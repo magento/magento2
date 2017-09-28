@@ -82,10 +82,8 @@ class SelectCheckoutMethodStep implements TestStepInterface
     {
         if ($this->checkoutMethod === 'login') {
             $this->checkoutOnepage->getLoginBlock()->loginCustomer($this->customer);
-        } elseif ($this->checkoutMethod === 'guest') {
-            if (empty($this->shipping)) {
-                $this->checkoutOnepage->getLoginBlock()->fillGuestFields($this->customer);
-            }
+        } elseif (($this->checkoutMethod === 'guest') && empty($this->shipping)) {
+            $this->checkoutOnepage->getLoginBlock()->fillGuestFields($this->customer);
         }
     }
 

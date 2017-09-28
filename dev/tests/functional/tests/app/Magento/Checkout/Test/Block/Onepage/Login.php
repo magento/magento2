@@ -49,6 +49,8 @@ class Login extends Form
      */
     protected $loadingMask = '.loading-mask';
 
+    private $emailSelector = '[name="username"]';
+
     /**
      * Select how to perform checkout whether guest or registered customer.
      *
@@ -98,8 +100,7 @@ class Login extends Form
      */
     public function fillGuestFields(FixtureInterface $customer)
     {
-        $mapping = $this->dataMapping();
-        $this->_rootElement->find($mapping['email']['selector'], $mapping['email']['strategy'])
+        $this->_rootElement->find($this->emailSelector)
             ->setValue($customer->getEmail());
     }
 
