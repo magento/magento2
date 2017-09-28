@@ -141,12 +141,10 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Test return action with configurable product.
      *
-     * #magentoDataFixture Magento/Paypal/_files/quote_express_configurable.php skipped due to MAGETWO-75517
+     * @magentoDataFixture Magento/Paypal/_files/quote_express_configurable.php
      */
     public function testReturnAction()
     {
-
-        $this->markTestSkipped('Test skipped due to MAGETWO-75517');
         $quote = $this->_objectManager->create(Quote::class);
         $quote->load('test_cart_with_configurable', 'reserved_order_id');
 
