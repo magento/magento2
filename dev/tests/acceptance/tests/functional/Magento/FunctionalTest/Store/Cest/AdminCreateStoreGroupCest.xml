@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Test XML Example -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="AdminCreateStoreGroupCest">
+        <annotations>
+            <features value="Create a store group in admin"/>
+            <stories value="Create a store group in admin"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <env value="phantomjs"/>
+            <group value="store"/>
+        </annotations>
+        <before>
+            <createData mergeKey="b1" entity="customStoreGroup"/>
+            <createData mergeKey="b2" entity="customStoreGroup"/>
+        </before>
+        <test name="AdminCreateStoreGroupTest">
+            <annotations>
+                <title value="Create a store group in admin"/>
+                <description value="Create a store group in admin"/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-?????"/>
+            </annotations>
+            <amOnPage mergeKey="s1" url="{{AdminLoginPage}}"/>
+            <fillField mergeKey="s3" selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}"/>
+            <fillField mergeKey="s5" selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+            <click mergeKey="s7" selector="{{AdminLoginFormSection.signIn}}"/>
+            <amOnPage mergeKey="s9" url="{{AdminSystemStorePage}}"/>
+
+            <click mergeKey="s11" selector="{{AdminStoresGridSection.resetButton}}"/>
+            <waitForPageLoad mergeKey="s15" time="10"/>
+
+            <!-- Uncomment after MFTF Bug MQE-391 is fixed -->
+            <!--fillField mergeKey="s17" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="$$b1.group[name]$$"/-->
+            <click mergeKey="s19" selector="{{AdminStoresGridSection.searchButton}}"/>
+            <waitForPageLoad mergeKey="s21" time="10"/>
+            <!--see mergeKey="s23" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="$$b1.group[name]$$"/-->
+
+            <click mergeKey="s31" selector="{{AdminStoresGridSection.resetButton}}"/>
+            <waitForPageLoad mergeKey="s35" time="10"/>
+            <!--fillField mergeKey="s37" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="$$b2.group[name]$$"/-->
+            <click mergeKey="s39" selector="{{AdminStoresGridSection.searchButton}}"/>
+            <waitForPageLoad mergeKey="s41" time="10"/>
+            <!--see mergeKey="s43" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="$$b2.group[name]$$"/-->
+        </test>
+    </cest>
+</config>

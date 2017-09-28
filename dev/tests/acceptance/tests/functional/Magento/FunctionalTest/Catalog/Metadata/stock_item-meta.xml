@@ -9,11 +9,11 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateStockItem" dataType="stock_item" type="create">
-        <entry key="qty">integer</entry>
-        <entry key="is_in_stock">boolean</entry>
+        <field key="qty">integer</field>
+        <field key="is_in_stock">boolean</field>
     </operation>
     <operation name="UpdateStockItem" dataType="stock_item" type="update">
-        <entry key="qty">integer</entry>
-        <entry key="is_in_stock">boolean</entry>
+        <field key="qty">integer</field>
+        <field key="is_in_stock">boolean</field>
     </operation>
 </config>

@@ -8,20 +8,20 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
-    <operation name="CreateProduct" dataType="product" type="create" auth="/rest/V1/integration/admin/token" url="/rest/V1/products" method="POST">
-        <header param="Content-Type">application/json</header>
-        <jsonObject dataType="product" key="product">
-            <entry key="sku">string</entry>
-            <entry key="name">string</entry>
-            <entry key="attribute_set_id">integer</entry>
-            <entry key="price">integer</entry>
-            <entry key="status">integer</entry>
-            <entry key="visibility">integer</entry>
-            <entry key="type_id">string</entry>
-            <entry key="created_at">string</entry>
-            <entry key="updated_at">string</entry>
-            <entry key="weight">integer</entry>
-            <entry key="extension_attributes">product_extension_attribute</entry>
+    <operation name="CreateProduct" dataType="product" type="create" auth="adminOauth" url="/V1/products" method="POST">
+        <contentType>application/json</contentType>
+        <object dataType="product" key="product">
+            <field key="sku">string</field>
+            <field key="name">string</field>
+            <field key="attribute_set_id">integer</field>
+            <field key="price">integer</field>
+            <field key="status">integer</field>
+            <field key="visibility">integer</field>
+            <field key="type_id">string</field>
+            <field key="created_at">string</field>
+            <field key="updated_at">string</field>
+            <field key="weight">integer</field>
+            <field key="extension_attributes">product_extension_attribute</field>
             <array key="product_links">
                 <value>product_link</value>
             </array>
@@ -31,23 +31,23 @@
             <array key="options">
                 <value>product_option</value>
             </array>
-        </jsonObject>
+        </object>
     </operation>
-    <operation name="UpdateProduct" dataType="product" type="update" auth="/rest/V1/integration/admin/token" url="/rest/V1/products" method="PUT">
-        <header param="Content-Type">application/json</header>
-        <jsonObject dataType="product" key="product">
-            <entry key="id">integer</entry>
-            <entry key="sku">string</entry>
-            <entry key="name">string</entry>
-            <entry key="attribute_set_id">integer</entry>
-            <entry key="price">integer</entry>
-            <entry key="status">integer</entry>
-            <entry key="visibility">integer</entry>
-            <entry key="type_id">string</entry>
-            <entry key="created_at">string</entry>
-            <entry key="updated_at">string</entry>
-            <entry key="weight">integer</entry>
-            <entry key="extension_attributes">product_extension_attribute</entry>
+    <operation name="UpdateProduct" dataType="product" type="update" auth="adminOauth" url="/V1/products" method="PUT">
+        <contentType>application/json</contentType>
+        <object dataType="product" key="product">
+            <field key="id">integer</field>
+            <field key="sku">string</field>
+            <field key="name">string</field>
+            <field key="attribute_set_id">integer</field>
+            <field key="price">integer</field>
+            <field key="status">integer</field>
+            <field key="visibility">integer</field>
+            <field key="type_id">string</field>
+            <field key="created_at">string</field>
+            <field key="updated_at">string</field>
+            <field key="weight">integer</field>
+            <field key="extension_attributes">product_extension_attribute</field>
             <array key="product_links">
                 <value>product_link</value>
             </array>
@@ -63,11 +63,11 @@
             <array key="tier_prices">
                 <value>tier_prices</value>
             </array-->
-        </jsonObject>
-        <entry key="saveOptions">boolean</entry>
+        </object>
+        <field key="saveOptions">boolean</field>
     </operation>
-    <operation name="deleteProduct" dataType="product" type="delete" auth="/rest/V1/integration/admin/token" url="/rest/V1/products" method="DELETE">
-        <header param="Content-Type">application/json</header>
+    <operation name="deleteProduct" dataType="product" type="delete" auth="adminOauth" url="/V1/products" method="DELETE">
+        <contentType>application/json</contentType>
         <param key="sku" type="path">{sku}</param>
     </operation>
 </config>
