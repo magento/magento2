@@ -10,7 +10,7 @@ namespace Magento\Catalog\Ui\DataProvider\Product;
  *
  * Used for product grid and customizes behavior of the default Product collection for grid needs.
  */
-class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
+class ProductCollection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
      * Disables using of price index for grid rendering
