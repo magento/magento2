@@ -400,8 +400,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param ShippingAssignmentFactory $shippingAssignmentFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-     * @param OrderIncrementIdChecker|null $orderIncrementIdChecker
      * @param array $data
+     * @param OrderIncrementIdChecker|null $orderIncrementIdChecker
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -444,8 +444,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        OrderIncrementIdChecker $orderIncrementIdChecker = null,
-        array $data = []
+        array $data = [],
+        OrderIncrementIdChecker $orderIncrementIdChecker = null
     ) {
         $this->quoteValidator = $quoteValidator;
         $this->_catalogProduct = $catalogProduct;

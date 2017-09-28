@@ -7,8 +7,7 @@
 namespace Magento\Sales\Model;
 
 /**
- * Class OrderIncrementIdChecker
- * Check if order increment ID is already used.
+ * This class uses for checking if reserved order id was already used for some order
  */
 class OrderIncrementIdChecker
 {
@@ -28,6 +27,7 @@ class OrderIncrementIdChecker
 
     /**
      * Check if order increment ID is already used.
+     *
      * Method can be used to avoid collisions of order IDs.
      *
      * @param int $orderIncrementId
