@@ -12,9 +12,9 @@ use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
 use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
+use Magento\Sales\Model\Order\Shipment\Item\Converter;
 
 /**
  * Class ShipmentDocumentFactory
@@ -40,6 +40,11 @@ class ShipmentDocumentFactory
     private $hydratorPool;
 
     /**
+     * @var Converter
+     */
+    private $converter;
+
+    /**
      * ShipmentDocumentFactory constructor.
      *
      * @param ShipmentFactory $shipmentFactory
@@ -49,11 +54,14 @@ class ShipmentDocumentFactory
     public function __construct(
         ShipmentFactory $shipmentFactory,
         HydratorPool $hydratorPool,
-        TrackFactory $trackFactory
+        TrackFactory $trackFactory,
+        Converter $converter = null
     ) {
         $this->shipmentFactory = $shipmentFactory;
         $this->trackFactory = $trackFactory;
         $this->hydratorPool = $hydratorPool;
+        $this->converter = $converter
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Converter::class);
     }
 
     /**
@@ -78,18 +86,7 @@ class ShipmentDocumentFactory
         array $packages = [],
         ShipmentCreationArgumentsInterface $arguments = null
     ) {
-        if (!empty($items)) {
-            $shipmentItems = $this->itemsToArray($items);
-        } else {
-            // Ship all items if optional array not sent in client request
-            $shipmentItems = [];
-            /** @var OrderItemInterface $item */
-            foreach ($order->getItems() as $item) {
-                if (!$item->getIsVirtual() && !$item->getParentItem()) {
-                    $shipmentItems[$item->getItemId()] = $item->getQtyOrdered();
-                }
-            }
-        }
+        $shipmentItems = $this->converter->convertItemCreationToQuantityArray($items, $order);
         /** @var Shipment $shipment */
         $shipment = $this->shipmentFactory->create(
             $order,
@@ -123,20 +120,5 @@ class ShipmentDocumentFactory
             $shipment->addTrack($this->trackFactory->create(['data' => $hydrator->extract($track)]));
         }
         return $shipment;
-    }
-
-    /**
-     * Convert items to array
-     *
-     * @param ShipmentItemCreationInterface[] $items
-     * @return array
-     */
-    private function itemsToArray(array $items = [])
-    {
-        $shipmentItems = [];
-        foreach ($items as $item) {
-            $shipmentItems[$item->getOrderItemId()] = $item->getQty();
-        }
-        return $shipmentItems;
     }
 }

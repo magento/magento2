@@ -6,6 +6,14 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Registry;
+use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
+use Magento\Sales\Api\Data\ShipmentTrackCreationInterfaceFactory;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order\Shipment\Item\Converter;
+use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 
 /**
  * Class ShipmentLoader
@@ -23,72 +31,69 @@ use Magento\Framework\DataObject;
 class ShipmentLoader extends DataObject
 {
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
-    protected $registry;
+    private $registry;
 
     /**
-     * @var \Magento\Sales\Api\ShipmentRepositoryInterface
+     * @var ShipmentRepositoryInterface
      */
-    protected $shipmentRepository;
+    private $shipmentRepository;
 
     /**
-     * @var \Magento\Sales\Model\Order\ShipmentFactory
+     * @var OrderRepositoryInterface
      */
-    protected $shipmentFactory;
+    private $orderRepository;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\TrackFactory
+     * @var Converter
      */
-    protected $trackFactory;
+    private $converter;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     * @var ShipmentDocumentFactory
      */
-    protected $orderRepository;
+    private $documentFactory;
 
     /**
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
-     * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
-     * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
-     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
-     * @param array $data
+     * @var ShipmentTrackCreationInterfaceFactory
+     */
+    private $trackFactory;
+
+    /**
+     * ManagerInterface $messageManager
+     * Registry $registry
+     * ShipmentRepositoryInterface $shipmentRepository
+     * OrderRepositoryInterface $orderRepository
+     * HydratorPool $hydratorPool
+     * Converter $converter
+     * ShipmentDocumentFactory $documentFactory
+     * ShipmentTrackCreationInterfaceFactory $trackFactory
+     * array $data
      */
     public function __construct(
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\Registry $registry,
-        \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
-        \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
-        \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+        ManagerInterface $messageManager,
+        Registry $registry,
+        ShipmentRepositoryInterface $shipmentRepository,
+        OrderRepositoryInterface $orderRepository,
+        Converter $converter,
+        ShipmentDocumentFactory $documentFactory,
+        ShipmentTrackCreationInterfaceFactory $trackFactory,
         array $data = []
     ) {
         $this->messageManager = $messageManager;
         $this->registry = $registry;
         $this->shipmentRepository = $shipmentRepository;
-        $this->shipmentFactory = $shipmentFactory;
-        $this->trackFactory = $trackFactory;
         $this->orderRepository = $orderRepository;
+        $this->converter = $converter;
+        $this->documentFactory = $documentFactory;
+        $this->trackFactory = $trackFactory;
         parent::__construct($data);
-    }
-
-    /**
-     * Initialize shipment items QTY
-     *
-     * @return array
-     */
-    protected function getItemQtys()
-    {
-        $data = $this->getShipment();
-
-        return isset($data['items']) ? $data['items'] : [];
     }
 
     /**
@@ -129,14 +134,49 @@ class ShipmentLoader extends DataObject
                 return false;
             }
 
-            $shipment = $this->shipmentFactory->create(
+            $shipment = $this->documentFactory->create(
                 $order,
-                $this->getItemQtys(),
-                $this->getTracking()
+                $this->converter->convertQuantityArrayToItemCreation($this->getItemQtys()),
+                $this->getTrackingArray()
             );
         }
 
         $this->registry->register('current_shipment', $shipment);
         return $shipment;
+    }
+
+    /**
+     * Initialize shipment items QTY
+     *
+     * @return array
+     */
+    private function getItemQtys()
+    {
+        $data = $this->getShipment();
+
+        return isset($data['items']) ? $data['items'] : [];
+    }
+
+    /**
+     * @return ShipmentTrackCreationInterface[]
+     */
+    private function getTrackingArray()
+    {
+        $tracks = $this->getTracking() ?: [];
+        $trackingCreation = [];
+        foreach ($tracks as $track) {
+            if (!isset($track['number']) || !isset($track['title']) || !isset($track['carrier_code'])) {
+                throw new \InvalidArgumentException(
+                    'Tracking information must contain title, carrier code, and tracking number'
+                );
+            }
+            /** @var ShipmentTrackCreationInterface $trackCreation */
+            $trackCreation = $this->trackFactory->create();
+            $trackCreation->setTrackNumber($track['number']);
+            $trackCreation->setTitle($track['title']);
+            $trackCreation->setCarrierCode($track['carrier_code']);
+            $trackingCreation[] = $trackCreation;
+        }
+        return $trackingCreation;
     }
 }
