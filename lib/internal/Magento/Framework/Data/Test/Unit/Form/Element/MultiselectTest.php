@@ -26,10 +26,37 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
      */
     public function testHiddenFieldPresentInMultiSelect()
     {
-        $this->_model->setDisabled(true);
+        $fieldName = 'fieldName';
         $this->_model->setCanBeEmpty(true);
+        $this->_model->setName($fieldName);
         $elementHtml = $this->_model->getElementHtml();
-        $this->assertContains('<input type="hidden"', $elementHtml);
+        $this->assertContains('<input type="hidden" name="' . $fieldName . '"', $elementHtml);
+    }
+
+    /**
+     * Verify that hidden input is present in multiselect and it allow indicate is multiselect is disabled.
+     */
+    public function testHiddenDisabledFieldPresentInMultiSelect()
+    {
+        $fieldName = 'fieldName';
+        $this->_model->setDisabled(true);
+        $this->_model->setName($fieldName);
+        $elementHtml = $this->_model->getElementHtml();
+        $this->assertContains('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
+    }
+
+    /**
+     * Verify that hidden input doesn't present in multiselect and it allow indicate is multiselect is disabled.
+     *
+     * @covers \Magento\Framework\Data\Form\Element\Multiselect::getElementHtml
+     */
+    public function testHiddenDisabledFieldNotPresentInMultiSelect()
+    {
+        $fieldName = 'fieldName';
+        $this->_model->setDisabled(false);
+        $this->_model->setName($fieldName);
+        $elementHtml = $this->_model->getElementHtml();
+        $this->assertNotContains('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
     }
 
     /**
