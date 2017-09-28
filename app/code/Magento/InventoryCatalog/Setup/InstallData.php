@@ -72,8 +72,8 @@ class InstallData implements InstallDataInterface
             SourceInterface::LATITUDE => 0,
             SourceInterface::LONGITUDE => 0,
             SourceInterface::PRIORITY => 0,
-            SourceInterface::COUNTRY_ID => 'PL',
-            SourceInterface::POSTCODE => '00-000'
+            SourceInterface::COUNTRY_ID => 'US',
+            SourceInterface::POSTCODE => '00000'
         ];
         $source = $this->sourceFactory->create();
         $this->dataObjectHelper->populateWithArray($source, $data, SourceInterface::class);
