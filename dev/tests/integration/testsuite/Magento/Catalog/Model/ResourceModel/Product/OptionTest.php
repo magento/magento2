@@ -80,7 +80,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns option title by type.
+     * Returns option title.
      *
      * @param int|null $storeId
      * @return string|null
