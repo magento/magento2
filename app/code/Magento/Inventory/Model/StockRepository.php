@@ -84,7 +84,7 @@ class StockRepository implements StockRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria = null)
+    public function getList(SearchCriteriaInterface $searchCriteria = null): StockSearchResultsInterface
     {
         return $this->commandGetList->execute($searchCriteria);
     }

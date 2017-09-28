@@ -50,7 +50,7 @@ class GetList implements GetListInterface
     /**
      * @inheritdoc
      */
-    public function execute(SearchCriteriaInterface $searchCriteria)
+    public function execute(SearchCriteriaInterface $searchCriteria): SourceItemSearchResultsInterface
     {
         /** @var Collection $collection */
         $collection = $this->sourceItemCollectionFactory->create();

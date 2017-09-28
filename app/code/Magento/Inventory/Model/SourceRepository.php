@@ -67,7 +67,7 @@ class SourceRepository implements SourceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria = null)
+    public function getList(SearchCriteriaInterface $searchCriteria = null): SourceSearchResultsInterface
     {
         return $this->commandGetList->execute($searchCriteria);
     }

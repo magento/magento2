@@ -42,7 +42,7 @@ class SourceItemRepository implements SourceItemRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria): SourceItemSearchResultsInterface
     {
         return $this->commandGetList->execute($searchCriteria);
     }
