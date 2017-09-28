@@ -18,15 +18,15 @@ class SaveMultiple
     /**
      * @var ResourceConnection
      */
-    private $connection;
+    private $resourceConnection;
 
     /**
-     * @param ResourceConnection $connection
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        ResourceConnection $connection
+        ResourceConnection $resourceConnection
     ) {
-        $this->connection = $connection;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -39,8 +39,10 @@ class SaveMultiple
         if (!count($sourceIds)) {
             return;
         }
-        $connection = $this->connection->getConnection();
-        $tableName = $connection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK);
+        $connection = $this->resourceConnection->getConnection();
+        $tableName = $this->resourceConnection->getTableName(
+            StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK
+        );
 
         $columns = [
             StockSourceLink::SOURCE_ID,

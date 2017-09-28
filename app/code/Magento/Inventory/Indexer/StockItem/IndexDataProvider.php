@@ -40,9 +40,9 @@ class IndexDataProvider
     public function getData(int $stockId, array $sourceIds = []): \ArrayIterator
     {
         $connection = $this->resourceConnection->getConnection();
-        $sourceTable = $connection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE);
-        $sourceItemTable = $connection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
-        $sourceStockLinkTable = $connection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK);
+        $sourceTable = $this->resourceConnection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE);
+        $sourceItemTable = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
+        $sourceStockLinkTable = $this->resourceConnection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK);
 
         // find all enabled sources
         $select = $connection->select()
