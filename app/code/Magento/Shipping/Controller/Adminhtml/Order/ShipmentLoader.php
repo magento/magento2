@@ -6,6 +6,7 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
@@ -66,15 +67,14 @@ class ShipmentLoader extends DataObject
     private $trackFactory;
 
     /**
-     * ManagerInterface $messageManager
-     * Registry $registry
-     * ShipmentRepositoryInterface $shipmentRepository
-     * OrderRepositoryInterface $orderRepository
-     * HydratorPool $hydratorPool
-     * Converter $converter
-     * ShipmentDocumentFactory $documentFactory
-     * ShipmentTrackCreationInterfaceFactory $trackFactory
-     * array $data
+     * @param ManagerInterface $messageManager
+     * @param Registry $registry
+     * @param ShipmentRepositoryInterface $shipmentRepository
+     * @param OrderRepositoryInterface $orderRepository
+     * @param Converter $converter
+     * @param ShipmentDocumentFactory $documentFactory
+     * @param ShipmentTrackCreationInterfaceFactory $trackFactory
+     * @param array $data
      */
     public function __construct(
         ManagerInterface $messageManager,
@@ -136,7 +136,7 @@ class ShipmentLoader extends DataObject
 
             $shipment = $this->documentFactory->create(
                 $order,
-                $this->converter->convertQuantityArrayToItemCreation($this->getItemQtys()),
+                $this->converter->convertToItemCreationArray($this->getItemQtys()),
                 $this->getTrackingArray()
             );
         }
@@ -158,7 +158,10 @@ class ShipmentLoader extends DataObject
     }
 
     /**
+     * Converts tracking array sent by UI to Data Object array
+     *
      * @return ShipmentTrackCreationInterface[]
+     * @throws LocalizedException
      */
     private function getTrackingArray()
     {
@@ -166,8 +169,8 @@ class ShipmentLoader extends DataObject
         $trackingCreation = [];
         foreach ($tracks as $track) {
             if (!isset($track['number']) || !isset($track['title']) || !isset($track['carrier_code'])) {
-                throw new \InvalidArgumentException(
-                    'Tracking information must contain title, carrier code, and tracking number'
+                throw new LocalizedException(
+                    __('Tracking information must contain title, carrier code, and tracking number')
                 );
             }
             /** @var ShipmentTrackCreationInterface $trackCreation */

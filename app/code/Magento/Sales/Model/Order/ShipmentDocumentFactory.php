@@ -86,7 +86,7 @@ class ShipmentDocumentFactory
         array $packages = [],
         ShipmentCreationArgumentsInterface $arguments = null
     ) {
-        $shipmentItems = $this->converter->convertItemCreationToQuantityArray($items, $order);
+        $shipmentItems = $this->converter->convertToQuantityArray($items, $order);
         /** @var Shipment $shipment */
         $shipment = $this->shipmentFactory->create(
             $order,

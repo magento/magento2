@@ -12,7 +12,7 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterfaceFactory;
 
 /**
- * Converts ShipmentItemCreationInterface data objects
+ * Converts shipment data to different formats for shipment processing
  *
  * @api
  */
@@ -39,7 +39,7 @@ class Converter
      * @param OrderInterface $order
      * @return array
      */
-    public function convertItemCreationToQuantityArray(array $items, OrderInterface $order)
+    public function convertToQuantityArray(array $items, OrderInterface $order)
     {
         $shipmentItems = [];
         if (empty($items)) {
@@ -60,12 +60,12 @@ class Converter
     }
 
     /**
-     * Converts array of Id => Quantity to ShipmentItemCreationInterface array.
+     * Converts array of Product Id => Quantity to ShipmentItemCreationInterface array.
      *
      * @param array $items
      * @return ShipmentItemCreationInterface[]
      */
-    public function convertQuantityArrayToItemCreation(array $items)
+    public function convertToItemCreationArray(array $items)
     {
         $shipmentItems = [];
         foreach ($items as $itemId => $quantity) {
