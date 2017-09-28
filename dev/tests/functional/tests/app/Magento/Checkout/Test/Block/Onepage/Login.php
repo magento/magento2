@@ -49,6 +49,11 @@ class Login extends Form
      */
     protected $loadingMask = '.loading-mask';
 
+    /**
+     * Selector for checkout email input.
+     *
+     * @var string
+     */
     private $emailSelector = '[name="username"]';
 
     /**
