@@ -60,7 +60,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveOptionTitleCustomStore()
     {
-        $this->saveOption($this->store, ['title' => 'drop_down option 1 sku Custom Store']);
+        $this->saveOption($this->store, ['title' => 'drop_down option Custom Store']);
 
         self::assertEquals('drop_down option', $this->getOptionTitle());
         self::assertEquals('drop_down option Custom Store', $this->getOptionTitle($this->store->getStoreId()));
