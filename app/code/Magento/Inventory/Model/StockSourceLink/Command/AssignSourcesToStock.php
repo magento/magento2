@@ -41,9 +41,9 @@ class AssignSourcesToStock implements AssignSourcesToStockInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $sourceIds, $stockId)
+    public function execute(array $sourceIds, int $stockId)
     {
-        if (!is_numeric($stockId) || empty($sourceIds)) {
+        if (empty($sourceIds)) {
             throw new InputException(__('Input data is invalid'));
         }
         try {

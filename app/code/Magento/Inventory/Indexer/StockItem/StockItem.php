@@ -86,14 +86,14 @@ class StockItem implements StockItemIndexerInterface
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
-                ->create();
+                ->build();
             $this->indexStructure->create($mainIndexName);
 
             $replicaIndexName = $this->indexNameBuilder
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_REPLICA)
-                ->create();
+                ->build();
             $this->indexStructure->create($replicaIndexName);
 
             $this->indexHandler->saveIndex($replicaIndexName, $this->indexDataProvider->getData($stockId));
@@ -122,7 +122,7 @@ class StockItem implements StockItemIndexerInterface
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
-                ->create();
+                ->build();
             // TODO: we do not need to clear index
             $this->indexStructure->create($mainIndexName);
             $this->indexHandler->saveIndex($mainIndexName, $this->indexDataProvider->getData($stockId));

@@ -30,7 +30,7 @@ class CreateSourceItemTable
      * @param SchemaSetupInterface $setup
      * @return Table
      */
-    private function createSourceItemTable(SchemaSetupInterface $setup)
+    private function createSourceItemTable(SchemaSetupInterface $setup): Table
     {
         $sourceItemTable = $setup->getTable(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 

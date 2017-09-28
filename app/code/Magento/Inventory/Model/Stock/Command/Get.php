@@ -40,7 +40,7 @@ class Get implements GetInterface
     /**
      * @inheritdoc
      */
-    public function execute($stockId)
+    public function execute(int $stockId): StockInterface
     {
         /** @var StockInterface $stock */
         $stock = $this->stockFactory->create();

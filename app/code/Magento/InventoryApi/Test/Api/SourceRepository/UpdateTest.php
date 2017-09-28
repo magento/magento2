@@ -79,7 +79,7 @@ class UpdateTest extends WebapiAbstract
      * @param int $sourceId
      * @return array
      */
-    private function getSourceDataById($sourceId)
+    private function getSourceDataById(int $sourceId): array
     {
         $serviceInfo = [
             'rest' => [

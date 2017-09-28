@@ -128,7 +128,7 @@ class StockDataProvider extends DataProvider
      * @param int $stockId
      * @return array
      */
-    private function getAssignedSourcesData($stockId)
+    private function getAssignedSourcesData(int $stockId): array
     {
         $assignedSources = $this->getAssignedSourcesForStock->execute($stockId);
 

@@ -52,7 +52,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function dataProviderCarrierLinks()
+    public function dataProviderCarrierLinks(): array
     {
         return [
             'add_carrier_new_links' => [
@@ -154,7 +154,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
      * @param array $data
      * @return void
      */
-    private function saveSource($sourceId, array $data)
+    private function saveSource(int $sourceId, array $data)
     {
         $serviceInfo = [
             'rest' => [
@@ -179,7 +179,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
      * @param int $sourceId
      * @return array
      */
-    private function getSourceDataById($sourceId)
+    private function getSourceDataById(int $sourceId): array
     {
         $serviceInfo = [
             'rest' => [

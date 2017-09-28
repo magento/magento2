@@ -78,8 +78,10 @@ class Save extends Action
         $requestData = $this->getRequest()->getParams();
         if ($this->getRequest()->isPost() && !empty($requestData['general'])) {
             try {
-                $stockId = $requestData['general'][StockInterface::STOCK_ID] ?? null;
-                $stockId = $this->processSave($stockId, $requestData);
+                $stockId = isset($requestData['general'][StockInterface::STOCK_ID])
+                    ? (int)$requestData['general'][StockInterface::STOCK_ID]
+                    : null;
+                $stockId = $this->processSave($requestData, $stockId);
 
                 $this->messageManager->addSuccessMessage(__('The Stock has been saved.'));
                 $this->processRedirectAfterSuccessSave($resultRedirect, $stockId);
@@ -99,7 +101,7 @@ class Save extends Action
                 $this->processRedirectAfterFailureSave($resultRedirect, $stockId);
             } catch (Exception $e) {
                 $this->messageManager->addErrorMessage(__('Could not save stock.'));
-                $this->processRedirectAfterFailureSave($resultRedirect, $stockId);
+                $this->processRedirectAfterFailureSave($resultRedirect, $stockId ?? null);
             }
         } else {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
@@ -115,13 +117,13 @@ class Save extends Action
      * @param array $requestData
      * @return int
      */
-    private function processSave($stockId, array $requestData)
+    private function processSave(array $requestData, int $stockId = null): int
     {
-        if ($stockId) {
-            $stock = $this->stockRepository->get($stockId);
-        } else {
+        if (null === $stockId) {
             /** @var StockInterface $stock */
             $stock = $this->stockFactory->create();
+        } else {
+            $stock = $this->stockRepository->get($stockId);
         }
         $this->dataObjectHelper->populateWithArray($stock, $requestData['general'], StockInterface::class);
         $stockId = $this->stockRepository->save($stock);
@@ -139,7 +141,7 @@ class Save extends Action
      * @param int $stockId
      * @return void
      */
-    private function processRedirectAfterSuccessSave(Redirect $resultRedirect, $stockId)
+    private function processRedirectAfterSuccessSave(Redirect $resultRedirect, int $stockId)
     {
         if ($this->getRequest()->getParam('back')) {
             $resultRedirect->setPath('*/*/edit', [
@@ -160,7 +162,7 @@ class Save extends Action
      * @param int|null $stockId
      * @return void
      */
-    private function processRedirectAfterFailureSave(Redirect $resultRedirect, $stockId = null)
+    private function processRedirectAfterFailureSave(Redirect $resultRedirect, int $stockId = null)
     {
         if (null === $stockId) {
             $resultRedirect->setPath('*/*/new');

@@ -25,5 +25,5 @@ interface UnassignSourceFromStockInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function execute($sourceId, $stockId);
+    public function execute(int $sourceId, int $stockId);
 }

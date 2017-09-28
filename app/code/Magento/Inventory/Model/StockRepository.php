@@ -11,6 +11,7 @@ use Magento\Inventory\Model\Stock\Command\GetInterface;
 use Magento\Inventory\Model\Stock\Command\GetListInterface;
 use Magento\Inventory\Model\Stock\Command\SaveInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\Data\StockSearchResultsInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 
 /**
@@ -59,7 +60,7 @@ class StockRepository implements StockRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(StockInterface $stock)
+    public function save(StockInterface $stock): int
     {
         return $this->commandSave->execute($stock);
     }
@@ -67,7 +68,7 @@ class StockRepository implements StockRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function get($stockId)
+    public function get(int $stockId): StockInterface
     {
         return $this->commandGet->execute($stockId);
     }
@@ -75,7 +76,7 @@ class StockRepository implements StockRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function deleteById($stockId)
+    public function deleteById(int $stockId)
     {
         $this->commandDeleteById->execute($stockId);
     }
@@ -83,7 +84,7 @@ class StockRepository implements StockRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria = null)
+    public function getList(SearchCriteriaInterface $searchCriteria = null): StockSearchResultsInterface
     {
         return $this->commandGetList->execute($searchCriteria);
     }

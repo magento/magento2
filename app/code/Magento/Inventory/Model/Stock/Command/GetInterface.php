@@ -27,5 +27,5 @@ interface GetInterface
      * @return StockInterface
      * @throws NoSuchEntityException
      */
-    public function execute($stockId);
+    public function execute(int $stockId): StockInterface;
 }

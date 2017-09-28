@@ -54,7 +54,7 @@ class Sources extends AbstractModifier
     /**
      * @return array
      */
-    private function getSourceItemsData()
+    private function getSourceItemsData(): array
     {
         $product = $this->locator->getProduct();
 

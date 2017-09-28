@@ -52,7 +52,7 @@ class UpdateTest extends WebapiAbstract
      * @param int $stockId
      * @return array
      */
-    private function getStockDataById($stockId)
+    private function getStockDataById(int $stockId): array
     {
         $serviceInfo = [
             'rest' => [

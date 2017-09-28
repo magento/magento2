@@ -37,14 +37,14 @@ interface SourceItemInterface extends ExtensibleDataInterface
     /**
      * Get source item sku
      *
-     * @return string
+     * @return string|null
      */
     public function getSku();
 
     /**
      * Set source item sku
      *
-     * @param string $sku
+     * @param string|null $sku
      * @return void
      */
     public function setSku($sku);
@@ -52,14 +52,14 @@ interface SourceItemInterface extends ExtensibleDataInterface
     /**
      * Get source id
      *
-     * @return int
+     * @return int|null
      */
     public function getSourceId();
 
     /**
      * Set source id
      *
-     * @param int $sourceId
+     * @param int|null $sourceId
      * @return void
      */
     public function setSourceId($sourceId);
@@ -67,14 +67,14 @@ interface SourceItemInterface extends ExtensibleDataInterface
     /**
      * Get source item quantity
      *
-     * @return float
+     * @return float|null
      */
     public function getQuantity();
 
     /**
      * Set source item quantity
      *
-     * @param float $quantity
+     * @param float|null $quantity
      * @return void
      */
     public function setQuantity($quantity);
@@ -82,14 +82,14 @@ interface SourceItemInterface extends ExtensibleDataInterface
     /**
      * Get source item status (One of self::STATUS_*)
      *
-     * @return int
+     * @return int|null
      */
     public function getStatus();
 
     /**
      * Set source item status (One of self::STATUS_*)
      *
-     * @param int $status
+     * @param int|null $status
      * @return int
      */
     public function setStatus($status);
@@ -97,7 +97,9 @@ interface SourceItemInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object
      *
-     * @return \Magento\InventoryApi\Api\Data\SourceItemExtensionInterface
+     * Null for return is specified for proper work SOAP requests parser
+     *
+     * @return \Magento\InventoryApi\Api\Data\SourceItemExtensionInterface|null
      */
     public function getExtensionAttributes();
 

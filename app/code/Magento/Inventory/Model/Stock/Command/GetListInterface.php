@@ -22,9 +22,10 @@ interface GetListInterface
 {
     /**
      * Find Stocks by given SearchCriteria
+     * SearchCriteria is not required because load all stocks is useful case
      *
      * @param SearchCriteriaInterface|null $searchCriteria
      * @return StockSearchResultsInterface
      */
-    public function execute(SearchCriteriaInterface $searchCriteria = null);
+    public function execute(SearchCriteriaInterface $searchCriteria = null): StockSearchResultsInterface;
 }

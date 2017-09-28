@@ -116,7 +116,7 @@ class SourceDataProvider extends DataProvider
      * @param int $sourceId
      * @return array
      */
-    private function getAssignedCarrierCodes($sourceId)
+    private function getAssignedCarrierCodes(int $sourceId): array
     {
         $source = $this->sourceRepository->get($sourceId);
         $carrierCodes = [];
