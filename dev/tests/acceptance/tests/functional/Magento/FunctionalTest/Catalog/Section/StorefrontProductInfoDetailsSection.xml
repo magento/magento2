@@ -9,6 +9,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoDetailsSection">
-        <element name="productNameForReview" type="text" locator=".legend.review-legend>strong" />
+        <element name="productNameForReview" type="text" selector=".legend.review-legend>strong" />
     </section>
 </config>

@@ -9,6 +9,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="InvoiceDetailsInformationSection">
-        <element name="orderStatus" type="text" locator="#order_status"/>
+        <element name="orderStatus" type="text" selector="#order_status"/>
     </section>
 </config>
