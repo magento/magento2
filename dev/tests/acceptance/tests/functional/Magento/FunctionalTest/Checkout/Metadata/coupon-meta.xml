@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateCoupon" dataType="coupon" type="create" auth="/rest/V1/integration/admin/token" url="/rest/V1/coupons" method="POST">
+        <header param="Content-Type">application/json</header>
+        <jsonObject key="coupon" dataType="coupon">
+            <entry key="rule_id" required="true">integer</entry>
+            <entry key="times_used" required="true">integer</entry>
+            <entry key="is_primary" required="true">boolean</entry>
+            <entry key="code">string</entry>
+            <entry key="usage_limit">integer</entry>
+            <entry key="usage_per_customer">integer</entry>
+            <entry key="expiration_date">string</entry>
+            <entry key="created_at">string</entry>
+            <entry key="type">integer</entry>
+            <entry key="extension_attributes">empty_extension_attribute</entry>
+        </jsonObject>
+    </operation>
+
+    <operation name="DeleteCoupon" dataType="coupon" type="delete" auth="/rest/V1/integration/admin/token" url="/rest/V1/coupons" method="DELETE">
+        <header param="Content-Type">application/json</header>
+        <param key="couponId" type="path">{coupon_id}</param>
+    </operation>
+</config>
