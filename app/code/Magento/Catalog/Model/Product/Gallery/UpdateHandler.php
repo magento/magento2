@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
@@ -33,8 +34,10 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
             if (!empty($image['removed'])) {
                 if (!empty($image['value_id']) && !isset($picturesInOtherStores[$image['file']])) {
                     $recordsToDelete[] = $image['value_id'];
-                    // only delete physical files if they are not used by any other products
-                    if (!$this->resourceModel->countImageUses($image['file']) > 1) {
+                    $catalogPath = $this->mediaConfig->getBaseMediaPath();
+                    $isFile = $this->mediaDirectory->isFile($catalogPath . $image['file']);
+                    // only delete physical files if they are not used by any other products and if this file exist
+                    if (!($this->resourceModel->countImageUses($image['file']) > 1) && $isFile) {
                         $filesToDelete[] = ltrim($image['file'], '/');
                     }
                 }
