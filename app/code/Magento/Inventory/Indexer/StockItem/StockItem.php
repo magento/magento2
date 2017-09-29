@@ -73,7 +73,6 @@ class StockItem implements StockItemIndexerInterface
         IndexTableSwitcherInterface $indexTableSwitcher,
         IndexNameBuilder $indexNameBuilder
     ) {
-
         $this->getDeltaReindexData = $getDeltaReindexData;
         $this->getFullReindexData = $getFullReindexData;
         $this->indexStructure = $indexStructureHandler;
@@ -95,14 +94,14 @@ class StockItem implements StockItemIndexerInterface
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
-                ->create();
+                ->build();
             $this->indexStructure->create($mainIndexName);
 
             $replicaIndexName = $this->indexNameBuilder
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_REPLICA)
-                ->create();
+                ->build();
             $this->indexStructure->create($replicaIndexName);
 
             $this->indexHandler->saveIndex($replicaIndexName, $this->indexDataProvider->getData($stockId));
@@ -132,7 +131,7 @@ class StockItem implements StockItemIndexerInterface
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
-                ->create();
+                ->build();
 
             $this->indexStructure->cleanUp($mainIndexName, $skuList);
             $this->indexHandler->saveIndex(

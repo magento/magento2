@@ -73,10 +73,14 @@ class IndexDataProvider
                 []
             )
             ->where('source_item.' . SourceItemInterface::STATUS . ' = ?', SourceItemInterface::STATUS_IN_STOCK)
-            ->where('source_item.' . SourceItemInterface::SKU . ' IN (?)', $skuList)
             ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
-            ->where('stock_source_link.' . StockSourceLink::SOURCE_ID . ' IN (?)', $sourceIds)
-            ->group([SourceItemInterface::SKU]);
+            ->where('stock_source_link.' . StockSourceLink::SOURCE_ID . ' IN (?)', $sourceIds);
+
+        if (count($skuList) === 0) {
+            $select->where('source_item.' . SourceItemInterface::SKU . ' IN (?)', $skuList);
+        }
+
+        $select->group([SourceItemInterface::SKU]);
 
         return new \ArrayIterator($connection->fetchAll($select));
     }

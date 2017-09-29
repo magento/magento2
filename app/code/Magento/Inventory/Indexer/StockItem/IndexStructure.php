@@ -73,7 +73,7 @@ class IndexStructure implements IndexStructureInterface
         $connection = $this->resourceConnection->getConnection($connectionName);
         $tableName = $this->indexNameResolver->resolveName($indexName);
         if ($connection->isTableExists($tableName) === false) {
-            $this->createTable($connection, $indexName);
+            $this->createTable($connection, $tableName);
             return;
         }
         $where = ['sku in (?)' => $skuList];
