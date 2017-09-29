@@ -8,6 +8,7 @@ namespace Magento\Setup\Console\Command;
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -38,15 +39,25 @@ class UpgradeCommand extends AbstractSetupCommand
     private $deploymentConfig;
 
     /**
+     * @var State
+     */
+    private $state;
+
+    /**
      * Constructor
      *
      * @param InstallerFactory $installerFactory
      * @param DeploymentConfig $deploymentConfig
+     * @param State $state
      */
-    public function __construct(InstallerFactory $installerFactory, DeploymentConfig $deploymentConfig = null)
-    {
+    public function __construct(
+        InstallerFactory $installerFactory,
+        DeploymentConfig $deploymentConfig = null,
+        State $state = null
+    ) {
         $this->installerFactory = $installerFactory;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->state = $state ?? ObjectManager::getInstance()->get(State::class);
         parent::__construct();
     }
 
@@ -90,7 +101,7 @@ class UpgradeCommand extends AbstractSetupCommand
                 $importConfigCommand->run($arrayInput, $output);
             }
 
-            if (!$keepGenerated) {
+            if (!$this->isDeveloperMode() && !$keepGenerated) {
                 $output->writeln(
                     '<info>Please re-run Magento compile command. Use the command "setup:di:compile"</info>'
                 );
@@ -101,5 +112,15 @@ class UpgradeCommand extends AbstractSetupCommand
         }
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Return whether the application is in developer mode.
+     *
+     * @return bool
+     */
+    private function isDeveloperMode()
+    {
+        return $this->state->getMode() === State::MODE_DEVELOPER;
     }
 }
