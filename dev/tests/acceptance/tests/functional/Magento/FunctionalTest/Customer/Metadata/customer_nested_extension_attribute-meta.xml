@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateNestedExtensionAttribute" dataType="customer_nested_extension_attribute" type="create">
+        <entry key="id">integer</entry>
+        <entry key="customer_id">integer</entry>
+        <entry key="value">string</entry>
+    </operation>
+    <operation name="UpdateNestedExtensionAttribute" dataType="customer_nested_extension_attribute" type="update">
+        <entry key="id">integer</entry>
+        <entry key="customer_id">integer</entry>
+        <entry key="value">string</entry>
+    </operation>
+</config>

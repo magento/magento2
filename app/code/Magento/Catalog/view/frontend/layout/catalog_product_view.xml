@@ -94,7 +94,7 @@
                         <argument name="at_call" xsi:type="string">getShortDescription</argument>
                         <argument name="at_code" xsi:type="string">short_description</argument>
                         <argument name="css_class" xsi:type="string">overview</argument>
-                        <argument name="at_label" xsi:type="string">none</argument>
+                        <argument name="at_label" translate="true" xsi:type="string">none</argument>
                         <argument name="title" translate="true" xsi:type="string">Overview</argument>
                         <argument name="add_attribute" xsi:type="string">itemprop="description"</argument>
                     </arguments>
@@ -135,7 +135,7 @@
                         <argument name="at_call" xsi:type="string">getDescription</argument>
                         <argument name="at_code" xsi:type="string">description</argument>
                         <argument name="css_class" xsi:type="string">description</argument>
-                        <argument name="at_label" xsi:type="string">none</argument>
+                        <argument name="at_label" translate="true" xsi:type="string">none</argument>
                         <argument name="title" translate="true" xsi:type="string">Details</argument>
                     </arguments>
                 </block>
