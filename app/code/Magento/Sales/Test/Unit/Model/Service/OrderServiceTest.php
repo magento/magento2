@@ -163,7 +163,28 @@ class OrderServiceTest extends \PHPUnit\Framework\TestCase
         $this->orderMock->expects($this->once())
             ->method('cancel')
             ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->once())
+            ->method('canCancel')
+            ->willReturn(true);
         $this->assertTrue($this->orderService->cancel(123));
+    }
+
+    /**
+     * test for Order::cancel() fail case
+     */
+    public function testCancelFailed()
+    {
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with(123)
+            ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->never())
+            ->method('cancel')
+            ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->once())
+            ->method('canCancel')
+            ->willReturn(false);
+        $this->assertFalse($this->orderService->cancel(123));
     }
 
     public function testGetCommentsList()

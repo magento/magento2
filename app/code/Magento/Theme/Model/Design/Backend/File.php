@@ -97,7 +97,8 @@ class File extends BackendFile
             $this->setValue($value['file']);
             return $this;
         }
-        $filename = $value['file'];
+
+        $filename = basename($value['file']);
         $result = $this->_mediaDirectory->copyFile(
             $this->getTmpMediaPath($filename),
             $this->_getUploadDir() . '/' . $filename

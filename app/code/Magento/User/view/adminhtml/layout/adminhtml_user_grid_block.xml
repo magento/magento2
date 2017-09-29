@@ -74,6 +74,13 @@
                             <argument name="index" xsi:type="string">email</argument>
                         </arguments>
                     </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="role_name">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Role</argument>
+                            <argument name="index" xsi:type="string">role_name</argument>
+                            <argument name="filter_index" xsi:type="string">detail_role.role_name</argument>
+                        </arguments>
+                    </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="is_active">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Status</argument>

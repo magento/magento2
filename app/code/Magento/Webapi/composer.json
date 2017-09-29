@@ -10,7 +10,8 @@
         "magento/framework": "100.3.*"
     },
     "suggest": {
-        "magento/module-user": "100.3.*"
+        "magento/module-user": "100.3.*",
+        "magento/module-customer": "100.3.*"
     },
     "type": "magento2-module",
     "version": "100.3.0-dev",

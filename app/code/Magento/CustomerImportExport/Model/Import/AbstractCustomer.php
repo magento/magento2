@@ -256,6 +256,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param array $attributeParameters Parameters of an attribute
      * @param int|string $value A value of an attribute
      * @return int An option id of attribute
+     * @since 100.2.0
      */
     protected function getSelectAttrIdByValue(array $attributeParameters, $value)
     {
@@ -268,6 +269,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * Returns multiple value separator
      *
      * @return string
+     * @since 100.2.0
      */
     protected function getMultipleValueSeparator()
     {
