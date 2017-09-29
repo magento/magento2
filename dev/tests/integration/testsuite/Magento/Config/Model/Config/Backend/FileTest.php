@@ -12,7 +12,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Config\Model\Config\Backend\File
      */
-    private $_model = null;
+    private $_model;
 
     protected function setUp()
     {
