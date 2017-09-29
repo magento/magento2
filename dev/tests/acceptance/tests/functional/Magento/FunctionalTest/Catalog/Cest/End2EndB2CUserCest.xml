@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="End2EndB2CUserCest">
+        <annotations>
+            <features value="End to End scenarios"/>
+            <stories value="B2C - User"/>
+            <group value="end2end"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <env value="phantomjs"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" mergeKey="createCategory"/>
+            <entity name="categoryLink" type="custom_attribute" mergeKey="categoryLink">
+                <data key="attribute_code">category_ids</data>
+                <data key="value">$$createCategory.id$$</data>
+            </entity>
+            <createData entity="_defaultProduct" mergeKey="createSimpleProduct1">
+                <required-entity name="categoryLink"/>
+            </createData>
+            <createData entity="_defaultProduct" mergeKey="createSimpleProduct2">
+                <required-entity name="categoryLink"/>
+            </createData>
+            <!--<createData entity="ConfigurableProductOne" mergeKey="createConfigurableProduct">-->
+                <!--<required-entity name="categoryLink"/>-->
+            <!--</createData>-->
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" mergeKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct1" mergeKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" mergeKey="deleteSimpleProduct2"/>
+            <!--<deleteData createDataKey="createConfigurableProduct" mergeKey="deleteConfigurableProduct"/>-->
+        </after>
+        <test name="End2EndB2CUser">
+            <annotations>
+                <title value="You should be able to pass End to End B2C User scenario"/>
+                <description value="User browses catalog, searches for product, adds product to cart, adds product to wishlist, compares products, uses coupon code and checks out."/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-75411"/>
+            </annotations>
+            <!-- Step 1: User browses catalog -->
+            <!-- Open home page -->
+            <amOnPage url="{{StorefrontHomePage}}" mergeKey="amOnHomePage"/>
+            <!-- Open Category -->
+            <click selector="//nav//a[span[contains(., '$$createCategory.name$$')]]" mergeKey="clickCategory1" />
+            <!-- Assert Category Page Title equals Category Name -->
+            <seeInTitle userInput="$$createCategory.name$$" mergeKey="assertCategoryNameTitle"/>
+            <!-- Assert Category Name is on the Categorypage -->
+            <see userInput="$$createCategory.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" mergeKey="assertCategoryName"/>
+            <!-- Assert Product Count is 2 on the Category page -->
+            <see userInput="2" selector="{{StorefrontCategoryMainSection.productCount}} span" mergeKey="assertCategoryProductCount"/>
+            <!-- Assert Product 1 Name is present on the Category page -->
+            <see userInput="$$createSimpleProduct1.name$$" selector="//main//li[1]//a[@class='product-item-link']" mergeKey="assertCategorySimpleProduct1Name"/>
+            <!-- Assert Product 1 Price is present on the Category page -->
+            <see userInput="$$$createSimpleProduct1.price$$.00" selector="//main//li[1]//span[@class='price']" mergeKey="assertCategorySimpleProduct1Price"/>
+            <!-- Assert Product 2 Name is present on the Category page -->
+            <see userInput="$$createSimpleProduct2.name$$" selector="//main//li[2]//a[@class='product-item-link']" mergeKey="assertCategorySimpleProduct2Name"/>
+            <!-- Assert Product 2 Price is present on the Category page -->
+            <see userInput="$$$createSimpleProduct2.price$$.00" selector="//main//li[2]//span[@class='price']" mergeKey="assertCategorySimpleProduct2Price"/>
+
+            <!-- View Simple Product 1 -->
+            <click selector="//main//li[1]//a[@class='product-item-link']" mergeKey="clickCategorySimpleProduct1View" />
+            <!-- Assert Product Page Title equals Product 1 Name -->
+            <seeInTitle userInput="$$createSimpleProduct1.name$$" mergeKey="assertSimpleProduct1NameTitle"/>
+            <!-- Assert Product 1 Name is on the Product page -->
+            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="assertSimpleProduct1Name"/>
+            <!-- Assert Product 1 SKU is on the Product page -->
+            <see userInput="$$createSimpleProduct1.sku$$" selector="{{StorefrontProductInfoMainSection.productSku}}" mergeKey="assertSimpleProduct1Sku"/>
+            <!-- Assert Product 1 Price is on the Product page -->
+            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" mergeKey="assertSimpleProduct1Price"/>
+            <!-- Assert Product 1 Stock is on the Product page -->
+            <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" mergeKey="assertSimpleProduct1Stock"/>
+
+            <!-- Open Category -->
+            <click selector="//nav//a[span[contains(., '$$createCategory.name$$')]]" mergeKey="clickCategory2" />
+
+            <!-- View Simple Product 2 -->
+            <click selector="//main//li[2]//a[@class='product-item-link']" mergeKey="clickCategorySimpleProduct2View" />
+            <!-- Assert Product Page Title equals Product 2 Name -->
+            <seeInTitle userInput="$$createSimpleProduct2.name$$" mergeKey="assertSimpleProduct2NameTitle"/>
+            <!-- Assert Product 2 Name is on the Product page -->
+            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="assertSimpleProduct2Name"/>
+            <!-- Assert Product 2 SKU is on the Product page -->
+            <see userInput="$$createSimpleProduct2.sku$$" selector="{{StorefrontProductInfoMainSection.productSku}}" mergeKey="assertSimpleProduct2Sku"/>
+            <!-- Assert Product 2 Price is on the Product page -->
+            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" mergeKey="assertSimpleProduct2Price"/>
+            <!-- Assert Product 2 Stock is on the Product page -->
+            <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" mergeKey="assertSimpleProduct2Stock"/>
+
+            <!-- Step 2: User searches for product -->
+            <!-- Fill Quick Search with Product 1 Name -->
+            <fillField userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontQuickSearchSection.searchPhrase}}" mergeKey="fillQuickSearch"/>
+            <!-- Press Search button -->
+            <click selector="{{StorefrontQuickSearchSection.searchButton}}" mergeKey="clickQuickSearchButton" />
+            <!-- Assert Quick Search Result Page Title contains Product 1 Name -->
+            <seeInTitle userInput="Search results for: '$$createSimpleProduct1.name$$'" mergeKey="assertQuickSearchTitle"/>
+            <!-- Assert Quick Search Result Title contains Product 1 Name -->
+            <see userInput="Search results for: '$$createSimpleProduct1.name$$'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" mergeKey="assertQuickSearchName"/>
+            <!-- Assert Product Count is 1 on the Quick Search Result page -->
+            <see userInput="1" selector="{{StorefrontQuickSearchMainSection.productCount}} span" mergeKey="assertQuickSearchProductCount"/>
+            <!-- Assert Product 1 Name is present on the Quick Search Result page -->
+            <see userInput="$$createSimpleProduct1.name$$" selector="//main//li[1]//a[@class='product-item-link']" mergeKey="assertQuickSearchSimpleProduct1Name"/>
+            <!-- Assert Product 1 Price is present on the Quick Search Result page -->
+            <see userInput="$$$createSimpleProduct1.price$$.00" selector="//main//li[1]//span[@class='price']" mergeKey="assertQuickSearchSimpleProduct1Price"/>
+            <!-- View Simple Product 1 -->
+            <click selector="//main//li[1]//a[@class='product-item-link']" mergeKey="clickQuickSearchSimpleProduct1View"/>
+            <!-- Assert Product 1 Name is on the Product page -->
+            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="assertQuickSearchSimpleProduct1PageName"/>
+
+            <!-- Fill Quick Search with common part of product names -->
+            <fillField userInput="testProductName" selector="{{StorefrontQuickSearchSection.searchPhrase}}" mergeKey="fillQuickSearchCommonPart"/>
+            <!-- Press Search button -->
+            <click selector="{{StorefrontQuickSearchSection.searchButton}}" mergeKey="clickQuickSearchButtonCommonPart" />
+            <!-- Assert Quick Search Result Page Title contains common part -->
+            <seeInTitle userInput="Search results for: 'testProductName'" mergeKey="assertQuickSearchTitleCommonPart"/>
+            <!-- Assert Quick Search Result Title contains Product 1 Name -->
+            <see userInput="Search results for: 'testProductName'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" mergeKey="assertQuickSearchNameCommonPart"/>
+            <!-- Click Category Filter Title -->
+            <click selector="{{StorefrontQuickSearchMainSection.CategoryFilter}}" mergeKey="clickQuickSearchCategoryFilterTitleCommonPart" />
+            <!-- Press Search button -->
+            <click selector="//main//div[@class='filter-options']//li[@class='item']//a[contains(text(), '$$createCategory.name$$')]" mergeKey="clickQuickSearchCategoryFilterCommonPart" />
+            <!-- Assert Product Count is 2 on the Quick Search Result page -->
+            <see userInput="2" selector="{{StorefrontQuickSearchMainSection.productCount}} span" mergeKey="assertQuickSearchProductCountCommonPart"/>
+            <!-- Assert Product 1 Name is present on the Quick Search Result page -->
+            <see userInput="$$createSimpleProduct1.name$$" selector="//main//li[1]//a[@class='product-item-link']" mergeKey="assertQuickSearchSimpleProduct1Name"/>
+            <!-- Assert Product 1 Price is present on the Quick Search Result page -->
+            <see userInput="$$$createSimpleProduct1.price$$.00" selector="//main//li[1]//span[@class='price']" mergeKey="assertQuickSearchSimpleProduct1Price"/>
+            <!-- Assert Product 2 Name is present on the Quick Search Result page -->
+            <see userInput="$$createSimpleProduct2.name$$" selector="//main//li[2]//a[@class='product-item-link']" mergeKey="assertQuickSearchSimpleProduct2Name"/>
+            <!-- Assert Product 2 Price is present on the Quick Search Result page -->
+            <see userInput="$$$createSimpleProduct2.price$$.00" selector="//main//li[2]//span[@class='price']" mergeKey="assertQuickSearchSimpleProduct2Price"/>
+            <!-- View Simple Product 2 -->
+            <click selector="//main//li[2]//a[@class='product-item-link']" mergeKey="clickQuickSearchSimpleProduct2View"/>
+            <!-- Assert Product 2 Name is on the Product page -->
+            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="assertQuickSearchSimpleProduct2PageName"/>
+
+            <!-- Fill Quick Search with non-existent product name -->
+            <fillField userInput="nonexistent$$createSimpleProduct1.name$$nonexistent" selector="{{StorefrontQuickSearchSection.searchPhrase}}" mergeKey="fillQuickSearchNonExistent"/>
+            <!-- Press Search button -->
+            <click selector="{{StorefrontQuickSearchSection.searchButton}}" mergeKey="clickQuickSearchButtonNonExistent" />
+            <!-- Assert Quick Search Result Page Title contains non-existent product -->
+            <seeInTitle userInput="Search results for: 'nonexistent$$createSimpleProduct1.name$$nonexistent'" mergeKey="assertQuickSearchTitleNonExistent"/>
+            <!-- Assert Quick Search Result Title contains non-existent product -->
+            <see userInput="Search results for: 'nonexistent$$createSimpleProduct1.name$$nonexistent'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" mergeKey="assertQuickSearchNameNonExistent"/>
+            <!-- Assert Quick Search Result Page contains no results mesage -->
+            <see userInput="Your search returned no results." selector="{{StorefrontQuickSearchMainSection.message}}" mergeKey="assertQuickSearchMessageNonExistent"/>
+
+        </test>
+    </cest>
+</config>
