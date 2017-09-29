@@ -26,7 +26,7 @@ class ConfigurableProduct extends FinalPrice implements ConfiguredPriceInterface
         $product = $customOption ? $customOption->getProduct() : $this->getProduct();
         $price = $product->getPriceInfo()->getPrice(self::PRICE_CODE)->getValue();
 
-        return max(0, $price);
+        return $price === null ? null : max(0, $price);
     }
 
     /**

@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
+
 <?php
 /** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
 /** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $configuredPrice */
@@ -14,11 +18,13 @@ $priceLabel = ($block->getPriceLabel() !== null)
     : '';
 ?>
 <p class="price-as-configured">
-    <?= /* @escapeNotVerified */ $block->renderAmount($configuredPrice->getAmount(), [
-        'display_label'     => $priceLabel,
-        'price_id'          => $block->getPriceId('product-price-'),
-        'price_type'        => 'finalPrice',
-        'include_container' => true,
-        'schema' => $schema
-    ]); ?>
+    <?php if($configuredPrice->getAmount()->getValue() !== null): ?>
+        <?= /* @noEscape */ $block->renderAmount($configuredPrice->getAmount(), [
+            'display_label'     => $priceLabel,
+            'price_id'          => $block->getPriceId('product-price-'),
+            'price_type'        => 'finalPrice',
+            'include_container' => true,
+            'schema' => $schema
+        ]); ?>
+    <?php endif; ?>
 </p>

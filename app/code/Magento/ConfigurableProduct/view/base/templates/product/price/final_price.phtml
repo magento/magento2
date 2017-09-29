@@ -38,7 +38,7 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
             'skip_adjustments'  => true
         ]); ?>
     </span>
-<?php else: ?>
+<?php elseif($finalPriceModel->getAmount()->getValue() !== null): ?>
     <?php /* @escapeNotVerified */ echo $block->renderAmount($finalPriceModel->getAmount(), [
         'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
         'price_type'        => 'finalPrice',
