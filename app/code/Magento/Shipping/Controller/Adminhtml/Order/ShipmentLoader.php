@@ -158,7 +158,7 @@ class ShipmentLoader extends DataObject
     }
 
     /**
-     * Converts tracking array sent by UI to Data Object array
+     * Convert UI-generated tracking array to Data Object array
      *
      * @return ShipmentTrackCreationInterface[]
      * @throws LocalizedException
