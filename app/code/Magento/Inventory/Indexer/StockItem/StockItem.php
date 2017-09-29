@@ -138,7 +138,7 @@ class StockItem implements StockItemIndexerInterface
             $this->indexStructure->cleanUp($mainIndexName, $skuList);
             $this->indexHandler->saveIndex(
                 $mainIndexName,
-                $this->indexDataProvider->getDataBySkuList($stockId, $skuList)
+                $this->indexDataProvider->getData($stockId, $skuList)
             );
         }
     }
