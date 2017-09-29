@@ -79,6 +79,13 @@ class Cart extends Block
     protected $deleteItemButton = 'a.action.action-delete';
 
     /**
+     * Cart item class name.
+     *
+     * @var string
+     */
+    protected $cartItemClass = \Magento\Checkout\Test\Block\Cart\CartItem::class;
+
+    /**
      * Get Shopping Cart item.
      *
      * @param FixtureInterface $product
@@ -98,7 +105,7 @@ class Cart extends Block
                 Locator::SELECTOR_XPATH
             );
             $cartItem = $this->blockFactory->create(
-                'Magento\Checkout\Test\Block\Cart\CartItem',
+                $this->cartItemClass,
                 ['element' => $cartItemBlock]
             );
         }

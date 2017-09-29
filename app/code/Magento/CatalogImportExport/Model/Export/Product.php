@@ -772,6 +772,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $memoryUsagePercent = 0.8;
             // Minimum Products limit
             $minProductsLimit = 500;
+            // Maximal Products limit
+            $maxProductsLimit = 3000;
 
             $this->_itemsPerPage = intval(
                 ($memoryLimit * $memoryUsagePercent - memory_get_usage(true)) / $memoryPerProduct
@@ -779,7 +781,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             if ($this->_itemsPerPage < $minProductsLimit) {
                 $this->_itemsPerPage = $minProductsLimit;
             }
+            if ($this->_itemsPerPage > $maxProductsLimit) {
+                $this->_itemsPerPage = $maxProductsLimit;
+            }
         }
+
         return $this->_itemsPerPage;
     }
 

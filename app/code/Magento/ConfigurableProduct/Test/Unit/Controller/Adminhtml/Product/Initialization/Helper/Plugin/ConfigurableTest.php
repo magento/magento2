@@ -191,7 +191,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * generate product resource model mock
+     * Generate product resource model mock.
+     *
      * @param $postValue
      * @return \PHPUnit_Framework_MockObject_MockObject
      */

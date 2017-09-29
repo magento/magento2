@@ -37,4 +37,18 @@ class ProductForm extends \Magento\Catalog\Test\Block\Adminhtml\Product\ProductF
         $this->getTab('variations')->showContent();
         return $this->fillTabs($tabs, $element);
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getFieldsByTabs(FixtureInterface $fixture)
+    {
+        /** @var array $tabs */
+        $tabs = parent::getFieldsByTabs($fixture);
+        if (isset($tabs['advanced-pricing'])) {
+            unset($tabs['advanced-pricing']);
+        }
+        
+        return $tabs;
+    }
 }

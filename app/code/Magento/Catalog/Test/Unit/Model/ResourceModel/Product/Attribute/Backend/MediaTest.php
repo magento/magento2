@@ -61,21 +61,21 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->connection = $this->getMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [], [], '', false);
+        $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $resource->expects($this->any())
                  ->method('getConnection')
                  ->willReturn($this->connection);
         $resource->expects($this->any())->method('getTableName')->willReturn('table');
         $this->connection->expects($this->any())->method('setCacheAdapter');
         $this->resource = $objectManager->getObject(
-            'Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media',
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media::class,
             ['resource' => $resource]
         );
-        $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->model = $this->getMock('Magento\Catalog\Model\Product\Attribute\Backend\Media', [], [], '', false);
-        $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $this->attribute = $this->getMock('Magento\Eav\Model\Entity\Attribute\AbstractAttribute', [], [], '', false);
+        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->model = $this->getMock(\Magento\Catalog\Model\Product\Attribute\Backend\Media::class, [], [], '', false);
+        $this->select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $this->attribute = $this->getMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class, [], [], '', false);
     }
 
     public function testLoadDataFromTableByValueId()
@@ -411,5 +411,34 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
 
         $this->resource->deleteGalleryValueInStore($valueId, $entityId, $storeId);
+    }
+
+
+    public function testCountImageUses()
+    {
+        $results = [
+            [
+                'value_id' => '1',
+                'attribute_id' => 90,
+                'value' => '/d/o/download_7.jpg',
+                'media_type' => 'image',
+                'disabled' => '0',
+            ],
+        ];
+
+        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
+        $this->select->expects($this->at(0))
+            ->method('from')
+            ->with(['main' => 'table'], 'count(*)' )
+            ->willReturnSelf();
+        $this->select->expects($this->at(1))
+            ->method('where')
+            ->with('value = ?', 1)
+            ->willReturnSelf();
+        $this->connection->expects($this->once())
+            ->method('fetchOne')
+            ->with($this->select)
+            ->willReturn(count($results));
+        $this->assertEquals($this->resource->countImageUses(1), count($results));
     }
 }

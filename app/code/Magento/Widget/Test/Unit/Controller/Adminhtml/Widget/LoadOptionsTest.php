@@ -105,7 +105,7 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function dtestExecuteWithException()
+    public function testExecuteWithException()
     {
         $jsonResult = '{"error":true,"message":"Some error"}';
         $errorMessage = 'Some error';

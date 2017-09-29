@@ -235,12 +235,28 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param string|null $type product type, all if null
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function prepareFinalPriceDataForType($entityIds, $type)
     {
         $this->_prepareDefaultFinalPriceTable();
 
+        $select = $this->getSelect($entityIds, $type);
+        $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable(), [], false);
+        $this->getConnection()->query($query);
+        return $this;
+    }
+
+    /**
+     * Get select by entity ids or/and product type.
+     *
+     * @param int|array $entityIds the entity ids limitation
+     * @param string|null $type product type, all if null
+     * @return \Magento\Framework\DB\Select
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    protected function getSelect($entityIds = null, $type = null)
+    {
         $connection = $this->getConnection();
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -340,9 +356,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             ]
         );
 
-        $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable(), [], false);
-        $connection->query($query);
-        return $this;
+        return $select;
     }
 
     /**

@@ -159,7 +159,12 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Api\Data\CustomerInterface::class,
             [],
             '',
-            false
+            true,
+            true,
+            true,
+            [
+                '__toArray'
+            ]
         );
 
         $this->model = new \Magento\Customer\Model\ResourceModel\CustomerRepository(
@@ -274,6 +279,11 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->customer->expects($this->atLeastOnce())
+            ->method('__toArray')
+            ->willReturn(['default_billing', 'default_shipping']);
+
         $customerAttributesMetaData = $this->getMockForAbstractClass(
             \Magento\Framework\Api\CustomAttributesDataInterface::class,
             [],
@@ -315,7 +325,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->customer, CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $this->customer)
             ->willReturn($customerAttributesMetaData);
         $this->customerRegistry->expects($this->atLeastOnce())
-            ->method("remove")
+            ->method('remove')
             ->with($customerId);
         $address->expects($this->once())
             ->method('setCustomerId')
@@ -341,7 +351,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with([$address]);
         $this->extensibleDataObjectConverter->expects($this->once())
             ->method('toNestedArray')
-            ->with($customerAttributesMetaData, [], '\Magento\Customer\Api\Data\CustomerInterface')
+            ->with($customerAttributesMetaData, [], \Magento\Customer\Api\Data\CustomerInterface::class)
             ->willReturn(['customerData']);
         $this->customerFactory->expects($this->once())
             ->method('create')
@@ -476,6 +486,11 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
                 'getId'
             ]
         );
+
+        $this->customer->expects($this->atLeastOnce())
+            ->method('__toArray')
+            ->willReturn(['default_billing', 'default_shipping']);
+
         $customerModel = $this->getMock(
             \Magento\Customer\Model\Customer::class,
             [
@@ -548,7 +563,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with([$address]);
         $this->extensibleDataObjectConverter->expects($this->once())
             ->method('toNestedArray')
-            ->with($customerAttributesMetaData, [], '\Magento\Customer\Api\Data\CustomerInterface')
+            ->with($customerAttributesMetaData, [], \Magento\Customer\Api\Data\CustomerInterface::class)
             ->willReturn(['customerData']);
         $this->customerFactory->expects($this->once())
             ->method('create')
@@ -557,7 +572,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerModel->expects($this->once())
             ->method('getStoreId')
             ->willReturn(null);
-        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $store->expects($this->once())
             ->method('getId')
             ->willReturn($storeId);
@@ -684,7 +699,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($collection);
         $this->extensionAttributesJoinProcessor->expects($this->once())
             ->method('process')
-            ->with($collection, 'Magento\Customer\Api\Data\CustomerInterface');
+            ->with($collection, \Magento\Customer\Api\Data\CustomerInterface::class);
         $this->customerMetadata->expects($this->once())
             ->method('getAllAttributesMetadata')
             ->willReturn([$metadata]);

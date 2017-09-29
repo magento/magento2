@@ -5,6 +5,8 @@
  */
 namespace Magento\Widget\Test\Unit\Model;
 
+use Magento\CatalogWidget\Block\Product\ProductsList;
+
 /**
  * Test class for \Magento\Widget\Model\Widget
  */
@@ -142,5 +144,51 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $resultObject = $this->widget->getConfigAsObject(\Magento\Cms\Block\Widget\Page\Link::class);
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $resultObject);
         $this->assertSame([], $resultObject->getData());
+    }
+
+    public function testGetWidgetDeclaration()
+    {
+        $mathRandomMock = $this->getMock(\Magento\Framework\Math\Random::class, ['getRandomString'], [], '', false);
+        $mathRandomMock->expects($this->any())->method('getRandomString')->willReturn('asdf');
+        $reflection = new \ReflectionClass(get_class($this->widget));
+        $reflectionProperty = $reflection->getProperty('mathRandom');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->widget, $mathRandomMock);
+
+        $conditions = [
+            [
+                'type' => \Magento\CatalogWidget\Model\Rule\Condition\Combine::class,
+                'aggregator' => 'all',
+                'value' => '1',
+                'new_child' => ''
+            ]
+        ];
+        $params = [
+            'title' => 'my "widget"',
+            'show_pager' => '1',
+            'products_per_page' => '5',
+            'products_count' => '10',
+            'template' => 'product/widget/content/grid.phtml',
+            'conditions' => $conditions
+        ];
+
+        $this->conditionsHelper->expects($this->once())->method('encode')->with($conditions)
+            ->willReturn('encoded-conditions-string');
+        $this->escaperMock->expects($this->atLeastOnce())
+            ->method('escapeQuote')
+            ->willReturnMap([
+                ['my "widget"', false, 'my &quot;widget&quot;'],
+                ['1', false, '1'],
+                ['5', false, '5'],
+                ['10', false, '10'],
+                ['product/widget/content/grid.phtml', false, 'product/widget/content/grid.phtml'],
+                ['encoded-conditions-string', false, 'encoded-conditions-string'],
+            ]);
+
+        $result = $this->widget->getWidgetDeclaration(ProductsList::class, $params);
+        $this->assertContains('{{widget type="' . ProductsList::class .'"', $result);
+        $this->assertContains('title="my &quot;widget&quot;"', $result);
+        $this->assertContains('conditions_encoded="encoded-conditions-string"', $result);
+        $this->assertContains('page_var_name="pasdf"}}', $result);
     }
 }

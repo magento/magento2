@@ -91,22 +91,29 @@ class Matrix extends Form
      *
      * @var string
      */
-    protected $actionMenu = '.action-select';
+    private $actionMenu = '.action-select';
 
     /**
      * Choose a different Product button selector.
      *
      * @var string
      */
-    protected $chooseProduct = '[data-bind*="showGrid"]';
+    private $chooseProduct = '[data-bind*="showGrid"]';
 
     /**
      * Selector for row on product grid by product id.
      *
      * @var string
      */
-    protected $associatedProductGrid =
+    private $associatedProductGrid =
         '[data-bind*="configurable_associated_product_listing.configurable_associated_product_listing"]';
+
+    /**
+     * Delete variation button selector.
+     *
+     * @var string
+     */
+    private $deleteVariation = '[data-bind*="removeProduct"]';
 
     /**
      * Fill variations.
@@ -122,7 +129,6 @@ class Matrix extends Form
                 sprintf($this->variationRowByNumber, $count),
                 Locator::SELECTOR_XPATH
             );
-            ksort($variation);
             ++$count;
 
             if (isset($variation['configurable_attribute'])) {
@@ -131,7 +137,6 @@ class Matrix extends Form
             }
 
             $mapping = $this->dataMapping($variation);
-
             $this->_fill($mapping, $variationRow);
         }
     }
@@ -217,5 +222,26 @@ class Matrix extends Form
             \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AssociatedProductGrid::class,
             ['element' => $this->browser->find($this->associatedProductGrid)]
         );
+    }
+
+    /**
+     * Delete variations.
+     *
+     * @throws \Exception
+     */
+    public function deleteVariations()
+    {
+        $rowLocator = sprintf($this->variationRowByNumber, 1);
+        $variationText = '';
+        while ($this->_rootElement->find($rowLocator, Locator::SELECTOR_XPATH)->isVisible()) {
+            $variation = $this->_rootElement->find($rowLocator, Locator::SELECTOR_XPATH);
+            if ($variationText == $variation->getText()) {
+                throw new \Exception("Failed to delete configurable product variation");
+            }
+            $variationText = $variation->getText();
+            $variation->find($this->actionMenu)->hover();
+            $variation->find($this->actionMenu)->click();
+            $variation->find($this->deleteVariation)->click();
+        }
     }
 }
