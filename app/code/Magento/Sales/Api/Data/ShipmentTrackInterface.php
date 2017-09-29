@@ -46,6 +46,10 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      */
     const TRACK_NUMBER = 'track_number';
     /*
+     * Track URL.
+     */
+    const TRACK_URL = 'track_url';
+    /*
      * Description.
      */
     const DESCRIPTION = 'description';
