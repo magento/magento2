@@ -8,8 +8,8 @@ use Magento\Sales\Model\Order\Payment;
 
 // @codingStandardsIgnoreFile
 
-require 'default_rollback.php';
 require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/product_configurable.php';
+
 /** @var \Magento\Catalog\Model\Product $product */
 $configurableProduct = $product;
 
