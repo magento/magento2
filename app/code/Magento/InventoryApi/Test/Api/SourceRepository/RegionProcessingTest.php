@@ -92,7 +92,7 @@ class RegionProcessingTest extends WebapiAbstract
      * @param array $data
      * @return int
      */
-    private function saveSource(array $data)
+    private function saveSource(array $data): int
     {
         $serviceInfo = [
             'rest' => [
@@ -114,7 +114,7 @@ class RegionProcessingTest extends WebapiAbstract
      * @param int $sourceId
      * @return array
      */
-    private function getSourceDataById($sourceId)
+    private function getSourceDataById(int $sourceId): array
     {
         $serviceInfo = [
             'rest' => [

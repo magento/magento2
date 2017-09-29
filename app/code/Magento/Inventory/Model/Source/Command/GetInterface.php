@@ -27,5 +27,5 @@ interface GetInterface
      * @return SourceInterface
      * @throws NoSuchEntityException
      */
-    public function execute($sourceId);
+    public function execute(int $sourceId): SourceInterface;
 }

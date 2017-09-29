@@ -12,14 +12,14 @@ class Checker
     /**
      * @var ResourceConnection
      */
-    private $resource;
+    private $resourceConnection;
 
     /**
-     * @param ResourceConnection $resource
+     * @param ResourceConnection $resourceConnection
      */
-    public function __construct(ResourceConnection $resource)
+    public function __construct(ResourceConnection $resourceConnection)
     {
-        $this->resource = $resource;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -30,9 +30,8 @@ class Checker
      */
     public function execute($stockId, $sku)
     {
-        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
-        $connection = $this->resource->getConnection();
-        $tableName = $connection->getTableName('inventory_stock_item_stock_' . $stockId);
+        $connection = $this->resourceConnection->getConnection();
+        $tableName = $this->resourceConnection->getTableName('inventory_stock_item_stock_' . $stockId);
 
         $result = 0;
         // can make select to non exitsing table count must be 0.

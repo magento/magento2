@@ -15,7 +15,6 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
- * Class SourceDataProvider
  * @api
  */
 class SourceDataProvider extends DataProvider
@@ -117,7 +116,7 @@ class SourceDataProvider extends DataProvider
      * @param int $sourceId
      * @return array
      */
-    private function getAssignedCarrierCodes($sourceId)
+    private function getAssignedCarrierCodes(int $sourceId): array
     {
         $source = $this->sourceRepository->get($sourceId);
         $carrierCodes = [];

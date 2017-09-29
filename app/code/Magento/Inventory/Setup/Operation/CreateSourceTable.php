@@ -43,7 +43,7 @@ class CreateSourceTable
      * @param Table $sourceTable
      * @return Table
      */
-    private function addBaseFields(Table $sourceTable)
+    private function addBaseFields(Table $sourceTable): Table
     {
         return $sourceTable->addColumn(
             SourceInterface::SOURCE_ID,

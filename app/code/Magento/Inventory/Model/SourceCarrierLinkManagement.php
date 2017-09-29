@@ -23,7 +23,7 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
     /**
      * @var ResourceConnection
      */
-    private $connection;
+    private $resourceConnection;
 
     /**
      * @var SourceCarrierLinkResourceModel
@@ -46,22 +46,20 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
     private $searchCriteriaBuilder;
 
     /**
-     * SourceCarrierLinkManagement constructor
-     *
-     * @param ResourceConnection $connection
+     * @param ResourceConnection $resourceConnection
      * @param SourceCarrierLinkResourceModel $sourceCarrierLinkResource
      * @param CollectionProcessorInterface $collectionProcessor
      * @param CollectionFactory $carrierLinkCollectionFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
-        ResourceConnection $connection,
+        ResourceConnection $resourceConnection,
         SourceCarrierLinkResourceModel $sourceCarrierLinkResource,
         CollectionProcessorInterface $collectionProcessor,
         CollectionFactory $carrierLinkCollectionFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
-        $this->connection = $connection;
+        $this->resourceConnection = $resourceConnection;
         $this->sourceCarrierLinkResource = $sourceCarrierLinkResource;
         $this->collectionProcessor = $collectionProcessor;
         $this->carrierLinkCollectionFactory = $carrierLinkCollectionFactory;
@@ -87,9 +85,9 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
      */
     private function deleteCurrentCarrierLinks(SourceInterface $source)
     {
-        $connection = $this->connection->getConnection();
+        $connection = $this->resourceConnection->getConnection();
         $connection->delete(
-            $connection->getTableName(SourceCarrierLink::TABLE_NAME_SOURCE_CARRIER_LINK),
+            $this->resourceConnection->getTableName(SourceCarrierLink::TABLE_NAME_SOURCE_CARRIER_LINK),
             $connection->quoteInto('source_id = ?', $source->getSourceId())
         );
     }
@@ -109,9 +107,8 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
             ];
         }
 
-        $connection = $this->connection->getConnection();
-        $connection->insertMultiple(
-            $connection->getTableName(SourceCarrierLink::TABLE_NAME_SOURCE_CARRIER_LINK),
+        $this->resourceConnection->getConnection()->insertMultiple(
+            $this->resourceConnection->getTableName(SourceCarrierLink::TABLE_NAME_SOURCE_CARRIER_LINK),
             $carrierLinkData
         );
     }

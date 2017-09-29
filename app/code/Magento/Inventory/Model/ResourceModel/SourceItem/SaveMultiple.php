@@ -18,17 +18,15 @@ class SaveMultiple
     /**
      * @var ResourceConnection
      */
-    private $connection;
+    private $resourceConnection;
 
     /**
-     * SourceCarrierLinkManagement constructor
-     *
-     * @param ResourceConnection $connection
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        ResourceConnection $connection
+        ResourceConnection $resourceConnection
     ) {
-        $this->connection = $connection;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -39,8 +37,11 @@ class SaveMultiple
      */
     public function execute(array $sourceItems)
     {
-        $connection = $this->connection->getConnection();
-        $tableName = $connection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
+        if (!count($sourceItems)) {
+            return;
+        }
+        $connection = $this->resourceConnection->getConnection();
+        $tableName = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
         $columnsSql = $this->buildColumnsSqlPart([
             SourceItemInterface::SOURCE_ID,
@@ -70,9 +71,9 @@ class SaveMultiple
      * @param array $columns
      * @return string
      */
-    private function buildColumnsSqlPart(array $columns)
+    private function buildColumnsSqlPart(array $columns): string
     {
-        $connection = $this->connection->getConnection();
+        $connection = $this->resourceConnection->getConnection();
         $processedColumns = array_map([$connection, 'quoteIdentifier'], $columns);
         $sql = implode(', ', $processedColumns);
         return $sql;
@@ -82,7 +83,7 @@ class SaveMultiple
      * @param SourceItemInterface[] $sourceItems
      * @return string
      */
-    private function buildValuesSqlPart(array $sourceItems)
+    private function buildValuesSqlPart(array $sourceItems): string
     {
         $sql = rtrim(str_repeat('(?, ?, ?, ?), ', count($sourceItems)), ', ');
         return $sql;
@@ -90,9 +91,9 @@ class SaveMultiple
 
     /**
      * @param SourceItemInterface[] $sourceItems
-     * @return string
+     * @return array
      */
-    private function getSqlBindData(array $sourceItems)
+    private function getSqlBindData(array $sourceItems): array
     {
         $bind = [];
         foreach ($sourceItems as $sourceItem) {
@@ -110,9 +111,9 @@ class SaveMultiple
      * @param array $fields
      * @return string
      */
-    private function buildOnDuplicateSqlPart(array $fields)
+    private function buildOnDuplicateSqlPart(array $fields): string
     {
-        $connection = $this->connection->getConnection();
+        $connection = $this->resourceConnection->getConnection();
         $processedFields = [];
         foreach ($fields as $field) {
             $processedFields[] = sprintf('%1$s = VALUES(%1$s)', $connection->quoteIdentifier($field));

@@ -99,7 +99,7 @@ class UnassignSourceFromStockTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function dataProviderWrongParameters()
+    public function dataProviderWrongParameters(): array
     {
         return [
             'not_numeric_stock_id' => [
@@ -123,7 +123,7 @@ class UnassignSourceFromStockTest extends WebapiAbstract
      * @param int $stockId
      * @return array
      */
-    private function getAssignedSourcesForStock(int $stockId)
+    private function getAssignedSourcesForStock(int $stockId): array
     {
         $serviceInfo = [
             'rest' => [

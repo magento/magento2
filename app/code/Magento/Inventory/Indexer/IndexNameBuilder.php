@@ -104,7 +104,7 @@ class IndexNameBuilder
     /**
      * @return IndexName
      */
-    public function create()
+    public function build()
     {
         $indexName = $this->indexNameFactory->create($this->data);
         $this->data = [];

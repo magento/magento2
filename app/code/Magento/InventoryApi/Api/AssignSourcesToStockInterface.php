@@ -25,5 +25,5 @@ interface AssignSourcesToStockInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(array $sourceIds, $stockId);
+    public function execute(array $sourceIds, int $stockId);
 }

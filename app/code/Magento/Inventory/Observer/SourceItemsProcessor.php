@@ -47,8 +47,6 @@ class SourceItemsProcessor
     private $sourceItemsSave;
 
     /**
-     * SourceItemsProcessor constructor
-     *
      * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SourceItemInterfaceFactory $sourceItemFactory
@@ -111,7 +109,7 @@ class SourceItemsProcessor
      * @param string $sku
      * @return SourceItemInterface[]
      */
-    private function getCurrentSourceItemsMap($sku)
+    private function getCurrentSourceItemsMap(string $sku): array
     {
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $this->searchCriteriaBuilderFactory->create();

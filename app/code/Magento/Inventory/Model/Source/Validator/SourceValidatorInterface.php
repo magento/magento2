@@ -20,5 +20,5 @@ interface SourceValidatorInterface
      * @param SourceInterface $source
      * @return ValidationResult
      */
-    public function validate(SourceInterface $source);
+    public function validate(SourceInterface $source): ValidationResult;
 }

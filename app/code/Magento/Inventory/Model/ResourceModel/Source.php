@@ -34,8 +34,6 @@ class Source extends AbstractDb
     private $sourceCarrierLinkManagement;
 
     /**
-     * Source constructor
-     *
      * @param Context $context
      * @param SourceCarrierLinkManagementInterface $sourceCarrierLinkManagement
      * @param null $connectionName

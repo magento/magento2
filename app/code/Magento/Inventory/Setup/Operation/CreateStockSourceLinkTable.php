@@ -32,7 +32,7 @@ class CreateStockSourceLinkTable
      * @param SchemaSetupInterface $setup
      * @return Table
      */
-    private function createStockSourceLinkTable(SchemaSetupInterface $setup)
+    private function createStockSourceLinkTable(SchemaSetupInterface $setup): Table
     {
         $stockSourceLinkTable = $setup->getTable(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK);
         $stockTable = $setup->getTable(StockResourceModel::TABLE_NAME_STOCK);

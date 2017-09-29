@@ -29,6 +29,7 @@
                 <class>reset</class>
                 <label translate="true">Reset</label>
             </button>
+            <button name="delete" class="Magento\Inventory\Ui\Component\Control\Stock\DeleteButton"/>
             <button name="save" class="Magento\Inventory\Ui\Component\Control\Stock\SaveSplitButton"/>
         </buttons>
     </settings>

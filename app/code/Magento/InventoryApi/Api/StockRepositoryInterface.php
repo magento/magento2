@@ -7,6 +7,7 @@ namespace Magento\InventoryApi\Api;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\Data\StockSearchResultsInterface;
 
 /**
  * In Magento 2 Repository considered as an implementation of Facade pattern which provides a simplified interface
@@ -34,7 +35,7 @@ interface StockRepositoryInterface
      * @throws \Magento\Framework\Validation\ValidationException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(StockInterface $stock);
+    public function save(StockInterface $stock): int;
 
     /**
      * Get Stock data by given stockId. If you want to create plugin on get method, also you need to create separate
@@ -44,15 +45,16 @@ interface StockRepositoryInterface
      * @return \Magento\InventoryApi\Api\Data\StockInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get($stockId);
+    public function get(int $stockId): StockInterface;
 
     /**
      * Find Stocks by given SearchCriteria
+     * SearchCriteria is not required because load all stocks is useful case
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\StockSearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria = null);
+    public function getList(SearchCriteriaInterface $searchCriteria = null): StockSearchResultsInterface;
 
     /**
      * Delete the Stock data by stockId. If stock is not found do nothing
@@ -61,5 +63,5 @@ interface StockRepositoryInterface
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function deleteById($stockId);
+    public function deleteById(int $stockId);
 }

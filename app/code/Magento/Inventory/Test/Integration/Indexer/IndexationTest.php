@@ -72,7 +72,7 @@ class IndexationTest extends TestCase
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
-                ->create();
+                ->build();
             $indexStructure->delete($indexName);
         }
     }

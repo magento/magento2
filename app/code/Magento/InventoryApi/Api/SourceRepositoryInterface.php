@@ -7,6 +7,7 @@ namespace Magento\InventoryApi\Api;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceSearchResultsInterface;
 
 /**
  * In Magento 2 Repository considered as an implementation of Facade pattern which provides a simplified interface
@@ -37,7 +38,7 @@ interface SourceRepositoryInterface
      * @throws \Magento\Framework\Validation\ValidationException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(SourceInterface $source);
+    public function save(SourceInterface $source): int;
 
     /**
      * Get Source data by given sourceId. If you want to create plugin on get method, also you need to create separate
@@ -47,13 +48,14 @@ interface SourceRepositoryInterface
      * @return \Magento\InventoryApi\Api\Data\SourceInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get($sourceId);
+    public function get(int $sourceId): SourceInterface;
 
     /**
      * Find Sources by SearchCriteria
+     * SearchCriteria is not required because load all stocks is useful case
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\SourceSearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria = null);
+    public function getList(SearchCriteriaInterface $searchCriteria = null): SourceSearchResultsInterface;
 }

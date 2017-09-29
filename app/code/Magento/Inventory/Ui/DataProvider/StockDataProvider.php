@@ -17,7 +17,6 @@ use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 
 /**
- * Class StockDataProvider
  * @api
  */
 class StockDataProvider extends DataProvider
@@ -129,7 +128,7 @@ class StockDataProvider extends DataProvider
      * @param int $stockId
      * @return array
      */
-    private function getAssignedSourcesData($stockId)
+    private function getAssignedSourcesData(int $stockId): array
     {
         $assignedSources = $this->getAssignedSourcesForStock->execute($stockId);
 
