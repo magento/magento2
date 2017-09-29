@@ -18,9 +18,14 @@ use Magento\Inventory\Indexer\StockItemIndexerInterface;
 class StockItem implements StockItemIndexerInterface
 {
     /**
-     * @var GetAssignedStockIds
+     * @var GetDeltaReindexData
      */
-    private $getAssignedStockIds;
+    private $getDeltaReindexData;
+
+    /**
+     * @var GetFullReindexData
+     */
+    private $getFullReindexData;
 
     /**
      * @var IndexStructureInterface
@@ -48,7 +53,8 @@ class StockItem implements StockItemIndexerInterface
     private $indexNameBuilder;
 
     /**
-     * @param GetAssignedStockIds $getAssignedStockIds
+     * @param GetDeltaReindexData $getDeltaReindexData,
+     * @param GetFullReindexData $getFullReindexData,
      * @param IndexStructureInterface $indexStructureHandler
      * @param IndexHandlerInterface $indexHandler
      * @param IndexDataProvider $indexDataProvider
@@ -59,14 +65,17 @@ class StockItem implements StockItemIndexerInterface
      * @see \Magento\Indexer\Model\Indexer::getActionInstance
      */
     public function __construct(
-        GetAssignedStockIds $getAssignedStockIds,
+        GetDeltaReindexData $getDeltaReindexData,
+        GetFullReindexData $getFullReindexData,
         IndexStructureInterface $indexStructureHandler,
         IndexHandlerInterface $indexHandler,
         IndexDataProvider $indexDataProvider,
         IndexTableSwitcherInterface $indexTableSwitcher,
         IndexNameBuilder $indexNameBuilder
     ) {
-        $this->getAssignedStockIds = $getAssignedStockIds;
+
+        $this->getDeltaReindexData = $getDeltaReindexData;
+        $this->getFullReindexData = $getFullReindexData;
         $this->indexStructure = $indexStructureHandler;
         $this->indexHandler = $indexHandler;
         $this->indexDataProvider = $indexDataProvider;
@@ -79,7 +88,7 @@ class StockItem implements StockItemIndexerInterface
      */
     public function executeFull()
     {
-        $stockIds = $this->getAssignedStockIds->execute([]);
+        $stockIds = $this->getFullReindexData->execute();
 
         foreach ($stockIds as $stockId) {
             $mainIndexName = $this->indexNameBuilder
@@ -115,17 +124,7 @@ class StockItem implements StockItemIndexerInterface
      */
     public function executeList(array $sourceItemIds)
     {
-
-        /**
-         * Select stock_id, sku from inventory_source_item
-         * INNER JOIN inventory_source_stock_link ON inventory_source_item.source_id = inventory_source_stock_link.source_id
-         * where source_item_id IN (1,2)
-         */
-
-        // 1  1 sku1
-        // 5  3 sku2
-        $sourceItemIds = [1, 5];
-        $stockIds = [1 => ['sku1'], 2 => ['sku1', 'sku2'] ];
+        $stockIds = $this->getDeltaReindexData->execute($sourceItemIds);
 
         foreach($stockIds as $stockId => $skuList)
         {
