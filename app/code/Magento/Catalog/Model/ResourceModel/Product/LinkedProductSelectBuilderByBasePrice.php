@@ -98,15 +98,15 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
             ->limit(1);
         $priceSelect = $this->baseSelectProcessor->process($priceSelect);
 
-        $priceSelectDefault = clone $priceSelect;
-        $priceSelectDefault->where('t.store_id = ?', Store::DEFAULT_STORE_ID);
-        $select[] = $priceSelectDefault;
-
         if (!$this->catalogHelper->isPriceGlobal()) {
-            $priceSelect->where('t.store_id = ?', $this->storeManager->getStore()->getId());
-            $select[] = $priceSelect;
+            $priceSelectStore = clone $priceSelect;
+            $priceSelectStore->where('t.store_id = ?', $this->storeManager->getStore()->getId());
+            $selects[] = $priceSelectStore;
         }
 
-        return $select;
+        $priceSelect->where('t.store_id = ?', Store::DEFAULT_STORE_ID);
+        $selects[] = $priceSelect;
+
+        return $selects;
     }
 }

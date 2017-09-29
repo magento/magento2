@@ -131,4 +131,31 @@ class LowestPriceOptionProviderTest extends \PHPUnit_Framework_TestCase
             LowestPriceOptionsProviderInterface::class
         );
     }
+
+    /**
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDataFixture Magento/Store/_files/website.php
+     */
+    public function testGetProductsIfOneOfChildrenIsAssignedToOtherWebsite()
+    {
+        $configurableProduct = $this->productRepository->getById(1001, false, null, true);
+        $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
+        $this->assertCount(1, $lowestPriceChildrenProducts);
+        $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
+        $this->assertEquals(10, $lowestPriceChildrenProduct->getPrice());
+
+        /** @var \Magento\Store\Api\WebsiteRepositoryInterface $webSiteRepository */
+        $webSiteRepository = Bootstrap::getObjectManager()->get(\Magento\Store\Api\WebsiteRepositoryInterface::class);
+        $website = $webSiteRepository->get('test');
+
+        $lowestPriceChildrenProduct->setWebsiteIds([$website->getId()]);
+
+        $this->productRepository->save($lowestPriceChildrenProduct);
+
+        $configurableProduct = $this->productRepository->getById(1001, false, null, true);
+        $lowestPriceChildrenProducts = $this->createLowestPriceOptionsProvider()->getProducts($configurableProduct);
+        $this->assertCount(1, $lowestPriceChildrenProducts);
+        $lowestPriceChildrenProduct = reset($lowestPriceChildrenProducts);
+        $this->assertEquals(20, $lowestPriceChildrenProduct->getPrice());
+    }
 }
