@@ -112,7 +112,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
             $data['customer_collection']
         ) ? $data['customer_collection'] : $customerColFactory->create();
 
-        $this->_initAttributeValues()->_initStores()->_initWebsites(true);
+        $this->_initAttributeValues()->_initAttributeTypes()->_initStores()->_initWebsites(true);
     }
 
     /**
