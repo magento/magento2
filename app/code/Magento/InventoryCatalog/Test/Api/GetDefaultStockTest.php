@@ -11,12 +11,12 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Rest\Request;
 
 /**
- * Class GetDefaultStock
+ * Class GetDefaultStockTest
  */
-class GetDefaultStock extends WebapiAbstract
+class GetDefaultStockTest extends WebapiAbstract
 {
     /**
-     * Get default stock from WebApi test
+     * Test that default Stock is present after installation
      */
     public function testGetDefaultSource()
     {
