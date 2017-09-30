@@ -11,12 +11,12 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Rest\Request;
 
 /**
- * Class GetDefaultSource
+ * Class GetDefaultSourceTest
  */
-class GetDefaultSource extends WebapiAbstract
+class GetDefaultSourceTest extends WebapiAbstract
 {
     /**
-     * Get default source from WebApi test
+     * Test that default Source is present after installation
      */
     public function testGetDefaultSource()
     {
