@@ -47,15 +47,14 @@ class GetDeltaReindexData
             ->from(
                 ['source_item' => $sourceItemTable],
                 [
-                    SourceItemInterface::SKU => sprintf("GROUP_CONCAT(DISTINCT %s SEPARATOR ',')",
-                        'source_item.' . SourceItemInterface::SKU
-                    )
+                    SourceItemInterface::SKU =>
+                        sprintf("GROUP_CONCAT(DISTINCT %s SEPARATOR ',')", 'source_item.' . SourceItemInterface::SKU)
                 ]
-            )->joinInner(['stock_source_link' => $sourceStockLinkTable],
+            )->joinInner(
+                ['stock_source_link' => $sourceStockLinkTable],
                 'source_item.' . SourceItemInterface::SOURCE_ID . ' = stock_source_link.' . StockSourceLink::SOURCE_ID,
                 [StockSourceLink::STOCK_ID]
-            )
-            ->where('source_item.source_item_id IN (?)', $sourceItemIds)
+            )->where('source_item.source_item_id IN (?)', $sourceItemIds)
             ->group(['stock_source_link.' . StockSourceLink::STOCK_ID]);
 
         $items = $connection->fetchAll($select);
@@ -67,7 +66,7 @@ class GetDeltaReindexData
      * @param array $items
      * @return array
      */
-    private function getStockIdToSkus(array $items) :array
+    private function getStockIdToSkus(array $items): array
     {
         $stockIds = [];
         foreach ($items as $item) {

@@ -76,7 +76,7 @@ class IndexDataProvider
             ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
             ->where('stock_source_link.' . StockSourceLink::SOURCE_ID . ' IN (?)', $sourceIds);
 
-        if (count($skuList) === 0) {
+        if (count($skuList) !== 0) {
             $select->where('source_item.' . SourceItemInterface::SKU . ' IN (?)', $skuList);
         }
 

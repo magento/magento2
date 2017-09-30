@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\Inventory\Indexer\Alias;
@@ -53,8 +54,8 @@ class StockItem implements StockItemIndexerInterface
     private $indexNameBuilder;
 
     /**
-     * @param GetDeltaReindexData $getDeltaReindexData,
-     * @param GetFullReindexData $getFullReindexData,
+     * @param GetDeltaReindexData $getDeltaReindexData ,
+     * @param GetFullReindexData $getFullReindexData ,
      * @param IndexStructureInterface $indexStructureHandler
      * @param IndexHandlerInterface $indexHandler
      * @param IndexDataProvider $indexDataProvider
@@ -125,8 +126,7 @@ class StockItem implements StockItemIndexerInterface
     {
         $stockIds = $this->getDeltaReindexData->execute($sourceItemIds);
 
-        foreach($stockIds as $stockId => $skuList)
-        {
+        foreach ($stockIds as $stockId => $skuList) {
             $mainIndexName = $this->indexNameBuilder
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)

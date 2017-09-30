@@ -76,8 +76,7 @@ class IndexStructure implements IndexStructureInterface
             $this->createTable($connection, $tableName);
             return;
         }
-        $where = ['sku in (?)' => $skuList];
-        $connection->delete($tableName,  $where);
+        $connection->delete($tableName, ['sku in (?)' => $skuList]);
     }
 
     /**
