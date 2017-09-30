@@ -82,9 +82,13 @@ class ConfigGenerator
 
         $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
 
-        $key = $data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY]
-            ?? $currentKey
-            ?? $this->cryptKeyGenerator->generate();
+        // Use given key if set, else use current
+        $key = $data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY] ?? $currentKey;
+
+        // If there is no key given or currently set, generate a new one
+        $key = $key ?? $this->cryptKeyGenerator->generate();
+
+        // Chaining of ".. ?? .." is not used to keep it simpler to understand
 
         $configData->set(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY, $key);
 
