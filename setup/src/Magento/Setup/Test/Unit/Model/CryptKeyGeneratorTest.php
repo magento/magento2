@@ -38,7 +38,8 @@ class CryptKeyGeneratorTest extends TestCase
     {
         $this->randomMock
             ->expects($this->once())
-            ->method('getRandomString');
+            ->method('getRandomString')
+            ->willReturn('');
         
         $this->cryptKeyGenerator->generate();
     }
