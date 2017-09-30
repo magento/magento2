@@ -31,7 +31,7 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $cryptKeyGenerator = new CryptKeyGenerator($randomMock);
 
-        $this->configGeneratorObject = new ConfigGenerator($deployConfig, null, $cryptKeyGenerator);
+        $this->configGeneratorObject = new ConfigGenerator($randomMock, $deployConfig, null, $cryptKeyGenerator);
     }
 
     public function testCreateCryptConfigWithInput()
