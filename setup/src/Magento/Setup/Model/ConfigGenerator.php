@@ -53,7 +53,7 @@ class ConfigGenerator
     /**
      * @var ConfigDataFactory
      */
-    protected $configDataFactory;
+    private $configDataFactory;
 
     /**
      * Constructor
