@@ -81,8 +81,6 @@ class ConfigGenerator
     {
         $currentKey = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
 
-        // TODO: refactor configData to factory in constructor
-        // TODO: test method 'set' with mock
         $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
         if (isset($data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY])) {
             $configData->set(
