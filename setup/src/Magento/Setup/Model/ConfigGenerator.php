@@ -13,6 +13,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\State;
+use Magento\Framework\Math\Random;
 
 /**
  * Creates deployment config data based on user input array
@@ -45,6 +46,12 @@ class ConfigGenerator
     protected $deploymentConfig;
 
     /**
+     * @var Random
+     * @deprecated since 100.2.0
+     */
+    protected $random;
+
+    /**
      * @var ConfigDataFactory
      */
     private $configDataFactory;
@@ -57,11 +64,13 @@ class ConfigGenerator
     /**
      * Constructor
      *
+     * @param Random $random Deprecated since 100.2.0
      * @param DeploymentConfig $deploymentConfig
      * @param ConfigDataFactory|null $configDataFactory
      * @param CryptKeyGeneratorInterface|null $cryptKeyGenerator
      */
     public function __construct(
+        Random $random,
         DeploymentConfig $deploymentConfig,
         ConfigDataFactory $configDataFactory = null,
         CryptKeyGeneratorInterface $cryptKeyGenerator = null
