@@ -6,13 +6,14 @@
 
 namespace Magento\Setup\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Math\Random;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\State;
-use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Creates deployment config data based on user input array
@@ -50,15 +51,25 @@ class ConfigGenerator
     protected $deploymentConfig;
 
     /**
+     * @var ConfigDataFactory
+     */
+    protected $configDataFactory;
+
+    /**
      * Constructor
      *
      * @param Random $random
      * @param DeploymentConfig $deploymentConfig
+     * @param ConfigDataFactory $configDataFactory
      */
-    public function __construct(Random $random, DeploymentConfig $deploymentConfig)
-    {
+    public function __construct(
+        Random $random,
+        DeploymentConfig $deploymentConfig,
+        ConfigDataFactory $configDataFactory
+    ) {
         $this->random = $random;
         $this->deploymentConfig = $deploymentConfig;
+        $this->configDataFactory = $configDataFactory;
     }
 
     /**
@@ -70,15 +81,14 @@ class ConfigGenerator
     {
         $currentKey = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
 
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        // TODO: refactor configData to factory in constructor
+        // TODO: test method 'set' with mock
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
         if (isset($data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY])) {
-            if ($currentKey !== null) {
-                $key = $currentKey . "\n" . $data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY];
-            } else {
-                $key = $data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY];
-            }
-
-            $configData->set(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY, $key);
+            $configData->set(
+                ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY,
+                $data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY]
+            );
         } else {
             if ($currentKey === null) {
                 $configData->set(
@@ -99,7 +109,7 @@ class ConfigGenerator
      */
     public function createSessionConfig(array $data)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
 
         if (isset($data[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE])) {
             $configData->set(
@@ -132,7 +142,7 @@ class ConfigGenerator
      */
     public function createDbConfig(array $data)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
 
         $optional = [
             ConfigOptionsListConstants::INPUT_KEY_DB_HOST,
@@ -182,7 +192,7 @@ class ConfigGenerator
      */
     public function createResourceConfig()
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
 
         if ($this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_RESOURCE_DEFAULT_SETUP) === null) {
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_RESOURCE_DEFAULT_SETUP, 'default');
@@ -198,7 +208,7 @@ class ConfigGenerator
      */
     public function createXFrameConfig()
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
         if ($this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT) === null) {
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT, 'SAMEORIGIN');
         }
@@ -212,7 +222,7 @@ class ConfigGenerator
      */
     public function createModeConfig()
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
         if ($this->deploymentConfig->get(State::PARAM_MODE) === null) {
             $configData->set(State::PARAM_MODE, State::MODE_DEFAULT);
         }
@@ -227,7 +237,7 @@ class ConfigGenerator
      */
     public function createCacheHostsConfig(array $data)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
         if (isset($data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])) {
             $hostData = explode(',', $data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]);
             $hosts = [];
