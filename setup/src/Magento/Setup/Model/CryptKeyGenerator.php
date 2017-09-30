@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Math\Random;
 
@@ -20,9 +21,9 @@ class CryptKeyGenerator implements CryptKeyGeneratorInterface
      */
     private $random;
 
-    public function __construct(Random $random)
+    public function __construct(Random $random = null)
     {
-        $this->random = $random;
+        $this->random = $random ?? ObjectManager::getInstance()->get(Random::class);
     }
 
     /**
