@@ -70,7 +70,7 @@ class Input extends AbstractFilter
             if (!empty($value)) {
                 $filter = $this->filterBuilder->setConditionType('like')
                     ->setField($this->getName())
-                    ->setValue(sprintf('%%%s%%', $value))
+                    ->setValue(sprintf('%%%s%%', str_replace('\\', '\\\\', $value)))
                     ->create();
 
                 $this->getContext()->getDataProvider()->addFilter($filter);
