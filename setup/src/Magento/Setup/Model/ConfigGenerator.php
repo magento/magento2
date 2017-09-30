@@ -249,12 +249,12 @@ class ConfigGenerator
      */
     private function mapHostData($hostData)
     {
-        list($host, $port) = explode(':', trim($hostData));
+        $hostDataParts = explode(':', trim($hostData));
 
-        $tmp = ['host' => $host];
+        $tmp = ['host' => $hostDataParts[0]];
 
-        if ($port !== null) {
-            $tmp['port'] = $port;
+        if (isset($hostDataParts[1])) {
+            $tmp['port'] = $hostDataParts[1];
         }
 
         return $tmp;
