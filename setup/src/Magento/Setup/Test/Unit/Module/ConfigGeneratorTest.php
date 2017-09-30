@@ -5,9 +5,12 @@
  */
 namespace Magento\Setup\Test\Unit\Module;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Math\Random;
 use Magento\Setup\Model\ConfigGenerator;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Setup\Model\CryptKeyGenerator;
 
 class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
 {
@@ -18,11 +21,17 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $random = $this->createMock(\Magento\Framework\Math\Random::class);
-        $random->expects($this->any())->method('getRandomString')->willReturn('key');
-        $deployConfig= $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        /** @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject $deployConfig */
+        $deployConfig = $this->createMock(DeploymentConfig::class);
         $deployConfig->expects($this->any())->method('isAvailable')->willReturn(false);
-        $this->configGeneratorObject = new ConfigGenerator($random, $deployConfig);
+
+        /** @var Random|\PHPUnit_Framework_MockObject_MockObject $randomMock */
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->expects($this->any())->method('getRandomString')->willReturn('key');
+
+        $cryptKeyGenerator = new CryptKeyGenerator($randomMock);
+
+        $this->configGeneratorObject = new ConfigGenerator($deployConfig, null, $cryptKeyGenerator);
     }
 
     public function testCreateCryptConfigWithInput()
