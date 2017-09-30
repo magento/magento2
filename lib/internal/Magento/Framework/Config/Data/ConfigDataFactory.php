@@ -18,7 +18,7 @@ class ConfigDataFactory
      * @param string $fileKey
      * @return ConfigData
      */
-    public function create(string $fileKey)
+    public function create(string $fileKey) : ConfigData
     {
         return new ConfigData($fileKey);
     }
