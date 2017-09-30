@@ -34,7 +34,7 @@ class CryptKeyGenerator implements CryptKeyGeneratorInterface
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function generate()
+    public function generate() : string
     {
         return md5($this->getRandomString());
     }
