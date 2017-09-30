@@ -65,11 +65,11 @@ class ConfigGenerator
     public function __construct(
         Random $random,
         DeploymentConfig $deploymentConfig,
-        ConfigDataFactory $configDataFactory
+        ConfigDataFactory $configDataFactory = null
     ) {
         $this->random = $random;
         $this->deploymentConfig = $deploymentConfig;
-        $this->configDataFactory = $configDataFactory;
+        $this->configDataFactory = $deploymentConfig ?? ObjectManager::getInstance()->get(ConfigDataFactory::class);
     }
 
     /**
