@@ -232,21 +232,34 @@ class ConfigGenerator
     public function createCacheHostsConfig(array $data)
     {
         $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
+
         if (isset($data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])) {
-            $hostData = explode(',', $data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]);
-            $hosts = [];
-            foreach ($hostData as $data) {
-                $dataArray = explode(':', trim($data));
-                $host = [];
-                $host['host'] = $dataArray[0];
-                if (isset($dataArray[1])) {
-                    $host['port'] = $dataArray[1];
-                }
-                $hosts[] = $host;
-            }
+            $hosts = explode(',', $data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]);
+            $hosts = array_map([$this, 'mapHostData'], $hosts);
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS, $hosts);
         }
+
         $configData->setOverrideWhenSave(true);
         return $configData;
+    }
+
+    /**
+     * Splits host data to host and port and returns them as an assoc. array.
+     *
+     * @param string $hostData
+     *
+     * @return array
+     */
+    private function mapHostData($hostData)
+    {
+        list($host, $port) = explode(':', trim($hostData));
+
+        $tmp = ['host' => $host];
+
+        if ($port !== null) {
+            $tmp['port'] = $port;
+        }
+
+        return $tmp;
     }
 }
