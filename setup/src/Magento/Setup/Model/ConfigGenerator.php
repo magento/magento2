@@ -203,9 +203,11 @@ class ConfigGenerator
     public function createXFrameConfig()
     {
         $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
+
         if ($this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT) === null) {
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT, 'SAMEORIGIN');
         }
+
         return $configData;
     }
 
@@ -217,9 +219,11 @@ class ConfigGenerator
     public function createModeConfig()
     {
         $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
+
         if ($this->deploymentConfig->get(State::PARAM_MODE) === null) {
             $configData->set(State::PARAM_MODE, State::MODE_DEFAULT);
         }
+
         return $configData;
     }
 
