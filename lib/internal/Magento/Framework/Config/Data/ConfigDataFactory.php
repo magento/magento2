@@ -6,12 +6,30 @@
 
 namespace Magento\Framework\Config\Data;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
+
 /**
  * Factory for ConfigData
  * @api
  */
 class ConfigDataFactory
 {
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * Factory constructor
+     *
+     * @param ObjectManagerInterface $objectManager
+     */
+    public function __construct(ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
     /**
      * Returns a new instance of ConfigData on every call.
      *
@@ -20,6 +38,6 @@ class ConfigDataFactory
      */
     public function create(string $fileKey) : ConfigData
     {
-        return new ConfigData($fileKey);
+        return $this->objectManager->create(ConfigData::class, ['fileKey' => $fileKey]);
     }
 }
