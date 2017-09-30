@@ -69,7 +69,7 @@ class ConfigGenerator
     ) {
         $this->random = $random;
         $this->deploymentConfig = $deploymentConfig;
-        $this->configDataFactory = $deploymentConfig ?? ObjectManager::getInstance()->get(ConfigDataFactory::class);
+        $this->configDataFactory = $configDataFactory ?? ObjectManager::getInstance()->get(ConfigDataFactory::class);
     }
 
     /**
@@ -82,21 +82,24 @@ class ConfigGenerator
         $currentKey = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
 
         $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
-        if (isset($data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY])) {
-            $configData->set(
-                ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY,
-                $data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY]
-            );
-        } else {
-            if ($currentKey === null) {
-                $configData->set(
-                    ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY,
-                    md5($this->random->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE))
-                );
-            }
-        }
+
+        $key = $data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY]
+            ?? $currentKey
+            ?? $this->generateCryptKey();
+
+        $configData->set(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY, $key);
 
         return $configData;
+    }
+
+    /**
+     * Generates a new crypt key.
+     *
+     * @return string
+     */
+    private function generateCryptKey()
+    {
+        return md5($this->random->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE));
     }
 
     /**
