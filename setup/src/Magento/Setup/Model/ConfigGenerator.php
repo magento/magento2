@@ -75,6 +75,7 @@ class ConfigGenerator
         ConfigDataFactory $configDataFactory = null,
         CryptKeyGeneratorInterface $cryptKeyGenerator = null
     ) {
+        $this->random = $random;
         $this->deploymentConfig = $deploymentConfig;
         $this->configDataFactory = $configDataFactory ?? ObjectManager::getInstance()->get(ConfigDataFactory::class);
         $this->cryptKeyGenerator = $cryptKeyGenerator ?? ObjectManager::getInstance()->get(CryptKeyGenerator::class);
