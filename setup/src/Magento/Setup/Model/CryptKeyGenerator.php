@@ -20,6 +20,11 @@ class CryptKeyGenerator implements CryptKeyGeneratorInterface
      */
     private $random;
 
+    /**
+     * CryptKeyGenerator constructor.
+     *
+     * @param Random $random
+     */
     public function __construct(Random $random)
     {
         $this->random = $random;
@@ -44,7 +49,7 @@ class CryptKeyGenerator implements CryptKeyGeneratorInterface
      *
      * @return string
      */
-    private function getRandomString()
+    private function getRandomString() : string
     {
         return $this->random->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE);
     }

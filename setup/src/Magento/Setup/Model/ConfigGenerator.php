@@ -257,7 +257,7 @@ class ConfigGenerator
      *
      * @return array
      */
-    private function mapHostData($hostData)
+    private function mapHostData(string $hostData) : array
     {
         $hostDataParts = explode(':', trim($hostData));
 
