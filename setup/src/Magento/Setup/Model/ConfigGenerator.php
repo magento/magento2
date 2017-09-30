@@ -10,7 +10,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Math\Random;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\State;
@@ -41,11 +40,6 @@ class ConfigGenerator
     ];
 
     /**
-     * @var Random
-     */
-    protected $random;
-
-    /**
      * @var DeploymentConfig
      */
     protected $deploymentConfig;
@@ -56,20 +50,25 @@ class ConfigGenerator
     private $configDataFactory;
 
     /**
+     * @var CryptKeyGeneratorInterface
+     */
+    private $cryptKeyGenerator;
+
+    /**
      * Constructor
      *
-     * @param Random $random
      * @param DeploymentConfig $deploymentConfig
-     * @param ConfigDataFactory $configDataFactory
+     * @param ConfigDataFactory|null $configDataFactory
+     * @param CryptKeyGeneratorInterface|null $cryptKeyGenerator
      */
     public function __construct(
-        Random $random,
         DeploymentConfig $deploymentConfig,
-        ConfigDataFactory $configDataFactory = null
+        ConfigDataFactory $configDataFactory = null,
+        CryptKeyGeneratorInterface $cryptKeyGenerator = null
     ) {
-        $this->random = $random;
         $this->deploymentConfig = $deploymentConfig;
         $this->configDataFactory = $configDataFactory ?? ObjectManager::getInstance()->get(ConfigDataFactory::class);
+        $this->cryptKeyGenerator = $cryptKeyGenerator ?? ObjectManager::getInstance()->get(CryptKeyGenerator::class);
     }
 
     /**
@@ -85,21 +84,11 @@ class ConfigGenerator
 
         $key = $data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY]
             ?? $currentKey
-            ?? $this->generateCryptKey();
+            ?? $this->cryptKeyGenerator->generate();
 
         $configData->set(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY, $key);
 
         return $configData;
-    }
-
-    /**
-     * Generates a new crypt key.
-     *
-     * @return string
-     */
-    private function generateCryptKey()
-    {
-        return md5($this->random->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE));
     }
 
     /**
