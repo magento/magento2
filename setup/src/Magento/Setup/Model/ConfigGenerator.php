@@ -155,25 +155,18 @@ class ConfigGenerator
             );
         }
 
+        $dbConnectionPrefix = ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/';
+
         foreach ($optional as $key) {
             if (isset($data[$key])) {
-                $configData->set(
-                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . self::$paramMap[$key],
-                    $data[$key]
-                );
+                $configData->set($dbConnectionPrefix . self::$paramMap[$key], $data[$key]);
             }
         }
 
-        $currentStatus = $this->deploymentConfig->get(
-            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsListConstants::KEY_ACTIVE
-        );
+        $currentStatus = $this->deploymentConfig->get($dbConnectionPrefix . ConfigOptionsListConstants::KEY_ACTIVE);
 
         if ($currentStatus === null) {
-            $configData->set(
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT
-                . '/' . ConfigOptionsListConstants::KEY_ACTIVE,
-                '1'
-            );
+            $configData->set($dbConnectionPrefix . ConfigOptionsListConstants::KEY_ACTIVE, '1');
         }
 
         return $configData;
