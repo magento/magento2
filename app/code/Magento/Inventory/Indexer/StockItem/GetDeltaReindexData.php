@@ -72,7 +72,6 @@ class GetDeltaReindexData
         foreach ($items as $item) {
             $stockIds[$item[StockSourceLink::STOCK_ID]] = explode(',', $item[SourceItemInterface::SKU]);
         }
-
         return $stockIds;
     }
 }

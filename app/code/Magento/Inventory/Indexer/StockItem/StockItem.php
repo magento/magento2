@@ -133,7 +133,7 @@ class StockItem implements StockItemIndexerInterface
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();
 
-            $this->indexStructure->cleanUp($mainIndexName, $skuList);
+            $this->indexHandler->cleanUp($mainIndexName, $skuList);
             $this->indexHandler->saveIndex(
                 $mainIndexName,
                 $this->indexDataProvider->getData($stockId, $skuList)

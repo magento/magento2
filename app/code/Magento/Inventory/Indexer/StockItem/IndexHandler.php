@@ -72,6 +72,23 @@ class IndexHandler implements IndexHandlerInterface
     /**
      * @inheritdoc
      */
+    public function cleanUp(
+        IndexName $indexName,
+        array $skuList,
+        string $connectionName = ResourceConnection::DEFAULT_CONNECTION
+    ) {
+        $connection = $this->resourceConnection->getConnection($connectionName);
+        $tableName = $this->indexNameResolver->resolveName($indexName);
+        if ($connection->isTableExists($tableName) === false) {
+            $this->createTable($connection, $tableName);
+            return;
+        }
+        $connection->delete($tableName, ['sku in (?)' => $skuList]);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function deleteIndex(IndexName $indexName, \Traversable $documents)
     {
         // TODO: implementation
