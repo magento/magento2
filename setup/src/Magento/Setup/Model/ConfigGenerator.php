@@ -264,5 +264,4 @@ class ConfigGenerator
         $configData->setOverrideWhenSave(true);
         return $configData;
     }
-
 }
