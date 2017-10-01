@@ -24,7 +24,8 @@ interface IndexHandlerInterface
     public function saveIndex(IndexName $indexName, \Traversable $documents, string $connectionName);
 
     /**
-     * Create the index i not exits or remove sku list from the index to rebuild
+     * Remove given documents from Index. For StockItem index we provide list of SKUs, aggregated Quantity
+     * for which should be re-calculated
      *
      * @param IndexName $indexName
      * @param \Traversable $documents

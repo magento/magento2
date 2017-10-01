@@ -14,7 +14,7 @@ namespace Magento\Inventory\Indexer;
 interface IndexStructureInterface
 {
     /**
-     * Create the Index Structure if is not existing
+     * Create the Index Structure
      *
      * @param IndexName $indexName
      * @param string $connectionName
@@ -24,7 +24,7 @@ interface IndexStructureInterface
     public function create(IndexName $indexName, string $connectionName);
 
     /**
-     * Delete the given Index from the database
+     * Delete the given Index
      *
      * @param IndexName $indexName
      * @param string $connectionName
@@ -33,7 +33,7 @@ interface IndexStructureInterface
     public function delete(IndexName $indexName, string $connectionName);
 
     /**
-     * Checks whether the Index exits.
+     * Checks whether the Index exits
      *
      * @param IndexName $indexName
      * @param string $connectionName
