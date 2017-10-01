@@ -71,5 +71,3 @@ foreach ($sourcesItemsData as $sourceItemData) {
     $sourceItems[] = $sourceItem;
 }
 $sourceItemsSave->execute($sourceItems);
-
-
