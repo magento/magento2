@@ -18,9 +18,10 @@ interface IndexHandlerInterface
      *
      * @param IndexName $indexName
      * @param \Traversable $documents
+     * @param string $connectionName
      * @return void
      */
-    public function saveIndex(IndexName $indexName, \Traversable $documents);
+    public function saveIndex(IndexName $indexName, \Traversable $documents, string $connectionName);
 
     /**
      * Create the index i not exits or remove sku list from the index to rebuild
@@ -29,5 +30,5 @@ interface IndexHandlerInterface
      * @param string $connectionName
      * @return void
      */
-    public function cleanIndex(IndexName $indexName, \Traversable $documents, $connectionName);
+    public function cleanIndex(IndexName $indexName, \Traversable $documents, string $connectionName);
 }

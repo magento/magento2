@@ -111,7 +111,11 @@ class StockItem implements StockItemIndexerInterface
                 $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
             }
 
-            $this->indexHandler->saveIndex($replicaIndexName, $this->indexDataProvider->getData($stockId));
+            $this->indexHandler->saveIndex(
+                $replicaIndexName,
+                $this->indexDataProvider->getData($stockId),
+                ResourceConnection::DEFAULT_CONNECTION
+            );
             $this->indexTableSwitcher->switch($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
             $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
         }
@@ -153,7 +157,8 @@ class StockItem implements StockItemIndexerInterface
             );
             $this->indexHandler->saveIndex(
                 $mainIndexName,
-                $this->indexDataProvider->getData($stockId, $skuList)
+                $this->indexDataProvider->getData($stockId, $skuList),
+                ResourceConnection::DEFAULT_CONNECTION
             );
         }
     }
