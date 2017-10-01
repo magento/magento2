@@ -104,9 +104,8 @@ class StockItem implements StockItemIndexerInterface
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();
 
-            if (!$this->indexStructure->isExist($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
-                $this->indexStructure->create($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
-            }
+            $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
+            $this->indexStructure->create($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
 
             if (!$this->indexStructure->isExist($mainIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
                 $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
