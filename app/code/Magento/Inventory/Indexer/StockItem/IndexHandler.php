@@ -58,22 +58,21 @@ class IndexHandler implements IndexHandlerInterface
     /**
      * @inheritdoc
      */
-    public function saveIndex(IndexName $indexName, \Traversable $documents)
+    public function saveIndex(IndexName $indexName, \Traversable $documents, string $connectionName)
     {
+        $connection = $this->resourceConnection->getConnection($connectionName);
         $tableName = $this->indexNameResolver->resolveName($indexName);
 
         $columns = [IndexStructure::SKU, IndexStructure::QUANTITY];
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
-            $this->resourceConnection
-                ->getConnection()
-                ->insertArray($tableName, $columns, $batchDocuments);
+            $connection->insertArray($tableName, $columns, $batchDocuments);
         }
     }
 
     /**
      * @inheritdoc
      */
-    public function cleanIndex(IndexName $indexName, \Traversable $documents, $connectionName)
+    public function cleanIndex(IndexName $indexName, \Traversable $documents, string $connectionName)
     {
         $connection = $this->resourceConnection->getConnection($connectionName);
         $tableName = $this->indexNameResolver->resolveName($indexName);
