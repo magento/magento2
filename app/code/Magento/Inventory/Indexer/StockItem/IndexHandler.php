@@ -72,7 +72,7 @@ class IndexHandler implements IndexHandlerInterface
     /**
      * @inheritdoc
      */
-    public function cleanUp(
+    public function cleanIndex(
         IndexName $indexName,
         array $skuList,
         string $connectionName = ResourceConnection::DEFAULT_CONNECTION
@@ -80,17 +80,8 @@ class IndexHandler implements IndexHandlerInterface
         $connection = $this->resourceConnection->getConnection($connectionName);
         $tableName = $this->indexNameResolver->resolveName($indexName);
         if ($connection->isTableExists($tableName) === false) {
-            $this->createTable($connection, $tableName);
             return;
         }
         $connection->delete($tableName, ['sku in (?)' => $skuList]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function deleteIndex(IndexName $indexName, \Traversable $documents)
-    {
-        // TODO: implementation
     }
 }

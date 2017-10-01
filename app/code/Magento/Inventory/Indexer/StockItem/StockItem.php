@@ -19,9 +19,9 @@ use Magento\Inventory\Indexer\StockItemIndexerInterface;
 class StockItem implements StockItemIndexerInterface
 {
     /**
-     * @var GetDeltaReindexData
+     * @var GetPartialReindexData
      */
-    private $getDeltaReindexData;
+    private $getPartialReindexData;
 
     /**
      * @var GetFullReindexData
@@ -54,8 +54,8 @@ class StockItem implements StockItemIndexerInterface
     private $indexNameBuilder;
 
     /**
-     * @param GetDeltaReindexData $getDeltaReindexData ,
-     * @param GetFullReindexData $getFullReindexData ,
+     * @param GetPartialReindexData $getPartialReindexData
+     * @param GetFullReindexData $getFullReindexData
      * @param IndexStructureInterface $indexStructureHandler
      * @param IndexHandlerInterface $indexHandler
      * @param IndexDataProvider $indexDataProvider
@@ -66,7 +66,7 @@ class StockItem implements StockItemIndexerInterface
      * @see \Magento\Indexer\Model\Indexer::getActionInstance
      */
     public function __construct(
-        GetDeltaReindexData $getDeltaReindexData,
+        GetPartialReindexData $getPartialReindexData,
         GetFullReindexData $getFullReindexData,
         IndexStructureInterface $indexStructureHandler,
         IndexHandlerInterface $indexHandler,
@@ -74,7 +74,7 @@ class StockItem implements StockItemIndexerInterface
         IndexTableSwitcherInterface $indexTableSwitcher,
         IndexNameBuilder $indexNameBuilder
     ) {
-        $this->getDeltaReindexData = $getDeltaReindexData;
+        $this->getPartialReindexData = $getPartialReindexData;
         $this->getFullReindexData = $getFullReindexData;
         $this->indexStructure = $indexStructureHandler;
         $this->indexHandler = $indexHandler;
@@ -91,19 +91,19 @@ class StockItem implements StockItemIndexerInterface
         $stockIds = $this->getFullReindexData->execute();
 
         foreach ($stockIds as $stockId) {
-            $mainIndexName = $this->indexNameBuilder
-                ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
-                ->addDimension('stock_', $stockId)
-                ->setAlias(Alias::ALIAS_MAIN)
-                ->build();
-            $this->indexStructure->create($mainIndexName);
-
             $replicaIndexName = $this->indexNameBuilder
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_REPLICA)
                 ->build();
             $this->indexStructure->create($replicaIndexName);
+
+            $mainIndexName = $this->indexNameBuilder
+                ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
+                ->addDimension('stock_', $stockId)
+                ->setAlias(Alias::ALIAS_MAIN)
+                ->build();
+            $this->indexStructure->create($mainIndexName);
 
             $this->indexHandler->saveIndex($replicaIndexName, $this->indexDataProvider->getData($stockId));
             $this->indexTableSwitcher->switch($mainIndexName);
@@ -124,16 +124,20 @@ class StockItem implements StockItemIndexerInterface
      */
     public function executeList(array $sourceItemIds)
     {
-        $stockIds = $this->getDeltaReindexData->execute($sourceItemIds);
+        $skuListInStockToUpdateList = $this->getPartialReindexData->execute($sourceItemIds);
 
-        foreach ($stockIds as $stockId => $skuList) {
+        foreach ($skuListInStockToUpdateList as $skuListInStockToUpdate) {
+            $stockId = $skuListInStockToUpdate->getStockId();
+            $skuList = $skuListInStockToUpdate->getSkuList();
+
             $mainIndexName = $this->indexNameBuilder
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();
+            $this->indexStructure->create($mainIndexName);
 
-            $this->indexHandler->cleanUp($mainIndexName, $skuList);
+            $this->indexHandler->cleanIndex($mainIndexName, $skuList);
             $this->indexHandler->saveIndex(
                 $mainIndexName,
                 $this->indexDataProvider->getData($stockId, $skuList)

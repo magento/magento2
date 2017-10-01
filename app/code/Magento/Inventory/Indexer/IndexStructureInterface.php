@@ -16,7 +16,7 @@ use Magento\Framework\App\ResourceConnection;
 interface IndexStructureInterface
 {
     /**
-     * If index is exist then recreate it
+     * Create the Index Structure if is not existing
      *
      * @param IndexName $indexName
      * @param string $connectionName

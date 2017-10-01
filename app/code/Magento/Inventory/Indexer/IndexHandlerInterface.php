@@ -28,18 +28,9 @@ interface IndexHandlerInterface
      * @param string $connectionName
      * @return void
      */
-    public function cleanUp(
+    public function cleanIndex(
         IndexName $indexName,
         array $skuList,
         string $connectionName = ResourceConnection::DEFAULT_CONNECTION
     );
-
-    /**
-     * Remove data from index
-     *
-     * @param IndexName $indexName
-     * @param \Traversable $documents
-     * @return void
-     */
-    public function deleteIndex(IndexName $indexName, \Traversable $documents);
 }

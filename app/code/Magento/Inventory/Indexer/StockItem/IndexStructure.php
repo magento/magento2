@@ -55,7 +55,6 @@ class IndexStructure implements IndexStructureInterface
         $tableName = $this->indexNameResolver->resolveName($indexName);
 
         if ($connection->isTableExists($tableName)) {
-            $connection->truncateTable($tableName);
             return;
         }
 
