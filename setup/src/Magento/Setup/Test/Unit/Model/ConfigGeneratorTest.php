@@ -140,6 +140,5 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY, $key);
 
         $this->model->createCryptConfig($data);
-
     }
 }

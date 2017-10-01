@@ -256,6 +256,8 @@ class ConfigGenerator
      * @param string $hostData
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function mapHostData(string $hostData) : array
     {

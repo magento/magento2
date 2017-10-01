@@ -44,7 +44,12 @@ class ConfigGeneratorTest extends TestCase
         $configDataFactoryMock = (new ObjectManager($this))
             ->getObject(ConfigDataFactory::class, ['objectManager' => $objectManagerMock]);
 
-        $this->configGeneratorObject = new ConfigGenerator($randomMock, $deployConfig, $configDataFactoryMock, $cryptKeyGenerator);
+        $this->configGeneratorObject = new ConfigGenerator(
+            $randomMock,
+            $deployConfig,
+            $configDataFactoryMock,
+            $cryptKeyGenerator
+        );
     }
 
     public function testCreateCryptConfigWithInput()
