@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\Framework\App\ResourceConnection;
@@ -72,16 +73,10 @@ class IndexHandler implements IndexHandlerInterface
     /**
      * @inheritdoc
      */
-    public function cleanIndex(
-        IndexName $indexName,
-        array $skuList,
-        string $connectionName = ResourceConnection::DEFAULT_CONNECTION
-    ) {
+    public function cleanIndex(IndexName $indexName, \Traversable $documents, $connectionName)
+    {
         $connection = $this->resourceConnection->getConnection($connectionName);
         $tableName = $this->indexNameResolver->resolveName($indexName);
-        if ($connection->isTableExists($tableName) === false) {
-            return;
-        }
-        $connection->delete($tableName, ['sku in (?)' => $skuList]);
+        $connection->delete($tableName, ['sku in (?)' => iterator_to_array($documents)]);
     }
 }

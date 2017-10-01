@@ -8,6 +8,7 @@ namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\Exception\StateException;
 use Magento\Inventory\Indexer\IndexName;
 use Magento\Inventory\Indexer\IndexNameResolverInterface;
 use Magento\Inventory\Indexer\IndexStructureInterface;
@@ -49,29 +50,26 @@ class IndexStructure implements IndexStructureInterface
     /**
      * @inheritdoc
      */
-    public function create(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION)
+    public function isExist(IndexName $indexName, string $connectionName): bool
     {
         $connection = $this->resourceConnection->getConnection($connectionName);
         $tableName = $this->indexNameResolver->resolveName($indexName);
-
-        if ($connection->isTableExists($tableName)) {
-            return;
-        }
-
-        $this->createTable($connection, $tableName);
+        return $connection->isTableExists($tableName);
     }
 
     /**
      * @inheritdoc
      */
-    public function delete(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION)
+    public function create(IndexName $indexName, string $connectionName)
     {
         $connection = $this->resourceConnection->getConnection($connectionName);
         $tableName = $this->indexNameResolver->resolveName($indexName);
 
         if ($connection->isTableExists($tableName)) {
-            $connection->dropTable($tableName);
+            throw new StateException(__('Table %s allready exits', $tableName));
         }
+
+        $this->createTable($connection, $tableName);
     }
 
     /**
@@ -109,5 +107,15 @@ class IndexStructure implements IndexStructureInterface
             'Quantity'
         );
         $connection->createTable($table);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete(IndexName $indexName, string $connectionName)
+    {
+        $connection = $this->resourceConnection->getConnection($connectionName);
+        $tableName = $this->indexNameResolver->resolveName($indexName);
+        $connection->dropTable($tableName);
     }
 }

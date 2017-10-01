@@ -6,6 +6,7 @@
 
 namespace Magento\Inventory\Indexer\StockItem;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Indexer\Alias;
 use Magento\Inventory\Indexer\IndexHandlerInterface;
 use Magento\Inventory\Indexer\IndexNameBuilder;
@@ -96,18 +97,24 @@ class StockItem implements StockItemIndexerInterface
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_REPLICA)
                 ->build();
-            $this->indexStructure->create($replicaIndexName);
 
             $mainIndexName = $this->indexNameBuilder
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();
-            $this->indexStructure->create($mainIndexName);
+
+            if (!$this->indexStructure->isExist($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
+                $this->indexStructure->create($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
+            }
+
+            if (!$this->indexStructure->isExist($mainIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
+                $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
+            }
 
             $this->indexHandler->saveIndex($replicaIndexName, $this->indexDataProvider->getData($stockId));
-            $this->indexTableSwitcher->switch($mainIndexName);
-            $this->indexStructure->delete($replicaIndexName);
+            $this->indexTableSwitcher->switch($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
+            $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
         }
     }
 
@@ -135,9 +142,16 @@ class StockItem implements StockItemIndexerInterface
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();
-            $this->indexStructure->create($mainIndexName);
 
-            $this->indexHandler->cleanIndex($mainIndexName, $skuList);
+            if (!$this->indexStructure->isExist($mainIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
+                $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
+            }
+
+            $this->indexHandler->cleanIndex(
+                $mainIndexName,
+                new \ArrayIterator($skuList),
+                ResourceConnection::DEFAULT_CONNECTION
+            );
             $this->indexHandler->saveIndex(
                 $mainIndexName,
                 $this->indexDataProvider->getData($stockId, $skuList)

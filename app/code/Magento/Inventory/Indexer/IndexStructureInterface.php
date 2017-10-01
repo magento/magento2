@@ -6,8 +6,6 @@
 
 namespace Magento\Inventory\Indexer;
 
-use Magento\Framework\App\ResourceConnection;
-
 /**
  * Represent manipulation with index structure
  *
@@ -20,15 +18,26 @@ interface IndexStructureInterface
      *
      * @param IndexName $indexName
      * @param string $connectionName
+     * @throws \Magento\Framework\Exception\StateException
      * @return void
      */
-    public function create(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION);
+    public function create(IndexName $indexName, string $connectionName);
 
     /**
      * Delete the given Index from the database
+     *
      * @param IndexName $indexName
      * @param string $connectionName
      * @return void
      */
-    public function delete(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION);
+    public function delete(IndexName $indexName, string $connectionName);
+
+    /**
+     * Checks is the index exits.
+     *
+     * @param IndexName $indexName
+     * @param string $connectionName
+     * @return bool
+     */
+    public function isExist(IndexName $indexName, string $connectionName): bool;
 }

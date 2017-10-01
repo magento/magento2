@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Inventory\Indexer;
 
 /**
@@ -24,13 +25,9 @@ interface IndexHandlerInterface
     /**
      * Create the index i not exits or remove sku list from the index to rebuild
      * @param IndexName $indexName
-     * @param array $skuList
+     * @param \Traversable $documents
      * @param string $connectionName
      * @return void
      */
-    public function cleanIndex(
-        IndexName $indexName,
-        array $skuList,
-        string $connectionName = ResourceConnection::DEFAULT_CONNECTION
-    );
+    public function cleanIndex(IndexName $indexName, \Traversable $documents, $connectionName);
 }
