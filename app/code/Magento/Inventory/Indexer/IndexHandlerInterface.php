@@ -25,6 +25,7 @@ interface IndexHandlerInterface
 
     /**
      * Create the index i not exits or remove sku list from the index to rebuild
+     *
      * @param IndexName $indexName
      * @param \Traversable $documents
      * @param string $connectionName

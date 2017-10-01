@@ -33,7 +33,7 @@ interface IndexStructureInterface
     public function delete(IndexName $indexName, string $connectionName);
 
     /**
-     * Checks is the index exits.
+     * Checks whether the Index exits.
      *
      * @param IndexName $indexName
      * @param string $connectionName
