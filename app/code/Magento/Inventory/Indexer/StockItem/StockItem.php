@@ -146,10 +146,6 @@ class StockItem implements StockItemIndexerInterface
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();
 
-            if (!$this->indexStructure->isExist($mainIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
-                $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
-            }
-
             $this->indexHandler->cleanIndex(
                 $mainIndexName,
                 new \ArrayIterator($skuList),
