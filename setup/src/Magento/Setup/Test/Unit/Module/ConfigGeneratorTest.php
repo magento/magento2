@@ -23,6 +23,9 @@ class ConfigGeneratorTest extends TestCase
      */
     private $configGeneratorObject;
 
+    /**
+     * @SuppressWarnings(PHPMD.LongVariable)
+     */
     protected function setUp()
     {
         /** @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject $deployConfig */
