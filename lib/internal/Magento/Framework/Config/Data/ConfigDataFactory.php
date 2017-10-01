@@ -36,7 +36,7 @@ class ConfigDataFactory
      * @param string $fileKey
      * @return ConfigData
      */
-    public function create(string $fileKey) : ConfigData
+    public function create($fileKey)
     {
         return $this->objectManager->create(ConfigData::class, ['fileKey' => $fileKey]);
     }

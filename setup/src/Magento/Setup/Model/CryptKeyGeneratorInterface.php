@@ -8,7 +8,6 @@ namespace Magento\Setup\Model;
 
 /**
  * Interface for crypt key generators.
- * @api
  */
 interface CryptKeyGeneratorInterface
 {
@@ -19,5 +18,5 @@ interface CryptKeyGeneratorInterface
      *
      * @return string
      */
-    public function generate() : string;
+    public function generate();
 }

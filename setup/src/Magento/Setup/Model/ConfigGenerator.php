@@ -242,7 +242,22 @@ class ConfigGenerator
 
         if (isset($data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])) {
             $hosts = explode(',', $data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]);
-            $hosts = array_map([$this, 'mapHostData'], $hosts);
+
+            $hosts = array_map(
+                function ($hostData) {
+                    $hostDataParts = explode(':', trim($hostData));
+
+                    $tmp = ['host' => $hostDataParts[0]];
+
+                    if (isset($hostDataParts[1])) {
+                        $tmp['port'] = $hostDataParts[1];
+                    }
+
+                    return $tmp;
+                },
+                $hosts
+            );
+
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS, $hosts);
         }
 
@@ -250,25 +265,4 @@ class ConfigGenerator
         return $configData;
     }
 
-    /**
-     * Splits host data to host and port and returns them as an assoc. array.
-     *
-     * @param string $hostData
-     *
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
-     */
-    private function mapHostData(string $hostData) : array
-    {
-        $hostDataParts = explode(':', trim($hostData));
-
-        $tmp = ['host' => $hostDataParts[0]];
-
-        if (isset($hostDataParts[1])) {
-            $tmp['port'] = $hostDataParts[1];
-        }
-
-        return $tmp;
-    }
 }

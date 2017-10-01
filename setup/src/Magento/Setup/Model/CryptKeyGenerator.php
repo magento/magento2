@@ -11,7 +11,6 @@ use Magento\Framework\Math\Random;
 
 /**
  * Generates a crypt
- * @api
  */
 class CryptKeyGenerator implements CryptKeyGeneratorInterface
 {
@@ -39,7 +38,7 @@ class CryptKeyGenerator implements CryptKeyGeneratorInterface
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function generate() : string
+    public function generate()
     {
         return md5($this->getRandomString());
     }
@@ -49,7 +48,7 @@ class CryptKeyGenerator implements CryptKeyGeneratorInterface
      *
      * @return string
      */
-    private function getRandomString() : string
+    private function getRandomString()
     {
         return $this->random->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE);
     }
