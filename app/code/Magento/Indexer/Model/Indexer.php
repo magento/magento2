@@ -418,7 +418,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
                 $state->save();
                 $this->getView()->resume();
                 throw $exception;
-            }catch (\Error $error) {
+            } catch (\Error $error) {
                 $state->setStatus(StateInterface::STATUS_INVALID);
                 $state->save();
                 $this->getView()->resume();
