@@ -280,7 +280,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                     ImportAdvancedPricing::TABLE_TIER_PRICE
                 );
 
-
                 $exportData = $this->correctExportData(
                     $productsByStores,
                     $tierPricesData
@@ -294,6 +293,44 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         }
 
         return $exportData;
+    }
+
+    /**
+     * @param array $tierPriceData Tier price information.
+     *
+     * @return array Formatted for export tier price information.
+     */
+    private function createExportRow(array $tierPriceData): array
+    {
+        $exportRow = $this->templateExportData;
+        foreach ($exportRow as $keyTemplate => $valueTemplate) {
+            if (isset($row[$keyTemplate])) {
+                if (in_array($keyTemplate, $this->_priceWebsite)) {
+                    $exportRow[$keyTemplate] = $this->_getWebsiteCode(
+                        $tierPriceData[$keyTemplate]
+                    );
+                } elseif (in_array($keyTemplate, $this->_priceCustomerGroup)) {
+                    $exportRow[$keyTemplate] = $this->_getCustomerGroupById(
+                        $tierPriceData[$keyTemplate],
+                        $tierPriceData[ImportAdvancedPricing::VALUE_ALL_GROUPS]
+                    );
+                    unset($exportRow[ImportAdvancedPricing::VALUE_ALL_GROUPS]);
+                } elseif ($keyTemplate
+                    === ImportAdvancedPricing::COL_TIER_PRICE
+                ) {
+                    $exportRow[$keyTemplate]
+                        = $tierPriceData[ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE]
+                        ? $tierPriceData[ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE]
+                        : $tierPriceData[ImportAdvancedPricing::COL_TIER_PRICE];
+                    $exportRow[ImportAdvancedPricing::COL_TIER_PRICE_TYPE]
+                        = $this->tierPriceTypeValue($tierPriceData);
+                } else {
+                    $exportRow[$keyTemplate] = $tierPriceData[$keyTemplate];
+                }
+            }
+        }
+
+        return $exportRow;
     }
 
     /**
@@ -328,33 +365,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
 
         $customExportData = [];
         foreach ($linkedTierPricesData as $row) {
-            $exportRow = $this->templateExportData;
-            foreach ($exportRow as $keyTemplate => $valueTemplate) {
-                if (isset($row[$keyTemplate])) {
-                    if (in_array($keyTemplate, $this->_priceWebsite)) {
-                        $exportRow[$keyTemplate] = $this->_getWebsiteCode(
-                            $row[$keyTemplate]
-                        );
-                    } elseif (in_array($keyTemplate, $this->_priceCustomerGroup)) {
-                        $exportRow[$keyTemplate] = $this->_getCustomerGroupById(
-                            $row[$keyTemplate],
-                            $row[ImportAdvancedPricing::VALUE_ALL_GROUPS]
-                        );
-                        unset($exportRow[ImportAdvancedPricing::VALUE_ALL_GROUPS]);
-                    } elseif ($keyTemplate === ImportAdvancedPricing::COL_TIER_PRICE) {
-                        $exportRow[$keyTemplate] = $row[ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE]
-                            ? $row[ImportAdvancedPricing::COL_TIER_PRICE_PERCENTAGE_VALUE]
-                            : $row[ImportAdvancedPricing::COL_TIER_PRICE];
-                        $exportRow[ImportAdvancedPricing::COL_TIER_PRICE_TYPE]
-                            = $this->tierPriceTypeValue($row);
-                    } else {
-                        $exportRow[$keyTemplate] = $row[$keyTemplate];
-                    }
-                }
-            }
-
-            $customExportData[] = $exportRow;
-            unset($exportRow);
+            $customExportData[] = $this->createExportRow($row);
         }
 
         return $customExportData;
@@ -416,8 +427,10 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                         ['ap' => $this->_resource->getTableName($table)],
                         $selectFields
                     )
-                    ->where('ap.'.$productEntityLinkField.' IN (?)',
-                        $productLinksIds);
+                    ->where(
+                        'ap.'.$productEntityLinkField.' IN (?)',
+                        $productLinksIds
+                    );
 
                 if (isset($price[0]) && !empty($price[0])) {
                     $select->where('ap.value >= ?', $price[0]);
