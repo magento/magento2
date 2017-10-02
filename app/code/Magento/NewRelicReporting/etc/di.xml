@@ -27,4 +27,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="magento_new_relic_reporting_command_deploy_marker" xsi:type="object">Magento\NewRelicReporting\Command\DeployMarker</item>
+            </argument>
+        </arguments>
+    </type>    
 </config>
