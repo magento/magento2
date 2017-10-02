@@ -22,6 +22,11 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
     const DEFAULT_BATCH_SIZE = 1000;
 
     /**
+     * Max versions to load from database at a time
+     */
+    const MAX_VERSION_QUERY_BATCH = 100000;
+
+    /**
      * @var string
      */
     protected $_idFieldName = 'view_id';
@@ -272,14 +277,19 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
             try {
                 $this->getState()->setStatus(View\StateInterface::STATUS_WORKING)->save();
 
+                $versionBatchSize = self::MAX_VERSION_QUERY_BATCH;
                 $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
                     ? $this->changelogBatchSize[$this->getChangelog()->getViewId()]
                     : self::DEFAULT_BATCH_SIZE;
 
-                for ($versionFrom = $lastVersionId; $versionFrom < $currentVersionId; $versionFrom += $batchSize) {
-                    $ids = $this->getChangelog()->getList($versionFrom, $versionFrom + $batchSize);
+                for ($versionFrom = $lastVersionId; $versionFrom < $currentVersionId; $versionFrom += $versionBatchSize) {
+                    // Don't go past the current version for atomicy.
+                    $versionTo = min($currentVersionId, $versionFrom + $versionBatchSize);
+                    $ids = $this->getChangelog()->getList($versionFrom, $versionTo);
 
-                    if (!empty($ids)) {
+                    // We run the actual indexer in batches.  Chunked AFTER loading to avoid duplicates in separate chunks.
+                    $chunks = array_chunk($ids, $batchSize);
+                    foreach ($chunks as $ids) {
                         $action->execute($ids);
                     }
                 }
