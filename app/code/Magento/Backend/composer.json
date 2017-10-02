@@ -18,6 +18,7 @@
         "magento/module-translation": "100.3.*",
         "magento/module-require-js": "100.3.*",
         "magento/module-config": "100.3.*",
+        "magento/module-ui": "100.3.*",
         "magento/framework": "100.3.*"
     },
     "suggest": {

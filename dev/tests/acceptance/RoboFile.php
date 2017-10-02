@@ -14,15 +14,6 @@ class RoboFile extends \Robo\Tasks
     use Robo\Task\Base\loadShortcuts;
 
     /**
-     * Complete all Project Setup tasks
-     */
-    function setup()
-    {
-        $this->_exec('vendor/bin/robo clone:files');
-        $this->_exec('vendor/bin/codecept build');
-    }
-
-    /**
      * Duplicate the Example configuration files used to customize the Project for customization
      */
     function cloneFiles()
@@ -33,12 +24,13 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
+     * Clone the Example configuration files
      * Build the Codeception project
      */
     function buildProject()
     {
         $this->cloneFiles();
-        $this->_exec('vendor/bin/codecept build');
+        $this->_exec('./vendor/bin/codecept build');
     }
 
     /**
@@ -56,7 +48,7 @@ class RoboFile extends \Robo\Tasks
      */
     function chrome()
     {
-        $this->_exec('codecept run functional --env chrome --skip-group skip');
+        $this->_exec('./vendor/bin/codecept run functional --env chrome --skip-group skip');
     }
 
     /**
@@ -64,7 +56,7 @@ class RoboFile extends \Robo\Tasks
      */
     function firefox()
     {
-        $this->_exec('codecept run functional --env firefox --skip-group skip');
+        $this->_exec('./vendor/bin/codecept run functional --env firefox --skip-group skip');
     }
 
     /**
@@ -72,7 +64,7 @@ class RoboFile extends \Robo\Tasks
      */
     function phantomjs()
     {
-        $this->_exec('codecept run functional --env phantomjs --skip-group skip');
+        $this->_exec('./vendor/bin/codecept run functional --env phantomjs --skip-group skip');
     }
 
     /**
@@ -80,7 +72,7 @@ class RoboFile extends \Robo\Tasks
      */
     function group($args = '')
     {
-        $this->taskExec('codecept run functional --verbose --steps --env chrome --skip-group skip --group')->args($args)->run();
+        $this->taskExec('./vendor/bin/codecept run functional --verbose --steps --env chrome --skip-group skip --group')->args($args)->run();
     }
 
     /**
@@ -88,7 +80,7 @@ class RoboFile extends \Robo\Tasks
      */
     function folder($args = '')
     {
-        $this->taskExec('codecept run functional --env chrome')->args($args)->run();
+        $this->taskExec('./vendor/bin/codecept run functional --env chrome')->args($args)->run();
     }
 
     /**
@@ -96,7 +88,7 @@ class RoboFile extends \Robo\Tasks
      */
     function example()
     {
-        $this->_exec('codecept run --env chrome --group example --skip-group skip');
+        $this->_exec('./vendor/bin/codecept run --env chrome --group example --skip-group skip');
     }
 
     /**
