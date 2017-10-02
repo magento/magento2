@@ -27,9 +27,9 @@ $option = $options->setAttributeFilter($attribute->getId())->getFirstItem();
 
 $requestInfo = new \Magento\Framework\DataObject(
     [
-        'product' => 1,
-        'selected_configurable_option' => 1,
-        'qty' => 100,
+        'product' => 2,
+        'selected_configurable_option' => 2,
+        'qty' => 1,
         'super_attribute' => [
             $attribute->getId() => $option->getId()
         ]
