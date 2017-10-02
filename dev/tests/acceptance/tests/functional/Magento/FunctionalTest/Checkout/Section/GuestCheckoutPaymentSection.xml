@@ -9,8 +9,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="GuestCheckoutPaymentSection">
-        <element name="cartItems" type="text" locator=".minicart-items"/>
-        <element name="billingAddress" type="text" locator="div.billing-address-details"/>
-        <element name="placeOrder" type="button" locator="button.action.primary.checkout" timeout="30"/>
+        <element name="cartItems" type="text" selector=".minicart-items"/>
+        <element name="billingAddress" type="text" selector="div.billing-address-details"/>
+        <element name="placeOrder" type="button" selector="button.action.primary.checkout" timeout="30"/>
     </section>
 </config>

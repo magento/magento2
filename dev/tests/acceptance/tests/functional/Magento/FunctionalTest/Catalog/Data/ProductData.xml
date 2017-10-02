@@ -24,7 +24,7 @@
         <data key="sku" unique="suffix">SimpleProduct</data>
         <data key="type_id">simple</data>
         <data key="attribute_set_id">4</data>
-        <data key="name">SimpleProduct</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
         <data key="price">123.00</data>
         <data key="visibility">4</data>
         <data key="status">1</data>
