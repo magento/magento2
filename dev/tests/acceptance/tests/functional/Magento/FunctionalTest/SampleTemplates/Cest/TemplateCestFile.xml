@@ -28,6 +28,7 @@
                 <severity value=""/>
                 <testCaseId value=""/>
             </annotations>
+            <!-- ADD TEST STEPS HERE -->
         </test>
     </cest>
 </config>
