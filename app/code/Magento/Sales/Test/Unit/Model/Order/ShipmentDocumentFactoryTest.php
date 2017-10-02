@@ -19,7 +19,7 @@ use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Sales\Model\Order\Shipment\Item\Converter;
 
 /**
- * Class ShipmentDocumentFactoryTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {

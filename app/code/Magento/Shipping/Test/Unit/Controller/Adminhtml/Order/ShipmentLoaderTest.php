@@ -14,9 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 
 /**
- * Class ShipmentLoaderTest
- *
- * @package Magento\Shipping\Controller\Adminhtml\Order
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentLoaderTest extends \PHPUnit\Framework\TestCase
 {
