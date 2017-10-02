@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Layout;
 
 use Magento\Framework\App\State;
 use Magento\Framework\Phrase;
+use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -65,6 +66,11 @@ class MergeTest extends \PHPUnit\Framework\TestCase
      */
     protected $pageConfig;
 
+    /**
+     * @var LayoutCacheKeyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $layoutCacheKeyMock;
+
     protected function setUp()
     {
         $files = [];
@@ -119,6 +125,11 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             )
         );
 
+        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(LayoutCacheKeyInterface::class);
+        $this->layoutCacheKeyMock->expects($this->any())
+            ->method('getCacheKeys')
+            ->willReturn([]);
+
         $this->_model = $objectHelper->getObject(
             \Magento\Framework\View\Model\Layout\Merge::class,
             [
@@ -134,6 +145,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
                 'logger' => $this->_logger,
                 'readFactory' => $readFactory,
                 'pageConfig' => $this->pageConfig,
+                'layoutCacheKey' => $this->layoutCacheKeyMock,
             ]
         );
     }
