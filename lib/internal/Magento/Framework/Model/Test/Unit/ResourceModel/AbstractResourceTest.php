@@ -33,8 +33,8 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock = $this->createMock(Json::class);
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->abstractResource = $objectManager->getObject(AbstractResourceStub::class);
-        $objectManager->setBackwardCompatibleProperty($this->abstractResource,'serializer',$this->serializerMock);
-        $objectManager->setBackwardCompatibleProperty($this->abstractResource,'_logger',$this->loggerMock);
+        $objectManager->setBackwardCompatibleProperty($this->abstractResource, 'serializer', $this->serializerMock);
+        $objectManager->setBackwardCompatibleProperty($this->abstractResource, '_logger', $this->loggerMock);
     }
 
     /**
