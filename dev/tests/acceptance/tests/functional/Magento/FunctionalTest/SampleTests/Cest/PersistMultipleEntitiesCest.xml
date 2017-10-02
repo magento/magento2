@@ -15,16 +15,11 @@
         </annotations>
         <before>
             <createData entity="simplesubcategory" mergeKey="simplecategory"/>
-            <entity name="categoryLink" type="custom_attribute" mergeKey="categoryLink">
-                <data key="attribute_code">category_ids</data>
-                <data key="value">$$simplecategory.id$$</data>
-            </entity>
-
             <createData entity="simpleproduct" mergeKey="simpleproduct1">
-                <required-entity name="categoryLink"/>
+                <required-entity persistedKey="simplecategory"/>
             </createData>
             <createData entity="simpleproduct" mergeKey="simpleproduct2">
-                <required-entity name="categoryLink"/>
+                <required-entity persistedKey="categoryLink"/>
             </createData>
         </before>
         <after>

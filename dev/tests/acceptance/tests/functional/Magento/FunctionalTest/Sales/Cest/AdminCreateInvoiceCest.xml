@@ -19,12 +19,8 @@
         </annotations>
         <before>
             <createData entity="_defaultCategory" mergeKey="createCategory"/>
-            <entity name="categoryLink" type="custom_attribute" mergeKey="categoryLink">
-                <data key="attribute_code">category_ids</data>
-                <data key="value">$$createCategory.id$$</data>
-            </entity>
             <createData entity="_defaultProduct" mergeKey="createProduct">
-                <required-entity name="categoryLink"/>
+                <required-entity persistedKey="createCategory"/>
             </createData>
         </before>
 

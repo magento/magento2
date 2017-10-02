@@ -12,6 +12,12 @@
         <field key="attribute_code">string</field>
         <field key="value">string</field>
     </operation>
+    <operation name="CreateCustomAttributeArray" dataType="custom_attribute_array" type="create">
+        <field key="attribute_code">string</field>
+        <array key="value">
+            <value>string</value>
+        </array>
+    </operation>
     <operation name="UpdateCustomAttribute" dataType="custom_attribute" type="update">
         <field key="attribute_code">string</field>
         <field key="value">string</field>
