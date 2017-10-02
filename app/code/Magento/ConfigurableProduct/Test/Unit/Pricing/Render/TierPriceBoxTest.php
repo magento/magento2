@@ -5,13 +5,16 @@
  */
 
 namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Render;
+
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
 use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
 use Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Tests \Magento\ConfigurableProduct\Pricing\Render\TierPriceBox
+ * Tests \Magento\ConfigurableProduct\Pricing\Render\TierPriceBox.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TierPriceBoxTest extends \PHPUnit_Framework_TestCase
 {
