@@ -59,4 +59,12 @@
         <step name="addProductsToTheCart" module="Magento_Checkout" next="ProceedToCheckout" />
         <step name="ProceedToCheckout" module="Magento_Checkout" />
     </scenario>
+    <scenario name="UpdateAddressOnCheckoutWithMultipleAddressesTest" firstStep="createProducts">
+        <step name="createProducts" module="Magento_Catalog" next="createCustomer"/>
+        <step name="createCustomer" module="Magento_Customer" next="loginCustomerOnFrontend"/>
+        <step name="loginCustomerOnFrontend" module="Magento_Customer" next="addProductsToTheCart"/>
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToMultipleAddressCheckout"/>
+        <step name="proceedToMultipleAddressCheckout" module="Magento_Multishipping" next="fillCustomerAddresses"/>
+        <step name="fillCustomerAddresses" module="Magento_Multishipping"/>
+    </scenario>
 </config>

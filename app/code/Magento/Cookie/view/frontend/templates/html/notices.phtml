@@ -8,7 +8,7 @@
 
 ?>
 <?php /** @var \Magento\Cookie\Block\Html\Notices $block */ ?>
-<?php if ($this->helper('Magento\Cookie\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
+<?php if ($this->helper('Magento\Cookie\Helper\Cookie')->isCookieRestrictionModeEnabled()): ?>
     <div class="message global cookie" id="notice-cookie-block" style="display: none">
         <div class="content">
             <p>

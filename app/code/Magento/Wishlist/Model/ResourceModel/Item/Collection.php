@@ -291,6 +291,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'thumbnail',
             'links_purchased_separately',
             'links_title',
+            'price_type',
         ];
 
         $productCollection->addPriceData()
