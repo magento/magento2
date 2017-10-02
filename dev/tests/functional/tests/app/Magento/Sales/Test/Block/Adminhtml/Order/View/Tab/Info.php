@@ -6,16 +6,18 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab;
 
-use Magento\Mtf\Block\Block;
+use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\ShippingInfoBlock;
+use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\CommentsHistoryBlock;
 use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Info\PaymentInfoBlock;
 
 /**
  * Order information tab block.
  */
-class Info extends Block
+class Info extends Tab
 {
     /**
-     * Order status selector
+     * Order status selector.
      *
      * @var string
      */
@@ -29,7 +31,21 @@ class Info extends Block
     private $paymentInfoBlockSelector = '.order-payment-method';
 
     /**
-     * Get order status from info block
+     * Selector for `Shipping Information` block.
+     *
+     * @var string
+     */
+    private $shippingInfoBlock = '.order-shipping-method';
+
+    /**
+     * Selector for Comments history block.
+     *
+     * @var string
+     */
+    private $commentsHistoryBlockSelector = '#order_history_block';
+
+    /**
+     * Get order status from info block.
      *
      * @return array|string
      */
@@ -48,6 +64,32 @@ class Info extends Block
         return $this->blockFactory->create(
             PaymentInfoBlock::class,
             ['element' => $this->_rootElement->find($this->paymentInfoBlockSelector)]
+        );
+    }
+
+    /**
+     * Gets Order Shipping Information block.
+     *
+     * @return ShippingInfoBlock
+     */
+    public function getShippingInfoBlock()
+    {
+        return $this->blockFactory->create(
+            ShippingInfoBlock::class,
+            ['element' => $this->_rootElement->find($this->shippingInfoBlock)]
+        );
+    }
+
+    /**
+     * Returns Comments history block.
+     *
+     * @return CommentsHistoryBlock
+     */
+    public function getCommentsHistoryBlock()
+    {
+        return $this->blockFactory->create(
+            CommentsHistoryBlock::class,
+            ['element' => $this->_rootElement->find($this->commentsHistoryBlockSelector)]
         );
     }
 }
