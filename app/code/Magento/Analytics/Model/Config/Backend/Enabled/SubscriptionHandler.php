@@ -29,6 +29,17 @@ class SubscriptionHandler
     const CRON_STRING_PATH = 'crontab/default/jobs/analytics_subscribe/schedule/cron_expr';
 
     /**
+     * Config value for schedule setting of subscription handler.
+     */
+    const CRON_EXPR_ARRAY = [
+        '0',                    # Minute
+        '*',                    # Hour
+        '*',                    # Day of the Month
+        '*',                    # Month of the Year
+        '*',                    # Day of the Week
+    ];
+
+    /**
      * Max value for reserve counter of attempts to subscribe.
      *
      * @var int
@@ -124,18 +135,7 @@ class SubscriptionHandler
      */
     private function setCronSchedule()
     {
-        $cronExprArray = [
-            '0',                    # Minute
-            '*',                    # Hour
-            '*',                    # Day of the Month
-            '*',                    # Month of the Year
-            '*',                    # Day of the Week
-        ];
-
-        $cronExprString = join(' ', $cronExprArray);
-
-        $this->configWriter->save(self::CRON_STRING_PATH, $cronExprString);
-
+        $this->configWriter->save(self::CRON_STRING_PATH, join(' ', self::CRON_EXPR_ARRAY));
         return true;
     }
 
