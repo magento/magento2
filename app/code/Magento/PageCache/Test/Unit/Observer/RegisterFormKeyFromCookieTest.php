@@ -166,4 +166,74 @@ class RegisterFormKeyFromCookieTest extends \PHPUnit\Framework\TestCase
 
         $this->observer->execute($this->observerMock);
     }
+
+    public function testExecuteWithZeroLifetime()
+    {
+        $formKey = 'form_key';
+        $escapedFormKey = 'escaped_form_key';
+        $cookieDomain = 'example.com';
+        $cookiePath = '/';
+        $cookieLifetime = 0;
+
+        $cookieMetadata = $this->getMockBuilder(
+            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->cookieFormKey->expects(static::any())
+            ->method('get')
+            ->willReturn($formKey);
+        $this->cookieMetadataFactory->expects(static::once())
+            ->method('createPublicCookieMetadata')
+            ->willReturn(
+                $cookieMetadata
+            );
+
+        $this->sessionConfig->expects(static::once())
+            ->method('getCookieDomain')
+            ->willReturn(
+                $cookieDomain
+            );
+        $cookieMetadata->expects(static::once())
+            ->method('setDomain')
+            ->with(
+                $cookieDomain
+            );
+        $this->sessionConfig->expects(static::once())
+            ->method('getCookiePath')
+            ->willReturn(
+                $cookiePath
+            );
+        $cookieMetadata->expects(static::once())
+            ->method('setPath')
+            ->with(
+                $cookiePath
+            );
+        $this->sessionConfig->expects(static::once())
+            ->method('getCookieLifetime')
+            ->willReturn(
+                $cookieLifetime
+            );
+        $cookieMetadata->expects(static::never())
+            ->method('setDuration');
+
+        $this->cookieFormKey->expects(static::once())
+            ->method('set')
+            ->with(
+                $formKey,
+                $cookieMetadata
+            );
+
+        $this->escaper->expects(static::once())
+            ->method('escapeHtml')
+            ->with($formKey)
+            ->willReturn($escapedFormKey);
+
+        $this->sessionFormKey->expects(static::once())
+            ->method('set')
+            ->with($escapedFormKey);
+
+        $this->observer->execute($this->observerMock);
+    }
 }
