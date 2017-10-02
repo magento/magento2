@@ -130,6 +130,12 @@
                 <public_files_valid_paths>
                     <protected>
                         <app>/app/*/*</app>
+                        <bin>/bin/*/*</bin>
+                        <dev>/dev/*/*</dev>
+                        <lib>/lib/*/*</lib>
+                        <setup>/setup/*/*</setup>
+                        <update>/update/*/*</update>
+                        <vendor>/vendor/*/*</vendor>
                     </protected>
                 </public_files_valid_paths>
             </file>

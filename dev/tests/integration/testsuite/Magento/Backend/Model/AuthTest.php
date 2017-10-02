@@ -5,6 +5,7 @@
  */
 namespace Magento\Backend\Model;
 
+use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Exception\AuthenticationException;
 
 /**
@@ -28,7 +29,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Model\Auth');
+            ->create(\Magento\Backend\Model\Auth::class);
     }
 
     /**
@@ -53,11 +54,11 @@ class AuthTest extends \PHPUnit_Framework_TestCase
     public function testSetGetAuthStorage()
     {
         // by default \Magento\Backend\Model\Auth\Session class will instantiate as a Authentication Storage
-        $this->assertInstanceOf('Magento\Backend\Model\Auth\Session', $this->_model->getAuthStorage());
+        $this->assertInstanceOf(\Magento\Backend\Model\Auth\Session::class, $this->_model->getAuthStorage());
 
-        $mockStorage = $this->getMock('Magento\Backend\Model\Auth\StorageInterface');
+        $mockStorage = $this->getMock(\Magento\Backend\Model\Auth\StorageInterface::class);
         $this->_model->setAuthStorage($mockStorage);
-        $this->assertInstanceOf('Magento\Backend\Model\Auth\StorageInterface', $this->_model->getAuthStorage());
+        $this->assertInstanceOf(\Magento\Backend\Model\Auth\StorageInterface::class, $this->_model->getAuthStorage());
 
         $incorrectStorage = new \StdClass();
         try {
@@ -72,7 +73,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
     public function testGetCredentialStorageList()
     {
         $storage = $this->_model->getCredentialStorage();
-        $this->assertInstanceOf('Magento\Backend\Model\Auth\Credential\StorageInterface', $storage);
+        $this->assertInstanceOf(\Magento\Backend\Model\Auth\Credential\StorageInterface::class, $storage);
     }
 
     public function testLoginSuccessful()
@@ -81,7 +82,10 @@ class AuthTest extends \PHPUnit_Framework_TestCase
             \Magento\TestFramework\Bootstrap::ADMIN_NAME,
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
-        $this->assertInstanceOf('Magento\Backend\Model\Auth\Credential\StorageInterface', $this->_model->getUser());
+        $this->assertInstanceOf(
+            \Magento\Backend\Model\Auth\Credential\StorageInterface::class,
+            $this->_model->getUser()
+        );
         $this->assertGreaterThan(time() - 10, $this->_model->getAuthStorage()->getUpdatedAt());
     }
 
@@ -100,7 +104,8 @@ class AuthTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Disabled form security in order to prevent exit from the app
+     * Disabled form security in order to prevent exit from the app.
+     *
      * @magentoAdminConfigFixture admin/security/session_lifetime 100
      */
     public function testIsLoggedIn()
@@ -121,6 +126,9 @@ class AuthTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotNull($this->_model->getUser());
         $this->assertGreaterThan(0, $this->_model->getUser()->getId());
-        $this->assertInstanceOf('Magento\Backend\Model\Auth\Credential\StorageInterface', $this->_model->getUser());
+        $this->assertInstanceOf(
+            \Magento\Backend\Model\Auth\Credential\StorageInterface::class,
+            $this->_model->getUser()
+        );
     }
 }
