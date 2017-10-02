@@ -39,7 +39,7 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
     public function testGetOptions()
     {
         $options = $this->configList->getOptions();
-        $this->assertCount(5, $options);
+        $this->assertCount(8, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -60,6 +60,18 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey(4, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[4]);
         $this->assertEquals('page-cache-redis-compress-data', $options[4]->getName());
+
+        $this->assertArrayHasKey(4, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[5]);
+        $this->assertEquals('page-cache-redis-sentinel-master', $options[5]->getName());
+
+        $this->assertArrayHasKey(4, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[6]);
+        $this->assertEquals('page-cache-redis-sentinel-master-verify', $options[6]->getName());
+
+        $this->assertArrayHasKey(4, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[7]);
+        $this->assertEquals('page-cache-redis-sentinel-load-from-slaves', $options[7]->getName());
     }
 
     public function testCreateConfigWithRedis()
@@ -75,7 +87,10 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
                             'server'=> '',
                             'port' => '',
                             'database' => '',
-                            'compress_data' => ''
+                            'compress_data' => '',
+                            'sentinel_master' => '',
+                            'sentinel_master_verify' => '',
+                            'load_from_slaves' => '',
                         ]
                     ]
                 ]
@@ -98,7 +113,10 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
                             'server' => 'foo.bar',
                             'port' => '9000',
                             'database' => '6',
-                            'compress_data' => '1'
+                            'compress_data' => '1',
+                            'sentinel_master' => 'redismaster',
+                            'sentinel_master_verify' => '1',
+                            'load_from_slaves' => '2',
                         ]
                     ]
                 ]
@@ -110,7 +128,10 @@ class PageCacheTest extends \PHPUnit\Framework\TestCase
             'page-cache-redis-server' => 'foo.bar',
             'page-cache-redis-port' => '9000',
             'page-cache-redis-db' => '6',
-            'page-cache-redis-compress-data' => '1'
+            'page-cache-redis-compress-data' => '1',
+            'page-cache-redis-sentinel-master' => 'redismaster',
+            'page-cache-redis-sentinel-master-verify' => '1',
+            'page-cache-redis-sentinel-load-from-slaves' => '2',
         ];
 
         $configData = $this->configList->createConfig($options, $this->deploymentConfigMock);

@@ -216,6 +216,20 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->config->getBreakAfter(), $breakAfter);
     }
 
+    public function testFailAfter()
+    {
+        $areaCode = 'frontend';
+        $breakAfter = 5;
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(Config::PARAM_FAIL_AFTER . '_' . $areaCode)
+            ->willReturn($breakAfter);
+        $this->appStateMock->expects($this->once())
+            ->method('getAreaCode')
+            ->willReturn($areaCode);
+        $this->assertEquals($this->config->getFailAfter(), $breakAfter);
+    }
+
     public function testGetLifetimeAdmin()
     {
         $areaCode = 'adminhtml';
@@ -245,5 +259,45 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn($expectedLifetime);
         $this->assertEquals($this->config->getLifetime(), $expectedLifetime);
+    }
+
+    public function testGetSentinelServers()
+    {
+        $expected = 'tcp://127.0.0.1:26379,tcp://127.0.0.2:26379';
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(Config::PARAM_HOST)
+            ->willReturn($expected);
+        $this->assertEquals($this->config->getSentinelServers(), $expected);
+    }
+
+    public function testGetSentinelMaster()
+    {
+        $expected = 'redismaster';
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(Config::PARAM_SENTINEL_MASTER)
+            ->willReturn($expected);
+        $this->assertEquals($this->config->getSentinelMaster(), $expected);
+    }
+
+    public function testGetSentinelVerifyMaster()
+    {
+        $expected = '1';
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(Config::PARAM_SENTINEL_VERIFY_MASTER)
+            ->willReturn($expected);
+        $this->assertEquals($this->config->getSentinelVerifyMaster(), $expected);
+    }
+
+    public function testGetSentinelConnectRetries()
+    {
+        $expected = '3';
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(Config::PARAM_SENTINEL_CONNECT_RETRIES)
+            ->willReturn($expected);
+        $this->assertEquals($this->config->getSentinelConnectRetries(), $expected);
     }
 }

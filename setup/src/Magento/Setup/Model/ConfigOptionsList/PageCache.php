@@ -27,12 +27,22 @@ class PageCache implements ConfigOptionsListInterface
     const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE = 'page-cache-redis-db';
     const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT = 'page-cache-redis-port';
     const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA = 'page-cache-redis-compress-data';
+    const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER = 'page-cache-redis-sentinel-master';
+    const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY = 'page-cache-redis-sentinel-master-verify';
+    const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_LOAD_FROM_SLAVES= 'page-cache-redis-sentinel-load-from-slaves';
 
     const CONFIG_PATH_PAGE_CACHE_BACKEND = 'cache/frontend/page_cache/backend';
     const CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER = 'cache/frontend/page_cache/backend_options/server';
     const CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE = 'cache/frontend/page_cache/backend_options/database';
     const CONFIG_PATH_PAGE_CACHE_BACKEND_PORT = 'cache/frontend/page_cache/backend_options/port';
-    const CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA = 'cache/frontend/page_cache/backend_options/compress_data';
+    const CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA =
+        'cache/frontend/page_cache/backend_options/compress_data';
+    const CONFIG_PATH_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER =
+        'cache/frontend/page_cache/backend_options/sentinel_master';
+    const CONFIG_PATH_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY =
+        'cache/frontend/page_cache/backend_options/sentinel_master_verify';
+    const CONFIG_PATH_PAGE_CACHE_BACKEND_REDIS_SENTINEL_LOAD_FROM_SLAVES =
+        'cache/frontend/page_cache/backend_options/load_from_slaves';
 
     /**
      * @var array
@@ -41,7 +51,10 @@ class PageCache implements ConfigOptionsListInterface
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER => '127.0.0.1',
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE => '1',
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT => '6379',
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA => '0'
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA => '0',
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER => null,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY => null,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_LOAD_FROM_SLAVES => null,
     ];
 
     /**
@@ -58,7 +71,13 @@ class PageCache implements ConfigOptionsListInterface
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER => self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE => self::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA => self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA => self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_LOAD_FROM_SLAVES =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_REDIS_SENTINEL_LOAD_FROM_SLAVES,
     ];
 
     /**
@@ -112,7 +131,26 @@ class PageCache implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA,
                 'Set to 1 to compress the full page cache (use 0 to disable)'
-            )
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER,
+                'Redis sentinel master'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY,
+                'Verify connected server is actually master'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_LOAD_FROM_SLAVES,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_REDIS_SENTINEL_LOAD_FROM_SLAVES,
+                'Using the value \'1\' indicates to only load from slaves ' .
+                    'and \'2\' to include the master in the random read slave selection'
+            ),
         ];
     }
 
@@ -202,7 +240,22 @@ class PageCache implements ConfigOptionsListInterface
                 $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE)
             );
 
-        return $this->redisValidator->isValidConnection($config);
+        $config['sentinel_master'] = isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER])
+            ? $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER]
+            : $deploymentConfig->get(
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER,
+                null
+            );
+
+        $config['sentinel_master_verify'] =
+            isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY])
+            ? $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY]
+            : $deploymentConfig->get(
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_REDIS_SENTINEL_MASTER_VERIFY,
+                null
+            );
+
+        return $this->redisValidator->isValidConnection(array_filter($config));
     }
 
     /**

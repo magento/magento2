@@ -101,6 +101,26 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     const PARAM_BREAK_AFTER             = 'session/redis/break_after';
 
     /**
+     * Configuration path for number of seconds to wait before completely failing to break the lock
+     */
+    const PARAM_FAIL_AFTER             = 'session/redis/fail_after';
+
+    /**
+     * The name of master to reach via Sentinel servers.
+     */
+    const PARAM_SENTINEL_MASTER         = 'session/redis/sentinel_master';
+
+    /**
+     * Configuration path indicating if master status should be verified during connections.
+     */
+    const PARAM_SENTINEL_VERIFY_MASTER  = 'session/redis/sentinel_master_verify';
+
+    /**
+     * Configuration path indicating the number of connect retries for sentinel servers connection.
+     */
+    const PARAM_SENTINEL_CONNECT_RETRIES  = 'session/redis/sentinel_connect_retries';
+
+    /**
      * Cookie lifetime config path
      */
     const XML_PATH_COOKIE_LIFETIME = 'web/cookie/cookie_lifetime';
@@ -300,10 +320,52 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get number of seconds to wait before completely failing to break the lock
+     *
+     * @return int
      */
     public function getFailAfter()
     {
-        return self::DEFAULT_FAIL_AFTER;
+        return $this->deploymentConfig->get(self::PARAM_FAIL_AFTER . '_' . $this->appState->getAreaCode());
+    }
+
+    /**
+     * Get list of redis sentinels
+     *
+     * @return string
+     */
+    public function getSentinelServers()
+    {
+        return $this->getHost();
+    }
+
+    /**
+     * Get sentinel master name
+     *
+     * @return string
+     */
+    public function getSentinelMaster()
+    {
+        return $this->deploymentConfig->get(self::PARAM_SENTINEL_MASTER);
+    }
+
+    /**
+     * Verify master status flag
+     *
+     * @return string
+     */
+    public function getSentinelVerifyMaster()
+    {
+        return $this->deploymentConfig->get(self::PARAM_SENTINEL_VERIFY_MASTER);
+    }
+
+    /**
+     * Connection retries for sentinels
+     *
+     * @return string
+     */
+    public function getSentinelConnectRetries()
+    {
+        return $this->deploymentConfig->get(self::PARAM_SENTINEL_CONNECT_RETRIES);
     }
 }
