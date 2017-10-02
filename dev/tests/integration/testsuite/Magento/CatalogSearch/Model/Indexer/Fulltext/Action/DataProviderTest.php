@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
@@ -8,48 +8,34 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
+     * @magentoDbIsolation disabled
      */
-    public function testRebuildStoreIndexConfigurable()
+    public function testSearchProductByAttribute()
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $repository = $objectManager->create(
-            \Magento\Catalog\Model\ProductRepository::class
-        );
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $objectManager->create(
-            \Magento\Store\Model\Store::class
-        );
-        $globalStoreId = $store->load('admin')->getId();
-        $secondStoreId = $store->load('fixture_second_store')->getId();
-        $thirdStoreId = $store->load('fixture_third_store')->getId();
-        /** @var \Magento\Catalog\Model\Product\Action $productAction */
-        $productAction = $objectManager->create(
-            \Magento\Catalog\Model\Product\Action::class
-        );
 
-        $product = $repository->get('simple');
-        $productId = $product->getId();
-        $productResource = $product->getResource();
-        $productAction->updateWebsites([$productId], [$store->load('fixture_second_store')->getWebsiteId()], 'add');
-        $product->setOrigData();
-        $product->setStoreId($secondStoreId);
-        $product->setShortDescription('short description 2 store');
-        $productResource->save($product);
+        $config = $objectManager->create(\Magento\Framework\Search\Request\Config::class);
+        /** @var \Magento\Framework\Search\Request\Builder $requestBuilder */
+        $requestBuilder = $objectManager->create(
+            \Magento\Framework\Search\Request\Builder::class,
+            ['config' => $config]
+        );
+        $requestBuilder->bind('search_term', 'VALUE1');
+        $requestBuilder->setRequestName('quick_search_container');
+        $queryRequest = $requestBuilder->create();
+        /** @var \Magento\Framework\Search\Adapter\Mysql\Adapter $adapter */
+        $adapter = $objectManager->create(\Magento\Framework\Search\Adapter\Mysql\Adapter::class);
+        $queryResponse = $adapter->query($queryRequest);
+        $actualIds = [];
+        foreach ($queryResponse as $document) {
+            /** @var \Magento\Framework\Api\Search\Document $document */
+            $actualIds[] = $document->getId();
+        }
 
-        $this->assertEquals(
-            'Short description',
-            $productResource->getAttributeRawValue($productId, 'short_description', $globalStoreId)
-        );
-        $this->assertEquals(
-            'short description 2 store',
-            $productResource->getAttributeRawValue($productId, 'short_description', $secondStoreId)
-        );
-        $this->assertEquals(
-            'Short description',
-            $productResource->getAttributeRawValue($productId, 'short_description', $thirdStoreId)
-        );
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class)->get('simple');
+        $this->assertContains($product->getId(), $actualIds, 'Product not found by searchable attribute.');
     }
 }

@@ -286,11 +286,7 @@ class DataProvider
     {
         $result = [];
         $selects = [];
-        $ifStoreValue = $this->connection->getCheckSql(
-            'cpe_type.value_id > 0',
-            'cpe_type.value',
-            'cpe_type_default.value'
-        );
+        $ifStoreValue = $this->connection->getCheckSql('t_store.value_id > 0', 't_store.value', 't_default.value');
         $linkField = $this->metadata->getLinkField();
         $productLinkFieldsToEntityIdMap = $this->connection->fetchPairs(
             $this->connection->select()->from(
@@ -304,43 +300,40 @@ class DataProvider
         foreach ($attributeTypes as $backendType => $attributeIds) {
             if ($attributeIds) {
                 $tableName = $this->getTable('catalog_product_entity_' . $backendType);
-                $selects[] = $this->connection->select()
-                    ->from(
-                        ['cpe' => $this->getTable('catalog_product_entity')],
-                        []
-                    )->joinInner(
-                        ['cea' => $this->getTable('catalog_eav_attribute')],
-                        '',
-                        []
-                    )->joinLeft(
-                        ['cpe_type' => $tableName],
-                        $this->connection->quoteInto(
-                            'cpe. ' . $linkField . ' = cpe_type.' . $linkField . ' AND cpe_type.store_id = ? '
-                            . 'AND cea.attribute_id = cpe_type.attribute_id',
-                            $storeId
-                        ),
-                        []
-                    )->joinLeft(
-                        ['cpe_type_default' => $tableName],
-                        'cpe.' . $linkField . ' = cpe_type_default.' . $linkField
-                        . ' AND cpe_type_default.store_id = 0'
-                        . ' AND cea.attribute_id = cpe_type_default.attribute_id',
-                        []
-                    )->where(
-                        'cea.attribute_id IN (?)',
-                        $attributeIds
-                    )->where(
-                        'cpe.' . $linkField . ' IN (?)',
-                        array_keys($productLinkFieldsToEntityIdMap)
-                    )->where(
-                        'cpe_type.attribute_id IS NOT NULL OR cpe_type_default.attribute_id IS NOT NULL'
-                    )->columns(
-                        [
-                            $linkField => 'cpe.' . $linkField,
-                            'attribute_id' => 'cea.attribute_id',
-                            'value' => $this->unifyField($ifStoreValue, $backendType)
-                        ]
-                    );
+
+                $select = $this->connection->select()->from(
+                    ['t' => $tableName],
+                    [
+                        $linkField => 't.' . $linkField,
+                        'attribute_id' => 't.attribute_id',
+                        'value' => $this->unifyField($ifStoreValue, $backendType),
+                    ]
+                )->joinLeft(
+                    ['t_store' => $tableName],
+                    $this->connection->quoteInto(
+                        't.' . $linkField . '=t_store.' . $linkField .
+                        ' AND t.attribute_id=t_store.attribute_id' .
+                        ' AND t_store.store_id = ?',
+                        $storeId
+                    ),
+                    []
+                )->joinLeft(
+                    ['t_default' => $tableName],
+                    $this->connection->quoteInto(
+                        't.' . $linkField . '=t_default.' . $linkField .
+                        ' AND t.attribute_id=t_default.attribute_id' .
+                        ' AND t_default.store_id = ?',
+                        0
+                    ),
+                    []
+                )->where(
+                    't.attribute_id IN (?)',
+                    $attributeIds
+                )->where(
+                    't.' . $linkField . ' IN (?)',
+                    array_keys($productLinkFieldsToEntityIdMap)
+                )->distinct();
+                $selects[] = $select;
             }
         }
 
