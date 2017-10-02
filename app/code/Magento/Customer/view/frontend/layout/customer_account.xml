@@ -9,7 +9,7 @@
     <body>
         <attribute name="class" value="account"/>
         <referenceContainer name="sidebar.main">
-            <block class="Magento\Framework\View\Element\Template" template="Magento_Theme::html/collapsible.phtml" before="-">
+            <block class="Magento\Framework\View\Element\Template" name="sidebar.main.account_nav" template="Magento_Theme::html/collapsible.phtml" before="-">
                 <arguments>
                     <argument name="block_css" xsi:type="string">account-nav</argument>
                 </arguments>
