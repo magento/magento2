@@ -36,12 +36,14 @@ class Navigation extends Block
      */
     protected $optionTitle = './/div[@class="filter-options-title" and contains(text(),"%s")]';
 
+    // @codingStandardsIgnoreStart
     /**
      * Locator value for corresponding filtered attribute option content.
      *
      * @var string
      */
     protected $optionContent = './/div[@class="filter-options-title" and contains(text(),"")]/following-sibling::div//a[contains(text(), \'SIZE\')]';
+    // @codingStandardsIgnoreEnd
 
     /**
      * Locator value for correspondent "Filter" link.
