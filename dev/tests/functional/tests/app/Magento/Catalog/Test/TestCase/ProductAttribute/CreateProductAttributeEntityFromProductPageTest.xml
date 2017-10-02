@@ -33,8 +33,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedInSortOnFrontend" />
         </variation>
         <variation name="CreateProductAttributeEntityFromProductPageTestVariation2_Filterable">
-            <data name="tag" xsi:type="string">stable:no</data>
-            <data name="issue" xsi:type="string">MAGETWO-64245: Magento\Catalog\Test\TestCase\ProductAttribute\CreateProductAttributeEntityFromProductPageTest.test with data set "	CreateProductAttributeEntityFromProductPageTestVariation2_Filterable"</data>
             <data name="attribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>
             <data name="attribute/data/frontend_input" xsi:type="string">Dropdown</data>
             <data name="attribute/data/options/dataset" xsi:type="string">two_options</data>
