@@ -303,8 +303,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     private function createExportRow(array $tierPriceData): array
     {
         $exportRow = $this->templateExportData;
-        foreach ($exportRow as $keyTemplate => $valueTemplate) {
-            if (isset($row[$keyTemplate])) {
+        foreach (array_keys($exportRow) as $keyTemplate) {
+            if (!empty($tierPriceData[$keyTemplate])) {
                 if (in_array($keyTemplate, $this->_priceWebsite)) {
                     $exportRow[$keyTemplate] = $this->_getWebsiteCode(
                         $tierPriceData[$keyTemplate]
