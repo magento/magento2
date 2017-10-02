@@ -11,20 +11,17 @@
         <schema name="current">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" type="string" translate="true" xsi:type="xpath">settings/label</item>
+                    <item name="label" type="string" xsi:type="xpath">settings/label</item>
                     <item name="type" type="string" xsi:type="xpath">settings/type</item>
                     <item name="url" type="url" xsi:type="converter">settings/url</item>
                     <item name="confirm" xsi:type="array">
-                        <item name="title" type="string" translate="true" xsi:type="xpath">settings/confirm/title</item>
-                        <item name="message" type="string" translate="true" xsi:type="xpath">settings/confirm/message
+                        <item name="title" type="string" xsi:type="xpath">settings/confirm/title</item>
+                        <item name="message" type="string" xsi:type="xpath">settings/confirm/message
                         </item>
                     </item>
                     <item name="callback" xsi:type="array">
-                        <item name="provider" type="string" translate="true" xsi:type="xpath">
-                            settings/callback/provider
-                        </item>
-                        <item name="target" type="string" translate="true" xsi:type="xpath">settings/callback/target
-                        </item>
+                        <item name="provider" type="string" xsi:type="xpath">settings/callback/provider</item>
+                        <item name="target" type="string" xsi:type="xpath">settings/callback/target</item>
                     </item>
                 </item>
             </argument>
@@ -59,8 +56,7 @@
                 <item name="config" xsi:type="array">
                     <item name="childDefaults" type="item" xsi:type="converter">settings/childDefaults</item>
                     <item name="viewTmpl" type="string" xsi:type="xpath">settings/viewTmpl</item>
-                    <item name="newViewLabel" translate="true" type="string" xsi:type="xpath">settings/newViewLabel
-                    </item>
+                    <item name="newViewLabel" translate="true" type="string" xsi:type="xpath">settings/newViewLabel</item>
                 </item>
             </argument>
         </schema>
@@ -70,7 +66,7 @@
         <schema name="current">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="title" type="string" translate="true" xsi:type="xpath">settings/title</item>
+                    <item name="title" type="string" xsi:type="xpath">settings/title</item>
                     <item name="visible" type="boolean" xsi:type="xpath">settings/visible</item>
                     <item name="disabled" type="boolean" xsi:type="xpath">settings/disabled</item>
                     <item name="displayAsLink" type="boolean" xsi:type="xpath">settings/displayAsLink</item>
@@ -85,7 +81,7 @@
                     <item name="multiple" type="string" xsi:type="xpath">settings/multiple</item>
                     <item name="checked" type="boolean" xsi:type="xpath">settings/checked</item>
                     <item name="prefer" type="string" xsi:type="xpath">settings/prefer</item>
-                    <item name="description" type="string" translate="true" xsi:type="xpath">settings/description</item>
+                    <item name="description" type="string" xsi:type="xpath">settings/description</item>
                     <item name="options" type="options" xsi:type="converter">settings/options</item>
                     <item name="valueMap" type="item" xsi:type="converter">settings/valueMap</item>
                     <item name="templates" type="item" xsi:type="converter">settings/templates</item>
@@ -113,7 +109,7 @@
                     <item name="controlVisibility" type="boolean" xsi:type="xpath">settings/controlVisibility</item>
                     <item name="bodyTmpl" type="string" xsi:type="xpath">settings/bodyTmpl</item>
                     <item name="headerTmpl" type="string" xsi:type="xpath">settings/headerTmpl</item>
-                    <item name="label" type="string" translate="true" xsi:type="xpath">settings/label</item>
+                    <item name="label" type="string" xsi:type="xpath">settings/label</item>
                     <item name="fieldClass" type="additionalClasses" xsi:type="converter">settings/fieldClass</item>
                     <item name="disableAction" type="boolean" xsi:type="xpath">settings/disableAction</item>
                     <item name="filter" type="string" xsi:type="xpath">settings/filter</item>
@@ -255,9 +251,7 @@
                     <item name="columnsHeaderClasses" type="string" xsi:type="xpath">settings/columnsHeaderClasses</item>
                     <item name="recordTemplate" type="string" xsi:type="xpath">settings/recordTemplate</item>
                     <item name="collapsibleHeader" type="boolean" xsi:type="xpath">settings/collapsibleHeader</item>
-                    <item name="addButtonLabel" type="string" translate="true" xsi:type="xpath">
-                        settings/addButtonLabel
-                    </item>
+                    <item name="addButtonLabel" type="string" xsi:type="xpath">settings/addButtonLabel</item>
                     <item name="addButton" type="boolean" xsi:type="xpath">settings/addButton</item>
                     <item name="deleteProperty" type="string" xsi:type="xpath">settings/deleteProperty</item>
                     <item name="identificationProperty" type="string" xsi:type="xpath">settings/identificationProperty</item>
@@ -335,7 +329,7 @@
                     <item name="templates" type="item" xsi:type="converter">
                         formElements/*[name(.)=../../@formElement]/settings/templates
                     </item>
-                    <item name="caption" type="string" translate="true" xsi:type="xpath">
+                    <item name="caption" type="string" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/caption
                     </item>
                     <item name="size" type="number" xsi:type="xpath">
@@ -370,7 +364,7 @@
                             formElements/*[name(.)=../../@formElement]/settings/filterBy/field
                         </item>
                     </item>
-                    <item name="title" type="string" translate="true" xsi:type="xpath">
+                    <item name="title" type="string" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/title
                     </item>
                     <item name="scopeLabel" type="string" xsi:type="xpath">settings/scopeLabel</item>
@@ -390,7 +384,7 @@
                 <item name="config" xsi:type="array">
                     <item name="disabled" type="boolean" xsi:type="xpath">settings/disabled</item>
                     <item name="level" type="number" xsi:type="xpath">settings/level</item>
-                    <item name="label" type="string" translate="true" xsi:type="xpath">settings/label</item>
+                    <item name="label" type="string" xsi:type="xpath">settings/label</item>
                     <item name="visible" type="boolean" xsi:type="xpath">settings/visible</item>
                     <item name="opened" type="boolean" xsi:type="xpath">settings/opened</item>
                     <item name="collapsible" type="boolean" xsi:type="xpath">settings/collapsible</item>
@@ -426,7 +420,7 @@
                     <item name="visible" type="boolean" xsi:type="xpath">settings/visible</item>
                     <item name="additionalClasses" type="additionalClasses" xsi:type="converter">settings/additionalClasses</item>
                     <item name="dataScope" type="string" xsi:type="xpath">settings/dataScope</item>
-                    <item name="label" type="string" translate="true" xsi:type="xpath">settings/label</item>
+                    <item name="label" type="string" xsi:type="xpath">settings/label</item>
                     <item name="rangeType" type="string" xsi:type="xpath">settings/rangeType</item>
                     <item name="showLabel" type="boolean" xsi:type="xpath">settings/showLabel</item>
                     <item name="required" type="boolean" xsi:type="xpath">settings/required</item>
@@ -475,7 +469,7 @@
             </argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="caption" type="string" translate="true" xsi:type="xpath">settings/caption</item>
+                    <item name="caption" type="string" xsi:type="xpath">settings/caption</item>
                     <item name="filterBy" xsi:type="array">
                         <item name="target" type="string" xsi:type="xpath">settings/filterBy/target</item>
                         <item name="field" type="string" xsi:type="xpath">settings/filterBy/field</item>
@@ -530,7 +524,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="autoRender" type="boolean" xsi:type="xpath">settings/autoRender</item>
-                    <item name="label" type="string" translate="true" xsi:type="xpath">settings/label</item>
+                    <item name="label" type="string" xsi:type="xpath">settings/label</item>
                     <item name="realTimeLink" type="boolean" xsi:type="xpath">settings/realTimeLink</item>
                     <item name="externalProvider" type="string" xsi:type="xpath">settings/externalProvider</item>
                     <item name="showSpinner" type="boolean" xsi:type="xpath">settings/showSpinner</item>
@@ -558,7 +552,7 @@
                     <item name="autoRender" type="boolean" xsi:type="xpath">settings/autoRender</item>
                     <item name="behaviourType" type="string" xsi:type="xpath">settings/behaviourType</item>
                     <item name="externalFilterMode" type="boolean" xsi:type="xpath">settings/externalFilterMode</item>
-                    <item name="label" type="string" translate="true" xsi:type="xpath">settings/label</item>
+                    <item name="label" type="string" xsi:type="xpath">settings/label</item>
                     <item name="editorProvider" type="string" xsi:type="xpath">settings/editorProvider</item>
                     <item name="externalCondition" type="string" xsi:type="xpath">settings/externalCondition</item>
                     <item name="render_url" type="url" xsi:type="converter">settings/renderUrl</item>
@@ -616,8 +610,8 @@
         <schema name="current">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="title" type="string" translate="true" xsi:type="xpath">settings/title</item>
-                    <item name="subTitle" type="string" translate="true" xsi:type="xpath">settings/subTitle</item>
+                    <item name="title" type="string" xsi:type="xpath">settings/title</item>
+                    <item name="subTitle" type="string" xsi:type="xpath">settings/subTitle</item>
                     <item name="onCancel" type="string" xsi:type="xpath">settings/onCancel</item>
                     <item name="modalClass" type="string" xsi:type="xpath">settings/modalClass</item>
                     <item name="state" type="boolean" xsi:type="xpath">settings/state</item>
@@ -631,13 +625,13 @@
         <schema name="current">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" type="string" translate="true" xsi:type="xpath">settings/label</item>
-                    <item name="visible" type="boolean" translate="true" xsi:type="xpath">settings/visible</item>
-                    <item name="showLabel" type="boolean" translate="true" xsi:type="xpath">settings/showLabel</item>
-                    <item name="breakLine" type="boolean" translate="true" xsi:type="xpath">settings/breakLine</item>
+                    <item name="label" type="string" xsi:type="xpath">settings/label</item>
+                    <item name="visible" type="boolean" xsi:type="xpath">settings/visible</item>
+                    <item name="showLabel" type="boolean" xsi:type="xpath">settings/showLabel</item>
+                    <item name="breakLine" type="boolean" xsi:type="xpath">settings/breakLine</item>
                     <item name="fieldTemplate" type="string" xsi:type="xpath">settings/fieldTemplate</item>
                     <item name="validateWholeGroup" type="boolean" xsi:type="xpath">settings/validateWholeGroup</item>
-                    <item name="required" type="boolean" translate="true" xsi:type="xpath">settings/required</item>
+                    <item name="required" type="boolean" xsi:type="xpath">settings/required</item>
                     <item name="childDefaults" type="item" xsi:type="converter">settings/childDefaults</item>
                 </item>
             </argument>
@@ -647,9 +641,9 @@
         <schema name="current">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="size" type="number" translate="true" xsi:type="xpath">settings/size</item>
+                    <item name="size" type="number" xsi:type="xpath">settings/size</item>
                     <item name="multiple" type="string" xsi:type="xpath">settings/multiple</item>
-                    <item name="caption" type="string" translate="true" xsi:type="xpath">settings/caption</item>
+                    <item name="caption" type="string" xsi:type="xpath">settings/caption</item>
                     <item name="filterBy" xsi:type="array">
                         <item name="target" type="string" xsi:type="xpath">settings/filterBy/target</item>
                         <item name="field" type="string" xsi:type="xpath">settings/filterBy/field</item>
@@ -683,9 +677,7 @@
                         <item name="component" type="string" xsi:type="xpath">settings/sizesConfig/component</item>
                         <item name="name" type="string" xsi:type="xpath">settings/sizesConfig/name</item>
                         <item name="param" type="item" xsi:type="converter">settings/sizesConfig/param</item>
-                        <item name="storageConfig" type="storageConfig" xsi:type="converter">
-                            settings/sizesConfig/storageConfig
-                        </item>
+                        <item name="storageConfig" type="storageConfig" xsi:type="converter">settings/sizesConfig/storageConfig</item>
                     </item>
                 </item>
             </argument>
@@ -707,7 +699,7 @@
         <schema name="current">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="caption" type="string" translate="true" xsi:type="xpath">settings/caption</item>
+                    <item name="caption" type="string" xsi:type="xpath">settings/caption</item>
                     <item name="filterBy" xsi:type="array">
                         <item name="target" type="string" xsi:type="xpath">settings/filterBy/target</item>
                         <item name="field" type="string" xsi:type="xpath">settings/filterBy/field</item>
@@ -723,9 +715,7 @@
         <schema name="current">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="preserveSelectionsOnFilter" type="boolean" xsi:type="xpath">
-                        settings/preserveSelectionsOnFilter
-                    </item>
+                    <item name="preserveSelectionsOnFilter" type="boolean" xsi:type="xpath">settings/preserveSelectionsOnFilter</item>
                     <item name="indexField" type="string" xsi:type="xpath">settings/indexField</item>
                     <item name="fieldAction" type="item" xsi:type="converter">settings/fieldAction</item>
                 </item>
@@ -793,14 +783,14 @@
                     <item name="labelVisible" type="boolean" xsi:type="xpath">settings/labelVisible</item>
                     <item name="showFallbackReset" type="boolean" xsi:type="xpath">settings/showFallbackReset</item>
                     <item name="focused" type="boolean" xsi:type="xpath">settings/focused</item>
-                    <item name="label" type="string" translate="true" xsi:type="xpath">settings/label</item>
+                    <item name="label" type="string" xsi:type="xpath">settings/label</item>
                     <item name="dataType" type="string" xsi:type="xpath">settings/dataType</item>
                     <item name="elementTmpl" type="string" xsi:type="xpath">settings/elementTmpl</item>
                     <item name="tooltipTpl" type="string" xsi:type="xpath">settings/tooltipTpl</item>
                     <item name="fallbackResetTpl" type="string" xsi:type="xpath">settings/fallbackResetTpl</item>
                     <item name="placeholder" type="item" xsi:type="converter">settings/placeholder</item>
                     <item name="validation" type="item" xsi:type="converter">settings/validation</item>
-                    <item name="notice" type="string" translate="true" xsi:type="xpath">settings/notice</item>
+                    <item name="notice" type="string" xsi:type="xpath">settings/notice</item>
                     <item name="required" type="boolean" xsi:type="xpath">settings/required</item>
                     <item name="switcherConfig" xsi:type="array">
                         <item name="name" type="string" xsi:type="xpath">settings/switcherConfig/name</item>
@@ -812,11 +802,11 @@
                     </item>
                     <item name="tooltip" xsi:type="array">
                         <item name="link" type="string" xsi:type="xpath">settings/tooltip/link</item>
-                        <item name="description" type="string" translate="true" xsi:type="xpath">settings/tooltip/description</item>
+                        <item name="description" type="string" xsi:type="xpath">settings/tooltip/description</item>
                     </item>
                     <item name="additionalClasses" type="additionalClasses" xsi:type="converter">settings/additionalClasses</item>
-                    <item name="addbefore" type="string" translate="true" xsi:type="xpath">settings/addBefore</item>
-                    <item name="addafter" type="string" translate="true" xsi:type="xpath">settings/addAfter</item>
+                    <item name="addbefore" type="string" xsi:type="xpath">settings/addBefore</item>
+                    <item name="addafter" type="string" xsi:type="xpath">settings/addAfter</item>
                 </item>
             </argument>
         </schema>
