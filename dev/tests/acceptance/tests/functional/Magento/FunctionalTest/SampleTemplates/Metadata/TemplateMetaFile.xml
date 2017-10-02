@@ -9,14 +9,11 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="" dataType="" type="" auth="" url="" method="">
-        <header param="">application/json</header>
-        <param key="" type="">{}</param>
-        <jsonObject dataType="" key="">
-            <entry key=""></entry>
-            <array key="">
-                <value></value>
-            </array>
-        </jsonObject>
-        <entry key=""></entry>
+        <contentType>application/json</contentType>
+        <field key=""></field>
+        <array key="">
+            <value></value>
+        </array>
+        <param key="" type=""></param>
     </operation>
 </config>
