@@ -1441,7 +1441,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $typeTitles
      * @return void
      */
-    private function restoreOriginalOptionTypeIds(array &$typeValues, array &$typePrices, array &$typeTitles)
+    public function restoreOriginalOptionTypeIds(array &$typeValues, array &$typePrices, array &$typeTitles)
     {
         foreach ($typeValues as $optionId => &$optionTypes) {
             foreach ($optionTypes as &$optionType) {
