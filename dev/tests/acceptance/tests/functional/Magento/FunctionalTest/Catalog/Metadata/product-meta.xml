@@ -26,7 +26,7 @@
                 <value>product_link</value>
             </array>
             <array key="custom_attributes">
-                <value>custom_attribute</value>
+                <value>custom_attribute_array</value>
             </array>
             <array key="options">
                 <value>product_option</value>
@@ -52,7 +52,7 @@
                 <value>product_link</value>
             </array>
             <array key="custom_attributes">
-                <value>custom_attribute</value>
+                <value>custom_attribute_array</value>
             </array>
             <array key="options">
                 <value>product_option</value>

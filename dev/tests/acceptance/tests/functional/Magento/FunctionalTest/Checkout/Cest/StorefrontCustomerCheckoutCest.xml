@@ -19,12 +19,8 @@
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" mergeKey="simplecategory"/>
-            <entity name="categoryLink" type="custom_attribute" mergeKey="categoryLink">
-                <data key="attribute_code">category_ids</data>
-                <data key="value">$$simplecategory.id$$</data>
-            </entity>
             <createData entity="SimpleProduct" mergeKey="simpleproduct1">
-                <required-entity name="categoryLink"/>
+                <required-entity persistedKey="simplecategory"/>
             </createData>
             <createData entity="Simple_US_Customer" mergeKey="simpleuscustomer"/>
         </before>
