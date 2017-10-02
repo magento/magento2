@@ -8,8 +8,8 @@ use Magento\Sales\Model\Order\Payment;
 
 // @codingStandardsIgnoreFile
 
-require 'default_rollback.php';
 require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/product_configurable.php';
+
 /** @var \Magento\Catalog\Model\Product $product */
 $configurableProduct = $product;
 
@@ -48,9 +48,8 @@ $order->setIncrementId('100000001')
     ->setShippingAddress($shippingAddress)
     ->setStoreId($objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId())
     ->setPayment($payment);
-
 $order->save();
-/** @var \Magento\Sales\Model\Order\Item[] $orderItems */
+
 $qtyOrdered = 2;
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
 $orderConfigurableItem = $objectManager->create(\Magento\Sales\Model\Order\Item::class);
@@ -61,10 +60,9 @@ $orderConfigurableItem->setRowTotal($configurableProduct->getPrice());
 $orderConfigurableItem->setParentItemId(null);
 $orderConfigurableItem->setProductType('configurable');
 $orderConfigurableItem->setOrder($order);
-
 /** @var \Magento\Sales\Api\OrderItemRepositoryInterface $orderItemsRepository */
 $orderItemsRepository = $objectManager->create(\Magento\Sales\Api\OrderItemRepositoryInterface::class);
-// Configurable item must be present into database for having real ID of it to set parent id of simple product.
+// Configurable item must be present in database to have its real ID to set parent id of simple product.
 $orderItemsRepository->save($orderConfigurableItem);
 
 if ($configurableProduct->getExtensionAttributes()
@@ -73,7 +71,6 @@ if ($configurableProduct->getExtensionAttributes()
     $simpleProductId = current($configurableProduct->getExtensionAttributes()->getConfigurableProductLinks());
     /** @var \Magento\Catalog\Api\Data\ProductInterface $simpleProduct */
     $simpleProduct = $productRepository->getById($simpleProductId);
-
     $orderItem = $objectManager->create(\Magento\Sales\Api\Data\OrderItemInterface::class);
     $orderItem->setBasePrice($simpleProduct->getPrice());
     $orderItem->setPrice($simpleProduct->getPrice());

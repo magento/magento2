@@ -6,6 +6,15 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Registry;
+use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
+use Magento\Sales\Api\Data\ShipmentTrackCreationInterfaceFactory;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order\Shipment\Item\Converter;
+use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 
 /**
  * Class ShipmentLoader
@@ -23,72 +32,70 @@ use Magento\Framework\DataObject;
 class ShipmentLoader extends DataObject
 {
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
-    protected $registry;
+    private $registry;
 
     /**
-     * @var \Magento\Sales\Api\ShipmentRepositoryInterface
+     * @var ShipmentRepositoryInterface
      */
-    protected $shipmentRepository;
+    private $shipmentRepository;
 
     /**
-     * @var \Magento\Sales\Model\Order\ShipmentFactory
+     * @var OrderRepositoryInterface
      */
-    protected $shipmentFactory;
+    private $orderRepository;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\TrackFactory
+     * @var ShipmentDocumentFactory
      */
-    protected $trackFactory;
+    private $documentFactory;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     * @var Converter
      */
-    protected $orderRepository;
+    private $converter;
 
     /**
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
-     * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
-     * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
-     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
-     * @param array $data
+     * @var ShipmentTrackCreationInterfaceFactory
+     */
+    private $trackFactory;
+
+    /**
+     * @param ManagerInterface                      $messageManager
+     * @param Registry                              $registry
+     * @param ShipmentRepositoryInterface           $shipmentRepository
+     * @param OrderRepositoryInterface              $orderRepository
+     * @param Converter                             $converter
+     * @param ShipmentDocumentFactory               $documentFactory
+     * @param ShipmentTrackCreationInterfaceFactory $trackFactory
+     * @param array                                 $data
      */
     public function __construct(
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\Registry $registry,
-        \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
-        \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
-        \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+        ManagerInterface $messageManager,
+        Registry $registry,
+        ShipmentRepositoryInterface $shipmentRepository,
+        OrderRepositoryInterface $orderRepository,
+        Converter $converter,
+        ShipmentDocumentFactory $documentFactory,
+        ShipmentTrackCreationInterfaceFactory $trackFactory,
         array $data = []
-    ) {
+    )
+    {
         $this->messageManager = $messageManager;
         $this->registry = $registry;
         $this->shipmentRepository = $shipmentRepository;
-        $this->shipmentFactory = $shipmentFactory;
-        $this->trackFactory = $trackFactory;
         $this->orderRepository = $orderRepository;
+        $this->converter = $converter;
+        $this->documentFactory = $documentFactory;
+        $this->trackFactory = $trackFactory;
+
         parent::__construct($data);
-    }
-
-    /**
-     * Initialize shipment items QTY
-     *
-     * @return array
-     */
-    protected function getItemQtys()
-    {
-        $data = $this->getShipment();
-
-        return isset($data['items']) ? $data['items'] : [];
     }
 
     /**
@@ -112,6 +119,7 @@ class ShipmentLoader extends DataObject
              */
             if (!$order->getId()) {
                 $this->messageManager->addError(__('The order no longer exists.'));
+
                 return false;
             }
             /**
@@ -119,6 +127,7 @@ class ShipmentLoader extends DataObject
              */
             if ($order->getForcedShipmentWithInvoice()) {
                 $this->messageManager->addError(__('Cannot do shipment for the order separately from invoice.'));
+
                 return false;
             }
             /**
@@ -126,17 +135,57 @@ class ShipmentLoader extends DataObject
              */
             if (!$order->canShip()) {
                 $this->messageManager->addError(__('Cannot do shipment for the order.'));
+
                 return false;
             }
 
-            $shipment = $this->shipmentFactory->create(
+            $shipment = $this->documentFactory->create(
                 $order,
-                $this->getItemQtys(),
-                $this->getTracking()
+                $this->converter->convertToItemCreationArray($this->getItemQtys()),
+                $this->getTrackingArray()
             );
         }
 
         $this->registry->register('current_shipment', $shipment);
+
         return $shipment;
+    }
+
+    /**
+     * Initialize shipment items QTY
+     *
+     * @return array
+     */
+    private function getItemQtys()
+    {
+        $data = $this->getShipment();
+
+        return isset($data['items']) ? $data['items'] : [];
+    }
+
+    /**
+     * Convert UI-generated tracking array to Data Object array
+     *
+     * @return array
+     * @throws LocalizedException
+     */
+    private function getTrackingArray()
+    {
+        $tracks = $this->getTracking() ?: [];
+        $trackingCreation = [];
+        foreach ($tracks as $track) {
+            if (!isset($track['number']) || !isset($track['title']) || !isset($track['carrier_code'])) {
+                throw new LocalizedException(
+                    __('Tracking information must contain title, carrier code, and tracking number')
+                );
+            }
+            /** @var ShipmentTrackCreationInterface $trackCreation */
+            $trackCreation = $this->trackFactory->create();
+            $trackCreation->setTrackNumber($track['number']);
+            $trackCreation->setTitle($track['title']);
+            $trackCreation->setCarrierCode($track['carrier_code']);
+            $trackingCreation[] = $trackCreation;
+        }
+        return $trackingCreation;
     }
 }
