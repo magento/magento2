@@ -159,7 +159,7 @@ class Migration
         ];
         $this->_compositeModules = $compositeModules;
         $this->setup = $setup;
-        $this->serializer = $serializer?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
@@ -712,8 +712,7 @@ class Migration
     }
 
     /**
-     * Decodes the given $encodedValue string which is
-     * encoded in the JSON format
+     * Decodes the given $encodedValue string which is encoded in the JSON format
      *
      * @param string $encodedValue
      * @return string|int|float|bool|array|null
