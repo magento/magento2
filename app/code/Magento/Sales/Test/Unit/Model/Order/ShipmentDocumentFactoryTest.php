@@ -20,6 +20,7 @@ use Magento\Sales\Model\Order\Shipment\Item\Converter;
 
 /**
  * Class ShipmentDocumentFactoryTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -167,9 +168,9 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->trackMock);
 
         $this->converterMock->expects($this->once())
- 	 	    ->method('convertToQuantityArray')
- 	 	    ->with([$this->itemMock], $this->orderMock)
- 	 	    ->willReturn($items);
+            ->method('convertToQuantityArray')
+            ->with([$this->itemMock], $this->orderMock)
+            ->willReturn($items);
 
         if ($appendComment) {
             $comment = "New comment!";

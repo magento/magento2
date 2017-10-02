@@ -85,8 +85,7 @@ class ShipmentLoader extends DataObject
         ShipmentDocumentFactory $documentFactory,
         ShipmentTrackCreationInterfaceFactory $trackFactory,
         array $data = []
-    )
-    {
+    ) {
         $this->messageManager = $messageManager;
         $this->registry = $registry;
         $this->shipmentRepository = $shipmentRepository;
