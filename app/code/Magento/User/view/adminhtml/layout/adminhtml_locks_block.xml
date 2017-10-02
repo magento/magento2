@@ -33,11 +33,11 @@
                         </argument>
                     </arguments>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet">
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.block.locks.grid.columnSet" as="grid.columnSet">
                     <arguments>
                         <argument name="id" xsi:type="string">lockedAdminsGrid</argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="user_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.locks.grid.columnSet.user_id" as="user_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">ID</argument>
                             <argument name="type" xsi:type="string">number</argument>
@@ -48,7 +48,7 @@
                             <argument name="header_css_class" xsi:type="string">col-id</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="username">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.locks.grid.columnSet.username" as="username">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Username</argument>
                             <argument name="type" xsi:type="string">text</argument>
@@ -58,7 +58,7 @@
                             <argument name="header_css_class" xsi:type="string">col-name</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="last_login">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.locks.grid.columnSet.last_login" as="last_login">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Last login</argument>
                             <argument name="type" xsi:type="string">datetime</argument>
@@ -69,7 +69,7 @@
                             <argument name="header_css_class" xsi:type="string">col-date</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="failures_num">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.locks.grid.columnSet.failures_num" as="failures_num">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Failures</argument>
                             <argument name="filter" xsi:type="string">0</argument>
@@ -77,7 +77,7 @@
                             <argument name="index" xsi:type="string">failures_num</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="lock_expires">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.block.locks.grid.columnSet.lock_expires" as="lock_expires">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Unlocked</argument>
                             <argument name="type" xsi:type="string">datetime</argument>
