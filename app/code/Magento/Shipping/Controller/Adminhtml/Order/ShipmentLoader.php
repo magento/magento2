@@ -191,7 +191,7 @@ class ShipmentLoader extends DataObject
      * Extract product id => product quantity array from shipment data.
      *
      * @param array $shipmentData
-     * @return array
+     * @return int[]
      */
     private function getShipmentItems(array $shipmentData)
     {

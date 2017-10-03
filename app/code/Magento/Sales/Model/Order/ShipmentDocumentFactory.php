@@ -111,7 +111,7 @@ class ShipmentDocumentFactory
      * Translate OrderItemInterface array to product id => product quantity array.
      *
      * @param OrderItemInterface[] $items
-     * @return array
+     * @return int[]
      */
     private function getQuantitiesFromOrderItems(array $items)
     {
@@ -128,7 +128,7 @@ class ShipmentDocumentFactory
      * Translate ShipmentItemCreationInterface array to product id => product quantity array.
      *
      * @param ShipmentItemCreationInterface[] $items
-     * @return array
+     * @return int[]
      */
     private function getQuantitiesFromShipmentItems(array $items)
     {
