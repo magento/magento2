@@ -42,8 +42,8 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     {
         if ($this->_options === null) {
             $this->_options = [
-                ['label' => __('Yes'), 'value' => self::VALUE_YES],
                 ['label' => __('No'), 'value' => self::VALUE_NO],
+                ['label' => __('Yes'), 'value' => self::VALUE_YES],
             ];
         }
         return $this->_options;
