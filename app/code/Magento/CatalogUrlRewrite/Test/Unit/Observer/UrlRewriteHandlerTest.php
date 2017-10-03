@@ -127,13 +127,7 @@ class UrlRewriteHandlerTest extends \PHPUnit\Framework\TestCase
     {
         /* @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject $category */
         $category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
-            ->setMethods([
-                'getEntityId',
-                'getStoreId',
-                'getData',
-                'getAffectedProductIds',
-                'dataHasChangedFor',
-            ])
+            ->setMethods(['getEntityId', 'getStoreId', 'getData', 'getChangedProductIds'])
             ->disableOriginalConstructor()
             ->getMock();
         $category->expects($this->any())
@@ -142,9 +136,6 @@ class UrlRewriteHandlerTest extends \PHPUnit\Framework\TestCase
         $category->expects($this->any())
             ->method('getStoreId')
             ->willReturn(1);
-        $category->expects($this->atLeastOnce())
-            ->method('dataHasChangedFor')
-            ->willReturn('true');
         $category->expects($this->any())
             ->method('getData')
             ->with('save_rewrites_history')

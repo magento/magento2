@@ -161,6 +161,7 @@ class IndexBuilder
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
      * @param ProductLoader|null $productLoader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         RuleCollectionFactory $ruleCollectionFactory,
