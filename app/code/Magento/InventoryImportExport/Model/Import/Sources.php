@@ -100,7 +100,7 @@ class Sources extends AbstractEntity
      * @return CommandInterface
      * @throws LocalizedException
      */
-    public function getCommandByBehavior($behavior)
+    private function getCommandByBehavior($behavior)
     {
         if (!isset($this->commands[$behavior])) {
             throw new LocalizedException(
