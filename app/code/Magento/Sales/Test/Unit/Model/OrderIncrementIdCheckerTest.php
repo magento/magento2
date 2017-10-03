@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Quote\Test\Unit\Model\ResourceModel;
+namespace Magento\Sales\Test\Unit\Model;
 
-class QuoteTest extends \PHPUnit\Framework\TestCase
+class OrderIncrementIdCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Quote\Model\ResourceModel\Quote
+     * @var \Magento\Sales\Model\OrderIncrementIdChecker
      */
     private $model;
 
@@ -42,7 +42,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->adapterMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
 
-        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resourceMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock->expects(
@@ -54,9 +54,9 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Quote\Model\ResourceModel\Quote::class,
+            \Magento\Sales\Model\OrderIncrementIdChecker::class,
             [
-                'resource' => $this->resourceMock
+                'resourceModel' => $this->resourceMock
             ]
         );
     }
@@ -67,11 +67,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      * @param array $value
      * @dataProvider isOrderIncrementIdUsedDataProvider
      */
-    public function testIsOrderIncrementIdUsed($value)
+    public function testIsIncrementIdUsed($value)
     {
         $expectedBind = [':increment_id' => $value];
         $this->adapterMock->expects($this->once())->method('fetchOne')->with($this->selectMock, $expectedBind);
-        $this->model->isOrderIncrementIdUsed($value);
+        $this->model->isIncrementIdUsed($value);
     }
 
     /**
