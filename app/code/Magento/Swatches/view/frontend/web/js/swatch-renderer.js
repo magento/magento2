@@ -6,9 +6,12 @@
 define([
     'jquery',
     'underscore',
+    'mage/template',
+    'mage/translate',
+    'priceUtils',
     'jquery/ui',
     'jquery/jquery.parsequery'
-], function ($, _) {
+], function ($, _, mageTemplate, $t, priceUtils) {
     'use strict';
 
     /**
@@ -207,7 +210,13 @@ define([
             gallerySwitchStrategy: 'replace',
 
             // sly-old-price block selector
-            slyOldPriceSelector: '.sly-old-price'
+            slyOldPriceSelector: '.sly-old-price',
+
+            // tier prise selectors start
+            tierPriceTemplateSelector: '#tier-prices-template',
+            tierPriceBlockSelector: '[data-role="tier-price-block"]',
+            tierPriceTemplate: ''
+            // tier prise selectors end
         },
 
         /**
@@ -229,6 +238,7 @@ define([
             } else {
                 console.log('SwatchRenderer: No input data received');
             }
+            this.options.tierPriceTemplate = $(this.options.tierPriceTemplateSelector).html();
         },
 
         /**
@@ -694,7 +704,8 @@ define([
                 $product = $widget.element.parents($widget.options.selectorProduct),
                 $productPrice = $product.find(this.options.selectorProductPrice),
                 options = _.object(_.keys($widget.optionsMap), {}),
-                result;
+                result,
+                tierPriceHtml;
 
             $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
                 var attributeId = $(this).attr('attribute-id');
@@ -715,6 +726,23 @@ define([
                 $(this.options.slyOldPriceSelector).show();
             } else {
                 $(this.options.slyOldPriceSelector).hide();
+            }
+
+            if (result.tierPrices.length) {
+                if (this.options.tierPriceTemplate) {
+                    tierPriceHtml = mageTemplate(
+                        this.options.tierPriceTemplate,
+                        {
+                            'tierPrices': result.tierPrices,
+                            '$t': $t,
+                            'currencyFormat': this.options.jsonConfig.currencyFormat,
+                            'priceUtils': priceUtils
+                        }
+                    );
+                    $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
+                }
+            } else {
+                $(this.options.tierPriceBlockSelector).hide();
             }
         },
 
