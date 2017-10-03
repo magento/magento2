@@ -1439,29 +1439,66 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $typeValues
      * @param array $typePrices
      * @param array $typeTitles
-     * @return void
+     * @return array
      */
     public function restoreOriginalOptionTypeIds(array &$typeValues, array &$typePrices, array &$typeTitles)
     {
+        $optionsForRestore = [];
         foreach ($typeValues as $optionId => &$optionTypes) {
             foreach ($optionTypes as &$optionType) {
                 $optionTypeId = $optionType['option_type_id'];
                 foreach ($typeTitles[$optionTypeId] as $storeId => $optionTypeTitle) {
                     $existingTypeId = $this->getExistingOptionTypeId($optionId, $storeId, $optionTypeTitle);
-                    if ($existingTypeId) {
+                    if ($existingTypeId !== null) {
                         $optionType['option_type_id'] = $existingTypeId;
-                        $typeTitles[$existingTypeId] = $typeTitles[$optionTypeId];
-                        unset($typeTitles[$optionTypeId]);
-                        if (isset($typePrices[$optionTypeId])) {
-                            $typePrices[$existingTypeId] = $typePrices[$optionTypeId];
-                            unset($typePrices[$optionTypeId]);
-                        }
+
+                        $typeTitles = $this->replaceArrayElements($typeTitles, $existingTypeId, $optionTypeId);
+                        $typePrices = $this->replaceArrayElements($typePrices, $existingTypeId, $optionTypeId);
+
+                        $optionsForRestore[] = [$existingTypeId, $optionTypeId];
                         // If option type titles match at least in one store, consider current option type as existing
                         break;
                     }
                 }
             }
         }
+        return $optionsForRestore;
+    }
+
+//    public function getRestoreOriginalOptionTypeIds(array $typeValues, array $typeTitles)
+//    {
+//        $optionsForRestore = [];
+//        foreach ($typeValues as $optionId =>&$optionTypes) {
+//            foreach ($optionTypes as &$optionType) {
+//                $optionTypeId = $optionType['option_type_id'];
+//                foreach ($typeTitles[$optionTypeId] as $storeId => $optionTypeTitle) {
+//                    $existingTypeId = $this->getExistingOptionTypeId($optionId, $storeId, $optionTypeTitle);
+//                    if ($existingTypeId !== null) {
+//                        $optionsForRestore[] = [$existingTypeId, $optionTypeId];
+//                        // If option type titles match at least in one store, consider current option type as existing
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//        return $optionsForRestore;
+//    }
+
+    /**
+     * Replace $searchKey element to $replaceKey element
+     *
+     * @param array $originalArray
+     * @param string $searchKey
+     * @param string $replaceKey
+     * @return array
+     */
+    public function replaceArrayElements(array $originalArray, $searchKey, $replaceKey)
+    {
+        if (isset($originalArray[$replaceKey])) {
+            $originalArray[$searchKey] = $originalArray[$replaceKey];
+            unset($originalArray[$replaceKey]);
+        }
+        return $originalArray;
     }
 
     /**

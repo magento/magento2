@@ -6,12 +6,15 @@
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
+use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory as ResourceCollectionFactory;
-use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
-use Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory as ResourceValueCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product\Option;
+use Magento\Framework\DataObject;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection as ValueCollection;
+
 
 /**
  * Test class for import product options module
@@ -225,7 +228,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     private $optionValueCollectionMock;
     /**
-     * @var ResourceValueCollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     private $optionValueCollectionFactoryMock;
 
@@ -259,23 +262,12 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->method('getLinkField')
             ->willReturn('entity_id');
 
-        $this->optionValueCollectionFactoryMock = $this->createDefaultMock(ResourceValueCollectionFactory::class);
-        $this->optionValueCollectionMock = $this->createDefaultMock(Collection::class);
+        $this->optionValueCollectionFactoryMock = $this->createDefaultMock(CollectionFactory::class);
+        $this->optionValueCollectionMock = $this->createDefaultMock(ValueCollection::class);
         $this->optionValueCollectionMock
             ->expects($this->any())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([]));
-
-        $timezoneInterface = $this->createDefaultMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $timezoneInterface
-            ->expects($this->any())
-            ->method('date')
-            ->willReturn(new \DateTime());
-
-        $this->optionValueCollectionFactoryMock
-            ->expects($this->any())
-            ->method('create')
-            ->willReturn($this->optionValueCollectionMock);
 
         $modelClassArgs = $this->createModelArgs($addExpectations, $deleteBehavior, $doubleOptions);
 
@@ -621,20 +613,20 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_saveSpecificTypeTitles
      * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_updateProducts
      */
-//    public function testImportDataAppendBehavior()
-//    {
-//        $this->model->importData();
-//    }
-//
-//    /**
-//     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_importData
-//     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_deleteEntities
-//     */
-//    public function testImportDataDeleteBehavior()
-//    {
-//        $this->model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE]);
-//        $this->model->importData();
-//    }
+    public function testImportDataAppendBehavior()
+    {
+        $this->model->importData();
+    }
+
+    /**
+     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_importData
+     * @covers \Magento\CatalogImportExport\Model\Import\Product\Option::_deleteEntities
+     */
+    public function testImportDataDeleteBehavior()
+    {
+        $this->model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE]);
+        $this->model->importData();
+    }
 
     /**
      * Load and return CSV source data
@@ -719,17 +711,17 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      * @covers       \Magento\CatalogImportExport\Model\Import\Product\Option::_validateSpecificParameterData
      * @dataProvider validateRowDataProvider
      */
-//    public function testValidateRow(array $rowData, array $errors)
-//    {
-//        $this->_bypassModelMethodGetMultiRowFormat($rowData);
-//        if (empty($errors)) {
-//            $this->assertTrue($this->modelMock->validateRow($rowData, 0));
-//        } else {
-//            $this->assertFalse($this->modelMock->validateRow($rowData, 0));
-//        }
-//        $resultErrors = $this->productEntity->getErrorAggregator()->getRowsGroupedByErrorCode([], [], false);
-//        $this->assertEquals($errors, $resultErrors);
-//    }
+    public function testValidateRow(array $rowData, array $errors)
+    {
+        $this->_bypassModelMethodGetMultiRowFormat($rowData);
+        if (empty($errors)) {
+            $this->assertTrue($this->modelMock->validateRow($rowData, 0));
+        } else {
+            $this->assertFalse($this->modelMock->validateRow($rowData, 0));
+        }
+        $resultErrors = $this->productEntity->getErrorAggregator()->getRowsGroupedByErrorCode([], [], false);
+        $this->assertEquals($errors, $resultErrors);
+    }
 
     /**
      * Test for validation of ambiguous data
@@ -746,32 +738,32 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      * @covers       \Magento\CatalogImportExport\Model\Import\Product\Option::_saveNewOptionData
      * @dataProvider validateAmbiguousDataDataProvider
      */
-//    public function testValidateAmbiguousData(
-//        array $rowData,
-//        array $errors,
-//        $behavior = null,
-//        $numberOfValidations = 1
-//    ) {
-//        $this->_testStores = ['admin' => 0];
-//        $this->setUp();
-//        if ($behavior) {
-//            $this->modelMock->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND]);
-//        }
-//
-//        $this->_bypassModelMethodGetMultiRowFormat($rowData);
-//
-//        for ($i = 0; $i < $numberOfValidations; $i++) {
-//            $this->modelMock->validateRow($rowData, $i);
-//        }
-//
-//        if (empty($errors)) {
-//            $this->assertTrue($this->modelMock->validateAmbiguousData());
-//        } else {
-//            $this->assertFalse($this->modelMock->validateAmbiguousData());
-//        }
-//        $resultErrors = $this->productEntity->getErrorAggregator()->getRowsGroupedByErrorCode([], [], false);
-//        $this->assertEquals($errors, $resultErrors);
-//    }
+    public function testValidateAmbiguousData(
+        array $rowData,
+        array $errors,
+        $behavior = null,
+        $numberOfValidations = 1
+    ) {
+        $this->_testStores = ['admin' => 0];
+        $this->setUp();
+        if ($behavior) {
+            $this->modelMock->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND]);
+        }
+
+        $this->_bypassModelMethodGetMultiRowFormat($rowData);
+
+        for ($i = 0; $i < $numberOfValidations; $i++) {
+            $this->modelMock->validateRow($rowData, $i);
+        }
+
+        if (empty($errors)) {
+            $this->assertTrue($this->modelMock->validateAmbiguousData());
+        } else {
+            $this->assertFalse($this->modelMock->validateAmbiguousData());
+        }
+        $resultErrors = $this->productEntity->getErrorAggregator()->getRowsGroupedByErrorCode([], [], false);
+        $this->assertEquals($errors, $resultErrors);
+    }
 
     /**
      * Data provider of row data and errors
@@ -1017,7 +1009,6 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
 
     public function testRestoreOptions()
     {
-        $this->model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND]);
         $typeValues = [
             4 => [
                 [
@@ -1046,38 +1037,10 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         ];
 
         $typePrices = [
-            2 =>
-                [
-                    0 =>
-                        [
-                            'price' => 3.0,
-                            'price_type' => 'fixed',
-                        ],
-                ],
-            3 =>
-                [
-                    0 =>
-                        [
-                            'price' => 3.0,
-                            'price_type' => 'fixed',
-                        ],
-                ],
-            4 =>
-                [
-                    0 =>
-                        [
-                            'price' => 3.0,
-                            'price_type' => 'fixed',
-                        ],
-                ],
-            5 =>
-                [
-                    0 =>
-                        [
-                            'price' => 3.0,
-                            'price_type' => 'fixed',
-                        ],
-                ],
+            2 => [['price' => 3.0, 'price_type' => 'fixed',],],
+            3 => [['price' => 3.0, 'price_type' => 'fixed',],],
+            4 => [['price' => 3.0, 'price_type' => 'fixed',],],
+            5 => [['price' => 3.0, 'price_type' => 'fixed',],],
         ];
         $typeTitles = [
             2 => ['Option 1',],
@@ -1085,38 +1048,71 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             4 => ['Option 1',],
             5 => ['Option 2',],
         ];
+        $typeTitlesRefactored = [
+            2 => ['Option 1',],
+            3 => ['Option 2',],
+            4 => ['Option 1',],
+            5 => ['Option 2',],
+        ];
 
-        $optionValueMock = $this->createDefaultMock(\Magento\Catalog\Model\Product\Option\Value::class);
-        $this->optionValueCollectionMock = $this->createDefaultMock(Collection::class);
-        $this->optionValueCollectionFactoryMock = $this->createDefaultMock(ResourceValueCollectionFactory::class);
+        $optionDataValue = new DataObject([
+            'option_id' => 4,
+            'id' => 1,
+            'title' => 'Option 1'
+        ]);
 
-        $optionValueMock->expects($this->once())
-            ->method('getOptionId')
-            ->willReturn(2);
-
-        $optionValueMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
-        $optionValueMock->expects($this->once())
-            ->method('getTitle')
-            ->willReturn('Option 1');
+        $this->optionValueCollectionMock = $this->createDefaultMock(ValueCollection::class);
 
         $this->optionValueCollectionMock
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$optionValueMock]));
+            ->willReturn(new \ArrayIterator([$optionDataValue]));
 
-        $this->optionValueCollectionFactoryMock
-            ->expects($this->any())
-            ->method('create')
-            ->willReturn($this->optionValueCollectionMock);
-
+        $this->optionValueCollectionFactoryMock = $this->createDefaultMock(CollectionFactory::class);
 
         $modelClassArgs = $this->createModelArgs();
 
         $this->model = new Option(...array_values($modelClassArgs));
-        $this->model->restoreOriginalOptionTypeIds($typeValues, $typePrices, $typeTitles);
+        $optionsForRestore = $this->model->restoreOriginalOptionTypeIds($typeValues, $typePrices, $typeTitles);
 
+
+//        $this->assertEquals(
+//            $this->model->getRestoreOriginalOptionTypeIds($typeValues, $typeTitlesRefactored),
+//            $optionsForRestore
+//        );
+        $this->assertEquals(
+            [
+                3 => [0 => 'Option 2',],
+                4 => [0 => 'Option 1',],
+                5 => [0 => 'Option 2',],
+                1 => [0 => 'Option 1',],
+            ],
+            $typeTitles
+        );
+
+        $this->assertEquals(
+            [
+                3 => [['price' => 3.0, 'price_type' => 'fixed',],],
+                4 => [['price' => 3.0, 'price_type' => 'fixed',],],
+                5 => [['price' => 3.0, 'price_type' => 'fixed',],],
+                1 => [['price' => 3.0, 'price_type' => 'fixed',],],
+            ],
+            $typePrices);
+        $this->assertEquals(
+            [
+                4 =>
+                    [
+                        ['option_type_id' => 1, 'sort_order' => 0, 'sku' => '3-1-select',],
+                        ['option_type_id' => 3, 'sort_order' => 1, 'sku' => '3-2-select',],
+                    ],
+                5 =>
+                    [
+                        ['option_type_id' => 4, 'sort_order' => 0, 'sku' => '4-1-radio',],
+                        ['option_type_id' => 5, 'sort_order' => 1, 'sku' => '4-1-radio',],
+                    ],
+            ],
+            $typeValues
+        );
         $this->model->importData();
     }
 
