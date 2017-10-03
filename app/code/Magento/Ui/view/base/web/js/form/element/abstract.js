@@ -158,16 +158,20 @@ define([
          * @returns {Abstract} Chainable.
          */
         _setClasses: function () {
-            var additional = this.additionalClasses,
-                classes;
+            var additional = this.additionalClasses;
 
-            if (_.isString(additional) && additional.trim().length) {
-                additional = this.additionalClasses.trim().split(' ');
-                classes = this.additionalClasses = {};
+            if (_.isString(additional)){
+                this.additionalClasses = {};
 
-                additional.forEach(function (name) {
-                    classes[name] = true;
-                }, this);
+                if (additional.trim().length) {
+                    additional = additional.trim().split(' ');
+
+                    additional.forEach(function (name) {
+                        if (name.length) {
+                            this.additionalClasses[name] = true;
+                        }
+                    }, this);
+                }
             }
 
             _.extend(this.additionalClasses, {
