@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Test XML Example -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="StorefrontCustomerCreateWishlistCest">
+        <annotations>
+            <features value="Persist a wishlist for a customer"/>
+            <stories value="Persist a wishlist for a customer"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <env value="phantomjs"/>
+            <group value="wishlist"/>
+        </annotations>
+        <before>
+            <createData mergeKey="category" entity="SimpleSubCategory"/>
+            <createData mergeKey="product" entity="SimpleProduct" >
+                <required-entity persistedKey="category"/>
+            </createData>
+            <createData mergeKey="customer" entity="Simple_US_Customer"/>
+            <createData mergeKey="wishlist" entity="Wishlist">
+                <required-entity persistedKey="customer"/>
+                <required-entity persistedKey="product"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData mergeKey="deleteProduct" createDataKey="product"/>
+            <deleteData mergeKey="deleteCategory" createDataKey="category"/>
+            <deleteData mergeKey="deleteCustomer" createDataKey="customer"/>
+        </after>
+        <test name="StorefrontCustomerCreateWishlistTest">
+            <annotations>
+                <title value="Persist a wishlist for a customer"/>
+                <description value="Persist a wishlist for a customer"/>
+            </annotations>
+            <amOnPage mergeKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage}}"/>
+            <fillField  mergeKey="fillEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
+            <fillField  mergeKey="fillPassword" userInput="$$customer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
+            <waitForElementVisible mergeKey="waitForButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+            <click mergeKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+            <see mergeKey="seeFirstName" userInput="$$customer.firstname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <see mergeKey="seeLastName" userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <see mergeKey="seeEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <waitForPageLoad mergeKey="15"/>
+            <amOnPage mergeKey="amOnWishlist" url="{{StorefrontCustomerWishlistPage}}"/>
+            <see mergeKey="seeInField" userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemName}}"/>
+        </test>
+    </cest>
+</config>
