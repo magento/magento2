@@ -135,14 +135,7 @@ class ShipmentLoader extends DataObject
                 return false;
             }
 
-            $shipmentItems = [];
-            foreach ($this->getItemQtys() as $itemId => $quantity) {
-                /** @var ShipmentItemCreationInterface $item */
-                $item = $this->itemFactory->create();
-                $item->setOrderItemId($itemId);
-                $item->setQty($quantity);
-                $shipmentItems[] = $item;
-            }
+            $shipmentItems = $this->getShipmentItems($this->getShipment());
 
             $shipment = $this->documentFactory->create(
                 $order,
@@ -192,5 +185,25 @@ class ShipmentLoader extends DataObject
         }
 
         return $trackingCreation;
+    }
+
+    /**
+     * Extract product id => product quantity array from shipment data.
+     *
+     * @param array $shipmentData
+     * @return array
+     */
+    private function getShipmentItems(array $shipmentData)
+    {
+        $shipmentItems = [];
+        $itemQty = isset($shipmentData['items']) ? $shipmentData['items'] : [];
+        foreach ($itemQty as $itemId => $quantity) {
+            /** @var ShipmentItemCreationInterface $item */
+            $item = $this->itemFactory->create();
+            $item->setOrderItemId($itemId);
+            $item->setQty($quantity);
+            $shipmentItems[] = $item;
+        }
+        return $shipmentItems;
     }
 }

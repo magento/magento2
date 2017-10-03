@@ -79,20 +79,9 @@ class ShipmentDocumentFactory
         array $packages = [],
         ShipmentCreationArgumentsInterface $arguments = null
     ) {
-        $shipmentItems = [];
-        if (empty($items)) {
-            /** @var OrderItemInterface $item */
-            foreach ($order->getItems() as $item) {
-                if (!$item->getIsVirtual() && !$item->getParentItem()) {
-                    $shipmentItems[$item->getItemId()] = $item->getQtyOrdered();
-                }
-            }
-        } else {
-            /** @var ShipmentItemCreationInterface $item */
-            foreach ($items as $item) {
-                    $shipmentItems[$item->getOrderItemId()] = $item->getQty();
-            }
-        }
+        $shipmentItems = empty($items)
+            ? $this->getQuantitiesFromOrderItems($order->getItems())
+            : $this->getQuantitiesFromShipmentItems($items);
 
         /** @var Shipment $shipment */
         $shipment = $this->shipmentFactory->create(
@@ -116,5 +105,37 @@ class ShipmentDocumentFactory
         }
 
         return $shipment;
+    }
+
+    /**
+     * Translate OrderItemInterface array to product id => product quantity array.
+     *
+     * @param OrderItemInterface[] $items
+     * @return array
+     */
+    private function getQuantitiesFromOrderItems(array $items)
+    {
+        $shipmentItems = [];
+        foreach ($items as $item) {
+            if (!$item->getIsVirtual() && !$item->getParentItem()) {
+                $shipmentItems[$item->getItemId()] = $item->getQtyOrdered();
+            }
+        }
+        return $shipmentItems;
+    }
+
+    /**
+     * Translate ShipmentItemCreationInterface array to product id => product quantity array.
+     *
+     * @param ShipmentItemCreationInterface[] $items
+     * @return array
+     */
+    private function getQuantitiesFromShipmentItems(array $items)
+    {
+        $shipmentItems = [];
+        foreach ($items as $item) {
+            $shipmentItems[$item->getOrderItemId()] = $item->getQty();
+        }
+        return $shipmentItems;
     }
 }
