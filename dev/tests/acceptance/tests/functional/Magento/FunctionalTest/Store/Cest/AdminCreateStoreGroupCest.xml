@@ -36,18 +36,17 @@
             <click mergeKey="s11" selector="{{AdminStoresGridSection.resetButton}}"/>
             <waitForPageLoad mergeKey="s15" time="10"/>
 
-            <!-- Uncomment after MFTF Bug MQE-391 is fixed -->
-            <!--fillField mergeKey="s17" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="$$b1.group[name]$$"/-->
+            <fillField mergeKey="s17" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="$$b1.group[name]$$"/>
             <click mergeKey="s19" selector="{{AdminStoresGridSection.searchButton}}"/>
             <waitForPageLoad mergeKey="s21" time="10"/>
-            <!--see mergeKey="s23" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="$$b1.group[name]$$"/-->
+            <see mergeKey="s23" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="$$b1.group[name]$$"/>
 
             <click mergeKey="s31" selector="{{AdminStoresGridSection.resetButton}}"/>
             <waitForPageLoad mergeKey="s35" time="10"/>
-            <!--fillField mergeKey="s37" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="$$b2.group[name]$$"/-->
+            <fillField mergeKey="s37" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="$$b2.group[name]$$"/>
             <click mergeKey="s39" selector="{{AdminStoresGridSection.searchButton}}"/>
             <waitForPageLoad mergeKey="s41" time="10"/>
-            <!--see mergeKey="s43" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="$$b2.group[name]$$"/-->
+            <see mergeKey="s43" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" userInput="$$b2.group[name]$$"/>
         </test>
     </cest>
 </config>

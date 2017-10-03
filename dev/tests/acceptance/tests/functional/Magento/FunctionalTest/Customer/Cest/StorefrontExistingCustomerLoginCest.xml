@@ -14,10 +14,10 @@
             <stories value="Existing Customer can Login on the Storefront"/>
         </annotations>
         <before>
-            <createData entity="Simple_US_Customer" mergeKey="Simple_US_Customer"/>
+            <createData mergeKey="customer" entity="Simple_US_Customer"/>
         </before>
         <after>
-            <deleteData createDataKey="Simple_US_Customer" mergeKey="Simple_US_Customer"/>
+            <deleteData mergeKey="deleteCustomer" createDataKey="customer" />
         </after>
         <test name="ExistingCustomerLoginStorefrontTest">
             <annotations>
@@ -31,13 +31,13 @@
                 <env value="phantomjs"/>
                 <env value="headless"/>
             </annotations>
-            <amOnPage mergeKey="amOnSignInPage"  url="customer/account/login/"/>
-            <fillField  mergeKey="fillEmail" userInput="$$Simple_US_Customer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
-            <fillField  mergeKey="fillPassword" userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
+            <amOnPage mergeKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage}}"/>
+            <fillField  mergeKey="fillEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
+            <fillField  mergeKey="fillPassword" userInput="$$customer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
             <click mergeKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
-            <see mergeKey="seeFirstName" userInput="{{Simple_US_Customer.firstname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
-            <see mergeKey="seeLastName" userInput="{{Simple_US_Customer.lastname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
-            <see mergeKey="seeEmail" userInput="$$Simple_US_Customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <see mergeKey="seeFirstName" userInput="$$customer.firstname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <see mergeKey="seeLastName" userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <see mergeKey="seeEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
         </test>
     </cest>
 </config>
