@@ -11,10 +11,11 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterfaceFactory;
+use Magento\Sales\Api\Data\ShipmentItemCreationInterfaceFactory;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order\Shipment\Item\Converter;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory;
+use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 
 /**
  * Class ShipmentLoader
@@ -52,11 +53,6 @@ class ShipmentLoader extends DataObject
     private $orderRepository;
 
     /**
-     * @var Converter
-     */
-    private $converter;
-
-    /**
      * @var ShipmentDocumentFactory
      */
     private $documentFactory;
@@ -67,13 +63,18 @@ class ShipmentLoader extends DataObject
     private $trackFactory;
 
     /**
+     * @var ShipmentItemCreationInterfaceFactory
+     */
+    private $itemFactory;
+
+    /**
      * @param ManagerInterface $messageManager
      * @param Registry $registry
      * @param ShipmentRepositoryInterface $shipmentRepository
      * @param OrderRepositoryInterface $orderRepository
-     * @param Converter $converter
      * @param ShipmentDocumentFactory $documentFactory
      * @param ShipmentTrackCreationInterfaceFactory $trackFactory
+     * @param ShipmentItemCreationInterfaceFactory $itemFactory
      * @param array $data
      */
     public function __construct(
@@ -81,18 +82,18 @@ class ShipmentLoader extends DataObject
         Registry $registry,
         ShipmentRepositoryInterface $shipmentRepository,
         OrderRepositoryInterface $orderRepository,
-        Converter $converter,
         ShipmentDocumentFactory $documentFactory,
         ShipmentTrackCreationInterfaceFactory $trackFactory,
+        ShipmentItemCreationInterfaceFactory $itemFactory,
         array $data = []
     ) {
         $this->messageManager = $messageManager;
         $this->registry = $registry;
         $this->shipmentRepository = $shipmentRepository;
         $this->orderRepository = $orderRepository;
-        $this->converter = $converter;
         $this->documentFactory = $documentFactory;
         $this->trackFactory = $trackFactory;
+        $this->itemFactory = $itemFactory;
         parent::__construct($data);
     }
 
@@ -134,9 +135,18 @@ class ShipmentLoader extends DataObject
                 return false;
             }
 
+            $shipmentItems = [];
+            foreach ($this->getItemQtys() as $itemId => $quantity) {
+                /** @var ShipmentItemCreationInterface $item */
+                $item = $this->itemFactory->create();
+                $item->setOrderItemId($itemId);
+                $item->setQty($quantity);
+                $shipmentItems[] = $item;
+            }
+
             $shipment = $this->documentFactory->create(
                 $order,
-                $this->converter->convertToItemCreationArray($this->getItemQtys()),
+                $shipmentItems,
                 $this->getTrackingArray()
             );
         }
@@ -180,6 +190,7 @@ class ShipmentLoader extends DataObject
             $trackCreation->setCarrierCode($track['carrier_code']);
             $trackingCreation[] = $trackCreation;
         }
+
         return $trackingCreation;
     }
 }
