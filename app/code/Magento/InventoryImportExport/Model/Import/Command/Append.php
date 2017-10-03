@@ -5,6 +5,7 @@
  */
 
 namespace Magento\InventoryImportExport\Model\Import\Command;
+
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;

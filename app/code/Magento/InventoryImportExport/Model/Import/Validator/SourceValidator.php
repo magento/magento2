@@ -6,7 +6,6 @@
 
 namespace Magento\InventoryImportExport\Model\Import\Validator;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryImportExport\Model\Import\Sources;
@@ -63,16 +62,19 @@ class SourceValidator implements ValidatorInterface
     }
 
     /**
+     * Returns exits already the source in sources.
+     *
      * @param int $sourceId
      * @return bool
      */
-    private function isExistingSource($sourceId)
+    private function isExistingSource($sourceId): bool
     {
         return isset($this->sourceIds[$sourceId]);
     }
 
     /**
      * Loads all existing source ids
+     *
      * @return void
      */
     private function loadSourceIds()

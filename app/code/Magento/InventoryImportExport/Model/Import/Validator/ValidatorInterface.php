@@ -9,7 +9,7 @@ namespace Magento\InventoryImportExport\Model\Import\Validator;
 use Magento\Framework\Validation\ValidationResult;
 
 /**
- * Extension point for row validation
+ * Extension point for row validation (Service Provider Interface - SPI)
  *
  * @api
  */

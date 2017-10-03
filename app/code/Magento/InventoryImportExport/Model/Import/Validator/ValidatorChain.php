@@ -10,9 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationResultFactory;
 
 /**
- * Extension point for row validation
- *
- * @api
+ * @inheritdoc
  */
 class ValidatorChain implements ValidatorInterface
 {
@@ -52,14 +50,16 @@ class ValidatorChain implements ValidatorInterface
      */
     public function validate(array $rowData, $rowNumber)
     {
-        $errors = [];
+        /* the inner empty array covers cases when no loops were made */
+        $errors = [[]];
         foreach ($this->validators as $validator) {
             $validationResult = $validator->validate($rowData, $rowNumber);
 
             if (!$validationResult->isValid()) {
-                $errors = array_merge($errors, $validationResult->getErrors());
+                $errors[] = $validationResult->getErrors();
             }
         }
-        return $this->validationResultFactory->create(['errors' => $errors]);
+
+        return $this->validationResultFactory->create(['errors' => array_merge(...$errors)]);
     }
 }
