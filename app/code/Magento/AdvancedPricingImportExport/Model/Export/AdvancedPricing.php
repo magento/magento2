@@ -397,6 +397,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     protected function getTierPrices(array $productLinksIds, $table)
     {
         $exportFilter = null;
+        $price = null;
         if (isset($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP])) {
             $exportFilter = $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP];
         }
@@ -413,8 +414,10 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 'product_link_id'                                      => 'ap.'
                     .$productEntityLinkField,
             ];
-            if (isset($exportFilter) && !empty($exportFilter)) {
-                $price = $exportFilter['tier_price'];
+            if ($exportFilter) {
+                if (array_key_exists('tier_price', $exportFilter)) {
+                    $price = $exportFilter['tier_price'];
+                }
             }
         } else {
             throw new \InvalidArgumentException('Proper table name needed');
