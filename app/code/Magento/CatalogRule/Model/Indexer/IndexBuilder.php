@@ -11,6 +11,7 @@ use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollec
 use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
 
 /**
  * @api
@@ -136,6 +137,11 @@ class IndexBuilder
     private $activeTableSwitcher;
 
     /**
+     * @var ProductLoader
+     */
+    private $productLoader;
+
+    /**
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -153,6 +159,7 @@ class IndexBuilder
      * @param \Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice|null $reindexRuleProductPrice
      * @param \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor|null $pricesPersistor
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
+     * @param ProductLoader|null $productLoader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -172,7 +179,8 @@ class IndexBuilder
         \Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder $ruleProductsSelectBuilder = null,
         \Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice $reindexRuleProductPrice = null,
         \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor $pricesPersistor = null,
-        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
+        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null,
+        ProductLoader $productLoader = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -207,6 +215,8 @@ class IndexBuilder
         $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
         );
+        $this->productLoader = $productLoader ?:
+            ObjectManager::getInstance()->get(ProductLoader::class);
     }
 
     /**
@@ -251,9 +261,10 @@ class IndexBuilder
     {
         $this->cleanByIds($ids);
 
+        $products = $this->productLoader->getProducts($ids);
         foreach ($this->getActiveRules() as $rule) {
-            foreach ($ids as $productId) {
-                $this->applyRule($rule, $this->getProduct($productId));
+            foreach ($products as $product) {
+                $this->applyRule($rule, $product);
             }
         }
     }

@@ -423,6 +423,8 @@ class Category extends AbstractResource
                 'catalog_category_change_products',
                 ['category' => $category, 'product_ids' => $productIds]
             );
+
+            $category->setChangedProductIds($productIds);
         }
 
         if (!empty($insert) || !empty($update) || !empty($delete)) {

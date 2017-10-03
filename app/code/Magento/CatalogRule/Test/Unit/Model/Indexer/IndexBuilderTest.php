@@ -6,11 +6,8 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
+use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Catalog\Api\Data\ProductSearchResultsInterface;
-use Magento\Framework\Api\SearchCriteria;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -119,26 +116,6 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
     protected $backend;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $productRepository;
-
-    /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var ProductSearchResultsInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $productSearchResults;
-
-    /**
-     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $searchCriteria;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $reindexRuleProductPrice;
@@ -147,6 +124,11 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $reindexRuleGroupWebsite;
+
+    /**
+     * @var ProductLoader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productLoader;
 
     /**
      * Set up test
@@ -211,19 +193,7 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
         $this->rules->expects($this->any())->method('validate')->with($this->product)->willReturn(true);
         $this->attribute->expects($this->any())->method('getBackend')->will($this->returnValue($this->backend));
         $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
-
-        $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->productSearchResults = $this->getMockBuilder(ProductSearchResultsInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->searchCriteria = $this->getMockBuilder(SearchCriteria::class)
+        $this->productLoader = $this->getMockBuilder(ProductLoader::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -240,19 +210,18 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
                 'dateTime' => $this->dateTime,
                 'productFactory' => $this->productFactory,
                 1000,
-                'productRepository' => $this->productRepository,
-                'searchCriteriaBuilder' => $this->searchCriteriaBuilder
+                'productLoader' => $this->productLoader
             ]
         );
 
         $this->reindexRuleProductPrice =
             $this->getMockBuilder(\Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->reindexRuleGroupWebsite =
             $this->getMockBuilder(\Magento\CatalogRule\Model\Indexer\ReindexRuleGroupWebsite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->setProperties($this->indexBuilder, [
             'metadataPool' => $this->metadataPool,
             'reindexRuleProductPrice' => $this->reindexRuleProductPrice,
@@ -288,18 +257,8 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($backendModelMock));
 
         $iterator = new \ArrayIterator([$this->product]);
-        $this->searchCriteriaBuilder->expects($this->once())
-            ->method('addFilter')
-            ->willReturnSelf();
-        $this->searchCriteriaBuilder->expects($this->once())
-            ->method('create')
-            ->willReturn($this->searchCriteria);
-        $this->productRepository->expects($this->once())
-            ->method('getList')
-            ->with($this->searchCriteria)
-            ->willReturn($this->productSearchResults);
-        $this->productSearchResults->expects($this->once())
-            ->method('getItems')
+        $this->productLoader->expects($this->once())
+            ->method('getProducts')
             ->willReturn($iterator);
 
         $this->reindexRuleProductPrice->expects($this->once())->method('execute')->willReturn(true);
