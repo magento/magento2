@@ -304,7 +304,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     {
         $exportRow = $this->templateExportData;
         foreach (array_keys($exportRow) as $keyTemplate) {
-            if (!empty($tierPriceData[$keyTemplate])) {
+            if (array_key_exists($keyTemplate, $tierPriceData)) {
                 if (in_array($keyTemplate, $this->_priceWebsite)) {
                     $exportRow[$keyTemplate] = $this->_getWebsiteCode(
                         $tierPriceData[$keyTemplate]
@@ -459,7 +459,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @param int $websiteId
      * @return string
      */
-    protected function _getWebsiteCode($websiteId)
+    protected function _getWebsiteCode(int $websiteId): string
     {
         if (!array_key_exists($websiteId, $this->websiteCodesMap)) {
             $storeName = ($websiteId == 0)
