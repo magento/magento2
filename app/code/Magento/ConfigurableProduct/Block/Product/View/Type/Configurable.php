@@ -236,7 +236,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      *
      * @return array
      */
-    protected function getOptionImages()
+    private function getOptionImages()
     {
         $images = [];
         foreach ($this->getAllowProducts() as $product) {

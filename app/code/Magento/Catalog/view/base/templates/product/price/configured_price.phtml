@@ -17,7 +17,7 @@ $priceLabel = ($block->getPriceLabel() !== null)
     : '';
 ?>
 <p class="price-as-configured">
-    <?php if ($configuredPrice->getValue() !== 0): ?>
+    <?php if ($configuredPrice->getAmount()->getValue() !== null): ?>
         <?php /* @noEscape */
         echo $block->renderAmount($configuredPrice->getAmount(), [
             'display_label' => $priceLabel,
