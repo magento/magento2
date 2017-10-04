@@ -101,6 +101,7 @@ use Magento\Sales\Model\Status;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\CartInterface
 {
@@ -848,7 +849,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Loading quote data by customer
      *
      * @param \Magento\Customer\Model\Customer|int $customer
-     * @deprecated
+     * @deprecated 100.2.0
      * @return $this
      */
     public function loadByCustomer($customer)
@@ -1619,6 +1620,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $item = $this->getItemByProduct($candidate);
             if (!$item) {
                 $item = $this->itemProcessor->init($candidate, $request);
+                $item->setQuote($this);
+                $item->setOptions($candidate->getCustomOptions());
+                $item->setProduct($candidate);
                 // Add only item that is not in quote already
                 $this->addItem($item);
             }
@@ -2373,8 +2377,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected function _afterLoad()
     {
         // collect totals and save me, if required
-        if (1 == $this->getData('trigger_recollect')) {
+        if (1 == $this->getTriggerRecollect()) {
             $this->collectTotals()->save();
+            $this->setTriggerRecollect(0);
         }
         return parent::_afterLoad();
     }

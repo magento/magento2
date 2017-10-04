@@ -14,7 +14,7 @@ use \Magento\Framework\Session\Config;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -177,7 +177,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testWrongMethodCall()
     {
         $this->getModel($this->validatorMock);
-        $this->setExpectedException(
+        $this->expectException(
             '\BadMethodCallException',
             'Method "methodThatNotExist" does not exist in Magento\Framework\Session\Config'
         );
@@ -390,13 +390,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function getModel($validator)
     {
-        $this->requestMock = $this->getMock(
+        $this->requestMock = $this->createPartialMock(
             \Magento\Framework\App\Request\Http::class,
-            ['getBasePath', 'isSecure', 'getHttpHost'],
-            [],
-            '',
-            false,
-            false
+            ['getBasePath', 'isSecure', 'getHttpHost']
         );
         $this->requestMock->expects($this->atLeastOnce())->method('getBasePath')->will($this->returnValue('/'));
         $this->requestMock->expects(
@@ -408,6 +404,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->validatorFactoryMock = $this->getMockBuilder(\Magento\Framework\ValidatorFactory::class)
+            ->setMethods(['setInstanceName', 'create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->validatorFactoryMock->expects($this->any())
@@ -417,7 +414,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($validator);
 
-        $this->configMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $getValueReturnMap = [
             ['test_web/test_cookie/test_cookie_lifetime', 'store', null, 7200],
             ['web/cookie/cookie_path', 'store', null, ''],
@@ -425,13 +422,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->configMock->method('getValue')
             ->will($this->returnValueMap($getValueReturnMap));
 
-        $filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $dirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($dirMock));
 
-        $deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $deploymentConfigMock->expects($this->at(0))
             ->method('get')
             ->with(Config::PARAM_SESSION_SAVE_PATH)

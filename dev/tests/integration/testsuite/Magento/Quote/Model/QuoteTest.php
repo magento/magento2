@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QuoteTest extends \PHPUnit_Framework_TestCase
+class QuoteTest extends \PHPUnit\Framework\TestCase
 {
     private function convertToArray($entity)
     {
@@ -323,7 +323,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quote->setTotalsCollectedFlag(false)->collectTotals();
         $this->assertEquals(1, $quote->getItemsQty());
 
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\LocalizedException::class,
             'We don\'t have as many "Simple Product" as you requested.'
         );
@@ -441,7 +441,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Quote\Model\Quote  $quote */
         $product = $productRepository->getById($productId, false, null, true);
 
-        $this->setExpectedException(
+        $this->expectException(
             LocalizedException::class,
             'Product that you are trying to add is not available.'
         );

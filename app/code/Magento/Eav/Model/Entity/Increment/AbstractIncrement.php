@@ -13,6 +13,7 @@ namespace Magento\Eav\Model\Entity\Increment;
  * - last_id
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractIncrement extends \Magento\Framework\DataObject implements
     \Magento\Eav\Model\Entity\Increment\IncrementInterface

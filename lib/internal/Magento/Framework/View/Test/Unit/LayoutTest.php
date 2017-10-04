@@ -11,7 +11,7 @@ use Magento\Framework\Serialize\SerializerInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LayoutTest extends \PHPUnit_Framework_TestCase
+class LayoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Layout
@@ -118,18 +118,15 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->structureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Data\Structure::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->processorFactoryMock = $this->getMock(
+        $this->processorFactoryMock = $this->createPartialMock(
             \Magento\Framework\View\Layout\ProcessorFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->themeResolverMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Design\Theme\ResolverInterface::class
         );
-        $this->processorMock = $this->getMock(\Magento\Framework\View\Model\Layout\Merge::class, [], [], '', false);
-        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->processorMock = $this->createMock(\Magento\Framework\View\Model\Layout\Merge::class);
+        $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->generatorBlockMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Generator\Block::class)
             ->disableOriginalConstructor()->getMock();
         $this->generatorContainerMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Generator\Container::class)
@@ -184,7 +181,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMock();
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->serializer->expects($this->any())->method('serialize')
             ->willReturnCallback(function ($value) {
                 return json_encode($value);
@@ -598,7 +595,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBlockSingleton($type, $blockInstance, $isAbstract)
     {
-        $blockMock = $this->getMock($blockInstance, [], [], '', false);
+        $blockMock = $this->createMock($blockInstance);
         $this->generatorBlockMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
 
         if ($isAbstract) {
@@ -952,7 +949,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->with($name)
             ->willReturn($children);
 
-        $block = $this->getMock(\Magento\Framework\View\Element\AbstractBlock::class, [], [], '', false);
+        $block = $this->createMock(\Magento\Framework\View\Element\AbstractBlock::class);
         $block->expects($this->once())->method('toHtml')->willReturn($blockHtml);
 
         $renderingOutput = new \Magento\Framework\DataObject();

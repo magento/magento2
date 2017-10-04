@@ -10,6 +10,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
@@ -93,7 +94,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Get StoreManager dependency
      *
      * @return StoreManagerInterface
-     * @deprecated
+     * @deprecated 100.1.6
      */
     private function getStoreManager()
     {

@@ -13,6 +13,7 @@ use Magento\Framework\Translate\Inline as Inline;
  * Block responsible for including Inline Translation config on the page
  *
  * @api
+ * @since 100.0.2
  */
 class Config extends \Magento\Framework\View\Element\AbstractBlock
 {

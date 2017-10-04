@@ -7,7 +7,7 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-class MakePersistentQuoteGuestObserverTest extends \PHPUnit_Framework_TestCase
+class MakePersistentQuoteGuestObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Persistent\Observer\MakePersistentQuoteGuestObserver
@@ -51,14 +51,14 @@ class MakePersistentQuoteGuestObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->actionMock = $this->getMock(\Magento\Persistent\Controller\Index::class, [], [], '', false);
-        $this->observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
-        $this->sessionHelperMock = $this->getMock(\Magento\Persistent\Helper\Session::class, [], [], '', false);
-        $this->helperMock = $this->getMock(\Magento\Persistent\Helper\Data::class, [], [], '', false);
-        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
-        $this->quoteManagerMock = $this->getMock(\Magento\Persistent\Model\QuoteManager::class, [], [], '', false);
+        $this->actionMock = $this->createMock(\Magento\Persistent\Controller\Index::class);
+        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
+        $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->quoteManagerMock = $this->createMock(\Magento\Persistent\Model\QuoteManager::class);
         $this->eventManagerMock =
-            $this->getMock(\Magento\Framework\Event::class, ['getControllerAction', '__wakeUp'], [], '', false);
+            $this->createPartialMock(\Magento\Framework\Event::class, ['getControllerAction', '__wakeUp']);
         $this->observerMock
             ->expects($this->once())
             ->method('getEvent')

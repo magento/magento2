@@ -16,7 +16,7 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AttributeMetadataCacheTest extends \PHPUnit_Framework_TestCase
+class AttributeMetadataCacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -46,16 +46,10 @@ class AttributeMetadataCacheTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->cacheMock = $this->getMock(CacheInterface::class);
-        $this->stateMock = $this->getMock(StateInterface::class);
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
-        $this->attributeMetadataHydratorMock = $this->getMock(
-            AttributeMetadataHydrator::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->stateMock = $this->createMock(StateInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->attributeMetadataHydratorMock = $this->createMock(AttributeMetadataHydrator::class);
         $this->attributeMetadataCache = $objectManager->getObject(
             AttributeMetadataCache::class,
             [
@@ -122,14 +116,14 @@ class AttributeMetadataCacheTest extends \PHPUnit_Framework_TestCase
             ->with($serializedString)
             ->willReturn($attributesMetadataData);
         /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $attributeMetadataMock */
-        $attributeMetadataMock = $this->getMock(AttributeMetadataInterface::class);
+        $attributeMetadataMock = $this->createMock(AttributeMetadataInterface::class);
         $this->attributeMetadataHydratorMock->expects($this->at(0))
             ->method('hydrate')
             ->with($attributeMetadataOneData)
             ->willReturn($attributeMetadataMock);
         $attributesMetadata = $this->attributeMetadataCache->load($entityType, $suffix);
         $this->assertInternalType(
-            \PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+            \PHPUnit\Framework\Constraint\IsType::TYPE_ARRAY,
             $attributesMetadata
         );
         $this->assertArrayHasKey(
@@ -174,7 +168,7 @@ class AttributeMetadataCacheTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $attributeMetadataMock */
-        $attributeMetadataMock = $this->getMock(AttributeMetadataInterface::class);
+        $attributeMetadataMock = $this->createMock(AttributeMetadataInterface::class);
         $attributesMetadata = [$attributeMetadataMock];
         $this->attributeMetadataHydratorMock->expects($this->once())
             ->method('extract')

@@ -62,9 +62,7 @@ class EmailNotification implements EmailNotificationInterface
 
     /**#@-*/
 
-    /**
-     * @var CustomerRegistry
-     */
+    /**#@-*/
     private $customerRegistry;
 
     /**

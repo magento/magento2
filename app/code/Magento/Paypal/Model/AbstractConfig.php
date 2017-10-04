@@ -62,6 +62,11 @@ abstract class AbstractConfig implements ConfigInterface
     private static $bnCode = 'Magento_Cart_%s';
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
@@ -343,7 +348,7 @@ abstract class AbstractConfig implements ConfigInterface
      * The getter function to get the ProductMetadata
      *
      * @return ProductMetadataInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function getProductMetadata()
     {

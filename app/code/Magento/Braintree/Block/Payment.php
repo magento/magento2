@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\Template\Context;
  * Class Payment
  *
  * @api
+ * @since 100.1.0
  */
 class Payment extends Template
 {
@@ -40,6 +41,7 @@ class Payment extends Template
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getPaymentConfig()
     {
@@ -51,6 +53,7 @@ class Payment extends Template
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getCode()
     {
