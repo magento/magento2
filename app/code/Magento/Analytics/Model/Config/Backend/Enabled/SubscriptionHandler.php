@@ -7,7 +7,6 @@ namespace Magento\Analytics\Model\Config\Backend\Enabled;
 
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Config\Backend\CollectionTime;
-use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\FlagManager;
@@ -72,14 +71,6 @@ class SubscriptionHandler
     private $analyticsToken;
 
     /**
-     * Resource for managing last notification time about subscription to Magento Analytics.
-     *
-     * @var NotificationTime
-     * @since 2.2.0
-     */
-    private $notificationTime;
-
-    /**
      * @var ReinitableConfigInterface
      * @since 2.2.0
      */
@@ -89,7 +80,6 @@ class SubscriptionHandler
      * @param WriterInterface $configWriter
      * @param FlagManager $flagManager
      * @param AnalyticsToken $analyticsToken
-     * @param NotificationTime $notificationTime
      * @param ReinitableConfigInterface $reinitableConfig
      * @since 2.2.0
      */
@@ -97,13 +87,11 @@ class SubscriptionHandler
         WriterInterface $configWriter,
         FlagManager $flagManager,
         AnalyticsToken $analyticsToken,
-        NotificationTime $notificationTime,
         ReinitableConfigInterface $reinitableConfig
     ) {
         $this->configWriter = $configWriter;
         $this->flagManager = $flagManager;
         $this->analyticsToken = $analyticsToken;
-        $this->notificationTime = $notificationTime;
         $this->reinitableConfig = $reinitableConfig;
     }
 
@@ -120,7 +108,6 @@ class SubscriptionHandler
         if (!$this->analyticsToken->isTokenExist()) {
             $this->setCronSchedule();
             $this->setAttemptsFlag();
-            $this->notificationTime->unsetLastTimeNotificationValue();
             $this->reinitableConfig->reinit();
         }
 

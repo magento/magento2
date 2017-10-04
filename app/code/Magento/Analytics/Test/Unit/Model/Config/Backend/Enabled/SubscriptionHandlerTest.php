@@ -35,11 +35,6 @@ class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
     private $tokenMock;
 
     /**
-     * @var NotificationTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $notificationTimeMock;
-
-    /**
      * @var ObjectManagerHelper
      */
     private $objectManagerHelper;
@@ -71,10 +66,6 @@ class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->notificationTimeMock = $this->getMockBuilder(NotificationTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->subscriptionHandler = $this->objectManagerHelper->getObject(
@@ -84,7 +75,6 @@ class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
                 'configWriter' => $this->configWriterMock,
                 'attemptsInitValue' => $this->attemptsInitValue,
                 'analyticsToken' => $this->tokenMock,
-                'notificationTime' => $this->notificationTimeMock,
             ]
         );
     }
@@ -104,9 +94,6 @@ class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
         $this->flagManagerMock
             ->expects($this->never())
             ->method('saveFlag');
-        $this->notificationTimeMock
-            ->expects($this->never())
-            ->method('unsetLastTimeNotificationValue');
         $this->assertTrue(
             $this->subscriptionHandler->processEnabled()
         );
@@ -129,10 +116,6 @@ class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('saveFlag')
             ->with(SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE, $this->attemptsInitValue)
-            ->willReturn(true);
-        $this->notificationTimeMock
-            ->expects($this->once())
-            ->method('unsetLastTimeNotificationValue')
             ->willReturn(true);
         $this->assertTrue(
             $this->subscriptionHandler->processEnabled()

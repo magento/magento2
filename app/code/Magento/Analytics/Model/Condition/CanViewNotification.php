@@ -7,14 +7,13 @@ namespace Magento\Analytics\Model\Condition;
 
 use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 use Magento\Analytics\Model\NotificationTime;
-use Magento\Framework\Intl\DateTimeFactory;
 
 /**
  * Class CanViewNotification
  *
- * Dynamic validator for UI signUp notification form, manage Ui component visibility.
- * Return true if last notification was shipped seven days ago.
- * @since 2.2.0
+ * Dynamic validator for UI analytics notification, manage UI component visibility.
+ * Return true if the logged in user has not seen the notification.
+ * @since 2.2.2
  */
 class CanViewNotification implements VisibilityConditionInterface
 {
@@ -24,61 +23,43 @@ class CanViewNotification implements VisibilityConditionInterface
     const NAME = 'can_view_notification';
 
     /**
-     * Time interval in seconds
-     *
-     * @var int
-     * @since 2.2.0
-     */
-    private $notificationInterval = 604800;
-
-    /**
      * @var NotificationTime
-     * @since 2.2.0
+     * @since 2.2.2
      */
     private $notificationTime;
-
-    /**
-     * @var DateTimeFactory
-     * @since 2.2.0
-     */
-    private $dateTimeFactory;
 
     /**
      * CanViewNotification constructor.
      *
      * @param NotificationTime $notificationTime
-     * @param DateTimeFactory $dateTimeFactory
-     * @since 2.2.0
+     * @since 2.2.2
      */
     public function __construct(
-        NotificationTime $notificationTime,
-        DateTimeFactory $dateTimeFactory
+        NotificationTime $notificationTime
     ) {
         $this->notificationTime = $notificationTime;
-        $this->dateTimeFactory = $dateTimeFactory;
     }
 
     /**
-     * Validate is notification popup can be shown
+     * Validate if notification popup can be shown
      *
      * @inheritdoc
-     * @since 2.2.0
+     * @since 2.2.2
      */
     public function isVisible(array $arguments)
     {
-        $lastNotificationTime = $this->notificationTime->getLastTimeNotification();
-        if (!$lastNotificationTime) {
+        $lastNotificationTime = $this->notificationTime->getLastTimeNotificationForCurrentUser();
+
+        if ($lastNotificationTime) {
             return false;
         }
-        $datetime = $this->dateTimeFactory->create();
-        return (
-            $datetime->getTimestamp() >= $lastNotificationTime + $this->notificationInterval
-        );
+
+        return $this->notificationTime->storeLastTimeNotificationForCurrentUser();
     }
 
     /**
      * @return string
-     * @since 2.2.0
+     * @since 2.2.2
      */
     public function getName()
     {
