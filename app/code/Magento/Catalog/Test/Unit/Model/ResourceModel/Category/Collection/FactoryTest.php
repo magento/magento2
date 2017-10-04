@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Category\Collection;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\Collection\Factory
@@ -19,14 +19,14 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Catalog\Model\ResourceModel\Category\Collection\Factory($this->_objectManager);
     }
 
     public function testCreate()
     {
-        $objectOne = $this->getMock(\Magento\Catalog\Model\ResourceModel\Category\Collection::class, [], [], '', false);
-        $objectTwo = $this->getMock(\Magento\Catalog\Model\ResourceModel\Category\Collection::class, [], [], '', false);
+        $objectOne = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
+        $objectTwo = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
         $this->_objectManager->expects(
             $this->exactly(2)
         )->method(

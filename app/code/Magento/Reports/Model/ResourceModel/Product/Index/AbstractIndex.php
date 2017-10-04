@@ -9,6 +9,7 @@ namespace Magento\Reports\Model\ResourceModel\Product\Index;
 /**
  * Reports Product Index Abstract Resource Model
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractIndex extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

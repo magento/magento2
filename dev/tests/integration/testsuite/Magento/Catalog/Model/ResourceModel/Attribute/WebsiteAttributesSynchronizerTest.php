@@ -17,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Class WebsiteAttributesSynchronizerTest
  * @package Magento\Catalog\Model\ResourceModel\Attribute
  */
-class WebsiteAttributesSynchronizerTest extends \PHPUnit_Framework_TestCase
+class WebsiteAttributesSynchronizerTest extends \PHPUnit\Framework\TestCase
 {
     const PRODUCT_ID = 333;
     const PRODUCT_NOT_EDIT_MODE = false;

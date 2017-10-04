@@ -13,6 +13,7 @@ use Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider;
  * Checks possibility to use payment method at particular country
  *
  * @api
+ * @since 100.0.2
  */
 class CanUseForCountry implements SpecificationInterface
 {

@@ -9,8 +9,7 @@ namespace Magento\SalesRule\Model;
  * SalesRule Coupon Model
  *
  * @api
- * @method \Magento\SalesRule\Model\ResourceModel\Coupon _getResource()
- * @method \Magento\SalesRule\Model\ResourceModel\Coupon getResource()
+ * @since 100.0.2
  */
 class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\SalesRule\Api\Data\CouponInterface

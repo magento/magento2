@@ -13,11 +13,13 @@ use \Magento\Customer\Block\Account\SortLinkInterface;
  * Class for sorting links in navigation panels.
  *
  * @api
+ * @since 100.2.0
  */
 class Navigation extends Links
 {
     /**
      * {@inheritdoc}
+     * @since 100.2.0
      */
     public function getLinks()
     {

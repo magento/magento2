@@ -5,12 +5,8 @@
  */
 namespace Magento\Paypal\Model\Report\Settlement;
 
-/*
- * Model for report rows
- */
 /**
- * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement\Row _getResource()
- * @method \Magento\Paypal\Model\ResourceModel\Report\Settlement\Row getResource()
+ * Model for report rows
  * @method int getReportId()
  * @method Row setReportId(int $value)
  * @method string getTransactionId()

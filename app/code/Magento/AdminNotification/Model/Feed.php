@@ -13,6 +13,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Feed extends \Magento\Framework\Model\AbstractModel
 {
@@ -147,9 +148,9 @@ class Feed extends \Magento\Framework\Model\AbstractModel
                     $feedData[] = [
                         'severity' => (int)$item->severity,
                         'date_added' => date('Y-m-d H:i:s', $itemPublicationDate),
-                        'title' => (string)$item->title,
-                        'description' => (string)$item->description,
-                        'url' => (string)$item->link,
+                        'title' => $this->escapeString($item->title),
+                        'description' => $this->escapeString($item->description),
+                        'url' => $this->escapeString($item->link),
                     ];
                 }
             }
@@ -244,5 +245,16 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         }
 
         return $xml;
+    }
+
+    /**
+     * Converts incoming data to string format and escapes special characters.
+     *
+     * @param \SimpleXMLElement $data
+     * @return string
+     */
+    private function escapeString(\SimpleXMLElement $data)
+    {
+        return htmlspecialchars((string)$data);
     }
 }

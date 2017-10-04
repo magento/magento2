@@ -28,6 +28,7 @@
         <settings>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Sales::sales_order</aclResource>
         <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="sales_order_grid_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>

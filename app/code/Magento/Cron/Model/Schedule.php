@@ -11,8 +11,6 @@ use Magento\Framework\Exception\CronException;
 /**
  * Crontab schedule model
  *
- * @method \Magento\Cron\Model\ResourceModel\Schedule _getResource()
- * @method \Magento\Cron\Model\ResourceModel\Schedule getResource()
  * @method string getJobCode()
  * @method \Magento\Cron\Model\Schedule setJobCode(string $value)
  * @method string getStatus()
@@ -31,6 +29,7 @@ use Magento\Framework\Exception\CronException;
  * @method \Magento\Cron\Model\Schedule setCronExprArr(array $value)
  *
  * @api
+ * @since 100.0.2
  */
 class Schedule extends \Magento\Framework\Model\AbstractModel
 {
