@@ -206,4 +206,9 @@
             <argument name="baseSelectProcessor" xsi:type="object">Magento\ConfigurableProduct\Model\ResourceModel\Product\StockStatusBaseSelectProcessor</argument>
         </arguments>
     </type>
+    <type name="Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox">
+        <arguments>
+            <argument name="salableResolver" xsi:type="object">Magento\ConfigurableProduct\Model\Product\Pricing\Renderer\SalableResolver</argument>
+        </arguments>
+    </type>
 </config>

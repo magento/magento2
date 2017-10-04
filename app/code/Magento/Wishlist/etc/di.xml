@@ -78,4 +78,9 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Wishlist\Pricing\Render\Configurable\ConfiguredPriceBox" type="Magento\Wishlist\Pricing\Render\ConfiguredPriceBox">
+        <arguments>
+            <argument name="salableResolver" xsi:type="object">Magento\ConfigurableProduct\Model\Product\Pricing\Renderer\SalableResolver</argument>
+        </arguments>
+    </virtualType>
 </config>
