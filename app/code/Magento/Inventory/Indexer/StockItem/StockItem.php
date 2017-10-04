@@ -62,9 +62,6 @@ class StockItem implements StockItemIndexerInterface
      * @param IndexDataProvider $indexDataProvider
      * @param IndexTableSwitcherInterface $indexTableSwitcher
      * @param IndexNameBuilder $indexNameBuilder
-     *
-     * $indexStructureHandler name is for avoiding conflict with legacy index implementation
-     * @see \Magento\Indexer\Model\Indexer::getActionInstance
      */
     public function __construct(
         GetPartialReindexData $getPartialReindexData,
