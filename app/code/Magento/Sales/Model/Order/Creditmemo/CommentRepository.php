@@ -15,9 +15,6 @@ use Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory;
 use Magento\Sales\Api\Data\CreditmemoCommentSearchResultInterfaceFactory;
 use Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface;
 
-/**
- * @since 2.2.0
- */
 class CommentRepository implements CreditmemoCommentRepositoryInterface
 {
     /**

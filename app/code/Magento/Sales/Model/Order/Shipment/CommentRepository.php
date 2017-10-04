@@ -15,9 +15,6 @@ use Magento\Sales\Api\Data\ShipmentCommentSearchResultInterfaceFactory;
 use Magento\Sales\Api\ShipmentCommentRepositoryInterface;
 use Magento\Sales\Model\Spi\ShipmentCommentResourceInterface;
 
-/**
- * @since 2.2.0
- */
 class CommentRepository implements ShipmentCommentRepositoryInterface
 {
     /**
