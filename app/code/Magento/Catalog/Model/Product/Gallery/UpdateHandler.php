@@ -36,7 +36,7 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
                     $catalogPath = $this->mediaConfig->getBaseMediaPath();
                     $isFile = $this->mediaDirectory->isFile($catalogPath . $image['file']);
                     // only delete physical files if they are not used by any other products and if this file exist
-                    if (!($this->resourceModel->countImageUses($image['file']) > 1) && $isFile) {
+                    if ($isFile && !($this->resourceModel->countImageUses($image['file']) > 1)) {
                         $filesToDelete[] = ltrim($image['file'], '/');
                     }
                 }
