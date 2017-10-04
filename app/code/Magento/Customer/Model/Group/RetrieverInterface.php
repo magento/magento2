@@ -9,6 +9,7 @@ namespace Magento\Customer\Model\Group;
  * Interface for getting current customer group from session.
  *
  * @api
+ * @since 100.2.0
  */
 interface RetrieverInterface
 {
@@ -16,6 +17,7 @@ interface RetrieverInterface
      * Retrieve customer group id.
      *
      * @return int
+     * @since 100.2.0
      */
     public function getCustomerGroupId();
 }

@@ -7,6 +7,7 @@
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
 /**
@@ -95,6 +96,11 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
+    /**
+     * @var NotificationStorage
+     */
+    private $notificationStorage;
+
     protected function setUp()
     {
         $this->customerResourceModel =
@@ -158,6 +164,10 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         );
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
+        $this->notificationStorage = $this->getMockBuilder(NotificationStorage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new \Magento\Customer\Model\ResourceModel\CustomerRepository(
             $this->customerFactory,
             $this->customerSecureFactory,
@@ -172,7 +182,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->dataObjectHelper,
             $this->imageProcessor,
             $this->extensionAttributesJoinProcessor,
-            $this->collectionProcessorMock
+            $this->collectionProcessorMock,
+            $this->notificationStorage
         );
     }
 
@@ -789,6 +800,9 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->customerRegistry->expects($this->atLeastOnce())
             ->method('remove')
             ->with($customerId);
+        $this->notificationStorage->expects($this->atLeastOnce())
+            ->method('remove')
+            ->with(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customerId);
 
         $this->assertTrue($this->model->delete($this->customer));
     }
