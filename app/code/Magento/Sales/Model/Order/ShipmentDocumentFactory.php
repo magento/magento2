@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
 use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
  * Class ShipmentDocumentFactory
@@ -77,13 +78,23 @@ class ShipmentDocumentFactory
         array $packages = [],
         ShipmentCreationArgumentsInterface $arguments = null
     ) {
-        $shipmentItems = $this->itemsToArray($items);
+        $shipmentItems = empty($items)
+            ? $this->getQuantitiesFromOrderItems($order->getItems())
+            : $this->getQuantitiesFromShipmentItems($items);
+
         /** @var Shipment $shipment */
         $shipment = $this->shipmentFactory->create(
             $order,
             $shipmentItems
         );
-        $this->prepareTracks($shipment, $tracks);
+
+        foreach ($tracks as $track) {
+            $hydrator = $this->hydratorPool->getHydrator(
+                \Magento\Sales\Api\Data\ShipmentTrackCreationInterface::class
+            );
+            $shipment->addTrack($this->trackFactory->create(['data' => $hydrator->extract($track)]));
+        }
+
         if ($comment) {
             $shipment->addComment(
                 $comment->getComment(),
@@ -96,30 +107,29 @@ class ShipmentDocumentFactory
     }
 
     /**
-     * Adds tracks to the shipment.
+     * Translate OrderItemInterface array to product id => product quantity array.
      *
-     * @param ShipmentInterface $shipment
-     * @param ShipmentTrackCreationInterface[] $tracks
-     * @return ShipmentInterface
+     * @param OrderItemInterface[] $items
+     * @return int[]
      */
-    private function prepareTracks(\Magento\Sales\Api\Data\ShipmentInterface $shipment, array $tracks)
+    private function getQuantitiesFromOrderItems(array $items)
     {
-        foreach ($tracks as $track) {
-            $hydrator = $this->hydratorPool->getHydrator(
-                \Magento\Sales\Api\Data\ShipmentTrackCreationInterface::class
-            );
-            $shipment->addTrack($this->trackFactory->create(['data' => $hydrator->extract($track)]));
+        $shipmentItems = [];
+        foreach ($items as $item) {
+            if (!$item->getIsVirtual() && !$item->getParentItem()) {
+                $shipmentItems[$item->getItemId()] = $item->getQtyOrdered();
+            }
         }
-        return $shipment;
+        return $shipmentItems;
     }
 
     /**
-     * Convert items to array
+     * Translate ShipmentItemCreationInterface array to product id => product quantity array.
      *
      * @param ShipmentItemCreationInterface[] $items
-     * @return array
+     * @return int[]
      */
-    private function itemsToArray(array $items = [])
+    private function getQuantitiesFromShipmentItems(array $items)
     {
         $shipmentItems = [];
         foreach ($items as $item) {

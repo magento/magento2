@@ -257,8 +257,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
                 if (!$item->getOrderItem()->isDummy(true)) {
                     $totalQty += $item->getQty();
                 }
-            } else {
-                $item->isDeleted(true);
             }
         }
 
