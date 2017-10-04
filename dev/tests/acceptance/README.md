@@ -30,8 +30,8 @@ Due to the current setup of the Framework you will need to do the following:
 
   * `mkdir [DIRECTORY_NAME]`
   * `cd [DIRECTORY_NAME]`
-  * Pull down - [EE](https://github.com/magento-pangolin/magento2ee)
-  * Pull down - [CE](https://github.com/magento-pangolin/magento2ce)
+  * Pull down - [EE](https://github.com/magento/magento2ee)
+  * Pull down - [CE](https://github.com/magento/magento2ce)
   * `cd magento2ee`
   * `php -f dev/tools/build-ee.php -- --command=link --exclude=true`
   * `cd ..`
@@ -50,16 +50,7 @@ Due to the current setup of the Framework you will need to do the following:
     ```
   * Replace `<personal access token>` with the token you generated in GitHub.
   * Save your work.
-  * `cd ../magento2ce`
-  * `cd dev/tests/acceptance`
-  * Open the `composer.json` file.
-  * Make the following edits:
-      * `url`:
-          1. ORIGINAL: `"url": "git@github.com:magento/magento2-functional-testing-framework.git"`  
-          1. UPDATED: `"url": "git@github.com:magento-pangolin/magento2-functional-testing-framework.git"`
-      * `magento/magento2-functional-testing-framework`:
-          1. ORIGINAL: `"magento/magento2-functional-testing-framework": "dev-develop"`
-          1. UPDATED: `"magento/magento2-functional-testing-framework": "dev-sprint-develop"`
+  * `cd magento2ce/dev/tests/acceptance`
   * `composer install`
       * **PLEASE IGNORE THE "Installation" SECTION THAT FOLLOWS, START WITH THE "Building The Framework" SECTION INSTEAD.**
 
@@ -137,7 +128,7 @@ To determine which version of the Allure command you need to use please run `all
 ----
 
 # Building The Framework
-After installing the dependencies you will want to build the Codeception project in the [Magento 2 Functional Testing Framework](https://github.com/magento-pangolin/magento2-functional-testing-framework), which is a dependency of the CE or EE Tests repo. Run the following to complete this task:
+After installing the dependencies you will want to build the Codeception project in the [Magento 2 Functional Testing Framework](https://github.com/magento/magento2-functional-testing-framework), which is a dependency of the CE or EE Tests repo. Run the following to complete this task:
 
 `./vendor/bin/robo build:project`
 
