@@ -13,6 +13,9 @@ use Magento\Inventory\Indexer\IndexNameBuilder;
 use Magento\Inventory\Indexer\IndexStructureInterface;
 use Magento\Inventory\Indexer\IndexTableSwitcherInterface;
 use Magento\Inventory\Indexer\StockItemIndexerInterface;
+use Magento\Inventory\Indexer\StockItem\GetPartialReindexData;
+use Magento\Inventory\Indexer\StockItem\GetFullReindexData;
+use Magento\Inventory\Indexer\StockItem\IndexDataProvider;
 
 /**
  * @inheritdoc
