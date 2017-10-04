@@ -30,16 +30,25 @@ class AssertConfigurableProductOutOfStockPage extends AssertProductPage
     protected function verifyPrice()
     {
         $priceBlock = $this->productView->getPriceBlock();
-        if (!$priceBlock->isVisible()) {
-            return "Price block for '{$this->product->getName()}' product' is not visible.";
-        }
-        $formPrice = $priceBlock->isOldPriceVisible() ? $priceBlock->getOldPrice() : $priceBlock->getPrice();
         $fixturePrice = $this->getLowestConfigurablePrice();
 
-        if ($fixturePrice != $formPrice) {
-            return "Displayed product price on product page (front-end) not equals passed from fixture. "
-                . "Actual: {$formPrice}, expected: {$fixturePrice}.";
+        if ($fixturePrice === null) {
+            if ($priceBlock->isVisible()) {
+                return "Price block for '{$this->product->getName()}' product' is visible.";
+            }
+        } else {
+            if (!$priceBlock->isVisible()) {
+                return "Price block for '{$this->product->getName()}' product' is not visible.";
+            }
+
+            $formPrice = $priceBlock->isOldPriceVisible() ? $priceBlock->getOldPrice() : $priceBlock->getPrice();
+
+            if ($fixturePrice != $formPrice) {
+                return "Displayed product price on product page (front-end) not equals passed from fixture. "
+                    . "Actual: {$formPrice}, expected: {$fixturePrice}.";
+            }
         }
+
         return null;
     }
 

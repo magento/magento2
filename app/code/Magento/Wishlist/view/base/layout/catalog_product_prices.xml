@@ -16,13 +16,6 @@
                     </item>
                 </item>
             </argument>
-            <argument name="configurable" xsi:type="array">
-                <item name="prices" xsi:type="array">
-                    <item name="wishlist_configured_price" xsi:type="array">
-                        <item name="render_class" xsi:type="string">Magento\Wishlist\Pricing\Render\Configurable\ConfiguredPriceBox</item>
-                    </item>
-                </item>
-            </argument>
         </arguments>
     </referenceBlock>
 </layout>
