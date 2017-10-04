@@ -9,12 +9,29 @@ use Magento\Backend\App\Action\Context;
 use Magento\Ui\Controller\Adminhtml\AbstractAction;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Model\UiComponentTypeResolver;
 
-/**
- * Class Render
- */
 class Render extends AbstractAction
 {
+    /**
+     * @var \Magento\Ui\Model\UiComponentTypeResolver
+     */
+    private $contentTypeResolver;
+
+    /**
+     * @param Context $context
+     * @param UiComponentFactory $factory
+     * @param UiComponentTypeResolver $contentTypeResolver
+     */
+    public function __construct(
+        Context $context,
+        UiComponentFactory $factory,
+        UiComponentTypeResolver $contentTypeResolver
+    ) {
+        parent::__construct($context, $factory);
+        $this->contentTypeResolver = $contentTypeResolver;
+    }
+
     /**
      * Action for AJAX request
      *
@@ -27,9 +44,14 @@ class Render extends AbstractAction
             return;
         }
 
-        $component = $this->factory->create($this->_request->getParam('namespace'));
-        $this->prepareComponent($component);
-        $this->_response->appendBody((string) $component->render());
+        $component = $this->factory->create($this->getRequest()->getParam('namespace'));
+        if ($this->validateAclResource($component->getContext()->getDataProvider()->getConfigData())) {
+            $this->prepareComponent($component);
+            $this->getResponse()->appendBody((string) $component->render());
+
+            $contentType = $this->contentTypeResolver->resolve($component->getContext());
+            $this->getResponse()->setHeader('Content-Type', $contentType, true);
+        }
     }
 
     /**
@@ -43,6 +65,25 @@ class Render extends AbstractAction
         foreach ($component->getChildComponents() as $child) {
             $this->prepareComponent($child);
         }
+
         $component->prepare();
+    }
+
+    /**
+     * Optionally validate ACL resource of components with a DataSource/DataProvider
+     *
+     * @param mixed $dataProviderConfigData
+     * @return bool
+     */
+    private function validateAclResource($dataProviderConfigData)
+    {
+        if (isset($dataProviderConfigData['aclResource'])) {
+            if (!$this->_authorization->isAllowed($dataProviderConfigData['aclResource'])) {
+                $this->_redirect('admin/denied');
+                return false;
+            }
+        }
+
+        return true;
     }
 }

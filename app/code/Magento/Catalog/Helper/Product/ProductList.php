@@ -12,6 +12,7 @@ namespace Magento\Catalog\Helper\Product;
  * Class ProductList
  *
  * @api
+ * @since 100.0.2
  */
 class ProductList
 {
@@ -30,6 +31,11 @@ class ProductList
     protected $scopeConfig;
 
     /**
+     * @var \Magento\Framework\Registry
+     */
+    private $coreRegistry;
+
+    /**
      * Default limits per page
      *
      * @var array
@@ -40,9 +46,11 @@ class ProductList
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Registry $coreRegistry = null
     ) {
         $this->scopeConfig = $scopeConfig;
+        $this->coreRegistry = $coreRegistry ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Registry::class);
     }
 
     /**
@@ -96,6 +104,11 @@ class ProductList
      */
     public function getDefaultSortField()
     {
+        $currentCategory = $this->coreRegistry->registry('current_category');
+        if ($currentCategory) {
+            return $currentCategory->getDefaultSortBy();
+        }
+
         return $this->scopeConfig->getValue(
             \Magento\Catalog\Model\Config::XML_PATH_LIST_DEFAULT_SORT_BY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE

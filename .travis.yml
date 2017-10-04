@@ -29,8 +29,7 @@ env:
     - TEST_SUITE=integration INTEGRATION_INDEX=1
     - TEST_SUITE=integration INTEGRATION_INDEX=2
     - TEST_SUITE=integration INTEGRATION_INDEX=3
-    - TEST_SUITE=functional ACCEPTANCE_INDEX=1
-    - TEST_SUITE=functional ACCEPTANCE_INDEX=2
+    - TEST_SUITE=functional
 matrix:
   exclude:
     - php: 7.0
@@ -40,9 +39,7 @@ matrix:
     - php: 7.0
       env: TEST_SUITE=js GRUNT_COMMAND=static
     - php: 7.0
-      env: TEST_SUITE=functional ACCEPTANCE_INDEX=1
-    - php: 7.0
-      env: TEST_SUITE=functional ACCEPTANCE_INDEX=2
+      env: TEST_SUITE=functional
 cache:
   apt: true
   directories:
@@ -51,7 +48,7 @@ cache:
     - $HOME/node_modules
     - $HOME/yarn.lock
 before_install: ./dev/travis/before_install.sh
-install: composer install --no-interaction --prefer-dist
+install: composer install --no-interaction
 before_script: ./dev/travis/before_script.sh
 script:
   # Set arguments for variants of phpunit based tests; '|| true' prevents failing script when leading test fails
@@ -59,5 +56,6 @@ script:
   - test $TEST_SUITE = "functional" && TEST_FILTER='dev/tests/functional/testsuites/Magento/Mtf/TestSuite/InjectableTests.php' || true
 
   # The scripts for grunt/phpunit type tests
-  - if [ $TEST_SUITE != "js" ]; then phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER; fi
+  - if [ $TEST_SUITE == "functional" ]; then dev/tests/functional/vendor/phpunit/phpunit/phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER; fi
+  - if [ $TEST_SUITE != "functional" ] && [ $TEST_SUITE != "js" ]; then phpunit -c dev/tests/$TEST_SUITE $TEST_FILTER; fi
   - if [ $TEST_SUITE == "js" ]; then grunt $GRUNT_COMMAND; fi

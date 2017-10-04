@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product;
  * Swatch renderer block in Category page
  *
  * @api
+ * @since 100.0.2
  */
 class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
 {
@@ -28,6 +29,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * Produce and return block's html output
      *
      * @return string
+     * @since 100.1.5
      */
     protected function _toHtml()
     {
@@ -69,6 +71,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * Do not load images for Configurable product with swatches due to its loaded by request
      *
      * @return array
+     * @since 100.2.0
      */
     protected function getOptionImages()
     {
@@ -79,6 +82,7 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      * Add images to result json config in case of Layered Navigation is used
      *
      * @return array
+     * @since 100.2.0
      */
     protected function _getAdditionalConfig()
     {

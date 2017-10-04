@@ -11,7 +11,7 @@ use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 
-class IndexerHandlerFactoryTest extends \PHPUnit_Framework_TestCase
+class IndexerHandlerFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var IndexerHandlerFactory */
     protected $model;

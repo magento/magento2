@@ -22,7 +22,7 @@ use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\ReaderPool;
 use Magento\Framework\View\Layout\ScheduledStructure;
 
-class UiComponentTest extends \PHPUnit_Framework_TestCase
+class UiComponentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Layout\Reader\UiComponent

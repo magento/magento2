@@ -98,10 +98,10 @@ No,No
 "Store Information","Store Information"
 "Web Site","Web Site"
 Name,Name
+Code,Code
 "Root Category","Root Category"
 "Default Store View","Default Store View"
 "Store View Information","Store View Information"
-Code,Code
 Status,Status
 Disabled,Disabled
 Enabled,Enabled
@@ -128,7 +128,7 @@ To,To
 "[ deleted ]","[ deleted ]"
 "Select All","Select All"
 " [deleted]"," [deleted]"
-"We couldn\'t find any records.","We couldn\'t find any records."
+"We couldn't find any records.","We couldn't find any records."
 "Add New","Add New"
 "Invalid export type supplied for grid export block","Invalid export type supplied for grid export block"
 Export,Export
@@ -139,7 +139,7 @@ Submit,Submit
 "Please correct the tab configuration and try again. Tab Id should be not empty","Please correct the tab configuration and try again. Tab Id should be not empty"
 "Please correct the tab configuration and try again.","Please correct the tab configuration and try again."
 "You have logged out.","You have logged out."
-"Specified cache type(s) don\'t exist: %1","Specified cache type(s) don\'t exist: %1"
+"Specified cache type(s) don't exist: %1","Specified cache type(s) don't exist: %1"
 "The image cache was cleaned.","The image cache was cleaned."
 "An error occurred while clearing the image cache.","An error occurred while clearing the image cache."
 "The JavaScript/CSS cache has been cleaned.","The JavaScript/CSS cache has been cleaned."
@@ -148,6 +148,7 @@ Submit,Submit
 "You flushed the cache storage.","You flushed the cache storage."
 "The Magento cache storage has been flushed.","The Magento cache storage has been flushed."
 "Cache Management","Cache Management"
+"You can't change status of cache type(s) in production mode","You can't change status of cache type(s) in production mode"
 "%1 cache type(s) disabled.","%1 cache type(s) disabled."
 "An error occurred while disabling cache.","An error occurred while disabling cache."
 "%1 cache type(s) enabled.","%1 cache type(s) enabled."
@@ -156,7 +157,7 @@ Submit,Submit
 "An error occurred while refreshing cache.","An error occurred while refreshing cache."
 Dashboard,Dashboard
 "We updated lifetime statistic.","We updated lifetime statistic."
-"We can\'t refresh lifetime statistics.","We can\'t refresh lifetime statistics."
+"We can't refresh lifetime statistics.","We can't refresh lifetime statistics."
 "invalid request","invalid request"
 "see error log for details","see error log for details"
 "Service unavailable: %1","Service unavailable: %1"
@@ -175,7 +176,7 @@ Error,Error
 System,System
 "Manage Stores","Manage Stores"
 "The database was backed up.","The database was backed up."
-"We can\'t create a backup right now. Please try again later.","We can\'t create a backup right now. Please try again later."
+"We can't create a backup right now. Please try again later.","We can't create a backup right now. Please try again later."
 "Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.), but the %1 will not be able to be restored. It is suggested that you create a database backup before deleting the %1.","Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.), but the %1 will not be able to be restored. It is suggested that you create a database backup before deleting the %1."
 "Something went wrong. Please try again.","Something went wrong. Please try again."
 "This store cannot be deleted.","This store cannot be deleted."
@@ -194,9 +195,12 @@ System,System
 "Store view doesn't exist","Store view doesn't exist"
 "Before modifying the store view code please make sure it is not used in index.php.","Before modifying the store view code please make sure it is not used in index.php."
 "New ","New "
+"All Stores","All Stores"
 "You saved the website.","You saved the website."
-"You saved the store.","You saved the store."
+"The default store cannot be disabled","The default store cannot be disabled"
 "You saved the store view.","You saved the store view."
+"An inactive store view cannot be saved as default store view","An inactive store view cannot be saved as default store view"
+"You saved the store.","You saved the store."
 "Something went wrong while saving. Please review the error log.","Something went wrong while saving. Please review the error log."
 "Last 24 Hours","Last 24 Hours"
 "Last 7 Days","Last 7 Days"
@@ -232,7 +236,7 @@ password,password
 "Reload Data","Reload Data"
 "Browse Files...","Browse Files..."
 Magento,Magento
-"Copyright&copy; %1 Magento Commerce Inc. All rights reserved.","Copyright&copy; %1 Magento Commerce Inc. All rights reserved."
+"Copyright &copy; %1 Magento Commerce Inc. All rights reserved.","Copyright &copy; %1 Magento Commerce Inc. All rights reserved."
 "ver. %1","ver. %1"
 "Magento Admin Panel","Magento Admin Panel"
 "Account Setting","Account Setting"
@@ -253,7 +257,7 @@ Minute,Minute
 "Report an Issue","Report an Issue"
 "Store View:","Store View:"
 "Stores Configuration","Stores Configuration"
-"Please confirm scope switching. All data that hasn\'t been saved will be lost.","Please confirm scope switching. All data that hasn\'t been saved will be lost."
+"Please confirm scope switching. All data that hasn't been saved will be lost.","Please confirm scope switching. All data that hasn't been saved will be lost."
 "Additional Cache Management","Additional Cache Management"
 "Flush Catalog Images Cache","Flush Catalog Images Cache"
 "Pregenerated product images files","Pregenerated product images files"
@@ -286,7 +290,7 @@ Actions,Actions
 "The information in this tab has been changed.","The information in this tab has been changed."
 Loading...,Loading...
 "We could not detect a size.","We could not detect a size."
-"We don\'t recognize or support this file extension type.","We don\'t recognize or support this file extension type."
+"We don't recognize or support this file extension type.","We don't recognize or support this file extension type."
 "Allow everything","Allow everything"
 "Magento Admin","Magento Admin"
 "Global Search","Global Search"
@@ -298,7 +302,6 @@ Elements,Elements
 Design,Design
 Schedule,Schedule
 Settings,Settings
-"All Stores","All Stores"
 Attributes,Attributes
 "Other Settings","Other Settings"
 "Data Transfer","Data Transfer"
@@ -441,19 +444,18 @@ Tags,Tags
 "<h1 class=""page-heading"">404 Error</h1><p>Page not found.</p>","<h1 class=""page-heading"">404 Error</h1><p>Page not found.</p>"
 "Community Edition","Community Edition"
 "Default Theme","Default Theme"
-"Applied Theme","Applied Theme"
 "If no value is specified, the system default is used. The system default may be modified by third party extensions.","If no value is specified, the system default is used. The system default may be modified by third party extensions."
+"Applied Theme","Applied Theme"
 "Design Rule","Design Rule"
 "User Agent Rules","User Agent Rules"
-Magento_Ui/js/dynamic-rows/record,Magento_Ui/js/dynamic-rows/record
 Pagination,Pagination
-"Pagination Frame","Pagination Frame"
 "How many links to display at once.","How many links to display at once."
-"Pagination Frame Skip","Pagination Frame Skip"
+"Pagination Frame","Pagination Frame"
 "If current frame position does not cover utmost pages, it renders the link to current position plus/minus this value.","If current frame position does not cover utmost pages, it renders the link to current position plus/minus this value."
-"Anchor Text for Previous","Anchor Text for Previous"
+"Pagination Frame Skip","Pagination Frame Skip"
 "Alternative text for the previous pages link in the pagination menu. If empty, the default arrow image is used.","Alternative text for the previous pages link in the pagination menu. If empty, the default arrow image is used."
-"Anchor Text for Next","Anchor Text for Next"
+"Anchor Text for Previous","Anchor Text for Previous"
 "Alternative text for the next pages link in the pagination menu. If empty, default arrow image is used.","Alternative text for the next pages link in the pagination menu. If empty, default arrow image is used."
+"Anchor Text for Next","Anchor Text for Next"
 "Theme Name","Theme Name"
-"Deployment config file %1 is not writable.","Deployment config file %1 is not writable."
+"Config","Config"

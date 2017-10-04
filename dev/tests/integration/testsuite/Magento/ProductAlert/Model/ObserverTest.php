@@ -8,7 +8,7 @@ namespace Magento\ProductAlert\Model;
 /**
  * @magentoAppIsolation enabled
  */
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class ObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

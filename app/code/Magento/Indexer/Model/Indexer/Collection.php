@@ -5,6 +5,8 @@
  */
 namespace Magento\Indexer\Model\Indexer;
 
+use Magento\Framework\Indexer\IndexerInterface;
+
 class Collection extends \Magento\Framework\Data\Collection
 {
     /**
@@ -12,7 +14,14 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @var string
      */
-    protected $_itemObjectClass = \Magento\Framework\Indexer\IndexerInterface::class;
+    protected $_itemObjectClass = IndexerInterface::class;
+
+    /**
+     * Collection items
+     *
+     * @var IndexerInterface[]
+     */
+    protected $_items = [];
 
     /**
      * @var \Magento\Framework\Indexer\ConfigInterface
@@ -53,7 +62,7 @@ class Collection extends \Magento\Framework\Data\Collection
         if (!$this->isLoaded()) {
             $states = $this->statesFactory->create();
             foreach (array_keys($this->config->getIndexers()) as $indexerId) {
-                /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
+                /** @var IndexerInterface $indexer */
                 $indexer = $this->getNewEmptyItem();
                 $indexer->load($indexerId);
                 foreach ($states->getItems() as $state) {
@@ -68,5 +77,133 @@ class Collection extends \Magento\Framework\Data\Collection
             $this->_setIsLoaded(true);
         }
         return $this;
+    }
+
+    /**
+     * {@inheritdoc} Prevents handle collection items as DataObject class instances.
+     */
+    public function getAllIds()
+    {
+        $ids = [];
+        foreach ($this->getItems() as $item) {
+            $ids[] = $item->getId();
+        }
+        return $ids;
+    }
+
+    /**
+     * @inheritdoc
+     * @return IndexerInterface[]
+     */
+    public function getItems()
+    {
+        return parent::getItems();
+    }
+
+    /**
+     * {@inheritdoc} Prevents handle collection items as DataObject class instances.
+     * @deprecated 100.2.0 Should not be used in the current implementation.
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getColumnValues($colName)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc} Prevents handle collection items as DataObject class instances.
+     * @deprecated 100.2.0 Should not be used in the current implementation.
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getItemsByColumnValue($column, $value)
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc} Prevents handle collection items as DataObject class instances.
+     * @deprecated 100.2.0 Should not be used in the current implementation.
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getItemByColumnValue($column, $value)
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc} Prevents handle collection items as DataObject class instances.
+     * @deprecated 100.2.0 Should not be used in the current implementation.
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function setDataToAll($key, $value = null)
+    {
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc} Prevents handle collection items as DataObject class instances.
+     * @deprecated 100.2.0 Should not be used in the current implementation.
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function setItemObjectClass($className)
+    {
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc} Prevents handle collection items as DataObject class instances.
+     * @deprecated 100.2.0 Should not be used in the current implementation.
+     */
+    public function toXml()
+    {
+        return '';
+    }
+
+    /**
+     * {@inheritdoc} Prevents handle collection items as DataObject class instances.
+     * @deprecated 100.2.0 Should not be used in the current implementation.
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function toArray($arrRequiredFields = [])
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc} Prevents handle collection items as DataObject class instances.
+     * @deprecated 100.2.0 Should not be used in the current implementation.
+     */
+    public function toOptionArray()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc} Prevents handle collection items as DataObject class instances.
+     * @deprecated 100.2.0 Should not be used in the current implementation.
+     */
+    public function toOptionHash()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc} Prevents handle collection items as DataObject class instances.
+     * @deprecated 100.2.0 Should not be used in the current implementation.
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _toOptionArray($valueField = 'id', $labelField = 'name', $additional = [])
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc} Prevents handle collection items as DataObject class instances.
+     * @deprecated 100.2.0  Should not be used in the current implementation.
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _toOptionHash($valueField = 'id', $labelField = 'name')
+    {
+        return [];
     }
 }

@@ -7,7 +7,7 @@ namespace Magento\Framework\Search\Test\Unit\Request;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CleanerTest extends \PHPUnit_Framework_TestCase
+class CleanerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Framework\Search\Request\Aggregation\StatusInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $status;

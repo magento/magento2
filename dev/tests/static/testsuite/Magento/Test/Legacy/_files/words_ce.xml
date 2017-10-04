@@ -42,6 +42,9 @@
             <path>lib/internal/Zend</path>
         </item>
         <item>
+            <path>dev/tests/static/testsuite/Magento/Test/_files</path>
+        </item>
+        <item>
             <path>dev/tests/static/testsuite/Magento/Test/Legacy/_files/obsolete_constants.php</path>
             <word>overriden</word>
         </item>
@@ -54,6 +57,10 @@
         </item>
         <item>
             <path>app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js</path>
+            <word>twig</word>
+        </item>
+        <item>
+            <path>app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/jsoneditor.min.js</path>
             <word>twig</word>
         </item>
         <item>

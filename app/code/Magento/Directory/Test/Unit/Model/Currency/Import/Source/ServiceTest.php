@@ -5,7 +5,7 @@
  */
 namespace Magento\Directory\Test\Unit\Model\Currency\Import\Source;
 
-class ServiceTest extends \PHPUnit_Framework_TestCase
+class ServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Directory\Model\Currency\Import\Source\Service
@@ -19,13 +19,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_importConfig = $this->getMock(
-            \Magento\Directory\Model\Currency\Import\Config::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_importConfig = $this->createMock(\Magento\Directory\Model\Currency\Import\Config::class);
         $this->_model = new \Magento\Directory\Model\Currency\Import\Source\Service($this->_importConfig);
     }
 

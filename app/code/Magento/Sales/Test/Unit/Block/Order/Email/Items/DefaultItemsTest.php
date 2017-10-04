@@ -8,7 +8,7 @@
 
 namespace Magento\Sales\Test\Unit\Block\Order\Email\Items;
 
-class DefaultItemsTest extends \PHPUnit_Framework_TestCase
+class DefaultItemsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Block\Order\Email\Items\DefaultItem

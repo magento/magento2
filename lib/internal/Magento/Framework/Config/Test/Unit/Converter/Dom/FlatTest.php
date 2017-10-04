@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Config\Test\Unit\Converter\Dom;
 
-class FlatTest extends \PHPUnit_Framework_TestCase
+class FlatTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Config\Converter\Dom\Flat

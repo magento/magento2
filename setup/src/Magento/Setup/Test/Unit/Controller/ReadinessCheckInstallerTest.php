@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\ReadinessCheckInstaller;
 
-class ReadinessCheckInstallerTest extends \PHPUnit_Framework_TestCase
+class ReadinessCheckInstallerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ReadinessCheckInstaller

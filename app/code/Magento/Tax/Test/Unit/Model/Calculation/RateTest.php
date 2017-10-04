@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
-class RateTest extends \PHPUnit_Framework_TestCase
+class RateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -23,13 +23,15 @@ class RateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->resourceMock = $this->getMock(
+        $this->resourceMock = $this->createPartialMock(
             \Magento\Framework\Model\ResourceModel\AbstractResource::class,
-            ['_construct', 'getConnection', 'getIdFieldName', 'beginTransaction',
-                'rollBack'],
-            [],
-            '',
-            false
+            [
+                '_construct',
+                'getConnection',
+                'getIdFieldName',
+                'beginTransaction',
+                'rollBack'
+            ]
         );
         $this->resourceMock->expects($this->any())->method('beginTransaction')->will($this->returnSelf());
     }
@@ -44,7 +46,7 @@ class RateTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionOfValidation($exceptionMessage, $data)
     {
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
         $rate = $this->objectHelper->getObject(
             \Magento\Tax\Model\Calculation\Rate::class,
             ['resource' => $this->resourceMock]

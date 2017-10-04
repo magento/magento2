@@ -65,7 +65,7 @@ class AdvancedInventoryTest extends AbstractModifierTest
         $this->productMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
-        $this->serializerMock = $this->getMock(Json::class);
+        $this->serializerMock = $this->createMock(Json::class);
         $this->jsonValidatorMock = $this->getMockBuilder(\Magento\Framework\Serialize\JsonValidator::class)
             ->disableOriginalConstructor()
             ->getMock();

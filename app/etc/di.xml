@@ -171,6 +171,7 @@
     <preference for="Magento\Framework\App\View\Deployment\Version\StorageInterface" type="Magento\Framework\App\View\Deployment\Version\Storage\File"/>
     <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
     <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
+    <preference for="Magento\Framework\Indexer\Config\DependencyInfoProviderInterface" type="Magento\Framework\Indexer\Config\DependencyInfoProvider" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -222,6 +223,7 @@
     <type name="Magento\Framework\Message\Manager">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Framework\Message\Session\Proxy</argument>
+            <argument name="exceptionMessageFactory" xsi:type="object">Magento\Framework\Message\ExceptionMessageLookupFactory</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\BlockPool" shared="false" />
@@ -1328,6 +1330,11 @@
     <type name="Magento\Framework\App\Config\MetadataConfigTypeProcessor">
         <arguments>
             <argument name="configSource" xsi:type="object">Magento\Config\App\Config\Source\EnvironmentConfigSource</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Message\ExceptionMessageFactoryPool">
+        <arguments>
+            <argument name="defaultExceptionMessageFactory" xsi:type="object">Magento\Framework\Message\ExceptionMessageFactory</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Mview\View\Subscription">

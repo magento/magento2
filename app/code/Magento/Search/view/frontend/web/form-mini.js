@@ -283,7 +283,7 @@ define([
             this.submitBtn.disabled = isEmpty(value);
 
             if (value.length >= parseInt(this.options.minSearchLength, 10)) {
-                $.get(this.options.url, {
+                $.getJSON(this.options.url, {
                     q: value
                 }, $.proxy(function (data) {
                     $.each(data, function (index, element) {

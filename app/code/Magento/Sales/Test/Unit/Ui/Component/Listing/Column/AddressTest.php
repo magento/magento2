@@ -12,7 +12,7 @@ use Magento\Sales\Ui\Component\Listing\Column\Address;
 /**
  * Class AddressTest
  */
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Address
@@ -33,7 +33,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
-        $this->escaper = $this->getMock(\Magento\Framework\Escaper::class, ['escapeHtml'], [], '', false);
+        $this->escaper = $this->createPartialMock(\Magento\Framework\Escaper::class, ['escapeHtml']);
         $this->model = $objectManager->getObject(
             \Magento\Sales\Ui\Component\Listing\Column\Address::class,
             [

@@ -27,6 +27,7 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api Use this class as a base for virtual types declaration
+ * @since 100.0.2
  */
 class Adapter implements MethodInterface
 {

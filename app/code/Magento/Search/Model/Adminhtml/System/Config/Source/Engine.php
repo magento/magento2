@@ -9,6 +9,7 @@ namespace Magento\Search\Model\Adminhtml\System\Config\Source;
  * All registered search adapters
  *
  * @api
+ * @since 100.0.2
  */
 class Engine implements \Magento\Framework\Option\ArrayInterface
 {
