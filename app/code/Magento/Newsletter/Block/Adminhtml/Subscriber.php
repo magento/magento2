@@ -15,6 +15,7 @@ use Magento\Newsletter\Model\ResourceModel\Queue\Collection;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Subscriber extends \Magento\Backend\Block\Template
 {

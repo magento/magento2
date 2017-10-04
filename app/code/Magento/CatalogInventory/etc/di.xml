@@ -60,6 +60,13 @@
     <type name="Magento\Store\Model\ResourceModel\Group">
         <plugin name="storeGroupResourceAroundBeforeSave" type="Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup"/>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Full">
+        <arguments>
+            <argument name="indexerList" xsi:type="array">
+                <item name="cataloginventory_stock" xsi:type="const">Magento\CatalogInventory\Model\Indexer\Stock\Processor::INDEXER_ID</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Block\Product\View">
         <plugin name="quantityValidators" type="Magento\CatalogInventory\Block\Plugin\ProductView" />
     </type>
@@ -70,9 +77,6 @@
     </type>
     <type name="Magento\Catalog\Model\Product">
         <plugin name="catalogInventoryAfterLoad" type="Magento\CatalogInventory\Model\Plugin\AfterProductLoad"/>
-    </type>
-    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
-        <plugin name="catalogInventoryAroundSave" sortOrder="20" type="Magento\CatalogInventory\Model\Plugin\AroundProductRepositorySave"/>
     </type>
     <type name="Magento\CatalogInventory\Setup\UpgradeData">
         <arguments>

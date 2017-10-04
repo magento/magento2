@@ -9,6 +9,7 @@ namespace Magento\Reports\Model\ResourceModel\Report\Collection;
  * Report collection abstract model
  *
  * @api
+ * @since 100.0.2
  */
 class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\DB\Test\Unit\Select;
 
-class OrderRendererTest extends \PHPUnit_Framework_TestCase
+class OrderRendererTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender()
     {

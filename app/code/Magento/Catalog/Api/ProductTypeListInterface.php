@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface ProductTypeListInterface
 {

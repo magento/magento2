@@ -20,6 +20,7 @@ use Magento\Directory\Model\AllowedCountries;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codingStandardsIgnoreFile
+ * @since 100.0.2
  */
 class Multishipping extends \Magento\Framework\DataObject
 {

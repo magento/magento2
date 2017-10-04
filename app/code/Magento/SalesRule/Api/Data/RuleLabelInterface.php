@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Api\Data;
  * Interface RuleLabelInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface RuleLabelInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

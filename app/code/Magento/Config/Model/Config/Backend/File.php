@@ -16,6 +16,7 @@ use Magento\MediaStorage\Model\File\Uploader;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @api
+ * @since 100.0.2
  */
 class File extends \Magento\Framework\App\Config\Value
 {
@@ -122,6 +123,7 @@ class File extends \Magento\Framework\App\Config\Value
      * Receiving uploaded file data
      *
      * @return array
+     * @since 100.1.0
      */
     protected function getFileData()
     {
@@ -210,6 +212,7 @@ class File extends \Magento\Framework\App\Config\Value
      *
      * @param string $uploadDir
      * @return string
+     * @since 100.1.0
      */
     protected function getUploadDirPath($uploadDir)
     {

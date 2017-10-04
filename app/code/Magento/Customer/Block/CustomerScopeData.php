@@ -11,6 +11,7 @@ namespace Magento\Customer\Block;
  * that private cache invalid for current scope, by comparing
  * with appropriate value in store front private cache.
  * @api
+ * @since 100.2.0
  */
 class CustomerScopeData extends \Magento\Framework\View\Element\Template
 {
@@ -45,6 +46,7 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
      * Can be used when necessary to obtain website id of the current customer.
      *
      * @return integer
+     * @since 100.2.0
      */
     public function getWebsiteId()
     {

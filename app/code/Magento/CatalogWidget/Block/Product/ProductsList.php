@@ -259,6 +259,14 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             $conditions = $this->conditionsHelper->decode($conditions);
         }
 
+        foreach ($conditions as $key => $condition) {
+            if (!empty($condition['attribute'])
+                && in_array($condition['attribute'], ['special_from_date', 'special_to_date'])
+            ) {
+                $conditions[$key]['value'] = date('Y-m-d H:i:s', strtotime($condition['value']));
+            }
+        }
+
         $this->rule->loadPost(['conditions' => $conditions]);
         return $this->rule->getConditions();
     }
@@ -378,7 +386,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     /**
      * @return PriceCurrencyInterface
      *
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getPriceCurrency()
     {

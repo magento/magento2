@@ -23,6 +23,7 @@ use Magento\Framework\App\Config;
  * @see ConfigSetCommand
  *
  * @api
+ * @since 100.2.0
  */
 class ProcessorFacade
 {
@@ -99,6 +100,7 @@ class ProcessorFacade
      * @throws ValidatorException If some validation is wrong
      * @throws CouldNotSaveException If cannot save config value
      * @throws ConfigurationMismatchException If processor can not be instantiated
+     * @since 100.2.0
      */
     public function process($path, $value, $scope, $scopeCode, $lock)
     {

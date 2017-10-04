@@ -25,7 +25,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * Class VaultDetailsHandlerTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
+class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 {
     private static $transactionId = '1n2suy';
 

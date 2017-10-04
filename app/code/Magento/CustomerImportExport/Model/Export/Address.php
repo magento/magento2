@@ -11,6 +11,7 @@ namespace Magento\CustomerImportExport\Model\Export;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 {
@@ -27,6 +28,16 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     const COLUMN_ADDRESS_ID = '_entity_id';
 
     /**#@-*/
+
+    /**
+     * Country column name for index value
+     */
+    const COLUMN_COUNTRY_ID = 'country_id';
+
+    /**
+     * Name of region id column
+     */
+    const COLUMN_REGION_ID = 'region_id';
 
     /**#@+
      * Particular columns that contains of customer default addresses
@@ -51,12 +62,15 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 
     /**#@-*/
 
+    /**#@-*/
+    protected $_permanentAttributes = [self::COLUMN_WEBSITE, self::COLUMN_EMAIL, self::COLUMN_ADDRESS_ID];
+
     /**
-     * Permanent entity columns
+     * Attributes with index (not label) value
      *
      * @var string[]
      */
-    protected $_permanentAttributes = [self::COLUMN_WEBSITE, self::COLUMN_EMAIL, self::COLUMN_ADDRESS_ID];
+    protected $_indexValueAttributes = [self::COLUMN_COUNTRY_ID];
 
     /**
      * Default addresses column names to appropriate customer attribute code
@@ -152,7 +166,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
             $data['address_collection']
         ) ? $data['address_collection'] : $addressColFactory->create();
 
-        $this->_initWebsites(true);
+        $this->_initAttributeValues()->_initAttributeTypes()->_initWebsites(true);
         $this->setFileName($this->getEntityTypeCode());
     }
 
@@ -246,6 +260,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
         $row[self::COLUMN_ADDRESS_ID] = $item['entity_id'];
         $row[self::COLUMN_EMAIL] = $customer['email'];
         $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$customer['website_id']];
+        $row[self::COLUMN_REGION_ID] = $item->getRegionId();
 
         $this->getWriter()->writeRow($row);
     }

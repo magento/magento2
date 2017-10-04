@@ -8,7 +8,7 @@ namespace Magento\Reports\Test\Unit\Observer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CatalogProductCompareAddProductObserverTest extends \PHPUnit_Framework_TestCase
+class CatalogProductCompareAddProductObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Observer\CatalogProductCompareAddProductObserver
@@ -72,7 +72,7 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit_Framework_Tes
             ->willReturn($this->reportEventMock);
 
         /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject $storeManager */
-        $storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()->getMock();
 

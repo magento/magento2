@@ -6,7 +6,7 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
-class UploaderTest extends \PHPUnit_Framework_TestCase
+class UploaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
@@ -127,10 +127,12 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
         $this->uploader->expects($this->any())->method('getTmpDir')->will($this->returnValue(''));
         $this->uploader->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
         $this->uploader->expects($this->once())->method('save')->with($destDir . '/' . $expectedFileName)
-            ->willReturn(['name' => $expectedFileName]);
+            ->willReturn(['name' => $expectedFileName, 'path' => 'absPath']);
 
         $this->uploader->setDestDir($destDir);
-        $this->assertEquals(['name' => $expectedFileName], $this->uploader->move($fileUrl));
+        $result = $this->uploader->move($fileUrl);
+        $this->assertEquals(['name' => $expectedFileName], $result);
+        $this->assertArrayNotHasKey('path', $result);
     }
 
     public function testMoveFileName()
@@ -157,8 +159,8 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testMoveFileUrlDrivePool($fileUrl, $expectedHost, $expectedDriverPool, $expectedScheme)
     {
-        $driverPool = $this->getMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
-        $driverMock = $this->getMock($expectedDriverPool, ['readAll']);
+        $driverPool = $this->createPartialMock(\Magento\Framework\Filesystem\DriverPool::class, ['getDriver']);
+        $driverMock = $this->createPartialMock($expectedDriverPool, ['readAll', 'isExists']);
         $driverMock->expects($this->any())->method('isExists')->willReturn(true);
         $driverMock->expects($this->any())->method('readAll')->willReturn(null);
         $driverPool->expects($this->any())->method('getDriver')->willReturn($driverMock);
@@ -187,7 +189,8 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $uploaderMock->move($fileUrl);
+        $result = $uploaderMock->move($fileUrl);
+        $this->assertNull($result);
     }
 
     public function moveFileUrlDriverPoolDataProvider()

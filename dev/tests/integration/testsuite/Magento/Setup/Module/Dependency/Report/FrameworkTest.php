@@ -7,7 +7,7 @@ namespace Magento\Setup\Module\Dependency\Report;
 
 use Magento\Setup\Module\Dependency\ServiceLocator;
 
-class FrameworkTest extends \PHPUnit_Framework_TestCase
+class FrameworkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string

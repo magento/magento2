@@ -143,7 +143,7 @@ abstract class AbstractAction
     protected function processRelations($indexer, $ids, $onlyParents = false)
     {
         $parentIds = $indexer->getRelationsByChild($ids);
-        $childIds = $onlyParents ? [] : $indexer->getRelationsByParent($ids);
+        $childIds = $onlyParents ? [] : $indexer->getRelationsByParent($parentIds);
         return array_unique(array_merge($ids, $childIds, $parentIds));
     }
 }

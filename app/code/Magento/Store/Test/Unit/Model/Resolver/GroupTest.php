@@ -12,7 +12,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Test class for \Magento\Store\Model\Resolver\Store
  */
-class GroupTest extends \PHPUnit_Framework_TestCase
+class GroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Group
@@ -26,14 +26,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock(
-            \Magento\Store\Model\StoreManagerInterface::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
 
         $this->model = new Group($this->storeManagerMock);
     }
@@ -45,7 +38,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     public function testGetScope()
     {
-        $scopeMock = $this->getMock(\Magento\Framework\App\ScopeInterface::class, [], [], '', false, false);
+        $scopeMock = $this->createMock(\Magento\Framework\App\ScopeInterface::class);
         $this->storeManagerMock
             ->expects($this->once())
             ->method('getGroup')

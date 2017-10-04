@@ -11,6 +11,7 @@ use Magento\Backend\Block\Widget\Grid\Column;
  * Acl role user grid.
  *
  * @api
+ * @since 100.0.2
  */
 class User extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -40,6 +41,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @var bool|array
+     * @since 100.1.0
      */
     protected $restoredUsersFormData;
 
@@ -227,6 +229,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * Get Form Data if exist
      *
      * @return array|bool
+     * @since 100.1.0
      */
     protected function getUsersFormData()
     {
@@ -241,6 +244,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * Restore Users Form Data from the registry
      *
      * @return array|bool
+     * @since 100.1.0
      */
     protected function restoreUsersFormData()
     {

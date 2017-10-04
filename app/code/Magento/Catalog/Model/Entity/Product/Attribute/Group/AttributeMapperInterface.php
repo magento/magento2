@@ -9,6 +9,10 @@ namespace Magento\Catalog\Model\Entity\Product\Attribute\Group;
 
 use Magento\Eav\Model\Entity\Attribute;
 
+/**
+ * Interface \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface
+ *
+ */
 interface AttributeMapperInterface
 {
     /**

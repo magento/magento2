@@ -6,7 +6,7 @@
 
 namespace Magento\SalesRule\Test\Unit\Helper;
 
-class CouponTest extends \PHPUnit_Framework_TestCase
+class CouponTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Helper\Coupon

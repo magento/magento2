@@ -159,7 +159,7 @@ class Factory
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {
@@ -175,7 +175,7 @@ class Factory
      * Get file iterator factory
      *
      * @return \Magento\Framework\Config\FileIteratorFactory
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getFileIteratorFactory()
     {
