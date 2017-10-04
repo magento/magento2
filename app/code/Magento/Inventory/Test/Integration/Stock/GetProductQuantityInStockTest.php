@@ -13,7 +13,6 @@ use Magento\Inventory\Indexer\IndexStructureInterface;
 use Magento\Inventory\Indexer\StockItemIndexerInterface;
 use Magento\Inventory\Model\GetProductQuantityInStock;
 use Magento\Inventory\Model\ReservationCleanupInterface;
-use Magento\Inventory\Test\Integration\Indexer\Checker;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 use Magento\InventoryApi\Api\ReservationsAppendInterface;
@@ -26,11 +25,6 @@ class GetProductQuantityInStockTest extends TestCase
      * @var IndexerInterface
      */
     private $indexer;
-
-    /**
-     * @var Checker
-     */
-    private $indexerChecker;
 
     /**
      * @var ReservationBuilderInterface
@@ -56,8 +50,6 @@ class GetProductQuantityInStockTest extends TestCase
     {
         $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
         $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
-
-        $this->indexerChecker = Bootstrap::getObjectManager()->create(Checker::class);
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->reservationsAppend = Bootstrap::getObjectManager()->get(ReservationsAppendInterface::class);
