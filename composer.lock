@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9638b9ba14682bca16191207441a0c38",
-    "content-hash": "97eff12e92f191fc7f80f6e2ff9c278c",
+    "hash": "e9655626aff3d3314ffaab8bd609154c",
+    "content-hash": "bcd940e542a85144ed6e61f7ca9334d6",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -494,16 +494,16 @@
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "5.2.1",
+            "version": "5.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/justinrainbow/json-schema.git",
-                "reference": "429be236f296ca249d61c65649cdf2652f4a5e80"
+                "reference": "b80053b620826810b38211b3c5f935ba9cddf6b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/429be236f296ca249d61c65649cdf2652f4a5e80",
-                "reference": "429be236f296ca249d61c65649cdf2652f4a5e80",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/b80053b620826810b38211b3c5f935ba9cddf6b3",
+                "reference": "b80053b620826810b38211b3c5f935ba9cddf6b3",
                 "shasum": ""
             },
             "require": {
@@ -512,7 +512,6 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^2.1",
                 "json-schema/json-schema-test-suite": "1.2.0",
-                "phpdocumentor/phpdocumentor": "^2.7",
                 "phpunit/phpunit": "^4.8.22"
             },
             "bin": [
@@ -557,7 +556,7 @@
                 "json",
                 "schema"
             ],
-            "time": "2017-05-16 21:06:09"
+            "time": "2017-10-03 00:49:49"
         },
         {
             "name": "league/climate",
@@ -912,16 +911,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.10",
+            "version": "v2.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d"
+                "reference": "5da4d3c796c275c55f057af5a643ae297d96b4d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/634bae8e911eefa89c1abfbf1b66da679ac8f54d",
-                "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/5da4d3c796c275c55f057af5a643ae297d96b4d8",
+                "reference": "5da4d3c796c275c55f057af5a643ae297d96b4d8",
                 "shasum": ""
             },
             "require": {
@@ -956,7 +955,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2017-03-13 16:27:32"
+            "time": "2017-09-27 21:40:39"
         },
         {
             "name": "pelago/emogrifier",
@@ -6116,7 +6115,7 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "RC",
+    "minimum-stability": "dev",
     "stability-flags": {
         "phpmd/phpmd": 0
     },
