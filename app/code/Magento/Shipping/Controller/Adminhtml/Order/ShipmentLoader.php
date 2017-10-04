@@ -149,18 +149,6 @@ class ShipmentLoader extends DataObject
     }
 
     /**
-     * Initialize shipment items QTY
-     *
-     * @return array
-     */
-    private function getItemQtys()
-    {
-        $data = $this->getShipment();
-
-        return isset($data['items']) ? $data['items'] : [];
-    }
-
-    /**
      * Convert UI-generated tracking array to Data Object array
      *
      * @return ShipmentTrackCreationInterface[]
