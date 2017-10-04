@@ -3,13 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Inventory\Indexer\StockItem;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
-use Magento\Inventory\Model\Source;
 use Magento\Inventory\Model\StockSourceLink;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
@@ -33,11 +33,13 @@ class IndexDataProvider
     }
 
     /**
+     * Returns all data for the index to
+     *
      * @param int $stockId
-     * @param array $sourceIds
+     * @param array $skuList
      * @return \ArrayIterator
      */
-    public function getData(int $stockId, array $sourceIds = []): \ArrayIterator
+    public function getData(int $stockId, array $skuList = []): \ArrayIterator
     {
         $connection = $this->resourceConnection->getConnection();
         $sourceTable = $this->resourceConnection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE);
@@ -50,9 +52,6 @@ class IndexDataProvider
         $select = $connection->select()
             ->from($sourceTable, [SourceInterface::SOURCE_ID])
             ->where(SourceInterface::ENABLED . ' = ?', 1);
-        if (count($sourceIds)) {
-            $select->where(Source::SOURCE_ID . ' IN (?)', $sourceIds);
-        }
         $sourceIds = $connection->fetchCol($select);
 
         if (0 === count($sourceIds)) {
@@ -75,8 +74,13 @@ class IndexDataProvider
             )
             ->where('source_item.' . SourceItemInterface::STATUS . ' = ?', SourceItemInterface::STATUS_IN_STOCK)
             ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
-            ->where('stock_source_link.' . StockSourceLink::SOURCE_ID . ' IN (?)', $sourceIds)
-            ->group([SourceItemInterface::SKU]);
+            ->where('stock_source_link.' . StockSourceLink::SOURCE_ID . ' IN (?)', $sourceIds);
+
+        if (count($skuList) !== 0) {
+            $select->where('source_item.' . SourceItemInterface::SKU . ' IN (?)', $skuList);
+        }
+
+        $select->group([SourceItemInterface::SKU]);
 
         return new \ArrayIterator($connection->fetchAll($select));
     }

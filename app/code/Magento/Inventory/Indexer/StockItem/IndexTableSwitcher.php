@@ -49,7 +49,7 @@ class IndexTableSwitcher implements IndexTableSwitcherInterface
     /**
      * @inheritdoc
      */
-    public function switch(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION)
+    public function switch(IndexName $indexName, string $connectionName)
     {
         $connection = $this->resourceConnection->getConnection($connectionName);
         $tableName = $this->indexNameResolver->resolveName($indexName);
