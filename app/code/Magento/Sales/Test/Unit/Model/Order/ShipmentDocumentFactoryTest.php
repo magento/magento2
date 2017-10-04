@@ -18,7 +18,6 @@ use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Framework\EntityManager\HydratorInterface;
 
 /**
- * Class ShipmentDocumentFactoryTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
