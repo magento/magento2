@@ -6,15 +6,12 @@
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
-use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory as ResourceCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product\Option;
-use Magento\Framework\DataObject;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection as ValueCollection;
-
 
 /**
  * Test class for import product options module
@@ -224,7 +221,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     protected $metadataPoolMock;
     /**
-     * @var Collection | \PHPUnit_Framework_MockObject_MockObject
+     * @var ValueCollection | \PHPUnit_Framework_MockObject_MockObject
      */
     private $optionValueCollectionMock;
     /**
@@ -1004,116 +1001,6 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         return $this->getMockBuilder($originalClassName)
             ->disableOriginalConstructor()
             ->getMock();
-    }
-
-
-    public function testRestoreOptions()
-    {
-        $typeValues = [
-            4 => [
-                [
-                    'option_type_id' => 2,
-                    'sort_order' => 0,
-                    'sku' => '3-1-select'
-                ],
-                [
-                    'option_type_id' => 3,
-                    'sort_order' => 1,
-                    'sku' => '3-2-select'
-                ]
-            ],
-            5 => [
-                [
-                    'option_type_id' => 4,
-                    'sort_order' => 0,
-                    'sku' => '4-1-radio'
-                ],
-                [
-                    'option_type_id' => 5,
-                    'sort_order' => 1,
-                    'sku' => '4-1-radio'
-                ]
-            ],
-        ];
-
-        $typePrices = [
-            2 => [['price' => 3.0, 'price_type' => 'fixed',],],
-            3 => [['price' => 3.0, 'price_type' => 'fixed',],],
-            4 => [['price' => 3.0, 'price_type' => 'fixed',],],
-            5 => [['price' => 3.0, 'price_type' => 'fixed',],],
-        ];
-        $typeTitles = [
-            2 => ['Option 1',],
-            3 => ['Option 2',],
-            4 => ['Option 1',],
-            5 => ['Option 2',],
-        ];
-        $typeTitlesRefactored = [
-            2 => ['Option 1',],
-            3 => ['Option 2',],
-            4 => ['Option 1',],
-            5 => ['Option 2',],
-        ];
-
-        $optionDataValue = new DataObject([
-            'option_id' => 4,
-            'id' => 1,
-            'title' => 'Option 1'
-        ]);
-
-        $this->optionValueCollectionMock = $this->createDefaultMock(ValueCollection::class);
-
-        $this->optionValueCollectionMock
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$optionDataValue]));
-
-        $this->optionValueCollectionFactoryMock = $this->createDefaultMock(CollectionFactory::class);
-
-        $modelClassArgs = $this->createModelArgs();
-
-        $this->model = new Option(...array_values($modelClassArgs));
-        $optionsForRestore = $this->model->restoreOriginalOptionTypeIds($typeValues, $typePrices, $typeTitles);
-
-
-//        $this->assertEquals(
-//            $this->model->getRestoreOriginalOptionTypeIds($typeValues, $typeTitlesRefactored),
-//            $optionsForRestore
-//        );
-        $this->assertEquals(
-            [
-                3 => [0 => 'Option 2',],
-                4 => [0 => 'Option 1',],
-                5 => [0 => 'Option 2',],
-                1 => [0 => 'Option 1',],
-            ],
-            $typeTitles
-        );
-
-        $this->assertEquals(
-            [
-                3 => [['price' => 3.0, 'price_type' => 'fixed',],],
-                4 => [['price' => 3.0, 'price_type' => 'fixed',],],
-                5 => [['price' => 3.0, 'price_type' => 'fixed',],],
-                1 => [['price' => 3.0, 'price_type' => 'fixed',],],
-            ],
-            $typePrices);
-        $this->assertEquals(
-            [
-                4 =>
-                    [
-                        ['option_type_id' => 1, 'sort_order' => 0, 'sku' => '3-1-select',],
-                        ['option_type_id' => 3, 'sort_order' => 1, 'sku' => '3-2-select',],
-                    ],
-                5 =>
-                    [
-                        ['option_type_id' => 4, 'sort_order' => 0, 'sku' => '4-1-radio',],
-                        ['option_type_id' => 5, 'sort_order' => 1, 'sku' => '4-1-radio',],
-                    ],
-            ],
-            $typeValues
-        );
-        $this->model->importData();
     }
 
     /**

@@ -1226,7 +1226,12 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if ($this->_isReadyForSaving($options, $titles, $typeValues)) {
                 if ($this->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
                     $this->_compareOptionsWithExisting($options, $titles, $prices, $typeValues);
-                    $this->restoreOriginalOptionTypeIds($typeValues, $typePrices, $typeTitles);
+
+                    $optionsForRestore = $this->getRestoreOriginalOptionTypeIds($typeValues, $typeTitles);
+
+                    $typeValues = $this->restoreTypeValues($typeValues, $optionsForRestore);
+                    $typePrices = $this->restoreOptionTypesData($typePrices, $optionsForRestore);
+                    $typeTitles = $this->restoreOptionTypesData($typeTitles, $optionsForRestore);
                 }
 
                 $this->_saveOptions(
@@ -1432,32 +1437,31 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Restore original IDs for existing option types.
-     *
-     * Warning: arguments are modified by reference
+     * Returns existing optionsTypes data for restoring original data
      *
      * @param array $typeValues
-     * @param array $typePrices
      * @param array $typeTitles
      * @return array
      */
-    public function restoreOriginalOptionTypeIds(array &$typeValues, array &$typePrices, array &$typeTitles)
+    public function getRestoreOriginalOptionTypeIds(array $typeValues, array $typeTitles)
     {
         $optionsForRestore = [];
-        foreach ($typeValues as $optionId => &$optionTypes) {
-            foreach ($optionTypes as &$optionType) {
+        foreach ($typeValues as $optionId => $optionTypes) {
+            foreach ($optionTypes as $optionTypeKey => $optionType) {
                 $optionTypeId = $optionType['option_type_id'];
-                foreach ($typeTitles[$optionTypeId] as $storeId => $optionTypeTitle) {
-                    $existingTypeId = $this->getExistingOptionTypeId($optionId, $storeId, $optionTypeTitle);
-                    if ($existingTypeId !== null) {
-                        $optionType['option_type_id'] = $existingTypeId;
-
-                        $typeTitles = $this->replaceArrayElements($typeTitles, $existingTypeId, $optionTypeId);
-                        $typePrices = $this->replaceArrayElements($typePrices, $existingTypeId, $optionTypeId);
-
-                        $optionsForRestore[] = [$existingTypeId, $optionTypeId];
-                        // If option type titles match at least in one store, consider current option type as existing
-                        break;
+                if (isset($typeTitles[$optionTypeId]) && is_array($typeTitles[$optionTypeId])) {
+                    foreach ($typeTitles[$optionTypeId] as $storeId => $optionTypeTitle) {
+                        $existingTypeId = $this->getExistingOptionTypeId($optionId, $storeId, $optionTypeTitle);
+                        if ($existingTypeId !== null) {
+                            $optionsForRestore[] = [
+                                'searchKey' => $existingTypeId,
+                                'replaceKey' => $optionTypeId,
+                                'optionTypeKey' => $optionTypeKey,
+                                'optionId' => $optionId,
+                            ];
+                            // If option type titles match at least in one store, consider current option type as existing
+                            break;
+                        }
                     }
                 }
             }
@@ -1465,40 +1469,41 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         return $optionsForRestore;
     }
 
-//    public function getRestoreOriginalOptionTypeIds(array $typeValues, array $typeTitles)
-//    {
-//        $optionsForRestore = [];
-//        foreach ($typeValues as $optionId =>&$optionTypes) {
-//            foreach ($optionTypes as &$optionType) {
-//                $optionTypeId = $optionType['option_type_id'];
-//                foreach ($typeTitles[$optionTypeId] as $storeId => $optionTypeTitle) {
-//                    $existingTypeId = $this->getExistingOptionTypeId($optionId, $storeId, $optionTypeTitle);
-//                    if ($existingTypeId !== null) {
-//                        $optionsForRestore[] = [$existingTypeId, $optionTypeId];
-//                        // If option type titles match at least in one store, consider current option type as existing
-//                        break;
-//                    }
-//                }
-//            }
-//        }
-//        return $optionsForRestore;
-//    }
-
     /**
-     * Replace $searchKey element to $replaceKey element
+     * Returns restored array of typeValues
      *
-     * @param array $originalArray
-     * @param string $searchKey
-     * @param string $replaceKey
+     * @param array $typeValues
+     * @param array $optionsForRestore
      * @return array
      */
-    public function replaceArrayElements(array $originalArray, $searchKey, $replaceKey)
+    public function restoreTypeValues(array $typeValues, array $optionsForRestore)
     {
-        if (isset($originalArray[$replaceKey])) {
-            $originalArray[$searchKey] = $originalArray[$replaceKey];
-            unset($originalArray[$replaceKey]);
+        foreach ($optionsForRestore as $restoreValues) {
+            if (isset($typeValues[$restoreValues['optionId']][$restoreValues['optionTypeKey']])) {
+                $typeValues[$restoreValues['optionId']][$restoreValues['optionTypeKey']]['option_type_id'] = $restoreValues['searchKey'];
+            }
         }
-        return $originalArray;
+        return $typeValues;
+    }
+
+    /**
+     * Restores optionTypes data
+     *
+     * @param array $optionDataArray
+     * @param array $optionsForRestore
+     * @return array
+     */
+    public function restoreOptionTypesData(array $optionDataArray, array $optionsForRestore)
+    {
+        foreach ($optionsForRestore as $restoreValues) {
+            $replaceKey = $restoreValues['replaceKey'];
+            $searchKey = $restoreValues['searchKey'];
+            if (isset($optionDataArray[$replaceKey])) {
+                $optionDataArray[$searchKey] = $optionDataArray[$replaceKey];
+                unset($optionDataArray[$replaceKey]);
+            }
+        }
+        return $optionDataArray;
     }
 
     /**
@@ -1925,8 +1930,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (empty($rowData['custom_options'])) {
             return $rowData;
         }
-        $rowData['custom_options'] = str_replace($beforeOptionValueSkuDelimiter,
-            $this->_productEntity->getMultipleValueSeparator(), $rowData['custom_options']);
+        $rowData['custom_options'] = str_replace(
+            $beforeOptionValueSkuDelimiter,
+            $this->_productEntity->getMultipleValueSeparator(),
+            $rowData['custom_options']
+        );
         $options = [];
         $optionValues = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['custom_options']);
         $k = 0;
