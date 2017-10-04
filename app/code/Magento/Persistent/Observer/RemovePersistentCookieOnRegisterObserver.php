@@ -8,7 +8,10 @@ namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
-class RemovePersistentCookieObserver implements ObserverInterface
+/**
+ * Plugin to change persistent session cart to guest cart on new customer register success.
+ */
+class RemovePersistentCookieOnRegisterObserver implements ObserverInterface
 {
     /**
      * Customer session
