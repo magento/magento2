@@ -29,9 +29,6 @@ class ConfigGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $configDataMock;
 
-    /**
-     * @SuppressWarnings(PHPMD.LongVariable)
-     */
     public function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
