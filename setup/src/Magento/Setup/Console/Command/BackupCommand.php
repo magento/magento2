@@ -107,6 +107,7 @@ class BackupCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

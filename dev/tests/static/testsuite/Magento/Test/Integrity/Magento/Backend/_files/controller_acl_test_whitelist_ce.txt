@@ -27,3 +27,4 @@ Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
 Magento\Swatches\Controller\Adminhtml\Product\Attribute\Plugin\Save
 Magento\Ui\Controller\Adminhtml\Export\GridToCsv
 Magento\Ui\Controller\Adminhtml\Export\GridToXml
+Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter
