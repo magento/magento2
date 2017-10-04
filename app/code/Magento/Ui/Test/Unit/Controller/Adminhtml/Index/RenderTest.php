@@ -85,11 +85,6 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     private $resultJsonFactoryMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $escaperMock;
-
-    /**
      * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $loggerMock;
@@ -141,12 +136,6 @@ class RenderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->escaperMock = $this->getMockBuilder(
-            \Magento\Framework\Escaper::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
 
         $this->contextMock->expects($this->any())
@@ -179,7 +168,6 @@ class RenderTest extends \PHPUnit\Framework\TestCase
                 'context' => $this->contextMock,
                 'factory' => $this->uiFactoryMock,
                 'resultJsonFactory' => $this->resultJsonFactoryMock,
-                'escaper' => $this->escaperMock,
                 'logger' => $this->loggerMock
             ]
         );
@@ -216,10 +204,6 @@ class RenderTest extends \PHPUnit\Framework\TestCase
 
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->willReturnSelf();
-
-        $this->escaperMock->expects($this->once())
-            ->method('escapeHtml')
             ->willReturnSelf();
 
         $this->dataProviderMock->expects($this->once())
