@@ -90,7 +90,7 @@ class BeforeTest extends \PHPUnit\Framework\TestCase
     public function testGetEntityBehaviors()
     {
         $actualEntities = $this->_model->getEntityBehaviors();
-        $expectedEntities = \Zend_Json::encode($this->_expectedEntities);
+        $expectedEntities = json_encode($this->_expectedEntities);
         $this->assertEquals($expectedEntities, $actualEntities);
     }
 
@@ -102,7 +102,7 @@ class BeforeTest extends \PHPUnit\Framework\TestCase
     public function testGetUniqueBehaviors()
     {
         $actualBehaviors = $this->_model->getUniqueBehaviors();
-        $expectedBehaviors = \Zend_Json::encode($this->_expectedBehaviors);
+        $expectedBehaviors = json_encode($this->_expectedBehaviors);
         $this->assertEquals($expectedBehaviors, $actualBehaviors);
     }
 }

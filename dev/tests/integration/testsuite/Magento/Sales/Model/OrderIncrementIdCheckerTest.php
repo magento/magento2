@@ -4,22 +4,22 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Quote\Model\ResourceModel;
+namespace Magento\Sales\Model;
 
 /**
  * Class QuoteTest to verify isOrderIncrementIdUsed method behaviour
  */
-class QuoteTest extends \PHPUnit\Framework\TestCase
+class OrderIncrementIdCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Quote\Model\ResourceModel\Quote
+     * @var \Magento\Sales\Model\OrderIncrementIdChecker
      */
-    private $_resourceModel;
+    private $checker;
 
     protected function setUp()
     {
-        $this->_resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Quote\Model\ResourceModel\Quote::class
+        $this->checker = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Sales\Model\OrderIncrementIdChecker::class
         );
     }
 
@@ -30,7 +30,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsOrderIncrementIdUsedNumericIncrementId()
     {
-        $this->assertTrue($this->_resourceModel->isOrderIncrementIdUsed('100000001'));
+        $this->assertTrue($this->checker->isIncrementIdUsed('100000001'));
     }
 
     /**
@@ -40,6 +40,6 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsOrderIncrementIdUsedAlphanumericIncrementId()
     {
-        $this->assertTrue($this->_resourceModel->isOrderIncrementIdUsed('M00000001'));
+        $this->assertTrue($this->checker->isIncrementIdUsed('M00000001'));
     }
 }
