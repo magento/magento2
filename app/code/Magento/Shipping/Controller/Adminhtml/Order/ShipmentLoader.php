@@ -135,7 +135,7 @@ class ShipmentLoader extends DataObject
                 return false;
             }
 
-            $shipmentItems = $this->getShipmentItems($this->getShipment());
+            $shipmentItems = $this->getShipmentItems($this->getShipment() ?: []);
 
             $shipment = $this->documentFactory->create(
                 $order,
