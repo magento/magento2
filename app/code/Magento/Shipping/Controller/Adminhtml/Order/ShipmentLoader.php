@@ -27,11 +27,12 @@ use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
  * @method ShipmentLoader setTracking($tracking)
  * @method int getOrderId()
  * @method int getShipmentId()
- * @method array getShipment()
  * @method array getTracking()
  */
 class ShipmentLoader extends DataObject
 {
+    const SHIPMENT = 'shipment';
+
     /**
      * @var ManagerInterface
      */
@@ -135,7 +136,7 @@ class ShipmentLoader extends DataObject
                 return false;
             }
 
-            $shipmentItems = $this->getShipmentItems($this->getShipment() ?: []);
+            $shipmentItems = $this->getShipmentItems($this->getShipment());
 
             $shipment = $this->documentFactory->create(
                 $order,
@@ -193,5 +194,15 @@ class ShipmentLoader extends DataObject
             $shipmentItems[] = $item;
         }
         return $shipmentItems;
+    }
+
+    /**
+     * Retrieve shipment
+     *
+     * @return array
+     */
+    public function getShipment()
+    {
+        return $this->getData(self::SHIPMENT) ?: [];
     }
 }
