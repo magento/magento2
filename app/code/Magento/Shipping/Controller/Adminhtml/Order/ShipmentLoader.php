@@ -11,10 +11,11 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterface;
 use Magento\Sales\Api\Data\ShipmentTrackCreationInterfaceFactory;
+use Magento\Sales\Api\Data\ShipmentItemCreationInterfaceFactory;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order\Shipment\Item\Converter;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory;
+use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 
 /**
  * Class ShipmentLoader
@@ -57,43 +58,42 @@ class ShipmentLoader extends DataObject
     private $documentFactory;
 
     /**
-     * @var Converter
-     */
-    private $converter;
-
-    /**
      * @var ShipmentTrackCreationInterfaceFactory
      */
     private $trackFactory;
 
     /**
-     * @param ManagerInterface                      $messageManager
-     * @param Registry                              $registry
-     * @param ShipmentRepositoryInterface           $shipmentRepository
-     * @param OrderRepositoryInterface              $orderRepository
-     * @param Converter                             $converter
-     * @param ShipmentDocumentFactory               $documentFactory
+     * @var ShipmentItemCreationInterfaceFactory
+     */
+    private $itemFactory;
+
+    /**
+     * @param ManagerInterface $messageManager
+     * @param Registry $registry
+     * @param ShipmentRepositoryInterface $shipmentRepository
+     * @param OrderRepositoryInterface $orderRepository
+     * @param ShipmentDocumentFactory $documentFactory
      * @param ShipmentTrackCreationInterfaceFactory $trackFactory
-     * @param array                                 $data
+     * @param ShipmentItemCreationInterfaceFactory $itemFactory
+     * @param array $data
      */
     public function __construct(
         ManagerInterface $messageManager,
         Registry $registry,
         ShipmentRepositoryInterface $shipmentRepository,
         OrderRepositoryInterface $orderRepository,
-        Converter $converter,
         ShipmentDocumentFactory $documentFactory,
         ShipmentTrackCreationInterfaceFactory $trackFactory,
+        ShipmentItemCreationInterfaceFactory $itemFactory,
         array $data = []
     ) {
         $this->messageManager = $messageManager;
         $this->registry = $registry;
         $this->shipmentRepository = $shipmentRepository;
         $this->orderRepository = $orderRepository;
-        $this->converter = $converter;
         $this->documentFactory = $documentFactory;
         $this->trackFactory = $trackFactory;
-
+        $this->itemFactory = $itemFactory;
         parent::__construct($data);
     }
 
@@ -118,7 +118,6 @@ class ShipmentLoader extends DataObject
              */
             if (!$order->getId()) {
                 $this->messageManager->addError(__('The order no longer exists.'));
-
                 return false;
             }
             /**
@@ -126,7 +125,6 @@ class ShipmentLoader extends DataObject
              */
             if ($order->getForcedShipmentWithInvoice()) {
                 $this->messageManager->addError(__('Cannot do shipment for the order separately from invoice.'));
-
                 return false;
             }
             /**
@@ -134,19 +132,19 @@ class ShipmentLoader extends DataObject
              */
             if (!$order->canShip()) {
                 $this->messageManager->addError(__('Cannot do shipment for the order.'));
-
                 return false;
             }
 
+            $shipmentItems = $this->getShipmentItems($this->getShipment());
+
             $shipment = $this->documentFactory->create(
                 $order,
-                $this->converter->convertToItemCreationArray($this->getItemQtys()),
+                $shipmentItems,
                 $this->getTrackingArray()
             );
         }
 
         $this->registry->register('current_shipment', $shipment);
-
         return $shipment;
     }
 
@@ -165,7 +163,7 @@ class ShipmentLoader extends DataObject
     /**
      * Convert UI-generated tracking array to Data Object array
      *
-     * @return array
+     * @return ShipmentTrackCreationInterface[]
      * @throws LocalizedException
      */
     private function getTrackingArray()
@@ -185,6 +183,27 @@ class ShipmentLoader extends DataObject
             $trackCreation->setCarrierCode($track['carrier_code']);
             $trackingCreation[] = $trackCreation;
         }
+
         return $trackingCreation;
+    }
+
+    /**
+     * Extract product id => product quantity array from shipment data.
+     *
+     * @param array $shipmentData
+     * @return int[]
+     */
+    private function getShipmentItems(array $shipmentData)
+    {
+        $shipmentItems = [];
+        $itemQty = isset($shipmentData['items']) ? $shipmentData['items'] : [];
+        foreach ($itemQty as $itemId => $quantity) {
+            /** @var ShipmentItemCreationInterface $item */
+            $item = $this->itemFactory->create();
+            $item->setOrderItemId($itemId);
+            $item->setQty($quantity);
+            $shipmentItems[] = $item;
+        }
+        return $shipmentItems;
     }
 }

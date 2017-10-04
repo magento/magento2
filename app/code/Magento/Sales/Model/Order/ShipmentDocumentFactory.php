@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentCommentCreationInterface;
 use Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface;
-use Magento\Sales\Model\Order\Shipment\Item\Converter;
+use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
  * Class ShipmentDocumentFactory
@@ -39,28 +39,20 @@ class ShipmentDocumentFactory
     private $hydratorPool;
 
     /**
-     * @var Converter;
-     */
-    private $converter;
-
-    /**
      * ShipmentDocumentFactory constructor.
      *
      * @param ShipmentFactory $shipmentFactory
      * @param HydratorPool $hydratorPool
      * @param TrackFactory $trackFactory
-     * @param Converter $converter
      */
     public function __construct(
         ShipmentFactory $shipmentFactory,
         HydratorPool $hydratorPool,
-        TrackFactory $trackFactory,
-        Converter $converter = null
+        TrackFactory $trackFactory
     ) {
         $this->shipmentFactory = $shipmentFactory;
         $this->trackFactory = $trackFactory;
         $this->hydratorPool = $hydratorPool;
-        $this->converter = $converter ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Converter::class);
     }
 
     /**
@@ -84,13 +76,23 @@ class ShipmentDocumentFactory
         array $packages = [],
         ShipmentCreationArgumentsInterface $arguments = null
     ) {
-        $shipmentItems = $this->converter->convertToQuantityArray($items, $order);
+        $shipmentItems = empty($items)
+            ? $this->getQuantitiesFromOrderItems($order->getItems())
+            : $this->getQuantitiesFromShipmentItems($items);
+
         /** @var Shipment $shipment */
         $shipment = $this->shipmentFactory->create(
             $order,
             $shipmentItems
         );
-        $this->prepareTracks($shipment, $tracks);
+
+        foreach ($tracks as $track) {
+            $hydrator = $this->hydratorPool->getHydrator(
+                \Magento\Sales\Api\Data\ShipmentTrackCreationInterface::class
+            );
+            $shipment->addTrack($this->trackFactory->create(['data' => $hydrator->extract($track)]));
+        }
+
         if ($comment) {
             $shipment->addComment(
                 $comment->getComment(),
@@ -103,20 +105,34 @@ class ShipmentDocumentFactory
     }
 
     /**
-     * Adds tracks to the shipment.
+     * Translate OrderItemInterface array to product id => product quantity array.
      *
-     * @param ShipmentInterface $shipment
-     * @param ShipmentTrackCreationInterface[] $tracks
-     * @return ShipmentInterface
+     * @param OrderItemInterface[] $items
+     * @return array
      */
-    private function prepareTracks(\Magento\Sales\Api\Data\ShipmentInterface $shipment, array $tracks)
+    private function getQuantitiesFromOrderItems(array $items)
     {
-        foreach ($tracks as $track) {
-            $hydrator = $this->hydratorPool->getHydrator(
-                \Magento\Sales\Api\Data\ShipmentTrackCreationInterface::class
-            );
-            $shipment->addTrack($this->trackFactory->create(['data' => $hydrator->extract($track)]));
+        $shipmentItems = [];
+        foreach ($items as $item) {
+            if (!$item->getIsVirtual() && !$item->getParentItem()) {
+                $shipmentItems[$item->getItemId()] = $item->getQtyOrdered();
+            }
         }
-        return $shipment;
+        return $shipmentItems;
+    }
+
+    /**
+     * Translate ShipmentItemCreationInterface array to product id => product quantity array.
+     *
+     * @param ShipmentItemCreationInterface[] $items
+     * @return array
+     */
+    private function getQuantitiesFromShipmentItems(array $items)
+    {
+        $shipmentItems = [];
+        foreach ($items as $item) {
+            $shipmentItems[$item->getOrderItemId()] = $item->getQty();
+        }
+ 	 	return $shipmentItems;
     }
 }
