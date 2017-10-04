@@ -53,7 +53,7 @@ class Render extends AbstractAction
     /**
      * Action for AJAX request
      *
-     * @return void
+     * @return void|\Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
