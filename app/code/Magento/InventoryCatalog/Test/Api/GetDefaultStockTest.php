@@ -7,6 +7,7 @@
 namespace Magento\InventoryCatalog\Test\Api;
 
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryCatalog\Api\DefaultStockRepositoryInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Rest\Request;
 
@@ -20,10 +21,9 @@ class GetDefaultStockTest extends WebapiAbstract
      */
     public function testGetDefaultSource()
     {
-        $defaultStockId = 1;
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/inventory/stock/' . $defaultStockId,
+                'resourcePath' => '/V1/inventory/stock/' . DefaultStockRepositoryInterface::DEFAULT_STOCK,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -34,8 +34,8 @@ class GetDefaultStockTest extends WebapiAbstract
         if (self::ADAPTER_REST == TESTS_WEB_API_ADAPTER) {
             $stock = $this->_webApiCall($serviceInfo);
         } else {
-            $stock = $this->_webApiCall($serviceInfo, ['stockId' => $defaultStockId]);
+            $stock = $this->_webApiCall($serviceInfo, ['stockId' => DefaultStockRepositoryInterface::DEFAULT_STOCK]);
         }
-        $this->assertEquals($defaultStockId, $stock[StockInterface::STOCK_ID]);
+        $this->assertEquals(DefaultStockRepositoryInterface::DEFAULT_STOCK, $stock[StockInterface::STOCK_ID]);
     }
 }

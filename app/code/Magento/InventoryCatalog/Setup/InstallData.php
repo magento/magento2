@@ -17,6 +17,8 @@ use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\InventoryCatalog\Api\DefaultSourceRepositoryInterface;
+use Magento\InventoryCatalog\Api\DefaultStockRepositoryInterface;
 
 /**
  * Install Default Source, Stock and link them together
@@ -96,7 +98,7 @@ class InstallData implements InstallDataInterface
     private function addDefaultSource()
     {
         $data = [
-            SourceInterface::SOURCE_ID => 1,
+            SourceInterface::SOURCE_ID => DefaultSourceRepositoryInterface::DEFAULT_SOURCE,
             SourceInterface::NAME => 'Default Source',
             SourceInterface::ENABLED => 1,
             SourceInterface::DESCRIPTION => 'Default Source',
@@ -119,7 +121,7 @@ class InstallData implements InstallDataInterface
     private function addDefaultStock()
     {
         $data = [
-            StockInterface::STOCK_ID => 1,
+            StockInterface::STOCK_ID => DefaultStockRepositoryInterface::DEFAULT_STOCK,
             StockInterface::NAME => 'Default Stock'
         ];
         $source = $this->stockFactory->create();
@@ -134,6 +136,6 @@ class InstallData implements InstallDataInterface
      */
     private function assignStockToSource()
     {
-        $this->assignSourcesToStock->execute([1], 1);
+        $this->assignSourcesToStock->execute([DefaultSourceRepositoryInterface::DEFAULT_SOURCE], DefaultStockRepositoryInterface::DEFAULT_STOCK);
     }
 }
