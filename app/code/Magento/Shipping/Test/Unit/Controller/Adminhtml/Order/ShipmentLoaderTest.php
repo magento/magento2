@@ -21,22 +21,22 @@ class ShipmentLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ObjectManager
      */
-    private $objectManagerMock;
+    protected $objectManagerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $registryMock;
+    protected $registryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $messageManagerMock;
+    protected $messageManagerMock;
 
     /**
      * @var \Magento\Sales\Model\Order\ShipmentRepository|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $shipmentRepositoryMock;
+    protected $shipmentRepositoryMock;
 
     /**
      * @var ShipmentDocumentFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -56,12 +56,12 @@ class ShipmentLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $orderRepositoryMock;
+    protected $orderRepositoryMock;
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
      */
-    private $loader;
+    protected $loader;
 
     protected function setUp()
     {

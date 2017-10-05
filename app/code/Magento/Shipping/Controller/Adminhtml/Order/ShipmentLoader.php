@@ -35,22 +35,22 @@ class ShipmentLoader extends DataObject
     /**
      * @var ManagerInterface
      */
-    private $messageManager;
+    protected $messageManager;
 
     /**
      * @var Registry
      */
-    private $registry;
+    protected $registry;
 
     /**
      * @var ShipmentRepositoryInterface
      */
-    private $shipmentRepository;
+    protected $shipmentRepository;
 
     /**
      * @var OrderRepositoryInterface
      */
-    private $orderRepository;
+    protected $orderRepository;
 
     /**
      * @var ShipmentDocumentFactory
