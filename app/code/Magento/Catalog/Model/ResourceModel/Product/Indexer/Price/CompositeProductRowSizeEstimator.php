@@ -32,7 +32,6 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
 
     /**
      * @var CompositeProductRelationsCalculator
-     * @since 2.2.0
      */
     private $compositeProductRelationsCalculator;
 
@@ -40,7 +39,6 @@ class CompositeProductRowSizeEstimator implements IndexTableRowSizeEstimatorInte
      * @param WebsiteManagementInterface $websiteManagement
      * @param CollectionFactory $collectionFactory
      * @param CompositeProductRelationsCalculator $compositeProductRelationsCalculator
-     * @since 2.2.0
      */
     public function __construct(
         WebsiteManagementInterface $websiteManagement,

@@ -118,8 +118,12 @@ class CategoryProcessor
         $category->setIsActive(true);
         $category->setIncludeInMenu(true);
         $category->setAttributeSetId($category->getDefaultAttributeSetId());
-        $category->save();
-        $this->categoriesCache[$category->getId()] = $category;
+        try {
+            $category->save();
+            $this->categoriesCache[$category->getId()] = $category;
+        } catch (\Exception $e) {
+            $this->addFailedCategory($category, $e);
+        }
 
         return $category->getId();
     }
