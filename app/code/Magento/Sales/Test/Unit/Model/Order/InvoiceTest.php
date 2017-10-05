@@ -437,10 +437,10 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
      * Assert open invoice can be canceled, and its status changes
      *
      * @param $initialInvoiceStatus
-     * @param $expectedInvoiceStatus
+     * @param $finalInvoiceStatus
      * @dataProvider getNotOpenedInvoiceStatuses
      */
-    public function testCannotCancelNotOpenedInvoice($initialInvoiceStatus, $expectedInvoiceStatus)
+    public function testCannotCancelNotOpenedInvoice($initialInvoiceStatus, $finalInvoiceStatus)
     {
         $this->order->expects($this->never())->method('getPayment');
         $this->paymentMock->expects($this->never())->method('cancelInvoice');
@@ -449,7 +449,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ->with('sales_order_invoice_cancel');
         $this->model->setState($initialInvoiceStatus);
         $this->model->cancel();
-        self::assertEquals($expectedInvoiceStatus, $this->model->getState());
+        self::assertEquals($finalInvoiceStatus, $this->model->getState());
     }
 
     /**
