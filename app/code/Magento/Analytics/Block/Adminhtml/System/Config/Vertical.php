@@ -6,11 +6,12 @@
 namespace Magento\Analytics\Block\Adminhtml\System\Config;
 
 /**
- * Provides select with industry information
+ * Provides vertical select with additional information and style customization
  */
 class Vertical extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
+     * @inheritdoc
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
@@ -22,6 +23,8 @@ class Vertical extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
+     * Decorates row HTML for custom element style
+     *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @param string $html
      * @return string

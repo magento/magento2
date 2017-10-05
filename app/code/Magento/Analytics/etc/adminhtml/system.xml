@@ -28,7 +28,7 @@
                     <frontend_model>Magento\Analytics\Block\Adminhtml\System\Config\CollectionTimeLabel</frontend_model>
                     <backend_model>Magento\Analytics\Model\Config\Backend\CollectionTime</backend_model>
                 </field>
-                <field id="vertical" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="vertical" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <hint>Industry Data</hint>
                     <label>Industry</label>
                     <comment>In order to personalize your Advanced Reporting experience, please select your industry.</comment>
@@ -36,7 +36,7 @@
                     <backend_model>Magento\Analytics\Model\Config\Backend\Vertical</backend_model>
                     <frontend_model>Magento\Analytics\Block\Adminhtml\System\Config\Vertical</frontend_model>
                 </field>
-                <field id="additional_comment" translate="label comment" type="label" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="additional_comment" translate="label comment" type="label" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label><![CDATA[<strong>Get more insights from Magento Business Intelligence</strong>]]></label>
                     <comment><![CDATA[Magento Business Intelligence provides you with a simple and clear path to
                     becoming more data driven.</br> Learn more about <a target="_blank"
