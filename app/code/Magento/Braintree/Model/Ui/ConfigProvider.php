@@ -5,12 +5,15 @@
  */
 namespace Magento\Braintree\Model\Ui;
 
-use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
-use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Gateway\Config\PayPal\Config as PayPalConfig;
+use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
+use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 
 /**
  * Class ConfigProvider
@@ -32,9 +35,9 @@ final class ConfigProvider implements ConfigProviderInterface
     private $config;
 
     /**
-     * @var BraintreeAdapter
+     * @var BraintreeAdapterFactory
      */
-    private $adapter;
+    private $adapterFactory;
 
     /**
      * @var string
@@ -42,22 +45,30 @@ final class ConfigProvider implements ConfigProviderInterface
     private $clientToken = '';
 
     /**
-     * Constructor
-     *
+     * @var SessionManagerInterface
+     */
+    private $session;
+
+    /**
      * @param Config $config
      * @param PayPalConfig $payPalConfig No longer used by internal code and not recommended.
-     * @param BraintreeAdapter $adapter
+     * @param BraintreeAdapter $adapter No longer used by internal code and not recommended.
      * @param ResolverInterface $localeResolver No longer used by internal code and not recommended.
+     * @param SessionManagerInterface|null $session
+     * @param BraintreeAdapterFactory|null $adapterFactory
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Config $config,
         PayPalConfig $payPalConfig,
         BraintreeAdapter $adapter,
-        ResolverInterface $localeResolver
+        ResolverInterface $localeResolver,
+        SessionManagerInterface $session = null,
+        BraintreeAdapterFactory $adapterFactory = null
     ) {
         $this->config = $config;
-        $this->adapter = $adapter;
+        $this->adapterFactory = $adapterFactory ?: ObjectManager::getInstance()->get(BraintreeAdapterFactory::class);
+        $this->session = $session ?: ObjectManager::getInstance()->get(SessionManagerInterface::class);
     }
 
     /**
@@ -67,26 +78,27 @@ final class ConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
+        $storeId = $this->session->getStoreId();
         return [
             'payment' => [
                 self::CODE => [
-                    'isActive' => $this->config->isActive(),
+                    'isActive' => $this->config->isActive($storeId),
                     'clientToken' => $this->getClientToken(),
                     'ccTypesMapper' => $this->config->getCctypesMapper(),
                     'sdkUrl' => $this->config->getSdkUrl(),
-                    'countrySpecificCardTypes' => $this->config->getCountrySpecificCardTypeConfig(),
-                    'availableCardTypes' => $this->config->getAvailableCardTypes(),
-                    'useCvv' => $this->config->isCvvEnabled(),
-                    'environment' => $this->config->getEnvironment(),
-                    'kountMerchantId' => $this->config->getKountMerchantId(),
-                    'hasFraudProtection' => $this->config->hasFraudProtection(),
-                    'merchantId' => $this->config->getMerchantId(),
+                    'countrySpecificCardTypes' => $this->config->getCountrySpecificCardTypeConfig($storeId),
+                    'availableCardTypes' => $this->config->getAvailableCardTypes($storeId),
+                    'useCvv' => $this->config->isCvvEnabled($storeId),
+                    'environment' => $this->config->getEnvironment($storeId),
+                    'kountMerchantId' => $this->config->getKountMerchantId($storeId),
+                    'hasFraudProtection' => $this->config->hasFraudProtection($storeId),
+                    'merchantId' => $this->config->getMerchantId($storeId),
                     'ccVaultCode' => self::CC_VAULT_CODE
                 ],
                 Config::CODE_3DSECURE => [
-                    'enabled' => $this->config->isVerify3DSecure(),
-                    'thresholdAmount' => $this->config->getThresholdAmount(),
-                    'specificCountries' => $this->config->get3DSecureSpecificCountries()
+                    'enabled' => $this->config->isVerify3DSecure($storeId),
+                    'thresholdAmount' => $this->config->getThresholdAmount($storeId),
+                    'specificCountries' => $this->config->get3DSecureSpecificCountries($storeId)
                 ],
             ]
         ];
@@ -101,12 +113,14 @@ final class ConfigProvider implements ConfigProviderInterface
         if (empty($this->clientToken)) {
             $params = [];
 
-            $merchantAccountId = $this->config->getMerchantAccountId();
+            $storeId = $this->session->getStoreId();
+            $merchantAccountId = $this->config->getMerchantAccountId($storeId);
             if (!empty($merchantAccountId)) {
                 $params[PaymentDataBuilder::MERCHANT_ACCOUNT_ID] = $merchantAccountId;
             }
 
-            $this->clientToken = $this->adapter->generate($params);
+            $this->clientToken = $this->adapterFactory->create($storeId)
+                ->generate($params);
         }
 
         return $this->clientToken;

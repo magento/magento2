@@ -20,7 +20,7 @@ class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
         $buildSubject = [];
 
         $builder = new VaultDataBuilder();
-        static::assertEquals(
+        self::assertEquals(
             $expectedResult,
             $builder->build($buildSubject)
         );

@@ -64,12 +64,15 @@ class ThreeDSecureDataBuilder implements BuilderInterface
      */
     private function is3DSecureEnabled(OrderAdapterInterface $order, $amount)
     {
-        if (!$this->config->isVerify3DSecure() || $amount < $this->config->getThresholdAmount()) {
+        $storeId = $order->getStoreId();
+        if (!$this->config->isVerify3DSecure($storeId)
+            || $amount < $this->config->getThresholdAmount($storeId)
+        ) {
             return false;
         }
 
         $billingAddress = $order->getBillingAddress();
-        $specificCounties = $this->config->get3DSecureSpecificCountries();
+        $specificCounties = $this->config->get3DSecureSpecificCountries($storeId);
         if (!empty($specificCounties) && !in_array($billingAddress->getCountryId(), $specificCounties)) {
             return false;
         }

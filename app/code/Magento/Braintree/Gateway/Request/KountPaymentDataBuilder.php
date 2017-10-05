@@ -48,10 +48,12 @@ class KountPaymentDataBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         $result = [];
-        if (!$this->config->hasFraudProtection()) {
+        $paymentDO = $this->subjectReader->readPayment($buildSubject);
+        $order = $paymentDO->getOrder();
+
+        if (!$this->config->hasFraudProtection($order->getStoreId())) {
             return $result;
         }
-        $paymentDO = $this->subjectReader->readPayment($buildSubject);
 
         $payment = $paymentDO->getPayment();
         $data = $payment->getAdditionalInformation();
