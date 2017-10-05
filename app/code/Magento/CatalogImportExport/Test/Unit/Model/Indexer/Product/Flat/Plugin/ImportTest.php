@@ -45,9 +45,8 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-
         $this->model = (new ObjectManager($this))->getObject(
-            'Magento\CatalogImportExport\Model\Indexer\Product\Flat\Plugin\Import',
+            \Magento\CatalogImportExport\Model\Indexer\Product\Flat\Plugin\Import::class,
             [
                 'productFlatIndexerProcessor' => $this->processorMock,
                 'flatState' => $this->flatStateMock
@@ -66,13 +65,13 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterImportSourceWithFlatDisabledAndIndexerScheduledDisabled()
     {
-
         $this->flatStateMock->expects($this->once())->method('isFlatEnabled')->willReturn(false);
         $this->processorMock->expects($this->never())->method('isIndexerScheduled')->willReturn(false);
         $this->processorMock->expects($this->never())->method('markIndexerAsInvalid');
         $someData = [1, 2, 3];
         $this->assertEquals($someData, $this->model->afterImportSource($this->subjectMock, $someData));
     }
+
     public function testAfterImportSourceWithFlatEnabledAndIndexerScheduledEnabled()
     {
         $this->flatStateMock->expects($this->once())->method('isFlatEnabled')->willReturn(true);
