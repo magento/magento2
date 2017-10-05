@@ -19,5 +19,5 @@ return [
             ],
             'ProductSku should be specified',
             400,
-        ]
+        ],
 ];
