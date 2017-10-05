@@ -9,44 +9,47 @@ use Magento\Ui\Controller\Adminhtml\AbstractAction;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\Controller\Result\JsonFactory;
 
 class Render extends AbstractAction
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     private $resultJsonFactory;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
      * @param Context $context
      * @param UiComponentFactory $factory
-     * @param \Magento\Framework\Controller\Result\JsonFactory|null $resultJsonFactory
-     * @param \Magento\Framework\Escaper|null $escaper
-     * @param \Psr\Log\LoggerInterface|null $logger
+     * @param JsonFactory|null $resultJsonFactory
+     * @param Escaper|null $escaper
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         Context $context,
         UiComponentFactory $factory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory = null,
-        \Magento\Framework\Escaper $escaper = null,
-        \Psr\Log\LoggerInterface $logger = null
+        JsonFactory $resultJsonFactory = null,
+        Escaper $escaper = null,
+        LoggerInterface $logger = null
     ) {
         parent::__construct($context, $factory);
-        $this->resultJsonFactory = $resultJsonFactory ?: $this->_objectManager
+        $this->resultJsonFactory = $resultJsonFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Controller\Result\JsonFactory::class);
-        $this->escaper = $escaper ?: $this->_objectManager
+        $this->escaper = $escaper ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Escaper::class);
-        $this->logger = $logger ?: $this->_objectManager
+        $this->logger = $logger ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Psr\Log\LoggerInterface::class);
     }
 

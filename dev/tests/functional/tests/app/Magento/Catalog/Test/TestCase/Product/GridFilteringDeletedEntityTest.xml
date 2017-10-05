@@ -23,7 +23,7 @@
             </data>
             <data name="pageClass" xsi:type="string">Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex</data>
             <data name="gridRetriever" xsi:type="string">getProductGrid</data>
-            <constraint name="\Magento\Catalog\Test\Constraint\AssertProductGridIsRendered"/>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductGridIsRendered"/>
             <constraint name="Magento\Catalog\Test\Constraint\AssertResetFilterMessage"/>
         </variation>
     </testCase>

@@ -356,15 +356,6 @@ define([
         },
 
         /**
-         * Assigns filters index change.
-         *
-         * @param {integer} index - Selected index of the filter.
-         */
-        onActiveIndexChange: function (index) {
-            this.activeIndex = index;
-        },
-
-        /**
          * Extract previews of a specified filters.
          *
          * @param {Array} filters - Filters to be processed.
@@ -393,10 +384,10 @@ define([
          * @param {bool} isError - Selected index of the filter.
          */
         onBackendError: function (isError) {
-            var defaultMessage = 'Something went wrong with processing the default view and we have restored the' +
-                    ' filter to its original state.',
-                customMessage  = 'Something went wrong with processing current custom view and filters have been' +
-                    ' reset to its original state. Please edit filters then click apply.';
+            var defaultMessage = 'Something went wrong with processing the default view and we have restored the filter' +
+                    ' to its original state.',
+                customMessage  = 'Something went wrong with processing current custom view and filters have been reset' +
+                    ' to its original state. Please edit filters then click apply.';
 
             if (isError) {
                 this.clear();
