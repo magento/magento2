@@ -5,6 +5,7 @@
  */
 namespace Magento\Inventory\Test\Integration\Stock;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Indexer\Model\Indexer;
 use Magento\Inventory\Indexer\Alias;
@@ -53,12 +54,11 @@ class GetProductQuantityInStockTest extends TestCase
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->reservationsAppend = Bootstrap::getObjectManager()->get(ReservationsAppendInterface::class);
+        $this->reservationCleanup = Bootstrap::getObjectManager()->create(ReservationCleanupInterface::class);
 
         $this->getProductQtyInStockService = Bootstrap::getObjectManager()->create(
             GetProductQuantityInStockInterface::class
         );
-
-        $this->reservationCleanup = Bootstrap::getObjectManager()->create(ReservationCleanupInterface::class);
     }
 
     public function tearDown()
@@ -73,8 +73,8 @@ class GetProductQuantityInStockTest extends TestCase
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
-                ->create();
-            $indexStructure->delete($indexName);
+                ->build();
+            $indexStructure->delete($indexName, ResourceConnection::DEFAULT_CONNECTION);
         }
 
         // Cleanup reservations

@@ -41,20 +41,18 @@ class ReservationQuantity
     public function execute(string $sku, int $stockId): float
     {
         $connection = $this->resource->getConnection();
-
-        $reservationTable = $connection->getTableName(CreateReservationTable::TABLE_NAME_RESERVATION);
+        $reservationTable = $this->resource->getTableName(CreateReservationTable::TABLE_NAME_RESERVATION);
 
         $select = $connection->select()
-            ->from($reservationTable, [ReservationInterface::QUANTITY => 'sum(' . ReservationInterface::QUANTITY . ')'])
-            ->where(ReservationInterface::SKU . '=?', $sku)
-            ->where(ReservationInterface::STOCK_ID . '=?', $stockId)
+            ->from($reservationTable, [ReservationInterface::QUANTITY => 'SUM(' . ReservationInterface::QUANTITY . ')'])
+            ->where(ReservationInterface::SKU . ' = ?', $sku)
+            ->where(ReservationInterface::STOCK_ID . ' = ?', $stockId)
             ->limit(1);
 
         $reservationQty = $connection->fetchOne($select);
         if (false === $reservationQty) {
             $reservationQty = 0;
         }
-
-        return (float) $reservationQty;
+        return (float)$reservationQty;
     }
 }

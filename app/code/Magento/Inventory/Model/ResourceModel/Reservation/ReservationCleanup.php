@@ -5,9 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model;
+namespace Magento\Inventory\Model\ResourceModel\Reservation;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Inventory\Model\ReservationCleanupInterface;
 use Magento\Inventory\Setup\Operation\CreateReservationTable;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 
@@ -36,18 +37,18 @@ class ReservationCleanup implements ReservationCleanupInterface
     public function execute()
     {
         $connection = $this->resource->getConnection();
-        $reservationTable = $connection->getTableName(CreateReservationTable::TABLE_NAME_RESERVATION);
+        $reservationTable = $this->resource->getTableName(CreateReservationTable::TABLE_NAME_RESERVATION);
 
         $select = $connection->select()
             ->from(
                 $reservationTable,
-                ['grouped_reservation_ids' => 'group_concat(' . ReservationInterface::RESERVATION_ID . ')']
+                ['grouped_reservation_ids' => 'GROUP_CONCAT(' . ReservationInterface::RESERVATION_ID . ')']
             )
             ->group([ReservationInterface::STOCK_ID, ReservationInterface::SKU])
-            ->having('sum(' . ReservationInterface::QUANTITY . ') = 0');
+            ->having('SUM(' . ReservationInterface::QUANTITY . ') = 0');
         $groupedReservationIds = implode(',', $connection->fetchCol($select, 'grouped_reservation_ids'));
 
-        $condition = [ReservationInterface::RESERVATION_ID . ' IN (?)' => explode(',', $groupedReservationIds)];
+        $condition = [ReservationInterface::RESERVATION_ID . ' IN (?)' => $groupedReservationIds];
         $connection->delete($reservationTable, $condition);
     }
 }

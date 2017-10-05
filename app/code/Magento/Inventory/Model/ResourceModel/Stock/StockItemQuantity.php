@@ -63,12 +63,10 @@ class StockItemQuantity
             ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
             ->addDimension('stock_', (string) $stockId)
             ->setAlias(Alias::ALIAS_MAIN)
-            ->create();
-
+            ->build();
         $stockItemTableName = $this->indexNameResolver->resolveName($indexName);
 
         $connection = $this->resource->getConnection();
-
         $select = $connection->select()
             ->from($stockItemTableName, [StockItemIndex::QUANTITY])
             ->where(StockItemIndex::SKU . '=?', $sku);
@@ -77,7 +75,6 @@ class StockItemQuantity
         if (false === $stockItemQty) {
             $stockItemQty = 0;
         }
-
-        return (float) $stockItemQty;
+        return (float)$stockItemQty;
     }
 }

@@ -75,11 +75,13 @@ class CreateReservationTable
         )->addColumn(
             ReservationInterface::QUANTITY,
             Table::TYPE_DECIMAL,
-            [12, 4],
+            null,
             [
                 Table::OPTION_UNSIGNED => false,
                 Table::OPTION_NULLABLE => false,
                 Table::OPTION_DEFAULT => 0.0000,
+                Table::OPTION_PRECISION => 10,
+                Table::OPTION_SCALE => 4,
             ],
             'Quantity'
         )->addColumn(

@@ -5,16 +5,15 @@
  */
 namespace Magento\Inventory\Test\Integration\Stock;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Indexer\Model\Indexer;
 use Magento\Inventory\Indexer\Alias;
 use Magento\Inventory\Indexer\IndexNameBuilder;
 use Magento\Inventory\Indexer\IndexStructureInterface;
 use Magento\Inventory\Indexer\StockItemIndexerInterface;
-use Magento\Inventory\Model\GetProductQuantityInStock;
 use Magento\Inventory\Model\ReservationCleanupInterface;
 use Magento\Inventory\Test\Integration\Indexer\Checker;
-use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\InventoryApi\Api\IsProductInStockInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 use Magento\InventoryApi\Api\ReservationsAppendInterface;
@@ -62,10 +61,9 @@ class IsProductInStockTest extends TestCase
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->reservationsAppend = Bootstrap::getObjectManager()->get(ReservationsAppendInterface::class);
+        $this->reservationCleanup = Bootstrap::getObjectManager()->create(ReservationCleanupInterface::class);
 
         $this->isProductInStockService = Bootstrap::getObjectManager()->create(IsProductInStockInterface::class);
-
-        $this->reservationCleanup = Bootstrap::getObjectManager()->create(ReservationCleanupInterface::class);
     }
 
     public function tearDown()
@@ -80,8 +78,8 @@ class IsProductInStockTest extends TestCase
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
-                ->create();
-            $indexStructure->delete($indexName);
+                ->build();
+            $indexStructure->delete($indexName, ResourceConnection::DEFAULT_CONNECTION);
         }
 
         // Cleanup reservations
