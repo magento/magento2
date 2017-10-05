@@ -41,12 +41,12 @@ class ShipmentLoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ShipmentDocumentFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $documentFactoryMock;
+    protected $documentFactoryMock;
 
     /**
      * @var ShipmentTrackCreationInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $trackFactoryMock;
+    protected $trackFactoryMock;
 
     /**
      * @var ShipmentItemCreationInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject

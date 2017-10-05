@@ -55,12 +55,12 @@ class ShipmentLoader extends DataObject
     /**
      * @var ShipmentDocumentFactory
      */
-    private $documentFactory;
+    protected $documentFactory;
 
     /**
      * @var ShipmentTrackCreationInterfaceFactory
      */
-    private $trackFactory;
+    protected $trackFactory;
 
     /**
      * @var ShipmentItemCreationInterfaceFactory
