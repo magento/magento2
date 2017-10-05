@@ -112,7 +112,6 @@ class ReservationBuilderTest extends TestCase
         self::assertEquals($this->reservation, $this->reservationBuilder->build());
     }
 
-
     /**
      * @dataProvider getSettersAndValues
      */
