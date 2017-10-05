@@ -1,0 +1,13 @@
+diff --git a/app/code/Magento/Catalog/Model/Product/Attribute/Backend/GroupPrice/AbstractGroupPrice.php b/app/code/Magento/Catalog/Model/Product/Attribute/Backend/GroupPrice/AbstractGroupPrice.php
+index f7ab3f5..cd686c0 100644
+--- a/app/code/Magento/Catalog/Model/Product/Attribute/Backend/GroupPrice/AbstractGroupPrice.php
++++ b/app/code/Magento/Catalog/Model/Product/Attribute/Backend/GroupPrice/AbstractGroupPrice.php
+@@ -360,7 +360,7 @@ abstract class AbstractGroupPrice extends Price
+     {
+         /** @var array $priceItem */
+         foreach ($data as $key => $priceItem) {
+-            if (isset($priceItem['price']) && $priceItem['price'] > 0) {
++            if (array_key_exists('price', $priceItem)) {
+                 $data[$key]['website_price'] = $priceItem['price'];
+             }
+             if ($priceItem['all_groups']) {
