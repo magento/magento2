@@ -34,8 +34,16 @@ class GetDefaultSourceTest extends WebapiAbstract
         if (self::ADAPTER_REST == TESTS_WEB_API_ADAPTER) {
             $source = $this->_webApiCall($serviceInfo);
         } else {
-            $source = $this->_webApiCall($serviceInfo, ['sourceId' => DefaultSourceRepositoryInterface::DEFAULT_SOURCE]);
+            $source = $this->_webApiCall(
+                $serviceInfo,
+                [
+                    'sourceId' => DefaultSourceRepositoryInterface::DEFAULT_SOURCE
+                ]
+            );
         }
-        $this->assertEquals(DefaultSourceRepositoryInterface::DEFAULT_SOURCE, $source[SourceInterface::SOURCE_ID]);
+        $this->assertEquals(
+            DefaultSourceRepositoryInterface::DEFAULT_SOURCE,
+            $source[SourceInterface::SOURCE_ID]
+        );
     }
 }

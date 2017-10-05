@@ -136,6 +136,9 @@ class InstallData implements InstallDataInterface
      */
     private function assignStockToSource()
     {
-        $this->assignSourcesToStock->execute([DefaultSourceRepositoryInterface::DEFAULT_SOURCE], DefaultStockRepositoryInterface::DEFAULT_STOCK);
+        $this->assignSourcesToStock->execute(
+            [DefaultSourceRepositoryInterface::DEFAULT_SOURCE],
+            DefaultStockRepositoryInterface::DEFAULT_STOCK
+        );
     }
 }
