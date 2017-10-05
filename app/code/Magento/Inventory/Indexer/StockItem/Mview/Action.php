@@ -10,9 +10,9 @@ use Magento\Framework\Mview\ActionInterface;
 use Magento\Inventory\Indexer\StockItemIndexerInterface;
 
 /**
- * Execute materialization on ids entities
+ * Execute materialization on entity ids
  *
- * Extension pint for indexation
+ * Extension point for indexation
  *
  * @api
  */

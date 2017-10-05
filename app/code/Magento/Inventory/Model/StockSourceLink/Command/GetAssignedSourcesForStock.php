@@ -62,11 +62,8 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     /**
      * @inheritdoc
      */
-    public function execute($stockId)
+    public function execute(int $stockId): array
     {
-        if (!is_numeric($stockId)) {
-            throw new InputException(__('Input data is invalid'));
-        }
         try {
             $sourceIds = $this->getAssignedSourceIds($stockId);
 
@@ -87,13 +84,13 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
      * @param int $stockId
      * @return array
      */
-    private function getAssignedSourceIds($stockId)
+    private function getAssignedSourceIds(int $stockId): array
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection
             ->select()
             ->from(
-                $connection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK),
+                $this->resourceConnection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK),
                 [StockSourceLink::SOURCE_ID]
             )
             ->where(StockSourceLink::STOCK_ID . ' = ?', $stockId);

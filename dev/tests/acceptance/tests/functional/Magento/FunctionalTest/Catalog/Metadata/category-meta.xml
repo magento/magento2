@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateCategory" dataType="category" type="create" auth="/rest/V1/integration/admin/token" url="/rest/V1/categories" method="POST">
+        <header param="Content-Type">application/json</header>
+        <jsonObject key="category" dataType="category">
+            <entry key="parent_id">integer</entry>
+            <entry key="name">string</entry>
+            <entry key="is_active">boolean</entry>
+            <entry key="position">integer</entry>
+            <entry key="level">integer</entry>
+            <entry key="children">string</entry>
+            <entry key="created_at">string</entry>
+            <entry key="updated_at">string</entry>
+            <entry key="path">string</entry>
+            <entry key="include_in_menu">boolean</entry>
+            <array key="available_sort_by">
+                <value>string</value>
+            </array>
+            <entry key="extension_attributes">empty_extension_attribute</entry>
+            <array key="custom_attributes">
+                <value>custom_attribute</value>
+            </array>
+        </jsonObject>
+    </operation>
+
+    <operation name="UpdateCategory" dataType="category" type="update" auth="/rest/V1/integration/admin/token" url="/rest/V1/categories" method="PUT">
+        <header param="Content-Type">application/json</header>
+        <jsonObject key="category" dataType="category">
+            <entry key="id">integer</entry>
+            <entry key="parent_id">integer</entry>
+            <entry key="name">string</entry>
+            <entry key="is_active">boolean</entry>
+            <entry key="position">integer</entry>
+            <entry key="level">integer</entry>
+            <entry key="children">string</entry>
+            <entry key="created_at">string</entry>
+            <entry key="updated_at">string</entry>
+            <entry key="path">string</entry>
+            <array key="available_sort_by">
+                <value>string</value>
+            </array>
+            <entry key="include_in_menu">boolean</entry>
+            <entry key="extension_attributes">empty_extension_attribute</entry>
+            <array key="custom_attributes">
+                <value>custom_attribute</value>
+            </array>
+        </jsonObject>
+    </operation>
+
+    <operation name="DeleteCategory" dataType="category" type="delete" auth="/rest/V1/integration/admin/token" url="/rest/V1/categories" method="DELETE">
+        <header param="Content-Type">application/json</header>
+        <param key="categoryId" type="path">{id}</param>
+    </operation>
+</config>

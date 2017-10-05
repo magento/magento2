@@ -34,7 +34,7 @@ class ValidationTest extends WebapiAbstract
      * @throws \Exception
      * @dataProvider dataProviderRequiredFields
      */
-    public function testCreateWithMissedRequiredFields($field, array $expectedErrorData)
+    public function testCreateWithMissedRequiredFields(string $field, array $expectedErrorData)
     {
         $data = $this->validData;
         unset($data[$field]);
@@ -49,51 +49,40 @@ class ValidationTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        try {
-            $this->_webApiCall($serviceInfo, ['source' => $data]);
-            $this->fail('Expected throwing exception');
-        } catch (\Exception $e) {
-            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
-                $errorData = $this->processRestExceptionResult($e);
-                self::assertEquals($expectedErrorData['rest_message'], $errorData['message']);
-                self::assertEquals($expectedErrorData['parameters'], $errorData['parameters']);
-                self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
-            } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-                $this->assertInstanceOf('SoapFault', $e);
-                $this->checkSoapFault(
-                    $e,
-                    $expectedErrorData['soap_message'],
-                    'Sender'
-                );
-            } else {
-                throw $e;
-            }
-        }
+        $this->webApiCall($serviceInfo, $data, $expectedErrorData);
     }
 
     /**
      * @return array
      */
-    public function dataProviderRequiredFields()
+    public function dataProviderRequiredFields(): array
     {
         return [
             'without_' . SourceInterface::NAME => [
                 SourceInterface::NAME,
                 [
-                    'rest_message' => '"%field" can not be empty.',
-                    'soap_message' => sprintf('object has no \'%s\' property', SourceInterface::NAME),
-                    'parameters' => [
-                        'field' => SourceInterface::NAME,
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::NAME,
+                            ],
+                        ],
                     ],
                 ],
             ],
             'without_' . SourceInterface::POSTCODE => [
                 SourceInterface::POSTCODE,
                 [
-                    'rest_message' => '"%field" can not be empty.',
-                    'soap_message' => sprintf('object has no \'%s\' property', SourceInterface::POSTCODE),
-                    'parameters' => [
-                        'field' => SourceInterface::POSTCODE,
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::POSTCODE,
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -102,11 +91,11 @@ class ValidationTest extends WebapiAbstract
 
     /**
      * @param string $field
-     * @param string $value
+     * @param string|null $value
      * @param array $expectedErrorData
      * @dataProvider failedValidationDataProvider
      */
-    public function testFailedValidationOnCreate($field, $value, array $expectedErrorData)
+    public function testFailedValidationOnCreate(string $field, $value, array $expectedErrorData)
     {
         $data = $this->validData;
         $data[$field] = $value;
@@ -126,12 +115,12 @@ class ValidationTest extends WebapiAbstract
 
     /**
      * @param string $field
-     * @param string $value
+     * @param string|null $value
      * @param array $expectedErrorData
      * @dataProvider failedValidationDataProvider
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source.php
      */
-    public function testFailedValidationOnUpdate($field, $value, array $expectedErrorData)
+    public function testFailedValidationOnUpdate(string $field, $value, array $expectedErrorData)
     {
         $data = $this->validData;
         $data[$field] = $value;
@@ -153,16 +142,36 @@ class ValidationTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function failedValidationDataProvider()
+    public function failedValidationDataProvider(): array
     {
         return [
-            'empty_' . SourceInterface::NAME => [
+            'null_' . SourceInterface::NAME => [
                 SourceInterface::NAME,
                 null,
                 [
-                    'message' => '"%field" can not be empty.',
-                    'parameters' => [
-                        'field' => SourceInterface::NAME,
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::NAME,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'empty_' . SourceInterface::NAME => [
+                SourceInterface::NAME,
+                '',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::NAME,
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -170,19 +179,29 @@ class ValidationTest extends WebapiAbstract
                 SourceInterface::NAME,
                 ' ',
                 [
-                    'message' => '"%field" can not be empty.',
-                    'parameters' => [
-                        'field' => SourceInterface::NAME,
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::NAME,
+                            ],
+                        ],
                     ],
                 ],
             ],
             'empty_' . SourceInterface::POSTCODE => [
                 SourceInterface::POSTCODE,
-                null,
+                '',
                 [
-                    'message' => '"%field" can not be empty.',
-                    'parameters' => [
-                        'field' => SourceInterface::POSTCODE,
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::POSTCODE,
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -190,19 +209,44 @@ class ValidationTest extends WebapiAbstract
                 SourceInterface::POSTCODE,
                 ' ',
                 [
-                    'message' => '"%field" can not be empty.',
-                    'parameters' => [
-                        'field' => SourceInterface::POSTCODE,
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::POSTCODE,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'null_' . SourceInterface::POSTCODE => [
+                SourceInterface::POSTCODE,
+                null,
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::POSTCODE,
+                            ],
+                        ],
                     ],
                 ],
             ],
             'empty_' . SourceInterface::COUNTRY_ID => [
                 SourceInterface::COUNTRY_ID,
-                null,
+                '',
                 [
-                    'message' => '"%field" can not be empty.',
-                    'parameters' => [
-                        'field' => SourceInterface::COUNTRY_ID,
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::COUNTRY_ID,
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -210,9 +254,29 @@ class ValidationTest extends WebapiAbstract
                 SourceInterface::COUNTRY_ID,
                 ' ',
                 [
-                    'message' => '"%field" can not be empty.',
-                    'parameters' => [
-                        'field' => SourceInterface::COUNTRY_ID,
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::COUNTRY_ID,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'null_' . SourceInterface::COUNTRY_ID => [
+                SourceInterface::COUNTRY_ID,
+                null,
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::COUNTRY_ID,
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -223,6 +287,7 @@ class ValidationTest extends WebapiAbstract
      * @param array $serviceInfo
      * @param array $data
      * @param array $expectedErrorData
+     * @return void
      * @throws \Exception
      */
     private function webApiCall(array $serviceInfo, array $data, array $expectedErrorData)
@@ -232,17 +297,19 @@ class ValidationTest extends WebapiAbstract
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
-                $errorData = $this->processRestExceptionResult($e);
-                self::assertEquals($expectedErrorData, $errorData);
+                self::assertEquals($expectedErrorData, $this->processRestExceptionResult($e));
                 self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
             } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $this->assertInstanceOf('SoapFault', $e);
-                $this->checkSoapFault(
-                    $e,
-                    $expectedErrorData['message'],
-                    'env:Sender',
-                    $expectedErrorData['parameters']
-                );
+                $expectedWrappedErrors = [];
+                foreach ($expectedErrorData['errors'] as $error) {
+                    // @see \Magento\TestFramework\TestCase\WebapiAbstract::getActualWrappedErrors()
+                    $expectedWrappedErrors[] = [
+                        'message' => $error['message'],
+                        'params' => $error['parameters'],
+                    ];
+                }
+                $this->checkSoapFault($e, $expectedErrorData['message'], 'env:Sender', [], $expectedWrappedErrors);
             } else {
                 throw $e;
             }

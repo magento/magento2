@@ -9,7 +9,8 @@ namespace Magento\Inventory\Model\Reservation;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validation\ValidationException;
-use Magento\Inventory\Model\Reservation\Validator\ReservationValidatorInterface;
+use Magento\Framework\Validation\ValidationResult;
+use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Inventory\Model\SnakeToCamelCaseConverter;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
@@ -45,28 +46,28 @@ class ReservationBuilder implements ReservationBuilderInterface
     private $objectManager;
 
     /**
-     * @var ReservationValidatorInterface
-     */
-    private $reservationValidator;
-
-    /**
      * @var SnakeToCamelCaseConverter
      */
     private $snakeToCamelCaseConverter;
 
     /**
+     * @var ValidationResultFactory
+     */
+    private $validationResultFactory;
+
+    /**
      * @param ObjectManagerInterface $objectManager
-     * @param ReservationValidatorInterface $reservationValidator
      * @param SnakeToCamelCaseConverter $snakeToCamelCaseConverter
+     * @param ValidationResultFactory $validationResultFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        ReservationValidatorInterface $reservationValidator,
-        SnakeToCamelCaseConverter $snakeToCamelCaseConverter
+        SnakeToCamelCaseConverter $snakeToCamelCaseConverter,
+        ValidationResultFactory $validationResultFactory
     ) {
         $this->objectManager = $objectManager;
-        $this->reservationValidator = $reservationValidator;
         $this->snakeToCamelCaseConverter = $snakeToCamelCaseConverter;
+        $this->validationResultFactory = $validationResultFactory;
     }
 
     /**
@@ -110,6 +111,12 @@ class ReservationBuilder implements ReservationBuilderInterface
      */
     public function build(): ReservationInterface
     {
+        /** @var ValidationResult $validationResult */
+        $validationResult = $this->validate();
+        if (!$validationResult->isValid()) {
+            throw new ValidationException(__('Validation error'), null, 0, $validationResult);
+        }
+
         $data = [
             ReservationInterface::RESERVATION_ID => null,
             ReservationInterface::STOCK_ID => $this->stockId,
@@ -120,13 +127,29 @@ class ReservationBuilder implements ReservationBuilderInterface
 
         $arguments = $this->convertArrayKeysFromSnakeToCamelCase($data);
         $reservation = $this->objectManager->create(ReservationInterface::class, $arguments);
+
         $this->reset();
 
-        $validationResult = $this->reservationValidator->validate($reservation);
-        if (!$validationResult->isValid()) {
-            throw new ValidationException($validationResult);
-        }
         return $reservation;
+    }
+
+    private function validate()
+    {
+        $errors = [];
+
+        if (null === $this->stockId) {
+            $errors[] = __('"%field" is expected to be a number.', ['field' => ReservationInterface::STOCK_ID]);
+        }
+
+        if (null === $this->sku || '' === trim($this->sku)) {
+            $errors[] = __('"%field" can not be empty.', ['field' => ReservationInterface::SKU]);
+        }
+
+        if (null === $this->quantity) {
+            $errors[] = __('"%field" can not be null.', ['field' => ReservationInterface::QUANTITY]);
+        }
+
+        return $this->validationResultFactory->create(['errors' => $errors]);
     }
 
     /**

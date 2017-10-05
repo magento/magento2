@@ -20,15 +20,15 @@ class SaveMultiple
     /**
      * @var ResourceConnection
      */
-    private $resource;
+    private $resourceConnection;
 
     /**
-     * @param ResourceConnection $resource
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        ResourceConnection $resource
+        ResourceConnection $resourceConnection
     ) {
-        $this->resource = $resource;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -37,8 +37,8 @@ class SaveMultiple
      */
     public function execute(array $reservations)
     {
-        $connection = $this->resource->getConnection();
-        $tableName = $connection->getTableName(CreateReservationTable::TABLE_NAME_RESERVATION);
+        $connection = $this->resourceConnection->getConnection();
+        $tableName = $this->resourceConnection->getTableName(CreateReservationTable::TABLE_NAME_RESERVATION);
 
         $columns = [
             ReservationInterface::STOCK_ID,

@@ -70,12 +70,8 @@ class UnassignSourceFromStock implements UnassignSourceFromStockInterface
     /**
      * @inheritdoc
      */
-    public function execute($sourceId, $stockId)
+    public function execute(int $sourceId, int $stockId)
     {
-        if (!is_numeric($sourceId) || !is_numeric($stockId)) {
-            throw new InputException(__('Input data is invalid'));
-        }
-
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(StockSourceLink::STOCK_ID, (int)$stockId)
             ->addFilter(StockSourceLink::SOURCE_ID, $sourceId)

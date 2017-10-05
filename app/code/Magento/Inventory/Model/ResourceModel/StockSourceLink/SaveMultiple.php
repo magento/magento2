@@ -18,28 +18,31 @@ class SaveMultiple
     /**
      * @var ResourceConnection
      */
-    private $connection;
+    private $resourceConnection;
 
     /**
-     * SourceCarrierLinkManagement constructor
-     *
-     * @param ResourceConnection $connection
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        ResourceConnection $connection
+        ResourceConnection $resourceConnection
     ) {
-        $this->connection = $connection;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * @param int $stockId
      * @param array $sourceIds
+     * @param int $stockId
      * @return void
      */
     public function execute(array $sourceIds, $stockId)
     {
-        $connection = $this->connection->getConnection();
-        $tableName = $connection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK);
+        if (!count($sourceIds)) {
+            return;
+        }
+        $connection = $this->resourceConnection->getConnection();
+        $tableName = $this->resourceConnection->getTableName(
+            StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK
+        );
 
         $columns = [
             StockSourceLink::SOURCE_ID,
@@ -50,6 +53,8 @@ class SaveMultiple
         foreach ($sourceIds as $sourceId) {
             $data[] = [$sourceId, $stockId];
         }
-        $connection->insertArray($tableName, $columns, $data);
+        if ($data) {
+            $connection->insertArray($tableName, $columns, $data);
+        }
     }
 }

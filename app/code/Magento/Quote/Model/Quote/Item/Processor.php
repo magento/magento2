@@ -71,9 +71,6 @@ class Processor
             return $item;
         }
 
-        $item->setOptions($product->getCustomOptions());
-        $item->setProduct($product);
-
         if ($request->getResetCount() && !$product->getStickWithinParent() && $item->getId() === $request->getId()) {
             $item->setData(CartItemInterface::KEY_QTY, 0);
         }

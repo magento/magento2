@@ -70,7 +70,7 @@ case $TEST_SUITE in
         php get_github_changes.php \
             --output-file="$changed_files_ce" \
             --base-path="$TRAVIS_BUILD_DIR" \
-            --repo='https://github.com/magento/magento2.git' \
+            --repo='https://github.com/magento-engcom/msi.git' \
             --branch='$TRAVIS_BRANCH'
         cat "$changed_files_ce" | sed 's/^/  + including /'
 

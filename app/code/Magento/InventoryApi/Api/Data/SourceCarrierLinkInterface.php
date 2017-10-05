@@ -6,7 +6,6 @@
 namespace Magento\InventoryApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface;
 
 /**
  * Represents relation between some physical storage and shipping method
@@ -27,14 +26,14 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
     /**
      * Get carrier code
      *
-     * @return string
+     * @return string|null
      */
     public function getCarrierCode();
 
     /**
      * Set carrier code
      *
-     * @param string $carrierCode
+     * @param string|null $carrierCode
      * @return void
      */
     public function setCarrierCode($carrierCode);
@@ -57,6 +56,8 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object
      *
+     * Null for return is specified for proper work SOAP requests parser
+     *
      * @return \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface|null
      */
     public function getExtensionAttributes();
@@ -65,7 +66,7 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
      * Set an extension attributes object
      *
      * @param \Magento\InventoryApi\Api\Data\SourceCarrierLinkExtensionInterface $extensionAttributes
-     * @return $this
+     * @return void
      */
     public function setExtensionAttributes(SourceCarrierLinkExtensionInterface $extensionAttributes);
 }

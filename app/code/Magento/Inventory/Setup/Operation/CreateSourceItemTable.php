@@ -30,7 +30,7 @@ class CreateSourceItemTable
      * @param SchemaSetupInterface $setup
      * @return Table
      */
-    private function createSourceItemTable(SchemaSetupInterface $setup)
+    private function createSourceItemTable(SchemaSetupInterface $setup): Table
     {
         $sourceItemTable = $setup->getTable(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
@@ -97,17 +97,6 @@ class CreateSourceItemTable
             SourceItemInterface::SOURCE_ID,
             SourceResourceModel::TABLE_NAME_SOURCE,
             SourceInterface::SOURCE_ID,
-            AdapterInterface::FK_ACTION_CASCADE
-        )->addForeignKey(
-            $setup->getFkName(
-                $sourceItemTable,
-                SourceItemInterface::SKU,
-                'catalog_product_entity',
-                'sku'
-            ),
-            SourceItemInterface::SKU,
-            'catalog_product_entity',
-            'sku',
             AdapterInterface::FK_ACTION_CASCADE
         )->addIndex(
             $setup->getIdxName(

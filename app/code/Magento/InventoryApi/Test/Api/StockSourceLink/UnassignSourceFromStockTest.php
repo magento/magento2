@@ -91,8 +91,7 @@ class UnassignSourceFromStockTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo);
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
-            $errorData = $this->processRestExceptionResult($e);
-            self::assertEquals($expectedErrorData['message'], $errorData['message']);
+            self::assertEquals($expectedErrorData, $this->processRestExceptionResult($e));
             self::assertEquals(Exception::HTTP_BAD_REQUEST, $e->getCode());
         }
     }
@@ -100,7 +99,7 @@ class UnassignSourceFromStockTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function dataProviderWrongParameters()
+    public function dataProviderWrongParameters(): array
     {
         return [
             'not_numeric_stock_id' => [
@@ -124,7 +123,7 @@ class UnassignSourceFromStockTest extends WebapiAbstract
      * @param int $stockId
      * @return array
      */
-    private function getAssignedSourcesForStock(int $stockId)
+    private function getAssignedSourcesForStock(int $stockId): array
     {
         $serviceInfo = [
             'rest' => [

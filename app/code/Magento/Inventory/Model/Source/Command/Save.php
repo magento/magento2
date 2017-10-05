@@ -50,12 +50,12 @@ class Save implements SaveInterface
     /**
      * @inheritdoc
      */
-    public function execute(SourceInterface $source)
+    public function execute(SourceInterface $source): int
     {
         $validationResult = $this->sourceValidator->validate($source);
 
         if (!$validationResult->isValid()) {
-            throw new ValidationException($validationResult);
+            throw new ValidationException(__('Validation Failed'), null, 0, $validationResult);
         }
 
         try {

@@ -430,14 +430,19 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     * @dataProvider createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider
+     * @param string $customerEmailFirstAttempt
+     * @param string $customerEmailSecondAttempt
      */
-    public function testCreateOrderNewCustomerWithFailedFirstPlaceOrderAction()
-    {
+    public function testCreateOrderNewCustomerWithFailedFirstPlaceOrderAction(
+        $customerEmailFirstAttempt,
+        $customerEmailSecondAttempt
+    ) {
         $productIdFromFixture = 1;
         $shippingMethod = 'freeshipping_freeshipping';
         $paymentMethod = 'checkmo';
         $shippingAddressAsBilling = 1;
-        $customerEmail = 'new_customer@example.com';
+        $customerEmail = $customerEmailFirstAttempt;
         $orderData = [
             'currency' => 'USD',
             'account' => ['group_id' => '1', 'email' => $customerEmail],
@@ -469,8 +474,42 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             Bootstrap::getObjectManager()->removeSharedInstance(OrderManagementInterface::class);
         }
 
+        $customerEmail = $customerEmailSecondAttempt ? :$this->_model->getQuote()->getCustomer()->getEmail();
+        $orderData['account']['email'] = $customerEmailSecondAttempt;
+
+        $this->_preparePreconditionsForCreateOrder(
+            $productIdFromFixture,
+            $customerEmail,
+            $shippingMethod,
+            $shippingAddressAsBilling,
+            $paymentData,
+            $orderData,
+            $paymentMethod
+        );
+
         $order = $this->_model->createOrder();
         $this->_verifyCreatedOrder($order, $shippingMethod);
+    }
+
+    /**
+     * Email before and after failed first place order action.
+     *
+     * @case #1 Is the same.
+     * @case #2 Is empty.
+     * @case #3 Filled after failed first place order action.
+     * @case #4 Empty after failed first place order action.
+     * @case #5 Changed after failed first place order action.
+     * @return array
+     */
+    public function createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider()
+    {
+        return [
+            1 => ['customer@email.com', 'customer@email.com'],
+            2 => ['', ''],
+            3 => ['', 'customer@email.com'],
+            4 => ['customer@email.com', ''],
+            5 => ['customer@email.com', 'changed_customer@email.com'],
+        ];
     }
 
     /**

@@ -35,7 +35,7 @@ class CreateReservationTable
      * @param SchemaSetupInterface $setup
      * @return Table
      */
-    private function createReservationTable(SchemaSetupInterface $setup)
+    private function createReservationTable(SchemaSetupInterface $setup): Table
     {
         $reservationTable = $setup->getTable(self::TABLE_NAME_RESERVATION);
         $stockTable = $setup->getTable(StockResourceModel::TABLE_NAME_STOCK);

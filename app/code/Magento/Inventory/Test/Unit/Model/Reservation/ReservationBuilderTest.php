@@ -8,8 +8,8 @@ namespace Magento\Inventory\Test\Unit\Model\Reservation;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validation\ValidationResult;
+use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Inventory\Model\Reservation\ReservationBuilder;
-use Magento\Inventory\Model\Reservation\Validator\ReservationValidatorInterface;
 use Magento\Inventory\Model\SnakeToCamelCaseConverter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
@@ -21,11 +21,6 @@ class ReservationBuilderTest extends TestCase
      * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManager;
-
-    /**
-     * @var ReservationValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $reservationValidator;
 
     /**
      * @var ReservationInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -42,6 +37,9 @@ class ReservationBuilderTest extends TestCase
      */
     private $snakeToCamelCaseConverter;
 
+    /** @var  ValidationResultFactory|\PHPUnit_Framework_MockObject_MockObject */
+    private $validationResultFactory;
+
     /**
      * @var ReservationBuilder
      */
@@ -50,19 +48,19 @@ class ReservationBuilderTest extends TestCase
     protected function setUp()
     {
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)->getMock();
-        $this->reservationValidator = $this->getMockBuilder(ReservationValidatorInterface::class)->getMock();
         $this->snakeToCamelCaseConverter = $this->getMockBuilder(SnakeToCamelCaseConverter::class)->getMock();
         $this->reservation = $this->getMockBuilder(ReservationInterface::class)->getMock();
         $this->validationResult = $this->getMockBuilder(ValidationResult::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->validationResultFactory = $this->getMockBuilder(ValidationResultFactory::class)->getMock();
 
         $this->reservationBuilder = (new ObjectManager($this))->getObject(
             ReservationBuilder::class,
             [
                 'objectManager' => $this->objectManager,
-                'reservationValidator' => $this->reservationValidator,
                 'snakeToCamelCaseConverter' => $this->snakeToCamelCaseConverter,
+                'validationResultFactory' => $this->validationResultFactory,
             ]
         );
     }
@@ -97,10 +95,9 @@ class ReservationBuilderTest extends TestCase
             ->with(ReservationInterface::class, $reservationMappedData)
             ->willReturn($this->reservation);
 
-        $this->reservationValidator
+        $this->validationResultFactory
             ->expects($this->once())
-            ->method('validate')
-            ->with($this->reservation)
+            ->method('create')
             ->willReturn($this->validationResult);
 
         $this->validationResult
@@ -114,5 +111,55 @@ class ReservationBuilderTest extends TestCase
         $this->reservationBuilder->setMetadata($reservationData[ReservationInterface::METADATA]);
 
         self::assertEquals($this->reservation, $this->reservationBuilder->build());
+    }
+
+    /**
+     * @dataProvider getSettersAndValues
+     */
+    public function testThrowValidationException($firstSetter, $secondSetter)
+    {
+        $this->validationResultFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->validationResult);
+
+        $this->validationResult
+            ->expects($this->once())
+            ->method('isValid')
+            ->willReturn(false);
+
+        $method = $firstSetter['method'];
+        $argument = $firstSetter['argument'];
+        $this->reservationBuilder->$method($argument);
+
+        $method = $secondSetter['method'];
+        $argument = $secondSetter['argument'];
+        $this->reservationBuilder->$method($argument);
+
+        self::expectException(\Magento\Framework\Validation\ValidationException::class);
+        self::expectExceptionMessage((string) __('Validation error'));
+
+        $this->reservationBuilder->build();
+    }
+
+    /**
+     * @return array
+     */
+    public function getSettersAndValues()
+    {
+        return [
+            'with_missing_stock_id' => [
+                ['method' => 'setSku', 'argument' => 'somesku'],
+                ['method' => 'setQuantity', 'argument' => 11]
+            ],
+            'with_missing_sku' => [
+                ['method' => 'setStockId', 'argument' => 1],
+                ['method' => 'setQuantity', 'argument' => 11],
+            ],
+            'with_missing_qty' => [
+                ['method' => 'setStockId', 'argument' => 1],
+                ['method' => 'setSku', 'argument' => 'somesku'],
+            ],
+        ];
     }
 }

@@ -324,7 +324,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     /**
      * @inheritdoc
      */
-    public function setCarrierLinks(array $carrierLinks)
+    public function setCarrierLinks($carrierLinks)
     {
         $this->setData(self::CARRIER_LINKS, $carrierLinks);
     }

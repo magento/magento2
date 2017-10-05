@@ -50,11 +50,11 @@ class Save implements SaveInterface
     /**
      * @inheritdoc
      */
-    public function execute(StockInterface $stock)
+    public function execute(StockInterface $stock): int
     {
         $validationResult = $this->stockValidator->validate($stock);
         if (!$validationResult->isValid()) {
-            throw new ValidationException($validationResult);
+            throw new ValidationException(__('Validation Failed'), null, 0, $validationResult);
         }
 
         try {

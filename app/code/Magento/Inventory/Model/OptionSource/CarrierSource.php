@@ -30,8 +30,6 @@ class CarrierSource implements OptionSourceInterface
     private $sourceData;
 
     /**
-     * CarrierSource constructor
-     *
      * @param Config $shippingConfig
      */
     public function __construct(Config $shippingConfig)

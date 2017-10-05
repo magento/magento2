@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CustomerEntityOne" type="customer">
+        <data key="group_id">0</data>
+        <data key="default_billing">defaultBillingValue</data>
+        <data key="default_shipping">defaultShippingValue</data>
+        <data key="confirmation">confirmationData</data>
+        <data key="created_at">12:00</data>
+        <data key="updated_at">12:00</data>
+        <data key="created_in">createdInData</data>
+        <data key="dob">01-01-1970</data>
+        <data key="email" unique="prefix">test@email.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="middlename">S</data>
+        <data key="password">pwdTest123!</data>
+        <data key="prefix">Mr</data>
+        <data key="suffix">Sr</data>
+        <data key="gender">0</data>
+        <data key="store_id">0</data>
+        <data key="taxvat">taxValue</data>
+        <data key="website_id">0</data>
+        <required-entity type="address">CustomerAddressSimple</required-entity>
+        <data key="disable_auto_group_change">0</data>
+        <!--required-entity type="extension_attribute">ExtensionAttributeSimple</required-entity-->
+    </entity>
+    <entity name="Simple_US_Customer" type="customer">
+        <data key="group_id">0</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <required-entity type="address">US_Address_TX</required-entity>
+    </entity>
+</config>
