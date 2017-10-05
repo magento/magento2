@@ -180,7 +180,10 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $allCustomersGroup = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
             ->disableOriginalConstructor()->getMock();
-        $this->groupManagement->expects($this->exactly(2))->method('getAllCustomersGroup')->willReturn($allCustomersGroup);
+        $this->groupManagement
+            ->expects($this->exactly(2))
+            ->method('getAllCustomersGroup')
+            ->willReturn($allCustomersGroup);
         $allCustomersGroup->expects($this->exactly(2))->method('getId')->willReturn($allCustomersGroupId);
         $object->expects($this->once())->method('getPrice')->willReturn($productPrice);
         $this->attribute->expects($this->atLeastOnce())->method('isScopeGlobal')->willReturn(true);
