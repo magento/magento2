@@ -7,7 +7,6 @@ namespace Magento\Analytics\Block\Adminhtml\System\Config;
 
 /**
  * Provides label with default Time Zone
- * @since 2.2.0
  */
 class CollectionTimeLabel extends \Magento\Config\Block\System\Config\Form\Field
 {
@@ -16,7 +15,6 @@ class CollectionTimeLabel extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
-     * @since 2.2.0
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

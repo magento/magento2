@@ -13,7 +13,6 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * @codeCoverageIgnore
- * @since 2.2.0
  */
 class InstallData implements InstallDataInterface
 {
@@ -21,7 +20,6 @@ class InstallData implements InstallDataInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @since 2.2.0
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

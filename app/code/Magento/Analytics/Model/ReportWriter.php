@@ -11,7 +11,6 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 /**
  * Writes reports in files in csv format
  * @inheritdoc
- * @since 2.2.0
  */
 class ReportWriter implements ReportWriterInterface
 {
@@ -19,25 +18,21 @@ class ReportWriter implements ReportWriterInterface
      * File name for error reporting file in archive
      *
      * @var string
-     * @since 2.2.0
      */
     private $errorsFileName = 'errors.csv';
 
     /**
      * @var Config
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var ProviderFactory
-     * @since 2.2.0
      */
     private $providerFactory;
 
     /**
      * @var ReportValidator
-     * @since 2.2.0
      */
     private $reportValidator;
 
@@ -47,7 +42,6 @@ class ReportWriter implements ReportWriterInterface
      * @param ConfigInterface $config
      * @param ReportValidator $reportValidator
      * @param ProviderFactory $providerFactory
-     * @since 2.2.0
      */
     public function __construct(
         ConfigInterface $config,
@@ -61,7 +55,6 @@ class ReportWriter implements ReportWriterInterface
 
     /**
      * {@inheritdoc}
-     * @since 2.2.0
      */
     public function write(WriteInterface $directory, $path)
     {

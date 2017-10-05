@@ -13,13 +13,11 @@ use Magento\Framework\DB\Sql\Expression;
  * Class ConditionResolver
  *
  * Mapper for WHERE conditions
- * @since 2.2.0
  */
 class ConditionResolver
 {
     /**
      * @var array
-     * @since 2.2.0
      */
     private $conditionMap = [
         'eq' => '%1$s = %2$s',
@@ -39,20 +37,17 @@ class ConditionResolver
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.2.0
      */
     private $connection;
 
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
     /**
      * ConditionResolver constructor.
      * @param ResourceConnection $resourceConnection
-     * @since 2.2.0
      */
     public function __construct(
         ResourceConnection $resourceConnection
@@ -64,7 +59,6 @@ class ConditionResolver
      * Returns connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @since 2.2.0
      */
     private function getConnection()
     {
@@ -80,7 +74,6 @@ class ConditionResolver
      * @param string $condition
      * @param string $referencedEntity
      * @return mixed|null|string|\Zend_Db_Expr
-     * @since 2.2.0
      */
     private function getValue($condition, $referencedEntity)
     {
@@ -114,7 +107,6 @@ class ConditionResolver
      * @param array $condition
      * @param null|string $referencedEntity
      * @return string
-     * @since 2.2.0
      */
     private function getCondition(SelectBuilder $selectBuilder, $tableName, $condition, $referencedEntity = null)
     {
@@ -141,7 +133,6 @@ class ConditionResolver
      * @param string $aliasName
      * @param null|string $referencedAlias
      * @return array
-     * @since 2.2.0
      */
     public function getFilter(SelectBuilder $selectBuilder, $filterConfig, $aliasName, $referencedAlias = null)
     {

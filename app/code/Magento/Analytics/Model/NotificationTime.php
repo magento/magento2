@@ -14,7 +14,6 @@ use Magento\Framework\Intl\DateTimeFactory;
  *
  * Manage access to notification time flag
  *
- * @since 2.2.2
  */
 class NotificationTime
 {
@@ -22,19 +21,16 @@ class NotificationTime
 
     /**
      * @var FlagManager
-     * @since 2.2.2
      */
     private $flagManager;
 
     /**
      * @var UserContextInterface
-     * @since 2.2.2
      */
     private $userContext;
 
     /**
      * @var DateTimeFactory
-     * @since 2.2.2
      */
     private $dateTimeFactory;
 
@@ -44,7 +40,6 @@ class NotificationTime
      * @param FlagManager $flagManager
      * @param UserContextInterface $userContext
      * @param DateTimeFactory $dateTimeFactory
-     * @since 2.2.2
      */
     public function __construct(
         FlagManager $flagManager,
@@ -60,7 +55,6 @@ class NotificationTime
      * Stores last notification time
      *
      * @return bool
-     * @since 2.2.2
      */
     public function storeLastTimeNotificationForCurrentUser()
     {
@@ -73,7 +67,6 @@ class NotificationTime
      * Returns last time when merchant was notified about Analytic services
      *
      * @return int
-     * @since 2.2.2
      */
     public function getLastTimeNotificationForCurrentUser()
     {
@@ -84,7 +77,6 @@ class NotificationTime
      * Remove last notification time flag.
      *
      * @return bool
-     * @since 2.2.2
      */
     public function unsetLastTimeNotificationValueForCurrentUser()
     {

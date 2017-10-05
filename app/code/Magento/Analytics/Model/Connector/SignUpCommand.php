@@ -17,49 +17,41 @@ use Magento\Store\Model\Store;
  * Class SignUpCommand
  *
  * SignUp merchant for Free Tier project
- * @since 2.2.0
  */
 class SignUpCommand implements CommandInterface
 {
     /**
      * @var string
-     * @since 2.2.0
      */
     private $signUpUrlPath = 'analytics/url/signup';
 
     /**
      * @var AnalyticsToken
-     * @since 2.2.0
      */
     private $analyticsToken;
 
     /**
      * @var IntegrationManager
-     * @since 2.2.0
      */
     private $integrationManager;
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var Http\ClientInterface
-     * @since 2.2.0
      */
     private $httpClient;
 
     /**
      * @var LoggerInterface
-     * @since 2.2.0
      */
     private $logger;
 
     /**
      * @var ResponseResolver
-     * @since 2.2.0
      */
     private $responseResolver;
 
@@ -72,7 +64,6 @@ class SignUpCommand implements CommandInterface
      * @param Http\ClientInterface $httpClient
      * @param LoggerInterface $logger
      * @param ResponseResolver $responseResolver
-     * @since 2.2.0
      */
     public function __construct(
         AnalyticsToken $analyticsToken,
@@ -101,7 +92,6 @@ class SignUpCommand implements CommandInterface
      * This method returns true in case of success
      *
      * @return bool
-     * @since 2.2.0
      */
     public function execute()
     {

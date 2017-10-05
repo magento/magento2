@@ -11,7 +11,6 @@ use Magento\Framework\Config\ConverterInterface;
  * A converter of reports configuration.
  *
  * Converts configuration data stored in XML format into corresponding PHP array.
- * @since 2.2.0
  */
 class Xml implements ConverterInterface
 {
@@ -20,7 +19,6 @@ class Xml implements ConverterInterface
      *
      * @param \DOMNode $source
      * @return array|string
-     * @since 2.2.0
      */
     private function convertNode(\DOMNode $source)
     {
@@ -55,7 +53,6 @@ class Xml implements ConverterInterface
      *
      * @param \DOMDocument $source
      * @return array
-     * @since 2.2.0
      */
     public function convert($source)
     {

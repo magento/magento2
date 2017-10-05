@@ -9,7 +9,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * A backend model for verticals configuration.
- * @since 2.2.0
  */
 class Vertical extends \Magento\Framework\App\Config\Value
 {
@@ -21,7 +20,6 @@ class Vertical extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      * @throws LocalizedException if the value of the selected vertical is empty.
-     * @since 2.2.0
      */
     public function beforeSave()
     {

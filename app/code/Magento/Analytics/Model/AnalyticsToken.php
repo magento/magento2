@@ -11,13 +11,11 @@ use Magento\Framework\App\Config\Storage\WriterInterface;
 
 /**
  * Model for handling Magento BI token value into config.
- * @since 2.2.0
  */
 class AnalyticsToken
 {
     /**
      * Path to value of Magento BI token into config.
-     * @since 2.2.0
      */
     private $tokenPath = 'analytics/general/token';
 
@@ -25,7 +23,6 @@ class AnalyticsToken
      * Reinitable Config Model.
      *
      * @var ReinitableConfigInterface
-     * @since 2.2.0
      */
     private $reinitableConfig;
 
@@ -33,7 +30,6 @@ class AnalyticsToken
      * Scope config model.
      *
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $config;
 
@@ -41,7 +37,6 @@ class AnalyticsToken
      * Service which allows to write values into config.
      *
      * @var WriterInterface
-     * @since 2.2.0
      */
     private $configWriter;
 
@@ -49,7 +44,6 @@ class AnalyticsToken
      * @param ReinitableConfigInterface $reinitableConfig
      * @param ScopeConfigInterface $config
      * @param WriterInterface $configWriter
-     * @since 2.2.0
      */
     public function __construct(
         ReinitableConfigInterface $reinitableConfig,
@@ -65,7 +59,6 @@ class AnalyticsToken
      * Get Magento BI token value.
      *
      * @return string|null
-     * @since 2.2.0
      */
     public function getToken()
     {
@@ -78,7 +71,6 @@ class AnalyticsToken
      * @param string $value
      *
      * @return bool
-     * @since 2.2.0
      */
     public function storeToken($value)
     {
@@ -92,7 +84,6 @@ class AnalyticsToken
      * Check Magento BI token value exist.
      *
      * @return bool
-     * @since 2.2.0
      */
     public function isTokenExist()
     {

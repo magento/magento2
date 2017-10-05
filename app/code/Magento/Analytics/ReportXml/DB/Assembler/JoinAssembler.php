@@ -16,31 +16,26 @@ use Magento\Framework\App\ResourceConnection;
  * Class JoinAssembler
  *
  * Assembles JOIN conditions
- * @since 2.2.0
  */
 class JoinAssembler implements AssemblerInterface
 {
     /**
      * @var ConditionResolver
-     * @since 2.2.0
      */
     private $conditionResolver;
 
     /**
      * @var NameResolver
-     * @since 2.2.0
      */
     private $nameResolver;
 
     /**
      * @var ColumnsResolver
-     * @since 2.2.0
      */
     private $columnsResolver;
 
     /**
      * @var ResourceConnection
-     * @since 2.2.0
      */
     private $resourceConnection;
 
@@ -49,7 +44,6 @@ class JoinAssembler implements AssemblerInterface
      * @param ColumnsResolver $columnsResolver
      * @param NameResolver $nameResolver
      * @param ResourceConnection $resourceConnection
-     * @since 2.2.0
      */
     public function __construct(
         ConditionResolver $conditionResolver,
@@ -69,7 +63,6 @@ class JoinAssembler implements AssemblerInterface
      * @param SelectBuilder $selectBuilder
      * @param array $queryConfig
      * @return SelectBuilder
-     * @since 2.2.0
      */
     public function assemble(SelectBuilder $selectBuilder, $queryConfig)
     {

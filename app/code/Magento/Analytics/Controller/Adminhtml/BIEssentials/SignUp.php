@@ -13,7 +13,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * Class SignUp
  *
  * Provides link to BI Essentials signup
- * @since 2.2.0
  */
 class SignUp extends Action
 {
@@ -21,20 +20,17 @@ class SignUp extends Action
      * Path to config value with URL to BI Essentials sign-up page.
      *
      * @var string
-     * @since 2.2.0
      */
     private $urlBIEssentialsConfigPath = 'analytics/url/bi_essentials';
 
     /**
      * @var ScopeConfigInterface
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * @param Context $context
      * @param ScopeConfigInterface $config
-     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -48,7 +44,6 @@ class SignUp extends Action
      * Check admin permissions for this controller
      *
      * @return boolean
-     * @since 2.2.0
      */
     protected function _isAllowed()
     {
@@ -59,7 +54,6 @@ class SignUp extends Action
      * Provides link to BI Essentials signup
      *
      * @return \Magento\Framework\Controller\AbstractResult
-     * @since 2.2.0
      */
     public function execute()
     {

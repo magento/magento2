@@ -7,26 +7,22 @@ namespace Magento\Analytics\Model\Connector\Http;
 
 /**
  * Extract result from http response. Call response handler by status.
- * @since 2.2.0
  */
 class ResponseResolver
 {
     /**
      * @var ConverterInterface
-     * @since 2.2.0
      */
     private $converter;
 
     /**
      * @var array
-     * @since 2.2.0
      */
     private $responseHandlers;
 
     /**
      * @param ConverterInterface $converter
      * @param ResponseHandlerInterface[] $responseHandlers
-     * @since 2.2.0
      */
     public function __construct(ConverterInterface $converter, array $responseHandlers = [])
     {
@@ -38,7 +34,6 @@ class ResponseResolver
      * @param \Zend_Http_Response $response
      *
      * @return bool|string
-     * @since 2.2.0
      */
     public function getResult(\Zend_Http_Response $response)
     {

@@ -15,20 +15,17 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Provide redirect to resource with reports.
- * @since 2.2.0
  */
 class Show extends Action
 {
     /**
      * @var ReportUrlProvider
-     * @since 2.2.0
      */
     private $reportUrlProvider;
 
     /**
      * @param Context $context
      * @param ReportUrlProvider $reportUrlProvider
-     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -42,7 +39,6 @@ class Show extends Action
      * Check admin permissions for this controller.
      *
      * @return boolean
-     * @since 2.2.0
      */
     protected function _isAllowed()
     {
@@ -53,7 +49,6 @@ class Show extends Action
      * Redirect to resource with reports.
      *
      * @return Redirect $resultRedirect
-     * @since 2.2.0
      */
     public function execute()
     {

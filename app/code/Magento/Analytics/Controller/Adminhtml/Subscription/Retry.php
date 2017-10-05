@@ -15,7 +15,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Retry subscription to Magento BI Advanced Reporting.
- * @since 2.2.0
  */
 class Retry extends Action
 {
@@ -23,14 +22,12 @@ class Retry extends Action
      * Resource for managing subscription to Magento Analytics.
      *
      * @var SubscriptionHandler
-     * @since 2.2.0
      */
     private $subscriptionHandler;
 
     /**
      * @param Context $context
      * @param SubscriptionHandler $subscriptionHandler
-     * @since 2.2.0
      */
     public function __construct(
         Context $context,
@@ -44,7 +41,6 @@ class Retry extends Action
      * Check admin permissions for this controller
      *
      * @return boolean
-     * @since 2.2.0
      */
     protected function _isAllowed()
     {
@@ -55,7 +51,6 @@ class Retry extends Action
      * Retry process of subscription.
      *
      * @return Redirect
-     * @since 2.2.0
      */
     public function execute()
     {

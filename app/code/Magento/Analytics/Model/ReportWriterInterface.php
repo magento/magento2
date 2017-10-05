@@ -14,7 +14,6 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
  * Executes export of collected data
  * Iterates registered providers @see etc/analytics.xml
  * Collects data (to TMP folder)
- * @since 2.2.0
  */
 interface ReportWriterInterface
 {
@@ -24,7 +23,6 @@ interface ReportWriterInterface
      * @param WriteInterface $directory
      * @param string $path
      * @return void
-     * @since 2.2.0
      */
     public function write(WriteInterface $directory, $path);
 }

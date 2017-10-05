@@ -9,7 +9,6 @@ namespace Magento\Analytics\Model\Connector\Http;
  * An interface for an HTTP client.
  *
  * Sends requests via a proper adapter.
- * @since 2.2.0
  */
 interface ClientInterface
 {
@@ -25,7 +24,6 @@ interface ClientInterface
      * @param string $version
      *
      * @return \Zend_Http_Response
-     * @since 2.2.0
      */
     public function request($method, $url, array $body = [], array $headers = [], $version = '1.1');
 }

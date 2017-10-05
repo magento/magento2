@@ -12,25 +12,21 @@ use Magento\Framework\Api\SearchCriteria;
  * Class ReportProvider
  *
  * Providers for reports data
- * @since 2.2.0
  */
 class ReportProvider
 {
     /**
      * @var QueryFactory
-     * @since 2.2.0
      */
     private $queryFactory;
 
     /**
      * @var ConnectionFactory
-     * @since 2.2.0
      */
     private $connectionFactory;
 
     /**
      * @var IteratorFactory
-     * @since 2.2.0
      */
     private $iteratorFactory;
 
@@ -40,7 +36,6 @@ class ReportProvider
      * @param QueryFactory $queryFactory
      * @param ConnectionFactory $connectionFactory
      * @param IteratorFactory $iteratorFactory
-     * @since 2.2.0
      */
     public function __construct(
         QueryFactory $queryFactory,
@@ -58,7 +53,6 @@ class ReportProvider
      *
      * @param Query $query
      * @return string|null
-     * @since 2.2.0
      */
     private function getIteratorName(Query $query)
     {
@@ -71,7 +65,6 @@ class ReportProvider
      *
      * @param string $name
      * @return \IteratorIterator
-     * @since 2.2.0
      */
     public function getReport($name)
     {

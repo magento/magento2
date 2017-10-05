@@ -18,25 +18,21 @@ use Magento\Integration\Api\OauthServiceInterface;
  * Manages the integration user at magento side.
  * User name stored in config.
  * User roles
- * @since 2.2.0
  */
 class IntegrationManager
 {
     /**
      * @var SystemConfig
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var IntegrationServiceInterface
-     * @since 2.2.0
      */
     private $integrationService;
 
     /**
      * @var OauthServiceInterface
-     * @since 2.2.0
      */
     private $oauthService;
 
@@ -46,7 +42,6 @@ class IntegrationManager
      * @param SystemConfig $config
      * @param IntegrationServiceInterface $integrationService
      * @param OauthServiceInterface $oauthService
-     * @since 2.2.0
      */
     public function __construct(
         SystemConfig $config,
@@ -63,7 +58,6 @@ class IntegrationManager
      *
      * @return bool
      * @throws NoSuchEntityException
-     * @since 2.2.0
      */
     public function activateIntegration()
     {
@@ -83,7 +77,6 @@ class IntegrationManager
      * This method execute Generate Token command and enable integration
      *
      * @return bool|\Magento\Integration\Model\Oauth\Token
-     * @since 2.2.0
      */
     public function generateToken()
     {
@@ -99,7 +92,6 @@ class IntegrationManager
      * Returns consumer Id for MA integration user
      *
      * @return \Magento\Integration\Model\Integration
-     * @since 2.2.0
      */
     private function generateIntegration()
     {
@@ -117,7 +109,6 @@ class IntegrationManager
      *
      * @param int $status
      * @return array
-     * @since 2.2.0
      */
     private function getIntegrationData($status = Integration::STATUS_INACTIVE)
     {

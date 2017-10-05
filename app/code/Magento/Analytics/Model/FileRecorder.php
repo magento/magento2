@@ -11,7 +11,6 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Class for the handling of registration a new file for MBI.
- * @since 2.2.0
  */
 class FileRecorder
 {
@@ -19,13 +18,11 @@ class FileRecorder
      * Resource for managing FileInfo object.
      *
      * @var FileInfoManager
-     * @since 2.2.0
      */
     private $fileInfoManager;
 
     /**
      * @var FileInfoFactory
-     * @since 2.2.0
      */
     private $fileInfoFactory;
 
@@ -33,7 +30,6 @@ class FileRecorder
      * Subdirectory path for an encoded file.
      *
      * @var string
-     * @since 2.2.0
      */
     private $fileSubdirectoryPath = 'analytics/';
 
@@ -41,13 +37,11 @@ class FileRecorder
      * File name of an encoded file.
      *
      * @var string
-     * @since 2.2.0
      */
     private $encodedFileName = 'data.tgz';
 
     /**
      * @var Filesystem
-     * @since 2.2.0
      */
     private $filesystem;
 
@@ -55,7 +49,6 @@ class FileRecorder
      * @param FileInfoManager $fileInfoManager
      * @param FileInfoFactory $fileInfoFactory
      * @param Filesystem $filesystem
-     * @since 2.2.0
      */
     public function __construct(
         FileInfoManager $fileInfoManager,
@@ -72,7 +65,6 @@ class FileRecorder
      *
      * @param EncodedContext $encodedContext
      * @return bool
-     * @since 2.2.0
      */
     public function recordNewFile(EncodedContext $encodedContext)
     {
@@ -92,7 +84,6 @@ class FileRecorder
      * Return relative path to encoded file.
      *
      * @return string
-     * @since 2.2.0
      */
     private function getFileRelativePath()
     {
@@ -106,7 +97,6 @@ class FileRecorder
      * @param EncodedContext $encodedContext
      * @param string $fileRelativePath
      * @return bool
-     * @since 2.2.0
      */
     private function registerFile(EncodedContext $encodedContext, $fileRelativePath)
     {
@@ -127,7 +117,6 @@ class FileRecorder
      * @param FileInfo $fileInfo
      * @param WriteInterface $directory
      * @return bool
-     * @since 2.2.0
      */
     private function removeOldFile(FileInfo $fileInfo, WriteInterface $directory)
     {

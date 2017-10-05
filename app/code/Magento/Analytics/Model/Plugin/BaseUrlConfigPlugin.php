@@ -12,19 +12,16 @@ use Magento\Store\Model\Store;
 
 /**
  * Plugin on Base URL config value AfterSave method.
- * @since 2.2.0
  */
 class BaseUrlConfigPlugin
 {
     /**
      * @var SubscriptionUpdateHandler
-     * @since 2.2.0
      */
     private $subscriptionUpdateHandler;
 
     /**
      * @param SubscriptionUpdateHandler $subscriptionUpdateHandler
-     * @since 2.2.0
      */
     public function __construct(
         SubscriptionUpdateHandler $subscriptionUpdateHandler
@@ -39,7 +36,6 @@ class BaseUrlConfigPlugin
      * @param Value $result
      * @return Value
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @since 2.2.0
      */
     public function afterAfterSave(
         Value $subject,
@@ -55,7 +51,6 @@ class BaseUrlConfigPlugin
     /**
      * @param Value $result
      * @return bool
-     * @since 2.2.0
      */
     private function isPluginApplicable(Value $result)
     {

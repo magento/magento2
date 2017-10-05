@@ -10,7 +10,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Analytics is in update subscription mode.
- * @since 2.2.0
  */
 class SubscriptionUpdateException extends LocalizedException
 {
