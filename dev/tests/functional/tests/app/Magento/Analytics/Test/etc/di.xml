@@ -6,13 +6,6 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Mtf\App\State\AbstractState">
-        <arguments>
-            <argument name="arguments" xsi:type="array">
-                <item name="disable-notification" xsi:type="string">Magento\Analytics\Mtf\App\State\NotificationTimeHandler</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsDisabled">
         <arguments>
             <argument name="severity" xsi:type="string">S1</argument>
