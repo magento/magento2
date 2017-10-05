@@ -329,7 +329,7 @@
 
         <dataset name="configurable_product">
             <field name="entity_id" xsi:type="array">
-                <item name="products" xsi:type="string">configurableProduct::with_two_options</item>
+                <item name="products" xsi:type="string">configurableProduct::with_only_two_options</item>
             </field>
             <field name="customer_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
