@@ -2,13 +2,13 @@
 
 ## Overview
 
-The Performance Toolkit enables you to test the performance of your Magento installations and the impact of your customizations. It allows you to generate sample data for testing performance and torun Apache JMeter scenarios, which imitate users activity. As a result, you get a set of metrics, that you can use to judge how changes affect performance, and the overall load capacity of your server(s).
+The Performance Toolkit enables you to test the performance of your Magento installations and the impact of your customizations. It allows you to generate sample data for testing performance and to run Apache JMeter scenarios, which imitate users activity. As a result, you get a set of metrics, that you can use to judge how changes affect performance, and the overall load capacity of your server(s).
 
 ## Installation
 
 ### Apache JMeter
 
-- Go tothe [Download Apache JMeter](http://jmeter.apache.org/download_jmeter.cgi) page and download JMeter in the *Binaries* section. Note that Java 8 or later is required.
+- Go to the [Download Apache JMeter](http://jmeter.apache.org/download_jmeter.cgi) page and download JMeter in the *Binaries* section. Note that Java 8 or later is required.
 - Unzip the archive.
 
 ### JSON Plugins
@@ -58,7 +58,7 @@ The following parameters can be passed to the `benchmark.jmx` scenario:
 | numberOfThreads                   | 48                  | Total number of all threads.                                                             |
 | frontEndPoolPercentage            | 90                  | Percentage of Frontend Pool.                                                             |
 | adminPoolPercentage               | 10                  | Percentage of Admin Pool.                                                                |
-| browseCatalogPercentage           | 30                  | Percentage of threads in Frontend Pool that emulate catalog browsing activities.         |
+| browseCatalogByGuestPercentage    | 30                  | Percentage of threads in Frontend Pool that emulate catalog browsing activities.         |
 | siteSearchPercentage              | 30                  | Percentage of threads in Frontend Pool that emulate catalog search activities.           |
 | checkoutByGuestPercentage         | 4                   | Percentage of threads in Frontend Pool that emulate checkout by guest.                   |
 | checkoutByCustomerPercentage      | 4                   | Percentage of threads in Frontend Pool that emulate checkout by customer.                |
@@ -68,15 +68,16 @@ The following parameters can be passed to the `benchmark.jmx` scenario:
 | productCompareDelay               | 0                   | Delay (s) between iterations of product comparison.                                      |
 | promotionRulesPercentage          | 10                  | Percentage of threads in Admin Pool that emulate creation of promotion rules.            |
 | adminPromotionsManagementDelay    | 0                   | Delay (s) between creation of promotion rules.                                           |
-| merchandizingPercentage           | 50                  | Percentage of threads in Admin Pool that emulate merchandizing activities.               |
-| adminProductManagementPercentage  | 90                  | Percentage of threads in Merchandizing Pool that emulate product management activities.  |
-| adminCategoryManagementPercentage | 10                  | Percentage of threads in Merchandizing Pool that emulate category management activities. |
+| merchandisingPercentage           | 50                  | Percentage of threads in Admin Pool that emulate merchandising activities.               |
+| adminProductManagementPercentage  | 90                  | Percentage of threads in Merchandising Pool that emulate product management activities.  |
+| adminCategoryManagementPercentage | 10                  | Percentage of threads in Merchandising Pool that emulate category management activities. |
 | adminProductEditingPercentage     | 60                  | Percentage of threads in Product Management Pool that emulate product editing.           |
 | adminProductCreationPercentage    | 40                  | Percentage of threads in Product Management Pool that emulate creation of products.      |
 | adminCategoryManagementDelay      | 0                   | Delay (s) between iterations of category management activities.                          |
 | apiProcessOrdersPercentage        | 30                  | Percentage of threads in Admin Pool that emulate orders processing activities.           |
-| adminProcessReturnsPercentage     | 10                  | Percentage of threads in Admin Pool that emulate creation/processing of returns.         |
-| csrPoolPercentage                 | 0                   | Percentage of CSR Pool.                                                                  |
+| apiProcessOrders                  | 5                   | Number of orders for process in Admin API - Process Orders                               |
+| adminEditOrderPercentage          | 10                  | Percentage of threads in Admin Pool that emulate order edit                |
+| csrPoolUsers                      | 0                   | Users of CSR Pool.                                                                       |
 | csrBrowseCustomersPercentage      | 10                  | Percentage of threads in CSR Pool that emulate customers browsing activities.            |
 | csrCreateOrderPercentage          | 70                  | Percentage of threads in CSR Pool that emulate creation of orders.                       |
 | csrCreateProcessReturnsPercentage | 20                  | Percentage of threads in CSR Pool that emulate creation/processing of returns.           |
@@ -193,32 +194,26 @@ For more details, read [Summary Report](http://jmeter.apache.org/usermanual/comp
 | Checkout By Customer      | Checkout By Customer                                   | 4         |
 
 Site Search thread group contains 3 variations:
-- Quick Search (65%)
-- Quick Search With Filtering (35%)
-- Advanced Search (5%)
+- Quick Search (60%)
+- Quick Search With Filtering (30%)
+- Advanced Search (10%)
 
 - **Admin Pool** (10%)
 
 | Thread Group Name                         | Label Suffix | % of Pool |
 | ----------------------------------------- | ------------ | --------- |
-| *Merchandizing Pool* (see below)          | -            | 50        |
+| *Merchandising Pool* (see below)          | -            | 50        |
 | Admin Promotion Rules                     | -            | 10        |
 | Admin API - Process Orders                | -            | 30        |
-| Admin Create/Process Returns              | -            | 10        |
+| Admin Edit Order                          | -            | 10        |
 
-*Merchandizing Pool* (50% of Admin Pool)
-
-| Thread Group Name                         | Label Suffix | % of Pool |
-| ----------------------------------------- | ------------ | --------- |
-| *Product Management Pool* (see below)     | -            | 90        |
-| Admin Category Management (Merchandizing) | -            | 10        |
-
-*Product Management Pool* (90% of Merchandizing Pool)
+*Merchandising Pool* (50% of Admin Pool)
 
 | Thread Group Name                         | Label Suffix | % of Pool |
 | ----------------------------------------- | ------------ | --------- |
-| Admin Edit Product (Merchandizing)        | -            | 60        |
-| Admin Create Product (Merchandizing)      | -            | 40        |
+| Admin Category Management (Merchandising) | -            | 10        |
+| Admin Edit Product (Merchandising)        | -            | 55        |
+| Admin Create Product (Merchandising)      | -            | 35        |
 
 - **CSR Pool** (0%)
 
@@ -236,9 +231,9 @@ For example, the value of {numberOfThreads} parameter is 100 and we want to get 
 
     N = 100 * 90 * 4 / 10000 = 4
 
-The *Merchandizing Pool* and the *Product Management Pool* should be taken into account when the number of product or category management threads needs to be calculated. For example, the number of threads in *Admin Create Product (Merchandizing)* group is calculated as follows:
+The *Merchandising Pool* and the *Product Management Pool* should be taken into account when the number of product or category management threads needs to be calculated. For example, the number of threads in *Admin Create Product (Merchandising)* group is calculated as follows:
 
-    N = {numberOfThreads} * {adminPoolPercentage} * {merchandizingPercentage} * {adminProductManagementPercentage} * {adminProductCreationPercentage} / 100 / 100 / 100 / 100
+    N = {numberOfThreads} * {adminPoolPercentage} * {merchandisingPercentage} * {adminProductManagementPercentage} * {adminProductCreationPercentage} / 100 / 100 / 100 / 100
 
 If {numberOfThreads} equals to 100:
 
