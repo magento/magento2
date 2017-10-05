@@ -1,0 +1,47 @@
+{
+    "name": "magento/magento2-functional-test-asynchronous-operations",
+    "description": "Magento 2 Acceptance Test Module Asynchronous Operations",
+    "repositories": [
+        {
+    "type": "vcs",
+    "url": "git@github.com:magento/magento2-functional-testing-framework.git"
+        }
+    ],
+    "require": {
+        "php": "~7.0",
+        "codeception/codeception": "2.2|2.3",
+        "allure-framework/allure-codeception": "dev-master#af40af5ae2b717618a42fe3e137d75878508c75d",
+        "consolidation/robo": "^1.0.0",
+        "henrikbjorn/lurker": "^1.2",
+        "vlucas/phpdotenv": "~2.4",
+        "magento/magento2-functional-testing-framework": "dev-develop"
+    },
+    "suggest": {
+        "magento/magento2-functional-test-module-user": "dev-master",
+        "magento/magento2-functional-test-module-backend": "dev-master",
+        "magento/magento2-functional-test-module-logging": "dev-master",
+        "magento/magento2-functional-test-module-authorization": "dev-master",
+        "magento/magento2-functional-test-module-ui": "dev-master"
+    },
+    "type": "magento2-test-module",
+    "version": "dev-master",
+    "license": [
+         "proprietary"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Magento\\FunctionalTest\\": [
+                "tests/functional/Magento/FunctionalTest",
+                "generated/Magento/FunctionalTest"
+            ]
+        }
+    },
+    "extra": {
+        "map": [
+            [
+                "*",
+                "tests/functional/Magento/FunctionalTest/AsynchronousOperations"
+            ]
+        ]
+    }
+}
