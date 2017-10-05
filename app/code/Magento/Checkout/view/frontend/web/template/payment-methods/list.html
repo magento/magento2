@@ -9,9 +9,9 @@
     <div repeat="foreach: paymentGroupsList, item: '$group'"
          class="payment-group">
         <div if="getRegion($group().displayArea)().length"
-             translate="getGroupTitle($group)"
              class="step-title"
              data-role="title">
+            <translate args="getGroupTitle($group)"/>:
         </div>
         <each args="data: getRegion($group().displayArea), as: 'method'" render=""/>
     </div>
