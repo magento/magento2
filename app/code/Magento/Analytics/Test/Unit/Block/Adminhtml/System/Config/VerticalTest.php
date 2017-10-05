@@ -9,6 +9,7 @@ use Magento\Analytics\Block\Adminhtml\System\Config\Vertical;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class VerticalTest extends \PHPUnit\Framework\TestCase
 {
@@ -32,9 +33,6 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
      */
     private $formMock;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
@@ -48,12 +46,15 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->vertical = new Vertical($this->contextMock);
+        $objectManager = new ObjectManager($this);
+        $this->vertical = $objectManager->getObject(
+            Vertical::class,
+            [
+                'context' => $this->contextMock
+            ]
+        );
     }
 
-    /**
-     * @return void
-     */
     public function testRender()
     {
         $this->abstractElementMock->setForm($this->formMock);
