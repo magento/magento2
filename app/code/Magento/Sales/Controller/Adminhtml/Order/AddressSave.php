@@ -71,8 +71,19 @@ class AddressSave extends Order
         $this->orderRepository = $orderRepository;
         $this->logger = $logger;
         $this->regionFactory = $regionFactory;
-        parent::__construct($context, $coreRegistry, $fileFactory, $translateInline, $resultPageFactory,
-            $resultJsonFactory, $resultLayoutFactory, $resultRawFactory, $orderManagement, $orderRepository, $logger);
+        parent::__construct(
+            $context,
+            $coreRegistry,
+            $fileFactory,
+            $translateInline,
+            $resultPageFactory,
+            $resultJsonFactory,
+            $resultLayoutFactory,
+            $resultRawFactory,
+            $orderManagement,
+            $orderRepository,
+            $logger
+        );
     }
 
     /**
