@@ -15,6 +15,7 @@ use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
 use Magento\Framework\Api\DataObjectHelper;
 
 /**
@@ -48,10 +49,16 @@ class InstallData implements InstallDataInterface
     private $dataObjectHelper;
 
     /**
+     * @var AssignSourcesToStockInterface
+     */
+    private $assignSourcesToStock;
+
+    /**
      * @param SourceRepositoryInterface $sourceRepository
      * @param SourceInterfaceFactory $sourceFactory
      * @param StockRepositoryInterface $stockRepository
      * @param StockInterfaceFactory $stockFactory
+     * @param AssignSourcesToStockInterface $assignSourcesToStock
      * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
@@ -59,12 +66,14 @@ class InstallData implements InstallDataInterface
         SourceInterfaceFactory $sourceFactory,
         StockRepositoryInterface $stockRepository,
         StockInterfaceFactory $stockFactory,
+        AssignSourcesToStockInterface $assignSourcesToStock,
         DataObjectHelper $dataObjectHelper
     ) {
         $this->sourceRepository = $sourceRepository;
         $this->sourceFactory = $sourceFactory;
         $this->stockRepository = $stockRepository;
         $this->stockFactory = $stockFactory;
+        $this->assignSourcesToStock = $assignSourcesToStock;
         $this->dataObjectHelper = $dataObjectHelper;
     }
 
@@ -76,6 +85,7 @@ class InstallData implements InstallDataInterface
     {
         $this->addDefaultSource();
         $this->addDefaultStock();
+        $this->assignStockToSource();
     }
 
     /**
@@ -115,5 +125,15 @@ class InstallData implements InstallDataInterface
         $source = $this->stockFactory->create();
         $this->dataObjectHelper->populateWithArray($source, $data, StockInterface::class);
         $this->stockRepository->save($source);
+    }
+
+    /**
+     * Assign default stock to default source
+     *
+     * @return void
+     */
+    private function assignStockToSource()
+    {
+        $this->assignSourcesToStock->execute([1], 1);
     }
 }
