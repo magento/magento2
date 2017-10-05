@@ -7,7 +7,7 @@
 use \Magento\Framework\Component\ComponentRegistrar;
 
 ComponentRegistrar::register(
-  ComponentRegistrar::THEME,
-  'frontend/Magento/rush',
-  __DIR__
+    ComponentRegistrar::THEME,
+    'frontend/Magento/rush',
+    __DIR__
 );
