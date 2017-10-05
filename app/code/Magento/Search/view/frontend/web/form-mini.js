@@ -88,7 +88,7 @@ define([
                 }
 
                 setTimeout($.proxy(function () {
-                    if (this.autoComplete.css('display','none')) {
+                    if (this.autoComplete.css('display', 'none')) {
                         this.setActiveState(false);
                     } else {
                         this.element.trigger('focus');
