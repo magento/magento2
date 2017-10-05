@@ -12,8 +12,6 @@ class Vertical extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * @inheritdoc
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return string
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
