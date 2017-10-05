@@ -60,16 +60,6 @@ class AddressSave extends Order
         LoggerInterface $logger,
         RegionFactory $regionFactory
     ) {
-        $this->_coreRegistry = $coreRegistry;
-        $this->_fileFactory = $fileFactory;
-        $this->_translateInline = $translateInline;
-        $this->resultPageFactory = $resultPageFactory;
-        $this->resultJsonFactory = $resultJsonFactory;
-        $this->resultLayoutFactory = $resultLayoutFactory;
-        $this->resultRawFactory = $resultRawFactory;
-        $this->orderManagement = $orderManagement;
-        $this->orderRepository = $orderRepository;
-        $this->logger = $logger;
         $this->regionFactory = $regionFactory;
         parent::__construct(
             $context,
