@@ -425,9 +425,13 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->order->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
         $this->order->expects($this->once())->method('getConfig')->willReturn($orderConfigMock);
 
-        $this->paymentMock->expects($this->once())->method('cancelInvoice')->willReturn($this->paymentMock);
+        $this->paymentMock->expects($this->once())
+            ->method('cancelInvoice')
+            ->willReturn($this->paymentMock);
 
-        $this->eventManagerMock->expects($this->once())->method('dispatch')->with('sales_order_invoice_cancel');
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with('sales_order_invoice_cancel');
 
         $this->model->setData(InvoiceInterface::ITEMS, []);
         $this->model->setState(Invoice::STATE_OPEN);
@@ -440,19 +444,21 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
      * Assert open invoice can be canceled, and its status changes
      *
      * @param $initialInvoiceStatus
-     * @param $expectedInvoiceStatus
+     * @param $finalInvoiceStatus
      * @dataProvider getNotOpenedInvoiceStatuses
      */
-    public function testCannotCancelNotOpenedInvoice($initialInvoiceStatus, $expectedInvoiceStatus)
+    public function testCannotCancelNotOpenedInvoice($initialInvoiceStatus, $finalInvoiceStatus)
     {
         $this->order->expects($this->never())->method('getPayment');
         $this->paymentMock->expects($this->never())->method('cancelInvoice');
-        $this->eventManagerMock->expects($this->never())->method('dispatch')->with('sales_order_invoice_cancel');
+        $this->eventManagerMock->expects($this->never())
+            ->method('dispatch')
+            ->with('sales_order_invoice_cancel');
 
         $this->model->setState($initialInvoiceStatus);
         $this->model->cancel();
 
-        self::assertEquals($expectedInvoiceStatus, $this->model->getState());
+        self::assertEquals($finalInvoiceStatus, $this->model->getState());
     }
 
     /**
