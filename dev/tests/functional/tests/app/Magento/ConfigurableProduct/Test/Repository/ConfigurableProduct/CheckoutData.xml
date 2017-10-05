@@ -467,7 +467,7 @@
             </field>
         </dataset>
 
-        <dataset name="configurable_default_1">
+        <dataset name="configurable_default_with_two_options">
             <field name="options" xsi:type="array">
                 <item name="configurable_options" xsi:type="array">
                     <item name="0" xsi:type="array">

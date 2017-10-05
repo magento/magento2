@@ -28,21 +28,22 @@ class AssertOrderedProductReportForConfigurableProduct extends AbstractConstrain
     {
         $products = $order->getEntityId()['products'];
         $simpleChildSku = $orderedProducts->getGridBlock()->getOrdersResultsforConfigurableProducts($order);
-        $filters =[];
+        $filters = [];
         foreach ($products as $product) {
             /** @var ConfigurableProduct $product */
             if ($product->hasData('configurable_attributes_data')) {
-                $configurableAttributesData = $product->getConfigurableAttributesData();
-                foreach ($configurableAttributesData['matrix'] as $variation) {
+                $matrix = isset($product->getConfigurableAttributesData()['matrix']) ?
+                    $product->getConfigurableAttributesData()['matrix'] : [];
+                foreach ($matrix as $variation) {
                     $filters[] = $variation['sku'];
                 }
             }
         }
-            \PHPUnit_Framework_Assert::assertContains(
-                $simpleChildSku[0],
-                $filters,
-                'Ordered simple product sku is not present in the Reports grid'
-            );
+        \PHPUnit_Framework_Assert::assertContains(
+            $simpleChildSku[0],
+            $filters,
+            'Ordered simple product sku is not present in the Reports grid'
+        );
     }
 
     /**

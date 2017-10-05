@@ -1178,7 +1178,7 @@
                 <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="checkout_data" xsi:type="array">
-                <item name="dataset" xsi:type="string">configurable_default_1</item>
+                <item name="dataset" xsi:type="string">configurable_default_with_two_options</item>
             </field>
             <field name="category_ids" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_subcategory</item>

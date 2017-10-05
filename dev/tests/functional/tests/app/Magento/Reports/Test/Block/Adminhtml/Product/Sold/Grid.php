@@ -41,7 +41,6 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      */
     protected $productSku = './/*[contains(.,"%s")]/*[contains(@class,"col-sku")]';
 
-
     /**
      * Filter locator
      *
