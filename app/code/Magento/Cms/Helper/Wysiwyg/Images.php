@@ -177,7 +177,14 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
                 $html = $fileurl; // $mediaPath;
             } else {
                 $directive = $this->urlEncoder->encode($directive);
-                $html = $this->_backendData->getUrl('cms/wysiwyg/directive', ['___directive' => $directive]);
+
+                $html = $this->_backendData->getUrl(
+                    'cms/wysiwyg/directive',
+                    [
+                        '___directive' => $directive,
+                        '_escape_params' => false,
+                    ]
+                );
             }
         }
         return $html;
