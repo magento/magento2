@@ -9,7 +9,6 @@ namespace Magento\Analytics\Test\Unit\Model\Config\Backend\Enabled;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Config\Backend\CollectionTime;
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
-use Magento\Analytics\Model\NotificationTime;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -49,9 +48,6 @@ class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
      */
     private $subscriptionHandler;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
@@ -79,9 +75,6 @@ class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testProcessEnabledTokenExist()
     {
         $this->tokenMock
@@ -99,9 +92,6 @@ class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testProcessEnabledTokenDoesNotExist()
     {
         $this->tokenMock
@@ -122,9 +112,6 @@ class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testProcessDisabledTokenDoesNotExist()
     {
         $this->configWriterMock
@@ -145,9 +132,6 @@ class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testProcessDisabledTokenExists()
     {
         $this->configWriterMock

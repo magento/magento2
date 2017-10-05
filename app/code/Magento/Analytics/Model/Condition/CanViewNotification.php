@@ -6,7 +6,7 @@
 namespace Magento\Analytics\Model\Condition;
 
 use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
-use Magento\Analytics\Model\NotificationTime;
+use Magento\Analytics\Model\NotificationFlag;
 
 /**
  * Class CanViewNotification
@@ -22,19 +22,19 @@ class CanViewNotification implements VisibilityConditionInterface
     const NAME = 'can_view_notification';
 
     /**
-     * @var NotificationTime
+     * @var NotificationFlag
      */
-    private $notificationTime;
+    private $notificationFlag;
 
     /**
      * CanViewNotification constructor.
      *
-     * @param NotificationTime $notificationTime
+     * @param NotificationFlag $notificationFlag
      */
     public function __construct(
-        NotificationTime $notificationTime
+        NotificationFlag $notificationFlag
     ) {
-        $this->notificationTime = $notificationTime;
+        $this->notificationFlag = $notificationFlag;
     }
 
     /**
@@ -44,13 +44,11 @@ class CanViewNotification implements VisibilityConditionInterface
      */
     public function isVisible(array $arguments)
     {
-        $lastNotificationTime = $this->notificationTime->getLastTimeNotificationForCurrentUser();
-
-        if ($lastNotificationTime) {
+        if ($this->notificationFlag->hasNotificationValueForCurrentUser()) {
             return false;
         }
 
-        return $this->notificationTime->storeLastTimeNotificationForCurrentUser();
+        return $this->notificationFlag->storeNotificationValueForCurrentUser();
     }
 
     /**
