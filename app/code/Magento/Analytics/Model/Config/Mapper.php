@@ -8,7 +8,6 @@ namespace Magento\Analytics\Model\Config;
 
 /**
  * Transforms Analytics configuration data.
- * @since 2.2.0
  */
 class Mapper
 {
@@ -35,7 +34,6 @@ class Mapper
      *        ],
      *    ]
      * ];
-     * @since 2.2.0
      */
     public function execute($configData)
     {

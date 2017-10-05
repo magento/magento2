@@ -14,43 +14,36 @@ use Magento\Framework\ObjectManagerInterface;
  *
  * Creates Query object according to configuration
  * Factory for @see \Magento\Analytics\ReportXml\Query
- * @since 2.2.0
  */
 class QueryFactory
 {
     /**
      * @var Config
-     * @since 2.2.0
      */
     private $config;
 
     /**
      * @var SelectBuilderFactory
-     * @since 2.2.0
      */
     private $selectBuilderFactory;
 
     /**
      * @var DB\Assembler\AssemblerInterface[]
-     * @since 2.2.0
      */
     private $assemblers;
 
     /**
      * @var CacheInterface
-     * @since 2.2.0
      */
     private $queryCache;
 
     /**
      * @var ObjectManagerInterface
-     * @since 2.2.0
      */
     private $objectManager;
 
     /**
      * @var SelectHydrator
-     * @since 2.2.0
      */
     private $selectHydrator;
 
@@ -63,7 +56,6 @@ class QueryFactory
      * @param SelectBuilderFactory $selectBuilderFactory
      * @param Config $config
      * @param array $assemblers
-     * @since 2.2.0
      */
     public function __construct(
         CacheInterface $queryCache,
@@ -86,7 +78,6 @@ class QueryFactory
      *
      * @param string $queryConfig
      * @return string
-     * @since 2.2.0
      */
     private function getQueryConnectionName($queryConfig)
     {
@@ -102,7 +93,6 @@ class QueryFactory
      *
      * @param string $queryName
      * @return Query
-     * @since 2.2.0
      */
     private function constructQuery($queryName)
     {
@@ -129,7 +119,6 @@ class QueryFactory
      *
      * @param string $queryName
      * @return Query
-     * @since 2.2.0
      */
     public function create($queryName)
     {
