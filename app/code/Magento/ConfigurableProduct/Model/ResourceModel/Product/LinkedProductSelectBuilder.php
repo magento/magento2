@@ -45,7 +45,7 @@ class LinkedProductSelectBuilder implements LinkedProductSelectBuilderInterface
     {
         $selects = $this->linkedProductSelectBuilder->build($productId);
 
-        foreach ($selects as &$select) {
+        foreach ($selects as $select) {
             $this->baseSelectProcessor->process($select);
         }
 
