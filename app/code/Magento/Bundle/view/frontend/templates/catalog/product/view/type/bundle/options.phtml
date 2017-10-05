@@ -11,8 +11,9 @@
 <?php
 $product = $block->getProduct();
 $helper = $this->helper('Magento\Catalog\Helper\Output');
+$stripSelection = $product->getConfigureMode() ? true : false;
+$options = $block->decorateArray($block->getOptions($stripSelection));
 ?>
-<?php $options = $block->decorateArray($block->getOptions()); ?>
 <?php if ($product->isSaleable()):?>
     <?php if (count($options)): ?>
 <script type="text/x-magento-init">

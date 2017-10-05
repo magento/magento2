@@ -11,7 +11,7 @@ use Magento\Framework\Filesystem\Driver\File;
 /**
  * Test class for \Magento\Framework\File\Csv.
  */
-class CsvTest extends \PHPUnit_Framework_TestCase
+class CsvTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Csv model

@@ -17,7 +17,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 /**
  * Class DataCategoryHashMapTest
  */
-class DataCategoryHashMapTest extends \PHPUnit_Framework_TestCase
+class DataCategoryHashMapTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CategoryRepository|\PHPUnit_Framework_MockObject_MockObject */
     private $categoryRepository;
@@ -33,15 +33,9 @@ class DataCategoryHashMapTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->categoryRepository = $this->getMock(CategoryRepository::class, [], [], '', false);
-        $this->categoryResourceFactory = $this->getMock(CategoryFactory::class, ['create'], [], '', false);
-        $this->categoryResource = $this->getMock(
-            Category::class,
-            ['getConnection', 'getEntityTable'],
-            [],
-            '',
-            false
-        );
+        $this->categoryRepository = $this->createMock(CategoryRepository::class);
+        $this->categoryResourceFactory = $this->createPartialMock(CategoryFactory::class, ['create']);
+        $this->categoryResource = $this->createPartialMock(Category::class, ['getConnection', 'getEntityTable']);
 
         $this->categoryResourceFactory->expects($this->any())
             ->method('create')
@@ -64,9 +58,11 @@ class DataCategoryHashMapTest extends \PHPUnit_Framework_TestCase
         $categoryIds = ['1' => [1, 2, 3], '2' => [2, 3], '3' => 3];
         $categoryIdsOther = ['2' => [2, 3, 4]];
 
-        $categoryMock = $this->getMock(CategoryInterface::class, [], [], '', false);
-        $connectionAdapterMock = $this->getMock(AdapterInterface::class);
-        $selectMock = $this->getMock(Select::class, [], [], '', false);
+        $categoryMock = $this->getMockBuilder(CategoryInterface::class)
+            ->setMethods(['getResource'])
+            ->getMockForAbstractClass();
+        $connectionAdapterMock = $this->createMock(AdapterInterface::class);
+        $selectMock = $this->createMock(Select::class);
 
         $this->categoryRepository->expects($this->any())
             ->method('get')

@@ -9,6 +9,7 @@ namespace Magento\Cron\Model;
  * Interface \Magento\Cron\Model\ConfigInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface ConfigInterface
 {

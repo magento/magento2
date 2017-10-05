@@ -10,7 +10,8 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  * Grid column widget for rendering action grid cells
  *
  * @api
- * @deprecated in favour of UI component implementation
+ * @deprecated 100.2.0 in favour of UI component implementation
+ * @since 100.0.2
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {

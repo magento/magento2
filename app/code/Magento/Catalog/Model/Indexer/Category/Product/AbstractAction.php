@@ -18,6 +18,7 @@ use Magento\Framework\EntityManager\MetadataPool;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractAction
 {
@@ -98,11 +99,13 @@ abstract class AbstractAction
 
     /**
      * @var MetadataPool
+     * @since 101.0.0
      */
     protected $metadataPool;
 
     /**
      * @var string
+     * @since 101.0.0
      */
     protected $tempTreeIndexTableName;
 
@@ -496,6 +499,7 @@ abstract class AbstractAction
      * Temp table name is NOT shared between action instances and each action has it's own temp tree index
      *
      * @return string
+     * @since 101.0.0
      */
     protected function getTemporaryTreeIndexTableName()
     {
@@ -514,6 +518,7 @@ abstract class AbstractAction
      * Returns the name of the temporary table to use in queries.
      *
      * @return string
+     * @since 101.0.0
      */
     protected function makeTempCategoryTreeIndex()
     {
@@ -553,6 +558,7 @@ abstract class AbstractAction
      * Populate the temporary category tree index table
      *
      * @param string $temporaryName
+     * @since 101.0.0
      */
     protected function fillTempCategoryTreeIndex($temporaryName)
     {

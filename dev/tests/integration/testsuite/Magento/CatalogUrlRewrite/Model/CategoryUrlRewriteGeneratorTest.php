@@ -15,7 +15,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 /**
  * @magentoAppArea adminhtml
  */
-class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
+class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
@@ -206,7 +206,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateUrlRewritesWithIncorrectUrlKey($urlKey)
     {
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\LocalizedException::class,
             'Invalid URL key'
         );

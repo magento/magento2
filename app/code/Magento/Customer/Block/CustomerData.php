@@ -7,6 +7,7 @@ namespace Magento\Customer\Block;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class CustomerData extends \Magento\Framework\View\Element\Template
 {
@@ -58,6 +59,7 @@ class CustomerData extends \Magento\Framework\View\Element\Template
      * Once this period has expired the corresponding section must be invalidated and reloaded.
      *
      * @return int section lifetime in minutes
+     * @since 100.2.0
      */
     public function getExpirableSectionLifetime()
     {
@@ -68,6 +70,7 @@ class CustomerData extends \Magento\Framework\View\Element\Template
      * Retrieve the list of sections that can expire.
      *
      * @return array
+     * @since 100.2.0
      */
     public function getExpirableSectionNames()
     {

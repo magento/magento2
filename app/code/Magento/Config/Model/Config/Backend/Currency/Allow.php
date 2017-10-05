@@ -12,6 +12,7 @@ namespace Magento\Config\Model\Config\Backend\Currency;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Allow extends AbstractCurrency
 {
@@ -80,6 +81,7 @@ class Allow extends AbstractCurrency
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     protected function _getAllowedCurrencies()
     {

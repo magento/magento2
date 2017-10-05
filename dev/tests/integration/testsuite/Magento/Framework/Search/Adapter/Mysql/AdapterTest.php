@@ -21,7 +21,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDataFixture Magento/Framework/Search/_files/products.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdapterTest extends \PHPUnit_Framework_TestCase
+class AdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Search\AdapterInterface
@@ -525,6 +525,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdvancedSearchCompositeProductWithOutOfStockOption()
     {
+        $this->markTestSkipped('MAGETWO-71445: configurable product created incorrectly - children not linked').
         /** @var Attribute $attribute */
         $attribute = $this->objectManager->get(Attribute::class)
             ->loadByCode(Product::ENTITY, 'test_configurable');

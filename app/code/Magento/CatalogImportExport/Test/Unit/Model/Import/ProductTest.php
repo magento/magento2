@@ -166,8 +166,8 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     {
         parent::setUp();
 
-        $metadataPoolMock = $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
-        $entityMetadataMock = $this->getMock(\Magento\Framework\EntityManager\EntityMetadata::class, [], [], '', false);
+        $metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $entityMetadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
         $metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
@@ -227,47 +227,29 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             $this->getMockBuilder(\Magento\ImportExport\Model\Import\Config::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->_resourceFactory = $this->getMock(
+        $this->_resourceFactory = $this->createPartialMock(
             \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->_setColFactory = $this->getMock(
+        $this->_setColFactory = $this->createPartialMock(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->_productTypeFactory = $this->getMock(
+        $this->_productTypeFactory = $this->createPartialMock(
             \Magento\CatalogImportExport\Model\Import\Product\Type\Factory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->_linkFactory = $this->getMock(
+        $this->_linkFactory = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\LinkFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->_proxyProdFactory = $this->getMock(
+        $this->_proxyProdFactory = $this->createPartialMock(
             \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->_uploaderFactory = $this->getMock(
+        $this->_uploaderFactory = $this->createPartialMock(
             \Magento\CatalogImportExport\Model\Import\UploaderFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->_filesystem =
             $this->getMockBuilder(\Magento\Framework\Filesystem::class)
@@ -276,12 +258,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->_mediaDirectory =
             $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
                 ->getMock();
-        $this->_stockResItemFac = $this->getMock(
+        $this->_stockResItemFac = $this->createPartialMock(
             \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->_localeDate =
             $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
@@ -319,7 +298,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 ->getMock();
         $this->validator =
             $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Validator::class)
-                ->setMethods(['isAttributeValid', 'getMessages', 'isValid'])
+                ->setMethods(['isAttributeValid', 'getMessages', 'isValid', 'init'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->objectRelationProcessor =
@@ -408,12 +387,9 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      */
     protected function _objectConstructor()
     {
-        $this->optionFactory = $this->getMock(
+        $this->optionFactory = $this->createPartialMock(
             \Magento\CatalogImportExport\Model\Import\Product\OptionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->optionEntity = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Option::class)
             ->disableOriginalConstructor()->getMock();
@@ -437,7 +413,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $type->expects($this->any())->method('getEntityTypeId')->will($this->returnValue(self::ENTITY_TYPE_ID));
         $this->config->expects($this->any())->method('getEntityType')->with(self::ENTITY_TYPE_CODE)->willReturn($type);
 
-        $this->_connection = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->_connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->_connection);
         return $this;
     }
@@ -1033,8 +1009,11 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             'entity_id' => null,
             'type_id' => $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_TYPE],//value
             //attr_set_id_val
-            'attr_set_id' =>
-                $_attrSetNameToId[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET]],
+            'attr_set_id' => $_attrSetNameToId[
+                $rowData[
+                    \Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET
+                ]
+            ],
             'attr_set_code' => $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET],//value
             'row_id' => null
         ];

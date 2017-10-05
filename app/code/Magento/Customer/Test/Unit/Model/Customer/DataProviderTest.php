@@ -23,7 +23,7 @@ use Magento\Ui\DataProvider\EavValidationRules;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     const ATTRIBUTE_CODE = 'test-code';
     const OPTIONS_RESULT = 'test-options';
@@ -68,12 +68,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerCollectionFactoryMock = $this->getMock(
+        $this->customerCollectionFactoryMock = $this->createPartialMock(
             \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->eavValidationRulesMock = $this
             ->getMockBuilder(\Magento\Ui\DataProvider\EavValidationRules::class)
@@ -507,7 +504,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $shareMock = $this->getMockBuilder(Share::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap([
@@ -516,7 +513,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ]);
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
         $countryAttrMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
-            ->setMethods(['getAttributeCode', 'getDataUsingMethod', 'usesSource', 'getSource'])
+            ->setMethods(['getAttributeCode', 'getDataUsingMethod', 'usesSource', 'getSource', 'getLabel'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -550,6 +547,20 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetData()
     {
+        $customerData = [
+            'email' => 'test@test.ua',
+            'default_billing' => 2,
+            'default_shipping' => 2,
+            'password_hash' => 'password_hash',
+            'rp_token' => 'rp_token',
+            'confirmation' => 'confirmation',
+        ];
+        $addressData = [
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'street' => "street\nstreet",
+        ];
+
         $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -573,11 +584,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$customer]);
         $customer->expects($this->once())
             ->method('getData')
-            ->willReturn([
-                'email' => 'test@test.ua',
-                'default_billing' => 2,
-                'default_shipping' => 2,
-            ]);
+            ->willReturn($customerData);
         $customer->expects($this->once())
             ->method('getAddresses')
             ->willReturn([$address]);
@@ -594,11 +601,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $address->expects($this->once())
             ->method('getData')
-            ->willReturn([
-                'firstname' => 'firstname',
-                'lastname' => 'lastname',
-                'street' => "street\nstreet",
-            ]);
+            ->willReturn($addressData);
         $address->expects($this->once())
             ->method('getAttributes')
             ->willReturn([]);
@@ -1261,7 +1264,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         );
 
         $helper = new ObjectManager($this);
-        $context = $this->getMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
+        $context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
+            ->setMethods(['getRequestParam'])
+            ->getMockforAbstractClass();
         $context->expects($this->any())
             ->method('getRequestParam')
             ->with('request-field-name')

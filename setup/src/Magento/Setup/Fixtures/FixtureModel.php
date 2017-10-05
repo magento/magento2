@@ -51,7 +51,7 @@ class FixtureModel
      * Parameters labels
      *
      * @var array
-     * @deprecated
+     * @deprecated 2.2.0
      */
     protected $paramLabels = [];
 
@@ -125,7 +125,7 @@ class FixtureModel
      * Get param labels
      *
      * @return array
-     * @deprecated
+     * @deprecated 2.2.0
      */
     public function getParamLabels()
     {
@@ -196,7 +196,7 @@ class FixtureModel
      * Reset object manager
      *
      * @return \Magento\Framework\ObjectManagerInterface
-     * @deprecated
+     * @deprecated 2.2.0
      */
     public function resetObjectManager()
     {

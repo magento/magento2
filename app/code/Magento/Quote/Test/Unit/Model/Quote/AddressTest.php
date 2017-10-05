@@ -35,7 +35,7 @@ use Magento\Quote\Model\Quote\Address\RateResult\AbstractResult;
  * @see \Magento\Quote\Model\Quote\Address
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Address
@@ -116,8 +116,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
-        $this->serializer = $this->getMock(\Magento\Framework\Serialize\Serializer\Json::class, [], [], '', false);
+        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config::class);
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->requestFactory = $this->getMockBuilder(RateRequestFactory::class)
             ->disableOriginalConstructor()
@@ -179,7 +179,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 '_addressRateFactory' => $this->addressRateFactory
             ]
         );
-        $this->quote = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $this->quote = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->address->setQuote($this->quote);
     }
 

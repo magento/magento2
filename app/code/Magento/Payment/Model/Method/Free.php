@@ -16,6 +16,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Inheritance is allowed to modify it behavior.
  *
  * @api
+ * @since 100.0.2
  */
 class Free extends \Magento\Payment\Model\Method\AbstractMethod
 {

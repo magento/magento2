@@ -13,6 +13,7 @@ use Magento\Framework\EntityManager\MetadataPool;
  * CatalogSearch Fulltext Index resource model
  *
  * @api
+ * @since 100.0.2
  */
 class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -75,6 +76,7 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int|array $childIds
      * @return array
+     * @since 100.2.0
      */
     public function getRelationsByChild($childIds)
     {

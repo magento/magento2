@@ -97,7 +97,7 @@ class SourceArgumentsReader
      * @param string $argument
      * @param array $availableNamespaces
      * @return string
-     * @deprecated
+     * @deprecated 100.2.0
      * @see \Magento\Framework\Code\Reader\NamespaceResolver::resolveNamespace
      */
     protected function resolveNamespaces($argument, $availableNamespaces)
@@ -126,7 +126,7 @@ class SourceArgumentsReader
      *
      * @param array $file
      * @return array
-     * @deprecated
+     * @deprecated 100.2.0
      * @see \Magento\Framework\Code\Reader\NamespaceResolver::getImportedNamespaces
      */
     protected function getImportedNamespaces(array $file)

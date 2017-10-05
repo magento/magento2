@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Url\Test\Unit;
 
-class SecurityInfoTest extends \PHPUnit_Framework_TestCase
+class SecurityInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
