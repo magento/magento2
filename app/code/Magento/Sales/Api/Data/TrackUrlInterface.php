@@ -12,6 +12,13 @@ namespace Magento\Sales\Api\Data;
  */
 interface TrackUrlInterface
 {
+    /**#@+
+     * Constants for keys of data array. Identical to the name of the getter in snake case.
+     */
+    /*
+     * Track URL.
+     */
+    const TRACK_URL = 'track_url';
     /**
      * Sets the track URL for the shipment package.
      *

@@ -14,7 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * @api
  * @since 100.1.2
  */
-interface ShipmentTrackCreationInterface extends TrackInterface, ExtensibleDataInterface
+interface ShipmentTrackCreationInterface extends TrackInterface, TrackUrlInterface, ExtensibleDataInterface
 {
     /**
      * Retrieve existing extension attributes object or create a new one.

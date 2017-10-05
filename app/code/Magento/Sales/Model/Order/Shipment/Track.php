@@ -8,7 +8,6 @@ namespace Magento\Sales\Model\Order\Shipment;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\ShipmentTrackInterface;
-use Magento\Sales\Api\Data\TrackUrlInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
@@ -17,7 +16,7 @@ use Magento\Sales\Model\AbstractModel;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Track extends AbstractModel implements ShipmentTrackInterface, TrackUrlInterface
+class Track extends AbstractModel implements ShipmentTrackInterface
 {
     /**
      * Code of custom carrier

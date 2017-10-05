@@ -16,7 +16,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * @api
  * @since 100.0.2
  */
-interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
+interface ShipmentTrackInterface extends TrackInterface, TrackUrlInterface, ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
@@ -45,10 +45,6 @@ interface ShipmentTrackInterface extends TrackInterface, ExtensibleDataInterface
      * Track number.
      */
     const TRACK_NUMBER = 'track_number';
-    /*
-     * Track URL.
-     */
-    const TRACK_URL = 'track_url';
     /*
      * Description.
      */
