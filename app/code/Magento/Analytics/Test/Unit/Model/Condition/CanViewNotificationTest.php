@@ -8,7 +8,7 @@ namespace Magento\Analytics\Test\Unit\Model\Condition;
 
 use Magento\Analytics\Model\Condition\CanViewNotification;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Analytics\Model\NotificationTime;
+use Magento\Analytics\Model\NotificationFlag;
 
 /**
  * Class CanViewNotificationTest
@@ -16,9 +16,9 @@ use Magento\Analytics\Model\NotificationTime;
 class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var NotificationTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var NotificationFlag|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $notificationTimeMock;
+    private $notificationFlagMock;
 
     /**
      * @var CanViewNotification
@@ -27,33 +27,33 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->notificationTimeMock = $this->getMockBuilder(NotificationTime::class)
+        $this->notificationFlagMock = $this->getMockBuilder(NotificationFlag::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
             CanViewNotification::class,
             [
-                'notificationTime' => $this->notificationTimeMock
+                'notificationFlag' => $this->notificationFlagMock
             ]
         );
     }
 
     public function testUserShouldSeeNotification()
     {
-        $this->notificationTimeMock->expects($this->once())
-            ->method('getLastTimeNotificationForCurrentUser')
+        $this->notificationFlagMock->expects($this->once())
+            ->method('hasNotificationValueForCurrentUser')
             ->willReturn(false);
-        $this->notificationTimeMock->expects($this->once())
-            ->method('storeLastTimeNotificationForCurrentUser')
+        $this->notificationFlagMock->expects($this->once())
+            ->method('storeNotificationValueForCurrentUser')
             ->willReturn(true);
         $this->assertTrue($this->canViewNotification->isVisible([]));
     }
 
     public function testUserShouldNotSeeNotification()
     {
-        $this->notificationTimeMock->expects($this->once())
-            ->method('getLastTimeNotificationForCurrentUser')
+        $this->notificationFlagMock->expects($this->once())
+            ->method('hasNotificationValueForCurrentUser')
             ->willReturn(true);
         $this->assertFalse($this->canViewNotification->isVisible([]));
     }
