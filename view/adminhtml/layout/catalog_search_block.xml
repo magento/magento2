@@ -29,7 +29,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="query_id_selected">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet." as="query_id_selected">
                         <arguments>
                             <argument name="index" xsi:type="string">query_id</argument>
                             <argument name="id" xsi:type="string">query_id_selected</argument>
@@ -38,7 +38,7 @@
                             <argument name="values" xsi:type="options" model="Magento\AdvancedSearch\Model\Adminhtml\Search\Grid\Options"/>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="query_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet.query_id" as="query_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">ID</argument>
                             <argument name="index" xsi:type="string">query_id</argument>
@@ -46,13 +46,13 @@
                             <argument name="header_css_class" xsi:type="string">col-id</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="search_query">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet.search_query" as="search_query">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Search Query</argument>
                             <argument name="index" xsi:type="string">query_text</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="store_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="search.edit.grid.columnSet.store_id" as="store_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Store</argument>
                             <argument name="index" xsi:type="string">store_id</argument>
@@ -61,27 +61,27 @@
                             <argument name="sortable" xsi:type="string">0</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="num_results">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet.num_results" as="num_results">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Results</argument>
                             <argument name="index" xsi:type="string">num_results</argument>
                             <argument name="type" xsi:type="string">number</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="popularity">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet.popularity" as="popularity">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Uses</argument>
                             <argument name="index" xsi:type="string">popularity</argument>
                             <argument name="type" xsi:type="string">number</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="redirect">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet.redirect" as="redirect">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Redirect URL</argument>
                             <argument name="index" xsi:type="string">redirect</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="display_in_terms">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet.display_in_terms" as="display_in_terms">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Suggested Term</argument>
                             <argument name="sortable" xsi:type="string">1</argument>
@@ -99,7 +99,7 @@
                             </argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="action">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="search.edit.grid.columnSet.action" as="action">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Action</argument>
                             <argument name="index" xsi:type="string">catalog</argument>
