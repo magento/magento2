@@ -31,17 +31,6 @@ class ConfigurableProduct extends FinalPrice implements ConfiguredPriceInterface
     }
 
     /**
-     * Get selected option
-     *
-     * @return \Magento\Wishlist\Model\Item\Option
-     */
-    public function getOption()
-    {
-        /** @var \Magento\Wishlist\Model\Item\Option $customOption */
-        return $this->getProduct()->getCustomOption('simple_product');
-    }
-
-    /**
      * @inheritdoc
      */
     public function getValue()

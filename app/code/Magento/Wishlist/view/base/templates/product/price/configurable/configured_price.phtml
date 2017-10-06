@@ -10,10 +10,8 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 /** @var \Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct $configuredPrice */
 $configuredPrice = $block->getPrice();
-$option = $configuredPrice->getOption();
 ?>
 <?php if ($block->hasSpecialPrice()
-    && $configuredPrice->getOption()
     && $configuredPrice->getAmount()->getValue() !== $configuredPrice->getConfiguredAmount(true)->getValue()) : ?>
     <p class="price-as-configured">
         <span class="special-price">
