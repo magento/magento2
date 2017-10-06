@@ -202,7 +202,7 @@ class ShipmentLoader extends DataObject
       * @return array
       */
     public function getShipment()
- 	{
- 	    return $this->getData(self::SHIPMENT) ?: [];
- 	}
+    {
+        return $this->getData(self::SHIPMENT) ?: [];
+    }
 }
