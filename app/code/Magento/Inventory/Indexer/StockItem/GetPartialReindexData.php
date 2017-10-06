@@ -48,8 +48,12 @@ class GetPartialReindexData
     public function execute(array $sourceItemIds): array
     {
         $connection = $this->resourceConnection->getConnection();
-        $sourceStockLinkTable = $connection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK);
-        $sourceItemTable = $connection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM);
+        $sourceStockLinkTable = $this->resourceConnection->getTableName(
+            StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK
+        );
+        $sourceItemTable = $this->resourceConnection->getTableName(
+            SourceItem::TABLE_NAME_SOURCE_ITEM
+        );
 
         $select = $connection
             ->select()
