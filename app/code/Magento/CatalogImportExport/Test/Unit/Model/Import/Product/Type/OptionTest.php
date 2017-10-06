@@ -222,16 +222,6 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     protected $metadataPoolMock;
 
     /**
-     * @var ValueCollection | \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $optionValueCollectionMock;
-
-    /**
-     * @var CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $optionValueCollectionFactoryMock;
-
-    /**
      * Init entity adapter model
      */
     protected function setUp()
@@ -260,13 +250,6 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $entityMetadataMock->expects($this->any())
             ->method('getLinkField')
             ->willReturn('entity_id');
-
-        $this->optionValueCollectionFactoryMock = $this->createDefaultMock(CollectionFactory::class);
-        $this->optionValueCollectionMock = $this->createDefaultMock(ValueCollection::class);
-        $this->optionValueCollectionMock
-            ->expects($this->any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([]));
 
         $modelClassArgs = $this->createModelArgs($addExpectations, $deleteBehavior, $doubleOptions);
 
@@ -1013,16 +996,27 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     protected function createModelArgs($addExpectations = false, $deleteBehavior = false, $doubleOptions = false)
     {
+        $optionValueCollectionMock = $this->createDefaultMock(ValueCollection::class);
+        $optionValueCollectionMock
+            ->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([]));
+
         $timezoneInterface = $this->createDefaultMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $timezoneInterface
             ->expects($this->any())
             ->method('date')
             ->willReturn(new \DateTime());
 
-        $this->optionValueCollectionFactoryMock
+        $optionValueCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $optionValueCollectionFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->willReturn($this->optionValueCollectionMock);
+            ->willReturn($optionValueCollectionMock);
 
         return [
             $this->createDefaultMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class),
@@ -1037,7 +1031,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $timezoneInterface,
             $this->createDefaultMock(ProcessingErrorAggregatorInterface::class),
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions),
-            $this->optionValueCollectionFactoryMock
+            $optionValueCollectionFactoryMock,
         ];
     }
 }
