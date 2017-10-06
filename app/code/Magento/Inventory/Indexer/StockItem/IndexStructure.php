@@ -54,7 +54,7 @@ class IndexStructure implements IndexStructureInterface
     {
         $connection = $this->resourceConnection->getConnection($connectionName);
         $tableName = $this->indexNameResolver->resolveName($indexName);
-        return $connection->isTableExists($tableName);
+        return $connection->isTableExists($this->resourceConnection->getTableName($tableName));
     }
 
     /**
@@ -116,6 +116,6 @@ class IndexStructure implements IndexStructureInterface
     {
         $connection = $this->resourceConnection->getConnection($connectionName);
         $tableName = $this->indexNameResolver->resolveName($indexName);
-        $connection->dropTable($tableName);
+        $connection->dropTable($this->resourceConnection->getTableName($tableName));
     }
 }
