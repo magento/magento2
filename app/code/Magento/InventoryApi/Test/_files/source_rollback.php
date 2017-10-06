@@ -9,6 +9,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var ResourceConnection $connection */
 $connection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
-$connection->getConnection()->delete('inventory_source', [
+$connection->getConnection()->delete($connection->getTableName('inventory_source'), [
     SourceInterface::SOURCE_ID . ' = ?' => 1,
 ]);

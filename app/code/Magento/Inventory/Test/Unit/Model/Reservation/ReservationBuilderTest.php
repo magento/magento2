@@ -6,6 +6,7 @@
 namespace Magento\Inventory\Test\Unit\Model\Reservation;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Inventory\Model\Reservation\ReservationBuilder;
