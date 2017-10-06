@@ -165,7 +165,7 @@
         "magento/module-security": "100.2.0-dev",
         "magento/module-send-friend": "100.2.0-dev",
         "magento/module-shipping": "100.2.0-dev",
-        "magento/module-sitemap": "100.3.0-dev",
+        "magento/module-sitemap": "100.2.0-dev",
         "magento/module-store": "100.2.0-dev",
         "magento/module-swagger": "100.2.0-dev",
         "magento/module-swatches": "100.2.0-dev",
