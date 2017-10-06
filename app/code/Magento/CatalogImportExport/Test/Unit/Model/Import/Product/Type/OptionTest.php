@@ -220,10 +220,12 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPoolMock;
+
     /**
      * @var ValueCollection | \PHPUnit_Framework_MockObject_MockObject
      */
     private $optionValueCollectionMock;
+
     /**
      * @var CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
      */
@@ -1038,5 +1040,4 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $this->optionValueCollectionFactoryMock
         ];
     }
-
 }
