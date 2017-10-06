@@ -799,7 +799,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected function _getPhysicalTheme(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
         $result = $theme;
-        while (!is_null($result) && $result->getId() && !$result->isPhysical()) {
+        while ($result !== null && $result->getId() && !$result->isPhysical()) {
             $result = $result->getParentTheme();
         }
         if (!$result) {
