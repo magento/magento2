@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalog\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Inventory\Indexer\StockItemIndexerInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
@@ -22,6 +23,8 @@ use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
 /**
  * Install Default Source, Stock and link them together
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallData implements InstallDataInterface
 {
@@ -56,6 +59,11 @@ class InstallData implements InstallDataInterface
     private $assignSourcesToStock;
 
     /**
+     * @var StockItemIndexerInterface
+     */
+    private $stockItemIndexer;
+
+    /**
      * @var DefaultSourceProviderInterface
      */
     private $defaultSourceProvider;
@@ -72,6 +80,7 @@ class InstallData implements InstallDataInterface
      * @param StockInterfaceFactory $stockFactory
      * @param AssignSourcesToStockInterface $assignSourcesToStock
      * @param DataObjectHelper $dataObjectHelper
+     * @param StockItemIndexerInterface $stockItemIndexer
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param DefaultStockProviderInterface $defaultStockProvider
      */
@@ -82,6 +91,7 @@ class InstallData implements InstallDataInterface
         StockInterfaceFactory $stockFactory,
         AssignSourcesToStockInterface $assignSourcesToStock,
         DataObjectHelper $dataObjectHelper,
+        StockItemIndexerInterface $stockItemIndexer,
         DefaultSourceProviderInterface $defaultSourceProvider,
         DefaultStockProviderInterface $defaultStockProvider
     ) {
@@ -91,6 +101,7 @@ class InstallData implements InstallDataInterface
         $this->stockFactory = $stockFactory;
         $this->assignSourcesToStock = $assignSourcesToStock;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->stockItemIndexer = $stockItemIndexer;
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->defaultStockProvider = $defaultStockProvider;
     }
@@ -103,7 +114,8 @@ class InstallData implements InstallDataInterface
     {
         $this->addDefaultSource();
         $this->addDefaultStock();
-        $this->assignStockToSource();
+        $this->assignSourceToStock();
+        $this->stockItemIndexer->executeFull();
     }
 
     /**
@@ -150,7 +162,7 @@ class InstallData implements InstallDataInterface
      *
      * @return void
      */
-    private function assignStockToSource()
+    private function assignSourceToStock()
     {
         $this->assignSourcesToStock->execute(
             [$this->defaultSourceProvider->getId()],
