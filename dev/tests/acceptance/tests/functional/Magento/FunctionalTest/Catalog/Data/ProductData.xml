@@ -19,6 +19,7 @@
         <data key="status">1</data>
         <data key="quantity">100</data>
         <required-entity type="product_extension_attribute">EavStockItem</required-entity>
+        <required-entity type="custom_attribute_array">CustomAttributeCategoryIds</required-entity>
     </entity>
     <entity name="SimpleProduct" type="product">
         <data key="sku" unique="suffix">SimpleProduct</data>
@@ -29,6 +30,7 @@
         <data key="visibility">4</data>
         <data key="status">1</data>
         <required-entity type="product_extension_attribute">EavStockItem</required-entity>
+        <required-entity type="custom_attribute_array">CustomAttributeCategoryIds</required-entity>
         <!--required-entity type="custom_attribute">CustomAttributeProductUrlKey</required-entity-->
     </entity>
 </config>

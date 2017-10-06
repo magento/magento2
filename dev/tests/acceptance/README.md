@@ -8,18 +8,20 @@
 ----
 
 # Prerequisites
-* **IMPORTANT**: Configure your Magento Store for [Automated Testing](http://devdocs.magento.com/guides/v2.0/mtf/mtf_quickstart/mtf_quickstart_magento.html)
+* **IMPORTANT**
+    * You will need to have a running instance of Magento that you can access.
+    * You will need to configure your instance of Magento for [Automated Testing](http://devdocs.magento.com/guides/v2.0/mtf/mtf_quickstart/mtf_quickstart_magento.html).
 * [PHP v7.x](http://php.net/manual/en/install.php)
 * [Composer v1.4.x](https://getcomposer.org/download/)
-* [Java](https://www.java.com/en/download/)
+* [Java v1.8.x](https://www.java.com/en/download/)
 * [Selenium Server](http://www.seleniumhq.org/download/) - [v2.53.x](http://selenium-release.storage.googleapis.com/index.html?path=2.53/)
-* [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
-* [Allure CLI](https://docs.qameta.io/allure/latest/#_installing_a_commandline)
+* [ChromeDriver v2.32.x](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+* [Allure CLI v2.3.x](https://docs.qameta.io/allure/latest/#_installing_a_commandline)
 * [GitHub](https://desktop.github.com/)
 
 ### Recommendations
 * We recommend using [PHPStorm 2017](https://www.jetbrains.com/phpstorm/) for your IDE. They recently added support for [Codeception Test execution](https://blog.jetbrains.com/phpstorm/2017/03/codeception-support-comes-to-phpstorm-2017-1/) which is helpful when debugging.
-* We also recommend updating your [$PATH to include](https://stackoverflow.com/questions/7703041/editing-path-variable-on-mac) `./vendor/bin` so you can easily execute the necessary `robo` and `codecept` commands instead of `./vendor/bin/robo` or `./vendor/bin/codecept`.  
+* We also recommend updating your [$PATH to include](https://stackoverflow.com/questions/7703041/editing-path-variable-on-mac) `./vendor/bin` so you can easily execute the necessary `robo` and `codecept` commands instead of using `./vendor/bin/robo` or `./vendor/bin/codecept`.  
 
 ----
 
@@ -28,19 +30,29 @@ Due to the current setup of the Framework you will need to do the following:
 
   * `mkdir [DIRECTORY_NAME]`
   * `cd [DIRECTORY_NAME]`
-  * Pull down - [EE](https://github.com/magento-pangolin/magento2ee)
-  * Pull down - [CE](https://github.com/magento-pangolin/magento2ce)
+  * Pull down - [EE](https://github.com/magento/magento2ee)
+  * Pull down - [CE](https://github.com/magento/magento2ce)
   * `cd magento2ee`
   * `php -f dev/tools/build-ee.php -- --command=link --exclude=true`
-  * Generate a `github-oauth` token: [Instructions](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/#creating-a-token)
+  * `cd ..`
+  * Generate a `github-oauth` token: 
+      * [How to setup an auth.json file for the Composer?](https://mage2.pro/t/topic/743)
+      * [Creating a personal access token for the command line.](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/#creating-a-token)
   * `touch magento2ce/dev/tests/acceptance/auth.json`
   * `nano magento2ce/dev/tests/acceptance/auth.json`
+  * Copy/Paste the following:
+    ```
+    {
+      "github-oauth": {
+          "github.com": "<personal access token>"
+      }
+    }
+    ```
   * Replace `<personal access token>` with the token you generated in GitHub.
   * Save your work.
-  * `cd ../magento2ce`
-  * `cd dev/tests/acceptance`
+  * `cd magento2ce/dev/tests/acceptance`
   * `composer install`
-    * **PLEASE IGNORE THE "Installation" SECTION THAT FOLLOWS, START WITH THE "Building The Framework" SECTION INSTEAD.**
+      * **PLEASE IGNORE THE "Installation" SECTION THAT FOLLOWS, START WITH THE "Building The Framework" SECTION INSTEAD.**
 
 ----
 
@@ -116,7 +128,7 @@ To determine which version of the Allure command you need to use please run `all
 ----
 
 # Building The Framework
-After installing the dependencies you will want to build the Codeception project in the [Magento 2 Functional Testing Framework](https://github.com/magento-pangolin/magento2-functional-testing-framework), which is a dependency of the CE or EE Tests repo. Run `./vendor/bin/robo build:project` to complete this task.
+After installing the dependencies you will want to build the Codeception project in the [Magento 2 Functional Testing Framework](https://github.com/magento/magento2-functional-testing-framework), which is a dependency of the CE or EE Tests repo. Run the following to complete this task:
 
 `./vendor/bin/robo build:project`
 
@@ -127,9 +139,15 @@ Before you can generate or run the Tests you will need to edit the Configuration
 
 In the `.env` file you will find key pieces of information that are unique to your local Magento setup that will need to be edited before you can generate tests:
 * **MAGENTO_BASE_URL**
+    * Example: `MAGENTO_BASE_URL=http://127.0.0.1:32772/`
+    * Note: Please end the URL with a `/`.
 * **MAGENTO_BACKEND_NAME**
+    * Example: `MAGENTO_BACKEND_NAME=admin`
+    * Note: Set this variable to `admin`.
 * **MAGENTO_ADMIN_USERNAME**
+    * Example: `MAGENTO_ADMIN_USERNAME=admin`
 * **MAGENTO_ADMIN_PASSWORD**
+    * Example: `MAGENTO_ADMIN_PASSWORD=123123`
 
 ##### Additional Codeception settings can be found in the following files: 
 * **tests/functional.suite.yml**
@@ -222,25 +240,31 @@ Due to the interdependent nature of the 2 repos it is recommended to Symlink the
     `sudo nano /etc/paths`
     
 * StackOverflow Help: https://stackoverflow.com/questions/7703041/editing-path-variable-on-mac
-* Allure `@env error` - Allure recently changed their Codeception Adapter that breaks Codeception when tests include the `@env` tag. A workaround for this error is to revert the changes they made to a function. 
-    * Locate the `AllureAdapter.php` file here: `vendor/allure-framework/allure-codeception/src/Yandex/Allure/Adapter/AllureAdapter.php`
-    * Edit the `_initialize()` function found on line 77 and replace it with the following:
-```
-public function _initialize(array $ignoredAnnotations = [])
-    {
-        parent::_initialize();
-        Annotation\AnnotationProvider::registerAnnotationNamespaces();
-        // Add standard PHPUnit annotations
-        Annotation\AnnotationProvider::addIgnoredAnnotations($this->ignoredAnnotations);
-        // Add custom ignored annotations
-        $ignoredAnnotations = $this->tryGetOption('ignoredAnnotations', []);
-        Annotation\AnnotationProvider::addIgnoredAnnotations($ignoredAnnotations);
-        $outputDirectory = $this->getOutputDirectory();
-        $deletePreviousResults =
-            $this->tryGetOption(DELETE_PREVIOUS_RESULTS_PARAMETER, false);
-        $this->prepareOutputDirectory($outputDirectory, $deletePreviousResults);
-        if (is_null(Model\Provider::getOutputDirectory())) {
-            Model\Provider::setOutputDirectory($outputDirectory);
-        }
-    }
-```
+* Allure `@env error` - Allure recently changed their Codeception Adapter that breaks Codeception when tests include the `@env` tag. There are 2 workarounds for this issue currently.
+    1. You can edit the `composer.json` and point the Allure-Codeception Adapter to a previous commit:
+        * Edit the `composer.json` file.
+        * Make the following change:
+            * ORIGINAL: `“allure-framework/allure-codeception”: "dev-master"`
+            * UPDATED: `“allure-framework/allure-codeception”: “dev-master#af40af5ae2b717618a42fe3e137d75878508c75d”`
+    1. You can revert the changes that they made manually: 
+        * Locate the `AllureAdapter.php` file here: `vendor/allure-framework/allure-codeception/src/Yandex/Allure/Adapter/AllureAdapter.php`
+        * Edit the `_initialize()` function found on line 77 and replace it with the following:
+            ```
+            public function _initialize(array $ignoredAnnotations = [])
+                {
+                    parent::_initialize();
+                    Annotation\AnnotationProvider::registerAnnotationNamespaces();
+                    // Add standard PHPUnit annotations
+                    Annotation\AnnotationProvider::addIgnoredAnnotations($this->ignoredAnnotations);
+                    // Add custom ignored annotations
+                    $ignoredAnnotations = $this->tryGetOption('ignoredAnnotations', []);
+                    Annotation\AnnotationProvider::addIgnoredAnnotations($ignoredAnnotations);
+                    $outputDirectory = $this->getOutputDirectory();
+                    $deletePreviousResults =
+                        $this->tryGetOption(DELETE_PREVIOUS_RESULTS_PARAMETER, false);
+                    $this->prepareOutputDirectory($outputDirectory, $deletePreviousResults);
+                    if (is_null(Model\Provider::getOutputDirectory())) {
+                        Model\Provider::setOutputDirectory($outputDirectory);
+                    }
+                }
+            ```

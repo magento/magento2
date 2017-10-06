@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
  /**
   * Copyright © Magento, Inc. All rights reserved.
@@ -8,8 +9,14 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="CustomAttributeProductUrlKey" type="custom_attribute">
-        <data key="attribute_code">url_key</data>
-        <data key="value" unique="suffix">product</data>
+    <entity name="SamplePerson" type="samplePerson">
+        <data key="foo">foo</data>
+        <data key="bar">bar</data>
+        <data key="lastName">Doe</data>
+        <data key="email" unique="prefix">.email@gmail.com</data>
+    </entity>
+    <entity name="OverrideDefaultPerson" type="samplePerson">
+        <data key="foo">fizz</data>
+        <data key="bar">buzz</data>
     </entity>
 </config>
