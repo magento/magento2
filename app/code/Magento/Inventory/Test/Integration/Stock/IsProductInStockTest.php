@@ -7,7 +7,6 @@ namespace Magento\Inventory\Test\Integration\Stock;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Indexer\Model\Indexer;
 use Magento\Inventory\Indexer\Alias;
 use Magento\Inventory\Indexer\IndexNameBuilder;
 use Magento\Inventory\Indexer\IndexStructureInterface;
@@ -54,7 +53,7 @@ class IsProductInStockTest extends TestCase
 
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
+        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
         $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
 
         $this->indexerChecker = Bootstrap::getObjectManager()->create(Checker::class);
