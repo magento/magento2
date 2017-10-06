@@ -16,7 +16,7 @@
         <before>
             <createData entity="SimpleSubCategory" mergeKey="simplecategory"/>
             <createData entity="SimpleProduct" mergeKey="simpleproduct1">
-                <required-entity persistedKey="simplecategory"/>
+                <required-entity createDataKey="simplecategory"/>
             </createData>
             <createData entity="Simple_US_Customer" mergeKey="simpleuscustomer"/>
         </before>

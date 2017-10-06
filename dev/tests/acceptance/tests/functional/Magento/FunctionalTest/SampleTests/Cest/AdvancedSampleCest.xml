@@ -32,7 +32,7 @@
             <!-- Create an entity that depends on another entity -->
             <createData entity="_defaultCategory" mergeKey="createCategory"/>
             <createData entity="_defaultProduct" mergeKey="createProduct">
-                <required-entity persistedKey="createCategory"/>
+                <required-entity createDataKey="createCategory"/>
             </createData>
 
             <!-- Parameterized url -->
