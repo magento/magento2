@@ -12,10 +12,6 @@
         <annotations>
             <features value="Invoice Creation"/>
             <stories value="Create an Invoice via the Admin"/>
-            <group value="sales"/>
-            <env value="chrome"/>
-            <env value="firefox"/>
-            <env value="phantomjs"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" mergeKey="createCategory"/>
@@ -30,6 +26,9 @@
                 <description value="Should be able to create an invoice via the admin."/>
                 <severity value="NORMAL"/>
                 <testCaseId value="MAGETWO-72096"/>
+                <group value="sales"/>
+                <env value="chrome"/>
+                <env value="headless"/>
             </annotations>
 
             <!-- todo: Create an order via the api instead of driving the browser  -->

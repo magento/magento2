@@ -12,10 +12,6 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout via the Admin"/>
-            <group value="checkout"/>
-            <env value="chrome"/>
-            <env value="firefox"/>
-            <env value="phantomjs"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" mergeKey="simplecategory"/>
@@ -35,6 +31,9 @@
                 <description value="Should be able to place an order as a customer."/>
                 <severity value="CRITICAL"/>
                 <testCaseId value="#"/>
+                <group value="checkout"/>
+                <env value="chrome"/>
+                <env value="headless"/>
             </annotations>
 
             <amOnPage mergeKey="s1"  url="customer/account/login/"/>
