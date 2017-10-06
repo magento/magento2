@@ -79,6 +79,8 @@ define([
                     }
                 },
                 success: function(res) {
+                    $(document).trigger('ajax:addToCart', form.data().productSku);
+
                     if (self.isLoaderEnabled()) {
                         $('body').trigger(self.options.processStop);
                     }
