@@ -12,4 +12,12 @@
         <data key="attribute_code">url_key</data>
         <data key="value" unique="suffix">category</data>
     </entity>
+    <entity name="CustomAttributeProductUrlKey" type="custom_attribute">
+        <data key="attribute_code">url_key</data>
+        <data key="value" unique="suffix">product</data>
+    </entity>
+    <entity name="CustomAttributeCategoryIds" type="custom_attribute_array">
+        <data key="attribute_code">category_ids</data>
+        <var key="value" entityType="category" entityKey="id"/>
+    </entity>
 </config>

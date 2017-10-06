@@ -8,7 +8,7 @@
 <!-- Test XML Example -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <cest name="SampleGeneratorCest">
+    <cest name="SampleCest">
         <annotations>
             <features value="Test Generator"/>
             <stories value="Verify each Codeception command is generated correctly."/>
@@ -246,6 +246,27 @@
             <typeInPopup variable="randomStuff" mergeKey="typeInPopup"/>
             <unselectOption selector="#option" variable="randomStuff" mergeKey="unselectOption1"/>
             <waitForText variable="randomStuff" time="5" mergeKey="waitForText1"/>
+        </test>
+        <test name="AllReplacementTest">
+            <annotations>
+                <title value="Exercise reference replacement."/>
+                <description value="Exercises {{foo}}, $foo$, and $$foo$$ replacement."/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="#"/>
+            </annotations>
+            <createData entity="CustomerEntity1" mergeKey="testScopeData"/>
+            <amOnPage url="{{SamplePage.url('success','success2')}}" mergeKey="a0"/>
+            <amOnPage url="/$testScopeData.firstname$.html" mergeKey="a1"/>
+            <amOnPage url="/$$createData1.firstname$$.html" mergeKey="a2"/>
+            <amOnPage url="{{SamplePage.url($testScopeData.firstname$,$testScopeData.lastname$)}}" mergeKey="a3"/>
+            <amOnPage url="{{SamplePage.url($$createData1.firstname$$,$$createData1.lastname$$)}}" mergeKey="a4"/>
+            <click selector="{{SampleSection.oneParamElement('success')}}" mergeKey="c1"/>
+            <click selector="{{SampleSection.twoParamElement('success','success2')}}" mergeKey="c2"/>
+            <click selector="{{SampleSection.threeParamElement('John', SamplePerson.lastname, $testScopeData.lastname$)}}" mergeKey="c3"/>
+            <click selector="#$testScopeData.firstname$ .$testScopeData.lastname$" mergeKey="c4"/>
+            <click selector="#$$createData1.firstname$$ .$$createData1.lastname$$" mergeKey="c5"/>
+            <fillField selector="#sample" userInput="Hello $testScopeData.firstname$ $testScopeData.lastname$" mergeKey="f1"/>
+            <fillField selector="#sample" userInput="Hello $$createData1.firstname$$ $$createData1.lastname$$" mergeKey="f2"/>
         </test>
     </cest>
 </config>
