@@ -23,6 +23,8 @@ use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
 /**
  * Install Default Source, Stock and link them together
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallData implements InstallDataInterface
 {
