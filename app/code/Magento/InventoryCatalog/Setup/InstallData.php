@@ -94,7 +94,7 @@ class InstallData implements InstallDataInterface
     {
         $this->addDefaultSource();
         $this->addDefaultStock();
-        $this->assignStockToSource();
+        $this->assignSourceToStock();
         $this->stockItemIndexer->executeFull();
     }
 
@@ -142,7 +142,7 @@ class InstallData implements InstallDataInterface
      *
      * @return void
      */
-    private function assignStockToSource()
+    private function assignSourceToStock()
     {
         $this->assignSourcesToStock->execute([1], 1);
     }
