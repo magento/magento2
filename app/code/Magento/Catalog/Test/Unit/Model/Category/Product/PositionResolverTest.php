@@ -48,11 +48,19 @@ class PositionResolverTest extends \PHPUnit\Framework\TestCase
         '1' => 102
     ];
 
+    /**
+     * @var array
+     */
     private $flippedPositions = [
         '100' => 3,
         '101' => 2,
         '102' => 1
     ];
+
+    /**
+     * @var int
+     */
+    private $categoryId = 1;
 
     protected function setUp()
     {
@@ -107,6 +115,6 @@ class PositionResolverTest extends \PHPUnit\Framework\TestCase
             ->method('fetchCol')
             ->willReturn($this->positions);
 
-        $this->assertEquals($this->flippedPositions, $this->model->getPositions(1));
+        $this->assertEquals($this->flippedPositions, $this->model->getPositions($this->categoryId));
     }
 }

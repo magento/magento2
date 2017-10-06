@@ -209,8 +209,7 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
                 'dateFormat' => $this->dateFormat,
                 'dateTime' => $this->dateTime,
                 'productFactory' => $this->productFactory,
-                1000,
-                'productLoader' => $this->productLoader
+                'productLoader' => $this->productLoader,
             ]
         );
 
