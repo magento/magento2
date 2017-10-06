@@ -6,21 +6,18 @@
 
 namespace Magento\InventoryCatalog\Model;
 
-use Magento\InventoryCatalog\Api\DefaultSourceResolverInterface;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
 /**
- * Class DefaultSourceResolver
+ * Service returns Default Stock Id
  */
-class DefaultSourceResolver implements DefaultSourceResolverInterface
+class DefaultStockProvider implements DefaultStockProviderInterface
 {
     /**
-     * Get default source id
-     *
-     * @return int
+     * @inheritdoc
      */
     public function getId(): int
     {
         return 1;
     }
-
 }

@@ -7,15 +7,14 @@
 namespace Magento\InventoryCatalog\Api;
 
 /**
- * Represents default stock
+ * Service returns Default Stock Id
  *
  * @api
  */
-interface DefaultStockResolverInterface
+interface DefaultStockProviderInterface
 {
-
     /**
-     * Get default stock
+     * Get Default Stock Id
      *
      * @return int
      */

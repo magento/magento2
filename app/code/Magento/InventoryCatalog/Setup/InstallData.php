@@ -17,8 +17,8 @@ use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\InventoryCatalog\Api\DefaultSourceResolverInterface;
-use Magento\InventoryCatalog\Api\DefaultStockResolverInterface;
+use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
 /**
  * Install Default Source, Stock and link them together
@@ -56,12 +56,12 @@ class InstallData implements InstallDataInterface
     private $assignSourcesToStock;
 
     /**
-     * @var DefaultSourceResolverInterface
+     * @var DefaultSourceProviderInterface
      */
     private $defaultSourceResolver;
 
     /**
-     * @var DefaultStockResolverInterface
+     * @var DefaultStockProviderInterface
      */
     private $defaultStockResolver;
 
@@ -72,8 +72,8 @@ class InstallData implements InstallDataInterface
      * @param StockInterfaceFactory $stockFactory
      * @param AssignSourcesToStockInterface $assignSourcesToStock
      * @param DataObjectHelper $dataObjectHelper
-     * @param DefaultSourceResolverInterface $defaultSourceResolver
-     * @param DefaultStockResolverInterface $defaultStockResolver
+     * @param DefaultSourceProviderInterface $defaultSourceResolver
+     * @param DefaultStockProviderInterface $defaultStockResolver
      */
     public function __construct(
         SourceRepositoryInterface $sourceRepository,
@@ -82,8 +82,8 @@ class InstallData implements InstallDataInterface
         StockInterfaceFactory $stockFactory,
         AssignSourcesToStockInterface $assignSourcesToStock,
         DataObjectHelper $dataObjectHelper,
-        DefaultSourceResolverInterface $defaultSourceResolver,
-        DefaultStockResolverInterface $defaultStockResolver
+        DefaultSourceProviderInterface $defaultSourceResolver,
+        DefaultStockProviderInterface $defaultStockResolver
     ) {
         $this->sourceRepository = $sourceRepository;
         $this->sourceFactory = $sourceFactory;

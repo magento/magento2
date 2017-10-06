@@ -7,14 +7,14 @@
 namespace Magento\InventoryCatalog\Api;
 
 /**
- * Represents default source
+ * Service returns Default Source Id
  *
  * @api
  */
-interface DefaultSourceResolverInterface
+interface DefaultSourceProviderInterface
 {
     /**
-     * Get default source id
+     * Get Default Source id
      *
      * @return int
      */
