@@ -57,13 +57,13 @@
             <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" returnVariable="orderNumber" mergeKey="grabOrderNumber"/>
             <!-- end todo -->
 
-            <amOnPage url="{{AdminLoginPage}}" mergeKey="goToAdmin"/>
+            <amOnPage url="{{AdminLoginPage.url}}" mergeKey="goToAdmin"/>
             <waitForPageLoad mergeKey="waitForPageLoad1"/>
             <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
             <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" mergeKey="fillPassword"/>
             <click selector="{{AdminLoginFormSection.signIn}}" mergeKey="clickLogin"/>
 
-            <amOnPage url="{{OrdersPage}}" mergeKey="onOrdersPage"/>
+            <amOnPage url="{{OrdersPage.url}}" mergeKey="onOrdersPage"/>
             <waitForElementNotVisible selector="{{OrdersGridSection.spinner}}" time="10" mergeKey="waitSpinner1"/>
             <fillField selector="{{OrdersGridSection.search}}" variable="orderNumber" mergeKey="searchOrderNum"/>
             <click selector="{{OrdersGridSection.submitSearch}}" mergeKey="submitSearch"/>
@@ -79,7 +79,7 @@
             <see selector="{{OrderDetailsInvoicesSection.content}}" userInput="John Doe" mergeKey="seeInvoice2"/>
             <click selector="{{OrderDetailsOrderViewSection.information}}" mergeKey="clickInformation"/>
             <see selector="{{OrderDetailsInformationSection.orderStatus}}" userInput="Processing" mergeKey="seeOrderStatus"/>
-            <amOnPage url="{{InvoicesPage}}" mergeKey="goToInvoices"/>
+            <amOnPage url="{{InvoicesPage.url}}" mergeKey="goToInvoices"/>
             <waitForElementNotVisible selector="{{InvoicesGridSection.spinner}}" time="10" mergeKey="waitSpinner4"/>
             <click selector="{{InvoicesGridSection.filter}}" mergeKey="clickFilters"/>
             <fillField selector="{{InvoicesFiltersSection.orderNum}}" variable="orderNumber" mergeKey="searchOrderNum2"/>

@@ -62,11 +62,11 @@
             <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" returnVariable="orderNumber" mergeKey="grabOrderNumber"/>
             <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order # is:" mergeKey="seeOrderNumber"/>
             <see selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." mergeKey="seeEmailYou"/>
-            <amOnPage url="{{AdminLoginPage}}" mergeKey="navigateToAdmin"/>
+            <amOnPage url="{{AdminLoginPage.url}}" mergeKey="navigateToAdmin"/>
             <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
             <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" mergeKey="fillPassword"/>
             <click selector="{{AdminLoginFormSection.signIn}}" mergeKey="clickLogin"/>
-            <amOnPage url="{{OrdersPage}}" mergeKey="onOrdersPage"/>
+            <amOnPage url="{{OrdersPage.url}}" mergeKey="onOrdersPage"/>
             <waitForElementNotVisible selector="{{OrdersGridSection.spinner}}" time="30" mergeKey="waitForOrdersPage"/>
             <fillField selector="{{OrdersGridSection.search}}" variable="orderNumber" mergeKey="fillOrderNum"/>
             <click selector="{{OrdersGridSection.submitSearch}}" mergeKey="submitSearchOrderNum"/>
