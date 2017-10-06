@@ -5,6 +5,7 @@
  */
 namespace Magento\Store\App\FrontController\Plugin;
 
+use Magento\Store\Model\Store;
 use \Magento\Store\Model\StoreResolver\ReaderList;
 use \Magento\Store\Model\ScopeInterface;
 
@@ -48,7 +49,7 @@ class DefaultStore
         $scopeCode = null
     ) {
         $this->runMode = $scopeCode ? $runMode : ScopeInterface::SCOPE_WEBSITE;
-        $this->scopeCode = $scopeCode;
+        $this->scopeCode = $scopeCode ? : Store::ADMIN_CODE;
         $this->readerList = $readerList;
         $this->storeManager = $storeManager;
     }
@@ -58,6 +59,7 @@ class DefaultStore
      *
      * @param \Magento\Framework\App\FrontController $subject
      * @param \Magento\Framework\App\RequestInterface $request
+     *
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

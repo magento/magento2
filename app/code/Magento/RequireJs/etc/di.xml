@@ -38,4 +38,14 @@
             <argument name="minifyAdapter" xsi:type="object">jsMinificationAdapter</argument>
         </arguments>
     </type>
+    <virtualType name="defaultScopeMinification" type="Magento\Framework\View\Asset\Minification">
+        <arguments>
+            <argument name="scope" xsi:type="string">default</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\RequireJs\Block\Adminhtml\Html\Head\Config">
+        <arguments>
+            <argument name="minification" xsi:type="object">defaultScopeMinification</argument>
+        </arguments>
+    </type>
 </config>

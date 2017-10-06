@@ -5,7 +5,11 @@
  */
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Service model responsible for making a decision of whether to use the merged asset in place of original ones
@@ -41,16 +45,23 @@ class MergeService
     protected $state;
 
     /**
+     * @var ScopeResolverInterface
+     */
+    protected $scopeResolver;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ConfigInterface $config
+     * @param ScopeResolverInterface $scopeResolver
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\State $state
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         ConfigInterface $config,
+        ScopeResolverInterface $scopeResolver,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\State $state
     ) {
@@ -58,6 +69,7 @@ class MergeService
         $this->config = $config;
         $this->filesystem = $filesystem;
         $this->state = $state;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -65,19 +77,25 @@ class MergeService
      *
      * @param MergeableInterface[] $assets
      * @param string $contentType
+     *
      * @return array|\Iterator
+     *
      * @throws \InvalidArgumentException
      */
     public function getMergedAssets(array $assets, $contentType)
     {
         $isCss = $contentType == 'css';
         $isJs = $contentType == 'js';
+
         if (!$isCss && !$isJs) {
             throw new \InvalidArgumentException("Merge for content type '{$contentType}' is not supported.");
         }
 
-        $isCssMergeEnabled = $this->config->isMergeCssFiles();
-        $isJsMergeEnabled = $this->config->isMergeJsFiles();
+        $scopeType = $this->isAdminStore() ? ScopeConfigInterface::SCOPE_TYPE_DEFAULT : ScopeInterface::SCOPE_STORE;
+
+        $isCssMergeEnabled = $this->config->isMergeCssFiles($scopeType);
+        $isJsMergeEnabled = $this->config->isMergeJsFiles($scopeType);
+
         if (($isCss && $isCssMergeEnabled) || ($isJs && $isJsMergeEnabled)) {
             $mergeStrategyClass = \Magento\Framework\View\Asset\MergeStrategy\FileExists::class;
 
@@ -105,5 +123,15 @@ class MergeService
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW)
             ->delete(Merged::getRelativeDir());
+    }
+
+    /**
+     * Check is request use admin scope
+     *
+     * @return bool
+     */
+    protected function isAdminStore()
+    {
+        return Store::ADMIN_CODE == $this->scopeResolver->getScope()->getCode();
     }
 }

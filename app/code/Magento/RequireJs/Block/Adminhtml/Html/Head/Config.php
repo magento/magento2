@@ -6,6 +6,7 @@
 
 namespace Magento\RequireJs\Block\Adminhtml\Html\Head;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\RequireJs\Config as RequireJsConfig;
 use Magento\Framework\View\Asset\Minification;
 
@@ -76,7 +77,9 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     protected function _prepareLayout()
     {
         $after = RequireJsConfig::REQUIRE_JS_FILE_NAME;
+        $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
         $assetCollection = $this->pageConfig->getAssetCollection();
+
         if ($this->minification->isEnabled('js')) {
             $minResolver = $this->fileManager->createMinResolverAsset();
             $assetCollection->insert(
@@ -86,7 +89,9 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
             );
             $after = $minResolver->getFilePath();
         }
+
         $requireJsMapConfig = $this->fileManager->createRequireJsMapConfigAsset();
+
         if ($requireJsMapConfig) {
             $urlResolverAsset = $this->fileManager->createUrlResolverAsset();
             $assetCollection->insert(
@@ -102,10 +107,13 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
             );
             $after = $requireJsMapConfig->getFilePath();
         }
-        if ($this->bundleConfig->isBundlingJsFiles()) {
+
+        if ($this->bundleConfig->isBundlingJsFiles($scopeType)) {
+
             $bundleAssets = $this->fileManager->createBundleJsPool();
             $staticAsset = $this->fileManager->createStaticJsAsset();
             /** @var \Magento\Framework\View\Asset\File $bundleAsset */
+
             if (!empty($bundleAssets) && $staticAsset !== false) {
                 $bundleAssets = array_reverse($bundleAssets);
                 foreach ($bundleAssets as $bundleAsset) {
@@ -123,6 +131,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
                 $after = $staticAsset->getFilePath();
             }
         }
+
         $requireJsConfig = $this->fileManager->createRequireJsConfigAsset();
         $assetCollection->insert(
             $requireJsConfig->getFilePath(),
@@ -135,6 +144,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
             $requireJsMixinsConfig,
             $after
         );
+
         return parent::_prepareLayout();
     }
 }
