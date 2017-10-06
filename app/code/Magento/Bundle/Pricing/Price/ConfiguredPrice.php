@@ -84,13 +84,12 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
         $bundleOptions = [];
         /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
         $typeInstance = $bundleProduct->getTypeInstance();
-
-        // get bundle options
-        $optionsQuoteItemOption = $this->item->getOptionByCode('bundle_option_ids');
-        $bundleOptionsIds = $optionsQuoteItemOption
-            ? $this->serializer->unserialize($optionsQuoteItemOption->getValue())
-            : [];
-
+        $bundleOptionsIds = [];
+        if ($this->item) {
+            // get bundle options
+            $optionsQuoteItemOption = $this->item->getOptionByCode('bundle_option_ids');
+            $bundleOptionsIds = $this->serializer->unserialize($optionsQuoteItemOption->getValue());
+        }
         if ($bundleOptionsIds) {
             /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
             $optionsCollection = $typeInstance->getOptionsByIds($bundleOptionsIds, $bundleProduct);
@@ -106,12 +105,10 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     }
 
     /**
-     * Option amount calculation for bundle product
-     *
-     * @param float $baseValue
-     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * Get Selection pricing list
+     * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
      */
-    public function getConfiguredAmount($baseValue = 0.)
+    public function getSelectionPriceList()
     {
         $selectionPriceList = [];
         foreach ($this->getOptions() as $option) {
@@ -120,6 +117,18 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
                 $this->createSelectionPriceList($option)
             );
         }
+        return $selectionPriceList;
+    }
+
+    /**
+     * Option amount calculation for bundle product
+     *
+     * @param float $baseValue
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     */
+    public function getConfiguredAmount($baseValue = 0.)
+    {
+        $selectionPriceList = $this->getSelectionPriceList();
         return $this->calculator->calculateBundleAmount(
             $baseValue,
             $this->product,

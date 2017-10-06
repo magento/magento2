@@ -10,11 +10,16 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 /** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $configuredPrice */
 $configuredPrice = $block->getPrice();
+/** @var \Magento\Bundle\Pricing\Price\FinalPrice $finalPriceModel */
+$finalPriceModel = $block->getPriceType('final_price');
+$minimalPrice = $configuredPrice->getMinimalPrice();
+$maximalPrice = $finalPriceModel->getMaximalPrice();
 /** @var \Magento\Framework\Pricing\Price\PriceInterface $regularPriceModel */
 $regularPriceModel = $block->getPriceType('regular_price');
+$maximalRegularPrice = $regularPriceModel->getMaximalPrice();
+$minimalRegularPrice = $regularPriceModel->getMinimalPrice();
 ?>
-<?php if ($block->hasSpecialPrice()
-    && $configuredPrice->getAmount()->getValue() !== $regularPriceModel->getValue()) : ?>
+<?php if (($minimalPrice < $minimalRegularPrice) || ($maximalPrice < $maximalRegularPrice)) : ?>
     <p class="price-as-configured">
         <span class="special-price">
             <?= /* @noEscape */ $block->renderAmount(

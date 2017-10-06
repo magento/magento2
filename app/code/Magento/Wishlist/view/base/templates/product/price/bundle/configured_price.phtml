@@ -5,27 +5,15 @@
  */
 ?>
 <?php
-/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
+/** @var \Magento\Catalog\Pricing\Render\ConfiguredPriceBox $block */
 $schema = ($block->getZone() == 'item_view') ? true : false;
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
-/** @var \Magento\Bundle\Pricing\Price\ConfiguredPrice $configuredPrice */
-$configuredPrice = $block->getPrice();
 ?>
 <?php if ($block->hasSpecialPrice()) : ?>
-    <?php
-    //get total configured amount in case we have a configured price or not
-    if (!empty($configuredPrice->getOptions())) {
-        $finalPriceModelAmount = $block->getPriceType('configured_price')->getConfiguredAmount();
-        $regularPriceAmount = $block->getPriceType('configured_regular_price')->getConfiguredAmount();
-    } else {
-        $finalPriceModelAmount = $block->getPriceType('final_price')->getAmount();
-        $regularPriceAmount = $block->getPriceType('regular_price')->getAmount();
-    }
-    ?>
     <p class="price-as-configured">
         <span class="special-price">
             <?= /* @noEscape */ $block->renderAmount(
-                $finalPriceModelAmount,
+                $block->getConfiguredPrice()->getAmount(),
                 [
                     'display_label'     => $block->escapeHtml(__('Special Price')),
                     'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
@@ -37,7 +25,7 @@ $configuredPrice = $block->getPrice();
         </span>
         <span class="old-price">
             <?= /* @noEscape */ $block->renderAmount(
-                $regularPriceAmount,
+                $block->getConfiguredRegularPrice()->getAmount(),
                 [
                     'display_label'     => $block->escapeHtml(__('Regular Price')),
                     'price_id'          => $block->escapeHtml($block->getPriceId('old-price-' . $idSuffix)),
@@ -56,7 +44,7 @@ $configuredPrice = $block->getPrice();
     ?>
     <p class="price-as-configured">
         <?= /* @noEscape */ $block->renderAmount(
-            $block->getPriceType('configured_price')->getAmount(),
+            $this->getConfiguredPrice()->getAmount(),
             [
                 'display_label'     => $block->escapeHtml($priceLabel),
                 'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
