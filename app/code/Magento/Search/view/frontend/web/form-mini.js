@@ -286,46 +286,50 @@ define([
                 $.getJSON(this.options.url, {
                     q: value
                 }, $.proxy(function (data) {
-                    $.each(data, function (index, element) {
-                        var html;
+                    if (data.length) {
+                        $.each(data, function (index, element) {
+                            var html;
 
-                        element.index = index;
-                        html = template({
-                            data: element
+                            element.index = index;
+                            html = template({
+                                data: element
+                            });
+                            dropdown.append(html);
                         });
-                        dropdown.append(html);
-                    });
-                    this.responseList.indexList = this.autoComplete.html(dropdown)
-                        .css(clonePosition)
-                        .show()
-                        .find(this.options.responseFieldElements + ':visible');
 
-                    this._resetResponseList(false);
-                    this.element.removeAttr('aria-activedescendant');
+                        this.responseList.indexList = this.autoComplete.html(dropdown)
+                            .css(clonePosition)
+                            .show()
+                            .find(this.options.responseFieldElements + ':visible');
 
-                    if (this.responseList.indexList.length) {
-                        this._updateAriaHasPopup(true);
-                    } else {
-                        this._updateAriaHasPopup(false);
+                        this._resetResponseList(false);
+                        this.element.removeAttr('aria-activedescendant');
+
+                        if (this.responseList.indexList.length) {
+                            this._updateAriaHasPopup(true);
+                        } else {
+                            this._updateAriaHasPopup(false);
+                        }
+
+                        this.responseList.indexList
+                            .on('click', function (e) {
+                                this.responseList.selected = $(e.currentTarget);
+                                this.searchForm.trigger('submit');
+                            }.bind(this))
+                            .on('mouseenter mouseleave', function (e) {
+                                this.responseList.indexList.removeClass(this.options.selectClass);
+                                $(e.target).addClass(this.options.selectClass);
+                                this.responseList.selected = $(e.target);
+                                this.element.attr('aria-activedescendant', $(e.target).attr('id'));
+                            }.bind(this))
+                            .on('mouseout', function (e) {
+                                if (!this._getLastElement() &&
+                                    this._getLastElement().hasClass(this.options.selectClass)) {
+                                    $(e.target).removeClass(this.options.selectClass);
+                                    this._resetResponseList(false);
+                                }
+                            }.bind(this));
                     }
-
-                    this.responseList.indexList
-                        .on('click', function (e) {
-                            this.responseList.selected = $(e.currentTarget);
-                            this.searchForm.trigger('submit');
-                        }.bind(this))
-                        .on('mouseenter mouseleave', function (e) {
-                            this.responseList.indexList.removeClass(this.options.selectClass);
-                            $(e.target).addClass(this.options.selectClass);
-                            this.responseList.selected = $(e.target);
-                            this.element.attr('aria-activedescendant', $(e.target).attr('id'));
-                        }.bind(this))
-                        .on('mouseout', function (e) {
-                            if (!this._getLastElement() && this._getLastElement().hasClass(this.options.selectClass)) {
-                                $(e.target).removeClass(this.options.selectClass);
-                                this._resetResponseList(false);
-                            }
-                        }.bind(this));
                 }, this));
             } else {
                 this._resetResponseList(true);
