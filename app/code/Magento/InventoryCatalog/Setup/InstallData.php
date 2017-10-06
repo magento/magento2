@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalog\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Inventory\Indexer\StockItemIndexerInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
@@ -54,12 +55,18 @@ class InstallData implements InstallDataInterface
     private $assignSourcesToStock;
 
     /**
+     * @var StockItemIndexerInterface
+     */
+    private $stockItemIndexer;
+
+    /**
      * @param SourceRepositoryInterface $sourceRepository
      * @param SourceInterfaceFactory $sourceFactory
      * @param StockRepositoryInterface $stockRepository
      * @param StockInterfaceFactory $stockFactory
      * @param AssignSourcesToStockInterface $assignSourcesToStock
      * @param DataObjectHelper $dataObjectHelper
+     * @param StockItemIndexerInterface $stockItemIndexer
      */
     public function __construct(
         SourceRepositoryInterface $sourceRepository,
@@ -67,7 +74,8 @@ class InstallData implements InstallDataInterface
         StockRepositoryInterface $stockRepository,
         StockInterfaceFactory $stockFactory,
         AssignSourcesToStockInterface $assignSourcesToStock,
-        DataObjectHelper $dataObjectHelper
+        DataObjectHelper $dataObjectHelper,
+        StockItemIndexerInterface $stockItemIndexer
     ) {
         $this->sourceRepository = $sourceRepository;
         $this->sourceFactory = $sourceFactory;
@@ -75,6 +83,7 @@ class InstallData implements InstallDataInterface
         $this->stockFactory = $stockFactory;
         $this->assignSourcesToStock = $assignSourcesToStock;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->stockItemIndexer = $stockItemIndexer;
     }
 
     /**
@@ -86,6 +95,7 @@ class InstallData implements InstallDataInterface
         $this->addDefaultSource();
         $this->addDefaultStock();
         $this->assignStockToSource();
+        $this->stockItemIndexer->executeFull();
     }
 
     /**
