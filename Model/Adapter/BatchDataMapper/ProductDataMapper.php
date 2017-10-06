@@ -308,6 +308,8 @@ class ProductDataMapper implements BatchDataMapperInterface
             && isset($attributeValue[$productId])
         ) {
             $value = $attributeValue[$productId];
+        } elseif (in_array($attributeCode, $this->attributesExcludedFromMerge) && !isset($attributeValue[$productId])) {
+            $value = '';
         } else {
             $value = implode(' ', $attributeValue);
         }
