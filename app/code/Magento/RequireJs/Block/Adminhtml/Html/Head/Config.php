@@ -8,7 +8,12 @@ namespace Magento\RequireJs\Block\Adminhtml\Html\Head;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\RequireJs\Config as RequireJsConfig;
+use Magento\Framework\View\Asset\ConfigInterface as ViewAssetConfigInterface;
 use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Context as ViewElementContext;
+use Magento\Framework\View\Page\Config as ViewPageConfig;
+use Magento\RequireJs\Model\FileManager as RequireJsFileManager;
 
 /**
  * Block responsible for including RequireJs config on backend pages
@@ -16,20 +21,20 @@ use Magento\Framework\View\Asset\Minification;
  * @api
  * @since 100.0.2
  */
-class Config extends \Magento\Framework\View\Element\AbstractBlock
+class Config extends AbstractBlock
 {
     /**
      * @var RequireJsConfig
      */
-    private $config;
+    protected $config;
 
     /**
-     * @var \Magento\RequireJs\Model\FileManager
+     * @var RequireJsFileManager
      */
-    private $fileManager;
+    protected $fileManager;
 
     /**
-     * @var \Magento\Framework\View\Page\Config
+     * @var ViewPageConfig
      */
     protected $pageConfig;
 
@@ -39,25 +44,27 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     protected $minification;
 
     /**
-     * @var \Magento\Framework\View\Asset\ConfigInterface
+     * @var ViewAssetConfigInterface
      */
-    private $bundleConfig;
+    protected $bundleConfig;
 
     /**
-     * @param \Magento\Framework\View\Element\Context $context
+     * Config constructor.
+     *
+     * @param ViewElementContext $context
      * @param RequireJsConfig $config
-     * @param \Magento\RequireJs\Model\FileManager $fileManager
-     * @param \Magento\Framework\View\Page\Config $pageConfig
-     * @param \Magento\Framework\View\Asset\ConfigInterface $bundleConfig
+     * @param RequireJsFileManager $fileManager
+     * @param ViewPageConfig $pageConfig
+     * @param ViewAssetConfigInterface $bundleConfig
      * @param Minification $minification
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Context $context,
+        ViewElementContext $context,
         RequireJsConfig $config,
-        \Magento\RequireJs\Model\FileManager $fileManager,
-        \Magento\Framework\View\Page\Config $pageConfig,
-        \Magento\Framework\View\Asset\ConfigInterface $bundleConfig,
+        RequireJsFileManager $fileManager,
+        ViewPageConfig $pageConfig,
+        ViewAssetConfigInterface $bundleConfig,
         Minification $minification,
         array $data = []
     ) {
@@ -72,7 +79,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     /**
      * Include RequireJs configuration as an asset on the page
      *
-     * @return $this
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {
@@ -112,8 +119,8 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
 
             $bundleAssets = $this->fileManager->createBundleJsPool();
             $staticAsset = $this->fileManager->createStaticJsAsset();
-            /** @var \Magento\Framework\View\Asset\File $bundleAsset */
 
+            /** @var \Magento\Framework\View\Asset\File $bundleAsset */
             if (!empty($bundleAssets) && $staticAsset !== false) {
                 $bundleAssets = array_reverse($bundleAssets);
                 foreach ($bundleAssets as $bundleAsset) {

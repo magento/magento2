@@ -7,7 +7,13 @@
 namespace Magento\RequireJs\Block\Html\Head;
 
 use Magento\Framework\RequireJs\Config as RequireJsConfig;
+use Magento\Framework\View\Asset\ConfigInterface as ViewAssetConfigInterface;
+use Magento\Framework\View\Asset\File as ViewAssetFile;
 use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Context as ViewElementContext;
+use Magento\Framework\View\Page\Config as PageConfig;
+use Magento\RequireJs\Model\FileManager as RequireJsFileManager;
 
 /**
  * Block responsible for including RequireJs config on the page
@@ -15,20 +21,20 @@ use Magento\Framework\View\Asset\Minification;
  * @api
  * @since 100.0.2
  */
-class Config extends \Magento\Framework\View\Element\AbstractBlock
+class Config extends AbstractBlock
 {
     /**
      * @var RequireJsConfig
      */
-    private $config;
+    protected $config;
 
     /**
-     * @var \Magento\RequireJs\Model\FileManager
+     * @var RequireJsFileManager
      */
-    private $fileManager;
+    protected $fileManager;
 
     /**
-     * @var \Magento\Framework\View\Page\Config
+     * @var PageConfig
      */
     protected $pageConfig;
 
@@ -38,25 +44,27 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     protected $minification;
 
     /**
-     * @var \Magento\Framework\View\Asset\ConfigInterface
+     * @var ViewAssetConfigInterface
      */
-    private $bundleConfig;
+    protected $bundleConfig;
 
     /**
-     * @param \Magento\Framework\View\Element\Context $context
+     * Config constructor.
+     *
+     * @param ViewElementContext $context
      * @param RequireJsConfig $config
-     * @param \Magento\RequireJs\Model\FileManager $fileManager
-     * @param \Magento\Framework\View\Page\Config $pageConfig
-     * @param \Magento\Framework\View\Asset\ConfigInterface $bundleConfig
+     * @param RequireJsFileManager $fileManager
+     * @param PageConfig $pageConfig
+     * @param ViewAssetConfigInterface $bundleConfig
      * @param Minification $minification
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Context $context,
+        ViewElementContext $context,
         RequireJsConfig $config,
-        \Magento\RequireJs\Model\FileManager $fileManager,
-        \Magento\Framework\View\Page\Config $pageConfig,
-        \Magento\Framework\View\Asset\ConfigInterface $bundleConfig,
+        RequireJsFileManager $fileManager,
+        PageConfig $pageConfig,
+        ViewAssetConfigInterface $bundleConfig,
         Minification $minification,
         array $data = []
     ) {
@@ -71,12 +79,13 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     /**
      * Include RequireJs configuration as an asset on the page
      *
-     * @return $this
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {
         $after = RequireJsConfig::REQUIRE_JS_FILE_NAME;
         $assetCollection = $this->pageConfig->getAssetCollection();
+
         if ($this->minification->isEnabled('js')) {
             $minResolver = $this->fileManager->createMinResolverAsset();
             $assetCollection->insert(
@@ -86,7 +95,9 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
             );
             $after = $minResolver->getFilePath();
         }
+
         $requireJsMapConfig = $this->fileManager->createRequireJsMapConfigAsset();
+
         if ($requireJsMapConfig) {
             $urlResolverAsset = $this->fileManager->createUrlResolverAsset();
             $assetCollection->insert(
@@ -102,10 +113,12 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
             );
             $after = $requireJsMapConfig->getFilePath();
         }
+
         if ($this->bundleConfig->isBundlingJsFiles()) {
             $bundleAssets = $this->fileManager->createBundleJsPool();
             $staticAsset = $this->fileManager->createStaticJsAsset();
-            /** @var \Magento\Framework\View\Asset\File $bundleAsset */
+
+            /** @var ViewAssetFile $bundleAsset */
             if (!empty($bundleAssets) && $staticAsset !== false) {
                 $bundleAssets = array_reverse($bundleAssets);
                 foreach ($bundleAssets as $bundleAsset) {
@@ -123,6 +136,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
                 $after = $staticAsset->getFilePath();
             }
         }
+
         $requireJsConfig = $this->fileManager->createRequireJsConfigAsset();
         $assetCollection->insert(
             $requireJsConfig->getFilePath(),
@@ -135,6 +149,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
             $requireJsMixinsConfig,
             $after
         );
+
         return parent::_prepareLayout();
     }
 }
