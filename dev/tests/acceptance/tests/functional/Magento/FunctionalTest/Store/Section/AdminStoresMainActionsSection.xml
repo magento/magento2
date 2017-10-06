@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="AdminStoresMainActionsSection">
+        <element name="createStoreViewButton" type="button" selector="#add_store"/>
+        <element name="createStoreButton" type="button" selector="#add_group"/>
+        <element name="createWebsiteButton" type="button" selector="#add"/>
+        <element name="saveButton" type="button" selector="#save"/>
+        <element name="backButton" type="button" selector="#back"/>
+    </section>
+</config>

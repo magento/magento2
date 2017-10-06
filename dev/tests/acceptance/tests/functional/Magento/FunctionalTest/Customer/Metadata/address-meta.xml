@@ -9,52 +9,52 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateAddress" dataType="address" type="create">
-        <entry key="region">region</entry>
-        <entry key="country_id">string</entry>
+        <field key="region">region</field>
+        <field key="country_id">string</field>
         <array key="street">
             <value>string</value>
         </array>
-        <entry key="company">string</entry>
-        <entry key="telephone">string</entry>
-        <entry key="fax">string</entry>
-        <entry key="postcode">string</entry>
-        <entry key="city">string</entry>
-        <entry key="firstname">string</entry>
-        <entry key="lastname">string</entry>
-        <entry key="middlename">string</entry>
-        <entry key="prefix">string</entry>
-        <entry key="suffix">string</entry>
-        <entry key="vat_id">string</entry>
-        <entry key="default_shipping">boolean</entry>
-        <entry key="default_billing">boolean</entry>
-        <entry key="extension_attributes">empty_extension_attribute</entry>
+        <field key="company">string</field>
+        <field key="telephone">string</field>
+        <field key="fax">string</field>
+        <field key="postcode">string</field>
+        <field key="city">string</field>
+        <field key="firstname">string</field>
+        <field key="lastname">string</field>
+        <field key="middlename">string</field>
+        <field key="prefix">string</field>
+        <field key="suffix">string</field>
+        <field key="vat_id">string</field>
+        <field key="default_shipping">boolean</field>
+        <field key="default_billing">boolean</field>
+        <field key="extension_attributes">empty_extension_attribute</field>
         <array key="custom_attributes">
             <value>custom_attribute</value>
         </array>
     </operation>
     <operation name="UpdateAddress" dataType="address" type="update">
-        <entry key="id">integer</entry>
-        <entry key="customer_id">integer</entry>
-        <entry key="region">region</entry>
-        <entry key="region_id">integer</entry>
-        <entry key="country_id">string</entry>
+        <field key="id">integer</field>
+        <field key="customer_id">integer</field>
+        <field key="region">region</field>
+        <field key="region_id">integer</field>
+        <field key="country_id">string</field>
         <array key="street">
             <value>string</value>
         </array>
-        <entry key="company">string</entry>
-        <entry key="telephone">string</entry>
-        <entry key="fax">string</entry>
-        <entry key="postcode">string</entry>
-        <entry key="city">string</entry>
-        <entry key="firstname">string</entry>
-        <entry key="lastname">string</entry>
-        <entry key="middlename">string</entry>
-        <entry key="prefix">string</entry>
-        <entry key="suffix">string</entry>
-        <entry key="vat_id">string</entry>
-        <entry key="default_shipping">boolean</entry>
-        <entry key="default_billing">boolean</entry>
-        <entry key="extension_attributes">empty_extension_attribute</entry>
+        <field key="company">string</field>
+        <field key="telephone">string</field>
+        <field key="fax">string</field>
+        <field key="postcode">string</field>
+        <field key="city">string</field>
+        <field key="firstname">string</field>
+        <field key="lastname">string</field>
+        <field key="middlename">string</field>
+        <field key="prefix">string</field>
+        <field key="suffix">string</field>
+        <field key="vat_id">string</field>
+        <field key="default_shipping">boolean</field>
+        <field key="default_billing">boolean</field>
+        <field key="extension_attributes">empty_extension_attribute</field>
         <array key="custom_attributes">
             <value>custom_attribute</value>
         </array>
