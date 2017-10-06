@@ -12,10 +12,10 @@
         <before>
             <createData entity="simplesubcategory" mergeKey="simplecategory"/>
             <createData entity="simpleproduct" mergeKey="simpleproduct1">
-                <required-entity persistedKey="simplecategory"/>
+                <required-entity createDataKey="simplecategory"/>
             </createData>
             <createData entity="simpleproduct" mergeKey="simpleproduct2">
-                <required-entity persistedKey="categoryLink"/>
+                <required-entity createDataKey="categoryLink"/>
             </createData>
         </before>
         <after>
