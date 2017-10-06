@@ -8,7 +8,8 @@ namespace Magento\Analytics\Test\Unit\Model\Condition;
 
 use Magento\Analytics\Model\Condition\CanViewNotification;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Analytics\Model\NotificationFlag;
+use Magento\Analytics\Model\notificationFlagManager;
+use Magento\Backend\Model\Auth\Session;
 
 /**
  * Class CanViewNotificationTest
@@ -16,44 +17,66 @@ use Magento\Analytics\Model\NotificationFlag;
 class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var NotificationFlag|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $notificationFlagMock;
-
-    /**
      * @var CanViewNotification
      */
     private $canViewNotification;
 
+    /**
+     * @var NotificationFlagManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $notificationFlagManagerMock;
+
+    /**
+     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sessionMock;
+
     public function setUp()
     {
-        $this->notificationFlagMock = $this->getMockBuilder(NotificationFlag::class)
+        $this->notificationFlagManagerMock = $this->getMockBuilder(NotificationFlagManager::class)
             ->disableOriginalConstructor()
+            ->getMock();
+        $this->sessionMock = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getUser', 'getId'])
             ->getMock();
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
             CanViewNotification::class,
             [
-                'notificationFlag' => $this->notificationFlagMock
+                'notificationFlagManager' => $this->notificationFlagManagerMock,
+                'session' => $this->sessionMock
             ]
         );
     }
 
     public function testUserShouldSeeNotification()
     {
-        $this->notificationFlagMock->expects($this->once())
-            ->method('hasNotificationValueForCurrentUser')
+        $this->sessionMock->expects($this->once())
+            ->method('getUser')
+            ->willReturnSelf();
+        $this->sessionMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $this->notificationFlagManagerMock->expects($this->once())
+            ->method('isUserNotified')
             ->willReturn(false);
-        $this->notificationFlagMock->expects($this->once())
-            ->method('storeNotificationValueForCurrentUser')
+        $this->notificationFlagManagerMock->expects($this->once())
+            ->method('setNotifiedUser')
             ->willReturn(true);
         $this->assertTrue($this->canViewNotification->isVisible([]));
     }
 
     public function testUserShouldNotSeeNotification()
     {
-        $this->notificationFlagMock->expects($this->once())
-            ->method('hasNotificationValueForCurrentUser')
+        $this->sessionMock->expects($this->once())
+            ->method('getUser')
+            ->willReturnSelf();
+        $this->sessionMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $this->notificationFlagManagerMock->expects($this->once())
+            ->method('isUserNotified')
             ->willReturn(true);
         $this->assertFalse($this->canViewNotification->isVisible([]));
     }

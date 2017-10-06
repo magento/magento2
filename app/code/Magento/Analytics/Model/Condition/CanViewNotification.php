@@ -5,8 +5,9 @@
  */
 namespace Magento\Analytics\Model\Condition;
 
+use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
-use Magento\Analytics\Model\NotificationFlag;
+use Magento\Analytics\Model\NotificationFlagManager;
 
 /**
  * Class CanViewNotification
@@ -22,33 +23,42 @@ class CanViewNotification implements VisibilityConditionInterface
     const NAME = 'can_view_notification';
 
     /**
-     * @var NotificationFlag
+     * @var NotificationFlagManager
      */
-    private $notificationFlag;
+    private $notificationFlagManager;
+
+    /**
+     * @var Session
+     */
+    private $session;
 
     /**
      * CanViewNotification constructor.
      *
-     * @param NotificationFlag $notificationFlag
+     * @param NotificationFlagManager $notificationFlagManager
+     * @param Session $session
      */
     public function __construct(
-        NotificationFlag $notificationFlag
+        NotificationFlagManager $notificationFlagManager,
+        Session $session
     ) {
-        $this->notificationFlag = $notificationFlag;
+        $this->notificationFlagManager = $notificationFlagManager;
+        $this->session = $session;
     }
 
     /**
-     * Validate if notification popup can be shown
+     * Validate if notification popup can be shown and set the notification flag
      *
      * @inheritdoc
      */
     public function isVisible(array $arguments)
     {
-        if ($this->notificationFlag->hasNotificationValueForCurrentUser()) {
+        $userId = $this->session->getUser()->getId();
+        if ($this->notificationFlagManager->isUserNotified($userId)) {
             return false;
         }
 
-        return $this->notificationFlag->storeNotificationValueForCurrentUser();
+        return $this->notificationFlagManager->setNotifiedUser($userId);
     }
 
     /**
