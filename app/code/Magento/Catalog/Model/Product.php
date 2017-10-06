@@ -1058,7 +1058,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function cleanCache()
     {
-        $this->_cacheManager->clean('catalog_product_' . $this->getId());
+        if ($this->getId()) {
+            $this->_cacheManager->clean(self::CACHE_TAG.'_'.$this->getId());
+        }
         return $this;
     }
 
@@ -2278,13 +2280,16 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getIdentities()
     {
-        $identities = [self::CACHE_TAG . '_' . $this->getId()];
+        $identities = [];
+
+        if ($this->getId()) {
+            $identities[] = self::CACHE_TAG.'_'.$this->getId();
+        }
         if ($this->getIsChangedCategories()) {
             foreach ($this->getAffectedCategoryIds() as $categoryId) {
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
-        
         if (($this->getOrigData('status') != $this->getData('status')) || $this->isStockStatusChanged()) {
             foreach ($this->getCategoryIds() as $categoryId) {
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;

@@ -461,11 +461,18 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $configurableAttributes = $this->getConfigurableAttributeCollection($product);
                 $this->extensionAttributesJoinProcessor->process($configurableAttributes);
                 $configurableAttributes->orderByPosition()->load();
-                $this->getCache()->save(
-                    serialize($configurableAttributes),
-                    $cacheId,
-                    array_merge($product->getIdentities(), [self::TYPE_CODE . '_' . $productId])
-                );
+                //Caching attributes if we can already identify the product.
+                if ($productId) {
+                    $this->getCache()
+                        ->save(
+                            serialize($configurableAttributes),
+                            $cacheId,
+                            array_merge(
+                                $product->getIdentities(),
+                                [self::TYPE_CODE.'_'.$productId]
+                            )
+                        );
+                }
             }
             $product->setData($this->_configurableAttributes, $configurableAttributes);
         }
@@ -710,7 +717,13 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $productId = $product->getData($metadata->getLinkField());
 
-        $this->getCache()->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::TYPE_CODE . '_' . $productId]);
+        if ($productId) {
+            $this->getCache()
+                ->clean(
+                    \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                    [self::TYPE_CODE.'_'.$productId]
+                );
+        }
         parent::beforeSave($product);
 
         $product->canAffectOptions(false);
