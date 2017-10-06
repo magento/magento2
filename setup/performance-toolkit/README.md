@@ -21,7 +21,7 @@ The Performance Toolkit enables you to test the performance of your Magento inst
 
 Before running the JMeter tests for the first time, you will need to first use the `php bin/magento setup:performance:generate-fixtures {profile path}` command to generate the test data. You can find the configuration files of available profiles in the folders `setup/performance-toolkit/profiles/ce` and `setup/performance-toolkit/profiles/ee`.
 
-It can take a significant amount of time to generate a profile. For example, generating the medium profile takes up to 6 hours, while generating the large profile can take up to 22 hours. So we recommend using the `-s` option to skip indexation. Then you can start indexation manually.
+It can take a significant amount of time to generate a profile. For example, generating the large profile can take up to 4 hours. So we recommend using the `-s` option to skip indexation. Then you can start indexation manually.
 
 Splitting generation and indexation processes doesn't reduce total processing time, but it requires fewer resources. For example, to generate a small profile, use commands:
 
@@ -29,6 +29,17 @@ Splitting generation and indexation processes doesn't reduce total processing ti
     php bin/magento indexer:reindex
 
 For more information about the available profiles and generating fixtures generation, read [Generate data for performance testing](http://devdocs.magento.com/guides/v2.2/config-guide/cli/config-cli-subcommands-perf-data.html).
+
+For run Admin Pool in multithreading mode, please be sure, that:
+  - "Admin Account Sharing" is enabled
+
+    `Follow Stores > Configuration > Advanced > Admin > Security.
+    Set Admin Account Sharing to Yes.`
+
+  - Indexers setup in "Update by schedule" mode: 
+
+    `Follow System > Tool > Index Management
+    Set "Update by schedule" for all idexers`
 
 **Note:** Before generating medium or large profiles, it may be necessary to increase the value of `tmp_table_size` and `max_heap_table_size` parameters for MySQL to 512Mb or more. The value of `memory_limit` for PHP should be 1Gb or more.
 
