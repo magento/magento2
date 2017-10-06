@@ -63,7 +63,7 @@
             <grabTextFrom mergeKey="s53" selector="{{CheckoutSuccessMainSection.orderNumber22}}" returnVariable="orderNumber" />
             <see mergeKey="s55" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" />
 
-            <amOnPage mergeKey="s59" url="{{AdminLoginPage}}" />
+            <amOnPage mergeKey="s59" url="{{AdminLoginPage.url}}" />
             <fillField mergeKey="s61" selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" />
             <fillField mergeKey="s63" selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" />
             <click mergeKey="s65" selector="{{AdminLoginFormSection.signIn}}" />

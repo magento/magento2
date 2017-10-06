@@ -31,7 +31,7 @@
                 <title value="Persist a wishlist for a customer"/>
                 <description value="Persist a wishlist for a customer"/>
             </annotations>
-            <amOnPage mergeKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage}}"/>
+            <amOnPage mergeKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>
             <fillField  mergeKey="fillEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
             <fillField  mergeKey="fillPassword" userInput="$$customer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
             <waitForElementVisible mergeKey="waitForButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
@@ -40,7 +40,7 @@
             <see mergeKey="seeLastName" userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
             <see mergeKey="seeEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
             <waitForPageLoad mergeKey="15"/>
-            <amOnPage mergeKey="amOnWishlist" url="{{StorefrontCustomerWishlistPage}}"/>
+            <amOnPage mergeKey="amOnWishlist" url="{{StorefrontCustomerWishlistPage.url}}"/>
             <see mergeKey="seeInField" userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemName}}"/>
         </test>
     </cest>
