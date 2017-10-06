@@ -6,21 +6,18 @@
 
 namespace Magento\InventoryCatalog\Api;
 
-use Magento\InventoryApi\Api\Data\StockInterface;
-
 /**
  * Represents default stock
  *
  * @api
  */
-interface DefaultStockRepositoryInterface
+interface DefaultStockResolverInterface
 {
-    const DEFAULT_STOCK = 1;
 
     /**
      * Get default stock
      *
-     * @return StockInterface
+     * @return int
      */
-    public function get(): StockInterface;
+    public function getId(): int;
 }

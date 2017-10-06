@@ -7,7 +7,6 @@
 namespace Magento\InventoryCatalog\Test\Api;
 
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceRepositoryInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Rest\Request;
 
@@ -21,9 +20,10 @@ class GetDefaultSourceTest extends WebapiAbstract
      */
     public function testGetDefaultSource()
     {
+        $defaultSourceId = 1;
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/inventory/source/' . DefaultSourceRepositoryInterface::DEFAULT_SOURCE,
+                'resourcePath' => '/V1/inventory/source/' . $defaultSourceId,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -34,16 +34,8 @@ class GetDefaultSourceTest extends WebapiAbstract
         if (self::ADAPTER_REST == TESTS_WEB_API_ADAPTER) {
             $source = $this->_webApiCall($serviceInfo);
         } else {
-            $source = $this->_webApiCall(
-                $serviceInfo,
-                [
-                    'sourceId' => DefaultSourceRepositoryInterface::DEFAULT_SOURCE
-                ]
-            );
+            $source = $this->_webApiCall($serviceInfo, ['sourceId' => $defaultSourceId]);
         }
-        $this->assertEquals(
-            DefaultSourceRepositoryInterface::DEFAULT_SOURCE,
-            $source[SourceInterface::SOURCE_ID]
-        );
+        $this->assertEquals($defaultSourceId, $source[SourceInterface::SOURCE_ID]);
     }
 }

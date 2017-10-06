@@ -17,8 +17,8 @@ use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\InventoryCatalog\Api\DefaultSourceRepositoryInterface;
-use Magento\InventoryCatalog\Api\DefaultStockRepositoryInterface;
+use Magento\InventoryCatalog\Api\DefaultSourceResolverInterface;
+use Magento\InventoryCatalog\Api\DefaultStockResolverInterface;
 
 /**
  * Install Default Source, Stock and link them together
@@ -56,12 +56,24 @@ class InstallData implements InstallDataInterface
     private $assignSourcesToStock;
 
     /**
+     * @var DefaultSourceResolverInterface
+     */
+    private $defaultSourceResolver;
+
+    /**
+     * @var DefaultStockResolverInterface
+     */
+    private $defaultStockResolver;
+
+    /**
      * @param SourceRepositoryInterface $sourceRepository
      * @param SourceInterfaceFactory $sourceFactory
      * @param StockRepositoryInterface $stockRepository
      * @param StockInterfaceFactory $stockFactory
      * @param AssignSourcesToStockInterface $assignSourcesToStock
      * @param DataObjectHelper $dataObjectHelper
+     * @param DefaultSourceResolverInterface $defaultSourceResolver
+     * @param DefaultStockResolverInterface $defaultStockResolver
      */
     public function __construct(
         SourceRepositoryInterface $sourceRepository,
@@ -69,7 +81,9 @@ class InstallData implements InstallDataInterface
         StockRepositoryInterface $stockRepository,
         StockInterfaceFactory $stockFactory,
         AssignSourcesToStockInterface $assignSourcesToStock,
-        DataObjectHelper $dataObjectHelper
+        DataObjectHelper $dataObjectHelper,
+        DefaultSourceResolverInterface $defaultSourceResolver,
+        DefaultStockResolverInterface $defaultStockResolver
     ) {
         $this->sourceRepository = $sourceRepository;
         $this->sourceFactory = $sourceFactory;
@@ -77,6 +91,8 @@ class InstallData implements InstallDataInterface
         $this->stockFactory = $stockFactory;
         $this->assignSourcesToStock = $assignSourcesToStock;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->defaultSourceResolver = $defaultSourceResolver;
+        $this->defaultStockResolver = $defaultStockResolver;
     }
 
     /**
@@ -98,7 +114,7 @@ class InstallData implements InstallDataInterface
     private function addDefaultSource()
     {
         $data = [
-            SourceInterface::SOURCE_ID => DefaultSourceRepositoryInterface::DEFAULT_SOURCE,
+            SourceInterface::SOURCE_ID => $this->defaultSourceResolver->getId(),
             SourceInterface::NAME => 'Default Source',
             SourceInterface::ENABLED => 1,
             SourceInterface::DESCRIPTION => 'Default Source',
@@ -121,7 +137,7 @@ class InstallData implements InstallDataInterface
     private function addDefaultStock()
     {
         $data = [
-            StockInterface::STOCK_ID => DefaultStockRepositoryInterface::DEFAULT_STOCK,
+            StockInterface::STOCK_ID => $this->defaultStockResolver->getId(),
             StockInterface::NAME => 'Default Stock'
         ];
         $source = $this->stockFactory->create();
@@ -137,8 +153,8 @@ class InstallData implements InstallDataInterface
     private function assignStockToSource()
     {
         $this->assignSourcesToStock->execute(
-            [DefaultSourceRepositoryInterface::DEFAULT_SOURCE],
-            DefaultStockRepositoryInterface::DEFAULT_STOCK
+            [$this->defaultSourceResolver->getId()],
+            $this->defaultStockResolver->getId()
         );
     }
 }

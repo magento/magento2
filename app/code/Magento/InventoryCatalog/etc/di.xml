@@ -6,6 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\InventoryCatalog\Api\DefaultStockRepositoryInterface" type="Magento\InventoryCatalog\Model\DefaultStockRepository"/>
-    <preference for="Magento\InventoryCatalog\Api\DefaultSourceRepositoryInterface" type="Magento\InventoryCatalog\Model\DefaultSourceRepository"/>
+    <preference for="Magento\InventoryCatalog\Api\DefaultStockResolverInterface" type="Magento\InventoryCatalog\Model\DefaultStockResolver"/>
+    <preference for="Magento\InventoryCatalog\Api\DefaultSourceResolverInterface" type="Magento\InventoryCatalog\Model\DefaultSourceResolver"/>
 </config>

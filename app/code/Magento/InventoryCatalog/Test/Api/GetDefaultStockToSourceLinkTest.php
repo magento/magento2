@@ -7,8 +7,6 @@
 namespace Magento\InventoryCatalog\Test\Api;
 
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceRepositoryInterface;
-use Magento\InventoryCatalog\Api\DefaultStockRepositoryInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Rest\Request;
 
@@ -22,10 +20,11 @@ class GetDefaultStockToSourceLinkTest extends WebapiAbstract
      */
     public function testGetDefaultStockToSourceLink()
     {
+        $defaultStockId = 1;
+        $defaultSourceId = 1;
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/inventory/stock/get-assigned-sources/' .
-                    DefaultStockRepositoryInterface::DEFAULT_STOCK,
+                'resourcePath' => '/V1/inventory/stock/get-assigned-sources/' . $defaultStockId,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -36,11 +35,8 @@ class GetDefaultStockToSourceLinkTest extends WebapiAbstract
         if (self::ADAPTER_REST == TESTS_WEB_API_ADAPTER) {
             $source = $this->_webApiCall($serviceInfo);
         } else {
-            $source = $this->_webApiCall($serviceInfo, ['stockId' => DefaultStockRepositoryInterface::DEFAULT_STOCK]);
+            $source = $this->_webApiCall($serviceInfo, ['stockId' => $defaultStockId]);
         }
-        $this->assertEquals(
-            [DefaultSourceRepositoryInterface::DEFAULT_SOURCE],
-            array_column($source, SourceInterface::SOURCE_ID)
-        );
+        $this->assertEquals([$defaultSourceId], array_column($source, SourceInterface::SOURCE_ID));
     }
 }
