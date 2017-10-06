@@ -3,11 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Asset;
 
+use InvalidArgumentException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\Filesystem;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Asset\Merged as ViewAssetMerged;
+use Magento\Framework\View\Asset\MergeStrategy\Checksum as AssetMergeStrategyChecksum;
+use Magento\Framework\View\Asset\MergeStrategy\FileExists as AssetMergeStrategyFileExists;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
@@ -19,7 +27,7 @@ class MergeService
     /**
      * Object Manager
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -33,14 +41,14 @@ class MergeService
     /**
      * Filesystem
      *
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     protected $filesystem;
 
     /**
      * State
      *
-     * @var \Magento\Framework\App\State
+     * @var AppState
      */
     protected $state;
 
@@ -52,18 +60,18 @@ class MergeService
     /**
      * Constructor
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param ConfigInterface $config
      * @param ScopeResolverInterface $scopeResolver
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\App\State $state
+     * @param Filesystem $filesystem
+     * @param AppState $state
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        ObjectManagerInterface $objectManager,
         ConfigInterface $config,
         ScopeResolverInterface $scopeResolver,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\App\State $state
+        Filesystem $filesystem,
+        AppState $state
     ) {
         $this->objectManager = $objectManager;
         $this->config = $config;
@@ -80,7 +88,7 @@ class MergeService
      *
      * @return array|\Iterator
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getMergedAssets(array $assets, $contentType)
     {
@@ -88,7 +96,7 @@ class MergeService
         $isJs = $contentType == 'js';
 
         if (!$isCss && !$isJs) {
-            throw new \InvalidArgumentException("Merge for content type '{$contentType}' is not supported.");
+            throw new InvalidArgumentException("Merge for content type '{$contentType}' is not supported.");
         }
 
         $scopeType = $this->isAdminStore() ? ScopeConfigInterface::SCOPE_TYPE_DEFAULT : ScopeInterface::SCOPE_STORE;
@@ -97,16 +105,16 @@ class MergeService
         $isJsMergeEnabled = $this->config->isMergeJsFiles($scopeType);
 
         if (($isCss && $isCssMergeEnabled) || ($isJs && $isJsMergeEnabled)) {
-            $mergeStrategyClass = \Magento\Framework\View\Asset\MergeStrategy\FileExists::class;
+            $mergeStrategyClass = AssetMergeStrategyFileExists::class;
 
-            if ($this->state->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER) {
-                $mergeStrategyClass = \Magento\Framework\View\Asset\MergeStrategy\Checksum::class;
+            if (AppState::MODE_DEVELOPER === $this->state->getMode()) {
+                $mergeStrategyClass = AssetMergeStrategyChecksum::class;
             }
 
             $mergeStrategy = $this->objectManager->get($mergeStrategyClass);
 
             $assets = $this->objectManager->create(
-                \Magento\Framework\View\Asset\Merged::class,
+                ViewAssetMerged::class,
                 ['assets' => $assets, 'mergeStrategy' => $mergeStrategy]
             );
         }
