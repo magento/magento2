@@ -7,14 +7,28 @@
 
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Sales\Controller\Adminhtml\Order;
-use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Directory\Model\RegionFactory;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Directory\Model\RegionFactory;
+use Magento\Sales\Api\Data\OrderAddressInterface;
+use Magento\Sales\Controller\Adminhtml\Order;
+use Magento\Sales\Model\Order\Address;
 use Psr\Log\LoggerInterface;
-use Magento\Framework;
+use Magento\Framework\Registry;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ */
 class AddressSave extends Order
 {
     /**
@@ -30,31 +44,29 @@ class AddressSave extends Order
     private $regionFactory;
 
     /**
-     * @param Action\Context $context
-     * @param Framework\Registry $coreRegistry
-     * @param Framework\App\Response\Http\FileFactory $fileFactory
-     * @param Framework\Translate\InlineInterface $translateInline
-     * @param Framework\View\Result\PageFactory $resultPageFactory
-     * @param Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @param Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param FileFactory $fileFactory
+     * @param InlineInterface $translateInline
+     * @param PageFactory $resultPageFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param LayoutFactory $resultLayoutFactory
+     * @param RawFactory $resultRawFactory
      * @param OrderManagementInterface $orderManagement
      * @param OrderRepositoryInterface $orderRepository
      * @param LoggerInterface $logger
      * @param RegionFactory $regionFactory
      *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
-        Action\Context $context,
-        Framework\Registry $coreRegistry,
-        Framework\App\Response\Http\FileFactory $fileFactory,
-        Framework\Translate\InlineInterface $translateInline,
-        Framework\View\Result\PageFactory $resultPageFactory,
-        Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        Framework\View\Result\LayoutFactory $resultLayoutFactory,
-        Framework\Controller\Result\RawFactory $resultRawFactory,
+        Context $context,
+        Registry $coreRegistry,
+        FileFactory $fileFactory,
+        InlineInterface $translateInline,
+        PageFactory $resultPageFactory,
+        JsonFactory $resultJsonFactory,
+        LayoutFactory $resultLayoutFactory,
+        RawFactory $resultRawFactory,
         OrderManagementInterface $orderManagement,
         OrderRepositoryInterface $orderRepository,
         LoggerInterface $logger,
@@ -79,14 +91,14 @@ class AddressSave extends Order
     /**
      * Save order address
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
         $addressId = $this->getRequest()->getParam('address_id');
-        /** @var $address \Magento\Sales\Api\Data\OrderAddressInterface|\Magento\Sales\Model\Order\Address */
+        /** @var $address OrderAddressInterface|Address */
         $address = $this->_objectManager->create(
-            \Magento\Sales\Api\Data\OrderAddressInterface::class
+            OrderAddressInterface::class
         )->load($addressId);
         $data = $this->getRequest()->getPostValue();
         $this->updateRegionData($data);
@@ -103,7 +115,7 @@ class AddressSave extends Order
                 );
                 $this->messageManager->addSuccess(__('You updated the order address.'));
                 return $resultRedirect->setPath('sales/*/view', ['order_id' => $address->getParentId()]);
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('We can\'t update the order address right now.'));
@@ -119,7 +131,6 @@ class AddressSave extends Order
      *
      * @param array $attributeValues
      * @return void
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function updateRegionData(&$attributeValues)
     {
