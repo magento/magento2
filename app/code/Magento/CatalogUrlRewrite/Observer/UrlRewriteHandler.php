@@ -10,7 +10,6 @@ use Magento\CatalogUrlRewrite\Model\CategoryBasedProductRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Event\Observer as EventObserver;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
@@ -88,31 +87,36 @@ class UrlRewriteHandler
         $this->isSkippedProduct = [];
         $saveRewriteHistory = $category->getData('save_rewrites_history');
         $storeId = $category->getStoreId();
-        if ($category->getAffectedProductIds()) {
-            $this->isSkippedProduct = $category->getAffectedProductIds();
-            $collection = $this->productCollectionFactory->create()
-                ->setStoreId($storeId)
-                ->addIdFilter($category->getAffectedProductIds())
-                ->addAttributeToSelect('visibility')
-                ->addAttributeToSelect('name')
-                ->addAttributeToSelect('url_key')
-                ->addAttributeToSelect('url_path');
-            foreach ($collection as $product) {
-                $product->setStoreId($storeId);
-                $product->setData('save_rewrites_history', $saveRewriteHistory);
+        if ($category->dataHasChangedFor('name')
+            || $category->dataHasChangedFor('url_key')
+            || $category->dataHasChangedFor('url_path')
+        ) {
+            if ($category->getAffectedProductIds()) {
+                $this->isSkippedProduct = $category->getAffectedProductIds();
+                $collection = $this->productCollectionFactory->create()
+                    ->setStoreId($storeId)
+                    ->addIdFilter($category->getAffectedProductIds())
+                    ->addAttributeToSelect('visibility')
+                    ->addAttributeToSelect('name')
+                    ->addAttributeToSelect('url_key')
+                    ->addAttributeToSelect('url_path');
+                foreach ($collection as $product) {
+                    $product->setStoreId($storeId);
+                    $product->setData('save_rewrites_history', $saveRewriteHistory);
+                    $mergeDataProvider->merge(
+                        $this->productUrlRewriteGenerator->generate($product, $category->getEntityId())
+                    );
+                }
+            } else {
                 $mergeDataProvider->merge(
-                    $this->productUrlRewriteGenerator->generate($product, $category->getEntityId())
+                    $this->getCategoryProductsUrlRewrites(
+                        $category,
+                        $storeId,
+                        $saveRewriteHistory,
+                        $category->getEntityId()
+                    )
                 );
             }
-        } else {
-            $mergeDataProvider->merge(
-                $this->getCategoryProductsUrlRewrites(
-                    $category,
-                    $storeId,
-                    $saveRewriteHistory,
-                    $category->getEntityId()
-                )
-            );
         }
         foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
             $mergeDataProvider->merge(
