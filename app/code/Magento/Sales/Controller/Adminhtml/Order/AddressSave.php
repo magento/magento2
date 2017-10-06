@@ -7,7 +7,15 @@
 
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
+use Magento\Sales\Controller\Adminhtml\Order;
+use Magento\Backend\App\Action;
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Directory\Model\RegionFactory;
+use Psr\Log\LoggerInterface;
+use Magento\Framework;
+
+class AddressSave extends Order
 {
     /**
      * Authorization level of a basic admin session
@@ -17,40 +25,40 @@ class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
     const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
 
     /**
-     * @var \Magento\Directory\Model\RegionFactory
+     * @var RegionFactory
      */
     private $regionFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Framework\Translate\InlineInterface $translateInline
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param \Magento\Sales\Api\OrderManagementInterface $orderManagement
-     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Directory\Model\RegionFactory $regionFactory
+     * @param Action\Context $context
+     * @param Framework\Registry $coreRegistry
+     * @param Framework\App\Response\Http\FileFactory $fileFactory
+     * @param Framework\Translate\InlineInterface $translateInline
+     * @param Framework\View\Result\PageFactory $resultPageFactory
+     * @param Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param OrderManagementInterface $orderManagement
+     * @param OrderRepositoryInterface $orderRepository
+     * @param LoggerInterface $logger
+     * @param RegionFactory $regionFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Framework\Translate\InlineInterface $translateInline,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Sales\Api\OrderManagementInterface $orderManagement,
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Directory\Model\RegionFactory $regionFactory
+        Action\Context $context,
+        Framework\Registry $coreRegistry,
+        Framework\App\Response\Http\FileFactory $fileFactory,
+        Framework\Translate\InlineInterface $translateInline,
+        Framework\View\Result\PageFactory $resultPageFactory,
+        Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        Framework\View\Result\LayoutFactory $resultLayoutFactory,
+        Framework\Controller\Result\RawFactory $resultRawFactory,
+        OrderManagementInterface $orderManagement,
+        OrderRepositoryInterface $orderRepository,
+        LoggerInterface $logger,
+        RegionFactory $regionFactory
     ) {
         $this->regionFactory = $regionFactory;
         parent::__construct(
