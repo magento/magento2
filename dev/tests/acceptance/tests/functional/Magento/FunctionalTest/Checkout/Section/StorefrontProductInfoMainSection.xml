@@ -8,8 +8,7 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
-    <section name="StorefrontQuickSearchSection">
-        <element name="searchPhrase" type="input" selector="#search"/>
-        <element name="searchButton" type="button" selector="button.action.search"/>
+    <section name="StorefrontProductInfoMainSection">
+        <element name="AddToCart" type="button" selector="#product-addtocart-button"/>
     </section>
 </config>
