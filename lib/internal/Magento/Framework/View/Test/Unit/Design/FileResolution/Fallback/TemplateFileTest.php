@@ -11,6 +11,9 @@ use Magento\Framework\View\Design\Fallback\RulePool;
 use Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile;
 use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
 
+/**T
+ * Class TemplateFileTest
+ */
 class TemplateFileTest extends \PHPUnit\Framework\TestCase
 {
     /**
