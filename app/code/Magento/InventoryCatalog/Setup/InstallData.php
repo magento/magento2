@@ -58,12 +58,12 @@ class InstallData implements InstallDataInterface
     /**
      * @var DefaultSourceProviderInterface
      */
-    private $defaultSourceResolver;
+    private $defaultSourceProvider;
 
     /**
      * @var DefaultStockProviderInterface
      */
-    private $defaultStockResolver;
+    private $defaultStockProvider;
 
     /**
      * @param SourceRepositoryInterface $sourceRepository
@@ -72,8 +72,8 @@ class InstallData implements InstallDataInterface
      * @param StockInterfaceFactory $stockFactory
      * @param AssignSourcesToStockInterface $assignSourcesToStock
      * @param DataObjectHelper $dataObjectHelper
-     * @param DefaultSourceProviderInterface $defaultSourceResolver
-     * @param DefaultStockProviderInterface $defaultStockResolver
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
+     * @param DefaultStockProviderInterface $defaultStockProvider
      */
     public function __construct(
         SourceRepositoryInterface $sourceRepository,
@@ -82,8 +82,8 @@ class InstallData implements InstallDataInterface
         StockInterfaceFactory $stockFactory,
         AssignSourcesToStockInterface $assignSourcesToStock,
         DataObjectHelper $dataObjectHelper,
-        DefaultSourceProviderInterface $defaultSourceResolver,
-        DefaultStockProviderInterface $defaultStockResolver
+        DefaultSourceProviderInterface $defaultSourceProvider,
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->sourceRepository = $sourceRepository;
         $this->sourceFactory = $sourceFactory;
@@ -91,8 +91,8 @@ class InstallData implements InstallDataInterface
         $this->stockFactory = $stockFactory;
         $this->assignSourcesToStock = $assignSourcesToStock;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->defaultSourceResolver = $defaultSourceResolver;
-        $this->defaultStockResolver = $defaultStockResolver;
+        $this->defaultSourceProvider = $defaultSourceProvider;
+        $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
@@ -114,7 +114,7 @@ class InstallData implements InstallDataInterface
     private function addDefaultSource()
     {
         $data = [
-            SourceInterface::SOURCE_ID => $this->defaultSourceResolver->getId(),
+            SourceInterface::SOURCE_ID => $this->defaultSourceProvider->getId(),
             SourceInterface::NAME => 'Default Source',
             SourceInterface::ENABLED => 1,
             SourceInterface::DESCRIPTION => 'Default Source',
@@ -137,7 +137,7 @@ class InstallData implements InstallDataInterface
     private function addDefaultStock()
     {
         $data = [
-            StockInterface::STOCK_ID => $this->defaultStockResolver->getId(),
+            StockInterface::STOCK_ID => $this->defaultStockProvider->getId(),
             StockInterface::NAME => 'Default Stock'
         ];
         $source = $this->stockFactory->create();
@@ -153,8 +153,8 @@ class InstallData implements InstallDataInterface
     private function assignStockToSource()
     {
         $this->assignSourcesToStock->execute(
-            [$this->defaultSourceResolver->getId()],
-            $this->defaultStockResolver->getId()
+            [$this->defaultSourceProvider->getId()],
+            $this->defaultStockProvider->getId()
         );
     }
 }
