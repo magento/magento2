@@ -7,7 +7,6 @@
 
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Sales\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -15,7 +14,7 @@ use Magento\Directory\Model\RegionFactory;
 use Psr\Log\LoggerInterface;
 use Magento\Framework;
 
-class AddressSave extends Adminhtml\Order
+class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
      * Authorization level of a basic admin session
