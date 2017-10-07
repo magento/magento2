@@ -86,7 +86,7 @@ class InstallSchema implements InstallSchemaInterface
             'Data Sharing Key'
         )->addColumn(
             'default_attribute_set_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Default Attribute Set Id'
@@ -153,7 +153,7 @@ class InstallSchema implements InstallSchemaInterface
             'Entity Type Id'
         )->addColumn(
             'attribute_set_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Attribute Set Id'
@@ -812,7 +812,7 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getTable('eav_attribute_set')
         )->addColumn(
             'attribute_set_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
             'Attribute Set Id'
@@ -863,13 +863,13 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getTable('eav_attribute_group')
         )->addColumn(
             'attribute_group_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
             'Attribute Group Id'
         )->addColumn(
             'attribute_set_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Attribute Set Id'
@@ -944,13 +944,13 @@ class InstallSchema implements InstallSchemaInterface
             'Entity Type Id'
         )->addColumn(
             'attribute_set_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Attribute Set Id'
         )->addColumn(
             'attribute_group_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Attribute Group Id'

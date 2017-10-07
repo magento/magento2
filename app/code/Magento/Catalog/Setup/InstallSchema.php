@@ -40,7 +40,7 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addColumn(
                 'attribute_set_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'Attribute Set ID'
@@ -671,7 +671,7 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addColumn(
                 'attribute_set_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'Attriute Set ID'
