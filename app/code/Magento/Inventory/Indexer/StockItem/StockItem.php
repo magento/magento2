@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Inventory\Indexer\StockItem;
 
-use Magento\Inventory\Indexer\IndexStructureInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Indexer\Alias;
 use Magento\Inventory\Indexer\IndexHandlerInterface;
 use Magento\Inventory\Indexer\IndexNameBuilder;
+use Magento\Inventory\Indexer\IndexStructureInterface;
 use Magento\Inventory\Indexer\IndexTableSwitcherInterface;
 use Magento\Inventory\Indexer\StockItemIndexerInterface;
+use Magento\Inventory\Indexer\StockItem\GetPartialReindexData;
+use Magento\Inventory\Indexer\StockItem\GetFullReindexData;
+use Magento\Inventory\Indexer\StockItem\IndexDataProvider;
 
 /**
  * @inheritdoc
@@ -18,9 +23,14 @@ use Magento\Inventory\Indexer\StockItemIndexerInterface;
 class StockItem implements StockItemIndexerInterface
 {
     /**
-     * @var AssignedStockIdsResolver
+     * @var GetPartialReindexData
      */
-    private $assignedStockIdsResolver;
+    private $getPartialReindexData;
+
+    /**
+     * @var GetFullReindexData
+     */
+    private $getFullReindexData;
 
     /**
      * @var IndexStructureInterface
@@ -48,25 +58,25 @@ class StockItem implements StockItemIndexerInterface
     private $indexNameBuilder;
 
     /**
-     * @param AssignedStockIdsResolver $assignedStockIdsResolver
+     * @param GetPartialReindexData $getPartialReindexData
+     * @param GetFullReindexData $getFullReindexData
      * @param IndexStructureInterface $indexStructureHandler
      * @param IndexHandlerInterface $indexHandler
      * @param IndexDataProvider $indexDataProvider
      * @param IndexTableSwitcherInterface $indexTableSwitcher
      * @param IndexNameBuilder $indexNameBuilder
-     *
-     * $indexStructureHandler name is for avoiding conflict with legacy index implementation
-     * @see \Magento\Indexer\Model\Indexer::getActionInstance
      */
     public function __construct(
-        AssignedStockIdsResolver $assignedStockIdsResolver,
+        GetPartialReindexData $getPartialReindexData,
+        GetFullReindexData $getFullReindexData,
         IndexStructureInterface $indexStructureHandler,
         IndexHandlerInterface $indexHandler,
         IndexDataProvider $indexDataProvider,
         IndexTableSwitcherInterface $indexTableSwitcher,
         IndexNameBuilder $indexNameBuilder
     ) {
-        $this->assignedStockIdsResolver = $assignedStockIdsResolver;
+        $this->getPartialReindexData = $getPartialReindexData;
+        $this->getFullReindexData = $getFullReindexData;
         $this->indexStructure = $indexStructureHandler;
         $this->indexHandler = $indexHandler;
         $this->indexDataProvider = $indexDataProvider;
@@ -79,53 +89,79 @@ class StockItem implements StockItemIndexerInterface
      */
     public function executeFull()
     {
-        $stockIds = $this->assignedStockIdsResolver->execute();
+        $stockIds = $this->getFullReindexData->execute();
 
         foreach ($stockIds as $stockId) {
-            $mainIndexName = $this->indexNameBuilder
-                ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
-                ->addDimension('stock_', $stockId)
-                ->setAlias(Alias::ALIAS_MAIN)
-                ->build();
-            $this->indexStructure->create($mainIndexName);
-
             $replicaIndexName = $this->indexNameBuilder
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_REPLICA)
                 ->build();
-            $this->indexStructure->create($replicaIndexName);
 
-            $this->indexHandler->saveIndex($replicaIndexName, $this->indexDataProvider->getData($stockId));
-            $this->indexTableSwitcher->switch($mainIndexName);
-            $this->indexStructure->delete($replicaIndexName);
+            $mainIndexName = $this->indexNameBuilder
+                ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
+                ->addDimension('stock_', $stockId)
+                ->setAlias(Alias::ALIAS_MAIN)
+                ->build();
+
+            $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
+            $this->indexStructure->create($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
+
+            if (!$this->indexStructure->isExist($mainIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
+                $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
+            }
+
+            $this->indexHandler->saveIndex(
+                $replicaIndexName,
+                $this->indexDataProvider->getData($stockId),
+                ResourceConnection::DEFAULT_CONNECTION
+            );
+            $this->indexTableSwitcher->switch($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
+            $this->indexStructure->delete($replicaIndexName, ResourceConnection::DEFAULT_CONNECTION);
         }
     }
 
     /**
      * @inheritdoc
      */
-    public function executeRow($sourceId)
+    public function executeRow($sourceItemId)
     {
-        $this->executeList([$sourceId]);
+        $this->executeList([$sourceItemId]);
     }
 
     /**
      * @inheritdoc
      */
-    public function executeList(array $sourceIds)
+    public function executeList(array $sourceItemIds)
     {
-        $stockIds = $this->assignedStockIdsResolver->execute($sourceIds);
+        $skuListInStockToUpdateList = $this->getPartialReindexData->execute($sourceItemIds);
 
-        foreach ($stockIds as $stockId) {
+        foreach ($skuListInStockToUpdateList as $skuListInStockToUpdate) {
+            $stockId = $skuListInStockToUpdate->getStockId();
+            $skuList = $skuListInStockToUpdate->getSkuList();
+
             $mainIndexName = $this->indexNameBuilder
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();
-            // TODO: we do not need to clear index
-            $this->indexStructure->create($mainIndexName);
-            $this->indexHandler->saveIndex($mainIndexName, $this->indexDataProvider->getData($stockId));
+
+            if ($this->indexStructure->isExist($mainIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
+                $this->indexHandler->cleanIndex(
+                    $mainIndexName,
+                    new \ArrayIterator($skuList),
+                    ResourceConnection::DEFAULT_CONNECTION
+                );
+            } else {
+                // TODO: need to remove after creating separate indexes
+                $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
+            }
+
+            $this->indexHandler->saveIndex(
+                $mainIndexName,
+                $this->indexDataProvider->getData($stockId, $skuList),
+                ResourceConnection::DEFAULT_CONNECTION
+            );
         }
     }
 }

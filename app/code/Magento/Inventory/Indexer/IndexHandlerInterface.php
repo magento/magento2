@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Inventory\Indexer;
 
 /**
@@ -17,16 +18,19 @@ interface IndexHandlerInterface
      *
      * @param IndexName $indexName
      * @param \Traversable $documents
+     * @param string $connectionName
      * @return void
      */
-    public function saveIndex(IndexName $indexName, \Traversable $documents);
+    public function saveIndex(IndexName $indexName, \Traversable $documents, string $connectionName);
 
     /**
-     * Remove data from index
+     * Remove given documents from Index. For StockItem index we provide list of SKUs, aggregated Quantity
+     * for which should be re-calculated
      *
      * @param IndexName $indexName
      * @param \Traversable $documents
+     * @param string $connectionName
      * @return void
      */
-    public function deleteIndex(IndexName $indexName, \Traversable $documents);
+    public function cleanIndex(IndexName $indexName, \Traversable $documents, string $connectionName);
 }

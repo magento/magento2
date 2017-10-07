@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Model;
 
 use Magento\InventoryApi\Api\Data\ReservationInterface;
@@ -39,6 +41,13 @@ class Reservation implements ReservationInterface
      */
     private $metadata;
 
+    /**
+     * @param int|null $reservationId
+     * @param int $stockId
+     * @param string $sku
+     * @param float $quantity
+     * @param null $metadata
+     */
     public function __construct(
         $reservationId,
         int $stockId,

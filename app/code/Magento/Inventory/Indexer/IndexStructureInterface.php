@@ -3,9 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Indexer;
 
-use Magento\Framework\App\ResourceConnection;
+namespace Magento\Inventory\Indexer;
 
 /**
  * Represent manipulation with index structure
@@ -15,18 +14,30 @@ use Magento\Framework\App\ResourceConnection;
 interface IndexStructureInterface
 {
     /**
-     * If index is exist then recreate it
+     * Create the Index Structure
+     *
+     * @param IndexName $indexName
+     * @param string $connectionName
+     * @throws \Magento\Framework\Exception\StateException
+     * @return void
+     */
+    public function create(IndexName $indexName, string $connectionName);
+
+    /**
+     * Delete the given Index
      *
      * @param IndexName $indexName
      * @param string $connectionName
      * @return void
      */
-    public function create(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION);
+    public function delete(IndexName $indexName, string $connectionName);
 
     /**
+     * Checks whether the Index exits
+     *
      * @param IndexName $indexName
      * @param string $connectionName
-     * @return void
+     * @return bool
      */
-    public function delete(IndexName $indexName, string $connectionName = ResourceConnection::DEFAULT_CONNECTION);
+    public function isExist(IndexName $indexName, string $connectionName): bool;
 }
