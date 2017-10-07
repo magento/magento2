@@ -9,4 +9,7 @@
     <event name="cms_wysiwyg_images_static_urls_allowed">
         <observer name="catalog_wysiwyg" instance="Magento\Catalog\Observer\CatalogCheckIsUsingStaticUrlsAllowedObserver" />
     </event>
+    <event name="attribute_set_delete_after">
+        <observer name="delete_url_keys" instance="Magento\Catalog\Observer\DeleteUrlKeys" />
+    </event>
 </config>

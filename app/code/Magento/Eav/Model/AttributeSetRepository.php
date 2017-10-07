@@ -53,9 +53,17 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
     protected $joinProcessor;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * @var CollectionProcessorInterface
      */
     private $collectionProcessor;
+
+    /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection */
+    private $productCollection;
 
     /**
      * @param AttributeSetResource $attributeSetResource
@@ -64,6 +72,8 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
      * @param Config $eavConfig
      * @param \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
      * @param CollectionProcessorInterface $collectionProcessor
      * @codeCoverageIgnore
      */
@@ -74,6 +84,8 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         EavConfig $eavConfig,
         \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection,
         CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->attributeSetResource = $attributeSetResource;
@@ -82,6 +94,8 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         $this->eavConfig = $eavConfig;
         $this->searchResultsFactory = $searchResultFactory;
         $this->joinProcessor = $joinProcessor;
+        $this->eventManager = $eventManager;
+        $this->productCollection = $productCollection;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
     }
 
@@ -156,13 +170,19 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
      */
     public function delete(AttributeSetInterface $attributeSet)
     {
+        // Get the affected product ids
+        $productIds = $this->productCollection
+            ->addFieldToFilter('attribute_set_id', $attributeSet->getAttributeSetId())->getAllIds();
+
         try {
             $this->attributeSetResource->delete($attributeSet);
+            $this->eventManager->dispatch('attribute_set_delete_after', ['products' => $productIds]);
         } catch (\Magento\Framework\Exception\StateException $exception) {
             throw new CouldNotDeleteException(__('Default attribute set can not be deleted'));
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(__('There was an error deleting attribute set.'));
         }
+
         return true;
     }
 
