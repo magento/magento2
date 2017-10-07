@@ -44,7 +44,7 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Acceptance tests using the Chrome environment
+     * Run all Functional tests using the Chrome environment
      */
     function chrome()
     {
@@ -52,7 +52,7 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Acceptance tests using the FireFox environment
+     * Run all Functional tests using the FireFox environment
      */
     function firefox()
     {
@@ -60,7 +60,7 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Acceptance tests using the PhantomJS environment
+     * Run all Functional tests using the PhantomJS environment
      */
     function phantomjs()
     {
@@ -68,7 +68,16 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
+     * Run all Functional tests using the Chrome Headless environment
+     */
+    function headless()
+    {
+        $this->_exec('./vendor/bin/codecept run functional --env headless --skip-group skip');
+    }
+
+    /**
      * Run all Tests with the specified @group tag, excluding @group 'skip', using the Chrome environment
+     * @param string $args
      */
     function group($args = '')
     {
@@ -76,7 +85,8 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Acceptance tests located under the Directory Path provided using the Chrome environment
+     * Run all Functional tests located under the Directory Path provided using the Chrome environment
+     * @param string $args
      */
     function folder($args = '')
     {
