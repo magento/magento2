@@ -24,10 +24,10 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class AddressSave extends Order
 {
@@ -55,8 +55,9 @@ class AddressSave extends Order
      * @param OrderManagementInterface $orderManagement
      * @param OrderRepositoryInterface $orderRepository
      * @param LoggerInterface $logger
-     * @param RegionFactory $regionFactory
+     * @param RegionFactory|null $regionFactory
      *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -70,9 +71,9 @@ class AddressSave extends Order
         OrderManagementInterface $orderManagement,
         OrderRepositoryInterface $orderRepository,
         LoggerInterface $logger,
-        RegionFactory $regionFactory
+        RegionFactory $regionFactory = null
     ) {
-        $this->regionFactory = $regionFactory;
+        $this->regionFactory = $regionFactory ?: ObjectManager::getInstance()->get(RegionFactory::class);
         parent::__construct(
             $context,
             $coreRegistry,
@@ -101,7 +102,7 @@ class AddressSave extends Order
             OrderAddressInterface::class
         )->load($addressId);
         $data = $this->getRequest()->getPostValue();
-        $this->updateRegionData($data);
+        $data = $this->updateRegionData($data);
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data && $address->getId()) {
             $address->addData($data);
@@ -130,14 +131,15 @@ class AddressSave extends Order
      * Update region data
      *
      * @param array $attributeValues
-     * @return void
+     * @return array
      */
-    protected function updateRegionData(&$attributeValues)
+    protected function updateRegionData($attributeValues)
     {
         if (!empty($attributeValues['region_id'])) {
             $newRegion = $this->regionFactory->create()->load($attributeValues['region_id']);
             $attributeValues['region_code'] = $newRegion->getCode();
             $attributeValues['region'] = $newRegion->getDefaultName();
         }
+        return $attributeValues;
     }
 }
