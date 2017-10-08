@@ -7,12 +7,12 @@ namespace Magento\Inventory\Test\Integration\Model\Import;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryImportExport\Model\Import\Sources;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use \Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
 
 /**
  * TODO: fixture via composer
@@ -96,9 +96,9 @@ class SourcesTest extends TestCase
             $this->buildRowDataArray(5, 'SKU-2', 15, 1),
             $this->buildRowDataArray(1, 'SKU-2', 33, 1),
         ];
-        $this->importDataMock->expects($this->atLeastOnce())
+        $this->importDataMock->expects($this->any())
             ->method('getNextBunch')
-            ->will($this->returnValue($bunch));
+            ->will($this->onConsecutiveCalls($bunch, false));
 
         $this->importer->importData();
 
@@ -106,7 +106,7 @@ class SourcesTest extends TestCase
         $expectedData = $this->updateDataArrayByBunch($beforeImportData, $bunch);
         $afterImportData = $this->buildDataArray($sourceItems->getItems());
 
-        $this->assertSame($expectedData, $afterImportData);
+        $this->assertEquals($expectedData, $afterImportData);
     }
 
     /**
@@ -136,10 +136,10 @@ class SourcesTest extends TestCase
         foreach ($sourceItems as $sourceItem) {
             $key = sprintf('%s-%s', $sourceItem->getSourceId(), $sourceItem->getSku());
             $comparableArray[$key] = $this->buildRowDataArray(
-                $sourceItem->getSourceId(),
+                (int) $sourceItem->getSourceId(),
                 $sourceItem->getSku(),
-                $sourceItem->getQuantity(),
-                $sourceItem->getStatus()
+                (float) $sourceItem->getQuantity(),
+                (int) $sourceItem->getStatus()
             );
         }
         return $comparableArray;
