@@ -10,6 +10,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventoryImportExport\Model\Import\Sources;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -45,6 +46,9 @@ class DeleteMultipleTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      */
     public function testDeleteMultipleWithEmptySourceItems()
@@ -59,6 +63,9 @@ class DeleteMultipleTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      */
     public function testDeleteMultipleForTwoItems()
@@ -84,12 +91,7 @@ class DeleteMultipleTest extends TestCase
         $comparableArray = [];
         foreach ($sourceItems as $sourceItem) {
             $key = sprintf('%s-%s', $sourceItem->getSourceId(), $sourceItem->getSku());
-            $comparableArray[$key] = $this->buildRowDataArray(
-                $sourceItem->getSourceId(),
-                $sourceItem->getSku(),
-                $sourceItem->getQuantity(),
-                $sourceItem->getStatus()
-            );
+            $comparableArray[$key] = '';
         }
         return $comparableArray;
     }
