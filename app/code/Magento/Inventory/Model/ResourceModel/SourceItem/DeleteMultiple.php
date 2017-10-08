@@ -8,7 +8,6 @@ namespace Magento\Inventory\Model\ResourceModel\SourceItem;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
-use Magento\Inventory\Model\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
@@ -45,8 +44,9 @@ class DeleteMultiple
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
+        $sourceIds = $this->getSourceIds($sourceItems);
         $whereCond = [
-            $connection->quoteInto(SourceItemInterface::SOURCE_ID . ' IN(?)', $this->getSourceIds($sourceItems))
+            $connection->quoteInto(SourceItemInterface::SOURCE_ID . ' IN(?)', $sourceIds)
         ];
 
         $connection->delete($tableName, $whereCond);

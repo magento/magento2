@@ -8,9 +8,7 @@ namespace Magento\Inventory\Model\ResourceModel\SourceItem;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryImportExport\Model\Import\Sources;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -53,13 +51,11 @@ class DeleteMultipleTest extends TestCase
      */
     public function testDeleteMultipleWithEmptySourceItems()
     {
-        $beforeDeleteMultiple = $this->getSourceItems()->getTotalCount();
+        $expectedCount = count($this->getSourceItems());
 
-        $sourceItems = [];
-        $this->deleteModel->execute($sourceItems);
+        $this->deleteModel->execute([]);
 
-        $afterDeleteMultiple = $this->getSourceItems()->getTotalCount();
-        $this->assertEquals($beforeDeleteMultiple, $afterDeleteMultiple);
+        $this->assertCount($expectedCount, $this->getSourceItems());
     }
 
     /**
@@ -71,38 +67,23 @@ class DeleteMultipleTest extends TestCase
     public function testDeleteMultipleForTwoItems()
     {
         $sourceItems = $this->getSourceItems();
-        $beforeDeleteMultiple = $this->buildDataArray($sourceItems->getItems());
-        $itemsToDelete = array_slice($beforeDeleteMultiple, 0, 2);
-        $expectedData = array_slice($beforeDeleteMultiple, 2);
+        $expectedCount = count($sourceItems) - 2;
+        $itemsToDelete = array_slice($sourceItems, 0, 2);
+        $expectedResult = array_slice($sourceItems, 2);
 
         $this->deleteModel->execute($itemsToDelete);
 
-        $sourceItems = $this->getSourceItems();
-        $afterDeleteMultiple = $this->buildDataArray($sourceItems->getItems());
-        $this->assertEquals($expectedData, $afterDeleteMultiple);
+        $result = array_values($this->getSourceItems());
+        $this->assertCount($expectedCount, $result);
+        $this->assertEquals($expectedResult, $result);
     }
 
     /**
-     * @param SourceItemInterface[] $sourceItems
-     * @return array
+     * @return \Magento\InventoryApi\Api\Data\SourceItemInterface[]
      */
-    private function buildDataArray(array $sourceItems)
-    {
-        $comparableArray = [];
-        foreach ($sourceItems as $sourceItem) {
-            $key = sprintf('%s-%s', $sourceItem->getSourceId(), $sourceItem->getSku());
-            $comparableArray[$key] = '';
-        }
-        return $comparableArray;
-    }
-
-
-    /**
-     * @return \Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface
-     */
-    private function getSourceItems(): SourceItemSearchResultsInterface
+    private function getSourceItems(): array
     {
         $searchCriteria = $this->searchCriteriaBuilder->create();
-        return $this->sourceItemRepository->getList($searchCriteria);
+        return $this->sourceItemRepository->getList($searchCriteria)->getItems();
     }
 }
