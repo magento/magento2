@@ -44,6 +44,7 @@
     <preference for="Magento\Inventory\Model\Stock\Command\DeleteByIdInterface" type="Magento\Inventory\Model\Stock\Command\DeleteById"/>
     <preference for="Magento\Inventory\Model\Stock\Command\GetInterface" type="Magento\Inventory\Model\Stock\Command\Get"/>
     <preference for="Magento\Inventory\Model\Stock\Command\GetListInterface" type="Magento\Inventory\Model\Stock\Command\GetList"/>
+    <preference for="Magento\Inventory\Model\Stock\Command\GetProductQuantityInterface" type="Magento\Inventory\Model\Stock\Command\GetProductQuantity"/>
     <preference for="Magento\Inventory\Model\Stock\Command\SaveInterface" type="Magento\Inventory\Model\Stock\Command\Save"/>
     <type name="Magento\Inventory\Model\Stock\Validator\ValidatorChain">
         <arguments>
@@ -78,21 +79,10 @@
         </arguments>
     </type>
     <!-- Reservation -->
-    <preference for="Magento\InventoryApi\Api\ReservationAppendInterface" type="Magento\Inventory\Model\Reservation\Command\ReservationsAppend"/>
+    <preference for="Magento\InventoryApi\Api\GetProductQuantityInStockInterface" type="Magento\Inventory\Model\GetProductQuantityInStock"/>
+    <preference for="Magento\InventoryApi\Api\IsProductInStockInterface" type="Magento\Inventory\Model\IsProductInStock"/>
+    <preference for="Magento\InventoryApi\Api\ReservationsAppendInterface" type="Magento\Inventory\Model\Reservation\Command\ReservationsAppend"/>
     <preference for="Magento\InventoryApi\Api\ReservationBuilderInterface" type="Magento\Inventory\Model\Reservation\ReservationBuilder"/>
     <preference for="Magento\InventoryApi\Api\Data\ReservationInterface" type="Magento\Inventory\Model\Reservation"/>
-    <type name="Magento\Inventory\Model\Reservation\Validator\ValidatorChain">
-        <arguments>
-            <argument name="validators" xsi:type="array">
-                <item name="stockId" xsi:type="object">Magento\Inventory\Model\Reservation\Validator\StockIdValidator</item>
-                <item name="sku" xsi:type="object">Magento\Inventory\Model\Reservation\Validator\SkuValidator</item>
-                <item name="quantity" xsi:type="object">Magento\Inventory\Model\Reservation\Validator\QuantityValidator</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Inventory\Model\Reservation\ReservationBuilder">
-        <arguments>
-            <argument name="reservationValidator" xsi:type="object">Magento\Inventory\Model\Reservation\Validator\ValidatorChain</argument>
-        </arguments>
-    </type>
+    <preference for="Magento\Inventory\Model\ReservationCleanupInterface" type="Magento\Inventory\Model\ResourceModel\Reservation\ReservationCleanup"/>
 </config>

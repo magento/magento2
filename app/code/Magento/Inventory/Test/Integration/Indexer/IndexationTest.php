@@ -5,6 +5,7 @@
  */
 namespace Magento\Inventory\Test\Integration\Indexer;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Indexer\Model\Indexer;
 use Magento\Inventory\Indexer\Alias;
@@ -73,7 +74,7 @@ class IndexationTest extends TestCase
                 ->addDimension('stock_', $stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();
-            $indexStructure->delete($indexName);
+            $indexStructure->delete($indexName, ResourceConnection::DEFAULT_CONNECTION);
         }
     }
 
