@@ -441,42 +441,46 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Retrieve configurable attributes data
      *
      * @param  \Magento\Catalog\Model\Product $product
+     *
      * @return \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute[]
      */
     public function getConfigurableAttributes($product)
     {
         \Magento\Framework\Profiler::start(
-            'CONFIGURABLE:' . __METHOD__,
+            'CONFIGURABLE:'.__METHOD__,
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if (!$product->hasData($this->_configurableAttributes)) {
-            $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+            $metadata = $this->getMetadataPool()
+                ->getMetadata(ProductInterface::class);
             $productId = $product->getData($metadata->getLinkField());
-            $cacheId = __CLASS__ . $productId . '_' . $product->getStoreId();
+            $productCacheId = $productId ?? spl_object_hash($product);
+            $cacheId = __CLASS__.$productCacheId.'_'.$product->getStoreId();
             $configurableAttributes = $this->getCache()->load($cacheId);
-            $configurableAttributes = $this->hasCacheData($configurableAttributes);
+            $configurableAttributes
+                = $this->hasCacheData($configurableAttributes);
             if ($configurableAttributes) {
                 $configurableAttributes->setProductFilter($product);
             } else {
-                $configurableAttributes = $this->getConfigurableAttributeCollection($product);
-                $this->extensionAttributesJoinProcessor->process($configurableAttributes);
+                $configurableAttributes
+                    = $this->getConfigurableAttributeCollection($product);
+                $this->extensionAttributesJoinProcessor
+                    ->process($configurableAttributes);
                 $configurableAttributes->orderByPosition()->load();
-                //Caching attributes if we can already identify the product.
-                if ($productId) {
-                    $this->getCache()
-                        ->save(
-                            serialize($configurableAttributes),
-                            $cacheId,
-                            array_merge(
-                                $product->getIdentities(),
-                                [self::TYPE_CODE.'_'.$productId]
-                            )
-                        );
-                }
+                $this->getCache()
+                    ->save(
+                        serialize($configurableAttributes),
+                        $cacheId,
+                        array_merge(
+                            $product->getIdentities(),
+                            [self::TYPE_CODE.'_'.$productId]
+                        )
+                    );
             }
-            $product->setData($this->_configurableAttributes, $configurableAttributes);
+            $product->setData($this->_configurableAttributes,
+                $configurableAttributes);
         }
-        \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
+        \Magento\Framework\Profiler::stop('CONFIGURABLE:'.__METHOD__);
 
         return $product->getData($this->_configurableAttributes);
     }
