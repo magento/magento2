@@ -659,6 +659,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $this->inlineTranslation->suspend();
 
+        $storeId = $this->_storeManager->getStore()->getId();
         $this->_transportBuilder->setTemplateIdentifier(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
@@ -667,10 +668,12 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         )->setTemplateOptions(
             [
                 'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                'store' => $this->_storeManager->getStore()->getId(),
+                'store' => $storeId,
             ]
         )->setTemplateVars(
             ['subscriber' => $this, 'store' => $this->_storeManager->getStore()]
+        )->setScopeId(
+            $storeId
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_CONFIRM_EMAIL_IDENTITY,
@@ -712,6 +715,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $this->inlineTranslation->suspend();
 
+        $storeId = $this->_storeManager->getStore()->getId();
         $this->_transportBuilder->setTemplateIdentifier(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_SUCCESS_EMAIL_TEMPLATE,
@@ -720,10 +724,12 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         )->setTemplateOptions(
             [
                 'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                'store' => $this->_storeManager->getStore()->getId(),
+                'store' => $storeId,
             ]
         )->setTemplateVars(
             ['subscriber' => $this]
+        )->setScopeId(
+            $storeId
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_SUCCESS_EMAIL_IDENTITY,
@@ -764,6 +770,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $this->inlineTranslation->suspend();
 
+        $storeId = $this->_storeManager->getStore()->getId();
         $this->_transportBuilder->setTemplateIdentifier(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE,
@@ -772,10 +779,12 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         )->setTemplateOptions(
             [
                 'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                'store' => $this->_storeManager->getStore()->getId(),
+                'store' => $storeId,
             ]
         )->setTemplateVars(
             ['subscriber' => $this]
+        )->setScopeId(
+            $storeId
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY,
