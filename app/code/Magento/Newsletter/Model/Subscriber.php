@@ -446,7 +446,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         try {
             /* Save model before sending out email */
             $this->save();
-            if($sendInformationEmail) {
+            if ($sendInformationEmail) {
                 if ($isConfirmNeed === true
                     && $isOwnSubscribes === false
                 ) {
