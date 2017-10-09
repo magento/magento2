@@ -454,7 +454,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $metadata = $this->getMetadataPool()
                 ->getMetadata(ProductInterface::class);
             $productId = $product->getData($metadata->getLinkField());
-            $productCacheId = $productId ?? spl_object_hash($product);
+            $productCacheId = $productId ? $productId
+                : spl_object_hash($product);
             $cacheId = __CLASS__.$productCacheId.'_'.$product->getStoreId();
             $configurableAttributes = $this->getCache()->load($cacheId);
             $configurableAttributes
