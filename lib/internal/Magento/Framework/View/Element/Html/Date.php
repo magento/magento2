@@ -26,6 +26,7 @@ class Date extends \Magento\Framework\View\Element\Template
         $changeYear = $this->getChangeYear();
         $maxDate = $this->getMaxDate();
         $showOn = $this->getShowOn();
+        $firstDay = $this->getFirstDay();
 
         $html .= '<script type="text/javascript">
             require(["jquery", "mage/calendar"], function($){
@@ -59,6 +60,7 @@ class Date extends \Magento\Framework\View\Element\Template
             ($changeMonth === null ? '' : ', changeMonth: ' . $changeMonth) .
             ($changeYear === null ? '' : ', changeYear: ' . $changeYear) .
             ($showOn ? ', showOn: "' . $showOn . '"' : '') .
+            ($firstDay ? ', firstDay: ' . $firstDay : '') .
             '})
             });
             </script>';
