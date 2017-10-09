@@ -12,11 +12,6 @@
         <annotations>
             <features value="Product Creation"/>
             <stories value="Create a Configurable Product via the Admin"/>
-            <group value="configurable"/>
-            <group value="product"/>
-            <env value="chrome"/>
-            <env value="firefox"/>
-            <env value="phantomjs"/>
         </annotations>
         <before>
             <loginAsAdmin mergeKey="loginAsAdmin"/>
@@ -30,6 +25,9 @@
                 <description value="You should be able to create a Configurable Product via the Admin."/>
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-26041"/>
+                <group value="configurable"/>
+                <group value="product"/>
+                <env value="chrome"/>
             </annotations>
 
             <amOnPage url="{{AdminCategoryPage.urlPath}}" mergeKey="amOnCategoryGridPage"/>
