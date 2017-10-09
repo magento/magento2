@@ -10,16 +10,10 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 /** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $configuredPrice */
 $configuredPrice = $block->getPrice();
-/** @var \Magento\Bundle\Pricing\Price\FinalPrice $finalPriceModel */
-$finalPriceModel = $block->getPriceType('final_price');
-$minimalPrice = $configuredPrice->getMinimalPrice();
-$maximalPrice = $finalPriceModel->getMaximalPrice();
-/** @var \Magento\Framework\Pricing\Price\PriceInterface $regularPriceModel */
-$regularPriceModel = $block->getPriceType('regular_price');
-$maximalRegularPrice = $regularPriceModel->getMaximalPrice();
-$minimalRegularPrice = $regularPriceModel->getMinimalPrice();
+/** @var \Magento\Catalog\Pricing\Price\RegularPrice $regularPrice */
+$regularPrice = $block->getPriceType('regular_price');
 ?>
-<?php if (($minimalPrice < $minimalRegularPrice) || ($maximalPrice < $maximalRegularPrice)) : ?>
+<?php if ($configuredPrice->getAmount()->getValue() < $regularPrice->getAmount()->getValue()) : ?>
     <p class="price-as-configured">
         <span class="special-price">
             <?= /* @noEscape */ $block->renderAmount(
@@ -35,7 +29,7 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
         </span>
         <span class="old-price">
             <?= /* @noEscape */ $block->renderAmount(
-                $regularPriceModel->getAmount(),
+                $regularPrice->getAmount(),
                 [
                     'display_label'     => $block->escapeHtml(__('Regular Price')),
                     'price_id'          => $block->escapeHtml($block->getPriceId('old-price-' . $idSuffix)),
