@@ -133,7 +133,7 @@ class AddressSave extends Order
      * @param array $attributeValues
      * @return array
      */
-    protected function updateRegionData($attributeValues)
+    private function updateRegionData($attributeValues)
     {
         if (!empty($attributeValues['region_id'])) {
             $newRegion = $this->regionFactory->create()->load($attributeValues['region_id']);
