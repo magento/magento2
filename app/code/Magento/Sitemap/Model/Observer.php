@@ -113,7 +113,6 @@ class Observer
                 $sitemap->generateXml();
             } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
-                throw $e;
             }
         }
 
