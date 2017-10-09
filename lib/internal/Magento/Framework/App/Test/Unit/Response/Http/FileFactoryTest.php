@@ -244,7 +244,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $modelMock = $this->getMock(
             'Magento\Framework\App\Response\Http\FileFactory',
-            ['callExit'],
+            null,
             [
                 'response' => $this->responseMock,
                 'filesystem' => $this->fileSystemMock,
