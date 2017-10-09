@@ -121,8 +121,7 @@ class Observer
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )
         ) {
-            $translate = $this->_translateModel->getTranslateInline();
-            $this->_translateModel->setTranslateInline(false);
+            $this->inlineTranslation->suspend();
 
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_scopeConfig->getValue(
