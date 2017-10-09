@@ -173,7 +173,8 @@ class AttributeMerger
                 $additionalConfig,
                 [
                     'config' => [
-                        // customScope is used to group elements within a single form (e.g. they can be validated separately)
+                        // customScope is used to group elements within a single
+                        // form (e.g. they can be validated separately)
                         'customScope' => $dataScopePrefix,
                         'template' => 'ui/form/field',
                         'elementTmpl' => $elementTemplate,
