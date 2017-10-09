@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Model;
 
-use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -786,15 +785,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      */
     public function getCacheTags()
     {
-        if ($this instanceof IdentityInterface) {
-            //If child classes are implementing IdentityInterface then
-            //that's how you get entity-specific tags
-            $individualTags = $this->getIdentities();
-            if ($individualTags) {
-                return $individualTags;
-            }
-        }
-
         $tags = false;
         if ($this->_cacheTag) {
             if ($this->_cacheTag === true) {

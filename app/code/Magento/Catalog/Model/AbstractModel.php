@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Abstract model for catalog entities
@@ -423,5 +424,22 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     {
         $this->_isReadonly = (bool)$value;
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCacheTags()
+    {
+        if ($this instanceof IdentityInterface) {
+            //If child classes are implementing IdentityInterface then
+            //that's how you get entity-specific tags
+            $individualTags = $this->getIdentities();
+            if ($individualTags) {
+                return $individualTags;
+            }
+        }
+
+        return parent::getCacheTags();
     }
 }
