@@ -9,7 +9,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Gallery;
 
-class MimeTypeExtensionMapTest extends \PHPUnit_Framework_TestCase
+class MimeTypeExtensionMapTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap

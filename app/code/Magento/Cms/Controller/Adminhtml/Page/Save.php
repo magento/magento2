@@ -91,6 +91,12 @@ class Save extends \Magento\Backend\App\Action
             $id = $this->getRequest()->getParam('page_id');
             if ($id) {
                 $model->load($id);
+                if (!$model->getId()) {
+                    $this->messageManager->addErrorMessage(__('This page no longer exists.'));
+                    /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+                    $resultRedirect = $this->resultRedirectFactory->create();
+                    return $resultRedirect->setPath('*/*/');
+                }
             }
 
             $model->setData($data);

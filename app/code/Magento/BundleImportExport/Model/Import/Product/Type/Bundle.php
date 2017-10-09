@@ -168,6 +168,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     protected function parseSelections($rowData, $entityId)
     {
+        if (empty($rowData['bundle_values'])) {
+            return [];
+        }
+
         $rowData['bundle_values'] = str_replace(
             self::BEFORE_OPTION_VALUE_DELIMITER,
             $this->_entityModel->getMultipleValueSeparator(),

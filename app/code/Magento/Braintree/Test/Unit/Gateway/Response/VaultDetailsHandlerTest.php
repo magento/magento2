@@ -25,7 +25,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
+class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 {
     const TRANSACTION_ID = '432erwwe';
 
@@ -71,7 +71,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentToken = $this->getMock(PaymentTokenInterface::class);
+        $this->paymentToken = $this->createMock(PaymentTokenInterface::class);
         $this->paymentTokenFactory = $this->getMockBuilder(CreditCardTokenFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -122,13 +122,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getCctypesMapper')
             ->willReturn($mapperArray);
 
-        $this->serializer = $this->getMock(
-            \Magento\Framework\Serialize\Serializer\Json::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->paymentHandler = new VaultDetailsHandler(
             $this->paymentTokenFactory,

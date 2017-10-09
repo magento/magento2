@@ -9,7 +9,9 @@ use Magento\Store\Model\Store;
 
 class AttributeValidation
 {
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private $storeManager;
 
     /**

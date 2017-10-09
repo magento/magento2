@@ -9,6 +9,7 @@ namespace Magento\Store\Api\Data;
  * Website interface
  *
  * @api
+ * @since 100.0.2
  */
 interface WebsiteInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

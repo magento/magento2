@@ -17,11 +17,7 @@ class Discount extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
 {
     //protected $_template = 'tax/checkout/subtotal.phtml';
 
-    /**
-     * Tax config
-     *
-     * @var \Magento\Tax\Model\Config
-     */
+    //protected $_template = 'tax/checkout/subtotal.phtml';
     protected $_taxConfig;
 
     /**

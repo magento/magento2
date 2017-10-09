@@ -7,7 +7,7 @@
         "AFL-3.0"
     ],
     "require": {
-        "magento/framework": "100.2.*"
+        "magento/framework": "101.0.*"
     },
     "type": "magento2-language",
     "autoload": {

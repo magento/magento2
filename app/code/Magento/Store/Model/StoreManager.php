@@ -298,7 +298,7 @@ class StoreManager implements
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @return StoreWebsiteRelation
      */
     private function getStoreWebsiteRelation()

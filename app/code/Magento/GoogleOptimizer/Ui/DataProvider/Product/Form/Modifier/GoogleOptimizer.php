@@ -19,6 +19,7 @@ use Magento\GoogleOptimizer\Helper\Code as CodeHelper;
  * Class GoogleOptimizer adds Product View Optimization Panel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.1.0
  */
 class GoogleOptimizer extends AbstractModifier
 {
@@ -27,16 +28,19 @@ class GoogleOptimizer extends AbstractModifier
 
     /**
      * @var LocatorInterface
+     * @since 100.1.0
      */
     protected $locator;
 
     /**
      * @var DataHelper
+     * @since 100.1.0
      */
     protected $dataHelper;
 
     /**
      * @var CodeHelper
+     * @since 100.1.0
      */
     protected $codeHelper;
 
@@ -57,6 +61,7 @@ class GoogleOptimizer extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -69,6 +74,7 @@ class GoogleOptimizer extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function modifyData(array $data)
     {
@@ -83,6 +89,7 @@ class GoogleOptimizer extends AbstractModifier
      * Can show panel
      *
      * @return bool
+     * @since 100.1.0
      */
     protected function canShowPanel()
     {
@@ -96,6 +103,7 @@ class GoogleOptimizer extends AbstractModifier
      *
      * @param array $data
      * @return array
+     * @since 100.1.0
      */
     protected function addDataProductViewOptimization(array $data)
     {
@@ -113,6 +121,7 @@ class GoogleOptimizer extends AbstractModifier
      * Get Code model
      *
      * @return \Magento\GoogleOptimizer\Model\Code|null
+     * @since 100.1.0
      */
     protected function getCodeModel()
     {
@@ -128,6 +137,7 @@ class GoogleOptimizer extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 100.1.0
      */
     protected function addProductViewOptimizationPanel(array $meta)
     {

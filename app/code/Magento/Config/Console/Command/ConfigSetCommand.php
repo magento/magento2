@@ -22,6 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.2.0
  */
 class ConfigSetCommand extends Command
 {
@@ -35,11 +36,7 @@ class ConfigSetCommand extends Command
     const OPTION_LOCK = 'lock';
     /**#@-*/
 
-    /**
-     * Emulator adminhtml area for CLI command.
-     *
-     * @var EmulatedAdminhtmlAreaProcessor
-     */
+    /**#@-*/
     private $emulatedAreaProcessor;
 
     /**
@@ -85,6 +82,7 @@ class ConfigSetCommand extends Command
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     protected function configure()
     {
@@ -125,6 +123,7 @@ class ConfigSetCommand extends Command
      * Creates and run appropriate processor, depending on input options.
      *
      * {@inheritdoc}
+     * @since 100.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

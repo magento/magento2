@@ -10,6 +10,10 @@ use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * Interface \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\BucketInterface
+ *
+ */
 interface BucketInterface
 {
     /**

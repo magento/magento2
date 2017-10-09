@@ -154,20 +154,6 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
                 ],
                 $expectedData
             ],
-            // Rate empty
-            [
-                [
-                    'rate' => '',
-                    'tax_country_id' => 'US',
-                    'tax_region_id' => '0',
-                    'code' => 'Rate ' . uniqid(),
-                    'zip_is_range' => '0',
-                    'zip_from' => '10000',
-                    'zip_to' => '20000',
-                    'tax_postcode' => '*',
-                ],
-                $expectedData
-            ],
             // Tax zip code is empty
             [
                 [

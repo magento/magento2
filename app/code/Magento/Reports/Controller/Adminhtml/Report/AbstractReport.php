@@ -15,9 +15,17 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractReport extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Reports::report';
+
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */

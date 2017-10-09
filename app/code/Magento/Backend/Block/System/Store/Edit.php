@@ -12,6 +12,7 @@ use Magento\Framework\Serialize\SerializerInterface;
  * @api
  *
  * Adminhtml store edit
+ * @since 100.0.2
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -145,6 +146,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Get data for store edit
      *
      * @return string
+     * @since 100.2.0
      */
     public function getStoreData()
     {

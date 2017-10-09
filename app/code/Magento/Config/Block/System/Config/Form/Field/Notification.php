@@ -11,6 +11,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 /**
  * Backend system config datetime field renderer
  * @api
+ * @since 100.0.2
  */
 class Notification extends \Magento\Config\Block\System\Config\Form\Field
 {

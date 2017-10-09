@@ -7,7 +7,7 @@ namespace Magento\Translation\Test\Unit\Block;
 
 use Magento\Translation\Block\Js;
 
-class JsTest extends \PHPUnit_Framework_TestCase
+class JsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Js

@@ -28,7 +28,7 @@ use Magento\Quote\Model\Quote;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PlaceTest extends \PHPUnit_Framework_TestCase
+class PlaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

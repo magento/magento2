@@ -254,7 +254,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return StoreManagerInterface
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getStoreManager()
     {
@@ -269,7 +269,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * Retrieve data persistor
      *
      * @return DataPersistorInterface|mixed
-     * @deprecated
+     * @deprecated 101.0.0
      */
     protected function getDataPersistor()
     {

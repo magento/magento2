@@ -9,6 +9,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\CallbackPool;
 use Magento\Framework\Serialize\Serializer\Json;
+use Psr\Log\LoggerInterface;
 
 /**
  * Abstract resource model
@@ -19,8 +20,14 @@ abstract class AbstractResource
 {
     /**
      * @var Json
+     * @since 100.2.0
      */
     protected $serializer;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * Constructor
@@ -91,7 +98,7 @@ abstract class AbstractResource
                     call_user_func($callback);
                 }
             } catch (\Exception $e) {
-                throw $e;
+                $this->getLogger()->critical($e);
             }
         }
         return $this;
@@ -241,7 +248,8 @@ abstract class AbstractResource
      * Get serializer
      *
      * @return Json
-     * @deprecated
+     * @deprecated 100.2.0
+     * @since 100.2.0
      */
     protected function getSerializer()
     {
@@ -249,5 +257,20 @@ abstract class AbstractResource
             $this->serializer = ObjectManager::getInstance()->get(Json::class);
         }
         return $this->serializer;
+    }
+
+    /**
+     * Get logger
+     *
+     * @return LoggerInterface
+     * @deprecated 100.2.0
+     * @since 100.2.0
+     */
+    private function getLogger()
+    {
+        if (null === $this->logger) {
+            $this->logger = ObjectManager::getInstance()->get(LoggerInterface::class);
+        }
+        return $this->logger;
     }
 }

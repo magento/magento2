@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Crontab;
 
+/**
+ * Interface \Magento\Framework\Crontab\TasksProviderInterface
+ *
+ */
 interface TasksProviderInterface
 {
     /**

@@ -9,6 +9,7 @@ namespace Magento\Email\Model\ResourceModel\Template;
  * Templates collection
  *
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
