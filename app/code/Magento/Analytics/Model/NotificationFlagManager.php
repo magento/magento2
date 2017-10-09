@@ -51,6 +51,10 @@ class NotificationFlagManager
      */
     public function isUserNotified($userId)
     {
-        return $this->flagManager->getFlagData(self::NOTIFICATION_SEEN . $userId);
+        if ($this->flagManager->getFlagData(self::NOTIFICATION_SEEN . $userId)) {
+            return true;
+        }
+
+        return false;
     }
 }

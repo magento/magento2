@@ -50,34 +50,35 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testUserShouldSeeNotification()
+    public function isVisibleProvider()
     {
-        $this->sessionMock->expects($this->once())
-            ->method('getUser')
-            ->willReturnSelf();
-        $this->sessionMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
-        $this->notificationFlagManagerMock->expects($this->once())
-            ->method('isUserNotified')
-            ->willReturn(false);
-        $this->notificationFlagManagerMock->expects($this->once())
-            ->method('setNotifiedUser')
-            ->willReturn(true);
-        $this->assertTrue($this->canViewNotification->isVisible([]));
+        return [
+            [1, false, true],
+            [1, true, false]
+        ];
     }
 
-    public function testUserShouldNotSeeNotification()
+    /**
+     * @dataProvider isVisibleProvider
+     * @param int $userId
+     * @param bool $isUserNotified
+     * @param bool $expected
+     */
+    public function testIsVisible($userId, $isUserNotified, $expected)
     {
         $this->sessionMock->expects($this->once())
             ->method('getUser')
             ->willReturnSelf();
         $this->sessionMock->expects($this->once())
             ->method('getId')
-            ->willReturn(1);
+            ->willReturn($userId);
         $this->notificationFlagManagerMock->expects($this->once())
             ->method('isUserNotified')
+            ->willReturn($isUserNotified);
+        $this->notificationFlagManagerMock->expects($this->any())
+            ->method('setNotifiedUser')
             ->willReturn(true);
-        $this->assertFalse($this->canViewNotification->isVisible([]));
+
+        $this->assertEquals($expected, $this->canViewNotification->isVisible([]));
     }
 }
