@@ -393,10 +393,12 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      */
     public function subscribe($email)
     {
+        $sendInformationEmail = false;
         $this->loadByEmail($email);
 
         if (!$this->getId()) {
             $this->setSubscriberConfirmCode($this->randomSequence());
+            $sendInformationEmail = true;
         }
 
         $isConfirmNeed = $this->_scopeConfig->getValue(
@@ -444,12 +446,14 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         try {
             /* Save model before sending out email */
             $this->save();
-            if ($isConfirmNeed === true
-                && $isOwnSubscribes === false
-            ) {
-                $this->sendConfirmationRequestEmail();
-            } else {
-                $this->sendConfirmationSuccessEmail();
+            if($sendInformationEmail) {
+                if ($isConfirmNeed === true
+                    && $isOwnSubscribes === false
+                ) {
+                    $this->sendConfirmationRequestEmail();
+                } else {
+                    $this->sendConfirmationSuccessEmail();
+                }
             }
             return $this->getStatus();
         } catch (\Exception $e) {
