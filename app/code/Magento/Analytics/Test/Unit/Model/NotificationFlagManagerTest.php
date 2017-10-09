@@ -11,7 +11,7 @@ use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * Class NotificationFlagTest
+ * Class NotificationFlagManagerTest
  */
 class NotificationFlagManagerTest extends \PHPUnit\Framework\TestCase
 {
@@ -25,14 +25,8 @@ class NotificationFlagManagerTest extends \PHPUnit\Framework\TestCase
      */
     private $notificationFlagManager;
 
-    /**
-     * @var int
-     */
-    private $userId;
-
     public function setUp()
     {
-        $this->userId = 1;
         $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -47,21 +41,23 @@ class NotificationFlagManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testSetNotifiedUser()
     {
+        $userId = 1;
         $this->flagManagerMock
             ->expects($this->once())
             ->method('saveFlag')
-            ->with(NotificationFlagManager::NOTIFICATION_SEEN . $this->userId, 1)
+            ->with(NotificationFlagManager::NOTIFICATION_SEEN . $userId, 1)
             ->willReturn(true);
-        $this->assertTrue($this->notificationFlagManager->setNotifiedUser($this->userId));
+        $this->assertTrue($this->notificationFlagManager->setNotifiedUser($userId));
     }
 
     public function testIsUserNotified()
     {
+        $userId = 1;
         $this->flagManagerMock
             ->expects($this->once())
             ->method('getFlagData')
-            ->with(NotificationFlagManager::NOTIFICATION_SEEN . $this->userId)
+            ->with(NotificationFlagManager::NOTIFICATION_SEEN . $userId)
             ->willReturn(true);
-        $this->assertTrue($this->notificationFlagManager->isUserNotified($this->userId));
+        $this->assertTrue($this->notificationFlagManager->isUserNotified($userId));
     }
 }
