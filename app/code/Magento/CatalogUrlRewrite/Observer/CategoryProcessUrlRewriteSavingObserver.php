@@ -91,10 +91,12 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         }
         if ($category->dataHasChangedFor('url_key')
             || $category->dataHasChangedFor('is_anchor')
-            || $category->getIsChangedProductList()
+            || $category->getChangedProductIds()
         ) {
-            $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category);
-            $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
+            if ($category->dataHasChangedFor('url_key')) {
+                $categoryUrlRewriteResult = $this->categoryUrlRewriteGenerator->generate($category);
+                $this->urlRewriteBunchReplacer->doBunchReplace($categoryUrlRewriteResult);
+            }
 
             $productUrlRewriteResult = $this->urlRewriteHandler->generateProductUrlRewrites($category);
             $this->urlRewriteBunchReplacer->doBunchReplace($productUrlRewriteResult);
