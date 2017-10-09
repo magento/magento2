@@ -477,8 +477,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function beforeSave($product)
     {
-        //clear cached associated links
-        $product->unsetData($this->_keyAssociatedProducts);
         if ($product->hasData('product_options') && !empty($product->getData('product_options'))) {
             throw new \Exception('Custom options for grouped product type are not supported');
         }
