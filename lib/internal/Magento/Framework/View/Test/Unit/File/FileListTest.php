@@ -8,7 +8,7 @@
 
 namespace Magento\Framework\View\Test\Unit\File;
 
-class FileListTest extends \PHPUnit_Framework_TestCase
+class FileListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\File\FileList
@@ -34,7 +34,7 @@ class FileListTest extends \PHPUnit_Framework_TestCase
     {
         $this->_baseFile = $this->_createViewFile('fixture.xml', 'Fixture_TestModule');
         $this->_themeFile = $this->_createViewFile('fixture.xml', 'Fixture_TestModule', 'area/theme/path');
-        $this->collator = $this->getMock(\Magento\Framework\View\File\FileList\Collator::class, ['collate']);
+        $this->collator = $this->createPartialMock(\Magento\Framework\View\File\FileList\Collator::class, ['collate']);
         $this->_model = new \Magento\Framework\View\File\FileList($this->collator);
         $this->_model->add([$this->_baseFile, $this->_themeFile]);
     }

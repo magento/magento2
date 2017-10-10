@@ -23,7 +23,8 @@ interface TransportInterface
     /**
      * Get message
      *
-     * @return string
+     * @return \Magento\Framework\Mail\MessageInterface
+     * @since 100.2.0
      */
     public function getMessage();
 }

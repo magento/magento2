@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
@@ -90,10 +89,23 @@ class Grid extends DataGrid
      * Get base image source link.
      *
      * @return string
+     * @deprecated for general get attribute method
+     * @see getBaseImageAttribute
      */
     public function getBaseImageSource()
     {
+        return $this->getBaseImageAttribute('src');
+    }
+
+    /**
+     * Get attribute from base image component
+     *
+     * @param string $attributeName
+     * @return string
+     */
+    public function getBaseImageAttribute($attributeName)
+    {
         $baseImage = $this->_rootElement->find($this->baseImage);
-        return $baseImage->isVisible() ? $baseImage->getAttribute('src') : '';
+        return $baseImage->isVisible() ? $baseImage->getAttribute($attributeName) : '';
     }
 }

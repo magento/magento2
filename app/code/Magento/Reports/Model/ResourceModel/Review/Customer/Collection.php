@@ -13,6 +13,7 @@ namespace Magento\Reports\Model\ResourceModel\Review\Customer;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
 {

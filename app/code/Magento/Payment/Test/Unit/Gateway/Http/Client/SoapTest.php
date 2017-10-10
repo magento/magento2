@@ -7,7 +7,7 @@ namespace Magento\Payment\Test\Unit\Gateway\Http\Client;
 
 use Magento\Payment\Gateway\Http\Client\Soap;
 
-class SoapTest extends \PHPUnit_Framework_TestCase
+class SoapTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -64,7 +64,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             'result' => []
         ];
-        $soapResult = new \StdClass;
+        $soapResult = new \StdClass();
 
         $this->logger->expects(static::at(0))
             ->method('debug')
@@ -99,7 +99,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
 
     public function testPlaceRequestSoapException()
     {
-        $this->setExpectedException('Exception');
+        $this->expectException('Exception');
 
         $this->logger->expects(static::at(0))
             ->method('debug')
@@ -117,7 +117,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
         $this->client->expects(static::once())
             ->method('__soapCall')
             ->with('soapMethod', [['body']])
-            ->willThrowException(new \Exception);
+            ->willThrowException(new \Exception());
         $this->client->expects(static::once())
             ->method('__getLastRequest')
             ->willReturn('RequestTrace');
@@ -139,7 +139,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
     {
         $transferObject = $this->getMockBuilder(
             \Magento\Payment\Gateway\Http\TransferInterface::class
-        )->getMock();
+        )->setMethods(['__setSoapHeaders', 'getBody', 'getClientConfig', 'getMethod'])->getMockForAbstractClass();
 
         $transferObject->expects(static::any())
             ->method('getBody')

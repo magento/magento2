@@ -7,7 +7,7 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Increment;
 
 use Magento\Eav\Model\Entity\Increment\Alphanum;
 
-class AlphanumTest extends \PHPUnit_Framework_TestCase
+class AlphanumTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Alphanum

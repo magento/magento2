@@ -12,6 +12,7 @@ use Magento\Framework\Filesystem\DriverPool;
  * Import entity product model
  *
  * @api
+ * @since 100.0.2
  */
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {
@@ -171,6 +172,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         $this->_setUploadFile($filePath);
         $destDir = $this->_directory->getAbsolutePath($this->getDestDir());
         $result = $this->save($destDir);
+        unset($result['path']);
         $result['name'] = self::getCorrectFileName($result['name']);
         return $result;
     }

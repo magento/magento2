@@ -52,7 +52,7 @@ interface ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return ManagerInterface
-     * @deprecated
+     * @deprecated 100.1.0
      * @see \Magento\Framework\Message\ManagerInterface::addErrorMessage
      */
     public function addError($message, $group = null);
@@ -63,7 +63,7 @@ interface ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return ManagerInterface
-     * @deprecated
+     * @deprecated 100.1.0
      * @see \Magento\Framework\Message\ManagerInterface::addWarningMessage
      */
     public function addWarning($message, $group = null);
@@ -74,7 +74,7 @@ interface ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return ManagerInterface
-     * @deprecated
+     * @deprecated 100.1.0
      * @see \Magento\Framework\Message\ManagerInterface::addNoticeMessage
      */
     public function addNotice($message, $group = null);
@@ -85,7 +85,7 @@ interface ManagerInterface
      * @param string $message
      * @param string|null $group
      * @return ManagerInterface
-     * @deprecated
+     * @deprecated 100.1.0
      * @see \Magento\Framework\Message\ManagerInterface::addSuccessMessage
      */
     public function addSuccess($message, $group = null);
@@ -182,7 +182,7 @@ interface ManagerInterface
      * @param string|null $alternativeText
      * @param string|null $group
      * @return ManagerInterface
-     * @deprecated
+     * @deprecated 100.1.0
      * @see \Magento\Framework\Message\ManagerInterface::addExceptionMessage
      */
     public function addException(\Exception $exception, $alternativeText = null, $group = null);

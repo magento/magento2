@@ -9,12 +9,11 @@ namespace Magento\Customer\Model;
  * Customer group model
  *
  * @api
- * @method \Magento\Customer\Model\ResourceModel\Group _getResource()
- * @method \Magento\Customer\Model\ResourceModel\Group getResource()
  * @method string getCustomerGroupCode()
  * @method \Magento\Customer\Model\Group setCustomerGroupCode(string $value)
  * @method \Magento\Customer\Model\Group setTaxClassId(int $value)
  * @method Group setTaxClassName(string $value)
+ * @since 100.0.2
  */
 class Group extends \Magento\Framework\Model\AbstractModel
 {

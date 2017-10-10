@@ -12,10 +12,13 @@ namespace Magento\Config\Model\Config\Backend\Currency;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Base extends AbstractCurrency
 {
-    /** @var \Magento\Directory\Model\CurrencyFactory */
+    /**
+     * @var \Magento\Directory\Model\CurrencyFactory
+     */
     private $currencyFactory;
 
     /**

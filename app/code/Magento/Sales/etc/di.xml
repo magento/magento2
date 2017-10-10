@@ -43,14 +43,14 @@
     <preference for="Magento\Sales\Api\Data\TransactionInterface" type="Magento\Sales\Model\Order\Payment\Transaction"/>
     <preference for="Magento\Sales\Api\Data\TransactionSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection"/>
     <preference for="Magento\Sales\Api\Data\TotalInterface" type="Magento\Sales\Model\Order\ShippingTotal"/>
-    <preference for="Magento\Sales\Api\CreditmemoCommentRepositoryInterface" type="Magento\Sales\Api\Data\CreditmemoComment\Repository"/>
-    <preference for="Magento\Sales\Api\CreditmemoItemRepositoryInterface" type="Magento\Sales\Api\Data\CreditmemoItem\Repository"/>
+    <preference for="Magento\Sales\Api\CreditmemoCommentRepositoryInterface" type="Magento\Sales\Model\Order\Creditmemo\CommentRepository"/>
+    <preference for="Magento\Sales\Api\CreditmemoItemRepositoryInterface" type="Magento\Sales\Model\Order\Creditmemo\ItemRepository"/>
     <preference for="Magento\Sales\Api\CreditmemoRepositoryInterface" type="Magento\Sales\Model\Order\CreditmemoRepository"/>
     <preference for="Magento\Sales\Api\CreditmemoManagementInterface" type="Magento\Sales\Model\Service\CreditmemoService"/>
     <preference for="Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface" type="Magento\Sales\Model\Order\Creditmemo\CreationArguments"/>
     <preference for="Magento\Sales\Api\Data\CreditmemoItemCreationInterface" type="Magento\Sales\Model\Order\Creditmemo\ItemCreation"/>
-    <preference for="Magento\Sales\Api\InvoiceCommentRepositoryInterface" type="Magento\Sales\Api\Data\InvoiceComment\Repository"/>
-    <preference for="Magento\Sales\Api\InvoiceItemRepositoryInterface" type="Magento\Sales\Api\Data\InvoiceItem\Repository"/>
+    <preference for="Magento\Sales\Api\InvoiceCommentRepositoryInterface" type="Magento\Sales\Model\Order\Invoice\CommentRepository"/>
+    <preference for="Magento\Sales\Api\InvoiceItemRepositoryInterface" type="Magento\Sales\Model\Order\Invoice\ItemRepository"/>
     <preference for="Magento\Sales\Api\InvoiceRepositoryInterface" type="Magento\Sales\Model\Order\InvoiceRepository"/>
     <preference for="Magento\Sales\Api\InvoiceManagementInterface" type="Magento\Sales\Model\Service\InvoiceService"/>
     <preference for="Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface" type="Magento\Sales\Model\Order\Invoice\CreationArguments"/>
@@ -64,12 +64,12 @@
     <preference for="Magento\Sales\Api\OrderPaymentRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Repository"/>
     <preference for="Magento\Sales\Api\OrderRepositoryInterface" type="Magento\Sales\Model\OrderRepository"/>
     <preference for="Magento\Sales\Api\OrderManagementInterface" type="Magento\Sales\Model\Service\OrderService"/>
-    <preference for="Magento\Sales\Api\OrderStatusHistoryRepositoryInterface" type="Magento\Sales\Api\Data\OrderStatusHistory\Repository"/>
-    <preference for="Magento\Sales\Api\ShipmentCommentRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentComment\Repository"/>
-    <preference for="Magento\Sales\Api\ShipmentItemRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentItem\Repository"/>
+    <preference for="Magento\Sales\Api\OrderStatusHistoryRepositoryInterface" type="Magento\Sales\Model\Order\Status\HistoryRepository"/>
+    <preference for="Magento\Sales\Api\ShipmentCommentRepositoryInterface" type="Magento\Sales\Model\Order\Shipment\CommentRepository"/>
+    <preference for="Magento\Sales\Api\ShipmentItemRepositoryInterface" type="Magento\Sales\Model\Order\Shipment\ItemRepository"/>
     <preference for="Magento\Sales\Api\ShipmentRepositoryInterface" type="Magento\Sales\Model\Order\ShipmentRepository"/>
     <preference for="Magento\Sales\Api\ShipmentManagementInterface" type="Magento\Sales\Model\Service\ShipmentService"/>
-    <preference for="Magento\Sales\Api\ShipmentTrackRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentTrack\Repository"/>
+    <preference for="Magento\Sales\Api\ShipmentTrackRepositoryInterface" type="Magento\Sales\Model\Order\Shipment\TrackRepository"/>
     <preference for="Magento\Sales\Api\ShipOrderInterface" type="Magento\Sales\Model\ShipOrder"/>
     <preference for="Magento\Sales\Api\TransactionRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Repository"/>
     <preference for="Magento\Sales\Model\Order\Invoice\NotifierInterface" type="Magento\Sales\Model\Order\Invoice\Notifier"/>

@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class VisibilityTest extends \PHPUnit_Framework_TestCase
+class VisibilityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
@@ -22,12 +22,9 @@ class VisibilityTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFlatColumns()
     {
-        $abstractAttributeMock = $this->getMock(
+        $abstractAttributeMock = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-            ['getAttributeCode', '__wakeup'],
-            [],
-            '',
-            false
+            ['getAttributeCode', '__wakeup']
         );
 
         $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));

@@ -14,13 +14,19 @@ use Magento\Catalog\Api\Data\CategoryInterface;
  */
 class DataCategoryHashMap implements HashMapInterface
 {
-    /** @var int[] */
+    /**
+     * @var int[]
+     */
     private $hashMap = [];
 
-    /** @var CategoryRepository */
+    /**
+     * @var \Magento\Catalog\Model\CategoryRepository
+     */
     private $categoryRepository;
 
-    /** @var CategoryFactory */
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\CategoryFactory
+     */
     private $categoryResourceFactory;
 
     /**

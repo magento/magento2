@@ -9,6 +9,7 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
+ * @since 100.2.0
  */
 class UrlAlreadyExistsException extends \Magento\Framework\Exception\LocalizedException
 {
@@ -34,6 +35,7 @@ class UrlAlreadyExistsException extends \Magento\Framework\Exception\LocalizedEx
 
     /**
      * @return array
+     * @since 100.2.0
      */
     public function getUrls()
     {

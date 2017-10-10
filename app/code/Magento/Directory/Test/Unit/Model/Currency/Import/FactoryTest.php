@@ -5,7 +5,7 @@
  */
 namespace Magento\Directory\Test\Unit\Model\Currency\Import;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Directory\Model\Currency\Import\Factory
@@ -24,14 +24,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_importConfig = $this->getMock(
-            \Magento\Directory\Model\Currency\Import\Config::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_importConfig = $this->createMock(\Magento\Directory\Model\Currency\Import\Config::class);
         $this->_model = new \Magento\Directory\Model\Currency\Import\Factory(
             $this->_objectManager,
             $this->_importConfig
@@ -40,7 +34,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $expectedResult = $this->getMock(\Magento\Directory\Model\Currency\Import\ImportInterface::class);
+        $expectedResult = $this->createMock(\Magento\Directory\Model\Currency\Import\ImportInterface::class);
         $this->_importConfig->expects(
             $this->once()
         )->method(

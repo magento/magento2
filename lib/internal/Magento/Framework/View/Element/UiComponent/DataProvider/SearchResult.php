@@ -95,7 +95,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @return ResourceConnection
      */
     private function getResourceConnection()

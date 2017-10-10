@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\AdminOrder\Product\Quote;
 /**
  * Initializer test
  */
-class InitializerTest extends \PHPUnit_Framework_TestCase
+class InitializerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -46,48 +46,33 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteMock = $this->getMock(
+        $this->quoteMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote::class,
-            ['addProduct', '__wakeup', 'getStore'],
-            [],
-            '',
-            false
+            ['addProduct', '__wakeup', 'getStore']
         );
 
-        $this->productMock = $this->getMock(
+        $this->productMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getId', 'setIsQtyDecimal', 'setCartQty', '__wakeup'],
-            [],
-            '',
-            false
+            ['getId', 'setIsQtyDecimal', 'setCartQty', '__wakeup']
         );
 
-        $this->configMock = $this->getMock(
-            \Magento\Framework\DataObject::class,
-            ['getQty', 'setQty'],
-            [],
-            '',
-            false
-        );
+        $this->configMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getQty', 'setQty']);
 
         $this->stockRegistry = $this->getMockBuilder(\Magento\CatalogInventory\Model\StockRegistry::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStockItem', '__wakeup'])
             ->getMock();
 
-        $this->stockItemMock = $this->getMock(
+        $this->stockItemMock = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Stock\Item::class,
-            ['getIsQtyDecimal', '__wakeup'],
-            [],
-            '',
-            false
+            ['getIsQtyDecimal', '__wakeup']
         );
 
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
             ->will($this->returnValue($this->stockItemMock));
 
-        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getWebsiteId'], [], '', false);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId']);
         $store->expects($this->once())
             ->method('getWebsiteId')
             ->will($this->returnValue(10));
@@ -105,12 +90,9 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
 
     public function testInitWithDecimalQty()
     {
-        $quoteItemMock = $this->getMock(
+        $quoteItemMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Item::class,
-            ['getStockId', 'getIsQtyDecimal', '__wakeup'],
-            [],
-            '',
-            false
+            ['getStockId', 'getIsQtyDecimal', '__wakeup']
         );
 
         $this->stockItemMock->expects($this->once())
@@ -152,12 +134,9 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
 
     public function testInitWithNonDecimalQty()
     {
-        $quoteItemMock = $this->getMock(
+        $quoteItemMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Item::class,
-            ['getStockId', 'getIsQtyDecimal', '__wakeup'],
-            [],
-            '',
-            false
+            ['getStockId', 'getIsQtyDecimal', '__wakeup']
         );
 
         $this->productMock->expects($this->once())
