@@ -42,8 +42,7 @@ class NotificationFlagManagerTest extends \PHPUnit\Framework\TestCase
     public function testSetNotifiedUser()
     {
         $userId = 1;
-        $this->flagManagerMock
-            ->expects($this->once())
+        $this->flagManagerMock->expects($this->once())
             ->method('saveFlag')
             ->with('analytics_notification_seen_admin_' . $userId, 1)
             ->willReturn(true);
@@ -53,8 +52,7 @@ class NotificationFlagManagerTest extends \PHPUnit\Framework\TestCase
     public function testIsUserNotified()
     {
         $userId = 1;
-        $this->flagManagerMock
-            ->expects($this->once())
+        $this->flagManagerMock->expects($this->once())
             ->method('getFlagData')
             ->with('analytics_notification_seen_admin_' . $userId)
             ->willReturn(true);
