@@ -13,12 +13,12 @@
         <before>
             <createData mergeKey="category" entity="SimpleSubCategory"/>
             <createData mergeKey="product" entity="SimpleProduct" >
-                <required-entity persistedKey="category"/>
+                <required-entity createDataKey="category"/>
             </createData>
             <createData mergeKey="customer" entity="Simple_US_Customer"/>
             <createData mergeKey="wishlist" entity="Wishlist">
-                <required-entity persistedKey="customer"/>
-                <required-entity persistedKey="product"/>
+                <required-entity createDataKey="customer"/>
+                <required-entity createDataKey="product"/>
             </createData>
         </before>
         <after>
