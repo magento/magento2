@@ -143,6 +143,29 @@ define([
             var obj = getData();
             obj.inputFieldEmailValue = email;
             saveData(obj);
+        },
+
+        /**
+         * Pulling the checked email value from persistence storage.
+         *
+         * @returns {*}
+         */
+        getCheckedEmailValue: function () {
+            var obj = getData();
+
+            return obj.checkedEmailValue ? obj.checkedEmailValue : '';
+        },
+
+        /**
+         * Setting the checked email value pulled from persistence storage.
+         *
+         * @param {String} email
+         */
+        setCheckedEmailValue: function (email) {
+            var obj = getData();
+
+            obj.checkedEmailValue = email;
+            saveData(obj);
         }
     }
 });
