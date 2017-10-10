@@ -26,6 +26,5 @@ class AdvancedReportingBlock extends Modal
     {
         $this->waitModalAnimationFinished();
         return parent::isVisible() && $this->_rootElement->find($this->closeReportingButton)->isVisible();
-
     }
 }
