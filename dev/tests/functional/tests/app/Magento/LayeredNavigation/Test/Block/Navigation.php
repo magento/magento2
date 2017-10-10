@@ -36,6 +36,15 @@ class Navigation extends Block
      */
     protected $optionTitle = './/div[@class="filter-options-title" and contains(text(),"%s")]';
 
+    // @codingStandardsIgnoreStart
+    /**
+     * Locator value for corresponding filtered attribute option content.
+     *
+     * @var string
+     */
+    protected $optionContent = './/div[@class="filter-options-title" and contains(text(),"")]/following-sibling::div//a[contains(text(), \'SIZE\')]';
+    // @codingStandardsIgnoreEnd
+
     /**
      * Locator value for correspondent "Filter" link.
      *
@@ -87,6 +96,23 @@ class Navigation extends Block
         $data = [];
         foreach ($options as $option) {
             $data[] = strtoupper($option->getText());
+        }
+
+        return $data;
+    }
+
+    /**
+     * Get all available filters.
+     *
+     * @return array
+     */
+    public function getFilterContents()
+    {
+        $this->waitForElementVisible($this->loadedNarrowByList);
+        $optionContents = $this->_rootElement->find($this->optionContent, Locator::SELECTOR_XPATH);
+        $data =[];
+        foreach ($optionContents as $optionContent) {
+            $data[] = trim(strtoupper($optionContent->getText()));
         }
 
         return $data;

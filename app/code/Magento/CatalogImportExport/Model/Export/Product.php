@@ -8,6 +8,7 @@ namespace Magento\CatalogImportExport\Model\Export;
 use Magento\ImportExport\Model\Import;
 use \Magento\Store\Model\Store;
 use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\Catalog\Model\Product as ProductEntity;
 
 /**
  * Export entity product model
@@ -161,7 +162,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Header columns for export file
      *
      * @var array
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $_headerColumns = [];
 
@@ -699,7 +700,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param array $customOptionsData
      * @param array $stockItemRows
      * @return void
-     * @deprecated Logic will be moved to _getHeaderColumns in future release
+     * @deprecated 100.2.0 Logic will be moved to _getHeaderColumns in future release
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -914,6 +915,29 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Load products' data from the collection
+     * and filter it (if needed).
+     *
+     * @return array Keys are product IDs, values arrays with keys as store IDs
+     *               and values as store-specific versions of Product entity.
+     */
+    protected function loadCollection(): array
+    {
+        $data = [];
+
+        $collection = $this->_getEntityCollection();
+        foreach (array_keys($this->_storeIdToCode) as $storeId) {
+            $collection->setStoreId($storeId);
+            foreach ($collection as $itemId => $item) {
+                $data[$itemId][$storeId] = $item;
+            }
+        }
+        $collection->clear();
+
+        return $data;
+    }
+
+    /**
      * Collect export data for all products
      *
      * @return array
@@ -923,14 +947,15 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function collectRawData()
     {
         $data = [];
-        $collection = $this->_getEntityCollection();
-        foreach ($this->_storeIdToCode as $storeId => $storeCode) {
-            $collection->setStoreId($storeId);
+        $items = $this->loadCollection();
+
+        foreach ($items as $itemId => $itemByStore) {
             /**
-             * @var int $itemId
-             * @var \Magento\Catalog\Model\Product $item
+             * @var int           $itemId
+             * @var ProductEntity $item
              */
-            foreach ($collection as $itemId => $item) {
+            foreach ($this->_storeIdToCode as $storeId => $storeCode) {
+                $item = $itemByStore[$storeId];
                 $additionalAttributes = [];
                 $productLinkId = $item->getData($this->getProductEntityLinkField());
                 foreach ($this->_getExportAttrCodes() as $code) {
@@ -1010,7 +1035,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $data[$itemId][$storeId]['product_id'] = $itemId;
                 $data[$itemId][$storeId]['product_link_id'] = $productLinkId;
             }
-            $collection->clear();
         }
 
         return $data;
