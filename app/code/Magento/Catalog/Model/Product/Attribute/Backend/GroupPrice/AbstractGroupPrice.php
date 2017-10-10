@@ -360,7 +360,7 @@ abstract class AbstractGroupPrice extends Price
     {
         /** @var array $priceItem */
         foreach ($data as $key => $priceItem) {
-            if (isset($priceItem['price']) && $priceItem['price'] > 0) {
+            if (array_key_exists('price', $priceItem)) {
                 $data[$key]['website_price'] = $priceItem['price'];
             }
             if ($priceItem['all_groups']) {
