@@ -194,7 +194,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    private function getFullWhitelist()
+    private static function getFullWhitelist()
     {
         return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
     }
