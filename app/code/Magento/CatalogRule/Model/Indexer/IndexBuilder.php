@@ -195,7 +195,7 @@ class IndexBuilder
         $this->batchCount = $batchCount;
 
         $this->productPriceCalculator = $productPriceCalculator ?? ObjectManager::getInstance()->get(
-           ProductPriceCalculator::class
+            ProductPriceCalculator::class
         );
         $this->reindexRuleProduct = $reindexRuleProduct ?? ObjectManager::getInstance()->get(
             ReindexRuleProduct::class
