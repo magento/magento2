@@ -9,7 +9,7 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\CacheCleaner;
 
-class AddressMetadataTest extends \PHPUnit_Framework_TestCase
+class AddressMetadataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AddressMetadataInterface */
     private $service;

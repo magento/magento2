@@ -7,7 +7,7 @@ namespace Magento\Setup\Module;
 
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
-class DataSetupTest extends \PHPUnit_Framework_TestCase
+class DataSetupTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ModuleDataSetupInterface

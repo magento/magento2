@@ -9,7 +9,7 @@ use Magento\Cms\Model\Page\Source\Theme;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Design\Theme\Label\ListInterface;
 
-class ThemeTest extends \PHPUnit_Framework_TestCase
+class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ListInterface|\PHPUnit_Framework_MockObject_MockObject

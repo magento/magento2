@@ -12,7 +12,7 @@ use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 
 /**
  * Class AbstractPaymentTokenFactory
- * @deprecated
+ * @deprecated 100.3.0
  * @see PaymentTokenFactoryInterface
  */
 abstract class AbstractPaymentTokenFactory implements PaymentTokenInterfaceFactory

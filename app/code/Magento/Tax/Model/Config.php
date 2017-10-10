@@ -472,7 +472,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 100.1.3
      */
     public function displayCartDiscountInclTax($store = null)
     {
@@ -486,7 +486,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 100.1.3
      */
     public function displayCartDiscountExclTax($store = null)
     {
@@ -500,7 +500,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 100.1.3
      */
     public function displayCartDiscountBoth($store = null)
     {
@@ -670,7 +670,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 100.1.3
      */
     public function displaySalesDiscountInclTax($store = null)
     {
@@ -684,7 +684,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 100.1.3
      */
     public function displaySalesDiscountExclTax($store = null)
     {
@@ -698,7 +698,7 @@ class Config
     /**
      * @param null|string|bool|int|Store $store
      * @return bool
-     * @deprecated
+     * @deprecated 100.1.3
      */
     public function displaySalesDiscountBoth($store = null)
     {

@@ -48,7 +48,7 @@ define(
                             setPaymentMethodAction(this.messageContainer).done(function () {
                                 $('body').trigger('processStart');
 
-                                $.get(this.path, {
+                                $.getJSON(this.path, {
                                     button: 0
                                 }).done(function (response) {
                                     var message = response && response.message;

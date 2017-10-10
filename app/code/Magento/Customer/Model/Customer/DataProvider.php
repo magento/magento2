@@ -29,10 +29,10 @@ use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
 
 /**
- * Class DataProvider
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -104,6 +104,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     /**
      * @var SessionManagerInterface
+     * @since 100.1.0
      */
     protected $session;
 
@@ -123,6 +124,17 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     ];
 
     /**
+     * Customer fields that must be removed
+     *
+     * @var array
+     */
+    private $forbiddenCustomerFields = [
+        'password_hash',
+        'rp_token',
+        'confirmation',
+    ];
+
+    /*
      * @var ContextInterface
      */
     private $context;
@@ -184,8 +196,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Get session object
      *
      * @return SessionManagerInterface
-     *
-     * @deprecated
+     * @deprecated 100.1.3
+     * @since 100.1.0
      */
     protected function getSession()
     {
@@ -214,6 +226,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             $this->overrideFileUploaderData($customer, $result['customer']);
 
+            $result['customer'] = array_diff_key(
+                $result['customer'],
+                array_flip($this->forbiddenCustomerFields)
+            );
             unset($result['address']);
 
             /** @var Address $address */
@@ -403,8 +419,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Retrieve Country With Websites Source
      *
-     * @deprecated
      * @return CountryWithWebsites
+     * @deprecated 100.2.0
      */
     private function getCountryWithWebsiteSource()
     {
@@ -418,8 +434,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Retrieve Customer Config Share
      *
-     * @deprecated
      * @return \Magento\Customer\Model\Config\Share
+     * @deprecated 100.1.3
      */
     private function getShareConfig()
     {
@@ -589,8 +605,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Get FileProcessorFactory instance
      *
      * @return FileProcessorFactory
-     *
-     * @deprecated
+     * @deprecated 100.1.3
      */
     private function getFileProcessorFactory()
     {

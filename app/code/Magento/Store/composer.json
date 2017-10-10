@@ -3,18 +3,18 @@
     "description": "N/A",
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/module-catalog": "101.1.*",
+        "magento/module-catalog": "102.0.*",
         "magento/module-directory": "100.2.*",
-        "magento/module-ui": "100.2.*",
-        "magento/module-config": "100.2.*",
+        "magento/module-ui": "101.0.*",
+        "magento/module-config": "101.0.*",
         "magento/module-media-storage": "100.2.*",
-        "magento/framework": "100.2.*"
+        "magento/framework": "101.0.*"
     },
     "suggest": {
         "magento/module-deploy": "100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.0-dev",
+    "version": "100.2.0",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

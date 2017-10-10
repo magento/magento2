@@ -60,6 +60,10 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->method('addSuccess')
             ->with(__('The integration \'%1\' has been deleted.', $intData[Info::DATA_NAME]));
 
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
+
         $this->integrationController->execute();
     }
 
@@ -89,6 +93,10 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->method('addSuccess')
             ->with(__('The integration \'%1\' has been deleted.', $intData[Info::DATA_NAME]));
 
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
+
         $this->integrationController->execute();
     }
 
@@ -116,6 +124,10 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
         $this->_translateModelMock = null;
         // verify success message
         $this->_messageManager->expects($this->never())->method('addSuccess');
+
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
 
         $this->integrationController->execute();
     }

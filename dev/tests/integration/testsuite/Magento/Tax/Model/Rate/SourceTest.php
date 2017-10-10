@@ -9,7 +9,7 @@ namespace Magento\Tax\Model\Rate;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Tax\Model\Rate\Provider;
 
-class SourceTest extends \PHPUnit_Framework_TestCase
+class SourceTest extends \PHPUnit\Framework\TestCase
 {
     public function testToOptionArray()
     {

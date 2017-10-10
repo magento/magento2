@@ -15,7 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\DriverPool;
 
-class CrontabManagerTest extends \PHPUnit_Framework_TestCase
+class CrontabManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ShellInterface|\PHPUnit_Framework_MockObject_MockObject

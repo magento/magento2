@@ -54,7 +54,7 @@ class Redirect
     protected $customerUrl;
 
     /**
-     * @deprecated
+     * @deprecated 100.1.8
      * @var UrlInterface
      */
     protected $url;
@@ -229,7 +229,7 @@ class Redirect
     /**
      * Get Cookie manager. For release backward compatibility.
      *
-     * @deprecated
+     * @deprecated 100.0.10
      * @return CookieManagerInterface
      */
     protected function getCookieManager()
@@ -243,7 +243,7 @@ class Redirect
     /**
      * Set cookie manager. For unit tests.
      *
-     * @deprecated
+     * @deprecated 100.0.10
      * @param object $value
      * @return void
      */

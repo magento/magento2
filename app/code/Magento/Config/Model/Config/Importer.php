@@ -23,6 +23,7 @@ use Magento\Framework\Stdlib\ArrayUtils;
  * {@inheritdoc}
  * @see \Magento\Deploy\Console\Command\App\ConfigImport\Importer
  * @api
+ * @since 100.2.0
  */
 class Importer implements ImporterInterface
 {
@@ -102,6 +103,7 @@ class Importer implements ImporterInterface
      * or current value is different from previously imported.
      *
      * {@inheritdoc}
+     * @since 100.2.0
      */
     public function import(array $data)
     {
@@ -141,6 +143,7 @@ class Importer implements ImporterInterface
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 100.2.0
      */
     public function getWarningMessages(array $data)
     {

@@ -95,6 +95,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     \Magento\Quote\Api\Data\AddressInterface
@@ -205,6 +206,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
     /**
      * @var \Magento\Quote\Model\Quote\Address\RateFactory
+     * @since 100.2.0
      */
     protected $_addressRateFactory;
 

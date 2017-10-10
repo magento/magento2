@@ -8,7 +8,7 @@ namespace Magento\Store\Test\Unit\Block;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class SwitcherTest extends \PHPUnit_Framework_TestCase
+class SwitcherTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Store\Block\Switcher */
     protected $switcher;
@@ -28,11 +28,11 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)->getMock();
-        $this->urlBuilder = $this->getMock(\Magento\Framework\UrlInterface::class);
-        $this->context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
+        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->context->expects($this->any())->method('getStoreManager')->will($this->returnValue($this->storeManager));
         $this->context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilder));
-        $this->corePostDataHelper = $this->getMock(\Magento\Framework\Data\Helper\PostHelper::class, [], [], '', false);
+        $this->corePostDataHelper = $this->createMock(\Magento\Framework\Data\Helper\PostHelper::class);
         $this->switcher = (new ObjectManager($this))->getObject(
             \Magento\Store\Block\Switcher::class,
             [
@@ -63,11 +63,11 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider testIsStoreInUrlDataProvider
+     * @dataProvider isStoreInUrlDataProvider
      */
     public function testIsStoreInUrl($isUseStoreInUrl)
     {
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
 
         $storeMock->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue($isUseStoreInUrl));
 
@@ -81,7 +81,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
      * @see self::testIsStoreInUrlDataProvider()
      * @return array
      */
-    public function testIsStoreInUrlDataProvider()
+    public function isStoreInUrlDataProvider()
     {
         return [[true], [false]];
     }

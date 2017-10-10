@@ -16,7 +16,9 @@ class UrlRewriteExceptionMessageFactory implements ExceptionMessageFactoryInterf
 {
     const URL_DUPLICATE_MESSAGE_MAP_ID = 'urlDuplicateMessageMapId';
 
-    /** @var Factory */
+    /**
+     * @var \Magento\Framework\Message\Factory
+     */
     private $messageFactory;
 
     /**

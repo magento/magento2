@@ -7,7 +7,7 @@ namespace Magento\Framework\Module\Test\Unit;
 
 use \Magento\Framework\Module\DbVersionInfo;
 
-class DbVersionInfoTest extends \PHPUnit_Framework_TestCase
+class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DbVersionInfo

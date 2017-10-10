@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig;
 /**
  * Class is used to work with placeholders for environment variables names based on config paths
  * @api
+ * @since 100.1.2
  */
 class Environment implements PlaceholderInterface
 {
@@ -36,6 +37,7 @@ class Environment implements PlaceholderInterface
      * Generates placeholder like CONFIG__DEFAULT__TEST__TEST_VALUE
      *
      * @inheritdoc
+     * @since 100.1.2
      */
     public function generate($path, $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
     {
@@ -57,6 +59,7 @@ class Environment implements PlaceholderInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.2
      */
     public function restore($template)
     {
@@ -69,6 +72,7 @@ class Environment implements PlaceholderInterface
 
     /**
      * @inheritdoc
+     * @since 100.1.2
      */
     public function isApplicable($placeholder)
     {

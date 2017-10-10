@@ -5,7 +5,7 @@
  */
 namespace Magento\Sniffs\EchoTags;
 
-class ShortEchoSyntaxSniffTest extends \PHPUnit_Framework_TestCase
+class ShortEchoSyntaxSniffTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHP_CodeSniffer_File|\PHPUnit_Framework_MockObject_MockObject

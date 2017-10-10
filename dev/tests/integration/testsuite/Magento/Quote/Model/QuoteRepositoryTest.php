@@ -20,7 +20,7 @@ use Magento\Quote\Model\Quote\Address as QuoteAddress;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
+class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface

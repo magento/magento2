@@ -7,7 +7,7 @@ namespace Magento\Framework\App\Test\Unit\DeploymentConfig\Writer;
 
 use \Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 
-class PhpFormatterTest extends \PHPUnit_Framework_TestCase
+class PhpFormatterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider formatWithCommentDataProvider

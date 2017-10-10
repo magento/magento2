@@ -28,8 +28,7 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- *
- * @method \Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface getResource()
+ * @since 100.0.2
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
 {
@@ -1553,6 +1552,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
     {
@@ -2090,6 +2090,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param int $customerGroupId
      * @return $this
+     * @since 101.1.0
      */
     public function addTierPriceDataByGroupId($customerGroupId)
     {
@@ -2216,6 +2217,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 101.0.1
      */
     public function addMediaGalleryData()
     {
@@ -2265,6 +2267,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get product entity metadata
      *
      * @return \Magento\Framework\EntityManager\EntityMetadataInterface
+     * @since 101.1.0
      */
     public function getProductEntityMetadata()
     {
@@ -2275,7 +2278,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Retrieve GalleryReadHandler
      *
      * @return GalleryReadHandler
-     * @deprecated
+     * @deprecated 101.0.1
      */
     private function getGalleryReadHandler()
     {
@@ -2286,7 +2289,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
-     * @deprecated
+     * @deprecated 101.0.1
      * @return \Magento\Catalog\Model\ResourceModel\Product\Gallery
      */
     private function getMediaGalleryResource()
