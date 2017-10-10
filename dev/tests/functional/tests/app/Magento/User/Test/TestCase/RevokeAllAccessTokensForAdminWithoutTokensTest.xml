@@ -8,8 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\User\Test\TestCase\RevokeAllAccessTokensForAdminWithoutTokensTest" summary="Revoke All Access Tokens for Admin without Tokens" ticketId="MAGETWO-29675">
         <variation name="RevokeAllAccessTokensForAdminWithoutTokensTestVariation1">
-            <data name="tag" xsi:type="string">stable:no</data>
-            <data name="issue" xsi:type="string">MAGETWO-80353: PHP 7.1 compatibility: Jenkins Failures related to PHP 7.1 upgrade</data>
             <data name="user/dataset" xsi:type="string">custom_admin</data>
             <constraint name="Magento\User\Test\Constraint\AssertAccessTokensErrorRevokeMessage" />
         </variation>
