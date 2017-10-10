@@ -60,7 +60,7 @@ class Multiselect extends AbstractElement
             $html .= '<input type="hidden" id="' . $this->getHtmlId() . '_hidden" name="' . parent::getName() . '" value="" />';
         }
         if (!empty($this->_data['disabled'])) {
-            $html .= '<input type="hidden" id="' . $this->getHtmlId() . '_hidden" name="' . parent::getName() . '_disabled" value="" />';
+            $html .= '<input type="hidden" name="' . parent::getName() . '_disabled" value="" />';
         }
 
         $html .= '<select id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" ' . $this->serialize(
