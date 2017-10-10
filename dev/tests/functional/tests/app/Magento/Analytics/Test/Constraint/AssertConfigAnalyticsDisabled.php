@@ -10,12 +10,12 @@ use Magento\Analytics\Test\TestStep\OpenAnalyticsConfigStep;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert Analytics is disabled in Stores>Configuration>General>Analytics->General menu.
+ * Assert Advanced Reporting service is disabled
  */
 class AssertConfigAnalyticsDisabled extends AbstractConstraint
 {
     /**
-     * Assert Analytics is disabled in Stores > Configuration > General > Analytics menu.
+     * Assert Advanced Reporting service is disabled.
      *
      * @param ConfigAnalytics $configAnalytics
      * @param OpenAnalyticsConfigStep $openAnalyticsConfigStep
@@ -27,12 +27,12 @@ class AssertConfigAnalyticsDisabled extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertFalse(
             (bool)$configAnalytics->getAnalyticsForm()->isAnalyticsEnabled(),
-            'Magento Analytics is not disabled.'
+            'Magento Advanced Reporting service is not disabled.'
         );
         \PHPUnit_Framework_Assert::assertEquals(
             $configAnalytics->getAnalyticsForm()->getAnalyticsStatus(),
             'Subscription status: Disabled',
-            'Magento Analytics status is not disabled.'
+            'Magento Advanced Reporting service subscription status is not disabled.'
         );
     }
 
@@ -43,7 +43,6 @@ class AssertConfigAnalyticsDisabled extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Magento Analytics is disabled in Stores > Configuration > General > Analytics > General menu'
-            . ' and has Disabled status.';
+        return 'Magento Advanced Reporting service is disabled and has Disabled status.';
     }
 }

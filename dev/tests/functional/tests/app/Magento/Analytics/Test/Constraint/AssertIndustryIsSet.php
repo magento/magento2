@@ -9,23 +9,23 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
 
 /**
- * Assert Analytics Vertical is set in Stores > Configuration > General > Analytics > General menu.
+ * Assert Advance Reporting Industry is set.
  */
-class AssertVerticalIsSet extends AbstractConstraint
+class AssertIndustryIsSet extends AbstractConstraint
 {
     /**
-     * Assert Analytics Vertical is set in Stores > Configuration > General > Analytics > General menu.
+     * Assert Advance Reporting Industry is set
      *
      * @param ConfigAnalytics $configAnalytics
-     * @param string $vertical
+     * @param string $industry
      * @return void
      */
-    public function processAssert(ConfigAnalytics $configAnalytics, $vertical)
+    public function processAssert(ConfigAnalytics $configAnalytics, $industry)
     {
         \PHPUnit_Framework_Assert::assertEquals(
-            $vertical,
+            $industry,
             $configAnalytics->getAnalyticsForm()->getAnalyticsVertical(),
-            $vertical . 'vertical is not selected'
+            $industry . 'industry is not selected'
         );
     }
 
@@ -37,6 +37,6 @@ class AssertVerticalIsSet extends AbstractConstraint
     public function toString()
     {
         return
-            'Proper Magento Analytics vertical is selected';
+            'Proper Magento Advanced Reporting industry is selected';
     }
 }

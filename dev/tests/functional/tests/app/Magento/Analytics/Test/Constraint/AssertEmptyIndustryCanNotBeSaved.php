@@ -9,12 +9,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
 
 /**
- * Assert Analytics empty Vertical can not be saved in Stores > Configuration > General > Analytics > General menu.
+ * Assert empty industry can not be saved in advanced reporting configuration.
  */
-class AssertEmptyVerticalCanNotBeSaved extends AbstractConstraint
+class AssertEmptyIndustryCanNotBeSaved extends AbstractConstraint
 {
     /**
-     * Assert Analytics empty Vertical can not be saved in Stores > Configuration > General > Analytics > General menu.
+     * Assert empty industry can not be saved in Advanced Reporting configuration.
      *
      * @param ConfigAnalytics $configAnalytics
      * @param string $errorMessage
@@ -25,7 +25,7 @@ class AssertEmptyVerticalCanNotBeSaved extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $errorMessage,
             $configAnalytics->getMessages()->getErrorMessage(),
-            'There is no error message when saving empty vertical in configuration'
+            'There is no error message when saving empty industry in configuration'
         );
     }
 
@@ -37,6 +37,6 @@ class AssertEmptyVerticalCanNotBeSaved extends AbstractConstraint
     public function toString()
     {
         return
-            'Empty Magento Analytics vertical can not be saved';
+            'Empty Magento Advanced Reporting industry can not be saved';
     }
 }
