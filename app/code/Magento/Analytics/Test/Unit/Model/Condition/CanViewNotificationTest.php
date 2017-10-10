@@ -8,7 +8,7 @@ namespace Magento\Analytics\Test\Unit\Model\Condition;
 
 use Magento\Analytics\Model\Condition\CanViewNotification;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Analytics\Model\notificationFlagManager;
+use Magento\Analytics\Model\NotificationFlagManager;
 use Magento\Backend\Model\Auth\Session;
 
 /**
