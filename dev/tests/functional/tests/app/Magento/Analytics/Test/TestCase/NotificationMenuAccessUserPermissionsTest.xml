@@ -10,6 +10,12 @@
         <variation name="UserWithoutSubscriptionPermissionsTestVariation1" summary="User without subscription permissions">
             <data name="user/dataset" xsi:type="string">custom_admin_with_role_without_subscription_permissions</data>
             <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingPopupExist" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertLoginAgainAdvancedReportingPopupNotExist" />
+        </variation>
+        <variation name="UserWithSubscriptionPermissionsTestVariation2" summary="User with subscription permissions">
+            <data name="user/dataset" xsi:type="string">default</data>
+            <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingPopupExist" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertLoginAgainAdvancedReportingPopupNotExist" />
         </variation>
     </testCase>
 </config>
