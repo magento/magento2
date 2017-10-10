@@ -12,7 +12,7 @@ use Magento\User\Test\Fixture\User;
 /**
  * Assert that Advanced Reporting Popup is absent on dashboard when admin user login again
  */
-class AssertAdvancedReportingPopupExist extends AbstractConstraint
+class AssertLoginAgainAdvancedReportingPopupNotExist extends AbstractConstraint
 {
     /**
      * Assert that Advanced Reporting Popup is absent on dashboard when admin user login again
@@ -26,11 +26,11 @@ class AssertAdvancedReportingPopupExist extends AbstractConstraint
             \Magento\User\Test\TestStep\LogoutUserOnBackendStep::class
         )->run();
 
-
         $this->objectManager->create(
             \Magento\User\Test\TestStep\LoginUserOnBackendStep::class,
             ['user' => $user]
         )->run();
+
         \PHPUnit_Framework_Assert::assertFalse(
             $dashboard->getAdvancedReportingBlock()->isVisible(),
             "Advanced Reporting Popup is visible on dashboard."
