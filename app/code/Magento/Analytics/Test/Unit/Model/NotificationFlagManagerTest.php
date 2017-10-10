@@ -8,7 +8,7 @@ namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\NotificationFlagManager;
 use Magento\Framework\FlagManager;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class NotificationFlagManagerTest
@@ -30,8 +30,8 @@ class NotificationFlagManagerTest extends \PHPUnit\Framework\TestCase
         $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->notificationFlagManager = $objectManagerHelper->getObject(
+        $objectManager = new ObjectManager($this);
+        $this->notificationFlagManager = $objectManager->getObject(
             NotificationFlagManager::class,
             [
                 'flagManager' => $this->flagManagerMock
