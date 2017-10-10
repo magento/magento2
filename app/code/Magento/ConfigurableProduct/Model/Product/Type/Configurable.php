@@ -478,8 +478,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                         )
                     );
             }
-            $product->setData($this->_configurableAttributes,
-                $configurableAttributes);
+            $product->setData(
+                $this->_configurableAttributes,
+                $configurableAttributes
+            );
         }
         \Magento\Framework\Profiler::stop('CONFIGURABLE:'.__METHOD__);
 
