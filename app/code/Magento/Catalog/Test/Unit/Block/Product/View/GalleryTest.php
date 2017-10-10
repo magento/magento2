@@ -77,7 +77,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->registry);
     }
 
-    public function testGetGalleryImagesJsonWithLabel(){
+    public function testGetGalleryImagesJsonWithLabel()
+    {
         $this->prepareGetGalleryImagesJsonMocks();
         $json = $this->model->getGalleryImagesJson();
         $decodedJson = json_decode($json, true);
@@ -91,7 +92,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test_video_url', $decodedJson[0]['videoUrl']);
     }
 
-    public function testGetGalleryImagesJsonWithoutLabel(){
+    public function testGetGalleryImagesJsonWithoutLabel()
+    {
         $this->prepareGetGalleryImagesJsonMocks(false);
         $json = $this->model->getGalleryImagesJson();
         $decodedJson = json_decode($json, true);
@@ -99,7 +101,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
 
     }
 
-    private function prepareGetGalleryImagesJsonMocks($hasLabel = true){
+    private function prepareGetGalleryImagesJsonMocks($hasLabel = true)
+    {
         $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
