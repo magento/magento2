@@ -85,6 +85,11 @@ class TransportBuilder
     protected $mailTransportFactory;
 
     /**
+     * @var int|null
+     */
+    protected $scopeId;
+
+    /**
      * @param FactoryInterface $templateFactory
      * @param MessageInterface $message
      * @param SenderResolverInterface $senderResolver
@@ -164,8 +169,20 @@ class TransportBuilder
      */
     public function setFrom($from)
     {
-        $result = $this->_senderResolver->resolve($from);
+        $result = $this->_senderResolver->resolve($from, $this->scopeId);
         $this->message->setFrom($result['email'], $result['name']);
+        return $this;
+    }
+
+    /**
+     * Set scope
+     *
+     * @param int $scopeId
+     * @return $this
+     */
+    public function setScopeId($scopeId)
+    {
+        $this->scopeId = $scopeId;
         return $this;
     }
 
@@ -242,6 +259,7 @@ class TransportBuilder
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;
+        $this->scopeId = null;
         return $this;
     }
 
