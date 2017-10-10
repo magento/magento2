@@ -18,7 +18,7 @@ use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
  *
  * @ZephyrId MAGETWO-63898
  */
-class SetVerticalTest extends Injectable
+class SetIndustryTest extends Injectable
 {
     /* tags */
     const MVP = 'no';

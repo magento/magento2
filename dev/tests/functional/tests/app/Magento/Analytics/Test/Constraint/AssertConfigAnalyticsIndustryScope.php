@@ -9,12 +9,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
 
 /**
- * Assert Analytics vertical scope is website in Stores > Configuration > General > Analytics > General menu.
+ * Assert Advanced Reporting industry scope is website in Stores.
  */
-class AssertConfigAnalyticsVerticalScope extends AbstractConstraint
+class AssertConfigAnalyticsIndustryScope extends AbstractConstraint
 {
     /**
-     * Assert Analytics vertical scope is website in Stores > Configuration > General > Analytics menu.
+     * Assert Advanced Reporting industry scope is website in Stores.
      *
      * @param ConfigAnalytics $configAnalytics
      */
@@ -23,7 +23,7 @@ class AssertConfigAnalyticsVerticalScope extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             true,
             $configAnalytics->getAnalyticsForm()->getAnalyticsVerticalScope(),
-            'Magento Analytics vertical scope is not website'
+            'Magento Advanced Reporting industry scope is not website'
         );
     }
 
@@ -34,6 +34,6 @@ class AssertConfigAnalyticsVerticalScope extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Magento Analytics vertical scope is website';
+        return 'Magento Advanced Reporting industry scope is website';
     }
 }
