@@ -196,4 +196,17 @@
             <argument name="productIndexer" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Full</argument>
         </arguments>
     </type>
+    <type name="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider">
+        <arguments>
+            <argument name="linkedProductSelectBuilder" xsi:type="object">Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedProductSelectBuilder</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedProductSelectBuilder">
+        <arguments>
+            <argument name="baseSelectProcessor" xsi:type="object">Magento\ConfigurableProduct\Model\ResourceModel\Product\StockStatusBaseSelectProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolver">
+        <plugin name="configurable" type="Magento\ConfigurableProduct\Plugin\Catalog\Model\Product\Pricing\Renderer\SalableResolver" />
+    </type>
 </config>
