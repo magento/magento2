@@ -5,30 +5,27 @@
  */
 namespace Magento\Analytics\Test\Block\Adminhtml\Dashboard\AdvancedReporting;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Ui\Test\Block\Adminhtml\Modal;
 
 /**
- * Subscription block.
+ * Advanced Reporting block.
  */
-class SubscriptionBlock extends Modal
+class AdvancedReportingBlock extends Modal
 {
     /**
-     * Close subscription pop-up button
+     * Close pop-up button
      *
      * @var string
      */
     private $closeReportingButton = '[data-index="analytics_subscription_button_close"]';
 
     /**
-     * Skip subscription popup.
-     *
-     * @return void
+     * @inheritdoc
      */
-    public function skipAdvancedReporting()
+    public function isVisible()
     {
         $this->waitModalAnimationFinished();
-        $this->_rootElement->find($this->closeReportingButton)->click();
-        $this->waitForElementNotVisible($this->loadingMask);
+        return parent::isVisible() && $this->_rootElement->find($this->closeReportingButton)->isVisible();
+
     }
 }

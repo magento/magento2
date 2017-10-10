@@ -10,7 +10,7 @@
         <variation name="SetVertical">
             <data name="vertical" xsi:type="string">Apps and Games</data>
             <constraint name="Magento\Analytics\Test\Constraint\AssertIndustryIsSet" />
-            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsVerticalScope" />
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsIndustryScope" />
         </variation>
         <variation name="SetVerticalEmpty" summary="Navigate to Analytics admin menu and try to save empty Vertical" ticketId="MAGETWO-63981">
             <data name="vertical" xsi:type="string">--Please Select--</data>
