@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Test XML Example -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <cest name="StorefrontCustomerCreateWishlistCest">
+    <cest name="StorefrontDeletePersistedWishlistCest">
         <annotations>
-            <features value="Persist a wishlist for a customer"/>
-            <stories value="Persist a wishlist for a customer"/>
+            <features value="Delete a persist wishlist for a customer"/>
+            <stories value="Delete a persist wishlist for a customer"/>
             <env value="chrome"/>
             <env value="firefox"/>
             <env value="phantomjs"/>
@@ -26,10 +26,10 @@
             <deleteData mergeKey="deleteCategory" createDataKey="category"/>
             <deleteData mergeKey="deleteCustomer" createDataKey="customer"/>
         </after>
-        <test name="StorefrontCustomerCreateWishlistTest">
+        <test name="StorefrontDeletePersistedWishlistTest">
             <annotations>
-                <title value="Persist a wishlist for a customer"/>
-                <description value="Persist a wishlist for a customer"/>
+                <title value="Delete a persist wishlist for a customer"/>
+                <description value="Delete a persist wishlist for a customer"/>
             </annotations>
             <amOnPage mergeKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>
             <fillField  mergeKey="fillEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
@@ -41,7 +41,11 @@
             <see mergeKey="seeEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
             <waitForPageLoad mergeKey="15"/>
             <amOnPage mergeKey="amOnWishlist" url="{{StorefrontCustomerWishlistPage.url}}"/>
-            <see mergeKey="seeInField" userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemName}}"/>
+            <see mergeKey="seeWishlist" userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}"/>
+            <moveMouseOver mergeKey="mouseOver" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}"/>
+            <waitForElementVisible mergeKey="waitForRemoveButton" selector="{{StorefrontCustomerWishlistSection.removeWishlistButton}}"/>
+            <click mergeKey="clickRemove" selector="{{StorefrontCustomerWishlistSection.removeWishlistButton}}"/>
+            <see mergeKey="seeEmptyWishlist" userInput="You have no items in your wish list" selector="{{StorefrontCustomerWishlistSection.emptyWishlistText}}"/>
         </test>
     </cest>
 </config>
