@@ -45,7 +45,7 @@ class NotificationFlagManagerTest extends \PHPUnit\Framework\TestCase
         $this->flagManagerMock
             ->expects($this->once())
             ->method('saveFlag')
-            ->with(NotificationFlagManager::NOTIFICATION_SEEN . $userId, 1)
+            ->with('analytics_notification_seen_admin_' . $userId, 1)
             ->willReturn(true);
         $this->assertTrue($this->notificationFlagManager->setNotifiedUser($userId));
     }
@@ -56,7 +56,7 @@ class NotificationFlagManagerTest extends \PHPUnit\Framework\TestCase
         $this->flagManagerMock
             ->expects($this->once())
             ->method('getFlagData')
-            ->with(NotificationFlagManager::NOTIFICATION_SEEN . $userId)
+            ->with('analytics_notification_seen_admin_' . $userId)
             ->willReturn(true);
         $this->assertTrue($this->notificationFlagManager->isUserNotified($userId));
     }
