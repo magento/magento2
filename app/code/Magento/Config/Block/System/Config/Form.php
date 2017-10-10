@@ -425,24 +425,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if ($placeholderValue) {
             $data = $placeholderValue;
         }
-        if ($data === null) {
-            if (array_key_exists($path, $this->_configData)) {
-                $data = $this->_configData[$path];
 
-                if ($field->hasBackendModel()) {
-                    $backendModel = $field->getBackendModel();
-                    $backendModel->setPath($path)
-                        ->setValue($data)
-                        ->setWebsite($this->getWebsiteCode())
-                        ->setStore($this->getStoreCode())
-                        ->afterLoad();
-                    $data = $backendModel->getValue();
-                }
-            } elseif ($field->getConfigPath() !== null) {
-                $data = $this->getConfigValue($field->getConfigPath());
-            } else {
-                $data = $this->getConfigValue($path);
-            }
+        if ($data === null) {
+            $path = $field->getConfigPath() !== null ? $field->getConfigPath() : $path;
+            $data = $this->getConfigValue($path);
         }
 
         return $data;
