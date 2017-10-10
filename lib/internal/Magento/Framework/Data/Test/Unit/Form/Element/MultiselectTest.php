@@ -33,7 +33,8 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $this->_model->setId($fieldId);
         $elementHtml = $this->_model->getElementHtml();
         $this->assertContains(
-            '<input type="hidden" id="' . $fieldId . '_hidden" name="' . $fieldName . '"', $elementHtml
+            '<input type="hidden" id="' . $fieldId . '_hidden" name="' . $fieldName . '"',
+            $elementHtml
         );
     }
 
