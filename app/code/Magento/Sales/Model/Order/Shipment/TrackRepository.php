@@ -15,9 +15,6 @@ use Magento\Sales\Api\Data\ShipmentTrackSearchResultInterfaceFactory;
 use Magento\Sales\Api\ShipmentTrackRepositoryInterface;
 use Magento\Sales\Model\Spi\ShipmentTrackResourceInterface;
 
-/**
- * @since 2.2.0
- */
 class TrackRepository implements ShipmentTrackRepositoryInterface
 {
     /**
