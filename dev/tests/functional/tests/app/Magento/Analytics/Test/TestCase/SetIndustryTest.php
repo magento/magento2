@@ -28,13 +28,13 @@ class SetIndustryTest extends Injectable
      * Set analytics vertical test.
      *
      * @param ConfigAnalytics $configAnalytics
-     * @param string $vertical
+     * @param string $industry
      * @return void
      */
-    public function test(ConfigAnalytics $configAnalytics, $vertical)
+    public function test(ConfigAnalytics $configAnalytics, $industry)
     {
         $configAnalytics->open();
-        $configAnalytics->getAnalyticsForm()->setAnalyticsVertical($vertical);
+        $configAnalytics->getAnalyticsForm()->setAnalyticsVertical($industry);
         $configAnalytics->getAnalyticsForm()->saveConfig();
     }
 }
