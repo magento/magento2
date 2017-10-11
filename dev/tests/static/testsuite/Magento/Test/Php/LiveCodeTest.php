@@ -201,10 +201,8 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
     public function testCodeStyle()
     {
-        $useWhiteList = isset($_ENV['phpunit.static.testcodestyle.use_whitelist'])
-            && $_ENV['phpunit.static.testcodestyle.use_whitelist'] === '1';
-
-        $whiteList = $useWhiteList ? self::getWhitelist(['php']) : $this->getFullWhitelist();
+        $whiteList = defined('TESTCODESTYLE_IS_FULL_SCAN') && TESTCODESTYLE_IS_FULL_SCAN === '1'
+            ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']);
 
         $reportFile = self::$reportDir . '/phpcs_report.txt';
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
