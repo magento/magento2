@@ -276,3 +276,9 @@
 .swatch-option-loading {
     content: url("../images/loader-2.gif");
 }
+
+.swatch-input {
+    left: -1000px;
+    position: absolute;
+    visibility: hidden;
+}

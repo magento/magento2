@@ -24,7 +24,7 @@ define([
             state: {},
             priceFormat: {},
             optionTemplate: '<%- data.label %>' +
-            "<% if (typeof data.finalPrice.value !== 'undefined') { %>" +
+            '<% if (typeof data.finalPrice.value !== "undefined") { %>' +
             ' <%- data.finalPrice.formatted %>' +
             '<% } %>',
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
@@ -221,6 +221,7 @@ define([
             if (this.options.values) {
                 this.options.settings.each($.proxy(function (index, element) {
                     var attributeId = element.attributeId;
+
                     element.value = this.options.values[attributeId] || '';
                     this._configureElement(element);
                 }, this));
@@ -253,7 +254,7 @@ define([
                     this._fillSelect(element.nextSetting);
                     this._resetChildren(element.nextSetting);
                 } else {
-                    if (!!document.documentMode) {
+                    if (!!document.documentMode) { //eslint-disable-line
                         this.inputSimpleProduct.val(element.options[element.selectedIndex].config.allowedProducts[0]);
                     } else {
                         this.inputSimpleProduct.val(element.selectedOptions[0].config.allowedProducts[0]);
@@ -262,6 +263,7 @@ define([
             } else {
                 this._resetChildren(element);
             }
+
             this._reloadPrice();
             this._displayRegularPriceBlock(this.simpleProduct);
             this._displayTierPriceBlock(this.simpleProduct);
@@ -270,6 +272,7 @@ define([
 
         /**
          * Change displayed product image according to chosen options of configurable product
+         *
          * @private
          */
         _changeProductImage: function () {
@@ -289,18 +292,37 @@ define([
                 }
 
                 images = $.extend(true, [], images);
-
-                images.forEach(function (img) {
-                    img.type = 'image';
-                });
+                images = this._setImageIndex(images);
 
                 galleryObject.updateData(images);
+
+                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
+                    selectedOption: this.simpleProduct,
+                    dataMergeStrategy: this.options.gallerySwitchStrategy
+                });
             } else {
                 galleryObject.updateData(initialImages);
                 $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
             }
 
             galleryObject.first();
+        },
+
+        /**
+         * Set correct indexes for image set.
+         *
+         * @param {Array} images
+         * @private
+         */
+        _setImageIndex: function (images) {
+            var length = images.length,
+                i;
+
+            for (i = 0; length > i; i++) {
+                images[i].i = i + 1;
+            }
+
+            return images;
         },
 
         /**
@@ -349,6 +371,7 @@ define([
                 for (i = 0; i < options.length; i++) {
                     allowedProducts = [];
 
+                    /* eslint-disable max-depth */
                     if (prevConfig) {
                         for (j = 0; j < options[i].products.length; j++) {
                             // prevConfig.config can be undefined
@@ -373,6 +396,8 @@ define([
                         element.options[index].config = options[i];
                         index++;
                     }
+
+                    /* eslint-enable max-depth */
                 }
             }
         },
@@ -500,9 +525,9 @@ define([
          * @private
          */
         _displayRegularPriceBlock: function (optionId) {
-            if (typeof optionId != 'undefined'
-                && this.options.spConfig.optionPrices[optionId].oldPrice.amount
-                != this.options.spConfig.optionPrices[optionId].finalPrice.amount
+            if (typeof optionId != 'undefined' &&
+                this.options.spConfig.optionPrices[optionId].oldPrice.amount != //eslint-disable-line eqeqeq
+                this.options.spConfig.optionPrices[optionId].finalPrice.amount
             ) {
                 $(this.options.slyOldPriceSelector).show();
             } else {
@@ -528,12 +553,15 @@ define([
          * @private
          */
         _displayTierPriceBlock: function (optionId) {
+            var options, tierPriceHtml;
+
             if (typeof optionId != 'undefined' &&
-                this.options.spConfig.optionPrices[optionId].tierPrices != []
+                this.options.spConfig.optionPrices[optionId].tierPrices != [] // eslint-disable-line eqeqeq
             ) {
-                var options = this.options.spConfig.optionPrices[optionId];
+                options = this.options.spConfig.optionPrices[optionId];
+
                 if (this.options.tierPriceTemplate) {
-                    var tierPriceHtml = mageTemplate(this.options.tierPriceTemplate, {
+                    tierPriceHtml = mageTemplate(this.options.tierPriceTemplate, {
                         'tierPrices': options.tierPrices,
                         '$t': $t,
                         'currencyFormat': this.options.spConfig.currencyFormat,
