@@ -98,7 +98,6 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $json = $this->model->getGalleryImagesJson();
         $decodedJson = json_decode($json, true);
         $this->assertEquals('test_product_name', $decodedJson[0]['caption']);
-
     }
 
     private function prepareGetGalleryImagesJsonMocks($hasLabel = true)
