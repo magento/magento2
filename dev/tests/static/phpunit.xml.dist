@@ -30,6 +30,7 @@
     </testsuites>
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>
+        <env name="phpunit.static.testcodestyle.use_whitelist" value="0"/>
         <!-- TESTS_COMPOSER_PATH - specify the path to composer binary, if a relative reference cannot be resolved -->
         <!--<const name="TESTS_COMPOSER_PATH" value="/usr/local/bin/composer"/>-->
     </php>

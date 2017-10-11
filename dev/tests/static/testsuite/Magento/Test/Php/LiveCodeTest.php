@@ -76,7 +76,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
     {
         $changedFiles = self::getChangedFilesList($changedFilesBaseDir);
         if (empty($changedFiles)) {
-            return self::getFullWhitelist();
+            return [];
         }
 
         $globPatternsFolder = ('' !== $baseFilesFolder) ? $baseFilesFolder : self::getBaseFilesFolder();
@@ -194,18 +194,23 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    private static function getFullWhitelist()
+    private function getFullWhitelist()
     {
         return Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
     }
 
     public function testCodeStyle()
     {
+        $useWhiteList = isset($_ENV['phpunit.static.testcodestyle.use_whitelist'])
+            && $_ENV['phpunit.static.testcodestyle.use_whitelist'] === '1';
+
+        $whiteList = $useWhiteList ? self::getWhitelist(['php']) : $this->getFullWhitelist();
+
         $reportFile = self::$reportDir . '/phpcs_report.txt';
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
         $this->assertEquals(
             0,
-            $result = $codeSniffer->run(self::getWhitelist(['php'])),
+            $result = $codeSniffer->run($whiteList),
             "PHP Code Sniffer detected {$result} violation(s): " . PHP_EOL . file_get_contents($reportFile)
         );
     }
