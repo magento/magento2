@@ -520,7 +520,7 @@ class Adapter implements MethodInterface
     /**
      * @inheritdoc
      */
-    private function executeCommand($commandCode, array $arguments = [])
+    public function executeCommand($commandCode, array $arguments = [])
     {
         if (!$this->canPerformCommand($commandCode)) {
             return null;
