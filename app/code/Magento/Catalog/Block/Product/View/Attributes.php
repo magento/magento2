@@ -81,8 +81,9 @@ class Attributes extends \Magento\Framework\View\Element\Template
         $attributes = $product->getAttributes();
         foreach ($attributes as $attribute) {
             if ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
-                $value = $attribute->getFrontend()->getValue($product);
-
+                if (is_array($value = $attribute->getFrontend()->getValue($product))) {
+                    continue;
+                }
                 if (!$product->hasData($attribute->getAttributeCode())) {
                     $value = __('N/A');
                 } elseif ((string)$value == '') {
@@ -90,7 +91,6 @@ class Attributes extends \Magento\Framework\View\Element\Template
                 } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
                     $value = $this->priceCurrency->convertAndFormat($value);
                 }
-
                 if ($value instanceof Phrase || (is_string($value) && strlen($value))) {
                     $data[$attribute->getAttributeCode()] = [
                         'label' => __($attribute->getStoreLabel()),
