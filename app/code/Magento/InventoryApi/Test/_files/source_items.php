@@ -61,7 +61,7 @@ $sourcesItemsData = [
 $resourceConnection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
 /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
 $connection = $resourceConnection->getConnection();
-$connection->query('ALTER TABLE ' . $resourceConnection->getTableNAme('inventory_source_item') . ' AUTO_INCREMENT 1;');
+$connection->query('ALTER TABLE ' . $resourceConnection->getTableName('inventory_source_item') . ' AUTO_INCREMENT 1;');
 
 $sourceItems = [];
 foreach ($sourcesItemsData as $sourceItemData) {
