@@ -34,13 +34,14 @@ API,API
 Configuration,Configuration
 "Business Intelligence","Business Intelligence"
 "BI Essentials","BI Essentials"
-"This service provides a suite of dynamic reports based on your product, order and
-                customer data. All reports are accessed securely on a personalized dashboard dedicated to your reports -
-                separate from your Admin Panel.</br> For more information, <a href=""#"">view details</a> or see our
-                <a href=""#"">terms and conditions</a>.","This service provides a suite of dynamic reports based on your product, order and
-                customer data. All reports are accessed securely on a personalized dashboard dedicated to your reports -
-                separate from your Admin Panel.</br> For more information, <a href=""#"">view details</a> or see our
-                <a href=""#"">terms and conditions</a>."
+"This service provides a dynamic suite of reports with rich insights about your business.
+                Your reports can be accessed securely on a personalized dashboard outside of the admin panel by clicking on the
+                ""Go to Advanced Reporting"" link. </br> For more information, see our
+                <a href=""https://magento.com/legal/terms/privacy"">terms and conditions</a>.
+                ","This service provides a dynamic suite of reports with rich insights about your business.
+                Your reports can be accessed securely on a personalized dashboard outside of the admin panel by clicking on the
+                ""Go to Advanced Reporting"" link. </br> For more information, see our
+                <a href=""https://magento.com/legal/terms/privacy"">terms and conditions</a>."
 "Advanced Reporting Service","Advanced Reporting Service"
 Industry,Industry
 "Time of day to send data","Time of day to send data"
@@ -70,26 +71,22 @@ Industry,Industry
 "Technology B2B","Technology B2B"
 "Analytics Subscription","Analytics Subscription"
 "powered by Magento Business Intelligence","powered by Magento Business Intelligence"
-"<p>When you turn on Advanced
-                        Reporting, you'll have access to a suite of dynamic reports tailored to your business. Example
-                        of the new data and trend reports, listed by category, include:</p><ul class=""list"">
-                        <li><strong>Order:</strong> Number of orders, total revenue, and AOV</li><li><strong>Customer:
-                        </strong> New registered accounts, unique customers, number of orders, AOV, revenue by email
-                        </li><li><strong>Product:</strong> Quantity sold, bestsellers by volume/revenue</li></ul><p>A
-                        personalized dashboard includes all reports - separate from your Admin Panel, yet still at your
-                        fingertips.</p><p>We're excited to offer these valuable tools that can help your business become
-                        more data-driven. For more information, <a href=""#"" target=""_blank"">view details</a> or see our
-                        <a href=""#"" target=""_blank"">terms and conditions</a>.</p>
-                        ","<p>When you turn on Advanced
-                        Reporting, you'll have access to a suite of dynamic reports tailored to your business. Example
-                        of the new data and trend reports, listed by category, include:</p><ul class=""list"">
-                        <li><strong>Order:</strong> Number of orders, total revenue, and AOV</li><li><strong>Customer:
-                        </strong> New registered accounts, unique customers, number of orders, AOV, revenue by email
-                        </li><li><strong>Product:</strong> Quantity sold, bestsellers by volume/revenue</li></ul><p>A
-                        personalized dashboard includes all reports - separate from your Admin Panel, yet still at your
-                        fingertips.</p><p>We're excited to offer these valuable tools that can help your business become
-                        more data-driven. For more information, <a href=""#"" target=""_blank"">view details</a> or see our
-                        <a href=""#"" target=""_blank"">terms and conditions</a>.</p>
+"<p>Advanced Reporting
+                        provides you with a dynamic suite of reports with rich insights about the health of your
+                        business.</p><br /><p>As part of the Advanced Reporting service, we may also use your customer
+                        data for such purposes as benchmarking, improving our products and services, and providing you
+                        with new and improved analytics.</p><br /><p>By using Magento 2.2, you agree to the Advanced
+                        Reporting <a href=""https://magento.com/legal/terms/privacy"" target=""_blank"">Privacy Policy</a> and
+                        <a href=""https://magento.com/legal/terms/cloud-terms"" target=""_blank"">Terms
+                        of Service</a>. You may opt out at any time from the Stores Configuration page.</p>
+                        ","<p>Advanced Reporting
+                        provides you with a dynamic suite of reports with rich insights about the health of your
+                        business.</p><br /><p>As part of the Advanced Reporting service, we may also use your customer
+                        data for such purposes as benchmarking, improving our products and services, and providing you
+                        with new and improved analytics.</p><br /><p>By using Magento 2.2, you agree to the Advanced
+                        Reporting <a href=""https://magento.com/legal/terms/privacy"" target=""_blank"">Privacy Policy</a> and
+                        <a href=""https://magento.com/legal/terms/cloud-terms"" target=""_blank"">Terms
+                        of Service</a>. You may opt out at any time from the Stores Configuration page.</p>
                         "
 "Are you sure you want to opt out?","Are you sure you want to opt out?"
 Cancel,Cancel
@@ -101,3 +98,4 @@ Cancel,Cancel
                     free of charge, in your Magento software. When you opt out, we collect no product, order, and
                     customer data to generate our dynamic reports.</p><p>To opt in later: You can always turn on Advanced
                     Reporting in you Admin Panel.</p>"
+"In order to personalize your Advanced Reporting experience, please select your industry.","In order to personalize your Advanced Reporting experience, please select your industry."
