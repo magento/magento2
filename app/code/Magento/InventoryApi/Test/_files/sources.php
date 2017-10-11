@@ -21,7 +21,7 @@ $sourcesData = [
     [
         // define only required and needed for tests fields
         SourceInterface::SOURCE_ID => 10,
-        SourceInterface::NAME => 'EU-source-1222',
+        SourceInterface::NAME => 'EU-source-1',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 100,
         SourceInterface::POSTCODE => 'postcode',
