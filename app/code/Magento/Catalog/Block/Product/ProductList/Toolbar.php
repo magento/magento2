@@ -193,7 +193,10 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         }
         if ($this->getCurrentOrder()) {
             if (($this->getCurrentOrder()) == 'position') {
-                $this->_collection->addAttributeToSort($this->getCurrentOrder(), $this->getCurrentDirection())->addAttributeToSort('entity_id', $this->getCurrentDirection());
+                $this->_collection->addAttributeToSort(
+                    $this->getCurrentOrder(),
+                    $this->getCurrentDirection())->addAttributeToSort('entity_id', $this->getCurrentDirection()
+                );
             } else {
                 $this->_collection->setOrder($this->getCurrentOrder(), $this->getCurrentDirection());
             }
