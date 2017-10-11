@@ -131,7 +131,9 @@ class CategoryTreeTest extends \PHPUnit\Framework\TestCase
     public function testGetChildrenSorted()
     {
         $this->_model->load(2);
-        $this->assertEquals(array_diff([3, 4, 5], explode(',', $this->_model->getChildren(true))), []);
+        $unsorted = explode(',', $this->_model->getChildren());
+        usort($unsorted);
+        $this->assertEquals(array_diff($unsorted, explode(',', $this->_model->getChildren(true, true, true))), []);
     }
 
     public function testGetPathInStore()
