@@ -56,7 +56,7 @@ class Group implements GroupSourceInterface
         $customerGroups = [];
         $customerGroups[] = [
             'label' => __('ALL GROUPS'),
-            'value' => GroupInterface::CUST_GROUP_ALL,
+            'value' => (string)GroupInterface::CUST_GROUP_ALL,
         ];
 
         /** @var GroupSearchResultsInterface $groups */
