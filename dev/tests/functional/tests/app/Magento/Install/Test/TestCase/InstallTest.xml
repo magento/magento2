@@ -42,6 +42,7 @@
             <constraint name="Magento\Install\Test\Constraint\AssertRewritesEnabled" />
         </variation>
         <variation name="InstallTestVariation5" summary="Install with enabled secure urls">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="install/httpsFront" xsi:type="string">Use HTTPS for Magento Storefront</data>
             <data name="install/httpsAdmin" xsi:type="string">Use HTTPS for Magento Admin</data>

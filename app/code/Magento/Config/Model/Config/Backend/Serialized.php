@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Model\Config\Backend;
 
+use Magento\Framework\App\Config\Data\ProcessorInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
@@ -12,7 +13,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @api
  * @since 100.0.2
  */
-class Serialized extends \Magento\Framework\App\Config\Value
+class Serialized extends \Magento\Framework\App\Config\Value implements ProcessorInterface
 {
     /**
      * @var Json
@@ -66,5 +67,13 @@ class Serialized extends \Magento\Framework\App\Config\Value
         }
         parent::beforeSave();
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function processValue($value)
+    {
+        return empty($value) ? '' : $this->serializer->unserialize($value);
     }
 }
