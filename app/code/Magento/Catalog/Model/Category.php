@@ -780,11 +780,12 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Retrieve children ids comma separated
      *
+     * @param boolean $sortByPosition
      * @return string
      */
-    public function getChildren()
+    public function getChildren($sortByPosition = false)
     {
-        return implode(',', $this->getResource()->getChildren($this, false));
+        return implode(',', $this->getResource()->getChildren($this, false, true, $sortByPosition));
     }
 
     /**
