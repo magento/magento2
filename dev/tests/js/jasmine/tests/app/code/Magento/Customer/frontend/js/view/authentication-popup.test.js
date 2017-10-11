@@ -29,6 +29,7 @@ define(['squire'], function (Squire) {
         window.authenticationPopup = {
             customerRegisterUrl: 'register_url',
             customerForgotPasswordUrl: 'forgot_password_url',
+            redirectUrl: 'redirect_url',
             autocomplete: 'autocomplete_flag',
             baseUrl: 'base_url'
         };
@@ -75,7 +76,7 @@ define(['squire'], function (Squire) {
                 expect(obj.login(null, event)).toBeFalsy();
                 expect(mocks['Magento_Customer/js/action/login']).toHaveBeenCalledWith({
                     username: 'customer'
-                });
+                }, 'redirect_url');
             });
         });
     });
