@@ -50,7 +50,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     self::$connectionName
                 )
             );
-
             //sales_bestsellers_aggregated_yearly
             $connection->dropForeignKey(
                 $installer->getTable('sales_bestsellers_aggregated_yearly', self::$connectionName),
@@ -62,7 +61,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     self::$connectionName
                 )
             );
-
             $installer->endSetup();
         }
         if (version_compare($context->getVersion(), '2.0.3', '<')) {
@@ -103,6 +101,21 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'length' => 120
+                ]
+            );
+        }
+        if (version_compare($context->getVersion(), '2.1.0', '<')) {
+            $connection = $installer->getConnection(self::$connectionName);
+            $tableName = $installer->getTable('sales_shipment_track');
+            $connection->addColumn(
+                $tableName,
+                'track_url',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => '64k',
+                    'nullable' => true,
+                    'default' => null,
+                    'comment' => 'Tracking URL'
                 ]
             );
         }

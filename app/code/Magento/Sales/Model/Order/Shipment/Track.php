@@ -225,6 +225,16 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
+     * Returns track_url
+     *
+     * @return string
+     */
+    public function getTrackUrl()
+    {
+        return $this->getData(ShipmentTrackInterface::TRACK_URL);
+    }
+
+    /**
      * Returns carrier_code
      *
      * @return string
@@ -368,6 +378,14 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     public function setTrackNumber($trackNumber)
     {
         return $this->setData(ShipmentTrackInterface::TRACK_NUMBER, $trackNumber);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTrackUrl($trackUrl)
+    {
+        return $this->setData(ShipmentTrackInterface::TRACK_URL, $trackUrl);
     }
 
     /**
