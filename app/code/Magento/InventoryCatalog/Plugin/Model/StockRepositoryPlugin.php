@@ -11,7 +11,7 @@ use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
 /**
- * Plugin Stock Repository
+ * Class provide Before Plugin on StockRepositoryInterface::deleteByItem to prevent default stock could be deleted
  */
 class StockRepositoryPlugin
 {
@@ -34,7 +34,7 @@ class StockRepositoryPlugin
      * @param StockRepositoryInterface $subject
      * @param int $stockId
      *
-     * @return null
+     * @return void
      * @throws CouldNotDeleteException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -43,7 +43,5 @@ class StockRepositoryPlugin
         if ($stockId === $this->defaultStockProvider->getId()) {
             throw new CouldNotDeleteException(__('Default Stock could not be deleted.'));
         }
-
-        return null;
     }
 }
