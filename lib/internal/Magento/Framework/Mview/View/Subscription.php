@@ -10,6 +10,8 @@ namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Trigger;
+use Magento\Framework\DB\Ddl\TriggerFactory;
+use Magento\Framework\Mview\ViewInterface;
 
 class Subscription implements SubscriptionInterface
 {
@@ -21,12 +23,12 @@ class Subscription implements SubscriptionInterface
     protected $connection;
 
     /**
-     * @var \Magento\Framework\DB\Ddl\TriggerFactory
+     * @var TriggerFactory
      */
     protected $triggerFactory;
 
     /**
-     * @var \Magento\Framework\Mview\View\CollectionInterface
+     * @var CollectionInterface
      */
     protected $viewCollection;
 
@@ -67,21 +69,21 @@ class Subscription implements SubscriptionInterface
 
     /**
      * @param ResourceConnection $resource
-     * @param \Magento\Framework\DB\Ddl\TriggerFactory $triggerFactory
-     * @param \Magento\Framework\Mview\View\CollectionInterface $viewCollection
-     * @param \Magento\Framework\Mview\ViewInterface $view
+     * @param TriggerFactory $triggerFactory
+     * @param CollectionInterface $viewCollection
+     * @param ViewInterface $view
      * @param string $tableName
      * @param string $columnName
      * @param array $ignoredUpdateColumns
      */
     public function __construct(
         ResourceConnection $resource,
-        \Magento\Framework\DB\Ddl\TriggerFactory $triggerFactory,
-        \Magento\Framework\Mview\View\CollectionInterface $viewCollection,
-        \Magento\Framework\Mview\ViewInterface $view,
+        TriggerFactory $triggerFactory,
+        CollectionInterface $viewCollection,
+        ViewInterface $view,
         $tableName,
         $columnName,
-        $ignoredUpdateColumns = []
+        array $ignoredUpdateColumns = []
     ) {
         $this->connection = $resource->getConnection();
         $this->triggerFactory = $triggerFactory;
@@ -94,9 +96,9 @@ class Subscription implements SubscriptionInterface
     }
 
     /**
-     * Create subsciption
+     * Create subscription
      *
-     * @return \Magento\Framework\Mview\View\SubscriptionInterface
+     * @return SubscriptionInterface
      */
     public function create()
     {
@@ -113,7 +115,7 @@ class Subscription implements SubscriptionInterface
 
             // Add statements for linked views
             foreach ($this->getLinkedViews() as $view) {
-                /** @var \Magento\Framework\Mview\ViewInterface $view */
+                /** @var ViewInterface $view */
                 $trigger->addStatement($this->buildStatement($event, $view->getChangelog()));
             }
 
@@ -127,7 +129,7 @@ class Subscription implements SubscriptionInterface
     /**
      * Remove subscription
      *
-     * @return \Magento\Framework\Mview\View\SubscriptionInterface
+     * @return SubscriptionInterface
      */
     public function remove()
     {
@@ -142,7 +144,7 @@ class Subscription implements SubscriptionInterface
 
             // Add statements for linked views
             foreach ($this->getLinkedViews() as $view) {
-                /** @var \Magento\Framework\Mview\ViewInterface $view */
+                /** @var ViewInterface $view */
                 $trigger->addStatement($this->buildStatement($event, $view->getChangelog()));
             }
 
@@ -165,10 +167,10 @@ class Subscription implements SubscriptionInterface
     protected function getLinkedViews()
     {
         if (!$this->linkedViews) {
-            $viewList = $this->viewCollection->getViewsByStateMode(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED);
+            $viewList = $this->viewCollection->getViewsByStateMode(StateInterface::MODE_ENABLED);
 
             foreach ($viewList as $view) {
-                /** @var \Magento\Framework\Mview\ViewInterface $view */
+                /** @var ViewInterface $view */
                 // Skip the current view
                 if ($view->getId() == $this->getView()->getId()) {
                     continue;
@@ -189,10 +191,10 @@ class Subscription implements SubscriptionInterface
      * Build trigger statement for INSERT, UPDATE, DELETE events
      *
      * @param string $event
-     * @param \Magento\Framework\Mview\View\ChangelogInterface $changelog
+     * @param ChangelogInterface $changelog
      * @return string
      */
-    protected function buildStatement($event, $changelog)
+    protected function buildStatement(string $event, ChangelogInterface $changelog)
     {
         switch ($event) {
             case Trigger::EVENT_INSERT:
@@ -259,7 +261,7 @@ class Subscription implements SubscriptionInterface
     /**
      * Retrieve View related to subscription
      *
-     * @return \Magento\Framework\Mview\ViewInterface
+     * @return ViewInterface
      * @codeCoverageIgnore
      */
     public function getView()
