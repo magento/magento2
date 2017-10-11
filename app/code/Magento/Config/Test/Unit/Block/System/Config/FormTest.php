@@ -543,12 +543,12 @@ class FormTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 ['section1/group1/field1' => 'some_value'],
-                false,
-                null,
+                'some_value',
+                'section1/group1/field1',
                 false,
                 'some_value',
                 null,
-                1,
+                0,
                 false,
                 false,
                 false
