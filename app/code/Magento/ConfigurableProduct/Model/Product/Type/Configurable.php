@@ -19,7 +19,7 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection as AttributesCollection;
+use Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
  * Configurable product type implementation
@@ -30,7 +30,7 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\At
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
+class Configurable extends AbstractType
 {
     /**
      * Product type code
@@ -188,8 +188,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Cache attributes of products without and ID here.
      *
-     * @var AttributesCollection[] Where keys are objects' hashes
-     * and value are attributes.
+     * @var ProductTypeConfigurable\Attribute\Collection[] Where keys are
+     * objects' hashes and value are attributes.
      */
     private $configurableAttributesLocalCache = [];
 
@@ -453,8 +453,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @throws \InvalidArgumentException When it's impossible to generate cache
      * ID for the product.
      */
-    private function generateConfigurableAttributesCacheId(Product $product
-    ): string {
+    private function generateConfigurableAttributesCacheId(
+        Product $product
+    ) {
         $metadata = $this->getMetadataPool()
             ->getMetadata(ProductInterface::class);
         /** @var string|null $productId */
@@ -473,11 +474,12 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param Product $product
      *
-     * @return AttributesCollection
+     * @return ProductTypeConfigurable\Attribute\Collection
      * @throws \RuntimeException When can't find the cached attributes.
      */
-    private function findCachedConfigurableAttributes(Product $product
-    ): AttributesCollection {
+    private function findCachedConfigurableAttributes(
+        Product $product
+    ) {
         try {
             //Trying to load attributes from cache.
             $cacheId = $this->generateConfigurableAttributesCacheId($product);
@@ -524,14 +526,14 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Cache collection for further use.
      *
-     * @param Product $product
-     * @param AttributesCollection $collection
+     * @param Product                                      $product
+     * @param ProductTypeConfigurable\Attribute\Collection $collection
      *
      * @return void
      */
     private function cacheConfigurableAttributes(
         Product $product,
-        AttributesCollection $collection
+        ProductTypeConfigurable\Attribute\Collection $collection
     ) {
         $metadata = $this->getMetadataPool()
             ->getMetadata(ProductInterface::class);
@@ -599,7 +601,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * @param string $configurableAttributes
-     * @return bool|AttributesCollection False when cache is invalid.
+     *
+     * @return bool|ProductTypeConfigurable\Attribute\Collection False when
+     * cache is invalid.
      */
     protected function hasCacheData($configurableAttributes)
     {
