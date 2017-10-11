@@ -44,6 +44,23 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
+     * Generate a suite based on name(s) passed in as args
+     */
+    function generateSuite(array $args)
+    {
+        if (empty($args)) {
+            throw new Exception("Please provide suite name(s) after generate:suite command");
+        }
+
+        require 'tests/functional/_bootstrap.php';
+        $sg = \Magento\FunctionalTestingFramework\Suite\SuiteGenerator::getInstance();
+
+        foreach ($args as $arg) {
+            $sg->generateSuite($arg);
+        }
+    }
+
+    /**
      * Run all Functional tests using the Chrome environment
      */
     function chrome()
