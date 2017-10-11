@@ -194,7 +194,7 @@ class Subscription implements SubscriptionInterface
      * @param ChangelogInterface $changelog
      * @return string
      */
-    protected function buildStatement(string $event, ChangelogInterface $changelog)
+    protected function buildStatement($event, $changelog)
     {
         switch ($event) {
             case Trigger::EVENT_INSERT:
