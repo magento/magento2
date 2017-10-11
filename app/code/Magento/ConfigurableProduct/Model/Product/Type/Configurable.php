@@ -491,7 +491,7 @@ class Configurable extends AbstractType
             }
 
             return $configurableAttributes;
-        } catch (\Throwable $exception) {
+        } catch (\Exception $exception) {
             //Failed, trying local cache.
             $productHashId = spl_object_hash($product);
             if (
