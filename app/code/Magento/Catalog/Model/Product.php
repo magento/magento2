@@ -2639,4 +2639,18 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $this->getExtensionAttributes()->setConfigurableProductLinks($productIds);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCacheTags()
+    {
+        //Preferring individual tags over broad ones.
+        $individualTags = $this->getIdentities();
+        if ($individualTags) {
+            return $individualTags;
+        }
+
+        return parent::getCacheTags();
+    }
 }

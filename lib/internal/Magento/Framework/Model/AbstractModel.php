@@ -233,7 +233,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
                 '_resource',
             ]
         );
-
         return $properties;
     }
 
@@ -266,7 +265,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     public function setIdFieldName($name)
     {
         $this->_idFieldName = $name;
-
         return $this;
     }
 
@@ -299,7 +297,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     public function setId($value)
     {
         $this->setData($this->_idFieldName, $value);
-
         return $this;
     }
 
@@ -315,7 +312,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         if ($isDeleted !== null) {
             $this->_isDeleted = $isDeleted;
         }
-
         return $result;
     }
 
@@ -342,6 +338,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @param string|array $key
      * @param mixed        $value
+     *
      * @return $this
      */
     public function setData($key, $value = null)
@@ -357,7 +354,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
             }
             $this->_data[$key] = $value;
         }
-
         return $this;
     }
 
@@ -381,7 +377,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
                 $this->unsetData($element);
             }
         }
-
         return $this;
     }
 
@@ -394,7 +389,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     public function setDataChanges($value)
     {
         $this->_hasDataChanges = (bool)$value;
-
         return $this;
     }
 
@@ -412,7 +406,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         if (isset($this->_origData[$key])) {
             return $this->_origData[$key];
         }
-
         return null;
     }
 
@@ -432,7 +425,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         } else {
             $this->_origData[$key] = $data;
         }
-
         return $this;
     }
 
@@ -446,7 +438,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     {
         $newData = $this->getData($field);
         $origData = $this->getOrigData($field);
-
         return $newData != $origData;
     }
 
@@ -509,7 +500,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
                 new \Magento\Framework\Phrase('Model collection resource name is not defined.')
             );
         }
-
         return $this->_resourceCollection ? clone $this
             ->_resourceCollection : \Magento\Framework\App\ObjectManager::getInstance()
             ->create(
@@ -546,7 +536,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         $this->setOrigData();
         $this->_hasDataChanges = false;
         $this->updateStoredData();
-
         return $this;
     }
 
@@ -576,7 +565,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         $this->_eventManager->dispatch('model_load_before', $params);
         $params = array_merge($params, $this->_getEventData());
         $this->_eventManager->dispatch($this->_eventPrefix . '_load_before', $params);
-
         return $this;
     }
 
@@ -589,7 +577,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     {
         $this->_eventManager->dispatch('model_load_after', ['object' => $this]);
         $this->_eventManager->dispatch($this->_eventPrefix . '_load_after', $this->_getEventData());
-
         return $this;
     }
 
@@ -603,7 +590,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         $this->getResource()->afterLoad($this);
         $this->_afterLoad();
         $this->updateStoredData();
-
         return $this;
     }
 
@@ -648,7 +634,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     public function save()
     {
         $this->_getResource()->save($this);
-
         return $this;
     }
 
@@ -661,7 +646,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     {
         $this->_eventManager->dispatch('model_save_commit_after', ['object' => $this]);
         $this->_eventManager->dispatch($this->_eventPrefix . '_save_commit_after', $this->_getEventData());
-
         return $this;
     }
 
@@ -682,7 +666,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         if ($this->_isObjectNew !== null) {
             return $this->_isObjectNew;
         }
-
         return !(bool)$this->getId();
     }
 
@@ -698,7 +681,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         }
         $this->_eventManager->dispatch('model_save_before', ['object' => $this]);
         $this->_eventManager->dispatch($this->_eventPrefix . '_save_before', $this->_getEventData());
-
         return $this;
     }
 
@@ -721,7 +703,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
             }
             throw $exception;
         }
-
         return $this;
     }
 
@@ -736,7 +717,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         if ($this->_validatorBeforeSave === null) {
             $this->_validatorBeforeSave = $this->_createValidatorBeforeSave();
         }
-
         return $this->_validatorBeforeSave;
     }
 
@@ -797,7 +777,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
                 }
             }
         }
-
         return $tags;
     }
 
@@ -812,7 +791,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         if ($tags !== false) {
             $this->_cacheManager->clean($tags);
         }
-
         return $this;
     }
 
@@ -828,7 +806,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
         $this->_eventManager->dispatch($this->_eventPrefix . '_save_after', $this->_getEventData());
         $this->updateStoredData();
-
         return $this;
     }
 
@@ -844,7 +821,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     public function delete()
     {
         $this->_getResource()->delete($this);
-
         return $this;
     }
 
@@ -865,7 +841,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         $this->_eventManager->dispatch('model_delete_before', ['object' => $this]);
         $this->_eventManager->dispatch($this->_eventPrefix . '_delete_before', $this->_getEventData());
         $this->cleanModelCache();
-
         return $this;
     }
 
@@ -880,7 +855,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
         $this->_eventManager->dispatch($this->_eventPrefix . '_delete_after', $this->_getEventData());
         $this->storedData = [];
-
         return $this;
     }
 
@@ -893,7 +867,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     {
         $this->_eventManager->dispatch('model_delete_commit_after', ['object' => $this]);
         $this->_eventManager->dispatch($this->_eventPrefix . '_delete_commit_after', $this->_getEventData());
-
         return $this;
     }
 
@@ -938,7 +911,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         $this->_clearReferences();
         $this->_eventManager->dispatch($this->_eventPrefix . '_clear', $this->_getEventData());
         $this->_clearData();
-
         return $this;
     }
 
@@ -974,7 +946,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         } else {
             $this->storedData = [];
         }
-
         return $this;
     }
 

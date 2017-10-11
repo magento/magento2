@@ -19,6 +19,7 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection as AttributesCollection;
 
 /**
  * Configurable product type implementation
@@ -183,6 +184,14 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @var SalableProcessor
      */
     private $salableProcessor;
+
+    /**
+     * Cache attributes of products without and ID here.
+     *
+     * @var AttributesCollection[] Where keys are objects' hashes
+     * and value are attributes.
+     */
+    private $configurableAttributesLocalCache = [];
 
     /**
      *
@@ -438,9 +447,119 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * @param Product $product
+     *
+     * @return string
+     * @throws \InvalidArgumentException When it's impossible to generate cache
+     * ID for the product.
+     */
+    private function generateConfigurableAttributesCacheId(Product $product
+    ): string {
+        $metadata = $this->getMetadataPool()
+            ->getMetadata(ProductInterface::class);
+        /** @var string|null $productId */
+        $productId = $product->getData($metadata->getLinkField());
+        if (!$productId) {
+            throw new \InvalidArgumentException(
+                'Impossible to generate cache ID for the product'
+            );
+        }
+
+        return __CLASS__.$productId.'_'.$product->getStoreId();
+    }
+
+    /**
+     * Retrieve configurable attributes for the product from cache.
+     *
+     * @param Product $product
+     *
+     * @return AttributesCollection
+     * @throws \RuntimeException When can't find the cached attributes.
+     */
+    private function findCachedConfigurableAttributes(Product $product
+    ): AttributesCollection {
+        try {
+            //Trying to load attributes from cache.
+            $cacheId = $this->generateConfigurableAttributesCacheId($product);
+            $configurableAttributes = $this->getCache()->load($cacheId);
+            $configurableAttributes
+                = $this->hasCacheData($configurableAttributes);
+            if (!$configurableAttributes) {
+                throw new \RuntimeException();
+            }
+
+            return $configurableAttributes;
+        } catch (\Throwable $exception) {
+            //Failed, trying local cache.
+            $productHashId = spl_object_hash($product);
+            if (
+            array_key_exists(
+                $productHashId,
+                $this->configurableAttributesLocalCache
+            )
+            ) {
+                $configurableAttributes
+                    = $this->configurableAttributesLocalCache[$productHashId];
+                //If product has ID then caching attributes for further use.
+                $metadata = $this->getMetadataPool()
+                    ->getMetadata(ProductInterface::class);
+                /** @var string|null $productId */
+                $productId = $product->getData($metadata->getLinkField());
+                if ($productId) {
+                    $this->cacheConfigurableAttributes(
+                        $product,
+                        $configurableAttributes
+                    );
+                }
+
+                return $configurableAttributes;
+            }
+        }
+
+        throw new \RuntimeException(
+            'Couldn\'t find attributes for configurable product.'
+        );
+    }
+
+    /**
+     * Cache collection for further use.
+     *
+     * @param Product $product
+     * @param AttributesCollection $collection
+     *
+     * @return void
+     */
+    private function cacheConfigurableAttributes(
+        Product $product,
+        AttributesCollection $collection
+    ) {
+        $metadata = $this->getMetadataPool()
+            ->getMetadata(ProductInterface::class);
+        /** @var string|null $productId */
+        $productId = $product->getData($metadata->getLinkField());
+        /** @var string $productHashId */
+        $productHashId = spl_object_hash($product);
+
+        if ($productId) {
+            $this->getCache()
+                ->save(
+                    serialize($collection),
+                    $this->generateConfigurableAttributesCacheId($product),
+                    array_merge(
+                        $product->getIdentities(),
+                        [self::TYPE_CODE.'_'.$productId]
+                    )
+                );
+        } else {
+            $this->configurableAttributesLocalCache[$productHashId]
+                = $collection;
+        }
+    }
+
+    /**
      * Retrieve configurable attributes data
      *
-     * @param  \Magento\Catalog\Model\Product $product
+     * @param  Product $product
      *
      * @return \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute[]
      */
@@ -451,33 +570,23 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if (!$product->hasData($this->_configurableAttributes)) {
-            $metadata = $this->getMetadataPool()
-                ->getMetadata(ProductInterface::class);
-            $productId = $product->getData($metadata->getLinkField());
-            $productCacheId = $productId ? $productId
-                : spl_object_hash($product);
-            $cacheId = __CLASS__.$productCacheId.'_'.$product->getStoreId();
-            $configurableAttributes = $this->getCache()->load($cacheId);
-            $configurableAttributes
-                = $this->hasCacheData($configurableAttributes);
-            if ($configurableAttributes) {
-                $configurableAttributes->setProductFilter($product);
-            } else {
+            try {
+                $configurableAttributes
+                    = $this->findCachedConfigurableAttributes($product);
+            } catch (\RuntimeException $exception) {
+                //Couldn't find attributes in cache, loading.
                 $configurableAttributes
                     = $this->getConfigurableAttributeCollection($product);
                 $this->extensionAttributesJoinProcessor
                     ->process($configurableAttributes);
                 $configurableAttributes->orderByPosition()->load();
-                $this->getCache()
-                    ->save(
-                        serialize($configurableAttributes),
-                        $cacheId,
-                        array_merge(
-                            $product->getIdentities(),
-                            [self::TYPE_CODE.'_'.$productId]
-                        )
-                    );
+
+                $this->cacheConfigurableAttributes(
+                    $product,
+                    $configurableAttributes
+                );
             }
+
             $product->setData(
                 $this->_configurableAttributes,
                 $configurableAttributes
@@ -489,8 +598,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * @param mixed $configurableAttributes
-     * @return bool
+     * @param string $configurableAttributes
+     * @return bool|AttributesCollection False when cache is invalid.
      */
     protected function hasCacheData($configurableAttributes)
     {
