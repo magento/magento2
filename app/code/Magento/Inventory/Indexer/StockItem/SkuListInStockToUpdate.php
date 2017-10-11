@@ -3,11 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Inventory\Indexer\StockItem;
 
 /**
- * @inheritdoc
+ * Represents relation between stock and sku list
  */
 class SkuListInStockToUpdate
 {

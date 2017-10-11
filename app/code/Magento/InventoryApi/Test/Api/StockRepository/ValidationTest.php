@@ -109,7 +109,7 @@ class ValidationTest extends WebapiAbstract
         $data = $this->validData;
         $data[$field] = $value;
 
-        $stockId = 1;
+        $stockId = 10;
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $stockId,

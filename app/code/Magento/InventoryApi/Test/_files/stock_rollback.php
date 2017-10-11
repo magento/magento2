@@ -8,4 +8,4 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var StockRepositoryInterface $stockRepository */
 $stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
-$stockRepository->deleteById(1);
+$stockRepository->deleteById(10);
