@@ -39,6 +39,11 @@ class ProcessSourceItemsObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
+        // start prototype code
+        // Work like as in single stock mode
+        return;
+        // end prototype code
+
         /** @var ProductInterface $product */
         $product = $observer->getEvent()->getProduct();
         /** @var Save $controller */

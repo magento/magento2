@@ -125,6 +125,35 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($this->processIndexEvents) {
             $this->stockIndexerProcessor->reindexRow($object->getProductId());
         }
+
+        // start prototype code
+        $sourceItemFactory = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory::class);
+        /** @var \Magento\InventoryApi\Api\SourceItemsSaveInterface $sourceItemsSave */
+        $sourceItemsSave = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\InventoryApi\Api\SourceItemsSaveInterface::class);
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        /** @var \Magento\InventoryCatalog\Api\DefaultSourceProviderInterface $defaultSourceProvider */
+        $defaultSourceProvider = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\InventoryCatalog\Api\DefaultSourceProviderInterface::class);
+
+        $sourceId = $defaultSourceProvider->getId();
+        $product = $productRepository->getById($object->getProductId());
+        $sku = $product->getSku();
+        $qty = (float)$object->getQty();
+        $status = (bool)$object->getIsInStock();
+
+        /** @var \Magento\InventoryApi\Api\Data\SourceItemInterface $sourceItem */
+        $sourceItem = $sourceItemFactory->create();
+        $sourceItem->setSourceId($sourceId);
+        $sourceItem->setSku($sku);
+        $sourceItem->setQuantity($qty);
+        $sourceItem->setStatus($status);
+        $sourceItemsSave->execute([$sourceItem]);
+        // end prototype code
+
         return $this;
     }
 

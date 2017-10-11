@@ -74,6 +74,35 @@ class StockItemDataChecker
         $productLoadedByModel = $this->productFactory->create();
         $productLoadedByModel->load($product->getId());
         $this->doCheckStockItemData($product, $expectedData);
+
+        // start prototype code
+        /** @var \Magento\InventoryApi\Api\SourceItemRepositoryInterface $sourceItemRepository */
+        $sourceItemRepository = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\InventoryApi\Api\SourceItemRepositoryInterface::class);
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        /** @var \Magento\InventoryCatalog\Api\DefaultSourceProviderInterface $defaultSourceProvider */
+        $defaultSourceProvider = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\InventoryCatalog\Api\DefaultSourceProviderInterface::class);
+
+        $searchCriteria = $searchCriteriaBuilder
+            ->addFilter(\Magento\InventoryApi\Api\Data\SourceItemInterface::SOURCE_ID, $defaultSourceProvider->getId())
+            ->addFilter(\Magento\InventoryApi\Api\Data\SourceItemInterface::SKU, $sku)
+            ->create();
+        $sourceItems = $sourceItemRepository->getList($searchCriteria)->getItems();
+        \PHPUnit\Framework\Assert::assertCount(1, $sourceItems);
+
+        $sourceItem = reset($sourceItems);
+        \PHPUnit\Framework\Assert::assertEquals(
+            $expectedData[StockItemInterface::QTY],
+            $sourceItem->getQuantity()
+        );
+        \PHPUnit\Framework\Assert::assertEquals(
+            $expectedData[StockItemInterface::IS_IN_STOCK],
+            (int)$sourceItem->getStatus()
+        );
+        // end prototype code
     }
 
     /**
