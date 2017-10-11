@@ -125,11 +125,23 @@ class Builder
                 throw new \Magento\Framework\Exception\LocalizedException(__('Unknown condition operator'));
             }
 
-            $sql = str_replace(
-                ':field',
-                $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), 0),
-                $this->_conditionOperatorMap[$conditionOperator]
-            );
+            if (is_array($argument)) {
+                $fields = [];
+                foreach ($argument as $field) {
+                    $fields[] = $this->_connection->quoteIdentifier($field);
+                }
+                $sql = str_replace(
+                    ':field',
+                    $this->_connection->getIfNullSql($fields[0], $fields[1]),
+                    $this->_conditionOperatorMap[$conditionOperator]
+                );
+            } else {
+                $sql = str_replace(
+                    ':field',
+                    $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument)),
+                    $this->_conditionOperatorMap[$conditionOperator]
+                );
+            }
 
             return $this->_expressionFactory->create(
                 ['expression' => $value . $this->_connection->quoteInto($sql, $condition->getBindArgumentValue())]
