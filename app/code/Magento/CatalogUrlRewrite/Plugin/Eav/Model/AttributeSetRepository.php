@@ -8,7 +8,6 @@
 
 namespace Magento\CatalogUrlRewrite\Plugin\Eav\Model;
 
-
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
@@ -43,9 +42,11 @@ class AttributeSetRepository
      * @param callable $proceed
      * @param AttributeSetInterface $attributeSet
      */
-    public function aroundDelete(\Magento\Eav\Model\AttributeSetRepository $subject, callable $proceed,
-                                 AttributeSetInterface $attributeSet)
-    {
+    public function aroundDelete(
+        \Magento\Eav\Model\AttributeSetRepository $subject,
+        callable $proceed,
+        AttributeSetInterface $attributeSet
+    ) {
         // Get the product ids
         $ids = $this->productCollection->addFieldToFilter('attribute_set_id', $attributeSet->getAttributeSetId())
                                        ->getAllIds();
@@ -54,12 +55,9 @@ class AttributeSetRepository
         $result = $proceed($attributeSet);
 
         // Delete the old product url rewrites
-        try
-        {
+        try {
             $this->urlPersist->deleteByData(['entity_id' => $ids, 'entity_type' => 'product']);
-        }
-        catch (\Exception $exception)
-        {
+        } catch (\Exception $exception) {
             throw new CouldNotDeleteException(__('Could not delete the url rewrite(s): %1', $exception->getMessage()));
         }
 
