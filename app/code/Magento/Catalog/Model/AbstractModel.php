@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Abstract model for catalog entities

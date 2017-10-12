@@ -186,7 +186,7 @@ class Configurable extends AbstractType
     private $salableProcessor;
 
     /**
-     * Cache attributes of products without and ID here.
+     * Cache attributes of products without IDs here.
      *
      * @var ProductTypeConfigurable\Attribute\Collection[] Where keys are
      * objects' hashes and value are attributes.
@@ -480,42 +480,44 @@ class Configurable extends AbstractType
     private function findCachedConfigurableAttributes(
         Product $product
     ) {
+        //Trying to load attributes from cache.
         try {
-            //Trying to load attributes from cache.
             $cacheId = $this->generateConfigurableAttributesCacheId($product);
+        } catch (\Exception $exception) {
+            $cacheId = null;
+        }
+        if ($cacheId) {
             $configurableAttributes = $this->getCache()->load($cacheId);
             $configurableAttributes
                 = $this->hasCacheData($configurableAttributes);
-            if (!$configurableAttributes) {
-                throw new \RuntimeException();
+            if ($configurableAttributes) {
+                return $configurableAttributes;
             }
+        }
 
-            return $configurableAttributes;
-        } catch (\Exception $exception) {
-            //Failed, trying local cache.
-            $productHashId = spl_object_hash($product);
-            if (
+        //Failed, trying local cache.
+        $productHashId = spl_object_hash($product);
+        if (
             array_key_exists(
                 $productHashId,
                 $this->configurableAttributesLocalCache
             )
-            ) {
-                $configurableAttributes
-                    = $this->configurableAttributesLocalCache[$productHashId];
-                //If product has ID then caching attributes for further use.
-                $metadata = $this->getMetadataPool()
-                    ->getMetadata(ProductInterface::class);
-                /** @var string|null $productId */
-                $productId = $product->getData($metadata->getLinkField());
-                if ($productId) {
-                    $this->cacheConfigurableAttributes(
-                        $product,
-                        $configurableAttributes
-                    );
-                }
-
-                return $configurableAttributes;
+        ) {
+            $configurableAttributes
+                = $this->configurableAttributesLocalCache[$productHashId];
+            //If product has ID then caching attributes for further use.
+            $metadata = $this->getMetadataPool()
+                ->getMetadata(ProductInterface::class);
+            /** @var string|null $productId */
+            $productId = $product->getData($metadata->getLinkField());
+            if ($productId) {
+                $this->cacheConfigurableAttributes(
+                    $product,
+                    $configurableAttributes
+                );
             }
+
+            return $configurableAttributes;
         }
 
         throw new \RuntimeException(
