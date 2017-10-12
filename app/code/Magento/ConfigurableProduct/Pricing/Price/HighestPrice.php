@@ -1,0 +1,63 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\ConfigurableProduct\Pricing\Price;
+
+/**
+ * A model for retrieving the highest price of a configurable product.
+ */
+class HighestPrice extends \Magento\Framework\Pricing\Price\AbstractPrice
+{
+    /**
+     * Price type.
+     */
+    const PRICE_CODE = 'highest_price';
+
+    /**
+     * @var array
+     */
+    private $values = [];
+
+    /**
+     * @var PriceResolverInterface
+     */
+    private $priceResolver;
+
+    /**
+     * @param \Magento\Framework\Pricing\SaleableInterface $saleableItem
+     * @param float $quantity
+     * @param \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param PriceResolverInterface $priceResolver
+     */
+    public function __construct(
+        \Magento\Framework\Pricing\SaleableInterface $saleableItem,
+        $quantity,
+        \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        PriceResolverInterface $priceResolver
+    ) {
+        parent::__construct(
+            $saleableItem,
+            $quantity,
+            $calculator,
+            $priceCurrency
+        );
+
+        $this->priceResolver = $priceResolver;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValue()
+    {
+        if (!isset($this->values[$this->product->getId()])) {
+            $this->values[$this->product->getId()] = $this->priceResolver->resolvePrice($this->product);
+        }
+
+        return $this->values[$this->product->getId()];
+    }
+}

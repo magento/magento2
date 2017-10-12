@@ -496,9 +496,17 @@ define([
          * @private
          */
         _displayRegularPriceBlock: function (optionId) {
-            if (typeof optionId != 'undefined'
+            var shouldBeShown = true;
+
+            _.each(this.options.settings, function (element) {
+                if (element.value === '') {
+                    shouldBeShown = false;
+                }
+            });
+
+            if (shouldBeShown
                 && this.options.spConfig.optionPrices[optionId].oldPrice.amount
-                != this.options.spConfig.optionPrices[optionId].finalPrice.amount
+                !== this.options.spConfig.optionPrices[optionId].finalPrice.amount
             ) {
                 $(this.options.slyOldPriceSelector).show();
             } else {
