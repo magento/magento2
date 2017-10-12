@@ -26,6 +26,8 @@ use Magento\Framework\App\ObjectManager;
  * @method int getShipmentId()
  * @method array|null getShipment()
  * @method array getTracking()
+ *          
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentLoader extends DataObject
 {
@@ -87,6 +89,8 @@ class ShipmentLoader extends DataObject
      * @param ShipmentDocumentFactory|null $documentFactory
      * @param ShipmentTrackCreationInterfaceFactory|null $trackFactory
      * @param ShipmentItemCreationInterfaceFactory|null $shipmentItemCreationFactory
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Message\ManagerInterface $messageManager,
