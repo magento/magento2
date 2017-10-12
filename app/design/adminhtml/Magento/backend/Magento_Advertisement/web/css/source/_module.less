@@ -1,0 +1,114 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Magento_Advertisement Modal on dashboard
+//  ---------------------------------------------
+
+.advertisement-modal, .analytics-subscription-modal, .developer-experience-modal, .b2b-modal {
+  .modal-inner-wrap {
+    height: 50rem;
+    max-width: 75rem;
+    margin-top: 13rem;
+
+    .modal-content, .modal-header {
+      padding-left: 4rem;
+      padding-right: 4rem;
+
+      .action-close {
+        display: none;
+      }
+    }
+  }
+
+  .admin__fieldset {
+    padding: 0;
+  }
+}
+
+.advertisement-text {
+  line-height: @line-height__l;
+  height: 32rem;
+
+  ul {
+    margin: 2rem 0 2rem 0;
+
+    li {
+      font-size: @font-size__xs;
+      margin: 1.5rem 0 1.5rem 2rem;
+
+      span {
+        font-size: @font-size__base;
+        margin-left: 2rem;
+      }
+    }
+  }
+}
+
+.advertisement-modal {
+  .advertisement-text {
+    height: 35.5rem;
+  }
+}
+
+.advertisement-button-next {
+  display: inline-block;
+  vertical-align: top;
+  float: right;
+}
+
+.analytics-highlight {
+  background: url("Magento_Advertisement::images/analytics-icon.svg") no-repeat;
+  background-size: 65px 58px;
+}
+
+.b2b-highlight {
+  background: url("Magento_Advertisement::images/b2b-icon.svg") no-repeat;
+  background-size: 65px 53.37px;
+}
+
+.developer-experience-highlight {
+  background: url("Magento_Advertisement::images/developer-experience-icon.svg") no-repeat;
+  background-size: 65px 59px;
+}
+
+.analytics-highlight, .b2b-highlight, .developer-experience-highlight {
+  padding: 0 0 2rem 8.5rem;
+  margin-left: 1rem;
+
+  h3 {
+    margin: 0;
+
+    span {
+      font-style: @font-style__emphasis;
+      font-size: @font-size__s;
+      font-weight: @font-weight__light;
+    }
+  }
+}
+
+.analytics-subscription-modal {
+  h1:first-of-type {
+    background: url("Magento_Advertisement::images/analytics-icon.svg") no-repeat;
+    background-size: 55px 49.08px;
+    padding: 1.5rem 0 2rem 7rem;
+  }
+}
+
+.b2b-modal {
+  h1:first-of-type {
+    background: url("Magento_Advertisement::images/b2b-icon.svg") no-repeat;
+    background-size: 55px 49.92px;
+    padding: 1.5rem 0 2rem 7rem;
+  }
+}
+
+.developer-experience-modal {
+  h1:first-of-type {
+    background: url("Magento_Advertisement::images/developer-experience-icon.svg") no-repeat;
+    background-size: 55px 46px;
+    padding: 1.5rem 0 2rem 7rem;
+  }
+}

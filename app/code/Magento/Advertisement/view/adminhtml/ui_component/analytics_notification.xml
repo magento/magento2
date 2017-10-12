@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">advertisement_notification.advertisement_notification_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Analytics Subscription</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <namespace>advertisement_notification</namespace>
+        <ajaxSave>true</ajaxSave>
+        <ajaxSaveType>simple</ajaxSaveType>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>advertisement_notification.advertisement_notification_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="advertisement_notification_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <dataProvider class="Magento\Analytics\Ui\DataProvider\DummyDataProvider" name="advertisement_notification_data_source">
+            <settings>
+                <clientConfig>
+                    <param name="validateBeforeSave" xsi:type="boolean">false</param>
+                </clientConfig>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <modal name="advertisement_modal">
+        <settings>
+            <onCancel>actionCancel</onCancel>
+            <state>true</state>
+            <options>
+                <option name="modalClass" xsi:type="string">analytics-subscription-modal</option>
+                <option name="title" xsi:type="string" translate="true">Advanced Reporting</option>
+                <option name="type" xsi:type="string">popup</option>
+                <option name="responsive" xsi:type="boolean">true</option>
+                <option name="innerScroll" xsi:type="boolean">true</option>
+                <option name="autoOpen" xsi:type="boolean">true</option>
+            </options>
+        </settings>
+        <fieldset name="advertisement_fieldset">
+            <settings>
+                <label/>
+            </settings>
+            <container name="advertisement_text" template="ui/form/components/complex">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                        <item name="additionalClasses" xsi:type="string">advertisement-text</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[<p>Advanced Reporting
+                        provides you with a dynamic suite of reports with rich insights about the health of your
+                        business.</p><br /><p>As part of the Advanced Reporting service, we may also use your customer
+                        data for such purposes as benchmarking, improving our products and services, and providing you
+                        with new and improved analytics.</p><br /><p>By using Magento 2.2, you agree to the Advanced
+                        Reporting <a href="https://magento.com/legal/terms/privacy" target="_blank">Privacy Policy</a>
+                        and <a href="https://magento.com/legal/terms/cloud-terms" target="_blank">Terms
+                        of Service</a>. You may opt out at any time from the Stores Configuration page.</p>]]>
+                        </item>
+                    </item>
+                </argument>
+            </container>
+            <container name="advertisement_buttons">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string"/>
+                    </item>
+                </argument>
+                <button name="advertisement_button_back" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">advertisement-button-back</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = advertisement_modal</item>
+                                    <item name="actionName" xsi:type="string">actionCancel</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[< Back]]></title>
+                    </settings>
+                </button>
+                <button name="advertisement_button_next" displayArea="actions-secondary">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="buttonClasses" xsi:type="string">advertisement-button-next</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = advertisement_modal</item>
+                                    <item name="actionName" xsi:type="string">actionCancel</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <displayAsLink>true</displayAsLink>
+                        <title><![CDATA[Next >]]></title>
+                    </settings>
+                </button>
+            </container>
+        </fieldset>
+    </modal>
+</form>
