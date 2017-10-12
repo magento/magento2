@@ -372,6 +372,5 @@ class Helper extends \Magento\Framework\DB\Helper
         }
 
         return $script;
-
     }
 }

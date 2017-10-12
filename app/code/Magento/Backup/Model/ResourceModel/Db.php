@@ -136,7 +136,6 @@ class Db
             $triggerScript = $this->getTableTriggersSql($tableName, $addDropIfExists);
         }
         return $triggerScript;
-
     }
 
     /**
