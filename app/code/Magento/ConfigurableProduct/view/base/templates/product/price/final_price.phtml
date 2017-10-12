@@ -24,33 +24,35 @@ $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 $schema = ($block->getZone() == 'item_view') ? true : false;
 ?>
 
-<span class="normal-price">
-    <?php
-        $arguments = [
-            'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
-            'price_type'        => 'finalPrice',
-            'include_container' => true,
-            'schema' => $schema
-        ];
+<?php if ($finalPriceModel->getAmount()->getValue() !== null): ?>
+    <span class="normal-price">
+        <?php
+            $arguments = [
+                'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
+                'price_type'        => 'finalPrice',
+                'include_container' => true,
+                'schema' => $schema
+            ];
 
-        if ($finalPriceModel->getValue() !== $highestPriceModel->getValue()) {
-            $arguments['display_label'] = __('As low as');
-        }
+            if ($finalPriceModel->getAmount()->getValue() !== $highestPriceModel->getAmount()->getValue()) {
+                $arguments['display_label'] = __('As low as');
+            }
 
-        /* @escapeNotVerified */ echo $block->renderAmount($finalPriceModel->getAmount(), $arguments);
-    ?>
-</span>
-
-<?php if (!$block->isProductList() && $block->hasSpecialPrice()): ?>
-    <span class="old-price sly-old-price no-display">
-        <?php /* @escapeNotVerified */ echo $block->renderAmount($priceModel->getAmount(), [
-            'display_label'     => __('Regular Price'),
-            'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
-            'price_type'        => 'oldPrice',
-            'include_container' => true,
-            'skip_adjustments'  => true
-        ]); ?>
+            /* @escapeNotVerified */ echo $block->renderAmount($finalPriceModel->getAmount(), $arguments);
+        ?>
     </span>
+
+    <?php if (!$block->isProductList() && $block->hasSpecialPrice()): ?>
+        <span class="old-price sly-old-price no-display">
+            <?php /* @escapeNotVerified */ echo $block->renderAmount($priceModel->getAmount(), [
+                'display_label'     => __('Regular Price'),
+                'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
+                'price_type'        => 'oldPrice',
+                'include_container' => true,
+                'skip_adjustments'  => true
+            ]); ?>
+        </span>
+    <?php endif; ?>
 <?php endif; ?>
 
 <?php if ($block->showMinimalPrice()): ?>
