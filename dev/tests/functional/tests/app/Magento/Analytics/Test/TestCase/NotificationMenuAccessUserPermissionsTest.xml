@@ -14,7 +14,7 @@
             <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingSectionInvisible" />
         </variation>
         <variation name="UserWithSubscriptionPermissionsTestVariation2" summary="User with subscription permissions">
-            <data name="user/dataset" xsi:type="string">default</data>
+            <data name="user/dataset" xsi:type="string">custom_admin_with_default_role</data>
             <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingPopupExist" />
             <constraint name="Magento\Analytics\Test\Constraint\AssertLoginAgainAdvancedReportingPopupNotExist" />
             <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingSectionVisible" />
