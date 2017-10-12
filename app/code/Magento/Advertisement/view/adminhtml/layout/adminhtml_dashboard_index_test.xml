@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix" template="Magento_ConfigurableProduct::catalog/product/edit/super/wizard-ajax.phtml" as="wizard">
+            <arguments>
+                <argument name="config" xsi:type="array">
+                    <item name="collapsible" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true" />
+                    <item name="sortOrder" xsi:type="string">3333</item>
+                    <item name="canShow" xsi:type="boolean">true</item>
+                    <item name="componentType" xsi:type="string">fieldset</item>
+                    <item name="form" xsi:type="string">advertisement_notification.advertisement_notification</item>
+                    <item name="modal" xsi:type="string">advertisement_modal</item>
+                    <item name="nameStepWizard" xsi:type="string">advertisement-steps-wizard</item>
+                    <item name="dataScope" xsi:type="string">data</item>
+                </argument>
+            </arguments>
+            <block class="Magento\Ui\Block\Component\StepsWizard" name="advertisement-steps-wizard">
+                <arguments>
+                    <argument name="config" xsi:type="array">
+                        <item name="form" xsi:type="string">advertisement_notification.advertisement_notification</item>
+                        <item name="modal" xsi:type="string">advertisement_modal</item>
+                        <item name="dataScope" xsi:type="string">data</item>
+                    </argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Template" name="step1" template="">
+                    <arguments>
+                        <argument name="config" xsi:type="array">
+                            <item name="form" xsi:type="string">advertisement_notification.advertisement_notification</item>
+                            <item name="modal" xsi:type="string">advertisement_modal</item>
+                            <item name="multiselectName" xsi:type="string">product_attributes_listing.product_attributes_listing.product_attributes_columns.ids</item>
+                            <item name="providerName" xsi:type="string">advertisement_notification.advertisement_notification_data_source</item>
+                            <item name="dataScope" xsi:type="string">data</item>
+                        </argument>
+                    </arguments>
+                    <uiComponent name="advertisement_notification"/>
+                </block>
+                <block class="Magento\Backend\Block\Template" name="step2" template="">
+                    <arguments>
+                        <argument name="config" xsi:type="array">
+                            <item name="form" xsi:type="string">advertisement_notification.advertisement_notification</item>
+                            <item name="modal" xsi:type="string">advertisement_modal</item>
+                            <item name="dataScope" xsi:type="string">data</item>
+                        </argument>
+                    </arguments>
+                    <uiComponent name="analytics_notification"/>
+                </block>
+                <block class="Magento\Backend\Block\Template" name="step3" template="">
+                    <arguments>
+                        <argument name="config" xsi:type="array">
+                            <item name="form" xsi:type="string">advertisement_notification.advertisement_notification</item>
+                            <item name="modal" xsi:type="string">advertisement_modal</item>
+                            <item name="dataScope" xsi:type="string">data</item>
+                        </argument>
+                    </arguments>
+                    <uiComponent name="developer_experience_notification"/>
+                </block>
+                <block class="Magento\Backend\Block\Template" name="step4" template="">
+                    <arguments>
+                        <argument name="config" xsi:type="array">
+                            <item name="form" xsi:type="string">advertisement_notification.advertisement_notification</item>
+                            <item name="modal" xsi:type="string">advertisement_modal</item>
+                            <item name="dataScope" xsi:type="string">data</item>
+                        </argument>
+                    </arguments>
+                    <uiComponent name="b2b_notification"/>
+                </block>
+            </block>
+            </block>
+        </referenceContainer>
+    </body>
+</page>
