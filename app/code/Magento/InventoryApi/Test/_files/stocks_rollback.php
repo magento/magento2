@@ -8,6 +8,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var StockRepositoryInterface $stockRepository */
 $stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::class);
-foreach ([1, 2, 3] as $stockId) {
+foreach ([10, 20, 30] as $stockId) {
     $stockRepository->deleteById($stockId);
 }

@@ -33,6 +33,7 @@ class CreateSourceItemTable
     private function createSourceItemTable(SchemaSetupInterface $setup): Table
     {
         $sourceItemTable = $setup->getTable(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
+        $sourceTable = $setup->getTable(SourceResourceModel::TABLE_NAME_SOURCE);
 
         return $setup->getConnection()->newTable(
             $sourceItemTable
@@ -91,11 +92,11 @@ class CreateSourceItemTable
             $setup->getFkName(
                 $sourceItemTable,
                 SourceItemInterface::SOURCE_ID,
-                SourceResourceModel::TABLE_NAME_SOURCE,
+                $sourceTable,
                 SourceInterface::SOURCE_ID
             ),
             SourceItemInterface::SOURCE_ID,
-            SourceResourceModel::TABLE_NAME_SOURCE,
+            $sourceTable,
             SourceInterface::SOURCE_ID,
             AdapterInterface::FK_ACTION_CASCADE
         )->addIndex(

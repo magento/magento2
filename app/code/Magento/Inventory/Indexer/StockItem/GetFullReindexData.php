@@ -10,7 +10,7 @@ use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkReso
 use Magento\Inventory\Model\StockSourceLink;
 
 /**
- * Returns all assigned stock ids by given sources ids
+ * Returns all assigned stock ids
  */
 class GetFullReindexData
 {

@@ -19,26 +19,26 @@ use PHPUnit\Framework\TestCase;
  * Preconditions:
  *
  * Products to Sources links:
- *   SKU-1 - EU-source-1(id:1) - 5.5qty
- *   SKU-1 - EU-source-2(id:2) - 3qty
- *   SKU-1 - EU-source-3(id:3) - 10qty (out of stock)
- *   SKU-1 - EU-source-4(id:4) - 10qty (disabled source)
+ *   SKU-1 - EU-source-1(id:10) - 5.5qty
+ *   SKU-1 - EU-source-2(id:20) - 3qty
+ *   SKU-1 - EU-source-3(id:30) - 10qty (out of stock)
+ *   SKU-1 - EU-source-4(id:40) - 10qty (disabled source)
  *
- *   SKU-2 - US-source-1(id:3) - 5qty
+ *   SKU-2 - US-source-1(id:30) - 5qty
  *
  * Sources to Stocks links:
- *   EU-source-1(id:1) - EU-stock(id:1)
- *   EU-source-2(id:2) - EU-stock(id:1)
- *   EU-source-3(id:3) - EU-stock(id:1)
- *   EU-source-disabled(id:4) - EU-stock(id:1)
+ *   EU-source-1(id:10) - EU-stock(id:10)
+ *   EU-source-2(id:20) - EU-stock(id:10)
+ *   EU-source-3(id:30) - EU-stock(id:10)
+ *   EU-source-disabled(id:40) - EU-stock(id:10)
  *
- *   US-source-1(id:5) - US-stock(id:2)
+ *   US-source-1(id:50) - US-stock(id:20)
  *
- *   EU-source-1(id:1) - Global-stock(id:3)
- *   EU-source-2(id:2) - Global-stock(id:3)
- *   EU-source-3(id:3) - Global-stock(id:3)
- *   EU-source-disabled(id:4) - Global-stock(id:3)
- *   US-source-1(id:5) - Global-stock(id:3)
+ *   EU-source-1(id:10) - Global-stock(id:30)
+ *   EU-source-2(id:20) - Global-stock(id:30)
+ *   EU-source-3(id:30) - Global-stock(id:30)
+ *   EU-source-disabled(id:40) - Global-stock(id:30)
+ *   US-source-1(id:50) - Global-stock(id:30)
  *
  * TODO: fixture via composer
  */
@@ -68,7 +68,7 @@ class IndexationTest extends TestCase
         /** @var IndexStructureInterface $indexStructure */
         $indexStructure = Bootstrap::getObjectManager()->get(IndexStructureInterface::class);
 
-        foreach ([1, 2, 3] as $stockId) {
+        foreach ([10, 20, 30] as $stockId) {
             $indexName = $indexNameBuilder
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
@@ -89,9 +89,9 @@ class IndexationTest extends TestCase
     {
         $this->indexer->reindexRow(1);
 
-        self::assertEquals(8.5, $this->indexerChecker->execute(1, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-1'));
-        self::assertEquals(8.5, $this->indexerChecker->execute(3, 'SKU-1'));
+        self::assertEquals(8.5, $this->indexerChecker->execute(10, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(20, 'SKU-1'));
+        self::assertEquals(8.5, $this->indexerChecker->execute(30, 'SKU-1'));
     }
 
     /**
@@ -105,13 +105,13 @@ class IndexationTest extends TestCase
     {
         $this->indexer->reindexList([1, 5]);
 
-        self::assertEquals(8.5, $this->indexerChecker->execute(1, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-1'));
-        self::assertEquals(8.5, $this->indexerChecker->execute(3, 'SKU-1'));
+        self::assertEquals(8.5, $this->indexerChecker->execute(10, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(20, 'SKU-1'));
+        self::assertEquals(8.5, $this->indexerChecker->execute(30, 'SKU-1'));
 
-        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-2'));
-        self::assertEquals(5, $this->indexerChecker->execute(2, 'SKU-2'));
-        self::assertEquals(5, $this->indexerChecker->execute(3, 'SKU-2'));
+        self::assertEquals(0, $this->indexerChecker->execute(10, 'SKU-2'));
+        self::assertEquals(5, $this->indexerChecker->execute(20, 'SKU-2'));
+        self::assertEquals(5, $this->indexerChecker->execute(30, 'SKU-2'));
     }
 
     /**
@@ -125,12 +125,12 @@ class IndexationTest extends TestCase
     {
         $this->indexer->reindexAll();
 
-        self::assertEquals(8.5, $this->indexerChecker->execute(1, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(2, 'SKU-1'));
-        self::assertEquals(8.5, $this->indexerChecker->execute(3, 'SKU-1'));
+        self::assertEquals(8.5, $this->indexerChecker->execute(10, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(20, 'SKU-1'));
+        self::assertEquals(8.5, $this->indexerChecker->execute(30, 'SKU-1'));
 
-        self::assertEquals(0, $this->indexerChecker->execute(1, 'SKU-2'));
-        self::assertEquals(5, $this->indexerChecker->execute(2, 'SKU-2'));
-        self::assertEquals(5, $this->indexerChecker->execute(3, 'SKU-2'));
+        self::assertEquals(0, $this->indexerChecker->execute(10, 'SKU-2'));
+        self::assertEquals(5, $this->indexerChecker->execute(20, 'SKU-2'));
+        self::assertEquals(5, $this->indexerChecker->execute(30, 'SKU-2'));
     }
 }
