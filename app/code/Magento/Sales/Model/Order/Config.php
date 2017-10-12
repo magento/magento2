@@ -122,8 +122,14 @@ class Config
      */
     public function getStatusLabel($code)
     {
-        $code = $this->maskStatusForArea($this->state->getAreaCode(), $code);
+        $area = $this->state->getAreaCode();
+        $code = $this->maskStatusForArea($area, $code);
         $status = $this->orderStatusFactory->create()->load($code);
+
+        if ($area == 'adminhtml') {
+            return $status->getLabel();
+        }
+
         return $status->getStoreLabel();
     }
 
