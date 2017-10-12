@@ -1138,7 +1138,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         ) {
             $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
         }
-        if ($this->isObjectNew()) {
+        if ($this->getId() && $this->isObjectNew()) {
             $identities[] = self::CACHE_TAG;
         }
 
