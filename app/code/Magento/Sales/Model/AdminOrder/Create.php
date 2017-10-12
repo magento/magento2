@@ -1477,6 +1477,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         // but if quote already has the billing address it won't be overridden
         if (empty($billingAddress->getCustomerAddressId())) {
             $quote->removeAddress($quote->getBillingAddress()->getId());
+            $billingAddress->setCustomerAddressId(null);
         }
         $quote->setBillingAddress($billingAddress);
 
@@ -1779,6 +1780,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $address = $this->getShippingAddress()->setCustomerId($this->getQuote()->getCustomer()->getId());
             $this->setShippingAddress($address);
         }
+        $this->getBillingAddress()->setCustomerId($customer->getId());
         $this->getQuote()->updateCustomerData($this->getQuote()->getCustomer());
 
         $customer = $this->getQuote()->getCustomer();
