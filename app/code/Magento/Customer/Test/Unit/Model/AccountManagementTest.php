@@ -984,6 +984,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('setTemplateVars')
             ->with(['customer' => $this->customerSecure, 'store' => $this->store])
             ->willReturnSelf();
+        $this->transportBuilder->expects($this->any())
+            ->method('setScopeId')
+            ->with($customerStoreId)
+            ->willReturnSelf();
         $this->transportBuilder->expects($this->once())
             ->method('setFrom')
             ->with($sender)
