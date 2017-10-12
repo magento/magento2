@@ -58,8 +58,7 @@ class CanViewNotification implements VisibilityConditionInterface
             return false;
         }
 
-        //return $this->advertisementFlagManager->setNotifiedUser($userId);
-        return true;
+        return $this->advertisementFlagManager->setNotifiedUser($userId);
     }
 
     /**

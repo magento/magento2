@@ -9,15 +9,6 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <uiComponent name="b2b_notification">
-                <visibilityCondition name="can_view_notification" className="Magento\Advertisement\Model\Condition\CanViewNotification"/>
-            </uiComponent>
-            <uiComponent name="developer_experience_notification">
-                <visibilityCondition name="can_view_notification" className="Magento\Advertisement\Model\Condition\CanViewNotification"/>
-            </uiComponent>
-            <uiComponent name="analytics_notification">
-                <visibilityCondition name="can_view_notification" className="Magento\Advertisement\Model\Condition\CanViewNotification"/>
-            </uiComponent>
             <uiComponent name="advertisement_notification">
                 <visibilityCondition name="can_view_notification" className="Magento\Advertisement\Model\Condition\CanViewNotification"/>
             </uiComponent>
