@@ -132,7 +132,7 @@ class CategoryTreeTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->load(2);
         $unsorted = explode(',', $this->_model->getChildren());
-        usort($unsorted);
+        sort($unsorted);
         $this->assertEquals(array_diff($unsorted, explode(',', $this->_model->getChildren(true, true, true))), []);
     }
 
