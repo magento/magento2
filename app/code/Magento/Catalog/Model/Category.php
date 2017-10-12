@@ -785,7 +785,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param boolean $sortByPosition
      * @return string
      */
-    public function getChildren($recursive = true, $isActive = true, $sortByPosition = false)
+    public function getChildren($recursive = false, $isActive = true, $sortByPosition = false)
     {
         return implode(',', $this->getResource()->getChildren($this, $recursive, $isActive, $sortByPosition));
     }
