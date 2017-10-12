@@ -24,7 +24,7 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
     /**
      * Max versions to load from database at a time
      */
-    const MAX_VERSION_QUERY_BATCH = 100000;
+    private static $maxVersionQueryBatch = 100000;
 
     /**
      * @var string
@@ -277,7 +277,7 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
             try {
                 $this->getState()->setStatus(View\StateInterface::STATUS_WORKING)->save();
 
-                $versionBatchSize = self::MAX_VERSION_QUERY_BATCH;
+                $versionBatchSize = self::$maxVersionQueryBatch;
                 $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
                     ? $this->changelogBatchSize[$this->getChangelog()->getViewId()]
                     : self::DEFAULT_BATCH_SIZE;
