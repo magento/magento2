@@ -49,6 +49,14 @@ interface StoreInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return $this
      */
     public function setName($name);
+    
+    /**
+     * Set store is_active flag
+     *
+     * @param bool $isActive
+     * @return $this
+     */
+    public function setIsActive($isActive);
 
     /**
      * @return int
@@ -65,6 +73,11 @@ interface StoreInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return int
      */
     public function getStoreGroupId();
+    
+    /**
+     * @return bool
+     */
+    public function getIsActive();
 
     /**
      * @param int $storeGroupId
