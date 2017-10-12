@@ -12,8 +12,6 @@
         <annotations>
             <features value=""/>
             <stories value=""/>
-            <group value=""/>
-            <env value=""/>
         </annotations>
         <before>
 
@@ -27,6 +25,8 @@
                 <description value=""/>
                 <severity value=""/>
                 <testCaseId value=""/>
+                <group value=""/>
+                <env value=""/>
             </annotations>
             <!-- ADD TEST STEPS HERE -->
         </test>

@@ -12,10 +12,6 @@
         <annotations>
             <features value="Minimum Test"/>
             <stories value="Minimum Test"/>
-            <group value="example"/>
-            <env value="chrome"/>
-            <env value="firefox"/>
-            <env value="phantomjs"/>
         </annotations>
         <after>
             <seeInCurrentUrl url="/admin/admin/" mergeKey="seeInCurrentUrl"/>
@@ -24,6 +20,11 @@
             <annotations>
                 <title value="Minimum Test"/>
                 <description value="Minimum Test"/>
+                <group value="example"/>
+                <env value="chrome"/>
+                <env value="firefox"/>
+                <env value="phantomjs"/>
+                <env value="headless"/>
             </annotations>
             <amOnPage url="{{AdminLoginPage}}" mergeKey="navigateToAdmin"/>
             <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>

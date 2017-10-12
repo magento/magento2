@@ -19,7 +19,7 @@
                 <block class="Magento\Catalog\Block\Product\ListProduct" name="category.products.list" as="product_list" template="Magento_Catalog::product/list.phtml">
                     <container name="category.product.list.additional" as="additional" />
                     <block class="Magento\Framework\View\Element\RendererList" name="category.product.type.details.renderers" as="details.renderers">
-                        <block class="Magento\Framework\View\Element\Template" as="default"/>
+                        <block class="Magento\Framework\View\Element\Template" name="category.product.type.details.renderers.default" as="default"/>
                     </block>
                     <block class="Magento\Catalog\Block\Product\ProductList\Item\Container" name="category.product.addto" as="addto">
                         <block class="Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare"

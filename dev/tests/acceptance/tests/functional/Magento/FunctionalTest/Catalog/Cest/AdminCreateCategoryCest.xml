@@ -12,10 +12,6 @@
         <annotations>
             <features value="Category Creation"/>
             <stories value="Create a Category via the Admin"/>
-            <group value="category"/>
-            <env value="chrome"/>
-            <env value="firefox"/>
-            <env value="phantomjs"/>
         </annotations>
         <after>
             <amOnPage url="admin/admin/auth/logout/" mergeKey="amOnLogoutPage"/>
@@ -26,6 +22,9 @@
                 <description value="You should be able to create a Category in the admin back-end."/>
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-72102"/>
+                <group value="category"/>
+                <env value="chrome"/>
+                <env value="headless"/>
             </annotations>
             <amOnPage url="{{AdminLoginPage}}" mergeKey="amOnAdminLoginPage"/>
             <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
