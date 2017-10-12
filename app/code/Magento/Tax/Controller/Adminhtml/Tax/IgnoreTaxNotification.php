@@ -51,7 +51,7 @@ class IgnoreTaxNotification extends \Magento\Tax\Controller\Adminhtml\Tax
         }
 
         // clear the block html cache
-        $this->_cacheTypeList->cleanType('config')
+        $this->_cacheTypeList->cleanType('config');
         $this->_eventManager->dispatch('adminhtml_cache_refresh_type', ['type' => 'config']);
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
