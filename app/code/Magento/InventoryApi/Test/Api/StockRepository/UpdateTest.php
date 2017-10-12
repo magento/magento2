@@ -24,7 +24,7 @@ class UpdateTest extends WebapiAbstract
      */
     public function testUpdate()
     {
-        $stockId = 1;
+        $stockId = 10;
         $expectedData = [
             StockInterface::NAME => 'stock-name-1-updated',
         ];

@@ -27,7 +27,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
      */
     public function testCarrierLinksManagement(array $carrierLinks)
     {
-        $sourceId = 1;
+        $sourceId = 10;
         $expectedData = [
             SourceInterface::NAME => 'source-name-1',
             SourceInterface::POSTCODE => 'source-postcode',
@@ -98,7 +98,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
      */
     public function testAssignCarrierLinksIfUseGlobalConfigurationChosen()
     {
-        $sourceId = 1;
+        $sourceId = 10;
         $expectedData = [
             SourceInterface::NAME => 'source-name-1',
             SourceInterface::POSTCODE => 'source-postcode',

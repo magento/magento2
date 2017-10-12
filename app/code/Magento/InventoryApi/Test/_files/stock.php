@@ -21,7 +21,7 @@ $stock = $stockFactory->create();
 $dataObjectHelper->populateWithArray(
     $stock,
     [
-        StockInterface::STOCK_ID => 1,
+        StockInterface::STOCK_ID => 10,
         StockInterface::NAME => 'stock-name-1',
     ],
     StockInterface::class

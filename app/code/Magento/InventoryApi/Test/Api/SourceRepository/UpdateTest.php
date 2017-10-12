@@ -25,7 +25,7 @@ class UpdateTest extends WebapiAbstract
      */
     public function testUpdate()
     {
-        $sourceId = 1;
+        $sourceId = 10;
         $expectedData = [
             SourceInterface::NAME => 'source-name-1-updated',
             SourceInterface::CONTACT_NAME => 'source-contact-name-updated',
