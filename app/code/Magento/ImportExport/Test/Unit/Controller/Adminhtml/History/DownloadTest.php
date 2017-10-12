@@ -72,8 +72,9 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParam']);
-        $this->request->expects($this->any())->method('getParam')->with('filename')->willReturn('filename');
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->reportHelper = $this->createPartialMock(
             \Magento\ImportExport\Helper\Report::class,
             ['importFileExists', 'getReportSize', 'getReportOutput']
@@ -126,11 +127,12 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test execute()
+     * Tests execute()
      */
     public function testExecute()
     {
-        $this->reportHelper->expects($this->any())->method('importFileExists')->willReturn(true);
+        $this->reportHelper->expects($this->atLeastOnce())->method('importFileExists')->willReturn(true);
+
         $this->resultRaw->expects($this->once())->method('setContents');
         $this->downloadController->execute();
     }
@@ -140,7 +142,8 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteFileNotFound()
     {
-        $this->reportHelper->expects($this->any())->method('importFileExists')->willReturn(false);
+        $this->request->method('getParam')->with('filename')->willReturn('filename');
+        $this->reportHelper->method('importFileExists')->willReturn(false);
         $this->resultRaw->expects($this->never())->method('setContents');
         $this->downloadController->execute();
     }
