@@ -71,8 +71,9 @@ class ValidatorHandlerFactory
             );
 
         if (!$validatorHandler instanceof ValidatorHandlerInterface) {
-            $exceptionMessage = 'Invalid cron expression part validator handler type: %1 is not an instance of ';
-            throw new CronException(__($exceptionMessage . ValidatorHandlerInterface::class, $validatorHandlerType));
+            $exceptionMessage = 'Invalid cron expression part validator handler type: %1 is not an instance of '
+                . ValidatorHandlerInterface::class;
+            throw new CronException(__($exceptionMessage, $validatorHandlerType));
         }
 
         return $validatorHandler;

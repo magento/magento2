@@ -54,12 +54,13 @@ class MatcherFactory
             throw new CronException(__('Invalid cron expression part matcher type: %1', $matcherType));
         }
 
-        $matcher = ObjectManager::getInstance(
-        )->get('Magento\Cron\Model\ResourceModel\Schedule\Expression\Part\Matcher\\' . $matcherType);
+        $matcher = ObjectManager::getInstance()
+            ->get('Magento\Cron\Model\ResourceModel\Schedule\Expression\Part\Matcher\\' . $matcherType);
 
         if (!$matcher instanceof PartMatcherInterface) {
-            $exceptionMessage = 'Invalid cron expression part matcher type: %1 is not an instance of ';
-            throw new CronException(__($exceptionMessage . PartMatcherInterface::class, $matcherType));
+            $exceptionMessage = 'Invalid cron expression part matcher type: %1 is not an instance of '
+                . PartMatcherInterface::class;
+            throw new CronException(__($exceptionMessage, $matcherType));
         }
 
         return $matcher;

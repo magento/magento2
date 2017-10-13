@@ -51,8 +51,9 @@ class ParserFactory
         );
 
         if (!$parser instanceof PartParserInterface) {
-            $exceptionMessage = 'Invalid cron expression part parser type: %1 is not an instance of ';
-            throw new CronException(__($exceptionMessage . PartParserInterface::class, $parserType));
+            $exceptionMessage = 'Invalid cron expression part parser type: %1 is not an instance of '
+                . PartParserInterface::class;
+            throw new CronException(__($exceptionMessage, $parserType));
         }
 
         return $parser;

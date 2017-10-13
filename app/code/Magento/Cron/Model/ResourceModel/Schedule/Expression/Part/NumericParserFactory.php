@@ -58,8 +58,9 @@ class NumericParserFactory
             ->get('Magento\Cron\Model\ResourceModel\Schedule\Expression\Part\NumericParser\\' . $numericType);
 
         if (!$numeric instanceof PartNumericInterface) {
-            $exceptionMessage = 'Invalid cron expression part numeric type: %1 is not an instance of ';
-            throw new CronException(__($exceptionMessage . PartNumericInterface::class, $numericType));
+            $exceptionMessage = 'Invalid cron expression part numeric type: %1 is not an instance of '
+                . PartNumericInterface::class;
+            throw new CronException(__($exceptionMessage, $numericType));
         }
 
         return $numeric;

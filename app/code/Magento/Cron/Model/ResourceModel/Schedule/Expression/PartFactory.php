@@ -63,8 +63,9 @@ class PartFactory
             ->create('Magento\Cron\Model\ResourceModel\Schedule\Expression\Part\Index\\' . $indexType);
 
         if (!$part instanceof PartInterface) {
-            $exceptionMessage = 'Invalid cron expression part index: %1 is not an instance of ';
-            throw new CronException(__($exceptionMessage . PartInterface::class, $indexType));
+            $exceptionMessage = 'Invalid cron expression part index: %1 is not an instance of '
+                . PartInterface::class;
+            throw new CronException(__($exceptionMessage, $indexType));
         }
 
         $part->setPartValue($partValue);
