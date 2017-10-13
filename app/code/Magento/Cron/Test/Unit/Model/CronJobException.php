@@ -6,7 +6,7 @@
 
 /**
  * Class CronJobException used to check that cron handles execution exception
- * Please see \Magento\Cron\Test\Unit\Model\ObserverTest
+ * @see \Magento\Cron\Test\Unit\Observer\ProcessCronQueueObserverTest::dispatchExceptionInCallbackDataProvider
  */
 namespace Magento\Cron\Test\Unit\Model;
 

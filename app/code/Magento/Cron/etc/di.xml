@@ -10,6 +10,14 @@
     <preference for="Magento\Framework\Shell\CommandRendererInterface" type="Magento\Framework\Shell\CommandRenderer" />
     <preference for="Magento\Framework\Crontab\CrontabManagerInterface" type="Magento\Framework\Crontab\CrontabManager" />
     <preference for="Magento\Framework\Crontab\TasksProviderInterface" type="Magento\Framework\Crontab\TasksProvider" />
+    <preference for="Magento\Cron\Model\ResourceModel\Schedule\ExpressionInterface" type="Magento\Cron\Model\ResourceModel\Schedule\Expression" />
+    <preference for="Magento\Cron\Model\ResourceModel\Schedule\Expression\PartInterface" type="Magento\Cron\Model\ResourceModel\Schedule\Expression\Part" />
+    <preference for="Magento\Cron\Model\ResourceModel\Schedule\Expression\MatcherInterface" type="Magento\Cron\Model\ResourceModel\Schedule\Expression\Matcher" />
+    <preference for="Magento\Cron\Model\ResourceModel\Schedule\Expression\ParserInterface" type="Magento\Cron\Model\ResourceModel\Schedule\Expression\Parser" />
+    <preference for="Magento\Cron\Model\ResourceModel\Schedule\Expression\ValidatorInterface" type="Magento\Cron\Model\ResourceModel\Schedule\Expression\Validator" />
+    <preference for="Magento\Cron\Model\ResourceModel\Schedule\Expression\Part\ParserInterface" type="Magento\Cron\Model\ResourceModel\Schedule\Expression\Part\Parser" />
+    <preference for="Magento\Cron\Model\ResourceModel\Schedule\Expression\Part\MatcherInterface" type="Magento\Cron\Model\ResourceModel\Schedule\Expression\Part\Matcher" />
+    <preference for="Magento\Cron\Model\ResourceModel\Schedule\Expression\Part\ValidatorInterface" type="Magento\Cron\Model\ResourceModel\Schedule\Expression\Part\Validator" />
     <type name="Magento\Config\Model\Config\Structure\Converter">
         <plugin name="cron_backend_config_structure_converter_plugin" type="Magento\Cron\Model\Backend\Config\Structure\Converter" />
     </type>

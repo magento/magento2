@@ -6,8 +6,11 @@
 
 namespace Magento\Cron\Model;
 
-use Magento\Framework\Exception\CronException;
+use Magento\Cron\Model\ResourceModel\Schedule\Expression\PartFactory;
+use Magento\Cron\Model\ResourceModel\Schedule\ExpressionFactory;
+use Magento\Cron\Model\ResourceModel\Schedule\ExpressionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\CronException;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
@@ -32,6 +35,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Schedule extends \Magento\Framework\Model\AbstractModel
 {
@@ -51,12 +55,29 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     private $timezoneConverter;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @var ExpressionFactory
+     */
+    private $expressionFactory;
+
+    /**
+     * @var ExpressionInterface
+     */
+    private $expression;
+
+    /**
+     * @var PartFactory
+     */
+    private $partFactory;
+
+    /**
+     * @param \Magento\Framework\Model\Context                        $context
+     * @param \Magento\Framework\Registry                             $registry
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $data
-     * @param TimezoneInterface $timezoneConverter
+     * @param \Magento\Framework\Data\Collection\AbstractDb           $resourceCollection
+     * @param array                                                   $data
+     * @param TimezoneInterface                                       $timezoneConverter
+     * @param ExpressionFactory                                       $expressionFactory
+     * @param PartFactory                                             $partFactory
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -64,10 +85,15 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        TimezoneInterface $timezoneConverter = null
+        TimezoneInterface $timezoneConverter = null,
+        ExpressionFactory $expressionFactory = null,
+        PartFactory $partFactory = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->timezoneConverter = $timezoneConverter ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
+        $this->expressionFactory = $expressionFactory ?: ObjectManager::getInstance()->get(ExpressionFactory::class);
+        $this->expression = $this->expressionFactory->create();
+        $this->partFactory = $partFactory ?: ObjectManager::getInstance()->get(PartFactory::class);
     }
 
     /**
@@ -79,18 +105,14 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @param string $expr
+     * @param string $cronExpr
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\CronException
      */
-    public function setCronExpr($expr)
+    public function setCronExpr($cronExpr)
     {
-        $e = preg_split('#\s+#', $expr, null, PREG_SPLIT_NO_EMPTY);
-        if (sizeof($e) < 5 || sizeof($e) > 6) {
-            throw new CronException(__('Invalid cron expression: %1', $expr));
-        }
-
-        $this->setCronExprArr($e);
+        $this->expression->setCronExpr($cronExpr);
         return $this;
     }
 
@@ -104,95 +126,49 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     public function trySchedule()
     {
         $time = $this->getScheduledAt();
-        $e = $this->getCronExprArr();
 
-        if (!$e || !$time) {
+        if (!$time) {
             return false;
         }
+
         if (!is_numeric($time)) {
             //convert time from UTC to admin store timezone
             //we assume that all schedules in configuration (crontab.xml and DB tables) are in admin store timezone
-            $time = $this->timezoneConverter->date($time)->format('Y-m-d H:i');
+            $date = $this->timezoneConverter->date($time);
+            $time = $date->format('Y-m-d H:i');
             $time = strtotime($time);
         }
-        $match = $this->matchCronExpression($e[0], strftime('%M', $time))
-            && $this->matchCronExpression($e[1], strftime('%H', $time))
-            && $this->matchCronExpression($e[2], strftime('%d', $time))
-            && $this->matchCronExpression($e[3], strftime('%m', $time))
-            && $this->matchCronExpression($e[4], strftime('%w', $time));
 
-        return $match;
+        return $this->expression->match($time);
     }
 
     /**
-     * @param string $expr
-     * @param int $num
+     * @param string $cronExprPart
+     * @param int    $number
+     *
      * @return bool
      * @throws \Magento\Framework\Exception\CronException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @deprecated
      */
-    public function matchCronExpression($expr, $num)
+    public function matchCronExpression($cronExprPart, $number)
     {
-        // handle ALL match
-        if ($expr === '*') {
-            return true;
+        $part = $this->partFactory->create(PartFactory::GENERIC_PART, $cronExprPart);
+        if (!$part->validate()) {
+            throw new CronException(__('Invalid cron expression part: %1', $cronExprPart));
         }
 
-        // handle multiple options
-        if (strpos($expr, ',') !== false) {
-            foreach (explode(',', $expr) as $e) {
-                if ($this->matchCronExpression($e, $num)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        // handle modulus
-        if (strpos($expr, '/') !== false) {
-            $e = explode('/', $expr);
-            if (sizeof($e) !== 2) {
-                throw new CronException(__('Invalid cron expression, expecting \'match/modulus\': %1', $expr));
-            }
-            if (!is_numeric($e[1])) {
-                throw new CronException(__('Invalid cron expression, expecting numeric modulus: %1', $expr));
-            }
-            $expr = $e[0];
-            $mod = $e[1];
-        } else {
-            $mod = 1;
-        }
-
-        // handle all match by modulus
-        if ($expr === '*') {
-            $from = 0;
-            $to = 60;
-        } elseif (strpos($expr, '-') !== false) {
-            // handle range
-            $e = explode('-', $expr);
-            if (sizeof($e) !== 2) {
-                throw new CronException(__('Invalid cron expression, expecting \'from-to\' structure: %1', $expr));
-            }
-
-            $from = $this->getNumeric($e[0]);
-            $to = $this->getNumeric($e[1]);
-        } else {
-            // handle regular token
-            $from = $this->getNumeric($expr);
-            $to = $from;
-        }
-
-        if ($from === false || $to === false) {
-            throw new CronException(__('Invalid cron expression: %1', $expr));
-        }
-
-        return $num >= $from && $num <= $to && $num % $mod === 0;
+        return $part->match($number);
     }
 
     /**
      * @param int|string $value
+     *
      * @return bool|int|string
+     *
+     * @deprecated
+     * @see \Magento\Cron\Model\ResourceModel\Schedule\Expression\Part\Parser\NumericParser::parse
      */
     public function getNumeric($value)
     {
