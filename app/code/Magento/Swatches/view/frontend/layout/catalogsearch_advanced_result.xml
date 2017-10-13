@@ -6,9 +6,6 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <head>
-        <css src="Magento_Swatches::css/swatches.css"/>
-    </head>
     <body>
         <referenceBlock name="category.product.type.details.renderers">
             <block class="Magento\Swatches\Block\Product\Renderer\Listing\Configurable" name="category.product.type.details.renderers.configurable" as="configurable" template="Magento_Swatches::product/listing/renderer.phtml" ifconfig="catalog/frontend/show_swatches_in_product_list" />
