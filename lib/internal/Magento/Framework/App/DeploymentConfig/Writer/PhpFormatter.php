@@ -51,13 +51,13 @@ class PhpFormatter implements FormatterInterface
                     $elements[] = $prefix . " */";
                 }
 
+                $elements[] = $prefix . var_export($key, true) . ' => ' .
+                    (!is_array($value) ? var_export($value, true) . ',' : '');
+
                 if (is_array($value)) {
-                    $elements[] = $prefix . var_export($key, true) . ' => ';
                     $elements[] = $prefix . 'array (';
                     $elements[] = $this->formatData($value, [], '  ' . $prefix);
                     $elements[] = $prefix . '),';
-                } else {
-                    $elements[] = $prefix . var_export($key, true) . ' => ' . var_export($value, true) . ',';
                 }
             }
             return implode("\n", $elements);
