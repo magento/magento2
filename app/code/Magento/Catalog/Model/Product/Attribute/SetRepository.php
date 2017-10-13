@@ -72,10 +72,15 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
                     ->create(),
             ]
         );
+
         $this->searchCriteriaBuilder->setSortOrders((array)$searchCriteria->getSortOrders());
         $this->searchCriteriaBuilder->setCurrentPage($searchCriteria->getCurrentPage());
         $this->searchCriteriaBuilder->setPageSize($searchCriteria->getPageSize());
-        return $this->attributeSetRepository->getList($this->searchCriteriaBuilder->create());
+
+        $searchResult = $this->attributeSetRepository->getList($this->searchCriteriaBuilder->create());
+        $searchResult->setSearchCriteria($searchCriteria);
+
+        return $searchResult;
     }
 
     /**
