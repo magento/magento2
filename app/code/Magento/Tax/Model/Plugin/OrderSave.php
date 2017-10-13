@@ -167,7 +167,9 @@ class OrderSave
                                     if (isset($quoteItemId['id'])) {
                                         //This is a product item
                                         $item = $order->getItemByQuoteItemId($quoteItemId['id']);
-                                        $itemId = $item->getId();
+                                        if ($item !== null && $item->getId()) {
+                                            $itemId = $item->getId();
+                                        }
                                     } elseif (isset($quoteItemId['associated_item_id'])) {
                                         //This item is associated with a product item
                                         $item = $order->getItemByQuoteItemId($quoteItemId['associated_item_id']);
