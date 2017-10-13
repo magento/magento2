@@ -144,6 +144,40 @@ class SourcesTest extends TestCase
 
         $this->assertCount(count($beforeImportData) - 2, $afterImportData);
     }
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     */
+    public function testImportDataWithReplaceBehavior()
+    {
+        $this->markTestIncomplete('Implement clenup (DELETE from inventory_source_item;)');
+        /** @see \Magento\InventoryImportExport\Model\Import\Command\Replace::execute */
+        $this->importer->setParameters([
+            'behavior' => Import::BEHAVIOR_REPLACE
+        ]);
+
+        $bunch = [
+            $this->buildRowDataArray(20, 'SKU-1', 5, 1),
+            $this->buildRowDataArray(50, 'SKU-2', 15, 1),
+        ];
+        $this->importDataMock->expects($this->any())
+            ->method('getNextBunch')
+            ->will($this->onConsecutiveCalls($bunch, false));
+
+        $this->importer->importData();
+
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+
+        $sourceItems = $this->sourceItemRepository->getList($searchCriteria);
+        $afterImportData = $this->buildDataArray($sourceItems->getItems());
+
+        $this->assertArrayHasKey('20-SKU-1', $afterImportData);
+        $this->assertArrayHasKey('50-SKU-2', $afterImportData);
+        $this->assertCount(2, $afterImportData);
+    }
 
     /**
      * @param int $sourceID

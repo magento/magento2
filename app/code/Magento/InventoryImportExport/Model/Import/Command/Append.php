@@ -6,10 +6,8 @@
 
 namespace Magento\InventoryImportExport\Model\Import\Command;
 
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
-use Magento\InventoryImportExport\Model\Import\Sources;
+use Magento\InventoryImportExport\Helper\SourceItemConvert;
 
 /**
  * @inheritdoc
@@ -17,9 +15,9 @@ use Magento\InventoryImportExport\Model\Import\Sources;
 class Append implements CommandInterface
 {
     /**
-     * @var SourceItemInterfaceFactory
+     * @var SourceItemConvert
      */
-    private $sourceItemFactory;
+    private $sourceItemConvert;
 
     /**
      * @var SourceItemsSaveInterface
@@ -27,14 +25,13 @@ class Append implements CommandInterface
     private $sourceItemsSave;
 
     /**
-     * @param SourceItemInterfaceFactory $sourceItemFactory
-     * @param SourceItemsSaveInterface $sourceItemsSave
+     * @param SourceItemBuilder
      */
     public function __construct(
-        SourceItemInterfaceFactory $sourceItemFactory,
+        SourceItemConvert $sourceItemConvert,
         SourceItemsSaveInterface $sourceItemsSave
     ) {
-        $this->sourceItemFactory = $sourceItemFactory;
+        $this->sourceItemConvert = $sourceItemConvert;
         $this->sourceItemsSave = $sourceItemsSave;
     }
 
@@ -43,31 +40,7 @@ class Append implements CommandInterface
      */
     public function execute(array $bunch)
     {
-        $sourceItems = [];
-        foreach ($bunch as $rowNum => $rowData) {
-            $sourceItems[] = $this->buildSourceItem($rowData);
-        }
+        $sourceItems = $this->sourceItemConvert->convert($bunch);
         $this->sourceItemsSave->execute($sourceItems);
-    }
-
-    /**
-     * @param array $rowData
-     * @return SourceItemInterface
-     */
-    private function buildSourceItem(array $rowData)
-    {
-        /** @var SourceItemInterface $sourceItem */
-        $sourceItem = $this->sourceItemFactory->create();
-        $sourceItem->setSourceId($rowData[Sources::COL_SOURCE]);
-        $sourceItem->setSku($rowData[Sources::COL_SKU]);
-        $sourceItem->setQuantity($rowData[Sources::COL_QTY]);
-
-        $status = (int)$rowData[Sources::COL_QTY] > 0;
-        if (isset($rowData[Sources::COL_STATUS])) {
-            $status = (int)$rowData[Sources::COL_STATUS];
-        }
-        $sourceItem->setStatus($status);
-
-        return $sourceItem;
     }
 }

@@ -6,11 +6,8 @@
 
 namespace Magento\InventoryImportExport\Model\Import\Command;
 
-use Magento\Inventory\Model\ResourceModel\SourceItem\DeleteMultiple as SourceItemsDelete;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
-use Magento\InventoryImportExport\Model\Import\Sources;
+use Magento\InventoryImportExport\Helper\SourceItemConvert;
 
 /**
  * @inheritdoc
@@ -19,24 +16,24 @@ class Delete implements CommandInterface
 {
 
     /**
-     * @var SourceItemInterfaceFactory
+     * @var SourceItemConvert
      */
-    private $sourceItemFactory;
+    private $sourceItemConvert;
 
     /**
-     * @var SourceItemsDelete
+     * @var SourceItemsDeleteInterface
      */
     private $sourceItemsDelete;
 
     /**
-     * @param SourceItemInterfaceFactory $sourceItemFactory
-     * @param SourceItemsDelete $sourceItemsSave
+     * @param SourceItemConvert $sourceItemConvert ,
+     * @param SourceItemsDeleteInterface $sourceItemsSave
      */
     public function __construct(
-        SourceItemInterfaceFactory $sourceItemFactory,
+        SourceItemConvert $sourceItemConvert,
         SourceItemsDeleteInterface $sourceItemsDelete
     ) {
-        $this->sourceItemFactory = $sourceItemFactory;
+        $this->sourceItemConvert = $sourceItemConvert;
         $this->sourceItemsDelete = $sourceItemsDelete;
     }
 
@@ -45,25 +42,7 @@ class Delete implements CommandInterface
      */
     public function execute(array $bunch)
     {
-        $sourceItems = [];
-
-        foreach ($bunch as $rowNum => $rowData) {
-            $sourceItems[]= $this->buildSourceItem($rowData);
-        }
-
+        $sourceItems = $this->sourceItemConvert->convert($bunch);
         $this->sourceItemsDelete->execute($sourceItems);
-    }
-
-    /**
-     * @param array $rowData
-     * @return SourceItemInterface
-     */
-    private function buildSourceItem(array $rowData)
-    {
-        /** @var SourceItemInterface $sourceItem */
-        $sourceItem = $this->sourceItemFactory->create();
-        $sourceItem->setSourceId($rowData[Sources::COL_SOURCE]);
-        $sourceItem->setSku($rowData[Sources::COL_SKU]);
-        return $sourceItem;
     }
 }
