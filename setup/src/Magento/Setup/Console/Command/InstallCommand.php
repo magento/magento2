@@ -215,13 +215,33 @@ class InstallCommand extends AbstractSetupCommand
     {
         $helper = $this->getHelper('question');
         $configOptionsToValidate = [];
+
         foreach ($this->configModel->getAvailableOptions() as $option) {
+            $configOptionsToValidate[$option->getName()] = $this->askQuestion(
+                $input,
+                $output,
+                $helper,
+                $option,
+                true
+            );
+        }
 
-            $configOptionsToValidate[$option->getName()] = $this->askQuestion($input, $output, $helper, $option);
+        foreach ($this->userConfig->getOptionsList() as $option) {
+            $configOptionsToValidate[$option->getName()] = $this->askQuestion(
+                $input,
+                $output,
+                $helper,
+                $option
+            );
+        }
 
-            /*$question = new Question($option->getDescription() . '? ', $option->getDefault());
-            $configOptionsToValidate[$option->getName()] = $helper->ask($input, $output, $question);
-            */
+        foreach ($this->adminUser->getOptionsList() as $option) {
+            $configOptionsToValidate[$option->getName()] = $this->askQuestion(
+                $input,
+                $output,
+                $helper,
+                $option
+            );
         }
         return $configOptionsToValidate;
     }
@@ -234,11 +254,17 @@ class InstallCommand extends AbstractSetupCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      * @param QuestionHelper $helper
-     * @param Magento\Framework\Setup\Option\TextConfigOption|Magento\Framework\Setup\Option\FlagConfigOption\Magento\Framework\Setup\Option\SelectConfigOption $option
+     * @param TextConfigOption|FlagConfigOption\SelectConfigOption $option
+     * @param Boolean $validateInline
      * @return string[] Array of inputs
      */
-    private function askQuestion(InputInterface $input, OutputInterface $output, QuestionHelper $helper, $option)
-    {
+    private function askQuestion(
+        InputInterface $input,
+        OutputInterface $output,
+        QuestionHelper $helper,
+        $option,
+        $validateInline = false
+    ) {
         if (get_class($option) === 'Magento\Framework\Setup\Option\SelectConfigOption') {
             if ($option->isValueRequired()) {
                 $question = new ChoiceQuestion(
@@ -253,10 +279,6 @@ class InstallCommand extends AbstractSetupCommand
                     $option->getDefault()
                 );
             }
-            $question->setValidator(function ($answer) use ($option) {
-                $option->validate($option->getSelectOptions()[$answer]);
-                return $answer;
-            });
         } else {
             if ($option->isValueRequired()) {
                 $question = new Question(
@@ -269,13 +291,25 @@ class InstallCommand extends AbstractSetupCommand
                     $option->getDefault()
                 );
             }
-            $question->setValidator(function ($answer) use ($option) {
-                $option->validate($answer);
-                return $answer;
-            });
+
         }
 
+        $question->setValidator(function ($answer) use ($option, $validateInline) {
+            $answer = trim($answer);
+
+            if (get_class($option) === 'Magento\Framework\Setup\Option\SelectConfigOption') {
+                $answer = $option->getSelectOptions()[$answer];
+            }
+
+            if ($validateInline) {
+                $option->validate($answer);
+            }
+
+            return $answer;
+        });
+
         $value = $helper->ask($input, $output, $question);
+
         return $value;
     }
 }
