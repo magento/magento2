@@ -6,6 +6,7 @@
 namespace Magento\Analytics\Model\Condition;
 
 use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 use Magento\Analytics\Model\NotificationFlagManager;
 
@@ -23,6 +24,11 @@ class CanViewNotification implements VisibilityConditionInterface
     const NAME = 'can_view_notification';
 
     /**
+     * Magento Version to only show Advertisement module notification content and hide Analytics notification
+     */
+    const VERSION_TO_HIDE = '2.2.1-dev';
+
+    /**
      * @var NotificationFlagManager
      */
     private $notificationFlagManager;
@@ -33,17 +39,25 @@ class CanViewNotification implements VisibilityConditionInterface
     private $session;
 
     /**
+     * @var ProductMetadataInterface
+     */
+    private $productMetadataInterface;
+
+    /**
      * CanViewNotification constructor.
      *
      * @param NotificationFlagManager $notificationFlagManager
      * @param Session $session
+     * @param ProductMetadataInterface $productMetadataInterface
      */
     public function __construct(
         NotificationFlagManager $notificationFlagManager,
-        Session $session
+        Session $session,
+        ProductMetadataInterface $productMetadataInterface
     ) {
         $this->notificationFlagManager = $notificationFlagManager;
         $this->session = $session;
+        $this->productMetadataInterface = $productMetadataInterface;
     }
 
     /**
@@ -53,8 +67,10 @@ class CanViewNotification implements VisibilityConditionInterface
      */
     public function isVisible(array $arguments)
     {
+        $version = $this->productMetadataInterface->getVersion();
+
         $userId = $this->session->getUser()->getId();
-        if ($this->notificationFlagManager->isUserNotified($userId)) {
+        if (!strcmp($version, self::VERSION_TO_HIDE) || $this->notificationFlagManager->isUserNotified($userId)) {
             return false;
         }
 
