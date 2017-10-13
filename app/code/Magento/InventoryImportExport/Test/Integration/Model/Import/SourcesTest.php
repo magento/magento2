@@ -58,7 +58,7 @@ class SourcesTest extends TestCase
      */
     public function testValidateRowExpectsInvalidRow()
     {
-        $rowData = $this->buildRowDataArray(10, 'SKU-55', 33, 1);
+        $rowData = $this->buildRowDataArray(880, 'SKU-55', 33, 1);
         $result = $this->importer->validateRow($rowData, 2);
         $this->assertNotTrue($result, 'Expect result FALSE as given source ID is not present in database.');
     }
@@ -68,7 +68,7 @@ class SourcesTest extends TestCase
      */
     public function testValidateRowExpectsValidRow()
     {
-        $rowData = $this->buildRowDataArray(2, 'SKU-55', 33, 1);
+        $rowData = $this->buildRowDataArray(20, 'SKU-55', 33, 1);
         $result = $this->importer->validateRow($rowData, 2);
         $this->assertTrue($result, 'Expect result TRUE as given data is valid.');
     }
@@ -91,10 +91,10 @@ class SourcesTest extends TestCase
         $beforeImportData = $this->buildDataArray($sourceItems->getItems());
 
         $bunch = [
-            $this->buildRowDataArray(1, 'SKU-1', 6.88, 1),
-            $this->buildRowDataArray(2, 'SKU-1', 5, 1),
-            $this->buildRowDataArray(5, 'SKU-2', 15, 1),
-            $this->buildRowDataArray(1, 'SKU-2', 33, 1),
+            $this->buildRowDataArray(10, 'SKU-1', 6.88, 1),
+            $this->buildRowDataArray(20, 'SKU-1', 5, 1),
+            $this->buildRowDataArray(50, 'SKU-2', 15, 1),
+            $this->buildRowDataArray(10, 'SKU-2', 33, 1),
         ];
         $this->importDataMock->expects($this->any())
             ->method('getNextBunch')
@@ -107,6 +107,42 @@ class SourcesTest extends TestCase
         $afterImportData = $this->buildDataArray($sourceItems->getItems());
 
         $this->assertEquals($expectedData, $afterImportData);
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     */
+    public function testImportDataWithDelteBehavior()
+    {
+        $this->importer->setParameters([
+            'behavior' => Import::BEHAVIOR_DELETE
+        ]);
+
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $sourceItems = $this->sourceItemRepository->getList($searchCriteria);
+        $beforeImportData = $this->buildDataArray($sourceItems->getItems());
+
+        $bunch = [
+            $this->buildRowDataArray(10, 'SKU-1', 6.88, 1),
+            $this->buildRowDataArray(20, 'SKU-1', 5, 1),
+        ];
+        $this->importDataMock->expects($this->any())
+            ->method('getNextBunch')
+            ->will($this->onConsecutiveCalls($bunch, false));
+
+        $this->importer->importData();
+
+        $sourceItems = $this->sourceItemRepository->getList($searchCriteria);
+        $afterImportData = $this->buildDataArray($sourceItems->getItems());
+
+        $this->assertArrayNotHasKey('10-SKU-1', $afterImportData);
+        $this->assertArrayNotHasKey('20-SKU-1', $afterImportData);
+
+        $this->assertCount(count($beforeImportData) - 2, $afterImportData);
     }
 
     /**

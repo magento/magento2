@@ -63,7 +63,7 @@ class Delete implements CommandInterface
         /** @var SourceItemInterface $sourceItem */
         $sourceItem = $this->sourceItemFactory->create();
         $sourceItem->setSourceId($rowData[Sources::COL_SOURCE]);
-
+        $sourceItem->setSku($rowData[Sources::COL_SKU]);
         return $sourceItem;
     }
 }
