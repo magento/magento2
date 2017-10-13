@@ -24,18 +24,18 @@ class UnassignSourceFromStockTest extends WebapiAbstract
     /**
      * Preconditions:
      * Sources to Stock links:
-     *   EU-source-1(id:1) - EU-stock(id:1)
-     *   EU-source-2(id:2) - EU-stock(id:1)
-     *   EU-source-3(id:3) - EU-stock(id:1)
-     *   EU-source-disabled(id:4) - EU-stock(id:1)
+     *   EU-source-1(id:10) - EU-stock(id:10)
+     *   EU-source-2(id:20) - EU-stock(id:10)
+     *   EU-source-3(id:30) - EU-stock(id:10)
+     *   EU-source-disabled(id:40) - EU-stock(id:10)
      *
      * Test case:
-     *   Unassign EU-source-1(id:1) from EU-stock(id:1)
+     *   Unassign EU-source-1(id:10) from EU-stock(id:10)
      *
      * Expected data:
-     *   EU-source-2(id:2) - EU-stock(id:1)
-     *   EU-source-3(id:3) - EU-stock(id:1)
-     *   EU-source-disabled(id:4) - EU-stock(id:1)
+     *   EU-source-2(id:20) - EU-stock(id:10)
+     *   EU-source-3(id:30) - EU-stock(id:10)
+     *   EU-source-disabled(id:40) - EU-stock(id:10)
      *
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
@@ -43,8 +43,8 @@ class UnassignSourceFromStockTest extends WebapiAbstract
      */
     public function testUnassignSourceFromStock()
     {
-        $sourceId = 1;
-        $stockId = 1;
+        $sourceId = 10;
+        $stockId = 10;
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_UNASSIGN_SOURCES_FROM_STOCK . '/' . $stockId . '/' . $sourceId,
@@ -60,7 +60,7 @@ class UnassignSourceFromStockTest extends WebapiAbstract
             : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'stockId' => $stockId]);
 
         $assignedSourcesForStock = $this->getAssignedSourcesForStock($stockId);
-        self::assertEquals([2, 3, 4], array_column($assignedSourcesForStock, SourceInterface::SOURCE_ID));
+        self::assertEquals([20, 30, 40], array_column($assignedSourcesForStock, SourceInterface::SOURCE_ID));
     }
 
     /**
@@ -103,7 +103,7 @@ class UnassignSourceFromStockTest extends WebapiAbstract
     {
         return [
             'not_numeric_stock_id' => [
-                1,
+                10,
                 'not_numeric',
                 [
                     'message' => 'Invalid type for value: "not_numeric". Expected Type: "int".',
@@ -111,7 +111,7 @@ class UnassignSourceFromStockTest extends WebapiAbstract
             ],
             'not_numeric_source_id' => [
                 'not_numeric',
-                1,
+                10,
                 [
                     'message' => 'Invalid type for value: "not_numeric". Expected Type: "int".',
                 ],

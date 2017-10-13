@@ -8,4 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\InventoryCatalog\Api\DefaultStockProviderInterface" type="Magento\InventoryCatalog\Model\DefaultStockProvider"/>
     <preference for="Magento\InventoryCatalog\Api\DefaultSourceProviderInterface" type="Magento\InventoryCatalog\Model\DefaultSourceProvider"/>
+    <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
+        <plugin name="prevent_default_stock_deletion" type="Magento\InventoryCatalog\Plugin\Model\StockRepositoryPlugin" sortOrder="1"/>
+    </type>
 </config>

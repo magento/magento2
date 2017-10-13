@@ -19,15 +19,15 @@ $stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::
 $stocksData = [
     [
         // define only required and needed for tests fields
-        StockInterface::STOCK_ID => 1,
+        StockInterface::STOCK_ID => 10,
         StockInterface::NAME => 'EU-stock',
     ],
     [
-        StockInterface::STOCK_ID => 2,
+        StockInterface::STOCK_ID => 20,
         StockInterface::NAME => 'US-stock',
     ],
     [
-        StockInterface::STOCK_ID => 3,
+        StockInterface::STOCK_ID => 30,
         StockInterface::NAME => 'Global-stock',
     ],
 ];

@@ -9,19 +9,19 @@ use Magento\TestFramework\Helper\Bootstrap;
 /** @var AssignSourcesToStockInterface $assignSourcesToStock */
 $assignSourcesToStock = Bootstrap::getObjectManager()->get(AssignSourcesToStockInterface::class);
 /**
- * EU-source-1(id:1) - EU-stock(id:1)
- * EU-source-2(id:2) - EU-stock(id:1)
- * EU-source-3(id:3) - EU-stock(id:1)
- * EU-source-disabled(id:4) - EU-stock(id:1)
+ * EU-source-1(id:10) - EU-stock(id:10)
+ * EU-source-2(id:20) - EU-stock(id:10)
+ * EU-source-3(id:30) - EU-stock(id:10)
+ * EU-source-disabled(id:40) - EU-stock(id:10)
  *
- * US-source-1(id:5) - US-stock(id:2)
+ * US-source-1(id:50) - US-stock(id:20)
  *
- * EU-source-1(id:1) - Global-stock(id:3)
- * EU-source-2(id:2) - Global-stock(id:3)
- * EU-source-2(id:3) - Global-stock(id:3)
- * EU-source-disabled(id:4) - Global-stock(id:3)
- * US-source-1(id:5) - Global-stock(id:3)
+ * EU-source-1(id:10) - Global-stock(id:30)
+ * EU-source-2(id:20) - Global-stock(id:30)
+ * EU-source-2(id:30) - Global-stock(id:30)
+ * EU-source-disabled(id:40) - Global-stock(id:30)
+ * US-source-1(id:50) - Global-stock(id:30)
  */
-$assignSourcesToStock->execute([1, 2, 3, 4], 1);
-$assignSourcesToStock->execute([5], 2);
-$assignSourcesToStock->execute([1, 2, 3, 4, 5], 3);
+$assignSourcesToStock->execute([10, 20, 30, 40], 10);
+$assignSourcesToStock->execute([50], 20);
+$assignSourcesToStock->execute([10, 20, 30, 40, 50], 30);

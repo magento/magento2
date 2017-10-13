@@ -27,8 +27,8 @@ class AssignSourcesToStockTest extends WebapiAbstract
      */
     public function testAssignSourcesToStock()
     {
-        $sourceIds = [1, 2];
-        $stockId = 1;
+        $sourceIds = [10, 20];
+        $stockId = 10;
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_ASSIGN_SOURCES_TO_STOCK . '/' . $stockId,
@@ -98,7 +98,7 @@ class AssignSourcesToStockTest extends WebapiAbstract
     {
         return [
             'not_numeric_stock_id' => [
-                [1, 2],
+                [10, 20],
                 'not_numeric',
                 [
                     'rest_message' => 'Invalid type for value: "not_numeric". Expected Type: "int".',
@@ -107,7 +107,7 @@ class AssignSourcesToStockTest extends WebapiAbstract
                 ],
             ],
             'nonexistent_stock_id' => [
-                [1, 2],
+                [10, 20],
                 -1,
                 [
                     'rest_message' => 'Could not assign Sources to Stock',
@@ -116,7 +116,7 @@ class AssignSourcesToStockTest extends WebapiAbstract
             ],
             'not_array_source_ids' => [
                 'not_array',
-                1,
+                10,
                 [
                     'rest_message' => 'Invalid type for value: "string". Expected Type: "int[]".',
                     // During SOAP source_ids parameter will be converted to empty array so error is different
@@ -125,14 +125,14 @@ class AssignSourcesToStockTest extends WebapiAbstract
             ],
             'empty_source_ids' => [
                 [],
-                1,
+                10,
                 [
                     'rest_message' => 'Input data is invalid',
                     'soap_message' => 'Input data is invalid',
                 ],
             ],
             'nonexistent_source_id' => [
-                [-1, 2],
+                [-1, 20],
                 1,
                 [
                     'rest_message' => 'Could not assign Sources to Stock',
