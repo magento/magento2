@@ -61,6 +61,11 @@ class Login extends \Magento\Framework\Model\AbstractModel
     protected $_random;
 
     /**
+     * @var \Magento\Checkout\Model\Cart
+     */
+    protected $cart;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -69,6 +74,7 @@ class Login extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Framework\Math\Random $random
+     * @param \Magento\Checkout\Model\Cart $cart
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -80,6 +86,7 @@ class Login extends \Magento\Framework\Model\AbstractModel
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Framework\Math\Random $random,
+        \Magento\Checkout\Model\Cart $cart,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -88,6 +95,7 @@ class Login extends \Magento\Framework\Model\AbstractModel
         $this->_customerSession = $customerSession;
         $this->_dateTime = $dateTime;
         $this->_random = $random;
+        $this->cart = $cart;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -159,6 +167,17 @@ class Login extends \Magento\Framework\Model\AbstractModel
      */
     public function authenticateCustomer()
     {
+        if ($this->_customerSession->getId()) {
+            /* Logout if logged in */
+            $this->_customerSession->logout();
+        } else {
+            /* Remove items from guest cart */
+            foreach ($this->cart->getQuote()->getAllVisibleItems() as $item) {
+                $this->cart->removeItem($item->getId());
+            }
+            $this->cart->save();
+        }
+
         $customer = $this->getCustomer();
 
         if (!$customer->getId()) {
@@ -171,6 +190,15 @@ class Login extends \Magento\Framework\Model\AbstractModel
                 $this->getAdminId()
             );
         }
+
+        /* Save quote */
+        $this->cart->getQuote()->getBillingAddress();
+        $this->cart->getQuote()->getShippingAddress();
+        $this->cart->getQuote()->setCustomer($this->_customerSession->getCustomerDataObject())
+            ->setCustomerGroupId($customer->getGroupId())
+            ->setTotalsCollectedFlag(false)
+            ->collectTotals();
+        $this->cart->getQuote()->save();
 
         $this->setUsed(1)->save();
 

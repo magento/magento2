@@ -26,20 +26,6 @@ class Index extends \Magento\Framework\App\Action\Action
         }
 
         try {
-            $session = $this->_objectManager
-                ->create('\Magento\Customer\Model\Session');
-            if ($session->getId()) {
-                /* Logout if logged in */
-                $session->logout();
-            } else {
-                /* Remove items from cart */
-                $cart = $this->_objectManager
-                    ->create('\Magento\Checkout\Model\Cart');
-                foreach ($cart->getQuote()->getAllVisibleItems() as $item) {
-                    $cart->removeItem($item->getId());
-                }
-                $cart->save();
-            }
             /* Log in */
             $login->authenticateCustomer();
         } catch (\Exception $e) {
