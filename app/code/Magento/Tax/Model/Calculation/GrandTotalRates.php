@@ -6,19 +6,21 @@
 
 namespace Magento\Tax\Model\Calculation;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Tax\Api\Data\GrandTotalRatesInterface;
-use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
  * Grand Total Tax Details Model
  */
-class GrandTotalRates extends AbstractSimpleObject implements GrandTotalRatesInterface
+class GrandTotalRates extends AbstractExtensibleModel implements GrandTotalRatesInterface
 {
+
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
+    const TITLE = 'title';
     const PERCENT = 'percent';
-    const TITLE   = 'title';
+    const AMOUNT = 'amount';
     /**#@-*/
 
     /**
@@ -26,7 +28,23 @@ class GrandTotalRates extends AbstractSimpleObject implements GrandTotalRatesInt
      */
     public function getTitle()
     {
-        return $this->_get(self::TITLE);
+        return $this->getData(self::TITLE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPercent()
+    {
+        return $this->getData(self::PERCENT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAmount()
+    {
+        return $this->getData(self::AMOUNT);
     }
 
     /**
@@ -40,16 +58,33 @@ class GrandTotalRates extends AbstractSimpleObject implements GrandTotalRatesInt
     /**
      * {@inheritdoc}
      */
-    public function getPercent()
+    public function setPercent($percent)
     {
-        return $this->_get(self::PERCENT);
+        return $this->setData(self::PERCENT, $percent);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setPercent($percent)
+    public function setAmount($amount)
     {
-        return $this->setData(self::PERCENT, $percent);
+        return $this->setData(self::AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtensionAttributes(
+        \Magento\Tax\Api\Data\GrandTotalRatesExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

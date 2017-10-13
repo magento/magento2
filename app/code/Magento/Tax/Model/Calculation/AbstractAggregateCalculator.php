@@ -18,7 +18,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
             $this->taxClassManagement->getTaxClassId($item->getTaxClassKey())
         );
         $rate = $this->calculationTool->getRate($taxRateRequest);
-        $storeRate = $storeRate = $this->calculationTool->getStoreRate($taxRateRequest, $this->storeId);
+        $storeRate = $this->calculationTool->getStoreRate($taxRateRequest, $this->storeId);
 
         $discountTaxCompensationAmount = 0;
         $applyTaxAfterDiscount = $this->config->applyTaxAfterDiscount($this->storeId);
@@ -70,6 +70,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
         /** @var  \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes */
         $appliedRates = $this->calculationTool->getAppliedRates($taxRateRequest);
         $appliedTaxes = $this->getAppliedTaxes($rowTax, $rate, $appliedRates);
+        $appliedTaxes = $this->calculateAppliedTaxesRateAmounts($appliedTaxes);
 
         return $this->taxDetailsItemDataObjectFactory->create()
             ->setCode($item->getCode())
@@ -145,6 +146,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
             $rowTaxes[] = $rowTaxAfterDiscount;
             $rowTaxesBeforeDiscount[] = $rowTaxPerRate;
         }
+        $appliedTaxes = $this->calculateAppliedTaxesRateAmounts($appliedTaxes);
         $rowTax = array_sum($rowTaxes);
         $rowTaxBeforeDiscount = array_sum($rowTaxesBeforeDiscount);
         $rowTotalInclTax = $rowTotal + $rowTaxBeforeDiscount;

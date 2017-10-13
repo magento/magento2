@@ -88,6 +88,7 @@ class UnitBaseCalculator extends AbstractCalculator
         /** @var  \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes */
         $appliedRates = $this->calculationTool->getAppliedRates($taxRateRequest);
         $appliedTaxes = $this->getAppliedTaxes($rowTax, $rate, $appliedRates);
+        $appliedTaxes = $this->calculateAppliedTaxesRateAmounts($appliedTaxes);
 
         return $this->taxDetailsItemDataObjectFactory->create()
             ->setCode($item->getCode())
@@ -163,6 +164,7 @@ class UnitBaseCalculator extends AbstractCalculator
             $unitTaxes[] = $unitTaxAfterDiscount;
             $unitTaxesBeforeDiscount[] = $unitTaxPerRate;
         }
+        $appliedTaxes = $this->calculateAppliedTaxesRateAmounts($appliedTaxes);
         $unitTax = array_sum($unitTaxes);
         $unitTaxBeforeDiscount = array_sum($unitTaxesBeforeDiscount);
 

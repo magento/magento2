@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\Unit\Model\Quote;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -132,6 +132,10 @@ class GrandTotalDetailsPluginTest extends \PHPUnit\Framework\TestCase
             ->willReturn($taxRateMock);
 
         $taxRateMock->expects($this->once())
+            ->method('setAmount')
+            ->with($taxRate['amount'])
+            ->willReturnSelf();
+        $taxRateMock->expects($this->once())
             ->method('setPercent')
             ->with($taxRate['percent'])
             ->willReturnSelf();
@@ -172,8 +176,9 @@ class GrandTotalDetailsPluginTest extends \PHPUnit\Framework\TestCase
     public function testAfterProcess()
     {
         $taxRate = [
-            'percent' => 8.25,
             'title' => 'TX',
+            'percent' => 8.25,
+            'amount' => 1.06,
         ];
         $taxAmount = 10;
 
