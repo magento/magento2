@@ -12,12 +12,30 @@ namespace Magento\Sales\Model\Order;
  */
 class StatusTest extends \PHPUnit\Framework\TestCase
 {
+    public function theCorrectLabelIsUsedDependingOnTheAreaProvider()
+    {
+        return [
+            'backend label' => [
+                'adminhtml',
+                'Example',
+            ],
+            'store view label' => [
+                'frontend',
+                'Store view example',
+            ],
+        ];
+    }
+
     /**
      * In the backend the regular label must be showed.
      *
+     * @param $area
+     * @param $result
+     *
      * @magentoDataFixture Magento/Sales/_files/order_status.php
+     * @dataProvider theCorrectLabelIsUsedDependingOnTheAreaProvider
      */
-    public function testTheLabelIsUsedInTheBackend()
+    public function testTheCorrectLabelIsUsedDependingOnTheArea($area, $result)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('adminhtml');
@@ -27,22 +45,5 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         $order->loadByIncrementId('100000001');
 
         $this->assertEquals('Example', $order->getStatusLabel());
-    }
-
-    /**
-     * In the frontend the store view specific label must be showed.
-     *
-     * @magentoDataFixture Magento/Sales/_files/order_status.php
-     */
-    public function testTheStoreViewLabelIsUsedInTheFrontend()
-    {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
-
-        /** @var \Magento\Sales\Model\Order $order */
-        $order = $objectManager->create(\Magento\Sales\Model\Order::class);
-        $order->loadByIncrementId('100000001');
-
-        $this->assertEquals('Store view example', $order->getStatusLabel());
     }
 }
