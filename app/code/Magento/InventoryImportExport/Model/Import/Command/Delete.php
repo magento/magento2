@@ -6,9 +6,10 @@
 
 namespace Magento\InventoryImportExport\Model\Import\Command;
 
-use Magento\Inventory\Model\ResourceModel\SourceItem\DeleteMultiple  as SourceItemsDelete;
+use Magento\Inventory\Model\ResourceModel\SourceItem\DeleteMultiple as SourceItemsDelete;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
+use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
 use Magento\InventoryImportExport\Model\Import\Sources;
 
 /**
@@ -33,7 +34,7 @@ class Delete implements CommandInterface
      */
     public function __construct(
         SourceItemInterfaceFactory $sourceItemFactory,
-        SourceItemsDelete $sourceItemsDelete
+        SourceItemsDeleteInterface $sourceItemsDelete
     ) {
         $this->sourceItemFactory = $sourceItemFactory;
         $this->sourceItemsDelete = $sourceItemsDelete;

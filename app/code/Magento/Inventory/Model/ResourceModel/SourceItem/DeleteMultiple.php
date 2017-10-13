@@ -41,15 +41,18 @@ class DeleteMultiple
         if (!count($sourceItems)) {
             return;
         }
+
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
         $sourceIds = $this->getSourceIds($sourceItems);
-        $whereCond = [
-            $connection->quoteInto(SourceItemInterface::SOURCE_ID . ' IN(?)', $sourceIds)
-        ];
-
-        $connection->delete($tableName, $whereCond);
+        foreach ($sourceIds as $sourceId => $skuList) {
+            $whereCond = [
+                $connection->quoteInto(SourceItemInterface::SOURCE_ID . ' = ?', $sourceId),
+                $connection->quoteInto(SourceItemInterface::SKU . ' IN(?)', $skuList),
+            ];
+            $connection->delete($tableName, $whereCond);
+        }
     }
 
     /**
@@ -61,7 +64,7 @@ class DeleteMultiple
         $sourceIds = [];
 
         foreach ($sourceItems as $sourceItem) {
-            $sourceIds[] = $sourceItem->getSourceId();
+            $sourceIds[$sourceItem->getSourceId()][] = $sourceItem->getSku();
         }
 
         return $sourceIds;
