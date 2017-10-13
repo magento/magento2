@@ -72,7 +72,7 @@ class TransportBuilder
     /**
      * Message
      *
-     * @var \Magento\Framework\Mail\Message
+     * @var \Magento\Framework\Mail\MessageInterface
      */
     protected $message;
 
