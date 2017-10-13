@@ -14,7 +14,7 @@ use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Controller\Adminhtml\Order;
-use Magento\Sales\Model\Order\Address;
+use Magento\Sales\Model\Order\Address as AddressModel;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\App\Response\Http\FileFactory;
@@ -97,7 +97,7 @@ class AddressSave extends Order
     public function execute()
     {
         $addressId = $this->getRequest()->getParam('address_id');
-        /** @var $address OrderAddressInterface|Address */
+        /** @var $address OrderAddressInterface|AddressModel */
         $address = $this->_objectManager->create(
             OrderAddressInterface::class
         )->load($addressId);
