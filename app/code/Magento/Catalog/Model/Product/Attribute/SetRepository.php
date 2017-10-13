@@ -62,7 +62,7 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        $this->searchCriteriaBuilder->setFilterGroups($searchCriteria->getFilterGroups());
+        $this->searchCriteriaBuilder->setFilterGroups((array)$searchCriteria->getFilterGroups());
         $this->searchCriteriaBuilder->addFilters(
             [
                 $this->filterBuilder
