@@ -169,6 +169,14 @@ class InstallCommand extends AbstractSetupCommand
             }
         }
 
+        if ($inputOptions['interactive']) {
+            $command = '';
+            foreach ($configOptionsToValidate as $key => $value) {
+                $command .= " --{$key}={$value}";
+            }
+            $output->writeln("<comment>Try re-running command: php bin/magento setup:install{$command}</comment>");
+        }
+
         $errors = $this->configModel->validate($configOptionsToValidate);
         $errors = array_merge($errors, $this->adminUser->validate($input));
         $errors = array_merge($errors, $this->validate($input));
@@ -226,6 +234,8 @@ class InstallCommand extends AbstractSetupCommand
             );
         }
 
+        $output->writeln("");
+
         foreach ($this->userConfig->getOptionsList() as $option) {
             $configOptionsToValidate[$option->getName()] = $this->askQuestion(
                 $input,
@@ -235,6 +245,8 @@ class InstallCommand extends AbstractSetupCommand
             );
         }
 
+        $output->writeln("");
+
         foreach ($this->adminUser->getOptionsList() as $option) {
             $configOptionsToValidate[$option->getName()] = $this->askQuestion(
                 $input,
@@ -243,7 +255,17 @@ class InstallCommand extends AbstractSetupCommand
                 $option
             );
         }
-        return $configOptionsToValidate;
+
+        $output->writeln("");
+
+        $returnConfigOptionsToValidate = [];
+        foreach ($configOptionsToValidate as $key => $value) {
+            if ($value != '') {
+                $returnConfigOptionsToValidate[$key] = $value;
+            }
+        }
+
+        return $returnConfigOptionsToValidate;
     }
 
     /**
@@ -265,7 +287,7 @@ class InstallCommand extends AbstractSetupCommand
         $option,
         $validateInline = false
     ) {
-        if (get_class($option) === 'Magento\Framework\Setup\Option\SelectConfigOption') {
+        if ($option instanceof \Magento\Framework\Setup\Option\SelectConfigOption) {
             if ($option->isValueRequired()) {
                 $question = new ChoiceQuestion(
                     $option->getDescription() . '? ',
@@ -291,14 +313,18 @@ class InstallCommand extends AbstractSetupCommand
                     $option->getDefault()
                 );
             }
-
         }
 
         $question->setValidator(function ($answer) use ($option, $validateInline) {
-            $answer = trim($answer);
 
-            if (get_class($option) === 'Magento\Framework\Setup\Option\SelectConfigOption') {
+            if ($option instanceof \Magento\Framework\Setup\Option\SelectConfigOption) {
                 $answer = $option->getSelectOptions()[$answer];
+            }
+
+            if ($answer == null) {
+                $answer = '';
+            } else {
+                $answer = trim($answer);
             }
 
             if ($validateInline) {
