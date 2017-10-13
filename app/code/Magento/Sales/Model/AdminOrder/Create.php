@@ -10,6 +10,7 @@ namespace Magento\Sales\Model\AdminOrder;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Model\Metadata\Form as CustomerForm;
+use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 
@@ -324,7 +325,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->dataObjectHelper = $dataObjectHelper;
         $this->orderManagement = $orderManagement;
         $this->quoteFactory = $quoteFactory;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($data);
     }
@@ -1476,8 +1477,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         // not assigned billing address should be saved as new
         // but if quote already has the billing address it won't be overridden
         if (empty($billingAddress->getCustomerAddressId())) {
-            $quote->removeAddress($quote->getBillingAddress()->getId());
             $billingAddress->setCustomerAddressId(null);
+            $quote->getBillingAddress()->setCustomerAddressId(null);
         }
         $quote->setBillingAddress($billingAddress);
 
