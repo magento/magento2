@@ -215,11 +215,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\Eav\Model\Config
-     */
-    private $_eavConfig;
-
-    /**
      * @var \Magento\Sales\Model\Order\Status\HistoryFactory
      */
     protected $_orderHistoryFactory;
@@ -309,6 +304,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param array $data
      * @param ResolverInterface $localeResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -349,7 +345,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->_productVisibility = $productVisibility;
         $this->invoiceManagement = $invoiceManagement;
         $this->_currencyFactory = $currencyFactory;
-        $this->_eavConfig = $eavConfig;
         $this->_orderHistoryFactory = $orderHistoryFactory;
         $this->_addressCollectionFactory = $addressCollectionFactory;
         $this->_paymentCollectionFactory = $paymentCollectionFactory;
