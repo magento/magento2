@@ -170,6 +170,12 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
                 ->method($method)
                 ->will($this->returnSelf());
         }
+
+        $this->transportBuilder->expects($this->any())
+            ->method('setScopeId')
+            ->with(1)
+            ->willReturnSelf();
+
         $transportMock = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);
         $transportMock->expects($this->once())
             ->method('sendMessage')

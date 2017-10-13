@@ -172,6 +172,16 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->_transportBuilder->expects(
             $this->once()
         )->method(
+            'setScopeId'
+        )->with(
+            1
+        )->will(
+            $this->returnSelf()
+        );
+
+        $this->_transportBuilder->expects(
+            $this->once()
+        )->method(
             'setFrom'
         )->with(
             'noreply@example.com'
