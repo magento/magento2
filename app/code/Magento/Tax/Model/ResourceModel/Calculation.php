@@ -190,6 +190,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ) || $rates[$i + 1]['priority'] != $priority || isset(
                 $rates[$i + 1]['process']
             ) && $rates[$i + 1]['process'] != $rate['process']
+            || $rates[$i + 1]['code'] != $rate['code']
             ) {
                 if (!empty($rates[$i]['calculate_subtotal'])) {
                     $row['percent'] = $currentRate;
