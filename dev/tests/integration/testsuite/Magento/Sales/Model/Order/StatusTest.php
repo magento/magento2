@@ -38,12 +38,12 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     public function testTheCorrectLabelIsUsedDependingOnTheArea($area, $result)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('adminhtml');
+        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode($area);
 
         /** @var \Magento\Sales\Model\Order $order */
         $order = $objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
 
-        $this->assertEquals('Example', $order->getStatusLabel());
+        $this->assertEquals($result, $order->getStatusLabel());
     }
 }
