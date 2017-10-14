@@ -38,8 +38,7 @@ class Alerts extends AbstractModifier
      * @var LayoutFactory
      */
     private $layoutFactory;
-
-
+    
     /**
      * Alerts constructor.
      * @param ScopeConfigInterface $scopeConfig
