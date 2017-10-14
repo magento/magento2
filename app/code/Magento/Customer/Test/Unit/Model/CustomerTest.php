@@ -171,7 +171,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
                 ->will($this->returnSelf());
         }
 
-        $this->transportBuilder->expects($this->any())
+        $this->_transportBuilderMock->expects($this->any())
             ->method('setScopeId')
             ->with(1)
             ->willReturnSelf();
