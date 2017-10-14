@@ -479,9 +479,9 @@ Strong,Strong
 "The title that goes before name (Mr., Mrs., etc.)","The title that goes before name (Mr., Mrs., etc.)"
 "Prefix Dropdown Options","Prefix Dropdown Options"
 "
-                        Semicolon (;) separated values.<br/>Put semicolon in the beginning for empty first option.<br/>Leave empty for open text field.
+                        Semicolon (;) separated values.<br/>Leave empty for open text field.
                     ","
-                        Semicolon (;) separated values.<br/>Put semicolon in the beginning for empty first option.<br/>Leave empty for open text field.
+                        Semicolon (;) separated values.<br/>Leave empty for open text field.
                     "
 "Show Middle Name (initial)","Show Middle Name (initial)"
 "Always optional.","Always optional."
