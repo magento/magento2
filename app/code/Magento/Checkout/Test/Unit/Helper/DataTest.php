@@ -171,7 +171,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setScopeId'
         )->with(
-            1
+            8
         )->will(
             $this->returnSelf()
         );
