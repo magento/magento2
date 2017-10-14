@@ -112,3 +112,26 @@
     padding: 1.5rem 0 2rem 7rem;
   }
 }
+
+.lib-modal-popup() {
+  -webkit-transition: visibility 0s .5s, opacity .5s ease;
+  transition: visibility 0s .5s, opacity .5s ease;
+
+  &._show {
+    visibility: visible;
+    opacity: 1;
+    -webkit-transition: opacity .5s ease;
+    transition: opacity .5s ease;
+  }
+
+  .modal-inner-wrap {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    -webkit-transition: -webkit-transform 0s;
+    transition: transform 0s;
+    .lib-css(background-color, @modal__background-color);
+    .lib-css(box-shadow, @modal__box-shadow);
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
