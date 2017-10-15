@@ -7,13 +7,18 @@
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
+use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Url\Helper\Data;
 
 /**
  * Product list
@@ -33,7 +38,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * Product Collection
      *
-     * @var AbstractCollection
+     * @var \Magento\Eav\Model\Entity\Collection\AbstractCollection
      */
     protected $_productCollection;
 
@@ -55,30 +60,39 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     protected $urlHelper;
 
     /**
-     * @var CategoryRepositoryInterface
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
      */
     protected $categoryRepository;
 
     /**
-     * @param Context $context
+     * @var \Magento\Catalog\Helper\Product\ProductList
+     */
+    protected $productListHelper;
+
+    /**
+     * 
+     * @param \Magento\Catalog\Helper\Product\ProductList $productListHelper
+     * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
-     * @param CategoryRepositoryInterface $categoryRepository
+     * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
-        \Magento\Catalog\Model\Layer\Resolver $layerResolver,
+        ProductList $productListHelper,
+        Context $context,
+        PostHelper $postDataHelper,
+        Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
-        \Magento\Framework\Url\Helper\Data $urlHelper,
+        Data $urlHelper,
         array $data = []
     ) {
         $this->_catalogLayer = $layerResolver->get();
         $this->_postDataHelper = $postDataHelper;
         $this->categoryRepository = $categoryRepository;
         $this->urlHelper = $urlHelper;
+        $this->productListHelper = $productListHelper;
         parent::__construct(
             $context,
             $data
@@ -137,7 +151,12 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     public function getMode()
     {
-        return $this->getChildBlock('toolbar')->getCurrentMode();
+        if ($this->getChildBlock('toolbar')) {
+            return $this->getChildBlock('toolbar')->getCurrentMode();
+        }
+        // if toolbar is removed from layout, use the general configuration for product list mode
+        // - config path catalog/frontend/list_mode
+        return $this->productListHelper->getDefaultViewMode($this->getModes());
     }
 
     /**
@@ -148,27 +167,43 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     protected function _beforeToHtml()
     {
         $collection = $this->_getProductCollection();
-        $this->configureToolbar($this->getToolbarBlock(), $collection);
+
+        $this->addToobarBlock($collection);
+
         $collection->load();
 
         return parent::_beforeToHtml();
     }
 
     /**
+     * Add toolbar block to product listing
+     *
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     */
+    private function addToobarBlock(Collection $collection)
+    {
+        $toolbar = $this->getToolbarBlock();
+        if ($toolbar) {
+            $this->configureToolbar($toolbar, $collection);
+        }
+    }
+
+    /**
      * Retrieve Toolbar block
      *
-     * @return Toolbar
+     * @return Toolbar|false
      */
     public function getToolbarBlock()
     {
+        $block = false;
+
         $blockName = $this->getToolbarBlockName();
-        if ($blockName) {
-            $block = $this->getLayout()->getBlock($blockName);
-            if ($block) {
-                return $block;
-            }
+        if (!$blockName) {
+            return $block;
         }
-        $block = $this->getLayout()->createBlock($this->_defaultToolbarBlock, uniqid(microtime()));
+
+        $block = $this->getLayout()->getBlock($blockName);
+
         return $block;
     }
 
@@ -386,9 +421,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         if ($origCategory) {
             $layer->setCurrentCategory($origCategory);
         }
-
-        $toolbar = $this->getToolbarBlock();
-        $this->configureToolbar($toolbar, $collection);
+        
+        $this->addToobarBlock($collection);
 
         $this->_eventManager->dispatch(
             'catalog_block_product_list_collection',
