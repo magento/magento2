@@ -27,6 +27,9 @@ class SourceItemsSaveTest extends WebapiAbstract
     /**#@-*/
 
     /**
+     * @todo need to clear source items after test
+     * @see https://github.com/magento-engcom/msi/issues/135
+     * 
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @covers \Magento\InventoryApi\Api\SourceItemsSaveInterface::execute
