@@ -7,6 +7,10 @@ namespace Magento\Sitemap\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Class ObserverTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
