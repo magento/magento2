@@ -158,6 +158,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
 
     /**
      * Retrieve is secure mode for ULR logic
+     * If secure mode is not set up, use default magento behavior
      *
      * @return bool
      */
@@ -166,7 +167,10 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         if ($this->hasData('secure_is_forced')) {
             return $this->getData('secure');
         }
-        return $this->_scopeConfig->isSetFlag('web/secure/use_in_adminhtml');
+		if($this->_scopeConfig->isSetFlag('web/secure/use_in_adminhtml')){
+			return $this->getData('secure');
+		}
+        return parent::_isSecure();
     }
 
     /**
