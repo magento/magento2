@@ -111,7 +111,9 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$this->sitemapMock]));
 
-        $this->sitemapMock->expects($this->once())->method('generateXml')->willThrowException(new \Exception($exception));
+        $this->sitemapMock->expects($this->once())
+            ->method('generateXml')
+            ->willThrowException(new \Exception($exception));
 
         $this->scopeConfigMock->expects($this->at(1))
             ->method('getValue')
