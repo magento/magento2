@@ -82,22 +82,14 @@ class Alert extends \Magento\Framework\App\Config\Value
         $cronExprString = join(' ', $cronExprArray);
 
         try {
-            $this->_configValueFactory->create()->load(
-                self::CRON_STRING_PATH,
-                'path'
-            )->setValue(
-                $cronExprString
-            )->setPath(
-                self::CRON_STRING_PATH
-            )->save();
-            $this->_configValueFactory->create()->load(
-                self::CRON_MODEL_PATH,
-                'path'
-            )->setValue(
-                $this->_runModelPath
-            )->setPath(
-                self::CRON_MODEL_PATH
-            )->save();
+            $cronStringPath = $this->_configValueFactory->create()->load(self::CRON_STRING_PATH, 'path');
+            $cronStringPath->setValue($cronExprString);
+            $cronStringPath->setPath(self::CRON_STRING_PATH);
+            $cronStringPath->save();
+            $cronModelPath = $this->_configValueFactory->create()->load(self::CRON_MODEL_PATH, 'path');
+            $cronModelPath->setValue($this->_runModelPath);
+            $cronModelPath->setPath(self::CRON_MODEL_PATH);
+            $cronModelPath->save();
         } catch (\Exception $e) {
             throw new \Exception(__('We can\'t save the cron expression.'));
         }
