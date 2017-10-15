@@ -9,15 +9,11 @@ namespace Magento\InventoryApi\Test\Api\SourceItemRepository;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\TestFramework\Assert\AssertArrayContains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class GetListTest
- * @package Magento\InventoryApi\Test\Api\SourceItemRepository
  * @covers Magento\InventoryApi\Api\SourceItemRepositoryInterface
  */
 class GetListTest extends WebapiAbstract
