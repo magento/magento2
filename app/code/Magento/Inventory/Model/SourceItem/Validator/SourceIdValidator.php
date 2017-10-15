@@ -7,7 +7,6 @@ namespace Magento\Inventory\Model\SourceItem\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Inventory\Model\Source\Validator\SourceItemValidatorInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
@@ -36,7 +35,7 @@ class SourceIdValidator implements SourceItemValidatorInterface
         $errors = [];
         if (!is_numeric($source->getSourceId())) {
             $errors[] = __(
-                '"%field" should be numeric',
+                '"%field" should be numeric.',
                 ['field' => SourceItemInterface::SOURCE_ID]
             );
         }

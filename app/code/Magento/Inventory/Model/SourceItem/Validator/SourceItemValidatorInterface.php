@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Model\Source\Validator;
+namespace Magento\Inventory\Model\SourceItem\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;

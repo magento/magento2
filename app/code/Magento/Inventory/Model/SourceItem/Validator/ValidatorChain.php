@@ -8,7 +8,6 @@ namespace Magento\Inventory\Model\SourceItem\Validator;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Inventory\Model\Source\Validator\SourceItemValidatorInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**

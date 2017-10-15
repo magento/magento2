@@ -7,7 +7,6 @@ namespace Magento\Inventory\Model\SourceItem\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
-use Magento\Inventory\Model\Source\Validator\SourceItemValidatorInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
@@ -36,7 +35,7 @@ class SkuValidator implements SourceItemValidatorInterface
         $errors = [];
         if ('' === trim((string)$source->getSku())) {
             $errors[] = __(
-                '"%field" can not be empt',
+                '"%field" can not be empt.',
                 ['field' => SourceItemInterface::SKU]
             );
         }

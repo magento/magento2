@@ -8,7 +8,6 @@ namespace Magento\Inventory\Model\SourceItem\Validator;
 use Magento\Framework\Validation\ValidationResult;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Inventory\Model\OptionSource\SourceItemStatus;
-use Magento\Inventory\Model\Source\Validator\SourceItemValidatorInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
@@ -50,7 +49,7 @@ class StatusValidator implements SourceItemValidatorInterface
         $errors = [];
         if (!in_array($value, $allowedStatus)) {
             $errors[] = __(
-                '"%field" should be of status ' . implode(', ', $allowedStatus),
+                '"%field" should a known status.',
                 ['field' => SourceItemInterface::STATUS]
             );
         }
