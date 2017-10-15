@@ -167,9 +167,9 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         if ($this->hasData('secure_is_forced')) {
             return $this->getData('secure');
         }
-		if($this->_scopeConfig->isSetFlag('web/secure/use_in_adminhtml')){
-			return $this->getData('secure');
-		}
+        if($this->_scopeConfig->isSetFlag('web/secure/use_in_adminhtml')){
+            return $this->getData('secure');
+        }
         return parent::_isSecure();
     }
 
