@@ -35,7 +35,7 @@ class SkuValidator implements SourceItemValidatorInterface
         $errors = [];
         if ('' === trim((string)$source->getSku())) {
             $errors[] = __(
-                '"%field" can not be empt.',
+                '"%field" can not be empty.',
                 ['field' => SourceItemInterface::SKU]
             );
         }

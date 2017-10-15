@@ -315,7 +315,7 @@ class ValidationTest extends WebapiAbstract
     private function webApiCall(array $serviceInfo, array $data, array $expectedErrorData)
     {
         try {
-            $this->_webApiCall($serviceInfo, ['source' => $data]);
+            $this->_webApiCall($serviceInfo, ['sourceItems' => [$data]]);
             $this->fail('Expected throwing exception');
         } catch (\Exception $exception) {
             if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {

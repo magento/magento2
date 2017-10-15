@@ -10,7 +10,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Inventory\Model\ResourceModel\SourceItem\SaveMultiple;
-use Magento\Inventory\Model\Source\Validator\SourceItemValidatorInterface;
+use Magento\Inventory\Model\SourceItem\Validator\SourceItemValidatorInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Psr\Log\LoggerInterface;
 
