@@ -23,7 +23,7 @@ class SourceItemsSaveTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/source-items';
-    const SERVICE_NAME = 'inventoryApiSourceItemRepositoryV1';
+    const SERVICE_NAME = 'inventoryApiSourceItemsSaveV1';
     /**#@-*/
 
     /**
@@ -77,37 +77,33 @@ class SourceItemsSaveTest extends WebapiAbstract
      */
     public function testExecuteWithEmptyData()
     {
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => Request::HTTP_METHOD_POST,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'execute',
-            ],
-        ];
-
-        $expectedMessage = 'Input data is empty';
-        try {
-            $this->_webApiCall($serviceInfo, [ 'sourceItems' => [], ]);
-
-            $this->fail('Expected throwing exception');
-        } catch (\Exception $exception) {
-            if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
-                $errorData = $this->processRestExceptionResult($exception);
-                self::assertEquals($expectedMessage, $errorData['message']);
-                self::assertEquals(Exception::HTTP_BAD_REQUEST, $exception->getCode());
-            } elseif (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
-                $this->assertInstanceOf('SoapFault', $exception);
-                $this->checkSoapFault($exception, $expectedMessage, 'env:Sender');
-            } else {
-                throw $exception;
-            }
-        }
+        $this->callWebApi(
+            [ 'sourceItems' => []]
+            , 'Input data is empty'
+        );
     }
 
-    private function getAssertionResults()
+    /**
+     * @covers \Magento\InventoryApi\Api\SourceItemsSaveInterface::execute
+     */
+    public function testExecuteWithIncorrectData()
+    {
+        // no source exists
+        $this->callWebApi(
+            [ 'sourceItems' => [[
+                SourceItemInterface::SOURCE_ID => 10,
+                SourceItemInterface::SKU => 'SKU-1',
+                SourceItemInterface::QUANTITY => 5.5,
+                SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
+            ]]]
+            , 'Could not save Source Item'
+        );
+    }
+
+    /**
+     * @return array
+     */
+    private function getAssertionResults(): array
     {
         $requestData = [
             'searchCriteria' => [
@@ -144,5 +140,41 @@ class SourceItemsSaveTest extends WebapiAbstract
         return (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    /**
+     * @param array $requestData
+     * @param string $expectedMessage
+     * @throws \Exception
+     */
+    private function callWebApi(array $requestData, string $expectedMessage)
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'execute',
+            ],
+        ];
+
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+
+            $this->fail('Expected throwing exception');
+        } catch (\Exception $exception) {
+            if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
+                $errorData = $this->processRestExceptionResult($exception);
+                self::assertEquals($expectedMessage, $errorData['message']);
+                self::assertEquals(Exception::HTTP_BAD_REQUEST, $exception->getCode());
+            } elseif (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+                $this->assertInstanceOf('SoapFault', $exception);
+                $this->checkSoapFault($exception, $expectedMessage, 'env:Sender');
+            } else {
+                throw $exception;
+            }
+        }
     }
 }
