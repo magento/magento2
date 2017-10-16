@@ -163,7 +163,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
         // layout config mode
         $mode = $this->getData('mode');
-        if (!$mode && !isset($availableModes[$mode])) {
+
+        if (!$mode || !isset($availableModes[$mode])) {
             // default config mode
             $mode = $defaultToolbar->getCurrentMode();
         }
@@ -194,13 +195,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     private function addToolbarBlock(Collection $collection)
     {
-        $toolbarLayout = false;
-
-        $blockName = $this->getToolbarBlockName();
-
-        if ($blockName) {
-            $toolbarLayout = $this->getLayout()->getBlock($blockName);
-        }
+        $toolbarLayout = $this->getToolbarFromLayout();
 
         if ($toolbarLayout) {
             $this->configureToolbar($toolbarLayout, $collection);
@@ -214,17 +209,31 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     public function getToolbarBlock()
     {
-        $blockName = $this->getToolbarBlockName();
-
-        if ($blockName) {
-            $block = $this->getLayout()->getBlock($blockName);
-        }
+        $block = $this->getToolbarFromLayout();
 
         if (!$block) {
             $block = $this->getLayout()->createBlock($this->_defaultToolbarBlock, uniqid(microtime()));
         }
 
         return $block;
+    }
+
+    /**
+     * Get toolbar block from layout
+     *
+     * @return bool|Toolbar
+     */
+    private function getToolbarFromLayout()
+    {
+        $blockName = $this->getToolbarBlockName();
+
+        $toolbarLayout = false;
+
+        if ($blockName) {
+            $toolbarLayout = $this->getLayout()->getBlock($blockName);
+        }
+
+        return $toolbarLayout;
     }
 
     /**
