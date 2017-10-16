@@ -179,10 +179,10 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
     protected function _setRouteParams(array $data, $unsetOldParams = true)
     {
         if (isset($data['_nosecret'])) {
-            $this->setNoSecret(true);
+            $this->turnOffSecretKey();
             unset($data['_nosecret']);
         } else {
-            $this->setNoSecret(false);
+            $this->turnOnSecretKey();
         }
         unset($data['_scope_to_url']);
         return parent::_setRouteParams($data, $unsetOldParams);
