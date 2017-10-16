@@ -7,6 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Image;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -44,6 +45,26 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     protected $themeCollection;
 
     /**
+     * @var \Magento\Theme\Model\Config\Customization|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $themeCustomizationConfig;
+
+    /**
+     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eavConfig;
+
+    /**
+     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $attribute;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectManagerInterface;
+
+    /**
      * @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $imageHelper;
@@ -74,6 +95,22 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->themeCustomizationConfig = $this->getMockBuilder(\Magento\Theme\Model\Config\Customization::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->objectManagerInterface = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->mediaGalleryCollection = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -84,7 +121,11 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             [
                 'viewConfig' => $this->viewConfig,
                 'themeCollection' => $this->themeCollection,
+                'themeCustomizationConfig' => $this->themeCustomizationConfig,
                 'imageHelper' => $this->imageHelper,
+                'config' => $this->eavConfig,
+                'attribute' => $this->attribute,
+                'objectManager' => $this->objectManagerInterface
             ]
         );
     }
@@ -125,6 +166,10 @@ class CacheTest extends \PHPUnit\Framework\TestCase
         $this->themeCollection->expects($this->once())
             ->method('loadRegisteredThemes')
             ->willReturn([$themeMock]);
+
+        $this->themeCustomizationConfig->expects($this->once())
+            ->method('getStoresByThemes')
+            ->willReturn([$themeMock->getThemeId() => [1]]);
 
         $this->viewConfig->expects($this->once())
             ->method('getViewConfig')

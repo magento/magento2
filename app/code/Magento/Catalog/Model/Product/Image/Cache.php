@@ -8,8 +8,12 @@ namespace Magento\Catalog\Model\Product\Image;
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Product;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
+use Magento\Theme\Model\Config\Customization as ThemeCustomizationConfig;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\ConfigInterface;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\ObjectManagerInterface;
 
 class Cache
 {
@@ -24,9 +28,29 @@ class Cache
     protected $themeCollection;
 
     /**
+     * @var ThemeCustomizationConfig
+     */
+    protected $themeCustomizationConfig;
+
+    /**
      * @var ImageHelper
      */
     protected $imageHelper;
+
+    /**
+     * @var Config
+     */
+    protected $eavConfig;
+
+    /**
+     * @var Attribute
+     */
+    protected $attribute;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    protected $objectManager;
 
     /**
      * @var array
@@ -41,11 +65,19 @@ class Cache
     public function __construct(
         ConfigInterface $viewConfig,
         ThemeCollection $themeCollection,
-        ImageHelper $imageHelper
+        ImageHelper $imageHelper,
+        ThemeCustomizationConfig $themeCustomizationConfig,
+        Config $eavConfig,
+        Attribute $attribute,
+        ObjectManagerInterface $objectManager
     ) {
         $this->viewConfig = $viewConfig;
         $this->themeCollection = $themeCollection;
         $this->imageHelper = $imageHelper;
+        $this->themeCustomizationConfig = $themeCustomizationConfig;
+        $this->eavConfig = $eavConfig;
+        $this->attribute = $attribute;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -58,8 +90,10 @@ class Cache
     protected function getData()
     {
         if (!$this->data) {
+            $themesInUse = $this->getThemesInUse();
+
             /** @var \Magento\Theme\Model\Theme $theme */
-            foreach ($this->themeCollection->loadRegisteredThemes() as $theme) {
+            foreach ($themesInUse as $theme) {
                 $config = $this->viewConfig->getViewConfig([
                     'area' => Area::AREA_FRONTEND,
                     'themeModel' => $theme,
@@ -126,5 +160,88 @@ class Cache
         $this->imageHelper->save();
 
         return $this;
+    }
+
+    /**
+     * Get themes in use
+     *
+     * @return array
+     */
+    public function getThemesInUse()
+    {
+        $themesInUse = [];
+
+        $registeredThemes = $this->themeCollection->loadRegisteredThemes();
+        $storesByThemes   = $this->themeCustomizationConfig->getStoresByThemes();
+
+        foreach ($registeredThemes as $registeredTheme) {
+            if (array_key_exists($registeredTheme->getThemeId(), $storesByThemes)) {
+                $themesInUse[] = $registeredTheme;
+            }
+        }
+
+        $resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);
+
+        $productCustomDesignAttributeId = $this->attribute->loadByCode(4, 'custom_design')->getId();
+
+        $productSql = $resource->getConnection()
+            ->select()
+            ->from(
+                ['eav' => $resource->getTableName('catalog_product_entity_varchar')],
+                ['value']
+            )
+            ->where('eav.attribute_id = ?', $productCustomDesignAttributeId)
+            ->where('eav.value > 0')
+            ->group('value');
+
+        $productThemeIds = $resource->getConnection()->fetchCol($productSql);
+
+        foreach ($productThemeIds as $productThemeId) {
+            if (array_key_exists($productThemeId, $storesByThemes)
+                && !array_key_exists($productThemeId, $themesInUse) ) {
+                $themesInUse[] = $this->themeCollection->load($productThemeId);
+            }
+        }
+
+        $categoryCustomDesignAttributeId = $this->attribute->loadByCode(3, 'custom_design')->getId();
+
+        $categorySql = $resource->getConnection()
+            ->select()
+            ->from(
+                ['eav' => $resource->getTableName('catalog_category_entity_varchar')],
+                ['value']
+            )
+            ->where('eav.attribute_id = ?', $categoryCustomDesignAttributeId)
+            ->where('eav.value > 0')
+            ->group('value');
+
+        $categoryThemeIds = $resource->getConnection()->fetchCol($categorySql);
+
+        foreach ($categoryThemeIds as $categoryThemeId) {
+            if (array_key_exists($categoryThemeId, $storesByThemes)
+                && !array_key_exists($categoryThemeId, $themesInUse) ) {
+                $themesInUse[] = $this->themeCollection->load($categoryThemeId);
+            }
+        }
+
+        $pageSql = $resource->getConnection()
+            ->select()
+            ->from(
+                ['page' => $resource->getTableName('cms_page')],
+                ['custom_theme']
+            )
+            ->where('custom_theme > 0')
+            ->group('custom_theme');
+
+        $pageThemeIds = $resource->getConnection()->fetchCol($pageSql);
+
+        foreach ($pageThemeIds as $pageThemeId) {
+            if (array_key_exists($pageThemeId, $storesByThemes)
+                && !array_key_exists($pageThemeId, $themesInUse) ) {
+                $themesInUse[] = $this->themeCollection->load($pageThemeId);
+            }
+        }
+
+        return $themesInUse;
     }
 }
