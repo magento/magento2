@@ -393,12 +393,14 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      */
     public function subscribe($email)
     {
-        $sendInformationEmail = false;
         $this->loadByEmail($email);
+
+        if ($this->getId() && $this->getStatus() == self::STATUS_SUBSCRIBED) {
+            return $this->getStatus();
+        }
 
         if (!$this->getId()) {
             $this->setSubscriberConfirmCode($this->randomSequence());
-            $sendInformationEmail = true;
         }
 
         $isConfirmNeed = $this->_scopeConfig->getValue(
