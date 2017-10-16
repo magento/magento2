@@ -168,7 +168,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
             return $this->getData('secure');
         }
         if ($this->_scopeConfig->isSetFlag('web/secure/use_in_adminhtml')) {
-            return $this->getData('secure');
+            return true;
         }
         return parent::_isSecure();
     }
