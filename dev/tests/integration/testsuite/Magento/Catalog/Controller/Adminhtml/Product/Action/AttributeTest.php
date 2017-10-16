@@ -24,25 +24,17 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->dispatch('backend/catalog/product_action_attribute/save/store/0');
 
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
-        /** @var \Magento\Backend\Model\UrlInterface $urlBuilder */
-        $urlBuilder = $this->_objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
 
         /** @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper */
         $attributeHelper = $this->_objectManager->get(\Magento\Catalog\Helper\Product\Edit\Action\Attribute::class);
 
-        $expectedUrl = $urlBuilder->getUrl(
+        $this->_urlBuilder->turnOffSecretKey();
+        $expectedUrl = $this->_urlBuilder->getUrl(
             'catalog/product/index',
             ['store' => $attributeHelper->getSelectedStoreId()]
         );
 
-        $isRedirectPresent = false;
-        foreach ($this->getResponse()->getHeaders() as $header) {
-            if ($header->getFieldName() === 'Location' && strpos($header->getFieldValue(), $expectedUrl) === 0) {
-                $isRedirectPresent = true;
-            }
-        }
-
-        $this->assertTrue($isRedirectPresent);
+        $this->assertRedirect($this->stringStartsWith($expectedUrl));
     }
 
     /**
