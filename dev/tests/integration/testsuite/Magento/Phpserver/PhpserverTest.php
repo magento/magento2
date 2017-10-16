@@ -15,7 +15,7 @@ namespace Magento\Phpserver;
  *
  * @magentoAppArea frontend
  */
-class PhpserverTest extends \PHPUnit_Framework_TestCase
+class PhpserverTest extends \PHPUnit\Framework\TestCase
 {
 
     const BASE_URL = '127.0.0.1:8082';
