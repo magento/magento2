@@ -150,6 +150,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/ups/specificerrmsg' => 'ups error message',
             'carriers/ups/min_package_weight' => 2,
             'carriers/ups/type' => 'UPS',
+            'carriers/ups/active' => true
         ];
 
         return isset($pathMap[$path]) ? $pathMap[$path] : null;
@@ -240,6 +241,20 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $request->setPackageWeight(1);
 
         $this->assertSame($this->rate, $this->model->collectRates($request));
+    }
+
+    public function testFreeShippingIsActive()
+    {
+        $this->scope->expects($this->once())->method('isSetFlag')->willReturn(true);
+
+        $request = new \Magento\Quote\Model\Quote\Address\RateRequest();
+        $request->setPackageWeight(1);
+        $request->setFreeMethodWeight(2);
+        $request->setBaseSubtotalInclTax(10);
+        $this->model->setRawRequest($request);
+        $result = $this->model->collectRates($request);
+
+        $this->assertSame($this->rate, $result[0]);
     }
 
     /**

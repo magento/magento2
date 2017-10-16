@@ -97,16 +97,18 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                         $rowWeight = $itemWeight * $itemQty;
                         $addressWeight += $rowWeight;
                         if ($addressFreeShipping || $child->getFreeShipping() === true) {
+                            $freeMethodWeight += $rowWeight;
                             $rowWeight = 0;
                         } elseif (is_numeric($child->getFreeShipping())) {
                             $freeQty = $child->getFreeShipping();
                             if ($itemQty > $freeQty) {
                                 $rowWeight = $itemWeight * ($itemQty - $freeQty);
+                                $freeMethodWeight += $itemWeight * $freeQty;
                             } else {
+                                $freeMethodWeight += $rowWeight;
                                 $rowWeight = 0;
                             }
                         }
-                        $freeMethodWeight += $rowWeight;
                         $item->setRowWeight($rowWeight);
                     }
                 }
@@ -115,16 +117,18 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                     $rowWeight = $itemWeight * $item->getQty();
                     $addressWeight += $rowWeight;
                     if ($addressFreeShipping || $item->getFreeShipping() === true) {
+                        $freeMethodWeight += $rowWeight;
                         $rowWeight = 0;
                     } elseif (is_numeric($item->getFreeShipping())) {
                         $freeQty = $item->getFreeShipping();
                         if ($item->getQty() > $freeQty) {
                             $rowWeight = $itemWeight * ($item->getQty() - $freeQty);
+                            $freeMethodWeight += $itemWeight * $freeQty;
                         } else {
+                            $freeMethodWeight += $rowWeight;
                             $rowWeight = 0;
                         }
                     }
-                    $freeMethodWeight += $rowWeight;
                     $item->setRowWeight($rowWeight);
                 }
             } else {
@@ -135,16 +139,18 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 $rowWeight = $itemWeight * $item->getQty();
                 $addressWeight += $rowWeight;
                 if ($addressFreeShipping || $item->getFreeShipping() === true) {
+                    $freeMethodWeight += $rowWeight;
                     $rowWeight = 0;
                 } elseif (is_numeric($item->getFreeShipping())) {
                     $freeQty = $item->getFreeShipping();
                     if ($item->getQty() > $freeQty) {
                         $rowWeight = $itemWeight * ($item->getQty() - $freeQty);
+                        $freeMethodWeight += $itemWeight * $freeQty;
                     } else {
+                        $freeMethodWeight += $rowWeight;
                         $rowWeight = 0;
                     }
                 }
-                $freeMethodWeight += $rowWeight;
                 $item->setRowWeight($rowWeight);
             }
         }
