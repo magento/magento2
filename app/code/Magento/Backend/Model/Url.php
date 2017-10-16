@@ -207,7 +207,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
                 ];
             }
             if (is_array($routeParams)) {
-                $routeParams = array_merge($secret, $routeParams);
+                $routeParams = array_merge($routeParams, $secret);
             } else {
                 $routeParams = $secret;
             }
