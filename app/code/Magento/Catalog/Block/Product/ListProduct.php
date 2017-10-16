@@ -9,7 +9,6 @@ namespace Magento\Catalog\Block\Product;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
-use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product;
@@ -65,13 +64,6 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     protected $categoryRepository;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\ProductList
-     */
-    protected $productListHelper;
-
-    /**
-     * 
-     * @param \Magento\Catalog\Helper\Product\ProductList $productListHelper
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
@@ -80,7 +72,6 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * @param array $data
      */
     public function __construct(
-        ProductList $productListHelper,
         Context $context,
         PostHelper $postDataHelper,
         Resolver $layerResolver,
@@ -92,7 +83,6 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         $this->_postDataHelper = $postDataHelper;
         $this->categoryRepository = $categoryRepository;
         $this->urlHelper = $urlHelper;
-        $this->productListHelper = $productListHelper;
         parent::__construct(
             $context,
             $data
@@ -154,9 +144,31 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         if ($this->getChildBlock('toolbar')) {
             return $this->getChildBlock('toolbar')->getCurrentMode();
         }
-        // if toolbar is removed from layout, use the general configuration for product list mode
-        // - config path catalog/frontend/list_mode
-        return $this->productListHelper->getDefaultViewMode($this->getModes());
+
+        return $this->getDefaultListingMode();
+    }
+
+    /**
+     * Get listing mode for products if toolbar is removed from layout.
+     * Use the general configuration for product list mode from config path catalog/frontend/list_mode as default value
+    // or mode data from block declaration from layout.
+     *
+     * @return string
+     */
+    private function getDefaultListingMode()
+    {
+        // default Toolbar when the toolbar layout is not used
+        $defaultToolbar = $this->getToolbarBlock();
+        $availableModes = $defaultToolbar->getModes();
+
+        // layout config mode
+        $mode = $this->getData('mode');
+        if (!$mode && !isset($availableModes[$mode])) {
+            // default config mode
+            $mode = $defaultToolbar->getCurrentMode();
+        }
+
+        return $mode;
     }
 
     /**
@@ -168,7 +180,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     {
         $collection = $this->_getProductCollection();
 
-        $this->addToobarBlock($collection);
+        $this->addToolbarBlock($collection);
 
         $collection->load();
 
@@ -176,33 +188,41 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
-     * Add toolbar block to product listing
+     * Add toolbar block from product listing layout
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      */
-    private function addToobarBlock(Collection $collection)
+    private function addToolbarBlock(Collection $collection)
     {
-        $toolbar = $this->getToolbarBlock();
-        if ($toolbar) {
-            $this->configureToolbar($toolbar, $collection);
+        $toolbarLayout = false;
+
+        $blockName = $this->getToolbarBlockName();
+
+        if ($blockName) {
+            $toolbarLayout = $this->getLayout()->getBlock($blockName);
+        }
+
+        if ($toolbarLayout) {
+            $this->configureToolbar($toolbarLayout, $collection);
         }
     }
 
     /**
-     * Retrieve Toolbar block
+     * Retrieve Toolbar block from layout or a default Toolbar
      *
-     * @return Toolbar|false
+     * @return Toolbar
      */
     public function getToolbarBlock()
     {
-        $block = false;
-
         $blockName = $this->getToolbarBlockName();
-        if (!$blockName) {
-            return $block;
+
+        if ($blockName) {
+            $block = $this->getLayout()->getBlock($blockName);
         }
 
-        $block = $this->getLayout()->getBlock($blockName);
+        if (!$block) {
+            $block = $this->getLayout()->createBlock($this->_defaultToolbarBlock, uniqid(microtime()));
+        }
 
         return $block;
     }
@@ -422,7 +442,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
             $layer->setCurrentCategory($origCategory);
         }
         
-        $this->addToobarBlock($collection);
+        $this->addToolbarBlock($collection);
 
         $this->_eventManager->dispatch(
             'catalog_block_product_list_collection',
