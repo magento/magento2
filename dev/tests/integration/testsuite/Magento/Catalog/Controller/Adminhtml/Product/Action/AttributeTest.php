@@ -17,32 +17,24 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testSaveActionRedirectsSuccessfully()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
         /** @var $session \Magento\Backend\Model\Session */
-        $session = $objectManager->get(\Magento\Backend\Model\Session::class);
+        $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
         $session->setProductIds([1]);
 
         $this->dispatch('backend/catalog/product_action_attribute/save/store/0');
 
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
-        /** @var \Magento\Backend\Model\UrlInterface $urlBuilder */
-        $urlBuilder = $objectManager->get(\Magento\Framework\UrlInterface::class);
 
         /** @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper */
-        $attributeHelper = $objectManager->get(\Magento\Catalog\Helper\Product\Edit\Action\Attribute::class);
-        $expectedUrl = $urlBuilder->getUrl(
+        $attributeHelper = $this->_objectManager->get(\Magento\Catalog\Helper\Product\Edit\Action\Attribute::class);
+
+        $this->_urlBuilder->turnOffSecretKey();
+        $expectedUrl = $this->_urlBuilder->getUrl(
             'catalog/product/index',
             ['store' => $attributeHelper->getSelectedStoreId()]
         );
-        $isRedirectPresent = false;
-        foreach ($this->getResponse()->getHeaders() as $header) {
-            if ($header->getFieldName() === 'Location' && strpos($header->getFieldValue(), $expectedUrl) === 0) {
-                $isRedirectPresent = true;
-            }
-        }
 
-        $this->assertTrue($isRedirectPresent);
+        $this->assertRedirect($this->stringStartsWith($expectedUrl));
     }
 
     /**
