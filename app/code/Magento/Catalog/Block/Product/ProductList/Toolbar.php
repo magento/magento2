@@ -190,7 +190,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $this->_collection->setPageSize($limit);
         }
         if ($this->getCurrentOrder()) {
-            if (($this->getCurrentOrder()) == 'position') {
+            if ($this->getCurrentOrder() == 'position') {
                 $this->_collection->addAttributeToSort(
                     $this->getCurrentOrder(),
                     $this->getCurrentDirection()
