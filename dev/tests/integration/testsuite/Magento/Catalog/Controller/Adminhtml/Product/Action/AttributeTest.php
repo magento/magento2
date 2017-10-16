@@ -25,12 +25,10 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
 
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         /** @var \Magento\Backend\Model\UrlInterface $urlBuilder */
-        $urlBuilder = $this->_objectManager->get(\Magento\Backend\Model\UrlInterface::class);
+        $urlBuilder = $this->_objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
 
         /** @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper */
-        $attributeHelper = $this->_objectManager
-            ->get(\Magento\Catalog\Helper\Product\Edit\Action\Attribute::class)
-            ->turnOffSecretKey();
+        $attributeHelper = $this->_objectManager->get(\Magento\Catalog\Helper\Product\Edit\Action\Attribute::class);
 
         $expectedUrl = $urlBuilder->getUrl(
             'catalog/product/index',
