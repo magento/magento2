@@ -54,7 +54,7 @@ define(
                 var self = this;
 
                 this._super();
-                $.get(urlBuilder.build('onetouchorder/button/available')).done(function (data) {
+                $.get(urlBuilder.build('instantpurchase/button/available')).done(function (data) {
                     if (typeof data.available !== 'undefined') {
                         self.showButton(data.available);
                         self.options.cards(data.cards);
@@ -101,7 +101,7 @@ define(
             /**
              * Confirmation method
              */
-            oneTouchOrder: function () {
+            instantPurchase: function () {
                 var self = this,
                     form = $(self.options.formSelector),
                     confirmTemplate = mageTemplate(this.options.confirmTemplate);
@@ -124,7 +124,7 @@ define(
                         /** @inheritdoc */
                         confirm: function () {
                             $.ajax({
-                                url: urlBuilder.build('onetouchorder/button/placeOrder'),
+                                url: urlBuilder.build('instantpurchase/button/placeOrder'),
                                 data: form.serialize(),
                                 type: 'post',
                                 dataType: 'json',
