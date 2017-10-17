@@ -18,21 +18,21 @@ class Button extends Template
     /**
      * @var Config
      */
-    private $InstantPurchaseConfig;
+    private $instantPurchaseConfig;
 
     /**
      * Button constructor.
      * @param Context $context
-     * @param Config $InstantPurchaseConfig
+     * @param Config $instantPurchaseConfig
      * @param array $data
      */
     public function __construct(
         Context $context,
-        Config $InstantPurchaseConfig,
+        Config $instantPurchaseConfig,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->InstantPurchaseConfig = $InstantPurchaseConfig;
+        $this->instantPurchaseConfig = $instantPurchaseConfig;
     }
 
     /**
@@ -40,8 +40,8 @@ class Button extends Template
      */
     public function getJsLayout(): string
     {
-        $buttonText = $this->InstantPurchaseConfig->getButtonText();
-        $this->jsLayout['components']['one-touch-order']['config']['buttonText'] = $buttonText;
+        $buttonText = $this->instantPurchaseConfig->getButtonText();
+        $this->jsLayout['components']['instant-purchase']['config']['buttonText'] = $buttonText;
 
         return parent::getJsLayout();
     }

@@ -29,7 +29,7 @@ define(
             currentCard: ko.observable(null),
             currentShipping: ko.observable(null),
             defaults: {
-                template: 'Magento_InstantPurchase/one-touch-order',
+                template: 'Magento_InstantPurchase/instant-purchase',
                 buttonText: $.mage.__('Instant Purchase')
             },
             options: {

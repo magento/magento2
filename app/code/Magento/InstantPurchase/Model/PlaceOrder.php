@@ -32,7 +32,7 @@ class PlaceOrder
     /**
      * @var Config
      */
-    private $InstantPurchaseConfig;
+    private $instantPurchaseConfig;
     /**
      * @var PaymentPreparer
      */
@@ -45,7 +45,7 @@ class PlaceOrder
      * @param QuotePreparer $prepareQuote
      * @param PaymentPreparer $paymentPreparer
      * @param ShippingRateChooser $shippingRateChooser
-     * @param Config $InstantPurchaseConfig
+     * @param Config $instantPurchaseConfig
      */
     public function __construct(
         CartRepositoryInterface $quoteRepository,
@@ -53,13 +53,13 @@ class PlaceOrder
         QuotePreparer $prepareQuote,
         PaymentPreparer $paymentPreparer,
         ShippingRateChooser $shippingRateChooser,
-        Config $InstantPurchaseConfig
+        Config $instantPurchaseConfig
     ) {
         $this->cartManagementInterface = $cartManagementInterface;
         $this->quoteRepository = $quoteRepository;
         $this->prepareQuote = $prepareQuote;
         $this->shippingRateChooser = $shippingRateChooser;
-        $this->InstantPurchaseConfig = $InstantPurchaseConfig;
+        $this->instantPurchaseConfig = $instantPurchaseConfig;
         $this->paymentPreparer = $paymentPreparer;
     }
 
@@ -99,7 +99,7 @@ class PlaceOrder
                 __('We found an invalid request for adding product to quote.')
             );
         }
-        if (!$this->InstantPurchaseConfig->isSelectAddressEnabled()) {
+        if (!$this->instantPurchaseConfig->isSelectAddressEnabled()) {
             $request->unsetData('customer_address');
         }
         return $request;

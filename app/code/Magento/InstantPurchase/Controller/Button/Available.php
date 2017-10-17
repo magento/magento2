@@ -20,7 +20,7 @@ class Available extends Action
     /**
      * @var InstantPurchase
      */
-    private $InstantPurchase;
+    private $instantPurchase;
     /**
      * @var Session
      */
@@ -32,7 +32,7 @@ class Available extends Action
     /**
      * @var Config
      */
-    private $InstantPurchaseConfig;
+    private $instantPurchaseConfig;
     /**
      * @var CustomerCardsFormatter
      */
@@ -40,17 +40,17 @@ class Available extends Action
 
     public function __construct(
         Context $context,
-        InstantPurchase $InstantPurchase,
+        InstantPurchase $instantPurchase,
         Session $customerSession,
         CustomerAddressesFormatter $customerAddressesFormatter,
         CustomerCardsFormatter $customerCardsFormatter,
-        Config $InstantPurchaseConfig
+        Config $instantPurchaseConfig
     ) {
         parent::__construct($context);
-        $this->InstantPurchase = $InstantPurchase;
+        $this->InstantPurchase = $instantPurchase;
         $this->customerSession = $customerSession;
         $this->customerAddressesFormatter = $customerAddressesFormatter;
-        $this->InstantPurchaseConfig = $InstantPurchaseConfig;
+        $this->instantPurchaseConfig = $instantPurchaseConfig;
         $this->customerCardsFormatter = $customerCardsFormatter;
     }
 
@@ -74,7 +74,7 @@ class Available extends Action
                 'addresses' => $this->customerAddressesFormatter->getFormattedAddresses($customer),
                 'defaultShipping' => $customer->getDefaultShippingAddress()->getId(),
                 'defaultBilling' => $customer->getDefaultBillingAddress()->getId(),
-                'selectAddressAvailable' => $this->InstantPurchaseConfig->isSelectAddressEnabled()
+                'selectAddressAvailable' => $this->instantPurchaseConfig->isSelectAddressEnabled()
             ];
         }
 

@@ -12,10 +12,10 @@
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="components" xsi:type="array">
-                            <item name="one-touch-order" xsi:type="array">
-                                <item name="component" xsi:type="string">Magento_InstantPurchase/js/view/one-touch-order</item>
+                            <item name="instant-purchase" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_InstantPurchase/js/view/instant-purchase</item>
                                 <item name="config" xsi:type="array">
-                                    <item name="template" xsi:type="string">Magento_InstantPurchase/one-touch-order</item>
+                                    <item name="template" xsi:type="string">Magento_InstantPurchase/instant-purchase</item>
                                 </item>
                             </item>
                         </item>
@@ -28,10 +28,10 @@
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="components" xsi:type="array">
-                            <item name="one-touch-order" xsi:type="array">
-                                <item name="component" xsi:type="string">Magento_InstantPurchase/js/view/one-touch-order</item>
+                            <item name="instant-purchase" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_InstantPurchase/js/view/instant-purchase</item>
                                 <item name="config" xsi:type="array">
-                                    <item name="template" xsi:type="string">Magento_InstantPurchase/one-touch-order</item>
+                                    <item name="template" xsi:type="string">Magento_InstantPurchase/instant-purchase</item>
                                 </item>
                             </item>
                         </item>

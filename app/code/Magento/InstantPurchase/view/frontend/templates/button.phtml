@@ -6,12 +6,12 @@
 
 /** @var \Magento\InstantPurchase\Block\Button $block */
 ?>
-<div id="one-touch-order" data-bind="scope:'one-touch-order'">
+<div id="instant-purchase" data-bind="scope:'instant-purchase'">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>
 <script type="text/x-magento-init">
     {
-        "#one-touch-order": {
+        "#instant-purchase": {
             "Magento_Ui/js/core/app": <?= /* @escapeNotVerified */ $block->getJsLayout();?>
         }
     }

@@ -40,7 +40,7 @@ class InstantPurchaseTest extends TestCase
     /**
      * @var InstantPurchase
      */
-    private $InstantPurchase;
+    private $instantPurchase;
 
     public function setUp()
     {
