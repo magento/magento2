@@ -5,9 +5,6 @@
  */
 namespace Magento\InstantPurchase\Model;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Quote\Model\Quote;
-
 class CheapestShippingRateChooserRule implements ShippingRateChooserRuleInterface
 {
     /**

@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterfaceFactory;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
+use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
@@ -54,7 +55,7 @@ class RateCheckTest extends TestCase
 
         $storeManager = $this->createMock(StoreManagerInterface::class);
         $this->store = $this->createMock(Store::class);
-        $this->website = $this->createMock(\Magento\Store\Api\Data\WebsiteInterface::class);
+        $this->website = $this->createMock(WebsiteInterface::class);
 
         $storeManager->method('getStore')->willReturn($this->store);
         $storeManager->method('getWebsite')->willReturn($this->website);

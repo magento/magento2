@@ -6,10 +6,7 @@
 
 namespace Magento\InstantPurchase\Test\Unit\Model;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\InstantPurchase\Model\CheapestShippingRateChooserRule;
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\Quote\Address;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

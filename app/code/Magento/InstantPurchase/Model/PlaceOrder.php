@@ -11,6 +11,10 @@ use Magento\Framework\DataObject;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 
+/**
+ * Class PlaceOrder
+ * @api
+ */
 class PlaceOrder
 {
     /**

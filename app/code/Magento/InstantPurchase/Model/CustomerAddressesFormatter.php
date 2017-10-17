@@ -10,7 +10,6 @@ use Magento\Customer\Model\Customer;
 
 /**
  * Class CustomerAddresses
- * @package Magento\InstantPurchase\Model
  */
 class CustomerAddressesFormatter
 {

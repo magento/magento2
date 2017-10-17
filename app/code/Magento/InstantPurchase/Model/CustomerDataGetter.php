@@ -5,9 +5,15 @@
  */
 namespace Magento\InstantPurchase\Model;
 
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class CustomerDataGetter
+ * @api
+ */
 class CustomerDataGetter
 {
     /**
@@ -26,24 +32,24 @@ class CustomerDataGetter
     }
 
     /**
-     * @return \Magento\Customer\Api\Data\AddressInterface
+     * @return AddressInterface
      */
-    public function getDefaultBillingAddressDataModel(): \Magento\Customer\Api\Data\AddressInterface
+    public function getDefaultBillingAddressDataModel(): AddressInterface
     {
         return $this->getCustomer()->getDefaultBillingAddress()->getDataModel();
     }
 
     /**
-     * @return \Magento\Customer\Api\Data\AddressInterface
+     * @return AddressInterface
      */
-    public function getDefaultShippingAddressDataModel(): \Magento\Customer\Api\Data\AddressInterface
+    public function getDefaultShippingAddressDataModel(): AddressInterface
     {
         return $this->getCustomer()->getDefaultShippingAddress()->getDataModel();
     }
 
     /**
      * @param $addressId
-     * @return \Magento\Customer\Api\Data\AddressInterface
+     * @return AddressInterface
      */
     public function getShippingAddressDataModel($addressId)
     {
@@ -51,9 +57,9 @@ class CustomerDataGetter
     }
 
     /**
-     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @return CustomerInterface
      */
-    public function getCustomerDataModel(): \Magento\Customer\Api\Data\CustomerInterface
+    public function getCustomerDataModel(): CustomerInterface
     {
         return $this->getCustomer()->getDataModel();
     }

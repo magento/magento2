@@ -6,7 +6,12 @@
 namespace Magento\InstantPurchase\Model;
 
 use Magento\Customer\Model\Customer;
+use Magento\Vault\Api\Data\PaymentTokenInterface;
 
+/**
+ * Class CustomerCardsFormatter
+ * @api
+ */
 class CustomerCardsFormatter
 {
     public static $baseCardTypes = [
@@ -53,10 +58,10 @@ class CustomerCardsFormatter
     }
 
     /**
-     * @param \Magento\Vault\Api\Data\PaymentTokenInterface $cc
+     * @param PaymentTokenInterface $cc
      * @return string
      */
-    private function formatCc(\Magento\Vault\Api\Data\PaymentTokenInterface $cc): string
+    private function formatCc(PaymentTokenInterface $cc): string
     {
         $details = json_decode($cc->getTokenDetails(), true);
         return sprintf(

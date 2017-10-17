@@ -7,7 +7,7 @@ namespace Magento\InstantPurchase\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\InstantPurchase\Model\CustomerCreditCardManager;
-use Magento\InstantPurchase\Model\QuotePreparer;
+use Magento\InstantPurchase\Model\PaymentPreparer;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Model\QuoteFactory;
@@ -29,9 +29,9 @@ class PaymentPreparerTest extends TestCase
      */
     private $customerCreditCardManager;
     /**
-     * @var QuotePreparer
+     * @var PaymentPreparer
      */
-    private $prepareQuote;
+    private $paymentPreparer;
 
     public function setUp()
     {
@@ -46,8 +46,8 @@ class PaymentPreparerTest extends TestCase
 
         $this->customerCreditCardManager = $this->createMock(CustomerCreditCardManager::class);
 
-        $this->prepareQuote = $objectManager->getObject(
-            QuotePreparer::class,
+        $this->paymentPreparer = $objectManager->getObject(
+            PaymentPreparer::class,
             [
                 'quoteFactory' => $this->quoteFactory,
                 'customerCreditCardManager' => $this->customerCreditCardManager
@@ -89,7 +89,7 @@ class PaymentPreparerTest extends TestCase
             ->with($customerId, $publicHash)
             ->willReturn($paymentAdditionalInformation);
         $this->quote->expects($this->once())->method('collectTotals');
-        $this->prepareQuote->preparePayment($this->quote, $customerId, $ccId);
+        $this->paymentPreparer->prepare($this->quote, $customerId, $ccId);
 
         $this->assertArraySubset($paymentAdditionalInformation, $payment->getAdditionalInformation());
     }

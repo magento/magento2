@@ -6,6 +6,8 @@
 namespace Magento\InstantPurchase\Controller\Button;
 
 use Exception;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\Json as JsonResult;
@@ -15,17 +17,21 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InstantPurchase\Model\CustomerDataGetter;
 use Magento\InstantPurchase\Model\CustomerDataGetterFactory;
 use Magento\InstantPurchase\Model\PlaceOrder as PlaceOrderModel;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class PlaceOrder
+ * @api
+ */
 class PlaceOrder extends \Magento\Framework\App\Action\Action
 {
-
     /**
      * @var StoreManagerInterface
      */
     private $storeManager;
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     private $productRepository;
     /**
@@ -33,7 +39,7 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
      */
     private $placeOrder;
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     * @var OrderRepositoryInterface
      */
     private $orderRepository;
     /**
@@ -53,9 +59,9 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
      * PlaceOrder constructor.
      * @param Context $context
      * @param StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param ProductRepositoryInterface $productRepository
      * @param PlaceOrderModel $placeOrder
-     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+     * @param OrderRepositoryInterface $orderRepository
      * @param Session $customerSession
      * @param CustomerDataGetterFactory $customerData
      * @param Validator $formKeyValidator
@@ -63,9 +69,9 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        ProductRepositoryInterface $productRepository,
         PlaceOrderModel $placeOrder,
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+        OrderRepositoryInterface $orderRepository,
         Session $customerSession,
         CustomerDataGetterFactory $customerData,
         Validator $formKeyValidator
@@ -105,7 +111,7 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @return \Magento\Catalog\Api\Data\ProductInterface
+     * @return ProductInterface
      * @throws NoSuchEntityException
      */
     private function initProduct()

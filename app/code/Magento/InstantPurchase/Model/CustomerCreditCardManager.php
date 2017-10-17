@@ -8,21 +8,29 @@ namespace Magento\InstantPurchase\Model;
 use Exception;
 use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
 use Magento\Braintree\Model\Ui\ConfigProvider as BrainTreeConfigProvider;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Intl\DateTimeFactory;
+use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 
+/**
+ * Class CustomerCreditCardManager
+ * @api
+ */
 class CustomerCreditCardManager
 {
     /**
-     * @var \Magento\Vault\Api\PaymentTokenRepositoryInterface
+     * @var PaymentTokenRepositoryInterface
      */
     private $repository;
     /**
-     * @var \Magento\Framework\Api\FilterBuilder
+     * @var FilterBuilder
      */
     private $filterBuilder;
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
     /**
@@ -36,16 +44,16 @@ class CustomerCreditCardManager
 
     /**
      * CustomerCreditCardManager constructor.
-     * @param \Magento\Vault\Api\PaymentTokenRepositoryInterface $repository
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param PaymentTokenRepositoryInterface $repository
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DateTimeFactory $dateTimeFactory
      * @param GetPaymentNonceCommand $getNonce
      */
     public function __construct(
-        \Magento\Vault\Api\PaymentTokenRepositoryInterface $repository,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        PaymentTokenRepositoryInterface $repository,
+        FilterBuilder $filterBuilder,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         DateTimeFactory $dateTimeFactory,
         GetPaymentNonceCommand $getNonce
     ) {
@@ -78,16 +86,16 @@ class CustomerCreditCardManager
      */
     public function getVisibleAvailableTokens(string $customerId): array
     {
-        $customerFilter = $this->getFilter(\Magento\Vault\Api\Data\PaymentTokenInterface::CUSTOMER_ID, $customerId);
-        $visibleFilter = $this->getFilter(\Magento\Vault\Api\Data\PaymentTokenInterface::IS_VISIBLE, 1);
-        $isActiveFilter = $this->getFilter(\Magento\Vault\Api\Data\PaymentTokenInterface::IS_ACTIVE, 1);
+        $customerFilter = $this->getFilter(PaymentTokenInterface::CUSTOMER_ID, $customerId);
+        $visibleFilter = $this->getFilter(PaymentTokenInterface::IS_VISIBLE, 1);
+        $isActiveFilter = $this->getFilter(PaymentTokenInterface::IS_ACTIVE, 1);
         $isBrainTreeFilter = $this->getFilter(
-            \Magento\Vault\Api\Data\PaymentTokenInterface::PAYMENT_METHOD_CODE,
+            PaymentTokenInterface::PAYMENT_METHOD_CODE,
             BrainTreeConfigProvider::CODE
         );
 
         $expiresAtFilter = [
-            $this->filterBuilder->setField(\Magento\Vault\Api\Data\PaymentTokenInterface::EXPIRES_AT)
+            $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
                 ->setConditionType('gt')
                 ->setValue(
                     $this->dateTimeFactory->create(
