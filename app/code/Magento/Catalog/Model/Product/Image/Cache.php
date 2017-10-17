@@ -13,7 +13,6 @@ use Magento\Framework\App\Area;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
-use Magento\Framework\ObjectManagerInterface;
 
 class Cache
 {
@@ -47,10 +46,6 @@ class Cache
      */
     protected $attribute;
 
-    /**
-     * @var ObjectManagerInterface
-     */
-    protected $objectManager;
 
     /**
      * @var array
@@ -68,8 +63,7 @@ class Cache
         ImageHelper $imageHelper,
         ThemeCustomizationConfig $themeCustomizationConfig,
         Config $eavConfig,
-        Attribute $attribute,
-        ObjectManagerInterface $objectManager
+        Attribute $attribute
     ) {
         $this->viewConfig = $viewConfig;
         $this->themeCollection = $themeCollection;
@@ -77,7 +71,6 @@ class Cache
         $this->themeCustomizationConfig = $themeCustomizationConfig;
         $this->eavConfig = $eavConfig;
         $this->attribute = $attribute;
-        $this->objectManager = $objectManager;
     }
 
     /**
@@ -180,65 +173,71 @@ class Cache
             }
         }
 
-        $resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);
+        $connection = $this->attribute->getResource()->getConnection();
 
         $productCustomDesignAttributeId = $this->attribute->loadByCode(4, 'custom_design')->getId();
 
-        $productSql = $resource->getConnection()
+        $productSql = $connection
             ->select()
             ->from(
-                ['eav' => $resource->getTableName('catalog_product_entity_varchar')],
+                ['eav' => $connection->getTableName('catalog_product_entity_varchar')],
                 ['value']
             )
             ->where('eav.attribute_id = ?', $productCustomDesignAttributeId)
             ->where('eav.value > 0')
             ->group('value');
 
-        $productThemeIds = $resource->getConnection()->fetchCol($productSql);
+        $productThemeIds = $connection->fetchCol($productSql);
 
-        foreach ($productThemeIds as $productThemeId) {
-            if (array_key_exists($productThemeId, $storesByThemes)
-                && !array_key_exists($productThemeId, $themesInUse) ) {
-                $themesInUse[] = $this->themeCollection->load($productThemeId);
+        if (count($productThemeIds)) {
+            foreach ($productThemeIds as $productThemeId) {
+                if (array_key_exists($productThemeId, $storesByThemes)
+                    && !array_key_exists($productThemeId, $themesInUse) ) {
+                    $themesInUse[] = $this->themeCollection->load($productThemeId);
+                }
             }
         }
 
         $categoryCustomDesignAttributeId = $this->attribute->loadByCode(3, 'custom_design')->getId();
 
-        $categorySql = $resource->getConnection()
+        $categorySql = $connection
             ->select()
             ->from(
-                ['eav' => $resource->getTableName('catalog_category_entity_varchar')],
+                ['eav' => $connection->getTableName('catalog_category_entity_varchar')],
                 ['value']
             )
             ->where('eav.attribute_id = ?', $categoryCustomDesignAttributeId)
             ->where('eav.value > 0')
             ->group('value');
 
-        $categoryThemeIds = $resource->getConnection()->fetchCol($categorySql);
+        $categoryThemeIds = $connection->fetchCol($categorySql);
 
-        foreach ($categoryThemeIds as $categoryThemeId) {
-            if (array_key_exists($categoryThemeId, $storesByThemes)
-                && !array_key_exists($categoryThemeId, $themesInUse) ) {
-                $themesInUse[] = $this->themeCollection->load($categoryThemeId);
+        if (count($categoryThemeIds)) {
+            foreach ($categoryThemeIds as $categoryThemeId) {
+                if (array_key_exists($categoryThemeId, $storesByThemes)
+                    && !array_key_exists($categoryThemeId, $themesInUse) ) {
+                    $themesInUse[] = $this->themeCollection->load($categoryThemeId);
+                }
             }
         }
 
-        $pageSql = $resource->getConnection()
+        $pageSql = $connection
             ->select()
             ->from(
-                ['page' => $resource->getTableName('cms_page')],
+                ['page' => $connection->getTableName('cms_page')],
                 ['custom_theme']
             )
             ->where('custom_theme > 0')
             ->group('custom_theme');
 
-        $pageThemeIds = $resource->getConnection()->fetchCol($pageSql);
+        $pageThemeIds = $connection->fetchCol($pageSql);
 
-        foreach ($pageThemeIds as $pageThemeId) {
-            if (array_key_exists($pageThemeId, $storesByThemes)
-                && !array_key_exists($pageThemeId, $themesInUse) ) {
-                $themesInUse[] = $this->themeCollection->load($pageThemeId);
+        if (count($pageThemeIds)) {
+            foreach ($pageThemeIds as $pageThemeId) {
+                if (array_key_exists($pageThemeId, $storesByThemes)
+                    && !array_key_exists($pageThemeId, $themesInUse) ) {
+                    $themesInUse[] = $this->themeCollection->load($pageThemeId);
+                }
             }
         }
 
