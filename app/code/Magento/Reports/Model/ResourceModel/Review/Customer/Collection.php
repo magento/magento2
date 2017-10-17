@@ -117,6 +117,7 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
         $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
         $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
         $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::WHERE);
 
         $countSelect->columns(new \Zend_Db_Expr('COUNT(DISTINCT detail.customer_id)'));
 
