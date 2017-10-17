@@ -42,12 +42,12 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
         $this->notificationFlagManagerMock = $this->getMockBuilder(NotificationFlagManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->moduleListMock = $this->getMockBuilder(ModuleListInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUser', 'getId'])
+            ->getMock();
+        $this->moduleListMock = $this->getMockBuilder(ModuleListInterface::class)
+            ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
@@ -82,12 +82,12 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
         $this->sessionMock->expects($this->once())
             ->method('getUser')
             ->willReturnSelf();
-        $this->moduleListMock->expects($this->once())
-            ->method('has')
-            ->willReturn($hasNotificationModule);
         $this->sessionMock->expects($this->once())
             ->method('getId')
             ->willReturn($userId);
+        $this->moduleListMock->expects($this->once())
+            ->method('has')
+            ->willReturn($hasNotificationModule);
         $this->notificationFlagManagerMock->expects($this->any())
             ->method('isUserNotified')
             ->willReturn($isUserNotified);
