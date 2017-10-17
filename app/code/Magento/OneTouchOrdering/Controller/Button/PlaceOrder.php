@@ -12,7 +12,8 @@ use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\OneTouchOrdering\Model\CustomerData;
+use Magento\OneTouchOrdering\Model\CustomerDataGetter;
+use Magento\OneTouchOrdering\Model\CustomerDataGetterFactory;
 use Magento\OneTouchOrdering\Model\PlaceOrder as PlaceOrderModel;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -40,7 +41,7 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
      */
     private $customerSession;
     /**
-     * @var CustomerData
+     * @var CustomerDataGetter
      */
     private $customerData;
     /**
@@ -56,7 +57,7 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
      * @param PlaceOrderModel $placeOrder
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param Session $customerSession
-     * @param CustomerData $customerData
+     * @param CustomerDataGetterFactory $customerData
      * @param Validator $formKeyValidator
      */
     public function __construct(
@@ -66,7 +67,7 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
         PlaceOrderModel $placeOrder,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         Session $customerSession,
-        CustomerData $customerData,
+        CustomerDataGetterFactory $customerData,
         Validator $formKeyValidator
     ) {
         parent::__construct($context);
@@ -89,7 +90,7 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
         $product = $this->initProduct();
         $params = $this->getRequest()->getParams();
         try {
-            $customerData = $this->customerData->setCustomer($this->customerSession->getCustomer());
+            $customerData = $this->customerData->create($this->customerSession->getCustomer());
             $orderId = $this->placeOrder->placeOrder($product, $customerData, $params);
         } catch (NoSuchEntityException $e) {
             return $this->createResponse($errorMsg, false);

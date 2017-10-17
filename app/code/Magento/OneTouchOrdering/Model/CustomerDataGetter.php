@@ -8,12 +8,18 @@ namespace Magento\OneTouchOrdering\Model;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Exception\LocalizedException;
 
-class CustomerData
+class CustomerDataGetter
 {
     /**
      * @var Customer
      */
     private $customer;
+
+    public function __construct(
+        Customer $customer
+    ) {
+        $this->customer = $customer;
+    }
 
     /**
      * @return \Magento\Customer\Api\Data\AddressInterface
@@ -57,28 +63,11 @@ class CustomerData
     }
 
     /**
-     * @param Customer $customer
-     * @return $this
-     */
-    public function setCustomer(Customer $customer)
-    {
-        $this->customer = $customer;
-
-        return $this;
-    }
-
-    /**
      * @return Customer
      * @throws LocalizedException
      */
     private function getCustomer(): Customer
     {
-        if (!$this->customer) {
-            throw new LocalizedException(
-                __('Something went wrong. Please try again later.')
-            );
-        }
-
         return $this->customer;
     }
 }

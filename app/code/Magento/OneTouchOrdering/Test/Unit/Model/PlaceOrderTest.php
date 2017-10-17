@@ -7,7 +7,7 @@ namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
-use Magento\OneTouchOrdering\Model\CustomerData;
+use Magento\OneTouchOrdering\Model\CustomerDataGetter;
 use Magento\OneTouchOrdering\Model\PlaceOrder;
 use Magento\OneTouchOrdering\Model\PrepareQuote;
 use Magento\OneTouchOrdering\Model\ShippingRateChooser;
@@ -23,7 +23,7 @@ class PlaceOrderTest extends TestCase
      */
     private $shippingRateChooser;
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CustomerData
+     * @var \PHPUnit_Framework_MockObject_MockObject|CustomerDataGetter
      */
     private $customerData;
     /**
@@ -55,7 +55,7 @@ class PlaceOrderTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->customerData = $this->createMock(CustomerData::class);
+        $this->customerData = $this->createMock(CustomerDataGetter::class);
         $this->cartManagementInterface = $this->createMock(
             \Magento\Quote\Api\CartManagementInterface::class
         );

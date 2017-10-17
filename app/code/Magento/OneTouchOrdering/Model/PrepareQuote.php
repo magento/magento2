@@ -44,11 +44,11 @@ class PrepareQuote
     }
 
     /**
-     * @param CustomerData $customerData
+     * @param CustomerDataGetter $customerData
      * @param DataObject $params
      * @return Quote
      */
-    public function prepare(CustomerData $customerData, DataObject $params): Quote
+    public function prepare(CustomerDataGetter $customerData, DataObject $params): Quote
     {
         $store = $this->storeManager->getStore();
         $quote = $this->quoteFactory->create();

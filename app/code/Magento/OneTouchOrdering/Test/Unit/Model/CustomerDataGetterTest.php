@@ -8,18 +8,18 @@ namespace Magento\OneTouchOrdering\Test\Unit\Model;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\OneTouchOrdering\Model\CustomerData;
+use Magento\OneTouchOrdering\Model\CustomerDataGetter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
-class CustomerDataTest extends TestCase
+class CustomerDataGetterTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Customer
      */
     private $customer;
     /**
-     * @var CustomerData
+     * @var CustomerDataGetter
      */
     private $customerData;
     /**
@@ -47,12 +47,13 @@ class CustomerDataTest extends TestCase
             \Magento\Customer\Api\Data\AddressInterface::class
         );
 
-        $this->customerData = $objectManager->getObject(CustomerData::class);
+        $this->customerData = $objectManager->getObject(CustomerDataGetter::class, [
+            'customer' => $this->customer
+        ]);
     }
 
     public function testGetDefaultBillingAddressDataModel()
     {
-        $this->customerData->setCustomer($this->customer);
         $this->customer
             ->expects($this->once())
             ->method('getDefaultBillingAddress')
@@ -68,7 +69,6 @@ class CustomerDataTest extends TestCase
 
     public function testGetDefaultShippingAddressDataModel()
     {
-        $this->customerData->setCustomer($this->customer);
         $this->customer
             ->expects($this->once())
             ->method('getDefaultShippingAddress')
@@ -85,7 +85,6 @@ class CustomerDataTest extends TestCase
     public function testShippingAddressDataModel()
     {
         $addressId = 123;
-        $this->customerData->setCustomer($this->customer);
         $this->customer
             ->expects($this->once())
             ->method('getAddressById')
@@ -102,7 +101,6 @@ class CustomerDataTest extends TestCase
 
     public function testGetCustomerDataModel()
     {
-        $this->customerData->setCustomer($this->customer);
         $this->customer
             ->expects($this->once())
             ->method('getDataModel')
@@ -114,18 +112,11 @@ class CustomerDataTest extends TestCase
     public function testGetCustomerId()
     {
         $customerId = 32;
-        $this->customerData->setCustomer($this->customer);
         $this->customer
             ->expects($this->once())
             ->method('getId')
             ->willReturn($customerId);
         $result = $this->customerData->getCustomerId();
         $this->assertSame($result, $customerId);
-    }
-
-    public function testNoCustomer()
-    {
-        $this->expectException(LocalizedException::class);
-        $this->customerData->getCustomerDataModel();
     }
 }

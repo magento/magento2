@@ -9,7 +9,7 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\OneTouchOrdering\Model\CustomerData;
+use Magento\OneTouchOrdering\Model\CustomerDataGetter;
 use Magento\OneTouchOrdering\Model\PrepareQuote;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 class PrepareQuoteTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CustomerData
+     * @var \PHPUnit_Framework_MockObject_MockObject|CustomerDataGetter
      */
     private $customerData;
     /**
@@ -49,7 +49,7 @@ class PrepareQuoteTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->customerData = $this->createMock(CustomerData::class);
+        $this->customerData = $this->createMock(CustomerDataGetter::class);
         $this->quoteFactory = $this->createMock(QuoteFactory::class);
         $this->quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()

@@ -58,12 +58,12 @@ class PlaceOrder
 
     /**
      * @param Product $product
-     * @param CustomerData $customerData
+     * @param CustomerDataGetter $customerData
      * @param array $params
-     * @throws \Exception
+     * @throws Exception
      * @return int
      */
-    public function placeOrder(Product $product, CustomerData $customerData, array $params): int
+    public function placeOrder(Product $product, CustomerDataGetter $customerData, array $params): int
     {
         $paramsObject = $this->getProductRequest($params);
         $quote = $this->prepareQuote->prepare($customerData, $paramsObject);
