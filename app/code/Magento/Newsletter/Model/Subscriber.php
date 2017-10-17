@@ -447,14 +447,12 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         try {
             $this->save();
-            if ($sendInformationEmail) {
-                if ($isConfirmNeed === true
-                    && $isOwnSubscribes === false
-                ) {
-                    $this->sendConfirmationRequestEmail();
-                } else {
-                    $this->sendConfirmationSuccessEmail();
-                }
+            if ($isConfirmNeed === true
+                && $isOwnSubscribes === false
+            ) {
+                $this->sendConfirmationRequestEmail();
+            } else {
+                $this->sendConfirmationSuccessEmail();
             }
             return $this->getStatus();
         } catch (\Exception $e) {
