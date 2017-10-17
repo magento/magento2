@@ -63,10 +63,10 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
     public function isVisibleProvider()
     {
         return [
-            [1, false, false, true], // No Ad Module, Has not seen before, should see popup
-            [1, true, false, false], // Has Ad Module, Has not seen before, should not see popup
-            [1, false, true, false], // No Ad Module, Has seen before, should not see popup
-            [1, true, true, false] // Has Ad Module, Has seen before, should not see popup
+            [1, false, false, true],
+            [1, true, false, false],
+            [1, false, true, false],
+            [1, true, true, false]
         ];
     }
 
