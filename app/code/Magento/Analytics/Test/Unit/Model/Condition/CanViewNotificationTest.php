@@ -7,10 +7,10 @@
 namespace Magento\Analytics\Test\Unit\Model\Condition;
 
 use Magento\Analytics\Model\Condition\CanViewNotification;
-use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Analytics\Model\NotificationFlagManager;
 use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\Module\ModuleListInterface;
 
 /**
  * Class CanViewNotificationTest
@@ -33,21 +33,21 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
     private $sessionMock;
 
     /**
-     * @var ProductMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleListInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $productMetadataInterfaceMock;
+    private $moduleListMock;
 
     public function setUp()
     {
         $this->notificationFlagManagerMock = $this->getMockBuilder(NotificationFlagManager::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->moduleListMock = $this->getMockBuilder(ModuleListInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUser', 'getId'])
-            ->getMock();
-        $this->productMetadataInterfaceMock = $this->getMockBuilder(ProductMetadataInterface::class)
-            ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
@@ -55,7 +55,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             [
                 'notificationFlagManager' => $this->notificationFlagManagerMock,
                 'session' => $this->sessionMock,
-                'productMetadataInterface' => $this->productMetadataInterfaceMock
+                'moduleList' => $this->moduleListMock
             ]
         );
     }
@@ -63,28 +63,28 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
     public function isVisibleProvider()
     {
         return [
-            [1, "2.2.1", false, true],
-            [1, "2.2.1-dev", true, false],
-            [1, "2.2.1", true, false],
-            [1, "2.2.1-dev", false, false]
+            [1, false, false, true], // No Ad Module, Has not seen before, should see popup
+            [1, true, false, false], // Has Ad Module, Has not seen before, should not see popup
+            [1, false, true, false], // No Ad Module, Has seen before, should not see popup
+            [1, true, true, false] // Has Ad Module, Has seen before, should not see popup
         ];
     }
 
     /**
      * @dataProvider isVisibleProvider
      * @param int $userId
-     * @param string $version
+     * @param bool $hasNotificationModule
      * @param bool $isUserNotified
      * @param bool $expected
      */
-    public function testIsVisible($userId, $version, $isUserNotified, $expected)
+    public function testIsVisible($userId, $hasNotificationModule, $isUserNotified, $expected)
     {
-        $this->productMetadataInterfaceMock->expects($this->once())
-            ->method('getVersion')
-            ->willReturn($version);
         $this->sessionMock->expects($this->once())
             ->method('getUser')
             ->willReturnSelf();
+        $this->moduleListMock->expects($this->once())
+            ->method('has')
+            ->willReturn($hasNotificationModule);
         $this->sessionMock->expects($this->once())
             ->method('getId')
             ->willReturn($userId);

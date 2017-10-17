@@ -43,6 +43,7 @@ class CanViewNotification implements VisibilityConditionInterface
      *
      * @param NotificationFlagManager $notificationFlagManager
      * @param Session $session
+     * @param ModuleListInterface $moduleList
      */
     public function __construct(
         NotificationFlagManager $notificationFlagManager,
@@ -62,7 +63,8 @@ class CanViewNotification implements VisibilityConditionInterface
     public function isVisible(array $arguments)
     {
         $userId = $this->session->getUser()->getId();
-        if ($this->moduleList->has('Magento_Advertisement') || $this->notificationFlagManager->isUserNotified($userId)) {
+        if ($this->moduleList->has('Magento_Advertisement')
+            || $this->notificationFlagManager->isUserNotified($userId)) {
             return false;
         }
 
