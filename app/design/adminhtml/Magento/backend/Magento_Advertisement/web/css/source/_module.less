@@ -30,7 +30,6 @@
 
 .advertisement-text {
   line-height: @line-height__l;
-  height: 32rem;
 
   ul {
     margin: 2rem 0 2rem 0;
@@ -47,16 +46,16 @@
   }
 }
 
-.advertisement-modal {
-  .advertisement-text {
-    height: 35.5rem;
-  }
-}
-
-.advertisement-button-next {
+.advertisement-button-next, .advertisement-button-back {
   display: inline-block;
   vertical-align: top;
   float: right;
+  position: absolute;
+  bottom: 4rem;
+}
+
+.advertisement-button-next {
+  right: 4rem;
 }
 
 .analytics-highlight {
