@@ -33,7 +33,7 @@ class SourceItemConvert
     public function convert(array $bunch): array
     {
         $sourceItems = [];
-        foreach ($bunch as $rowNum => $rowData) {
+        foreach ($bunch as $rowData) {
             /** @var SourceItemInterface $sourceItem */
             $sourceItem = $this->sourceItemFactory->create();
             $sourceItem->setSourceId($rowData[Sources::COL_SOURCE]);

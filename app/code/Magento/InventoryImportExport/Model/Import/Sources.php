@@ -8,11 +8,11 @@ namespace Magento\InventoryImportExport\Model\Import;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
-use \Magento\ImportExport\Model\Import\Entity\AbstractEntity;
+use Magento\ImportExport\Helper\Data as DataHelper;
+use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use \Magento\ImportExport\Model\ResourceModel\Helper as ResourceHelper;
-use \Magento\ImportExport\Helper\Data as DataHelper;
-use \Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
+use Magento\ImportExport\Model\ResourceModel\Helper as ResourceHelper;
+use Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
 use Magento\InventoryImportExport\Model\Import\Command\CommandInterface;
 use Magento\InventoryImportExport\Model\Import\Validator\ValidatorInterface;
 
@@ -82,8 +82,8 @@ class Sources extends AbstractEntity
 
     /**
      * Import data rows.
-     *
      * @return boolean
+     * @throws LocalizedException
      */
     protected function _importData()
     {

@@ -7,18 +7,12 @@
 namespace Magento\Inventory\Model\ResourceModel\SourceItem;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 class DeleteMultipleTest extends TestCase
 {
-
-    /**
-     * @var ResourceConnection
-     */
-    private $resource;
 
     /**
      * @var DeleteMultiple

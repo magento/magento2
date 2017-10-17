@@ -74,6 +74,25 @@ class SourcesTest extends TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testImportDataWithWrongBehavior()
+    {
+        $this->importer->setParameters([
+            'behavior' => 'WrongBehavior'
+        ]);
+
+        $bunch = [
+            $this->buildRowDataArray(10, 'SKU-1', 6.88, 1)
+        ];
+        $this->importDataMock->expects($this->any())
+            ->method('getNextBunch')
+            ->will($this->onConsecutiveCalls($bunch, false));
+
+        $this->importer->importData();
+    }
+
+    /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
