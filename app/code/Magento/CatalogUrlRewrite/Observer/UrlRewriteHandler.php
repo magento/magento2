@@ -10,7 +10,6 @@ use Magento\CatalogUrlRewrite\Model\CategoryBasedProductRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Event\Observer as EventObserver;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
@@ -88,7 +87,7 @@ class UrlRewriteHandler
         $this->isSkippedProduct = [];
         $saveRewriteHistory = $category->getData('save_rewrites_history');
         $storeId = $category->getStoreId();
-        if ($category->getAffectedProductIds()) {
+        if ($category->getChangedProductIds()) {
             $this->isSkippedProduct = $category->getAffectedProductIds();
             $collection = $this->productCollectionFactory->create()
                 ->setStoreId($storeId)
