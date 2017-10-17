@@ -61,7 +61,6 @@ class ValidatorChainTest extends TestCase
             ]
         );
 
-
         $result = $this->validatorChain->validate([], 1);
         $this->assertEquals($emptyValidatorResult, $result);
     }
@@ -91,7 +90,6 @@ class ValidatorChainTest extends TestCase
         $result = $this->validatorChain->validate([], 1);
         $this->assertEquals($emptyValidatorResult, $result);
     }
-
 
     public function testValidateWithErros()
     {

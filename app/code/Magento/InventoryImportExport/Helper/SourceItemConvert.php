@@ -46,7 +46,6 @@ class SourceItemConvert
             }
             $sourceItem->setStatus($status);
 
-
             $sourceItems[] = $sourceItem;
         }
 

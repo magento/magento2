@@ -35,7 +35,6 @@ class DeleteMultipleTest extends TestCase
      */
     private $searchCriteriaBuilder;
 
-
     protected function setUp()
     {
         $this->deleteModel = Bootstrap::getObjectManager()->create(DeleteMultiple::class);
