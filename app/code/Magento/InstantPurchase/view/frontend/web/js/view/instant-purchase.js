@@ -30,7 +30,8 @@ define(
             currentShipping: ko.observable(null),
             defaults: {
                 template: 'Magento_InstantPurchase/instant-purchase',
-                buttonText: $.mage.__('Instant Purchase')
+                buttonText: $.mage.__('Instant Purchase'),
+                purchaseUrl: urlBuilder.build('instantpurchase/button/placeOrder')
             },
             options: {
                 message: $.mage.__('Are you sure you want to place order and pay?'),
@@ -124,7 +125,7 @@ define(
                         /** @inheritdoc */
                         confirm: function () {
                             $.ajax({
-                                url: urlBuilder.build('instantpurchase/button/placeOrder'),
+                                url: self.purchaseUrl,
                                 data: form.serialize(),
                                 type: 'post',
                                 dataType: 'json',

@@ -42,6 +42,8 @@ class Button extends Template
     {
         $buttonText = $this->instantPurchaseConfig->getButtonText();
         $this->jsLayout['components']['instant-purchase']['config']['buttonText'] = $buttonText;
+        $this->jsLayout['components']['instant-purchase']['config']['purchaseUrl'] =
+            $this->getUrl('instantpurchase/button/placeOrder', ['_secure' => true]);
 
         return parent::getJsLayout();
     }
