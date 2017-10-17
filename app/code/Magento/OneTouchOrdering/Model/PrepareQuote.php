@@ -76,20 +76,19 @@ class PrepareQuote
 
     /**
      * @param Quote $quote
+     * @param string $customerId
+     * @param string $ccId
      * @throws Exception
      */
-    public function preparePayment(Quote $quote, $customerId, $ccId)
+    public function preparePayment(Quote $quote, string $customerId, string $ccId)
     {
         $cc = $this->customerCreditCardManager->getCustomerCreditCard($customerId, $ccId);
         $publicHash = $cc->getPublicHash();
         $quote->getPayment()->setQuote($quote)->importData(
             ['method' => BrainTreeConfigProvider::CC_VAULT_CODE]
-        )->setAdditionalInformation([
-                'customer_id' => $customerId,
-                'public_hash' => $publicHash,
-                'payment_method_nonce' => $this->customerCreditCardManager->getNonce($publicHash, $customerId),
-                'is_active_payment_token_enabler' => true
-        ]);
+        )->setAdditionalInformation(
+            $this->customerCreditCardManager->getPaymentAdditionalInformation($customerId, $publicHash)
+        );
         $quote->collectTotals();
     }
 }

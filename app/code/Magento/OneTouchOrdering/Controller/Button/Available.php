@@ -66,13 +66,17 @@ class Available extends Action
         $customer = $this->customerSession->getCustomer();
         $available = $this->oneTouchOrdering->isAvailableForCustomer($customer);
         $resultData = [
-            'available' => $available,
-            'cards' => $this->customerCardsFormatter->getFormattedCards($customer),
-            'addresses' => $this->customerAddressesFormatter->getFormattedAddresses($customer),
-            'defaultShipping' => $customer->getDefaultShippingAddress()->getId(),
-            'defaultBilling' => $customer->getDefaultBillingAddress()->getId(),
-            'selectAddressAvailable' => $this->oneTouchOrderingConfig->isSelectAddressEnabled()
+            'available' => $available
         ];
+        if ($available) {
+            $resultData += [
+                'cards' => $this->customerCardsFormatter->getFormattedCards($customer),
+                'addresses' => $this->customerAddressesFormatter->getFormattedAddresses($customer),
+                'defaultShipping' => $customer->getDefaultShippingAddress()->getId(),
+                'defaultBilling' => $customer->getDefaultBillingAddress()->getId(),
+                'selectAddressAvailable' => $this->oneTouchOrderingConfig->isSelectAddressEnabled()
+            ];
+        }
 
         $result->setData($resultData);
 

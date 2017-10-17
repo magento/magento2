@@ -8,8 +8,23 @@ namespace Magento\OneTouchOrdering\Model;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote;
 
-class CheapestShippingRateChooser implements ShippingRateChooserInterface
+class ShippingRateChooser
 {
+    /**
+     * @var ShippingRateChooserRuleInterface
+     */
+    private $shippingRateChooserRule;
+
+    /**
+     * ShippingRateChooser constructor.
+     * @param ShippingRateChooserRuleInterface $shippingRateChooserRule
+     */
+    public function __construct(
+        ShippingRateChooserRuleInterface $shippingRateChooserRule
+    ) {
+        $this->shippingRateChooserRule = $shippingRateChooserRule;
+    }
+
     /**
      * @param Quote $quote
      * @return Quote
@@ -29,18 +44,12 @@ class CheapestShippingRateChooser implements ShippingRateChooserInterface
             ->getAllShippingRates();
         if (empty($shippingRates)) {
             throw new LocalizedException(
-                __('There are no shipping methods available for default shipping address.')
+                __('There are no shipping methods available.')
             );
         }
 
-        $rate = array_shift($shippingRates);
-
-        foreach ($shippingRates as $tmpRate) {
-            if ($tmpRate['price'] < $rate['price']) {
-                $rate = $tmpRate;
-            }
-        }
-        $address->setShippingMethod($rate['code']);
+        $shippingRate = $this->shippingRateChooserRule->choose($shippingRates);
+        $address->setShippingMethod($shippingRate);
 
         return $quote;
     }

@@ -57,11 +57,12 @@ class CustomerCreditCardManager
     }
 
     /**
-     * @param $customerId
-     * @return \Magento\Vault\Api\Data\PaymentTokenInterface
+     * @param string $customerId
+     * @param string $cardId
+     * @return mixed
      * @throws LocalizedException
      */
-    public function getCustomerCreditCard($customerId, $cardId)
+    public function getCustomerCreditCard(string $customerId, string $cardId)
     {
         $tokens = $this->getVisibleAvailableTokens($customerId);
         if (empty($tokens) || !$cardId || !isset($tokens[$cardId])) {
@@ -72,23 +73,10 @@ class CustomerCreditCardManager
     }
 
     /**
-     * @param $publicHash
-     * @param $customerId
-     * @throws Exception
-     * @return string
+     * @param string $customerId
+     * @return array
      */
-    public function getNonce($publicHash, $customerId): string
-    {
-        return $this->getNonce->execute(
-            ['public_hash' => $publicHash, 'customer_id' => $customerId]
-        )->get()['paymentMethodNonce'];
-    }
-
-    /**
-     * @param $customerId
-     * @return \Magento\Vault\Api\Data\PaymentTokenInterface[]
-     */
-    public function getVisibleAvailableTokens($customerId): array
+    public function getVisibleAvailableTokens(string $customerId): array
     {
         $customerFilter = $this->getFilter(\Magento\Vault\Api\Data\PaymentTokenInterface::CUSTOMER_ID, $customerId);
         $visibleFilter = $this->getFilter(\Magento\Vault\Api\Data\PaymentTokenInterface::IS_VISIBLE, 1);
@@ -120,16 +108,44 @@ class CustomerCreditCardManager
     }
 
     /**
-     * @param $field
+     * @param string $customerId
+     * @param string $publicHash
+     * @return array
+     */
+    public function getPaymentAdditionalInformation(string $customerId, string $publicHash): array
+    {
+        return [
+            'customer_id' => $customerId,
+            'public_hash' => $publicHash,
+            'payment_method_nonce' => $this->getNonce($publicHash, $customerId),
+            'is_active_payment_token_enabler' => true
+        ];
+    }
+
+    /**
+     * @param string $field
      * @param $value
      * @return array
      */
-    private function getFilter($field, $value): array
+    private function getFilter(string $field, $value): array
     {
         return [
             $this->filterBuilder->setField($field)
                 ->setValue($value)
                 ->create()
         ];
+    }
+
+    /**
+     * @param string $publicHash
+     * @param string $customerId
+     * @return string
+     * @throws Exception
+     */
+    private function getNonce(string $publicHash, string $customerId): string
+    {
+        return $this->getNonce->execute(
+            ['public_hash' => $publicHash, 'customer_id' => $customerId]
+        )->get()['paymentMethodNonce'];
     }
 }

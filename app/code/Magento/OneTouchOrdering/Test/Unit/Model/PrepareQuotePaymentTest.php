@@ -85,12 +85,12 @@ class PrepareQuotePaymentTest extends TestCase
         $cc->expects($this->once())->method('getPublicHash')->willReturn($publicHash);
         $this->quote->expects($this->once())->method('getPayment')->willReturn($payment);
         $this->customerCreditCardManager->expects($this->once())
-            ->method('getNonce')
-            ->with($publicHash, $customerId)
-            ->willReturn($nonce);
+            ->method('getPaymentAdditionalInformation')
+            ->with($customerId, $publicHash)
+            ->willReturn($paymentAdditionalInformation);
         $this->quote->expects($this->once())->method('collectTotals');
         $this->prepareQuote->preparePayment($this->quote, $customerId, $ccId);
-        
+
         $this->assertArraySubset($paymentAdditionalInformation, $payment->getAdditionalInformation());
     }
 }

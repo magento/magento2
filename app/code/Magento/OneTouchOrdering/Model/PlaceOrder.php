@@ -26,7 +26,7 @@ class PlaceOrder
      */
     private $prepareQuote;
     /**
-     * @var ShippingRateChooserInterface
+     * @var ShippingRateChooserRuleInterface
      */
     private $shippingRateChooser;
     /**
@@ -39,13 +39,14 @@ class PlaceOrder
      * @param QuoteRepository $quoteRepository
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagementInterface
      * @param PrepareQuote $prepareQuote
-     * @param ShippingRateChooserInterface $shippingRateChooser
+     * @param ShippingRateChooser $shippingRateChooser
+     * @param Config $oneTouchOrderingConfig
      */
     public function __construct(
         QuoteRepository $quoteRepository,
         \Magento\Quote\Api\CartManagementInterface $cartManagementInterface,
         PrepareQuote $prepareQuote,
-        ShippingRateChooserInterface $shippingRateChooser,
+        ShippingRateChooser $shippingRateChooser,
         Config $oneTouchOrderingConfig
     ) {
         $this->cartManagementInterface = $cartManagementInterface;
@@ -59,7 +60,7 @@ class PlaceOrder
      * @param Product $product
      * @param CustomerData $customerData
      * @param array $params
-     * @throws Exception
+     * @throws \Exception
      * @return int
      */
     public function placeOrder(Product $product, CustomerData $customerData, array $params): int

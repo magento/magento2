@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\OneTouchOrdering\Model\ShippingRateChooserInterface" type="Magento\OneTouchOrdering\Model\CheapestShippingRateChooser" />
+    <preference for="Magento\OneTouchOrdering\Model\ShippingRateChooserRuleInterface" type="Magento\OneTouchOrdering\Model\CheapestShippingRateChooserRule" />
 </config>

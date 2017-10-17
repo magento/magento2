@@ -9,18 +9,15 @@
 namespace Magento\OneTouchOrdering\Test\Unit\Model;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\OneTouchOrdering\Model\CheapestShippingRateChooser;
+use Magento\OneTouchOrdering\Model\ShippingRateChooserRuleInterface;
+use Magento\OneTouchOrdering\Model\ShippingRateChooser;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CheapestShippingRateChooserTest extends TestCase
+class ShippingRateChooserTest extends TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CheapestShippingRateChooser
-     */
-    private $shippingRateChooser;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Quote
      */
@@ -29,6 +26,14 @@ class CheapestShippingRateChooserTest extends TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $shippingAddress;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $shippingRateChooserRule;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ShippingRateChooser
+     */
+    private $shippingRateChooser;
 
     public function setUp()
     {
@@ -39,7 +44,10 @@ class CheapestShippingRateChooserTest extends TestCase
             ->setMethods(
                 ['setCollectShippingRates', 'collectShippingRates', 'getAllShippingRates', 'setShippingMethod']
             )->getMock();
-        $this->shippingRateChooser = $objectManager->getObject(CheapestShippingRateChooser::class);
+        $this->shippingRateChooserRule = $this->createMock(ShippingRateChooserRuleInterface::class);
+        $this->shippingRateChooser = $objectManager->getObject(ShippingRateChooser::class,
+            ['shippingRateChooserRule' => $this->shippingRateChooserRule]
+        );
     }
 
     public function testChoose()
@@ -48,6 +56,7 @@ class CheapestShippingRateChooserTest extends TestCase
             ['code' => 'expensive_rate', 'price' => 100],
             ['code' => 'cheap_rate', 'price' => 10]
         ];
+        $chosenCode = 'cheap_rate';
 
         $this->quote
             ->expects($this->once())
@@ -66,10 +75,16 @@ class CheapestShippingRateChooserTest extends TestCase
             ->expects($this->once())
             ->method('getAllShippingRates')
             ->willReturn($shippingRates);
+        $this->shippingRateChooserRule
+            ->expects($this->once())
+            ->method('choose')
+            ->with($shippingRates)
+            ->willReturn($chosenCode);
         $this->shippingAddress
             ->expects($this->once())
             ->method('setShippingMethod')
             ->with('cheap_rate');
+
         $this->shippingRateChooser->choose($this->quote);
     }
 

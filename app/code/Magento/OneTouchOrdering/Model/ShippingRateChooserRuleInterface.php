@@ -9,13 +9,12 @@ use Magento\Quote\Model\Quote;
 
 /**
  * Interface ShippingRateChooserInterface
- * @package Magento\OneTouchOrdering\Model
  */
-interface ShippingRateChooserInterface
+interface ShippingRateChooserRuleInterface
 {
     /**
-     * @param Quote $quote
-     * @return Quote
+     * @param array $shippingRates
+     * @return string
      */
-    public function choose(Quote $quote): Quote;
+    public function choose(array $shippingRates): string;
 }

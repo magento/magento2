@@ -10,7 +10,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\OneTouchOrdering\Model\CustomerData;
 use Magento\OneTouchOrdering\Model\PlaceOrder as PlaceOrderModel;
@@ -43,6 +43,10 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
      * @var CustomerData
      */
     private $customerData;
+    /**
+     * @var Validator
+     */
+    private $formKeyValidator;
 
     /**
      * PlaceOrder constructor.
@@ -53,6 +57,7 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param Session $customerSession
      * @param CustomerData $customerData
+     * @param Validator $formKeyValidator
      */
     public function __construct(
         Context $context,
@@ -61,7 +66,8 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
         PlaceOrderModel $placeOrder,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         Session $customerSession,
-        CustomerData $customerData
+        CustomerData $customerData,
+        Validator $formKeyValidator
     ) {
         parent::__construct($context);
         $this->storeManager = $storeManager;
@@ -70,47 +76,31 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
         $this->orderRepository = $orderRepository;
         $this->customerSession = $customerSession;
         $this->customerData = $customerData;
+        $this->formKeyValidator = $formKeyValidator;
     }
 
     public function execute()
     {
-        $product = $this->initProduct();
-        /** @var JsonResult $result */
-        $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $errorMsg = __('Something went wrong while processing your order. Please try again later.');
 
+        if (!$this->formKeyValidator->validate($this->getRequest())) {
+            return $this->createResponse($errorMsg, false);
+        }
+        $product = $this->initProduct();
         $params = $this->getRequest()->getParams();
         try {
             $customerData = $this->customerData->setCustomer($this->customerSession->getCustomer());
             $orderId = $this->placeOrder->placeOrder($product, $customerData, $params);
         } catch (NoSuchEntityException $e) {
-            $errorMsg = __('Something went wrong while processing your order. Please try again later.');
-            $this->messageManager->addErrorMessage($errorMsg);
-            $result->setData([
-                'response' => $errorMsg
-            ]);
-            return $result;
-        } catch (LocalizedException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
-            $result->setData([
-                'response' => $e->getMessage()
-            ]);
-            return $result;
+            return $this->createResponse($errorMsg, false);
         } catch (Exception $e) {
-            $errorMsg = __('Something went wrong while processing your order. Please try again later.');
-            $this->messageManager->addErrorMessage($errorMsg);
-            $result->setData([
-                'response' => $e->getMessage()
-            ]);
-            return $result;
+            return $this->createResponse($e->getMessage(), false);
         }
 
         $order = $this->orderRepository->get($orderId);
         $message = __('Your order number is: %1.', $order->getIncrementId());
-        $this->messageManager->addSuccessMessage($message);
-        $result->setData([
-            'response' => $message
-        ]);
-        return $result;
+
+        return $this->createResponse($message, true);
     }
 
     /**
@@ -125,5 +115,26 @@ class PlaceOrder extends \Magento\Framework\App\Action\Action
             return $this->productRepository->getById($productId, false, $storeId);
         }
         throw new NoSuchEntityException(__('Requested product doesn\'t exist'));
+    }
+
+    /**
+     * @param string $message
+     * @param bool $successMessage
+     * @return JsonResult
+     */
+    private function createResponse(string $message, bool $successMessage)
+    {
+        /** @var JsonResult $result */
+        $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $result->setData([
+            'response' => $message
+        ]);
+        if ($successMessage) {
+            $this->messageManager->addSuccessMessage($message);
+        } else {
+            $this->messageManager->addErrorMessage($message);
+        }
+
+        return $result;
     }
 }

@@ -57,7 +57,7 @@ class Config
      */
     public function getButtonText(): string
     {
-        return $this->getValue(self::ONE_TOUCH_ORDERING_MODULE_BUTTON_TEXT);
+        return strip_tags($this->getValue(self::ONE_TOUCH_ORDERING_MODULE_BUTTON_TEXT));
     }
 
     /**

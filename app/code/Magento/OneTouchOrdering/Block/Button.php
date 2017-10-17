@@ -11,7 +11,6 @@ use Magento\OneTouchOrdering\Model\Config;
 
 /**
  * Class Button
- * @package Magento\OneTouchOrdering\Block
  * @api
  */
 class Button extends Template

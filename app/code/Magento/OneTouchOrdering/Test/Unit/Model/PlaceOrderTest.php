@@ -10,7 +10,7 @@ use Magento\Framework\DataObject;
 use Magento\OneTouchOrdering\Model\CustomerData;
 use Magento\OneTouchOrdering\Model\PlaceOrder;
 use Magento\OneTouchOrdering\Model\PrepareQuote;
-use Magento\OneTouchOrdering\Model\ShippingRateChooserInterface;
+use Magento\OneTouchOrdering\Model\ShippingRateChooser;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -63,7 +63,7 @@ class PlaceOrderTest extends TestCase
         $this->prepareQuote = $this->createMock(PrepareQuote::class);
         $this->quote = $this->createMock(Quote::class);
         $this->product = $this->createMock(Product::class);
-        $this->shippingRateChooser = $this->createMock(ShippingRateChooserInterface::class);
+        $this->shippingRateChooser = $this->createMock(ShippingRateChooser::class);
         $this->placeOrder = $objectManager->getObject(PlaceOrder::class, [
             'quoteRepository' => $this->quoteRepository,
             'cartManagementInterface' => $this->cartManagementInterface,
@@ -74,12 +74,14 @@ class PlaceOrderTest extends TestCase
 
     public function testPlaceOrder()
     {
-        $params = ['qty' => 1];
+        $params = [
+            'qty' => 1,
+            'customer_cc' => '1'
+        ];
         $quoteId = 123;
         $orderId = 321;
 
         $paramsObject = new DataObject($params);
-
         $this->prepareQuote->expects($this->once())->method('prepare')->willReturn($this->quote);
         $this->quote->expects($this->once())
             ->method('addProduct')
