@@ -1,4 +1,4 @@
-Options All -Indexes
+Options -Indexes
 
 <IfModule mod_php5.c>
 php_flag engine 0
