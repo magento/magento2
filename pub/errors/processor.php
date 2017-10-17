@@ -215,7 +215,7 @@ class Processor
     public function processReport()
     {
         $this->pageTitle = 'There has been an error processing your request';
-        $this->_response->setHttpResponseCode(503);
+        $this->_response->setHttpResponseCode(500);
 
         $this->showErrorMsg = false;
         $this->showSentMsg  = false;
