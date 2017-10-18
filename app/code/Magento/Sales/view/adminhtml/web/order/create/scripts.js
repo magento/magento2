@@ -223,6 +223,7 @@ define([
             }
 
             data['order[' + type + '_address][customer_address_id]'] = null;
+            data['shipping_as_billing'] = jQuery('[name="shipping_same_as_billing"]').is(':checked') ? 1 : 0;
 
             if (name === 'customer_address_id') {
                 data['order[' + type + '_address][customer_address_id]'] =
