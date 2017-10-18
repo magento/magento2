@@ -11,9 +11,9 @@ use Magento\Framework\Data\Collection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
 /**
- * Class which serves as stub for degenerated UI component.
+ * Data Provider for the Advertisement Notification UI component.
  */
-class DummyDataProvider implements DataProviderInterface
+class DataProvider implements DataProviderInterface
 {
     /**
      * Search result object.
@@ -156,7 +156,7 @@ class DummyDataProvider implements DataProviderInterface
      */
     public function getPrimaryFieldName()
     {
-        return '';
+        return 'advertisement_notification';
     }
 
     /**
@@ -166,7 +166,7 @@ class DummyDataProvider implements DataProviderInterface
      */
     public function getRequestFieldName()
     {
-        return '';
+        return 'advertisement_notification';
     }
 
     /**
