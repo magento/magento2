@@ -29,7 +29,7 @@ class Cache
     /**
      * @var ThemeCustomizationConfig
      */
-    protected $themeCustomizationConfig;
+    private $themeCustomizationConfig;
 
     /**
      * @var ImageHelper
@@ -160,7 +160,7 @@ class Cache
      *
      * @return array
      */
-    public function getThemesInUse()
+    private function getThemesInUse(): array
     {
         $themesInUse = [];
 
@@ -175,7 +175,9 @@ class Cache
 
         $connection = $this->attribute->getResource()->getConnection();
 
-        $productCustomDesignAttributeId = $this->attribute->loadByCode(4, 'custom_design')->getId();
+        $productEntityTypeId = \Magento\Catalog\Setup\CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID;
+
+        $productCustomDesignAttributeId = $this->attribute->loadByCode($productEntityTypeId, 'custom_design')->getId();
 
         $productSql = $connection
             ->select()
@@ -198,7 +200,9 @@ class Cache
             }
         }
 
-        $categoryCustomDesignAttributeId = $this->attribute->loadByCode(3, 'custom_design')->getId();
+        $categoryEntityTypeId = \Magento\Catalog\Setup\CategorySetup::CATEGORY_ENTITY_TYPE_ID;
+
+        $categoryCustomDesignAttributeId = $this->attribute->loadByCode($categoryEntityTypeId, 'custom_design')->getId();
 
         $categorySql = $connection
             ->select()
