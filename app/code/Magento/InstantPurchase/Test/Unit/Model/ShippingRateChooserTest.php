@@ -45,7 +45,8 @@ class ShippingRateChooserTest extends TestCase
                 ['setCollectShippingRates', 'collectShippingRates', 'getAllShippingRates', 'setShippingMethod']
             )->getMock();
         $this->shippingRateChooserRule = $this->createMock(ShippingRateChooserRuleInterface::class);
-        $this->shippingRateChooser = $objectManager->getObject(ShippingRateChooser::class,
+        $this->shippingRateChooser = $objectManager->getObject(
+            ShippingRateChooser::class,
             ['shippingRateChooserRule' => $this->shippingRateChooserRule]
         );
     }

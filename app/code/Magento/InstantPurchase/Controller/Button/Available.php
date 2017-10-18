@@ -47,7 +47,7 @@ class Available extends Action
         Config $instantPurchaseConfig
     ) {
         parent::__construct($context);
-        $this->InstantPurchase = $instantPurchase;
+        $this->instantPurchase = $instantPurchase;
         $this->customerSession = $customerSession;
         $this->customerAddressesFormatter = $customerAddressesFormatter;
         $this->instantPurchaseConfig = $instantPurchaseConfig;
@@ -64,7 +64,7 @@ class Available extends Action
             return $result;
         }
         $customer = $this->customerSession->getCustomer();
-        $available = $this->InstantPurchase->isAvailableForCustomer($customer);
+        $available = $this->instantPurchase->isAvailableForCustomer($customer);
         $resultData = [
             'available' => $available
         ];

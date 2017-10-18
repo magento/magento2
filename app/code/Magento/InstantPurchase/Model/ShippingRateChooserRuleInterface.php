@@ -5,8 +5,6 @@
  */
 namespace Magento\InstantPurchase\Model;
 
-use Magento\Quote\Model\Quote;
-
 /**
  * Interface ShippingRateChooserInterface
  */

@@ -7,7 +7,6 @@ namespace Magento\InstantPurchase\Test\Unit\Model;
 
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\InstantPurchase\Model\CustomerDataGetter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;

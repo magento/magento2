@@ -114,7 +114,7 @@ class InstantPurchase
     /**
      * @return bool
      */
-    private function isBrainTree3DDisabled()
+    private function isBrainTree3DDisabled(): bool
     {
         return !$this->brainTreeConfig->isVerify3DSecure();
     }

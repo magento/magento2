@@ -15,13 +15,21 @@ class CustomerDataGetterFactory
      */
     private $objectManager;
 
+    /**
+     * CustomerDataGetterFactory constructor.
+     * @param ObjectManager $objectManager
+     */
     public function __construct(
         ObjectManager $objectManager
     ) {
         $this->objectManager = $objectManager;
     }
 
-    public function create(Customer $customer)
+    /**
+     * @param Customer $customer
+     * @return CustomerDataGetter
+     */
+    public function create(Customer $customer): CustomerDataGetter
     {
         return $this->objectManager->create(CustomerDataGetter::class, ['customer' => $customer]);
     }
