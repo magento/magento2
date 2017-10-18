@@ -23,7 +23,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -248,10 +247,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
 
             $product->load($productId);
-
-            if ($product->getTypeId() == Configurable::TYPE_CODE) {
-                $product->setMinimalPrice($product->getFinalPrice());
-            }
+            $product->setMinimalPrice($product->getFinalPrice());
 
             $this->cacheProduct($cacheKey, $product);
         }
@@ -695,6 +691,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $collection->addAttributeToSelect('*');
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+        $collection->addMinimalPrice();
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
