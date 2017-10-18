@@ -10,7 +10,7 @@ use Magento\Framework\Exception\State\UserLockedException;
 
 /**
  * Interface \Magento\Customer\Model\AuthenticationInterface
- *
+ * @api
  */
 interface AuthenticationInterface
 {
