@@ -85,6 +85,7 @@
         "magento/module-marketplace": "100.2.0",
         "magento/module-admin-notification": "100.2.0",
         "magento/module-advanced-pricing-import-export": "100.2.0",
+        "magento/module-advertisement": "100.2.0-dev",
         "magento/module-analytics": "100.2.0-dev",
         "magento/module-authorization": "100.2.0",
         "magento/module-authorizenet": "100.2.0",

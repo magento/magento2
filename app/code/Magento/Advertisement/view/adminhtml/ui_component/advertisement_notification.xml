@@ -28,7 +28,7 @@
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
-        <dataProvider class="Magento\Advertisement\Ui\DataProvider\DummyDataProvider" name="advertisement_notification_data_source">
+        <dataProvider class="Magento\Advertisement\Ui\DataProvider\DataProvider" name="advertisement_notification_data_source">
             <settings>
                 <clientConfig>
                     <param name="validateBeforeSave" xsi:type="boolean">false</param>
