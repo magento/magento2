@@ -92,7 +92,7 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->shipmentMock = $this->getMockBuilder(ShipmentInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addComment', 'addTrack'])
+            ->setMethods(['addComment', 'addTrack', 'setCustomerNote', 'setCustomerNoteNotify'])
             ->getMockForAbstractClass();
 
         $this->hydratorPoolMock = $this->getMockBuilder(HydratorPool::class)
@@ -166,7 +166,7 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
         if ($appendComment) {
             $comment = "New comment!";
             $visibleOnFront = true;
-            $this->commentMock->expects($this->once())
+            $this->commentMock->expects($this->exactly(2))
                 ->method('getComment')
                 ->willReturn($comment);
 
@@ -178,6 +178,10 @@ class ShipmentDocumentFactoryTest extends \PHPUnit_Framework_TestCase
                 ->method('addComment')
                 ->with($comment, $appendComment, $visibleOnFront)
                 ->willReturnSelf();
+
+            $this->shipmentMock->expects($this->once())
+                ->method('setCustomerNoteNotify')
+                ->with(true);
         }
 
         $this->assertEquals(
