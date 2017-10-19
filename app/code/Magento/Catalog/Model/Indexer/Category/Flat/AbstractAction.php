@@ -369,8 +369,9 @@ class AbstractAction
         }
         $values = [];
 
-        foreach ($entityIds as $entityId) {
-            $values[$entityId] = [];
+        $linkIds = $this->getLinkIds($entityIds);
+        foreach ($linkIds as $linkId) {
+            $values[$linkId] = [];
         }
 
         $attributes = $this->getAttributes();
@@ -386,7 +387,34 @@ class AbstractAction
                 }
             }
         }
+
         return $values;
+    }
+
+    /**
+     * Translate entity ids into link ids
+     *
+     * Used for rows with no EAV attributes set.
+     *
+     * @param array $entityIds
+     * @return array
+     */
+    private function getLinkIds(array $entityIds)
+    {
+        $linkField = $this->getCategoryMetadata()->getLinkField();
+        if ($linkField === 'entity_id') {
+            return $entityIds;
+        }
+
+        $select = $this->connection->select()->from(
+            ['e' => $this->connection->getTableName($this->getTableName('catalog_category_entity'))],
+            [$linkField]
+        )->where(
+            'e.entity_id IN (?)',
+            $entityIds
+        );
+
+        return $this->connection->fetchCol($select);
     }
 
     /**
