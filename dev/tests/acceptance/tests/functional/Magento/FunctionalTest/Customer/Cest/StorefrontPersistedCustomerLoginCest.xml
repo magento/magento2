@@ -8,10 +8,10 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <cest name="StorefrontExistingCustomerLoginCest">
+    <cest name="StorefrontPersistedCustomerLoginCest">
         <annotations>
-            <features value="Customer Login"/>
-            <stories value="Existing Customer can Login on the Storefront"/>
+            <features value="Persisted customer can login from storefront."/>
+            <stories value="Persisted customer can login from storefront."/>
         </annotations>
         <before>
             <createData mergeKey="customer" entity="Simple_US_Customer"/>
@@ -19,10 +19,10 @@
         <after>
             <deleteData mergeKey="deleteCustomer" createDataKey="customer" />
         </after>
-        <test name="ExistingCustomerLoginStorefrontTest">
+        <test name="StorefrontPersistedCustomerLoginTest">
             <annotations>
-                <title value="You should be able to create a customer via the storefront"/>
-                <description value="You should be able to create a customer via the storefront."/>
+                <title value="Persisted customer can login from storefront."/>
+                <description value="Persisted customer can login from storefront."/>
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-72103"/>
                 <group value="customer"/>

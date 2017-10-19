@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateConfigurableProductOption" dataType="ConfigurableProductOption" type="create" auth="adminOauth" url="/V1/configurable-products/{sku}/options" method="POST">
+        <contentType>application/json</contentType>
+        <param key="sku" type="path">{sku}</param>
+        <object dataType="ConfigurableProductOption" key="option">
+            <field key="attribute_id">integer</field>
+            <field key="label">string</field>
+            <array key="values">
+                <value>ValueIndex</value>
+            </array>
+        </object>
+    </operation>
+</config>

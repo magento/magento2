@@ -14,11 +14,11 @@
         "consolidation/robo": "^1.0.0",
         "henrikbjorn/lurker": "^1.2",
         "vlucas/phpdotenv": "~2.4",
-        "magento/magento2-functional-testing-framework": "dev-develop"
+        "magento/magento2-functional-testing-framework": "dev-develop",
+        "magento/magento2-functional-test-module-catalog": "dev-master"
     },
     "suggest": {
         "magento/magento2-functional-test-module-store": "dev-master",
-        "magento/magento2-functional-test-module-catalog": "dev-master",
         "magento/magento2-functional-test-module-catalog-inventory": "dev-master",
         "magento/magento2-functional-test-module-checkout": "dev-master",
         "magento/magento2-functional-test-module-msrp": "dev-master",
