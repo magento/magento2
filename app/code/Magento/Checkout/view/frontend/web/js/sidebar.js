@@ -177,6 +177,7 @@ define([
 
         _removeItem: function (elem) {
             var itemId = elem.data('cart-item');
+
             this._ajax(this.options.url.remove, {
                 item_id: itemId
             }, elem, this._removeItemAfter);
@@ -185,11 +186,15 @@ define([
         /**
          * Update content after item remove
          *
-         * @param elem
-         * @param response
+         * @param {Object} elem
          * @private
          */
-        _removeItemAfter: function (elem, response) {
+        _removeItemAfter: function (elem) {
+            var productData = customerData.get('cart')().items.find(function (item) {
+                return Number(elem.data('cart-item')) === Number(item['item_id']);
+            });
+
+            $(document).trigger('ajax:removeFromCart', productData['product_sku']);
         },
 
         /**
@@ -224,7 +229,7 @@ define([
 
                         if (msg) {
                             alert({
-                                content: $.mage.__(msg)
+                                content: msg
                             });
                         }
                     }

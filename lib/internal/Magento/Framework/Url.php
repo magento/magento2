@@ -389,6 +389,15 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     protected function _isSecure()
     {
         if ($this->_request->isSecure()) {
+            /**
+             * Allow generate programmatically non-secure URL in secure area
+             *
+             * @see https://github.com/magento/magento2/issues/6175
+             * @se https://github.com/magento/magento2/pull/10188
+             */
+            if ($this->getRouteParamsResolver()->hasData('secure')) {
+                return (bool) $this->getRouteParamsResolver()->getData('secure');
+            }
             return true;
         }
 

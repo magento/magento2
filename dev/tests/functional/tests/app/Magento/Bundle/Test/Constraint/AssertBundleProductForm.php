@@ -52,6 +52,7 @@ class AssertBundleProductForm extends AssertProductForm
     protected function prepareBundleOptions(array $bundleSelections)
     {
         foreach ($bundleSelections as &$item) {
+            unset($item['frontend_type']);
             foreach ($item['assigned_products'] as &$selection) {
                 $selection['data']['getProductName'] = $selection['search_data']['name'];
                 $selection = $selection['data'];

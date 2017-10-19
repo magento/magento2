@@ -37,7 +37,17 @@
                 <item name="sticky" xsi:type="boolean">true</item>
             </item>
         </argument>
-        <bookmark name="bookmarks"/>
+        <container name="bookmarks">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/bookmarks/bookmarks</item>
+                    <item name="displayArea" xsi:type="string">dataGridActions</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">localStorage</item>
+                    </item>
+                </item>
+            </argument>
+        </container>
         <columnsControls name="columns_controls"/>
         <filters name="listing_filters">
             <filterSelect name="store_id">

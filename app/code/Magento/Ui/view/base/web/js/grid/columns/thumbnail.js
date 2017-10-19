@@ -12,7 +12,8 @@ define([
     'mage/template',
     'text!Magento_Ui/templates/grid/cells/thumbnail/preview.html',
     'underscore',
-    'Magento_Ui/js/modal/modal'
+    'Magento_Ui/js/modal/modal',
+    'mage/translate'
 ], function (Column, $, mageTemplate, thumbnailPreviewTemplate, _) {
     'use strict';
 
