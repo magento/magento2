@@ -3,7 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Observer;
+
+namespace Magento\InventoryCatalog\Observer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\DataObjectHelper;
@@ -70,6 +71,7 @@ class SourceItemsProcessor
     /**
      * @param string $sku
      * @param array $sourceItemsData
+     *
      * @return void
      * @throws InputException
      */
@@ -107,15 +109,14 @@ class SourceItemsProcessor
      * Key is source id, value is Source Item
      *
      * @param string $sku
+     *
      * @return SourceItemInterface[]
      */
     private function getCurrentSourceItemsMap(string $sku): array
     {
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $this->searchCriteriaBuilderFactory->create();
-        $searchCriteria = $searchCriteriaBuilder
-            ->addFilter(ProductInterface::SKU, $sku)
-            ->create();
+        $searchCriteria = $searchCriteriaBuilder->addFilter(ProductInterface::SKU, $sku)->create();
         $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
 
         $sourceItemMap = [];
@@ -124,11 +125,13 @@ class SourceItemsProcessor
                 $sourceItemMap[$sourceItem->getSourceId()] = $sourceItem;
             }
         }
+
         return $sourceItemMap;
     }
 
     /**
      * @param array $sourceItemData
+     *
      * @return void
      * @throws InputException
      */
@@ -141,6 +144,7 @@ class SourceItemsProcessor
 
     /**
      * @param SourceItemInterface[] $sourceItems
+     *
      * @return void
      */
     private function deleteSourceItems(array $sourceItems)

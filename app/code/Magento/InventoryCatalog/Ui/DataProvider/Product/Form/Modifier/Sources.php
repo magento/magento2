@@ -3,7 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Ui\DataProvider\Product\Form\Modifier;
+
+namespace Magento\InventoryCatalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
@@ -48,6 +49,7 @@ class Sources extends AbstractModifier
         $product = $this->locator->getProduct();
 
         $data[$product->getId()]['sources']['assigned_sources'] = $this->getSourceItemsData();
+
         return $data;
     }
 
@@ -72,10 +74,11 @@ class Sources extends AbstractModifier
             $sourceItemsData[] = [
                 SourceItemInterface::SOURCE_ID => $row[SourceItemInterface::SOURCE_ID],
                 SourceItemInterface::QUANTITY => $row[SourceItemInterface::QUANTITY],
-                SourceItemInterface::STATUS  => $row[SourceItemInterface::STATUS],
+                SourceItemInterface::STATUS => $row[SourceItemInterface::STATUS],
                 SourceInterface::NAME => $row['source_name'],
             ];
         }
+
         return $sourceItemsData;
     }
 
