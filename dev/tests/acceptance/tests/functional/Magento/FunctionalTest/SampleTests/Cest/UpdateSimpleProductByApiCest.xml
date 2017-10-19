@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Test XML Example -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="UpdateSimpleProductByApiCest">
+        <annotations>
+            <features value="Update simple product by api test."/>
+            <stories value="Update simple product by api test."/>
+            <group value="example"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <env value="phantomjs"/>
+            <env value="headless"/>
+        </annotations>
+        <before>
+            <createData mergeKey="categoryHandle" entity="SimpleSubCategory"/>
+            <createData mergeKey="originalProductHandle" entity="SimpleProduct" >
+                <required-entity createDataKey="categoryHandle"/>
+            </createData>
+            <updateData mergeKey="productHandle" entity="NewSimpleProduct" createDataKey="originalProductHandle">
+            </updateData>
+            
+        </before>
+        <after>
+            <deleteData mergeKey="delete" createDataKey="productHandle"/>
+        </after>
+        <test name="UpdateSimpleProductByApiTest">
+        </test>
+    </cest>
+</config>
