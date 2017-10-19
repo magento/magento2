@@ -494,8 +494,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
                     $categoryData[$attributeCode][0]['name'] = $fileName;
                     $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
-                    $categoryData['image'][0]['size'] = isset($stat) ? $stat['size'] : 0;
-                    $categoryData['image'][0]['type'] = $mime;
+                    $categoryData[$attributeCode][0]['size'] = isset($stat) ? $stat['size'] : 0;
+                    $categoryData[$attributeCode][0]['type'] = $mime;
                 }
             }
         }
