@@ -285,7 +285,11 @@ abstract class AbstractType
             }
         }
         foreach ($absentKeys as $attributeSetName => $attributeIds) {
-            $unknownAttributeIds = array_diff($attributeIds, array_keys(self::$commonAttributesCache), self::$invisibleAttributesCache);
+            $unknownAttributeIds = array_diff(
+                $attributeIds,
+                array_keys(self::$commonAttributesCache),
+                self::$invisibleAttributesCache
+            );
             if ($unknownAttributeIds) {
                 $this->attachAttributesById($attributeSetName, $attributeIds);
             }
