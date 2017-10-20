@@ -19,7 +19,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store model manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $_storeManager;
 
@@ -339,7 +339,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getStockConfiguration()
     {

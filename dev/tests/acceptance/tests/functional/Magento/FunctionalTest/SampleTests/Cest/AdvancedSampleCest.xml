@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="AdvancedSampleCest">
+        <annotations>
+            <features value=""/>
+            <stories value=""/>
+            <group value="skip"/>
+        </annotations>
+        <before>
+            <createData entity="SamplePerson" mergeKey="beforeData"/>
+        </before>
+        <after>
+
+        </after>
+        <test name="OneTest">
+            <annotations>
+                <title value=""/>
+                <description value=""/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="#"/>
+            </annotations>
+
+            <!-- Create an entity that depends on another entity -->
+            <createData entity="_defaultCategory" mergeKey="createCategory"/>
+            <createData entity="_defaultProduct" mergeKey="createProduct">
+                <required-entity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Parameterized url -->
+            <amOnPage url="{{SamplePage('foo', SamplePerson.bar)}}" mergeKey="amOnPage"/>
+
+            <!-- Parameterized selector -->
+            <grabTextFrom selector="{{SampleSection.twoParamElement(SamplePerson.foo, 'bar')}}" returnVariable="myReturnVar" mergeKey="grabTextFrom"/>
+
+            <!-- Element with a timeout -->
+            <click selector="{{SampleSection.timeoutElement}}" mergeKey="click"/>
+
+            <!-- ActionGroup -->
+            <actionGroup ref="SampleActionGroup" mergeKey="actionGroup">
+                <argument name="person" value="OverrideDefaultPerson"/>
+            </actionGroup>
+        </test>
+    </cest>
+</config>

@@ -19,6 +19,8 @@
             <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInPage" />
         </variation>
         <variation name="UpdateCustomVariableEntityTestVariation2">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-80353: PHP 7.1 compatibility: Jenkins Failures related to PHP 7.1 upgrade</data>
             <data name="customVariable/data/code" xsi:type="string">variableCode%isolation%</data>
             <data name="customVariable/data/name" xsi:type="string">variableName%isolation%</data>
             <data name="customVariable/data/use_default_value" xsi:type="string">No</data>
@@ -30,6 +32,7 @@
             <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInPage" />
         </variation>
         <variation name="UpdateCustomVariableEntityTestVariation3">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="customVariable/data/code" xsi:type="string">variableCode%isolation%</data>
             <data name="customVariable/data/name" xsi:type="string">variableName%isolation%</data>
             <data name="customVariable/data/use_default_value" xsi:type="string">No</data>
@@ -42,6 +45,8 @@
             <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInPage" />
         </variation>
         <variation name="UpdateCustomVariableEntityTestVariation4">
+            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="issue" xsi:type="string">MAGETWO-80353: PHP 7.1 compatibility: Jenkins Failures related to PHP 7.1 upgrade</data>
             <data name="customVariable/data/code" xsi:type="string">variableCode%isolation%</data>
             <data name="customVariable/data/name" xsi:type="string">variableName%isolation%</data>
             <data name="customVariable/data/use_default_value" xsi:type="string">No</data>

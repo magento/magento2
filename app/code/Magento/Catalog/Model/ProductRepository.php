@@ -312,7 +312,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if ($this->cacheLimit && count($this->instances) > $this->cacheLimit) {
             $offset = round($this->cacheLimit / -2);
             $this->instancesById = array_slice($this->instancesById, $offset, null, true);
-            $this->instances = array_slice($this->instances, $offset);
+            $this->instances = array_slice($this->instances, $offset, null, true);
         }
     }
 
@@ -641,7 +641,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
         unset($this->instances[$product->getSku()]);
         unset($this->instancesById[$product->getId()]);
-        return $this->get($product->getSku());
+        return $this->get($product->getSku(), false, $product->getStoreId());
     }
 
     /**
@@ -717,7 +717,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated
+     * @deprecated 101.1.0
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -773,7 +773,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 101.1.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

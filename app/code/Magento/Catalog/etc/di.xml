@@ -69,6 +69,8 @@
     <preference for="Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface" type="Magento\Catalog\Model\ProductRender\PriceInfo" />
     <preference for="Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface" type="Magento\Catalog\Model\ProductRender\FormattedPriceInfo" />
     <preference for="Magento\Framework\Indexer\BatchProviderInterface" type="Magento\Framework\Indexer\BatchProvider" />
+    <preference for="Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface" type="Magento\Catalog\Model\Indexer\Product\Price\InvalidateIndex" />
+    <preference for="\Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface" type="\Magento\Catalog\Model\Product\Gallery\ImagesConfigFactory" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -82,6 +84,16 @@
         <arguments>
             <argument name="state" xsi:type="object" shared="false">Magento\Framework\Mview\View\StateInterface</argument>
             <argument name="changelog" xsi:type="object" shared="false">Magento\Framework\Mview\View\ChangelogInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Full">
+        <arguments>
+            <argument name="indexerList" xsi:type="array">
+                <item name="catalog_category_product" xsi:type="const">Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID</item>
+                <item name="catalog_product_category" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID</item>
+                <item name="catalog_product_price" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID</item>
+                <item name="catalog_product_attribute" xsi:type="const">Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool">
@@ -144,11 +156,11 @@
             <argument name="options" xsi:type="array">
                 <item name="option1" xsi:type="array">
                     <item name="value" xsi:type="string">container1</item>
-                    <item name="label" xsi:type="string">Product Info Column</item>
+                    <item name="label" xsi:type="string" translatable="true">Product Info Column</item>
                 </item>
                 <item name="option2" xsi:type="array">
                     <item name="value" xsi:type="string">container2</item>
-                    <item name="label" xsi:type="string">Block after Info Column</item>
+                    <item name="label" xsi:type="string" translatable="true">Block after Info Column</item>
                 </item>
             </argument>
         </arguments>

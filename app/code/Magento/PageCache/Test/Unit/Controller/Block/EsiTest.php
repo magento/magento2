@@ -12,7 +12,7 @@ namespace Magento\PageCache\Test\Unit\Controller\Block;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EsiTest extends \PHPUnit_Framework_TestCase
+class EsiTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
@@ -40,6 +40,11 @@ class EsiTest extends \PHPUnit_Framework_TestCase
     protected $layoutMock;
 
     /**
+     * @var \Magento\Framework\View\Layout\LayoutCacheKeyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $layoutCacheKeyMock;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Translate\InlineInterface
      */
     protected $translateInline;
@@ -51,6 +56,8 @@ class EsiTest extends \PHPUnit_Framework_TestCase
     {
         $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->disableOriginalConstructor()->getMock();
+
+        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\LayoutCacheKeyInterface::class);
 
         $contextMock =
             $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
@@ -67,7 +74,7 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
         $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
 
-        $this->translateInline = $this->getMock(\Magento\Framework\Translate\InlineInterface::class);
+        $this->translateInline = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
 
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->action = $helperObjectManager->getObject(
@@ -76,7 +83,8 @@ class EsiTest extends \PHPUnit_Framework_TestCase
                 'context' => $contextMock,
                 'translateInline' => $this->translateInline,
                 'jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Json(),
-                'base64jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Base64Json()
+                'base64jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Base64Json(),
+                'layoutCacheKey' => $this->layoutCacheKeyMock
             ]
         );
     }
@@ -93,13 +101,7 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $html = 'some-html';
         $mapData = [['blocks', '', json_encode([$block])], ['handles', '', base64_encode(json_encode($handles))]];
 
-        $blockInstance1 = $this->getMock(
-            $blockClass,
-            ['toHtml'],
-            [],
-            '',
-            false
-        );
+        $blockInstance1 = $this->createPartialMock($blockClass, ['toHtml']);
 
         $blockInstance1->expects($this->once())->method('toHtml')->will($this->returnValue($html));
         $blockInstance1->setTtl(360);
@@ -109,6 +111,11 @@ class EsiTest extends \PHPUnit_Framework_TestCase
         $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($handles));
 
         $this->viewMock->expects($this->once())->method('getLayout')->will($this->returnValue($this->layoutMock));
+
+        $this->layoutMock->expects($this->never())
+            ->method('getUpdate');
+        $this->layoutCacheKeyMock->expects($this->atLeastOnce())
+            ->method('addCacheKeys');
 
         $this->layoutMock->expects($this->once())
             ->method('getBlock')

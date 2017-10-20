@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Toolbar extends \Magento\Framework\View\Element\Template
 {
@@ -191,7 +192,14 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $this->_collection->setPageSize($limit);
         }
         if ($this->getCurrentOrder()) {
-            $this->_collection->setOrder($this->getCurrentOrder(), $this->getCurrentDirection());
+            if (($this->getCurrentOrder()) == 'position') {
+                $this->_collection->addAttributeToSort(
+                    $this->getCurrentOrder(),
+                    $this->getCurrentDirection()
+                )->addAttributeToSort('entity_id', $this->getCurrentDirection());
+            } else {
+                $this->_collection->setOrder($this->getCurrentOrder(), $this->getCurrentDirection());
+            }
         }
         return $this;
     }

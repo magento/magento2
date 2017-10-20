@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateStoreGroup" dataType="group" type="create"
+               auth="adminFormKey" url="/admin/system_store/save" method="POST" successRegex="messages-message-success" returnRegex="" >
+        <contentType>application/x-www-form-urlencoded</contentType>
+        <object dataType="group" key="group">
+            <field key="group_id">string</field>
+            <field key="name">string</field>
+            <field key="code">string</field>
+            <field key="root_category_id">integer</field>
+            <field key="website_id">integer</field>
+        </object>
+        <field key="store_action">string</field>
+        <field key="store_type">string</field>
+    </operation>
+</config>

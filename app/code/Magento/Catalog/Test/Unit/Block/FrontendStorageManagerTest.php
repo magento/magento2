@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved. 
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Block;
 use Magento\Catalog\Model\FrontendStorageConfigurationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class FrontendStorageManagerTest extends \PHPUnit_Framework_TestCase
+class FrontendStorageManagerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Block\FrontendStorageManager */
     protected $model;

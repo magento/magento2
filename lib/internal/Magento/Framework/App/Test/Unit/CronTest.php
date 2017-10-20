@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit;
 use Magento\Framework\App\Area;
 use \Magento\Framework\App\Cron;
 
-class CronTest extends \PHPUnit_Framework_TestCase
+class CronTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Cron
@@ -42,9 +42,9 @@ class CronTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_stateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
-        $this->_request = $this->getMock(\Magento\Framework\App\Console\Request::class, [], [], '', false);
-        $this->_responseMock = $this->getMock(\Magento\Framework\App\Console\Response::class, [], [], '', false);
+        $this->_stateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->_request = $this->createMock(\Magento\Framework\App\Console\Request::class);
+        $this->_responseMock = $this->createMock(\Magento\Framework\App\Console\Response::class);
         $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new Cron(
             $this->_stateMock,
@@ -58,12 +58,12 @@ class CronTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareAreaListMock()
     {
-        $areaMock = $this->getMock(\Magento\Framework\App\Area::class, [], [], '', false);
+        $areaMock = $this->createMock(\Magento\Framework\App\Area::class);
         $areaMock->expects($this->once())
             ->method('load')
             ->with(Area::PART_TRANSLATE);
 
-        $areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
+        $areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
         $areaListMock->expects($this->any())
             ->method('getArea')
             ->with(Area::AREA_CRONTAB)
@@ -75,7 +75,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
     public function testLaunchDispatchesCronEvent()
     {
         $configLoader = $this->getMockForAbstractClass(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
-        $eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
         $this->objectManager->expects($this->any())
             ->method('get')

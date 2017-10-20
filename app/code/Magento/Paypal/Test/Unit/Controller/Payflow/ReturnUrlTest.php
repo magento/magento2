@@ -26,7 +26,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReturnUrlTest extends \PHPUnit_Framework_TestCase
+class ReturnUrlTest extends \PHPUnit\Framework\TestCase
 {
     const LAST_REAL_ORDER_ID = '000000001';
 
@@ -169,7 +169,8 @@ class ReturnUrlTest extends \PHPUnit_Framework_TestCase
             ->with('goto_success_page', true)
             ->willReturnSelf();
 
-        $this->returnUrl->execute();
+        $result = $this->returnUrl->execute();
+        $this->assertNull($result);
     }
 
     /**

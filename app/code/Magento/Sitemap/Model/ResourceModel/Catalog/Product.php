@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -35,6 +36,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler
+     * @since 100.1.0
      */
     protected $mediaGalleryReadHandler;
 
@@ -67,12 +69,13 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
+     * @since 100.1.0
      */
     protected $mediaGalleryResourceModel;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
-     * @deprecated unused
+     * @deprecated 100.2.0 unused
      */
     protected $_mediaConfig;
 
@@ -189,9 +192,10 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int $storeId
      * @param string $attributeCode
+     * @param string $column Add attribute value to given column
      * @return void
      */
-    protected function _joinAttribute($storeId, $attributeCode)
+    protected function _joinAttribute($storeId, $attributeCode, $column = null)
     {
         $connection = $this->getConnection();
         $attribute = $this->_getAttribute($attributeCode);
@@ -204,6 +208,8 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             . ' AND ' . $connection->quoteInto($attrTableAlias . '.attribute_id = ?', $attribute['attribute_id']),
             []
         );
+        // Global scope attribute value
+        $columnValue = 't1_' . $attributeCode . '.value';
 
         if (!$attribute['is_global']) {
             $attrTableAlias2 = 't2_' . $attributeCode;
@@ -214,6 +220,15 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 . ' AND ' . $connection->quoteInto($attrTableAlias2 . '.store_id = ?', $storeId),
                 []
             );
+            // Store scope attribute value
+            $columnValue = $this->getConnection()->getIfNullSql('t2_'  . $attributeCode . '.value', $columnValue);
+        }
+
+        // Add attribute value to result set if needed
+        if (isset($column)) {
+            $this->_select->columns([
+               $column => $columnValue
+            ]);
         }
     }
 
@@ -282,30 +297,15 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         // Join product images required attributes
         $imageIncludePolicy = $this->_sitemapData->getProductImageIncludePolicy($store->getId());
         if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_NONE != $imageIncludePolicy) {
-            $this->_joinAttribute($store->getId(), 'name');
-            $this->_select->columns(
-                ['name' => $this->getConnection()->getIfNullSql('t2_name.value', 't1_name.value')]
-            );
-
+            $this->_joinAttribute($store->getId(), 'name', 'name');
             if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_ALL == $imageIncludePolicy) {
-                $this->_joinAttribute($store->getId(), 'thumbnail');
-                $this->_select->columns(
-                    [
-                        'thumbnail' => $this->getConnection()->getIfNullSql(
-                            't2_thumbnail.value',
-                            't1_thumbnail.value'
-                        ),
-                    ]
-                );
+                $this->_joinAttribute($store->getId(), 'thumbnail', 'thumbnail');
             } elseif (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_BASE == $imageIncludePolicy) {
-                $this->_joinAttribute($store->getId(), 'image');
-                $this->_select->columns(
-                    ['image' => $this->getConnection()->getIfNullSql('t2_image.value', 't1_image.value')]
-                );
+                $this->_joinAttribute($store->getId(), 'image', 'image');
             }
         }
 
-        $query = $connection->query($this->_select);
+        $query = $connection->query($this->prepareSelectStatement($this->_select));
         while ($row = $query->fetch()) {
             $product = $this->_prepareProduct($row, $store->getId());
             $products[$product->getId()] = $product;
@@ -414,12 +414,23 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Get media config
      *
      * @return \Magento\Catalog\Model\Product\Media\Config
-     * @deprecated No longer used, as we're getting full image URL from getProductImageUrl method
+     * @deprecated 100.2.0 No longer used, as we're getting full image URL from getProductImageUrl method
      * @see getProductImageUrl()
      */
     protected function _getMediaConfig()
     {
         return $this->_mediaConfig;
+    }
+
+    /**
+     * Allow to modify select statement with plugins
+     *
+     * @param \Magento\Framework\DB\Select $select
+     * @return \Magento\Framework\DB\Select
+     */
+    public function prepareSelectStatement(\Magento\Framework\DB\Select $select)
+    {
+        return $select;
     }
 
     /**

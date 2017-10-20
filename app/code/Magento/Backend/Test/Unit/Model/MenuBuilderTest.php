@@ -8,7 +8,7 @@ namespace Magento\Backend\Test\Unit\Model;
 
 use Magento\Backend\Model\Setup\MenuBuilder;
 
-class MenuBuilderTest extends \PHPUnit_Framework_TestCase
+class MenuBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider afterGetResultDataProvider
@@ -19,15 +19,15 @@ class MenuBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterGetResult($isPub, $times)
     {
-        $docRootLocator = $this->getMock(\Magento\Framework\App\DocRootLocator::class, [], [], '', false);
+        $docRootLocator = $this->createMock(\Magento\Framework\App\DocRootLocator::class);
         $docRootLocator->expects($this->once())->method('isPub')->willReturn($isPub);
         $model = new MenuBuilder($docRootLocator);
         /** @var \Magento\Backend\Model\Menu $menu */
-        $menu = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
+        $menu = $this->createMock(\Magento\Backend\Model\Menu::class);
         $menu->expects($this->exactly($times))->method('remove')->willReturn(true);
 
         /** @var \Magento\Backend\Model\Menu\Builder $menuBuilder */
-        $menuBuilder = $this->getMock(\Magento\Backend\Model\Menu\Builder::class, [], [], '', false);
+        $menuBuilder = $this->createMock(\Magento\Backend\Model\Menu\Builder::class);
 
         $this->assertInstanceOf(
             \Magento\Backend\Model\Menu::class,

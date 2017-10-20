@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="_defaultProduct" type="product">
+        <data key="sku" unique="suffix">testSku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">testProductName</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">testurlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <required-entity type="product_extension_attribute">EavStockItem</required-entity>
+        <required-entity type="custom_attribute_array">CustomAttributeCategoryIds</required-entity>
+    </entity>
+    <entity name="SimpleProduct" type="product">
+        <data key="sku" unique="suffix">SimpleProduct</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="price">123.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <required-entity type="product_extension_attribute">EavStockItem</required-entity>
+        <required-entity type="custom_attribute_array">CustomAttributeCategoryIds</required-entity>
+        <!--required-entity type="custom_attribute">CustomAttributeProductUrlKey</required-entity-->
+    </entity>
+</config>

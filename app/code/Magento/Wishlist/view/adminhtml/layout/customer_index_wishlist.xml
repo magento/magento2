@@ -30,7 +30,7 @@
                     </argument>
                     <argument name="empty_text" xsi:type="string" translate="true">No Items Found</argument>
                 </arguments>
-                <block class="Magento\Backend\Block\Widget\Grid\Column" as="product_name">
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="customer.wishlist.edit.tab.columnSet.product_name" as="product_name">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Product Name</argument>
                         <argument name="id" xsi:type="string">product_name</argument>
@@ -41,7 +41,7 @@
                         <argument name="header_css_class" xsi:type="string">col-name</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\Column" as="description">
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="customer.wishlist.edit.tab.columnSet.description" as="description">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">User Description</argument>
                         <argument name="index" xsi:type="string">description</argument>
@@ -49,7 +49,7 @@
                         <argument name="renderer" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\Tab\Wishlist\Grid\Renderer\Description</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\Column" as="qty">
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="customer.wishlist.edit.tab.columnSet.qty" as="qty">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Quantity</argument>
                         <argument name="index" xsi:type="string">qty</argument>
@@ -57,14 +57,14 @@
                         <argument name="id" xsi:type="string">qty</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="store">
+                <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="customer.wishlist.edit.tab.columnSet.store" as="store">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Add Locale</argument>
                         <argument name="index" xsi:type="string">store_id</argument>
                         <argument name="type" xsi:type="string">store</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\Column" as="added_at">
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="customer.wishlist.edit.tab.columnSet.added_at" as="added_at">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Add Date</argument>
                         <argument name="index" xsi:type="string">added_at</argument>
@@ -73,7 +73,7 @@
                         <argument name="id" xsi:type="string">added_at</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\Column" as="days">
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="customer.wishlist.edit.tab.columnSet.days" as="days">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Days in Wish List</argument>
                         <argument name="index" xsi:type="string">days_in_wishlist</argument>
@@ -81,7 +81,7 @@
                         <argument name="id" xsi:type="string">days</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\Column" as="action">
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="customer.wishlist.edit.tab.columnSet.action" as="action">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Action</argument>
                         <argument name="index" xsi:type="string">wishlist_item_id</argument>
@@ -104,7 +104,7 @@
                     </arguments>
                 </block>
             </block>
-            <block class="Magento\Framework\View\Element\Template" as="grid.js">
+            <block class="Magento\Framework\View\Element\Template" name="customer.wishlist.edit.tab.grid_js" as="grid.js">
                 <arguments>
                     <argument name="js_object_name" xsi:type="string">wishlistGridJsObject</argument>
                     <argument name="template" xsi:type="string">Magento_Wishlist::customer/edit/tab/wishlist.phtml</argument>

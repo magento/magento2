@@ -15,7 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\DriverPool;
 
-class CrontabManagerTest extends \PHPUnit_Framework_TestCase
+class CrontabManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ShellInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -87,17 +87,17 @@ class CrontabManagerTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'content' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_START . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . md5(BP) . PHP_EOL
                     . '* * * * * /bin/php /var/www/magento/bin/magento cron:run' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_END . PHP_EOL,
+                    . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . md5(BP) . PHP_EOL,
                 'tasks' => ['* * * * * /bin/php /var/www/magento/bin/magento cron:run'],
             ],
             [
                 'content' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_START . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . md5(BP) . PHP_EOL
                     . '* * * * * /bin/php /var/www/magento/bin/magento cron:run' . PHP_EOL
                     . '* * * * * /bin/php /var/www/magento/bin/magento setup:cron:run' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_END . PHP_EOL,
+                    . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . md5(BP) . PHP_EOL,
                 'tasks' => [
                     '* * * * * /bin/php /var/www/magento/bin/magento cron:run',
                     '* * * * * /bin/php /var/www/magento/bin/magento setup:cron:run',
@@ -165,17 +165,17 @@ class CrontabManagerTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'contentBefore' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_START . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . md5(BP) . PHP_EOL
                     . '* * * * * /bin/php /var/www/magento/bin/magento cron:run' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_END . PHP_EOL,
+                    . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . md5(BP) . PHP_EOL,
                 'contentAfter' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
             ],
             [
                 'contentBefore' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_START . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . md5(BP) . PHP_EOL
                     . '* * * * * /bin/php /var/www/magento/bin/magento cron:run' . PHP_EOL
                     . '* * * * * /bin/php /var/www/magento/bin/magento setup:cron:run' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_END . PHP_EOL,
+                    . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . md5(BP) . PHP_EOL,
                 'contentAfter' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
             ],
             [
@@ -198,14 +198,13 @@ class CrontabManagerTest extends \PHPUnit_Framework_TestCase
     {
         $baseDirMock = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
-        $baseDirMock->expects($this->once())
+        $baseDirMock->expects($this->never())
             ->method('getAbsolutePath')
             ->willReturn('/var/www/magento2/');
         $logDirMock = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
-        $logDirMock->expects($this->once())
-            ->method('getAbsolutePath')
-            ->willReturn('/var/www/magento2/var/log/');
+        $logDirMock->expects($this->never())
+            ->method('getAbsolutePath');
 
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
@@ -292,9 +291,9 @@ class CrontabManagerTest extends \PHPUnit_Framework_TestCase
     public function saveTasksDataProvider()
     {
         $content = '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
-            . CrontabManagerInterface::TASKS_BLOCK_START . PHP_EOL
+            . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . md5(BP) . PHP_EOL
             . '* * * * * /bin/php /var/www/magento/bin/magento cron:run' . PHP_EOL
-            . CrontabManagerInterface::TASKS_BLOCK_END . PHP_EOL;
+            . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . md5(BP) . PHP_EOL;
 
         return [
             [
@@ -303,9 +302,9 @@ class CrontabManagerTest extends \PHPUnit_Framework_TestCase
                 ],
                 'content' => $content,
                 'contentToSave' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_START . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . md5(BP) . PHP_EOL
                     . '* * * * * ' . PHP_BINARY . ' run.php' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_END . PHP_EOL,
+                    . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . md5(BP) . PHP_EOL,
             ],
             [
                 'tasks' => [
@@ -313,9 +312,9 @@ class CrontabManagerTest extends \PHPUnit_Framework_TestCase
                 ],
                 'content' => $content,
                 'contentToSave' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_START . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . md5(BP) . PHP_EOL
                     . '1 2 3 4 5 ' . PHP_BINARY . ' run.php' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_END . PHP_EOL,
+                    . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . md5(BP) . PHP_EOL,
             ],
             [
                 'tasks' => [
@@ -323,10 +322,10 @@ class CrontabManagerTest extends \PHPUnit_Framework_TestCase
                 ],
                 'content' => $content,
                 'contentToSave' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_START . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . md5(BP) . PHP_EOL
                     . '* * * * * ' . PHP_BINARY . ' /var/www/magento2/run.php >>'
                     . ' /var/www/magento2/var/log/cron.log' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_END . PHP_EOL,
+                    . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . md5(BP) . PHP_EOL,
             ],
             [
                 'tasks' => [
@@ -334,10 +333,10 @@ class CrontabManagerTest extends \PHPUnit_Framework_TestCase
                 ],
                 'content' => $content,
                 'contentToSave' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_START . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . md5(BP) . PHP_EOL
                     . '* * * * * ' . PHP_BINARY . ' /var/www/magento2/run.php'
                     . ' %% cron:run | grep -v \"Ran \'jobs\' by schedule\"' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_END . PHP_EOL,
+                    . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . md5(BP) . PHP_EOL,
             ],
         ];
     }

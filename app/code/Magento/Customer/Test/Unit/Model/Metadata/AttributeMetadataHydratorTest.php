@@ -21,7 +21,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeMetadataHydratorTest extends \PHPUnit_Framework_TestCase
+class AttributeMetadataHydratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AttributeMetadataInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -56,35 +56,14 @@ class AttributeMetadataHydratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->attributeMetadataFactoryMock = $this->getMock(
+        $this->attributeMetadataFactoryMock = $this->createPartialMock(
             AttributeMetadataInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->optionFactoryMock = $this->getMock(
-            OptionInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->validationRuleFactoryMock = $this->getMock(
-            ValidationRuleInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->attributeMetadataMock = $this->getMock(AttributeMetadataInterface::class);
-        $this->dataObjectProcessorMock = $this->getMock(
-            DataObjectProcessor::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->optionFactoryMock = $this->createPartialMock(OptionInterfaceFactory::class, ['create']);
+        $this->validationRuleFactoryMock = $this->createPartialMock(ValidationRuleInterfaceFactory::class, ['create']);
+        $this->attributeMetadataMock = $this->createMock(AttributeMetadataInterface::class);
+        $this->dataObjectProcessorMock = $this->createMock(DataObjectProcessor::class);
         $this->attributeMetadataHydrator = $objectManager->getObject(
             AttributeMetadataHydrator::class,
             [
@@ -182,7 +161,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit_Framework_TestCase
             $attributeMetadata->getAttributeCode()
         );
         $this->assertInternalType(
-            \PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+            \PHPUnit\Framework\Constraint\IsType::TYPE_ARRAY,
             $attributeMetadata->getOptions()
         );
         $this->assertArrayHasKey(
@@ -198,7 +177,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(OptionInterface::class, $attributeMetadata->getOptions()[1]);
 
         $this->assertInternalType(
-            \PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+            \PHPUnit\Framework\Constraint\IsType::TYPE_ARRAY,
             $attributeMetadata->getOptions()[1]->getOptions()
         );
         $this->assertArrayHasKey(0, $attributeMetadata->getOptions()[1]->getOptions());
@@ -208,7 +187,7 @@ class AttributeMetadataHydratorTest extends \PHPUnit_Framework_TestCase
             $attributeMetadata->getOptions()[1]->getOptions()[0]->getLabel()
         );
         $this->assertInternalType(
-            \PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY,
+            \PHPUnit\Framework\Constraint\IsType::TYPE_ARRAY,
             $attributeMetadata->getValidationRules()
         );
         $this->assertArrayHasKey(0, $attributeMetadata->getValidationRules());

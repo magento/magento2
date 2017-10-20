@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\Storage\DbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-class DbStorageTest extends \PHPUnit_Framework_TestCase
+class DbStorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -49,14 +49,10 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
         $this->urlRewriteFactory = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
-        $this->dataObjectHelper = $this->getMock(
-            \Magento\Framework\Api\DataObjectHelper::class, [], [], '',
-            false);
-        $this->connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->select = $this->getMock(
-            \Magento\Framework\DB\Select::class, ['from', 'where', 'deleteFromSelect'], [], '',
-            false);
-        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->select = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from', 'where', 'deleteFromSelect']);
+        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
 
         $this->resource->expects($this->any())
             ->method('getConnection')
@@ -440,8 +436,8 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
 
     public function testReplace()
     {
-        $urlFirst = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
-        $urlSecond = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
+        $urlFirst = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
+        $urlSecond = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
 
         // delete
 
@@ -531,11 +527,44 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
+     * @expectedException \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
      */
-    public function testReplaceIfThrewDuplicateEntryException()
+    public function testReplaceIfThrewExceptionOnDuplicateUrl()
     {
-        $url = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
+        $url = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
+
+        $url->expects($this->any())
+            ->method('toArray')
+            ->will($this->returnValue(['row1']));
+
+        $this->connectionMock->expects($this->once())
+            ->method('insertMultiple')
+            ->will(
+                $this->throwException(
+                    new \Exception('SQLSTATE[23000]: test: 1062 test', DbStorage::ERROR_CODE_DUPLICATE_ENTRY)
+                )
+            );
+        $conflictingUrl = [
+            UrlRewrite::URL_REWRITE_ID => 'conflicting-url'
+        ];
+        $this->connectionMock->expects($this->any())
+            ->method('fetchRow')
+            ->willReturn($conflictingUrl);
+
+        $this->storage->replace([$url]);
+    }
+
+    /**
+     * Validates a case when DB errors on duplicate entry, but calculated URLs are not really duplicated
+     *
+     * An example is when URL length exceeds length of the DB field, so URLs are trimmed and become conflicting
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage SQLSTATE[23000]: test: 1062 test
+     */
+    public function testReplaceIfThrewExceptionOnDuplicateEntry()
+    {
+        $url = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
 
         $url->expects($this->any())
             ->method('toArray')
@@ -557,7 +586,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testReplaceIfThrewCustomException()
     {
-        $url = $this->getMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class, [], [], '', false);
+        $url = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
 
         $url->expects($this->any())
             ->method('toArray')

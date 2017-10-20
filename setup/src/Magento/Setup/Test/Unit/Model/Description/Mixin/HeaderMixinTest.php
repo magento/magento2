@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Model\Description\Mixin;
 
-class HeaderMixinTest extends \PHPUnit_Framework_TestCase
+class HeaderMixinTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Model\Description\Mixin\HeaderMixin

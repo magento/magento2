@@ -31,7 +31,7 @@ class CreationQuantityValidator implements ValidatorInterface
     /**
      * ItemCreationQuantityValidator constructor.
      * @param OrderItemRepositoryInterface $orderItemRepository
-     * @param object $context
+     * @param mixed $context
      */
     public function __construct(OrderItemRepositoryInterface $orderItemRepository, $context = null)
     {

@@ -42,11 +42,10 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
     $pos = $block->getPositioned();
     ?>
     <div class="products wrapper <?= /* @escapeNotVerified */ $viewMode ?> products-<?= /* @escapeNotVerified */ $viewMode ?>">
-        <?php $iterator = 1; ?>
         <ol class="products list items product-items">
             <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
             <?php foreach ($_productCollection as $_product): ?>
-                <?= /* @escapeNotVerified */ ($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
+            <li class="item product product-item">
                 <div class="product-item-info" data-container="product-grid">
                     <?php
                     $productImage = $block->getImage($_product, $image);
@@ -78,7 +77,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                                 <div class="actions-primary"<?= strpos($pos, $viewMode . '-primary') ? $position : '' ?>>
                                     <?php if ($_product->isSaleable()): ?>
                                         <?php $postParams = $block->getAddToCartPostParams($_product); ?>
-                                        <form data-role="tocart-form" action="<?= /* @escapeNotVerified */ $postParams['action'] ?>" method="post">
+                                        <form data-role="tocart-form" data-product-sku="<?=  /* @NoEscape */ $_product->getSku() ?>" action="<?= /* @NoEscape */ $postParams['action'] ?>" method="post">
                                             <input type="hidden" name="product" value="<?= /* @escapeNotVerified */ $postParams['data']['product'] ?>">
                                             <input type="hidden" name="<?= /* @escapeNotVerified */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @escapeNotVerified */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
                                             <?= $block->getBlockHtml('formkey') ?>
@@ -112,7 +111,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                         </div>
                     </div>
                 </div>
-                <?= ($iterator == count($_productCollection)+1) ? '</li>' : '' ?>
+            </li>
             <?php endforeach; ?>
         </ol>
     </div>
@@ -121,7 +120,9 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
         <script type="text/x-magento-init">
         {
             "[data-role=tocart-form], .form.map.checkout": {
-                "catalogAddToCart": {}
+                "catalogAddToCart": {
+                    "product_sku": "<?= /* @NoEscape */ $_product->getSku() ?>"
+                }
             }
         }
         </script>

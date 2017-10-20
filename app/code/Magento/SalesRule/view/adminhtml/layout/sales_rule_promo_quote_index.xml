@@ -26,7 +26,7 @@
                                 </item>
                             </argument>
                         </arguments>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="rule_id">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.promo.quote.grid.columnSet.rule_id" as="rule_id">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">ID</argument>
                                 <argument name="index" xsi:type="string">rule_id</argument>
@@ -34,19 +34,19 @@
                                 <argument name="header_css_class" xsi:type="string">col-id</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="name">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.promo.quote.grid.columnSet.name" as="name">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Rule</argument>
                                 <argument name="index" xsi:type="string">name</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="coupon_code">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.promo.quote.grid.columnSet.coupon_code" as="coupon_code">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Coupon Code</argument>
                                 <argument name="index" xsi:type="string">code</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="from_date">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.promo.quote.grid.columnSet.from_date" as="from_date">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Start</argument>
                                 <argument name="type" xsi:type="string">date</argument>
@@ -56,7 +56,7 @@
                                 <argument name="header_css_class" xsi:type="string">col-date</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="to_date">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.promo.quote.grid.columnSet.to_date" as="to_date">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">End</argument>
                                 <argument name="type" xsi:type="string">date</argument>
@@ -67,7 +67,7 @@
                                 <argument name="header_css_class" xsi:type="string">col-date</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="is_active">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.promo.quote.grid.columnSet.is_active" as="is_active">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Status</argument>
                                 <argument name="index" xsi:type="string">is_active</argument>
@@ -84,7 +84,7 @@
                                 </argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="rule_website">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="adminhtml.promo.quote.grid.columnSet.rule_website" as="rule_website">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Web Site</argument>
                                 <argument name="index" xsi:type="string">website_ids</argument>
@@ -93,7 +93,7 @@
                                 <argument name="options" xsi:type="options" model="Magento\Config\Model\Config\Source\Website\OptionHash"/>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="sort_order">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.promo.quote.grid.columnSet.sort_order" as="sort_order">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Priority</argument>
                                 <argument name="index" xsi:type="string">sort_order</argument>

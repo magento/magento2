@@ -35,14 +35,13 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
         <div class="block-content">
             <?php $suffix = $block->getNameInLayout(); ?>
             <ol id="widget-viewed-<?= /* @escapeNotVerified */ $suffix ?>" class="product-items product-items-images">
-                <?php $iterator = 1; ?>
                 <?php foreach ($items as $_product): ?>
-                    <?= /* @escapeNotVerified */ ($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
+                    <li class="product-item">
                         <a class="product-item-photo" href="<?= /* @escapeNotVerified */ $_product->getProductUrl() ?>" title="<?= /* @escapeNotVerified */ $block->stripTags($_product->getName(), null, true) ?>">
                             <?= $block->getImage($_product, $image)->toHtml() ?>
                         </a>
-                    <?= ($iterator == count($items)+1) ? '</li>' : '' ?>
-            <?php endforeach; ?>
+                    </li>
+                <?php endforeach; ?>
             </ol>
         </div>
     </div>

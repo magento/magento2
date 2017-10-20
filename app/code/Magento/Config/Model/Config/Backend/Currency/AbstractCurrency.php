@@ -15,6 +15,7 @@ namespace Magento\Config\Model\Config\Backend\Currency;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
 {
@@ -25,7 +26,7 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
      */
     protected function _getAllowedCurrencies()
     {
-        if ($this->getData('groups/options/fields/allow/inherit')) {
+        if (!$this->isFormData() || $this->getData('groups/options/fields/allow/inherit')) {
             return explode(
                 ',',
                 (string)$this->_config->getValue(
@@ -62,7 +63,8 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
      */
     protected function _getCurrencyBase()
     {
-        if (!($value = $this->getData('groups/options/fields/base/value'))) {
+        $value = $this->getData('groups/options/fields/base/value');
+        if (!$this->isFormData() || !$value) {
             $value = $this->_config->getValue(
                 \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
                 $this->getScope(),
@@ -79,7 +81,7 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
      */
     protected function _getCurrencyDefault()
     {
-        if (!($value = $this->getData('groups/options/fields/default/value'))) {
+        if (!$this->isFormData() || !($value = $this->getData('groups/options/fields/default/value'))) {
             $value = $this->_config->getValue(
                 \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_DEFAULT,
                 $this->getScope(),
@@ -87,5 +89,15 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
             );
         }
         return strval($value);
+    }
+
+    /**
+     * Check whether field saved from Admin form with other currency data or as single field, e.g. from CLI command
+     *
+     * @return bool True in case when field was saved from Admin form
+     */
+    private function isFormData()
+    {
+        return $this->getData('groups/options/fields') !== null;
     }
 }

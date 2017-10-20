@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="StorefrontExistingCustomerLoginCest">
+        <annotations>
+            <features value="Customer Login"/>
+            <stories value="Existing Customer can Login on the Storefront"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" mergeKey="Simple_US_Customer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="Simple_US_Customer" mergeKey="Simple_US_Customer"/>
+        </after>
+        <test name="ExistingCustomerLoginStorefrontTest">
+            <annotations>
+                <title value="You should be able to create a customer via the storefront"/>
+                <description value="You should be able to create a customer via the storefront."/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-72103"/>
+                <group value="customer"/>
+                <env value="chrome"/>
+                <env value="firefox"/>
+                <env value="phantomjs"/>
+                <env value="headless"/>
+            </annotations>
+            <amOnPage mergeKey="amOnSignInPage"  url="customer/account/login/"/>
+            <fillField  mergeKey="fillEmail" userInput="$$Simple_US_Customer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
+            <fillField  mergeKey="fillPassword" userInput="{{Simple_US_Customer.password}}" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
+            <click mergeKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+            <see mergeKey="seeFirstName" userInput="{{Simple_US_Customer.firstname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <see mergeKey="seeLastName" userInput="{{Simple_US_Customer.lastname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <see mergeKey="seeEmail" userInput="$$Simple_US_Customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        </test>
+    </cest>
+</config>

@@ -10,7 +10,7 @@ use Magento\Customer\Model\Context;
 /**
  * Test class for \Magento\Customer\Block\Account\RegisterLink
  */
-class RegisterLinkTest extends \PHPUnit_Framework_TestCase
+class RegisterLinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

@@ -41,21 +41,21 @@
                                 <item name="total" xsi:type="string" translate="true">Row Total</item>
                             </argument>
                         </arguments>
-                        <block class="Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer" as="default" template="Magento_Sales::order/view/items/renderer/default.phtml">
-                        <arguments>
-                            <argument name="columns" xsi:type="array">
-                                <item name="product" xsi:type="string" translate="false">col-product</item>
-                                <item name="status" xsi:type="string" translate="false">col-status</item>
-                                <item name="price-original" xsi:type="string" translate="false">col-price-original</item>
-                                <item name="price" xsi:type="string" translate="false">col-price</item>
-                                <item name="qty" xsi:type="string" translate="false">col-ordered-qty</item>
-                                <item name="subtotal" xsi:type="string" translate="false">col-subtotal</item>
-                                <item name="tax-amount" xsi:type="string" translate="false">col-tax-amount</item>
-                                <item name="tax-percent" xsi:type="string" translate="false">col-tax-percent</item>
-                                <item name="discont" xsi:type="string" translate="false">col-discont</item>
-                                <item name="total" xsi:type="string" translate="false">col-total</item>
-                            </argument>
-                        </arguments>
+                        <block class="Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer" as="default" name="default_order_items_renderer" template="Magento_Sales::order/view/items/renderer/default.phtml">
+                            <arguments>
+                                <argument name="columns" xsi:type="array">
+                                    <item name="product" xsi:type="string" translate="false">col-product</item>
+                                    <item name="status" xsi:type="string" translate="false">col-status</item>
+                                    <item name="price-original" xsi:type="string" translate="false">col-price-original</item>
+                                    <item name="price" xsi:type="string" translate="false">col-price</item>
+                                    <item name="qty" xsi:type="string" translate="false">col-ordered-qty</item>
+                                    <item name="subtotal" xsi:type="string" translate="false">col-subtotal</item>
+                                    <item name="tax-amount" xsi:type="string" translate="false">col-tax-amount</item>
+                                    <item name="tax-percent" xsi:type="string" translate="false">col-tax-percent</item>
+                                    <item name="discont" xsi:type="string" translate="false">col-discont</item>
+                                    <item name="total" xsi:type="string" translate="false">col-total</item>
+                                </argument>
+                            </arguments>
                         </block>
                         <block class="Magento\Sales\Block\Adminhtml\Items\Column\Qty" name="column_qty" template="Magento_Sales::items/column/qty.phtml" group="column"/>
                         <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name" name="column_name" template="Magento_Sales::items/column/name.phtml" group="column"/>

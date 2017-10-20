@@ -20,6 +20,7 @@ use Magento\Sales\Model\EntityInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
 {
@@ -361,9 +362,18 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
 
         $this->setState(self::STATE_PAID);
 
-        $this->getOrder()->getPayment()->pay($this);
-        $this->getOrder()->setTotalPaid($this->getOrder()->getTotalPaid() + $this->getGrandTotal());
-        $this->getOrder()->setBaseTotalPaid($this->getOrder()->getBaseTotalPaid() + $this->getBaseGrandTotal());
+        $order = $this->getOrder();
+        $order->getPayment()->pay($this);
+        $totalPaid = $this->getGrandTotal();
+        $baseTotalPaid = $this->getBaseGrandTotal();
+        $invoiceList = $order->getInvoiceCollection();
+        // calculate all totals
+        if (count($invoiceList->getItems()) > 1) {
+            $totalPaid += $order->getTotalPaid();
+            $baseTotalPaid += $order->getBaseTotalPaid();
+        }
+        $order->setTotalPaid($totalPaid);
+        $order->setBaseTotalPaid($baseTotalPaid);
         $this->_eventManager->dispatch('sales_order_invoice_pay', [$this->_eventObject => $this]);
         return $this;
     }
@@ -397,6 +407,9 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function cancel()
     {
+        if (!$this->canCancel()) {
+            return $this;
+        }
         $order = $this->getOrder();
         $order->getPayment()->cancelInvoice($this);
         foreach ($this->getAllItems() as $item) {
