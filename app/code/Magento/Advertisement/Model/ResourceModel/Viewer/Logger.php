@@ -54,7 +54,7 @@ class Logger
         $connection = $this->resource->getConnection(ResourceConnection::DEFAULT_CONNECTION);
 
         $connection->insertOnDuplicate(
-            $this->resource->getTableName(self::TABLE_NAME ),
+            $this->resource->getTableName(self::TABLE_NAME),
             [
                 'viewer_id' => $viewerId,
                 'last_view_version' => $lastViewVersion
