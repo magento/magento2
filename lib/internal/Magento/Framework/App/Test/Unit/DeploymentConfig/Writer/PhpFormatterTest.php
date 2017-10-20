@@ -11,8 +11,8 @@ class PhpFormatterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider formatWithCommentDataProvider
-     * @param string|array $data
-     * @param array $comments
+     * @param string[] $data
+     * @param string[] $comments
      * @param string $expectedResult
      */
     public function testFormat($data, $comments, $expectedResult)
