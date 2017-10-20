@@ -12,10 +12,10 @@ use Magento\Framework\Indexer\ActionInterface;
  *
  * @api
  */
-interface StockItemIndexerInterface extends ActionInterface
+interface SourceItemIndexerInterface extends ActionInterface
 {
     /**
      * Indexer ID in configuration
      */
-    const INDEXER_ID = 'inventory_stock_item';
+    const INDEXER_ID = 'inventory_source_item';
 }
