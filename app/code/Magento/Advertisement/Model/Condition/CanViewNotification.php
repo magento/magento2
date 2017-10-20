@@ -5,9 +5,10 @@
  */
 namespace Magento\Advertisement\Model\Condition;
 
+use Magento\Advertisement\Model\ResourceModel\Viewer\Logger;
 use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
-use Magento\Advertisement\Model\AdvertisementFlagManager;
 
 /**
  * Class CanViewNotification
@@ -23,9 +24,9 @@ class CanViewNotification implements VisibilityConditionInterface
     const NAME = 'can_view_notification';
 
     /**
-     * @var AdvertisementFlagManager
+     * @var Logger
      */
-    private $advertisementFlagManager;
+    private $viewerLogger;
 
     /**
      * @var Session
@@ -33,17 +34,24 @@ class CanViewNotification implements VisibilityConditionInterface
     private $session;
 
     /**
+     * @var ProductMetadataInterface
+     */
+    private $productMetadata;
+
+    /**
      * CanViewNotification constructor.
      *
-     * @param AdvertisementFlagManager $advertisementFlagManager
+     * @param Logger $viewerLogger
      * @param Session $session
      */
     public function __construct(
-        AdvertisementFlagManager $advertisementFlagManager,
-        Session $session
+        Logger $viewerLogger,
+        Session $session,
+        ProductMetadataInterface $productMetadata
     ) {
-        $this->advertisementFlagManager = $advertisementFlagManager;
+        $this->viewerLogger = $viewerLogger;
         $this->session = $session;
+        $this->productMetadata = $productMetadata;
     }
 
     /**
@@ -54,11 +62,17 @@ class CanViewNotification implements VisibilityConditionInterface
     public function isVisible(array $arguments)
     {
         $userId = $this->session->getUser()->getId();
-        if ($this->advertisementFlagManager->isUserNotified($userId)) {
+        $viewerLog = $this->viewerLogger->get($userId);
+        $version = $this->productMetadata->getVersion();
+        if ($viewerLog == null
+            || $viewerLog->getLastViewVersion() == null
+            || $viewerLog->getLastViewVersion() < $version
+        ) {
+            $this->viewerLogger->log($userId, $version);
+            return true;
+        } else {
             return false;
         }
-
-        return $this->advertisementFlagManager->setNotifiedUser($userId);
     }
 
     /**
