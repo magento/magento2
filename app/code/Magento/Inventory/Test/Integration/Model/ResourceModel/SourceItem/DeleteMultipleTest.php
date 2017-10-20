@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Inventory\Model\ResourceModel\SourceItem;
+
+declare(strict_types=1);
+
+namespace Magento\Inventory\Test\Model\ResourceModel\SourceItem;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
@@ -48,25 +51,6 @@ class DeleteMultipleTest extends TestCase
         $this->deleteModel->execute([]);
 
         $this->assertCount($expectedCount, $this->getSourceItems());
-    }
-
-    /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     */
-    public function testDeleteMultipleForTwoItems()
-    {
-        $sourceItems = $this->getSourceItems();
-        $expectedCount = count($sourceItems) - 2;
-        $itemsToDelete = array_slice($sourceItems, 0, 2);
-        $expectedResult = array_slice($sourceItems, 2);
-
-        $this->deleteModel->execute($itemsToDelete);
-
-        $result = array_values($this->getSourceItems());
-        $this->assertCount($expectedCount, $result);
-        $this->assertEquals($expectedResult, $result);
     }
 
     /**

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\InventoryImportExport\Model\Import\Validator;
 
 use Magento\Framework\Validation\ValidationResultFactory;
@@ -12,8 +14,6 @@ use Magento\InventoryImportExport\Model\Import\Sources;
 
 /**
  * Extension point for source validation
- *
- * @api
  */
 class SourceValidator implements ValidatorInterface
 {
@@ -48,7 +48,7 @@ class SourceValidator implements ValidatorInterface
     /**
      * @inheritdoc
      */
-    public function validate(array $rowData, $rowNumber)
+    public function validate(array $rowData, int $rowNumber)
     {
         $errors = [];
 

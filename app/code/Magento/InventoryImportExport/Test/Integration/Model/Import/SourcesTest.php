@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -142,8 +145,6 @@ class SourcesTest extends TestCase
         ]);
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
-        $sourceItems = $this->sourceItemRepository->getList($searchCriteria);
-        $beforeImportData = $this->buildDataArray($sourceItems->getItems());
 
         $bunch = [
             $this->buildRowDataArray(10, 'SKU-1', 6.88, 1),
@@ -160,9 +161,8 @@ class SourcesTest extends TestCase
 
         $this->assertArrayNotHasKey('10-SKU-1', $afterImportData);
         $this->assertArrayNotHasKey('20-SKU-1', $afterImportData);
-
-        $this->assertCount(count($beforeImportData) - 2, $afterImportData);
     }
+
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
@@ -172,7 +172,6 @@ class SourcesTest extends TestCase
      */
     public function testImportDataWithReplaceBehavior()
     {
-        $this->markTestIncomplete('Implement clenup (DELETE from inventory_source_item;)');
         /** @see \Magento\InventoryImportExport\Model\Import\Command\Replace::execute */
         $this->importer->setParameters([
             'behavior' => Import::BEHAVIOR_REPLACE
@@ -225,10 +224,10 @@ class SourcesTest extends TestCase
         foreach ($sourceItems as $sourceItem) {
             $key = sprintf('%s-%s', $sourceItem->getSourceId(), $sourceItem->getSku());
             $comparableArray[$key] = $this->buildRowDataArray(
-                (int) $sourceItem->getSourceId(),
+                $sourceItem->getSourceId(),
                 $sourceItem->getSku(),
-                (float) $sourceItem->getQuantity(),
-                (int) $sourceItem->getStatus()
+                $sourceItem->getQuantity(),
+                $sourceItem->getStatus()
             );
         }
         return $comparableArray;

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\InventoryImportExport\Model\Import\Command;
 
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
@@ -26,16 +28,23 @@ class Replace implements CommandInterface
     private $sourceItemsSave;
 
     /**
+     * @var SourceItemsDeleteInterface
+     */
+    private $sourceItemsDelete;
+
+    /**
      * @param SourceItemConvert $sourceItemFactory
      * @param SourceItemsSaveInterface $sourceItemsSave
      * @param SourceItemsDeleteInterface $sourceItemsDelete
      */
     public function __construct(
         SourceItemConvert $sourceItemConvert,
-        SourceItemsSaveInterface $sourceItemsSave
+        SourceItemsSaveInterface $sourceItemsSave,
+        SourceItemsDeleteInterface $sourceItemsDelete
     ) {
         $this->sourceItemConvert = $sourceItemConvert;
         $this->sourceItemsSave = $sourceItemsSave;
+        $this->sourceItemsDelete = $sourceItemsDelete;
     }
 
     /**
@@ -43,8 +52,8 @@ class Replace implements CommandInterface
      */
     public function execute(array $bunch)
     {
-        // @todo implement clenup (DELETE from inventory_source_item;)
         $sourceItems = $this->sourceItemConvert->convert($bunch);
+        $this->sourceItemsDelete->execute($sourceItems);
         $this->sourceItemsSave->execute($sourceItems);
     }
 }

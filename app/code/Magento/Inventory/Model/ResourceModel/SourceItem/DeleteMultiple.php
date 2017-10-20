@@ -45,28 +45,15 @@ class DeleteMultiple
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
-        $sourceIds = $this->getSourceIds($sourceItems);
-        foreach ($sourceIds as $sourceId => $skuList) {
-            $whereCond = [
-                $connection->quoteInto(SourceItemInterface::SOURCE_ID . ' = ?', $sourceId),
-                $connection->quoteInto(SourceItemInterface::SKU . ' IN(?)', $skuList),
-            ];
-            $connection->delete($tableName, $whereCond);
-        }
-    }
-
-    /**
-     * @param SourceItemInterface[] $sourceItems
-     * @return int[]
-     */
-    private function getSourceIds($sourceItems): array
-    {
-        $sourceIds = [];
-
+        $skuList = [];
         foreach ($sourceItems as $sourceItem) {
-            $sourceIds[$sourceItem->getSourceId()][] = $sourceItem->getSku();
+            $skuList[] = $sourceItem->getSku();
         }
 
-        return $sourceIds;
+        $whereCond = [
+            $connection->quoteInto(SourceItemInterface::SKU . ' IN(?)', array_unique($skuList))
+        ];
+
+        $connection->delete($tableName, $whereCond);
     }
 }

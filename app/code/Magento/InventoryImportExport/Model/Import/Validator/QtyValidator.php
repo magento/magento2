@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\InventoryImportExport\Model\Import\Validator;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -12,8 +14,6 @@ use Magento\InventoryImportExport\Model\Import\Sources;
 
 /**
  * Extension point for row validation
- *
- * @api
  */
 class QtyValidator implements ValidatorInterface
 {
@@ -34,7 +34,7 @@ class QtyValidator implements ValidatorInterface
     /**
      * @inheritdoc
      */
-    public function validate(array $rowData, $rowNumber)
+    public function validate(array $rowData, int $rowNumber)
     {
         $errors = [];
 

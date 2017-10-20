@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\InventoryImportExport\Model\Import\Command;
 
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
@@ -25,7 +27,8 @@ class Append implements CommandInterface
     private $sourceItemsSave;
 
     /**
-     * @param SourceItemBuilder
+     * @param SourceItemConvert $sourceItemConvert
+     * @param SourceItemsSaveInterface $sourceItemsSave
      */
     public function __construct(
         SourceItemConvert $sourceItemConvert,

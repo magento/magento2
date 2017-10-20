@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\InventoryImportExport\Model\Import\Serializer;
 
 use Magento\Framework\Serialize\SerializerInterface;
@@ -35,7 +37,7 @@ class Json implements SerializerInterface, LegacyJsonHelperInterface
      */
     public function jsonEncode($valueToEncode)
     {
-        return $this->serializer->serialize($valueToEncode);
+        return $this->serialize($valueToEncode);
     }
 
     /**
@@ -47,7 +49,7 @@ class Json implements SerializerInterface, LegacyJsonHelperInterface
      */
     public function jsonDecode($encodedValue)
     {
-        return $this->serializer->unserialize($encodedValue);
+        return $this->unserialize($encodedValue);
     }
 
     /**
