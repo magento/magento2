@@ -27,6 +27,10 @@
                     <label>Maximum Query Length</label>
                     <validate>validate-digits</validate>
                 </field>
+                <field id="autocomplete_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Autocomplete Limit</label>
+                    <validate>validate-digits</validate>
+                </field>
             </group>
         </section>
     </system>
