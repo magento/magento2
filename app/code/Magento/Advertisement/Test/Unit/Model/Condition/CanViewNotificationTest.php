@@ -7,8 +7,10 @@
 namespace Magento\Advertisement\Test\Unit\Model\Condition;
 
 use Magento\Advertisement\Model\Condition\CanViewNotification;
+use Magento\Advertisement\Model\ResourceModel\Viewer\Logger;
+use Magento\Advertisement\Model\Viewer\Log;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Advertisement\Model\AdvertisementFlagManager;
 use Magento\Backend\Model\Auth\Session;
 
 /**
@@ -22,9 +24,14 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
     private $canViewNotification;
 
     /**
-     * @var AdvertisementFlagManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $advertisementFlagManagerMock;
+    private $viewerLoggerMock;
+
+    /**
+     * @var ProductMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productMetadataMock;
 
     /**
      * @var Session|\PHPUnit_Framework_MockObject_MockObject
@@ -33,52 +40,72 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
 
     public function setUp()
     {
-        $this->advertisementFlagManagerMock = $this->getMockBuilder(AdvertisementFlagManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUser', 'getId'])
+            ->getMock();
+        $this->viewerLoggerMock = $this->getMockBuilder(Logger::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
+            ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
             CanViewNotification::class,
             [
-                'advertisementFlagManager' => $this->advertisementFlagManagerMock,
-                'session' => $this->sessionMock
+                'viewerLogger' => $this->viewerLoggerMock,
+                'session' => $this->sessionMock,
+                'productMetadata' => $this->productMetadataMock,
             ]
         );
     }
 
-    public function isVisibleProvider()
-    {
-        return [
-            [1, false, true],
-            [1, true, false]
-        ];
-    }
-
     /**
-     * @dataProvider isVisibleProvider
-     * @param int $userId
-     * @param bool $isUserNotified
      * @param bool $expected
+     * @param string $variableName
+     * @param int $callNum
+     * @param string $version
+     * @param string $lastViewVersion
+     * @dataProvider isVisibleProvider
      */
-    public function testIsVisible($userId, $isUserNotified, $expected)
+    public function testIsVisible($expected, $variableName, $callNum, $version, $lastViewVersion = null)
     {
         $this->sessionMock->expects($this->once())
             ->method('getUser')
             ->willReturnSelf();
         $this->sessionMock->expects($this->once())
             ->method('getId')
-            ->willReturn($userId);
-        $this->advertisementFlagManagerMock->expects($this->once())
-            ->method('isUserNotified')
-            ->willReturn($isUserNotified);
-        $this->advertisementFlagManagerMock->expects($this->any())
-            ->method('setNotifiedUser')
-            ->willReturn(true);
-
+            ->willReturn(1);
+        $this->productMetadataMock->expects($this->once())
+            ->method('getVersion')
+            ->willReturn($version);
+        $viewerLogMock = $this->getMockBuilder(Log::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $viewerLogMock->expects($this->any())
+            ->method('getLastViewVersion')
+            ->willReturn($lastViewVersion);
+        $viewerLogNull = null;
+        $this->viewerLoggerMock->expects($this->once())
+            ->method('get')
+            ->with(1)
+            ->willReturn($$variableName);
+        $this->viewerLoggerMock->expects($this->exactly($callNum))
+            ->method('log')
+            ->with(1, $version);
         $this->assertEquals($expected, $this->canViewNotification->isVisible([]));
+    }
+
+    public function isVisibleProvider()
+    {
+        return [
+            [true, 'viewerLogNull', 1, '2.2.1-dev'],
+            [true, 'viewerLogMock', 1, '2.2.1-dev', null],
+            [true, 'viewerLogMock', 1, '2.2.1-dev', '2.2.1'],
+            [true, 'viewerLogMock', 1, '2.2.1-dev', '2.2.0'],
+            [true, 'viewerLogMock', 1, '2.3.0', '2.2.0'],
+            [false, 'viewerLogMock', 0, '2.2.2', '2.2.2'],
+        ];
     }
 }
