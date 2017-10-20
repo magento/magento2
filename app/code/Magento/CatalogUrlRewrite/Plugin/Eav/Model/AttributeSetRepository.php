@@ -47,10 +47,10 @@ class AttributeSetRepository
         callable $proceed,
         AttributeSetInterface $attributeSet
     ) {
-	if (!isset($subject) || !$attributeSet->getAttributeSetId())
-	{
-		return false;
-	}
+        if (!isset($subject) || !$attributeSet->getAttributeSetId())
+        {
+            return false;
+        }
 
         // Get the product ids
         $ids = $this->productCollection->addFieldToFilter('attribute_set_id', $attributeSet->getAttributeSetId())
