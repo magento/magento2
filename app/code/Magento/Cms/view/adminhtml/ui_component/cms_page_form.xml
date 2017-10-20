@@ -138,7 +138,7 @@
             </formElements>
         </field>
     </fieldset>
-    <fieldset name="search_engine_optimisation" sortOrder="20">
+    <fieldset name="search_engine_optimization" sortOrder="20">
         <settings>
             <collapsible>true</collapsible>
             <label translate="true">Search Engine Optimization</label>
