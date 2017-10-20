@@ -274,7 +274,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $this->model->load('admin');
         $this->model->expects($this->any())->method('getUrl')->will($this->returnValue('http://localhost/index.php'));
         $this->assertStringEndsWith('default', $this->model->getCurrentUrl());
-        $this->assertStringEndsNotWith('default', $this->model->getCurrentUrl(false));
+        $this->assertStringEndsWith('default', $this->model->getCurrentUrl(false));
     }
 
     /**
