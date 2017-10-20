@@ -30,7 +30,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="increment_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales.order_invoice.grid.columnSet.increment_id" as="increment_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Invoice</argument>
                             <argument name="type" xsi:type="string">text</argument>
@@ -40,7 +40,7 @@
                             <argument name="column_css_class" xsi:type="string">col-invoice-number</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="billing_name">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales.order_invoice.grid.columnSet.billing_name" as="billing_name">
                         <arguments>
                             <argument name="id" xsi:type="string">billing_name</argument>
                             <argument name="header" xsi:type="string" translate="true">Bill-to Name</argument>
@@ -49,7 +49,7 @@
                             <argument name="column_css_class" xsi:type="string">col-name</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="created_at">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales.order_invoice.grid.columnSet.created_at" as="created_at">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Invoice Date</argument>
                             <argument name="type" xsi:type="string">datetime</argument>
@@ -59,7 +59,7 @@
                             <argument name="column_css_class" xsi:type="string">col-period</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="state">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales.order_invoice.grid.columnSet.state" as="state">
                         <arguments>
                             <argument name="id" xsi:type="string">state</argument>
                             <argument name="header" xsi:type="string" translate="true">Status</argument>
@@ -70,7 +70,7 @@
                             <argument name="column_css_class" xsi:type="string">col-status</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="grand_total">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales.order_invoice.grid.columnSet.grand_total" as="grand_total">
                         <arguments>
                             <argument name="id" xsi:type="string">grand_total</argument>
                             <argument name="header" xsi:type="string" translate="true">Amount</argument>
