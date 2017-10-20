@@ -173,4 +173,12 @@ class RoboFile extends \Robo\Tasks
             $this->allure2Open();
         }
     }
+
+    /**
+     * Run the Pre-Install Check Script
+     */
+    function preInstall()
+    {
+        $this->_exec('php pre-install.php');
+    }
 }
