@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Inventory\Indexer;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -62,5 +61,14 @@ class ActiveTableSwitcher
         if (!empty($toRename)) {
             $connection->renameTablesBatch($toRename);
         }
+    }
+
+    /**
+     * @param string $tableName
+     * @return string
+     */
+    public function getAdditionalTableName($tableName)
+    {
+        return $tableName . $this->additionalTableSuffix;
     }
 }
