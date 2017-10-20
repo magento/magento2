@@ -40,6 +40,11 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $cartRepositoryMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $checkoutHelperMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -53,16 +58,18 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->cartRepositoryMock = $this->getMockBuilder(\Magento\Quote\Api\CartRepositoryInterface::class)->getMock();
+        $this->checkoutHelperMock = $this->createMock(\Magento\Checkout\Helper\Data::class);
         $this->model = $objectManager->getObject(
             \Magento\Checkout\Model\PaymentInformationManagement::class,
             [
                 'billingAddressManagement' => $this->billingAddressManagementMock,
                 'paymentMethodManagement' => $this->paymentMethodManagementMock,
-                'cartManagement' => $this->cartManagementMock
+                'cartManagement' => $this->cartManagementMock,
+                'cartRepository' => $this->cartRepositoryMock,
+                'checkoutHelper' => $this->checkoutHelperMock,
+                'logger' => $this->loggerMock,
             ]
         );
-        $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
-        $objectManager->setBackwardCompatibleProperty($this->model, 'cartRepository', $this->cartRepositoryMock);
     }
 
     public function testSavePaymentInformationAndPlaceOrder()
@@ -142,7 +149,7 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
      * @expectedExceptionMessage DB exception
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function testSavePaymentInformationAndPlaceOrderWithLocolizedException()
+    public function testSavePaymentInformationAndPlaceOrderWithLocalizedException()
     {
         $cartId = 100;
         $paymentMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
@@ -155,6 +162,7 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $exception = new \Magento\Framework\Exception\LocalizedException($phrase);
         $this->loggerMock->expects($this->never())->method('critical');
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
+        $this->checkoutHelperMock->expects($this->any())->method('sendPaymentFailedEmail')->willReturnSelf();
 
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $paymentMock, $billingAddressMock);
     }

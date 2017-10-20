@@ -45,6 +45,11 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $loggerMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $checkoutHelperMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -62,6 +67,7 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
             ['create']
         );
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->checkoutHelperMock = $this->createMock(\Magento\Checkout\Helper\Data::class);
         $this->model = $objectManager->getObject(
             \Magento\Checkout\Model\GuestPaymentInformationManagement::class,
             [
@@ -69,10 +75,11 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
                 'paymentMethodManagement' => $this->paymentMethodManagementMock,
                 'cartManagement' => $this->cartManagementMock,
                 'cartRepository' => $this->cartRepositoryMock,
-                'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock
+                'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
+                'checkoutHelper' => $this->checkoutHelperMock,
+                'logger' => $this->loggerMock,
             ]
         );
-        $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
     }
 
     public function testSavePaymentInformationAndPlaceOrder()
@@ -162,7 +169,7 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
      * @expectedExceptionMessage DB exception
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function testSavePaymentInformationAndPlaceOrderWithLocolizedException()
+    public function testSavePaymentInformationAndPlaceOrderWithLocalizedException()
     {
         $cartId = 100;
         $email = 'email@magento.com';
@@ -170,6 +177,11 @@ class GuestPaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
         $billingAddressMock = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
         $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
+        $quoteIdMaskMock = $this->createPartialMock(\Magento\Quote\Model\QuoteIdMask::class, ['getQuoteId', 'load']);
+        $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($quoteIdMaskMock);
+        $quoteIdMaskMock->expects($this->once())->method('load')->with($cartId, 'masked_id')->willReturnSelf();
+        $quoteIdMaskMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
+        $this->checkoutHelperMock->expects($this->any())->method('sendPaymentFailedEmail')->willReturnSelf();
 
         $this->billingAddressManagementMock->expects($this->once())
             ->method('assign')
