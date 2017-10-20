@@ -14,7 +14,7 @@
         "zendframework/zend-server": "~2.4.6",
         "zendframework/zend-soap": "~2.4.6",
         "zendframework/zend-uri": "~2.4.6",
-        "zendframework/zend-validator": "~2.4.6",
+        "zendframework/zend-validator": "^2.6.0",
         "zendframework/zend-crypt": "~2.4.6",
         "zendframework/zend-console": "~2.4.6",
         "zendframework/zend-modulemanager": "~2.4.6",
