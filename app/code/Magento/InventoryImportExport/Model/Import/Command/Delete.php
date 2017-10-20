@@ -3,13 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\InventoryImportExport\Model\Import\Command;
 
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
-use Magento\InventoryImportExport\Helper\SourceItemConvert;
+use Magento\InventoryImportExport\Model\Import\SourceItemConvert;
 
 /**
  * @inheritdoc

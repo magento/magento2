@@ -3,16 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\InventoryImportExport\Helper;
+namespace Magento\InventoryImportExport\Model\Import;
 
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
-use Magento\InventoryImportExport\Model\Import\Sources;
 
 class SourceItemConvert
 {
-    /**
+    /**´
      * @var SourceItemInterfaceFactory
      */
     private $sourceItemFactory;
@@ -27,7 +27,7 @@ class SourceItemConvert
 
     /**
      * Converts a data in sourceItem list.
-     * @param array $rowData
+     * @param array $bunch
      * @return SourceItemInterface[]
      */
     public function convert(array $bunch): array

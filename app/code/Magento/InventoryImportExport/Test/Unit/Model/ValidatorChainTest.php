@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Inventory\Test\Unit\Model;
@@ -111,7 +110,6 @@ class ValidatorChainTest extends TestCase
             ->method('create')
             ->with(['errors' => ['Qty can not negative', 'Additional error']])
             ->willReturn($validatorResult);
-
 
         $this->validatorChain = (new ObjectManager($this))->getObject(
             ValidatorChain::class,

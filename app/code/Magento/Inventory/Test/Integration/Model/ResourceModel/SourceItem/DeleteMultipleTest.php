@@ -3,13 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-
 declare(strict_types=1);
 
-namespace Magento\Inventory\Test\Model\ResourceModel\SourceItem;
+namespace Magento\Inventory\Test\Integration\Model\ResourceModel\SourceItem;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Inventory\Model\ResourceModel\SourceItem\DeleteMultiple;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;

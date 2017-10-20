@@ -1,11 +1,10 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Test\Integration\Model\Import;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
