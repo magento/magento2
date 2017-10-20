@@ -110,7 +110,7 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      */
     public function getSelectCountSql()
     {
-        $countSelect = clone $this->_select;
+        $countSelect = clone $this->getSelect();
         $countSelect->reset(\Magento\Framework\DB\Select::ORDER);
         $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
         $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
