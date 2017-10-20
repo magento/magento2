@@ -15,6 +15,7 @@
                 <engine>mysql</engine>
                 <min_query_length>1</min_query_length>
                 <max_query_length>128</max_query_length>
+                <autocomplete_limit>8</autocomplete_limit>
             </search>
         </catalog>
     </default>
