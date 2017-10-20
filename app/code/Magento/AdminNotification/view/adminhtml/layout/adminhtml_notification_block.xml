@@ -20,14 +20,14 @@
                     <arguments>
                         <argument name="filter_visibility" xsi:type="string">0</argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="severity">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.notification.container.grid.columnSet.severity" as="severity">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Severity</argument>
                             <argument name="index" xsi:type="string">severity</argument>
                             <argument name="renderer" xsi:type="string">Magento\AdminNotification\Block\Grid\Renderer\Severity</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="date_added">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.notification.container.grid.columnSet.date_added" as="date_added">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Date Added</argument>
                             <argument name="id" xsi:type="string">date_added</argument>
@@ -37,14 +37,14 @@
                             <argument name="header_css_class" xsi:type="string">col-date</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="title">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.notification.container.grid.columnSet.title" as="title">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Message</argument>
                             <argument name="index" xsi:type="string">title</argument>
                             <argument name="renderer" xsi:type="string">Magento\AdminNotification\Block\Grid\Renderer\Notice</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="actions">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.notification.container.grid.columnSet.actions" as="actions">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Actions</argument>
                             <argument name="sortable" xsi:type="string">0</argument>
