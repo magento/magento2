@@ -114,7 +114,6 @@ class OrderSave
                                     'real_amount' => $realAmount,
                                     'real_base_amount' => $realBaseAmount,
                                 ];
-                                $percentSum += $rate['percent'];
                             }
                         }
                     }
