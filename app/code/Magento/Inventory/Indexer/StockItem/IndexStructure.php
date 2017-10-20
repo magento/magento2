@@ -54,7 +54,7 @@ class IndexStructure implements IndexStructureInterface
     {
         $connection = $this->resourceConnection->getConnection($connectionName);
         $tableName = $this->indexNameResolver->resolveName($indexName);
-        return $connection->isTableExists($tableName);
+        return $connection->isTableExists($this->resourceConnection->getTableName($tableName));
     }
 
     /**
@@ -66,7 +66,7 @@ class IndexStructure implements IndexStructureInterface
         $tableName = $this->indexNameResolver->resolveName($indexName);
 
         if ($connection->isTableExists($tableName)) {
-            throw new StateException(__('Table %s allready exits', $tableName));
+            throw new StateException(__('Table %s already exits', $tableName));
         }
 
         $this->createTable($connection, $tableName);
@@ -81,7 +81,7 @@ class IndexStructure implements IndexStructureInterface
     private function createTable(\Magento\Framework\DB\Adapter\AdapterInterface $connection, string $tableName)
     {
         $table = $connection->newTable(
-            $tableName
+            $this->resourceConnection->getTableName($tableName)
         )->setComment(
             'Inventory Stock item Table'
         )->addColumn(
@@ -116,6 +116,6 @@ class IndexStructure implements IndexStructureInterface
     {
         $connection = $this->resourceConnection->getConnection($connectionName);
         $tableName = $this->indexNameResolver->resolveName($indexName);
-        $connection->dropTable($tableName);
+        $connection->dropTable($this->resourceConnection->getTableName($tableName));
     }
 }

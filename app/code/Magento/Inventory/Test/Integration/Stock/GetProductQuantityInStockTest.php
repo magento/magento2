@@ -32,19 +32,19 @@ class GetProductQuantityInStockTest extends TestCase
     private $reservationBuilder;
 
     /**
-     * @var  ReservationsAppendInterface
+     * @var ReservationsAppendInterface
      */
     private $reservationsAppend;
 
     /**
-     * @var  ReservationCleanupInterface
+     * @var ReservationCleanupInterface
      */
     private $reservationCleanup;
 
     /**
      * @var GetProductQuantityInStock
      */
-    private $getProductQtyInStockService;
+    private $getProductQtyInStock;
 
     protected function setUp()
     {
@@ -55,7 +55,7 @@ class GetProductQuantityInStockTest extends TestCase
         $this->reservationsAppend = Bootstrap::getObjectManager()->get(ReservationsAppendInterface::class);
         $this->reservationCleanup = Bootstrap::getObjectManager()->create(ReservationCleanupInterface::class);
 
-        $this->getProductQtyInStockService = Bootstrap::getObjectManager()->create(
+        $this->getProductQtyInStock = Bootstrap::getObjectManager()->create(
             GetProductQuantityInStockInterface::class
         );
     }
@@ -67,7 +67,7 @@ class GetProductQuantityInStockTest extends TestCase
         /** @var IndexStructureInterface $indexStructure */
         $indexStructure = Bootstrap::getObjectManager()->get(IndexStructureInterface::class);
 
-        foreach ([1, 2, 3] as $stockId) {
+        foreach ([10, 20, 30] as $stockId) {
             $indexName = $indexNameBuilder
                 ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
                 ->addDimension('stock_', $stockId)
@@ -91,18 +91,19 @@ class GetProductQuantityInStockTest extends TestCase
     {
         $this->indexer->reindexRow(1);
 
-        $reservations = [
-            $this->reservationBuilder->setStockId(1)->setSku('SKU-1')->setQuantity(-5)->build(), // reserve 5 units
-            $this->reservationBuilder->setStockId(1)->setSku('SKU-1')->setQuantity(1.5)->build(), // unreserve 1.5 units
-        ];
-        $this->reservationsAppend->execute($reservations);
+        $this->reservationsAppend->execute([
+            // reserve 5 units
+            $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(-5)->build(),
+            // unreserve 1.5 units
+            $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(1.5)->build(),
+        ]);
 
-        $qty = $this->getProductQtyInStockService->execute('SKU-1', 1);
+        $qty = $this->getProductQtyInStock->execute('SKU-1', 10);
         self::assertEquals(5, $qty);
 
-        $reservations = [
-            $this->reservationBuilder->setStockId(1)->setSku('SKU-1')->setQuantity(3.5)->build(), // unreserve 3.5 units
-        ];
-        $this->reservationsAppend->execute($reservations);
+        $this->reservationsAppend->execute([
+            // unreserve 3.5 units
+            $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(3.5)->build(),
+        ]);
     }
 }

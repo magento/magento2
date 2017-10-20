@@ -26,7 +26,7 @@ class GetAssignedSourcesForStockTest extends WebapiAbstract
      */
     public function testGetAssignedSourcesForStock()
     {
-        $stockId = 1;
+        $stockId = 10;
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_GET_ASSIGNED_SOURCES_FOR_STOCK . '/' . $stockId,
@@ -40,7 +40,7 @@ class GetAssignedSourcesForStockTest extends WebapiAbstract
         $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['stockId' => $stockId]);
-        self::assertEquals([1, 2, 3, 4], array_column($response, SourceInterface::SOURCE_ID));
+        self::assertEquals([10, 20, 30, 40], array_column($response, SourceInterface::SOURCE_ID));
     }
 
     /**
