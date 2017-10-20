@@ -1166,6 +1166,9 @@ class Store extends AbstractExtensibleModel implements
         if (!$this->isUseStoreInUrl()) {
             $storeParsedQuery['___store'] = $this->getCode();
         }
+        if ($this->getCode() !== $this->_storeManager->getStore()->getCode()) {
+            $fromStore = true;
+        }
         if ($fromStore !== false) {
             $storeParsedQuery['___from_store'] = $fromStore ===
                 true ? $this->_storeManager->getStore()->getCode() : $fromStore;
@@ -1175,9 +1178,14 @@ class Store extends AbstractExtensibleModel implements
             . '://'
             . $storeParsedUrl['host']
             . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
-            . $storeParsedUrl['path']
-            . $requestString
-            . ($storeParsedQuery ? '?' . http_build_query($storeParsedQuery, '', '&amp;') : '');
+            . $storeParsedUrl['path'];
+
+        //avoid query params duplication
+        if (!preg_match('/___store=(.*?)&___from_store=(.*?)/', $requestString)) {
+            $currentUrl .= $requestString;
+        }
+
+        $currentUrl .= ($storeParsedQuery ? '?' . http_build_query($storeParsedQuery, '', '&amp;') : '');
 
         return $currentUrl;
     }
