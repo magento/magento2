@@ -46,6 +46,11 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
      */
     private $loggerMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $checkoutHelperMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -66,6 +71,9 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->checkoutHelperMock = $this->getMockBuilder(\Magento\Checkout\Helper\Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = $objectManager->getObject(
             \Magento\Checkout\Model\GuestPaymentInformationManagement::class,
             [
@@ -73,10 +81,11 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
                 'paymentMethodManagement' => $this->paymentMethodManagementMock,
                 'cartManagement' => $this->cartManagementMock,
                 'cartRepository' => $this->cartRepositoryMock,
-                'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock
+                'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
+                'checkoutHelper' => $this->checkoutHelperMock,
+                'logger' => $this->loggerMock,
             ]
         );
-        $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
     }
 
     public function testSavePaymentInformationAndPlaceOrder()
@@ -175,6 +184,14 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $billingAddressMock = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
         $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
+        $quoteIdMaskMock = $this->getMockBuilder(\Magento\Quote\Model\QuoteIdMask::class)
+            ->setMethods(['getQuoteId', 'load'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($quoteIdMaskMock);
+        $quoteIdMaskMock->expects($this->once())->method('load')->with($cartId, 'masked_id')->willReturnSelf();
+        $quoteIdMaskMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
+        $this->checkoutHelperMock->expects($this->any())->method('sendPaymentFailedEmail')->willReturnSelf();
 
         $this->billingAddressManagementMock->expects($this->once())
             ->method('assign')

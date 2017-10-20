@@ -6,6 +6,9 @@
 
 namespace Magento\Checkout\Test\Unit\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -33,6 +36,16 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
      */
     private $loggerMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cartRepositoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $checkoutHelperMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -45,16 +58,20 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $this->cartManagementMock = $this->getMock(\Magento\Quote\Api\CartManagementInterface::class);
 
         $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
-
+        $this->cartRepositoryMock = $this->getMockBuilder(\Magento\Quote\Api\CartRepositoryInterface::class)->getMock();
+        $this->checkoutHelperMock = $this->getMockBuilder(\Magento\Checkout\Helper\Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = $objectManager->getObject(
             \Magento\Checkout\Model\PaymentInformationManagement::class,
             [
                 'billingAddressManagement' => $this->billingAddressManagementMock,
                 'paymentMethodManagement' => $this->paymentMethodManagementMock,
-                'cartManagement' => $this->cartManagementMock
+                'cartManagement' => $this->cartManagementMock,
+                'checkoutHelper' => $this->checkoutHelperMock,
+                'logger' => $this->loggerMock,
             ]
         );
-        $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
     }
 
     public function testSavePaymentInformationAndPlaceOrder()
@@ -156,6 +173,7 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $exception = new \Magento\Framework\Exception\LocalizedException($phrase);
         $this->loggerMock->expects($this->never())->method('critical');
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
+        $this->checkoutHelperMock->expects($this->any())->method('sendPaymentFailedEmail')->willReturnSelf();
 
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $paymentMock, $billingAddressMock);
     }

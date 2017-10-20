@@ -5,6 +5,7 @@
  */
 namespace Magento\Checkout\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
@@ -45,11 +46,24 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     private $logger;
 
     /**
+     * @var \Magento\Quote\Api\CartRepositoryInterface
+     */
+    private $cartRepository;
+
+    /**
+     * @var \Magento\Checkout\Helper\Data
+     */
+    private $checkoutHelper;
+
+    /**
      * @param \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement
-     * @param \Magento\Quote\Api\PaymentMethodManagementInterface  $paymentMethodManagement
-     * @param \Magento\Quote\Api\CartManagementInterface           $cartManagement
-     * @param PaymentDetailsFactory                                $paymentDetailsFactory
-     * @param \Magento\Quote\Api\CartTotalRepositoryInterface      $cartTotalsRepository
+     * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
+     * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
+     * @param PaymentDetailsFactory $paymentDetailsFactory
+     * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
+     * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \Psr\Log\LoggerInterface $logger
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -57,13 +71,21 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Quote\Api\CartManagementInterface $cartManagement,
         \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory,
-        \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
+        \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $cartRepository = null,
+        \Magento\Checkout\Helper\Data $checkoutHelper = null,
+        \Psr\Log\LoggerInterface $logger = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->cartManagement = $cartManagement;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
         $this->cartTotalsRepository = $cartTotalsRepository;
+        $this->cartRepository = $cartRepository ?:
+            ObjectManager::getInstance()->get(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->checkoutHelper = $checkoutHelper ?:
+            ObjectManager::getInstance()->get(\Magento\Checkout\Helper\Data::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
     }
 
     /**
@@ -78,12 +100,15 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         try {
             $orderId = $this->cartManagement->placeOrder($cartId);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            /** @var \Magento\Quote\Model\Quote $quote */
+            $quote = $this->cartRepository->getActive($cartId);
+            $this->checkoutHelper->sendPaymentFailedEmail($quote, __($e->getMessage()));
             throw new CouldNotSaveException(
                 __($e->getMessage()),
                 $e
             );
         } catch (\Exception $e) {
-            $this->getLogger()->critical($e);
+            $this->logger->critical($e);
             throw new CouldNotSaveException(
                 __('An error occurred on the server. Please try to place the order again.'),
                 $e
@@ -120,20 +145,5 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         $paymentDetails->setTotals($this->cartTotalsRepository->get($cartId));
 
         return $paymentDetails;
-    }
-
-    /**
-     * Get logger instance.
-     *
-     * @return \Psr\Log\LoggerInterface
-     * @deprecated
-     */
-    private function getLogger()
-    {
-        if (!$this->logger) {
-            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
-        }
-
-        return $this->logger;
     }
 }
