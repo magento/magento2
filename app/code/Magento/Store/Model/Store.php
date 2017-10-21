@@ -1166,26 +1166,29 @@ class Store extends AbstractExtensibleModel implements
         if (!$this->isUseStoreInUrl()) {
             $storeParsedQuery['___store'] = $this->getCode();
         }
-        if ($this->getCode() !== $this->_storeManager->getStore()->getCode()) {
-            $fromStore = true;
-        }
+
         if ($fromStore !== false) {
             $storeParsedQuery['___from_store'] = $fromStore ===
                 true ? $this->_storeManager->getStore()->getCode() : $fromStore;
         }
 
+        $requestStringParts = explode('?', $requestString, 2);
+        $requestStringPath = $requestStringParts[0];
+        if (isset($requestStringParts[1])) {
+            parse_str($requestStringParts[1], $requestString);
+        } else {
+            $requestString = [];
+        }
+
+        $currentUrlQueryParams = array_merge($requestString, $storeParsedQuery);
+
         $currentUrl = $storeParsedUrl['scheme']
             . '://'
             . $storeParsedUrl['host']
             . (isset($storeParsedUrl['port']) ? ':' . $storeParsedUrl['port'] : '')
-            . $storeParsedUrl['path'];
-
-        //avoid query params duplication
-        if (!preg_match('/___store=(.*?)&___from_store=(.*?)/', $requestString)) {
-            $currentUrl .= $requestString;
-        }
-
-        $currentUrl .= ($storeParsedQuery ? '?' . http_build_query($storeParsedQuery, '', '&amp;') : '');
+            . $storeParsedUrl['path']
+            . $requestStringPath
+            . ($currentUrlQueryParams ? '?' . http_build_query($currentUrlQueryParams, '', '&amp;') : '');
 
         return $currentUrl;
     }
