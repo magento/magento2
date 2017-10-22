@@ -19,8 +19,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->selectMock = $this->getMock('\Magento\Framework\DB\Select',
-            [], [], '', false);
+        $this->selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
     }
 
     public function testGetSelectCountSql()
