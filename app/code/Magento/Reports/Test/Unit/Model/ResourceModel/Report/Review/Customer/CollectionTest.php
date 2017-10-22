@@ -8,10 +8,9 @@
 
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Review\Customer;
 
-use Magento\Framework\DB\Select;
 use Magento\Reports\Model\ResourceModel\Review\Customer\Collection;
 
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -20,7 +19,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->selectMock = $this->createMock(Select::class);
+        $this->selectMock = $this->getMock('\Magento\Framework\DB\Select',
+            [], [], '', false);
     }
 
     public function testGetSelectCountSql()
