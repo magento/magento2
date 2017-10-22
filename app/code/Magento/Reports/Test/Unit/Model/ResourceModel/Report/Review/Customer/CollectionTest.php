@@ -6,7 +6,7 @@
  * @author    oscar.recio@interactiv4.com
  */
 
-namespace Magento\Reports\Test\Unit\Model\ResourceModel\Review\Customer;
+namespace Magento\Reports\Test\Unit\Model\ResourceModel\Report\Review\Customer;
 
 use Magento\Framework\DB\Select;
 use Magento\Reports\Model\ResourceModel\Review\Customer\Collection;
