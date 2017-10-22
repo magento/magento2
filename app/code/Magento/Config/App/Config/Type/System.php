@@ -5,9 +5,9 @@
  */
 namespace Magento\Config\App\Config\Type;
 
+use Magento\Config\App\Config\Type\System\Reader;
 use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Config\App\Config\Type\System\Reader;
 
 /**
  * System configuration type
@@ -146,17 +146,16 @@ class System implements ConfigTypeInterface
             }
             return $this->data[$pathParts[0]];
         }
+
         $scopeType = array_shift($pathParts);
         if ($scopeType === 'default') {
-            if (!isset($this->data[$scopeType])) {
-                $this->data = array_replace_recursive($this->loadDefaultScopeData($scopeType), $this->data);
-            }
+            $this->data = array_replace_recursive($this->data, $this->loadDefaultScopeData($scopeType));
             return $this->getDataByPathParts($this->data[$scopeType], $pathParts);
         }
+
         $scopeId = array_shift($pathParts);
-        if (!isset($this->data[$scopeType][$scopeId])) {
-            $this->data = array_replace_recursive($this->loadScopeData($scopeType, $scopeId), $this->data);
-        }
+        $this->data = array_replace_recursive($this->data, $this->loadScopeData($scopeType, $scopeId));
+
         return isset($this->data[$scopeType][$scopeId])
             ? $this->getDataByPathParts($this->data[$scopeType][$scopeId], $pathParts)
             : null;
