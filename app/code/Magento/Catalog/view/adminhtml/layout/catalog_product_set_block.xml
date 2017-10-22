@@ -26,7 +26,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="set_name">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.product.set.grid.columnSet.set_name" as="set_name">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Set</argument>
                             <argument name="align" xsi:type="string">left</argument>
