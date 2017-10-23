@@ -39,9 +39,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                         'locked' => $locked,
                     ];
                 }
+                /** @noinspection PhpUndefinedFieldInspection */
                 $attributes[$entityAttribute->attributes->getNamedItem('code')->nodeValue] = $attributeFields;
             }
             $entityConfig['attributes'] = $attributes;
+            /** @noinspection PhpUndefinedFieldInspection */
             $output[$entity->attributes->getNamedItem('type')->nodeValue] = $entityConfig;
         }
 

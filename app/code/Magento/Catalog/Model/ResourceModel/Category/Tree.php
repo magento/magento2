@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
-use Magento\Framework\Data\Tree\Dbp;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\Data\Tree\Dbp;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
@@ -59,6 +59,11 @@ class Tree extends Dbp
      * @var array
      */
     protected $_inactiveCategoryIds = null;
+
+    /**
+     * @var array
+     */
+    protected $_inactiveItems;
 
     /**
      * Store id

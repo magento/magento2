@@ -79,6 +79,11 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
      */
     protected $customerSessionMock;
 
+    /**
+     * @var \Magento\Customer\Api\Data\GroupInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $group;
+
     protected function setUp()
     {
         $this->vat = $this->getMockBuilder(\Magento\Customer\Model\Vat::class)

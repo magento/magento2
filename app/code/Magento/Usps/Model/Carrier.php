@@ -134,6 +134,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     private $dataHelper;
 
     /**
+     * @var \Magento\Framework\DataObject
+     */
+    private $_rawTrackRequest;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger

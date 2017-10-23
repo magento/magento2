@@ -35,6 +35,11 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
     protected $maximalPrice;
 
     /**
+     * @var array
+     */
+    private $optionSelectionAmountCache;
+
+    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param BundleCalculatorInterface $calculator
@@ -118,13 +123,13 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
             ]
         );
 
-        if (!isset($this->optionSelecionAmountCache[$cacheKey])) {
+        if (!isset($this->optionSelectionAmountCache[$cacheKey])) {
             $selectionPrice = $this->selectionFactory
                 ->create($this->product, $selection, $selection->getSelectionQty());
-            $this->optionSelecionAmountCache[$cacheKey] =  $selectionPrice->getAmount();
+            $this->optionSelectionAmountCache[$cacheKey] =  $selectionPrice->getAmount();
         }
 
-        return $this->optionSelecionAmountCache[$cacheKey];
+        return $this->optionSelectionAmountCache[$cacheKey];
     }
 
     /**

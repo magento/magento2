@@ -60,6 +60,11 @@ class EditAddressTest extends \PHPUnit\Framework\TestCase
      */
     protected $request;
 
+    /**
+     * @var \Magento\Multishipping\Model\Checkout\Type\Multishipping
+     */
+    protected $checkoutMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);

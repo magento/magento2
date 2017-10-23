@@ -29,10 +29,15 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $searchResultFactory;
 
     /**
-     * @var CollectionProcessorInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $collectionProcessorMock;
-    
+
+    /**
+     * @var \Magento\Eav\Model\Entity\Type|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $type;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

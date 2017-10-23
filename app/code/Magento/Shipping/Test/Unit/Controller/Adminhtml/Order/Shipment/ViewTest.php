@@ -71,6 +71,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     protected $controller;
 
+    /**
+     * @var \Magento\Backend\App\Action\Context
+     */
+    protected $context;
+
     protected function setUp()
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)

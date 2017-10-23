@@ -97,6 +97,7 @@ class VaultDetailsHandler implements HandlerInterface
     protected function getVaultPaymentToken(Transaction $transaction)
     {
         // Check token existing in gateway response
+        /** @noinspection PhpUndefinedFieldInspection */
         $token = $transaction->creditCardDetails->token;
         if (empty($token)) {
             return null;
@@ -107,6 +108,7 @@ class VaultDetailsHandler implements HandlerInterface
         $paymentToken->setGatewayToken($token);
         $paymentToken->setExpiresAt($this->getExpirationDate($transaction));
 
+        /** @noinspection PhpUndefinedFieldInspection */
         $paymentToken->setTokenDetails($this->convertDetailsToJSON([
             'type' => $this->getCreditCardType($transaction->creditCardDetails->cardType),
             'maskedCC' => $transaction->creditCardDetails->last4,
@@ -122,6 +124,7 @@ class VaultDetailsHandler implements HandlerInterface
      */
     private function getExpirationDate(Transaction $transaction)
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         $expDate = new \DateTime(
             $transaction->creditCardDetails->expirationYear
             . '-'

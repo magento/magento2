@@ -72,6 +72,11 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
     protected $rendererFactory;
 
     /**
+     * @var \Magento\Framework\App\State
+     */
+    protected $_appState;
+
+    /**
      * @param Request $request
      * @param Response $response
      * @param \Magento\Webapi\Model\Soap\Wsdl\Generator $wsdlGenerator

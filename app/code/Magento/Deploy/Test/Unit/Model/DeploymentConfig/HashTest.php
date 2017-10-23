@@ -41,6 +41,11 @@ class HashTest extends \PHPUnit\Framework\TestCase
     private $flagMock;
 
     /**
+     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfigMock;
+
+    /**
      * @var Hash
      */
     private $hash;

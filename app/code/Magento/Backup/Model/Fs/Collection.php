@@ -41,6 +41,11 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
     protected $_backup = null;
 
     /**
+     * @var \Magento\Framework\Filesystem
+     */
+    protected $_filesystem;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Magento\Backup\Helper\Data $backupData
      * @param \Magento\Framework\Filesystem $filesystem

@@ -10,6 +10,7 @@ use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollecti
 use Magento\Bundle\Model\Selection;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option\Type\DefaultType;
+use Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -88,6 +89,11 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     private $serializer;
 
     /**
+     * @var CollectionProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $catalogRuleProcessor;
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -145,7 +151,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->catalogRuleProcessor = $this->getMockBuilder(
-            \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor::class
+            CollectionProcessor::class
         )
             ->disableOriginalConstructor()
             ->getMock();

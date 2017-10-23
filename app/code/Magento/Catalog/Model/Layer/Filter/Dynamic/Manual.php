@@ -19,6 +19,41 @@ class Manual implements AlgorithmInterface
     const XML_PATH_RANGE_MAX_INTERVALS = 'catalog/layered_navigation/price_range_max_intervals';
 
     /**
+     * @var Algorithm
+     */
+    private $algorithm;
+
+    /**
+     * @var \Magento\Catalog\Model\Layer
+     */
+    private $layer;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var Render
+     */
+    private $render;
+
+    /**
+     * @var Registry
+     */
+    private $coreRegistry;
+
+    /**
+     * @var Range
+     */
+    private $range;
+
+    /**
+     * @var Price
+     */
+    private $resource;
+
+    /**
      * @param Algorithm $algorithm
      * @param Resolver $layerResolver
      * @param ScopeConfigInterface $scopeConfig

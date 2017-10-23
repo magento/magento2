@@ -34,6 +34,21 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
     protected $depersonalizeCheckerMock;
 
     /**
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $requestMock;
+
+    /**
+     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $moduleManagerMock;
+
+    /**
+     * @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cacheConfigMock;
+
+    /**
      * SetUp
      */
     protected function setUp()

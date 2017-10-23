@@ -86,6 +86,7 @@ class VaultDetailsHandler implements HandlerInterface
     private function getVaultPaymentToken(Transaction $transaction)
     {
         // Check token existing in gateway response
+        /** @noinspection PhpUndefinedFieldInspection */
         $token = $transaction->paypalDetails->token;
         if (empty($token)) {
             return null;
@@ -95,6 +96,7 @@ class VaultDetailsHandler implements HandlerInterface
         $paymentToken = $this->paymentTokenFactory->create();
         $paymentToken->setGatewayToken($token);
         $paymentToken->setExpiresAt($this->getExpirationDate());
+        /** @noinspection PhpUndefinedFieldInspection */
         $details = json_encode([
             'payerEmail' => $transaction->paypalDetails->payerEmail
         ]);

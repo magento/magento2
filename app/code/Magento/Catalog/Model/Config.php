@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Model;
+
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
@@ -42,6 +43,11 @@ class Config extends \Magento\Eav\Model\Config
      * @var mixed
      */
     protected $_productTypesById;
+
+    /**
+     * @var array
+     */
+    protected $_productTypesByName;
 
     /**
      * Array of attributes codes needed for product load

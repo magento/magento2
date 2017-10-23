@@ -16,6 +16,11 @@ class DeleteRelationTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Customer\Model\ResourceModel\Address\DeleteRelation */
     protected $relation;
 
+    /**
+     * @var \Magento\Customer\Model\CustomerFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerFactoryMock;
+
     protected function setUp()
     {
         $this->customerFactoryMock = $this->createPartialMock(

@@ -5,15 +5,15 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 
+use Braintree\Result\Error;
+use Braintree\Result\Successful;
 use Braintree\Transaction;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Validator\ResponseValidator;
 use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use Magento\Braintree\Gateway\Validator\ResponseValidator;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Braintree\Result\Error;
-use Braintree\Result\Successful;
 
 /**
  * Class ResponseValidatorTest
@@ -130,6 +130,7 @@ class ResponseValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $successTrue = new Successful();
         $successTrue->success = true;
+        /** @noinspection PhpUndefinedFieldInspection */
         $successTrue->transaction = new \stdClass();
         $successTrue->transaction->status = Transaction::AUTHORIZED;
 
@@ -138,6 +139,7 @@ class ResponseValidatorTest extends \PHPUnit\Framework\TestCase
 
         $transactionDeclined = new Successful();
         $transactionDeclined->success = true;
+        /** @noinspection PhpUndefinedFieldInspection */
         $transactionDeclined->transaction = new \stdClass();
         $transactionDeclined->transaction->status = Transaction::SETTLEMENT_DECLINED;
 

@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
 
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 
 /**
  * @api
@@ -17,6 +17,16 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
     const NAME = 'thumbnail';
 
     const ALT_FIELD = 'name';
+
+    /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    protected $imageHelper;
+
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $urlBuilder;
 
     /**
      * @param ContextInterface $context

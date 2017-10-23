@@ -8,9 +8,9 @@ namespace Magento\Vault\Test\Unit\Model;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Model\PaymentTokenFactory;
 use Magento\Vault\Model\CreditCardTokenFactory;
 use Magento\Vault\Model\PaymentToken;
+use Magento\Vault\Model\PaymentTokenFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -32,6 +32,11 @@ class CreditCardTokenFactoryTest extends \PHPUnit\Framework\TestCase
      * @var CreditCardTokenFactory
      */
     private $factory;
+
+    /**
+     * @var PaymentTokenFactory
+     */
+    private $paymentTokenFactory;
 
     protected function setUp()
     {

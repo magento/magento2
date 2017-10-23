@@ -40,7 +40,9 @@ class Formatter
         /** @var DOMNode $textNode */
         foreach ($xmlXpath->query('//text() | //comment() | //@*') as $textNode) {
             $placeholder = \spl_object_hash($textNode);
+            /** @noinspection PhpUndefinedFieldInspection */
             $placeholders[$placeholder] = $textNode->textContent;
+            /** @noinspection PhpUndefinedFieldInspection */
             $textNode->nodeValue = $placeholder;
         }
 

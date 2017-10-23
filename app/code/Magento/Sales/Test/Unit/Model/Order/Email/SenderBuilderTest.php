@@ -29,6 +29,11 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
      */
     protected $transportBuilder;
 
+    /**
+     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeMock;
+
     protected function setUp()
     {
         $templateId = 'test_template_id';

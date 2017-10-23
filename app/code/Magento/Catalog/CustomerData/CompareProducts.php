@@ -20,6 +20,11 @@ class CompareProducts implements SectionSourceInterface
     protected $productUrl;
 
     /**
+     * @var \Magento\Catalog\Helper\Output
+     */
+    protected $outputHelper;
+
+    /**
      * @param \Magento\Catalog\Helper\Product\Compare $helper
      * @param \Magento\Catalog\Model\Product\Url $productUrl
      * @param \Magento\Catalog\Helper\Output $outputHelper

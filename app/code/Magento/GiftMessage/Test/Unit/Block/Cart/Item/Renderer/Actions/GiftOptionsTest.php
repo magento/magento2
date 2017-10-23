@@ -13,19 +13,34 @@ use Magento\Quote\Model\Quote\Item;
 
 class GiftOptionsTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var GiftOptions */
+    /**
+     * @var GiftOptions
+     */
     protected $model;
 
-    /** @var Context|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $contextMock;
 
-    /** @var LayoutProcessorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var LayoutProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $layoutProcessorMock;
 
-    /** @var Encoder|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Encoder|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $jsonEncoderMock;
 
-    /** @var array  */
+    /**
+     * @var \Magento\Checkout\Model\CompositeConfigProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $compositeConfigProvider;
+
+    /**
+     * @var array
+     */
     protected $jsLayout = ['root' => 'node'];
 
     protected function setUp()

@@ -9,6 +9,11 @@ namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
 {
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param array $reportTypes

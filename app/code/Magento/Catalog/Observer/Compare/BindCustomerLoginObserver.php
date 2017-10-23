@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Observer\Compare;
 
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Model\Product\Compare\Item;
+use Magento\Framework\Event\ObserverInterface;
 
 /**
  * Catalog Compare Item Model
@@ -14,6 +14,11 @@ use Magento\Catalog\Model\Product\Compare\Item;
  */
 class BindCustomerLoginObserver implements ObserverInterface
 {
+    /**
+     * @var Item
+     */
+    private $item;
+
     /**
      * @param Item $item
      */
@@ -28,7 +33,7 @@ class BindCustomerLoginObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {

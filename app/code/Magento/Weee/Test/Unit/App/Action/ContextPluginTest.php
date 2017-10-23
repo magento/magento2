@@ -14,47 +14,62 @@ namespace Magento\Weee\Test\Unit\App\Action;
 class ContextPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Tax\Helper\Data
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerSessionMock;
+
+    /**
+     * @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeManagerMock;
+
+    /**
+     * @var \Magento\Tax\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $taxHelperMock;
 
     /**
-     * @var \Magento\Weee\Helper\Data
+     * @var \Magento\Weee\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $weeeHelperMock;
 
     /**
-     * @var \Magento\Weee\Model\Tax
+     * @var \Magento\Weee\Model\Tax|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $weeeTaxMock;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $httpContextMock;
 
     /**
-     * @var \Magento\Tax\Model\Calculation\Proxy
+     * @var \Magento\Tax\Model\Calculation\Proxy|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $taxCalculationMock;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleManagerMock;
 
     /**
-     * @var \Magento\PageCache\Model\Config
+     * @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cacheConfigMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManager
+     * @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManageMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfig
+     * @var \Magento\Framework\App\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $scopeConfigMock;
 

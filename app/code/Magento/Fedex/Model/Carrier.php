@@ -22,6 +22,7 @@ use Magento\Shipping\Model\Rate\Result;
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -144,6 +145,16 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @var Json
      */
     private $serializer;
+
+    /**
+     * @var string
+     */
+    private $_defaultGatewayUrl;
+
+    /**
+     * @var \Magento\Framework\DataObject
+     */
+    private $_rawTrackingRequest;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig

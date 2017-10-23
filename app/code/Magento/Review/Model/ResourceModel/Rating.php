@@ -35,6 +35,11 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_logger;
 
     /**
+     * @var Review\Summary
+     */
+    protected $_reviewSummary;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Module\Manager $moduleManager

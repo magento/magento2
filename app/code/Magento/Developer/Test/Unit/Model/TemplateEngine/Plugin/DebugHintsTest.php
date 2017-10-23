@@ -27,9 +27,14 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
     protected $devHelperMock;
 
     /**
-     * @var DebugHintsFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var DebugHintsFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $debugHintsFactory;
+
+    /**
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $httpMock;
 
     /**
      * @return void
@@ -57,7 +62,8 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $debugHintsPath
      * @param bool $showBlockHints
-     * @return void
+     * @param $debugHintsWithParam
+     * @param $debugHintsParameter
      * @dataProvider afterCreateActiveDataProvider
      */
     public function testAfterCreateActive(
@@ -125,7 +131,8 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
      * @param string $debugHintsPath
      * @param bool $isDevAllowed
      * @param bool $showTemplateHints
-     * @return void
+     * @param $debugHintsWithParam
+     * @param $debugHintsParameter
      * @dataProvider afterCreateInactiveDataProvider
      */
     public function testAfterCreateInactive(

@@ -168,6 +168,7 @@ class TunnelTest extends \PHPUnit\Framework\TestCase
         if (!$response) {
             /** @var $response \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
             $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
+            /** @noinspection PhpUndefinedFieldInspection */
             $response->headersSentThrowsException = false;
         }
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

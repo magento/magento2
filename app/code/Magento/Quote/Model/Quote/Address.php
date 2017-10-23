@@ -256,6 +256,16 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     private $storeManager;
 
     /**
+     * @var \Magento\Framework\DataObject\Copy
+     */
+    private $_objectCopyService;
+
+    /**
+     * @var \Magento\Shipping\Model\CarrierFactoryInterface
+     */
+    private $_carrierFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory

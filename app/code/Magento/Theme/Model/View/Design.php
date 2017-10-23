@@ -6,7 +6,6 @@
 
 namespace Magento\Theme\Model\View;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -72,6 +71,11 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @var \Magento\Framework\App\State
      */
     protected $_appState;
+
+    /**
+     * @var array
+     */
+    protected $_themes;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager

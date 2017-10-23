@@ -31,6 +31,11 @@ class SubtotalTest extends \PHPUnit\Framework\TestCase
      */
     protected $orderItemMock;
 
+    /**
+     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderMock;
+
     protected function setUp()
     {
         $this->orderMock = $this->createPartialMock(

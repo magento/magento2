@@ -5,9 +5,9 @@
  */
 namespace Magento\Backend\Test\Unit\App\Action\Plugin;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\App\AbstractAction;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class MassactionKeyTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,9 +28,6 @@ class MassactionKeyTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->closureMock = function () {
-            return 'Expected';
-        };
         $this->subjectMock = $this->createMock(\Magento\Backend\App\AbstractAction::class);
         $this->requestMock = $this->getMockForAbstractClass(
             RequestInterface::class,

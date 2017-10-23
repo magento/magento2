@@ -30,7 +30,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_coreRegistry = null;
 
     /**
-     * @var  \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory
+     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory
      */
     protected $collectionFactory;
 
@@ -52,7 +52,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_salesReorder = $salesReorder;
-        $this->_collectionFactory = $collectionFactory;
+        $this->collectionFactory = $collectionFactory;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -74,7 +74,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_collectionFactory->getReport('sales_order_grid_data_source')->addFieldToSelect(
+        $collection = $this->collectionFactory->getReport('sales_order_grid_data_source')->addFieldToSelect(
             'entity_id'
         )->addFieldToSelect(
             'increment_id'

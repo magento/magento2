@@ -16,7 +16,6 @@ use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
 use Magento\Vault\Model\AccountPaymentTokenFactory;
 use Magento\Vault\Model\PaymentToken;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -122,7 +121,7 @@ class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        
+
         $this->handler = new VaultDetailsHandler(
             $this->paymentTokenFactory,
             $this->paymentExtensionFactory,
@@ -153,7 +152,7 @@ class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
-        
+
         $this->paymentDataObject->expects(static::once())
             ->method('getPayment')
             ->willReturn($this->paymentInfo);
@@ -171,7 +170,7 @@ class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
         $this->dateTimeFactory->expects(static::once())
             ->method('create')
             ->willReturn($dateTime);
-        
+
         $this->handler->handle($this->subject, $response);
 
         $extensionAttributes = $this->paymentInfo->getExtensionAttributes();
@@ -182,7 +181,9 @@ class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
         $tokenDetails = json_decode($paymentToken->getTokenDetails(), true);
 
         static::assertSame($this->paymentToken, $paymentToken);
+        /** @noinspection PhpUndefinedFieldInspection */
         static::assertEquals($transaction->paypalDetails->token, $paymentToken->getGatewayToken());
+        /** @noinspection PhpUndefinedFieldInspection */
         static::assertEquals($transaction->paypalDetails->payerEmail, $tokenDetails['payerEmail']);
         static::assertEquals($expirationDate, $paymentToken->getExpiresAt());
     }
@@ -193,6 +194,7 @@ class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
     public function testHandleWithoutToken()
     {
         $transaction = $this->getTransaction();
+        /** @noinspection PhpUndefinedFieldInspection */
         $transaction->paypalDetails->token = null;
 
         $response = [

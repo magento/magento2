@@ -22,6 +22,11 @@ class BillingAgreementConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $agreementFactoryMock;
 
+    /**
+     * @var BillingAgreementConfigProvider
+     */
+    protected $configProvider;
+
     protected function setUp()
     {
         $this->currentCustomerMock = $this->getMockBuilder(\Magento\Customer\Helper\Session\CurrentCustomer::class)

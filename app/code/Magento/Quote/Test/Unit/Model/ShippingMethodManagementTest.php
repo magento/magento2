@@ -83,6 +83,11 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $totalsCollector;
 
+    /**
+     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeMock;
+
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);

@@ -5,12 +5,12 @@
  */
 namespace Magento\Msrp\Helper;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Msrp\Model\Product\Attribute\Source\Type;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Msrp data helper
@@ -41,6 +41,11 @@ class Data extends AbstractHelper
      * @var ProductRepositoryInterface
      */
     protected $productRepository;
+
+    /**
+     * @var \Magento\Msrp\Model\Msrp
+     */
+    protected $msrp;
 
     /**
      * @param Context $context

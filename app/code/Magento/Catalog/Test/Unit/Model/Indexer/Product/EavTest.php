@@ -32,6 +32,11 @@ class EavTest extends \PHPUnit\Framework\TestCase
      */
     protected $cacheContextMock;
 
+    /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Eav
+     */
+    protected $model;
+
     protected function setUp()
     {
         $this->_productEavIndexerRow = $this->getMockBuilder(

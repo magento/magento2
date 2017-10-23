@@ -20,6 +20,11 @@ class SaveButtonTest extends \PHPUnit\Framework\TestCase
      */
     protected $context;
 
+    /**
+     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlBuilder;
+
     protected function setUp()
     {
         $this->initContext();
@@ -42,7 +47,6 @@ class SaveButtonTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->context = $this->getMockBuilder(\Magento\Backend\Block\Widget\Context::class)
             ->disableOriginalConstructor()
             ->getMock();

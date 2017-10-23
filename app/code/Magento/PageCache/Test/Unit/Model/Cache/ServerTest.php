@@ -5,23 +5,36 @@
  */
 namespace Magento\PageCache\Test\Unit\Model\Cache;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Magento\PageCache\Model\Cache\Server;
-use \Zend\Uri\UriFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\PageCache\Model\Cache\Server;
+use Zend\Uri\UriFactory;
 
 class ServerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Server */
+    /**
+     * @var Server
+     */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\DeploymentConfig */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     */
     protected $configMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\RequestInterface */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     */
     protected $requestMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\UrlInterface */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\UrlInterface
+     */
     protected $urlBuilderMock;
+
+    /**
+     * @var \Magento\Framework\Cache\InvalidateLogger|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
 
     protected function setUp()
     {

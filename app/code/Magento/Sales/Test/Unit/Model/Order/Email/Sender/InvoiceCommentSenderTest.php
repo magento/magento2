@@ -15,9 +15,14 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
     protected $sender;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $invoiceMock;
+
+    /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $invoiceResource;
 
     protected function setUp()
     {
