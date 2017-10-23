@@ -25,8 +25,9 @@ class WebApiApplication extends Application
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function install()
+    public function install($cleanup)
     {
         $installOptions = $this->getInstallConfig();
 
