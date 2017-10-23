@@ -12,6 +12,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * CLI Command to enable Magento profiler.
+ */
 class ProfilerEnableCommand extends Command
 {
     /**
@@ -48,11 +51,12 @@ class ProfilerEnableCommand extends Command
      * Initialize dependencies.
      *
      * @param File $filesystem
+     * @param string|null $name The name of the command; passing null means it must be set in configure()
      * @internal param ConfigInterface $resourceConfig
      */
-    public function __construct(File $filesystem)
+    public function __construct(File $filesystem, $name = null)
     {
-        parent::__construct();
+        parent::__construct($name ?: self::COMMAND_NAME);
         $this->filesystem = $filesystem;
     }
 
@@ -61,9 +65,8 @@ class ProfilerEnableCommand extends Command
      */
     protected function configure()
     {
-        $this->setName(self::COMMAND_NAME)
-            ->setDescription('Enable the profiler.')
-            ->addArgument('type', InputArgument::OPTIONAL, 'Profiler type');
+        $this->setDescription('Enable the profiler.')
+            ->addArgument('type', InputArgument::OPTIONAL, 'Profiler type', self::TYPE_DEFAULT);
 
         parent::configure();
     }
@@ -75,10 +78,6 @@ class ProfilerEnableCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $type = $input->getArgument('type');
-        if (!$type) {
-            $type = self::TYPE_DEFAULT;
-        }
-
         if (!in_array($type, self::BUILT_IN_TYPES)) {
             $builtInTypes = implode(', ', self::BUILT_IN_TYPES);
             $output->writeln(
