@@ -6,6 +6,9 @@
 
 namespace Magento\Checkout\Test\Unit\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
