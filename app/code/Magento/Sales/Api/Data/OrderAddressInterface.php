@@ -333,10 +333,10 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the country address ID for the order address.
      *
-     * @param int $id
+     * @param int $addressId
      * @return $this
      */
-    public function setCustomerAddressId($id);
+    public function setCustomerAddressId($addressId);
 
     /**
      * Sets the quote address ID for the order address.
