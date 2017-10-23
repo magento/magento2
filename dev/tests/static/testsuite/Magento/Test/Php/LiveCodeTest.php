@@ -206,10 +206,12 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         $reportFile = self::$reportDir . '/phpcs_report.txt';
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
+        $result = $codeSniffer->run($whiteList);
+        $report = file_exists($reportFile) ? file_get_contents($reportFile) : '';
         $this->assertEquals(
             0,
-            $result = $codeSniffer->run($whiteList),
-            "PHP Code Sniffer detected {$result} violation(s): " . PHP_EOL . file_get_contents($reportFile)
+            $result,
+            "PHP Code Sniffer detected {$result} violation(s): " . PHP_EOL . $report
         );
     }
 
