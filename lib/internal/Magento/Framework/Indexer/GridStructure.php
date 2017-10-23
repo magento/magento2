@@ -113,15 +113,17 @@ class GridStructure implements IndexStructureInterface
             }
             $table->addColumn($name, $type, $size);
         }
-        $table->addIndex(
-            $this->resource->getIdxName(
-                $tableName,
+        if (count($searchableFields)) {
+            $table->addIndex(
+                $this->resource->getIdxName(
+                    $tableName,
+                    $searchableFields,
+                    AdapterInterface::INDEX_TYPE_FULLTEXT
+                ),
                 $searchableFields,
-                AdapterInterface::INDEX_TYPE_FULLTEXT
-            ),
-            $searchableFields,
-            ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
-        );
+                ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
+            );
+        }
         $adapter->createTable($table);
     }
 
