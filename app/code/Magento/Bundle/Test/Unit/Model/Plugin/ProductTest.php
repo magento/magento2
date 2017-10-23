@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Bundle\Model\Plugin\Product */
     private $plugin;
@@ -25,17 +25,17 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->product = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEntityId'])
             ->getMock();
-        $this->type = $this->getMockBuilder('\Magento\Bundle\Model\Product\Type')
+        $this->type = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParentIdsByChild'])
             ->getMock();
 
         $this->plugin = $objectManager->getObject(
-            'Magento\Bundle\Model\Plugin\Product',
+            \Magento\Bundle\Model\Plugin\Product::class,
             [
                 'type' => $this->type,
             ]

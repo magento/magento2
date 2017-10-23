@@ -1,94 +1,64 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Plugin\Product\Media;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
- * Class Gallery
+ * Provides a serialized media gallery data for configurable product options.
  */
-class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
+class Gallery
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler
+     * @var Json
      */
-    private $productGalleryReadHandler;
+    private $json;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
-     */
-    private $jsonEncoder;
-
-    /**
-     * @var \Magento\Framework\Json\DecoderInterface
-     */
-    private $jsonDecoder;
-
-    /**
-     * Gallery constructor.
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
-     * @param \Magento\Catalog\Model\Product\Gallery\ReadHandler $productGalleryReadHandler
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\Json\DecoderInterface $jsonDecoder
-     * @param array $data
+     * @param Json $json
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
-        \Magento\Catalog\Model\Product\Gallery\ReadHandler $productGalleryReadHandler,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Framework\Json\DecoderInterface $jsonDecoder,
-        array $data = []
+        Json $json
     ) {
-        $this->productGalleryReadHandler = $productGalleryReadHandler;
-        $this->jsonEncoder = $jsonEncoder;
-        $this->jsonDecoder = $jsonDecoder;
-        parent::__construct($context, $arrayUtils, $data);
+        $this->json = $json;
     }
 
     /**
      * @param \Magento\Catalog\Block\Product\View\Gallery $subject
      * @param string $result
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetOptionsMediaGalleryDataJson(
         \Magento\Catalog\Block\Product\View\Gallery $subject,
         $result
     ) {
-        $result = $this->jsonDecoder->decode($result);
-        if ($this->getProduct()->getTypeId() == 'configurable') {
+        $result = $this->json->unserialize($result);
+        $parentProduct = $subject->getProduct();
+        if ($parentProduct->getTypeId() == Configurable::TYPE_CODE) {
             /** @var Configurable $productType */
-            $productType = $this->getProduct()->getTypeInstance();
-            $products = $productType->getUsedProducts($this->getProduct());
-            $attributes = $productType->getConfigurableAttributesAsArray($this->getProduct());
-            /** @var \Magento\Catalog\Model\Product $product */
-            foreach ($attributes as $attribute) {
-                foreach ($products as $product) {
-                    $attributeValue = $product->getData($attribute['attribute_code']);
-                    if ($attributeValue) {
-                        $key = $attribute['attribute_code'] . '_' . $attributeValue;
-                        $result[$key] = $this->getProductGallery($product);
-                    }
-                }
+            $productType = $parentProduct->getTypeInstance();
+            $products = $productType->getUsedProducts($parentProduct);
+            /** @var Product $product */
+            foreach ($products as $product) {
+                $key = $product->getId();
+                $result[$key] = $this->getProductGallery($product);
             }
         }
-        return $this->jsonEncoder->encode($result);
+        return $this->json->serialize($result);
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return array
      */
     private function getProductGallery($product)
     {
         $result = [];
-        $this->productGalleryReadHandler->execute($product);
         $images = $product->getMediaGalleryImages();
         foreach ($images as $image) {
             $result[] = [

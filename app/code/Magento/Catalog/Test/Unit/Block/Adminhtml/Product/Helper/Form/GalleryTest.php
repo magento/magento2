@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Helper\Form;
 
-class GalleryTest extends \PHPUnit_Framework_TestCase
+class GalleryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
@@ -34,13 +34,13 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', ['getData'], [], '', false);
-        $this->formMock = $this->getMock('Magento\Framework\Data\Form', [], [], '', false);
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getData']);
+        $this->formMock = $this->createMock(\Magento\Framework\Data\Form::class);
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->gallery = $this->objectManager->getObject(
-            'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery',
+            \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery::class,
             [
                 'registry' => $this->registryMock,
                 'form' => $this->formMock
@@ -81,7 +81,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
     {
         $name = 'product[image]';
 
-        $attribute = $this->getMock('Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
+        $attribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $attribute->expects($this->once())->method('getAttributeCode')->willReturn('image');
 
         $this->formMock->expects($this->once())->method('addSuffixToName')->willReturn($name);

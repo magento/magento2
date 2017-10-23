@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payment\Method\Billing;
@@ -15,7 +15,11 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Payment;
 
-class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class AbstractAgreementTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class AbstractAgreementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -40,7 +44,7 @@ class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['dispatch'])
             ->getMockForAbstractClass();
 
-        $this->agreementFactory = $this->getMockBuilder('Magento\Paypal\Model\Billing\AgreementFactory')
+        $this->agreementFactory = $this->getMockBuilder(\Magento\Paypal\Model\Billing\AgreementFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

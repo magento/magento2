@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Catalog\Test\Unit\Model\Attribute\Backend;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class CustomlayoutupdateTest extends \PHPUnit_Framework_TestCase
+class CustomlayoutupdateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -58,7 +58,7 @@ class CustomlayoutupdateTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            '\Magento\Catalog\Model\Attribute\Backend\Customlayoutupdate',
+            \Magento\Catalog\Model\Attribute\Backend\Customlayoutupdate::class,
             [
                 'layoutUpdateValidatorFactory' => $this->getMockedLayoutUpdateValidatorFactory()
             ]
@@ -71,7 +71,7 @@ class CustomlayoutupdateTest extends \PHPUnit_Framework_TestCase
      */
     private function getMockedLayoutUpdateValidatorFactory()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Framework\View\Model\Layout\Update\ValidatorFactory');
+        $mockBuilder = $this->getMockBuilder(\Magento\Framework\View\Model\Layout\Update\ValidatorFactory::class);
         $mockBuilder->disableOriginalConstructor();
         $mockBuilder->setMethods(['create']);
         $mock = $mockBuilder->getMock();
@@ -88,7 +88,7 @@ class CustomlayoutupdateTest extends \PHPUnit_Framework_TestCase
      */
     private function getMockedValidator()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Framework\View\Model\Layout\Update\Validator');
+        $mockBuilder = $this->getMockBuilder(\Magento\Framework\View\Model\Layout\Update\Validator::class);
         $mockBuilder->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 
@@ -122,7 +122,7 @@ class CustomlayoutupdateTest extends \PHPUnit_Framework_TestCase
      */
     private function getMockedAttribute()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute');
+        $mockBuilder = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
         $mockBuilder->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 

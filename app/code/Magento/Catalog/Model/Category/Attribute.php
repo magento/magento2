@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Category;
@@ -324,6 +324,7 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
     {
         return $this->setData(self::IS_VISIBLE, $isVisible);
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -359,5 +360,32 @@ class Attribute extends \Magento\Catalog\Model\Entity\Attribute implements
             //Ignore unrecognized scope
             return $this;
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsUsedInGrid($isUsedInGrid)
+    {
+        $this->setData(self::IS_USED_IN_GRID, $isUsedInGrid);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsVisibleInGrid($isVisibleInGrid)
+    {
+        $this->setData(self::IS_VISIBLE_IN_GRID, $isVisibleInGrid);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsFilterableInGrid($isFilterableInGrid)
+    {
+        $this->setData(self::IS_FILTERABLE_IN_GRID, $isFilterableInGrid);
+        return $this;
     }
 }

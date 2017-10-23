@@ -1,14 +1,29 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block;
 
 /**
- * Backend abstract block
+ * Standard admin block. Adds admin-specific behavior and event.
+ * Should be used when you declare a block in admin layout handle.
  *
+ * Avoid extending this class if possible.
+ *
+ * If you need custom presentation logic in your blocks, use this class as block, and declare
+ * custom view models in block arguments in layout handle file.
+ *
+ * Example:
+ * <block name="my.block" class="Magento\Backend\Block\Template" template="My_Module::template.phtml" >
+ *      <arguments>
+ *          <argument name="viewModel" xsi:type="object">My\Module\ViewModel\Custom</argument>
+ *      </arguments>
+ * </block>
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 class Template extends \Magento\Framework\View\Element\Template
 {
@@ -63,13 +78,18 @@ class Template extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Check whether or not the module output is enabled
+     * Check whether or not the module output is enabled.
      *
      * Because many module blocks belong to Backend module,
-     * the feature "Disable module output" doesn't cover Admin area
+     * the feature "Disable module output" doesn't cover Admin area.
      *
      * @param string $moduleName Full module name
      * @return boolean
+     * @deprecated 100.2.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
+     * version. Module output can still be enabled/disabled in configuration files. However, this functionality should
+     * not be used in future development. Module design should explicitly state dependencies to avoid requiring output
+     * disabling. This functionality will temporarily be kept in Magento core, as there are unresolved modularity
+     * issues that will be addressed in future releases.
      */
     public function isOutputEnabled($moduleName = null)
     {

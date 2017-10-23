@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Config\Model\Config\TypePool">
+        <arguments>
+            <argument name="sensitive" xsi:type="array">
+                <item name="carriers/ups/username" xsi:type="string">1</item>
+                <item name="carriers/ups/password" xsi:type="string">1</item>
+                <item name="carriers/ups/access_license_number" xsi:type="string">1</item>
+                <item name="carriers/ups/tracking_xml_url" xsi:type="string">1</item>
+                <item name="carriers/ups/gateway_xml_url" xsi:type="string">1</item>
+                <item name="carriers/ups/shipper_number" xsi:type="string">1</item>
+                <item name="carriers/ups/gateway_url" xsi:type="string">1</item>
+            </argument>
+            <argument name="environment" xsi:type="array">
+                <item name="carriers/ups/access_license_number" xsi:type="string">1</item>
+                <item name="carriers/ups/debug" xsi:type="string">1</item>
+                <item name="carriers/ups/gateway_url" xsi:type="string">1</item>
+                <item name="carriers/ups/gateway_xml_url" xsi:type="string">1</item>
+                <item name="carriers/ups/is_account_live" xsi:type="string">1</item>
+                <item name="carriers/ups/password" xsi:type="string">1</item>
+                <item name="carriers/ups/username" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

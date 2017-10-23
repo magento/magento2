@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
@@ -160,7 +160,8 @@ class ConfigurablePanel extends AbstractModifier
                                         'component' => 'Magento_Ui/js/form/components/html',
                                         'additionalClasses' => 'message message-notice',
                                         'content' => __(
-                                            'Choose a new product to delete and replace the current product configuration.'
+                                            'Choose a new product to delete and replace'
+                                            . ' the current product configuration.'
                                         ),
                                         'imports' => [
                                             'visible' => '!ns = ${ $.ns }, index = '

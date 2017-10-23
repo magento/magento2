@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class PriceBackendTest
  */
-class PriceBackendTest extends \PHPUnit_Framework_TestCase
+class PriceBackendTest extends \PHPUnit\Framework\TestCase
 {
     const CLOSURE_VALUE = 'CLOSURE';
 

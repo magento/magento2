@@ -1,15 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model;
 
-use Magento\Webapi\Controller\Rest;
-use Magento\Webapi\Model\Cache\Type\Webapi;
-use Magento\Webapi\Model\ServiceMetadata;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Webapi\Authorization;
+use Magento\Webapi\Model\Cache\Type\Webapi;
 
 /**
  * Abstract API schema generator.
@@ -31,15 +31,22 @@ abstract class AbstractSchemaGenerator
      */
     protected $customAttributeTypeLocator;
 
-     /**
-      * @var ServiceMetadata
-      */
+    /**
+     * @var ServiceMetadata
+     */
     protected $serviceMetadata;
 
     /**
      * @var Authorization
      */
     protected $authorization;
+
+    /**
+     * Instance of serializer.
+     *
+     * @var Json
+     */
+    private $serializer;
 
     /**
      * Initialize dependencies.
@@ -49,38 +56,32 @@ abstract class AbstractSchemaGenerator
      * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
      * @param Authorization $authorization
+     * @param Json|null $serializer
      */
     public function __construct(
         Webapi $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
         ServiceMetadata $serviceMetadata,
-        Authorization $authorization
+        Authorization $authorization,
+        Json $serializer = null
     ) {
         $this->cache = $cache;
         $this->typeProcessor = $typeProcessor;
         $this->customAttributeTypeLocator = $customAttributeTypeLocator;
         $this->serviceMetadata = $serviceMetadata;
         $this->authorization = $authorization;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
-     * Retrieve a list of services visible to current user.
+     * Retrieve a list of all services.
      *
      * @return string[]
      */
     public function getListOfServices()
     {
-        $listOfAllowedServices = [];
-        foreach ($this->serviceMetadata->getServicesConfig() as $serviceName => $service) {
-            foreach ($service[ServiceMetadata::KEY_SERVICE_METHODS] as $method) {
-                if ($this->authorization->isAllowed($method[ServiceMetadata::KEY_ACL_RESOURCES])) {
-                    $listOfAllowedServices[] = $serviceName;
-                    break;
-                }
-            }
-        }
-        return $listOfAllowedServices;
+        return array_keys($this->serviceMetadata->getServicesConfig());
     }
 
     /**
@@ -96,7 +97,8 @@ abstract class AbstractSchemaGenerator
     {
         /** Sort requested services by names to prevent caching of the same schema file more than once. */
         ksort($requestedServices);
-        $cacheId = $this->cache->generateCacheIdUsingContext(get_class($this) . serialize($requestedServices));
+        $prefix = get_class($this) . $this->serializer->serialize($requestedServices);
+        $cacheId = $this->cache->generateCacheIdUsingContext($prefix);
         $cachedSchemaContent = $this->cache->load($cacheId);
         if ($cachedSchemaContent !== false) {
             return $cachedSchemaContent;

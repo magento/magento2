@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
@@ -19,13 +19,13 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $params = [$objectManager->create('Magento\CatalogImportExport\Model\Import\Product'), 'simple'];
+        $params = [$objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class), 'simple'];
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType',
+            \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class,
             [
-                $objectManager->get('Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory'),
-                $objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory'),
-                $objectManager->get('Magento\Framework\App\ResourceConnection'),
+                $objectManager->get(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class),
+                $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class),
+                $objectManager->get(\Magento\Framework\App\ResourceConnection::class),
                 $params
             ]
         );

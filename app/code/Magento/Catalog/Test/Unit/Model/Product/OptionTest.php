@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product;
 use \Magento\Catalog\Model\Product\Option;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class OptionTest extends \PHPUnit_Framework_TestCase
+class OptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Option
@@ -22,9 +22,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Catalog\Model\Product\Option');
+        $this->model = $objectManager->getObject(\Magento\Catalog\Model\Product\Option::class);
         $this->model->setProduct($this->productMock);
     }
 
@@ -35,10 +35,19 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($productSku, $this->model->getProductSku());
     }
 
+    public function testHasValues()
+    {
+        $this->model->setType('drop_down');
+        $this->assertTrue($this->model->hasValues());
+
+        $this->model->setType('field');
+        $this->assertFalse($this->model->hasValues());
+    }
+
     public function testGetRegularPrice()
     {
         $priceInfoMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Pricing\PriceInfoInterface',
+            \Magento\Framework\Pricing\PriceInfoInterface::class,
             [],
             '',
             false,
@@ -47,7 +56,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             ['getAmount', 'getPrice']
         );
         $priceInfoMock->expects($this->once())->method('getPrice')->willReturnSelf();
-        $amountMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\Amount\AmountInterface');
+        $amountMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $priceInfoMock->expects($this->once())->method('getAmount')->willReturn($amountMock);
 
         $this->productMock->expects($this->once())->method('getPriceInfo')->willReturn($priceInfoMock);

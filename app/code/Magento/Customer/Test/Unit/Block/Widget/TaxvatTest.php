@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Customer\Test\Unit\Block\Widget;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Block\Widget\Taxvat;
 
-class TaxvatTest extends \PHPUnit_Framework_TestCase
+class TaxvatTest extends \PHPUnit\Framework\TestCase
 {
     /** Constants used in the unit tests */
     const CUSTOMER_ENTITY_TYPE = 'customer';
@@ -31,9 +31,9 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->attribute = $this->getMockBuilder('\Magento\Customer\Api\Data\AttributeMetadataInterface')
+        $this->attribute = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
-        $this->customerMetadata = $this->getMockBuilder('\Magento\Customer\Api\CustomerMetadataInterface')
+        $this->customerMetadata = $this->getMockBuilder(\Magento\Customer\Api\CustomerMetadataInterface::class)
             ->getMockForAbstractClass();
         $this->customerMetadata->expects(
             $this->any()
@@ -46,8 +46,8 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_block = new \Magento\Customer\Block\Widget\Taxvat(
-            $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false),
-            $this->getMock('Magento\Customer\Helper\Address', [], [], '', false),
+            $this->createMock(\Magento\Framework\View\Element\Template\Context::class),
+            $this->createMock(\Magento\Customer\Helper\Address::class),
             $this->customerMetadata
         );
     }

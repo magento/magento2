@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Form\Element;
@@ -13,7 +13,8 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 
 /**
- * Class Input
+ * @api
+ * @since 100.1.0
  */
 class Wysiwyg extends AbstractElement
 {
@@ -21,11 +22,13 @@ class Wysiwyg extends AbstractElement
 
     /**
      * @var Form
+     * @since 100.1.0
      */
     protected $form;
 
     /**
      * @var Editor
+     * @since 100.1.0
      */
     protected $editor;
 
@@ -49,7 +52,7 @@ class Wysiwyg extends AbstractElement
         $this->form = $formFactory->create();
         $this->editor = $this->form->addField(
             $context->getNamespace() . '_' . $data['name'],
-            'Magento\Framework\Data\Form\Element\Editor',
+            \Magento\Framework\Data\Form\Element\Editor::class,
             [
                 'force_load' => true,
                 'rows' => 20,
@@ -67,6 +70,7 @@ class Wysiwyg extends AbstractElement
      * Get component name
      *
      * @return string
+     * @since 100.1.0
      */
     public function getComponentName()
     {

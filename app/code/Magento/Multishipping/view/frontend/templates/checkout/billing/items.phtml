@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,25 +10,25 @@
 <?php if ($block->getQuote()->hasVirtualItems()): ?>
 <div class="block block-other">
     <div class="block-title">
-        <strong><?php /* @escapeNotVerified */ echo __('Other items in your order') ?></strong>
-        <a href="<?php /* @escapeNotVerified */ echo $block->getVirtualProductEditUrl() ?>" class="action edit"><span><?php /* @escapeNotVerified */ echo __('Edit Items') ?></span></a>
+        <strong><?= /* @escapeNotVerified */ __('Other items in your order') ?></strong>
+        <a href="<?= /* @escapeNotVerified */ $block->getVirtualProductEditUrl() ?>" class="action edit"><span><?= /* @escapeNotVerified */ __('Edit Items') ?></span></a>
     </div>
     <div class="block-content">
-        <p><?php /* @escapeNotVerified */ echo __('Shipping is not applicable.') ?></p>
+        <p><?= /* @escapeNotVerified */ __('Shipping is not applicable.') ?></p>
         <div class="table-wrapper">
             <table class="items data table" id="unavailable-shipping-table">
-                <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Other items in your order') ?></caption>
+                <caption class="table-caption"><?= /* @escapeNotVerified */ __('Other items in your order') ?></caption>
                 <thead>
                     <tr>
-                        <th class="col item" scope="col"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
-                        <th class="col qty" scope="col"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
+                        <th class="col item" scope="col"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
+                        <th class="col qty" scope="col"><?= /* @escapeNotVerified */ __('Qty') ?></th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($block->getVirtualQuoteItems() as $_item): ?>
                     <tr>
-                        <td class="col item" data-th="<?php echo $block->escapeHtml(__('Product Name'));?>"><?php echo $block->getItemHtml($_item) ?></td>
-                        <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty'));?>"><?php /* @escapeNotVerified */ echo $_item->getQty() ?></td>
+                        <td class="col item" data-th="<?= $block->escapeHtml(__('Product Name')) ?>"><?= $block->getItemHtml($_item) ?></td>
+                        <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><?= /* @escapeNotVerified */ $_item->getQty() ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

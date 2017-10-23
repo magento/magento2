@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use \Magento\Store\Model\Store;
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
 
-class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
+class UpgradeInsecureTest extends \PHPUnit\Framework\TestCase
 {
     /** Content-Security-Policy Header name */
     const HEADER_NAME = 'Content-Security-Policy';
@@ -33,12 +33,12 @@ class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMockBuilder('\Magento\Framework\App\Config')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManagerHelper($this);
         $this->object = $objectManager->getObject(
-            '\Magento\Store\Model\HeaderProvider\UpgradeInsecure',
+            \Magento\Store\Model\HeaderProvider\UpgradeInsecure::class,
             ['scopeConfig' => $this->scopeConfigMock]
         );
     }
@@ -56,7 +56,7 @@ class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
     /**
      * @param [] $configValuesMap
      * @param bool $expected
-     * @dataProvider testCanApplyDataProvider
+     * @dataProvider canApplyDataProvider
      */
     public function testCanApply($configValuesMap, $expected)
     {
@@ -71,7 +71,7 @@ class UpgradeInsecureTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    public function testCanApplyDataProvider()
+    public function canApplyDataProvider()
     {
         return [
             [

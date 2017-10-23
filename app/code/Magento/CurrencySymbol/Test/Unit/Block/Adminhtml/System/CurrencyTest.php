@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Test\Unit\Block\Adminhtml\System;
 
-class CurrencyTest extends \PHPUnit_Framework_TestCase
+class CurrencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Object manager helper
@@ -26,25 +26,16 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareLayout()
     {
-        $childBlockMock = $this->getMock(
-            'Magento\Framework\View\Element\BlockInterface',
-            ['addChild', 'toHtml'],
-            [],
-            '',
-            false
+        $childBlockMock = $this->createPartialMock(
+            \Magento\Framework\View\Element\BlockInterface::class,
+            ['addChild', 'toHtml']
         );
 
-        $blockMock = $this->getMock(
-            'Magento\Framework\View\Element\BlockInterface',
-            [],
-            [],
-            '',
-            false
-        );
+        $blockMock = $this->createMock(\Magento\Framework\View\Element\BlockInterface::class);
 
         /** @var $layoutMock \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
         $layoutMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\LayoutInterface',
+            \Magento\Framework\View\LayoutInterface::class,
             [],
             '',
             false,
@@ -60,7 +51,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
             ->method('addChild')
             ->with(
                 'save_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Save Currency Rates'),
                     'class' => 'save primary save-currency-rates',
@@ -74,7 +65,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
             ->method('addChild')
             ->with(
                 'options_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 ['label' => __('Options'), 'onclick' => 'setLocation(\'\')']
             );
 
@@ -82,13 +73,13 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
             ->method('addChild')
             ->with(
                 'reset_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 ['label' => __('Reset'), 'onclick' => 'document.location.reload()', 'class' => 'reset']
             );
 
         /** @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency */
         $block = $this->objectManagerHelper->getObject(
-            'Magento\CurrencySymbol\Block\Adminhtml\System\Currency',
+            \Magento\CurrencySymbol\Block\Adminhtml\System\Currency::class,
             [
                 'layout' => $layoutMock
             ]

@@ -1,24 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Directory\Test\TestCase\CreateCurrencyRateTest" summary="Create Currency Rate" ticketId="MAGETWO-36824">
         <variation name="CreateCurrencyRateTestVariation1">
-            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test, severity:S1</data>
             <data name="currencyRate/data/currency_from" xsi:type="string">USD</data>
             <data name="currencyRate/data/currency_to" xsi:type="string">EUR</data>
             <data name="currencyRate/data/rate" xsi:type="number">0.8</data>
             <data name="currencySymbol/dataset" xsi:type="string">currency_symbols_eur</data>
-            <data name="product/dataset" xsi:type="string">simple_10_dollar</data>
+            <data name="product" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
             <data name="config/dataset" xsi:type="string">config_currency_symbols_usd_and_eur</data>
             <data name="basePrice" xsi:type="string">$10.00</data>
             <data name="convertedPrice" xsi:type="string">€8.00</data>
             <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage" />
             <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateAppliedOnCatalogPage" />
+        </variation>
+        <variation name="CreateCurrencyRateTestVariation2">
+            <data name="currencyRate/data/currency_from" xsi:type="string">USD</data>
+            <data name="currencyRate/data/currency_to" xsi:type="string">UAH</data>
+            <data name="currencyRate/data/rate" xsi:type="number">2.000</data>
+            <data name="currencySymbol/dataSet" xsi:type="string">currency_symbols_uah</data>
+            <data name="product" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
+            <data name="productData/0/custom_options/dataset" xsi:type="string">not_required_text_option</data>
+            <data name="config/dataset" xsi:type="string">config_base_currency_us_display_currency_uah</data>
+            <data name="basePrice" xsi:type="string">₴20.00</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage" />
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateAppliedOnProductPage" />
+        </variation>
+        <variation name="CreateCurrencyRateTestVariation3" summary="Create currency rate if is not base currency" ticketId="MAGETWO-45310">
+            <data name="currencyRate/data/currency_from" xsi:type="string">USD</data>
+            <data name="currencyRate/data/currency_to" xsi:type="string">UAH</data>
+            <data name="currencyRate/data/rate" xsi:type="number">0.5</data>
+            <data name="currencySymbol/dataset" xsi:type="string">currency_symbols_uah</data>
+            <data name="product" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
+            <data name="shippingAmount" xsi:type="string">₴2.50</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="config/dataset" xsi:type="string">config_allowed_currency_usd_and_uah</data>
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage" />
+            <constraint name="Magento\Directory\Test\Constraint\AssertShippingPriceWithCustomCurrency" />
         </variation>
     </testCase>
 </config>

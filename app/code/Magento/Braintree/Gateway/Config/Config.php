@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Config;
+
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class Config
@@ -31,15 +34,50 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const FRAUD_PROTECTION = 'fraudprotection';
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Braintree config constructor
+     *
+     * @param ScopeConfigInterface $scopeConfig
+     * @param null|string $methodCode
+     * @param string $pathPattern
+     * @param Json|null $serializer
+     */
+    public function __construct(
+        ScopeConfigInterface $scopeConfig,
+        $methodCode = null,
+        $pathPattern = self::DEFAULT_PATH_PATTERN,
+        Json $serializer = null
+    ) {
+        parent::__construct($scopeConfig, $methodCode, $pathPattern);
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Json::class);
+    }
+
+    /**
+     * Get list of available dynamic descriptors keys
+     * @var array
+     */
+    private static $dynamicDescriptorKeys = [
+        'name', 'phone', 'url'
+    ];
+
+    /**
      * Return the country specific card type config
      *
      * @return array
      */
     public function getCountrySpecificCardTypeConfig()
     {
-        $countriesCardTypes = unserialize($this->getValue(self::KEY_COUNTRY_CREDIT_CARD));
-
-        return is_array($countriesCardTypes) ? $countriesCardTypes : [];
+        $countryCardTypes = $this->getValue(self::KEY_COUNTRY_CREDIT_CARD);
+        if (!$countryCardTypes) {
+            return [];
+        }
+        $countryCardTypes = $this->serializer->unserialize($countryCardTypes);
+        return is_array($countryCardTypes) ? $countryCardTypes : [];
     }
 
     /**
@@ -168,5 +206,31 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function isActive()
     {
         return (bool) $this->getValue(self::KEY_ACTIVE);
+    }
+
+    /**
+     * Get list of configured dynamic descriptors
+     * @return array
+     */
+    public function getDynamicDescriptors()
+    {
+        $values = [];
+        foreach (self::$dynamicDescriptorKeys as $key) {
+            $value = $this->getValue('descriptor_' . $key);
+            if (!empty($value)) {
+                $values[$key] = $value;
+            }
+        }
+        return $values;
+    }
+
+    /**
+     * Get Merchant account ID
+     *
+     * @return string
+     */
+    public function getMerchantAccountId()
+    {
+        return $this->getValue(self::KEY_MERCHANT_ACCOUNT_ID);
     }
 }

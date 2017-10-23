@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Encryption;
 
-class EncryptorTest extends \PHPUnit_Framework_TestCase
+class EncryptorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Encryption\Encryptor
@@ -15,7 +15,7 @@ class EncryptorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Encryption\Encryptor'
+            \Magento\Framework\Encryption\Encryptor::class
         );
     }
 

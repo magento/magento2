@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Attribute\Button;
@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\Context;
 /**
  * Class GenericTest
  */
-class GenericTest extends \PHPUnit_Framework_TestCase
+class GenericTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject

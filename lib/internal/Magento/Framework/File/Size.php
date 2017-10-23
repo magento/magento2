@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,9 @@
  */
 namespace Magento\Framework\File;
 
+/**
+ * @api
+ */
 class Size
 {
     /**
@@ -33,7 +36,7 @@ class Size
      */
     public function getPostMaxSize()
     {
-        return $this->_iniGet('post_max_size');
+        return $this->_iniget('post_max_size');
     }
 
     /**
@@ -43,7 +46,7 @@ class Size
      */
     public function getUploadMaxSize()
     {
-        return $this->_iniGet('upload_max_filesize');
+        return $this->_iniget('upload_max_filesize');
     }
 
     /**
@@ -100,7 +103,7 @@ class Size
     /**
      * Converts a ini setting to a integer value
      *
-     * @deprecated Please use \Magento\Framework\Convert\DataSize
+     * @deprecated 100.1.0 Please use \Magento\Framework\Convert\DataSize
      *
      * @param string $size
      * @return integer
@@ -127,7 +130,7 @@ class Size
      *
      * @return \Magento\Framework\Convert\DataSize
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getDataSize()
     {

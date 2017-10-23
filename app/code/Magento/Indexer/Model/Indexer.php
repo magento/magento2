@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Model;
@@ -418,6 +418,11 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
                 $state->save();
                 $this->getView()->resume();
                 throw $exception;
+            } catch (\Error $error) {
+                $state->setStatus(StateInterface::STATUS_INVALID);
+                $state->save();
+                $this->getView()->resume();
+                throw $error;
             }
         }
     }
@@ -436,7 +441,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
 
     /**
      * Regenerate rows in index by ID list
-     *5
+     *
      * @param int[] $ids
      * @return void
      */

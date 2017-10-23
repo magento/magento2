@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ namespace Magento\Widget\Model\Config;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\Config\Reader
@@ -24,10 +24,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fileResolver = $this->getMockForAbstractClass('Magento\Framework\Config\FileResolverInterface');
+        $this->fileResolver = $this->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
         $objectManager = Bootstrap::getObjectManager();
         $this->model = $objectManager->create(
-            'Magento\Widget\Model\Config\Reader', ['fileResolver' => $this->fileResolver]
+            \Magento\Widget\Model\Config\Reader::class, ['fileResolver' => $this->fileResolver]
         );
     }
 

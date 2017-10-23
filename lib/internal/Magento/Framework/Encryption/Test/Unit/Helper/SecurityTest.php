@@ -2,7 +2,7 @@
 /**
  * Collection of various useful functions
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ namespace Magento\Framework\Encryption\Test\Unit\Helper;
 
 use Magento\Framework\Encryption\Helper\Security;
 
-class SecurityTest extends \PHPUnit_Framework_TestCase
+class SecurityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Security

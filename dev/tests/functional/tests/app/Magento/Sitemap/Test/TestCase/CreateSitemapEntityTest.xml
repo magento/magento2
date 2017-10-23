@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sitemap\Test\TestCase\CreateSitemapEntityTest" summary="Create Sitemap" ticketId="MAGETWO-23277">
         <variation name="CreateSitemapEntityTestVariation1">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, severity:S1</data>
             <data name="sitemap/data/sitemap_filename" xsi:type="string">sitemap.xml</data>
             <data name="sitemap/data/sitemap_path" xsi:type="string">/</data>
             <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapSuccessSaveMessage" />
             <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapInGrid" />
         </variation>
         <variation name="CreateSitemapEntityTestVariation2">
+            <data name="tag" xsi:type="string">severity:S3</data>
             <data name="sitemap/data/sitemap_filename" xsi:type="string">%isolation%</data>
             <data name="sitemap/data/sitemap_path" xsi:type="string">/</data>
             <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapFailPathSaveMessage" />
         </variation>
         <variation name="CreateSitemapEntityTestVariation3">
+            <data name="tag" xsi:type="string">severity:S3</data>
             <data name="sitemap/data/sitemap_filename" xsi:type="string">sitemap.xml</data>
             <data name="sitemap/data/sitemap_path" xsi:type="string">/%isolation%</data>
             <constraint name="Magento\Sitemap\Test\Constraint\AssertSitemapFailFolderSaveMessage" />

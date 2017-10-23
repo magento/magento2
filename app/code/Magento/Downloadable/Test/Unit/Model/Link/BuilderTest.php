@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\Link;
@@ -13,7 +13,7 @@ use Magento\Downloadable\Helper\Download;
 /**
  * Class BuilderTest
  */
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -60,7 +60,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Api\DataObjectHelper::class
         )->disableOriginalConstructor()->getMock();
 
-        $this->mockComponentFactory = $this->getMockBuilder('\Magento\Downloadable\Model\LinkFactory')
+        $this->mockComponentFactory = $this->getMockBuilder(\Magento\Downloadable\Model\LinkFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Helper;
@@ -13,6 +13,9 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -446,7 +449,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _getCartUrlParameters($item)
     {
-        return ['item' => is_string($item) ? $item : $item->getWishlistItemId()];
+        $params = [
+            'item' => is_string($item) ? $item : $item->getWishlistItemId(),
+        ];
+        if ($item instanceof \Magento\Wishlist\Model\Item) {
+            $params['qty'] = $item->getQty();
+        }
+        return $params;
     }
 
     /**

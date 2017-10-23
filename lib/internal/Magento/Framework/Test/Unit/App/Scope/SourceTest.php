@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit\App\Scope;
@@ -10,7 +10,7 @@ use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ScopeResolverPool;
 
-class SourceTest extends \PHPUnit_Framework_TestCase
+class SourceTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Source */
     protected $model;
@@ -23,7 +23,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeResolverPoolMock = $this->getMockBuilder('Magento\Framework\App\ScopeResolverPool')
+        $this->scopeResolverPoolMock = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -41,11 +41,11 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $result = [$scopeData, $scopeData];
 
         /** @var ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject $scopeResolverMock */
-        $scopeResolverMock = $this->getMockBuilder('Magento\Framework\App\ScopeResolverInterface')
+        $scopeResolverMock = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverInterface::class)
             ->getMockForAbstractClass();
 
         /** @var ScopeInterface|\PHPUnit_Framework_MockObject_MockObject $scopeMock */
-        $scopeMock = $this->getMockBuilder('Magento\Framework\App\ScopeInterface')
+        $scopeMock = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)
             ->getMockForAbstractClass();
 
         $this->scopeResolverPoolMock->expects($this->once())

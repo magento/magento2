@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Paypal\Model\Cart;
 
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Cart
@@ -46,9 +46,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_salesModel = $this->getMockForAbstractClass(
-            'Magento\Payment\Model\Cart\SalesModel\SalesModelInterface'
+            \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface::class
         );
-        $factoryMock = $this->getMock('Magento\Payment\Model\Cart\SalesModel\Factory', ['create'], [], '', false);
+        $factoryMock = $this->createPartialMock(\Magento\Payment\Model\Cart\SalesModel\Factory::class, ['create']);
         $factoryMock->expects(
             $this->once()
         )->method(
@@ -58,7 +58,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_salesModel)
         );
-        $eventManagerMock = $this->getMockForAbstractClass('Magento\Framework\Event\ManagerInterface');
+        $eventManagerMock = $this->getMockForAbstractClass(\Magento\Framework\Event\ManagerInterface::class);
 
         $this->_model = new \Magento\Paypal\Model\Cart($factoryMock, $eventManagerMock, 'sales model');
     }

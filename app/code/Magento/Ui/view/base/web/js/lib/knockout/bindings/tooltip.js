@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,10 +43,12 @@ define([
         closeButton: false,
         showed: false,
         strict: true,
-        center: false
+        center: false,
+        closeOnScroll: true
     };
 
     tooltipData = {
+        tooltipClasses: '',
         trigger: false,
         timeout: 0,
         element: false,
@@ -578,9 +580,12 @@ define([
                 $('.' + config.closeButtonClass).on('click.closeButton', tooltip.destroy.bind(null, id));
             }
 
-            document.addEventListener('scroll', tooltip.destroy, true);
+            if (config.closeOnScroll) {
+                document.addEventListener('scroll', tooltip.destroy, true);
+                $(window).on('scroll.tooltip', tooltip.outerClick.bind(null, id));
+            }
+
             $(window).on('keydown.tooltip', tooltip.keydownHandler);
-            $(window).on('scroll.tooltip', tooltip.outerClick.bind(null, id));
             $(window).on('resize.outerClick', tooltip.outerClick.bind(null, id));
         },
 
@@ -599,6 +604,8 @@ define([
             }
 
             tooltip.setContent.apply(null, arguments);
+
+            return false;
         },
 
         /**
@@ -664,6 +671,7 @@ define([
             $('.' + defaults.closeButtonClass).off('click.closeButton');
             tooltipData.trigger.off('mousemove.track');
             document.removeEventListener('scroll', tooltip.destroy, true);
+            $(window).off('scroll.tooltip');
             $(window).off(CLICK_EVENT + '.outerClick');
             $(window).off('keydown.tooltip');
             $(window).off('resize.outerClick');

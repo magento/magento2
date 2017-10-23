@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ namespace Magento\Bundle\Test\Unit\Pricing\Price;
 /**
  * Class DiscountCalculatorTest
  */
-class DiscountCalculatorTest extends \PHPUnit_Framework_TestCase
+class DiscountCalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Bundle\Pricing\Price\DiscountCalculator
@@ -43,28 +43,12 @@ class DiscountCalculatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            [],
-            [],
-            '',
-            false
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->priceInfoMock = $this->createPartialMock(\Magento\Framework\Pricing\PriceInfo\Base::class, ['getPrice', 'getPrices']);
+        $this->finalPriceMock = $this->createMock(\Magento\Catalog\Pricing\Price\FinalPrice::class);
+        $this->priceMock = $this->getMockForAbstractClass(
+            \Magento\Bundle\Pricing\Price\DiscountProviderInterface::class
         );
-        $this->priceInfoMock = $this->getMock(
-            'Magento\Framework\Pricing\PriceInfo\Base',
-            ['getPrice', 'getPrices'],
-            [],
-            '',
-            false
-        );
-        $this->finalPriceMock = $this->getMock(
-            'Magento\Catalog\Pricing\Price\FinalPrice',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->priceMock = $this->getMockForAbstractClass('Magento\Bundle\Pricing\Price\DiscountProviderInterface');
         $this->calculator = new \Magento\Bundle\Pricing\Price\DiscountCalculator();
     }
 

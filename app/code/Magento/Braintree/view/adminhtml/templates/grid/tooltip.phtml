@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /**
  * @var \Magento\Backend\Block\Template $block
  */
-echo $block->escapeHtml($block->getData('tooltip_content'));
+?>
+<?= $block->escapeHtml($block->getData('tooltip_content'));

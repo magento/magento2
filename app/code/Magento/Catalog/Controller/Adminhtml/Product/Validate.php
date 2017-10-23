@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -21,7 +21,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     protected $_dateFilter;
 
@@ -40,7 +40,9 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     protected $layoutFactory;
 
-    /** @var \Magento\Catalog\Model\ProductFactory */
+    /**
+     * @var \Magento\Catalog\Model\ProductFactory
+     */
     protected $productFactory;
 
     /**
@@ -147,20 +149,20 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return StoreManagerInterface
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getStoreManager()
     {
         if (null === $this->storeManager) {
             $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Store\Model\StoreManagerInterface');
+                ->get(\Magento\Store\Model\StoreManagerInterface::class);
         }
         return $this->storeManager;
     }
 
     /**
      * @return Initialization\Helper
-     * @deprecated
+     * @deprecated 101.0.0
      */
     protected function getInitializationHelper()
     {

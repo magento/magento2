@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
@@ -13,7 +13,7 @@ use Magento\SalesRule\Api\Data\RuleInterface;
 /**
  * Class SaveHandlerTest
  */
-class SaveHandlerTest extends \PHPUnit_Framework_TestCase
+class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SaveHandler
@@ -42,14 +42,14 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $className = 'Magento\SalesRule\Model\ResourceModel\Rule';
-        $this->ruleResource = $this->getMock($className, [], [], '', false);
+        $className = \Magento\SalesRule\Model\ResourceModel\Rule::class;
+        $this->ruleResource = $this->createMock($className);
 
-        $className = 'Magento\Framework\EntityManager\MetadataPool';
-        $this->metadataPool = $this->getMock($className, [], [], '', false);
+        $className = \Magento\Framework\EntityManager\MetadataPool::class;
+        $this->metadataPool = $this->createMock($className);
 
         $this->model = $this->objectManager->getObject(
-            'Magento\SalesRule\Model\ResourceModel\SaveHandler',
+            \Magento\SalesRule\Model\ResourceModel\SaveHandler::class,
             [
                 'ruleResource' => $this->ruleResource,
                 'metadataPool' => $this->metadataPool,
@@ -67,8 +67,8 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             'rule_id' => 1
         ];
 
-        $className = '\Magento\Framework\EntityManager\EntityMetadata';
-        $metadata = $this->getMock($className, [], [], '', false);
+        $className = \Magento\Framework\EntityManager\EntityMetadata::class;
+        $metadata = $this->createMock($className);
 
         $metadata->expects($this->once())
             ->method('getLinkField')
@@ -94,8 +94,8 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             'customer_group_ids' => $customers
         ];
 
-        $className = '\Magento\Framework\EntityManager\EntityMetadata';
-        $metadata = $this->getMock($className, [], [], '', false);
+        $className = \Magento\Framework\EntityManager\EntityMetadata::class;
+        $metadata = $this->createMock($className);
 
         $metadata->expects($this->once())
             ->method('getLinkField')
@@ -124,8 +124,8 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             'customer_group_ids' => $customers
         ];
 
-        $className = '\Magento\Framework\EntityManager\EntityMetadata';
-        $metadata = $this->getMock($className, [], [], '', false);
+        $className = \Magento\Framework\EntityManager\EntityMetadata::class;
+        $metadata = $this->createMock($className);
 
         $metadata->expects($this->once())
             ->method('getLinkField')

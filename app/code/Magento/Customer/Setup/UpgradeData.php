@@ -1,20 +1,28 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Setup;
 
 use Magento\Customer\Model\Customer;
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Setup\SetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\DB\FieldDataConverterFactory;
+use Magento\Framework\DB\DataConverter\SerializedToJson;
 
 /**
  * @codeCoverageIgnore
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpgradeData implements UpgradeDataInterface
 {
@@ -24,6 +32,11 @@ class UpgradeData implements UpgradeDataInterface
      * @var CustomerSetupFactory
      */
     protected $customerSetupFactory;
+
+    /**
+     * @var AllowedCountries
+     */
+    private $allowedCountriesReader;
 
     /**
      * @var IndexerRegistry
@@ -36,23 +49,40 @@ class UpgradeData implements UpgradeDataInterface
     protected $eavConfig;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var FieldDataConverterFactory
+     */
+    private $fieldDataConverterFactory;
+
+    /**
      * @param CustomerSetupFactory $customerSetupFactory
      * @param IndexerRegistry $indexerRegistry
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param FieldDataConverterFactory|null $fieldDataConverterFactory
      */
     public function __construct(
         CustomerSetupFactory $customerSetupFactory,
         IndexerRegistry $indexerRegistry,
-        \Magento\Eav\Model\Config $eavConfig
+        \Magento\Eav\Model\Config $eavConfig,
+        FieldDataConverterFactory $fieldDataConverterFactory = null
     ) {
         $this->customerSetupFactory = $customerSetupFactory;
         $this->indexerRegistry = $indexerRegistry;
         $this->eavConfig = $eavConfig;
+
+        $this->fieldDataConverterFactory = $fieldDataConverterFactory ?: ObjectManager::getInstance()->get(
+            FieldDataConverterFactory::class
+        );
     }
 
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -91,15 +121,164 @@ class UpgradeData implements UpgradeDataInterface
             );
         }
 
+        if (version_compare($context->getVersion(), '2.0.8', '<')) {
+            $setup->getConnection()->update(
+                $setup->getTable('core_config_data'),
+                ['path' => \Magento\Customer\Model\Form::XML_PATH_ENABLE_AUTOCOMPLETE],
+                ['path = ?' => 'general/restriction/autocomplete_on_storefront']
+            );
+        }
+
         if (version_compare($context->getVersion(), '2.0.7', '<')) {
             $this->upgradeVersionTwoZeroSeven($customerSetup);
             $this->upgradeCustomerPasswordResetlinkExpirationPeriodConfig($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.0.9', '<')) {
+            $setup->getConnection()->beginTransaction();
+
+            try {
+                $this->migrateStoresAllowedCountriesToWebsite($setup);
+                $setup->getConnection()->commit();
+            } catch (\Exception $e) {
+                $setup->getConnection()->rollBack();
+                throw $e;
+            }
+        }
+        if (version_compare($context->getVersion(), '2.0.11', '<')) {
+            $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
+            $fieldDataConverter->convert(
+                $setup->getConnection(),
+                $setup->getTable('customer_eav_attribute'),
+                'attribute_id',
+                'validate_rules'
+            );
+        }
+
+        if (version_compare($context->getVersion(), '2.0.12', '<')) {
+            $this->upgradeVersionTwoZeroTwelve($customerSetup);
         }
 
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexAll();
         $this->eavConfig->clear();
         $setup->endSetup();
+    }
+
+    /**
+     * Retrieve Store Manager
+     *
+     * @deprecated 100.1.3
+     * @return StoreManagerInterface
+     */
+    private function getStoreManager()
+    {
+        if (!$this->storeManager) {
+            $this->storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        }
+
+        return $this->storeManager;
+    }
+
+    /**
+     * Retrieve Allowed Countries Reader
+     *
+     * @deprecated 100.1.3
+     * @return AllowedCountries
+     */
+    private function getAllowedCountriesReader()
+    {
+        if (!$this->allowedCountriesReader) {
+            $this->allowedCountriesReader = ObjectManager::getInstance()->get(AllowedCountries::class);
+        }
+
+        return $this->allowedCountriesReader;
+    }
+
+    /**
+     * Merge allowed countries between different scopes
+     *
+     * @param array $countries
+     * @param array $newCountries
+     * @param string $identifier
+     * @return array
+     */
+    private function mergeAllowedCountries(array $countries, array $newCountries, $identifier)
+    {
+        if (!isset($countries[$identifier])) {
+            $countries[$identifier] = $newCountries;
+        } else {
+            $countries[$identifier] =
+                array_replace($countries[$identifier], $newCountries);
+        }
+
+        return $countries;
+    }
+
+    /**
+     * Retrieve countries not depending on global scope
+     *
+     * @param string $scope
+     * @param int $scopeCode
+     * @return array
+     */
+    private function getAllowedCountries($scope, $scopeCode)
+    {
+        $reader = $this->getAllowedCountriesReader();
+        return $reader->makeCountriesUnique($reader->getCountriesFromConfig($scope, $scopeCode));
+    }
+
+    /**
+     * Merge allowed countries from stores to websites
+     *
+     * @param SetupInterface $setup
+     * @return void
+     */
+    private function migrateStoresAllowedCountriesToWebsite(SetupInterface $setup)
+    {
+        $allowedCountries = [];
+        //Process Websites
+        foreach ($this->getStoreManager()->getStores() as $store) {
+            $allowedCountries = $this->mergeAllowedCountries(
+                $allowedCountries,
+                $this->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store->getId()),
+                $store->getWebsiteId()
+            );
+        }
+        //Process stores
+        foreach ($this->getStoreManager()->getWebsites() as $website) {
+            $allowedCountries = $this->mergeAllowedCountries(
+                $allowedCountries,
+                $this->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $website->getId()),
+                $website->getId()
+            );
+        }
+
+        $connection = $setup->getConnection();
+
+        //Remove everything from stores scope
+        $connection->delete(
+            $setup->getTable('core_config_data'),
+            [
+                'path = ?' => AllowedCountries::ALLOWED_COUNTRIES_PATH,
+                'scope = ?' => ScopeInterface::SCOPE_STORES
+            ]
+        );
+
+        //Update websites
+        foreach ($allowedCountries as $scopeId => $countries) {
+            $connection->update(
+                $setup->getTable('core_config_data'),
+                [
+                    'value' => implode(',', $countries)
+                ],
+                [
+                    'path = ?' => AllowedCountries::ALLOWED_COUNTRIES_PATH,
+                    'scope_id = ?' => $scopeId,
+                    'scope = ?' => ScopeInterface::SCOPE_WEBSITES
+                ]
+            );
+        }
     }
 
     /**
@@ -370,45 +549,45 @@ class UpgradeData implements UpgradeDataInterface
         $customerSetup->updateEntityType(
             \Magento\Customer\Model\Customer::ENTITY,
             'entity_model',
-            'Magento\Customer\Model\ResourceModel\Customer'
+            \Magento\Customer\Model\ResourceModel\Customer::class
         );
         $customerSetup->updateEntityType(
             \Magento\Customer\Model\Customer::ENTITY,
             'increment_model',
-            'Magento\Eav\Model\Entity\Increment\NumericValue'
+            \Magento\Eav\Model\Entity\Increment\NumericValue::class
         );
         $customerSetup->updateEntityType(
             \Magento\Customer\Model\Customer::ENTITY,
             'entity_attribute_collection',
-            'Magento\Customer\Model\ResourceModel\Attribute\Collection'
+            \Magento\Customer\Model\ResourceModel\Attribute\Collection::class
         );
         $customerSetup->updateEntityType(
             'customer_address',
             'entity_model',
-            'Magento\Customer\Model\ResourceModel\Address'
+            \Magento\Customer\Model\ResourceModel\Address::class
         );
         $customerSetup->updateEntityType(
             'customer_address',
             'entity_attribute_collection',
-            'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection'
+            \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class
         );
         $customerSetup->updateAttribute(
             'customer_address',
             'country_id',
             'source_model',
-            'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Country'
+            \Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Country::class
         );
         $customerSetup->updateAttribute(
             'customer_address',
             'region',
             'backend_model',
-            'Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region'
+            \Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region::class
         );
         $customerSetup->updateAttribute(
             'customer_address',
             'region_id',
             'source_model',
-            'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Region'
+            \Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Region::class
         );
     }
 
@@ -459,6 +638,15 @@ class UpgradeData implements UpgradeDataInterface
                 'system' => true,
             ]
         );
+    }
+
+    /**
+     * @param CustomerSetup $customerSetup
+     * @return void
+     */
+    private function upgradeVersionTwoZeroTwelve(CustomerSetup $customerSetup)
+    {
+        $customerSetup->updateAttribute('customer_address', 'vat_id', 'frontend_label', 'VAT Number');
     }
 
     /**

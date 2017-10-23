@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Block\Advanced;
@@ -15,6 +15,9 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Advanced search result
+ *
+ * @api
+ * @since 100.0.2
  */
 class Result extends Template
 {
@@ -64,6 +67,7 @@ class Result extends Template
      */
     protected function _prepareLayout()
     {
+        $this->pageConfig->getTitle()->set($this->getPageTitle());
         $breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
         if ($breadcrumbs) {
             $breadcrumbs->addCrumb(
@@ -82,6 +86,16 @@ class Result extends Template
             );
         }
         return parent::_prepareLayout();
+    }
+
+    /**
+     * Get page title
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    private function getPageTitle()
+    {
+        return __('Advanced Search Results');
     }
 
     /**

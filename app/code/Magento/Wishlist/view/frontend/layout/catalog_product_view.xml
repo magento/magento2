@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -16,7 +16,7 @@
                 </arguments>
             </block>
             <referenceBlock name="product.info.addto">
-                <block class="Magento\Wishlist\Block\Catalog\Product\View\AddTo\Wishlist" name="view.addto.wishlist" after="view.addto.requisition"
+                <block class="Magento\Wishlist\Block\Catalog\Product\View\AddTo\Wishlist" name="view.addto.wishlist"
                        template="Magento_Wishlist::catalog/product/view/addto/wishlist.phtml" />
             </referenceBlock>
         </referenceContainer>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,10 +13,10 @@ $instructions = $block->getInstructions();
 ?>
 <?php if ($instructions): ?>
     <?php $methodCode = $block->escapeHtml($block->getMethodCode());?>
-    <ul class="form-list checkout-agreements" id="payment_form_<?php /* @noEscape */ echo $methodCode ?>" style="display:none;">
+    <ul class="form-list checkout-agreements" id="payment_form_<?= /* @noEscape */ $methodCode ?>" style="display:none;">
         <li>
-            <div class="<?php /* @noEscape */ echo $methodCode ?>-instructions-content checkout-agreement-item-content">
-                <?php /* @noEscape */ echo nl2br($block->escapeHtml($instructions)) ?>
+            <div class="<?= /* @noEscape */ $methodCode ?>-instructions-content checkout-agreement-item-content">
+                <?= /* @noEscape */ nl2br($block->escapeHtml($instructions)) ?>
             </div>
         </li>
     </ul>

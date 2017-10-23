@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model;
@@ -13,7 +13,11 @@ use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 use Magento\Paypal\Model\Express;
 use Magento\Quote\Api\Data\PaymentInterface;
 
-class ExpressTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class ExpressTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ExpressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array
@@ -68,33 +72,24 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_checkoutSession = $this->getMock(
-            'Magento\Checkout\Model\Session',
-            ['getPaypalTransactionData', 'setPaypalTransactionData'],
-            [],
-            '',
-            false
+        $this->_checkoutSession = $this->createPartialMock(
+            \Magento\Checkout\Model\Session::class,
+            ['getPaypalTransactionData', 'setPaypalTransactionData']
         );
         $this->transactionBuilder = $this->getMockForAbstractClass(
-            'Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface',
+            \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface::class,
             [],
             '',
             false,
             false
         );
-        $this->_nvp = $this->getMock(
-            'Magento\Paypal\Model\Api\Nvp',
-            ['setProcessableErrors', 'setAmount', 'setCurrencyCode', 'setTransactionId', 'callDoAuthorization'],
-            [],
-            '',
-            false
+        $this->_nvp = $this->createPartialMock(
+            \Magento\Paypal\Model\Api\Nvp::class,
+            ['setProcessableErrors', 'setAmount', 'setCurrencyCode', 'setTransactionId', 'callDoAuthorization']
         );
-        $this->_pro = $this->getMock(
-            'Magento\Paypal\Model\Pro',
-            ['setMethod', 'getApi', 'importPaymentInfo', 'resetApi'],
-            [],
-            '',
-            false
+        $this->_pro = $this->createPartialMock(
+            \Magento\Paypal\Model\Pro::class,
+            ['setMethod', 'getApi', 'importPaymentInfo', 'resetApi']
         );
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->setMethods(['dispatch'])
@@ -109,7 +104,7 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
         $this->_nvp->expects($this->once())->method('setProcessableErrors')->with($this->errorCodes);
 
         $this->_model = $this->_helper->getObject(
-            'Magento\Paypal\Model\Express',
+            \Magento\Paypal\Model\Express::class,
             [
                 'data' => [$this->_pro],
                 'checkoutSession' => $this->_checkoutSession,
@@ -131,27 +126,18 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
         );
         $this->_checkoutSession->expects($this->once())->method('setPaypalTransactionData')->with([]);
 
-        $currency = $this->getMock('Magento\Directory\Model\Currency', ['__wakeup', 'formatTxt'], [], '', false);
-        $paymentModel = $this->getMock(
-            'Magento\Sales\Model\Order\Payment',
-            [
+        $currency = $this->createPartialMock(\Magento\Directory\Model\Currency::class, ['__wakeup', 'formatTxt']);
+        $paymentModel = $this->createPartialMock(\Magento\Sales\Model\Order\Payment::class, [
                 '__wakeup',
                 'getBaseCurrency',
                 'getOrder',
                 'getIsTransactionPending',
                 'addStatusHistoryComment',
                 'addTransactionCommentsToOrder'
-            ],
-            [],
-            '',
-            false
-        );
-        $order = $this->getMock(
-            'Magento\Sales\Model\Order',
-            ['setState', 'getBaseCurrency', 'getBaseCurrencyCode', 'setStatus'],
-            [],
-            '',
-            false
+            ]);
+        $order = $this->createPartialMock(
+            \Magento\Sales\Model\Order::class,
+            ['setState', 'getBaseCurrency', 'getBaseCurrencyCode', 'setStatus']
         );
         $paymentModel->expects($this->any())->method('getOrder')->willReturn($order);
         $order->expects($this->any())->method('getBaseCurrency')->willReturn($currency);
@@ -161,7 +147,7 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
         $this->transactionBuilder->expects($this->any())->method('setPayment')->will($this->returnSelf());
         $this->transactionBuilder->expects($this->any())->method('setTransactionId')->will($this->returnSelf());
         $this->_model = $this->_helper->getObject(
-            'Magento\Paypal\Model\Express',
+            \Magento\Paypal\Model\Express::class,
             [
                 'data' => [$this->_pro],
                 'checkoutSession' => $this->_checkoutSession,
@@ -178,13 +164,15 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
         $data = new DataObject(
             [
                 PaymentInterface::KEY_ADDITIONAL_DATA => [
-                    Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT => $transportValue
+                    Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT => $transportValue,
+                    Express\Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID => $transportValue,
+                    Express\Checkout::PAYMENT_INFO_TRANSPORT_TOKEN => $transportValue
                 ]
             ]
         );
 
         $this->_model = $this->_helper->getObject(
-            'Magento\Paypal\Model\Express',
+            \Magento\Paypal\Model\Express::class,
             [
                 'data' => [$this->_pro],
                 'checkoutSession' => $this->_checkoutSession,
@@ -193,16 +181,17 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $paymentInfo = $this->getMock(InfoInterface::class);
+        $paymentInfo = $this->createMock(InfoInterface::class);
         $this->_model->setInfoInstance($paymentInfo);
 
         $this->parentAssignDataExpectation($data);
 
-        $paymentInfo->expects(static::once())
+        $paymentInfo->expects(static::exactly(3))
             ->method('setAdditionalInformation')
-            ->with(
-                Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT,
-                $transportValue
+            ->withConsecutive(
+                [Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT, $transportValue],
+                [Express\Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID, $transportValue],
+                [Express\Checkout::PAYMENT_INFO_TRANSPORT_TOKEN, $transportValue]
             );
 
         $this->_model->assignData($data);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Options;
@@ -8,7 +8,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Options;
 /**
  * @magentoAppArea adminhtml
  */
-class AjaxTest extends \PHPUnit_Framework_TestCase
+class AjaxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Block\Adminhtml\Product\Options\Ajax
@@ -19,9 +19,9 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Options\Ajax'
+            \Magento\Catalog\Block\Adminhtml\Product\Options\Ajax::class
         );
     }
 
@@ -39,9 +39,9 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
-        $objectManager->get('Magento\Framework\Registry')
+        $objectManager->get(\Magento\Framework\Registry::class)
             ->register(
                 'import_option_products',
                 [$productRepository->get('simple')->getId()]

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -157,7 +157,7 @@ class OrderSave
 
                         if (isset($ratesIdQuoteItemId[$id])) {
                             foreach ($ratesIdQuoteItemId[$id] as $quoteItemId) {
-                                if ($quoteItemId['code'] == $tax['code']) {
+                                if ($quoteItemId['code'] === $tax['code']) {
                                     $itemId = null;
                                     $associatedItemId = null;
                                     if (isset($quoteItemId['id'])) {

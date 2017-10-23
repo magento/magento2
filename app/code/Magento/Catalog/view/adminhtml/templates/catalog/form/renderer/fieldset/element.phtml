@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,36 +38,36 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
 ?>
 <?php if (!$element->getNoDisplay()): ?>
     <?php if ($element->getType() == 'hidden'): ?>
-        <?php echo $element->getElementHtml() ?>
+        <?= $element->getElementHtml() ?>
     <?php else: ?>
-    <div<?php /* @escapeNotVerified */ echo $fieldAttributes ?> data-attribute-code="<?php echo $element->getHtmlId() ?>"
-        data-apply-to="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
+    <div<?= /* @escapeNotVerified */ $fieldAttributes ?> data-attribute-code="<?= $element->getHtmlId() ?>"
+        data-apply-to="<?= $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
             $element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : []
         ))?>"
         >
         <?php if ($elementBeforeLabel): ?>
-            <?php echo $block->getElementHtml() ?>
-            <?php echo $element->getLabelHtml('', $block->getScopeLabel()) ?>
-            <?php /* @escapeNotVerified */ echo $note ?>
+            <?= $block->getElementHtml() ?>
+            <?= $element->getLabelHtml('', $block->getScopeLabel()) ?>
+            <?= /* @escapeNotVerified */ $note ?>
         <?php else: ?>
-            <?php echo $element->getLabelHtml('', $block->getScopeLabel()) ?>
+            <?= $element->getLabelHtml('', $block->getScopeLabel()) ?>
             <div class="admin__field-control control">
-                <?php /* @escapeNotVerified */ echo($addOn) ? '<div class="addon">' . $block->getElementHtml() . '</div>' : $block->getElementHtml(); ?>
-                <?php /* @escapeNotVerified */ echo $note ?>
+                <?= /* @escapeNotVerified */ ($addOn) ? '<div class="addon">' . $block->getElementHtml() . '</div>' : $block->getElementHtml() ?>
+                <?= /* @escapeNotVerified */ $note ?>
             </div>
         <?php endif; ?>
         <div class="field-service">
             <?php if ($block->canDisplayUseDefault()): ?>
-                <label for="<?php echo $element->getHtmlId() ?>_default" class="choice use-default">
+                <label for="<?= $element->getHtmlId() ?>_default" class="choice use-default">
                     <input <?php if ($element->getReadonly()):?> disabled="disabled"<?php endif; ?>
                             type="checkbox"
                             name="use_default[]"
                             class="use-default-control"
-                            id="<?php echo $element->getHtmlId() ?>_default"
+                            id="<?= $element->getHtmlId() ?>_default"
                             <?php if ($block->usedDefault()): ?> checked="checked"<?php endif; ?>
-                            onclick="<?php /* @escapeNotVerified */ echo $elementToggleCode; ?>"
-                            value="<?php /* @escapeNotVerified */ echo $block->getAttributeCode() ?>"/>
-                    <span class="use-default-label"><?php /* @escapeNotVerified */ echo __('Use Default Value') ?></span>
+                            onclick="<?= /* @escapeNotVerified */ $elementToggleCode ?>"
+                            value="<?= /* @escapeNotVerified */ $block->getAttributeCode() ?>"/>
+                    <span class="use-default-label"><?= /* @escapeNotVerified */ __('Use Default Value') ?></span>
                 </label>
             <?php endif; ?>
         </div>

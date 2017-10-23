@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,6 +15,10 @@ use Magento\Framework\Data\Collection;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Catalog\Helper\Image;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
@@ -63,15 +67,13 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 );
                 $image->setData(
                     'medium_image_url',
-                    $this->_imageHelper->init($product, 'product_page_image_medium')
-                        ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
+                    $this->_imageHelper->init($product, 'product_page_image_medium_no_frame')
                         ->setImageFile($image->getFile())
                         ->getUrl()
                 );
                 $image->setData(
                     'large_image_url',
-                    $this->_imageHelper->init($product, 'product_page_image_large')
-                        ->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false)
+                    $this->_imageHelper->init($product, 'product_page_image_large_no_frame')
                         ->setImageFile($image->getFile())
                         ->getUrl()
                 );
@@ -117,16 +119,20 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'caption' => $image->getLabel(),
                 'position' => $image->getPosition(),
                 'isMain' => $this->isMainImage($image),
+                'type' => str_replace('external-', '', $image->getMediaType()),
+                'videoUrl' => $image->getVideoUrl(),
             ];
         }
         if (empty($imagesItems)) {
             $imagesItems[] = [
-                'thumb' => $this->getImage($this->getProduct(), 'product_thumbnail_image')->getImageUrl(),
-                'img' => $this->getImage($this->getProduct(), 'product_base_image')->getImageUrl(),
-                'full' => $this->getImage($this->getProduct(), 'product_page_image_large')->getImageUrl(),
+                'thumb' => $this->_imageHelper->getDefaultPlaceholderUrl('thumbnail'),
+                'img' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
+                'full' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
                 'caption' => '',
                 'position' => '0',
                 'isMain' => true,
+                'type' => 'image',
+                'videoUrl' => null,
             ];
         }
         return json_encode($imagesItems);

@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Constraint;
 
+use Magento\Customer\Test\Block\Address\Renderer;
 use Magento\Customer\Test\Fixture\Address;
-use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Customer\Test\Page\CustomerAccountAddress;
+use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -20,25 +21,31 @@ class AssertCustomerDefaultAddressFrontendAddressBook extends AbstractConstraint
      * Asserts that Default Billing Address and Default Shipping Address equal to data from fixture.
      *
      * @param CustomerAccountIndex $customerAccountIndex
-     * @param CustomerAccountAddress $customerAccountAddress
-     * @param Address $address
+     * @param CustomerAccountAddress $customerAddress
+     * @param Address|null $shippingAddress
+     * @param Address|null $billingAddress
      * @return void
      */
     public function processAssert(
         CustomerAccountIndex $customerAccountIndex,
-        CustomerAccountAddress $customerAccountAddress,
-        Address $address
+        CustomerAccountAddress $customerAddress,
+        Address $shippingAddress,
+        Address $billingAddress = null
     ) {
+        $customerAccountIndex->open();
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('Address Book');
-        $addressRenderer = $this->objectManager->create(
-            \Magento\Customer\Test\Block\Address\Renderer::class,
-            ['address' => $address, 'type' => 'html']
-        );
-        $addressToVerify = $addressRenderer->render();
+
+        $shippingAddressRendered = $this->createAddressRenderer($shippingAddress)->render();
+        $defaultShippingAddress = $customerAddress->getDefaultAddressBlock()->getDefaultShippingAddress();
+        $validated = strpos($defaultShippingAddress, trim($shippingAddressRendered)) !== false;
+        if (null !== $billingAddress) {
+            $billingAddressRendered = $customerAddress->getDefaultAddressBlock()->getDefaultBillingAddress();
+            $validated =
+                $validated && ($billingAddressRendered == $this->createAddressRenderer($billingAddress)->render());
+        }
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $addressToVerify == $customerAccountAddress->getDefaultAddressBlock()->getDefaultBillingAddress()
-            && $addressToVerify == $customerAccountAddress->getDefaultAddressBlock()->getDefaultShippingAddress(),
+            $validated,
             'Customer default address on address book tab is not matching the fixture.'
         );
     }
@@ -51,5 +58,19 @@ class AssertCustomerDefaultAddressFrontendAddressBook extends AbstractConstraint
     public function toString()
     {
         return 'Default billing and shipping address form is correct.';
+    }
+
+    /**
+     * Instantiate Renderer object.
+     *
+     * @param Address $address
+     * @return Renderer
+     */
+    private function createAddressRenderer(Address $address)
+    {
+        return $this->objectManager->create(
+            Renderer::class,
+            ['address' => $address, 'type' => 'html']
+        );
     }
 }

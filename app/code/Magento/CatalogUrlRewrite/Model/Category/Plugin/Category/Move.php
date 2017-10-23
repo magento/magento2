@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Category;
@@ -11,8 +11,15 @@ use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 
 class Move
 {
-    /** @var CategoryUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     */
     protected $categoryUrlPathGenerator;
+
+    /**
+     * @var ChildrenCategoriesProvider
+     */
+    private $childrenCategoriesProvider;
 
     /**
      * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
@@ -27,22 +34,23 @@ class Move
     }
 
     /**
+     * Perform url updating for children categories
+     *
      * @param \Magento\Catalog\Model\ResourceModel\Category $subject
-     * @param callable $proceed
+     * @param \Magento\Catalog\Model\ResourceModel\Category $result
      * @param Category $category
      * @param Category $newParent
      * @param null|int $afterCategoryId
-     * @return callable
+     * @return \Magento\Catalog\Model\ResourceModel\Category
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundChangeParent(
+    public function afterChangeParent(
         \Magento\Catalog\Model\ResourceModel\Category $subject,
-        \Closure $proceed,
-        $category,
-        $newParent,
+        \Magento\Catalog\Model\ResourceModel\Category $result,
+        Category $category,
+        Category $newParent,
         $afterCategoryId
     ) {
-        $result = $proceed($category, $newParent, $afterCategoryId);
         $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
         $category->getResource()->saveAttribute($category, 'url_path');
         $this->updateUrlPathForChildren($category);

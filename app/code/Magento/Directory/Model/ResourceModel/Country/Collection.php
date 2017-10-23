@@ -1,19 +1,24 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-/**
- * Directory Country Resource Collection
- */
 namespace Magento\Directory\Model\ResourceModel\Country;
 
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
+
 /**
- * Class Collection
+ * Country Resource Collection
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -54,7 +59,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $helperData;
 
     /**
+     * @var AllowedCountries
+     */
+    private $allowedCountriesReader;
+
+    /**
      * @var string[]
+     * @since 100.1.0
      */
     protected $countriesWithNotRequiredStates;
 
@@ -109,13 +120,46 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_foregroundCountries = [];
 
     /**
+     * Add top destinition countries to head of option array
+     *
+     * @param $emptyLabel
+     * @param $options
+     * @return array
+     */
+    private function addForegroundCountriesToOptionArray($emptyLabel, $options)
+    {
+        if ($emptyLabel !== false && count($this->_foregroundCountries) !== 0 &&
+            count($options) === count($this->_foregroundCountries)
+        ) {
+            $options[] = ['value' => '', 'label' => $emptyLabel];
+            return $options;
+        }
+        return $options;
+    }
+
+    /**
      * Define main table
      *
      * @return void
      */
     protected function _construct()
     {
-        $this->_init('Magento\Directory\Model\Country', 'Magento\Directory\Model\ResourceModel\Country');
+        $this->_init(\Magento\Directory\Model\Country::class, \Magento\Directory\Model\ResourceModel\Country::class);
+    }
+
+    /**
+     * Return Allowed Countries reader
+     *
+     * @deprecated 100.1.2
+     * @return \Magento\Directory\Model\AllowedCountries
+     */
+    private function getAllowedCountriesReader()
+    {
+        if (!$this->allowedCountriesReader) {
+            $this->allowedCountriesReader = ObjectManager::getInstance()->get(AllowedCountries::class);
+        }
+
+        return $this->allowedCountriesReader;
     }
 
     /**
@@ -126,16 +170,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function loadByStore($store = null)
     {
-        $allowCountries = explode(',',
-            (string)$this->_scopeConfig->getValue(
-                'general/country/allow',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $store
-            )
-        );
-        if (!empty($allowCountries)) {
-            $this->addFieldToFilter("country_id", ['in' => $allowCountries]);
+        $allowedCountries = $this->getAllowedCountriesReader()
+            ->getAllowedCountries(ScopeInterface::SCOPE_STORE, $store);
+
+        if (!empty($allowedCountries)) {
+            $this->addFieldToFilter("country_id", ['in' => $allowedCountries]);
         }
+
         return $this;
     }
 
@@ -220,7 +261,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function toOptionArray($emptyLabel = ' ')
     {
         $options = $this->_toOptionArray('country_id', 'name', ['title' => 'iso2_code']);
-
         $sort = [];
         foreach ($options as $data) {
             $name = (string)$this->_localeLists->getCountryTranslation($data['value']);
@@ -237,6 +277,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $isRegionVisible = (bool)$this->helperData->isShowNonRequiredState();
         $options = [];
         foreach ($sort as $label => $value) {
+            $options = $this->addForegroundCountriesToOptionArray($emptyLabel, $options);
             $option = ['value' => $value, 'label' => $label];
             if ($this->helperData->isRegionRequired($value)) {
                 $option['is_region_required'] = true;
@@ -248,8 +289,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             }
             $options[] = $option;
         }
-
-        if (count($options) > 0 && $emptyLabel !== false) {
+        if ($emptyLabel !== false && count($options) > 0) {
             array_unshift($options, ['value' => '', 'label' => $emptyLabel]);
         }
 
@@ -275,6 +315,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get list of countries with required states
      *
      * @return \Magento\Directory\Model\Country[]
+     * @since 100.1.0
      */
     public function getCountriesWithRequiredStates()
     {

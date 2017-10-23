@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Test\Unit\Model;
 
-class PurchaseorderTest extends \PHPUnit_Framework_TestCase
+class PurchaseorderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\OfflinePayments\Model\Purchaseorder
@@ -20,17 +20,14 @@ class PurchaseorderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
-        $this->_scopeConfig = $this->getMock(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
-            ['getValue', 'isSetFlag'],
-            [],
-            '',
-            false
+        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $paymentDataMock = $this->createMock(\Magento\Payment\Helper\Data::class);
+        $this->_scopeConfig = $this->createPartialMock(
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
+            ['getValue', 'isSetFlag']
         );
         $this->_object = $objectManagerHelper->getObject(
-            'Magento\OfflinePayments\Model\Purchaseorder',
+            \Magento\OfflinePayments\Model\Purchaseorder::class,
             [
                 'eventManager' => $eventManager,
                 'paymentData' => $paymentDataMock,
@@ -45,8 +42,9 @@ class PurchaseorderTest extends \PHPUnit_Framework_TestCase
             'po_number' => '12345'
         ]);
 
-        $instance = $this->getMock('Magento\Payment\Model\Info', [], [], '', false);
+        $instance = $this->createMock(\Magento\Payment\Model\Info::class);
         $this->_object->setData('info_instance', $instance);
-        $this->_object->assignData($data);
+        $result = $this->_object->assignData($data);
+        $this->assertEquals($result, $this->_object);
     }
 }

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock;
 
 use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * CatalogInventory Stock Status per website Resource Model
@@ -18,7 +19,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store model manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $_storeManager;
 
@@ -230,8 +231,8 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ' AND stock_status_index.stock_id = ?',
             Stock::DEFAULT_STOCK_ID
         );
-
-        $collection->getSelect()->join(
+        $method = $isFilterInStock ? 'join' : 'joinLeft';
+        $collection->getSelect()->$method(
             ['stock_status_index' => $this->getMainTable()],
             $joinCondition,
             ['is_salable' => 'stock_status']
@@ -338,13 +339,13 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @return StockConfigurationInterface
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getStockConfiguration()
     {
         if ($this->stockConfiguration === null) {
             $this->stockConfiguration = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\CatalogInventory\Api\StockConfigurationInterface');
+                ->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
         }
         return $this->stockConfiguration;
     }

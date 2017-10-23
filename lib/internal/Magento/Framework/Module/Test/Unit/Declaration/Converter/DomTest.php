@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit\Declaration\Converter;
 
-class DomTest extends \PHPUnit_Framework_TestCase
+class DomTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Module\Declaration\Converter\Dom
@@ -37,8 +37,8 @@ class DomTest extends \PHPUnit_Framework_TestCase
         try {
             $dom->loadXML($xmlString);
             $this->_converter->convert($dom);
-        } catch (\PHPUnit_Framework_Error $ex) {
-            // do nothing because we expect \Exception but not \PHPUnit_Framework_Error
+        } catch (\PHPUnit\Framework\Error $ex) {
+            // do nothing because we expect \Exception but not \PHPUnit\Framework\Error
         }
     }
 

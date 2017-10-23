@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,31 +10,31 @@
 <?php $_source  = $block->getSource() ?>
 <?php if ($_source): ?>
     <tr>
-        <td class="label"><?php /* @escapeNotVerified */ echo $block->getShippingLabel() ?><div id="shipping_amount_adv"></div></td>
+        <td class="label"><?= /* @escapeNotVerified */ $block->getShippingLabel() ?><div id="shipping_amount_adv"></div></td>
         <td>
             <input type="text"
                    name="creditmemo[shipping_amount]"
-                   value="<?php /* @escapeNotVerified */ echo $block->getShippingAmount()?>"
+                   value="<?= /* @escapeNotVerified */ $block->getShippingAmount() ?>"
                    class="input-text admin__control-text not-negative-amount"
                    id="shipping_amount" />
         </td>
     </tr>
     <tr>
-        <td class="label"><?php /* @escapeNotVerified */ echo __('Adjustment Refund') ?><div id="adjustment_positive_adv"></div></td>
+        <td class="label"><?= /* @escapeNotVerified */ __('Adjustment Refund') ?><div id="adjustment_positive_adv"></div></td>
         <td>
             <input type="text"
                    name="creditmemo[adjustment_positive]"
-                   value="<?php /* @escapeNotVerified */ echo $_source->getBaseAdjustmentFeePositive()*1 ?>"
+                   value="<?= /* @escapeNotVerified */ $_source->getBaseAdjustmentFeePositive()*1 ?>"
                    class="input-text admin__control-text not-negative-amount"
                    id="adjustment_positive" />
         </td>
     </tr>
     <tr>
-        <td class="label"><?php /* @escapeNotVerified */ echo __('Adjustment Fee') ?><div id="adjustment_negative_adv"></div></td>
+        <td class="label"><?= /* @escapeNotVerified */ __('Adjustment Fee') ?><div id="adjustment_negative_adv"></div></td>
         <td>
             <input type="text"
                    name="creditmemo[adjustment_negative]"
-                   value="<?php /* @escapeNotVerified */ echo $_source->getBaseAdjustmentFeeNegative()*1 ?>"
+                   value="<?= /* @escapeNotVerified */ $_source->getBaseAdjustmentFeeNegative()*1 ?>"
                    class="input-text admin__control-text not-negative-amount"
                    id="adjustment_negative"/>
             <script>
@@ -42,7 +42,7 @@
 
                 //<![CDATA[
                 Validation.addAllThese([
-                    ['not-negative-amount', '<?php /* @escapeNotVerified */ echo __('Please enter a positive number in this field.') ?>', function(v) {
+                    ['not-negative-amount', '<?= /* @escapeNotVerified */ __('Please enter a positive number in this field.') ?>', function(v) {
                         if(v.length)
                             return /^\s*\d+([,.]\d+)*\s*%?\s*$/.test(v);
                         else

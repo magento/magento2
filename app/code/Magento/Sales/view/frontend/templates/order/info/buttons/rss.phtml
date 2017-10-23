@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
 /** @var $block \Magento\Sales\Block\Order\Info\Buttons\Rss */
 ?>
 <?php if ($block->isRssAllowed() && $block->getLink()): ?>
-<a href="<?php /* @escapeNotVerified */ echo $block->getLink() ?>" class="action rss">
-    <span><?php /* @escapeNotVerified */ echo $block->getLabel() ?></span>
+<a href="<?= /* @escapeNotVerified */ $block->getLink() ?>" class="action rss">
+    <span><?= /* @escapeNotVerified */ $block->getLabel() ?></span>
 </a>
 <?php endif; ?>

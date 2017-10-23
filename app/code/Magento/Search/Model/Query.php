@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model;
@@ -20,8 +20,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Search query model
  *
- * @method \Magento\Search\Model\ResourceModel\Query _getResource()
- * @method \Magento\Search\Model\ResourceModel\Query getResource()
  * @method \Magento\Search\Model\Query setQueryText(string $value)
  * @method int getNumResults()
  * @method \Magento\Search\Model\Query setNumResults(int $value)
@@ -41,6 +39,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method \Magento\Search\Model\Query setIsQueryTextExceeded(bool $value)
  * @method \Magento\Search\Model\Query setIsQueryTextShort(bool $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Query extends AbstractModel implements QueryInterface
 {
@@ -130,7 +130,7 @@ class Query extends AbstractModel implements QueryInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Search\Model\ResourceModel\Query');
+        $this->_init(\Magento\Search\Model\ResourceModel\Query::class);
     }
 
     /**
@@ -167,7 +167,7 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @param string $text
      * @return $this
-     * @deprecated "synonym for" feature has been removed
+     * @deprecated 100.1.0 "synonym for" feature has been removed
      */
     public function loadByQuery($text)
     {
@@ -309,6 +309,7 @@ class Query extends AbstractModel implements QueryInterface
     /**
      * @return bool
      * @codeCoverageIgnore
+     * @since 100.1.0
      */
     public function isQueryTextShort()
     {

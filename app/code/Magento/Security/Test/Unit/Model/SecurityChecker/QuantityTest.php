@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Security\Test\Unit\Model\SecurityChecker;
 
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\ConfigInterface;
-use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection;
-use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory;
 
 /**
  * Test class for \Magento\Security\Model\SecurityChecker\Quantity testing
  */
-class QuantityTest extends \PHPUnit_Framework_TestCase
+class QuantityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Security\Model\SecurityChecker\Quantity
@@ -56,8 +56,8 @@ class QuantityTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
         $this->securityConfigMock =  $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+            ->setMethods(['getScopeByEventType'])
+            ->getMockForAbstractClass();
         $this->securityConfigMock->expects($this->any())
             ->method('getScopeByEventType')
             ->willReturnMap(
@@ -67,20 +67,14 @@ class QuantityTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->collectionFactoryMock = $this->getMock(
-            '\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->collectionFactoryMock = $this->createPartialMock(
+            \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory::class,
+            ['create']
         );
 
-        $this->collectionMock = $this->getMock(
-            '\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection',
-            ['addFieldToFilter', 'filterByLifetime', 'count'],
-            [],
-            '',
-            false
+        $this->collectionMock = $this->createPartialMock(
+            \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection::class,
+            ['addFieldToFilter', 'filterByLifetime', 'count']
         );
 
         $this->remoteAddressMock =  $this->getMockBuilder(RemoteAddress::class)
@@ -88,7 +82,7 @@ class QuantityTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
-            'Magento\Security\Model\SecurityChecker\Quantity',
+            \Magento\Security\Model\SecurityChecker\Quantity::class,
             [
                 'securityConfig' => $this->securityConfigMock,
                 'collectionFactory' => $this->collectionFactoryMock,

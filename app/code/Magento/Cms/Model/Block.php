@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
@@ -13,8 +13,6 @@ use Magento\Framework\Model\AbstractModel;
 /**
  * CMS block model
  *
- * @method ResourceCmsBlock _getResource()
- * @method ResourceCmsBlock getResource()
  * @method Block setStoreId(array $storeId)
  * @method array getStoreId()
  */
@@ -23,7 +21,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     /**
      * CMS block cache tag
      */
-    const CACHE_TAG = 'cms_block';
+    const CACHE_TAG = 'cms_b';
 
     /**#@+
      * Block's statuses
@@ -32,10 +30,9 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     const STATUS_DISABLED = 0;
 
     /**#@-*/
-    /**
-     * @var string
-     */
-    protected $_cacheTag = 'cms_block';
+
+    /**#@-*/
+    protected $_cacheTag = self::CACHE_TAG;
 
     /**
      * Prefix of model events names
@@ -49,7 +46,7 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\ResourceModel\Block');
+        $this->_init(\Magento\Cms\Model\ResourceModel\Block::class);
     }
 
     /**

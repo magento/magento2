@@ -32,12 +32,11 @@ notice,notice
 "We were unable to synchronize one or more media files. Please refer to the log file for details.","We were unable to synchronize one or more media files. Please refer to the log file for details."
 "Synchronization of media storages has been completed.","Synchronization of media storages has been completed."
 "Your web server is set up incorrectly and allows unauthorized access to sensitive files. Please contact your hosting provider.","Your web server is set up incorrectly and allows unauthorized access to sensitive files. Please contact your hosting provider."
-"Close popup","Close popup"
-Close,Close
 "System Messages:","System Messages:"
 "Critical System Messages","Critical System Messages"
 "Major System Messages","Major System Messages"
 "System messages","System messages"
+Close,Close
 "See All (","See All ("
 " unread)"," unread)"
 "Show Toolbar","Show Toolbar"

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel;
@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel;
 /**
  * Class AttributeTest
  */
-class AttributeTest extends \PHPUnit_Framework_TestCase
+class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Attribute|\PHPUnit_Framework_MockObject_MockObject
@@ -37,15 +37,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->appResourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->eventManagerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Event\ManagerInterface',
+            \Magento\Framework\Event\ManagerInterface::class,
             [],
             '',
             false,
@@ -54,7 +48,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             []
         );
         $this->modelMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Model\AbstractModel',
+            \Magento\Sales\Model\AbstractModel::class,
             [],
             '',
             false,
@@ -62,12 +56,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             true,
             ['__wakeup', 'getId', 'getEventPrefix', 'getEventObject']
         );
-        $this->connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['describeTable', 'insert', 'lastInsertId', 'beginTransaction', 'rollback', 'commit'],
-            [],
-            '',
-            false
+        $this->connectionMock = $this->createPartialMock(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            ['describeTable', 'insert', 'lastInsertId', 'beginTransaction', 'rollback', 'commit']
         );
         $this->connectionMock->expects($this->any())
             ->method('describeTable')

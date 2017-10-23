@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Controller\Adminhtml\System;
 
@@ -96,11 +94,11 @@ abstract class Store extends Action
         }
         try {
             /** @var \Magento\Backup\Model\Db $backupDb */
-            $backupDb = $this->_objectManager->create('Magento\Backup\Model\Db');
+            $backupDb = $this->_objectManager->create(\Magento\Backup\Model\Db::class);
             /** @var \Magento\Backup\Model\Backup $backup */
-            $backup = $this->_objectManager->create('Magento\Backup\Model\Backup');
+            $backup = $this->_objectManager->create(\Magento\Backup\Model\Backup::class);
             /** @var Filesystem $filesystem */
-            $filesystem = $this->_objectManager->get('Magento\Framework\Filesystem');
+            $filesystem = $this->_objectManager->get(\Magento\Framework\Filesystem::class);
             $backup->setTime(time())
                 ->setType('db')
                 ->setPath($filesystem->getDirectoryRead(DirectoryList::VAR_DIR)->getAbsolutePath('backups'));
@@ -129,7 +127,9 @@ abstract class Store extends Action
     {
         $this->messageManager->addNotice(
             __(
-                'Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.), but the %1 will not be able to be restored. It is suggested that you create a database backup before deleting the %1.',
+                'Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.)'
+                . ', but the %1 will not be able to be restored. It is suggested that you create a database backup '
+                . 'before deleting the %1.',
                 $typeTitle
             )
         );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,27 +9,27 @@
 ?>
 <div class="dashboard-diagram">
     <div class="dashboard-diagram-switcher">
-        <label for="order_<?php echo $block->getHtmlId() ?>_period"
-               class="label"><?php /* @escapeNotVerified */ echo __('Select Range:') ?></label>
-        <select name="period" id="order_<?php echo $block->getHtmlId() ?>_period"
+        <label for="order_<?= $block->getHtmlId() ?>_period"
+               class="label"><?= /* @escapeNotVerified */ __('Select Range:') ?></label>
+        <select name="period" id="order_<?= $block->getHtmlId() ?>_period"
                 onchange="changeDiagramsPeriod(this);" class="admin__control-select">
             <?php foreach ($this->helper('Magento\Backend\Helper\Dashboard\Data')->getDatePeriods() as $value => $label): ?>
                 <?php if (in_array($value, ['custom'])) {
                     continue;
                 } ?>
-                <option value="<?php /* @escapeNotVerified */ echo $value ?>"
+                <option value="<?= /* @escapeNotVerified */ $value ?>"
                     <?php if ($block->getRequest()->getParam('period') == $value): ?> selected="selected"<?php endif; ?>
-                    ><?php /* @escapeNotVerified */ echo $label ?></option>
+                    ><?= /* @escapeNotVerified */ $label ?></option>
             <?php endforeach; ?>
         </select>
     </div>
     <?php if ($block->getCount()): ?>
     <div class="dashboard-diagram-image">
-        <img src="<?php /* @escapeNotVerified */ echo $block->getChartUrl(false) ?>" class="dashboard-diagram-chart" alt="Chart" title="Chart" />
+        <img src="<?= /* @escapeNotVerified */ $block->getChartUrl(false) ?>" class="dashboard-diagram-chart" alt="Chart" title="Chart" />
     </div>
     <?php else: ?>
     <div class="dashboard-diagram-nodata">
-        <span><?php /* @escapeNotVerified */ echo __('No Data Found') ?></span>
+        <span><?= /* @escapeNotVerified */ __('No Data Found') ?></span>
     </div>
     <?php endif; ?>
 </div>

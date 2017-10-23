@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n\Dictionary;
@@ -8,7 +8,7 @@ namespace Magento\Setup\Module\I18n\Dictionary;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\ServiceLocator;
 
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -42,7 +42,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
         $paths->setAccessible(true);
         $this->backupRegistrar = $paths->getValue();
@@ -73,7 +73,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->generator = ServiceLocator::getDictionaryGenerator();
-
     }
 
     protected function tearDown()
@@ -81,12 +80,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         if (file_exists($this->outputFileName)) {
             unlink($this->outputFileName);
         }
-        $property = new \ReflectionProperty('Magento\Setup\Module\I18n\ServiceLocator', '_dictionaryGenerator');
+        $property = new \ReflectionProperty(\Magento\Setup\Module\I18n\ServiceLocator::class, '_dictionaryGenerator');
         $property->setAccessible(true);
         $property->setValue(null);
         $property->setAccessible(false);
 
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
         $paths->setAccessible(true);
         $paths->setValue($this->backupRegistrar);

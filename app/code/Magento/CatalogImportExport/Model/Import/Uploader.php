@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import;
@@ -11,10 +11,19 @@ use Magento\Framework\Filesystem\DriverPool;
 /**
  * Import entity product model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {
+
+    /**
+     * HTTP scheme
+     * used to compare against the filename and select the proper DriverPool adapter
+     * @var string
+     */
+    private $httpScheme = 'http://';
+
     /**
      * Temp directory.
      *
@@ -145,7 +154,13 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         }
         if (preg_match('/\bhttps?:\/\//i', $fileName, $matches)) {
             $url = str_replace($matches[0], '', $fileName);
-            $read = $this->_readFactory->create($url, DriverPool::HTTP);
+
+            if ($matches[0] === $this->httpScheme) {
+                $read = $this->_readFactory->create($url, DriverPool::HTTP);
+            } else {
+                $read = $this->_readFactory->create($url, DriverPool::HTTPS);
+            }
+
             $fileName = preg_replace('/[^a-z0-9\._-]+/i', '', $fileName);
             $this->_directory->writeFile(
                 $this->_directory->getRelativePath($this->getTmpDir() . '/' . $fileName),
@@ -155,7 +170,9 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 
         $filePath = $this->_directory->getRelativePath($this->getTmpDir() . '/' . $fileName);
         $this->_setUploadFile($filePath);
-        $result = $this->save($this->getDestDir());
+        $destDir = $this->_directory->getAbsolutePath($this->getDestDir());
+        $result = $this->save($destDir);
+        unset($result['path']);
         $result['name'] = self::getCorrectFileName($result['name']);
         return $result;
     }
@@ -305,11 +322,10 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
             $tmpRealPath = $this->_directory->getDriver()->getRealPath(
                 $this->_directory->getAbsolutePath($tmpPath)
             );
-            $destinationRealPath = $this->_directory->getDriver()->getRealPath(
-                $this->_directory->getAbsolutePath($destPath)
-            );
+            $destinationRealPath = $this->_directory->getDriver()->getRealPath($destPath);
+            $relativeDestPath = $this->_directory->getRelativePath($destPath);
             $isSameFile = $tmpRealPath === $destinationRealPath;
-            return $isSameFile ?: $this->_directory->copyFile($tmpPath, $destPath);
+            return $isSameFile ?: $this->_directory->copyFile($tmpPath, $relativeDestPath);
         } else {
             return false;
         }

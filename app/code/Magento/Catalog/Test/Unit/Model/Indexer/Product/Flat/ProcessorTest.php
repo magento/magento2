@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
 
-class ProcessorTest extends \PHPUnit_Framework_TestCase
+class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -38,33 +38,24 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->_indexerMock = $this->getMock(
-            'Magento\Indexer\Model\Indexer',
-            ['getId', 'invalidate'],
-            [],
-            '',
-            false
-        );
+        $this->_indexerMock = $this->createPartialMock(\Magento\Indexer\Model\Indexer::class, ['getId', 'invalidate']);
         $this->_indexerMock->expects($this->any())->method('getId')->will($this->returnValue(1));
 
-        $this->_stateMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Product\Flat\State',
-            ['isFlatEnabled'],
-            [],
-            '',
-            false
+        $this->_stateMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Indexer\Product\Flat\State::class,
+            ['isFlatEnabled']
         );
-        $this->indexerRegistryMock = $this->getMock(
-            'Magento\Framework\Indexer\IndexerRegistry',
-            ['get'],
-            [],
-            '',
-            false
+        $this->indexerRegistryMock = $this->createPartialMock(
+            \Magento\Framework\Indexer\IndexerRegistry::class,
+            ['get']
         );
-        $this->_model = $this->_objectManager->getObject('Magento\Catalog\Model\Indexer\Product\Flat\Processor', [
-            'indexerRegistry' => $this->indexerRegistryMock,
-            'state'  => $this->_stateMock
-        ]);
+        $this->_model = $this->_objectManager->getObject(
+            \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,
+            [
+                'indexerRegistry' => $this->indexerRegistryMock,
+                'state'  => $this->_stateMock
+            ]
+        );
     }
 
     /**
@@ -73,7 +64,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     public function testGetIndexer()
     {
         $this->prepareIndexer();
-        $this->assertInstanceOf('\Magento\Indexer\Model\Indexer', $this->_model->getIndexer());
+        $this->assertInstanceOf(\Magento\Indexer\Model\Indexer::class, $this->_model->getIndexer());
     }
 
     /**
@@ -120,7 +111,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('isFlatEnabled')
             ->willReturn($isFlatEnabled);
 
-        $indexerMock = $this->getMockBuilder('Magento\Indexer\Model\Indexer')
+        $indexerMock = $this->getMockBuilder(\Magento\Indexer\Model\Indexer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -154,7 +145,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('isFlatEnabled')
             ->willReturn(true);
 
-        $indexerMock = $this->getMockBuilder('Magento\Indexer\Model\Indexer')
+        $indexerMock = $this->getMockBuilder(\Magento\Indexer\Model\Indexer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -189,7 +180,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('isFlatEnabled')
             ->willReturn($isFlatEnabled);
 
-        $indexerMock = $this->getMockBuilder('Magento\Indexer\Model\Indexer')
+        $indexerMock = $this->getMockBuilder(\Magento\Indexer\Model\Indexer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -223,7 +214,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('isFlatEnabled')
             ->willReturn(true);
 
-        $indexerMock = $this->getMockBuilder('Magento\Indexer\Model\Indexer')
+        $indexerMock = $this->getMockBuilder(\Magento\Indexer\Model\Indexer::class)
             ->disableOriginalConstructor()
             ->getMock();
 

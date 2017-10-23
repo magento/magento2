@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -114,6 +114,17 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+        </variation>
+        <variation name="UpdateDownloadableProductEntityTestVariation7" summary="Verify data overriding on Store View level" ticketId="MAGETWO-50644">
+            <data name="storeDataset" xsi:type="string">custom</data>
+            <data name="storesCount" xsi:type="number">2</data>
+            <data name="storeIndexToUpdate" xsi:type="number">1</data>
+            <data name="product/data/use_default_name" xsi:type="string">No</data>
+            <data name="product/data/name" xsi:type="string">Test Downloadable Product %isolation%</data>
+            <data name="product/data/use_default_url_key" xsi:type="string">No</data>
+            <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
+            <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCustomStoreView" />
         </variation>
     </testCase>
 </config>

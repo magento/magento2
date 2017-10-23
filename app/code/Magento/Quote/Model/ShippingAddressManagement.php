@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
@@ -51,11 +51,6 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
      * @var Quote\TotalsCollector
      */
     protected $totalsCollector;
-
-    /**
-     * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
-     */
-    private $minimumAmountErrorMessage;
 
     /**
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
@@ -117,10 +112,6 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $address->setSaveInAddressBook($saveInAddressBook);
         $address->setCollectShippingRates(true);
 
-        if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
-            throw new InputException($this->getMinimumAmountErrorMessage()->getMessage());
-        }
-
         try {
             $address->save();
         } catch (\Exception $e) {
@@ -144,20 +135,5 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         }
         /** @var \Magento\Quote\Model\Quote\Address $address */
         return $quote->getShippingAddress();
-    }
-
-    /**
-     * @return \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
-     * @deprecated
-     */
-    private function getMinimumAmountErrorMessage()
-    {
-        if ($this->minimumAmountErrorMessage === null) {
-            $objectManager = ObjectManager::getInstance();
-            $this->minimumAmountErrorMessage = $objectManager->get(
-                \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class
-            );
-        }
-        return $this->minimumAmountErrorMessage;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,8 +13,9 @@ use Magento\Customer\Block\Account\Dashboard\Info;
 
 /**
  * Test class for \Magento\Customer\Block\Account\Dashboard\Info.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InfoTest extends \PHPUnit_Framework_TestCase
+class InfoTest extends \PHPUnit\Framework\TestCase
 {
     /** Constant values used for testing */
     const CUSTOMER_ID = 1;
@@ -56,50 +57,38 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->currentCustomer = $this->getMock(
-            'Magento\Customer\Helper\Session\CurrentCustomer',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->currentCustomer = $this->createMock(\Magento\Customer\Helper\Session\CurrentCustomer::class);
 
-        $urlBuilder = $this->getMockForAbstractClass('Magento\Framework\UrlInterface', [], '', false);
+        $urlBuilder = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class, [], '', false);
         $urlBuilder->expects($this->any())->method('getUrl')->will($this->returnValue(self::CHANGE_PASSWORD_URL));
 
-        $layout = $this->getMockForAbstractClass('Magento\Framework\View\LayoutInterface', [], '', false);
-        $this->_formRegister = $this->getMock('Magento\Customer\Block\Form\Register', [], [], '', false);
+        $layout = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class, [], '', false);
+        $this->_formRegister = $this->createMock(\Magento\Customer\Block\Form\Register::class);
         $layout->expects(
-            $this->any()
-        )->method(
+                $this->any()
+            )->method(
                 'getBlockSingleton'
             )->with(
-                'Magento\Customer\Block\Form\Register'
+                \Magento\Customer\Block\Form\Register::class
             )->will(
                 $this->returnValue($this->_formRegister)
             );
 
-        $this->_context = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
+        $this->_context = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()->getMock();
         $this->_context->expects($this->once())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
         $this->_context->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
 
-        $this->_customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
+        $this->_customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->_customerSession->expects($this->any())->method('getId')->will($this->returnValue(self::CUSTOMER_ID));
 
-        $this->_customer = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
+        $this->_customer = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $this->_customer->expects($this->any())->method('getEmail')->will($this->returnValue(self::EMAIL_ADDRESS));
         $this->_helperView = $this->getMockBuilder(
-            '\Magento\Customer\Helper\View'
+            \Magento\Customer\Helper\View::class
         )->disableOriginalConstructor()->getMock();
-        $this->_subscriberFactory = $this->getMock(
-            'Magento\Newsletter\Model\SubscriberFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->_subscriber = $this->getMock('Magento\Newsletter\Model\Subscriber', [], [], '', false);
+        $this->_subscriberFactory = $this->createPartialMock(\Magento\Newsletter\Model\SubscriberFactory::class, ['create']);
+        $this->_subscriber = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
         $this->_subscriber->expects($this->any())->method('loadByEmail')->will($this->returnSelf());
         $this->_subscriberFactory->expects(
             $this->any()

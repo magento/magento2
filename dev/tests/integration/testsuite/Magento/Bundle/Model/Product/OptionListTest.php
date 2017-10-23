@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Bundle\Model\Product;
 /**
  * Integration test for Magento\Bundle\Model\OptionList
  */
-class OptionListTest extends \PHPUnit_Framework_TestCase
+class OptionListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product
@@ -32,12 +32,12 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
     public function testGetItems()
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->product = $productRepository->get('bundle-product');
         /**
          * @var \Magento\Bundle\Model\Product\OptionList $optionList
          */
-        $optionList = $this->objectManager->create('\Magento\Bundle\Model\Product\OptionList');
+        $optionList = $this->objectManager->create(\Magento\Bundle\Model\Product\OptionList::class);
         $options = $optionList->getItems($this->product);
         $this->assertEquals(1, count($options));
         $this->assertEquals('Bundle Product Items', $options[0]->getTitle());

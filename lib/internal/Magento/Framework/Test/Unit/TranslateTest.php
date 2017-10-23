@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
 
-use \Magento\Framework\Translate;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Translate;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TranslateTest extends \PHPUnit_Framework_TestCase
+class TranslateTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Translate */
     protected $translate;
@@ -59,17 +60,18 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->viewDesign = $this->getMock('\Magento\Framework\View\DesignInterface', [], [], '', false);
-        $this->cache = $this->getMock('\Magento\Framework\Cache\FrontendInterface', [], [], '', false);
-        $this->viewFileSystem = $this->getMock('\Magento\Framework\View\FileSystem', [], [], '', false);
-        $this->moduleList = $this->getMock('\Magento\Framework\Module\ModuleList', [], [], '', false);
-        $this->modulesReader = $this->getMock('\Magento\Framework\Module\Dir\Reader', [], [], '', false);
-        $this->scopeResolver = $this->getMock('\Magento\Framework\App\ScopeResolverInterface', [], [], '', false);
-        $this->resource = $this->getMock('\Magento\Framework\Translate\ResourceInterface', [], [], '', false);
-        $this->locale = $this->getMock('\Magento\Framework\Locale\ResolverInterface', [], [], '', false);
-        $this->appState = $this->getMock('\Magento\Framework\App\State', [], [], '', false);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->viewDesign = $this->createMock(\Magento\Framework\View\DesignInterface::class);
+        $this->cache = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $this->viewFileSystem = $this->createMock(\Magento\Framework\View\FileSystem::class);
+        $this->moduleList = $this->createMock(\Magento\Framework\Module\ModuleList::class);
+        $this->modulesReader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
+        $this->scopeResolver = $this->createMock(\Magento\Framework\App\ScopeResolverInterface::class);
+        $this->resource = $this->createMock(\Magento\Framework\Translate\ResourceInterface::class);
+        $this->locale = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
+        $this->appState = $this->createMock(\Magento\Framework\App\State::class);
         $this->request = $this->getMockForAbstractClass(
-            '\Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             [],
             '',
             false,
@@ -77,10 +79,10 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             true,
             ['getParam', 'getControllerModule']
         );
-        $this->csvParser = $this->getMock('\Magento\Framework\File\Csv', [], [], '', false);
-        $this->packDictionary = $this->getMock('\Magento\Framework\App\Language\Dictionary', [], [], '', false);
-        $this->directory = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface', [], [], '', false);
-        $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
+        $this->csvParser = $this->createMock(\Magento\Framework\File\Csv::class);
+        $this->packDictionary = $this->createMock(\Magento\Framework\App\Language\Dictionary::class);
+        $this->directory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $filesystem->expects($this->once())->method('getDirectoryRead')->will($this->returnValue($this->directory));
 
         $this->translate = new Translate(
@@ -98,6 +100,21 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             $this->csvParser,
             $this->packDictionary
         );
+
+        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock->method('serialize')
+            ->willReturnCallback(function ($data) {
+                return json_encode($data);
+            });
+        $serializerMock->method('unserialize')
+            ->willReturnCallback(function ($string) {
+                return json_decode($string, true);
+            });
+        $objectManager->setBackwardCompatibleProperty(
+            $this->translate,
+            'serializer',
+            $serializerMock
+        );
     }
 
     /**
@@ -113,7 +130,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         $this->cache->expects($this->exactly($forceReload ? 0 : 1))
             ->method('load')
-            ->will($this->returnValue(serialize($cachedData)));
+            ->will($this->returnValue(json_encode($cachedData)));
 
         if (!$forceReload && $cachedData !== false) {
             $this->translate->loadData($area, $forceReload);
@@ -170,15 +187,16 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         ];
         $this->resource->expects($this->any())->method('getTranslationArray')->will($this->returnValue($dbData));
 
-        $this->cache->expects($this->exactly(1))
-            ->method('save');
+        if (!$forceReload) {
+            $this->cache->expects($this->exactly(1))->method('save');
+        }
 
         $this->translate->loadData($area, $forceReload);
 
         $expected = [
             'module original' => 'module translated',
             'module theme' => 'theme translated overwrite',
-            'module pack' => 'pack translated overwrite',
+            'module pack' => 'theme-pack translated overwrite',
             'module db' => 'db translated overwrite',
             'theme original' => 'theme translated',
             'pack original' => 'pack translated',
@@ -215,7 +233,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     {
         $this->cache->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(serialize($data)));
+            ->will($this->returnValue(json_encode($data)));
         $this->expectsSetConfig('themeId');
         $this->translate->loadData('frontend');
         $this->assertEquals($result, $this->translate->getData());

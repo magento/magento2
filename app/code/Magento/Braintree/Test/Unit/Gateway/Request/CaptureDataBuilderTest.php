@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
@@ -13,7 +13,7 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 /**
  * Class CaptureDataBuilderTest
  */
-class CaptureDataBuilderTest extends \PHPUnit_Framework_TestCase
+class CaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Braintree\Gateway\Request\CaptureDataBuilder
@@ -37,7 +37,7 @@ class CaptureDataBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentDO = $this->getMock(PaymentDataObjectInterface::class);
+        $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();

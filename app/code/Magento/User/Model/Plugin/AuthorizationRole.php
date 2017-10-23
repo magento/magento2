@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,9 @@ use Magento\Authorization\Model\Role;
  */
 class AuthorizationRole
 {
-    /** @var \Magento\User\Model\ResourceModel\User */
+    /**
+     * @var \Magento\User\Model\ResourceModel\User
+     */
     protected $userResourceModel;
 
     /**

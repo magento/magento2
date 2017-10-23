@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Category\Collection;
 
 /**
  * Class Factory
- * @deprecated
+ * @deprecated 101.0.0
  */
 class Factory
 {
@@ -31,6 +31,6 @@ class Factory
      */
     public function create()
     {
-        return $this->_objectManager->create('Magento\Catalog\Model\ResourceModel\Category\Collection');
+        return $this->_objectManager->create(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
     }
 }

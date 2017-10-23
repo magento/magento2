@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,19 +8,19 @@
 
 namespace Magento\Catalog\Model\Product\Option;
 
-use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Catalog product option select type model
  *
- * @method \Magento\Catalog\Model\ResourceModel\Product\Option\Value _getResource()
- * @method \Magento\Catalog\Model\ResourceModel\Product\Option\Value getResource()
+ * @api
  * @method int getOptionId()
  * @method \Magento\Catalog\Model\Product\Option\Value setOptionId(int $value)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
 class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface
 {
@@ -40,9 +40,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     const KEY_OPTION_TYPE_ID = 'option_type_id';
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     protected $_values = [];
 
     /**
@@ -93,7 +91,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\ResourceModel\Product\Option\Value');
+        $this->_init(\Magento\Catalog\Model\ResourceModel\Product\Option\Value::class);
     }
 
     /**
@@ -172,6 +170,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         $this->_product = $product;
         return $this;
     }
+
     //@codeCoverageIgnoreEnd
 
     /**
@@ -200,7 +199,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
                 'store_id',
                 $this->getOption()->getStoreId()
             );
-            $this->unsetData('option_type_id');
+
             if ($this->getData('is_delete') == '1') {
                 if ($this->getId()) {
                     $this->deleteValues($this->getId());
@@ -366,6 +365,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     {
         return $this->_getData(self::KEY_OPTION_TYPE_ID);
     }
+
     /**
      * Set option title
      *
@@ -431,5 +431,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     {
         return $this->setData(self::KEY_OPTION_TYPE_ID, $optionTypeId);
     }
+
     //@codeCoverageIgnoreEnd
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,28 +9,28 @@
 ?>
 
 <?php if ($_item = $block->getItem()): ?>
-    <div class="product-title"><?php /* @escapeNotVerified */ echo $_item->getName() ?></div>
+    <div class="product-title"><?= /* @escapeNotVerified */ $_item->getName() ?></div>
     <div class="product-sku-block">
-        <span><?php /* @escapeNotVerified */ echo __('SKU') ?>:</span>
-        <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getSku()))); ?>
+        <span><?= /* @escapeNotVerified */ __('SKU') ?>:</span>
+        <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($block->getSku()))) ?>
     </div>
     <?php if ($block->getOrderOptions()): ?>
         <dl class="item-options">
         <?php foreach ($block->getOrderOptions() as $_option): ?>
-            <dt><?php /* @escapeNotVerified */ echo $_option['label'] ?>:</dt>
+            <dt><?= /* @escapeNotVerified */ $_option['label'] ?>:</dt>
             <dd>
             <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
-                <?php /* @escapeNotVerified */ echo $_option['value'];?>
+                <?= /* @escapeNotVerified */ $_option['value'] ?>
             <?php else: ?>
-                <?php echo $block->truncateString($_option['value'], 55, '', $_remainder);?>
+                <?= $block->truncateString($_option['value'], 55, '', $_remainder) ?>
                 <?php if ($_remainder):?>
-                    ... <span id="<?php /* @escapeNotVerified */ echo $_id = 'id' . uniqid()?>"><?php /* @escapeNotVerified */ echo $_remainder ?></span>
+                    ... <span id="<?= /* @escapeNotVerified */ $_id = 'id' . uniqid() ?>"><?= /* @escapeNotVerified */ $_remainder ?></span>
                     <script>
 require(['prototype'], function(){
 
-    $('<?php /* @escapeNotVerified */ echo $_id ?>').hide();
-    $('<?php /* @escapeNotVerified */ echo $_id ?>').up().observe('mouseover', function(){$('<?php /* @escapeNotVerified */ echo $_id ?>').show();});
-    $('<?php /* @escapeNotVerified */ echo $_id ?>').up().observe('mouseout',  function(){$('<?php /* @escapeNotVerified */ echo $_id ?>').hide();});
+    $('<?= /* @escapeNotVerified */ $_id ?>').hide();
+    $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseover', function(){$('<?= /* @escapeNotVerified */ $_id ?>').show();});
+    $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseout',  function(){$('<?= /* @escapeNotVerified */ $_id ?>').hide();});
 
 });
 </script>
@@ -42,11 +42,11 @@ require(['prototype'], function(){
     <?php endif; ?>
     <?php if ($block->getLinks()): ?>
         <dl class="item-options">
-            <dt><?php /* @escapeNotVerified */ echo $block->getLinksTitle(); ?>:</dt>
+            <dt><?= /* @escapeNotVerified */ $block->getLinksTitle() ?>:</dt>
             <?php foreach ($block->getLinks()->getPurchasedItems() as $_link): ?>
-                <dd><?php echo $block->escapeHtml($_link->getLinkTitle()) ?> (<?php /* @escapeNotVerified */ echo $_link->getNumberOfDownloadsUsed() . ' / ' . ($_link->getNumberOfDownloadsBought() ? $_link->getNumberOfDownloadsBought() : __('U')) ?>)</dd>
+                <dd><?= $block->escapeHtml($_link->getLinkTitle()) ?> (<?= /* @escapeNotVerified */ $_link->getNumberOfDownloadsUsed() . ' / ' . ($_link->getNumberOfDownloadsBought() ? $_link->getNumberOfDownloadsBought() : __('U')) ?>)</dd>
             <?php endforeach; ?>
         </dl>
     <?php endif; ?>
-    <?php echo $block->escapeHtml($_item->getDescription()) ?>
+    <?= $block->escapeHtml($_item->getDescription()) ?>
 <?php endif; ?>

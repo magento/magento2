@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogRule\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
@@ -37,11 +36,11 @@ class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
     ) {
         if ($customer !== null) {
             $this->objectManager->create(
-                '\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+                \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
                 ['customer' => $customer]
             )->run();
         } else {
-            $this->objectManager->create('\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
+            $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
         }
 
         $cmsIndexPage->open();
@@ -53,9 +52,11 @@ class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
                 $priceBlock->isVisible(),
                 'Price block is not displayed for product ' . $product->getName()
             );
-            $actualPrice['regular'] = (float)$priceBlock->getOldPrice();
             $actualPrice['special'] = (float)$priceBlock->getSpecialPrice();
-            $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
+            if ($productPrice[$key]['regular'] !== 'No') {
+                $actualPrice['regular'] = (float)$priceBlock->getOldPrice();
+                $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
+            }
             $diff = $this->verifyData($actualPrice, $productPrice[$key]);
             \PHPUnit_Framework_Assert::assertTrue(
                 empty($diff),

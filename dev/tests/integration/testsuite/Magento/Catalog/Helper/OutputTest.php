@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
 
-class OutputTest extends \PHPUnit_Framework_TestCase
+class OutputTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Helper\Output
@@ -15,7 +15,7 @@ class OutputTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Helper\Output'
+            \Magento\Catalog\Helper\Output::class
         );
     }
 
@@ -92,7 +92,7 @@ class OutputTest extends \PHPUnit_Framework_TestCase
     {
         $attributeName = 'description';
         $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Eav\Model\Config'
+            \Magento\Eav\Model\Config::class
         )->getAttribute(
             $entityCode,
             $attributeName

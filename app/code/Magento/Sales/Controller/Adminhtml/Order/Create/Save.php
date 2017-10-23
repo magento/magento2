@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
@@ -63,6 +63,8 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
             }
             $resultRedirect->setPath('sales/*/');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            // customer can be created before place order flow is completed and should be stored in current session
+            $this->_getSession()->setCustomerId($this->_getSession()->getQuote()->getCustomerId());
             $message = $e->getMessage();
             if (!empty($message)) {
                 $this->messageManager->addError($message);

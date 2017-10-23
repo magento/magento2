@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice;
 
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -41,30 +41,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->orderItemFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Order\ItemFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->orderItemFactoryMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\ItemFactory::class,
+            ['create']
         );
-        $this->invoiceMock = $this->getMock(
-            'Magento\Sales\Model\Order\Invoice',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderItemMock = $this->getMock(
-            'Magento\Sales\Model\Order\Item',
-            [
+        $this->invoiceMock = $this->createMock(\Magento\Sales\Model\Order\Invoice::class);
+        $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
+        $this->orderItemMock = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
                 'load', 'isDummy', 'getIsQtyDecimal', 'getQtyToInvoice', 'getQtyInvoiced', 'getTaxInvoiced',
                 'getBaseTaxInvoiced', 'getDiscountTaxCompensationInvoiced',
                 'getBaseDiscountTaxCompensationInvoiced', 'getDiscountInvoiced',
@@ -73,13 +56,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 'setBaseDiscountTaxCompensationInvoiced', 'setDiscountInvoiced',
                 'setBaseDiscountInvoiced', 'setRowInvoiced', 'setBaseRowInvoiced', 'getQtyOrdered', 'getRowTotal',
                 'getBaseRowTotal', 'getRowTotalInclTax', 'getBaseRowTotalInclTax'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->item = $this->objectManager->getObject(
-            'Magento\Sales\Model\Order\Invoice\Item',
+            \Magento\Sales\Model\Order\Invoice\Item::class,
             [
                 'orderItemFactory' => $this->orderItemFactoryMock
             ]

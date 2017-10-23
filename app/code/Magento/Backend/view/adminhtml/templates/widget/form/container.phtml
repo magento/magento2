@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,14 +8,14 @@
 
 /** @var $block \Magento\Backend\Block\Widget\Form\Container */
  ?>
-<?php /* @escapeNotVerified */ echo $block->getFormInitScripts() ?>
+<?= /* @escapeNotVerified */ $block->getFormInitScripts() ?>
 <?php if ($block->getButtonsHtml('header')): ?>
-    <div class="page-form-actions" <?php /* @escapeNotVerified */ echo $block->getUiId('content-header') ?>><?php echo $block->getButtonsHtml('header') ?></div>
+    <div class="page-form-actions" <?= /* @escapeNotVerified */ $block->getUiId('content-header') ?>><?= $block->getButtonsHtml('header') ?></div>
 <?php endif; ?>
-<?php echo $block->getFormHtml() ?>
+<?= $block->getFormHtml() ?>
 <?php if ($block->hasFooterButtons()): ?>
     <div class="content-footer">
-        <p class="form-buttons"><?php echo $block->getButtonsHtml('footer') ?></p>
+        <p class="form-buttons"><?= $block->getButtonsHtml('footer') ?></p>
     </div>
 <?php endif; ?>
 <script>
@@ -27,7 +27,7 @@ require([
 
     $('#edit_form').form()
         .validation({
-            validationUrl: '<?php /* @escapeNotVerified */ echo $block->getValidationUrl() ?>',
+            validationUrl: '<?= /* @escapeNotVerified */ $block->getValidationUrl() ?>',
             highlight: function(element) {
                 var detailsElement = $(element).closest('details');
                 if (detailsElement.length && detailsElement.is('.details')) {
@@ -42,4 +42,4 @@ require([
 
 });
 </script>
-<?php /* @escapeNotVerified */ echo $block->getFormScripts() ?>
+<?= /* @escapeNotVerified */ $block->getFormScripts() ?>

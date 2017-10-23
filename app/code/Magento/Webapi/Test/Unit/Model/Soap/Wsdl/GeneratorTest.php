@@ -2,12 +2,16 @@
 /**
  * Tests for \Magento\Webapi\Model\Soap\Wsdl\Generator.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Soap\Wsdl;
 
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class GeneratorTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**  @var \Magento\Webapi\Model\Soap\Wsdl\Generator */
     protected $_wsdlGenerator;
@@ -29,14 +33,19 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $_typeProcessor;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->serviceMetadata = $this->getMockBuilder(
-            'Magento\Webapi\Model\ServiceMetadata'
+            \Magento\Webapi\Model\ServiceMetadata::class
         )->disableOriginalConstructor()->getMock();
 
         $_wsdlMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Soap\Wsdl'
+            \Magento\Webapi\Model\Soap\Wsdl::class
         )->disableOriginalConstructor()->setMethods(
             [
                 'addSchemaTypeSection',
@@ -54,28 +63,22 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ]
         )->getMock();
         $this->_wsdlFactoryMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Soap\WsdlFactory'
+            \Magento\Webapi\Model\Soap\WsdlFactory::class
         )->setMethods(
             ['create']
         )->disableOriginalConstructor()->getMock();
         $this->_wsdlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($_wsdlMock));
 
         $this->_cacheMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Cache\Type\Webapi'
+            \Magento\Webapi\Model\Cache\Type\Webapi::class
         )->disableOriginalConstructor()->getMock();
         $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
         $this->_cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
 
-        $this->_typeProcessor = $this->getMock(
-            'Magento\Framework\Reflection\TypeProcessor',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_typeProcessor = $this->createMock(\Magento\Framework\Reflection\TypeProcessor::class);
 
         /** @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject $authorizationMock */
-        $authorizationMock = $this->getMockBuilder('Magento\Framework\Webapi\Authorization')
+        $authorizationMock = $this->getMockBuilder(\Magento\Framework\Webapi\Authorization::class)
             ->disableOriginalConstructor()
             ->getMock();
         $authorizationMock->expects($this->any())->method('isAllowed')->willReturn(true);
@@ -83,17 +86,36 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->customAttributeTypeLocator = $objectManager
-            ->getObject('Magento\Eav\Model\EavCustomAttributeTypeLocator');
+            ->getObject(\Magento\Eav\Model\EavCustomAttributeTypeLocator::class);
+
+        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->willReturnMap([
+                [\Magento\Framework\Serialize\Serializer\Json::class, $this->serializer]
+            ]);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
 
         $this->_wsdlGenerator = $objectManager->getObject(
-            'Magento\Webapi\Model\Soap\Wsdl\Generator',
+            \Magento\Webapi\Model\Soap\Wsdl\Generator::class,
             [
                 'wsdlFactory' => $this->_wsdlFactoryMock,
                 'cache' => $this->_cacheMock,
                 'typeProcessor' => $this->_typeProcessor,
                 'customAttributeTypeLocator' => $this->customAttributeTypeLocator,
                 'serviceMetadata' => $this->serviceMetadata,
-                'authorization' => $authorizationMock
+                'authorization' => $authorizationMock,
+                'serializer' => $this->serializer
             ]
         );
 
@@ -159,6 +181,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * Test exception for handle
      *
+     * @covers \Magento\Webapi\Model\AbstractSchemaGenerator::generate()
      * @expectedException        \Magento\Framework\Webapi\Exception
      * @expectedExceptionMessage exception message
      */

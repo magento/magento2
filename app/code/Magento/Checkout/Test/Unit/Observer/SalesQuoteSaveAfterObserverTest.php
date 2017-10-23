@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Observer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class SalesQuoteSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
+class SalesQuoteSaveAfterObserverTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Checkout\Observer\SalesQuoteSaveAfterObserver */
     protected $object;
@@ -21,15 +21,16 @@ class SalesQuoteSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->checkoutSession = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
-        $this->object = $this->objectManager->getObject('Magento\Checkout\Observer\SalesQuoteSaveAfterObserver', [
-            'checkoutSession' => $this->checkoutSession,
-        ]);
+        $this->checkoutSession = $this->createMock(\Magento\Checkout\Model\Session::class);
+        $this->object = $this->objectManager->getObject(
+            \Magento\Checkout\Observer\SalesQuoteSaveAfterObserver::class,
+            ['checkoutSession' => $this->checkoutSession]
+        );
     }
 
     public function testSalesQuoteSaveAfter()
     {
-        $observer = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $observer = $this->createMock(\Magento\Framework\Event\Observer::class);
         $observer->expects($this->once())->method('getEvent')->will(
             $this->returnValue(new \Magento\Framework\DataObject(
                 ['quote' => new \Magento\Framework\DataObject(['is_checkout_cart' => 1, 'id' => 7])]

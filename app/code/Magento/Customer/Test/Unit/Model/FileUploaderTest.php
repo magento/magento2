@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
@@ -9,7 +9,7 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileUploader;
 
-class FileUploaderTest extends \PHPUnit_Framework_TestCase
+class FileUploaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -38,23 +38,28 @@ class FileUploaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customerMetadataService = $this->getMockBuilder('Magento\Customer\Api\CustomerMetadataInterface')
+        $this->customerMetadataService = $this->getMockBuilder(\Magento\Customer\Api\CustomerMetadataInterface::class)
             ->getMockForAbstractClass();
 
-        $this->addressMetadataService = $this->getMockBuilder('Magento\Customer\Api\AddressMetadataInterface')
+        $this->addressMetadataService = $this->getMockBuilder(\Magento\Customer\Api\AddressMetadataInterface::class)
             ->getMockForAbstractClass();
 
-        $this->elementFactory = $this->getMockBuilder('Magento\Customer\Model\Metadata\ElementFactory')
+        $this->elementFactory = $this->getMockBuilder(\Magento\Customer\Model\Metadata\ElementFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fileProcessorFactory = $this->getMockBuilder('Magento\Customer\Model\FileProcessorFactory')
+        $this->fileProcessorFactory = $this->getMockBuilder(\Magento\Customer\Model\FileProcessorFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->attributeMetadata = $this->getMockBuilder('Magento\Customer\Api\Data\AttributeMetadataInterface')
+        $this->attributeMetadata = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
+    }
+
+    protected function tearDown()
+    {
+        $_FILES = [];
     }
 
     /**
@@ -90,7 +95,7 @@ class FileUploaderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $formElement = $this->getMockBuilder('Magento\Customer\Model\Metadata\Form\Image')
+        $formElement = $this->getMockBuilder(\Magento\Customer\Model\Metadata\Form\Image::class)
             ->disableOriginalConstructor()
             ->getMock();
         $formElement->expects($this->once())
@@ -139,7 +144,7 @@ class FileUploaderTest extends \PHPUnit_Framework_TestCase
             'url' => $resultFileUrl,
         ];
 
-        $fileProcessor = $this->getMockBuilder('Magento\Customer\Model\FileProcessor')
+        $fileProcessor = $this->getMockBuilder(\Magento\Customer\Model\FileProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $fileProcessor->expects($this->once())
@@ -163,7 +168,7 @@ class FileUploaderTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturn($fileProcessor);
 
-        $validationRuleMock = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
+        $validationRuleMock = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
             ->getMockForAbstractClass();
         $validationRuleMock->expects($this->once())
             ->method('getName')
@@ -178,7 +183,6 @@ class FileUploaderTest extends \PHPUnit_Framework_TestCase
         $this->attributeMetadata->expects($this->once())
             ->method('getValidationRules')
             ->willReturn([$validationRuleMock]);
-
 
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, 'customer');
         $this->assertEquals($expectedResult, $model->upload());

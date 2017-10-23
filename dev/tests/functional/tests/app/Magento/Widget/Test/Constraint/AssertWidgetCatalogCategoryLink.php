@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Widget\Test\Constraint;
 
-use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
+use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Widget\Test\Fixture\Widget;
@@ -29,19 +29,17 @@ class AssertWidgetCatalogCategoryLink extends AbstractConstraint
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $categoryView
      * @param Widget $widget
-     * @param AdminCache $adminCache
+     * @param Cache $cache
      * @return void
      */
     public function processAssert(
         CmsIndex $cmsIndex,
         CatalogCategoryView $categoryView,
         Widget $widget,
-        AdminCache $adminCache
+        Cache $cache
     ) {
         // Flush cache
-        $adminCache->open();
-        $adminCache->getActionsBlock()->flushMagentoCache();
-        $adminCache->getMessagesBlock()->waitSuccessMessage();
+        $cache->flush();
 
         $cmsIndex->open();
         $widgetText = $widget->getParameters()['anchor_text'];

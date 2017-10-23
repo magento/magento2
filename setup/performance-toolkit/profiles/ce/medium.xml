@@ -1,25 +1,55 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<config>
+<config xmlns:xi="http://www.w3.org/2001/XInclude">
     <profile>
-        <websites>1</websites> <!-- Number of websites to generate -->
-        <store_groups>2</store_groups> <!--Number of stores-->
-        <store_views>2</store_views> <!-- Number of store views -->
-        <simple_products>16000</simple_products> <!-- Simple products count -->
-        <configurable_products>1000</configurable_products> <!--Configurable products count (each configurable has 3 simple products as options, that are not displayed individually in catalog) -->
+        <websites>3</websites> <!-- Number of websites to generate -->
+        <store_groups>3</store_groups> <!--Number of stores-->
+        <store_views>3</store_views> <!-- Number of store views -->
+        <assign_entities_to_all_websites>1</assign_entities_to_all_websites> <!-- Whether to assign all products per each website -->
+        <simple_products>24000</simple_products> <!-- Simple products count -->
+        <configurable_products> <!-- Configurable product -->
+            <config>
+                <attributes>
+                    <attribute>
+                        <options>3</options>
+                        <swatches>image</swatches>
+                    </attribute>
+                    <attribute>
+                        <options>8</options>
+                    </attribute>
+                </attributes>
+                <sku>Configurable Product %s</sku>
+                <products>640</products>
+            </config>
+        </configurable_products>
+        <product-images>
+            <images-count>1000</images-count>
+            <images-per-product>3</images-per-product>
+        </product-images>
         <categories>300</categories> <!-- Number of categories to generate -->
         <categories_nesting_level>3</categories_nesting_level> <!-- Nesting level for categories -->
-        <catalog_price_rules>20</catalog_price_rules> <!-- Number os catalog price rules -->
+        <customers>2000</customers> <!-- Number of customers to generate -->
+
+        <catalog_price_rules>20</catalog_price_rules> <!-- Number of catalog price rules -->
         <cart_price_rules>20</cart_price_rules> <!-- Number of cart price rules -->
-        <cart_price_rules_floor>2</cart_price_rules_floor> <!-- The price rule condition: minimum products amount in shopping cart for price rule to be applied -->
-        <customers>200</customers> <!-- Number of customers to generate -->
+        <cart_price_rules_floor>2</cart_price_rules_floor>
+
+        <product_attribute_sets>100</product_attribute_sets> <!-- Number of product attribute sets -->
+        <product_attribute_sets_attributes>50</product_attribute_sets_attributes> <!-- Number of attributes per set -->
+        <product_attribute_sets_attributes_values>2</product_attribute_sets_attributes_values> <!-- Number of values per attribute -->
+
+        <order_quotes_enable>true</order_quotes_enable>
+        <order_simple_product_count_from>2</order_simple_product_count_from>
+        <order_simple_product_count_to>2</order_simple_product_count_to>
+        <orders>50000</orders> <!-- Orders count -->
+
         <tax_rates_file>tax_rates.csv</tax_rates_file> <!-- Tax rates file in fixtures directory-->
-        <orders>1600</orders> <!-- Orders count -->
+
         <configs> <!-- Config variables and values for change -->
             <config>
                 <path>admin/security/use_form_key</path>
@@ -37,36 +67,42 @@
         <indexers> <!-- Indexer mode value (true - Update by Schedule, false - Update on Save) -->
             <indexer>
                 <id>catalog_category_product</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
             <indexer>
                 <id>catalog_product_category</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
             <indexer>
                 <id>catalog_product_price</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
             <indexer>
                 <id>catalog_product_attribute</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
             <indexer>
                 <id>cataloginventory_stock</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
             <indexer>
                 <id>catalogrule_rule</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
             <indexer>
                 <id>catalogrule_product</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
             <indexer>
                 <id>catalogsearch_fulltext</id>
-                <set_scheduled>false</set_scheduled>
+                <set_scheduled>true</set_scheduled>
             </indexer>
         </indexers>
+        <xi:include href="../../config/searchTermsLarge.xml" />
+        <xi:include href="../../config/attributeSets.xml" />
+        <xi:include href="../../config/searchConfig.xml" />
+        <xi:include href="../../config/customerConfig.xml" />
+        <xi:include href="../../config/description.xml" />
+        <xi:include href="../../config/shortDescription.xml" />
     </profile>
 </config>

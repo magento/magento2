@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Console\Command;
@@ -78,7 +78,7 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->setDecorated(true);
-        $this->appState->setAreaCode('catalog');
+        $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
         $connection = $this->attributeResource->getConnection();
         $attributeTables = $this->getAttributeTables();
 
@@ -101,11 +101,14 @@ class ProductAttributesCleanUp extends \Symfony\Component\Console\Command\Comman
             $output->writeln("");
             $output->writeln("<info>Unused product attributes successfully cleaned up:</info>");
             $output->writeln("<comment>  " . implode("\n  ", $attributeTables) . "</comment>");
+            return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         } catch (\Exception $exception) {
             $this->attributeResource->rollBack();
 
             $output->writeln("");
             $output->writeln("<error>{$exception->getMessage()}</error>");
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }
 

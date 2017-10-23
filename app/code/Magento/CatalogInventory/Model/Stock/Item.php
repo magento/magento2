@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Stock;
@@ -43,7 +43,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      *
      * @var string
      */
-    protected $eventObject = 'item';
+    protected $_eventObject = 'item';
 
     /**
      * Store model manager
@@ -143,7 +143,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogInventory\Model\ResourceModel\Stock\Item');
+        $this->_init(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
     }
 
     /**
@@ -291,6 +291,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     {
         return (bool) $this->_getData(static::USE_CONFIG_MIN_SALE_QTY);
     }
+
     /**
      * Retrieve Minimum Qty Allowed in Shopping Cart or NULL when there is no limitation
      *
@@ -556,6 +557,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * @param int $itemId
      * @return $this
@@ -831,5 +833,6 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Helper;
@@ -8,6 +8,7 @@ namespace Magento\Checkout\Helper;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Checkout default helper
@@ -398,6 +399,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_CUSTOMER_MUST_BE_LOGGED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Checks if display billing address on payment method is available, otherwise
+     * billing address should be display on payment page
+     * @return bool
+     */
+    public function isDisplayBillingOnPaymentMethodAvailable()
+    {
+        return (bool) !$this->scopeConfig->getValue(
+            'checkout/options/display_billing_address_on',
+            ScopeInterface::SCOPE_STORE
         );
     }
 }

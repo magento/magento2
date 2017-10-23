@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Test\Unit\Model;
@@ -14,7 +14,12 @@ use Magento\Search\Model\QueryFactory;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Search\Model\Query;
 
-class QueryFactoryTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class QueryFactoryTest tests Magento\Search\Model\QueryFactory
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class QueryFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var QueryFactory
@@ -333,7 +338,7 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $cleanedRawText
-     * @param void
+     * @return void
      */
     private function mockSetQueryTextOnceExecute($cleanedRawText)
     {

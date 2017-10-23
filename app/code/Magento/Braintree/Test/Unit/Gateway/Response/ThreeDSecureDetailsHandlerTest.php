@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Class ThreeDSecureDetailsHandlerTest
  */
-class ThreeDSecureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
+class ThreeDSecureDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 {
 
     const TRANSACTION_ID = '432er5ww3e';

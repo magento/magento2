@@ -1,8 +1,12 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+/**
+ * @api
+ * @deprecated since version 2.2.0
+ */
 define([
     'Magento_Ui/js/form/components/button',
     'uiRegistry',

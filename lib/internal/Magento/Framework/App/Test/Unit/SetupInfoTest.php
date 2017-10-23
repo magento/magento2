@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit;
 
 use \Magento\Framework\App\SetupInfo;
 
-class SetupInfoTest extends \PHPUnit_Framework_TestCase
+class SetupInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * A default fixture
@@ -24,7 +24,7 @@ class SetupInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorExceptions($server, $expectedError)
     {
-        $this->setExpectedException('\InvalidArgumentException', $expectedError);
+        $this->expectException('\InvalidArgumentException', $expectedError);
         new SetupInfo($server);
     }
 
@@ -190,6 +190,13 @@ class SetupInfoTest extends \PHPUnit_Framework_TestCase
                     'DOCUMENT_ROOT' => dirname(__DIR__) . DIRECTORY_SEPARATOR,
                     'SCRIPT_FILENAME' => __FILE__,
                     SetupInfo::PARAM_NOT_INSTALLED_URL_PATH => '_files'
+                ],
+                true
+            ],
+            'root within doc root + pub, existent sub-directory' => [
+                [
+                    'DOCUMENT_ROOT' => __DIR__ . '/_files/pub/',
+                    'SCRIPT_FILENAME' => __DIR__ . '/_files/pub/index.php',
                 ],
                 true
             ],

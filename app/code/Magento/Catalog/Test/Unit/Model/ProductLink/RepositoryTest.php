@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,10 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ProductLink;
 
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class RepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -66,69 +69,21 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $linkManagementMock = $this->getMock('\Magento\Catalog\Model\ProductLink\Management', [], [], '', false);
-        $this->productRepositoryMock = $this->getMock('\Magento\Catalog\Model\ProductRepository', [], [], '', false);
-        $this->entityCollectionProviderMock = $this->getMock(
-            'Magento\Catalog\Model\ProductLink\CollectionProvider',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->linkInitializerMock = $this->getMock(
-            'Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->metadataPoolMock = $this->getMock(
-            'Magento\Framework\EntityManager\MetadataPool',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->hydratorPoolMock = $this->getMock(
-            'Magento\Framework\EntityManager\HydratorPool',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->hydratorMock = $this->getMock(
-            'Magento\Framework\Model\Entity\Hydrator',
-            ['extract'],
-            [],
-            '',
-            false
-        );
-        $this->metadataMock = $this->getMock(
-            'Magento\Framework\EntityManager\EntityMetadata',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->linkTypeProvider = $this->getMock(
-            'Magento\Catalog\Model\Product\LinkTypeProvider',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->linkResourceMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Link',
-            [],
-            [],
-            '',
-            false
-        );
+        $linkManagementMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Management::class);
+        $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
+        $this->entityCollectionProviderMock = $this->createMock(\Magento\Catalog\Model\ProductLink\CollectionProvider::class);
+        $this->linkInitializerMock = $this->createMock(\Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks::class);
+        $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $this->hydratorPoolMock = $this->createMock(\Magento\Framework\EntityManager\HydratorPool::class);
+        $this->hydratorMock = $this->createPartialMock(\Magento\Framework\EntityManager\Hydrator::class, ['extract']);
+        $this->metadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
+        $this->linkTypeProvider = $this->createMock(\Magento\Catalog\Model\Product\LinkTypeProvider::class);
+        $this->linkResourceMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Link::class);
         $this->hydratorPoolMock->expects($this->any())->method('getHydrator')->willReturn($this->hydratorMock);
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->metadataMock);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\Catalog\Model\ProductLink\Repository',
+            \Magento\Catalog\Model\ProductLink\Repository::class,
             [
                 'productRepository' => $this->productRepositoryMock,
                 'entityCollectionProvider' => $this->entityCollectionProviderMock,
@@ -147,10 +102,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave()
     {
-        $entityMock = $this->getMock('\Magento\Catalog\Model\ProductLink\Link', [], [], '', false);
-        $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
 
-        $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $linkedProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $parentId = 42;
         $linkedProductId = 37;
         $typeId = 4;
@@ -184,9 +139,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveWithException()
     {
-        $entityMock = $this->getMock('\Magento\Catalog\Model\ProductLink\Link', [], [], '', false);
-        $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $linkedProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $parentId = 42;
         $linkedProductId = 37;
         $typeId = 4;
@@ -218,9 +173,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $entityMock = $this->getMock('\Magento\Catalog\Model\ProductLink\Link', [], [], '', false);
-        $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $linkedProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $parentId = 42;
         $linkedProductId = 37;
         $typeId = 4;
@@ -255,9 +210,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteWithInvalidDataException()
     {
-        $entityMock = $this->getMock('\Magento\Catalog\Model\ProductLink\Link', [], [], '', false);
-        $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $linkedProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $parentId = 42;
         $linkedProductId = 37;
         $typeId = 4;
@@ -293,9 +248,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteWithNoSuchEntityException()
     {
-        $entityMock = $this->getMock('\Magento\Catalog\Model\ProductLink\Link', [], [], '', false);
-        $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $linkedProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
             [
                 ['product', false, null, false, $productMock],

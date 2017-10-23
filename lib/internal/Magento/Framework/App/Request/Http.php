@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Request;
 
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\RequestContentInterface;
 use Magento\Framework\App\RequestSafetyInterface;
 use Magento\Framework\App\Route\ConfigInterface\Proxy as ConfigInterface;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
@@ -16,7 +16,7 @@ use Magento\Framework\Stdlib\StringUtils;
 /**
  * Http request
  */
-class Http extends Request implements RequestInterface, RequestSafetyInterface
+class Http extends Request implements RequestContentInterface, RequestSafetyInterface
 {
     /**#@+
      * HTTP Ports
@@ -100,7 +100,7 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
      * @param ConfigInterface $routeConfig
      * @param PathInfoProcessorInterface $pathInfoProcessor
      * @param ObjectManagerInterface  $objectManager
-     * @param string|null $uri
+     * @param \Zend\Uri\UriInterface|string|null $uri
      * @param array $directFrontNames
      */
     public function __construct(
@@ -149,25 +149,50 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
                 return $this;
             }
 
-            // Remove the query string from REQUEST_URI
-            $pos = strpos($requestUri, '?');
-            if ($pos) {
-                $requestUri = substr($requestUri, 0, $pos);
-            }
-
+            $requestUri = $this->removeRepitedSlashes($requestUri);
+            $parsedRequestUri = explode('?', $requestUri, 2);
+            $queryString = !isset($parsedRequestUri[1]) ? '' : '?' . $parsedRequestUri[1];
             $baseUrl = $this->getBaseUrl();
-            $pathInfo = substr($requestUri, strlen($baseUrl));
-            if (!empty($baseUrl) && false === $pathInfo) {
-                $pathInfo = '';
-            } elseif (null === $baseUrl) {
-                $pathInfo = $requestUri;
+            $pathInfo = (string)substr($parsedRequestUri[0], (int)strlen($baseUrl));
+
+            if ($this->isNoRouteUri($baseUrl, $pathInfo)) {
+                $pathInfo = 'noroute';
             }
             $pathInfo = $this->pathInfoProcessor->process($this, $pathInfo);
             $this->originalPathInfo = (string)$pathInfo;
-            $this->requestString = $pathInfo . ($pos !== false ? substr($requestUri, $pos) : '');
+            $this->requestString = $pathInfo . $queryString;
         }
         $this->pathInfo = (string)$pathInfo;
         return $this;
+    }
+
+    /**
+     * Remove repeated slashes from the start of the path.
+     *
+     * @param string $pathInfo
+     * @return string
+     */
+    private function removeRepitedSlashes($pathInfo)
+    {
+        $firstChar = (string)substr($pathInfo, 0, 1);
+        if ($firstChar == '/') {
+            $pathInfo = '/' . ltrim($pathInfo, '/');
+        }
+
+        return $pathInfo;
+    }
+
+    /**
+     * Check is URI should be marked as no route, helps route to 404 URI like `index.phpadmin`.
+     *
+     * @param string $baseUrl
+     * @param string $pathInfo
+     * @return bool
+     */
+    private function isNoRouteUri($baseUrl, $pathInfo)
+    {
+        $firstChar = (string)substr($pathInfo, 0, 1);
+        return $baseUrl !== '' && !in_array($firstChar, ['/', '']);
     }
 
     /**
@@ -408,8 +433,6 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
         return [];
     }
 
-
-
     /**
      * {@inheritdoc}
      */
@@ -424,6 +447,4 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
         }
         return $this->isSafeMethod;
     }
-
-    
 }

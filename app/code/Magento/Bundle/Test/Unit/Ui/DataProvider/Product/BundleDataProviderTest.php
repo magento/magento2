@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product;
@@ -12,7 +12,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Bundle\Helper\Data;
 
-class BundleDataProviderTest extends \PHPUnit_Framework_TestCase
+class BundleDataProviderTest extends \PHPUnit\Framework\TestCase
 {
     const ALLOWED_TYPE = 'simple';
 

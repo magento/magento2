@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 /**
  * @magentoAppArea adminhtml
  */
-class JsTest extends \PHPUnit_Framework_TestCase
+class JsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Tax/_files/tax_classes.php
@@ -18,7 +18,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Tax\Model\Calculation\Rule $fixtureTaxRule */
-        $fixtureTaxRule = $objectManager->create('Magento\Tax\Model\Calculation\Rule');
+        $fixtureTaxRule = $objectManager->create(\Magento\Tax\Model\Calculation\Rule::class);
         $fixtureTaxRule->load('Test Rule', 'code');
         $defaultCustomerTaxClass = 3;
         $fixtureTaxRule
@@ -27,7 +27,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
             ->setTaxRateIds($fixtureTaxRule->getRates())
             ->saveCalculationData();
         /** @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Js $block */
-        $block = $objectManager->create('Magento\Catalog\Block\Adminhtml\Product\Edit\Js');
+        $block = $objectManager->create(\Magento\Catalog\Block\Adminhtml\Product\Edit\Js::class);
         $jsonResult = $block->getAllRatesByProductClassJson();
         $decodedResult = json_decode($jsonResult);
         $this->assertNotEmpty($decodedResult, 'Resulting JSON is invalid.');

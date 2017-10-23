@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\DataProvider;
@@ -12,7 +12,7 @@ use Magento\Ui\DataProvider\EavValidationRules;
 /**
  * Class EavValidationRulesTest
  */
-class EavValidationRulesTest extends \PHPUnit_Framework_TestCase
+class EavValidationRulesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

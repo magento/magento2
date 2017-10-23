@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Block\Adminhtml\Template;
@@ -13,6 +13,7 @@ use Magento\Backend\Block\Widget\ContainerInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @method array getTemplateOptions()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Edit extends Widget implements ContainerInterface
 {
@@ -101,7 +102,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function updateButton($buttonId, $key, $data)
     {
@@ -110,7 +111,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
     {
@@ -118,7 +119,7 @@ class Edit extends Widget implements ContainerInterface
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function removeButton($buttonId)
     {
@@ -216,12 +217,12 @@ class Edit extends Widget implements ContainerInterface
             null
         );
         $this->toolbar->pushButtons($this, $this->buttonList);
-        $this->addChild('form', 'Magento\Email\Block\Adminhtml\Template\Edit\Form');
+        $this->addChild('form', \Magento\Email\Block\Adminhtml\Template\Edit\Form::class);
         return parent::_prepareLayout();
     }
 
     /**
-     *{@inheritdoc}
+     * {@inheritdoc}
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {

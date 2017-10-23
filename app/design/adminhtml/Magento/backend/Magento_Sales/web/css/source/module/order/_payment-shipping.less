@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2016 Magento. All rights reserved.
+//  * Copyright © Magento, Inc. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -7,7 +7,7 @@
 //  Order Payment & Shipping Information
 //  ---------------------------------------------
 
-.admin__payment-method-wapper {
+.admin__payment-method-wrapper {
     margin: 0;
     .admin__field {
         margin-left: 0;
@@ -72,6 +72,12 @@
         span {
             top: 22px;
         }
+    }
+}
+
+.order-shipping-method {
+    .admin__page-section-title > span {
+        &:extend(.validation-symbol all);
     }
 }
 

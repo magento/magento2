@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Filter;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class TextTest extends \PHPUnit_Framework_TestCase
+class TextTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Backend\Block\Widget\Grid\Column\Filter\Text*/
     protected $block;
@@ -27,18 +27,18 @@ class TextTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Backend\Block\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
             ->setMethods(['getEscaper'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->escaper = $this->getMock('Magento\Framework\Escaper', ['escapeHtml'], [], '', false);
-        $this->helper = $this->getMock('Magento\Framework\DB\Helper', [], [], '', false);
+        $this->escaper = $this->createPartialMock(\Magento\Framework\Escaper::class, ['escapeHtml']);
+        $this->helper = $this->createMock(\Magento\Framework\DB\Helper::class);
 
         $this->context->expects($this->once())->method('getEscaper')->willReturn($this->escaper);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
-            'Magento\Backend\Block\Widget\Grid\Column\Filter\Text',
+            \Magento\Backend\Block\Widget\Grid\Column\Filter\Text::class,
             [
                 'context' => $this->context,
                 'resourceHelper' => $this->helper
@@ -52,7 +52,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
             'id="escapedHtml" value="escapedHtml" ' .
             'class="input-text admin__control-text no-changes" data-ui-id="filter-escapedhtml"  />';
 
-        $column = $this->getMockBuilder('Magento\Backend\Block\Widget\Grid\Column')
+        $column = $this->getMockBuilder(\Magento\Backend\Block\Widget\Grid\Column::class)
             ->setMethods(['getId', 'getHtmlId'])
             ->disableOriginalConstructor()
             ->getMock();

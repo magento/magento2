@@ -1,20 +1,35 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader;
 
-class ClassesScannerTest extends \PHPUnit_Framework_TestCase
+use Magento\Framework\App\Filesystem\DirectoryList;
+
+class ClassesScannerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Code\Reader\ClassesScanner
      */
     private $model;
 
+    /**
+     * the /var/generation directory realpath
+     *
+     * @var string
+     */
+
+    private $generation;
+
     protected function setUp()
     {
-        $this->model = new \Magento\Setup\Module\Di\Code\Reader\ClassesScanner();
+        $this->generation = realpath(__DIR__ . '/../../_files/var/generation');
+        $mock = $this->getMockBuilder(DirectoryList::class)->disableOriginalConstructor()->setMethods(
+            ['getPath']
+        )->getMock();
+        $mock->method('getPath')->willReturn($this->generation);
+        $this->model = new \Magento\Setup\Module\Di\Code\Reader\ClassesScanner([], $mock);
     }
 
     public function testGetList()

@@ -1,12 +1,9 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /*eslint max-nested-callbacks: 0*/
-/*jscs:disable requirePaddingNewLinesInObjects*/
-/*jscs:disable jsDoc*/
-
 define([
     'underscore',
     'uiRegistry',
@@ -21,38 +18,6 @@ define([
             index: ''
         });
 
-        registry.set('provName', {
-            on: function () {
-            },
-            get: function () {
-            },
-            set: function () {
-            }
-        });
-
-        describe('"initProperties" method', function () {
-            it('Check for defined ', function () {
-                expect(obj.hasOwnProperty('initProperties')).toBeDefined();
-            });
-            it('Check answer type', function () {
-                var type = typeof obj.initProperties;
-
-                expect(type).toEqual('function');
-            });
-            it('Check returned value if method called without arguments', function () {
-                expect(obj.initProperties()).toBeDefined();
-            });
-            it('Check returned value type if method called without arguments', function () {
-                var type = typeof obj.initProperties();
-
-                expect(type).toEqual('object');
-            });
-            it('Check "displayed" property', function () {
-                obj.displayed = null;
-                obj.initProperties();
-                expect(obj.displayed).toEqual([]);
-            });
-        });
         describe('"initObservable" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initObservable')).toBeDefined();
@@ -87,6 +52,7 @@ define([
             });
             it('Check returned value if method called with object argument', function () {
                 var arg = {
+                    /** Stub */
                     initContainer: function () {
                     }
                 };
@@ -95,6 +61,7 @@ define([
             });
             it('Check returned value type if method called with object argument', function () {
                 var arg = {
+                        /** Stub */
                         initContainer: function () {
                         }
                     },
@@ -104,6 +71,7 @@ define([
             });
             it('Check called "this.insertToIndexed" method with object argument', function () {
                 var arg = {
+                    /** Stub */
                     initContainer: function () {
                     }
                 };
@@ -124,6 +92,7 @@ define([
             });
             it('Check called "insertToIndexed" method with object argument', function () {
                 var arg = {
+                    /** Stub */
                     initContainer: function () {
                     }
                 };
@@ -178,16 +147,23 @@ define([
                     prefix: 'magento'
                 };
 
+                obj.getPreview = jasmine.createSpy().and.callFake(function () {
+                    return [];
+                });
+
                 expect(obj.buildPreview(arg)).toBeDefined();
             });
             it('Check returned value type if method called with object argument', function () {
                 var arg = {
                         items: [],
                         prefix: 'magento'
-                    },
-                    type = typeof obj.buildPreview(arg);
+                    };
 
-                expect(type).toEqual('string');
+                obj.getPreview = jasmine.createSpy().and.callFake(function () {
+                    return [];
+                });
+
+                expect(typeof obj.buildPreview(arg)).toEqual('string');
             });
             it('Check called "this.getPreview" method with object argument', function () {
                 var arg = {

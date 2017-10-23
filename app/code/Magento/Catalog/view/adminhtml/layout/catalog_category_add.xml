@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -15,7 +15,7 @@
     <body>
         <referenceContainer name="left" htmlTag="div" />
         <referenceContainer name="left">
-            <block class="Magento\Catalog\Block\Adminhtml\Category\Tree" name="category.tree" template="catalog/category/tree.phtml"/>
+            <block class="Magento\Catalog\Block\Adminhtml\Category\Tree" name="category.tree" template="Magento_Catalog::catalog/category/tree.phtml"/>
         </referenceContainer>
         <referenceContainer name="content">
             <uiComponent name="category_form"/>

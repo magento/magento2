@@ -2,7 +2,7 @@
 /**
  * Default application router
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Router;
@@ -48,6 +48,6 @@ class DefaultRouter implements RouterInterface
             }
         }
 
-        return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+        return $this->actionFactory->create(\Magento\Framework\App\Action\Forward::class);
     }
 }

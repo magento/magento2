@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Http\Client;
@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class TransactionSubmitForSettlementTest
  */
-class TransactionSubmitForSettlementTest extends \PHPUnit_Framework_TestCase
+class TransactionSubmitForSettlementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TransactionSubmitForSettlement
@@ -90,7 +90,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit_Framework_TestCase
      */
     private function getTransferObjectMock()
     {
-        $mock = $this->getMock(TransferInterface::class);
+        $mock = $this->createMock(TransferInterface::class);
         $mock->expects($this->once())
             ->method('getBody')
             ->willReturn([

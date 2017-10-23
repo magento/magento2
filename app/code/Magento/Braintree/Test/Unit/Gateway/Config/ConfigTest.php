@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,12 +8,14 @@ namespace Magento\Braintree\Test\Unit\Gateway\Config;
 
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class ConfigTest
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     const METHOD_CODE = 'braintree';
 
@@ -27,23 +29,43 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     private $scopeConfigMock;
 
+    /**
+     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializerMock;
+
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->serializerMock = $this->createMock(Json::class);
 
-        $this->model = new Config($this->scopeConfigMock, self::METHOD_CODE);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            Config::class,
+            [
+                'scopeConfig' => $this->scopeConfigMock,
+                'methodCode' => self::METHOD_CODE,
+                'serializer' => $this->serializerMock
+            ]
+        );
     }
 
     /**
-     * @param string $value
+     * @param string $encodedValue
+     * @param string|array $value
      * @param array $expected
      * @dataProvider getCountrySpecificCardTypeConfigDataProvider
      */
-    public function testGetCountrySpecificCardTypeConfig($value, $expected)
+    public function testGetCountrySpecificCardTypeConfig($encodedValue, $value, array $expected)
     {
         $this->scopeConfigMock->expects(static::once())
             ->method('getValue')
             ->with($this->getPath(Config::KEY_COUNTRY_CREDIT_CARD), ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($encodedValue);
+
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with($encodedValue)
             ->willReturn($value);
 
         static::assertEquals(
@@ -58,11 +80,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function getCountrySpecificCardTypeConfigDataProvider()
     {
         return [
-            [
-                serialize(['GB' => ['VI', 'AE'], 'US' => ['DI', 'JCB']]),
+            'valid data' => [
+                '{"GB":["VI","AE"],"US":["DI","JCB"]}',
+                ['GB' => ['VI', 'AE'], 'US' => ['DI', 'JCB']],
                 ['GB' => ['VI', 'AE'], 'US' => ['DI', 'JCB']]
             ],
-            [
+            'non-array value' => [
+                '""',
                 '',
                 []
             ]
@@ -146,17 +170,29 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers       \Magento\Braintree\Gateway\Config\Config::getCountryAvailableCardTypes
      * @dataProvider getCountrySpecificCardTypeConfigDataProvider
+     * @param string $encodedData
+     * @param string|array $data
+     * @param array $countryData
      */
-    public function testCountryAvailableCardTypes($data, $countryData)
+    public function testCountryAvailableCardTypes($encodedData, $data, array $countryData)
     {
         $this->scopeConfigMock->expects(static::any())
             ->method('getValue')
             ->with($this->getPath(Config::KEY_COUNTRY_CREDIT_CARD), ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($encodedData);
+
+        $this->serializerMock->expects($this->any())
+            ->method('unserialize')
+            ->with($encodedData)
             ->willReturn($data);
 
         foreach ($countryData as $countryId => $types) {
             $result = $this->model->getCountryAvailableCardTypes($countryId);
             static::assertEquals($types, $result);
+        }
+
+        if (empty($countryData)) {
+            static::assertEquals($data, "");
         }
     }
 
@@ -268,6 +304,68 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         return [
             ['configValue' => 0, 'expected' => []],
             ['configValue' => 1, 'expected' => ['GB', 'US']],
+        ];
+    }
+
+    /**
+     * @covers \Magento\Braintree\Gateway\Config\Config::getDynamicDescriptors
+     * @param $name
+     * @param $phone
+     * @param $url
+     * @param array $expected
+     * @dataProvider descriptorsDataProvider
+     */
+    public function testGetDynamicDescriptors($name, $phone, $url, array $expected)
+    {
+        $this->scopeConfigMock->expects(static::at(0))
+            ->method('getValue')
+            ->with($this->getPath('descriptor_name'), ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($name);
+        $this->scopeConfigMock->expects(static::at(1))
+            ->method('getValue')
+            ->with($this->getPath('descriptor_phone'), ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($phone);
+        $this->scopeConfigMock->expects(static::at(2))
+            ->method('getValue')
+            ->with($this->getPath('descriptor_url'), ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($url);
+
+        $actual = $this->model->getDynamicDescriptors();
+        static::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Get variations to test dynamic descriptors
+     * @return array
+     */
+    public function descriptorsDataProvider()
+    {
+        $name = 'company * product';
+        $phone = '333-22-22-333';
+        $url = 'https://test.url.mage.com';
+        return [
+            [
+                $name, $phone, $url,
+                'expected' => [
+                    'name' => $name, 'phone' => $phone, 'url' => $url
+                ]
+            ],
+            [
+                $name, null, null,
+                'expected' => [
+                    'name' => $name
+                ]
+            ],
+            [
+                null, null, $url,
+                'expected' => [
+                    'url' => $url
+                ]
+            ],
+            [
+                null, null, null,
+                'expected' => []
+            ]
         ];
     }
 

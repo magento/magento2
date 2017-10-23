@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -84,14 +84,16 @@ class Config extends Section
             ? $fields['configurable_attributes_data']['value']
             : [];
 
-        $attributesValue = isset($fields['configurable_attributes_data']['source'])
-            ? $fields['configurable_attributes_data']['source']->getAttributesData()
-            : [];
+        $attributeSource = isset($fields['configurable_attributes_data']['source'])
+            ? $fields['configurable_attributes_data']['source']
+            : null;
+        $attributesValue = $attributeSource !== null ? $attributeSource->getAttributesData() : [];
+
         foreach ($attributesValue as $key => $value) {
             $attributesValue[$key] = array_merge($value, $attributes['attributes_data'][$key]);
         }
         $this->createConfigurations();
-        $this->getAttributeBlock()->fillAttributes($attributesValue);
+        $this->getAttributeBlock()->fillAttributes($attributesValue, $attributeSource);
         if (!empty($attributes['matrix'])) {
             $this->generateVariations();
             $this->getVariationsBlock()->fillVariations($attributes['matrix']);
@@ -130,7 +132,7 @@ class Config extends Section
     public function getAttributeBlock()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config\Attribute',
+            \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config\Attribute::class,
             ['element' => $this->_rootElement]
         );
     }
@@ -143,7 +145,7 @@ class Config extends Section
     public function getVariationsBlock()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config\Matrix',
+            \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config\Matrix::class,
             ['element' => $this->_rootElement->find($this->variationsMatrix)]
         );
     }
@@ -156,7 +158,7 @@ class Config extends Section
     public function getTemplateBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Template',
+            \Magento\Backend\Test\Block\Template::class,
             ['element' => $this->_rootElement->find($this->template, Locator::SELECTOR_XPATH)]
         );
     }

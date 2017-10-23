@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Msrp\Block\Adminhtml\Product\Helper\Form\Type;
@@ -14,7 +14,9 @@ use Magento\Framework\Escaper;
  */
 class Price extends \Magento\Framework\Data\Form\Element\Select
 {
-    /** @var \Magento\Msrp\Model\Config */
+    /**
+     * @var \Magento\Msrp\Model\Config
+     */
     protected $config;
 
     /**

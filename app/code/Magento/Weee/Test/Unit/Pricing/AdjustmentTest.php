@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use \Magento\Weee\Pricing\Adjustment;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
 
-class AdjustmentTest extends \PHPUnit_Framework_TestCase
+class AdjustmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Adjustment
@@ -37,8 +37,8 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->weeeHelper = $this->getMock('Magento\Weee\Helper\Data', [], [], '', false);
-        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+        $this->weeeHelper = $this->createMock(\Magento\Weee\Helper\Data::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->will($this->returnCallback(
@@ -103,7 +103,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testApplyAdjustment($amount, $amountOld, $expectedResult)
     {
-        $object = $this->getMockForAbstractClass('Magento\Framework\Pricing\SaleableInterface');
+        $object = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
 
         $this->weeeHelper->expects($this->any())
             ->method('getAmountExclTax')

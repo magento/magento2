@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 
 namespace Magento\Catalog\Model\Product;
 
@@ -13,58 +12,33 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Catalog product option model
  *
- * @method \Magento\Catalog\Model\ResourceModel\Product\Option getResource()
+ * @api
  * @method int getProductId()
  * @method \Magento\Catalog\Model\Product\Option setProductId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 100.0.2
  */
 class Option extends AbstractExtensibleModel implements ProductCustomOptionInterface
 {
-    const OPTION_GROUP_TEXT = 'text';
-
-    const OPTION_GROUP_FILE = 'file';
-
-    const OPTION_GROUP_SELECT = 'select';
-
-    const OPTION_GROUP_DATE = 'date';
-
-    const OPTION_TYPE_FIELD = 'field';
-
-    const OPTION_TYPE_AREA = 'area';
-
-    const OPTION_TYPE_FILE = 'file';
-
-    const OPTION_TYPE_DROP_DOWN = 'drop_down';
-
-    const OPTION_TYPE_RADIO = 'radio';
-
-    const OPTION_TYPE_CHECKBOX = 'checkbox';
-
-    const OPTION_TYPE_MULTIPLE = 'multiple';
-
-    const OPTION_TYPE_DATE = 'date';
-
-    const OPTION_TYPE_DATE_TIME = 'date_time';
-
-    const OPTION_TYPE_TIME = 'time';
-
     /**
      * @var Option\Repository
+     * @since 101.0.0
      */
     protected $optionRepository;
 
     /**
      * Option type percent
+     * @since 101.0.0
      */
     protected static $typePercent = 'percent';
 
@@ -86,9 +60,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     const KEY_IMAGE_SIZE_X = 'image_size_x';
     /**#@-*/
 
-    /**
-     * @var Product
-     */
+    /**#@-*/
     protected $product;
 
     /**
@@ -176,6 +148,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Get resource instance
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @deprecated 101.1.0 because resource models should be used directly
      */
     protected function _getResource()
     {
@@ -187,7 +160,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\ResourceModel\Product\Option');
+        $this->_init(\Magento\Catalog\Model\ResourceModel\Product\Option::class);
         parent::_construct();
     }
 
@@ -216,6 +189,18 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         }
 
         return null;
+    }
+
+    /**
+     * Whether or not the option type contains sub-values
+     *
+     * @param string $type
+     * @return bool
+     * @since 101.1.0
+     */
+    public function hasValues($type = null)
+    {
+        return $this->getGroupByType($type) == self::OPTION_GROUP_SELECT;
     }
 
     /**
@@ -351,6 +336,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @since 101.0.0
      */
     public function beforeSave()
     {
@@ -466,6 +452,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      *
      * @param Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
+     * @since 101.0.0
      */
     public function getProductOptions(Product $product)
     {
@@ -836,6 +823,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Return regular price.
      *
      * @return float|int
+     * @since 101.0.0
      */
     public function getRegularPrice()
     {
@@ -896,7 +884,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     {
         if (null === $this->optionRepository) {
             $this->optionRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\Product\Option\Repository');
+                ->get(\Magento\Catalog\Model\Product\Option\Repository::class);
         }
         return $this->optionRepository;
     }
@@ -908,9 +896,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\MetadataPool');
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }
+
     //@codeCoverageIgnoreEnd
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,7 @@ class StockStatusCriteriaMapper extends GenericMapper
      */
     protected function init()
     {
-        $this->initResource('Magento\CatalogInventory\Model\ResourceModel\Stock\Status');
+        $this->initResource(\Magento\CatalogInventory\Model\ResourceModel\Stock\Status::class);
     }
 
     /**
@@ -56,12 +56,9 @@ class StockStatusCriteriaMapper extends GenericMapper
      * @param int|array|\Magento\Catalog\Model\Product|\Magento\Catalog\Model\Product[] $products
      * @return void
      */
-    public function mapProductsFilter($products)
+    public function mapProductsFilter(...$products)
     {
         $productIds = [];
-        if (!is_array($products)) {
-            $products = [$products];
-        }
         foreach ($products as $product) {
             if ($product instanceof \Magento\Catalog\Model\Product) {
                 $productIds[] = $product->getId();

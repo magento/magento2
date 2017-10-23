@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use Magento\Framework\Module\Dir\Reader as ModuleDirReader;
 /**
  * @covers \Magento\Framework\Config\GenericSchemaLocator
  */
-class GenericSchemaLocatorTest extends \PHPUnit_Framework_TestCase
+class GenericSchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -37,7 +37,7 @@ class GenericSchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->moduleReaderMock = $this->getMock(ModuleDirReader::class, [], [], '', false);
+        $this->moduleReaderMock = $this->createMock(ModuleDirReader::class);
         $this->schemaLocator = $this->createNewSchemaLocatorInstance(
             $this->moduleReaderMock,
             'Test_ModuleName',

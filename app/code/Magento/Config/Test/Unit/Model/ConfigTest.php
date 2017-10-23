@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Test\Unit\Model;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config
@@ -59,27 +62,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eventManagerMock = $this->getMock(
-            'Magento\Framework\Event\ManagerInterface',
-            [],
-            [],
-            '',
-            false
+        $this->_eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->_structureReaderMock = $this->createPartialMock(
+            \Magento\Config\Model\Config\Structure\Reader::class,
+            ['getConfiguration']
         );
-        $this->_structureReaderMock = $this->getMock(
-            'Magento\Config\Model\Config\Structure\Reader',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_configStructure = $this->getMock(
-            'Magento\Config\Model\Config\Structure',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_configStructure = $this->createMock(\Magento\Config\Model\Config\Structure::class);
 
         $this->_structureReaderMock->expects(
             $this->any()
@@ -89,30 +77,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_configStructure)
         );
 
-        $this->_transFactoryMock = $this->getMock(
-            'Magento\Framework\DB\TransactionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->_transFactoryMock = $this->createPartialMock(
+            \Magento\Framework\DB\TransactionFactory::class,
+            ['create']
         );
-        $this->_appConfigMock = $this->getMock('Magento\Framework\App\Config\ReinitableConfigInterface');
-        $this->_configLoaderMock = $this->getMock(
-            'Magento\Config\Model\Config\Loader',
-            ['getConfigByPath'],
-            [],
-            '',
-            false
+        $this->_appConfigMock = $this->createMock(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $this->_configLoaderMock = $this->createPartialMock(
+            \Magento\Config\Model\Config\Loader::class,
+            ['getConfigByPath']
         );
-        $this->_dataFactoryMock = $this->getMock(
-            'Magento\Framework\App\Config\ValueFactory',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_dataFactoryMock = $this->createMock(\Magento\Framework\App\Config\ValueFactory::class);
 
-        $this->_storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
 
         $this->_model = new \Magento\Config\Model\Config(
             $this->_appConfigMock,
@@ -145,7 +121,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveToCheckAdminSystemConfigChangedSectionEvent()
     {
-        $transactionMock = $this->getMock('Magento\Framework\DB\Transaction', [], [], '', false);
+        $transactionMock = $this->createMock(\Magento\Framework\DB\Transaction::class);
 
         $this->_transFactoryMock->expects($this->any())->method('create')->will($this->returnValue($transactionMock));
 
@@ -175,7 +151,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveToCheckScopeDataSet()
     {
-        $transactionMock = $this->getMock('Magento\Framework\DB\Transaction', [], [], '', false);
+        $transactionMock = $this->createMock(\Magento\Framework\DB\Transaction::class);
 
         $this->_transFactoryMock->expects($this->any())->method('create')->will($this->returnValue($transactionMock));
 
@@ -199,9 +175,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->arrayHasKey('store')
         );
 
-        $group = $this->getMock('Magento\Config\Model\Config\Structure\Element\Group', [], [], '', false);
+        $group = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
 
-        $field = $this->getMock('Magento\Config\Model\Config\Structure\Element\Field', [], [], '', false);
+        $field = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Field::class);
 
         $this->_configStructure->expects(
             $this->at(0)
@@ -223,7 +199,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($field)
         );
 
-        $website = $this->getMock('Magento\Store\Model\Website', [], [], '', false);
+        $website = $this->createMock(\Magento\Store\Model\Website::class);
         $website->expects($this->any())->method('getCode')->will($this->returnValue('website_code'));
         $this->_storeManager->expects($this->any())->method('getWebsite')->will($this->returnValue($website));
         $this->_storeManager->expects($this->any())->method('getWebsites')->will($this->returnValue([$website]));
@@ -233,12 +209,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setGroups(['1' => ['fields' => ['key' => ['data']]]]);
 
-        $backendModel = $this->getMock(
-            'Magento\Framework\App\Config\Value',
-            ['setPath', 'addData', '__sleep', '__wakeup'],
-            [],
-            '',
-            false
+        $backendModel = $this->createPartialMock(
+            \Magento\Framework\App\Config\Value::class,
+            ['setPath', 'addData', '__sleep', '__wakeup']
         );
         $backendModel->expects(
             $this->once()
@@ -307,7 +280,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testSetDataByPathWrongDepth($path, $expectedException)
     {
         $expectedException = 'Allowed depth of configuration is 3 (<section>/<group>/<field>). ' . $expectedException;
-        $this->setExpectedException('\UnexpectedValueException', $expectedException);
+        $this->expectException('\UnexpectedValueException', $expectedException);
         $value = 'value';
         $this->_model->setDataByPath($path, $value);
     }

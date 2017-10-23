@@ -1,32 +1,32 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
 use Magento\Customer\Model\ResourceModel\Customer as ResourceCustomer;
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
-use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\ScopeInterface;
 
 /**
  * Customer model
  *
+ * @api
  * @method int getWebsiteId() getWebsiteId()
  * @method Customer setWebsiteId($value)
  * @method int getStoreId() getStoreId()
  * @method string getEmail() getEmail()
- * @method ResourceCustomer _getResource()
  * @method mixed getDisableAutoGroupChange()
  * @method Customer setDisableAutoGroupChange($value)
  * @method Customer setGroupId($value)
@@ -39,6 +39,7 @@ use Magento\Store\Model\ScopeInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Customer extends \Magento\Framework\Model\AbstractModel
 {
@@ -284,7 +285,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function _construct()
     {
-        $this->_init('Magento\Customer\Model\ResourceModel\Customer');
+        $this->_init(\Magento\Customer\Model\ResourceModel\Customer::class);
     }
 
     /**
@@ -304,7 +305,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $this->dataObjectHelper->populateWithArray(
             $customerDataObject,
             $customerData,
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $customerDataObject->setAddresses($addressesData)
             ->setId($this->getId());
@@ -321,7 +322,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         $customerDataAttributes = $this->dataObjectProcessor->buildOutputDataArray(
             $customer,
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
 
         foreach ($customerDataAttributes as $attributeCode => $attributeData) {
@@ -334,7 +335,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $customAttributes = $customer->getCustomAttributes();
         if ($customAttributes !== null) {
             foreach ($customAttributes as $attribute) {
-                $this->setDataUsingMethod($attribute->getAttributeCode(), $attribute->getValue());
+                $this->setData($attribute->getAttributeCode(), $attribute->getValue());
             }
         }
 
@@ -967,7 +968,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Validate customer attribute values.
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return bool
      */
     public function validate()
@@ -1317,6 +1318,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if customer is locked
      *
      * @return boolean
+     * @since 100.1.0
      */
     public function isCustomerLocked()
     {
@@ -1333,6 +1335,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Return Password Confirmation
      *
      * @return string
+     * @since 100.1.0
      */
     public function getPasswordConfirm()
     {
@@ -1343,6 +1346,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Return Password
      *
      * @return string
+     * @since 100.1.0
      */
     public function getPassword()
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config\FileUploader;
@@ -8,7 +8,7 @@ namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config\FileUploade
 use Magento\Theme\Controller\Adminhtml\Design\Config\FileUploader\Save;
 use Magento\Framework\Controller\ResultFactory;
 
-class SaveTest extends \PHPUnit_Framework_TestCase
+class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
@@ -27,23 +27,29 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultPage = $this->getMockBuilder('Magento\Framework\Controller\ResultInterface')
+        $this->resultPage = $this->getMockBuilder(\Magento\Framework\Controller\ResultInterface::class)
             ->setMethods(['setData'])
             ->getMockForAbstractClass();
-        $this->fileProcessor = $this->getMockBuilder('Magento\Theme\Model\Design\Config\FileUploader\FileProcessor')
-            ->disableOriginalConstructor()
+        $this->fileProcessor = $this->getMockBuilder(
+            \Magento\Theme\Model\Design\Config\FileUploader\FileProcessor::class
+        )->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
 
         $this->controller = new Save($this->context, $this->fileProcessor);
+    }
+
+    protected function tearDown()
+    {
+        $_FILES = [];
     }
 
     public function testExecute()

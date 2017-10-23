@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Setup;
 
+use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -12,6 +14,21 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 
 class UpgradeData implements UpgradeDataInterface
 {
+    /**
+     * @var FieldDataConverterFactory
+     */
+    private $fieldDataConverterFactory;
+
+    /**
+     * UpgradeData constructor.
+     *
+     * @param FieldDataConverterFactory $fieldDataConverterFactory
+     */
+    public function __construct(
+        FieldDataConverterFactory $fieldDataConverterFactory
+    ) {
+        $this->fieldDataConverterFactory = $fieldDataConverterFactory;
+    }
 
     /**
      * @inheritdoc
@@ -22,6 +39,10 @@ class UpgradeData implements UpgradeDataInterface
 
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $this->upgradeHash($setup);
+        }
+
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+            $this->upgradeSerializedFields($setup);
         }
 
         $setup->endSetup();
@@ -55,5 +76,24 @@ class UpgradeData implements UpgradeDataInterface
             $where = ['user_id = ?' => (int)$customer['user_id']];
             $setup->getConnection()->update($customerEntityTable, $bind, $where);
         }
+    }
+
+    /**
+     * Convert serialized data in fields to json format
+     *
+     * @param ModuleDataSetupInterface $setup
+     *
+     * @return void
+     */
+    private function upgradeSerializedFields($setup)
+    {
+        $fieldDataConverter = $this->fieldDataConverterFactory->create(SerializedToJson::class);
+
+        $fieldDataConverter->convert(
+            $setup->getConnection(),
+            $setup->getTable('admin_user'),
+            'user_id',
+            'extra'
+        );
     }
 }

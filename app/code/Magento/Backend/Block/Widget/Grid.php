@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Block\Widget;
 
 /**
  * Backend grid widget block
  *
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
  * @method string getRowClickCallback() getRowClickCallback()
  * @method \Magento\Backend\Block\Widget\Grid setRowClickCallback() setRowClickCallback(string $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 class Grid extends \Magento\Backend\Block\Widget
 {
@@ -349,7 +350,7 @@ class Grid extends \Magento\Backend\Block\Widget
             $dir = $this->getParam($this->getVarNameDir(), $this->_defaultDir);
             $filter = $this->getParam($this->getVarNameFilter(), null);
 
-            if (is_null($filter)) {
+            if ($filter === null) {
                 $filter = $this->_defaultFilter;
             }
 
@@ -434,7 +435,7 @@ class Grid extends \Magento\Backend\Block\Widget
         $this->setChild(
             'reset_filter_button',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Button'
+                \Magento\Backend\Block\Widget\Button::class
             )->setData(
                 [
                     'label' => __('Reset Filter'),
@@ -446,7 +447,7 @@ class Grid extends \Magento\Backend\Block\Widget
         $this->setChild(
             'search_button',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Button'
+                \Magento\Backend\Block\Widget\Button::class
             )->setData(
                 [
                     'label' => __('Search'),

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
@@ -72,6 +72,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     ) {
         $metadataForm = $this->getMetadataForm($entityType, $formCode, $scope);
         $formData = $metadataForm->extractData($this->getRequest(), $scope);
+        $formData = $metadataForm->compactData($formData);
 
         // Initialize additional attributes
         /** @var \Magento\Framework\DataObject $object */
@@ -80,11 +81,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         foreach ($additionalAttributes as $attributeCode) {
             $formData[$attributeCode] = isset($requestData[$attributeCode]) ? $requestData[$attributeCode] : false;
         }
-
-        $result = $metadataForm->compactData($formData);
-
-        // Re-initialize additional attributes
-        $formData = array_replace($formData, $result);
 
         // Unset unused attributes
         $formAttributes = $metadataForm->getAttributes();
@@ -204,7 +200,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->dataObjectHelper->populateWithArray(
                     $customer,
                     $customerData,
-                    '\Magento\Customer\Api\Data\CustomerInterface'
+                    \Magento\Customer\Api\Data\CustomerInterface::class
                 );
                 $addresses = [];
                 foreach ($addressesData as $addressData) {
@@ -218,7 +214,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $this->dataObjectHelper->populateWithArray(
                         $addressDataObject,
                         $addressData,
-                        '\Magento\Customer\Api\Data\AddressInterface'
+                        \Magento\Customer\Api\Data\AddressInterface::class
                     );
                     $addresses[] = $addressDataObject;
                 }
@@ -247,7 +243,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $isSubscribed = $this->getRequest()->getPost('subscription');
                 }
                 if ($isSubscribed !== null) {
-                    if ($isSubscribed !== 'false') {
+                    if ($isSubscribed !== '0') {
                         $this->_subscriberFactory->create()->subscribeCustomerById($customerId);
                     } else {
                         $this->_subscriberFactory->create()->unsubscribeCustomerById($customerId);
@@ -305,7 +301,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      * Get email notification
      *
      * @return EmailNotificationInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getEmailNotification()
     {

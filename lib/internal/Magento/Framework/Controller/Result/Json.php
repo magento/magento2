@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Controller\Result;
 
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\Controller\AbstractResult;
 use Magento\Framework\Translate\InlineInterface;
 
 /**
  * A possible implementation of JSON response type (instead of hardcoding json_encode() all over the place)
  * Actual for controller actions that serve ajax requests
+ *
+ * @api
  */
 class Json extends AbstractResult
 {
@@ -61,10 +63,11 @@ class Json extends AbstractResult
     /**
      * {@inheritdoc}
      */
-    protected function render(ResponseInterface $response)
+    protected function render(HttpResponseInterface $response)
     {
         $this->translateInline->processResponseBody($this->json, true);
-        $response->representJson($this->json);
+        $response->setHeader('Content-Type', 'application/json', true);
+        $response->setBody($this->json);
         return $this;
     }
 }

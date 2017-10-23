@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Test\Unit\Model\SalesRule;
 
-class CalculatorTest extends \PHPUnit_Framework_TestCase
+class CalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\OfflineShipping\Model\SalesRule\Calculator|\PHPUnit_Framework_MockObject_MockObject
@@ -14,21 +14,18 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = $this->getMock(
-            'Magento\OfflineShipping\Model\SalesRule\Calculator',
-            ['_getRules', '__wakeup'],
-            [],
-            '',
-            false
+        $this->_model = $this->createPartialMock(
+            \Magento\OfflineShipping\Model\SalesRule\Calculator::class,
+            ['_getRules', '__wakeup']
         );
     }
 
     public function testProcessFreeShipping()
     {
-        $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
+        $addressMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $item = $this->getMock('Magento\Quote\Model\Quote\Item', ['getAddress', '__wakeup'], [], '', false);
+        $item = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getAddress', '__wakeup']);
         $item->expects($this->once())->method('getAddress')->will($this->returnValue($addressMock));
 
         $this->_model->expects($this->once())
@@ -37,7 +34,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([]));
 
         $this->assertInstanceOf(
-            'Magento\OfflineShipping\Model\SalesRule\Calculator',
+            \Magento\OfflineShipping\Model\SalesRule\Calculator::class,
             $this->_model->processFreeShipping($item)
         );
 

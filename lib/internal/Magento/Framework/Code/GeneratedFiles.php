@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code;
 
+use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 
 /**
  * Regenerates generated code and DI configuration
@@ -48,7 +48,7 @@ class GeneratedFiles
      *
      * @return void
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @see \Magento\Framework\Code\GeneratedFiles::cleanGeneratedFiles
      */
     public function regenerate()
@@ -57,14 +57,13 @@ class GeneratedFiles
     }
 
     /**
-     * Clean var/generation, var/di and var/cache
+     * Clean generated/code, generated/metadata and var/cache
      *
      * @return void
      */
     public function cleanGeneratedFiles()
     {
         if ($this->write->isExist(self::REGENERATE_FLAG)) {
-
             $enabledCacheTypes = [];
 
             //TODO: to be removed in scope of MAGETWO-53476
@@ -78,15 +77,17 @@ class GeneratedFiles
             //TODO: Till here
 
             $cachePath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::CACHE));
-            $generationPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::GENERATION));
-            $diPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::DI));
+            $generationPath = $this->write->getRelativePath(
+                $this->directoryList->getPath(DirectoryList::GENERATED_CODE)
+            );
+            $diPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::GENERATED_METADATA));
 
-            // Clean var/generation dir
+            // Clean generated/code dir
             if ($this->write->isDirectory($generationPath)) {
                 $this->write->delete($generationPath);
             }
 
-            // Clean var/di
+            // Clean generated/metadata
             if ($this->write->isDirectory($diPath)) {
                 $this->write->delete($diPath);
             }
@@ -101,7 +102,7 @@ class GeneratedFiles
     }
 
     /**
-     * Create flag for cleaning up var/generation, var/di and var/cache directories for subsequent
+     * Create flag for cleaning up generated/code, generated/metadata and var/cache directories for subsequent
      * regeneration of this content
      *
      * @return void
@@ -132,7 +133,6 @@ class GeneratedFiles
         }
         return $enabledCacheTypes;
     }
-
 
     /**
      * Returns path to env.php file
@@ -183,8 +183,7 @@ class GeneratedFiles
      * Enables apppropriate cache types in app/etc/env.php based on the passed in $cacheTypes array
      * TODO: to be removed in scope of MAGETWO-53476
      *
-     * @param string[]
-     *
+     * @param string[] $cacheTypes
      * @return void
      */
     private function enableCacheTypes($cacheTypes)

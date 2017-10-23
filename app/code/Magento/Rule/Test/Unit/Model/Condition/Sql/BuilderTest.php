@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@ namespace Magento\Rule\Test\Unit\Model\Condition\Sql;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Rule\Model\Condition\Sql\Builder|\PHPUnit_Framework_MockObject_MockObject
@@ -17,39 +17,38 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $expressionMock = $this->getMock('\Magento\Rule\Model\Condition\Sql\Expression', [], [], '', false);
-        $expressionFactory = $this->getMock(
-            '\Magento\Rule\Model\Condition\Sql\ExpressionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $expressionMock = $this->createMock(\Magento\Rule\Model\Condition\Sql\Expression::class);
+        $expressionFactory = $this->createPartialMock(
+            \Magento\Rule\Model\Condition\Sql\ExpressionFactory::class,
+            ['create']
         );
         $expressionFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($expressionMock));
         $this->_builder = (new ObjectManagerHelper($this))->getObject(
-            '\Magento\Rule\Model\Condition\Sql\Builder',
+            \Magento\Rule\Model\Condition\Sql\Builder::class,
             ['expressionFactory' => $expressionFactory]
         );
     }
 
     public function testAttachConditionToCollection()
     {
-        $collection = $this->getMock(
-            '\Magento\Eav\Model\Entity\Collection\AbstractCollection',
-            ['getResource', 'getSelect'],
+        $collection = $this->createPartialMock(
+            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
+            ['getResource', 'getSelect']
+        );
+        $combine = $this->createPartialMock(\Magento\Rule\Model\Condition\Combine::class, ['getConditions']);
+        $resource = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['getConnection']);
+        $select = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['where']);
+        $select->expects($this->never())
+            ->method('where');
+
+        $connection = $this->getMockForAbstractClass(
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false
         );
-        $combine = $this->getMock('\Magento\Rule\Model\Condition\Combine', ['getConditions'], [], '', false);
-        $resource = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['getConnection'], [], '', false);
-        $select = $this->getMock('\Magento\Framework\DB\Select', ['where'], [], '', false);
-        $select->expects($this->never())
-            ->method('where');
-
-        $connection = $this->getMockForAbstractClass('\Magento\Framework\DB\Adapter\AdapterInterface', [], '', false);
 
         $collection->expects($this->once())
             ->method('getResource')

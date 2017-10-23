@@ -1,44 +1,46 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Model\Plugin;
 
-use Closure;
-use Magento\Sales\Model\Order\Item;
+use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\GiftMessage\Helper\Message as MessageHelper;
+use Magento\Quote\Model\Quote\Item\ToOrderItem;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 class QuoteItem
 {
     /**
-     * @var \Magento\GiftMessage\Helper\Message
+     * @var MessageHelper
      */
     protected $_helper;
 
     /**
-     * @param \Magento\GiftMessage\Helper\Message $helper
+     * @param MessageHelper $helper
      */
-    public function __construct(\Magento\GiftMessage\Helper\Message $helper)
+    public function __construct(MessageHelper $helper)
     {
         $this->_helper = $helper;
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Item\ToOrderItem $subject
-     * @param callable $proceed
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * Apply gift message per every item in order if available
+     *
+     * @param ToOrderItem $subject
+     * @param OrderItemInterface $orderItem
+     * @param AbstractItem $item
      * @param array $additional
-     * @return Item
+     * @return OrderItemInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundConvert(
-        \Magento\Quote\Model\Quote\Item\ToOrderItem $subject,
-        Closure $proceed,
-        \Magento\Quote\Model\Quote\Item\AbstractItem $item,
+    public function afterConvert(
+        ToOrderItem $subject,
+        OrderItemInterface $orderItem,
+        AbstractItem $item,
         $additional = []
     ) {
-        /** @var $orderItem Item */
-        $orderItem = $proceed($item, $additional);
         $isAvailable = $this->_helper->isMessagesAllowed('item', $item, $item->getStoreId());
 
         $orderItem->setGiftMessageId($item->getGiftMessageId());

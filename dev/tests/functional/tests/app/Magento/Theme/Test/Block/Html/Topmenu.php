@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -61,6 +61,26 @@ class Topmenu extends Block
             );
         }
         $category[0]->click();
+    }
+
+    /**
+     * Hover on category from top menu by name.
+     *
+     * @param string $categoryName
+     * @return void
+     */
+    public function hoverCategoryByName($categoryName)
+    {
+        $rootElement = $this->_rootElement;
+        $category = $this->waitLoadTopMenu($categoryName);
+        if ($category[1]) {
+            $rootElement->waitUntil(
+                function () use ($category) {
+                    return $category[0]->isVisible() ? true : null;
+                }
+            );
+        }
+        $category[0]->hover();
     }
 
     /**

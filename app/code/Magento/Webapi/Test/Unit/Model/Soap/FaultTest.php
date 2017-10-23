@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Soap;
@@ -10,7 +10,7 @@ use \Magento\Webapi\Model\Soap\Fault;
 /**
  * Test SOAP fault model.
  */
-class FaultTest extends \PHPUnit_Framework_TestCase
+class FaultTest extends \PHPUnit\Framework\TestCase
 {
     const WSDL_URL = 'http://host.com/?wsdl&services=customerV1';
 
@@ -35,7 +35,7 @@ class FaultTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock('\Magento\Framework\App\RequestInterface');
+        $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         /** Initialize SUT. */
         $details = ['param1' => 'value1', 'param2' => 2];
         $code = 111;
@@ -46,12 +46,12 @@ class FaultTest extends \PHPUnit_Framework_TestCase
             $details
         );
         $this->_soapServerMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Soap\Server'
+            \Magento\Webapi\Model\Soap\Server::class
         )->disableOriginalConstructor()->getMock();
         $this->_soapServerMock->expects($this->any())->method('generateUri')->will($this->returnValue(self::WSDL_URL));
 
         $this->_localeResolverMock = $this->getMockBuilder(
-            'Magento\Framework\Locale\Resolver'
+            \Magento\Framework\Locale\Resolver::class
         )->disableOriginalConstructor()->getMock();
         $this->_localeResolverMock->expects(
             $this->any()
@@ -61,7 +61,7 @@ class FaultTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('en_US')
         );
 
-        $this->_appStateMock = $this->getMock('\Magento\Framework\App\State', [], [], '', false);
+        $this->_appStateMock = $this->createMock(\Magento\Framework\App\State::class);
 
         $this->_soapFault = new \Magento\Webapi\Model\Soap\Fault(
             $this->_requestMock,

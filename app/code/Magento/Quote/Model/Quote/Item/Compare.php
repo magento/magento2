@@ -1,17 +1,44 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Quote\Model\Quote\Item;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\JsonValidator;
 
 /**
- * Class Compare
+ * Compare quote items
  */
 class Compare
 {
+    /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @var JsonValidator
+     */
+    private $jsonValidator;
+
+    /**
+     * Constructor
+     *
+     * @param Json|null $serializer
+     * @param JsonValidator|null $jsonValidator
+     */
+    public function __construct(
+        Json $serializer = null,
+        JsonValidator $jsonValidator = null
+    ) {
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->jsonValidator = $jsonValidator ?: ObjectManager::getInstance()->get(JsonValidator::class);
+    }
+
     /**
      * Returns option values adopted to compare
      *
@@ -20,12 +47,14 @@ class Compare
      */
     protected function getOptionValues($value)
     {
-        if (is_string($value) && is_array(@unserialize($value))) {
-            $value = @unserialize($value);
-            unset($value['qty'], $value['uenc']);
-            $value = array_filter($value, function ($optionValue) {
-                return !empty($optionValue);
-            });
+        if (is_string($value) && $this->jsonValidator->isValid($value)) {
+            $value = $this->serializer->unserialize($value);
+            if (is_array($value)) {
+                unset($value['qty'], $value['uenc']);
+                $value = array_filter($value, function ($optionValue) {
+                    return !empty($optionValue);
+                });
+            }
         }
         return $value;
     }

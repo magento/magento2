@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
+ * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @since 100.0.2
  */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
@@ -113,10 +115,10 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
     protected function _getAdditionalElementTypes()
     {
         return [
-            'price' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price',
-            'weight' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight',
-            'image' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image',
-            'boolean' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Boolean'
+            'price' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price::class,
+            'weight' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight::class,
+            'image' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image::class,
+            'boolean' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Boolean::class
         ];
     }
 

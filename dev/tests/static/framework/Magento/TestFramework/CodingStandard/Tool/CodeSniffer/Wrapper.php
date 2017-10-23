@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,19 +9,15 @@
  */
 namespace Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 
-class Wrapper extends \PHP_CodeSniffer_CLI
+use PHP_CodeSniffer\Config;
+use PHP_CodeSniffer\Runner;
+
+class Wrapper extends Runner
 {
     /**
-     * Emulate console arguments
-     *
-     * @param $values
-     * @return \Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper
+     * @var array
      */
-    public function setValues($values)
-    {
-        $this->values = $values;
-        return $this;
-    }
+    private $settings = [];
 
     /**
      * Return the current version of php code sniffer
@@ -31,10 +27,28 @@ class Wrapper extends \PHP_CodeSniffer_CLI
     public function version()
     {
         $version = '0.0.0';
-        if (defined('\PHP_CodeSniffer::VERSION')) {
-            $phpcs = new \PHP_CodeSniffer();
-            $version = $phpcs::VERSION;
+        if (defined('\PHP_CodeSniffer\Config::VERSION')) {
+            $version = Config::VERSION;
         }
         return $version;
+    }
+
+    public function init()
+    {
+        $this->config->extensions = $this->settings['extensions'];
+        unset($this->settings['extensions']);
+        $this->config->setSettings(array_replace_recursive(
+            $this->config->getSettings(),
+            $this->settings
+        ));
+        return parent::init();
+    }
+
+    /**
+     * @param array $settings
+     */
+    public function setSettings($settings)
+    {
+        $this->settings = $settings;
     }
 }

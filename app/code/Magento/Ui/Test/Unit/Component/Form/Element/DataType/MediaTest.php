@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Form\Element\DataType;
 
 use Magento\Ui\Component\Form\Element\DataType\Media;
 
-class MediaTest extends \PHPUnit_Framework_TestCase
+class MediaTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
@@ -23,16 +23,10 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+        $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
-        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
-        $this->processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->context->expects($this->any())
-            ->method('getProcessor')
-            ->willReturn($this->processor);
 
         $this->media = new Media($this->context);
         $this->media->setData(
@@ -48,6 +42,10 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepare()
     {
+        $this->processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->atLeastOnce())->method('getProcessor')->willReturn($this->processor);
         $url = 'http://magento2.com/module/actionPath/path/key/34523456234523trdg';
         $this->context->expects($this->once())
             ->method('getUrl')

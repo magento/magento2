@@ -1,8 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+namespace Magento\Rule\Model\Condition;
+
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Abstract Rule condition data model
@@ -10,15 +15,10 @@
  * @method string getOperator()
  * @method string getFormName()
  * @method setFormName()
- */
-namespace Magento\Rule\Model\Condition;
-
-use Magento\Framework\Data\Form;
-use Magento\Framework\Data\Form\Element\AbstractElement;
-
-/**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractCondition extends \Magento\Framework\DataObject implements ConditionInterface
 {
@@ -441,6 +441,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
         }
         if (!empty($valueArr)) {
             $value = implode(', ', $valueArr);
+        } elseif (is_array($value)) {
+            $value = implode(', ', $value);
         }
         return $value;
     }
@@ -534,7 +536,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                 'data-form-part' => $this->getFormName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+            $this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class)
         );
     }
 
@@ -575,7 +577,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                 'data-form-part' => $this->getFormName()
             ]
         );
-        $element->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+        $element->setRenderer($this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class));
 
         return $element;
     }
@@ -607,7 +609,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
         if (strpos($this->getValueElementType(), '/') !== false) {
             return $this->_layout->getBlockSingleton($this->getValueElementType());
         }
-        return $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable');
+        return $this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class);
     }
 
     /**

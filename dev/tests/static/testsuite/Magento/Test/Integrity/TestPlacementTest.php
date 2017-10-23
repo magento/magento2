@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ namespace Magento\Test\Integrity;
 use Magento\Framework\App\Utility\Files;
 use \Magento\Framework\App\Bootstrap;
 
-class TestPlacementTest extends \PHPUnit_Framework_TestCase
+class TestPlacementTest extends \PHPUnit\Framework\TestCase
 {
     /** @var array */
     private $scanList = ['dev/tests/unit/testsuite/Magento'];
@@ -31,7 +31,7 @@ class TestPlacementTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
         /** @var \Magento\Framework\Data\Collection\Filesystem $filesystem */
-        $filesystem = $objectManager->get('Magento\Framework\Data\Collection\Filesystem');
+        $filesystem = $objectManager->get(\Magento\Framework\Data\Collection\Filesystem::class);
         $filesystem->setCollectDirs(false)
             ->setCollectFiles(true)
             ->setCollectRecursively(true);

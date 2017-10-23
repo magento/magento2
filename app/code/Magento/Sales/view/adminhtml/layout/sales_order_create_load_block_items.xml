@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,10 +9,10 @@
     <update handle="sales_order_create_item_price"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items" template="order/create/items.phtml" name="items">
-                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid" template="order/create/items/grid.phtml" name="items_grid">
-                    <block class="Magento\Sales\Block\Adminhtml\Order\Create\Coupons" template="order/create/coupons/form.phtml" name="coupons">
-                        <block class="Magento\Sales\Block\Adminhtml\Order\Create\Coupons\Form" template="order/create/coupons/form.phtml" name="order.create.coupons.form" as="form"/>
+            <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items" template="Magento_Sales::order/create/items.phtml" name="items">
+                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid" template="Magento_Sales::order/create/items/grid.phtml" name="items_grid">
+                    <block class="Magento\Sales\Block\Adminhtml\Order\Create\Coupons" template="Magento_Sales::order/create/coupons/form.phtml" name="coupons">
+                        <block class="Magento\Sales\Block\Adminhtml\Order\Create\Coupons\Form" template="Magento_Sales::order/create/coupons/form.phtml" name="order.create.coupons.form" as="form"/>
                     </block>
                 </block>
             </block>

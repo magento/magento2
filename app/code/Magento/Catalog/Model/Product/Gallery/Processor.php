@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -11,37 +11,47 @@ use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Catalog product Media Gallery attribute processor.
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 101.0.0
  */
 class Processor
 {
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeInterface
+     * @since 101.0.0
      */
     protected $attribute;
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @since 101.0.0
      */
     protected $attributeRepository;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @since 101.0.0
      */
     protected $fileStorageDb;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
+     * @since 101.0.0
      */
     protected $mediaConfig;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @since 101.0.0
      */
     protected $mediaDirectory;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
+     * @since 101.0.0
      */
     protected $resourceModel;
 
@@ -68,13 +78,12 @@ class Processor
 
     /**
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
+     * @since 101.0.0
      */
     public function getAttribute()
     {
         if (!$this->attribute) {
-            $this->attribute = $this->attributeRepository->get(
-                'media_gallery'
-            );
+            $this->attribute = $this->attributeRepository->get('media_gallery');
         }
 
         return $this->attribute;
@@ -86,6 +95,7 @@ class Processor
      * @param \Magento\Catalog\Model\Product $object
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 101.0.0
      */
     public function validate($object)
     {
@@ -118,6 +128,7 @@ class Processor
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 101.0.0
      */
     public function addImage(
         \Magento\Catalog\Model\Product $product,
@@ -201,6 +212,7 @@ class Processor
      * @param string $file
      * @param array $data
      * @return $this
+     * @since 101.0.0
      */
     public function updateImage(\Magento\Catalog\Model\Product $product, $file, $data)
     {
@@ -240,6 +252,7 @@ class Processor
      * @param \Magento\Catalog\Model\Product $product
      * @param string $file
      * @return $this
+     * @since 101.0.0
      */
     public function removeImage(\Magento\Catalog\Model\Product $product, $file)
     {
@@ -268,6 +281,7 @@ class Processor
      * @param \Magento\Catalog\Model\Product $product
      * @param string $file
      * @return array|boolean
+     * @since 101.0.0
      */
     public function getImage(\Magento\Catalog\Model\Product $product, $file)
     {
@@ -292,6 +306,7 @@ class Processor
      * @param \Magento\Catalog\Model\Product $product
      * @param string|string[] $mediaAttribute
      * @return $this
+     * @since 101.0.0
      */
     public function clearMediaAttribute(\Magento\Catalog\Model\Product $product, $mediaAttribute)
     {
@@ -300,11 +315,11 @@ class Processor
         if (is_array($mediaAttribute)) {
             foreach ($mediaAttribute as $attribute) {
                 if (in_array($attribute, $mediaAttributeCodes)) {
-                    $product->setData($attribute, null);
+                    $product->setData($attribute, 'no_selection');
                 }
             }
         } elseif (in_array($mediaAttribute, $mediaAttributeCodes)) {
-            $product->setData($mediaAttribute, null);
+            $product->setData($mediaAttribute, 'no_selection');
         }
 
         return $this;
@@ -317,6 +332,7 @@ class Processor
      * @param string|string[] $mediaAttribute
      * @param string $value
      * @return $this
+     * @since 101.0.0
      */
     public function setMediaAttribute(\Magento\Catalog\Model\Product $product, $mediaAttribute, $value)
     {
@@ -338,6 +354,7 @@ class Processor
     /**
      * get media attribute codes
      * @return array
+     * @since 101.0.0
      */
     public function getMediaAttributeCodes()
     {
@@ -347,6 +364,7 @@ class Processor
     /**
      * @param string $file
      * @return string
+     * @since 101.0.0
      */
     protected function getFilenameFromTmp($file)
     {
@@ -358,6 +376,7 @@ class Processor
      *
      * @param string $file
      * @return string
+     * @since 101.0.0
      */
     public function duplicateImageFromTmp($file)
     {
@@ -384,6 +403,7 @@ class Processor
      * @param string $file
      * @param bool $forTmp
      * @return string
+     * @since 101.0.0
      */
     protected function getUniqueFileName($file, $forTmp = false)
     {
@@ -409,6 +429,7 @@ class Processor
      * @param string $fileName
      * @param string $dispretionPath
      * @return string
+     * @since 101.0.0
      */
     protected function getNotDuplicatedFilename($fileName, $dispretionPath)
     {
@@ -439,6 +460,7 @@ class Processor
      *
      * @param  \Magento\Catalog\Model\Product $object
      * @return array
+     * @since 101.0.0
      */
     public function getAffectedFields($object)
     {
@@ -462,6 +484,7 @@ class Processor
      * Attribute value is not to be saved in a conventional way, separate table is used to store the complex value
      *
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function isScalar()
     {

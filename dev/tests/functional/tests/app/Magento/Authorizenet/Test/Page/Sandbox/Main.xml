@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="Main" area="Sandbox" mca="https://sandbox.authorize.net/" module="Magento_Authorizenet">
+        <block name="loginForm" class="Magento\Authorizenet\Test\Block\Sandbox\AuthorizenetLogin" locator="#ctl00_MainContent_welcomeText" strategy="css selector" />
+        <block name="menuBlock" class="Magento\Authorizenet\Test\Block\Sandbox\Menu" locator="body" strategy="css selector" />
+        <block name="modalBlock" class="Magento\Authorizenet\Test\Block\Sandbox\GetStartedModal" locator="body" strategy="css selector" />
+        <block name="searchForm" class="Magento\Authorizenet\Test\Block\Sandbox\SearchForm" locator="#Main" strategy="css selector" />
+        <block name="transactionsGridBlock" class="Magento\Authorizenet\Test\Block\Sandbox\TransactionsGrid" locator="#Main" strategy="css selector" />
+    </page>
+</config>

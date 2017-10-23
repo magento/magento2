@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
@@ -29,7 +29,7 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
     {
         parent::setUp();
         $this->customerRepository = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
     }
 
@@ -38,12 +38,12 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
         /**
          * Unset customer data
          */
-        Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->setCustomerData(null);
+        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->setCustomerData(null);
 
         /**
          * Unset messages
          */
-        Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->getMessages(true);
+        Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)->getMessages(true);
     }
 
     /**
@@ -67,6 +67,33 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
 
         $customer = $this->customerRepository->getById(1);
         $this->assertEquals(0, $customer->getGroupId());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/twenty_one_customers.php
+     */
+    public function testLargeGroupMassAssignGroupAction()
+    {
+
+        for ($i = 1; $i < 22; $i++) {
+            $customer = $this->customerRepository->getById($i);
+            $this->assertEquals(1, $customer->getGroupId());
+        }
+
+        $this->getRequest()
+            ->setParam('group', 0)
+            ->setPostValue('namespace', 'customer_listing')
+            ->setPostValue('selected', [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]);
+        $this->dispatch('backend/customer/index/massAssignGroup');
+        $this->assertSessionMessages(
+            $this->equalTo(['A total of 21 record(s) were updated.']),
+            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+        );
+        $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));
+        for ($i = 1; $i < 22; $i++) {
+            $customer = $this->customerRepository->getById($i);
+            $this->assertEquals(0, $customer->getGroupId());
+        }
     }
 
     /**

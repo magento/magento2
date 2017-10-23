@@ -1,29 +1,37 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\Test\Unit;
 
-use \Magento\Framework\Stdlib\ArrayUtils;
+use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
- * Magento\Framework\Stdlib\ArrayUtilsTest test case
+ * Test for ArrayUtils.
+ *
+ * @see ArrayUtils
  */
-class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
+class ArrayUtilsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Stdlib\ArrayUtils
+     * @var ArrayUtils
      */
     protected $_arrayUtils;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->_arrayUtils = new ArrayUtils();
     }
 
     /**
-     * @covers \Magento\Framework\Stdlib\ArrayUtils::ksortMultibyte
+     * Tests ksort multibyte.
+     *
+     * @param array $input
+     * @param string $locale
      * @dataProvider ksortMultibyteDataProvider
      */
     public function testKsortMultibyte($input, $locale)
@@ -46,9 +54,6 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
         return [[['б' => 2, 'в' => 3, 'а' => 1], 'ru_RU']];
     }
 
-    /**
-     * @covers \Magento\Framework\Stdlib\ArrayUtils::decorateArray
-     */
     public function testDecorateArray()
     {
         $original = [['value' => 1], ['value' => 2], ['value' => 3]];
@@ -73,5 +78,137 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
             new \Magento\Framework\DataObject($decorated[2]),
         ];
         $this->assertEquals($decoratedVo, $this->_arrayUtils->decorateArray($sample, ''));
+    }
+
+    /**
+     * Test flattening of array.
+     *
+     * @param array $data
+     * @param array $expected
+     * @param string $path
+     * @param string $separator
+     * @dataProvider flattenDataProvider
+     */
+    public function testFlatten(array $data, array $expected, $path, $separator)
+    {
+        $this->assertSame($expected, $this->_arrayUtils->flatten($data, $path, $separator));
+    }
+
+    /**
+     * @return array
+     */
+    public function flattenDataProvider()
+    {
+        return [
+            [
+                [
+                    'default' => ['web' => ['unsecure' => ['base_url' => 'http://magento2.local/']]],
+                    'websites' => ['base' => ['web' => ['unsecure' => ['base_url' => 'http://magento2.local/']]]],
+                ],
+                [
+                    'default/web/unsecure/base_url' => 'http://magento2.local/',
+                    'websites/base/web/unsecure/base_url' => 'http://magento2.local/',
+                ],
+                '',
+                '/'
+            ],
+            [
+                [
+                    'default' => ['web' => ['unsecure' => ['base_url' => 'http://magento2.local/']]],
+                ],
+                [
+                    'default+web+unsecure+base_url' => 'http://magento2.local/',
+                ],
+                '',
+                '+',
+            ],
+            [
+                [
+                    'default' => ['web' => ['unsecure' => ['base_url' => 'http://magento2.local/']]],
+                ],
+                [
+                    'test+default+web+unsecure+base_url' => 'http://magento2.local/',
+                ],
+                'test',
+                '+',
+            ],
+            [
+                [
+                    'default' => ['unsecure' => 'http://magento2.local/'],
+                ],
+                [
+                    'test/default/unsecure' => 'http://magento2.local/',
+                ],
+                'test',
+                '/',
+            ],
+            [
+                [
+                    'unsecure' => 'http://magento2.local/',
+                ],
+                [
+                    'unsecure' => 'http://magento2.local/',
+                ],
+                '',
+                '/',
+            ],
+            [
+                [],
+                [],
+                '',
+                '/',
+            ]
+        ];
+    }
+
+    /**
+     * Tests recursive diff between arrays.
+     *
+     * @param array $originalArray
+     * @param array $newArray
+     * @param $expected
+     * @dataProvider recursiveDiffDataProvider
+     */
+    public function testRecursiveDiff(array $originalArray, array $newArray, $expected)
+    {
+        $this->assertSame($expected, $this->_arrayUtils->recursiveDiff($originalArray, $newArray));
+    }
+
+    /**
+     * @return array
+     */
+    public function recursiveDiffDataProvider()
+    {
+        return [
+            [
+                [
+                    'test' => ['test2' => 2]
+                ],
+                [],
+                [
+                    'test' => ['test2' => 2]
+                ]
+            ],
+            [
+                [
+                    'test' => ['test2' => 2]
+                ],
+                [
+                    'test' => ['test2' => 2]
+                ],
+                []
+            ],
+            [
+                [
+                    'test' => ['test2' => ['test3' => 3, 'test4' => 4]]
+                ],
+                [
+                    'test' => ['test3' => 3]
+                ],
+                [
+                    'test' => ['test2' => ['test3' => 3, 'test4' => 4]]
+                ]
+            ]
+        ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Model\Mview\View;
@@ -140,7 +140,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     /**
      * Set state updated time
      *
-     * @param string|int|\DateTime $updated
+     * @param string|int|\DateTimeInterface $updated
      * @return $this
      */
     public function setUpdated($updated)

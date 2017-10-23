@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -24,14 +24,13 @@ use Magento\Mtf\TestCase\Scenario;
  * 12. Save tax configuration.
  * 13. Perform all assertions.
  *
- * @group Tax_(CS)
+ * @group Tax
  * @ZephyrId MAGETWO-27809
  */
 class TaxCalculationTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     /* end tags */
 
     /**

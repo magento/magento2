@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller;
@@ -14,12 +14,12 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         parent::setUp();
 
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
+        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
         $order->load('100000001', 'increment_id');
         $order->getPayment()->setMethod(\Magento\Paypal\Model\Config::METHOD_PAYFLOWLINK);
 
         $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Quote\Model\Quote'
+            \Magento\Quote\Model\Quote::class
         )->setStoreId(
             $order->getStoreId()
         )->save();
@@ -27,7 +27,9 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
         $order->setQuoteId($quote->getId());
         $order->save();
 
-        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Checkout\Model\Session');
+        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Checkout\Model\Session::class
+        );
         $session->setLastRealOrderId($order->getRealOrderId())->setLastQuoteId($order->getQuoteId());
     }
 
@@ -39,7 +41,7 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
 
     public function testReturnurlActionIsContentGenerated()
     {
-        $checkoutHelper = $this->_objectManager->create('Magento\Paypal\Helper\Checkout');
+        $checkoutHelper = $this->_objectManager->create(\Magento\Paypal\Helper\Checkout::class);
         $checkoutHelper->cancelCurrentOrder('test');
         $this->dispatch('paypal/payflow/returnurl');
         $this->assertContains("goToSuccessPage = ''", $this->getResponse()->getBody());
@@ -55,9 +57,9 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
         // Check P3P header
         $headerConstraints = [];
         foreach ($this->getResponse()->getHeaders() as $header) {
-            $headerConstraints[] = new \PHPUnit_Framework_Constraint_IsEqual($header->getFieldName());
+            $headerConstraints[] = new \PHPUnit\Framework\Constraint\IsEqual($header->getFieldName());
         }
-        $constraint = new \PHPUnit_Framework_Constraint_Or();
+        $constraint = new \PHPUnit\Framework\Constraint\LogicalOr();
         $constraint->setConstraints($headerConstraints);
         $this->assertThat('P3P', $constraint);
     }
@@ -69,10 +71,10 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testCancelAction()
     {
-        $order = $this->_objectManager->create('Magento\Sales\Model\Order');
-        $session = $this->_objectManager->get('Magento\Checkout\Model\Session');
+        $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class);
+        $session = $this->_objectManager->get(\Magento\Checkout\Model\Session::class);
 
-        $quote = $this->_objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->_objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test02', 'reserved_order_id');
         $order->load('100000001', 'increment_id')->setQuoteId($quote->getId())->save();
         $session->setQuoteId($quote->getId());

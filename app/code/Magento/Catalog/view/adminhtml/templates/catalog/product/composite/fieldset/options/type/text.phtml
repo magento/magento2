@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,18 +11,18 @@
 <?php $_option = $block->getOption(); ?>
 <div class="field admin__field<?php if ($_option->getIsRequire()) echo ' required _required' ?>">
     <label class="admin__field-label label">
-        <?php echo  $block->escapeHtml($_option->getTitle()) ?>
-        <?php /* @escapeNotVerified */ echo $block->getFormatedPrice() ?>
+        <?= $block->escapeHtml($_option->getTitle()) ?>
+        <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
     </label>
     <div class="control admin__field-control">
-        <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_FIELD): ?>
-            <input type="text" id="options_<?php /* @escapeNotVerified */ echo $_option->getId() ?>_text" class="input-text admin__control-text <?php echo $_option->getIsRequire() ? ' required-entry' : '' ?> <?php /* @escapeNotVerified */ echo $_option->getMaxCharacters() ? ' validate-length maximum-length-' . $_option->getMaxCharacters() : '' ?> product-custom-option" name="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]" value="<?php echo $block->escapeHtml($block->getDefaultValue()) ?>" price="<?php /* @escapeNotVerified */ echo $block->getCurrencyPrice($_option->getPrice(true)) ?>" />
-        <?php elseif ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_AREA): ?>
-            <textarea id="options_<?php /* @escapeNotVerified */ echo $_option->getId() ?>_text" class="admin__control-textarea <?php echo $_option->getIsRequire() ? ' required-entry' : '' ?> <?php /* @escapeNotVerified */ echo $_option->getMaxCharacters() ? ' validate-length maximum-length-' . $_option->getMaxCharacters() : '' ?> product-custom-option" name="options[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]" rows="5" cols="25" price="<?php /* @escapeNotVerified */ echo $block->getCurrencyPrice($_option->getPrice(true)) ?>"><?php echo $block->escapeHtml($block->getDefaultValue()) ?></textarea>
+        <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FIELD): ?>
+            <input type="text" id="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text" class="input-text admin__control-text <?= $_option->getIsRequire() ? ' required-entry' : '' ?> <?= /* @escapeNotVerified */ $_option->getMaxCharacters() ? ' validate-length maximum-length-' . $_option->getMaxCharacters() : '' ?> product-custom-option" name="options[<?= /* @escapeNotVerified */ $_option->getId() ?>]" value="<?= $block->escapeHtml($block->getDefaultValue()) ?>" price="<?= /* @escapeNotVerified */ $block->getCurrencyPrice($_option->getPrice(true)) ?>" />
+        <?php elseif ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA): ?>
+            <textarea id="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text" class="admin__control-textarea <?= $_option->getIsRequire() ? ' required-entry' : '' ?> <?= /* @escapeNotVerified */ $_option->getMaxCharacters() ? ' validate-length maximum-length-' . $_option->getMaxCharacters() : '' ?> product-custom-option" name="options[<?= /* @escapeNotVerified */ $_option->getId() ?>]" rows="5" cols="25" price="<?= /* @escapeNotVerified */ $block->getCurrencyPrice($_option->getPrice(true)) ?>"><?= $block->escapeHtml($block->getDefaultValue()) ?></textarea>
         <?php endif;?>
 
         <?php if ($_option->getMaxCharacters()): ?>
-            <p class="note"><?php /* @escapeNotVerified */ echo __('Maximum number of characters:')?> <strong><?php /* @escapeNotVerified */ echo $_option->getMaxCharacters() ?></strong></p>
+            <p class="note"><?= /* @escapeNotVerified */ __('Maximum number of characters:') ?> <strong><?= /* @escapeNotVerified */ $_option->getMaxCharacters() ?></strong></p>
         <?php endif; ?>
     </div>
 </div>

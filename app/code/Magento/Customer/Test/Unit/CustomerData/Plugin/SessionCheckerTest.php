@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\CustomerData\Plugin;
 
 use Magento\Customer\CustomerData\Plugin\SessionChecker;
 
-class SessionCheckerTest extends \PHPUnit_Framework_TestCase
+class SessionCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SessionChecker
@@ -36,16 +36,16 @@ class SessionCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->cookieManager = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\PhpCookieManager')
+        $this->cookieManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataFactory = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory')
+        $this->metadataFactory = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadata = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieMetadata')
+        $this->metadata = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionManager = $this->getMockBuilder('Magento\Framework\Session\SessionManager')
+        $this->sessionManager = $this->getMockBuilder(\Magento\Framework\Session\SessionManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -56,7 +56,7 @@ class SessionCheckerTest extends \PHPUnit_Framework_TestCase
      * @param bool $result
      * @param string $callCount
      * @return void
-     * @dataProvider testBeforeStartDataProvider
+     * @dataProvider beforeStartDataProvider
      */
     public function testBeforeStart($result, $callCount)
     {
@@ -86,7 +86,7 @@ class SessionCheckerTest extends \PHPUnit_Framework_TestCase
         $this->plugin->beforeStart($this->sessionManager);
     }
 
-    public function testBeforeStartDataProvider()
+    public function beforeStartDataProvider()
     {
         return [
             [true, 'once'],

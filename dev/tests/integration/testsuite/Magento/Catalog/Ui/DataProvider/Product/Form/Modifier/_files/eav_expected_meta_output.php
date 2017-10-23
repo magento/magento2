@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,6 @@ return [
                                     "visible" => "1",
                                     "required" => "0",
                                     "label" => "Enable Product",
-                                    "default" => "1",
                                     "source" => "product-details",
                                     "scopeLabel" => "[WEBSITE]",
                                     "globalScope" => false,

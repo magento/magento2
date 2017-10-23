@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -8,10 +8,12 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
+use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
 use Magento\Eav\Api\Data\AttributeGroupInterface;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
@@ -21,22 +23,23 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Filter\Translit;
+use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
-use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
-use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
-use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
-use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Class Eav
  *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 101.0.0
  */
 class Eav extends AbstractModifier
 {
@@ -44,76 +47,91 @@ class Eav extends AbstractModifier
 
     /**
      * @var LocatorInterface
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @var Config
+     * @since 101.0.0
      */
     protected $eavConfig;
 
     /**
      * @var CatalogEavValidationRules
+     * @since 101.0.0
      */
     protected $catalogEavValidationRules;
 
     /**
      * @var RequestInterface
+     * @since 101.0.0
      */
     protected $request;
 
     /**
      * @var GroupCollectionFactory
+     * @since 101.0.0
      */
     protected $groupCollectionFactory;
 
     /**
      * @var StoreManagerInterface
+     * @since 101.0.0
      */
     protected $storeManager;
 
     /**
      * @var FormElementMapper
+     * @since 101.0.0
      */
     protected $formElementMapper;
 
     /**
      * @var MetaPropertiesMapper
+     * @since 101.0.0
      */
     protected $metaPropertiesMapper;
 
     /**
      * @var ProductAttributeGroupRepositoryInterface
+     * @since 101.0.0
      */
     protected $attributeGroupRepository;
 
     /**
      * @var SearchCriteriaBuilder
+     * @since 101.0.0
      */
     protected $searchCriteriaBuilder;
 
     /**
      * @var ProductAttributeRepositoryInterface
+     * @since 101.0.0
      */
     protected $attributeRepository;
 
     /**
      * @var SortOrderBuilder
+     * @since 101.0.0
      */
     protected $sortOrderBuilder;
 
     /**
      * @var EavAttributeFactory
+     * @since 101.0.0
      */
     protected $eavAttributeFactory;
 
     /**
      * @var Translit
+     * @since 101.0.0
      */
     protected $translitFilter;
 
     /**
      * @var ArrayManager
+     * @since 101.0.0
      */
     protected $arrayManager;
 
@@ -129,11 +147,13 @@ class Eav extends AbstractModifier
 
     /**
      * @var array
+     * @since 101.0.0
      */
     protected $attributesToEliminate;
 
     /**
      * @var DataPersistorInterface
+     * @since 101.0.0
      */
     protected $dataPersistor;
 
@@ -233,6 +253,7 @@ class Eav extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -299,6 +320,7 @@ class Eav extends AbstractModifier
      * @param int $sortOrder
      * @return array
      * @api
+     * @since 101.0.0
      */
     public function addContainerChildren(
         array $attributeContainer,
@@ -329,6 +351,7 @@ class Eav extends AbstractModifier
      * @param int $sortOrder
      * @return array
      * @api
+     * @since 101.0.0
      */
     public function getContainerChildren(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
@@ -341,6 +364,7 @@ class Eav extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -523,6 +547,16 @@ class Eav extends AbstractModifier
     }
 
     /**
+     * Check is product already new or we trying to create one
+     *
+     * @return bool
+     */
+    private function isProductExists()
+    {
+        return (bool) $this->locator->getProduct()->getId();
+    }
+
+    /**
      * Initial meta setup
      *
      * @param ProductAttributeInterface $attribute
@@ -531,7 +565,9 @@ class Eav extends AbstractModifier
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @api
+     * @since 101.0.0
      */
     public function setupAttributeMeta(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
@@ -543,7 +579,7 @@ class Eav extends AbstractModifier
             'visible' => $attribute->getIsVisible(),
             'required' => $attribute->getIsRequired(),
             'notice' => $attribute->getNote(),
-            'default' => $attribute->getDefaultValue(),
+            'default' => (!$this->isProductExists()) ? $attribute->getDefaultValue() : null,
             'label' => $attribute->getDefaultFrontendLabel(),
             'code' => $attribute->getAttributeCode(),
             'source' => $groupCode,
@@ -638,6 +674,7 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface $attribute
      * @return array
      * @api
+     * @since 101.0.0
      */
     public function setupAttributeContainerMeta(ProductAttributeInterface $attribute)
     {
@@ -672,6 +709,7 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface $attribute
      * @return mixed|null
      * @api
+     * @since 101.0.0
      */
     public function setupAttributeData(ProductAttributeInterface $attribute)
     {
@@ -743,7 +781,10 @@ class Eav extends AbstractModifier
         $meta['arguments']['data']['config']['wysiwyg'] = true;
         $meta['arguments']['data']['config']['wysiwygConfigData'] = [
             'add_variables' => false,
-            'add_widgets' => false
+            'add_widgets' => false,
+            'add_directives' => true,
+            'use_container' => true,
+            'container_class' => 'hor-scroll',
         ];
 
         return $meta;
@@ -784,8 +825,7 @@ class Eav extends AbstractModifier
      */
     private function getScopeLabel(ProductAttributeInterface $attribute)
     {
-        if (
-            $this->storeManager->isSingleStoreMode()
+        if ($this->storeManager->isSingleStoreMode()
             || $attribute->getFrontendInput() === AttributeInterface::FRONTEND_INPUT
         ) {
             return '';
@@ -877,7 +917,7 @@ class Eav extends AbstractModifier
      *
      * @return \Magento\Framework\Locale\CurrencyInterface
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getLocaleCurrency()
     {
@@ -892,6 +932,7 @@ class Eav extends AbstractModifier
      *
      * @param mixed $value
      * @return string
+     * @since 101.0.0
      */
     protected function formatPrice($value)
     {

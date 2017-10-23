@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
@@ -8,7 +8,7 @@ namespace Magento\Quote\Model;
 use Magento\Catalog\Model\Product\Type;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class QuoteManagementTest extends \PHPUnit_Framework_TestCase
+class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Create order with product that has child items
@@ -23,12 +23,12 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
          */
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $objectManager->create('\Magento\Quote\Model\Quote');
+        $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test01', 'reserved_order_id');
 
         /** Execute SUT */
         /** @var \Magento\Quote\Api\CartManagementInterface $model */
-        $model = $objectManager->create('\Magento\Quote\Api\CartManagementInterface');
+        $model = $objectManager->create(\Magento\Quote\Api\CartManagementInterface::class);
         $order = $model->submit($quote);
 
         /** Check if SUT caused expected effects */

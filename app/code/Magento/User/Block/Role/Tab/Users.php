@@ -1,14 +1,10 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Block\Role\Tab;
 
-/**
- * Class \Magento\User\Block\Role\Tab\Users
- *
- */
 class Users extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
@@ -59,7 +55,7 @@ class Users extends \Magento\Backend\Block\Widget\Tabs
     {
         $this->setChild(
             'userGrid',
-            $this->getLayout()->createBlock('Magento\User\Block\Role\Grid\User', 'roleUsersGrid')
+            $this->getLayout()->createBlock(\Magento\User\Block\Role\Grid\User::class, 'roleUsersGrid')
         );
         return parent::_prepareLayout();
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Controller;
@@ -12,22 +12,34 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * UrlRewrite Controller Router
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Router implements \Magento\Framework\App\RouterInterface
 {
-    /** var \Magento\Framework\App\ActionFactory */
+    /**
+     * @var \Magento\Framework\App\ActionFactory
+     */
     protected $actionFactory;
 
-    /** @var \Magento\Framework\UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
     protected $url;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
-    /** @var \Magento\Framework\App\ResponseInterface */
+    /**
+     * @var \Magento\Framework\App\ResponseInterface
+     */
     protected $response;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     protected $urlFinder;
 
     /**
@@ -87,7 +99,7 @@ class Router implements \Magento\Framework\App\RouterInterface
 
         $request->setAlias(\Magento\Framework\UrlInterface::REWRITE_REQUEST_PATH_ALIAS, $rewrite->getRequestPath());
         $request->setPathInfo('/' . $rewrite->getTargetPath());
-        return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+        return $this->actionFactory->create(\Magento\Framework\App\Action\Forward::class);
     }
 
     /**
@@ -116,7 +128,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     {
         $this->response->setRedirect($url, $code);
         $request->setDispatched(true);
-        return $this->actionFactory->create('Magento\Framework\App\Action\Redirect');
+        return $this->actionFactory->create(\Magento\Framework\App\Action\Redirect::class);
     }
 
     /**
@@ -127,7 +139,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     protected function getRewrite($requestPath, $storeId)
     {
         return $this->urlFinder->findOneByData([
-            UrlRewrite::REQUEST_PATH => trim($requestPath, '/'),
+            UrlRewrite::REQUEST_PATH => ltrim($requestPath, '/'),
             UrlRewrite::STORE_ID => $storeId,
         ]);
     }

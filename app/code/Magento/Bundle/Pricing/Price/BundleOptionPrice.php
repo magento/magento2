@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Pricing\Price;
@@ -109,9 +109,22 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
      */
     public function getOptionSelectionAmount($selection)
     {
-        $selectionPrice = $this->selectionFactory
-            ->create($this->product, $selection, $selection->getSelectionQty());
-        return $selectionPrice->getAmount();
+        $cacheKey = implode(
+            '_',
+            [
+                $this->product->getId(),
+                $selection->getOptionId(),
+                $selection->getSelectionId()
+            ]
+        );
+
+        if (!isset($this->optionSelecionAmountCache[$cacheKey])) {
+            $selectionPrice = $this->selectionFactory
+                ->create($this->product, $selection, $selection->getSelectionQty());
+            $this->optionSelecionAmountCache[$cacheKey] =  $selectionPrice->getAmount();
+        }
+
+        return $this->optionSelecionAmountCache[$cacheKey];
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Address;
@@ -10,7 +10,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Customer address edit block
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Edit extends \Magento\Directory\Block\Data
 {
@@ -133,7 +135,7 @@ class Edit extends \Magento\Directory\Block\Data
             $this->dataObjectHelper->populateWithArray(
                 $this->_address,
                 $postedData,
-                '\Magento\Customer\Api\Data\AddressInterface'
+                \Magento\Customer\Api\Data\AddressInterface::class
             );
         }
 
@@ -148,7 +150,7 @@ class Edit extends \Magento\Directory\Block\Data
     public function getNameBlockHtml()
     {
         $nameBlock = $this->getLayout()
-            ->createBlock('Magento\Customer\Block\Widget\Name')
+            ->createBlock(\Magento\Customer\Block\Widget\Name::class)
             ->setObject($this->getAddress());
 
         return $nameBlock->toHtml();

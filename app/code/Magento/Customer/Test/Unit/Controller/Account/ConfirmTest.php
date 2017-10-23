@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@ use Magento\Store\Model\ScopeInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class ConfirmTest extends \PHPUnit_Framework_TestCase
+class ConfirmTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Confirm
@@ -101,49 +101,39 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
-        $this->responseMock = $this->getMock(
-            'Magento\Framework\App\Response\Http', ['setRedirect', '__wakeup'], [], '', false
-        );
-        $viewMock = $this->getMock('Magento\Framework\App\ViewInterface');
-        $this->redirectMock = $this->getMock('Magento\Framework\App\Response\RedirectInterface');
+        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->responseMock = $this->createPartialMock(\Magento\Framework\App\Response\Http::class, ['setRedirect', '__wakeup']);
+        $viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
+        $this->redirectMock = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
 
-        $this->urlMock = $this->getMock('Magento\Framework\Url', [], [], '', false);
-        $urlFactoryMock = $this->getMock('Magento\Framework\UrlFactory', [], [], '', false);
+        $this->urlMock = $this->createMock(\Magento\Framework\Url::class);
+        $urlFactoryMock = $this->createMock(\Magento\Framework\UrlFactory::class);
         $urlFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->urlMock));
 
         $this->customerAccountManagementMock =
-            $this->getMockForAbstractClass('Magento\Customer\Api\AccountManagementInterface');
-        $this->customerDataMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterface', [], [], '', false
-        );
+            $this->getMockForAbstractClass(\Magento\Customer\Api\AccountManagementInterface::class);
+        $this->customerDataMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
 
         $this->customerRepositoryMock =
-            $this->getMockForAbstractClass('Magento\Customer\Api\CustomerRepositoryInterface');
+            $this->getMockForAbstractClass(\Magento\Customer\Api\CustomerRepositoryInterface::class);
 
-        $this->messageManagerMock = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
-        $this->addressHelperMock = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->redirectResultMock = $this->getMock('Magento\Framework\Controller\Result\Redirect', [], [], '', false);
+        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\Manager::class);
+        $this->addressHelperMock = $this->createMock(\Magento\Customer\Helper\Address::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->redirectResultMock = $this->createMock(\Magento\Framework\Controller\Result\Redirect::class);
 
-        $resultFactoryMock = $this->getMock(
-            'Magento\Framework\Controller\ResultFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $resultFactoryMock = $this->createPartialMock(\Magento\Framework\Controller\ResultFactory::class, ['create']);
         $resultFactoryMock->expects($this->once())
             ->method('create')
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->redirectResultMock);
 
-        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->contextMock = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
         $this->contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
@@ -166,7 +156,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->model = $objectManagerHelper->getObject(
-            'Magento\Customer\Controller\Account\Confirm',
+            \Magento\Customer\Controller\Account\Confirm::class,
             [
                 'context' => $this->contextMock,
                 'customerSession' => $this->customerSessionMock,
@@ -191,7 +181,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->model->execute());
+        $this->assertInstanceOf(\Magento\Framework\Controller\Result\Redirect::class, $this->model->execute());
     }
 
     /**
@@ -233,7 +223,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($testUrl))
             ->willReturnSelf();
 
-        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->model->execute());
+        $this->assertInstanceOf(\Magento\Framework\Controller\Result\Redirect::class, $this->model->execute());
     }
 
     /**
@@ -307,8 +297,6 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
-
-
 
         $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
             ->disableOriginalConstructor()
@@ -426,12 +414,12 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('*/*/index'), ['_secure' => true])
             ->will($this->returnValue($successUrl));
 
-        $this->redirectMock->expects($this->never())
+        $this->redirectMock->expects($this->once())
             ->method('success')
             ->with($this->equalTo($resultUrl))
             ->willReturn($resultUrl);
 
-        $this->scopeConfigMock->expects($this->never())
+        $this->scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
             ->with(
                 Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD,

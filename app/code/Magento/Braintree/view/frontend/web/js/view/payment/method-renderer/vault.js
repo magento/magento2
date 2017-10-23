@@ -1,16 +1,16 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
 /*global define*/
 define([
     'jquery',
-    'Magento_Braintree/js/view/payment/method-renderer/cc-form',
     'Magento_Vault/js/view/payment/method-renderer/vault',
+    'Magento_Braintree/js/view/payment/adapter',
     'Magento_Ui/js/model/messageList',
     'Magento_Checkout/js/model/full-screen-loader'
-], function ($, Component, VaultComponent, globalMessageList, fullScreenLoader) {
+], function ($, VaultComponent, Braintree, globalMessageList, fullScreenLoader) {
     'use strict';
 
     return VaultComponent.extend({
@@ -49,7 +49,17 @@ define([
          * Place order
          */
         placeOrder: function () {
-            this.getPaymentMethodNonce();
+            var self = this;
+
+            /**
+             * Define onReady callback
+             */
+            Braintree.onReady = function () {
+                self.getPaymentMethodNonce();
+            };
+            self.hostedFields(function (formComponent) {
+                formComponent.initBraintree();
+            });
         },
 
         /**
@@ -59,7 +69,7 @@ define([
             var self = this;
 
             fullScreenLoader.startLoader();
-            $.get(self.nonceUrl, {
+            $.getJSON(self.nonceUrl, {
                 'public_hash': self.publicHash
             })
                 .done(function (response) {
@@ -68,6 +78,7 @@ define([
                         formComponent.setPaymentMethodNonce(response.paymentMethodNonce);
                         formComponent.additionalData['public_hash'] = self.publicHash;
                         formComponent.code = self.code;
+                        formComponent.messageContainer = self.messageContainer;
                         formComponent.placeOrder();
                     });
                 })

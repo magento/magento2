@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ use Magento\Webapi\Model\ServiceMetadata;
 /**
  * Test for \Magento\Webapi\Controller\Soap\Request\Handler.
  */
-class HandlerTest extends \PHPUnit_Framework_TestCase
+class HandlerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Webapi\Controller\Soap\Request\Handler */
     protected $_handler;
@@ -49,37 +49,15 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->_apiConfigMock = $this->getMockBuilder('Magento\Webapi\Model\Soap\Config')
+        $this->_apiConfigMock = $this->getMockBuilder(\Magento\Webapi\Model\Soap\Config::class)
             ->setMethods(['getServiceMethodInfo'])->disableOriginalConstructor()->getMock();
-        $this->_requestMock = $this->getMock('Magento\Framework\Webapi\Request', [], [], '', false);
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_authorizationMock = $this->getMock('Magento\Framework\Webapi\Authorization', [], [], '', false);
-        $this->_dataObjectConverter = $this->getMock(
-            'Magento\Framework\Api\SimpleDataObjectConverter',
-            ['convertStdObjectToArray'],
-            [],
-            '',
-            false
-        );
-        $this->_serviceInputProcessorMock = $this->getMock(
-            'Magento\Framework\Webapi\ServiceInputProcessor',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_dataObjectProcessorMock = $this->getMock(
-            'Magento\Framework\Reflection\DataObjectProcessor',
-            [],
-            [],
-            '',
-            false);
-        $this->_methodsMapProcessorMock = $this->getMock(
-            'Magento\Framework\Reflection\MethodsMap',
-            [],
-            [],
-            '',
-            false);
+        $this->_requestMock = $this->createMock(\Magento\Framework\Webapi\Request::class);
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_authorizationMock = $this->createMock(\Magento\Framework\Webapi\Authorization::class);
+        $this->_dataObjectConverter = $this->createPartialMock(\Magento\Framework\Api\SimpleDataObjectConverter::class, ['convertStdObjectToArray']);
+        $this->_serviceInputProcessorMock = $this->createMock(\Magento\Framework\Webapi\ServiceInputProcessor::class);
+        $this->_dataObjectProcessorMock = $this->createMock(\Magento\Framework\Reflection\DataObjectProcessor::class);
+        $this->_methodsMapProcessorMock = $this->createMock(\Magento\Framework\Reflection\MethodsMap::class);
 
         /** Initialize SUT. */
         $this->_handler = new \Magento\Webapi\Controller\Soap\Request\Handler(
@@ -104,8 +82,9 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $this->_dataObjectConverter->expects($this->once())
             ->method('convertStdObjectToArray')
             ->will($this->returnValue(['field' => 1]));
+        $this->_methodsMapProcessorMock->method('getMethodReturnType')->willReturn('string');
         $operationName = 'soapOperation';
-        $className = 'Magento\Framework\DataObject';
+        $className = \Magento\Framework\DataObject::class;
         $methodName = 'testMethod';
         $isSecure = false;
         $aclResources = [['Magento_TestModule::resourceA']];

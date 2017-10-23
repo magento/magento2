@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -9,31 +9,29 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Data provider for main panel of product page
+ *
+ * @api
+ * @since 101.0.0
  */
 class General extends AbstractModifier
 {
     /**
      * @var LocatorInterface
+     * @since 101.0.0
      */
     protected $locator;
 
     /**
      * @var ArrayManager
+     * @since 101.0.0
      */
     protected $arrayManager;
-    
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
 
     /**
-     * @var CurrencyInterface
+     * @var \Magento\Framework\Locale\CurrencyInterface
      */
     private $localeCurrency;
 
@@ -51,6 +49,7 @@ class General extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyData(array $data)
     {
@@ -70,6 +69,7 @@ class General extends AbstractModifier
      *
      * @param array $data
      * @return array
+     * @since 101.0.0
      */
     protected function customizeWeightFormat(array $data)
     {
@@ -82,7 +82,7 @@ class General extends AbstractModifier
             $data = $this->arrayManager->replace(
                 $path,
                 $data,
-                $this->formatNumber($this->arrayManager->get($path, $data))
+                $this->formatWeight($this->arrayManager->get($path, $data))
             );
         }
 
@@ -94,6 +94,7 @@ class General extends AbstractModifier
      *
      * @param array $data
      * @return array
+     * @since 101.0.0
      */
     protected function customizeAdvancedPriceFormat(array $data)
     {
@@ -105,7 +106,7 @@ class General extends AbstractModifier
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
                     $this->formatPrice($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
-                    $this->formatNumber((int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY]);
+                    (int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
             }
         }
 
@@ -114,6 +115,7 @@ class General extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function modifyMeta(array $meta)
     {
@@ -131,6 +133,7 @@ class General extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function prepareFirstPanel(array $meta)
     {
@@ -153,6 +156,7 @@ class General extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function customizeStatusField(array $meta)
     {
@@ -178,6 +182,7 @@ class General extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function customizeWeightField(array $meta)
     {
@@ -246,6 +251,7 @@ class General extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function customizeNewDateRangeField(array $meta)
     {
@@ -303,6 +309,7 @@ class General extends AbstractModifier
      *
      * @param array $meta
      * @return array
+     * @since 101.0.0
      */
     protected function customizeNameListeners(array $meta)
     {
@@ -322,17 +329,6 @@ class General extends AbstractModifier
             $importsConfig = [
                 'mask' => $this->locator->getStore()->getConfig('catalog/fields_masks/' . $listener),
                 'component' => 'Magento_Catalog/js/components/import-handler',
-                'imports' => [
-                    'handleNameChanges' => '${$.provider}:data.product.name',
-                    'handleDescriptionChanges' => '${$.provider}:data.product.description',
-                    'handleSkuChanges' => '${$.provider}:data.product.sku',
-                    'handleColorChanges' => '${$.provider}:data.product.color',
-                    'handleCountryChanges' => '${$.provider}:data.product.country_of_manufacture',
-                    'handleGenderChanges' => '${$.provider}:data.product.gender',
-                    'handleMaterialChanges' => '${$.provider}:data.product.material',
-                    'handleShortDescriptionChanges' => '${$.provider}:data.product.short_description',
-                    'handleSizeChanges' => '${$.provider}:data.product.size'
-                ],
                 'allowImport' => !$this->locator->getProduct()->getId(),
             ];
 
@@ -368,38 +364,23 @@ class General extends AbstractModifier
      *
      * @return \Magento\Framework\Locale\CurrencyInterface
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getLocaleCurrency()
     {
         if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
+            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Locale\CurrencyInterface::class);
         }
         return $this->localeCurrency;
     }
-
-    /**
-     * The getter function to get the store manager for real application code
-     *
-     * @return \Magento\Store\Model\StoreManagerInterface
-     *
-     * @deprecated
-     */
-    private function getStoreManager()
-    {
-        if ($this->storeManager === null) {
-            $this->storeManager =
-                \Magento\Framework\App\ObjectManager::getInstance()->get(StoreManagerInterface::class);
-        }
-        return $this->storeManager;
-    }
-
 
     /**
      * Format price according to the locale of the currency
      *
      * @param mixed $value
      * @return string
+     * @since 101.0.0
      */
     protected function formatPrice($value)
     {
@@ -407,7 +388,7 @@ class General extends AbstractModifier
             return null;
         }
 
-        $store = $this->getStoreManager()->getStore();
+        $store = $this->locator->getStore();
         $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
         $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
 
@@ -419,6 +400,7 @@ class General extends AbstractModifier
      *
      * @param mixed $value
      * @return string
+     * @since 101.0.0
      */
     protected function formatNumber($value)
     {
@@ -428,7 +410,7 @@ class General extends AbstractModifier
 
         $value = (float)$value;
         $precision = strlen(substr(strrchr($value, "."), 1));
-        $store = $this->getStoreManager()->getStore();
+        $store = $this->locator->getStore();
         $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
         $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL,
                                                 'precision' => $precision]);

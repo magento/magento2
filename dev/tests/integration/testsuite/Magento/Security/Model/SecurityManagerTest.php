@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model;
@@ -8,7 +8,7 @@ namespace Magento\Security\Model;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class SecurityManagerTest extends \PHPUnit_Framework_TestCase
+class SecurityManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Security\Model\SecurityManager
@@ -36,10 +36,12 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->accountManagement = $this->objectManager->create('Magento\Customer\Api\AccountManagementInterface');
-        $this->securityManager = $this->objectManager->create('Magento\Security\Model\SecurityManager');
+        $this->accountManagement = $this->objectManager->create(
+            \Magento\Customer\Api\AccountManagementInterface::class
+        );
+        $this->securityManager = $this->objectManager->create(\Magento\Security\Model\SecurityManager::class);
         $this->passwordResetRequestEvent = $this->objectManager
-            ->get('Magento\Security\Model\PasswordResetRequestEvent');
+            ->get(\Magento\Security\Model\PasswordResetRequestEvent::class);
     }
 
     /**
@@ -68,7 +70,7 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
         $longIp = 127001;
         $accountReference = 'customer@example.com';
         $this->assertInstanceOf(
-            'Magento\Security\Model\SecurityManager',
+            \Magento\Security\Model\SecurityManager::class,
             $this->securityManager->performSecurityCheck(
                 $requestType,
                 $accountReference,

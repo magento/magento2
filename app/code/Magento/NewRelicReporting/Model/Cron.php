@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Model;
 
-use Magento\NewRelicReporting\Model\Cron\ReportModulesInfo;
 use Magento\NewRelicReporting\Model\Cron\ReportCounts;
+use Magento\NewRelicReporting\Model\Cron\ReportModulesInfo;
 use Magento\NewRelicReporting\Model\Cron\ReportNewRelicCron;
 
 class Cron
@@ -33,7 +33,7 @@ class Cron
 
     /**
      * Constructor
-     * 
+     *
      * @param Config $config
      * @param ReportModulesInfo $reportModulesInfo
      * @param ReportCounts $reportCounts
@@ -53,7 +53,7 @@ class Cron
 
     /**
      * The method run by the cron that fires all required events.
-     * 
+     *
      * @return \Magento\NewRelicReporting\Model\Cron
      */
     public function runCron()

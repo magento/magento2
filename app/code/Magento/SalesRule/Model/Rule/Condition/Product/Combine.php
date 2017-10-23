@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Combine extends \Magento\Rule\Model\Condition\Combine
 {
     /**
@@ -26,7 +30,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     ) {
         parent::__construct($context, $data);
         $this->_ruleConditionProd = $ruleConditionProduct;
-        $this->setType('Magento\SalesRule\Model\Rule\Condition\Product\Combine');
+        $this->setType(\Magento\SalesRule\Model\Rule\Condition\Product\Combine::class);
     }
 
     /**
@@ -42,12 +46,12 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         foreach ($productAttributes as $code => $label) {
             if (strpos($code, 'quote_item_') === 0) {
                 $iAttributes[] = [
-                    'value' => 'Magento\SalesRule\Model\Rule\Condition\Product|' . $code,
+                    'value' => \Magento\SalesRule\Model\Rule\Condition\Product::class . '|' . $code,
                     'label' => $label,
                 ];
             } else {
                 $pAttributes[] = [
-                    'value' => 'Magento\SalesRule\Model\Rule\Condition\Product|' . $code,
+                    'value' => \Magento\SalesRule\Model\Rule\Condition\Product::class . '|' . $code,
                     'label' => $label,
                 ];
             }
@@ -58,7 +62,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
             $conditions,
             [
                 [
-                    'value' => 'Magento\SalesRule\Model\Rule\Condition\Product\Combine',
+                    'value' => \Magento\SalesRule\Model\Rule\Condition\Product\Combine::class,
                     'label' => __('Conditions Combination'),
                 ],
                 ['label' => __('Cart Item Attribute'), 'value' => $iAttributes],

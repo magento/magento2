@@ -1,23 +1,23 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity;
 
-use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Eav\Model\Entity\AttributeCache;
+use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Eav\Model\Config;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * EAV attribute resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -42,11 +42,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var Config
      */
     private $config;
-
-    /**
-     * @var AttributeCache
-     */
-    private $attributeCache;
 
     /**
      * Class constructor
@@ -186,7 +181,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
          */
         if (!$object->getId()) {
             if ($object->getFrontendInput() == 'select') {
-                $object->setSourceModel('Magento\Eav\Model\Entity\Attribute\Source\Table');
+                $object->setSourceModel(\Magento\Eav\Model\Entity\Attribute\Source\Table::class);
             }
         }
 
@@ -211,7 +206,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $object
         );
         $this->getConfig()->clear();
-        $this->getAttributeCache()->clear();
         return parent::_afterSave($object);
     }
 
@@ -221,29 +215,17 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @since 100.0.7
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
         $this->getConfig()->clear();
-        $this->getAttributeCache()->clear();
         return $this;
     }
 
     /**
-     * @return AttributeCache
-     * @deprecated
-     */
-    private function getAttributeCache()
-    {
-        if (!$this->attributeCache) {
-            $this->attributeCache = ObjectManager::getInstance()->get(Config::class);
-        }
-        return $this->attributeCache;
-    }
-
-    /**
      * @return Config
-     * @deprecated
+     * @deprecated 100.0.7
      */
     private function getConfig()
     {
@@ -464,7 +446,8 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
         $table = $this->getTable('eav_attribute_option');
-        $intOptionId = (int)$optionId;
+        // ignore strings that start with a number
+        $intOptionId = is_numeric($optionId) ? (int)$optionId : 0;
 
         if (!empty($option['delete'][$optionId])) {
             if ($intOptionId) {
@@ -543,6 +526,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param int|string $entityAttributeId
      * @return array
+     * @since 100.1.0
      */
     public function getEntityAttribute($entityAttributeId)
     {
@@ -683,6 +667,11 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * @var array
+     */
+    private $storeLabelsCache = [];
+
+    /**
      * Retrieve store labels by given attribute id
      *
      * @param int $attributeId
@@ -690,16 +679,19 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getStoreLabelsByAttributeId($attributeId)
     {
-        $connection = $this->getConnection();
-        $bind = [':attribute_id' => $attributeId];
-        $select = $connection->select()->from(
-            $this->getTable('eav_attribute_label'),
-            ['store_id', 'value']
-        )->where(
-            'attribute_id = :attribute_id'
-        );
+        if (!isset($this->storeLabelsCache[$attributeId])) {
+            $connection = $this->getConnection();
+            $bind = [':attribute_id' => $attributeId];
+            $select = $connection->select()->from(
+                $this->getTable('eav_attribute_label'),
+                ['store_id', 'value']
+            )->where(
+                'attribute_id = :attribute_id'
+            );
+            $this->storeLabelsCache[$attributeId] = $connection->fetchPairs($select, $bind);
+        }
 
-        return $connection->fetchPairs($select, $bind);
+        return $this->storeLabelsCache[$attributeId];
     }
 
     /**
@@ -726,6 +718,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Provide variables to serialize
      *
      * @return array
+     * @since 100.0.7
      */
     public function __sleep()
     {
@@ -738,6 +731,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Restore global dependencies
      *
      * @return void
+     * @since 100.0.7
      */
     public function __wakeup()
     {

@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="1">
+    <fields>
+        <settlement_date_from>
+            <selector>[name=StartBatch]</selector>
+            <input>select</input>
+        </settlement_date_from>
+        <settlement_date_to>
+            <selector>[name=EndBatch]</selector>
+            <input>select</input>
+        </settlement_date_to>
+    </fields>
+</mapping>

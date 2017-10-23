@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Cms\Test\TestCase\CmsPageMassActionTest" summary="Create two CMS Content Pages and perform mass action" ticketId="MAGETWO-35581">
+        <variation name="CmsPageMassActionTestVariation1" summary="Create two CMS Content Pages and perform mass disable action">
+            <data name="cmsPages/0" xsi:type="string">default</data>
+            <data name="cmsPages/1" xsi:type="string">3_column_template</data>
+            <data name="action" xsi:type="string">Disable</data>
+            <data name="expectedStatus" xsi:type="string">Disabled</data>
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagesInGrid" />
+            <constraint name="Magento\Cms\Test\Constraint\AssertCmsPagesDisabledOnFrontend" />
+        </variation>
+    </testCase>
+</config>

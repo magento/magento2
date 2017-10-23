@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,24 +14,24 @@
  * @var $block \Magento\Multishipping\Block\Checkout\Billing
  */
 ?>
-<form action="<?php /* @escapeNotVerified */ echo $block->getPostActionUrl() ?>" method="post" id="multishipping-billing-form" class="form multicheckout billing">
+<form action="<?= /* @escapeNotVerified */ $block->getPostActionUrl() ?>" method="post" id="multishipping-billing-form" class="form multicheckout billing">
     <div class="block block-billing">
         <div class="block-content">
             <div class="box box-billing-address">
                 <strong class="box-title">
-                    <span><?php /* @escapeNotVerified */ echo __('Billing Address') ?></span>
-                    <a href="<?php /* @escapeNotVerified */ echo $block->getSelectAddressUrl() ?>" class="action"><span><?php /* @escapeNotVerified */ echo __('Change') ?></span></a>
+                    <span><?= /* @escapeNotVerified */ __('Billing Address') ?></span>
+                    <a href="<?= /* @escapeNotVerified */ $block->getSelectAddressUrl() ?>" class="action"><span><?= /* @escapeNotVerified */ __('Change') ?></span></a>
                 </strong>
                 <div class="box-content">
                     <?php $_address = $block->getAddress() ?>
-                    <address><?php /* @escapeNotVerified */ echo $_address->format('html') ?></address>
+                    <address><?= /* @escapeNotVerified */ $_address->format('html') ?></address>
                 </div>
             </div>
             <div class="box box-billing-method">
                 <fieldset class="fieldset">
-                    <legend class="legend box-title"><span><?php /* @escapeNotVerified */ echo __('Payment Method') ?></span></legend><br>
+                    <legend class="legend box-title"><span><?= /* @escapeNotVerified */ __('Payment Method') ?></span></legend><br>
                     <div class="box-content">
-                        <?php echo $block->getChildHtml('payment_methods_before') ?>
+                        <?= $block->getChildHtml('payment_methods_before') ?>
                         <?php /* Payment methods forms list */ ?>
                         <dl class="items methods-payment" id="payment-methods">
                             <?php
@@ -41,21 +41,21 @@
                             <?php foreach ($_methods as $_method): $_code = $_method->getCode() ?>
                                 <dt class="item-title">
                                     <?php if ($_methodsCount > 1): ?>
-                                        <input type="radio" id="p_method_<?php /* @escapeNotVerified */ echo $_code ?>" value="<?php /* @escapeNotVerified */ echo $_code ?>" name="payment[method]" title="<?php echo $block->escapeHtml($_method->getTitle()) ?>" <?php if ($block->getSelectedMethodCode() == $_code): ?> checked="checked"<?php endif; ?> class="radio"/>
+                                        <input type="radio" id="p_method_<?= /* @escapeNotVerified */ $_code ?>" value="<?= /* @escapeNotVerified */ $_code ?>" name="payment[method]" title="<?= $block->escapeHtml($_method->getTitle()) ?>" <?php if ($block->getSelectedMethodCode() == $_code): ?> checked="checked"<?php endif; ?> class="radio"/>
                                     <?php else : ?>
-                                        <input type="radio" id="p_method_<?php /* @escapeNotVerified */ echo $_code ?>" value="<?php /* @escapeNotVerified */ echo $_code ?>" name="payment[method]" checked="checked" class="radio solo method"/>
+                                        <input type="radio" id="p_method_<?= /* @escapeNotVerified */ $_code ?>" value="<?= /* @escapeNotVerified */ $_code ?>" name="payment[method]" checked="checked" class="radio solo method"/>
                                     <?php endif; ?>
-                                    <label for="p_method_<?php /* @escapeNotVerified */ echo $_code ?>"><?php echo $block->escapeHtml($_method->getTitle()) ?></label>
+                                    <label for="p_method_<?= /* @escapeNotVerified */ $_code ?>"><?= $block->escapeHtml($_method->getTitle()) ?></label>
                                 </dt>
                                 <?php if ($html = $block->getChildHtml('payment.method.' . $_code)) : ?>
                                     <dd class="item-content">
-                                        <?php /* @escapeNotVerified */ echo $html; ?>
+                                        <?= /* @escapeNotVerified */ $html ?>
                                     </dd>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </dl>
-                        <?php echo $block->getChildHtml('payment_methods_after') ?>
-                        <?php echo $block->getChildHtml('checkout_billing_items') ?>
+                        <?= $block->getChildHtml('payment_methods_after') ?>
+                        <?= $block->getChildHtml('checkout_billing_items') ?>
                     </div>
                 </fieldset>
             </div>
@@ -63,10 +63,10 @@
     </div>
     <div class="actions-toolbar">
         <div class="primary">
-            <button id="payment-continue" type="submit" class="action primary continue"><span><?php /* @escapeNotVerified */ echo __('Go to Review Your Order') ?></span></button>
+            <button id="payment-continue" type="submit" class="action primary continue"><span><?= /* @escapeNotVerified */ __('Go to Review Your Order') ?></span></button>
         </div>
         <div class="secondary">
-            <a href="<?php /* @escapeNotVerified */ echo $block->getBackUrl() ?>" class="action back"><span><?php /* @escapeNotVerified */ echo __('Back to Shipping Information') ?></span></a>
+            <a href="<?= /* @escapeNotVerified */ $block->getBackUrl() ?>" class="action back"><span><?= /* @escapeNotVerified */ __('Back to Shipping Information') ?></span></a>
         </div>
     </div>
 </form>
@@ -75,7 +75,7 @@ require(['jquery', 'mage/mage'], function(jQuery){
 
     var addtocartForm = jQuery('#multishipping-billing-form');
     addtocartForm.mage('payment', {
-        checkoutPrice: <?php echo (float)$block->getQuoteBaseGrandTotal(); ?>
+        checkoutPrice: <?= (float)$block->getQuoteBaseGrandTotal() ?>
     });
     addtocartForm.mage('validation', {
         errorPlacement: function(error, element) {

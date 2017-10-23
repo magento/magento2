@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Page\Widget;
@@ -10,6 +10,11 @@ use Magento\Backend\App\Action;
 
 class Chooser extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
+
     /**
      * @var \Magento\Framework\View\LayoutFactory
      */
@@ -46,7 +51,7 @@ class Chooser extends \Magento\Backend\App\Action
         /** @var \Magento\Framework\View\Layout $layout */
         $layout = $this->layoutFactory->create();
         $pagesGrid = $layout->createBlock(
-            'Magento\Cms\Block\Adminhtml\Page\Widget\Chooser',
+            \Magento\Cms\Block\Adminhtml\Page\Widget\Chooser::class,
             '',
             ['data' => ['id' => $uniqId]]
         );

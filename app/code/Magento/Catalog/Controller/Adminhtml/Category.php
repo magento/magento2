@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml;
@@ -18,9 +18,21 @@ abstract class Category extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Catalog::categories';
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      */
-    private $dateTimeFilter;
+    protected $dateFilter;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date|null $dateFilter
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter = null
+    ) {
+        $this->dateFilter = $dateFilter;
+        parent::__construct($context);
+    }
 
     /**
      * Initialize requested category and put it into registry.
@@ -31,16 +43,16 @@ abstract class Category extends \Magento\Backend\App\Action
      */
     protected function _initCategory($getRootInstead = false)
     {
-        $categoryId = (int)$this->getRequest()->getParam('id', false);
+        $categoryId = $this->resolveCategoryId();
         $storeId = (int)$this->getRequest()->getParam('store');
-        $category = $this->_objectManager->create('Magento\Catalog\Model\Category');
+        $category = $this->_objectManager->create(\Magento\Catalog\Model\Category::class);
         $category->setStoreId($storeId);
 
         if ($categoryId) {
             $category->load($categoryId);
             if ($storeId) {
                 $rootId = $this->_objectManager->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    \Magento\Store\Model\StoreManagerInterface::class
                 )->getStore(
                     $storeId
                 )->getRootCategoryId();
@@ -55,11 +67,23 @@ abstract class Category extends \Magento\Backend\App\Action
             }
         }
 
-        $this->_objectManager->get('Magento\Framework\Registry')->register('category', $category);
-        $this->_objectManager->get('Magento\Framework\Registry')->register('current_category', $category);
-        $this->_objectManager->get('Magento\Cms\Model\Wysiwyg\Config')
+        $this->_objectManager->get(\Magento\Framework\Registry::class)->register('category', $category);
+        $this->_objectManager->get(\Magento\Framework\Registry::class)->register('current_category', $category);
+        $this->_objectManager->get(\Magento\Cms\Model\Wysiwyg\Config::class)
             ->setStoreId($this->getRequest()->getParam('store'));
         return $category;
+    }
+
+    /**
+     * Resolve Category Id (from get or from post)
+     *
+     * @return int
+     */
+    private function resolveCategoryId()
+    {
+        $categoryId = (int)$this->getRequest()->getParam('id', false);
+
+        return $categoryId ?: (int)$this->getRequest()->getParam('entity_id', false);
     }
 
     /**
@@ -70,7 +94,7 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\Controller\Result\Json
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     protected function ajaxRequestResponse($category, $resultPage)
     {
@@ -79,7 +103,7 @@ abstract class Category extends \Magento\Backend\App\Action
         if (empty($breadcrumbsPath)) {
             // but if no category, and it is deleted - prepare breadcrumbs from path, saved in session
             $breadcrumbsPath = $this->_objectManager->get(
-                'Magento\Backend\Model\Auth\Session'
+                \Magento\Backend\Model\Auth\Session::class
             )->getDeletedPath(
                 true
             );
@@ -107,24 +131,10 @@ abstract class Category extends \Magento\Backend\App\Action
             ['response' => $eventResponse, 'controller' => $this]
         );
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-        $resultJson = $this->_objectManager->get('Magento\Framework\Controller\Result\Json');
+        $resultJson = $this->_objectManager->get(\Magento\Framework\Controller\Result\Json::class);
         $resultJson->setHeader('Content-type', 'application/json', true);
         $resultJson->setData($eventResponse->getData());
         return $resultJson;
-    }
-
-    /**
-     * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
-     *
-     * @deprecated
-     */
-    private function getDateTimeFilter()
-    {
-        if ($this->dateTimeFilter === null) {
-            $this->dateTimeFilter = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
-        }
-        return $this->dateTimeFilter;
     }
 
     /**
@@ -142,7 +152,7 @@ abstract class Category extends \Magento\Backend\App\Action
         foreach ($attributes as $attrKey => $attribute) {
             if ($attribute->getBackend()->getType() == 'datetime') {
                 if (array_key_exists($attrKey, $postData) && $postData[$attrKey] != '') {
-                    $dateFieldFilters[$attrKey] = $this->getDateTimeFilter();
+                    $dateFieldFilters[$attrKey] = $this->dateFilter;
                 }
             }
         }

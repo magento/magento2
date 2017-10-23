@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,20 +12,20 @@ $code = $block->escapeHtml($block->getMethodCode());
 $ccType = $block->getInfoData('cc_type');
 ?>
 <fieldset class="admin__fieldset payment-method"
-          id="payment_form_<?php /* @noEscape */ echo $code; ?>"
+          id="payment_form_<?= /* @noEscape */ $code ?>"
           style="display:none"
     >
     <div class="admin__field _required">
-        <label class="label admin__field-label" for="<?php /* @noEscape */ echo $code; ?>_cc_type" >
-            <span><?php echo $block->escapeHtml(__('Credit Card Type')); ?></span>
+        <label class="label admin__field-label" for="<?= /* @noEscape */ $code ?>_cc_type" >
+            <span><?= $block->escapeHtml(__('Credit Card Type')) ?></span>
         </label>
         <div class="admin__field-control control">
-            <select id="<?php /* @noEscape */ echo $code; ?>_cc_type" name="payment[cc_type]"
+            <select id="<?= /* @noEscape */ $code ?>_cc_type" name="payment[cc_type]"
                     class="required-entry select admin__control-select validate-cc-type-select">
                 <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName): ?>
-                    <option value="<?php echo $block->escapeHtml($typeCode); ?>"
+                    <option value="<?= $block->escapeHtml($typeCode) ?>"
                         <?php if($typeCode == $ccType): ?> selected="selected"<?php endif; ?>>
-                        <?php echo $block->escapeHtml($typeName); ?>
+                        <?= $block->escapeHtml($typeName) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -33,45 +33,45 @@ $ccType = $block->getInfoData('cc_type');
     </div>
     <div class="admin__field _required">
         <label class="label admin__field-label">
-            <span><?php echo $block->escapeHtml(__('Credit Card Number')); ?></span>
+            <span><?= $block->escapeHtml(__('Credit Card Number')) ?></span>
         </label>
         <div class="admin__field-control control">
-            <div id="<?php /* @noEscape */ echo $code; ?>_cc_number" class="admin__control-text hosted-control">
+            <div id="<?= /* @noEscape */ $code ?>_cc_number" class="admin__control-text hosted-control">
                 <span class="icon-type"></span>
             </div>
             <div class="hosted-error">
-                <?php echo $block->escapeHtml(__('Please, enter valid Credit Card Number')); ?>
+                <?= $block->escapeHtml(__('Please, enter valid Credit Card Number')) ?>
             </div>
         </div>
     </div>
 
     <div class="admin__field _required">
         <label class="label admin__field-label">
-            <span><?php echo $block->escapeHtml(__('Expiration Date')); ?></span>
+            <span><?= $block->escapeHtml(__('Expiration Date')) ?></span>
         </label>
         <div class="admin__field-control control">
             <div class="hosted-date-wrap">
-                <div id="<?php /* @noEscape */ echo $code; ?>_cc_exp_month"
+                <div id="<?= /* @noEscape */ $code ?>_cc_exp_month"
                      class="admin__control-text hosted-control hosted-date"></div>
 
-                <div id="<?php /* @noEscape */ echo $code; ?>_cc_exp_year"
+                <div id="<?= /* @noEscape */ $code ?>_cc_exp_year"
                      class="admin__control-text hosted-control hosted-date"></div>
 
-                <div class="hosted-error"><?php echo $block->escapeHtml(__('Please, enter valid Expiration Date')); ?></div>
+                <div class="hosted-error"><?= $block->escapeHtml(__('Please, enter valid Expiration Date')) ?></div>
             </div>
         </div>
     </div>
     <?php if($block->hasVerification()): ?>
         <div class="admin__field _required">
             <label class="label admin__field-label">
-                <span><?php echo $block->escapeHtml(__('Card Verification Number')); ?></span>
+                <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>
             </label>
             <div class="admin__field-control control">
-                <div id="<?php /* @noEscape */ echo $code; ?>_cc_cid"
+                <div id="<?= /* @noEscape */ $code ?>_cc_cid"
                      class="admin__control-text hosted-control hosted-cid"></div>
 
                 <div class="hosted-error">
-                    <?php echo $block->escapeHtml(__('Please, enter valid Card Verification Number')); ?>
+                    <?= $block->escapeHtml(__('Please, enter valid Card Verification Number')) ?>
                 </div>
             </div>
         </div>
@@ -80,16 +80,16 @@ $ccType = $block->getInfoData('cc_type');
     <?php if($block->isVaultEnabled()): ?>
         <div class="field-tooltip-content">
             <input type="checkbox"
-                   id="<?php /* @noEscape */ echo $code; ?>_vault"
+                   id="<?= /* @noEscape */ $code ?>_vault"
                    name="payment[is_active_payment_token_enabler]"
                    class="admin__control-checkbox"/>
-            <label class="label" for="<?php /* @noEscape */ echo $code; ?>_vault">
-                <span><?php echo $block->escapeHtml('Save for later use.'); ?></span>
+            <label class="label" for="<?= /* @noEscape */ $code ?>_vault">
+                <span><?= $block->escapeHtml('Save for later use.') ?></span>
             </label>
         </div>
     <?php endif; ?>
 
-    <input type="hidden" id="<?php /* @noEscape */ echo $code; ?>_payment_method_nonce"
+    <input type="hidden" id="<?= /* @noEscape */ $code ?>_payment_method_nonce"
            name="payment[payment_method_nonce]"/>
     <input type="submit" name="Submit" style="display: none;">
 </fieldset>

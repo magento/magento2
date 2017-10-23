@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model;
@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Unit test of sales emails sending observer.
  */
-class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
+class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Subject of testing.
@@ -51,16 +51,10 @@ class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->emailSender = $this->getMock(
-            'Magento\Sales\Model\Order\Email\Sender',
-            ['send'],
-            [],
-            '',
-            false
-        );
+        $this->emailSender = $this->createPartialMock(\Magento\Sales\Model\Order\Email\Sender::class, ['send']);
 
         $this->entityResource = $this->getMockForAbstractClass(
-            'Magento\Sales\Model\ResourceModel\EntityAbstract',
+            \Magento\Sales\Model\ResourceModel\EntityAbstract::class,
             [],
             '',
             false,
@@ -70,7 +64,7 @@ class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->entityCollection = $this->getMockForAbstractClass(
-            'Magento\Sales\Model\ResourceModel\Collection\AbstractCollection',
+            \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection::class,
             [],
             '',
             false,
@@ -79,16 +73,10 @@ class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
             ['addFieldToFilter', 'getItems']
         );
 
-        $this->globalConfig = $this->getMock(
-            'Magento\Framework\App\Config',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->globalConfig = $this->createMock(\Magento\Framework\App\Config::class);
 
         $this->object = $objectManager->getObject(
-            'Magento\Sales\Model\EmailSenderHandler',
+            \Magento\Sales\Model\EmailSenderHandler::class,
             [
                 'emailSender' => $this->emailSender,
                 'entityResource' => $this->entityResource,
@@ -165,7 +153,7 @@ class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
     public function executeDataProvider()
     {
         $entityModel = $this->getMockForAbstractClass(
-            'Magento\Sales\Model\AbstractModel',
+            \Magento\Sales\Model\AbstractModel::class,
             [],
             '',
             false,

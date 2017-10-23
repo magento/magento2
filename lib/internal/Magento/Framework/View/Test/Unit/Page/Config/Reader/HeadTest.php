@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Config\Reader\Head;
 
-class HeadTest extends \PHPUnit_Framework_TestCase
+class HeadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Head
@@ -24,10 +24,10 @@ class HeadTest extends \PHPUnit_Framework_TestCase
 
     public function testInterpret()
     {
-        $readerContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
+        $readerContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $structureMock = $this->getMockBuilder('Magento\Framework\View\Page\Config\Structure')
+        $structureMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config\Structure::class)
             ->disableOriginalConstructor()
             ->getMock();
         $readerContextMock->expects($this->once())

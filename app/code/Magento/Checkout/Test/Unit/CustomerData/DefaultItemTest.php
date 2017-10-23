@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\CustomerData;
 
-class DefaultItemTest extends \PHPUnit_Framework_TestCase
+class DefaultItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Checkout\CustomerData\DefaultItem
@@ -90,4 +90,3 @@ class DefaultItemTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('canApplyMsrp', $itemData);
     }
 }
-

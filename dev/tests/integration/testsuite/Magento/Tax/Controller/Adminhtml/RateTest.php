@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Controller\Adminhtml;
@@ -22,7 +22,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $jsonBody = $this->getResponse()->getBody();
         $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Json\Helper\Data'
+            \Magento\Framework\Json\Helper\Data::class
         )->jsonDecode(
             $jsonBody
         );
@@ -32,7 +32,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $rateId = $result['tax_calculation_rate_id'];
         /** @var $rate \Magento\Tax\Model\Calculation\Rate */
         $rate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Tax\Model\Calculation\Rate'
+            \Magento\Tax\Model\Calculation\Rate::class
         )->load(
             $rateId,
             'tax_calculation_rate_id'
@@ -90,7 +90,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $jsonBody = $this->getResponse()->getBody();
         $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Json\Helper\Data'
+            \Magento\Framework\Json\Helper\Data::class
         )->jsonDecode(
             $jsonBody
         );
@@ -154,20 +154,6 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
                 ],
                 $expectedData
             ],
-            // Rate empty
-            [
-                [
-                    'rate' => '',
-                    'tax_country_id' => 'US',
-                    'tax_region_id' => '0',
-                    'code' => 'Rate ' . uniqid(),
-                    'zip_is_range' => '0',
-                    'zip_from' => '10000',
-                    'zip_to' => '20000',
-                    'tax_postcode' => '*',
-                ],
-                $expectedData
-            ],
             // Tax zip code is empty
             [
                 [
@@ -210,7 +196,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         /** @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory $rateClassFactory */
         $rateClassFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Tax\Api\Data\TaxRateInterfaceFactory'
+            \Magento\Tax\Api\Data\TaxRateInterfaceFactory::class
         );
 
         $rateClass = $rateClassFactory->create();
@@ -229,7 +215,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $rateClassId=$rateClass->getTaxCalculationRateId();
         /** @var $class \Magento\Tax\Model\Calculation\Rate */
         $class = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Tax\Model\Calculation\Rate')
+            ->create(\Magento\Tax\Model\Calculation\Rate::class)
             ->load($rateClassId, 'tax_calculation_rate_id');
 
         $this->assertEquals($rateClassData['tax_country_id'], $class->getTaxCountryId());
@@ -248,7 +234,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $jsonBody = $this->getResponse()->getBody();
 
         $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Json\Helper\Data'
+            \Magento\Framework\Json\Helper\Data::class
         )->jsonDecode(
             $jsonBody
         );
@@ -284,7 +270,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $jsonBody = $this->getResponse()->getBody();
 
         $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Json\Helper\Data'
+            \Magento\Framework\Json\Helper\Data::class
         )->jsonDecode(
             $jsonBody
         );

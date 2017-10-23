@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
-class InterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
+class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Code\Generator\InterfaceGenerator
@@ -75,16 +75,16 @@ class InterfaceGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGenerate($additionalMethodsData, $expectedException, $expectedExceptionMessage)
     {
         if ($expectedException) {
-            $this->setExpectedException($expectedException, $expectedExceptionMessage);
+            $this->expectException($expectedException, $expectedExceptionMessage);
         }
         $methodsData = array_merge_recursive($this->methodsData, $additionalMethodsData);
         $this->interfaceGenerator->setClassDocBlock($this->interfaceDocBlock)
             ->addMethods($methodsData)
             ->setName('SevenInterface')
-            ->setNamespaceName('Magento\SomeModule\Model')
-            ->addUse('Magento\SomeModule\Model\Two\Test', 'TestTwo')
-            ->addUse('Magento\SomeModule\Model\Three\Test', 'TestThree')
-            ->setExtendedClass('\Magento\Framework\Code\Generator\CodeGeneratorInterface');
+            ->setNamespaceName(\Magento\SomeModule\Model::class)
+            ->addUse(\Magento\SomeModule\Model\Two\Test::class, 'TestTwo')
+            ->addUse(\Magento\SomeModule\Model\Three\Test::class, 'TestThree')
+            ->setExtendedClass(\Magento\Framework\Code\Generator\CodeGeneratorInterface::class);
         $generatedInterface = $this->interfaceGenerator->generate();
         $expectedInterface = file_get_contents(
             __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/SevenInterface.php'

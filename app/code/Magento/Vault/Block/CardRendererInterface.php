@@ -1,45 +1,28 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Block;
 
-use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Block\Customer\IconInterface;
 
 /**
  * Interface CardRendererInterface
  * @api
+ * @since 100.1.0
  */
-interface CardRendererInterface extends TokenRendererInterface
+interface CardRendererInterface extends TokenRendererInterface, IconInterface
 {
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getNumberLast4Digits();
 
     /**
      * @return string
+     * @since 100.1.0
      */
     public function getExpDate();
-
-    /**
-     * @return string
-     */
-    public function getIconUrl();
-
-    /**
-     * @return int
-     */
-    public function getIconHeight();
-
-    /**
-     * @return int
-     */
-    public function getIconWidth();
-
-    /**
-     * @return PaymentTokenInterface
-     */
-    public function getToken();
 }

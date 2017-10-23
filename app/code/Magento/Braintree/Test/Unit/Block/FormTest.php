@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Block;
@@ -16,13 +16,12 @@ use Magento\Payment\Model\Config;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
-use OAuthTest\Mocks\Common\Service\Mock;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class FormTest
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     public static $baseCardTypes = [
         'AE' => 'American Express',

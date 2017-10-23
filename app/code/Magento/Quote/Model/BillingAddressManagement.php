@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model;
@@ -11,7 +11,10 @@ use Psr\Log\LoggerInterface as Logger;
 use Magento\Quote\Api\BillingAddressManagementInterface;
 use Magento\Framework\App\ObjectManager;
 
-/** Quote billing address write service object. */
+/**
+ * Quote billing address write service object.
+ *
+ */
 class BillingAddressManagement implements BillingAddressManagementInterface
 {
     /**
@@ -39,6 +42,11 @@ class BillingAddressManagement implements BillingAddressManagementInterface
      * @var \Magento\Customer\Api\AddressRepositoryInterface
      */
     protected $addressRepository;
+
+    /**
+     * @var \Magento\Quote\Model\ShippingAddressAssignment
+     */
+    private $shippingAddressAssignment;
 
     /**
      * Constructs a quote billing address service object.
@@ -71,6 +79,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
         $quote->removeAddress($quote->getBillingAddress()->getId());
         $quote->setBillingAddress($address);
         try {
+            $this->getShippingAddressAssignment()->setAddress($quote, $address, $useForShipping);
             $quote->setDataChanges(true);
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
@@ -87,5 +96,18 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     {
         $cart = $this->quoteRepository->getActive($cartId);
         return $cart->getBillingAddress();
+    }
+
+    /**
+     * @return \Magento\Quote\Model\ShippingAddressAssignment
+     * @deprecated 100.2.0
+     */
+    private function getShippingAddressAssignment()
+    {
+        if (!$this->shippingAddressAssignment) {
+            $this->shippingAddressAssignment = ObjectManager::getInstance()
+                ->get(\Magento\Quote\Model\ShippingAddressAssignment::class);
+        }
+        return $this->shippingAddressAssignment;
     }
 }

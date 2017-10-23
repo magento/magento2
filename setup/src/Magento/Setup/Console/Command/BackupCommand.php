@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -58,6 +58,12 @@ class BackupCommand extends AbstractSetupCommand
     private $deploymentConfig;
 
     /**
+     * The initial maintenance mode state
+     * @var bool
+     */
+    private $maintenanceModeInitialState;
+
+    /**
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
@@ -71,8 +77,9 @@ class BackupCommand extends AbstractSetupCommand
     ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->maintenanceMode = $maintenanceMode;
-        $this->backupRollbackFactory = $this->objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
+        $this->backupRollbackFactory = $this->objectManager->get(\Magento\Framework\Setup\BackupRollbackFactory::class);
         $this->deploymentConfig = $deploymentConfig;
+        $this->maintenanceModeInitialState = $this->maintenanceMode->isOn();
         parent::__construct();
     }
 
@@ -109,6 +116,7 @@ class BackupCommand extends AbstractSetupCommand
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -147,8 +155,11 @@ class BackupCommand extends AbstractSetupCommand
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             $returnValue =  \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } finally {
-            $output->writeln('<info>Disabling maintenance mode</info>');
-            $this->maintenanceMode->set(false);
+            // Only disable maintenace mode if it wasn't turned on before
+            if (!$this->maintenanceModeInitialState) {
+                $output->writeln('<info>Disabling maintenance mode</info>');
+                $this->maintenanceMode->set(false);
+            }
         }
         return $returnValue;
     }
@@ -162,10 +173,10 @@ class BackupCommand extends AbstractSetupCommand
     {
         $areaCode = 'adminhtml';
         /** @var \Magento\Framework\App\State $appState */
-        $appState = $this->objectManager->get('Magento\Framework\App\State');
+        $appState = $this->objectManager->get(\Magento\Framework\App\State::class);
         $appState->setAreaCode($areaCode);
         /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
-        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $configLoader = $this->objectManager->get(\Magento\Framework\ObjectManager\ConfigLoaderInterface::class);
         $this->objectManager->configure($configLoader->load($areaCode));
     }
 }

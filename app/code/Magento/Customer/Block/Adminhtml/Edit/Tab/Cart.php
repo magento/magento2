@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
@@ -11,6 +11,9 @@ use Magento\Directory\Model\Currency;
 
 /**
  * Adminhtml customer orders grid block
+ *
+ * @api
+ * @since 100.0.2
  */
 class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -127,7 +130,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('Product'),
                 'index' => 'name',
-                'renderer' => 'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item'
+                'renderer' => \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item::class
             ]
         );
 
@@ -165,7 +168,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('Action'),
                 'index' => 'quote_item_id',
-                'renderer' => 'Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction',
+                'renderer' => \Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction::class,
                 'filter' => false,
                 'sortable' => false,
                 'actions' => [

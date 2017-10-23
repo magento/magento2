@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -91,6 +91,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $expectedData = [
             'attribute_code' => $attributeCode,
             'is_required' => true,
+            'entity_type_id' => "4",
             "frontend_input" => "select",
             "is_visible_on_front" => true,
             "is_searchable" => true,
@@ -142,8 +143,11 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             'attribute' => [
                 'attribute_id' => $attribute['attribute_id'],
                 'attribute_code' => $attributeCode,
+                'entity_type_id' => 4,
+                'is_used_in_grid' => true,
+                'default_frontend_label' => 'default_label_new',
                 'frontend_labels' => [
-                    ['store_id' => 0, 'label' => 'front_lbl_new'],
+                    ['store_id' => 1, 'label' => 'front_lbl_new'],
                 ],
                 "options" => [
                     //Update existing
@@ -182,8 +186,9 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $result = $this->updateAttribute($attributeCode, $attributeData);
 
         $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
+        $this->assertEquals(true, $result['is_used_in_grid']);
         $this->assertEquals($attributeCode, $result['attribute_code']);
-        $this->assertEquals('front_lbl_new', $result['default_frontend_label']);
+        $this->assertEquals('default_label_new', $result['default_frontend_label']);
         //New option set as default
         $this->assertEquals($result['options'][3]['value'], $result['default_value']);
         $this->assertEquals("Default Blue Updated", $result['options'][1]['label']);
@@ -201,6 +206,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             'attribute' => [
                 'attribute_id' => $attribute['attribute_id'],
                 'attribute_code' => $attributeCode,
+                'entity_type_id' => 4,
                 'is_required' => true,
                 'frontend_labels' => [
                     ['store_id' => 0, 'label' => 'front_lbl_new'],
@@ -277,6 +283,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $attributeData = [
             'attribute' => [
                 'attribute_code' => $attributeCode,
+                'entity_type_id' => '4',
                 'frontend_labels' => [
                     [
                         'store_id' => 0,

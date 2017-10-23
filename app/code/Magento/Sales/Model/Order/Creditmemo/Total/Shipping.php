@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
@@ -132,12 +132,14 @@ class Shipping extends AbstractTotal
      *
      * @return \Magento\Tax\Model\Config
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getTaxConfig()
     {
         if ($this->taxConfig === null) {
-            $this->taxConfig = \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Tax\Model\Config');
+            $this->taxConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Tax\Model\Config::class
+            );
         }
         return $this->taxConfig;
     }

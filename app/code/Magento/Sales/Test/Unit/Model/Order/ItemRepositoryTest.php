@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Model\Order\ItemRepository;
 
-class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DataObject\Factory|\PHPUnit_Framework_MockObject_MockObject
@@ -40,36 +43,45 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $extensionFactory;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $collectionProcessor;
+
+    /**
      * @var array
      */
     protected $productOptionData = [];
 
     protected function setUp()
     {
-        $this->objectFactory = $this->getMockBuilder('Magento\Framework\DataObject\Factory')
+        $this->objectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->metadata = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Metadata')
+        $this->metadata = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Metadata::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->searchResultFactory = $this->getMockBuilder(
-            'Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory'
+            \Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->productOptionFactory = $this->getMockBuilder('Magento\Catalog\Model\ProductOptionFactory')
+        $this->productOptionFactory = $this->getMockBuilder(\Magento\Catalog\Model\ProductOptionFactory::class)
             ->setMethods([
                 'create',
             ])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->extensionFactory = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductOptionExtensionFactory')
+        $this->collectionProcessor = $this->createMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+        );
+
+        $this->extensionFactory = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductOptionExtensionFactory::class)
             ->setMethods([
                 'create',
             ])
@@ -88,7 +100,9 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->metadata,
             $this->searchResultFactory,
             $this->productOptionFactory,
-            $this->extensionFactory
+            $this->extensionFactory,
+            [],
+            $this->collectionProcessor
         );
 
         $model->get(null);
@@ -102,7 +116,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $orderItemId = 1;
 
-        $orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
+        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $orderItemMock->expects($this->once())
@@ -122,7 +136,9 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->metadata,
             $this->searchResultFactory,
             $this->productOptionFactory,
-            $this->extensionFactory
+            $this->extensionFactory,
+            [],
+            $this->collectionProcessor
         );
 
         $model->get($orderItemId);
@@ -161,52 +177,17 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $productType = 'configurable';
-        $field = 'field';
-        $value = 'value';
-
         $this->productOptionData = ['option1' => 'value1'];
-
-        $filterMock = $this->getMockBuilder('Magento\Framework\Api\Filter')
+        $searchCriteriaMock = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteria::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $filterMock->expects($this->once())
-            ->method('getConditionType')
-            ->willReturn(null);
-        $filterMock->expects($this->once())
-            ->method('getField')
-            ->willReturn($field);
-        $filterMock->expects($this->once())
-            ->method('getValue')
-            ->willReturn($value);
-
-        $filterGroupMock = $this->getMockBuilder('Magento\Framework\Api\Search\FilterGroup')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filterGroupMock->expects($this->once())
-            ->method('getFilters')
-            ->willReturn([$filterMock]);
-
-        $searchCriteriaMock = $this->getMockBuilder('Magento\Framework\Api\SearchCriteria')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $searchCriteriaMock->expects($this->once())
-            ->method('getFilterGroups')
-            ->willReturn([$filterGroupMock]);
-
         $this->getProductOptionExtensionMock();
         $productOption = $this->getProductOptionMock();
         $orderItemMock = $this->getOrderMock($productType, $productOption);
 
-        $searchResultMock = $this->getMockBuilder('Magento\Sales\Api\Data\OrderItemSearchResultInterface')
-            ->setMethods([
-                'addFieldToFilter',
-                'getItems',
-            ])
-            ->getMockForAbstractClass();
-        $searchResultMock->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with($field, ['eq' => $value])
-            ->willReturnSelf();
+        $searchResultMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Item\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $searchResultMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$orderItemMock]);
@@ -224,11 +205,11 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $orderItemId = 1;
         $productType = 'configurable';
 
-        $requestMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $requestMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
+        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $orderItemMock->expects($this->once())
@@ -245,7 +226,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getBuyRequest')
             ->willReturn($requestMock);
 
-        $orderItemResourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
+        $orderItemResourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
         $orderItemResourceMock->expects($this->once())
@@ -275,11 +256,11 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $productType,
         array $data = []
     ) {
-        $requestMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $requestMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $requestUpdateMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $requestUpdateMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
         $requestUpdateMock->expects($this->any())
@@ -287,7 +268,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($data);
 
         $this->productOptionProcessorMock = $this->getMockBuilder(
-            'Magento\Catalog\Model\ProductOptionProcessorInterface'
+            \Magento\Catalog\Model\ProductOptionProcessorInterface::class
         )
             ->getMockForAbstractClass();
         $this->productOptionProcessorMock->expects($this->any())
@@ -307,8 +288,9 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->extensionFactory,
             [
                 $productType => $this->productOptionProcessorMock,
-                'custom_options' => $this->productOptionProcessorMock,
-            ]
+                'custom_options' => $this->productOptionProcessorMock
+            ],
+            $this->collectionProcessor
         );
         return $model;
     }
@@ -320,11 +302,11 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function getOrderMock($productType, $productOption)
     {
-        $requestMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $requestMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
+        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $orderItemMock->expects($this->once())
@@ -349,7 +331,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function getProductOptionMock()
     {
-        $productOption = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductOptionInterface')
+        $productOption = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductOptionInterface::class)
             ->getMockForAbstractClass();
         $productOption->expects($this->any())
             ->method('getExtensionAttributes')
@@ -364,7 +346,9 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function getProductOptionExtensionMock()
     {
-        $productOptionExtension = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductOptionExtensionInterface')
+        $productOptionExtension = $this->getMockBuilder(
+            \Magento\Catalog\Api\Data\ProductOptionExtensionInterface::class
+        )
             ->setMethods([
                 'setData',
             ])

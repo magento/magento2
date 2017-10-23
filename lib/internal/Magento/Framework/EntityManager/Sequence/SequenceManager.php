@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -53,29 +53,39 @@ class SequenceManager
     }
 
     /**
-     * Force sequence value creation
+     * Forces creation of a sequence value.
      *
      * @param string $entityType
      * @param string|int $identifier
+     *
      * @return int
+     *
      * @throws \Exception
      */
     public function force($entityType, $identifier)
     {
-        $metadata = $this->metadataPool->getMetadata($entityType);
         $sequenceInfo = $this->sequenceRegistry->retrieve($entityType);
 
         if (!isset($sequenceInfo['sequenceTable'])) {
-            throw new \Exception('TODO: use correct Exception class' . PHP_EOL  . ' Sequence table doesnt exists');
+            throw new \Exception(
+                'TODO: use correct Exception class' . PHP_EOL  . ' Sequence table doesnt exists'
+            );
         }
+
         try {
-            $connection = $this->appResource->getConnectionByName($metadata->getEntityConnectionName());
+            $metadata = $this->metadataPool->getMetadata($entityType);
+
+            $connection = $this->appResource->getConnectionByName(
+                $metadata->getEntityConnectionName()
+            );
+
             return $connection->insert(
                 $this->appResource->getTableName($sequenceInfo['sequenceTable']),
                 ['sequence_value' => $identifier]
             );
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage(), $e->getTrace());
+
             throw new \Exception('TODO: use correct Exception class' . PHP_EOL . $e->getMessage());
         }
     }

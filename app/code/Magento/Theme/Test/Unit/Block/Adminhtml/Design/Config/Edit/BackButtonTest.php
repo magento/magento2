@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\Design\Config\Edit;
@@ -9,7 +9,7 @@ use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\UrlInterface;
 use Magento\Theme\Block\Adminhtml\Design\Config\Edit\BackButton;
 
-class BackButtonTest extends \PHPUnit_Framework_TestCase
+class BackButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BackButton
@@ -52,11 +52,11 @@ class BackButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function initContext()
     {
-        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder('Magento\Backend\Block\Widget\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\Block\Widget\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Controller\Adminhtml\Email\Template;
@@ -17,8 +17,10 @@ use Magento\Framework\View\Result\Page;
 
 /**
  * Preview Test
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PreviewTest extends \PHPUnit_Framework_TestCase
+class PreviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Preview
@@ -60,39 +62,55 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
      */
     protected $pageTitleMock;
 
+    /**
+     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $responseMock;
+
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 
-        $this->coreRegistryMock = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->coreRegistryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->viewMock = $this->getMockBuilder('Magento\Framework\App\View')
+        $this->viewMock = $this->getMockBuilder(\Magento\Framework\App\View::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->getMock();
-        $this->pageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+        $this->pageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConfig'])
             ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+        $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->setMethods(['getTitle'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $this->pageTitleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->setMethods(['prepend'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $objectManager->getObject('Magento\Backend\App\Action\Context', [
-            'request' => $this->requestMock,
-            'view' => $this->viewMock
-        ]);
-        $this->object = $objectManager->getObject('Magento\Email\Controller\Adminhtml\Email\Template\Preview', [
-            'context' => $this->context,
-            'coreRegistry' => $this->coreRegistryMock,
-        ]);
+        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
+            ->setMethods(['setHeader'])
+            ->getMockForAbstractClass();
+
+        $this->context = $objectManager->getObject(
+            \Magento\Backend\App\Action\Context::class,
+            [
+                'request' => $this->requestMock,
+                'view' => $this->viewMock,
+                'response' => $this->responseMock
+            ]
+        );
+        $this->object = $objectManager->getObject(
+            \Magento\Email\Controller\Adminhtml\Email\Template\Preview::class,
+            [
+                'context' => $this->context,
+                'coreRegistry' => $this->coreRegistryMock,
+            ]
+        );
     }
 
     public function testExecute()
@@ -109,6 +127,9 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $this->pageTitleMock->expects($this->once())
             ->method('prepend')
             ->willReturnSelf();
+        $this->responseMock->expects($this->once())
+            ->method('setHeader')
+            ->with('Content-Security-Policy', "script-src 'none'");
 
         $this->assertNull($this->object->execute());
     }

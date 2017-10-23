@@ -1,36 +1,43 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\EntityManager;
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\EntityManager\Sequence\SequenceFactory;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class MetadataPool
+ *
+ * @api
+ * @since 100.1.0
  */
 class MetadataPool
 {
     /**
      * @var ObjectManagerInterface
+     * @since 100.1.0
      */
     protected $objectManager;
 
     /**
      * @var array
+     * @since 100.1.0
      */
     protected $metadata;
 
     /**
      * @var \Magento\Framework\EntityManager\EntityMetadata[]
+     * @since 100.1.0
      */
     protected $registry;
 
     /**
      * @var SequenceFactory
+     * @since 100.1.0
      */
     protected $sequenceFactory;
 
@@ -39,6 +46,7 @@ class MetadataPool
      * @param ObjectManagerInterface $objectManager
      * @param SequenceFactory $sequenceFactory
      * @param array $metadata
+     * @since 100.1.0
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -83,6 +91,7 @@ class MetadataPool
      * @param string $entityType
      * @return EntityMetadataInterface
      * @throws \Exception
+     * @since 100.1.0
      */
     public function getMetadata($entityType)
     {
@@ -90,7 +99,6 @@ class MetadataPool
             throw new \Exception(sprintf('Unknown entity type: %s requested', $entityType));
         }
         if (!isset($this->registry[$entityType])) {
-
             $this->registry[$entityType] = $this->createMetadata($entityType);
         }
         return $this->registry[$entityType];
@@ -99,7 +107,8 @@ class MetadataPool
     /**
      * @param string $entityType
      * @return HydratorInterface
-     * @deprecated
+     * @deprecated 100.1.0
+     * @since 100.1.0
      */
     public function getHydrator($entityType)
     {
@@ -112,6 +121,7 @@ class MetadataPool
      *
      * @param string $entityType
      * @return bool
+     * @since 100.1.0
      */
     public function hasConfiguration($entityType)
     {

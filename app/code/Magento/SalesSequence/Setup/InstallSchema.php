@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesSequence\Setup;
@@ -15,6 +15,11 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 class InstallSchema implements InstallSchemaInterface
 {
     /**
+     * @var string
+     */
+    private static $connectionName = 'sales';
+
+    /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -25,8 +30,8 @@ class InstallSchema implements InstallSchemaInterface
         /**
          * Create table 'sales_sequence_profile'
          */
-        $table = $installer->getConnection()->newTable(
-            $installer->getTable('sales_sequence_profile')
+        $table = $installer->getConnection(self::$connectionName)->newTable(
+            $installer->getTable('sales_sequence_profile', self::$connectionName)
         )->addColumn(
             'profile_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -84,24 +89,32 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getIdxName(
                 'sales_sequence_profile',
                 ['meta_id', 'prefix', 'suffix'],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE,
+                '',
+                self::$connectionName
             ),
             ['meta_id', 'prefix', 'suffix'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addForeignKey(
-            $installer->getFkName('sales_sequence_profile', 'meta_id', 'sales_sequence_meta', 'meta_id'),
+            $installer->getFkName(
+                'sales_sequence_profile',
+                'meta_id',
+                'sales_sequence_meta',
+                'meta_id',
+                self::$connectionName
+            ),
             'meta_id',
-            $installer->getTable('sales_sequence_meta'),
+            $installer->getTable('sales_sequence_meta', self::$connectionName),
             'meta_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection(self::$connectionName)->createTable($table);
 
         /**
          * Create table 'sales_sequence_meta'
          */
-        $table = $installer->getConnection()->newTable(
-            $installer->getTable('sales_sequence_meta')
+        $table = $installer->getConnection(self::$connectionName)->newTable(
+            $installer->getTable('sales_sequence_meta', self::$connectionName)
         )->addColumn(
             'meta_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -130,12 +143,14 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getIdxName(
                 'sales_sequence_meta',
                 ['entity_type', 'store_id'],
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE,
+                '',
+                self::$connectionName
             ),
             ['entity_type', 'store_id'],
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection(self::$connectionName)->createTable($table);
         $installer->endSetup();
     }
 }

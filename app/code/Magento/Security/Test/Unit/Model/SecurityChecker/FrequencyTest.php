@@ -1,20 +1,20 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Security\Test\Unit\Model\SecurityChecker;
 
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\ConfigInterface;
-use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 /**
  * Test class for \Magento\Security\Model\SecurityChecker\Frequency testing
  */
-class FrequencyTest extends \PHPUnit_Framework_TestCase
+class FrequencyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Security\Model\SecurityChecker\Frequency
@@ -59,8 +59,9 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->securityConfigMock =  $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
+            ->setMethods(['getScopeByEventType'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->securityConfigMock->expects($this->any())
             ->method('getScopeByEventType')
             ->willReturnMap(
@@ -70,20 +71,14 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->collectionFactoryMock = $this->getMock(
-            '\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->collectionFactoryMock = $this->createPartialMock(
+            \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory::class,
+            ['create']
         );
 
-        $this->collectionMock = $this->getMock(
-            '\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection',
-            ['addFieldToFilter', 'filterLastItem', 'getFirstItem'],
-            [],
-            '',
-            false
+        $this->collectionMock = $this->createPartialMock(
+            \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection::class,
+            ['addFieldToFilter', 'filterLastItem', 'getFirstItem']
         );
 
         $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)
@@ -95,7 +90,7 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
-            'Magento\Security\Model\SecurityChecker\Frequency',
+            \Magento\Security\Model\SecurityChecker\Frequency::class,
             [
                 'securityConfig' => $this->securityConfigMock,
                 'collectionFactory' => $this->collectionFactoryMock,
@@ -122,7 +117,7 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
             ->willReturn($timestamp);
 
         /** @var \Magento\Security\Model\PasswordResetRequestEvent $record */
-        $record = $this->objectManager->getObject('\Magento\Security\Model\PasswordResetRequestEvent');
+        $record = $this->objectManager->getObject(\Magento\Security\Model\PasswordResetRequestEvent::class);
         $record->setCreatedAt(
             date("Y-m-d H:i:s", $timestamp - $limitTimeBetweenPasswordResetRequests)
         );
@@ -153,7 +148,7 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
             ->willReturn($timestamp);
 
         /** @var \Magento\Security\Model\PasswordResetRequestEvent $record */
-        $record = $this->objectManager->getObject('\Magento\Security\Model\PasswordResetRequestEvent');
+        $record = $this->objectManager->getObject(\Magento\Security\Model\PasswordResetRequestEvent::class);
         $record->setCreatedAt(
             date("Y-m-d H:i:s", $timestamp - $limitTimeBetweenPasswordResetRequests + 1)
         );

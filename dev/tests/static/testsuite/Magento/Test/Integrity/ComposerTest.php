@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity;
@@ -12,7 +12,7 @@ use Magento\Framework\Composer\MagentoComponent;
 /**
  * A test that enforces validity of composer.json files and any other conventions in Magento components
  */
-class ComposerTest extends \PHPUnit_Framework_TestCase
+class ComposerTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -97,9 +97,14 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     private function validateComposerJsonFile($path)
     {
         /** @var \Magento\Framework\Composer\MagentoComposerApplicationFactory $appFactory */
-        $appFactory = self::$objectManager->get('Magento\Framework\Composer\MagentoComposerApplicationFactory');
+        $appFactory = self::$objectManager->get(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
         $app = $appFactory->create();
-        $app->runComposerCommand(['command' => 'validate'], $path);
+
+        try {
+            $app->runComposerCommand(['command' => 'validate'], $path);
+        } catch (\RuntimeException $exception) {
+            $this->fail($exception->getMessage());
+        }
     }
 
     /**

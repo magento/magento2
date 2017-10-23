@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,8 +12,13 @@
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Phrase;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Attributes extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -86,7 +91,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
                     $value = $this->priceCurrency->convertAndFormat($value);
                 }
 
-                if (is_string($value) && strlen($value)) {
+                if ($value instanceof Phrase || (is_string($value) && strlen($value))) {
                     $data[$attribute->getAttributeCode()] = [
                         'label' => __($attribute->getStoreLabel()),
                         'value' => $value,

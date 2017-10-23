@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api;
 
-class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
+class ExtensionAttributesFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Api\ExtensionAttributesFactory */
     private $factory;
@@ -18,7 +18,7 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $this->factory = $objectManager->create(
-            'Magento\Framework\Api\ExtensionAttributesFactory',
+            \Magento\Framework\Api\ExtensionAttributesFactory::class,
             ['objectManager' => $objectManager]
         );
     }
@@ -28,7 +28,7 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateThrowExceptionIfInterfaceNotImplemented()
     {
-        $this->factory->create('Magento\Framework\Api\ExtensionAttributesFactoryTest');
+        $this->factory->create(\Magento\Framework\Api\ExtensionAttributesFactoryTest::class);
     }
 
     /**
@@ -36,7 +36,7 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateThrowExceptionIfInterfaceNotOverridden()
     {
-        $this->factory->create('\Magento\Wonderland\Model\Data\FakeExtensibleOne');
+        $this->factory->create(\Magento\Wonderland\Model\Data\FakeExtensibleOne::class);
     }
 
     /**
@@ -44,20 +44,20 @@ class ExtensionAttributesFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateThrowExceptionIfReturnIsIncorrect()
     {
-        $this->factory->create('\Magento\Wonderland\Model\Data\FakeExtensibleTwo');
+        $this->factory->create(\Magento\Wonderland\Model\Data\FakeExtensibleTwo::class);
     }
 
     public function testCreate()
     {
         $this->assertInstanceOf(
-            'Magento\Wonderland\Api\Data\FakeRegionExtension',
-            $this->factory->create('Magento\Wonderland\Model\Data\FakeRegion')
+            \Magento\Wonderland\Api\Data\FakeRegionExtension::class,
+            $this->factory->create(\Magento\Wonderland\Model\Data\FakeRegion::class)
         );
     }
 
     public function testCreateWithLogicException()
     {
-        $this->setExpectedException(
+        $this->expectException(
             'LogicException',
             "Class 'Magento\\Framework\\Api\\ExtensionAttributesFactoryTest' must implement an interface, "
             . "which extends from 'Magento\\Framework\\Api\\ExtensibleDataInterface'"

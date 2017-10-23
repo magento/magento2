@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor\Helper;
@@ -12,7 +12,7 @@ use Magento\Framework\View\Asset\PreProcessor\Helper\Sort;
  *
  * @see \Magento\Framework\View\Asset\PreProcessor\Helper\Sorter2
  */
-class SortTest extends \PHPUnit_Framework_TestCase
+class SortTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $arrayData

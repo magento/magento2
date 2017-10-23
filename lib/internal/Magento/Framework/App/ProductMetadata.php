@@ -2,7 +2,7 @@
 /**
  * Magento application product metadata
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -37,7 +37,7 @@ class ProductMetadata implements ProductMetadataInterface
 
     /**
      * @var \Magento\Framework\Composer\ComposerJsonFinder
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $composerJsonFinder;
 
@@ -97,7 +97,7 @@ class ProductMetadata implements ProductMetadataInterface
      * Get version from system package
      *
      * @return string
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getSystemPackageVersion()
     {
@@ -114,7 +114,7 @@ class ProductMetadata implements ProductMetadataInterface
      * Load composerInformation
      *
      * @return ComposerInformation
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getComposerInformation()
     {

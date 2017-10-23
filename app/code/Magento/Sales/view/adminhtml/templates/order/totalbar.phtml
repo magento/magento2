@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,8 +12,8 @@
     <tr>
     <?php foreach ($block->getTotals() as $_total): ?>
         <td <?php if ($_total['grand']): ?>class="grand-total"<?php endif; ?>>
-            <?php /* @escapeNotVerified */ echo $_total['label'] ?><br />
-            <?php /* @escapeNotVerified */ echo $_total['value'] ?>
+            <?= /* @escapeNotVerified */ $_total['label'] ?><br />
+            <?= /* @escapeNotVerified */ $_total['value'] ?>
         </td>
     <?php endforeach; ?>
     </tr>

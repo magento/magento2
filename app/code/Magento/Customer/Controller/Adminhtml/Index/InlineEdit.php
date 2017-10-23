@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
@@ -24,25 +24,39 @@ class InlineEdit extends \Magento\Backend\App\Action
      */
     const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
-    /** @var CustomerInterface */
+    /**
+     * @var \Magento\Customer\Api\Data\CustomerInterface
+     */
     private $customer;
 
-    /** @var CustomerRepositoryInterface */
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
     protected $customerRepository;
 
-    /** @var \Magento\Framework\Controller\Result\JsonFactory  */
+    /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
     protected $resultJsonFactory;
 
-    /** @var \Magento\Customer\Model\Customer\Mapper  */
+    /**
+     * @var \Magento\Customer\Model\Customer\Mapper
+     */
     protected $customerMapper;
 
-    /** @var \Magento\Framework\Api\DataObjectHelper  */
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
     protected $dataObjectHelper;
 
-    /** @var \Psr\Log\LoggerInterface */
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     protected $logger;
 
-    /** @var EmailNotificationInterface */
+    /**
+     * @var \Magento\Customer\Model\EmailNotificationInterface
+     */
     private $emailNotification;
 
     /**
@@ -73,7 +87,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      * Get email notification
      *
      * @return EmailNotificationInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getEmailNotification()
     {
@@ -163,7 +177,7 @@ class InlineEdit extends \Magento\Backend\App\Action
         $this->dataObjectHelper->populateWithArray(
             $customer,
             $customerData,
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
     }
 
@@ -182,7 +196,7 @@ class InlineEdit extends \Magento\Backend\App\Action
                 $this->dataObjectHelper->populateWithArray(
                     $address,
                     $this->processAddressData($data),
-                    '\Magento\Customer\Api\Data\AddressInterface'
+                    \Magento\Customer\Api\Data\AddressInterface::class
                 );
                 break;
             }

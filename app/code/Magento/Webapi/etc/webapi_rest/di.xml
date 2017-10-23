@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -58,6 +58,10 @@
             <argument name="customAttributesProcessor" xsi:type="object">Magento\Framework\Reflection\CustomAttributesProcessor\Proxy</argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\Customer\Model\Authorization\CustomerSessionUserContext">
+        <plugin name="webApiCustomerSessionUserContext" type="Magento\Webapi\Model\Plugin\Authorization\CustomerSessionUserContext" />
+    </type>
 
     <type name="Magento\Framework\Webapi\ServiceOutputProcessor">
         <arguments>

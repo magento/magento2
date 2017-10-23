@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Mtf\Fixture\InjectableFixture;
@@ -29,7 +28,7 @@ class AssertProductNoImageInGrid extends AbstractConstraint
         $filter = ['sku' => $product->getSku()];
         $productGrid->open();
         $productGrid->getProductGrid()->search($filter);
-        $src = $productGrid->getProductGrid()->getBaseImageSource();
+        $src = $productGrid->getProductGrid()->getBaseImageAttribute('src');
         \PHPUnit_Framework_Assert::assertTrue(
             strpos($src, '/placeholder/') !== false,
             'Product image is displayed in product grid when it should not'

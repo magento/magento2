@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Security\Test\Unit\Block\Adminhtml\Session;
 
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\ConfigInterface;
-use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 /**
  * Test class for \Magento\Security\Block\Adminhtml\Session\Activity testing
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ActivityTest extends \PHPUnit_Framework_TestCase
+class ActivityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Security\Block\Adminhtml\Session\Activity
@@ -64,56 +64,42 @@ class ActivityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Init mocks for tests
+     *
      * @return void
      */
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->sessionsInfoCollection =  $this->getMock(
-            '\Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->sessionsInfoCollection = $this->createPartialMock(
+            \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory::class,
+            ['create']
         );
 
-        $this->sessionsManager =  $this->getMock(
-            '\Magento\Security\Model\AdminSessionsManager',
-            ['getSessionsForCurrentUser'],
-            [],
-            '',
-            false
+        $this->sessionsManager = $this->createPartialMock(
+            \Magento\Security\Model\AdminSessionsManager::class,
+            ['getSessionsForCurrentUser']
         );
 
-        $this->securityConfig =  $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
+        $this->securityConfig = $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->sessionMock =  $this->getMock(
-            '\Magento\Security\Model\AdminSessionInfo',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->sessionMock = $this->createMock(\Magento\Security\Model\AdminSessionInfo::class);
 
         $this->localeDate = $this->getMockForAbstractClass(
-            '\Magento\Framework\Stdlib\DateTime\TimezoneInterface',
+            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class,
             ['formatDateTime'],
             '',
             false
         );
 
-        $this->collectionMock =  $this->getMock(
-            '\Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection',
-            ['count', 'is_null'],
-            [],
-            '',
-            false
+        $this->collectionMock = $this->createPartialMock(
+            \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection::class,
+            ['count', 'is_null']
         );
 
-        $this->remoteAddressMock =  $this->getMockBuilder(RemoteAddress::class)
+        $this->remoteAddressMock = $this->getMockBuilder(RemoteAddress::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -137,7 +123,7 @@ class ActivityTest extends \PHPUnit_Framework_TestCase
             ->method('getSessionsForCurrentUser')
             ->willReturn($this->collectionMock);
         $this->assertInstanceOf(
-            '\Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection',
+            \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection::class,
             $this->block->getSessionInfoCollection()
         );
     }

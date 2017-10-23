@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
@@ -10,7 +10,7 @@ use Magento\Cms\Controller\Adminhtml\Page\InlineEdit;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InlineEditTest extends \PHPUnit_Framework_TestCase
+class InlineEditTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $request;
@@ -49,33 +49,24 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
-        $this->messageManager = $this->getMockForAbstractClass('Magento\Framework\Message\ManagerInterface');
-        $this->messageCollection = $this->getMock('Magento\Framework\Message\Collection', [], [], '', false);
-        $this->message = $this->getMockForAbstractClass('Magento\Framework\Message\MessageInterface');
-        $this->cmsPage = $this->getMock('Magento\Cms\Model\Page', [], [], '', false);
+        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
+        $this->messageManager = $this->getMockForAbstractClass(\Magento\Framework\Message\ManagerInterface::class);
+        $this->messageCollection = $this->createMock(\Magento\Framework\Message\Collection::class);
+        $this->message = $this->getMockForAbstractClass(\Magento\Framework\Message\MessageInterface::class);
+        $this->cmsPage = $this->createMock(\Magento\Cms\Model\Page::class);
         $this->context = $helper->getObject(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             [
                 'request' => $this->request,
                 'messageManager' => $this->messageManager
             ]
         );
-        $this->dataProcessor = $this->getMock(
-            'Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->pageRepository = $this->getMockForAbstractClass('Magento\Cms\Api\PageRepositoryInterface');
-        $this->resultJson = $this->getMock('Magento\Framework\Controller\Result\Json', [], [], '', false);
-        $this->jsonFactory = $this->getMock(
-            'Magento\Framework\Controller\Result\JsonFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->dataProcessor = $this->createMock(\Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor::class);
+        $this->pageRepository = $this->getMockForAbstractClass(\Magento\Cms\Api\PageRepositoryInterface::class);
+        $this->resultJson = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
+        $this->jsonFactory = $this->createPartialMock(
+            \Magento\Framework\Controller\Result\JsonFactory::class,
+            ['create']
         );
         $this->controller = new InlineEdit(
             $this->context,

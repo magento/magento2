@@ -1,26 +1,27 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code;
 
+use Magento\Framework\Code\Generator;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Interception\Code\Generator as InterceptionGenerator;
 use Magento\Framework\ObjectManager\Code\Generator as DIGenerator;
+use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceFactoryGenerator;
+use Magento\TestFramework\Helper\Bootstrap;
 
 require_once __DIR__ . '/GeneratorTest/SourceClassWithNamespace.php';
 require_once __DIR__ . '/GeneratorTest/ParentClassWithNamespace.php';
+require_once __DIR__ . '/GeneratorTest/SourceClassWithNamespaceExtension.php';
+
 /**
  * @magentoAppIsolation enabled
  */
-class GeneratorTest extends \PHPUnit_Framework_TestCase
+class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
-    const CLASS_NAME_WITHOUT_NAMESPACE = 'Magento\Framework\Code\GeneratorTest\SourceClassWithoutNamespace';
-
-    const CLASS_NAME_WITH_NAMESPACE = 'Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace';
-
-    const INTERFACE_NAME_WITHOUT_NAMESPACE = 'Magento\Framework\Code\GeneratorTest\SourceInterfaceWithoutNamespace';
+    const CLASS_NAME_WITH_NAMESPACE = \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace::class;
 
     /**
      * @var \Magento\Framework\Code\Generator
@@ -41,7 +42,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->varDirectory = $objectManager->get(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         )->getDirectoryWrite(
             DirectoryList::VAR_DIR
         );
@@ -51,14 +52,16 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             $generationDirectory
         );
         $this->_generator = $objectManager->create(
-            'Magento\Framework\Code\Generator',
+            \Magento\Framework\Code\Generator::class,
             [
                 'ioObject' => $this->_ioObject,
                 'generatedEntities' => [
-                    DIGenerator\Factory::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Factory',
-                    DIGenerator\Proxy::ENTITY_TYPE => '\Magento\Framework\ObjectManager\Code\Generator\Proxy',
+                    ExtensionAttributesInterfaceFactoryGenerator::ENTITY_TYPE =>
+                        ExtensionAttributesInterfaceFactoryGenerator::class,
+                    DIGenerator\Factory::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Factory::class,
+                    DIGenerator\Proxy::ENTITY_TYPE => \Magento\Framework\ObjectManager\Code\Generator\Proxy::class,
                     InterceptionGenerator\Interceptor::ENTITY_TYPE =>
-                        '\Magento\Framework\Interception\Code\Generator\Interceptor',
+                        \Magento\Framework\Interception\Code\Generator\Interceptor::class,
                 ]
             ]
         );
@@ -68,7 +71,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->varDirectory->delete('generation');
-        unset($this->_generator);
+        $this->_generator = null;
     }
 
     protected function _clearDocBlock($classBody)
@@ -86,7 +89,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertTrue($result, 'Failed asserting that \'' . (string)$generatorResult . '\' equals \'success\'.');
 
-        /** @var $factory \Magento\Framework\ObjectManager\FactoryInterface */
         $factory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($factoryClassName);
 
         $object = $factory->create();
@@ -152,5 +154,35 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             );
             $this->assertEquals($expectedContent, $content);
         }
+    }
+
+    /**
+     * Generates a new file with ExtensionInterfaceFactory class and compares with the sample from the
+     * SourceClassWithNamespaceExtensionInterfaceFactory.php.sample file.
+     */
+    public function testGenerateClassExtensionAttributesInterfaceFactoryWithNamespace()
+    {
+        $factoryClassName = self::CLASS_NAME_WITH_NAMESPACE . 'ExtensionInterfaceFactory';
+        $this->varDirectory->create(
+            $this->varDirectory->getAbsolutePath('generation') . '/Magento/Framework/Code/GeneratorTest/'
+        );
+
+        $generatorResult = $this->_generator->generateClass($factoryClassName);
+
+        $factory = Bootstrap::getObjectManager()->create($factoryClassName);
+        $object = $factory->create();
+
+        $this->assertEquals($generatorResult, Generator::GENERATION_SUCCESS);
+        $this->assertInstanceOf(self::CLASS_NAME_WITH_NAMESPACE . 'Extension', $object);
+
+        $content = $this->_clearDocBlock(
+            file_get_contents(
+                $this->_ioObject->generateResultFileName(self::CLASS_NAME_WITH_NAMESPACE . 'ExtensionInterfaceFactory')
+            )
+        );
+        $expectedContent = $this->_clearDocBlock(
+            file_get_contents(__DIR__ . '/_expected/SourceClassWithNamespaceExtensionInterfaceFactory.php.sample')
+        );
+        $this->assertEquals($expectedContent, $content);
     }
 }

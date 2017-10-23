@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\Exception\NotFoundException;
 
-class FrontControllerTest extends \PHPUnit_Framework_TestCase
+class FrontControllerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\FrontController
@@ -36,14 +36,14 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->setMethods(['isDispatched', 'setDispatched', 'initForward', 'setActionName'])
             ->getMock();
 
-        $this->router = $this->getMock('Magento\Framework\App\RouterInterface');
-        $this->routerList = $this->getMock('Magento\Framework\App\RouterList', [], [], '', false);
-        $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
+        $this->router = $this->createMock(\Magento\Framework\App\RouterInterface::class);
+        $this->routerList = $this->createMock(\Magento\Framework\App\RouterList::class);
+        $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->model = new \Magento\Framework\App\FrontController($this->routerList, $this->response);
     }
 
@@ -79,8 +79,8 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
             ->method('valid')
             ->will($this->returnValue(true));
 
-        $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $controllerInstance = $this->getMockBuilder('Magento\Framework\App\Action\Action')
+        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $controllerInstance = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)
             ->disableOriginalConstructor()
             ->getMock();
         $controllerInstance->expects($this->any())
@@ -113,8 +113,8 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
             ->method('valid')
             ->will($this->returnValue(true));
 
-        $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $controllerInstance = $this->getMockBuilder('Magento\Framework\App\Action\Action')
+        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $controllerInstance = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)
             ->disableOriginalConstructor()
             ->getMock();
         $controllerInstance->expects($this->any())

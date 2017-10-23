@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 
-class TranslateTest extends \PHPUnit_Framework_TestCase
+class TranslateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Translate|\PHPUnit_Framework_MockObject_MockObject
@@ -24,13 +24,13 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_translator = $this->getMock('Magento\Framework\TranslateInterface', [], [], '', false);
-        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $this->_translator = $this->createMock(\Magento\Framework\TranslateInterface::class);
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMock();
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_renderer = $objectManagerHelper->getObject(
-            'Magento\Framework\Phrase\Renderer\Translate',
+            \Magento\Framework\Phrase\Renderer\Translate::class,
             [
                 'translator' => $this->_translator,
                 'logger' => $this->loggerMock
@@ -91,7 +91,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->willThrowException($exception);
 
-        $this->setExpectedException('Exception', $message);
+        $this->expectException('Exception', $message);
         $this->_renderer->render(['text'], []);
     }
 }

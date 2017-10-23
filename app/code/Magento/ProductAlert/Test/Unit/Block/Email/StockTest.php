@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Test\Unit\Block\Email;
@@ -8,7 +8,7 @@ namespace Magento\ProductAlert\Test\Unit\Block\Email;
 /**
  * Test class for \Magento\ProductAlert\Block\Product\View\Stock
  */
-class StockTest extends \PHPUnit_Framework_TestCase
+class StockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Block\Email\Stock
@@ -28,20 +28,14 @@ class StockTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_filter = $this->getMock(
-            '\Magento\Framework\Filter\Input\MaliciousCode',
-            ['filter'],
-            [],
-            '',
-            false
-        );
+        $this->_filter = $this->createPartialMock(\Magento\Framework\Filter\Input\MaliciousCode::class, ['filter']);
 
-        $this->imageBuilder = $this->getMockBuilder('Magento\Catalog\Block\Product\ImageBuilder')
+        $this->imageBuilder = $this->getMockBuilder(\Magento\Catalog\Block\Product\ImageBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->_block = $objectManager->getObject(
-            'Magento\ProductAlert\Block\Email\Stock',
+            \Magento\ProductAlert\Block\Email\Stock::class,
             [
                 'maliciousCode' => $this->_filter,
                 'imageBuilder' => $this->imageBuilder,
@@ -50,7 +44,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider testGetFilteredContentDataProvider
+     * @dataProvider getFilteredContentDataProvider
      * @param $contentToFilter
      * @param $contentFiltered
      */
@@ -61,7 +55,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($contentFiltered, $this->_block->getFilteredContent($contentToFilter));
     }
 
-    public function testGetFilteredContentDataProvider()
+    public function getFilteredContentDataProvider()
     {
         return [
             'normal desc' => ['<b>Howdy!</b>', '<b>Howdy!</b>'],
@@ -74,11 +68,11 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $imageId = 'test_image_id';
         $attributes = [];
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $imageMock = $this->getMockBuilder('Magento\Catalog\Block\Product\Image')
+        $imageMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\Image::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -99,7 +93,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
             ->willReturn($imageMock);
 
         $this->assertInstanceOf(
-            'Magento\Catalog\Block\Product\Image',
+            \Magento\Catalog\Block\Product\Image::class,
             $this->_block->getImage($productMock, $imageId, $attributes)
         );
     }

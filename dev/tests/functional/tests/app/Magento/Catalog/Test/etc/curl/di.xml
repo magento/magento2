@@ -1,14 +1,14 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Catalog\Test\Handler\CatalogProductSimple\CatalogProductSimpleInterface" type="\Magento\Catalog\Test\Handler\CatalogProductSimple\Curl" />
-    <preference for="Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogProductAttributeInterface" type="\Magento\Catalog\Test\Handler\CatalogProductAttribute\Curl" />
-    <preference for="Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface" type="\Magento\Catalog\Test\Handler\CatalogAttributeSet\Curl" />
-    <preference for="Magento\Catalog\Test\Handler\Category\CategoryInterface" type="\Magento\Catalog\Test\Handler\Category\Curl" />
-    <preference for="Magento\Catalog\Test\Handler\CatalogProductVirtual\CatalogProductVirtualInterface" type="\Magento\Catalog\Test\Handler\CatalogProductVirtual\Curl" />
+    <preference for="Magento\Catalog\Test\Handler\CatalogProductSimple\CatalogProductSimpleInterface" type="Magento\Catalog\Test\Handler\CatalogProductSimple\Curl" />
+    <preference for="Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogProductAttributeInterface" type="Magento\Catalog\Test\Handler\CatalogProductAttribute\Curl" />
+    <preference for="Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface" type="Magento\Catalog\Test\Handler\CatalogAttributeSet\Curl" />
+    <preference for="Magento\Catalog\Test\Handler\Category\CategoryInterface" type="Magento\Catalog\Test\Handler\Category\Curl" />
+    <preference for="Magento\Catalog\Test\Handler\CatalogProductVirtual\CatalogProductVirtualInterface" type="Magento\Catalog\Test\Handler\CatalogProductVirtual\Curl" />
 </config>

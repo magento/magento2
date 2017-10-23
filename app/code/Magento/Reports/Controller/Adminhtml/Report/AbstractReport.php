@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,8 +13,19 @@ namespace Magento\Reports\Controller\Adminhtml\Report;
 
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 abstract class AbstractReport extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Reports::report';
+
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */
@@ -63,7 +74,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     protected function _getSession()
     {
         if ($this->_adminSession === null) {
-            $this->_adminSession = $this->_objectManager->get('Magento\Backend\Model\Auth\Session');
+            $this->_adminSession = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class);
         }
         return $this->_adminSession;
     }
@@ -93,7 +104,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         }
 
         $requestData = $this->_objectManager->get(
-            'Magento\Backend\Helper\Data'
+            \Magento\Backend\Helper\Data::class
         )->prepareFilterString(
             $this->getRequest()->getParam('filter')
         );
@@ -131,7 +142,9 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
      */
     protected function _showLastExecutionTime($flagCode, $refreshCode)
     {
-        $flag = $this->_objectManager->create('Magento\Reports\Model\Flag')->setReportFlagCode($flagCode)->loadSelf();
+        $flag = $this->_objectManager->create(\Magento\Reports\Model\Flag::class)
+            ->setReportFlagCode($flagCode)
+            ->loadSelf();
         $updatedAt = 'undefined';
         if ($flag->hasData()) {
             $updatedAt =  $this->timezone->formatDate(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
@@ -9,7 +9,22 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
 /**
- * Base html block
+ * Standard Magento block.
+ * Should be used when you declare a block in frontend area layout handle.
+ *
+ * Avoid extending this class.
+ *
+ * If you need custom presentation logic in your blocks, use this class as block, and declare
+ * custom view models in block arguments in layout handle file.
+ *
+ * Example:
+ * <block name="my.block" class="Magento\Backend\Block\Template" template="My_Module::template.phtml" >
+ *      <arguments>
+ *          <argument name="viewModel" xsi:type="object">My\Module\ViewModel\Custom</argument>
+ *      </arguments>
+ * </block>
+ *
+ * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -139,7 +154,7 @@ class Template extends AbstractBlock
     }
 
     /**
-     * Set template context. Sets the object that should represent $this in template
+     * Set template context. Sets the object that should represent $block in template
      *
      * @param \Magento\Framework\View\Element\BlockInterface $templateContext
      * @return void
@@ -194,7 +209,7 @@ class Template extends AbstractBlock
      * Get absolute path to template
      *
      * @param string|null $template
-     * @return string
+     * @return string|bool
      */
     public function getTemplateFile($template = null)
     {
@@ -256,10 +271,16 @@ class Template extends AbstractBlock
         } else {
             $html = '';
             $templatePath = $fileName ?: $this->getTemplate();
-            $this->_logger->critical(
-                "Invalid template file: '{$templatePath}' in module: '{$this->getModuleName()}'"
-                . " block's name: '{$this->getNameInLayout()}'"
-            );
+            $errorMessage = "Invalid template file: '{$templatePath}' in module: '{$this->getModuleName()}'"
+                . " block's name: '{$this->getNameInLayout()}'";
+            if ($this->_appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER) {
+                throw new \Magento\Framework\Exception\ValidatorException(
+                    new \Magento\Framework\Phrase(
+                        $errorMessage
+                    )
+                );
+            }
+            $this->_logger->critical($errorMessage);
         }
 
         \Magento\Framework\Profiler::stop('TEMPLATE:' . $fileName);

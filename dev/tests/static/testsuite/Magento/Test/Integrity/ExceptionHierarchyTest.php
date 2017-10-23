@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity;
@@ -10,7 +10,7 @@ use Magento\Framework\App\Utility\Files as UtilityFiles;
 /**
  * Checks that all Exceptions inherit LocalizedException
  */
-class ExceptionHierarchyTest extends \PHPUnit_Framework_TestCase
+class ExceptionHierarchyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param \ReflectionClass $reflectionException
@@ -19,7 +19,7 @@ class ExceptionHierarchyTest extends \PHPUnit_Framework_TestCase
     public function testIsInheritedLocalizedException(\ReflectionClass $reflectionException)
     {
         $this->assertTrue(
-            $reflectionException->isSubclassOf('Magento\Framework\Exception\LocalizedException'),
+            $reflectionException->isSubclassOf(\Magento\Framework\Exception\LocalizedException::class),
             "{$reflectionException->name} is not inherited LocalizedException"
         );
     }

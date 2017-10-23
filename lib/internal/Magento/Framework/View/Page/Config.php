@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -134,13 +134,13 @@ class Config
      *
      * @return \Magento\Framework\App\State
      *
-     * @deprecated
+     * @deprecated 100.0.7
      */
     private function getAreaResolver()
     {
         if ($this->areaResolver === null) {
             $this->areaResolver = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\App\State');
+                ->get(\Magento\Framework\App\State::class);
         }
         return $this->areaResolver;
     }

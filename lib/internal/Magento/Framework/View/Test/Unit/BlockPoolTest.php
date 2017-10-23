@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ use \Magento\Framework\View\BlockPool;
 /**
  * Test for view BlockPool model
  */
-class BlockPoolTest extends \PHPUnit_Framework_TestCase
+class BlockPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BlockPool
@@ -28,7 +28,7 @@ class BlockPoolTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->blockFactory = $this->getMockBuilder('Magento\Framework\View\Element\BlockFactory')
+        $this->blockFactory = $this->getMockBuilder(\Magento\Framework\View\Element\BlockFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['createBlock'])
             ->getMock();
@@ -38,10 +38,10 @@ class BlockPoolTest extends \PHPUnit_Framework_TestCase
     public function testAdd()
     {
         $blockName = 'testName';
-        $blockClass = '\Magento\Framework\View\BlockPoolTestBlock';
+        $blockClass = \Magento\Framework\View\Test\Unit\BlockPoolTestBlock::class;
         $arguments = ['key' => 'value'];
 
-        $block = $this->getMock('Magento\Framework\View\BlockPoolTestBlock');
+        $block = $this->createMock(\Magento\Framework\View\Test\Unit\BlockPoolTestBlock::class);
 
         $this->blockFactory->expects($this->atLeastOnce())
             ->method('createBlock')
@@ -62,21 +62,5 @@ class BlockPoolTest extends \PHPUnit_Framework_TestCase
     public function testAddWithException()
     {
         $this->blockPool->add('BlockPoolTestBlock', 'NotExistingBlockClass');
-    }
-}
-
-/**
- * Class BlockPoolTestBlock mock
- */
-class BlockPoolTestBlock implements \Magento\Framework\View\Element\BlockInterface
-{
-    /**
-     * Produce and return block's html output
-     *
-     * @return string
-     */
-    public function toHtml()
-    {
-        return '';
     }
 }

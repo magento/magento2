@@ -2,7 +2,7 @@
 /**
  * Mail Message
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mail;
@@ -15,6 +15,7 @@ class Message extends \Zend_Mail implements MessageInterface
     public function __construct($charset = 'utf-8')
     {
         parent::__construct($charset);
+        $this->setHeaderEncoding(\Zend_Mime::ENCODING_BASE64);
     }
 
     /**

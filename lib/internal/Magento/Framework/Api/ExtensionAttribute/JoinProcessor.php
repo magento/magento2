@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,13 +25,19 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      */
     protected $objectManager;
 
-    /** @var TypeProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     */
     private $typeProcessor;
 
-    /** @var ExtensionAttributesFactory */
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttributesFactory
+     */
     private $extensionAttributesFactory;
 
-    /** @var JoinProcessorHelper */
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorHelper
+     */
     private $joinProcessorHelper;
 
     /**

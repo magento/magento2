@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Currency model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Directory\Model;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Directory\Model\Currency\Filter;
 
 /**
+ * Currency model
+ *
+ * @api
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Currency extends \Magento\Framework\Model\AbstractModel
 {
@@ -109,7 +109,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Directory\Model\ResourceModel\Currency');
+        $this->_init(\Magento\Directory\Model\ResourceModel\Currency::class);
     }
 
     /**

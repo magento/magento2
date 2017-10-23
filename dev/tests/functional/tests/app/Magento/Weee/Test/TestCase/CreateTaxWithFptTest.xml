@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Weee\Test\TestCase\CreateTaxWithFptTest" summary="Apply FPT to Different Type Prices" ticketId="MAGETWO-29551">
         <variation name="CreateTaxWithFptTestVariation1" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Check not taxed FPT display set to Excluding, Description and Including FPT on product with custom option catalog price Excluding Tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_cat_excl_disc_on_excl</data>
             <data name="productData" xsi:type="string">with_custom_option_and_fpt</data>
@@ -28,6 +29,7 @@
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
         <variation name="CreateTaxWithFptTestVariation2" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Check not taxed FPT display set to Including FPT and Description on product with custom option catalog price Excluding Tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_cat_excl_disc_on_incl, display_including_tax</data>
             <data name="productData" xsi:type="string">with_custom_option_and_fpt</data>
@@ -50,6 +52,7 @@
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
         <variation name="CreateTaxWithFptTestVariation3" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Check not taxed FPT display set to Excluding, Description and Including FPT on product with special price catalog price Excluding Tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_cat_excl_disc_on_incl, display_including_tax</data>
             <data name="productData" xsi:type="string">with_special_price_and_fpt</data>
@@ -72,6 +75,7 @@
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
         <variation name="CreateTaxWithFptTestVariation4" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Check not taxed FPT display set to Including FPT and Description on product with special price catalog price Excluding Tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_cat_excl_disc_on_excl</data>
             <data name="productData" xsi:type="string">with_special_price_and_fpt</data>
@@ -92,6 +96,7 @@
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
         <variation name="CreateTaxWithFptTestVariation5" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Check taxed FPT display set to Excluding, Description and Including FPT on product with with custom option catalog price Excluding Tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_excl_disc_on_excl</data>
             <data name="productData" xsi:type="string">with_custom_option_and_fpt</data>
@@ -204,6 +209,7 @@
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
         <variation name="CreateTaxWithFptTestVariation11" firstConstraint="Magento\Weee\Test\Constraint\AssertFptApplied" method="test">
+            <data name="issue" xsi:type="string">MAGETWO-44968: FPT Final price includes tax on custom option, when display is set to excluding tax</data>
             <data name="description" xsi:type="string">Check taxed FPT display set to Excluding, Description and Including FPT on product with with custom option and catalog price Including Tax</data>
             <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods,tax_with_fpt_taxed_cat_incl_disc_on_excl</data>
             <data name="productData" xsi:type="string">with_custom_option_and_fpt</data>

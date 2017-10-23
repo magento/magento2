@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,9 +13,9 @@
         <script src="prototype/deprecation.js"/>
     </head>
     <referenceBlock name="after.body.start">
-        <block class="Magento\Framework\View\Element\Html\Calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
+        <block class="Magento\Framework\View\Element\Html\Calendar" name="head.calendar" as="calendar" template="Magento_Framework::page/js/calendar.phtml"/>
     </referenceBlock>
-    <block class="Magento\Backend\Block\Page" name="root" output="1" template="page.phtml">
+    <block class="Magento\Backend\Block\Page" name="root" output="1" template="Magento_Backend::page.phtml">
         <block class="Magento\Backend\Block\Page\Header" name="header" as="header"/>
         <block class="Magento\Backend\Block\Menu" name="menu" as="menu"/>
         <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>

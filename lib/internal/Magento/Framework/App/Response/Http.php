@@ -2,7 +2,7 @@
 /**
  * HTTP response
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Response;
@@ -25,19 +25,29 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     /** X-FRAME-OPTIONS Header name */
     const HEADER_X_FRAME_OPT = 'X-Frame-Options';
 
-    /** @var \Magento\Framework\App\Request\Http */
+    /**
+     * @var \Magento\Framework\App\Request\Http
+     */
     protected $request;
 
-    /** @var \Magento\Framework\Stdlib\CookieManagerInterface */
+    /**
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface
+     */
     protected $cookieManager;
 
-    /** @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory */
+    /**
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     */
     protected $cookieMetadataFactory;
 
-    /** @var \Magento\Framework\App\Http\Context */
+    /**
+     * @var \Magento\Framework\App\Http\Context
+     */
     protected $context;
 
-    /** @var DateTime */
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime
+     */
     protected $dateTime;
 
     /**
@@ -168,9 +178,11 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     public function __wakeup()
     {
         $objectManager = ObjectManager::getInstance();
-        $this->cookieManager = $objectManager->create('Magento\Framework\Stdlib\CookieManagerInterface');
-        $this->cookieMetadataFactory = $objectManager->get('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory');
-        $this->request = $objectManager->get('Magento\Framework\App\Request\Http');
+        $this->cookieManager = $objectManager->create(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+        $this->cookieMetadataFactory = $objectManager->get(
+            \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
+        );
+        $this->request = $objectManager->get(\Magento\Framework\App\Request\Http::class);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,14 +27,13 @@ use Magento\Mtf\TestCase\Scenario;
  * 11. Submit Order.
  * 12. Perform all assertions.
  *
- * @group Order_Management_(CS)
- * @ZephyrId MAGETWO-28696
+ * @group Order_Management
+ * @ZephyrId MAGETWO-28696, MAGETWO-17063
  */
 class CreateOrderBackendTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'CS';
     const TEST_TYPE = 'acceptance_test, extended_acceptance_test, 3rd_party_test';
     /* end tags */
 

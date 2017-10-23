@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Test class for \Magento\Security\Model\Plugin\Auth testing
  */
-class AuthTest extends \PHPUnit_Framework_TestCase
+class AuthTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var  \Magento\Security\Model\Plugin\Auth
@@ -51,39 +51,27 @@ class AuthTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->sessionsManager =  $this->getMock(
-            '\Magento\Security\Model\AdminSessionsManager',
-            ['processLogin', 'processLogout', 'getCurrentSession'],
-            [],
-            '',
-            false
+        $this->sessionsManager = $this->createPartialMock(
+            \Magento\Security\Model\AdminSessionsManager::class,
+            ['processLogin', 'processLogout', 'getCurrentSession']
         );
 
         $this->messageManager = $this->getMockForAbstractClass(
-            '\Magento\Framework\Message\ManagerInterface',
+            \Magento\Framework\Message\ManagerInterface::class,
             ['addWarning'],
             '',
             false
         );
 
-        $this->currentSession =  $this->getMock(
-            '\Magento\Security\Model\AdminSessionInfo',
-            ['isOtherSessionsTerminated'],
-            [],
-            '',
-            false
+        $this->currentSession = $this->createPartialMock(
+            \Magento\Security\Model\AdminSessionInfo::class,
+            ['isOtherSessionsTerminated']
         );
 
-        $this->authMock =  $this->getMock(
-            '\Magento\Backend\Model\Auth',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->authMock =  $this->createMock(\Magento\Backend\Model\Auth::class);
 
         $this->model = $this->objectManager->getObject(
-            '\Magento\Security\Model\Plugin\Auth',
+            \Magento\Security\Model\Plugin\Auth::class,
             [
                 'sessionsManager' => $this->sessionsManager,
                 'messageManager' =>$this->messageManager

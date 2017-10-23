@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Helper;
@@ -8,14 +8,17 @@ namespace Magento\Customer\Helper;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Model\Metadata\AttributeResolver;
 use Magento\Directory\Model\Country\Format;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Customer address helper
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Address extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -65,20 +68,37 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_formatTemplate = [];
 
-    /** @var \Magento\Framework\View\Element\BlockFactory */
+    /**
+     * @var \Magento\Framework\View\Element\BlockFactory
+     */
     protected $_blockFactory;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $_storeManager;
 
-    /** @var CustomerMetadataInterface */
+    /**
+     * @var CustomerMetadataInterface
+     *
+     * @deprecated 100.2.0
+     */
     protected $_customerMetadataService;
 
-    /** @var AddressMetadataInterface */
+    /**
+     * @var \Magento\Customer\Api\AddressMetadataInterface
+     */
     protected $_addressMetadataService;
 
-    /** @var \Magento\Customer\Model\Address\Config*/
+    /**
+     * @var \Magento\Customer\Model\Address\Config
+     */
     protected $_addressConfig;
+
+    /**
+     * @var AttributeResolver
+     */
+    private $attributeResolver;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
@@ -87,6 +107,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * @param CustomerMetadataInterface $customerMetadataService
      * @param AddressMetadataInterface $addressMetadataService
      * @param \Magento\Customer\Model\Address\Config $addressConfig
+     * @param AttributeResolver|null $attributeResolver
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -94,13 +115,15 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         CustomerMetadataInterface $customerMetadataService,
         AddressMetadataInterface $addressMetadataService,
-        \Magento\Customer\Model\Address\Config $addressConfig
+        \Magento\Customer\Model\Address\Config $addressConfig,
+        AttributeResolver $attributeResolver = null
     ) {
         $this->_blockFactory = $blockFactory;
         $this->_storeManager = $storeManager;
         $this->_customerMetadataService = $customerMetadataService;
         $this->_addressMetadataService = $addressMetadataService;
         $this->_addressConfig = $addressConfig;
+        $this->attributeResolver = $attributeResolver ?: ObjectManager::getInstance()->get(AttributeResolver::class);
         parent::__construct($context);
     }
 
@@ -243,19 +266,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
             $attribute = isset($this->_attributes[$attributeCode])
                 ? $this->_attributes[$attributeCode]
                 : $this->_addressMetadataService->getAttributeMetadata($attributeCode);
-            $class = $attribute ? $attribute->getFrontendClass() : '';
-            if (in_array($attributeCode, ['firstname', 'middlename', 'lastname', 'prefix', 'suffix', 'taxvat'])) {
-                if ($class && !$attribute->isVisible()) {
-                    // address attribute is not visible thus its validation rules are not applied
-                    $class = '';
-                }
 
-                /** @var $customerAttribute AttributeMetadataInterface */
-                $customerAttribute = $this->_customerMetadataService->getAttributeMetadata($attributeCode);
-                $class .= $customerAttribute &&
-                    $customerAttribute->isVisible() ? $customerAttribute->getFrontendClass() : '';
-                $class = implode(' ', array_unique(array_filter(explode(' ', $class))));
-            }
+            $class = $attribute ? $attribute->getFrontendClass() : '';
         } catch (NoSuchEntityException $e) {
             // the attribute does not exist so just return an empty string
         }
@@ -379,6 +391,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $code
      * @return bool
+     * @since 100.2.0
      */
     public function isAttributeVisible($code)
     {
@@ -387,5 +400,32 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
             return $attributeMetadata->isVisible();
         }
         return false;
+    }
+
+    /**
+     * Checks whether it is allowed to show an attribute on the form
+     *
+     * This check relies on the attribute's property 'getUsedInForms' which contains a list of forms
+     * where allowed to render specified attribute.
+     *
+     * @param string $attributeCode
+     * @param string $formName
+     * @return bool
+     */
+    public function isAttributeAllowedOnForm($attributeCode, $formName)
+    {
+        $isAllowed = false;
+        $attributeMetadata = $this->_addressMetadataService->getAttributeMetadata($attributeCode);
+        if ($attributeMetadata) {
+            /** @var \Magento\Customer\Model\Attribute $attribute */
+            $attribute = $this->attributeResolver->getModelByAttribute(
+                \Magento\Customer\Api\AddressMetadataManagementInterface::ENTITY_TYPE_ADDRESS,
+                $attributeMetadata
+            );
+            $usedInForms = $attribute->getUsedInForms();
+            $isAllowed = in_array($formName, $usedInForms, true);
+        }
+
+        return $isAllowed;
     }
 }

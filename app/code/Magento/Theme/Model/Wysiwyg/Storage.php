@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -111,11 +111,15 @@ class Storage
     public function uploadFile($targetPath)
     {
         /** @var $uploader \Magento\MediaStorage\Model\File\Uploader */
-        $uploader = $this->_objectManager->create('Magento\MediaStorage\Model\File\Uploader', ['fileId' => 'file']);
+        $uploader = $this->_objectManager->create(
+            \Magento\MediaStorage\Model\File\Uploader::class,
+            ['fileId' => 'file']
+        );
         $uploader->setAllowedExtensions($this->_helper->getAllowedExtensionsByType());
         $uploader->setAllowRenameFiles(true);
         $uploader->setFilesDispersion(false);
         $result = $uploader->save($targetPath);
+        unset($result['path']);
 
         if (!$result) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t upload the file right now.'));
@@ -160,7 +164,7 @@ class Storage
             $image->resize(self::THUMBNAIL_WIDTH, self::THUMBNAIL_HEIGHT);
             $image->save($this->mediaWriteDirectory->getAbsolutePath($thumbnailPath));
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return false;
         }
 

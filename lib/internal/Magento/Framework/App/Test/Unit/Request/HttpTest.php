@@ -1,20 +1,16 @@
 <?php
 /**
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Framework\App\Test\Unit\Request;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use \Magento\Framework\App\Request\Http;
-use Magento\Framework\App\ScopeInterface;
-use Zend\Stdlib\Parameters;
+use Magento\Framework\App\Request\Http;
 
-class HttpTest extends \PHPUnit_Framework_TestCase
+class HttpTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Request\Http
@@ -53,18 +49,14 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-
-        $this->_routerListMock = $this->getMock(
-            'Magento\Framework\App\Route\ConfigInterface\Proxy',
-            ['getRouteFrontName', 'getRouteByFrontName', '__wakeup'],
-            [],
-            '',
-            false
+        $this->_routerListMock = $this->createPartialMock(
+            \Magento\Framework\App\Route\ConfigInterface\Proxy::class,
+            ['getRouteFrontName', 'getRouteByFrontName', '__wakeup']
         );
-        $this->_infoProcessorMock = $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface');
+        $this->_infoProcessorMock = $this->createMock(\Magento\Framework\App\Request\PathInfoProcessorInterface::class);
         $this->_infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->converterMock = $this->getMockBuilder('Magento\Framework\Stdlib\StringUtils')
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->converterMock = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods(['cleanString'])
             ->getMock();
@@ -86,9 +78,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     private function getModel($uri = null, $appConfigMock = true)
     {
-
         $model = $this->objectManager->getObject(
-            'Magento\Framework\App\Request\Http',
+            \Magento\Framework\App\Request\Http::class,
             [
                 'routeConfig' => $this->_routerListMock,
                 'pathInfoProcessor' => $this->_infoProcessorMock,
@@ -99,7 +90,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         );
 
         if ($appConfigMock) {
-            $configMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '' , false);
+            $configMock = $this->createMock(\Magento\Framework\App\Config::class);
             $this->objectManager->setBackwardCompatibleProperty($model, 'appConfig', $configMock);
         }
 
@@ -135,7 +126,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     public function testSetRouteNameWithRouter()
     {
-        $router = $this->getMock('Magento\Framework\App\Router\AbstractRouter', [], [], '', false);
+        $router = $this->createMock(\Magento\Framework\App\Route\ConfigInterface::class);
         $this->_routerListMock->expects($this->any())->method('getRouteFrontName')->will($this->returnValue($router));
         $this->_model = $this->getModel();
         $this->_model->setRouteName('RouterName');
@@ -151,7 +142,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFrontName()
     {
-
         $uri = 'http://test.com/one/two';
         $this->_model = $this->getModel($uri);
         $this->assertEquals('one', $this->_model->getFrontName());
@@ -283,7 +273,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-
     public function serverVariablesProvider()
     {
         $returnValue = [];
@@ -345,14 +334,16 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = $this->getModel(null, false);
         $configOffloadHeader = 'Header-From-Proxy';
-        $configMock = $this->getMockBuilder('Magento\Framework\App\Config')
+        $configMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
         $configMock->expects($this->exactly($configCall))
             ->method('getValue')
-            ->with(\Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
-            ->willReturn($configOffloadHeader);
+            ->with(
+                \Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER,
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            )->willReturn($configOffloadHeader);
 
         $this->objectManager->setBackwardCompatibleProperty($this->_model, 'appConfig', $configMock);
         $this->objectManager->setBackwardCompatibleProperty($this->_model, 'sslOffloadHeader', null);
@@ -434,6 +425,43 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             'blank HTTPS with proxy set https' => [true, '', 'HEADER_FROM_PROXY', 'https', 1],
             'blank HTTPS with proxy set http' => [false, '', 'HEADER_FROM_PROXY', 'http', 1],
             'HTTPS off with HTTP_ prefixed proxy set to https' => [true, 'off', 'HTTP_HEADER_FROM_PROXY', 'https', 1],
+        ];
+    }
+    
+    /**
+     * @dataProvider setPathInfoDataProvider
+     * @param string $requestUri
+     * @param string $basePath$
+     * @param string $expected
+     */
+    public function testSetPathInfo($requestUri, $basePath, $expected)
+    {
+        $this->_model = $this->getModel($requestUri);
+        $this->_model->setBaseUrl($basePath);
+        $this->_model->setPathInfo();
+        $this->assertEquals($expected, $this->_model->getPathInfo());
+    }
+
+    public function setPathInfoDataProvider()
+    {
+        return [
+            ['http://svr.com/', '', ''],
+            ['http://svr.com', '', ''],
+            ['http://svr.com?param1=1', '', ''],
+            ['http://svr.com/?param1=1', '', '/'],
+            ['http://svr.com?param1=1&param2=2', '', ''],
+            ['http://svr.com/?param1=1&param2=2', '', '/'],
+            ['http://svr.com/module', '', '/module'],
+            ['http://svr.com/module/', '', '/module/'],
+            ['http://svr.com/module/route', '', '/module/route'],
+            ['http://svr.com/module/route/', '', '/module/route/'],
+            ['http://svr.com/index.php', '/index.php', ''],
+            ['http://svr.com/index.php/', '/index.php', '/'],
+            ['http://svr.com/index.phpmodule', '/index.php', 'noroute'],
+            ['http://svr.com/index.phpmodule/contact', '/index.php/', 'noroute'],
+            ['http://svr.com//index.phpmodule/contact', 'index.php', 'noroute'],
+            ['http://svr.com/index.phpmodule/contact/', '/index.php/', 'noroute'],
+            ['http://svr.com//index.phpmodule/contact/', 'index.php', 'noroute'],
         ];
     }
 }

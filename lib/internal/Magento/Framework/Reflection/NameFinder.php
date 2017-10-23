@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,7 +43,7 @@ class NameFinder
     {
         return ucfirst(substr(strstr($shortDescription, " "), 1));
     }
-    
+
     /**
      * Find the getter method name for a property from the given class
      *

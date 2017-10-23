@@ -1,14 +1,14 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <mapping strict="0">
     <fields>
         <qty>
-            <selector>//tr[contains(.,"%product_name%")]//input[contains(@class,"qty")]</selector>
+            <selector>.//tr[contains(.,"%product_name%")]//input[contains(@class,"qty")]</selector>
             <strategy>xpath</strategy>
         </qty>
     </fields>

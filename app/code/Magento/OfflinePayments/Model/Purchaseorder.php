@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Model;
@@ -9,6 +9,9 @@ namespace Magento\OfflinePayments\Model;
  * Class Purchaseorder
  *
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
+ *
+ * @api
+ * @since 100.0.2
  */
 class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
 {
@@ -24,12 +27,12 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\OfflinePayments\Block\Form\Purchaseorder';
+    protected $_formBlockType = \Magento\OfflinePayments\Block\Form\Purchaseorder::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\OfflinePayments\Block\Info\Purchaseorder';
+    protected $_infoBlockType = \Magento\OfflinePayments\Block\Info\Purchaseorder::class;
 
     /**
      * Availability option

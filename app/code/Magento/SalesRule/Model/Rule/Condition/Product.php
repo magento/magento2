@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
@@ -49,6 +49,34 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $model->getBaseRowTotal()
         );
 
+        $attrCode = $this->getAttribute();
+
+        if ('category_ids' == $attrCode) {
+            return $this->validateAttribute($this->_getAvailableInCategories($product->getId()));
+        }
+
         return parent::validate($product);
+    }
+
+    /**
+     * Retrieve value element chooser URL
+     *
+     * @return string
+     */
+    public function getValueElementChooserUrl()
+    {
+        $url = false;
+        switch ($this->getAttribute()) {
+            case 'sku':
+            case 'category_ids':
+                $url = 'sales_rule/promo_widget/chooser/attribute/' . $this->getAttribute();
+                if ($this->getJsFormObject()) {
+                    $url .= '/form/' . $this->getJsFormObject();
+                }
+                break;
+            default:
+                break;
+        }
+        return $url !== false ? $this->_backendData->getUrl($url) : '';
     }
 }

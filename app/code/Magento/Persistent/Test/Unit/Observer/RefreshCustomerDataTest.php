@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Observer;
 
 use Magento\Persistent\Observer\RefreshCustomerData;
 
-class RefreshCustomerDataTest extends \PHPUnit_Framework_TestCase
+class RefreshCustomerDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RefreshCustomerData
@@ -36,16 +36,16 @@ class RefreshCustomerDataTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->cookieManager = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\PhpCookieManager')
+        $this->cookieManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataFactory = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory')
+        $this->metadataFactory = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadata = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieMetadata')
+        $this->metadata = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionManager = $this->getMockBuilder('Magento\Framework\Session\SessionManager')
+        $this->sessionManager = $this->getMockBuilder(\Magento\Framework\Session\SessionManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -60,7 +60,7 @@ class RefreshCustomerDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeStart($result, $callCount)
     {
-        $observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
         $frontendSessionCookieName = 'mage-cache-sessid';
         $this->cookieManager->expects($this->once())
             ->method('getCookie')

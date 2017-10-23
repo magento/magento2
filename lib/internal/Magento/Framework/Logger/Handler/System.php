@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,20 +41,21 @@ class System extends Base
     }
 
     /**
-     * @{inheritDoc}
+     * Writes formatted record through the handler.
      *
-     * @param $record array
+     * @param $record array The record metadata
      * @return void
      */
     public function write(array $record)
     {
-        if (isset($record['context']['is_exception']) && $record['context']['is_exception']) {
-            unset($record['context']['is_exception']);
+        if (isset($record['context']['exception'])) {
             $this->exceptionHandler->handle($record);
-        } else {
-            unset($record['context']['is_exception']);
-            $record['formatted'] = $this->getFormatter()->format($record);
-            parent::write($record);
+
+            return;
         }
+
+        $record['formatted'] = $this->getFormatter()->format($record);
+
+        parent::write($record);
     }
 }

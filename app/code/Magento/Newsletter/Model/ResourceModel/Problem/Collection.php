@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model\ResourceModel\Problem;
@@ -12,6 +12,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Newsletter problems collection
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -87,7 +91,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Newsletter\Model\Problem', 'Magento\Newsletter\Model\ResourceModel\Problem');
+        $this->_init(\Magento\Newsletter\Model\Problem::class, \Magento\Newsletter\Model\ResourceModel\Problem::class);
     }
 
     /**
@@ -103,6 +107,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         }
         return parent::_setIsLoaded($flag);
     }
+
     /**
      * Adds subscribers info
      *

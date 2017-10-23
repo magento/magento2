@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Paypal\Test\Unit\Block\Bml;
 use Magento\Catalog\Block as CatalogBlock;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ShortcutTest extends \PHPUnit_Framework_TestCase
+class ShortcutTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Paypal\Block\Bml\Shortcut */
     protected $shortcut;
@@ -28,13 +28,13 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentHelperMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
-        $this->randomMock = $this->getMock('Magento\Framework\Math\Random');
-        $this->paypalShortcutHelperMock = $this->getMock('Magento\Paypal\Helper\Shortcut\ValidatorInterface');
+        $this->paymentHelperMock = $this->createMock(\Magento\Payment\Helper\Data::class);
+        $this->randomMock = $this->createMock(\Magento\Framework\Math\Random::class);
+        $this->paypalShortcutHelperMock = $this->createMock(\Magento\Paypal\Helper\Shortcut\ValidatorInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->shortcut = $this->objectManagerHelper->getObject(
-            'Magento\Paypal\Block\Bml\Shortcut',
+            \Magento\Paypal\Block\Bml\Shortcut::class,
             [
                 'paymentData' => $this->paymentHelperMock,
                 'mathRandom' => $this->randomMock,
@@ -80,7 +80,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
         $paymentMethodCode = '';
         $bmlMethodCode = '';
         $this->shortcut->setIsInCatalogProduct($isInCatalog);
-        $expressMethod = $this->getMockBuilder('Magento\Paypal\Model\Express')->disableOriginalConstructor()
+        $expressMethod = $this->getMockBuilder(\Magento\Paypal\Model\Express::class)->disableOriginalConstructor()
             ->setMethods([])->getMock();
 
         $this->paypalShortcutHelperMock->expects($this->once())->method('validate')
@@ -99,7 +99,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
         $bmlMethodCode = '';
         $hash = 'hash';
         $this->shortcut->setIsInCatalogProduct($isInCatalog);
-        $expressMethod = $this->getMockBuilder('Magento\Paypal\Model\Express')->disableOriginalConstructor()
+        $expressMethod = $this->getMockBuilder(\Magento\Paypal\Model\Express::class)->disableOriginalConstructor()
             ->setMethods([])->getMock();
         $expectedData = [
             'is_in_catalog_product' => $isInCatalog,

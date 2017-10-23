@@ -1,5 +1,5 @@
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -317,7 +317,7 @@ define(['jquery', 'jquery/ui'], function ($) {
             if (this._loop) {
                 additionalParams += '&loop=1';
             }
-            src = 'http://player.vimeo.com/video/' +
+            src = window.location.protocol + '//player.vimeo.com/video/' +
                 this._code + '?api=1&player_id=vimeo' +
                 this._code +
                 timestamp +
@@ -332,6 +332,7 @@ define(['jquery', 'jquery/ui'], function ($) {
                     .attr('webkitallowfullscreen', '')
                     .attr('mozallowfullscreen', '')
                     .attr('allowfullscreen', '')
+                    .attr('referrerPolicy', 'origin')
             );
             this._player = window.$f(this.element.children(':first')[0]);
 

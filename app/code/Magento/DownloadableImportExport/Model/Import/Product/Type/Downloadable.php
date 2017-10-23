@@ -2,12 +2,13 @@
 /**
  * Import entity of downloadable product type
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\DownloadableImportExport\Model\Import\Product\Type;
 
-use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\Framework\EntityManager\MetadataPool;
 use \Magento\Store\Model\Store;
 
 /**
@@ -244,7 +245,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $downloadableHelper;
 
     /**
-     * Constructor
+     * Downloadable constructor
      *
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
@@ -252,7 +253,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $params
      * @param \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper
      * @param \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -260,12 +261,12 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         \Magento\Framework\App\ResourceConnection $resource,
         array $params,
         \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper,
-        \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
+        \Magento\DownloadableImportExport\Helper\Data $downloadableHelper,
+        MetadataPool $metadataPool = null
     ) {
-        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
+        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
         $this->parameters = $this->_entityModel->getParameters();
         $this->_resource = $resource;
-        $this->connection = $resource->getConnection('write');
         $this->uploaderHelper = $uploaderHelper;
         $this->downloadableHelper = $downloadableHelper;
     }
@@ -283,7 +284,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
                     continue;
                 }
-                $productData = $newSku[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU]];
+                $rowSku = strtolower($rowData[ImportProduct::COL_SKU]);
+                $productData = $newSku[$rowSku];
                 if ($this->_type != $productData['type_id']) {
                     continue;
                 }
@@ -436,7 +438,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $result = $defaultValue;
         if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])) {
             $options = explode(
-                \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
+                ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
                 $rowData[self::COL_DOWNLOADABLE_LINKS]
             );
             foreach ($options as $option) {
@@ -461,7 +463,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $result = '';
         if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])) {
             $options = explode(
-                \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
+                ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
                 $rowData[self::COL_DOWNLOADABLE_SAMPLES]
             );
             foreach ($options as $option) {
@@ -727,7 +729,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $result = [];
         $options = explode(
-            \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
+            ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
             $rowCol
         );
         foreach ($options as $option) {
@@ -751,7 +753,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $result = [];
         $options = explode(
-            \Magento\CatalogImportExport\Model\Import\Product::PSEUDO_MULTI_LINE_SEPARATOR,
+            ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
             $rowCol
         );
         foreach ($options as $option) {

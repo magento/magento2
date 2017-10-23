@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Exception\Test\Unit;
@@ -8,7 +8,7 @@ namespace Magento\Framework\Exception\Test\Unit;
 use \Magento\Framework\Exception\InputException;
 use Magento\Framework\Phrase;
 
-class InputExceptionTest extends \PHPUnit_Framework_TestCase
+class InputExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Verify that the constructor creates a single instance of InputException with the proper

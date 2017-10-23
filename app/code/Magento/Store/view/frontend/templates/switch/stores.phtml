@@ -1,22 +1,16 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
-?>
-<?php
-/**
- * Store switcher template
- *
- * @see \Magento\Store\Block\Store\Switcher
- */
+/** @var \Magento\Store\Block\Switcher $block */
 ?>
 <?php if (count($block->getGroups())>1): ?>
 <div class="switcher store switcher-store" id="switcher-store">
-    <strong class="label switcher-label"><span><?php /* @escapeNotVerified */ echo __('Select Store') ?></span></strong>
+    <strong class="label switcher-label"><span><?= $block->escapeHtml(__('Select Store')) ?></span></strong>
     <div class="actions dropdown options switcher-options">
         <?php foreach ($block->getGroups() as $_group): ?>
         <?php if ($_group->getId() == $block->getCurrentGroupId()): ?>
@@ -28,7 +22,7 @@
                  data-trigger-keypress-button="true"
                  id="switcher-store-trigger">
                 <strong>
-                    <span><?php echo $block->escapeHtml($_group->getName()) ?></span>
+                    <span><?= $block->escapeHtml($_group->getName()) ?></span>
                 </strong>
             </div>
         <?php endif; ?>
@@ -37,9 +31,8 @@
             <?php foreach ($block->getGroups() as $_group): ?>
             <?php if (!($_group->getId() == $block->getCurrentGroupId())): ?>
                 <li class="switcher-option">
-                    <a href="#"
-                       data-post='<?php /* @escapeNotVerified */ echo $block->getTargetStorePostData($_group->getDefaultStore()); ?>'>
-                        <?php echo $block->escapeHtml($_group->getName()) ?>
+                    <a href="#" data-post='<?= /* @noEscape */ $block->getTargetStorePostData($_group->getDefaultStore()) ?>'>
+                        <?= $block->escapeHtml($_group->getName()) ?>
                     </a>
                 </li>
             <?php endif; ?>

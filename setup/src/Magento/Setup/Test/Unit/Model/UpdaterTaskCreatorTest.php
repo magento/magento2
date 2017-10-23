@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ namespace Magento\Setup\Test\Unit\Model;
 use \Magento\Setup\Model\ObjectManagerProvider;
 use \Magento\Setup\Model\UpdaterTaskCreator;
 
-class UpdaterTaskCreatorTest extends \PHPUnit_Framework_TestCase
+class UpdaterTaskCreatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Model\Updater|\PHPUnit_Framework_MockObject_MockObject
@@ -33,10 +33,11 @@ class UpdaterTaskCreatorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->updater = $this->getMock('Magento\Setup\Model\Updater', [], [], '', false);
-        $this->objectManagerProvider = $this->getMock('\Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->navigation = $this->getMock('Magento\Setup\Model\Navigation', [], [], '', false);
+        $this->updater = $this->createMock(\Magento\Setup\Model\Updater::class);
+        $this->objectManagerProvider =
+            $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->navigation = $this->createMock(\Magento\Setup\Model\Navigation::class);
         $this->model = new UpdaterTaskCreator(
             $this->filesystem,
             $this->navigation,
@@ -59,11 +60,16 @@ class UpdaterTaskCreatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateUpdaterTasks($payload)
     {
-        $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
+        $write = $this->getMockForAbstractClass(
+            \Magento\Framework\Filesystem\Directory\WriteInterface::class,
+            [],
+            '',
+            false
+        );
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
         $write->expects($this->once())->method('writeFile');
-        $cacheManager = $this->getMock('\Magento\Framework\App\Cache\Manager', [], [], '', false);
-        $objectManager = $this->getMockForAbstractClass('\Magento\Framework\ObjectManagerInterface');
+        $cacheManager = $this->createMock(\Magento\Framework\App\Cache\Manager::class);
+        $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
         $objectManager->expects($this->once())->method('get')->willReturn($cacheManager);
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 

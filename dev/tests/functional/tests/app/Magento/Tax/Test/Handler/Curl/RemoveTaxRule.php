@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,9 +39,9 @@ class RemoveTaxRule extends Curl
     public function persist(FixtureInterface $fixture = null)
     {
         $this->taxRuleGridUrl = $_ENV['app_backend_url'] . 'tax/rule/index/';
-        $curl = $this->_getCurl($this->taxRuleGridUrl);
+        $curl = $this->getCurl($this->taxRuleGridUrl);
         $response = $curl->read();
-        $this->_removeTaxRules($response);
+        $this->removeTaxRules($response);
         $curl->close();
         return $response;
     }

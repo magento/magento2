@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,14 +21,14 @@ use Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity;
  * 4. Click 'Save Currency Symbols' button
  * 5. Perform all asserts.
  *
- * @group Currency_(PS)
+ * @group Currency
  * @ZephyrId MAGETWO-26638
  */
 class ResetCurrencySymbolEntityTest extends AbstractCurrencySymbolEntityTest
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'PS';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

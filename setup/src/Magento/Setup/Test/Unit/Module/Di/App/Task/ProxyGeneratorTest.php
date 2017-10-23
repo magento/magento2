@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@ use Magento\Setup\Module\Di\App\Task\Operation\ProxyGenerator;
 use Magento\Setup\Module\Di\Code\Scanner;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 
-class ProxyGeneratorTest extends \PHPUnit_Framework_TestCase
+class ProxyGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Scanner\XmlScanner | \PHPUnit_Framework_MockObject_MockObject
@@ -29,18 +29,18 @@ class ProxyGeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->proxyScannerMock = $this->getMockBuilder('Magento\Setup\Module\Di\Code\Scanner\XmlScanner')
+        $this->proxyScannerMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Code\Scanner\XmlScanner::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->configurationScannerMock = $this->getMockBuilder(
-            'Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner'
+            \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner::class
         )->disableOriginalConstructor()
             ->getMock();
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            'Magento\Setup\Module\Di\App\Task\Operation\ProxyGenerator',
+            \Magento\Setup\Module\Di\App\Task\Operation\ProxyGenerator::class,
             [
                 'proxyScanner' => $this->proxyScannerMock,
                 'configurationScanner' => $this->configurationScannerMock,

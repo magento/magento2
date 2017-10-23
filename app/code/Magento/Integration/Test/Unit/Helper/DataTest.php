@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Helper;
 
 use Magento\Integration\Model\Integration;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Integration\Helper\Data */
     protected $dataHelper;
@@ -15,7 +15,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->dataHelper = $helper->getObject('Magento\Integration\Helper\Data');
+        $this->dataHelper = $helper->getObject(\Magento\Integration\Helper\Data::class);
     }
 
     public function testMapResources()

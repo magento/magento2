@@ -1,6 +1,6 @@
 <?php
 /***
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swagger\Controller\Index;
@@ -11,10 +11,14 @@ namespace Magento\Swagger\Controller\Index;
  */
 class Index extends \Magento\Framework\App\Action\Action
 {
-    /** @var \Magento\Framework\View\Page\Config */
+    /**
+     * @var \Magento\Framework\View\Page\Config
+     */
     private $pageConfig;
 
-    /** @var \Magento\Framework\View\Result\PageFactory */
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
     private $pageFactory;
 
     /**

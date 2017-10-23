@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model;
@@ -9,15 +9,12 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * Abstract class for testing product export and import scenarios
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\CatalogImportExport\Model\Export\Product
-     */
-    protected $model;
-
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
@@ -53,17 +50,17 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
         'custom_design_from',
         'updated_in',
         'tax_class_id',
+        'description'
     ];
 
     protected function setUp()
     {
-        parent::setUp();
-
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->fileSystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
         $this->productResource = $this->objectManager->create(
             \Magento\Catalog\Model\ResourceModel\Product::class
         );
+        \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::$commonAttributesCache = [];
     }
 
     protected function tearDown()
@@ -150,7 +147,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
 
             $this->assertEquals(
                 $value,
-                $actual[$key],
+                isset($actual[$key]) ? $actual[$key] : null,
                 'Assert value at key - ' . $key . ' failed'
             );
         }
@@ -257,9 +254,33 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
     }
 
     /**
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @dataProvider importReplaceDataProvider
      */
-    protected function executeImportReplaceTest($skus, $skippedAttributes)
+    public function testImportReplaceWithPagination($fixtures, $skus, $skippedAttributes = [])
+    {
+        $this->fixtures = $fixtures;
+        $this->executeFixtures($fixtures, $skus);
+        $this->modifyData($skus);
+        $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
+        $this->executeImportReplaceTest($skus, $skippedAttributes, true);
+    }
+
+    /**
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @param bool $usePagination
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function executeImportReplaceTest($skus, $skippedAttributes, $usePagination = false)
     {
         $replacedAttributes = [
             'row_id',
@@ -280,7 +301,18 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
             $index++;
         }
 
-        $csvfile = $this->exportProducts();
+        $exportProduct = $this->objectManager->create(\Magento\CatalogImportExport\Model\Export\Product::class);
+        if ($usePagination) {
+            /** @var \ReflectionProperty $itemsPerPageProperty */
+            $itemsPerPageProperty = $this->objectManager->create(\ReflectionProperty::class, [
+                'class' => \Magento\CatalogImportExport\Model\Export\Product::class,
+                'name' => '_itemsPerPage'
+            ]);
+            $itemsPerPageProperty->setAccessible(true);
+            $itemsPerPageProperty->setValue($exportProduct, 1);
+        }
+
+        $csvfile = $this->exportProducts($exportProduct);
         $this->importProducts($csvfile, \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE);
 
         while ($index > 0) {
@@ -321,13 +353,16 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
     /**
      * Export products in the system
      *
+     * @param \Magento\CatalogImportExport\Model\Export\Product|null $exportProduct
      * @return string Return exported file name
      */
-    private function exportProducts()
+    private function exportProducts(\Magento\CatalogImportExport\Model\Export\Product $exportProduct = null)
     {
         $csvfile = uniqid('importexport_') . '.csv';
 
-        $exportProduct = $this->objectManager->create(\Magento\CatalogImportExport\Model\Export\Product::class);
+        $exportProduct = $exportProduct ?: $this->objectManager->create(
+            \Magento\CatalogImportExport\Model\Export\Product::class
+        );
         $exportProduct->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
                 \Magento\ImportExport\Model\Export\Adapter\Csv::class,

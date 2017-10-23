@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\App\Utility;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
 use Magento\Framework\Filesystem\Glob;
 
@@ -19,26 +20,52 @@ use Magento\Framework\Filesystem\Glob;
  */
 class Files
 {
-    /**@#+
-     * File types offset flags
+    /**
+     * Include app code
      */
     const INCLUDE_APP_CODE = 1;
-    const INCLUDE_TESTS = 2;
-    const INCLUDE_DEV_TOOLS = 4;
-    const INCLUDE_TEMPLATES = 8;
-    const INCLUDE_LIBS = 16;
-    const INCLUDE_PUB_CODE = 32;
-    const INCLUDE_NON_CLASSES = 64;
-    /**#@-*/
 
     /**
-     * Return as DataSet offset flag
+     * Include tests
+     */
+    const INCLUDE_TESTS = 2;
+
+    /**
+     * Include dev tools
+     */
+    const INCLUDE_DEV_TOOLS = 4;
+
+    /**
+     * Include templates
+     */
+    const INCLUDE_TEMPLATES = 8;
+
+    /**
+     * Include lib files
+     */
+    const INCLUDE_LIBS = 16;
+
+    /**
+     * Include pub code
+     */
+    const INCLUDE_PUB_CODE = 32;
+
+    /**
+     * Include non classes
+     */
+    const INCLUDE_NON_CLASSES = 64;
+
+    /**
+     * Include setup
+     */
+    const INCLUDE_SETUP = 128;
+
+    /**
+     * Return as data set
      */
     const AS_DATA_SET = 1024;
 
     /**
-     * Component registrar
-     *
      * @var ComponentRegistrar
      */
     protected $componentRegistrar;
@@ -49,25 +76,54 @@ class Files
     protected static $_instance = null;
 
     /**
-     * In-memory cache for the data sets
-     *
      * @var array
      */
     protected static $_cache = [];
 
     /**
-     * Dir search for registered components
-     *
      * @var DirSearch
      */
     private $dirSearch;
 
     /**
-     * Theme list for registered themes
-     *
      * @var ThemePackageList
      */
     private $themePackageList;
+
+    /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @var RegexIteratorFactory
+     */
+    private $regexIteratorFactory;
+
+    /**
+     * Constructor
+     *
+     * @param ComponentRegistrar $componentRegistrar
+     * @param DirSearch $dirSearch
+     * @param ThemePackageList $themePackageList
+     * @param Json|null $serializer
+     * @param RegexIteratorFactory|null $regexIteratorFactory
+     */
+    public function __construct(
+        ComponentRegistrar $componentRegistrar,
+        DirSearch $dirSearch,
+        ThemePackageList $themePackageList,
+        Json $serializer = null,
+        RegexIteratorFactory $regexIteratorFactory = null
+    ) {
+        $this->componentRegistrar = $componentRegistrar;
+        $this->dirSearch = $dirSearch;
+        $this->themePackageList = $themePackageList;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
+            ->get(Json::class);
+        $this->regexIteratorFactory = $regexIteratorFactory ?: ObjectManager::getInstance()
+            ->get(RegexIteratorFactory::class);
+    }
 
     /**
      * Setter for an instance of self
@@ -112,23 +168,6 @@ class Files
     }
 
     /**
-     * Set path to source code
-     *
-     * @param ComponentRegistrar $componentRegistrar
-     * @param DirSearch $dirSearch
-     * @param ThemePackageList $themePackageList
-     */
-    public function __construct(
-        ComponentRegistrar $componentRegistrar,
-        DirSearch $dirSearch,
-        ThemePackageList $themePackageList
-    ) {
-        $this->componentRegistrar = $componentRegistrar;
-        $this->dirSearch = $dirSearch;
-        $this->themePackageList = $themePackageList;
-    }
-
-    /**
      * Get list of regular expressions for matching test directories in modules
      *
      * @return array
@@ -170,14 +209,15 @@ class Files
         }
         $key = __METHOD__ . BP . $flags;
         if (!isset(self::$_cache[$key])) {
-            $files = [];
-
-            $files = array_merge($files, $this->getAppCodeFiles($flags));
-            $files = array_merge($files, $this->getTestFiles($flags));
-            $files = array_merge($files, $this->getDevToolsFiles($flags));
-            $files = array_merge($files, $this->getTemplateFiles($flags));
-            $files = array_merge($files, $this->getLibraryFiles($flags));
-            $files = array_merge($files, $this->getPubFiles($flags));
+            $files = array_merge(
+                $this->getAppCodeFiles($flags),
+                $this->getTestFiles($flags),
+                $this->getDevToolsFiles($flags),
+                $this->getTemplateFiles($flags),
+                $this->getLibraryFiles($flags),
+                $this->getPubFiles($flags),
+                $this->getSetupPhpFiles($flags)
+            );
             self::$_cache[$key] = $files;
         }
         if ($flags & self::AS_DATA_SET) {
@@ -339,7 +379,7 @@ class Files
      */
     public function getMainConfigFiles($asDataSet = true)
     {
-        $cacheKey = __METHOD__ . '|' . serialize(func_get_args());
+        $cacheKey = __METHOD__ . '|' . implode('|', [$asDataSet]);
         if (!isset(self::$_cache[$cacheKey])) {
             $configXmlPaths = [];
             foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
@@ -375,7 +415,7 @@ class Files
         $excludedFileNames = ['wsdl.xml', 'wsdl2.xml', 'wsi.xml'],
         $asDataSet = true
     ) {
-        $cacheKey = __METHOD__ . '|' . serialize(func_get_args());
+        $cacheKey = __METHOD__ . '|' . $this->serializer->serialize([$fileNamePattern, $excludedFileNames, $asDataSet]);
         if (!isset(self::$_cache[$cacheKey])) {
             $files = $this->dirSearch->collectFiles(ComponentRegistrar::MODULE, "/etc/{$fileNamePattern}");
             $files = array_filter(
@@ -391,6 +431,7 @@ class Files
         }
         return self::$_cache[$cacheKey];
     }
+
     // @codingStandardsIgnoreEnd
 
     /**
@@ -406,7 +447,7 @@ class Files
         $excludedFileNames = [],
         $asDataSet = true
     ) {
-        $cacheKey = __METHOD__ . '|' . serialize(func_get_args());
+        $cacheKey = __METHOD__ . '|' . $this->serializer->serialize([$fileNamePattern, $excludedFileNames, $asDataSet]);
         if (!isset(self::$_cache[$cacheKey])) {
             $files = $this->getFilesSubset(
                 $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
@@ -457,7 +498,7 @@ class Files
      */
     public function getLayoutConfigFiles($fileNamePattern = '*.xml', $asDataSet = true)
     {
-        $cacheKey = __METHOD__ . '|' . serialize(func_get_args());
+        $cacheKey = __METHOD__ . '|' . implode('|', [$fileNamePattern, $asDataSet]);
         if (!isset(self::$_cache[$cacheKey])) {
             self::$_cache[$cacheKey] = $this->dirSearch->collectFiles(
                 ComponentRegistrar::THEME,
@@ -514,6 +555,29 @@ class Files
     public function getPageLayoutFiles($incomingParams = [], $asDataSet = true)
     {
         return $this->getLayoutXmlFiles('page_layout', $incomingParams, $asDataSet);
+    }
+
+    /**
+     * Returns list of UI Component files, used by Magento application
+     *
+     * An incoming array can contain the following items
+     * array (
+     *     'namespace'      => 'namespace_name',
+     *     'module'         => 'module_name',
+     *     'area'           => 'area_name',
+     *     'theme'          => 'theme_name',
+     *     'include_code'   => true|false,
+     *     'include_design' => true|false,
+     *     'with_metainfo'  => true|false,
+     * )
+     *
+     * @param array $incomingParams
+     * @param bool $asDataSet
+     * @return array
+     */
+    public function getUiComponentXmlFiles($incomingParams = [], $asDataSet = true)
+    {
+        return $this->getLayoutXmlFiles('ui_component', $incomingParams, $asDataSet);
     }
 
     /**
@@ -898,6 +962,7 @@ class Files
                         null,
                         null,
                         null,
+                        null
                     ];
                 }
             }
@@ -1267,6 +1332,7 @@ class Files
      * @param string $class
      * @param string &$path
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function classFileExists($class, &$path = '')
     {
@@ -1287,6 +1353,8 @@ class Files
             '/dev/tests/static/framework',
             '/dev/tests/static/testsuite',
             '/dev/tests/functional/tests/app',
+            '/dev/tests/functional/lib',
+            '/dev/tests/functional/vendor/magento/mtf',
             '/setup/src'
         ];
         foreach ($directories as $key => $dir) {
@@ -1312,6 +1380,10 @@ class Files
             if (count($classParts) >= 4) {
                 // Check if it's a library under framework directory
                 $trimmedFullPath = $dir . '/' . $classParts[3];
+                if ($this->classFileExistsCheckContent($trimmedFullPath, $namespace, $className)) {
+                    return true;
+                }
+                $trimmedFullPath = $dir . '/' . $classParts[2] . '/' . $classParts[3];
                 if ($this->classFileExistsCheckContent($trimmedFullPath, $namespace, $className)) {
                     return true;
                 }
@@ -1342,7 +1414,8 @@ class Files
             $fileContent = file_get_contents($fullPath);
             if (strpos($fileContent, 'namespace ' . $namespace) !== false
                 && (strpos($fileContent, 'class ' . $className) !== false
-                    || strpos($fileContent, 'interface ' . $className) !== false)
+                    || strpos($fileContent, 'interface ' . $className) !== false
+                    || strpos($fileContent, 'trait ' . $className) !== false)
             ) {
                 return true;
             }
@@ -1419,7 +1492,7 @@ class Files
      */
     public function getComposerFiles($componentType, $asDataSet = true)
     {
-        $key = __METHOD__ . '|' . serialize(func_get_args());
+        $key = __METHOD__ . '|' . implode('|', [$componentType, $asDataSet]);
         if (!isset(self::$_cache[$key])) {
             $excludes = $componentType == ComponentRegistrar::MODULE ? $this->getModuleTestDirsRegex() : [];
             $files = $this->getFilesSubset(
@@ -1558,5 +1631,27 @@ class Files
             $fileSet = preg_grep($excludeRegex, $fileSet, PREG_GREP_INVERT);
         }
         return $fileSet;
+    }
+
+    /**
+     * Get list of PHP files in setup application
+     *
+     * @param int $flags
+     * @return array
+     */
+    private function getSetupPhpFiles($flags = null)
+    {
+        $files = [];
+        $setupAppPath = BP . '/setup';
+        if ($flags & self::INCLUDE_SETUP && file_exists($setupAppPath)) {
+            $regexIterator = $this->regexIteratorFactory->create(
+                $setupAppPath,
+                '/.*php$/'
+            );
+            foreach ($regexIterator as $file) {
+                $files[] = $file[0];
+            }
+        }
+        return $files;
     }
 }

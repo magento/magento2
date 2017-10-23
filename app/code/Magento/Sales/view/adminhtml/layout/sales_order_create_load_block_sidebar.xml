@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar" template="order/create/sidebar.phtml" name="sidebar">
-                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Cart" template="order/create/sidebar/items.phtml" name="cart"/>
-                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Wishlist" template="order/create/sidebar/items.phtml" name="wishlist"/>
-                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Reorder" template="order/create/sidebar/items.phtml" name="reorder"/>
-                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Viewed" template="order/create/sidebar/items.phtml" name="viewed"/>
-                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Compared" template="order/create/sidebar/items.phtml" name="compared"/>
-                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Pcompared" template="order/create/sidebar/items.phtml" name="pcompared"/>
-                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Pviewed" template="order/create/sidebar/items.phtml" name="pviewed"/>
+            <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar" template="Magento_Sales::order/create/sidebar.phtml" name="sidebar">
+                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Cart" template="Magento_Sales::order/create/sidebar/items.phtml" name="cart"/>
+                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Wishlist" template="Magento_Sales::order/create/sidebar/items.phtml" name="wishlist"/>
+                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Reorder" template="Magento_Sales::order/create/sidebar/items.phtml" name="reorder"/>
+                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Viewed" template="Magento_Sales::order/create/sidebar/items.phtml" name="viewed"/>
+                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Compared" template="Magento_Sales::order/create/sidebar/items.phtml" name="compared"/>
+                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Pcompared" template="Magento_Sales::order/create/sidebar/items.phtml" name="pcompared"/>
+                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Pviewed" template="Magento_Sales::order/create/sidebar/items.phtml" name="pviewed"/>
             </block>
         </referenceContainer>
     </body>

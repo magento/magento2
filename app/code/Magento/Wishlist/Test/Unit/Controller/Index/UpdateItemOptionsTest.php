@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
@@ -10,7 +10,7 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
+class UpdateItemOptionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ProductRepository|\PHPUnit_Framework_MockObject_MockObject
@@ -79,19 +79,19 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->productRepository = $this->getMock('Magento\Catalog\Model\ProductRepository', [], [], '', false);
-        $this->context = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
-        $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->wishlistProvider = $this->getMock('Magento\Wishlist\Controller\WishlistProvider', [], [], '', false);
-        $this->om = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
-        $this->messageManager = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
-        $this->url = $this->getMock('Magento\Framework\Url', [], [], '', false);
-        $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->eventManager = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
-        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $this->productRepository = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
+        $this->context = $this->createMock(\Magento\Framework\App\Action\Context::class);
+        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->wishlistProvider = $this->createMock(\Magento\Wishlist\Controller\WishlistProvider::class);
+        $this->om = $this->createMock(\Magento\Framework\App\ObjectManager::class);
+        $this->messageManager = $this->createMock(\Magento\Framework\Message\Manager::class);
+        $this->url = $this->createMock(\Magento\Framework\Url::class);
+        $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->eventManager = $this->createMock(\Magento\Framework\Event\Manager::class);
+        $this->resultFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -100,7 +100,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->with(ResultFactory::TYPE_REDIRECT, [])
             ->willReturn($this->resultRedirectMock);
 
-        $this->formKeyValidator = $this->getMockBuilder('Magento\Framework\Data\Form\FormKey\Validator')
+        $this->formKeyValidator = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -131,7 +131,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function prepareContext()
     {
-        $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
+        $actionFlag = $this->createMock(\Magento\Framework\App\ActionFlag::class);
 
         $this->context
             ->expects($this->any())
@@ -267,8 +267,8 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithoutWishList()
     {
-        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $item = $this->getMock('Magento\Wishlist\Model\Item', [], [], '', false);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
 
         $product
             ->expects($this->once())
@@ -318,7 +318,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $this->om
             ->expects($this->once())
             ->method('create')
-            ->with('Magento\Wishlist\Model\Item')
+            ->with(\Magento\Wishlist\Model\Item::class)
             ->willReturn($item);
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
@@ -336,10 +336,10 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteAddSuccessException()
     {
-        $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', [], [], '', false);
-        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $item = $this->getMock('Magento\Wishlist\Model\Item', [], [], '', false);
-        $helper = $this->getMock('Magento\Wishlist\Helper\Data', [], [], '', false);
+        $wishlist = $this->createMock(\Magento\Wishlist\Model\Wishlist::class);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
+        $helper = $this->createMock(\Magento\Wishlist\Helper\Data::class);
 
         $helper
             ->expects($this->exactly(2))
@@ -411,7 +411,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $this->om
             ->expects($this->once())
             ->method('create')
-            ->with('Magento\Wishlist\Model\Item')
+            ->with(\Magento\Wishlist\Model\Item::class)
             ->willReturn($item);
 
         $this->request
@@ -422,7 +422,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $this->om
             ->expects($this->exactly(2))
             ->method('get')
-            ->with('Magento\Wishlist\Helper\Data')
+            ->with(\Magento\Wishlist\Helper\Data::class)
             ->willReturn($helper);
 
         $this->eventManager
@@ -448,6 +448,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
+
     /**
      * Test execute add success critical exception
      *
@@ -456,11 +457,11 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteAddSuccessCriticalException()
     {
-        $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', [], [], '', false);
-        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $item = $this->getMock('Magento\Wishlist\Model\Item', [], [], '', false);
-        $helper = $this->getMock('Magento\Wishlist\Helper\Data', [], [], '', false);
-        $logger = $this->getMock('Magento\Framework\Logger\Monolog', [], [], '', false);
+        $wishlist = $this->createMock(\Magento\Wishlist\Model\Wishlist::class);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $item = $this->createMock(\Magento\Wishlist\Model\Item::class);
+        $helper = $this->createMock(\Magento\Wishlist\Helper\Data::class);
+        $logger = $this->createMock(\Magento\Framework\Logger\Monolog::class);
         $exception = new \Exception();
 
         $logger
@@ -539,7 +540,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $this->om
             ->expects($this->once())
             ->method('create')
-            ->with('Magento\Wishlist\Model\Item')
+            ->with(\Magento\Wishlist\Model\Item::class)
             ->willReturn($item);
 
         $this->request
@@ -550,17 +551,17 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $this->om
             ->expects($this->at(1))
             ->method('get')
-            ->with('Magento\Wishlist\Helper\Data')
+            ->with(\Magento\Wishlist\Helper\Data::class)
             ->willReturn($helper);
         $this->om
             ->expects($this->at(2))
             ->method('get')
-            ->with('Magento\Wishlist\Helper\Data')
+            ->with(\Magento\Wishlist\Helper\Data::class)
             ->willReturn($helper);
         $this->om
             ->expects($this->at(3))
             ->method('get')
-            ->with('Psr\Log\LoggerInterface')
+            ->with(\Psr\Log\LoggerInterface::class)
             ->willReturn($logger);
 
         $this->eventManager

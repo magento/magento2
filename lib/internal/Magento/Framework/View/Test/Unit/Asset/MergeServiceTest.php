@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Asset;
@@ -18,8 +18,9 @@ use Magento\Framework\View\Asset\MergeStrategy\FileExists;
 
 /**
  * Class MergeServiceTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MergeServiceTest extends \PHPUnit_Framework_TestCase
+class MergeServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MergeService
@@ -96,8 +97,8 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMergedAssets(array $assets, $contentType, $appMode, $mergeStrategy)
     {
-        $mergedAsset = $this->getMock(AssetInterface::class);
-        $mergeStrategyMock = $this->getMock($mergeStrategy, [], [], '', false);
+        $mergedAsset = $this->createMock(AssetInterface::class);
+        $mergeStrategyMock = $this->createMock($mergeStrategy);
 
         $this->configMock->expects($this->once())->method('isMergeCssFiles')->willReturn(true);
         $this->configMock->expects($this->once())->method('isMergeJsFiles')->willReturn(true);

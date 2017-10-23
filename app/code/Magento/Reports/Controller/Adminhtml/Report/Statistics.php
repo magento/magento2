@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,10 @@ namespace Magento\Reports\Controller\Adminhtml\Report;
 use Magento\Backend\Model\Auth\Session as AuthSession;
 use Magento\Backend\Model\Session;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 abstract class Statistics extends \Magento\Backend\App\Action
 {
     /**
@@ -104,7 +108,7 @@ abstract class Statistics extends \Magento\Backend\App\Action
     protected function _getSession()
     {
         if ($this->_adminSession === null) {
-            $this->_adminSession = $this->_objectManager->get('Magento\Backend\Model\Auth\Session');
+            $this->_adminSession = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class);
         }
         return $this->_adminSession;
     }

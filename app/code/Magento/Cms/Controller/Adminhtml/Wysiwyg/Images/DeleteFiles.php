@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
@@ -21,6 +20,8 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
     protected $resultRawFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
@@ -37,7 +38,6 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
         parent::__construct($context, $coreRegistry);
     }
 
-
     /**
      * Delete file from media storage
      *
@@ -52,14 +52,14 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
             $files = $this->getRequest()->getParam('files');
 
             /** @var $helper \Magento\Cms\Helper\Wysiwyg\Images */
-            $helper = $this->_objectManager->get('Magento\Cms\Helper\Wysiwyg\Images');
+            $helper = $this->_objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
             $path = $this->getStorage()->getSession()->getCurrentPath();
             foreach ($files as $file) {
                 $file = $helper->idDecode($file);
                 /** @var \Magento\Framework\Filesystem $filesystem */
-                $filesystem = $this->_objectManager->get('Magento\Framework\Filesystem');
+                $filesystem = $this->_objectManager->get(\Magento\Framework\Filesystem::class);
                 $dir = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
-                $filePath = $path . '/' . $file;
+                $filePath = $path . '/' . \Magento\Framework\File\Uploader::getCorrectFileName($file);
                 if ($dir->isFile($dir->getRelativePath($filePath))) {
                     $this->getStorage()->deleteFile($filePath);
                 }

@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow;
 
+use Magento\Paypal\Block\Payment\Info;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
+use Magento\Vault\Model\CreditCardTokenFactory;
 
 /**
  * Class TransparentTest
@@ -16,7 +17,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
  * Test class for \Magento\Paypal\Model\Payflow\Transparent
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TransparentTest extends \PHPUnit_Framework_TestCase
+class TransparentTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Transparent|\PHPUnit_Framework_MockObject_MockObject */
     protected $object;
@@ -49,7 +50,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
     protected $addressShippingMock;
 
     /**
-     * @var PaymentTokenInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditCardTokenFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $paymentTokenFactory;
 
@@ -66,42 +67,40 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->paymentTokenFactory = $this->getMockBuilder('\Magento\Vault\Api\Data\PaymentTokenInterfaceFactory')
+        $this->paymentTokenFactory = $this->getMockBuilder(CreditCardTokenFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->gatewayMock = $this->getMockBuilder('\Magento\Paypal\Model\Payflow\Service\Gateway')
+        $this->gatewayMock = $this->getMockBuilder(\Magento\Paypal\Model\Payflow\Service\Gateway::class)
             ->setMethods(['postRequest'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->setMethods(['getStore', 'getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
+        $this->storeManagerMock->method('getStore')
             ->willReturnSelf();
-        $this->configMock = $this->getMockBuilder('Magento\Paypal\Model\PayflowConfig')
+        $this->configMock = $this->getMockBuilder(\Magento\Paypal\Model\PayflowConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configFactoryMock = $this->getMockBuilder('\Magento\Payment\Model\Method\ConfigInterfaceFactory')
+        $this->configFactoryMock = $this->getMockBuilder(\Magento\Payment\Model\Method\ConfigInterfaceFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configFactoryMock->expects($this->once())
-            ->method('create')
+        $this->configFactoryMock->method('create')
             ->willReturn($this->configMock);
         $this->responseMock = new \Magento\Framework\DataObject();
         $this->responseValidator = $this->getMockBuilder(
-            'Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator'
+            \Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator::class
         )->disableOriginalConstructor()
             ->setMethods(['validate'])
             ->getMock();
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $objectHelper->getObject(
-            'Magento\Paypal\Model\Payflow\Transparent',
+            \Magento\Paypal\Model\Payflow\Transparent::class,
             [
                 'gateway' => $this->gatewayMock,
                 'storeManager' => $this->storeManagerMock,
@@ -119,14 +118,14 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
      */
     protected function initializationAuthorizeMock()
     {
-        $this->orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->setMethods([
                 'getCustomerId', 'getBillingAddress', 'getShippingAddress', 'getCustomerEmail',
-                'getId', 'getIncrementId'
+                'getId', 'getIncrementId', 'getBaseCurrencyCode'
             ])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->addressBillingMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $this->addressBillingMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 [
                     'getFirstname',
@@ -139,7 +138,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
                 ]
             )->disableOriginalConstructor()
             ->getMock();
-        $this->addressShippingMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $this->addressShippingMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(
                 [
                     'getFirstname',
@@ -164,6 +163,9 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->paymentMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->once())
+            ->method('getBaseCurrencyCode')
+            ->willReturn('USD');
         $this->orderMock->expects($this->once())
             ->method('getBillingAddress')
             ->willReturn($this->addressBillingMock);
@@ -337,10 +339,10 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'origResult' => Payflowpro::RESPONSE_CODE_APPROVED,
-                'resultCode' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER
+                'resultCode' => Payflowpro::RESPONSE_CODE_DECLINED_BY_FILTER
             ],
             [
-                'origResult' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER,
+                'origResult' => Payflowpro::RESPONSE_CODE_DECLINED_BY_FILTER,
                 'resultCode' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER
             ],
             [
@@ -363,11 +365,11 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->initializationAuthorizeMock();
         $this->buildRequestData();
 
-        $paymentTokenMock = $this->getMock(PaymentTokenInterface::class);
-        $extensionAttributes = $this->getMockBuilder('Magento\Sales\Api\Data\OrderPaymentExtensionInterface')
+        $paymentTokenMock = $this->createMock(PaymentTokenInterface::class);
+        $extensionAttributes = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderPaymentExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setVaultPaymentToken'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $ccDetails = [
             'cc_type' => 'VI',
             'cc_number' => '1111'
@@ -425,6 +427,21 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
             ->method('setVaultPaymentToken')
             ->with($paymentTokenMock);
 
+        $this->paymentMock->expects($this->at(8))
+            ->method('unsAdditionalInformation')
+            ->with(Transparent::CC_DETAILS);
+        $this->paymentMock->expects($this->at(9))
+            ->method('unsAdditionalInformation')
+            ->with(Transparent::PNREF);
+
         $this->assertSame($this->object, $this->object->authorize($this->paymentMock, 33));
+    }
+
+    /**
+     * @covers \Magento\Paypal\Model\Payflow\Transparent::getInfoBlockType()
+     */
+    public function testGetInfoBlockType()
+    {
+        static::assertEquals(Info::class, $this->object->getInfoBlockType());
     }
 }

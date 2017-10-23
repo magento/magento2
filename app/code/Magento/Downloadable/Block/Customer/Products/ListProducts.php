@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,8 @@ use Magento\Downloadable\Model\Link\Purchased\Item;
 /**
  * Block to display downloadable links bought by customer
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class ListProducts extends \Magento\Framework\View\Element\Template
 {
@@ -94,7 +95,7 @@ class ListProducts extends \Magento\Framework\View\Element\Template
         parent::_prepareLayout();
 
         $pager = $this->getLayout()->createBlock(
-            'Magento\Theme\Block\Html\Pager',
+            \Magento\Theme\Block\Html\Pager::class,
             'downloadable.customer.products.pager'
         )->setCollection(
             $this->getItems()

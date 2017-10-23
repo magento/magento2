@@ -6,7 +6,7 @@
  * that no transactions should be used for API data fixtures.
  * Otherwise fixture data will not be accessible to Web API functional tests.
  *
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -47,10 +47,11 @@ class ApiDataFixture
     /**
      * Handler for 'startTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      */
-    public function startTest(\PHPUnit_Framework_TestCase $test)
+    public function startTest(\PHPUnit\Framework\TestCase $test)
     {
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
         /** Apply method level fixtures if thy are available, apply class level fixtures otherwise */
         $this->_applyFixtures($this->_getFixtures('method', $test) ?: $this->_getFixtures('class', $test));
     }
@@ -61,17 +62,20 @@ class ApiDataFixture
     public function endTest()
     {
         $this->_revertFixtures();
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->get(\Magento\Customer\Model\Metadata\AttributeMetadataCache::class)->clean();
     }
 
     /**
      * Retrieve fixtures from annotation
      *
      * @param string $scope 'class' or 'method'
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _getFixtures($scope, \PHPUnit_Framework_TestCase $test)
+    protected function _getFixtures($scope, \PHPUnit\Framework\TestCase $test)
     {
         $annotations = $test->getAnnotations();
         $result = [];

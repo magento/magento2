@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Test\Unit\Ddl;
 
-class TriggerTest extends \PHPUnit_Framework_TestCase
+class TriggerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Ddl\Trigger
@@ -79,6 +79,18 @@ class TriggerTest extends \PHPUnit_Framework_TestCase
         //non string
 
         $this->_object->setTable($tableName);
+    }
+
+    /**
+     * Test for table name setter
+     */
+    public function testSetTableName()
+    {
+        $names = ['PREFIX_table', 'prefix_table'];
+        foreach ($names as $name) {
+            $this->_object->setTable($name);
+            $this->assertEquals($name, $this->_object->getTable());
+        }
     }
 
     /**

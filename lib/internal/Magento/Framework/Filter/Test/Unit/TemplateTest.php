@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Filter\Test\Unit;
 
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filter\Template
@@ -16,7 +16,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->templateFilter = $objectManager->getObject('Magento\Framework\Filter\Template');
+        $this->templateFilter = $objectManager->getObject(\Magento\Framework\Filter\Template::class);
     }
 
     public function testFilter()
@@ -43,7 +43,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 {{depend street4}}{{var street4}}{{/depend}}
 {{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}
 {{var country}}
-T: {{var telephone}}
+{{depend telephone}}T: {{var telephone}}{{/depend}}
 {{depend fax}}F: {{var fax}}{{/depend}}
 {{depend vat_id}}VAT: {{var vat_id}}{{/depend}}
 TEMPLATE;
@@ -140,18 +140,23 @@ EXPECTED_RESULT;
 
     public function varDirectiveDataProvider()
     {
-        /* @var $stub \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
-        $stub = $this->getMockBuilder('\Magento\Framework\DataObject')
+        /* @var $dataObjectVariable \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
+        $dataObjectVariable = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->disableProxyingToOriginalMethods()
             ->setMethods(['bar'])
             ->getMock();
-
-        $stub->expects($this->once())
+        $dataObjectVariable->expects($this->once())
             ->method('bar')
-            ->will($this->returnCallback(function ($arg) {
-                return serialize($arg);
-            }));
+            ->willReturn('DataObject Method Return');
+
+        /* @var $nonDataObjectVariable \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject */
+        $nonDataObjectVariable = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $nonDataObjectVariable->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
 
         return [
             'no variables' => [
@@ -172,19 +177,28 @@ EXPECTED_RESULT;
             'array argument to method' => [
                 '{{var foo.bar([param_1:value_1, param_2:$value_2, param_3:[a:$b, c:$d]])}}',
                 [
-                    'foo' => $stub,
+                    'foo' => $dataObjectVariable,
                     'value_2' => 'lorem',
                     'b' => 'bee',
                     'd' => 'dee',
                 ],
-                serialize([
-                    'param_1' => 'value_1',
-                    'param_2' => 'lorem',
-                    'param_3' => [
-                        'a' => 'bee',
-                        'c' => 'dee',
-                    ],
-                ]),
+                'DataObject Method Return'
+            ],
+            'non DataObject method call' => [
+                '{{var foo.escapeHtml($value)}}',
+                [
+                    'foo' => $nonDataObjectVariable,
+                    'value' => 'lorem'
+                ],
+                'lorem'
+            ],
+            'non DataObject undefined method call' => [
+                '{{var foo.undefinedMethod($value)}}',
+                [
+                    'foo' => $nonDataObjectVariable,
+                    'value' => 'lorem'
+                ],
+                ''
             ],
         ];
     }

@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Paypal\Test\Unit\Controller\Ipn;
 
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Index */
     protected $model;
@@ -22,13 +22,13 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
-        $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            'Magento\Paypal\Controller\Ipn\Index',
+            \Magento\Paypal\Controller\Ipn\Index::class,
             [
                 'logger' => $this->logger,
                 'request' => $this->request,
