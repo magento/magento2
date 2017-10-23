@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductTypeListInterface;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Data\ImageContentInterface;
@@ -151,6 +152,18 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private $serializer;
 
     /**
+     * @var ProductTypeListInterface
+     */
+    protected $productTypeList;
+
+    /**
+     * Available product types
+     *
+     * @var array
+     */
+    protected $availableProductTypes;
+
+    /**
      * ProductRepository constructor.
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
@@ -172,6 +185,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param MimeTypeExtensionMap $mimeTypeExtensionMap
      * @param ImageProcessorInterface $imageProcessor
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param ProductTypeListInterface $productTypeList
      * @param CollectionProcessorInterface $collectionProcessor [optional]
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param int $cacheLimit [optional]
@@ -199,6 +213,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         MimeTypeExtensionMap $mimeTypeExtensionMap,
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
+        ProductTypeListInterface $productTypeList,
         CollectionProcessorInterface $collectionProcessor = null,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         $cacheLimit = 1000
@@ -224,6 +239,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->cacheLimit = (int)$cacheLimit;
+        $this->productTypeList = $productTypeList;
     }
 
     /**
@@ -326,6 +342,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     protected function initializeProductData(array $productData, $createNew)
     {
+        if (isset($productData['type_id'])
+            && !in_array($productData['type_id'], $this->getAvailableProductTypes())
+        ) {
+            unset($productData['type_id']);
+        }
+
         unset($productData['media_gallery']);
         if ($createNew) {
             $product = $this->productFactory->create();
@@ -414,6 +436,27 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             ]
         );
         return $this;
+    }
+
+    /**
+     * Get an array with the available product type ids
+     *
+     * @return string[]
+     */
+    protected function getAvailableProductTypes()
+    {
+        if (!isset($this->availableProductTypes)) {
+            $productTypeList = $this->productTypeList->getProductTypes();
+            array_walk(
+                $productTypeList,
+                function (&$productType) {
+                    /** @var \Magento\Catalog\Api\Data\ProductTypeInterface $productType */
+                    $productType = $productType->getName();
+                }
+            );
+            $this->availableProductTypes = $productTypeList;
+        }
+        return $this->availableProductTypes;
     }
 
     /**
