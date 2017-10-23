@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Test\Unit\Helper;
+namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\AddressMetadataManagementInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Customer\Helper\AttributeChecker;
+use Magento\Customer\Model\AttributeChecker;
 use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\Metadata\AttributeResolver;
 use Magento\Framework\App\Helper\Context;

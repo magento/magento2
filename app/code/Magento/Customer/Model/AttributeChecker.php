@@ -3,19 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Helper;
+namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\AddressMetadataManagementInterface;
-use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\Metadata\AttributeResolver;
-use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 
 /**
  * Customer attribute checker.
  */
-class AttributeChecker extends AbstractHelper
+class AttributeChecker
 {
     /**
      * @var AddressMetadataInterface
@@ -28,18 +26,15 @@ class AttributeChecker extends AbstractHelper
     private $attributeResolver;
 
     /**
-     * @param Context $context
      * @param AddressMetadataInterface $addressMetadata
      * @param AttributeResolver $attributeResolver
      */
     public function __construct(
-        Context $context,
         AddressMetadataInterface $addressMetadata,
         AttributeResolver $attributeResolver
     ) {
         $this->addressMetadata = $addressMetadata;
         $this->attributeResolver = $attributeResolver;
-        parent::__construct($context);
     }
 
     /**
