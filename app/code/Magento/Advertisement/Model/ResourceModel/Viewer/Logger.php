@@ -15,7 +15,9 @@ use Magento\Framework\App\ResourceConnection;
  */
 class Logger
 {
-    /** Log table name */
+    /**
+     * Log table name
+     */
     const LOG_TABLE_NAME = 'advertisement_viewer_log';
 
     /**
