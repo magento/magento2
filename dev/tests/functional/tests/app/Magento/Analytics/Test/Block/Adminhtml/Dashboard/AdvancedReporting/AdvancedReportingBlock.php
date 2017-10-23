@@ -13,11 +13,9 @@ use Magento\Ui\Test\Block\Adminhtml\Modal;
 class AdvancedReportingBlock extends Modal
 {
     /**
-     * Close pop-up button
-     *
      * @var string
      */
-    private $closeReportingButton = '[data-index="analytics_subscription_button_close"]';
+    private $advertisementText = '[data-index="advertisement_text"]';
 
     /**
      * @inheritdoc
@@ -25,6 +23,6 @@ class AdvancedReportingBlock extends Modal
     public function isVisible()
     {
         $this->waitModalAnimationFinished();
-        return parent::isVisible() && $this->_rootElement->find($this->closeReportingButton)->isVisible();
+        return parent::isVisible() && $this->_rootElement->find($this->advertisementText)->isVisible();
     }
 }
