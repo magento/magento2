@@ -34,6 +34,11 @@ class BatchRangeIterator implements BatchIteratorInterface
     private $rangeField;
 
     /**
+     * @var string
+     */
+    private $rangeFieldAlias;
+
+    /**
      * @var int
      */
     private $batchSize;
