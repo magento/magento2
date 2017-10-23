@@ -17,6 +17,13 @@ use Magento\Customer\Model\AccountManagement;
 class Register extends \Magento\Directory\Block\Data
 {
     /**
+     * Configuration paths for email templates and identities
+     *
+     * @deprecated
+     */
+    const XML_PATH_REGISTER_SHOW_ADDRESS_FIELDS = 'customer/create_account/show_address_fields';
+
+    /**
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
@@ -219,5 +226,15 @@ class Register extends \Magento\Directory\Block\Data
     public function getRequiredCharacterClassesNumber()
     {
         return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
+    }
+
+    /**
+     * Determine if Address Fields have to be shown
+     *
+     * @return bool
+     */
+    public function getShowAddressFields()
+    {
+        return $this->_scopeConfig->getValue(self::XML_PATH_REGISTER_SHOW_ADDRESS_FIELDS);
     }
 }
