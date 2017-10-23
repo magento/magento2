@@ -55,8 +55,10 @@ class SaveHandler
     public function execute($entityType, $entity)
     {
         /** @var \Magento\Catalog\Api\Data\ProductInterface $entity*/
-        foreach ($this->productLinkRepository->getList($entity) as $link) {
-            $this->productLinkRepository->delete($link);
+        if(!$entity->getIsDuplicate()){
+            foreach ($this->productLinkRepository->getList($entity) as $link) {
+                $this->productLinkRepository->delete($link);
+            }
         }
         foreach ($entity->getProductLinks() as $link) {
             $this->productLinkRepository->save($link);
