@@ -15,8 +15,6 @@
     </argument>
     <settings>
         <namespace>advertisement_notification</namespace>
-        <ajaxSave>true</ajaxSave>
-        <ajaxSaveType>simple</ajaxSaveType>
         <dataScope>data</dataScope>
         <deps>
             <dep>advertisement_notification.advertisement_notification_data_source</dep>
@@ -28,13 +26,7 @@
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
             </item>
         </argument>
-        <dataProvider class="Magento\Advertisement\Ui\DataProvider\DataProvider" name="advertisement_notification_data_source">
-            <settings>
-                <clientConfig>
-                    <param name="validateBeforeSave" xsi:type="boolean">false</param>
-                </clientConfig>
-            </settings>
-        </dataProvider>
+        <dataProvider class="Magento\Advertisement\Ui\DataProvider\DataProvider" name="advertisement_notification_data_source"/>
     </dataSource>
     <modal name="advertisement_modal">
         <settings>
