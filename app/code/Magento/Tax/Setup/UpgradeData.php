@@ -81,7 +81,7 @@ class UpgradeData implements UpgradeDataInterface
                 false
             );
         }
-        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+        if (version_compare($context->getVersion(), '2.0.3', '<')) {
             //Update the tax_region_id
             $taxRateList = $this->taxRateRepository->getList($this->searchCriteriaFactory->create());
             /** @var \Magento\Tax\Api\Data\TaxRateInterface $taxRateData */
