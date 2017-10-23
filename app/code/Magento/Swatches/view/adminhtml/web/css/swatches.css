@@ -4,7 +4,8 @@
  */
 
 .swatch_sub-menu_container {
-    position: absolute;
+    margin-top: 3px;
+    overflow: auto;
     z-index: 9999;
     width: 140px;
     display: none;
