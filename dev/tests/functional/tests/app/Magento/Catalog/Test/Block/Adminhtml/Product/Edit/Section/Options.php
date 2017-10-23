@@ -20,6 +20,12 @@ use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Row;
  */
 class Options extends Section
 {
+    /**#@+
+     * Determines if we need update option or add new one.
+     */
+    const ACTION_ADD = 'add';
+    /**#@-*/
+
     /**
      * Custom option row.
      *
@@ -104,24 +110,8 @@ class Options extends Section
                 $this->importOptions($field['products']);
                 continue;
             }
-            $options = null;
-            $this->_rootElement->find($this->buttonAddOption)->click();
-            if (!empty($field['options'])) {
-                $options = $field['options'];
-                unset($field['options']);
-            }
 
-            $rootElement = $this->_rootElement->find(
-                sprintf($this->newCustomOptionRow, $keyRoot + 1),
-                Locator::SELECTOR_XPATH
-            );
-            $data = $this->dataMapping($field);
-            $this->_fill($data, $rootElement);
-
-            // Fill subform
-            if (isset($field['type']) && !empty($options)) {
-                $this->setOptionTypeData($options, $field['type'], $rootElement);
-            }
+            $this->processField($keyRoot, $field);
         }
 
         return $this;
@@ -197,6 +187,11 @@ class Options extends Section
             } else {
                 $currentSortOrder = 0;
             }
+
+            if (!isset($option['action_type'])) {
+                $option['action_type'] = self::ACTION_ADD;
+            }
+
             $optionsForm->fillOptions(
                 $option,
                 $element->find(sprintf($context, $key + 1))
@@ -259,6 +254,10 @@ class Options extends Section
             if (!empty($field['options'])) {
                 $options = $field['options'];
                 unset($field['options']);
+            }
+
+            if (isset($field['action_type'])) {
+                unset($field['action_type']);
             }
 
             $rootLocator = sprintf($this->customOptionRow, $field['title']);
@@ -346,5 +345,41 @@ class Options extends Section
         }
 
         return $option;
+    }
+
+    /**
+     * Process field data.
+     *
+     * @param string|int $keyRoot
+     * @param array $field
+     * @return void
+     */
+    private function processField($keyRoot, array $field)
+    {
+        $options = null;
+
+        $actionType = isset($field['action_type']) ? $field['action_type'] : self::ACTION_ADD;
+        unset($field['action_type']);
+
+        if ($actionType == self::ACTION_ADD) {
+            $this->_rootElement->find($this->buttonAddOption)->click();
+        }
+
+        if (!empty($field['options'])) {
+            $options = $field['options'];
+            unset($field['options']);
+        }
+
+        $rootElement = $this->_rootElement->find(
+            sprintf($this->newCustomOptionRow, $keyRoot + 1),
+            Locator::SELECTOR_XPATH
+        );
+        $data = $this->dataMapping($field);
+        $this->_fill($data, $rootElement);
+
+        // Fill subform
+        if (isset($field['type']) && !empty($options)) {
+            $this->setOptionTypeData($options, $field['type'], $rootElement);
+        }
     }
 }

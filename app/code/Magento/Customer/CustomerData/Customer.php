@@ -20,6 +20,11 @@ class Customer implements SectionSourceInterface
     protected $currentCustomer;
 
     /**
+     * @var View
+     */
+    private $customerViewHelper;
+
+    /**
      * @param CurrentCustomer $currentCustomer
      * @param View $customerViewHelper
      */
@@ -39,10 +44,12 @@ class Customer implements SectionSourceInterface
         if (!$this->currentCustomer->getCustomerId()) {
             return [];
         }
+
         $customer = $this->currentCustomer->getCustomer();
         return [
             'fullname' => $this->customerViewHelper->getCustomerName($customer),
             'firstname' => $customer->getFirstname(),
+            'websiteId' => $customer->getWebsiteId(),
         ];
     }
 }

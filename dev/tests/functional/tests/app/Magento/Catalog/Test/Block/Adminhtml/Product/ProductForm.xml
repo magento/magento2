@@ -197,6 +197,11 @@
                 <selector>input[name$="[title]"]</selector>
                 <strategy>css selector</strategy>
             </title>
+            <use_default_title>
+                <selector>fieldset[data-index="container_common"] [name^="options_use_default"]</selector>
+                <strategy>css selector</strategy>
+                <input>checkbox</input>
+            </use_default_title>
             <is_require>
                 <selector>input[name$="[is_require]"]</selector>
                 <strategy>css selector</strategy>
@@ -207,6 +212,10 @@
                 <selector>[data-index="type"]</selector>
                 <strategy>css selector</strategy>
             </type>
+            <custom_design_from>
+                <selector>[name="product[custom_design_from]"]</selector>
+                <strategy>css selector</strategy>
+            </custom_design_from>
         </fields>
     </customer-options>
     <gift-options>

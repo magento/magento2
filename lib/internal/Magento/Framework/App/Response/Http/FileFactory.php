@@ -99,19 +99,7 @@ class FileFactory
             if (!empty($content['rm'])) {
                 $dir->delete($file);
             }
-            $this->callExit();
         }
         return $this->_response;
-    }
-
-    /**
-     * Call exit
-     *
-     * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
-     */
-    protected function callExit()
-    {
-        exit(0);
     }
 }

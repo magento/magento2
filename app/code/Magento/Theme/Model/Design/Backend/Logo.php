@@ -41,6 +41,6 @@ class Logo extends Image
      */
     public function getAllowedExtensions()
     {
-        return ['jpg', 'jpeg', 'gif', 'png', 'svg'];
+        return ['jpg', 'jpeg', 'gif', 'png'];
     }
 }

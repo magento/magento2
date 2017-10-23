@@ -53,7 +53,13 @@
                   instance="Magento\PageCache\Observer\RegisterFormKeyFromCookie"
                   />
     </event>
+    <event name="backend_auth_user_login_success">
+        <observer name="FlushFormKey" instance="Magento\PageCache\Observer\FlushFormKey"/>
+    </event>
+    <event name="customer_login">
+        <observer name="FlushFormKey" instance="Magento\PageCache\Observer\FlushFormKey"/>
+    </event>
     <event name="customer_logout">
-        <observer name="FlushFormKeyOnLogout" instance="Magento\PageCache\Observer\FlushFormKeyOnLogout"/>
+        <observer name="FlushFormKey" instance="Magento\PageCache\Observer\FlushFormKey"/>
     </event>
 </config>
