@@ -9,14 +9,10 @@
     <testCase name="Magento\Analytics\Test\TestCase\NotificationMenuAccessUserPermissionsTest" summary="Magento Analytics Popup will appear to every admin user during the first login only" ticketId="MAGETWO-80786">
         <variation name="UserWithoutSubscriptionPermissionsTestVariation1" summary="User without subscription permissions">
             <data name="user/dataset" xsi:type="string">custom_admin_with_role_without_subscription_permissions</data>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingPopupExist" />
-            <constraint name="Magento\Analytics\Test\Constraint\AssertLoginAgainAdvancedReportingPopupNotExist" />
             <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingSectionInvisible" />
         </variation>
         <variation name="UserWithSubscriptionPermissionsTestVariation2" summary="User with subscription permissions">
             <data name="user/dataset" xsi:type="string">custom_admin_with_default_role</data>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingPopupExist" />
-            <constraint name="Magento\Analytics\Test\Constraint\AssertLoginAgainAdvancedReportingPopupNotExist" />
             <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingSectionVisible" />
         </variation>
     </testCase>
