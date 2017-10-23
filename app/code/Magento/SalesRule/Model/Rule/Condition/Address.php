@@ -28,11 +28,17 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     protected $_paymentAllmethods;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    protected $_eventManager;
+
+    /**
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\Directory\Model\Config\Source\Country $directoryCountry
      * @param \Magento\Directory\Model\Config\Source\Allregion $directoryAllregion
      * @param \Magento\Shipping\Model\Config\Source\Allmethods $shippingAllmethods
      * @param \Magento\Payment\Model\Config\Source\Allmethods $paymentAllmethods
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param array $data
      */
     public function __construct(
@@ -41,8 +47,10 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
         \Magento\Directory\Model\Config\Source\Allregion $directoryAllregion,
         \Magento\Shipping\Model\Config\Source\Allmethods $shippingAllmethods,
         \Magento\Payment\Model\Config\Source\Allmethods $paymentAllmethods,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         array $data = []
     ) {
+        $this->_eventManager = $eventManager;
         parent::__construct($context, $data);
         $this->_directoryCountry = $directoryCountry;
         $this->_directoryAllregion = $directoryAllregion;
@@ -57,7 +65,25 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
      */
     public function loadAttributeOptions()
     {
-        $attributes = [
+
+        $attributes = array_merge(
+            $this->getDefaultAttributeOptions(),
+            $this->getCustomAttributeOptions()
+        );
+
+        $this->setAttributeOption($attributes);
+
+        return $this;
+    }
+
+    /**
+     * Get Default Attribute Options
+     *
+     * @return array
+     */
+    protected function getDefaultAttributeOptions()
+    {
+        return [
             'base_subtotal' => __('Subtotal'),
             'total_qty' => __('Total Items Quantity'),
             'weight' => __('Total Weight'),
@@ -67,10 +93,21 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
             'region_id' => __('Shipping State/Province'),
             'country_id' => __('Shipping Country'),
         ];
+    }
 
-        $this->setAttributeOption($attributes);
-
-        return $this;
+    /**
+     * Get Custom Attribute Options
+     *
+     * @return array
+     */
+    protected function getCustomAttributeOptions()
+    {
+        $attributes = [];
+        $this->_eventManager->dispatch(
+            'salesrule_rule_condition_address_custom_attribute_options',
+            ['attributes' => $attributes]
+        );
+        return $attributes;
     }
 
     /**
