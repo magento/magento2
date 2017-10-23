@@ -17,7 +17,5 @@
     </operation>
     <operation name="DeleteProductAttributeFromAttributeSet" dataType="ProductAttributeSet" type="delete" auth="adminOauth" url="/V1/products/attribute-sets/{attributeSetId}/attributes/{attributeCode}" method="DELETE">
         <contentType>application/json</contentType>
-        <param key="attributeSetId" type="path">{attributeSetId}</param>
-        <param key="attributeCode" type="path">{attributeCode}</param>
     </operation>
 </config>

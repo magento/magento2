@@ -10,7 +10,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateProductAttributeOption" dataType="ProductAttributeOption" type="create" auth="adminOauth" url="/V1/products/attributes/{attribute_code}/options" method="POST">
         <contentType>application/json</contentType>
-        <param key="attribute_code" type="path">{attribute_code}</param>
         <object dataType="ProductAttributeOption" key="option">
             <field key="label">string</field>
             <field key="value">string</field>
@@ -23,11 +22,8 @@
     </operation>
     <operation name="DeleteProductAttributeOption" dataType="ProductAttributeOption" type="delete" auth="adminOauth" url="/V1/products/attributes/{attribute_code}/options/{optionId}" method="DELETE">
         <contentType>application/json</contentType>
-        <param key="attribute_code" type="path">{attribute_code}</param>
-        <param key="optionId" type="path">{optionId}</param>
     </operation>
     <operation name="GetProductAttributeOption" dataType="ProductAttributeOption" type="get" auth="adminOauth" url="/V1/products/attributes/{attribute_code}/options/" method="GET">
         <contentType>application/json</contentType>
-        <param key="attribute_code" type="path">{attribute_code}</param>
     </operation>
 </config>

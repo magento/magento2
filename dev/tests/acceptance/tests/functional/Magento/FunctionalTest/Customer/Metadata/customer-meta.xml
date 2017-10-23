@@ -43,6 +43,5 @@
     </operation>
     <operation name="DeleteCustomer" dataType="customer" type="delete" auth="adminOauth" url="/V1/customers/{id}" method="DELETE">
         <contentType>application/json</contentType>
-        <param key="id" type="path">{id}</param>
     </operation>
 </config>

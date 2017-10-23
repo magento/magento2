@@ -36,7 +36,6 @@
     </operation>
     <operation name="UpdateProduct" dataType="product" type="update" auth="adminOauth" url="/V1/products/{sku}" method="PUT">
         <contentType>application/json</contentType>
-        <param key="sku" type="path">{sku}</param>
         <object dataType="product" key="product">
             <field key="id">integer</field>
             <field key="sku">string</field>
@@ -65,6 +64,5 @@
     </operation>
     <operation name="deleteProduct" dataType="product" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
         <contentType>application/json</contentType>
-        <param key="sku" type="path">{sku}</param>
     </operation>
 </config>
