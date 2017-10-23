@@ -536,9 +536,9 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     /**
      * {@inheritdoc}
      */
-    public function setQuoteAddressId($id)
+    public function setQuoteAddressId($addressId)
     {
-        return $this->setData(OrderAddressInterface::QUOTE_ADDRESS_ID, $id);
+        return $this->setData(OrderAddressInterface::QUOTE_ADDRESS_ID, $addressId);
     }
 
     /**

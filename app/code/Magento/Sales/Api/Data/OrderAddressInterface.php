@@ -367,10 +367,10 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the quote address ID for the order address.
      *
-     * @param int $id
+     * @param int $addressId
      * @return $this
      */
-    public function setQuoteAddressId($id);
+    public function setQuoteAddressId($addressId);
 
     /**
      * Sets the region ID for the order address.
