@@ -47,8 +47,9 @@ class Edit extends \Magento\Directory\Block\Data
      * @var \Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelper;
+
     /**
-     * @var AttributeChecker|null
+     * @var AttributeChecker
      */
     private $attributeChecker;
 
@@ -67,8 +68,7 @@ class Edit extends \Magento\Directory\Block\Data
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
-     *
-     * @param AttributeChecker|null $attributeChecker
+     * @param AttributeChecker $attributeChecker
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
