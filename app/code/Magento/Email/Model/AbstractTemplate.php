@@ -654,7 +654,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     {
         if (empty($this->templateFilter)) {
             $this->templateFilter = $this->getFilterFactory()->create();
-            $this->templateFilter->setUseAbsoluteLinks($this->getUseAbsoluteLinks())
+            $this->templateFilter->setUseAbsoluteLinks(true)
                 ->setStoreId($this->getDesignConfig()->getStore())
                 ->setUrlModel($this->urlModel);
         }
