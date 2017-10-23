@@ -16,7 +16,7 @@ use Magento\Framework\App\ResourceConnection;
 class Logger
 {
     /** Log table name */
-    const TABLE_NAME = 'advertisement_viewer_log';
+    const LOG_TABLE_NAME = 'advertisement_viewer_log';
 
     /**
      * @var Resource
@@ -54,7 +54,7 @@ class Logger
         $connection = $this->resource->getConnection(ResourceConnection::DEFAULT_CONNECTION);
 
         $connection->insertOnDuplicate(
-            $this->resource->getTableName(self::TABLE_NAME),
+            $this->resource->getTableName(self::LOG_TABLE_NAME),
             [
                 'viewer_id' => $viewerId,
                 'last_view_version' => $lastViewVersion
@@ -93,7 +93,7 @@ class Logger
 
         $select = $connection->select()
             ->from(
-                $this->resource->getTableName(self::TABLE_NAME)
+                $this->resource->getTableName(self::LOG_TABLE_NAME)
             )->where(
                 'viewer_id = ?',
                 $viewerId
