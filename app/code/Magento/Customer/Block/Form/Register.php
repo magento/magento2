@@ -6,6 +6,9 @@
 namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Model\AccountManagement;
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Customer register form block
@@ -39,6 +42,16 @@ class Register extends \Magento\Directory\Block\Data
     protected $_customerUrl;
 
     /**
+     * @var Attribute
+     */
+    protected $_eavAttribute;
+
+    /**
+     * @var ResourceConnection
+     */
+    protected $_resource;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -64,11 +77,15 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
+        ResourceConnection $resourceConnection,
+        Attribute $eavAttribute,
         array $data = []
     ) {
         $this->_customerUrl = $customerUrl;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
+        $this->_resource = $resourceConnection;
+        $this->_eavAttribute = $eavAttribute;
         parent::__construct(
             $context,
             $directoryHelper,
@@ -236,5 +253,26 @@ class Register extends \Magento\Directory\Block\Data
     public function getShowAddressFields()
     {
         return $this->_scopeConfig->getValue(self::XML_PATH_REGISTER_SHOW_ADDRESS_FIELDS);
+    }
+
+    /**
+     * Return form attribute IDs by form code
+     *
+     * @param string $formCode
+     * @return array
+     */
+    public function isAddressFieldUsedInForm($attributeCode)
+    {
+        $formCode = 'customer_register_address';
+        $entityType = AddressMetadataInterface::ENTITY_TYPE_ADDRESS;
+        $attributeId = $this->_eavAttribute->getIdByCode( $entityType, $attributeCode);
+        $bind = ['attribute_id' => $attributeId, 'form_code' => $formCode];
+        $select = $this->_resource->getConnection()->select()->from(
+            $this->_resource->getTableName('customer_form_attribute'),
+            'attribute_id'
+        )->where(
+            'attribute_id = :attribute_id AND form_code = :form_code'
+        );
+        return $this->_resource->getConnection()->fetchRow($select, $bind);
     }
 }
