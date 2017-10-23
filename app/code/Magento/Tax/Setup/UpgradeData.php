@@ -91,6 +91,9 @@ class UpgradeData implements UpgradeDataInterface
                     /** @var \Magento\Directory\Model\Region $region */
                     $region = $this->directoryRegionFactory->create();
                     $region->loadByCode($regionCode, $taxRateData->getTaxCountryId());
+                    if ($taxRateData->getTaxPostcode() === null) {
+                        $taxRateData->setTaxPostcode('*');
+                    }
                     $taxRateData->setTaxRegionId($region->getRegionId());
                     $this->taxRateRepository->save($taxRateData);
                 }
