@@ -6,6 +6,7 @@
 namespace Magento\Advertisement\Model\ResourceModel\Viewer;
 
 use Magento\Advertisement\Model\Viewer\Log;
+use Magento\Advertisement\Model\Viewer\LogFactory;
 use Magento\Framework\App\ResourceConnection;
 
 /**
@@ -26,18 +27,18 @@ class Logger
     private $resource;
 
     /**
-     * @var \Magento\Advertisement\Model\Viewer\LogFactory
+     * @var LogFactory
      */
     private $logFactory;
 
     /**
      * Logger constructor.
      * @param ResourceConnection $resource
-     * @param \Magento\Advertisement\Model\Viewer\LogFactory $logFactory
+     * @param LogFactory $logFactory
      */
     public function __construct(
         ResourceConnection $resource,
-        \Magento\Advertisement\Model\Viewer\LogFactory $logFactory
+        LogFactory $logFactory
     ) {
         $this->resource = $resource;
         $this->logFactory = $logFactory;
