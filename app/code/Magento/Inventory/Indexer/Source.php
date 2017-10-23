@@ -6,9 +6,9 @@
 
 namespace Magento\Inventory\Indexer;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Indexer\Source\GetPartialReindexData;
 use Magento\Inventory\Indexer\StockItem\IndexDataProvider;
+use Magento\InventoryApi\Api\Data\StockInterface;
 
 /**
  * @inheritdoc
@@ -90,7 +90,11 @@ class Source implements SourceIndexerInterface
      */
     public function executeList(array $sourceIds)
     {
-        $stockIds = $this->getPartialReindexData->execute($sourceIds);
+        $stockIds = [];
+        $stockList = $this->getPartialReindexData->execute($sourceIds);
+        foreach ($stockList as $stockData) {
+            $stockIds[] = $stockData[StockInterface::STOCK_ID];
+        }
         $this->stockItemIndexer->executeList($stockIds);
     }
 }

@@ -56,10 +56,14 @@ class IndexDataProvider
     public function getDataBySkuList(int $stockId, array $skuList): \ArrayIterator
     {
         $connection = $this->resourceConnection->getConnection();
-        $condition = count($skuList)
-            ? ['source_item.' . SourceItemInterface::SKU . ' IN (?)', $skuList]
-            : [];
-        $select = $this->prepareSelect($stockId, $condition);
+        $conditions = [];
+        if (count($skuList)) {
+            $conditions[] = [
+                'condition' => 'source_item.' . SourceItemInterface::SKU . ' IN (?)',
+                'value' => $skuList
+            ];
+        }
+        $select = $this->prepareSelect($stockId, $conditions);
 
 
         return new \ArrayIterator($connection->fetchAll($select));
@@ -111,7 +115,7 @@ class IndexDataProvider
 
         if (!empty($conditions)) {
             foreach ($conditions as $condition) {
-                $select->where($condition);
+                $select->where($condition['condition'], $condition['value']);
             }
         }
 

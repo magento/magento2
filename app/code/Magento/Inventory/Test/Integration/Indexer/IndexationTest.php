@@ -5,13 +5,21 @@
  */
 namespace Magento\Inventory\Test\Integration\Indexer;
 
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Indexer\Model\Indexer;
 use Magento\Inventory\Indexer\Alias;
 use Magento\Inventory\Indexer\IndexNameBuilder;
 use Magento\Inventory\Indexer\IndexStructureInterface;
+use Magento\Inventory\Indexer\SourceIndexerInterface;
+use Magento\Inventory\Indexer\SourceItemIndexerInterface;
 use Magento\Inventory\Indexer\StockItemIndexerInterface;
+use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
+use Magento\InventoryApi\Api\SourceItemsSaveInterface;
+use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryApi\Api\UnassignSourceFromStockInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -45,9 +53,19 @@ use Magento\TestFramework\Helper\Bootstrap;
 class IndexationTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
-     * @var IndexerInterface
+     * @var StockItemIndexerInterface
      */
-    private $indexer;
+    private $stockItemIndexer;
+
+    /**
+     * @var SourceItemIndexerInterface
+     */
+    private $sourceItemIndexer;
+
+    /**
+     * @var SourceIndexerInterface
+     */
+    private $sourceIndexer;
 
     /**
      * @var Checker
@@ -56,8 +74,15 @@ class IndexationTest extends \Magento\TestFramework\Indexer\TestCase
 
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
-        $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
+        $this->stockItemIndexer = Bootstrap::getObjectManager()->create(Indexer::class);
+        $this->stockItemIndexer->load(StockItemIndexerInterface::INDEXER_ID);
+
+        $this->sourceItemIndexer = Bootstrap::getObjectManager()->create(Indexer::class);
+        $this->sourceItemIndexer->load(SourceItemIndexerInterface::INDEXER_ID);
+
+        $this->sourceIndexer = Bootstrap::getObjectManager()->create(Indexer::class);
+        $this->sourceIndexer->load(SourceIndexerInterface::INDEXER_ID);
+
         $this->indexerChecker = Bootstrap::getObjectManager()->create(Checker::class);
     }
 
@@ -85,13 +110,54 @@ class IndexationTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
      */
-    public function testReindexRow()
+    public function testStockItemIndexerReindex()
     {
-        $this->indexer->reindexRow(1);
+        $this->stockItemIndexer->reindexRow(10);
+
+        self::assertEquals(8.5, $this->indexerChecker->execute(10, 'SKU-1'));
+        self::assertEquals(0, $this->indexerChecker->execute(20, 'SKU-1'));
+
+        $this->stockItemIndexer->reindexList([10, 30]);
+        self::assertEquals(8.5, $this->indexerChecker->execute(30, 'SKU-1'));
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_index_table_creator.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     */
+    public function testSourceItemIndexerReindex()
+    {
+        $this->sourceItemIndexer->reindexRow(1);
 
         self::assertEquals(8.5, $this->indexerChecker->execute(10, 'SKU-1'));
         self::assertEquals(0, $this->indexerChecker->execute(20, 'SKU-1'));
         self::assertEquals(8.5, $this->indexerChecker->execute(30, 'SKU-1'));
+
+        // set Source-30::SKU-1 to 'In Stock'
+        /** @var SourceItemInterfaceFactory $sourceItemFactory */
+        $sourceItemFactory = Bootstrap::getObjectManager()->get(SourceItemInterfaceFactory::class);
+        /** @var DataObjectHelper $dataObjectHelper */
+        $dataObjectHelper = Bootstrap::getObjectManager()->get(DataObjectHelper::class);
+        /** @var  SourceItemsSaveInterface $sourceItemsSave */
+        $sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
+        $sourceItem = $sourceItemFactory->create();
+        $sourceItemData = [
+            SourceItemInterface::SOURCE_ID => 30, // EU-source-3
+            SourceItemInterface::SKU => 'SKU-1',
+            SourceItemInterface::QUANTITY => 10,
+            SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
+        ];
+        $dataObjectHelper->populateWithArray($sourceItem, $sourceItemData, SourceItemInterface::class);
+        $sourceItemsSave->execute([$sourceItem]);
+
+        $this->sourceItemIndexer->reindexList([1, 5]);
+        self::assertEquals(18.5, $this->indexerChecker->execute(10, 'SKU-1'));
+        self::assertEquals(5, $this->indexerChecker->execute(20, 'SKU-2'));
     }
 
     /**
@@ -101,17 +167,40 @@ class IndexationTest extends \Magento\TestFramework\Indexer\TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
      */
-    public function testReindexList()
+    public function testSourceIndexerReindex()
     {
-        $this->indexer->reindexList([1, 5]);
+        $this->sourceIndexer->reindexList([10, 20, 30, 40, 50]);
 
         self::assertEquals(8.5, $this->indexerChecker->execute(10, 'SKU-1'));
         self::assertEquals(0, $this->indexerChecker->execute(20, 'SKU-1'));
-        self::assertEquals(8.5, $this->indexerChecker->execute(30, 'SKU-1'));
-
-        self::assertEquals(0, $this->indexerChecker->execute(10, 'SKU-2'));
         self::assertEquals(5, $this->indexerChecker->execute(20, 'SKU-2'));
         self::assertEquals(5, $this->indexerChecker->execute(30, 'SKU-2'));
+        self::assertEquals(8.5, $this->indexerChecker->execute(30, 'SKU-1'));
+
+        // Source-40 enable
+        $sourceData = [
+                SourceInterface::SOURCE_ID => 40,
+                SourceInterface::NAME => 'EU-source-disabled',
+                SourceInterface::ENABLED => true,
+                SourceInterface::PRIORITY => 10,
+                SourceInterface::POSTCODE => 'postcode',
+                SourceInterface::COUNTRY_ID => 'DE',
+        ];
+        /** @var SourceInterfaceFactory $sourceFactory */
+        $sourceFactory = Bootstrap::getObjectManager()->get(SourceInterfaceFactory::class);
+        /** @var DataObjectHelper $dataObjectHelper */
+        $dataObjectHelper = Bootstrap::getObjectManager()->get(DataObjectHelper::class);
+        /** @var SourceRepositoryInterface $sourceRepository */
+        $sourceRepository = Bootstrap::getObjectManager()->get(SourceRepositoryInterface::class);
+
+        /** @var SourceInterface $source */
+        $source = $sourceFactory->create();
+        $dataObjectHelper->populateWithArray($source, $sourceData, SourceInterface::class);
+        $sourceRepository->save($source);
+
+        $this->sourceIndexer->reindexRow(40);
+        self::assertEquals(18.5, $this->indexerChecker->execute(10, 'SKU-1'));
+        self::assertEquals(18.5, $this->indexerChecker->execute(30, 'SKU-1'));
     }
 
     /**
@@ -123,7 +212,7 @@ class IndexationTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testReindexAll()
     {
-        $this->indexer->reindexAll();
+        $this->stockItemIndexer->reindexAll();
 
         self::assertEquals(8.5, $this->indexerChecker->execute(10, 'SKU-1'));
         self::assertEquals(0, $this->indexerChecker->execute(20, 'SKU-1'));
@@ -138,13 +227,13 @@ class IndexationTest extends \Magento\TestFramework\Indexer\TestCase
 
         /** @var UnassignSourceFromStockInterface $assignSourcesToStock */
         $unassignSourcesToStock = Bootstrap::getObjectManager()->get(UnassignSourceFromStockInterface::class);
-        $unassignSourcesToStock->execute(2, 3);
+        $unassignSourcesToStock->execute(20, 30);
 
-        $this->indexer->reindexAll();
+        $this->stockItemIndexer->reindexAll();
 
         /**
          * Asserts after unassign action.
          */
-        self::assertEquals(5.5, $this->indexerChecker->execute(3, 'SKU-1'));
+        self::assertEquals(5.5, $this->indexerChecker->execute(30, 'SKU-1'));
     }
 }
