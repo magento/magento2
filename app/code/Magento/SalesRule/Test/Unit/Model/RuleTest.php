@@ -6,6 +6,9 @@
 
 namespace Magento\SalesRule\Test\Unit\Model;
 
+use Magento\Framework\Unserialize\SecureUnserializer;
+use Magento\Framework\ObjectManagerInterface;
+
 class RuleTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -18,16 +21,29 @@ class RuleTest extends \PHPUnit_Framework_TestCase
      */
     protected $coupon;
 
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @var SecureUnserializer
+     */
+    private $unserialize;
+
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->coupon = $this->getMockBuilder('Magento\SalesRule\Model\Coupon')
+        $this->coupon = $this->getMockBuilder(\Magento\SalesRule\Model\Coupon::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadPrimaryByRule', 'setRule', 'setIsPrimary', 'getCode', 'getUsageLimit'])
             ->getMock();
 
-        $couponFactory = $this->getMockBuilder('Magento\SalesRule\Model\CouponFactory')
+        $couponFactory = $this->getMockBuilder(\Magento\SalesRule\Model\CouponFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -35,10 +51,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->coupon);
 
-        $this->model = $objectManager->getObject(
-            'Magento\SalesRule\Model\Rule',
+        $this->prepareObjectManager();
+
+        $this->model = $this->objectManager->getObject(
+            \Magento\SalesRule\Model\Rule::class,
             [
-                'couponFactory' => $couponFactory
+                'couponFactory' => $couponFactory,
             ]
         );
     }
@@ -69,5 +87,38 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
         $this->model->loadCouponCode();
         $this->assertEquals(1, $this->model->getUsesPerCoupon());
+    }
+
+    /**
+     * Prepares ObjectManager mock.
+     *
+     * @return void
+     */
+    private function prepareObjectManager()
+    {
+        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->unserialize =  $this->getMockBuilder(SecureUnserializer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $objectManagerMock->expects($this->any())->method('get')->willReturn(
+            [SecureUnserializer::class, $this->unserialize]
+        );
+
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue(null, null);
     }
 }

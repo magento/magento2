@@ -5,11 +5,28 @@
  */
 namespace Magento\Widget\Helper;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Unserialize\SecureUnserializer;
+
 /**
  * Widget Conditions helper
  */
 class Conditions
 {
+    /**
+     * @var SecureUnserializer
+     */
+    private $unserializer;
+
+    /**
+     * @param SecureUnserializer|null $unserializer
+     */
+    public function __construct(
+        SecureUnserializer $unserializer = null
+    ) {
+        $this->unserializer = $unserializer ?: ObjectManager::getInstance()->get(SecureUnserializer::class);
+    }
+
     /**
      * Encode widget conditions to be used with WYSIWIG
      *
@@ -31,7 +48,7 @@ class Conditions
     public function decode($value)
     {
         $value = str_replace(['[', ']', '`', '|'], ['{', '}', '"', '\\'], $value);
-        $value = unserialize($value);
-        return $value;
+
+        return $this->unserializer->unserialize($value);
     }
 }

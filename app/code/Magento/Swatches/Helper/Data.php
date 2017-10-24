@@ -11,13 +11,15 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\Helper\Context;
 use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Catalog\Model\Product as ModelProduct;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Unserialize\SecureUnserializer;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory as SwatchCollectionFactory;
 use Magento\Swatches\Model\Swatch;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Framework\Exception\InputException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Helper Data
@@ -82,6 +84,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $imageHelper;
 
     /**
+     * @var SecureUnserializer
+     */
+    private $secureUnserializer;
+
+    /**
      * Data key which should populated to Attribute entity from "additional_data" field
      *
      * @var array
@@ -100,6 +107,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param StoreManagerInterface $storeManager
      * @param SwatchCollectionFactory $swatchCollectionFactory
      * @param Image $imageHelper
+     * @param SecureUnserializer|null $secureUnserializer
      */
     public function __construct(
         Context $context,
@@ -108,7 +116,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         ProductRepositoryInterface $productRepository,
         StoreManagerInterface $storeManager,
         SwatchCollectionFactory $swatchCollectionFactory,
-        Image $imageHelper
+        Image $imageHelper,
+        SecureUnserializer $secureUnserializer = null
     ) {
         $this->productCollectionFactory   = $productCollectionFactory;
         $this->productRepository = $productRepository;
@@ -116,6 +125,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->storeManager = $storeManager;
         $this->swatchCollectionFactory = $swatchCollectionFactory;
         $this->imageHelper = $imageHelper;
+        $this->secureUnserializer = $secureUnserializer
+            ?: ObjectManager::getInstance()->get(SecureUnserializer::class);
 
         parent::__construct($context);
     }
@@ -123,13 +134,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param Attribute $attribute
      * @return $this
+     * @throws LocalizedException
      */
     public function assembleAdditionalDataEavAttribute(Attribute $attribute)
     {
         $initialAdditionalData = [];
         $additionalData = (string) $attribute->getData('additional_data');
         if (!empty($additionalData)) {
-            $additionalData = unserialize($additionalData);
+            try {
+                $additionalData = $this->secureUnserializer->unserialize($additionalData);
+            } catch (\Exception $e) {
+                $this->_logger->critical("Additional data for EAV attribute cannot be assembled\n" . $e->getMessage());
+                throw new LocalizedException(__('Addtional data is wrong and cannot be assembled'));
+            }
+
             if (is_array($additionalData)) {
                 $initialAdditionalData = $additionalData;
             }
@@ -150,17 +168,28 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param Attribute $attribute
      * @return $this
+     * @throws LocalizedException
      */
     public function populateAdditionalDataEavAttribute(Attribute $attribute)
     {
-        $additionalData = unserialize($attribute->getData('additional_data'));
-        if (isset($additionalData) && is_array($additionalData)) {
-            foreach ($this->eavAttributeAdditionalDataKeys as $key) {
-                if (isset($additionalData[$key])) {
-                    $attribute->setData($key, $additionalData[$key]);
+        $additionalData = (string) $attribute->getData('additional_data');
+        if (!empty($additionalData)) {
+            try {
+                $additionalData = $this->secureUnserializer->unserialize($additionalData);
+            } catch (\Exception $e) {
+                $this->_logger->critical("Additional data for EAV attribute cannot be populated\n" . $e->getMessage());
+                throw new LocalizedException(__('Addtional data is wrong and cannot be populated'));
+            }
+
+            if (is_array($additionalData)) {
+                foreach ($this->eavAttributeAdditionalDataKeys as $key) {
+                    if (isset($additionalData[$key])) {
+                        $attribute->setData($key, $additionalData[$key]);
+                    }
                 }
             }
         }
+
         return $this;
     }
 
@@ -567,6 +596,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param Attribute $attribute
      * @return bool
+     * @throws LocalizedException
      */
     public function isSwatchAttribute(Attribute $attribute)
     {
@@ -579,6 +609,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param Attribute $attribute
      * @return bool
+     * @throws LocalizedException
      */
     public function isVisualSwatch(Attribute $attribute)
     {
@@ -593,6 +624,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param Attribute $attribute
      * @return bool
+     * @throws LocalizedException
      */
     public function isTextSwatch(Attribute $attribute)
     {

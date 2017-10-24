@@ -47,12 +47,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_stringMock = $this->getMock('Magento\Framework\Stdlib\StringUtils');
-        $this->_queryFactoryMock = $this->getMock('Magento\Search\Model\QueryFactory', [], [], '', false);
-        $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_escaperMock = $this->getMock('Magento\Framework\Escaper');
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->_contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
+        $this->_stringMock = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->_queryFactoryMock = $this->getMock(\Magento\Search\Model\QueryFactory::class, [], [], '', false);
+        $this->_scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_contextMock = $this->getMock(\Magento\Framework\App\Helper\Context::class, [], [], '', false);
         $this->_contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->_scopeConfigMock);
 
         $this->_model = new \Magento\Search\Helper\Data(

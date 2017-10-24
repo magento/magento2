@@ -72,26 +72,31 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
      */
     protected $layout;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->collectionFactory =
-            $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\CollectionFactory')
+            $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
-        $this->visibility = $this->getMockBuilder('Magento\Catalog\Model\Product\Visibility')
+        $this->visibility = $this->getMockBuilder(\Magento\Catalog\Model\Product\Visibility::class)
             ->setMethods(['getVisibleInCatalogIds'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->httpContext = $this->getMock('Magento\Framework\App\Http\Context');
-        $this->builder = $this->getMock('Magento\Rule\Model\Condition\Sql\Builder', [], [], '', false);
-        $this->rule = $this->getMock('Magento\CatalogWidget\Model\Rule', [], [], '', false);
-        $this->widgetConditionsHelper = $this->getMock('Magento\Widget\Helper\Conditions');
-        $this->storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
-        $this->design = $this->getMock('\Magento\Framework\View\DesignInterface');
+        $this->httpContext = $this->getMock(\Magento\Framework\App\Http\Context::class);
+        $this->builder = $this->getMock(\Magento\Rule\Model\Condition\Sql\Builder::class, [], [], '', false);
+        $this->rule = $this->getMock(\Magento\CatalogWidget\Model\Rule::class, [], [], '', false);
+        $this->widgetConditionsHelper = $this->getMockBuilder(\Magento\Widget\Helper\Conditions::class)
+            ->setMethods(['decode'])
+            ->disableOriginalConstructor()->getMock();
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->design = $this->getMock(\Magento\Framework\View\DesignInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $arguments = $objectManagerHelper->getConstructArguments(
-            'Magento\CatalogWidget\Block\Product\ProductsList',
+            \Magento\CatalogWidget\Block\Product\ProductsList::class,
             [
                 'productCollectionFactory' => $this->collectionFactory,
                 'catalogProductVisibility' => $this->visibility,
@@ -100,26 +105,26 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
                 'rule' => $this->rule,
                 'conditionsHelper' => $this->widgetConditionsHelper,
                 'storeManager' => $this->storeManager,
-                'design' => $this->design
+                'design' => $this->design,
             ]
         );
         $this->request = $arguments['context']->getRequest();
         $this->layout = $arguments['context']->getLayout();
 
         $this->productsList = $objectManagerHelper->getObject(
-            'Magento\CatalogWidget\Block\Product\ProductsList',
+            \Magento\CatalogWidget\Block\Product\ProductsList::class,
             $arguments
         );
     }
 
     public function testGetCacheKeyInfo()
     {
-        $store = $this->getMockBuilder('\Magento\Store\Model\Store')
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()->setMethods(['getId'])->getMock();
         $store->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
 
-        $theme = $this->getMock('\Magento\Framework\View\Design\ThemeInterface');
+        $theme = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class);
         $theme->expects($this->once())->method('getId')->willReturn('blank');
         $this->design->expects($this->once())->method('getDesignTheme')->willReturn($theme);
 
@@ -134,13 +139,13 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetProductPriceHtml()
     {
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->once())->method('getId')->willReturn(1);
 
-        $priceRenderer = $this->getMockBuilder('\Magento\Framework\Pricing\Render')
+        $priceRenderer = $this->getMockBuilder(\Magento\Framework\Pricing\Render::class)
             ->setMethods(['render'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -150,7 +155,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
                 'include_container' => false,
                 'display_minimal_price' => false,
                 'zone' => 'item_list',
-                'price_id' => 'old-price-1-some-price-type'
+                'price_id' => 'old-price-1-some-price-type',
             ])
             ->willReturn('<html>');
         $this->layout->expects($this->once())->method('getBlock')->willReturn($priceRenderer);
@@ -161,7 +166,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
             [
                 'include_container' => false,
-                'display_minimal_price' => false
+                'display_minimal_price' => false,
             ]
         ));
     }
@@ -173,7 +178,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPagerHtml()
     {
-        $collection = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Collection')
+        $collection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
             ->setMethods(['getSize'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -183,7 +188,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->productsList->setData('products_per_page', 2);
         $this->productsList->setData('product_collection', $collection);
 
-        $pagerBlock = $this->getMockBuilder('Magento\Catalog\Block\Product\Widget\Html\Pager')
+        $pagerBlock = $this->getMockBuilder(\Magento\Catalog\Block\Product\Widget\Html\Pager::class)
             ->setMethods([
                 'toHtml',
                 'setUseContainer',
@@ -221,7 +226,8 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
     {
         $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')
             ->willReturn([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH]);
-        $collection = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Collection')
+        $this->widgetConditionsHelper->expects($this->once())->method('decode')->willReturn('some_unserialized_value');
+        $collection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
             ->setMethods([
                 'setVisibility',
                 'addMinimalPrice',
@@ -249,7 +255,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->productsList->setData('conditions_encoded', 'some_serialized_conditions');
 
-        $conditions = $this->getMockBuilder('\Magento\Rule\Model\Condition\Combine')
+        $conditions = $this->getMockBuilder(\Magento\Rule\Model\Condition\Combine::class)
             ->setMethods(['collectValidatedAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -263,7 +269,6 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
 
         $this->rule->expects($this->once())->method('loadPost')->willReturnSelf();
         $this->rule->expects($this->once())->method('getConditions')->willReturn($conditions);
-
 
         if ($productsPerPage) {
             $this->productsList->setData('products_per_page', $productsPerPage);
@@ -291,7 +296,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
             [false, 5, null, 5],
             [false, 1, 3, 1],
             [false, 3, 5, 3],
-            [false, 5, 10, 5]
+            [false, 5, 10, 5],
         ];
     }
 

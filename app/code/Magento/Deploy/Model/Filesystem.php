@@ -8,11 +8,14 @@ namespace Magento\Deploy\Model;
 use Magento\Framework\App\State;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Validator\Locale;
+use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
 
 /**
- * Class Filesystem
- *
  * A class to manage Magento modes
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filesystem
 {
@@ -35,10 +38,14 @@ class Filesystem
      */
     const DEFAULT_THEME = 'Magento/blank';
 
-    /** @var \Magento\Framework\App\DeploymentConfig\Writer */
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig\Writer
+     */
     private $writer;
 
-    /** @var \Magento\Framework\App\DeploymentConfig\Reader */
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig\Reader
+     */
     private $reader;
 
     /** @var \Magento\Framework\ObjectManagerInterface */
@@ -63,6 +70,16 @@ class Filesystem
     private $functionCallPath;
 
     /**
+     * @var UserCollection
+     */
+    private $userCollection;
+
+    /**
+     * @var Locale
+     */
+    private $locale;
+
+    /**
      * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
      * @param \Magento\Framework\App\DeploymentConfig\Reader $reader
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -71,6 +88,9 @@ class Filesystem
      * @param \Magento\Framework\Filesystem\Driver\File $driverFile
      * @param \Magento\Store\Model\Config\StoreView $storeView
      * @param \Magento\Framework\Shell $shell
+     * @param UserCollection|null $userCollection
+     * @param Locale|null $locale
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\DeploymentConfig\Writer $writer,
@@ -80,7 +100,9 @@ class Filesystem
         \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
         \Magento\Framework\Filesystem\Driver\File $driverFile,
         \Magento\Store\Model\Config\StoreView $storeView,
-        \Magento\Framework\Shell $shell
+        \Magento\Framework\Shell $shell,
+        UserCollection $userCollection = null,
+        Locale $locale = null
     ) {
         $this->writer = $writer;
         $this->reader = $reader;
@@ -90,7 +112,10 @@ class Filesystem
         $this->driverFile = $driverFile;
         $this->storeView = $storeView;
         $this->shell = $shell;
-        $this->functionCallPath = 'php -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
+        $this->userCollection = $userCollection ?: $this->objectManager->get(UserCollection::class);
+        $this->locale = $locale ?: $this->objectManager->get(Locale::class);
+        $this->functionCallPath =
+            PHP_BINARY . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
 
     /**
@@ -102,13 +127,13 @@ class Filesystem
     public function regenerateStatic(
         \Symfony\Component\Console\Output\OutputInterface $output
     ) {
-        // Сlean up /var/generation, /var/di/, /var/view_preprocessed and /pub/static directories
+        // Сlean up var/generation, var/di/, var/view_preprocessed and pub/static directories
         $this->cleanupFilesystem(
             [
                 DirectoryList::CACHE,
                 DirectoryList::GENERATION,
                 DirectoryList::DI,
-                DirectoryList::TMP_MATERIALIZATION_DIR
+                DirectoryList::TMP_MATERIALIZATION_DIR,
             ]
         );
 
@@ -130,14 +155,63 @@ class Filesystem
     ) {
         $output->writeln('Static content deployment start');
         $cmd = $this->functionCallPath . 'setup:static-content:deploy '
-            . implode(' ', $this->storeView->retrieveLocales());
+            . implode(' ', $this->getUsedLocales());
 
         /**
          * @todo build a solution that does not depend on exec
          */
-        $execOutput = $this->shell->execute($cmd);
+        try {
+            $execOutput = $this->shell->execute($cmd);
+        } catch (LocalizedException $e) {
+            $output->writeln('Something went wrong while deploying static content. See the error log for details.');
+            throw $e;
+        }
         $output->writeln($execOutput);
         $output->writeln('Static content deployment complete');
+    }
+
+    /**
+     * Get admin user locales.
+     *
+     * @return array
+     */
+    private function getAdminUserInterfaceLocales()
+    {
+        $locales = [];
+
+        foreach ($this->userCollection as $user) {
+            $locales[] = $user->getInterfaceLocale();
+        }
+
+        return $locales;
+    }
+
+    /**
+     * Get used store and admin user locales.
+     *
+     * @return array
+     * @throws \InvalidArgumentException if unknown locale is provided by the store configuration
+     */
+    private function getUsedLocales()
+    {
+        $usedLocales = array_merge(
+            $this->storeView->retrieveLocales(),
+            $this->getAdminUserInterfaceLocales()
+        );
+
+        return array_map(
+            function ($locale) {
+                if (!$this->locale->isValid($locale)) {
+                    throw new \InvalidArgumentException(
+                        $locale .
+                        ' argument has invalid value, run info:language:list for list of available locales'
+                    );
+                }
+
+                return $locale;
+            },
+            array_unique($usedLocales)
+        );
     }
 
     /**
