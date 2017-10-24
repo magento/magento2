@@ -1,9 +1,11 @@
 # Magento_Advertisement Module
 
-This module serves to show each administrator user new features of a Magento installation or upgrade.
+The **Advertisement Module** serves to provide a notification delivery platform for displaying new features of a Magento installation or upgrade as well as any other required advertisement notifications.
 
-The module implements the following functionality:
+## Purpose and Content
 
-* Shows a modal pop-up with a high level overview of the features included in a new release of Magento upon the initial login of each admin user to the Admin Panel
-* The modal is enabled with pagination functionality to allow for previous and next navigation to each modal page
-* Each modal page includes more information about a highlighted feature of the Magento release
+* Provides a method of notifying administrators of changes, features, and functionality being introduced in a Magento release
+* Displays a modal containing a high level overview of the features included in the installed or upgraded release of Magento upon the initial login of each administrator into the Admin Panel for a given Magento version
+* The modal is enabled with pagination functionality to allow for easy navigation between each modal page
+* Each modal page includes detailed information about a highlighted feature of the Magento release or other notification
+* Advertisement modal content is determined and provided by Magento Marketing
