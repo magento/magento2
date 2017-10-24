@@ -43,7 +43,7 @@ class Post extends \Magento\Contact\Controller\Index
             if (!\Zend_Validate::is(trim($post['comment']), 'NotEmpty')) {
                 $error = true;
             }
-			$validator = new \Zend\Validator\EmailAddress();
+            $validator = new \Zend\Validator\EmailAddress();
             if (!$validator->isValid(trim($post['email']))) {
                 $error = true;
             }
