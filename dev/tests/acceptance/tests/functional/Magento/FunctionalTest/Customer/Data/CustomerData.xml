@@ -47,6 +47,5 @@
     <entity name="Simple_US_Customer_For_Update" type="customer">
         <var key="id" entityKey="id" entityType="customer"/>
         <data key="firstname">Jane</data>
-
     </entity>
 </config>

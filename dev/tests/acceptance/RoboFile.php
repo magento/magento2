@@ -15,6 +15,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Duplicate the Example configuration files used to customize the Project for customization
+     *
+     * @return void
      */
     function cloneFiles()
     {
@@ -26,6 +28,8 @@ class RoboFile extends \Robo\Tasks
     /**
      * Clone the Example configuration files
      * Build the Codeception project
+     *
+     * @return void
      */
     function buildProject()
     {
@@ -34,17 +38,24 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Generate all Tests
+     * Generate all Tests command.
+     *
+     * @param string[] $opts
+     * @return void
      */
     function generateTests($opts = ['config' => null, 'env' => 'chrome'])
     {
-        require 'tests/functional/_bootstrap.php';
+        require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
         \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance()->createAllCestFiles($opts['config'], $opts['env']);
         $this->say("Generate Tests Command Run");
     }
 
     /**
      * Generate a suite based on name(s) passed in as args
+     *
+     * @param string[] args
+     * @return void
+     * @throws Exception
      */
     function generateSuite(array $args)
     {
@@ -52,7 +63,7 @@ class RoboFile extends \Robo\Tasks
             throw new Exception("Please provide suite name(s) after generate:suite command");
         }
 
-        require 'tests/functional/_bootstrap.php';
+        require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
         $sg = \Magento\FunctionalTestingFramework\Suite\SuiteGenerator::getInstance();
 
         foreach ($args as $arg) {
@@ -62,6 +73,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Run all Functional tests using the Chrome environment
+     *
+     * @return void
      */
     function chrome()
     {
@@ -70,6 +83,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Run all Functional tests using the FireFox environment
+     *
+     * @return void
      */
     function firefox()
     {
@@ -78,6 +93,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Run all Functional tests using the PhantomJS environment
+     *
+     * @return void
      */
     function phantomjs()
     {
@@ -86,6 +103,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Run all Functional tests using the Chrome Headless environment
+     *
+     * @return void
      */
     function headless()
     {
@@ -94,7 +113,9 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Run all Tests with the specified @group tag, excluding @group 'skip', using the Chrome environment
+     *
      * @param string $args
+     * @return void
      */
     function group($args = '')
     {
@@ -103,7 +124,9 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Run all Functional tests located under the Directory Path provided using the Chrome environment
+     *
      * @param string $args
+     * @return void
      */
     function folder($args = '')
     {
@@ -112,6 +135,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Run all Tests marked with the @group tag 'example', using the Chrome environment
+     *
+     * @return void
      */
     function example()
     {
@@ -120,6 +145,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Generate the HTML for the Allure report based on the Test XML output - Allure v1.4.X
+     *
+     * @return void
      */
     function allure1Generate()
     {
@@ -128,6 +155,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Generate the HTML for the Allure report based on the Test XML output - Allure v2.3.X
+     *
+     * @return void
      */
     function allure2Generate()
     {
@@ -136,6 +165,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Open the HTML Allure report - Allure v1.4.xX
+     *
+     * @return void
      */
     function allure1Open()
     {
@@ -144,6 +175,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Open the HTML Allure report - Allure v2.3.X
+     *
+     * @return void
      */
     function allure2Open()
     {
@@ -152,6 +185,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Generate and open the HTML Allure report - Allure v1.4.X
+     *
+     * @return void
      */
     function allure1Report()
     {
@@ -164,6 +199,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Generate and open the HTML Allure report - Allure v2.3.X
+     *
+     * @return void
      */
     function allure2Report()
     {
@@ -176,6 +213,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Run the Pre-Install Check Script
+     *
+     * @return void
      */
     function preInstall()
     {
