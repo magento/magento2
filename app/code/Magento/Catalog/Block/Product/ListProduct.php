@@ -37,29 +37,29 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * Product Collection
      *
-     * @var \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @var AbstractCollection
      */
     protected $_productCollection;
 
     /**
      * Catalog layer
      *
-     * @var \Magento\Catalog\Model\Layer
+     * @var Layer
      */
     protected $_catalogLayer;
 
     /**
-     * @var \Magento\Framework\Data\Helper\PostHelper
+     * @var PostHelper
      */
     protected $_postDataHelper;
 
     /**
-     * @var \Magento\Framework\Url\Helper\Data
+     * @var Data
      */
     protected $urlHelper;
 
     /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     * @var CategoryRepositoryInterface
      */
     protected $categoryRepository;
 
@@ -151,7 +151,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * Get listing mode for products if toolbar is removed from layout.
      * Use the general configuration for product list mode from config path catalog/frontend/list_mode as default value
-    // or mode data from block declaration from layout.
+     * or mode data from block declaration from layout.
      *
      * @return string
      */
