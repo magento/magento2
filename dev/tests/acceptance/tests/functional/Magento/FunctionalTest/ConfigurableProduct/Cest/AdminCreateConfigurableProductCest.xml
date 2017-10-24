@@ -40,7 +40,7 @@
             <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" mergeKey="clickOnSaveCategory"/>
             <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" mergeKey="assertSuccessMessage"/>
 
-            <amOnPage url="{{AdminProductIndexPage.urlPath}}" mergeKey="amOnProductGridPage"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" mergeKey="amOnProductGridPage"/>
             <waitForPageLoad mergeKey="waitForPageLoad2"/>
             <click selector="{{AdminProductGridActionSection.addProductToggle}}" mergeKey="clickOnAddProductToggle"/>
             <click selector="{{AdminProductGridActionSection.addConfigurableProduct}}" mergeKey="clickOnAddConfigurableProduct"/>

@@ -25,7 +25,6 @@
         </after>
         <test name="PersistMultipleEntitiesTest">
             <annotations>
-                <group value="ff"/>
                 <group value="skip"/>
             </annotations>
             <amOnPage mergeKey="s11" url="/$$simplecategory.name$$.html" />

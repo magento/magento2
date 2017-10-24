@@ -27,14 +27,16 @@
             </array>
             <array key="custom_attributes">
                 <value>custom_attribute_array</value>
+                <value>custom_attribute</value>
             </array>
             <array key="options">
                 <value>product_option</value>
             </array>
         </object>
     </operation>
-    <operation name="UpdateProduct" dataType="product" type="update" auth="adminOauth" url="/V1/products" method="PUT">
+    <operation name="UpdateProduct" dataType="product" type="update" auth="adminOauth" url="/V1/products/{sku}" method="PUT">
         <contentType>application/json</contentType>
+        <param key="sku" type="path">{sku}</param>
         <object dataType="product" key="product">
             <field key="id">integer</field>
             <field key="sku">string</field>
@@ -53,20 +55,15 @@
             </array>
             <array key="custom_attributes">
                 <value>custom_attribute_array</value>
+                <value>custom_attribute</value>
             </array>
             <array key="options">
                 <value>product_option</value>
             </array>
-            <!--array key="media_gallery_entries">
-                <value>media_gallery_entries</value>
-            </array>
-            <array key="tier_prices">
-                <value>tier_prices</value>
-            </array-->
         </object>
         <field key="saveOptions">boolean</field>
     </operation>
-    <operation name="deleteProduct" dataType="product" type="delete" auth="adminOauth" url="/V1/products" method="DELETE">
+    <operation name="deleteProduct" dataType="product" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
         <contentType>application/json</contentType>
         <param key="sku" type="path">{sku}</param>
     </operation>
