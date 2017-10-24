@@ -718,6 +718,9 @@ XMLRequest;
         if ($this->getConfigFlag('negotiated_active')) {
             $xmlParams .= "<RateInformation><NegotiatedRatesIndicator/></RateInformation>";
         }
+        if ($this->getConfigFlag('include_taxes')) {
+            $xmlParams .= "<TaxInformationIndicator/>";
+        }
 
         $xmlParams .= <<<XMLRequest
   </Shipment>
@@ -819,10 +822,28 @@ XMLRequest;
                 foreach ($arr as $shipElement) {
                     $code = (string)$shipElement->Service->Code;
                     if (in_array($code, $allowedMethods)) {
+                    
+                        //The location of tax information is in a different place depending on whether we are using negotiated rates or not
                         if ($negotiatedActive) {
-                            $cost = $shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;
+                            $includeTaxesArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates/TaxCharges");
+                            $includeTaxesActive = $this->getConfigFlag(
+                                    'include_taxes'
+                                ) && !empty($includeTaxesArr);
+                            $cost = (double)$shipElement->NegotiatedRates->NetSummaryCharges->GrandTotal->MonetaryValue;
+                            if ($includeTaxesActive) {
+                                $taxes = (double)$shipElement->NegotiatedRates->TaxCharges->MonetaryValue;
+                                $cost += $taxes;
+                            }
                         } else {
-                            $cost = $shipElement->TotalCharges->MonetaryValue;
+                            $includeTaxesArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/TaxCharges");
+                            $includeTaxesActive = $this->getConfigFlag(
+                                    'include_taxes'
+                                ) && !empty($includeTaxesArr);                              
+                            $cost = (double)$shipElement->TotalCharges->MonetaryValue;
+                            if ($includeTaxesActive) {
+                                $taxes = (double)$shipElement->TaxCharges->MonetaryValue;
+                                $cost += $taxes;
+                            }
                         }
 
                         //convert price with Origin country currency code to base currency code
