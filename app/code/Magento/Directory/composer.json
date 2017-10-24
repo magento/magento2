@@ -1,13 +1,16 @@
 {
     "name": "magento/module-directory",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/module-config": "100.3.*",
-        "magento/module-store": "100.3.*",
-        "magento/module-backend": "100.3.*",
+        "lib-libxml": "*",
         "magento/framework": "100.3.*",
-        "lib-libxml": "*"
+        "magento/module-backend": "100.3.*",
+        "magento/module-config": "100.3.*",
+        "magento/module-store": "100.3.*"
     },
     "type": "magento2-module",
     "version": "100.3.0-dev",

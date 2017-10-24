@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\DeploymentConfig\Writer;
 
-use \Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
+use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 
 class PhpFormatterTest extends \PHPUnit\Framework\TestCase
 {
@@ -81,7 +81,7 @@ return array (
     ),
   ),
   'ns3' => 'just text',
-  'ns4' => 'just text'
+  'ns4' => 'just text',
 );
 
 TEXT;
@@ -126,7 +126,7 @@ return array (
    * For the section: ns4
    * comment for namespace 4
    */
-  'ns4' => 'just text'
+  'ns4' => 'just text',
 );
 
 TEXT;

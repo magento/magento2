@@ -2,5 +2,8 @@
   "name": "magento/module-second",
   "description": "N/A",
   "type": "magento2-module",
-  "version": "777.7.7"
+  "version": "777.7.7",
+  "config": {
+    "sort-packages": true
+  }
 }
