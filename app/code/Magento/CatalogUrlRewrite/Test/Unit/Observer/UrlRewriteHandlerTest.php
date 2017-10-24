@@ -92,11 +92,12 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(
                 [
                     'getAffectedProductIds',
+                    'getChangedProductIds',
                     'getData',
                     'getStoreId',
                     'getEntityId',
                     'getId',
-                    'getProductCollection'
+                    'getProductCollection',
                 ]
             )
             ->disableOriginalConstructor()
@@ -197,6 +198,9 @@ class UrlRewriteHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($storeId);
         $this->categoryMock->expects($this->any())
             ->method('getAffectedProductIds')
+            ->willReturn($affectedProductIds);
+        $this->categoryMock->expects($this->any())
+            ->method('getChangedProductIds')
             ->willReturn($affectedProductIds);
         $this->categoryMock->expects($this->once())
             ->method('getEntityId')
