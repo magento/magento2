@@ -40,18 +40,7 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $store = $observer->getEvent()->getStore();
         $result = $observer->getEvent()->getResult();
-
-        $result->setIsAllowed(true);
-
-        if (!$this->_scopeConfig->isSetFlag(
-            self::XML_PATH_DISABLE_GUEST_CHECKOUT,
-            ScopeInterface::SCOPE_STORE,
-            $store
-        )) {
-            return $this;
-        }
 
         /* @var $quote \Magento\Quote\Model\Quote */
         $quote = $observer->getEvent()->getQuote();
