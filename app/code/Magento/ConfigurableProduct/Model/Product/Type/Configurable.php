@@ -466,7 +466,7 @@ class Configurable extends AbstractType
             );
         }
 
-        return __CLASS__.$productId.'_'.$product->getStoreId();
+        return __CLASS__ . $productId . '_' . $product->getStoreId();
     }
 
     /**
@@ -551,7 +551,7 @@ class Configurable extends AbstractType
                     $this->generateConfigurableAttributesCacheId($product),
                     array_merge(
                         $product->getIdentities(),
-                        [self::TYPE_CODE.'_'.$productId]
+                        [self::TYPE_CODE . '_' . $productId]
                     )
                 );
         } else {
@@ -570,7 +570,7 @@ class Configurable extends AbstractType
     public function getConfigurableAttributes($product)
     {
         \Magento\Framework\Profiler::start(
-            'CONFIGURABLE:'.__METHOD__,
+            'CONFIGURABLE:' . __METHOD__,
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if (!$product->hasData($this->_configurableAttributes)) {
@@ -596,7 +596,7 @@ class Configurable extends AbstractType
                 $configurableAttributes
             );
         }
-        \Magento\Framework\Profiler::stop('CONFIGURABLE:'.__METHOD__);
+        \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
 
         return $product->getData($this->_configurableAttributes);
     }
@@ -843,7 +843,7 @@ class Configurable extends AbstractType
             $this->getCache()
                 ->clean(
                     \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-                    [self::TYPE_CODE.'_'.$productId]
+                    [self::TYPE_CODE . '_' . $productId]
                 );
         }
         parent::beforeSave($product);

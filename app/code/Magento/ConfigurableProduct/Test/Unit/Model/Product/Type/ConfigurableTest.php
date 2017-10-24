@@ -602,7 +602,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with(
                 serialize($attributeCollection),
-                get_class($this->_model).'1_0'
+                get_class($this->_model) . '1_0'
             );
 
         $this->assertEquals($expectedData, $this->_model->getConfigurableAttributes($product));

@@ -1059,7 +1059,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function cleanCache()
     {
         if ($this->getId()) {
-            $this->_cacheManager->clean(self::CACHE_TAG.'_'.$this->getId());
+            $this->_cacheManager->clean(
+                self::CACHE_TAG . '_' . $this->getId()
+            );
         }
         return $this;
     }
@@ -2283,7 +2285,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $identities = [];
 
         if ($this->getId()) {
-            $identities[] = self::CACHE_TAG.'_'.$this->getId();
+            $identities[] = self::CACHE_TAG . '_' . $this->getId();
         }
         if ($this->getIsChangedCategories()) {
             foreach ($this->getAffectedCategoryIds() as $categoryId) {
