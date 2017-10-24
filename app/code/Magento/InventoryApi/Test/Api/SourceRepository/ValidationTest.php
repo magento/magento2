@@ -140,7 +140,10 @@ class ValidationTest extends WebapiAbstract
     }
 
     /**
+     * SuppressWarnings was added due to a tests on different fail types and big size of data provider
+     *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function failedValidationDataProvider(): array
     {
