@@ -175,6 +175,7 @@ class RefundInvoice implements RefundInvoiceInterface
                     $invoice->getBaseTotalRefunded() + $creditmemo->getBaseGrandTotal()
                 );
             }
+            $creditmemo->setInvoiceId($invoice->getId());
             $this->invoiceRepository->save($invoice);
             $order = $this->orderRepository->save($order);
             $creditmemo = $this->creditmemoRepository->save($creditmemo);
