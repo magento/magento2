@@ -6,11 +6,11 @@
 
 namespace Magento\Developer\Model\XmlCatalog\Format;
 
+use Magento\Developer\Model\XmlCatalog\Format\PhpStorm\DomDocumentFactory;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Filesystem\Directory\WriteFactory;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\File\WriteFactory as FileWriteFactory;
 
 /**
  * Class PhpStorm generates URN catalog for PhpStorm 9
@@ -23,20 +23,28 @@ class PhpStorm implements FormatInterface
     private $currentDirRead;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\WriteFactory
+     * @var FileWriteFactory
      */
     private $fileWriteFactory;
 
     /**
+     * @var DomDocumentFactory
+     */
+    private $domDocumentFactory;
+
+    /**
      * @param ReadFactory $readFactory
-     * @param \Magento\Framework\Filesystem\File\WriteFactory $fileWriteFactory
+     * @param FileWriteFactory $fileWriteFactory
+     * @param DomDocumentFactory $domDocumentFactory
      */
     public function __construct(
         ReadFactory $readFactory,
-        \Magento\Framework\Filesystem\File\WriteFactory $fileWriteFactory
+        FileWriteFactory $fileWriteFactory,
+        DomDocumentFactory $domDocumentFactory
     ) {
         $this->currentDirRead = $readFactory->create(getcwd());
         $this->fileWriteFactory = $fileWriteFactory;
+        $this->domDocumentFactory = $domDocumentFactory;
     }
 
     /**
@@ -57,26 +65,14 @@ class PhpStorm implements FormatInterface
                 \Magento\Framework\Filesystem\DriverPool::FILE,
                 'r'
             );
-            $dom = new \DOMDocument();
-            $dom->loadXML($file->readAll());
+            $dom = $this->domDocumentFactory->create($file->readAll());
             $xpath = new \DOMXPath($dom);
             $nodeList = $xpath->query('/project');
             $projectNode = $nodeList->item(0);
             $file->close();
         } catch (FileSystemException $f) {
             //create file if does not exists
-            $dom = new \DOMDocument();
-            $projectNode = $dom->createElement('project');
-
-            //PhpStorm 9 version for component is "4"
-            $projectNode->setAttribute('version', '4');
-            $dom->appendChild($projectNode);
-            $rootComponentNode = $dom->createElement('component');
-
-            //PhpStorm 9 version for ProjectRootManager is "2"
-            $rootComponentNode->setAttribute('version', '2');
-            $rootComponentNode->setAttribute('name', 'ProjectRootManager');
-            $projectNode->appendChild($rootComponentNode);
+            $dom = $this->domDocumentFactory->create();
         }
 
         $xpath = new \DOMXPath($dom);

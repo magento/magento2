@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\DomDocument;
 
 /**
@@ -11,12 +12,34 @@ namespace Magento\Framework\DomDocument;
 class DomDocumentFactory
 {
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * DomDocumentFactory constructor.
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     */
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
+    /**
      * Create empty DOM document instance.
+     *
+     * @param string $data the data to be loaded into the object
      *
      * @return \DOMDocument
      */
-    public function create()
+    public function create($data = null)
     {
-        return new \DOMDocument();
+        $dom = $this->objectManager->create('DOMDocument');
+
+        if (!empty($data) && is_string($data)) {
+            $dom->loadXML($data);
+        }
+
+        return $dom;
     }
 }
