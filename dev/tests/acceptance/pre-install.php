@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// @codingStandardsIgnoreStart
+
+/**
+ * @codingStandardsIgnoreStart
+ * @SuppressWarnings(PHPMD)
+ */
 class CliColors {
     private $foreground_colors = array();
     private $background_colors = array();
