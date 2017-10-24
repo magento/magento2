@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+// @codingStandardsIgnoreStart
 class CliColors {
     private $foreground_colors = array();
     private $background_colors = array();
@@ -385,3 +385,4 @@ class PreInstallCheck {
 }
 
 $preCheck = new PreInstallCheck();
+// @codingStandardsIgnoreEnd
