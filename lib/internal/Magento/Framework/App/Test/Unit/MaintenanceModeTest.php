@@ -150,16 +150,20 @@ class MaintenanceModeTest extends \PHPUnit\Framework\TestCase
 
         $this->flagDir->expects($this->any())->method('readFile')
             ->with(MaintenanceMode::IP_FILENAME)
-            ->will($this->returnValue('address1,1.2.3.4,192.168.0.0/16'));
+            ->will($this->returnValue('address1,1.2.3.4,192.168.0.0/16,2620:0:2d0:200::7/32,1620:0:2d0:200::7'));
 
-        $expectedArray = ['address1', '1.2.3.4', '192.168.0.0/16'];
-        $this->model->setAddresses('address1,1.2.3.4,192.168.0.0/16');
+        $expectedArray = ['address1', '1.2.3.4', '192.168.0.0/16', '2620:0:2d0:200::7/32', '1620:0:2d0:200::7'];
+        $this->model->setAddresses('address1,1.2.3.4,192.168.0.0/16,2620:0:2d0:200::7/32,1620:0:2d0:200::7');
         $this->assertEquals($expectedArray, $this->model->getAddressInfo());
         $this->assertFalse($this->model->isOn('1.2.3.4')); // exact match
         $this->assertFalse($this->model->isOn('192.168.22.1')); // range match
         $this->assertTrue($this->model->isOn('192.22.1.1')); // range mismatch
         $this->assertTrue($this->model->isOn('address1')); // not an IP address
         $this->assertTrue($this->model->isOn('172.16.0.4')); // complete mismatch
+        $this->assertFalse($this->model->isOn('1620:0:2d0:200::7')); // ipv6 match
+        $this->assertFalse($this->model->isOn('1620:0:2d0:200:0:0:0:7')); // ipv6 expanded match
+        $this->assertFalse($this->model->isOn('2620::ff43:0:ff')); // ipv6 range match
+        $this->assertTrue($this->model->isOn('2720::ff43:0:ff')); // ipv6 range mismatch
     }
 
     public function testOffSetMultipleAddresses()
@@ -173,15 +177,19 @@ class MaintenanceModeTest extends \PHPUnit\Framework\TestCase
 
         $this->flagDir->expects($this->any())->method('readFile')
             ->with(MaintenanceMode::IP_FILENAME)
-            ->will($this->returnValue('address1,1.2.3.4,192.168.0.0/16'));
+            ->will($this->returnValue('address1,1.2.3.4,192.168.0.0/16,2620:0:2d0:200::7/32,1620:0:2d0:200::7'));
 
-        $expectedArray = ['address1', '1.2.3.4', '192.168.0.0/16'];
-        $this->model->setAddresses('address1,1.2.3.4,192.168.0.0/16');
+        $expectedArray = ['address1', '1.2.3.4', '192.168.0.0/16', '2620:0:2d0:200::7/32', '1620:0:2d0:200::7'];
+        $this->model->setAddresses('address1,1.2.3.4,192.168.0.0/16,2620:0:2d0:200::7/32,1620:0:2d0:200::7');
         $this->assertEquals($expectedArray, $this->model->getAddressInfo());
         $this->assertFalse($this->model->isOn('1.2.3.4')); // exact match
         $this->assertFalse($this->model->isOn('192.168.22.1')); // range match
         $this->assertFalse($this->model->isOn('192.22.1.1')); // range mismatch
         $this->assertFalse($this->model->isOn('address1')); // not an IP address
         $this->assertFalse($this->model->isOn('172.16.0.4')); // complete mismatch
+        $this->assertFalse($this->model->isOn('1620:0:2d0:200::7')); // ipv6 match
+        $this->assertFalse($this->model->isOn('1620:0:2d0:200:0:0:0:7')); // ipv6 expanded match
+        $this->assertFalse($this->model->isOn('2620::ff43:0:ff')); // ipv6 range match
+        $this->assertFalse($this->model->isOn('2720::ff43:0:ff')); // ipv6 range mismatch
     }
 }
