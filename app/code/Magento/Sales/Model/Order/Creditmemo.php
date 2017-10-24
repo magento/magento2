@@ -166,7 +166,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         $this->_commentFactory = $commentFactory;
         $this->_commentCollectionFactory = $commentCollectionFactory;
         $this->priceCurrency = $priceCurrency;
-        $this->invoiceRepository = $invoiceRepository;
+        $this->invoiceRepository = $invoiceRepository ?: ObjectManager::getInstance()->get(InvoiceRepositoryInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -1537,14 +1537,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function setExtensionAttributes(\Magento\Sales\Api\Data\CreditmemoExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
-     * @return InvoiceRepositoryInterface|mixed
-     * @deprecated
-     */
-    private function getInvoiceRepository() {
-        return $this->invoiceRepository ?: ObjectManager::getInstance()->get(InvoiceRepositoryInterface::class);
     }
     //@codeCoverageIgnoreEnd
 }
