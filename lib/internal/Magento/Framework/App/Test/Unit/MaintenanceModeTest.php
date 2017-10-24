@@ -58,7 +58,7 @@ class MaintenanceModeTest extends \PHPUnit\Framework\TestCase
         ];
         $this->flagDir->expects($this->exactly(2))->method('isExist')
             ->will(($this->returnValueMap($mapisExist)));
-        $this->assertFalse($this->model->isOn());
+        $this->assertTrue($this->model->isOn());
     }
 
     public function testisOnWithIPNoMaintenance()
