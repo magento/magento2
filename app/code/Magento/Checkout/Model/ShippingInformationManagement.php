@@ -144,6 +144,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
 
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
+        $address->setLimitCarrier($carrierCode);
         $quote = $this->prepareShippingAssignment($quote, $address, $carrierCode . '_' . $methodCode);
         $this->validateQuote($quote);
         $quote->setIsMultiShipping(false);
