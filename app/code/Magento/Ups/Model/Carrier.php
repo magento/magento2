@@ -822,7 +822,6 @@ XMLRequest;
                 foreach ($arr as $shipElement) {
                     $code = (string)$shipElement->Service->Code;
                     if (in_array($code, $allowedMethods)) {
-                    
                         //The location of tax information is in a different place depending on whether we are using negotiated rates or not
                         if ($negotiatedActive) {
                             $includeTaxesArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates/TaxCharges");
