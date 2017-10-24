@@ -150,13 +150,16 @@ class MaintenanceModeTest extends \PHPUnit\Framework\TestCase
 
         $this->flagDir->expects($this->any())->method('readFile')
             ->with(MaintenanceMode::IP_FILENAME)
-            ->will($this->returnValue('address1,10.50.60.123'));
+            ->will($this->returnValue('address1,1.2.3.4,192.168.0.0/16'));
 
-        $expectedArray = ['address1', '10.50.60.123'];
-        $this->model->setAddresses('address1,10.50.60.123');
+        $expectedArray = ['address1', '1.2.3.4', '192.168.0.0/16'];
+        $this->model->setAddresses('address1,1.2.3.4,192.168.0.0/16');
         $this->assertEquals($expectedArray, $this->model->getAddressInfo());
-        $this->assertFalse($this->model->isOn('address1'));
-        $this->assertTrue($this->model->isOn('address3'));
+        $this->assertFalse($this->model->isOn('1.2.3.4')); // exact match
+        $this->assertFalse($this->model->isOn('192.168.22.1')); // range match
+        $this->assertTrue($this->model->isOn('192.22.1.1')); // range mismatch
+        $this->assertTrue($this->model->isOn('address1')); // not an IP address
+        $this->assertTrue($this->model->isOn('172.16.0.4')); // complete mismatch
     }
 
     public function testOffSetMultipleAddresses()
