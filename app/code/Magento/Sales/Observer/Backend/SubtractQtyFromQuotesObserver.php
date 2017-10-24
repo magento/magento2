@@ -31,6 +31,6 @@ class SubtractQtyFromQuotesObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $product = $observer->getEvent()->getProduct();
-        $this->_quote->substractProductFromQuotes($product);
+        $this->_quote->subtractProductFromQuotes($product);
     }
 }
