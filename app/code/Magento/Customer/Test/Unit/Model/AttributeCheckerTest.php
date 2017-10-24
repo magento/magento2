@@ -4,23 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Test\Unit\Helper;
+namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\AddressMetadataManagementInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Customer\Helper\AttributeChecker;
+use Magento\Customer\Model\AttributeChecker;
 use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\Metadata\AttributeResolver;
-use Magento\Framework\App\Helper\Context;
 
 class AttributeCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AttributeChecker|\PHPUnit_Framework_MockObject_MockObject */
     private $model;
-
-    /** @var Context */
-    private $context;
 
     /** @var  AttributeResolver|\PHPUnit_Framework_MockObject_MockObject */
     private $attributeResolver;
@@ -30,16 +26,12 @@ class AttributeCheckerTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->addressMetadataService = $this->getMockForAbstractClass(AddressMetadataInterface::class);
         $this->attributeResolver = $this->getMockBuilder(AttributeResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = new AttributeChecker(
-            $this->context,
             $this->addressMetadataService,
             $this->attributeResolver
         );
