@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\DomDocument;
 
+use DOMDocument;
+
 /**
  * DOM document factory
  */
@@ -30,11 +32,11 @@ class DomDocumentFactory
      *
      * @param string $data the data to be loaded into the object
      *
-     * @return \DOMDocument
+     * @return DOMDocument
      */
     public function create($data = null)
     {
-        $dom = $this->objectManager->create('DOMDocument');
+        $dom = $this->objectManager->create(DOMDocument::class);
 
         if (!empty($data) && is_string($data)) {
             $dom->loadXML($data);
