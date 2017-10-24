@@ -82,7 +82,8 @@ class StockSaveProcessor
             $stockId = $this->stockRepository->save($stock);
 
             $assignedSources =
-                isset($requestData['sources']['assigned_sources']) && is_array($requestData['sources']['assigned_sources'])
+                isset($requestData['sources']['assigned_sources'])
+                    && is_array($requestData['sources']['assigned_sources'])
                     ? $requestData['sources']['assigned_sources']
                     : [];
             $this->stockSourceLinkProcessor->process($stockId, $assignedSources);
