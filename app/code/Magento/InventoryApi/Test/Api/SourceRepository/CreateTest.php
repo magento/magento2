@@ -68,6 +68,54 @@ class CreateTest extends WebapiAbstract
         AssertArrayContains::assert($expectedData, $this->getSourceDataById($sourceId));
     }
 
+    public function testCreateWithWrongCarrierLinks()
+    {
+        $expectedData = [
+            SourceInterface::NAME => 'source-name-1',
+            SourceInterface::CONTACT_NAME => 'source-contact-name',
+            SourceInterface::EMAIL => 'source-email',
+            SourceInterface::ENABLED => true,
+            SourceInterface::DESCRIPTION => 'source-description',
+            SourceInterface::LATITUDE => 11.123456,
+            SourceInterface::LONGITUDE => 12.123456,
+            SourceInterface::COUNTRY_ID => 'US',
+            SourceInterface::REGION_ID => 10,
+            SourceInterface::CITY => 'source-city',
+            SourceInterface::STREET => 'source-street',
+            SourceInterface::POSTCODE => 'source-postcode',
+            SourceInterface::PHONE => 'source-phone',
+            SourceInterface::FAX => 'source-fax',
+            SourceInterface::PRIORITY => 200,
+            SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 0,
+            SourceInterface::CARRIER_LINKS => [
+                [
+                    SourceCarrierLinkInterface::CARRIER_CODE => 'no_exists_1',
+                    SourceCarrierLinkInterface::POSITION => 100,
+                ],
+                [
+                    SourceCarrierLinkInterface::CARRIER_CODE => 'no_exists_2',
+                    SourceCarrierLinkInterface::POSITION => 200,
+                ],
+            ],
+        ];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        try {
+            $this->_webApiCall($serviceInfo, ['source' => $expectedData]);
+        } catch (\Exception $e) {
+            self::assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
+        }
+    }
+
     protected function tearDown()
     {
         /** @var ResourceConnection $connection */

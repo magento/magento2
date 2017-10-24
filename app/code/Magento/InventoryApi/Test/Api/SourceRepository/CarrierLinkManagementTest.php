@@ -66,11 +66,11 @@ class CarrierLinkManagementTest extends WebapiAbstract
                         SourceCarrierLinkInterface::POSITION => 200,
                     ],
                     [
-                        SourceCarrierLinkInterface::CARRIER_CODE => 'new-link-1',
+                        SourceCarrierLinkInterface::CARRIER_CODE => 'dhl',
                         SourceCarrierLinkInterface::POSITION => 300,
                     ],
                     [
-                        SourceCarrierLinkInterface::CARRIER_CODE => 'new-link-2',
+                        SourceCarrierLinkInterface::CARRIER_CODE => 'fedex',
                         SourceCarrierLinkInterface::POSITION => 400,
                     ],
                 ],
@@ -78,11 +78,11 @@ class CarrierLinkManagementTest extends WebapiAbstract
             'replace_carrier_links' => [
                 [
                     [
-                        SourceCarrierLinkInterface::CARRIER_CODE => 'new-link-1',
+                        SourceCarrierLinkInterface::CARRIER_CODE => 'dhl',
                         SourceCarrierLinkInterface::POSITION => 100,
                     ],
                     [
-                        SourceCarrierLinkInterface::CARRIER_CODE => 'new-link-2',
+                        SourceCarrierLinkInterface::CARRIER_CODE => 'fedex',
                         SourceCarrierLinkInterface::POSITION => 200,
                     ],
                 ],
