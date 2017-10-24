@@ -526,14 +526,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $customerId = 1;
         $quoteId = 1;
         $quoteItem = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
-        $billingAddress = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            [ 'getId','setId']
-        );
-        $shippingAddress = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            [ 'getId','setId']
-        );
+        $billingAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $shippingAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $payment = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
         $baseOrder = $this->createMock(\Magento\Sales\Api\Data\OrderInterface::class);
         $convertedBillingAddress = $this->createMock(\Magento\Sales\Api\Data\OrderAddressInterface::class);
@@ -568,7 +562,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                 [
                     'address_type' => 'shipping',
                     'email' => 'customer@example.com',
-                    'quote_address_id' => '1'
+                    'quote_address_id' => null
                 ]
             )
             ->willReturn($convertedShippingAddress);
@@ -579,7 +573,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                 [
                     'address_type' => 'billing',
                     'email' => 'customer@example.com',
-                    'quote_address_id' => '1'
+                    'quote_address_id' => null
                 ]
             )
             ->willReturn($convertedBillingAddress);
@@ -982,14 +976,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $customerId = 1;
         $quoteId = 1;
         $quoteItem = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
-        $billingAddress = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            [ 'getId','setId']
-        );
-        $shippingAddress = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address::class,
-            [ 'getId','setId']
-        );
+        $billingAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $shippingAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $payment = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
         $baseOrder = $this->createMock(\Magento\Sales\Api\Data\OrderInterface::class);
         $convertedBillingAddress = $this->createMock(
@@ -1028,7 +1016,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                 [
                     'address_type' => 'shipping',
                     'email' => 'customer@example.com',
-                    'quote_address_id' => '1'
+                    'quote_address_id' => null
                 ]
             )
             ->willReturn($convertedShippingAddress);
@@ -1039,7 +1027,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                 [
                     'address_type' => 'billing',
                     'email' => 'customer@example.com',
-                    'quote_address_id' => '1'
+                    'quote_address_id' => null
                 ]
             )
             ->willReturn($convertedBillingAddress);
