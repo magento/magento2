@@ -57,7 +57,9 @@ class Multiselect extends AbstractElement
         $this->addClass('select multiselect admin__control-multiselect');
         $html = '';
         if ($this->getCanBeEmpty()) {
-            $html .= '<input type="hidden" name="' . parent::getName() . '" value="" />';
+            $html .= '
+                <input type="hidden" id="' . $this->getHtmlId() . '_hidden" name="' . parent::getName() . '" value="" />
+                ';
         }
         if (!empty($this->_data['disabled'])) {
             $html .= '<input type="hidden" name="' . parent::getName() . '_disabled" value="" />';
