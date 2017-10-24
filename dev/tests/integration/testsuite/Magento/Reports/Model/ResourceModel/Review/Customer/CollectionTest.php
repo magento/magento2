@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model\ResourceModel\Review\Customer;
@@ -8,7 +8,7 @@ namespace Magento\Reports\Model\ResourceModel\Review\Customer;
 /**
  * @magentoAppArea adminhtml
  */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Review\Customer\Collection
