@@ -86,6 +86,9 @@ class CliColors {
     }
 }
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class PreInstallCheck {
     private $installedViaBrew             = false;
     private $filePath                     = '';
