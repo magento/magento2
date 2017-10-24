@@ -21,4 +21,8 @@
         <required-entity type="product_extension_attribute">EavStockItem</required-entity>
         <required-entity type="custom_attribute_array">CustomAttributeCategoryIds</required-entity>
     </entity>
+    <entity name="ConfigurableProductAddChild" type="ConfigurableProductAddChild">
+        <var key="sku" entityKey="sku" entityType="product" />
+        <var key="childSku" entityKey="sku" entityType="product"/>
+    </entity>
 </config>
