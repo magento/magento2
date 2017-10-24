@@ -59,11 +59,11 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
             [
                 'billingAddressManagement' => $this->billingAddressManagementMock,
                 'paymentMethodManagement' => $this->paymentMethodManagementMock,
-                'cartManagement' => $this->cartManagementMock
+                'cartManagement' => $this->cartManagementMock,
+                'cartRepository' => $this->cartRepositoryMock
             ]
         );
         $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
-        $objectManager->setBackwardCompatibleProperty($this->model, 'cartRepository', $this->cartRepositoryMock);
     }
 
     public function testSavePaymentInformationAndPlaceOrder()
