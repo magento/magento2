@@ -528,7 +528,7 @@ class Configurable extends AbstractType
     /**
      * Cache collection for further use.
      *
-     * @param Product                                      $product
+     * @param Product $product
      * @param ProductTypeConfigurable\Attribute\Collection $collection
      *
      * @return void
