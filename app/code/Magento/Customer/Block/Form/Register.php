@@ -249,7 +249,7 @@ class Register extends \Magento\Directory\Block\Data
      *
      * @return bool
      */
-    public function getShowAddressFields()
+    public function isShowAddressFields()
     {
         return $this->_scopeConfig->getValue(self::XML_PATH_REGISTER_SHOW_ADDRESS_FIELDS);
     }
