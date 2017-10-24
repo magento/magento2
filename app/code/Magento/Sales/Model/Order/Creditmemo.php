@@ -390,7 +390,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function getInvoice()
     {
         if (!$this->getData('invoice') instanceof \Magento\Sales\Model\Order\Invoice && $this->getInvoiceId()) {
-            $this->setInvoice($this->getInvoiceRepository()->get($this->getInvoiceId()));
+            $this->setInvoice($this->invoiceRepository->get($this->getInvoiceId()));
         }
         return $this->getData('invoice');
     }
