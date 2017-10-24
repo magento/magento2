@@ -7,8 +7,6 @@ namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute;
-use Magento\Framework\App\ResourceConnection;
 
 /**
  * Customer register form block
@@ -42,18 +40,17 @@ class Register extends \Magento\Directory\Block\Data
     protected $_customerUrl;
 
     /**
-     * @var Attribute
+     * @var \Magento\Customer\Model\ResourceModel\Address
      */
-    protected $_eavAttribute;
+    private $_addressResource;
 
     /**
-     * @var ResourceConnection
+     * @var \Magento\Customer\Model\ResourceModel\Entity\Attribute
      */
-    protected $_resource;
+    private $_customerAttribute;
 
     /**
-     * Constructor
-     *
+     * Register constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -61,8 +58,10 @@ class Register extends \Magento\Directory\Block\Data
      * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Customer\Model\ResourceModel\Address $addressResource
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Url $customerUrl
+     * @param \Magento\Customer\Model\ResourceModel\Attribute $customerAttribute
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -75,17 +74,17 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Customer\Model\ResourceModel\Address $addressResource,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
-        ResourceConnection $resourceConnection,
-        Attribute $eavAttribute,
+        \Magento\Customer\Model\ResourceModel\Attribute $customerAttribute,
         array $data = []
     ) {
         $this->_customerUrl = $customerUrl;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
-        $this->_resource = $resourceConnection;
-        $this->_eavAttribute = $eavAttribute;
+        $this->_addressResource = $addressResource;
+        $this->_customerAttribute = $customerAttribute;
         parent::__construct(
             $context,
             $directoryHelper,
@@ -256,23 +255,14 @@ class Register extends \Magento\Directory\Block\Data
     }
 
     /**
-     * Return form attribute IDs by form code
+     * Return if Address Field is used in form
      *
      * @param string $formCode
-     * @return array
+     * @return bool
      */
-    public function isAddressFieldUsedInForm($attributeCode)
+    public function isAddressFieldUsedInForm($attributeCode, $formCode = 'customer_register_address')
     {
-        $formCode = 'customer_register_address';
-        $entityType = AddressMetadataInterface::ENTITY_TYPE_ADDRESS;
-        $attributeId = $this->_eavAttribute->getIdByCode( $entityType, $attributeCode);
-        $bind = ['attribute_id' => $attributeId, 'form_code' => $formCode];
-        $select = $this->_resource->getConnection()->select()->from(
-            $this->_resource->getTableName('customer_form_attribute'),
-            'attribute_id'
-        )->where(
-            'attribute_id = :attribute_id AND form_code = :form_code'
-        );
-        return $this->_resource->getConnection()->fetchRow($select, $bind);
+        $attribute = $this->_addressResource->getAttribute($attributeCode);
+        return (in_array($formCode, $this->_customerAttribute->getUsedInForms($attribute)));
     }
 }
