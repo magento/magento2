@@ -27,11 +27,6 @@ class IsProductInStockTest extends TestCase
     private $indexer;
 
     /**
-     * @var Checker
-     */
-    private $indexerChecker;
-
-    /**
      * @var ReservationBuilderInterface
      */
     private $reservationBuilder;
@@ -55,8 +50,6 @@ class IsProductInStockTest extends TestCase
     {
         $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
         $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
-
-        $this->indexerChecker = Bootstrap::getObjectManager()->create(Checker::class);
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->reservationsAppend = Bootstrap::getObjectManager()->get(ReservationsAppendInterface::class);
