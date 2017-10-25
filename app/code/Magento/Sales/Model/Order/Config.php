@@ -206,7 +206,6 @@ class Config
             return $this->stateStatuses[$key];
         }
         $statuses = [];
-        $area = $this->state->getAreaCode();
 
         if (!is_array($state)) {
             $state = [$state];
@@ -218,7 +217,7 @@ class Config
                 foreach ($collection as $item) {
                     $status = $item->getData('status');
                     if ($addLabels) {
-                        $statuses[$status] = $area == 'adminhtml' ? $item->getLabel() : $item->getStoreLabel();
+                        $statuses[$status] = $this->getStatusLabel($status);
                     } else {
                         $statuses[] = $status;
                     }
