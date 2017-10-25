@@ -78,15 +78,15 @@ class IpValidator
                 list($ip, $cidr) = explode('/', $range);
             }
 
-            $ipValidator = new \Zend_Validate_Ip(['allowipv6' => true, 'allowipv4' => true]);
+            $ipValidator = new \Zend\Validator\Ip();
             if (!$ipValidator->isValid($ip)) {
                 $this->invalidIps[] = $range;
                 continue;
             }
 
-            $ipv4Validator = new \Zend_Validate_Ip(['allowipv6' => false, 'allowipv4' => true]);
-            $max = $ipv4Validator->isValid($ip) ? 32 : 128;
-            if ($cidr < 0 || $cidr > $max) {
+            $ipv4Validator = new \Zend\Validator\Ip(['allowipv6' => false]);
+            $maxBits = $ipv4Validator->isValid($ip) ? 32 : 128;
+            if ($cidr < 0 || $cidr > $maxBits) {
                 $this->invalidIps[] = $range;
                 continue;
             }
