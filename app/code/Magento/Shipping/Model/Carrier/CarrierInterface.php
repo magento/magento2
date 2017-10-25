@@ -9,7 +9,7 @@ namespace Magento\Shipping\Model\Carrier;
  * Interface \Magento\Shipping\Model\Carrier\CarrierInterface
  *
  */
-interface CarrierInterface
+interface CarrierInterface extends AbstractCarrierInterface
 {
     /**
      * Check if carrier has shipping tracking option available
