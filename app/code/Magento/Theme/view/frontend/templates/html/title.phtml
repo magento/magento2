@@ -7,12 +7,12 @@
 // @codingStandardsIgnoreFile
 
 /**
- * @var $block \Magento\Theme\Block\Html\Title
+ * @var $block \Magento\Theme\Block\Html\Title|\Magento\Theme\Block\Html\RawTitle
  */
 $cssClass = $block->getCssClass() ? ' ' . $block->getCssClass() : '';
 $title = '';
 if (trim($block->getPageHeading())) {
-    $title = '<span class="base" data-ui-id="page-title-wrapper" ' .  $block->getAddBaseAttribute() . '>'
+    $title = '<span class="base" data-ui-id="page-title-wrapper" ' . $block->getAddBaseAttribute() . '>'
         . $block->escapeHtml($block->getPageHeading()) . '</span>';
 }
 ?>

@@ -42,12 +42,14 @@
                 </arguments>
             </block>
         </referenceContainer>
-        <referenceBlock name="page.main.title">
-            <arguments>
-                <argument name="id" xsi:type="string">page-title-heading</argument>
-                <argument name="add_base_attribute_aria" xsi:type="string">page-title-heading toolbar-amount</argument>
-            </arguments>
-            <block class="Magento\Catalog\Block\Category\Rss\Link" name="rss.link" template="Magento_Catalog::category/rss.phtml"/>
-        </referenceBlock>
+        <referenceContainer name="columns.top">
+            <block class="Magento\Theme\Block\Html\RawTitle" name="page.main.title" template="Magento_Theme::html/title.phtml" before="-">
+                <arguments>
+                    <argument name="id" xsi:type="string">page-title-heading</argument>
+                    <argument name="add_base_attribute_aria" xsi:type="string">page-title-heading toolbar-amount</argument>
+                </arguments>
+                <block class="Magento\Catalog\Block\Category\Rss\Link" name="rss.link" template="Magento_Catalog::category/rss.phtml"/>
+            </block>
+        </referenceContainer>
     </body>
 </page>
