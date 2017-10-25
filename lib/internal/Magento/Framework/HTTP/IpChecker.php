@@ -7,6 +7,9 @@ namespace Magento\Framework\HTTP;
 
 use Symfony\Component\HttpFoundation\IpUtils;
 
+/**
+ * Ip checker facade
+ */
 class IpChecker
 {
     /**
@@ -16,8 +19,9 @@ class IpChecker
      * @param string|array $ips List of IPs or subnets (can be a string if only a single one)
      *
      * @return bool Whether the IP is contained in the list of given IPs or subnets
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public static function isInRange($requestIp, $ips)
+    public function isInRange($requestIp, $ips)
     {
         return IpUtils::checkIp($requestIp, $ips);
     }

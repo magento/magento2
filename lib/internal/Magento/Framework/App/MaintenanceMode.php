@@ -6,6 +6,7 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
 use Magento\Framework\HTTP\IpChecker;
 
@@ -40,13 +41,20 @@ class MaintenanceMode
     protected $flagDir;
 
     /**
+     * @var IpChecker
+     */
+    private $ipChecker;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param IpChecker|null $ipChecker
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct(Filesystem $filesystem, IpChecker $ipChecker = null)
     {
         $this->flagDir = $filesystem->getDirectoryWrite(self::FLAG_DIR);
+        $this->ipChecker = $ipChecker ?: ObjectManager::getInstance()->get(IpChecker::class);
     }
 
     /**
@@ -62,7 +70,7 @@ class MaintenanceMode
         if (!$this->flagDir->isExist(self::FLAG_FILENAME)) {
             return false;
         }
-        return !IpChecker::isInRange($remoteAddr, $this->getAddressInfo());
+        return $this->ipChecker->isInRange($remoteAddr, $this->getAddressInfo());
     }
 
     /**
