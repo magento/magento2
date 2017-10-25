@@ -94,6 +94,7 @@ class Dob extends AbstractWidget
     public function setDate($date)
     {
         $this->setTime($date ? strtotime($date) : false);
+        $date = $this->applyInputFilter($date);
         $this->setValue($this->applyOutputFilter($date));
         return $this;
     }
@@ -116,6 +117,20 @@ class Dob extends AbstractWidget
             return $filter;
         }
         return false;
+    }
+
+    /**
+     * Apply input filter to value
+     * @param $value
+     * @return string
+     */
+    protected function applyInputFilter($value)
+    {
+        $filter = $this->getFormFilter();
+        if ($filter) {
+            $value = $filter->inputFilter($value);
+        }
+        return $value;
     }
 
     /**
