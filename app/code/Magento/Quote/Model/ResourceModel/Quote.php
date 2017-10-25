@@ -167,7 +167,7 @@ class Quote extends AbstractDb
     {
         return $this->sequenceManager->getSequence(
             \Magento\Sales\Model\Order::ENTITY,
-            $quote->getStore()->getStoreId()
+            $quote->getStoreId()
         )
         ->getNextValue();
     }

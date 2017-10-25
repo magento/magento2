@@ -24,11 +24,6 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     private $sequenceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $storeMock;
-
-    /**
      * @var \Magento\Quote\Model\ResourceModel\Quote
      */
     private $quote;
@@ -56,9 +51,6 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->sequenceMock = $this->getMockBuilder(\Magento\Framework\DB\Sequence\SequenceInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->quote = new \Magento\Quote\Model\ResourceModel\Quote(
             $context,
             $snapshot,
@@ -71,24 +63,23 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $entityType
      * @param $storeId
+     * @param $reservedOrderId
      * @dataProvider getReservedOrderIdDataProvider
      */
-    public function testGetReservedOrderId($entityType, $storeId)
+    public function testGetReservedOrderId($entityType, $storeId, $reservedOrderId)
     {
         $this->sequenceManagerMock->expects($this->once())
             ->method('getSequence')
-            ->with(\Magento\Sales\Model\Order::ENTITY, $storeId)
+            ->with($entityType, $storeId)
             ->willReturn($this->sequenceMock);
         $this->quoteMock->expects($this->once())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())
             ->method('getStoreId')
             ->willReturn($storeId);
         $this->sequenceMock->expects($this->once())
-            ->method('getNextValue');
+            ->method('getNextValue')
+            ->willReturn($reservedOrderId);
 
-        $this->quote->getReservedOrderId($this->quoteMock);
+        $this->assertEquals($reservedOrderId, $this->quote->getReservedOrderId($this->quoteMock));
     }
 
     /**
@@ -97,9 +88,9 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     public function getReservedOrderIdDataProvider(): array
     {
         return [
-            [\Magento\Sales\Model\Order::ENTITY, 1],
-            [\Magento\Sales\Model\Order::ENTITY, 2],
-            [\Magento\Sales\Model\Order::ENTITY, 3]
+            [\Magento\Sales\Model\Order::ENTITY, 1, '1000000001'],
+            [\Magento\Sales\Model\Order::ENTITY, 2, '2000000001'],
+            [\Magento\Sales\Model\Order::ENTITY, 3, '3000000001']
         ];
     }
 }
