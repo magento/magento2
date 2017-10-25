@@ -12,9 +12,9 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
-use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
+use Magento\Sales\Model\InvoiceFactory;
 
 /**
  * Order creditmemo model
@@ -117,9 +117,9 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     protected $priceCurrency;
 
     /**
-     * @var InvoiceRepository
+     * @var InvoiceFactory
      */
-    private $invoiceRepository;
+    private $invoiceFactory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -137,7 +137,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param InvoiceRepository $invoiceRepository
+     * @param InvoiceFactory $invoiceFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -156,7 +156,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        InvoiceRepository $invoiceRepository = null
+        InvoiceFactory $invoiceFactory = null
     ) {
         $this->_creditmemoConfig = $creditmemoConfig;
         $this->_orderFactory = $orderFactory;
@@ -166,7 +166,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         $this->_commentFactory = $commentFactory;
         $this->_commentCollectionFactory = $commentCollectionFactory;
         $this->priceCurrency = $priceCurrency;
-        $this->invoiceRepository = $invoiceRepository ?: ObjectManager::getInstance()->get(InvoiceRepositoryInterface::class);
+        $this->invoiceFactory = $invoiceFactory ?: ObjectManager::getInstance()->get(InvoiceFactory::class);
         parent::__construct(
             $context,
             $registry,
@@ -390,7 +390,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function getInvoice()
     {
         if (!$this->getData('invoice') instanceof \Magento\Sales\Model\Order\Invoice && $this->getInvoiceId()) {
-            $this->setInvoice($this->invoiceRepository->get($this->getInvoiceId()));
+            $this->setInvoice($this->invoiceFactory->create()->load($this->getInvoiceId()));
         }
         return $this->getData('invoice');
     }
@@ -404,7 +404,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function setInvoice(Invoice $invoice)
     {
         $this->setData('invoice', $invoice);
-        $this->setInvoiceId($invoice->getId());
         return $this;
     }
 
