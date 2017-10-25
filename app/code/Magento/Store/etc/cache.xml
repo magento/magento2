@@ -30,4 +30,8 @@
         <label>Database DDL operations</label>
         <description>Results of DDL queries, such as describing tables or indexes</description>
     </type>
+    <type name="compiled_config" translate="label,description" instance="Magento\Framework\App\Interception\Cache\CompiledConfig">
+        <label>Compiled Config</label>
+        <description>Compilation configuration</description>
+    </type>
 </config>

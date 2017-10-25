@@ -147,4 +147,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Backend\Model\Search\Config\Result\Builder">
+        <arguments>
+            <argument name="structureElementTypes" xsi:type="array">
+                <item name="section" xsi:type="object">Magento\Backend\Model\Search\Config\Structure\Element\Builder\Section</item>
+                <item name="group" xsi:type="object">Magento\Backend\Model\Search\Config\Structure\Element\Builder\Group</item>
+                <item name="field" xsi:type="object">Magento\Backend\Model\Search\Config\Structure\Element\Builder\Field</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

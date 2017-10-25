@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="StorefrontDeletePersistedWishlistCest">
+        <annotations>
+            <features value="Delete a persist wishlist for a customer"/>
+            <stories value="Delete a persist wishlist for a customer"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <env value="phantomjs"/>
+            <group value="wishlist"/>
+        </annotations>
+        <before>
+            <createData mergeKey="category" entity="SimpleSubCategory"/>
+            <createData mergeKey="product" entity="SimpleProduct" >
+                <required-entity createDataKey="category"/>
+            </createData>
+            <createData mergeKey="customer" entity="Simple_US_Customer"/>
+            <createData mergeKey="wishlist" entity="Wishlist">
+                <required-entity createDataKey="customer"/>
+                <required-entity createDataKey="product"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData mergeKey="deleteProduct" createDataKey="product"/>
+            <deleteData mergeKey="deleteCategory" createDataKey="category"/>
+            <deleteData mergeKey="deleteCustomer" createDataKey="customer"/>
+        </after>
+        <test name="StorefrontDeletePersistedWishlistTest">
+            <annotations>
+                <title value="Delete a persist wishlist for a customer"/>
+                <description value="Delete a persist wishlist for a customer"/>
+            </annotations>
+            <amOnPage mergeKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>
+            <fillField  mergeKey="fillEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
+            <fillField  mergeKey="fillPassword" userInput="$$customer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
+            <waitForElementVisible mergeKey="waitForButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+            <click mergeKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+            <see mergeKey="seeFirstName" userInput="$$customer.firstname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <see mergeKey="seeLastName" userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <see mergeKey="seeEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <waitForPageLoad mergeKey="15"/>
+            <amOnPage mergeKey="amOnWishlist" url="{{StorefrontCustomerWishlistPage.url}}"/>
+            <see mergeKey="seeWishlist" userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}"/>
+            <moveMouseOver mergeKey="mouseOver" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}"/>
+            <waitForElementVisible mergeKey="waitForRemoveButton" selector="{{StorefrontCustomerWishlistSection.removeWishlistButton}}"/>
+            <click mergeKey="clickRemove" selector="{{StorefrontCustomerWishlistSection.removeWishlistButton}}"/>
+            <see mergeKey="seeEmptyWishlist" userInput="You have no items in your wish list" selector="{{StorefrontCustomerWishlistSection.emptyWishlistText}}"/>
+        </test>
+    </cest>
+</config>

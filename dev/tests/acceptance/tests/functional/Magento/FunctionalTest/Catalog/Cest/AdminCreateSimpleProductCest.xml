@@ -12,10 +12,6 @@
         <annotations>
             <features value="Product Creation"/>
             <stories value="Create a Simple Product via Admin"/>
-            <group value="product"/>
-            <env value="chrome"/>
-            <env value="firefox"/>
-            <env value="phantomjs"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" mergeKey="createPreReqCategory"/>
@@ -26,6 +22,9 @@
                 <description value="You should be able to create a Simple Product in the admin back-end."/>
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-23414"/>
+                <group value="product"/>
+                <env value="chrome"/>
+                <env value="headless"/>
             </annotations>
             <amOnPage url="{{AdminLoginPage.url}}" mergeKey="navigateToAdmin"/>
             <fillField userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" selector="{{AdminLoginFormSection.username}}" mergeKey="fillUsername"/>

@@ -5,11 +5,11 @@
  */
 namespace Magento\Framework\Crontab;
 
-use Magento\Framework\ShellInterface;
-use Magento\Framework\Phrase;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Phrase;
+use Magento\Framework\ShellInterface;
 
 /**
  * Manager works with cron tasks
@@ -39,13 +39,37 @@ class CrontabManager implements CrontabManagerInterface
     }
 
     /**
+     * @return string
+     */
+    private function getTasksBlockStart()
+    {
+        $tasksBlockStart = self::TASKS_BLOCK_START;
+        if (defined('BP')) {
+            $tasksBlockStart .= ' ' . md5(BP);
+        }
+        return $tasksBlockStart;
+    }
+
+    /**
+     * @return string
+     */
+    private function getTasksBlockEnd()
+    {
+        $tasksBlockEnd = self::TASKS_BLOCK_END;
+        if (defined('BP')) {
+            $tasksBlockEnd .= ' ' . md5(BP);
+        }
+        return $tasksBlockEnd;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getTasks()
     {
         $this->checkSupportedOs();
         $content = $this->getCrontabContent();
-        $pattern = '!(' . self::TASKS_BLOCK_START . ')(.*?)(' . self::TASKS_BLOCK_END . ')!s';
+        $pattern = '!(' . $this->getTasksBlockStart() . ')(.*?)(' . $this->getTasksBlockEnd() . ')!s';
 
         if (preg_match($pattern, $content, $matches)) {
             $tasks = trim($matches[2], PHP_EOL);
@@ -61,13 +85,13 @@ class CrontabManager implements CrontabManagerInterface
      */
     public function saveTasks(array $tasks)
     {
-        $this->checkSupportedOs();
-        $baseDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
-        $logDir = $this->filesystem->getDirectoryRead(DirectoryList::LOG)->getAbsolutePath();
-
         if (!$tasks) {
             throw new LocalizedException(new Phrase('List of tasks is empty'));
         }
+
+        $this->checkSupportedOs();
+        $baseDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
+        $logDir = $this->filesystem->getDirectoryRead(DirectoryList::LOG)->getAbsolutePath();
 
         foreach ($tasks as $key => $task) {
             if (empty($task['expression'])) {
@@ -114,11 +138,11 @@ class CrontabManager implements CrontabManagerInterface
     private function generateSection($content, $tasks = [])
     {
         if ($tasks) {
-            $content .= self::TASKS_BLOCK_START . PHP_EOL;
+            $content .= $this->getTasksBlockStart() . PHP_EOL;
             foreach ($tasks as $task) {
-                $content .=  $task['expression'] . ' ' . PHP_BINARY . ' '. $task['command'] . PHP_EOL;
+                $content .= $task['expression'] . ' ' . PHP_BINARY . ' ' . $task['command'] . PHP_EOL;
             }
-            $content .= self::TASKS_BLOCK_END . PHP_EOL;
+            $content .= $this->getTasksBlockEnd() . PHP_EOL;
         }
 
         return $content;
@@ -133,7 +157,8 @@ class CrontabManager implements CrontabManagerInterface
     private function cleanMagentoSection($content)
     {
         $content = preg_replace(
-            '!' . preg_quote(self::TASKS_BLOCK_START) . '.*?' . preg_quote(self::TASKS_BLOCK_END . PHP_EOL) . '!s',
+            '!' . preg_quote($this->getTasksBlockStart()) . '.*?'
+            . preg_quote($this->getTasksBlockEnd() . PHP_EOL) . '!s',
             '',
             $content
         );
@@ -192,7 +217,7 @@ class CrontabManager implements CrontabManagerInterface
     {
         if (stripos(PHP_OS, 'WIN') === 0) {
             throw new LocalizedException(
-                new Phrase('Your operation system is not supported to work with this command')
+                new Phrase('Your operating system is not supported to work with this command')
             );
         }
     }
