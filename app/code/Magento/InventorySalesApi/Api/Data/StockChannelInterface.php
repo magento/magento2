@@ -22,6 +22,7 @@ interface StockChannelInterface extends ExtensibleDataInterface
     const STOCK_CHANNEL_ID = 'stock_channel_id';
     const TYPE = 'type';
     const CODE = 'code';
+    const STOCK_ID = 'stock_id';
     /**#@-*/
 
     /**
@@ -68,4 +69,19 @@ interface StockChannelInterface extends ExtensibleDataInterface
      * @return void
      */
     public function setCode($code);
+
+    /**
+     * Get stock id
+     *
+     * @return int|null
+     */
+    public function getStockId();
+
+    /**
+     * Set stock id
+     *
+     * @param int|null $stockId
+     * @return void
+     */
+    public function setStockId($stockId);
 }

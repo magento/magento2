@@ -62,6 +62,19 @@ class CreateStockChannelTable
                 Table::OPTION_NULLABLE => false,
             ],
             'Stock Channel Code'
-        );;
+        )->addColumn(
+            StockChannelInterface::STOCK_ID,
+            Table::TYPE_INTEGER,
+            null,
+            [
+                Table::OPTION_NULLABLE => false,
+                Table::OPTION_UNSIGNED => true,
+            ],
+            'Stock Id'
+        )->addForeignKey($setup->getFkName('inventory_stock_channel', 'stock_id', 'inventory_stock', 'stock_id'),
+            'stock_id',
+            $setup->getTable('inventory_stock'),
+            'stock_id',
+            \Magento\Framework\DB\Ddl\Table::ACTION_RESTRICT);
     }
 }

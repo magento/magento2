@@ -7,7 +7,7 @@ namespace Magento\InventorySales\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\InventorySales\Model\ResourceModel\StockChannel as StockChannelResourceModel;
-use Magento\InventoryApi\Api\Data\StockChannelInterface;
+use Magento\InventorySalesApi\Api\Data\StockChannelInterface;
 
 /**
  * {@inheritdoc}
@@ -61,7 +61,7 @@ class StockChannel extends AbstractExtensibleModel implements StockChannelInterf
      */
     public function getCode()
     {
-        return $this->getData(self::TYPE);
+        return $this->getData(self::CODE);
     }
 
     /**
@@ -70,5 +70,21 @@ class StockChannel extends AbstractExtensibleModel implements StockChannelInterf
     public function setCode($code)
     {
         $this->setData(self::CODE, $code);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getStockId()
+    {
+        return $this->getData(self::STOCK_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStockId($stockId)
+    {
+        $this->setData(self::STOCK_ID, $stockId);
     }
 }
