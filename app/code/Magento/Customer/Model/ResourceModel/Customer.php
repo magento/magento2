@@ -140,7 +140,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         }
 
         // set confirmation key logic
-        if ($customer->getForceConfirmed() || $customer->getPasswordHash() == '') {
+        if ($customer->getForceConfirmed()) {
             $customer->setConfirmation(null);
         } elseif (!$customer->getId() && $customer->isConfirmationRequired()) {
             $customer->setConfirmation($customer->getRandomConfirmationKey());
