@@ -60,9 +60,9 @@ class IndexationTest extends TestCase
      */
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
+        $this->indexer = Bootstrap::getObjectManager()->get(Indexer::class);
         $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
-        $this->getProductQtyInStock = Bootstrap::getObjectManager()->create(
+        $this->getProductQtyInStock = Bootstrap::getObjectManager()->get(
             GetProductQuantityInStockInterface::class
         );
     }

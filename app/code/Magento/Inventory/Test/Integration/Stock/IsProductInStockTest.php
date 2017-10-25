@@ -53,9 +53,9 @@ class IsProductInStockTest extends TestCase
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->reservationsAppend = Bootstrap::getObjectManager()->get(ReservationsAppendInterface::class);
-        $this->reservationCleanup = Bootstrap::getObjectManager()->create(ReservationCleanupInterface::class);
+        $this->reservationCleanup = Bootstrap::getObjectManager()->get(ReservationCleanupInterface::class);
 
-        $this->isProductInStock = Bootstrap::getObjectManager()->create(IsProductInStockInterface::class);
+        $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
     }
 
     public function tearDown()
