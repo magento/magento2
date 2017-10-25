@@ -21,7 +21,6 @@ class ConfiguredRegularPrice extends ConfiguredPrice
      * Create Selection Price List
      *
      * @param \Magento\Bundle\Model\Option $option
-     * @param bool $useRegularPrice
      * @return BundleSelectionPrice[]
      */
     protected function createSelectionPriceList($option)

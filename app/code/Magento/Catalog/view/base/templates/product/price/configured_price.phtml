@@ -10,10 +10,12 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 /** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $configuredPrice */
 $configuredPrice = $block->getPrice();
-/** @var \Magento\Catalog\Pricing\Price\RegularPrice $regularPrice */
-$regularPrice = $block->getPriceType('regular_price');
+/** @var \Magento\Catalog\Pricing\Price\ConfiguredRegularPrice $configuredRegularPrice */
+$configuredRegularPrice = $block->getPriceType(
+        \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_REGULAR_PRICE_CODE
+);
 ?>
-<?php if ($configuredPrice->getAmount()->getValue() < $regularPrice->getAmount()->getValue()) : ?>
+<?php if ($configuredPrice->getAmount()->getValue() < $configuredRegularPrice->getAmount()->getValue()) : ?>
     <p class="price-as-configured">
         <span class="special-price">
             <?= /* @noEscape */ $block->renderAmount(
@@ -29,7 +31,7 @@ $regularPrice = $block->getPriceType('regular_price');
         </span>
         <span class="old-price">
             <?= /* @noEscape */ $block->renderAmount(
-                $regularPrice->getAmount(),
+                $configuredRegularPrice->getAmount(),
                 [
                     'display_label'     => $block->escapeHtml(__('Regular Price')),
                     'price_id'          => $block->escapeHtml($block->getPriceId('old-price-' . $idSuffix)),
