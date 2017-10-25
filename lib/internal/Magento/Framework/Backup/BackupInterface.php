@@ -65,4 +65,19 @@ interface BackupInterface
      * @return $this
      */
     public function setBackupsDir($backupsDir);
+
+    /**
+     * Check if keep files of backup
+     *
+     * @return boolean
+     */
+    public function keepSourceFile();
+
+    /**
+     * Set if keep files of backup
+     *
+     * @param boolean $keepSourceFile
+     * @return $this
+     */
+    public function setKeepSourceFile($keepSourceFile);
 }
