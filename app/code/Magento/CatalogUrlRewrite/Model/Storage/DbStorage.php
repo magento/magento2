@@ -17,15 +17,34 @@ class DbStorage extends BaseDbStorage
      */
     protected function prepareSelect(array $data)
     {
+        if (
+            !array_key_exists(UrlRewrite::ENTITY_ID, $data)
+            ||
+            !array_key_exists(UrlRewrite::ENTITY_TYPE, $data)
+            ||
+            !array_key_exists(UrlRewrite::STORE_ID, $data)
+        ) {
+            throw new \InvalidArgumentException(
+                UrlRewrite::ENTITY_ID . ', ' . UrlRewrite::ENTITY_TYPE
+                . ' and ' . UrlRewrite::STORE_ID . ' parameters are required.'
+            );
+        }
+
         $select = $this->connection->select();
         $select->from(['url_rewrite' => $this->resource->getTableName('url_rewrite')])
             ->joinLeft(
                 ['relation' => $this->resource->getTableName(Product::TABLE_NAME)],
                 'url_rewrite.url_rewrite_id = relation.url_rewrite_id'
             )
-            ->where('url_rewrite.entity_id IN (?)', $data['entity_id'])
-            ->where('url_rewrite.entity_type = ?', $data['entity_type'])
-            ->where('url_rewrite.store_id IN (?)', $data['store_id']);
+            ->where(
+                'url_rewrite.entity_id IN (?)',
+                $data[UrlRewrite::ENTITY_ID]
+            )
+            ->where(
+                'url_rewrite.entity_type = ?',
+                $data[UrlRewrite::ENTITY_TYPE]
+            )
+            ->where('url_rewrite.store_id IN (?)', $data[UrlRewrite::STORE_ID]);
         if (array_key_exists(UrlRewrite::REDIRECT_TYPE, $data)) {
             $select->where(
                 'url_rewrite.redirect_type = ?',
