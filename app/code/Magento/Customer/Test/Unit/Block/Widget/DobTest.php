@@ -33,7 +33,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
     const YEAR = '2014';
 
     // Value of date('Y', strtotime(self::DATE))
-    const DATE_FORMAT = 'M/d/yy';
+    const DATE_FORMAT = 'M/d/Y';
 
     /** Constants used by Dob::setDateInput($code, $html) */
     const DAY_HTML =
@@ -485,8 +485,8 @@ class DobTest extends \PHPUnit\Framework\TestCase
     {
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->with('{"validate-date":{"dateFormat":"M\/d\/yy"}}')
-            ->will($this->returnValue('{"validate-date":{"dateFormat":"M\/d\/yy"}}'));
+            ->with('{"validate-date":{"dateFormat":"M\/d\/Y"}}')
+            ->will($this->returnValue('{"validate-date":{"dateFormat":"M\/d\/Y"}}'));
 
         $this->attribute->expects($this->once())
             ->method("isRequired")
@@ -494,7 +494,7 @@ class DobTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             $this->_block->getHtmlExtraParams(),
-            'data-validate="{"validate-date":{"dateFormat":"M\/d\/yy"}}"'
+            'data-validate="{"validate-date":{"dateFormat":"M\/d\/Y"}}"'
         );
     }
 
@@ -506,14 +506,14 @@ class DobTest extends \PHPUnit\Framework\TestCase
 
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->with('{"required":true,"validate-date":{"dateFormat":"M\/d\/yy"}}')
-            ->will($this->returnValue('{"required":true,"validate-date":{"dateFormat":"M\/d\/yy"}}'));
+            ->with('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}')
+            ->will($this->returnValue('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}'));
 
 
         $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaper));
 
         $this->assertEquals(
-            'data-validate="{"required":true,"validate-date":{"dateFormat":"M\/d\/yy"}}"',
+            'data-validate="{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}"',
             $this->_block->getHtmlExtraParams()
         );
     }

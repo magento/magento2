@@ -28,7 +28,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="store_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="adminhtml.system.design.grid.columnSet.store_id" as="store_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Store</argument>
                             <argument name="width" xsi:type="string">100px</argument>
@@ -38,7 +38,7 @@
                             <argument name="index" xsi:type="string">store_id</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="package">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.design.grid.columnSet.package" as="package">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Design</argument>
                             <argument name="type" xsi:type="string">options</argument>
@@ -47,7 +47,7 @@
                             <argument name="index" xsi:type="string">design</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="date_from">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.design.grid.columnSet.date_from" as="date_from">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Date From</argument>
                             <argument name="align" xsi:type="string">left</argument>
@@ -57,7 +57,7 @@
                             <argument name="index" xsi:type="string">date_from</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="date_to">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.system.design.grid.columnSet.date_to" as="date_to">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Date To</argument>
                             <argument name="align" xsi:type="string">left</argument>
