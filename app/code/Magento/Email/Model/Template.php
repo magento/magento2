@@ -375,7 +375,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
             );
         }
 
-        $this->setUseAbsoluteLinks(true);
         $text = $this->getProcessedTemplate($this->_getVars());
 
         if ($isDesignApplied) {
