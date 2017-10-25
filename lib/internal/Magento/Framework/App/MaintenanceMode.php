@@ -70,7 +70,7 @@ class MaintenanceMode
         if (!$this->flagDir->isExist(self::FLAG_FILENAME)) {
             return false;
         }
-        return $this->ipChecker->isInRange($remoteAddr, $this->getAddressInfo());
+        return !$this->ipChecker->isInRange($remoteAddr, $this->getAddressInfo());
     }
 
     /**
