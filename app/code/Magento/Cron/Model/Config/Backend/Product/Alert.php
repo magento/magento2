@@ -79,7 +79,7 @@ class Alert extends \Magento\Framework\App\Config\Value
             $frequency == \Magento\Cron\Model\Config\Source\Frequency::CRON_WEEKLY ? '1' : '*', //Day of the Week
         ];
 
-        $cronExprString = join(' ', $cronExprArray);
+        $cronExprString = implode(' ', $cronExprArray);
 
         try {
             $cronStringPath = $this->_configValueFactory->create()->load(self::CRON_STRING_PATH, 'path');
