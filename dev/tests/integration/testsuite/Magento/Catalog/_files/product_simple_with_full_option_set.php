@@ -164,6 +164,29 @@ $oldOptions = [
                 'sku'           => '4-2-radio',
             ],
         ]
+    ],
+    [
+        'previous_group' => 'select',
+        'title' => 'File option',
+        'type' => 'file',
+        'sort_order' => 3,
+        'is_require' => 1,
+        'price' => 30,
+        'price_type' => 'percent',
+        'sku' => 'sku3',
+        'file_extension' => 'jpg, png, gif',
+        'image_size_x' => 10,
+        'image_size_y' => 20,
+    ],
+    [
+        'title' => 'area option',
+        'type' => 'area',
+        'sort_order' => 2,
+        'is_require' => 1,
+        'price' => 3.95,
+        'price_type' => 'percent',
+        'sku' => 'sku2',
+        'max_characters' => 20,
     ]
 ];
 
