@@ -26,6 +26,12 @@ class DbStorage extends BaseDbStorage
             ->where('url_rewrite.entity_id IN (?)', $data['entity_id'])
             ->where('url_rewrite.entity_type = ?', $data['entity_type'])
             ->where('url_rewrite.store_id IN (?)', $data['store_id']);
+        if (array_key_exists(UrlRewrite::REDIRECT_TYPE, $data)) {
+            $select->where(
+                'url_rewrite.redirect_type = ?',
+                $data[UrlRewrite::REDIRECT_TYPE]
+            );
+        }
         if (empty($data[UrlRewrite::METADATA]['category_id'])) {
             $select->where('relation.category_id IS NULL');
         } else {
