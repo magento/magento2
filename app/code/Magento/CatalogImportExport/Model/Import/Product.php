@@ -1292,15 +1292,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveProductAttributes(array $attributesData)
     {
-        $productEntityLinkField = $this->getProductEntityLinkField();
+        $linkField = $this->getProductEntityLinkField();
         foreach ($attributesData as $tableName => $skuData) {
             $tableData = [];
             foreach ($skuData as $sku => $attributes) {
-                $linkId = $this->_oldSku[strtolower($sku)][$productEntityLinkField];
+                $linkId = $this->_oldSku[strtolower($sku)][$linkField];
                 foreach ($attributes as $attributeId => $storeValues) {
                     foreach ($storeValues as $storeId => $storeValue) {
                         $tableData[] = [
-                            $productEntityLinkField => $linkId,
+                            $linkField => $linkId,
                             'attribute_id' => $attributeId,
                             'store_id' => $storeId,
                             'value' => $storeValue,
