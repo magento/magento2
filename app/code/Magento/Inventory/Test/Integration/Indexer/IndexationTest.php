@@ -13,6 +13,7 @@ use Magento\Inventory\Indexer\IndexNameBuilder;
 use Magento\Inventory\Indexer\IndexStructureInterface;
 use Magento\Inventory\Indexer\StockItemIndexerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -50,17 +51,25 @@ class IndexationTest extends TestCase
     private $indexer;
 
     /**
-     * @var Checker
+     * @var GetProductQuantityInStockInterface
      */
-    private $indexerChecker;
+    private $getProductQtyInStock;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
+        $this->indexer = Bootstrap::getObjectManager()->get(Indexer::class);
         $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
-        $this->indexerChecker = Bootstrap::getObjectManager()->create(Checker::class);
+        $this->getProductQtyInStock = Bootstrap::getObjectManager()->get(
+            GetProductQuantityInStockInterface::class
+        );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function tearDown()
     {
         /** @var IndexNameBuilder $indexNameBuilder */
@@ -89,9 +98,8 @@ class IndexationTest extends TestCase
     {
         $this->indexer->reindexRow(1);
 
-        self::assertEquals(8.5, $this->indexerChecker->execute(10, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(20, 'SKU-1'));
-        self::assertEquals(8.5, $this->indexerChecker->execute(30, 'SKU-1'));
+        self::assertEquals(8.5, $this->getProductQtyInStock->execute('SKU-1', 10));
+        self::assertEquals(8.5, $this->getProductQtyInStock->execute('SKU-1', 30));
     }
 
     /**
@@ -105,13 +113,13 @@ class IndexationTest extends TestCase
     {
         $this->indexer->reindexList([1, 5]);
 
-        self::assertEquals(8.5, $this->indexerChecker->execute(10, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(20, 'SKU-1'));
-        self::assertEquals(8.5, $this->indexerChecker->execute(30, 'SKU-1'));
+        self::assertEquals(8.5, $this->getProductQtyInStock->execute('SKU-1', 10));
+        self::assertEquals(0, $this->getProductQtyInStock->execute('SKU-1', 20));
+        self::assertEquals(8.5, $this->getProductQtyInStock->execute('SKU-1', 30));
 
-        self::assertEquals(0, $this->indexerChecker->execute(10, 'SKU-2'));
-        self::assertEquals(5, $this->indexerChecker->execute(20, 'SKU-2'));
-        self::assertEquals(5, $this->indexerChecker->execute(30, 'SKU-2'));
+        self::assertEquals(0, $this->getProductQtyInStock->execute('SKU-2', 10));
+        self::assertEquals(5, $this->getProductQtyInStock->execute('SKU-2', 20));
+        self::assertEquals(5, $this->getProductQtyInStock->execute('SKU-2', 30));
     }
 
     /**
@@ -125,12 +133,12 @@ class IndexationTest extends TestCase
     {
         $this->indexer->reindexAll();
 
-        self::assertEquals(8.5, $this->indexerChecker->execute(10, 'SKU-1'));
-        self::assertEquals(0, $this->indexerChecker->execute(20, 'SKU-1'));
-        self::assertEquals(8.5, $this->indexerChecker->execute(30, 'SKU-1'));
+        self::assertEquals(8.5, $this->getProductQtyInStock->execute('SKU-1', 10));
+        self::assertEquals(0, $this->getProductQtyInStock->execute('SKU-1', 20));
+        self::assertEquals(8.5, $this->getProductQtyInStock->execute('SKU-1', 30));
 
-        self::assertEquals(0, $this->indexerChecker->execute(10, 'SKU-2'));
-        self::assertEquals(5, $this->indexerChecker->execute(20, 'SKU-2'));
-        self::assertEquals(5, $this->indexerChecker->execute(30, 'SKU-2'));
+        self::assertEquals(0, $this->getProductQtyInStock->execute('SKU-2', 10));
+        self::assertEquals(5, $this->getProductQtyInStock->execute('SKU-2', 20));
+        self::assertEquals(5, $this->getProductQtyInStock->execute('SKU-2', 30));
     }
 }
