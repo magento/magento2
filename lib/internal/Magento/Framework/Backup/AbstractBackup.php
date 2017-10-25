@@ -72,6 +72,7 @@ abstract class AbstractBackup implements BackupInterface
     protected $_lastErrorMessage;
 
     /**
+     * Keep Source files in Backup
      *
      * @var boolean
      */

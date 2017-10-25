@@ -145,7 +145,7 @@ class BackupRollback
      * @return void
      * @throws LocalizedException
      */
-    public function codeRollback($rollbackFile, $type = Factory::TYPE_FILESYSTEM, $keepSourceFile)
+    public function codeRollback($rollbackFile, $type = Factory::TYPE_FILESYSTEM, $keepSourceFile = false)
     {
         if (preg_match('/[0-9]_(filesystem)_(code|media)\.(tgz)$/', $rollbackFile) !== 1) {
             throw new LocalizedException(new Phrase('Invalid rollback file.'));
@@ -223,7 +223,7 @@ class BackupRollback
      * @return void
      * @throws LocalizedException
      */
-    public function dbRollback($rollbackFile, $keepDbFile)
+    public function dbRollback($rollbackFile, $keepDbFile = false)
     {
         if (preg_match('/[0-9]_(db)(.*?).(sql)$/', $rollbackFile) !== 1) {
             throw new LocalizedException(new Phrase('Invalid rollback file.'));
