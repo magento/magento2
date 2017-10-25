@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Test\Block\Adminhtml\Dashboard\AdvancedReporting;
+namespace Magento\Advertisement\Test\Block\Adminhtml\Dashboard\Advertisement;
 
 use Magento\Ui\Test\Block\Adminhtml\Modal;
 
 /**
- * Advanced Reporting block.
+ * Advertisement block.
  */
-class AdvancedReportingBlock extends Modal
+class AdvertisementBlock extends Modal
 {
     /**
      * @var string

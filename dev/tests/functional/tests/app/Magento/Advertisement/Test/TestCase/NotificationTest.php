@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Test\TestCase;
+namespace Magento\Advertisement\Test\TestCase;
 
 use Magento\Mtf\TestCase\Scenario;
 
@@ -14,11 +14,11 @@ use Magento\Mtf\TestCase\Scenario;
  * Steps:
  * 1. Login to the admin panel with the newly created admin user.
  * 2. Navigate to dashboard.
- * 3. Assert that advanced reporting pop-up is visible.
+ * 3. Assert that advertisement pop-up is visible.
  *
  * @ZephyrId MAGETWO-80786
  */
-class NotificationMenuAccessUserPermissionsTest extends Scenario
+class NotificationTest extends Scenario
 {
     /* tags */
     const MVP = 'no';
