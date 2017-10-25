@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="StorefrontPersistedCustomerLoginCest">
+        <annotations>
+            <features value="Persisted customer can login from storefront."/>
+            <stories value="Persisted customer can login from storefront."/>
+        </annotations>
+        <before>
+            <createData mergeKey="customer" entity="Simple_US_Customer"/>
+        </before>
+        <after>
+            <deleteData mergeKey="deleteCustomer" createDataKey="customer" />
+        </after>
+        <test name="StorefrontPersistedCustomerLoginTest">
+            <annotations>
+                <title value="Persisted customer can login from storefront."/>
+                <description value="Persisted customer can login from storefront."/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-72103"/>
+                <group value="customer"/>
+                <env value="chrome"/>
+                <env value="firefox"/>
+                <env value="phantomjs"/>
+                <env value="headless"/>
+            </annotations>
+            <amOnPage mergeKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>
+            <fillField  mergeKey="fillEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
+            <fillField  mergeKey="fillPassword" userInput="$$customer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
+            <click mergeKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
+            <see mergeKey="seeFirstName" userInput="$$customer.firstname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <see mergeKey="seeLastName" userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+            <see mergeKey="seeEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" />
+        </test>
+    </cest>
+</config>

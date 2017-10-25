@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="CreateConfigurableProductByApiCest">
+        <annotations>
+            <features value="Create a Configurable Product By API"/>
+            <stories value="Create a Configurable Product By API"/>
+        </annotations>
+        <before>
+            <createData mergeKey="categoryHandle" entity="SimpleSubCategory" />
+            <createData mergeKey="baseConfigProductHandle" entity="BaseConfigurableProduct" >
+                <required-entity createDataKey="categoryHandle"/>
+            </createData>
+            <createData mergeKey="productAttributeHandle" entity="productAttributeWithTwoOptions"/>
+
+            <createData mergeKey="productAttributeOption1Handle" entity="productAttributeOption1">
+                <required-entity createDataKey="productAttributeHandle"/>
+            </createData>
+            <createData mergeKey="productAttributeOption2Handle" entity="productAttributeOption2">
+                <required-entity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <createData mergeKey="addToAttributeSetHandle" entity="AddToDefaultSet">
+                <required-entity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <getData mergeKey="getAttributeOption1Handle" entity="ProductAttributeOptionGetter" index="1">
+                <required-entity createDataKey="productAttributeHandle"/>
+            </getData>
+            <getData mergeKey="getAttributeOption2Handle" entity="ProductAttributeOptionGetter" index="2">
+                <required-entity createDataKey="productAttributeHandle"/>
+            </getData>
+
+            <createData mergeKey="childProductHandle1" entity="SimpleOne">
+                <required-entity createDataKey="productAttributeHandle"/>
+                <required-entity createDataKey="getAttributeOption1Handle"/>
+            </createData>
+            <createData mergeKey="childProductHandle2" entity="SimpleOne">
+                <required-entity createDataKey="productAttributeHandle"/>
+                <required-entity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData mergeKey="configProductOptionHandle" entity="ConfigurableProductTwoOptions">
+                <required-entity createDataKey="baseConfigProductHandle"/>
+                <required-entity createDataKey="productAttributeHandle"/>
+                <required-entity createDataKey="getAttributeOption1Handle"/>
+                <required-entity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData mergeKey="configProductHandle1" entity="ConfigurableProductAddChild">
+                <required-entity createDataKey="childProductHandle1"/>
+                <required-entity createDataKey="baseConfigProductHandle"/>
+            </createData>
+            <!--Uncomment this when MQE-472 is fixed-->
+            <!--createData mergeKey="configProductHandle2" entity="ConfigurableProductAddChild">
+                <required-entity createDataKey="childProductHandle2"/>
+                <required-entity createDataKey="baseConfigProductHandle"/>
+            </createData-->
+        </before>
+        <test name="CreateConfigurableProductByApiTest">
+        </test>
+    </cest>
+</config>

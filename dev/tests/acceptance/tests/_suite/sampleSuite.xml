@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Suite/etc/suiteSchema.xsd">
+    <suite name="mySuite">
+        <before>
+            <createData entity="_defaultCategory" mergeKey="createCategory"/>
+            <createData entity="_defaultProduct" mergeKey="createProduct">
+                <required-entity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData mergeKey="deleteMyProduct" createDataKey="createProduct"/>
+            <deleteData mergeKey="deleteMyCategory" createDataKey="createCategory"/>
+        </after>
+        <include>
+            <group name="example"/>
+            <cest test="PersistMultipleEntitiesTest"  name="PersistMultipleEntitiesCest"/>
+            <module name="SampleTests" file="SampleCest.xml"/>
+        </include>
+        <exclude>
+            <group name="testGroup"/>
+        </exclude>
+    </suite>
+</suites>

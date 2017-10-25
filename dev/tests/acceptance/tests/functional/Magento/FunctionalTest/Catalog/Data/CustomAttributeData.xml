@@ -20,4 +20,8 @@
         <data key="attribute_code">category_ids</data>
         <var key="value" entityType="category" entityKey="id"/>
     </entity>
+    <entity name="CustomAttributeProductAttribute" type="custom_attribute">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <var key="value" entityKey="value" entityType="ProductAttributeOption"/>
+    </entity>
 </config>
