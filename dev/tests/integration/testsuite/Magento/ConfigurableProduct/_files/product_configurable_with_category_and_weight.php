@@ -14,6 +14,7 @@ use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
 
@@ -92,7 +93,7 @@ foreach ($options as $option) {
     $video->setContent($imageContent);
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
+     * @var ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
      */
     $mediaGalleryEntryExtensionFactory = $objectManager->get(
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory::class
