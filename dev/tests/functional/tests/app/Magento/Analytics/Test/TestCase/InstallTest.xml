@@ -9,9 +9,9 @@
     <testCase name="Magento\Install\Test\TestCase\InstallTest" summary="[Web Setup][Auto] Install CE Magento via Web Interface">
         <variation name="InstallTestVariation" summary="Magento analytics opt-in by default" ticketId="MAGETWO-80760">
             <data name="tag" xsi:type="string">severity:S1</data>
-            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\Analytics\Test\Constraint\AssertAdvancedReportingPopupExist"/>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingPopupExist" prev="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled"/>
-            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" prev="Magento\Analytics\Test\Constraint\AssertAdvancedReportingPopupExist" />
+            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\Advertisement\Test\Constraint\AssertAdvertisementPopupExist"/>
+            <constraint name="Magento\Advertisement\Test\Constraint\AssertAdvertisementPopupExist" prev="Magento\User\Test\Constraint\AssertUserSuccessLogin" next="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled"/>
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsEnabled" prev="Magento\Advertisement\Test\Constraint\AssertAdvertisementPopupExist" />
         </variation>
     </testCase>
 </config>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\User\Test\TestCase\CustomAclPermissionTest" summary="Advanced Reporting configuration permission" ticketId="MAGETWO-82648">
+        <variation name="UserWithoutSubscriptionPermissionsTestVariation1" summary="User without subscription permissions">
+            <data name="user/dataset" xsi:type="string">custom_admin_with_role_without_subscription_permissions</data>
+            <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingSectionInvisible" />
+        </variation>
+        <variation name="UserWithSubscriptionPermissionsTestVariation2" summary="User with subscription permissions">
+            <data name="user/dataset" xsi:type="string">custom_admin_with_default_role</data>
+            <constraint name="Magento\Analytics\Test\Constraint\AssertAdvancedReportingSectionVisible" />
+        </variation>
+    </testCase>
+</config>
