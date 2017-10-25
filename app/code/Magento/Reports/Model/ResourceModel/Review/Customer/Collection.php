@@ -110,13 +110,14 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      */
     public function getSelectCountSql()
     {
-        $countSelect = clone $this->_select;
+        $countSelect = clone $this->getSelect();
         $countSelect->reset(\Magento\Framework\DB\Select::ORDER);
         $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
         $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
         $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
         $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
         $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::WHERE);
 
         $countSelect->columns(new \Zend_Db_Expr('COUNT(DISTINCT detail.customer_id)'));
 
