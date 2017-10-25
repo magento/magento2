@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventoryImportExport\Model\Import;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\ImportExport\Helper\Data as DataHelper;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\ResourceModel\Helper as ResourceHelper;
 use Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
 use Magento\InventoryImportExport\Model\Import\Command\CommandInterface;
+use Magento\InventoryImportExport\Model\Import\Serializer\Json;
 use Magento\InventoryImportExport\Model\Import\Validator\ValidatorInterface;
 
 /**
@@ -31,7 +31,7 @@ class Sources extends AbstractEntity
     const COL_STATUS = 'status';
 
     /**
-     * @var SerializerInterface
+     * @var Json
      */
     protected $jsonHelper;
 
@@ -46,7 +46,7 @@ class Sources extends AbstractEntity
     private $commands = [];
 
     /**
-     * @param SerializerInterface $jsonHelper
+     * @param Json $jsonHelper
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param ResourceHelper $resourceHelper
      * @param DataHelper $dataHelper
@@ -56,7 +56,7 @@ class Sources extends AbstractEntity
      * @throws LocalizedException
      */
     public function __construct(
-        SerializerInterface $jsonHelper,
+        Json $jsonHelper,
         ProcessingErrorAggregatorInterface $errorAggregator,
         ResourceHelper $resourceHelper,
         DataHelper $dataHelper,
