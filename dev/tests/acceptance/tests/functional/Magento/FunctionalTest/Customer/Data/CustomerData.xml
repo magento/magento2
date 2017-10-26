@@ -44,4 +44,8 @@
         <data key="website_id">0</data>
         <required-entity type="address">US_Address_TX</required-entity>
     </entity>
+    <entity name="Simple_US_Customer_For_Update" type="customer">
+        <var key="id" entityKey="id" entityType="customer"/>
+        <data key="firstname">Jane</data>
+    </entity>
 </config>

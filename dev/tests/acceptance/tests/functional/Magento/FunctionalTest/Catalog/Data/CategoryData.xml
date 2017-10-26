@@ -18,6 +18,5 @@
         <data key="name_lwr" unique="suffix">simplesubcategory</data>
         <data key="is_active">true</data>
         <data key="include_in_menu">true</data>
-        <!--required-entity type="custom_attribute">CustomAttributeCategoryUrlKey</required-entity-->
     </entity>
 </config>

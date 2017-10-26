@@ -4,16 +4,38 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\TestFramework\TestCase\Webapi;
+namespace Magento\TestFramework\TestCase\HttpClient;
+
+use Magento\TestFramework\Helper\JsonSerializer;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * A Curl client that can be called independently, outside of REST controller.
- *
- * Used by CookieManager tests.
+ * A Curl client that can be called independently, outside of any Web API controller used by CookieManager tests.
  */
-class Curl extends Adapter\Rest\CurlClient
+class CurlClientWithCookies
 {
     const COOKIE_HEADER = 'Set-Cookie: ';
+
+    /** @var CurlClient */
+    protected $curlClient;
+
+    /** @var JsonSerializer */
+    protected $jsonSerializer;
+
+    /**
+     * CurlClient constructor.
+     *
+     * @param CurlClient $curlClient
+     * @param \Magento\TestFramework\Helper\JsonSerializer $jsonSerializer
+     */
+    public function __construct(
+        CurlClient $curlClient,
+        \Magento\TestFramework\Helper\JsonSerializer $jsonSerializer
+    ) {
+        $objectManager = Bootstrap::getObjectManager();
+        $this->curlClient = $curlClient ? : $objectManager->get(CurlClient::class);
+        $this->jsonSerializer = $jsonSerializer ? : $objectManager->get(JsonSerializer::class);
+    }
 
     /**
      * @param string $resourcePath Resource URL like /V1/Resource1/123
@@ -43,7 +65,7 @@ class Curl extends Adapter\Rest\CurlClient
         $curlOpts = [];
         $curlOpts[CURLOPT_CUSTOMREQUEST] = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET;
         $curlOpts[CURLOPT_SSLVERSION] = 3;
-        $response = $this->_invokeApi($url, $curlOpts, $headers);
+        $response = $this->curlClient->invokeApi($url, $curlOpts, $headers);
         $response['cookies'] = $this->cookieParse($response['header']);
         return $response;
     }
