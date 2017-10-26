@@ -104,6 +104,21 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * Additional processing of 'customer_name' field is required, as it is a concat field, which can not be aliased.
+     * @see _joinCustomers
+     */
+    public function addFieldToFilter($field, $condition = null)
+    {
+        if ($field === 'customer_name') {
+            $field = $this->getConnection()->getConcatSql(['customer.firstname', 'customer.lastname'], ' ');
+        }
+
+        return parent::addFieldToFilter($field, $condition);
+    }
+
+    /**
      * Get select count sql
      *
      * @return string
