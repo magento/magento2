@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\InventorySales\Plugin\Ui\Inventory\DataProvider;
+namespace Magento\InventorySales\Plugin\Inventory\Ui\DataProvider;
 
 use Magento\Inventory\Ui\DataProvider\StockDataProvider;
 

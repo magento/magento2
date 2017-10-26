@@ -11,8 +11,6 @@ use Magento\Store\Api\WebsiteRepositoryInterface;
 
 /**
  * Provide option values for UI
- *
- * @api
  */
 class WebsiteSource implements OptionSourceInterface
 {
