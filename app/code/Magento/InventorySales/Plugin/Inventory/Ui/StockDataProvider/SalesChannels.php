@@ -18,12 +18,13 @@ class SalesChannels
      * @param StockDataProvider $subject
      * @param array $data
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetData(StockDataProvider $subject, array $data): array
     {
-        foreach ($data as $stockId => $stockData) {
-            $data[$stockId]['sales_channels'] = $this->getSalesChannelsDataForStock();
+        if ('inventory_stock_form_data_source' === $subject->getName()) {
+            foreach ($data as $stockId => $stockData) {
+                $data[$stockId]['sales_channels'] = $this->getSalesChannelsDataForStock();
+            }
         }
         return $data;
     }
