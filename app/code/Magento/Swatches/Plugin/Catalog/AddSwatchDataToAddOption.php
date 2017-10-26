@@ -6,15 +6,20 @@
 
 namespace Magento\Swatches\Plugin\Catalog;
 
-use Magento\Eav\Model\Entity\Attribute\OptionManagement;
-use Magento\Eav\Model\Config;
 use Magento\Catalog\Model\Product;
-use Magento\Swatches\Helper\Data as SwatchHelper;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\OptionManagement;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollection;
+use Magento\Swatches\Helper\Data as SwatchHelper;
 
 class AddSwatchDataToAddOption
 {
+    const SWATCH_VISUAL = 'visual';
+    const SWATCH_TEXT = 'text';
+    const PREFIX_OPTION = 'option';
+    const PREFIX_SWATCH = 'swatch';
+
     /**
      * @var Config
      */
@@ -53,50 +58,44 @@ class AddSwatchDataToAddOption
      *
      * @return []
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeAdd(OptionManagement $subject, $entityType, $attributeCode, $option)
     {
         $attribute = $this->eavConfig->getAttribute(Product::ENTITY, $attributeCode);
 
-        $isSwatch = false;
-        if ($this->swatchHelper->isVisualSwatch($attribute)) {
-            $isSwatch  = true;
-            $optionKey = 'optionvisual';
-            $swatchKey = 'swatchvisual';
-        } elseif ($this->swatchHelper->isTextSwatch($attribute)) {
-            $isSwatch  = true;
-            $optionKey = 'optiontext';
-            $swatchKey = 'swatchtext';
-        }
+        $isSwatch = $this->isSwatch($attribute);
+        $optionKey = self::PREFIX_OPTION . $isSwatch;
+        $swatchKey = self::PREFIX_SWATCH . $isSwatch;
 
-        if ($isSwatch && $attribute->getData($optionKey) === null && $attribute->getData($swatchKey) === null) {
+        if (!empty($isSwatch) && $attribute->getData($optionKey) === null
+            && $attribute->getData($swatchKey) === null) {
             $optionId    = $option->getValue();
             $optionOrder = $option->getSortOrder();
 
-            $prefix = '';
             if ($optionId === '') {
-                $prefix        = 'option_';
-                $options       = $this->getOptionsByAttributeIdWithSortOrder($attribute->getAttributeId());
-                $attributeData = $this->getOptionsForSwatch($options, $optionKey);
+                $attributeData = $this->prepareAttributeDataForNewOption($attribute->getAttributeId(), $optionKey);
                 $optionId      = count($attributeData[$optionKey]['value']);
                 if ($optionOrder === null) {
                     $optionOrder = $optionId + 1;
                 }
-                $option->setValue($prefix . $optionId);
+                $prefix        = 'option_' . $optionId;
+                $option->setValue($prefix);
+            } else {
+                $prefix = $optionId;
             }
 
-
-            $storeLabels                                              = $option->getStoreLabels();
-            $attributeData[$optionKey]['delete'][$prefix . $optionId] = '';
-            $attributeData[$optionKey]['order'][$prefix . $optionId]  = $optionOrder;
-            if ($swatchKey === 'swatchvisual') {
-                $attributeData[$swatchKey]['value'][$prefix . $optionId] = '';
+            $storeLabels = $option->getStoreLabels();
+            $attributeData[$optionKey]['delete'][$prefix] = '';
+            $attributeData[$optionKey]['order'][$prefix]  = $optionOrder;
+            if ($isSwatch === self::SWATCH_VISUAL) {
+                $attributeData[$swatchKey]['value'][$prefix] = '';
             }
             foreach ($storeLabels as $storeLabel) {
-                $attributeData[$optionKey]['value'][$prefix . $optionId][$storeLabel->getStoreId()]
+                $attributeData[$optionKey]['value'][$prefix][$storeLabel->getStoreId()]
                     = $storeLabel->getLabel();
-                if ($swatchKey === 'swatchtext') {
-                    $attributeData[$swatchKey]['value'][$prefix . $optionId][$storeLabel->getStoreId()]
+                if ($isSwatch === self::SWATCH_TEXT) {
+                    $attributeData[$swatchKey]['value'][$prefix][$storeLabel->getStoreId()]
                         = $storeLabel->getLabel();
                 }
             }
@@ -106,6 +105,33 @@ class AddSwatchDataToAddOption
         return [$entityType, $attributeCode, $option];
     }
 
+    /**
+     * @param $attribute
+     *
+     * @return null|string
+     */
+    protected function isSwatch($attribute)
+    {
+        if ($this->swatchHelper->isVisualSwatch($attribute)) {
+            return self::SWATCH_VISUAL;
+        } elseif ($this->swatchHelper->isTextSwatch($attribute)) {
+            return self::SWATCH_TEXT;
+        }
+        return null;
+    }
+
+    /**
+     * @param $attributeId
+     * @param $optionKey
+     *
+     * @return array
+     */
+    protected function prepareAttributeDataForNewOption($attributeId, $optionKey)
+    {
+        $options       = $this->getOptionsByAttributeIdWithSortOrder($attributeId);
+        $attributeData = $this->getOptionsForSwatch($options, $optionKey);
+        return $attributeData;
+    }
 
     /**
      * @param []     $options
@@ -123,6 +149,7 @@ class AddSwatchDataToAddOption
 
             return $optionsArray;
         }
+
         foreach ($options as $sortOrder => $optionId) {
             $optionsArray[$optionKey]['value'][$optionId]  = $this->getStoreLabels($optionId);
             $optionsArray[$optionKey]['delete'][$optionId] = '';
@@ -131,7 +158,6 @@ class AddSwatchDataToAddOption
 
         return $optionsArray;
     }
-
 
     /**
      * @param $optionId
