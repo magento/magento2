@@ -22,9 +22,15 @@ class SalesChannels
     public function afterGetData(StockDataProvider $subject, array $data): array
     {
         if ('inventory_stock_form_data_source' === $subject->getName()) {
-            foreach ($data as $stockId => $stockData) {
-                $data[$stockId]['sales_channels'] = $this->getSalesChannelsDataForStock();
+            foreach ($data as $stockId => &$stockData) {
+                $stockData['sales_channels'] = $this->getSalesChannelsDataForStock();
             }
+            unset($stockData);
+        } elseif ($data['totalRecords'] > 0) {
+            foreach ($data['items'] as $key => &$stockData) {
+                $stockData['sales_channels'] = $this->getSalesChannelsDataForStock();
+            }
+            unset($stockData);
         }
         return $data;
     }
