@@ -14,6 +14,7 @@ $objectManager = Bootstrap::getObjectManager();
 $productFactory = $objectManager->get(ProductInterfaceFactory::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$productRepository->cleanCache();
 
 for ($i = 1; $i <= 3; $i++) {
     $product = $productFactory->create();
