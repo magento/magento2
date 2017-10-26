@@ -22,12 +22,10 @@
             <createData mergeKey="productHandle" entity="SimpleProduct" >
                 <required-entity createDataKey="categoryHandle"/>
             </createData>
-            <updateData mergeKey="productHandle" entity="NewSimpleProduct" createDataKey="originalProductHandle">
-            </updateData>
-            <updateData mergeKey="update" entity="NewSimpleProduct" createDataKey="productHandle"/>
+            <updateData mergeKey="updateProduct" entity="NewSimpleProduct" createDataKey="productHandle"/>
         </before>
         <after>
-            <deleteData mergeKey="delete" createDataKey="productHandle"/>
+            <deleteData mergeKey="delete" createDataKey="updateProduct"/>
         </after>
         <test name="UpdateSimpleProductByApiTest">
         </test>

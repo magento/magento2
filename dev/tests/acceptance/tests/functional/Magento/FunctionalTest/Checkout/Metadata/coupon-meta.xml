@@ -25,7 +25,7 @@
         </object>
     </operation>
 
-    <operation name="DeleteCoupon" dataType="coupon" type="delete" auth="adminOauth" url="/rest/V1/coupons/{couponId}" method="DELETE">
+    <operation name="DeleteCoupon" dataType="coupon" type="delete" auth="adminOauth" url="/rest/V1/coupons/{coupon_id}" method="DELETE">
         <header param="Content-Type">application/json</header>
     </operation>
 </config>

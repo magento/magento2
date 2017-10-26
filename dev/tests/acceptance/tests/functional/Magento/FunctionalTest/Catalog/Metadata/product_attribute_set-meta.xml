@@ -15,7 +15,13 @@
         <field key="attributeCode">string</field>
         <field key="sortOrder">integer</field>
     </operation>
-    <operation name="DeleteProductAttributeFromAttributeSet" dataType="ProductAttributeSet" type="delete" auth="adminOauth" url="/V1/products/attribute-sets/{attributeSetId}/attributes/{attributeCode}" method="DELETE">
+    <operation name="DeleteProductAttributeFromAttributeSet" dataType="ProductAttributeSet" type="delete" auth="adminOauth" url="/V1/products/attribute-sets/{attribute_set_id}/attributes/{attribute_code}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+    <operation name="GetProductAttributesFromDefaultSet" dataType="DefaultProductAttributeSet1" type="get" auth="adminOauth" url="/V1/products/attribute-sets/4/attributes" method="GET">
+        <contentType>application/json</contentType>
+    </operation>
+    <operation name="GetDefaultProductAttributeSetInfo" dataType="DefaultProductAttributeSet2" type="get" auth="adminOauth" url="/V1/products/attribute-sets/4" method="GET">
         <contentType>application/json</contentType>
     </operation>
 </config>
