@@ -29,7 +29,7 @@ abstract class AbstractType
      *
      * @var array
      */
-    public static $invisibleAttributesCache = [];
+    public static $invAttributesCache = [];
 
     /**
      * Attribute Code to Id cache
@@ -278,7 +278,7 @@ abstract class AbstractType
             $unknownAttributeIds = array_diff(
                 $attributeIds,
                 array_keys(self::$commonAttributesCache),
-                self::$invisibleAttributesCache
+                self::$invAttributesCache
             );
             if ($unknownAttributeIds) {
                 $this->attachAttributesById($attributeSetName, $attributeIds);
@@ -342,7 +342,7 @@ abstract class AbstractType
                     $attribute
                 );
             } else {
-                self::$invisibleAttributesCache[] = $attributeId;
+                self::$invAttributesCache[] = $attributeId;
             }
         }
     }
