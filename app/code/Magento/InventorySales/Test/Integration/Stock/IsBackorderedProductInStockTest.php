@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace  Magento\InventorySales\Test\Integration\Stock;
 
 use Magento\Catalog\Api\Data\ProductInterface;
