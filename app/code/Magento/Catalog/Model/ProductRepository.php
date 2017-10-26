@@ -327,7 +327,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected function initializeProductData(array $productData, $createNew)
     {
         if (empty($productData['type_id'])) {
-            unset($productData['type_id']);
+            $productData['type_id'] = \Magento\Catalog\Model\Product\Type::DEFAULT_TYPE;
         }
 
         unset($productData['media_gallery']);
