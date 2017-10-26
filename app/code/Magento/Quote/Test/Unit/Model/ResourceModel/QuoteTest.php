@@ -6,20 +6,27 @@
 
 namespace Magento\Quote\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\DB\Sequence\SequenceInterface;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Quote\Model\Quote;
+use Magento\SalesSequence\Model\Manager;
+
 class QuoteTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     private $quoteMock;
 
     /**
-     * @var \Magento\SalesSequence\Model\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $sequenceManagerMock;
 
     /**
-     * @var \Magento\Framework\DB\Sequence\SequenceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SequenceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $sequenceMock;
 
@@ -33,28 +40,28 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $context = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Context::class)
+        $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $snapshot = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class)
+        $snapshot = $this->getMockBuilder(Snapshot::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $entityRelationComposite = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite::class)
+        $relationComposite = $this->getMockBuilder(RelationComposite::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sequenceManagerMock = $this->getMockBuilder(\Magento\SalesSequence\Model\Manager::class)
+        $this->sequenceManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sequenceMock = $this->getMockBuilder(\Magento\Framework\DB\Sequence\SequenceInterface::class)
+        $this->sequenceMock = $this->getMockBuilder(SequenceInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->quote = new \Magento\Quote\Model\ResourceModel\Quote(
             $context,
             $snapshot,
-            $entityRelationComposite,
+            $relationComposite,
             $this->sequenceManagerMock,
             null
         );
