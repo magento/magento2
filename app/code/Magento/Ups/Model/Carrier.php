@@ -796,6 +796,7 @@ XMLRequest;
      * @param mixed $xmlResponse
      * @return Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _parseXmlResponse($xmlResponse)
     {
