@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\InventorySales\Plugin\Model;
 
@@ -48,8 +49,12 @@ class BackorderStockStatusPlugin
      * @param int $stockId
      * @return bool
      */
-    public function aroundExecute(IsProductInStockInterface $subject, callable $proceed, string $sku, int $stockId)
-    {
+    public function aroundExecute(
+        IsProductInStockInterface $subject,
+        callable $proceed,
+        string $sku,
+        int $stockId
+    ): bool {
         $productData = $this->productRepository->get($sku);
         $productId = $productData->getId();
 
