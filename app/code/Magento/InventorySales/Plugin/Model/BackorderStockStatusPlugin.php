@@ -48,6 +48,7 @@ class BackorderStockStatusPlugin
      * @param string $sku
      * @param int $stockId
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
         IsProductInStockInterface $subject,

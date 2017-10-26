@@ -11,13 +11,42 @@ use Magento\Catalog\Model\ProductRepository;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Inventory\Indexer\StockItemIndexerInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
-use PHPUnit\Framework\TestCase;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\InventoryApi\Api\IsProductInStockInterface;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventoryApi\Api\SourceItemsSaveInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 class IsBackorderedProductInStockTest extends TestCase
 {
+    const PRODUCT_SKU = 'SKU-2';
+
+    /**
+     * @var SourceItemRepositoryInterface
+     */
+    private $sourceItemRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var SourceItemsSaveInterface
+     */
+    private $sourceItemsSaveInterface;
+
+    /**
+     * @var IndexerInterface
+     */
+    private $indexer;
+
     /**
      * @var ProductRepository
      */
@@ -45,6 +74,11 @@ class IsBackorderedProductInStockTest extends TestCase
         $this->stockItemCriteriaInterfaceFactory =  Bootstrap::getObjectManager()->create(
             StockItemCriteriaInterfaceFactory::class
         );
+        $this->sourceItemRepository = Bootstrap::getObjectManager()->create(SourceItemRepositoryInterface::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+        $this->sourceItemsSaveInterface = Bootstrap::getObjectManager()->create(SourceItemsSaveInterface::class);
+        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
+        $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
         $this->isProductInStock = Bootstrap::getObjectManager()->create(
             IsProductInStockInterface::class
         );
@@ -52,51 +86,69 @@ class IsBackorderedProductInStockTest extends TestCase
 
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
      * @magentoDbIsolation disabled
      */
     public function testBackorderedZeroQtyProductIsInStock()
     {
         /** @var ProductInterface $product */
-        $product = $this->productRepository->get('SKU-1');
+        $product = $this->productRepository->get(self::PRODUCT_SKU);
         $stockItemSearchCriteria = $this->stockItemCriteriaInterfaceFactory->create();
         $stockItemSearchCriteria->setProductsFilter($product->getId());
         $stockItemsCollection = $this->stockItemRepository->getList($stockItemSearchCriteria);
 
         /** @var StockItemInterface $stockItem */
         $stockItem = current($stockItemsCollection->getItems());
-
         $stockItem->setBackorders(1);
-        $stockItem->setUseConfigBackorders(1);
-        $stockItem->setQty(-15);
-
         $this->stockItemRepository->save($stockItem);
 
-        $this->assertTrue($this->isProductInStock->execute('SKU-1', 1));
+        $sourceItem = $this->getSourceItemBySKU(self::PRODUCT_SKU);
+        $this->changeSourceItemQty($sourceItem, -15);
+
+        $this->assertTrue($this->isProductInStock->execute(self::PRODUCT_SKU, 1));
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
      */
     public function testZeroQtyProductIsOutOfStock()
     {
-        $this->productRepository->cleanCache();
-        /** @var ProductInterface $product */
-        $product = $this->productRepository->get('SKU-1');
-        $stockItemSearchCriteria = $this->stockItemCriteriaInterfaceFactory->create();
-        $stockItemSearchCriteria->setProductsFilter($product->getId());
-        $stockItemsCollection = $this->stockItemRepository->getList($stockItemSearchCriteria);
+        $sourceItem = $this->getSourceItemBySKU(self::PRODUCT_SKU);
+        $this->changeSourceItemQty($sourceItem, 0);
 
-        /** @var StockItemInterface $stockItem */
-        $stockItem = current($stockItemsCollection->getItems());
+        $this->assertFalse($this->isProductInStock->execute(self::PRODUCT_SKU, 1));
+    }
 
-        $stockItem->setBackorders(0);
-        $stockItem->setUseConfigBackorders(0);
-        $stockItem->setQty(0);
+    /**
+     * @param string $sku
+     * @return SourceItemInterface
+     */
+    private function getSourceItemBySKU(string $sku)
+    {
+        /** @var SearchCriteriaInterface $sourceItemSearchCriteria */
+        $sourceItemSearchCriteria = $this->searchCriteriaBuilder->addFilter('sku', $sku)->create();
+        $sourceItemSearchResult = $this->sourceItemRepository->getList($sourceItemSearchCriteria);
 
-        $this->stockItemRepository->save($stockItem);
+        /** @var SourceItemInterface $sourceItem */
+        return current($sourceItemSearchResult->getItems());
+    }
 
-        $this->assertFalse($this->isProductInStock->execute('SKU-1', 1));
+    /**
+     * @param SourceItemInterface $sourceItem
+     * @param $qty
+     */
+    private function changeSourceItemQty(SourceItemInterface $sourceItem, $qty)
+    {
+        $sourceItem->setQuantity($qty);
+        $this->sourceItemsSaveInterface->execute([$sourceItem]);
+        $this->indexer->reindexRow(5);
     }
 }
