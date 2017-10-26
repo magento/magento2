@@ -6,38 +6,38 @@
 namespace Magento\InventorySales\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\InventorySales\Model\ResourceModel\StockChannel as StockChannelResourceModel;
-use Magento\InventorySalesApi\Api\Data\StockChannelInterface;
+use Magento\InventorySales\Model\ResourceModel\SalesChannel as SalesChannelResourceModel;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
  * {@inheritdoc}
  *
  * @codeCoverageIgnore
  */
-class StockChannel extends AbstractExtensibleModel implements StockChannelInterface
+class SalesChannel extends AbstractExtensibleModel implements SalesChannelInterface
 {
     /**
      * @inheritdoc
      */
     protected function _construct()
     {
-        $this->_init(StockChannelResourceModel::class);
+        $this->_init(SalesChannelResourceModel::class);
     }
 
     /**
      * @inheritdoc
      */
-    public function getStockChannelId()
+    public function getSalesChannellId()
     {
-        return $this->getData(self::STOCK_CHANNEL_ID);
+        return $this->getData(self::ID);
     }
 
     /**
      * @inheritdoc
      */
-    public function setStockChannelId($stockChannelId)
+    public function setSalesChannelId(int $salesChannelId)
     {
-        $this->setData(self::STOCK_CHANNEL_ID, $stockChannelId);
+        $this->setData(self::ID, $salesChannelId);
     }
 
     /**
@@ -51,7 +51,7 @@ class StockChannel extends AbstractExtensibleModel implements StockChannelInterf
     /**
      * @inheritdoc
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->setData(self::TYPE, $type);
     }
@@ -67,24 +67,9 @@ class StockChannel extends AbstractExtensibleModel implements StockChannelInterf
     /**
      * @inheritdoc
      */
-    public function setCode($code)
+    public function setCode(string $code)
     {
         $this->setData(self::CODE, $code);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getStockId()
-    {
-        return $this->getData(self::STOCK_ID);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setStockId($stockId)
-    {
-        $this->setData(self::STOCK_ID, $stockId);
-    }
 }

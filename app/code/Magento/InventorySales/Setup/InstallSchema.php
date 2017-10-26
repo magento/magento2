@@ -8,22 +8,22 @@ namespace Magento\InventorySales\Setup;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\InventorySales\Setup\Operation\CreateStockChannelTable;
+use Magento\InventorySales\Setup\Operation\CreateSalesChannelTable;
 
 class InstallSchema implements InstallSchemaInterface
 {
     /**
-     * @var CreateStockChannelTable
+     * @var CreateSalesChannelTable
      */
-    private $createStockChannelTable;
+    private $createSalesChannelTable;
 
     /**
-     * @param CreateStockChannelTable $createStockChannelTable
+     * @param CreateSalesChannelTable $createSalesChannelTable
      */
     public function __construct(
-        CreateStockChannelTable $createStockChannelTable
+        CreateSalesChannelTable $createSalesChannelTable
     ) {
-        $this->createStockChannelTable = $createStockChannelTable;
+        $this->createSalesChannelTable = $createSalesChannelTable;
     }
 
     /**
@@ -33,7 +33,7 @@ class InstallSchema implements InstallSchemaInterface
     {
         $setup->startSetup();
 
-        $this->createStockChannelTable->execute($setup);
+        $this->createSalesChannelTable->execute($setup);
 
         $setup->endSetup();
     }

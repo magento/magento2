@@ -14,74 +14,61 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  *
  * @api
  */
-interface StockChannelInterface extends ExtensibleDataInterface
+interface SalesChannelInterface extends ExtensibleDataInterface
 {
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const STOCK_CHANNEL_ID = 'stock_channel_id';
+    const ID = 'id';
     const TYPE = 'type';
     const CODE = 'code';
-    const STOCK_ID = 'stock_id';
     /**#@-*/
 
+    const TYPE_WEBSITE = 'website';
+
     /**
-     * Get stock id
+     * Get sales channel id
      *
      * @return int|null
      */
-    public function getStockChannelId();
+    public function getSalesChannellId();
 
     /**
-     * Set stock channel id
+     * Set sales channel id
      *
-     * @param int|null $stockChannelId
+     * @param int $salesChannelId
      * @return void
      */
-    public function setStockChannelId($stockChannelId);
+    public function setSalesChannelId(int $salesChannelId);
 
     /**
-     * Get stock channel type
+     * Get sales channel type
      *
-     * @return int|null
+     * @return string|null
      */
     public function getType();
 
     /**
-     * Set stock channel type
+     * Set sales channel type
      *
-     * @param int|null $type
+     * @param string $type
      * @return void
      */
-    public function setType($type);
+    public function setType(string $type);
 
     /**
-     * Get stock channel code
+     * Get sales channel code
      *
      * @return string|null
      */
     public function getCode();
 
     /**
-     * Set stock channel code
+     * Set sales channel code
      *
-     * @param string|null $code
+     * @param string $code
      * @return void
      */
-    public function setCode($code);
+    public function setCode(string $code);
 
-    /**
-     * Get stock id
-     *
-     * @return int|null
-     */
-    public function getStockId();
-
-    /**
-     * Set stock id
-     *
-     * @param int|null $stockId
-     * @return void
-     */
-    public function setStockId($stockId);
 }

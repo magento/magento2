@@ -7,36 +7,39 @@ namespace Magento\InventorySales\Setup\Operation;
 
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\InventorySales\Model\ResourceModel\StockChannel as StockChannelResourceModel;
-use Magento\InventorySalesApi\Api\Data\StockChannelInterface;
+use Magento\InventorySales\Model\ResourceModel\SalesChannel as SalesChannelResourceModel;
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
-class CreateStockChannelTable
+class CreateSalesChannelTable
 {
+
+    const STOCK_ID = 'stock_id';
+
     /**
      * @param SchemaSetupInterface $setup
      * @return void
      */
     public function execute(SchemaSetupInterface $setup)
     {
-        $stockChannelTable = $this->createStockChannelTable($setup);
+        $salesChannelTable = $this->createSalesChannelTable($setup);
 
-        $setup->getConnection()->createTable($stockChannelTable);
+        $setup->getConnection()->createTable($salesChannelTable);
     }
 
     /**
      * @param SchemaSetupInterface $setup
      * @return Table
      */
-    private function createStockChannelTable(SchemaSetupInterface $setup): Table
+    private function createSalesChannelTable(SchemaSetupInterface $setup): Table
     {
-        $stockChannelTable = $setup->getTable(StockChannelResourceModel::TABLE_NAME_STOCK_CHANNEL);
+        $salesChannelTable = $setup->getTable(SalesChannelResourceModel::TABLE_NAME_SALES_CHANNEL);
 
         return $setup->getConnection()->newTable(
-            $stockChannelTable
+            $salesChannelTable
         )->setComment(
             'Inventory Stock Channel Table'
         )->addColumn(
-            StockChannelInterface::STOCK_CHANNEL_ID,
+            SalesChannelInterface::ID,
             Table::TYPE_INTEGER,
             null,
             [
@@ -47,23 +50,23 @@ class CreateStockChannelTable
             ],
             'Stock Channel ID'
         )->addColumn(
-            StockChannelInterface::TYPE,
-            Table::TYPE_SMALLINT,
-            null,
+            SalesChannelInterface::TYPE,
+            Table::TYPE_TEXT,
+            64,
             [
                 Table::OPTION_NULLABLE => false,
             ],
             'Stock Channel Type'
         )->addColumn(
-            StockChannelInterface::CODE,
+            SalesChannelInterface::CODE,
             Table::TYPE_TEXT,
-            255,
+            64,
             [
                 Table::OPTION_NULLABLE => false,
             ],
             'Stock Channel Code'
         )->addColumn(
-            StockChannelInterface::STOCK_ID,
+            self::STOCK_ID,
             Table::TYPE_INTEGER,
             null,
             [
