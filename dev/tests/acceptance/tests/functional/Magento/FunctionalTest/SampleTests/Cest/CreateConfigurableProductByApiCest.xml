@@ -58,12 +58,18 @@
                 <required-entity createDataKey="childProductHandle1"/>
                 <required-entity createDataKey="baseConfigProductHandle"/>
             </createData>
-            <!--Uncomment this when MQE-472 is fixed-->
-            <!--createData mergeKey="configProductHandle2" entity="ConfigurableProductAddChild">
+            <createData mergeKey="configProductHandle2" entity="ConfigurableProductAddChild">
                 <required-entity createDataKey="childProductHandle2"/>
                 <required-entity createDataKey="baseConfigProductHandle"/>
-            </createData-->
+            </createData>
         </before>
+        <after>
+            <deleteData mergeKey="d2" createDataKey="childProductHandle1"/>
+            <deleteData mergeKey="d3" createDataKey="childProductHandle2"/>
+            <deleteData mergeKey="d7" createDataKey="baseConfigProductHandle"/>
+            <deleteData mergeKey="d8" createDataKey="categoryHandle"/>
+            <deleteData mergeKey="d6" createDataKey="productAttributeHandle"/>
+        </after>
         <test name="CreateConfigurableProductByApiTest">
         </test>
     </cest>
