@@ -68,6 +68,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
      * @param string $version
      * @param string $lastViewVersion
      * @dataProvider isVisibleProvider
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testIsVisible($expected, $variableName, $callNum, $version, $lastViewVersion = null)
     {
