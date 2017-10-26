@@ -72,10 +72,10 @@ class IpValidator
                 continue;
             }
 
-            $cidr = 32;
+            $subnetMask = 32;
             $ip = $range;
             if (strpos($range, '/') !== false) {
-                list($ip, $cidr) = explode('/', $range);
+                list($ip, $subnetMask) = explode('/', $range);
             }
 
             $ipValidator = new \Zend\Validator\Ip();
@@ -86,7 +86,7 @@ class IpValidator
 
             $ipv4Validator = new \Zend\Validator\Ip(['allowipv6' => false]);
             $maxBits = $ipv4Validator->isValid($ip) ? 32 : 128;
-            if ($cidr < 0 || $cidr > $maxBits) {
+            if ($subnetMask < 0 || $subnetMask > $maxBits) {
                 $this->invalidIps[] = $range;
                 continue;
             }
