@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="sampleBraintreeConfig" type="braintree_config_state">
+        <required-entity type="title">sampleTitle</required-entity>
+        <required-entity type="payment_action">samplePaymentAction</required-entity>
+        <required-entity type="environment">sampleEnvironment</required-entity>
+        <required-entity type="merchant_id">sampleMerchantId</required-entity>
+        <required-entity type="public_key">samplePublicKey</required-entity>
+        <required-entity type="private_key">samplePrivateKey</required-entity>
+    </entity>
+    <entity name="sampleTitle" type="title">
+        <data key="value">Sample Braintree Config</data>
+    </entity>
+    <entity name="samplePaymentAction" type="payment_action">
+        <data key="value">authorize</data>
+    </entity>
+    <entity name="sampleEnvironment" type="environment">
+        <data key="value">sandbox</data>
+    </entity>
+    <entity name="sampleMerchantId" type="merchant_id">
+        <data key="value">someMerchantId</data>
+    </entity>
+    <entity name="samplePublicKey" type="public_key">
+        <data key="value">somePublicKey</data>
+    </entity>
+    <entity name="samplePrivateKey" type="private_key">
+        <data key="value">somePrivateKey</data>
+    </entity>
+</config>

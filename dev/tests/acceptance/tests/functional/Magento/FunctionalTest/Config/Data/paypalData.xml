@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="samplePaypalConfig" type="paypal_config_state">
+        <required-entity type="business_account">sampleBusinessAccount</required-entity>
+        <required-entity type="api_username">sampleApiUsername</required-entity>
+        <required-entity type="api_password">sampleApiPassword</required-entity>
+        <required-entity type="api_signature">sampleApiSignature</required-entity>
+        <required-entity type="api_authentication">sampleApiAuthentication</required-entity>
+        <required-entity type="sandbox_flag">sampleSandboxFlag</required-entity>
+        <required-entity type="use_proxy">sampleUseProxy</required-entity>
+    </entity>
+    <entity name="sampleBusinessAccount" type="business_account">
+        <data key="value">myBusinessAccount@magento.com</data>
+    </entity>
+    <entity name="sampleApiUsername" type="api_username">
+        <data key="value">myApiUsername.magento.com</data>
+    </entity>
+    <entity name="sampleApiPassword" type="api_password">
+        <data key="value">somePassword</data>
+    </entity>
+    <entity name="sampleApiSignature" type="api_signature">
+        <data key="value">someApiSignature</data>
+    </entity>
+    <entity name="sampleApiAuthentication" type="api_authentication">
+        <data key="value">0</data>
+    </entity>
+    <entity name="sampleSandboxFlag" type="sandbox_flag">
+        <data key="value">0</data>
+    </entity>
+    <entity name="sampleUseProxy" type="use_proxy">
+        <data key="value">0</data>
+    </entity>
+</config>
