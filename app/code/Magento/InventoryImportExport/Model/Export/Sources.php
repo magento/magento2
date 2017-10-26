@@ -6,11 +6,10 @@
 
 namespace Magento\InventoryImportExport\Model\Export;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Eav\Model\Entity\AttributeFactory;
 use Magento\ImportExport\Model\Export\AbstractEntity;
 use Magento\Inventory\Model\ResourceModel\SourceItemFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-
 
 /**
  * @inheritdoc
@@ -18,16 +17,15 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 class Sources extends AbstractEntity
 {
 
-    /**#@+
-     * Attribute collection name
-     */
-    const ATTRIBUTE_COLLECTION_NAME = \Magento\Inventory\Model\ResourceModel\SourceItem\Collection::class;
-
     /**
      * @var SourceItemFactory
      */
     private $sourceItemFactory;
 
+    /**
+     * @var AttributeFactory
+     */
+    private $attributeFactory;
 
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -35,22 +33,39 @@ class Sources extends AbstractEntity
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory,
         SourceItemFactory $sourceItemFactory,
+        AttributeFactory $attributeFactory,
         array $data = []
     ) {
-
         $this->sourceItemFactory = $sourceItemFactory;
+        $this->attributeFactory =  $attributeFactory;
         parent::__construct($scopeConfig, $storeManager, $collectionFactory, $resourceColFactory, $data);
     }
 
     /**
-     * @return \Magento\Framework\Data\Collection|void
+     * @inheritdoc
      */
     public function getAttributeCollection()
     {
-        $objectManager = ObjectManager::getInstance();
-        /**  @var \Magento\Framework\DataObject $dataObject * */
-        $dataObject = $objectManager->create('\Magento\Framework\DataObject');
-        $this->_attributeCollection->addItem($dataObject);
+        if (count($this->_attributeCollection) === 0) {
+            /** @var   \Magento\Eav\Model\Entity\Attribute $skuAttribute */
+            $skuAttribute = $this->attributeFactory->create();
+            $skuAttribute->setDefaultFrontendLabel(SourceItemInterface::SKU);
+            $skuAttribute->setAttributeCode(SourceItemInterface::SKU);
+            $this->_attributeCollection->addItem($skuAttribute);
+
+            /** @var   \Magento\Eav\Model\Entity\Attribute   $sourceIdAttribute */
+            $sourceIdAttribute = $this->attributeFactory->create();
+            $sourceIdAttribute->setDefaultFrontendLabel(SourceItemInterface::SOURCE_ID);
+            $sourceIdAttribute->setAttributeCode(SourceItemInterface::SOURCE_ID);
+            $this->_attributeCollection->addItem($sourceIdAttribute);
+
+            /** @var   \Magento\Eav\Model\Entity\Attribute $skuAttribute */
+            $quantityAttribute = $this->attributeFactory->create();
+            $quantityAttribute->setDefaultFrontendLabel(SourceItemInterface::QUANTITY);
+            $quantityAttribute->setAttributeCode(SourceItemInterface::QUANTITY);
+            $this->_attributeCollection->addItem($quantityAttribute);
+        }
+
         return $this->_attributeCollection;
     }
 
@@ -61,7 +76,7 @@ class Sources extends AbstractEntity
      */
     public function export()
     {
-        return 'teststtststststtsts';
+
     }
 
     /**
