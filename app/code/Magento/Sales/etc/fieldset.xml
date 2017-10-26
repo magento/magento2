@@ -488,6 +488,7 @@
             </field>
             <field name="discount_description">
                 <aspect name="to_invoice" />
+                <aspect name="to_cm"/>
             </field>
             <field name="shipping_amount">
                 <aspect name="to_quote_address_shipping" />
