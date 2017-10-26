@@ -18,17 +18,17 @@ class BackorderStockStatusPlugin
     /**
      * @var StockItemRepository
      */
-    protected $stockItemRepository;
+    private $stockItemRepository;
 
     /**
      * @var StockItemCriteriaInterfaceFactory
      */
-    protected $stockItemCriteriaFactory;
+    private $stockItemCriteriaFactory;
 
     /**
      * @var ProductRepository
      */
-    protected $productRepository;
+    private $productRepository;
 
     public function __construct(
         StockItemRepository $stockItemRepository,

@@ -21,17 +21,17 @@ class IsBackorderedProductInStockTest extends TestCase
     /**
      * @var ProductRepository
      */
-    protected $productRepository;
+    private $productRepository;
 
     /**
      * @var GetProductQuantityInStockInterface
      */
-    protected $isProductInStock;
+    private $isProductInStock;
 
     /**
      * @var StockItemRepositoryInterface
      */
-    protected $stockItemRepository;
+    private $stockItemRepository;
 
     /**
      * @var StockItemCriteriaInterfaceFactory
