@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventorySales\Model\OptionSource;
 
 use Magento\Framework\Data\OptionSourceInterface;
@@ -10,11 +12,10 @@ use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 
 /**
- * Provide option values for UI
+ * @api
  */
 class WebsiteSource implements OptionSourceInterface
 {
-
     /**
      * @var WebsiteRepositoryInterface
      */
@@ -25,15 +26,14 @@ class WebsiteSource implements OptionSourceInterface
      */
     public function __construct(
         WebsiteRepositoryInterface $websiteRepository
-    )
-    {
+    ) {
         $this->websiteRepository = $websiteRepository;
     }
 
     /**
      * @inheritdoc
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         $websites = [];
         foreach ($this->websiteRepository->getList() as $website) {
@@ -45,8 +45,6 @@ class WebsiteSource implements OptionSourceInterface
                 'label' => $website->getName()
             ];
         }
-
         return $websites;
     }
-
 }
