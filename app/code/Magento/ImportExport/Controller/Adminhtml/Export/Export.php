@@ -48,7 +48,9 @@ class Export extends ExportController
      */
     public function execute()
     {
-        if ($this->getRequest()->getPost(ExportModel::FILTER_ELEMENT_GROUP)) {
+        $post = $this->getRequest()->getPost(ExportModel::FILTER_ELEMENT_GROUP);
+
+        if ($post) {
             try {
                 /** @var $model \Magento\ImportExport\Model\Export */
                 $model = $this->_objectManager->create(\Magento\ImportExport\Model\Export::class);

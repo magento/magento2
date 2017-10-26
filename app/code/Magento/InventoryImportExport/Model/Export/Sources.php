@@ -6,7 +6,11 @@
 
 namespace Magento\InventoryImportExport\Model\Export;
 
-use Magento\ImportExport\Model\Export\Entity\AbstractEntity;
+use Magento\Framework\App\ObjectManager;
+use Magento\ImportExport\Model\Export\AbstractEntity;
+use Magento\Inventory\Model\ResourceModel\SourceItemFactory;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+
 
 /**
  * @inheritdoc
@@ -14,54 +18,95 @@ use Magento\ImportExport\Model\Export\Entity\AbstractEntity;
 class Sources extends AbstractEntity
 {
 
-    /**
-     * Get header columns
-     *
-     * @return string[]
+    /**#@+
+     * Attribute collection name
      */
-    protected function _getHeaderColumns()
-    {
-        // TODO: Implement _getHeaderColumns() method.
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Inventory\Model\ResourceModel\SourceItem\Collection::class;
+
+    /**
+     * @var SourceItemFactory
+     */
+    private $sourceItemFactory;
+
+
+    public function __construct(
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\ImportExport\Model\Export\Factory $collectionFactory,
+        \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory,
+        SourceItemFactory $sourceItemFactory,
+        array $data = []
+    ) {
+
+        $this->sourceItemFactory = $sourceItemFactory;
+        parent::__construct($scopeConfig, $storeManager, $collectionFactory, $resourceColFactory, $data);
     }
 
     /**
-     * Get entity collection
-     *
-     * @param bool $resetCollection
-     * @return \Magento\Framework\Data\Collection\AbstractDb
+     * @return \Magento\Framework\Data\Collection|void
      */
-    protected function _getEntityCollection($resetCollection = false)
+    public function getAttributeCollection()
     {
-        // TODO: Implement _getEntityCollection() method.
+        $objectManager = ObjectManager::getInstance();
+        /**  @var \Magento\Framework\DataObject $dataObject * */
+        $dataObject = $objectManager->create('\Magento\Framework\DataObject');
+        $this->_attributeCollection->addItem($dataObject);
+        return $this->_attributeCollection;
     }
 
     /**
-     * Export process.
+     * Export process
      *
      * @return string
      */
     public function export()
     {
-        // TODO: Implement export() method.
+        return 'teststtststststtsts';
     }
 
     /**
-     * Entity attributes collection getter.
+     * Export one item
      *
-     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
+     * @param \Magento\Framework\Model\AbstractModel $item
+     * @return void
      */
-    public function getAttributeCollection()
+    public function exportItem($item)
     {
-        // TODO: Implement getAttributeCollection() method.
+        // TODO: Implement exportItem() method.
     }
 
     /**
-     * EAV entity type code getter.
+     * Entity type code getter
      *
      * @return string
      */
     public function getEntityTypeCode()
     {
-        // TODO: Implement getEntityTypeCode() method.
+      return 'stock_sources';
+    }
+
+    /**
+     * Get header columns
+     *
+     * @return array
+     */
+    protected function _getHeaderColumns()
+    {
+        return [
+            SourceItemInterface::SOURCE_ID,
+            SourceItemInterface::SKU,
+            SourceItemInterface::STATUS,
+            SourceItemInterface::QUANTITY
+        ];
+    }
+
+    /**
+     * Get entity collection
+     *
+     * @return \Magento\Framework\Data\Collection\AbstractDb
+     */
+    protected function _getEntityCollection()
+    {
+        return $this->sourceItemFactory->create();
     }
 }
