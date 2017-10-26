@@ -37,18 +37,18 @@ class WebsiteSource implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        $websiteData = [];
+        $websites = [];
         foreach ($this->websiteRepository->getList() as $website) {
             if ($website->getCode() === WebsiteInterface::ADMIN_CODE) {
-              continue;
+                continue;
             }
-            $websiteData[] = [
+            $websites[] = [
                 'value' => $website->getCode(),
                 'label' => $website->getName()
             ];
         }
 
-        return $websiteData;
+        return $websites;
     }
 
 }
