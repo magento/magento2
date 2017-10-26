@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\InventoryApi\Api\IsProductInStockInterface">
-        <plugin name="backorderInventoryStockStatus" type="Magento\InventorySales\Plugin\Model\BackorderStockStatusPlugin"/>
+        <plugin name="backorder_inventory_stock_status" type="Magento\InventorySales\Plugin\Model\BackorderStockStatusPlugin"/>
     </type>
 </config>

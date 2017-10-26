@@ -3,11 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace  Magento\InventorySales\Test\Integration\Stock;
+namespace Magento\InventorySales\Test\Integration\Stock;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ProductRepository;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
@@ -48,9 +47,9 @@ class IsBackorderedProductInStockTest extends TestCase
     private $indexer;
 
     /**
-     * @var ProductRepository
+     * @var ProductRepositoryInterface
      */
-    private $productRepository;
+    private $productRepositoryInterface;
 
     /**
      * @var GetProductQuantityInStockInterface
@@ -69,7 +68,7 @@ class IsBackorderedProductInStockTest extends TestCase
 
     protected function setUp()
     {
-        $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
+        $this->productRepositoryInterface = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->stockItemRepository =  Bootstrap::getObjectManager()->create(StockItemRepositoryInterface::class);
         $this->stockItemCriteriaInterfaceFactory =  Bootstrap::getObjectManager()->create(
             StockItemCriteriaInterfaceFactory::class
@@ -95,7 +94,7 @@ class IsBackorderedProductInStockTest extends TestCase
     public function testBackorderedZeroQtyProductIsInStock()
     {
         /** @var ProductInterface $product */
-        $product = $this->productRepository->get(self::PRODUCT_SKU);
+        $product = $this->productRepositoryInterface->get(self::PRODUCT_SKU);
         $stockItemSearchCriteria = $this->stockItemCriteriaInterfaceFactory->create();
         $stockItemSearchCriteria->setProductsFilter($product->getId());
         $stockItemsCollection = $this->stockItemRepository->getList($stockItemSearchCriteria);
@@ -103,6 +102,7 @@ class IsBackorderedProductInStockTest extends TestCase
         /** @var StockItemInterface $stockItem */
         $stockItem = current($stockItemsCollection->getItems());
         $stockItem->setBackorders(1);
+        $stockItem->setUseConfigBackorders(0);
         $this->stockItemRepository->save($stockItem);
 
         $sourceItem = $this->getSourceItemBySKU(self::PRODUCT_SKU);
@@ -131,7 +131,7 @@ class IsBackorderedProductInStockTest extends TestCase
      * @param string $sku
      * @return SourceItemInterface
      */
-    private function getSourceItemBySKU(string $sku)
+    private function getSourceItemBySKU(string $sku): SourceItemInterface
     {
         /** @var SearchCriteriaInterface $sourceItemSearchCriteria */
         $sourceItemSearchCriteria = $this->searchCriteriaBuilder->addFilter('sku', $sku)->create();
@@ -143,9 +143,9 @@ class IsBackorderedProductInStockTest extends TestCase
 
     /**
      * @param SourceItemInterface $sourceItem
-     * @param $qty
+     * @param float $qty
      */
-    private function changeSourceItemQty(SourceItemInterface $sourceItem, $qty)
+    private function changeSourceItemQty(SourceItemInterface $sourceItem, float $qty)
     {
         $sourceItem->setQuantity($qty);
         $this->sourceItemsSaveInterface->execute([$sourceItem]);

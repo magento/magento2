@@ -66,7 +66,7 @@ class BackorderStockStatusPlugin
         /** @var Item $stockItem */
         $stockItem = current($stockItemsCollection->getItems());
 
-        if ($stockItem->getData('backorders') > 0) {
+        if ($stockItem->getBackorders() > 0) {
             return true;
         }
 
