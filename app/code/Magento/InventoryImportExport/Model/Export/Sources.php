@@ -89,6 +89,7 @@ class Sources extends AbstractEntity
      * Export process
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function export()
     {
@@ -113,11 +114,49 @@ class Sources extends AbstractEntity
 
     /**
      * @param Collection $collection
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function applyFilters(Collection $collection)
     {
         foreach ($this->retrieveFilterDataFromRequest() as $columnName => $value) {
-            $collection->addFilter($columnName, $value);
+            $attributeDefinition = $this->getAttributeCollection()->getItemById($columnName);
+            $type = null;
+            if ($attributeDefinition) {
+                $type = $attributeDefinition->getData('backend_type');
+            }
+
+            if (is_array($value)) {
+                $from = $value[0] ?? null;
+                $to = $value[0] ?? null;
+
+                if (in_array($type, ['int', 'decimal'], true)) {
+                    if (is_numeric($from) && !empty($from)) {
+                        $collection->addFieldToFilter($columnName, ['from' => $from]);
+                    }
+                    if (is_numeric($to) && !empty($to)) {
+                        $collection->addFieldToFilter($columnName, ['from' => $to]);
+                    }
+                    continue;
+                }
+
+                if ($type === 'datetime') {
+                    $from = $value[0] ?? null;
+                    $to = $value[0] ?? null;
+                    if (is_scalar($from) && !empty($from)) {
+                        $date = (new \DateTime($from))->format('m/d/Y');
+                        $collection->addFieldToFilter($columnName, ['from' => $date, 'date' => true]);
+                    }
+                    if (is_scalar($to) && !empty($to)) {
+                        $date = (new \DateTime($to))->format('m/d/Y');
+                        $collection->addFieldToFilter($columnName, ['to' => $date, 'date' => true]);
+                    }
+                    continue;
+                }
+
+                continue;
+            }
+
+            $collection->addFieldToFilter($columnName, ['like' => '%' . $value . '%']);
         }
     }
 
