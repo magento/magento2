@@ -14,7 +14,9 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 class CreateSalesChannelTable
 {
-
+    /**
+     * Constant for key of data array. It is defined here because it's not part of the interface.
+     */
     const STOCK_ID = 'stock_id';
 
     /**
@@ -24,7 +26,6 @@ class CreateSalesChannelTable
     public function execute(SchemaSetupInterface $setup)
     {
         $salesChannelTable = $this->createSalesChannelTable($setup);
-
         $setup->getConnection()->createTable($salesChannelTable);
     }
 
@@ -39,7 +40,7 @@ class CreateSalesChannelTable
         return $setup->getConnection()->newTable(
             $salesChannelTable
         )->setComment(
-            'Inventory Stock Channel Table'
+            'Inventory Sales Channel Table'
         )->addColumn(
             SalesChannelInterface::ID,
             Table::TYPE_INTEGER,
@@ -50,7 +51,7 @@ class CreateSalesChannelTable
                 Table::OPTION_NULLABLE => false,
                 Table::OPTION_PRIMARY => true,
             ],
-            'Stock Channel ID'
+            'Sales Channel ID'
         )->addColumn(
             SalesChannelInterface::TYPE,
             Table::TYPE_TEXT,
@@ -58,7 +59,7 @@ class CreateSalesChannelTable
             [
                 Table::OPTION_NULLABLE => false,
             ],
-            'Stock Channel Type'
+            'Sales Channel Type'
         )->addColumn(
             SalesChannelInterface::CODE,
             Table::TYPE_TEXT,
@@ -66,7 +67,7 @@ class CreateSalesChannelTable
             [
                 Table::OPTION_NULLABLE => false,
             ],
-            'Stock Channel Code'
+            'Sales Channel Code'
         )->addColumn(
             self::STOCK_ID,
             Table::TYPE_INTEGER,
@@ -76,7 +77,7 @@ class CreateSalesChannelTable
                 Table::OPTION_UNSIGNED => true,
             ],
             'Stock Id'
-        )->addForeignKey($setup->getFkName('inventory_stock_channel', 'stock_id', 'inventory_stock', 'stock_id'),
+        )->addForeignKey($setup->getFkName('inventory_stock_sales_channel', 'stock_id', 'inventory_stock', 'stock_id'),
             'stock_id',
             $setup->getTable('inventory_stock'),
             'stock_id',

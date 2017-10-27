@@ -26,7 +26,7 @@ namespace Magento\InventorySales\Model;
 interface GetSalesChannelsByStockInterface
 {
     /**
-     * Get Sales Channel data by given stockId.
+     * Get linked sales channels data for given stockId.
      *
      * @param int $stockId
      * @return SalesChannelInterface[]
