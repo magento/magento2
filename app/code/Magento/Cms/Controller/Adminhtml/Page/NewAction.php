@@ -6,6 +6,10 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
+/**
+ * Class NewAction
+ * @package Magento\Cms\Controller\Adminhtml\Page
+ */
 class NewAction extends \Magento\Backend\App\Action
 {
     /**

@@ -8,6 +8,8 @@ namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 use Magento\Cms\Controller\Adminhtml\Page\InlineEdit;
 
 /**
+ * Class InlineEditTest
+ * @package Magento\Cms\Test\Unit\Controller\Adminhtml\Page
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InlineEditTest extends \PHPUnit\Framework\TestCase

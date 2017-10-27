@@ -6,8 +6,19 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-class NewAction extends \Magento\Cms\Controller\Adminhtml\Block
+/**
+ * Class NewAction
+ * @package Magento\Cms\Controller\Adminhtml\Block
+ */
+class NewAction extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::block';
+
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
@@ -15,26 +26,24 @@ class NewAction extends \Magento\Cms\Controller\Adminhtml\Block
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
         $this->resultForwardFactory = $resultForwardFactory;
-        parent::__construct($context, $coreRegistry);
+        parent::__construct($context);
     }
 
     /**
-     * Create new CMS block
+     * Forward to edit
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return \Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();
         return $resultForward->forward('edit');
     }
