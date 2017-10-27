@@ -200,7 +200,7 @@ switch ($type = $block->getType()) {
                         <?= /* @escapeNotVerified */ $block->getProductPrice($_item) ?>
 
                             <?php if ($templateType): ?>
-                                <?= $block->getReviewsSummaryHtml($_item, $templateType) ?>
+                                <?= $block->getReviewsSummaryHtml($_item, $templateType, true) ?>
                             <?php endif; ?>
 
                             <?php if ($canItemsAddToCart && !$_item->isComposite() && $_item->isSaleable() && $type == 'related'): ?>
