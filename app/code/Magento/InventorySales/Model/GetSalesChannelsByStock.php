@@ -17,13 +17,22 @@ class GetSalesChannelsByStock implements GetSalesChannelsByStockInterface
     private $salesChannelsProvider;
 
     /**
+     * @var SalesChannelFactory
+     */
+    private $salesChannelFactory;
+
+    /**
      * GetSalesChannelsByStock constructor.
+     *
      * @param SalesChannelsProvider $salesChannelsProvider
+     * @param SalesChannelFactory $salesChannelFactory
      */
     public function __construct(
-        SalesChannelsProvider $salesChannelsProvider)
+        SalesChannelsProvider $salesChannelsProvider,
+        SalesChannelFactory $salesChannelFactory)
     {
         $this->salesChannelsProvider = $salesChannelsProvider;
+        $this->salesChannelFactory = $salesChannelFactory;
     }
 
     /**
@@ -39,7 +48,6 @@ class GetSalesChannelsByStock implements GetSalesChannelsByStockInterface
         foreach ($salesChannelItems as $channelItem)
         {
             $salesChannel = $this->salesChannelFactory->create();
-            $salesChannel->setSalesChannelId($channelItem['id']);
             $salesChannel->setType($channelItem['type']);
             $salesChannel->setCode($channelItem['code']);
             $linkedSalesChannels[] = $salesChannel;
