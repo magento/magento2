@@ -19,22 +19,14 @@ class SalesEventQuoteSubmitBeforeObserver implements ObserverInterface
     private $fieldsetConfig;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterface
-     */
-    private $order;
-
-    /**
      * SalesEventQuoteSubmitBeforeObserver constructor.
      *
      * @param \Magento\Framework\DataObject\Copy\Config $fieldsetConfig
-     * @param \Magento\Sales\Api\Data\OrderInterface $order
      */
     public function __construct(
-        \Magento\Framework\DataObject\Copy\Config $fieldsetConfig,
-        \Magento\Sales\Api\Data\OrderInterface $order
+        \Magento\Framework\DataObject\Copy\Config $fieldsetConfig
     ) {
         $this->fieldsetConfig = $fieldsetConfig;
-        $this->order = $order;
     }
 
     /**
@@ -52,15 +44,14 @@ class SalesEventQuoteSubmitBeforeObserver implements ObserverInterface
 
         $fields = $this->fieldsetConfig->getFieldset('sales_convert_quote', 'global');
 
-        $methods = get_class_methods($this->order);
+        $methods = get_class_methods($order);
 
         foreach ($fields as $code => $node) {
             $targetCode = (string)$node['to_order'];
             $targetCode = $targetCode == '*' ? $code : $targetCode;
 
             if (!in_array($this->getMethodName($targetCode), $methods)) {
-                $code2 = $quote->getData($code);
-                $order->setData($targetCode, $code2);
+                $order->setData($targetCode, $quote->getData($code));
             }
         }
 

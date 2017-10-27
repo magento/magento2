@@ -27,19 +27,13 @@ class SalesEventQuoteSubmitBeforeObserverTest extends \PHPUnit\Framework\TestCas
      */
     private $fieldsetConfig;
 
-    /**
-     * @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $order;
 
     protected function setUp()
     {
         $this->fieldsetConfig = $this->createPartialMock(Config::class, ['getFieldset']);
-        $this->order = $this->createPartialMockForAbstractClass(OrderInterface::class);
 
         $this->observer = new SalesEventQuoteSubmitBeforeObserver(
-            $this->fieldsetConfig,
-            $this->order
+            $this->fieldsetConfig
         );
     }
 
