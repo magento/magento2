@@ -3,12 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\InventorySalesApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\InventoryApi\Api\Data\StockExtensionInterface;
 
 /**
  * Represents sales channels (which are a linkage between stocks and websites, customer groups, etc.)
@@ -28,21 +26,6 @@ interface SalesChannelInterface extends ExtensibleDataInterface
     /**#@-*/
 
     const TYPE_WEBSITE = 'website';
-
-    /**
-     * Get sales channel id
-     *
-     * @return int|null
-     */
-    public function getSalesChannellId();
-
-    /**
-     * Set sales channel id
-     *
-     * @param int $salesChannelId
-     * @return void
-     */
-    public function setSalesChannelId(int $salesChannelId);
 
     /**
      * Get sales channel type
@@ -79,16 +62,16 @@ interface SalesChannelInterface extends ExtensibleDataInterface
      *
      * Null for return is specified for proper work SOAP requests parser
      *
-     * @return SalesChannelExtensionInterface|null
+     * @return \Magento\InventorySalesApi\Api\Data\SalesChannelExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object
      *
-     * @param SalesChannelExtensionInterface $extensionAttributes
+     * @param \Magento\InventorySalesApi\Api\Data\SalesChannelExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(SalesChannelExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes($extensionAttributes);
 
 }

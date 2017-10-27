@@ -9,6 +9,7 @@ namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\InventorySales\Setup\Operation\CreateSalesChannelTable;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
@@ -44,7 +45,7 @@ class StockResolver
         $connection = $this->resource->getConnection();
 
         $tableName = $this->resource->getTableName(
-            SalesChannel::TABLE_NAME_SALES_CHANNEL
+            CreateSalesChannelTable::TABLE_NAME_SALES_CHANNEL
         );
 
         $select = $connection->select()
