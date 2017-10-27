@@ -186,7 +186,7 @@ class Block extends AbstractDb
         if ($this->_storeManager->hasSingleStore()) {
             $stores = [Store::DEFAULT_STORE_ID];
         } else {
-            $stores = (array)$object->getData('stores');
+            $stores = (array)$object->getData('store_id');
         }
 
         $select = $this->getConnection()->select()
