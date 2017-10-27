@@ -14,6 +14,7 @@ use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection as SourceItemCollection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryImportExport\Model\Export\Source\StockStatus;
 
 /**
  * @inheritdoc
@@ -47,6 +48,7 @@ class Sources extends AbstractEntity
 
     /**
      * @inheritdoc
+     * @throws \Exception
      */
     public function getAttributeCollection()
     {
@@ -66,17 +68,20 @@ class Sources extends AbstractEntity
             $sourceIdAttribute->setBackendType('int');
             $this->_attributeCollection->addItem($sourceIdAttribute);
 
-            /** @var \Magento\Eav\Model\Entity\Attribute $statusIdAttribut */
+            /** @var \Magento\Eav\Model\Entity\Attribute $statusIdAttribute */
             $statusIdAttribute = $this->attributeFactory->create();
             $statusIdAttribute->setId(SourceItemInterface::STATUS);
             $statusIdAttribute->setDefaultFrontendLabel(SourceItemInterface::STATUS);
             $statusIdAttribute->setAttributeCode(SourceItemInterface::STATUS);
+            $statusIdAttribute->setBackendType('int');
+            $statusIdAttribute->setFrontendInput('select');
+            $statusIdAttribute->setSourceModel(StockStatus::class);
             $this->_attributeCollection->addItem($statusIdAttribute);
 
             /** @var \Magento\Eav\Model\Entity\Attribute $quantityAttribute */
             $quantityAttribute = $this->attributeFactory->create();
             $quantityAttribute->setId(SourceItemInterface::QUANTITY);
-            $sourceIdAttribute->setBackendType('decimal');
+            $quantityAttribute->setBackendType('decimal');
             $quantityAttribute->setDefaultFrontendLabel(SourceItemInterface::QUANTITY);
             $quantityAttribute->setAttributeCode(SourceItemInterface::QUANTITY);
             $this->_attributeCollection->addItem($quantityAttribute);
@@ -125,33 +130,89 @@ class Sources extends AbstractEntity
                 $type = $attributeDefinition->getData('backend_type');
             }
 
-            if (is_array($value)) {
-                $from = $value[0] ?? null;
-                $to = $value[1] ?? null;
+            $filterMethodName = 'applyFilterFor' . ucfirst($type);
+            if (method_exists($this, $filterMethodName)) {
+                $this->$filterMethodName($collection, $columnName, $value);
+            } else {
+                $this->applyDefaultFilter($collection, $columnName, $value);
+            }
+        }
+    }
 
-                if (in_array($type, ['int', 'decimal'], true)) {
-                    if (is_numeric($from) && !empty($from)) {
-                        $collection->addFieldToFilter($columnName, ['from' => $from]);
-                    }
-                    if (is_numeric($to) && !empty($to)) {
-                        $collection->addFieldToFilter($columnName, ['to' => $to]);
-                    }
-                } elseif ($type === 'datetime') {
-                    if (is_scalar($from) && !empty($from)) {
-                        $date = (new \DateTime($from))->format('m/d/Y');
-                        $collection->addFieldToFilter($columnName, ['from' => $date, 'date' => true]);
-                    }
-                    if (is_scalar($to) && !empty($to)) {
-                        $date = (new \DateTime($to))->format('m/d/Y');
-                        $collection->addFieldToFilter($columnName, ['to' => $date, 'date' => true]);
-                    }
-                }
+    /**
+     * @param Collection $collection
+     * @param string $columnName
+     * @param mixed $value
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function applyFilterForInt(Collection $collection, $columnName, $value)
+    {
+        if (is_array($value)) {
+            $from = $value[0] ?? null;
+            $to = $value[1] ?? null;
 
-                continue;
+            if (is_numeric($from) && !empty($from)) {
+                $collection->addFieldToFilter($columnName, ['from' => $from]);
             }
 
-            $collection->addFieldToFilter($columnName, ['like' => '%' . $value . '%']);
+            if (is_numeric($to) && !empty($to)) {
+                $collection->addFieldToFilter($columnName, ['to' => $to]);
+            }
+
+            return;
         }
+
+        $collection->addFieldToFilter($columnName, ['eq' => $value]);
+    }
+
+    /**
+     * @param Collection $collection
+     * @param string $columnName
+     * @param mixed $value
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function applyFilterForDecimal(Collection $collection, $columnName, $value)
+    {
+        $this->applyFilterForInt($collection, $columnName, $value);
+    }
+
+    /**
+     * @param Collection $collection
+     * @param string $columnName
+     * @param mixed $value
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function applyDefaultFilter(Collection $collection, $columnName, $value)
+    {
+        $collection->addFieldToFilter($columnName, ['like' => '%' . $value . '%']);
+    }
+
+    /**
+     * @param Collection $collection
+     * @param string $columnName
+     * @param mixed $value
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function applyFilterForDatetime(Collection $collection, $columnName, $value)
+    {
+        if (is_array($value)) {
+            $from = $value[0] ?? null;
+            $to = $value[1] ?? null;
+
+            if (is_scalar($from) && !empty($from)) {
+                $date = (new \DateTime($from))->format('m/d/Y');
+                $collection->addFieldToFilter($columnName, ['from' => $date, 'date' => true]);
+            }
+
+            if (is_scalar($to) && !empty($to)) {
+                $date = (new \DateTime($to))->format('m/d/Y');
+                $collection->addFieldToFilter($columnName, ['to' => $date, 'date' => true]);
+            }
+
+            return;
+        }
+
+        $this->applyDefaultFilter($collection, $columnName, $value);
     }
 
     /**
@@ -162,7 +223,7 @@ class Sources extends AbstractEntity
         return array_filter(
             $this->_parameters[Export::FILTER_ELEMENT_GROUP] ?? [],
             function($value) {
-                return !empty($value);
+                return $value !== '';
             }
         );
     }
