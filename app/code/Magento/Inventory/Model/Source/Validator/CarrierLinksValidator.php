@@ -30,6 +30,7 @@ class CarrierLinksValidator implements SourceValidatorInterface
 
     /**
      * @param ValidationResultFactory $validationResultFactory
+     * @param Config $shippingConfig
      */
     public function __construct(ValidationResultFactory $validationResultFactory, Config $shippingConfig)
     {
