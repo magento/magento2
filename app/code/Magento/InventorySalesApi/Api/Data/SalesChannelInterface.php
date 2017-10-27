@@ -79,16 +79,16 @@ interface SalesChannelInterface extends ExtensibleDataInterface
      *
      * Null for return is specified for proper work SOAP requests parser
      *
-     * @return StockExtensionInterface|null
+     * @return SalesChannelExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object
      *
-     * @param StockExtensionInterface $extensionAttributes
+     * @param SalesChannelExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(StockExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(SalesChannelExtensionInterface $extensionAttributes);
 
 }

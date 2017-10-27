@@ -9,6 +9,7 @@ namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventorySales\Model\SalesChannelFactory;
+use Magento\InventorySales\Setup\Operation\CreateSalesChannelTable;
 
 /**
  * Provides linked sales channels by given stock id.
@@ -47,7 +48,7 @@ class SalesChannelsProvider
         $connection = $this->resource->getConnection();
 
         $tableName = $this->resource->getTableName(
-            SalesChannel::TABLE_NAME_SALES_CHANNEL
+            CreateSalesChannelTable::TABLE_NAME_SALES_CHANNEL
         );
 
         $select = $connection->select()
