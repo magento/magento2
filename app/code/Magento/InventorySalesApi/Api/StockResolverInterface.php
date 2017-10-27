@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventorySalesApi\Api;
 
 use Magento\InventoryApi\Api\Data\StockInterface;
-use Magento\InventorySalesApi\Api\Data\StockChannelSearchResultsInterface;
 
 /**
  * In Magento 2 Repository considered as an implementation of Facade pattern which provides a simplified interface

@@ -5,6 +5,7 @@
  * Date: 26.10.17
  * Time: 11:53
  */
+declare(strict_types=1);
 
 namespace Magento\InventorySales\Model;
 
