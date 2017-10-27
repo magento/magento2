@@ -25,6 +25,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             throw new \Magento\Framework\Exception\InputException(__('Bad value was supplied.'));
         }
         try {
+            $this->_defaultIndexerResource->getTableStrategy()->setUseIdxTable(false);
             $this->_reindexRows($ids);
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
