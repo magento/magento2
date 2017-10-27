@@ -50,6 +50,50 @@ class CarrierLinkManagementTest extends WebapiAbstract
     }
 
     /**
+     * @return array
+     */
+    public function dataProviderCarrierLinks(): array
+    {
+        return [
+            'add_carrier_new_links' => [
+                [
+                    [
+                        SourceCarrierLinkInterface::CARRIER_CODE => 'ups',
+                        SourceCarrierLinkInterface::POSITION => 100,
+                    ],
+                    [
+                        SourceCarrierLinkInterface::CARRIER_CODE => 'usps',
+                        SourceCarrierLinkInterface::POSITION => 200,
+                    ],
+                    [
+                        SourceCarrierLinkInterface::CARRIER_CODE => 'dhl',
+                        SourceCarrierLinkInterface::POSITION => 300,
+                    ],
+                    [
+                        SourceCarrierLinkInterface::CARRIER_CODE => 'fedex',
+                        SourceCarrierLinkInterface::POSITION => 400,
+                    ],
+                ],
+            ],
+            'replace_carrier_links' => [
+                [
+                    [
+                        SourceCarrierLinkInterface::CARRIER_CODE => 'dhl',
+                        SourceCarrierLinkInterface::POSITION => 100,
+                    ],
+                    [
+                        SourceCarrierLinkInterface::CARRIER_CODE => 'fedex',
+                        SourceCarrierLinkInterface::POSITION => 200,
+                    ],
+                ],
+            ],
+            'delete_carrier_links' => [
+                [],
+            ],
+        ];
+    }
+
+    /**
      * @param int $sourceId
      * @param array $data
      * @return void
@@ -99,9 +143,9 @@ class CarrierLinkManagementTest extends WebapiAbstract
     }
 
     /**
-     * @param array $carrierLinks
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source.php
-     * @dataProvider dataProviderForValidationFailed
+     * @param array $carrierData
+     * @param array $expectedErrorData
+     * @dataProvider failedValidationDataProvider
      */
     public function testCarrierLinksValidation(array $carrierData, array $expectedErrorData)
     {
@@ -128,51 +172,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function dataProviderCarrierLinks(): array
-    {
-        return [
-            'add_carrier_new_links' => [
-                [
-                    [
-                        SourceCarrierLinkInterface::CARRIER_CODE => 'ups',
-                        SourceCarrierLinkInterface::POSITION => 100,
-                    ],
-                    [
-                        SourceCarrierLinkInterface::CARRIER_CODE => 'usps',
-                        SourceCarrierLinkInterface::POSITION => 200,
-                    ],
-                    [
-                        SourceCarrierLinkInterface::CARRIER_CODE => 'dhl',
-                        SourceCarrierLinkInterface::POSITION => 300,
-                    ],
-                    [
-                        SourceCarrierLinkInterface::CARRIER_CODE => 'fedex',
-                        SourceCarrierLinkInterface::POSITION => 400,
-                    ],
-                ],
-            ],
-            'replace_carrier_links' => [
-                [
-                    [
-                        SourceCarrierLinkInterface::CARRIER_CODE => 'dhl',
-                        SourceCarrierLinkInterface::POSITION => 100,
-                    ],
-                    [
-                        SourceCarrierLinkInterface::CARRIER_CODE => 'fedex',
-                        SourceCarrierLinkInterface::POSITION => 200,
-                    ],
-                ],
-            ],
-            'delete_carrier_links' => [
-                [],
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderForValidationFailed(): array
+    public function failedValidationDataProvider(): array
     {
         return [
             'use_global_configuration_chosen' => [
@@ -226,21 +226,20 @@ class CarrierLinkManagementTest extends WebapiAbstract
                     'message' => 'Validation Failed',
                     'errors' => [
                         [
-                            'message' => 'You can\'t configure  because carrier with code: "%carrier" don\'t exists.',
+                            'message' => 'Carrier with code: "%carrier" don\'t exists.',
                             'parameters' => [
                                 'carrier' => 'no_exists_1'
                             ],
                         ],
                         [
-                            'message' => 'You can\'t configure  because carrier with code: "%carrier" don\'t exists.',
+                            'message' => 'Carrier with code: "%carrier" don\'t exists.',
                             'parameters' => [
                                 'carrier' => 'no_exists_2'
                             ],
-                        ]
+                        ],
                     ],
                 ],
-            ]
-
+            ],
         ];
     }
 }

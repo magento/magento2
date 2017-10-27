@@ -68,7 +68,7 @@ class CarrierLinksValidator implements SourceValidatorInterface
         foreach ($carrierLinks as $carrierLink) {
             $carrierCode = $carrierLink->getCarrierCode();
             if (array_key_exists($carrierCode, $availableCarriers) === false) {
-                $errors[] = __('You can\'t configure  because carrier with code: "%carrier" don\'t exists.', [
+                $errors[] = __('Carrier with code: "%carrier" don\'t exists.', [
                     'carrier' => $carrierCode
                 ]);
             }
