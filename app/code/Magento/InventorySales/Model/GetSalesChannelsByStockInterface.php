@@ -29,7 +29,7 @@ interface GetSalesChannelsByStockInterface
      * Get Sales Channel data by given stockId.
      *
      * @param int $stockId
-     * @return array
+     * @return SalesChannelInterface[]
      */
     public function get(int $stockId): array;
 
