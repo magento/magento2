@@ -35,8 +35,7 @@ class SalesChannelDataAfterGetPlugin
     {
         /** @var StockExtension $extensionAttributes */
         $extensionAttributes = $result->getExtensionAttributes();
-
-        $salesChannelSearchResults = $this->getSalesChannelByStock->get($result->getStockId());
+        $salesChannelSearchResults = $this->getSalesChannelByStock->get((int)$result->getStockId());
         $extensionAttributes->setData('sales_channels', $salesChannelSearchResults);
         $result->setExtensionAttributes($extensionAttributes);
         return  $result;
