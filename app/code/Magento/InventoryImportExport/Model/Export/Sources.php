@@ -127,21 +127,16 @@ class Sources extends AbstractEntity
 
             if (is_array($value)) {
                 $from = $value[0] ?? null;
-                $to = $value[0] ?? null;
+                $to = $value[1] ?? null;
 
                 if (in_array($type, ['int', 'decimal'], true)) {
                     if (is_numeric($from) && !empty($from)) {
                         $collection->addFieldToFilter($columnName, ['from' => $from]);
                     }
                     if (is_numeric($to) && !empty($to)) {
-                        $collection->addFieldToFilter($columnName, ['from' => $to]);
+                        $collection->addFieldToFilter($columnName, ['to' => $to]);
                     }
-                    continue;
-                }
-
-                if ($type === 'datetime') {
-                    $from = $value[0] ?? null;
-                    $to = $value[0] ?? null;
+                } elseif ($type === 'datetime') {
                     if (is_scalar($from) && !empty($from)) {
                         $date = (new \DateTime($from))->format('m/d/Y');
                         $collection->addFieldToFilter($columnName, ['from' => $date, 'date' => true]);
@@ -150,7 +145,6 @@ class Sources extends AbstractEntity
                         $date = (new \DateTime($to))->format('m/d/Y');
                         $collection->addFieldToFilter($columnName, ['to' => $date, 'date' => true]);
                     }
-                    continue;
                 }
 
                 continue;
