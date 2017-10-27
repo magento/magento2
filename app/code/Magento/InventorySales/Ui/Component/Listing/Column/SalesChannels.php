@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\InventorySales\Ui\Component\Listing\Column;
@@ -15,7 +14,6 @@ use Magento\Ui\Component\Listing\Columns\Column;
  */
 class SalesChannels extends Column
 {
-
     /**
      * Prepare column value
      *
@@ -31,7 +29,6 @@ class SalesChannels extends Column
         }
         return $websiteData;
     }
-
 
     /**
      * Prepare data source
