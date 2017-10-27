@@ -62,6 +62,7 @@ class Sources extends AbstractEntity
             $sourceIdAttribute->setId(SourceItemInterface::SOURCE_ID);
             $sourceIdAttribute->setDefaultFrontendLabel(SourceItemInterface::SOURCE_ID);
             $sourceIdAttribute->setAttributeCode(SourceItemInterface::SOURCE_ID);
+            $sourceIdAttribute->setBackendType('int');
             $this->_attributeCollection->addItem($sourceIdAttribute);
 
             /** @var \Magento\Eav\Model\Entity\Attribute $statusIdAttribut */
@@ -74,6 +75,7 @@ class Sources extends AbstractEntity
             /** @var \Magento\Eav\Model\Entity\Attribute $quantityAttribute */
             $quantityAttribute = $this->attributeFactory->create();
             $quantityAttribute->setId(SourceItemInterface::QUANTITY);
+            $sourceIdAttribute->setBackendType('decimal');
             $quantityAttribute->setDefaultFrontendLabel(SourceItemInterface::QUANTITY);
             $quantityAttribute->setAttributeCode(SourceItemInterface::QUANTITY);
             $this->_attributeCollection->addItem($quantityAttribute);
