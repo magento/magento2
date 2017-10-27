@@ -11,6 +11,7 @@ use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
@@ -65,6 +66,7 @@ class AnchorUrlRewriteGenerator
                     $urls[] = $this->urlRewriteFactory->create()
                         ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                         ->setEntityId($product->getId())
+                        ->setRedirectType(OptionProvider::PERMANENT)
                         ->setRequestPath(
                             $this->urlPathGenerator->getUrlPathWithSuffix(
                                 $product,
