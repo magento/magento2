@@ -1606,6 +1606,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $storeId = 1;
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
 
+        $this->prepareDateTimeFactory();
+
         //Handle store
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
         $store->expects($this->any())
