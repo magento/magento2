@@ -11,6 +11,7 @@ namespace Magento\InventorySales\Model;
 
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
+use Magento\Inventory\Model\StockFactory;
 
 class StockResolver implements StockResolverInterface
 {
