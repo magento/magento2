@@ -41,14 +41,14 @@ class AttributeSetRepository
      * @param \Magento\Eav\Model\AttributeSetRepository $subject
      * @param callable $proceed
      * @param AttributeSetInterface $attributeSet
+     * @return bool
      */
     public function aroundDelete(
         \Magento\Eav\Model\AttributeSetRepository $subject,
         callable $proceed,
         AttributeSetInterface $attributeSet
     ) {
-        if (!isset($subject) || !$attributeSet->getAttributeSetId())
-        {
+        if (!isset($subject) || !$attributeSet->getAttributeSetId()) {
             return false;
         }
 
