@@ -717,12 +717,12 @@ class AccountManagement implements AccountManagementInterface
         }
         try {
             foreach ($customerAddresses as $address) {
-                 if ($address->getId()) {
+                if ($address->getId()) {
                     $newAddress = clone $address;
                     $newAddress->setId(null);
                     $newAddress->setCustomerId($customer->getId());
                     $this->addressRepository->save($newAddress);
-                 } else {
+                } else {
                     $address->setCustomerId($customer->getId());
                     $this->addressRepository->save($address);
                 }
@@ -1093,6 +1093,7 @@ class AccountManagement implements AccountManagementInterface
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
             ->setTemplateVars($templateParams)
+            ->setScopeId($storeId)
             ->setFrom($this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId))
             ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
             ->getTransport();

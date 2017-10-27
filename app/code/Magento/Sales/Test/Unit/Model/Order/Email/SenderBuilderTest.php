@@ -58,19 +58,23 @@ class SenderBuilderTest extends \PHPUnit_Framework_TestCase
             [
                 'getEmailIdentity', 'getCustomerEmail',
                 'getCustomerName', 'getTemplateOptions', 'getEmailCopyTo',
-                'getCopyMethod'
+                'getCopyMethod', 'getStore'
             ],
             [],
             '',
             false
         );
 
+        $this->identityContainerMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+
         $this->transportBuilder = $this->getMock(
             '\Magento\Framework\Mail\Template\TransportBuilder',
             [
                 'addTo', 'addBcc', 'getTransport',
                 'setTemplateIdentifier', 'setTemplateOptions', 'setTemplateVars',
-                'setFrom',
+                'setFrom'
             ],
             [],
             '',
