@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Inventory\Model\Source\Validator;
 
 use Magento\Framework\Validation\ValidationResult;
@@ -42,29 +43,47 @@ class CarrierLinks implements SourceValidatorInterface
     public function validate(SourceInterface $source): ValidationResult
     {
         $carrierLinks = $source->getCarrierLinks();
-
         $errors = [];
-        if (null !== $carrierLinks) {
-            if (!is_array($carrierLinks)) {
-                $errors[] = __('"%field" must be list of SourceCarrierLinkInterface.', [
-                    'field' => SourceInterface::CARRIER_LINKS
-                ]);
-            } elseif (count($carrierLinks) && $source->isUseDefaultCarrierConfig()) {
-                $errors[] = __('You can\'t configure "%field" because you have chosen Global Shipping configuration.', [
-                    'field' => SourceInterface::CARRIER_LINKS
-                ]);
-            }
 
-            $availableCarriers = $this->shippingConfig->getAllCarriers();
-            foreach ($carrierLinks as $carrierLink) {
-                $carrierCode = $carrierLink->getCarrierCode();
-                if (array_key_exists($carrierCode, $availableCarriers) === false) {
-                    $errors[] = __('You can\'t configure  because carrier with code: "%carrier" don\'t exists.', [
-                        'carrier' => $carrierCode
-                    ]);
-                }
+        if (null === $carrierLinks) {
+            return $this->buildValidationResult($errors);
+        }
+
+        if (!is_array($carrierLinks)) {
+            $errors[] = __('"%field" must be list of SourceCarrierLinkInterface.', [
+                'field' => SourceInterface::CARRIER_LINKS
+            ]);
+            return $this->buildValidationResult($errors);
+        }
+
+        if (count($carrierLinks) && $source->isUseDefaultCarrierConfig()) {
+            $errors[] = __('You can\'t configure "%field" because you have chosen Global Shipping configuration.', [
+                'field' => SourceInterface::CARRIER_LINKS
+            ]);
+            return $this->buildValidationResult($errors);
+        }
+
+        $availableCarriers = $this->shippingConfig->getAllCarriers();
+        foreach ($carrierLinks as $carrierLink) {
+            $carrierCode = $carrierLink->getCarrierCode();
+            if (array_key_exists($carrierCode, $availableCarriers) === false) {
+                $errors[] = __('You can\'t configure  because carrier with code: "%carrier" don\'t exists.', [
+                    'carrier' => $carrierCode
+                ]);
             }
         }
+
+        return $this->buildValidationResult($errors);
+    }
+
+    /**
+     * Build the ValidationResult by given errors.
+     *
+     * @param array $errors
+     * @return ValidationResult
+     */
+    private function buildValidationResult(array $errors): ValidationResult
+    {
         return $this->validationResultFactory->create(['errors' => $errors]);
     }
 }

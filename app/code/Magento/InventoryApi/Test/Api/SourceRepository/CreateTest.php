@@ -109,9 +109,28 @@ class CreateTest extends WebapiAbstract
             ],
         ];
 
+        $expectedErrorData = [
+            'message' => 'Validation Failed',
+            'errors' => [
+                [
+                    'message' => 'You can\'t configure  because carrier with code: "%carrier" don\'t exists.',
+                    'parameters' => [
+                        'carrier' => 'no_exists_1'
+                    ],
+                ],
+                [
+                    'message' => 'You can\'t configure  because carrier with code: "%carrier" don\'t exists.',
+                    'parameters' => [
+                        'carrier' => 'no_exists_2'
+                    ],
+                ]
+            ],
+        ];
+
         try {
             $this->_webApiCall($serviceInfo, ['source' => $expectedData]);
         } catch (\Exception $e) {
+            self::assertEquals($expectedErrorData, $this->processRestExceptionResult($e));
             self::assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
         }
     }
