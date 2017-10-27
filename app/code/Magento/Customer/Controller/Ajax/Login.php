@@ -57,6 +57,11 @@ class Login extends \Magento\Framework\App\Action\Action
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
+    
+    /**
+     * @var url
+     */
+    protected $_url;
 
     /**
      * Initialize Login controller
@@ -82,6 +87,7 @@ class Login extends \Magento\Framework\App\Action\Action
         $this->customerAccountManagement = $customerAccountManagement;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultRawFactory = $resultRawFactory;
+        $this->_url = $context->getUrl();
     }
 
     /**
@@ -172,6 +178,11 @@ class Login extends \Magento\Framework\App\Action\Action
             if (!$this->getScopeConfig()->getValue('customer/startup/redirect_dashboard') && $redirectRoute) {
                 $response['redirectUrl'] = $this->_redirect->success($redirectRoute);
                 $this->getAccountRedirect()->clearRedirectCookie();
+            }else{
+                if(isset($credentials['context']) && $credentials['context'] == 'checkout'){
+                    $response['redirectUrl'] = $this->_redirect->success($this->_url->getUrl('checkout', ['_secure' => true]));
+                    $this->getAccountRedirect()->clearRedirectCookie();
+                }
             }
         } catch (EmailNotConfirmedException $e) {
             $response = [
