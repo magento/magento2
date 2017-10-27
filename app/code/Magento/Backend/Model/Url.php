@@ -170,12 +170,12 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
 
         // backend specific checks 
         // if ($this->hasData('secure_is_forced') already processed in parent class
-        
+
         if ($this->_scopeConfig->isSetFlag('web/secure/use_in_adminhtml')) {
             if ($this->getRouteParamsResolver()->hasData('secure')) {
                 // we still respect options provided programatically as for secure request in parent class
                 return (bool) $this->getRouteParamsResolver()->getData('secure');
-            }    
+            }
             return true;
         } else {
             // if web/secure/use_in_adminhtml == 0 that means we do not care but not that HTTP should be used
