@@ -7,6 +7,7 @@
 namespace Magento\InventoryImportExport\Model\Export;
 
 use Magento\Eav\Model\Entity\AttributeFactory;
+use Magento\Framework\Data\Collection;
 use Magento\ImportExport\Model\Export;
 use Magento\ImportExport\Model\Export\AbstractEntity;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
@@ -98,12 +99,37 @@ class Sources extends AbstractEntity
         $collection = $this->sourceItemCollectionFactory->create();
         $collection->addFieldToSelect($columns);
 
+        $this->applyFilters($collection);
+
         foreach ($collection->getData() as $data) {
             unset($data[SourceItem::ID_FIELD_NAME]);
             $writer->writeRow($data);
         }
 
         return $writer->getContents();
+    }
+
+    /**
+     * @param Collection $collection
+     */
+    private function applyFilters(Collection $collection)
+    {
+        foreach ($this->retrieveFilterDataFromRequest() as $columnName => $value) {
+            $collection->addFilter($columnName, $value);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    private function retrieveFilterDataFromRequest()
+    {
+        return array_filter(
+            $this->_parameters[Export::FILTER_ELEMENT_GROUP] ?? [],
+            function($value) {
+                return !empty($value);
+            }
+        );
     }
 
     /**
@@ -143,7 +169,7 @@ class Sources extends AbstractEntity
      */
     public function exportItem($item)
     {
-        // will not implement it is legacy interface method
+        // will not implement this method as it is legacy interface
     }
 
     /**
@@ -163,6 +189,6 @@ class Sources extends AbstractEntity
      */
     protected function _getEntityCollection()
     {
-        // will not implement it is legacy interface method
+        // will not implement this method as it is legacy interface
     }
 }
