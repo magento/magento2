@@ -100,7 +100,7 @@ class RefundInvoiceTest extends \PHPUnit\Framework\TestCase
     private $orderMock;
 
     /**
-     * @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $invoiceMock;
 
@@ -186,6 +186,7 @@ class RefundInvoiceTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
+            ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -239,6 +240,9 @@ class RefundInvoiceTest extends \PHPUnit\Framework\TestCase
         $this->invoiceRepositoryMock->expects($this->once())
             ->method('get')
             ->willReturn($this->invoiceMock);
+        $this->invoiceMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($invoiceId);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->willReturn($this->orderMock);
