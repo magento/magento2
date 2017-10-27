@@ -175,26 +175,6 @@ class CarrierLinkManagementTest extends WebapiAbstract
     public function dataProviderForValidationFailed(): array
     {
         return [
-            'not_list_of_SourceCarrierLinkInterface' => [
-                [
-                    SourceInterface::NAME => 'source-name-1',
-                    SourceInterface::POSTCODE => 'source-postcode',
-                    SourceInterface::COUNTRY_ID => 'US',
-                    SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 0,
-                    SourceInterface::CARRIER_LINKS => 1222
-                ],
-                [
-                    'message' => 'Validation Failed',
-                    'errors' => [
-                        [
-                            'message' => '"%field" must be list of SourceCarrierLinkInterface.',
-                            'parameters' => [
-                                'field' => SourceInterface::CARRIER_LINKS,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
             'use_global_configuration_chosen' => [
                 [
                     SourceInterface::NAME => 'source-name-1',
