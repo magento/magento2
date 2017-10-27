@@ -27,7 +27,6 @@ class SalesChannels extends Column
         $websiteData = '';
         foreach ($salesChannelData as $key => $channelData) {
             $websiteData .= $key . ': ' . implode(',', $channelData);
-
         }
         return $websiteData;
     }
