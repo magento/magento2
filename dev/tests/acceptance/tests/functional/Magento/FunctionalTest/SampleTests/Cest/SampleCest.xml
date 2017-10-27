@@ -38,6 +38,7 @@
             <attachFile userInput="filename.php" selector="#stuff" mergeKey="attachFile"/>
             <cancelPopup mergeKey="cancelPopup"/>
             <checkOption selector="#checkbox" mergeKey="checkOption"/>
+            <clearField selector="#field" mergeKey="clearField"/>
             <click selector="#button" userInput="Context" mergeKey="click1"/>
             <click selectorArray="['link' => 'Login']" mergeKey="click2"/>
             <click selectorArray="['link' => 'Login']" userInput="stuff" mergeKey="click3"/>
