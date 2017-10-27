@@ -177,7 +177,7 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
             ->method('isAvailable')
             ->will($this->returnValue(true));
         $this->question
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('ask')
             ->will($this->returnValue(false));
         $this->helperSet

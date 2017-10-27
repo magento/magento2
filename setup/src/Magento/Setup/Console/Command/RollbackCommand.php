@@ -165,8 +165,11 @@ class RollbackCommand extends AbstractSetupCommand
             $inputOptionProvided = true;
         }
         if ($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE)) {
-            $rollbackHandler->codeRollback($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE), Factory::TYPE_MEDIA,
-                $keep);
+            $rollbackHandler->codeRollback(
+                $input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE),
+                Factory::TYPE_MEDIA,
+                $keep
+            );
             $inputOptionProvided = true;
         }
         if ($input->getOption(self::INPUT_KEY_DB_BACKUP_FILE)) {

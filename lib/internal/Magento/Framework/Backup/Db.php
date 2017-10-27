@@ -47,7 +47,7 @@ class Db extends AbstractBackup
         foreach ($file as $statement) {
             $this->getResourceModel()->runCommand($statement);
         }
-        if ($this->keepSourceFile()) {
+        if (!$this->keepSourceFile()) {
             @unlink($source);
         }
 
