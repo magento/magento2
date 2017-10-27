@@ -12,7 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
- * The resource model responsible for retrieving StockItem Quantity.
+ * This resource model is responsible for retrieving Stock items by sales channel type and code.
  * Used by Service Contracts that are agnostic to the Data Access Layer.
  */
 class StockResolver
@@ -32,12 +32,12 @@ class StockResolver
     }
 
     /**
-     * Given a product sku and a stock id, return stock item quantity.
+     * Returns the linked stock id by given a sales channel type and code.
      *
      * @param string $type
      * @param string $code
-     * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return int
      */
     public function resolve(string $type, string $code): int
     {

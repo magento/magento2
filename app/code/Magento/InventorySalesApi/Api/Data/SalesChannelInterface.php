@@ -8,9 +8,10 @@ declare(strict_types=1);
 namespace Magento\InventorySalesApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\InventoryApi\Api\Data\StockExtensionInterface;
 
 /**
- * Represents product aggregation among some different physical storages (in technical words, it is an index)
+ * Represents sales channels (which are a linkage between stocks and websites, customer groups, etc.)
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
@@ -72,5 +73,22 @@ interface SalesChannelInterface extends ExtensibleDataInterface
      * @return void
      */
     public function setCode(string $code);
+
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * Null for return is specified for proper work SOAP requests parser
+     *
+     * @return StockExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param StockExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(StockExtensionInterface $extensionAttributes);
 
 }

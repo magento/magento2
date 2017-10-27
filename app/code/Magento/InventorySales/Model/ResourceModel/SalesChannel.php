@@ -11,7 +11,7 @@ use Magento\Inventory\Model\ResourceModel\PredefinedId;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
- * Implementation of basic operations for Stock entity for specific db layer
+ * Implementation of basic operations for sales channel entity for specific db layer
  */
 class SalesChannel extends AbstractDb
 {
