@@ -47,7 +47,7 @@ class CustomerManagement
     }
 
     /**
-     * Populate customer model
+     * Populate customer model.
      *
      * @param Quote $quote
      * @return void
@@ -62,8 +62,6 @@ class CustomerManagement
                 $quote->getPasswordHash()
             );
             $quote->setCustomer($customer);
-        } else {
-            $this->customerRepository->save($customer);
         }
         if (!$quote->getBillingAddress()->getId() && $customer->getDefaultBilling()) {
             $quote->getBillingAddress()->importCustomerAddressData(
