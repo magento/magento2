@@ -8,7 +8,7 @@
 
 namespace Magento\Shipping\Model;
 
-use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
+use Magento\Shipping\Model\Carrier\CarrierInterface;
 
 /**
  * Class Config
@@ -61,7 +61,7 @@ class Config extends \Magento\Framework\DataObject
      * Retrieve active system carriers
      *
      * @param   mixed $store
-     * @return  AbstractCarrierInterface[]
+     * @return  CarrierInterface[]
      */
     public function getActiveCarriers($store = null)
     {
@@ -82,7 +82,7 @@ class Config extends \Magento\Framework\DataObject
      * Retrieve all system carriers
      *
      * @param   mixed $store
-     * @return  AbstractCarrierInterface[]
+     * @return  CarrierInterface[]
      */
     public function getAllCarriers($store = null)
     {
