@@ -49,6 +49,7 @@
             <clickWithRightButton selectorArray="['css' => '.checkout']" mergeKey="clickWithRightButton2" x="23" y="324"/>
             <clickWithRightButton mergeKey="clickWithRightButton3" x="23" y="324"/>
             <closeTab mergeKey="closeTab"/>
+            <comment userInput="This is a Comment." mergeKey="comment"/>
             <createData entity="CustomerEntity1" mergeKey="createData1"/>
             <deleteData createDataKey="createData1" mergeKey="deleteData1"/>
             <dontSee userInput="Text" mergeKey="dontSee1"/>
