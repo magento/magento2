@@ -14,7 +14,7 @@ class RoboFile extends \Robo\Tasks
     use Robo\Task\Base\loadShortcuts;
 
     /**
-     * Duplicate the Example configuration files used to customize the Project for customization
+     * Duplicate the Example configuration files used to customize the Project for customization.
      *
      * @return void
      */
@@ -26,8 +26,8 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Clone the Example configuration files
-     * Build the Codeception project
+     * Duplicate the Example configuration files for the Project.
+     * Build the Codeception project.
      *
      * @return void
      */
@@ -38,9 +38,9 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Generate all Tests command.
+     * Generate all Tests in PHP.
      *
-     * @param string[] $opts
+     * @param array $opts
      * @return void
      */
     function generateTests($opts = ['config' => null, 'env' => 'chrome'])
@@ -51,11 +51,11 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Generate a suite based on name(s) passed in as args
+     * Generate a suite based on name(s) passed in as args.
      *
-     * @param string[] args
-     * @return void
+     * @param array $args
      * @throws Exception
+     * @return void
      */
     function generateSuite(array $args)
     {
@@ -72,7 +72,7 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Functional tests using the Chrome environment
+     * Run all Functional tests using the Chrome environment.
      *
      * @return void
      */
@@ -82,7 +82,7 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Functional tests using the FireFox environment
+     * Run all Functional tests using the FireFox environment.
      *
      * @return void
      */
@@ -92,7 +92,7 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Functional tests using the PhantomJS environment
+     * Run all Functional tests using the PhantomJS environment.
      *
      * @return void
      */
@@ -102,7 +102,7 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Functional tests using the Chrome Headless environment
+     * Run all Functional tests using the Chrome Headless environment.
      *
      * @return void
      */
@@ -112,7 +112,7 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Tests with the specified @group tag, excluding @group 'skip', using the Chrome environment
+     * Run all Tests with the specified @group tag, excluding @group 'skip', using the Chrome environment.
      *
      * @param string $args
      * @return void
@@ -123,7 +123,7 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Functional tests located under the Directory Path provided using the Chrome environment
+     * Run all Functional tests located under the Directory Path provided using the Chrome environment.
      *
      * @param string $args
      * @return void
@@ -134,7 +134,7 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Tests marked with the @group tag 'example', using the Chrome environment
+     * Run all Tests marked with the @group tag 'example', using the Chrome environment.
      *
      * @return void
      */
@@ -146,7 +146,7 @@ class RoboFile extends \Robo\Tasks
     /**
      * Generate the HTML for the Allure report based on the Test XML output - Allure v1.4.X
      *
-     * @return void
+     * @return \Robo\Result
      */
     function allure1Generate()
     {
@@ -156,7 +156,7 @@ class RoboFile extends \Robo\Tasks
     /**
      * Generate the HTML for the Allure report based on the Test XML output - Allure v2.3.X
      *
-     * @return void
+     * @return \Robo\Result
      */
     function allure2Generate()
     {
@@ -164,7 +164,7 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Open the HTML Allure report - Allure v1.4.xX
+     * Open the HTML Allure report - Allure v1.4.X
      *
      * @return void
      */
@@ -212,7 +212,7 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run the Pre-Install Check Script
+     * Run the Pre-Install system check script.
      *
      * @return void
      */
