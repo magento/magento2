@@ -7,7 +7,13 @@
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class Edit
+ * @package Magento\Cms\Controller\Adminhtml\Page
+ */
 class Edit extends \Magento\Backend\App\Action
 {
     /**
@@ -30,17 +36,35 @@ class Edit extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
+     * @var \Magento\Cms\Model\PageFactory
+     */
+    private $pageFactory;
+
+    /**
+     * @var \Magento\Cms\Api\PageRepositoryInterface
+     */
+    private $pageRepository;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Cms\Model\PageFactory $pageFactory
+     * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
      */
     public function __construct(
         Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Registry $registry
+        \Magento\Framework\Registry $registry,
+        \Magento\Cms\Model\PageFactory $pageFactory = null,
+        \Magento\Cms\Api\PageRepositoryInterface $pageRepository = null
     ) {
         $this->resultPageFactory = $resultPageFactory;
         $this->_coreRegistry = $registry;
+        $this->pageFactory = $pageFactory
+            ?: ObjectManager::getInstance()->get(\Magento\Cms\Model\PageFactory::class);
+        $this->pageRepository = $pageRepository
+            ?: ObjectManager::getInstance()->get(\Magento\Cms\Api\PageRepositoryInterface::class);
         parent::__construct($context);
     }
 
@@ -63,39 +87,56 @@ class Edit extends \Magento\Backend\App\Action
     /**
      * Edit CMS page
      *
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
-        // 1. Get ID and create model
-        $id = $this->getRequest()->getParam('page_id');
-        $model = $this->_objectManager->create(\Magento\Cms\Model\Page::class);
+        $pageId = $this->getRequest()->getParam('page_id');
+        $model = $this->prepareModel($pageId);
 
-        // 2. Initial checking
-        if ($id) {
-            $model->load($id);
-            if (!$model->getId()) {
-                $this->messageManager->addError(__('This page no longer exists.'));
-                /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-                $resultRedirect = $this->resultRedirectFactory->create();
-                return $resultRedirect->setPath('*/*/');
-            }
+        if (!$model || ($pageId && $model->getId() != $pageId)) {
+            $this->messageManager->addErrorMessage(__('This page no longer exists.'));
+            /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            return $resultRedirect->setPath('*/*/');
         }
 
         $this->_coreRegistry->register('cms_page', $model);
 
-        // 5. Build edit form
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->_initAction();
         $resultPage->addBreadcrumb(
-            $id ? __('Edit Page') : __('New Page'),
-            $id ? __('Edit Page') : __('New Page')
+            $pageId ? __('Edit Page') : __('New Page'),
+            $pageId ? __('Edit Page') : __('New Page')
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Pages'));
         $resultPage->getConfig()->getTitle()
             ->prepend($model->getId() ? $model->getTitle() : __('New Page'));
 
         return $resultPage;
+    }
+
+    /**
+     * Retrieve and prepare model.
+     *
+     * @param $pageId
+     * @return bool|\Magento\Cms\Api\Data\PageInterface
+     */
+    private function prepareModel($pageId)
+    {
+        if ($pageId) {
+            try {
+                $model = $this->pageRepository->getById($pageId);
+            } catch (NoSuchEntityException $e) {
+                $model = false;
+            }
+        }
+
+        if (!isset($model)) {
+            $model = $this->pageFactory->create();
+        }
+
+        return $model;
     }
 }

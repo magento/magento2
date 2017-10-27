@@ -7,6 +7,10 @@ namespace Magento\Cms\Test\Unit\Controller\Adminhtml;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class AbstractMassActionTest
+ * @package Magento\Cms\Test\Unit\Controller\Adminhtml
+ */
 abstract class AbstractMassActionTest extends \PHPUnit\Framework\TestCase
 {
     /**

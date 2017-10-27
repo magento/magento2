@@ -7,9 +7,13 @@ namespace Magento\Cms\Controller\Adminhtml\Block;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Cms\Api\BlockRepositoryInterface as BlockRepository;
-use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Framework\Controller\Result\JsonFactory;
 
+/**
+ * Class InlineEdit
+ * @package Magento\Cms\Controller\Adminhtml\Block
+ */
 class InlineEdit extends \Magento\Backend\App\Action
 {
     /**
@@ -54,26 +58,26 @@ class InlineEdit extends \Magento\Backend\App\Action
         $error = false;
         $messages = [];
 
-        if ($this->getRequest()->getParam('isAjax')) {
-            $postItems = $this->getRequest()->getParam('items', []);
-            if (!count($postItems)) {
-                $messages[] = __('Please correct the data sent.');
+        $postItems = $this->getRequest()->getParam('items', []);
+        if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
+            return $resultJson->setData([
+                'messages' => [__('Please correct the data sent.')],
+                'error' => true,
+            ]);
+        }
+
+        foreach (array_keys($postItems) as $blockId) {
+            /** @var \Magento\Cms\Model\Block $block */
+            $block = $this->blockRepository->getById($blockId);
+            try {
+                $block->setData(array_merge($block->getData(), $postItems[$blockId]));
+                $this->blockRepository->save($block);
+            } catch (\Exception $e) {
+                $messages[] = $this->getErrorWithBlockId(
+                    $block,
+                    __($e->getMessage())
+                );
                 $error = true;
-            } else {
-                foreach (array_keys($postItems) as $blockId) {
-                    /** @var \Magento\Cms\Model\Block $block */
-                    $block = $this->blockRepository->getById($blockId);
-                    try {
-                        $block->setData(array_merge($block->getData(), $postItems[$blockId]));
-                        $this->blockRepository->save($block);
-                    } catch (\Exception $e) {
-                        $messages[] = $this->getErrorWithBlockId(
-                            $block,
-                            __($e->getMessage())
-                        );
-                        $error = true;
-                    }
-                }
             }
         }
 

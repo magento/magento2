@@ -5,7 +5,11 @@
  */
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+
 /**
+ * Class EditTest
+ * @package Magento\Cms\Test\Unit\Controller\Adminhtml\Page
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EditTest extends \PHPUnit\Framework\TestCase
@@ -65,6 +69,16 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     protected $resultPageFactoryMock;
 
+    /**
+     * @var \Magento\Cms\Model\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $pageFactory;
+
+    /**
+     * @var \Magento\Cms\Api\PageRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $pageRepository;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -79,7 +93,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create', 'get'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock->expects($this->once())
+        $this->objectManagerMock->expects($this->never())
             ->method('create')
             ->with(\Magento\Cms\Model\Page::class)
             ->willReturn($this->pageMock);
@@ -112,12 +126,22 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactoryMock);
 
+        $this->pageFactory = $this->getMockBuilder(\Magento\Cms\Model\PageFactory::class)
+            ->disableOriginalConstructor()->setMethods(
+                ['create']
+            )->getMock();
+        $this->pageRepository = $this->getMockBuilder(\Magento\Cms\Api\PageRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->editController = $this->objectManager->getObject(
             \Magento\Cms\Controller\Adminhtml\Page\Edit::class,
             [
                 'context' => $this->contextMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
                 'registry' => $this->coreRegistryMock,
+                'pageFactory' => $this->pageFactory,
+                'pageRepository' => $this->pageRepository,
             ]
         );
     }
@@ -131,15 +155,20 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->with('page_id')
             ->willReturn($pageId);
 
-        $this->pageMock->expects($this->once())
-            ->method('load')
-            ->with($pageId);
-        $this->pageMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(null);
+        $this->pageRepository->expects($this->once())
+            ->method('getById')
+            ->willThrowException(
+                new NoSuchEntityException(__('No such entity.'))
+            );
+        $this->pageFactory->expects($this->never())->method('create');
+
+        $this->pageMock->expects($this->never())
+            ->method('load');
+        $this->pageMock->expects($this->never())
+            ->method('getId');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('This page no longer exists.'));
 
         $this->resultRedirectFactoryMock->expects($this->atLeastOnce())
@@ -167,9 +196,19 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->with('page_id')
             ->willReturn($pageId);
 
-        $this->pageMock->expects($this->any())
-            ->method('load')
-            ->with($pageId);
+        $expectedTimes = $pageId ? 1 : 0;
+        $this->pageRepository->expects($this->exactly($expectedTimes))
+            ->method('getById')
+            ->with($pageId)
+            ->willReturn($this->pageMock);
+
+        $expectedTimes = $pageId ? 0 : 1;
+        $this->pageFactory->expects($this->exactly($expectedTimes))
+            ->method('create')
+            ->willReturn($this->pageMock);
+
+        $this->pageMock->expects($this->never())
+            ->method('load');
         $this->pageMock->expects($this->any())
             ->method('getId')
             ->willReturn($pageId);
