@@ -30,7 +30,7 @@ class GetSalesChannelsByStock implements GetSalesChannelsByStockInterface
      * Get linked sales channels data for given stockId.
      *
      * @param int $stockId
-     * @return array
+     * @return SalesChannel[]
      */
     public function get(int $stockId) : array
     {
