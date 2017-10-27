@@ -33,7 +33,7 @@ class AddSwatchDataToAddOption
     /**
      * @var OptionCollection
      */
-    protected $attrOptionCollectionFactory;
+    protected $optionCollection;
 
     /**
      * @param Config           $eavConfig
@@ -47,7 +47,7 @@ class AddSwatchDataToAddOption
     ) {
         $this->eavConfig                   = $eavConfig;
         $this->swatchHelper                = $swatchHelper;
-        $this->attrOptionCollectionFactory = $attrOptionCollectionFactory;
+        $this->optionCollection = $attrOptionCollectionFactory;
     }
 
     /**
@@ -72,7 +72,7 @@ class AddSwatchDataToAddOption
             && $attribute->getData($swatchKey) === null) {
             $optionId    = $option->getValue();
             $optionOrder = $option->getSortOrder();
-
+            $prefix = $optionId;
             if ($optionId === '') {
                 $attributeData = $this->prepareAttributeDataForNewOption($attribute->getAttributeId(), $optionKey);
                 $optionId      = count($attributeData[$optionKey]['value']);
@@ -81,8 +81,6 @@ class AddSwatchDataToAddOption
                 }
                 $prefix        = 'option_' . $optionId;
                 $option->setValue($prefix);
-            } else {
-                $prefix = $optionId;
             }
 
             $storeLabels = $option->getStoreLabels();
@@ -166,10 +164,10 @@ class AddSwatchDataToAddOption
      */
     protected function getStoreLabels($optionId)
     {
-        $attrOptionCollectionFactory = $this->attrOptionCollectionFactory->create();
-        $connection                  = $attrOptionCollectionFactory->getConnection();
-        $eavAttributeOptionValue     = $attrOptionCollectionFactory->getTable('eav_attribute_option_value');
-        $select = $connection->select()->from(['eaov' => $eavAttributeOptionValue], [])->where(
+        $optionCollection = $this->optionCollection->create();
+        $connection                  = $optionCollection->getConnection();
+        $optionValueTable     = $optionCollection->getTable('eav_attribute_option_value');
+        $select = $connection->select()->from(['eaov' => $optionValueTable], [])->where(
             'option_id = ?',
             $optionId
         )->columns(['store_id', 'value']);
@@ -184,11 +182,11 @@ class AddSwatchDataToAddOption
      */
     protected function getOptionsByAttributeIdWithSortOrder($attributeId)
     {
-        $attrOptionCollectionFactory = $this->attrOptionCollectionFactory->create();
-        $connection                  = $attrOptionCollectionFactory->getConnection();
-        $eavAttributeOption          = $attrOptionCollectionFactory->getTable('eav_attribute_option');
+        $optionCollection = $this->optionCollection->create();
+        $connection                  = $optionCollection->getConnection();
+        $optionTable          = $optionCollection->getTable('eav_attribute_option');
         $select = $connection->select()->from(
-            ['eao' => $eavAttributeOption],
+            ['eao' => $optionTable],
             ['option_id', 'sort_order']
         )->where('eao.attribute_Id = ? ', $attributeId)->order('eao.sort_order ASC');
 
