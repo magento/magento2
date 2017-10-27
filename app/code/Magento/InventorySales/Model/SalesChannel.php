@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\InventorySales\Model\ResourceModel\SalesChannel as SalesChannelResourceModel;
+use Magento\InventorySalesApi\Api\Data\SalesChannelExtensionInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
@@ -18,13 +18,6 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
  */
 class SalesChannel extends AbstractExtensibleModel implements SalesChannelInterface
 {
-    /**
-     * @inheritdoc
-     */
-    protected function _construct()
-    {
-        $this->_init(SalesChannelResourceModel::class);
-    }
 
     /**
      * @inheritdoc
@@ -74,4 +67,24 @@ class SalesChannel extends AbstractExtensibleModel implements SalesChannelInterf
         $this->setData(self::CODE, $code);
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes()
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(SalesChannelInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(SalesChannelExtensionInterface $extensionAttributes)
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

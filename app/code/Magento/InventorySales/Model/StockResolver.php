@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: tschampelb
- * Date: 26.10.17
- * Time: 12:08
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
@@ -11,30 +9,36 @@ namespace Magento\InventorySales\Model;
 
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
-use Magento\Inventory\Model\StockFactory;
+use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\InventorySales\Model\ResourceModel\StockResolver as StockResolverResourceModel;
 
+/**
+ * The stock resolver is responsible for getting the linked stock for a certain sales channel.
+ */
 class StockResolver implements StockResolverInterface
 {
-
-    /** @var  \Magento\InventorySales\Model\ResourceModel\StockResolver */
-    private $stockResolver;
+    /**
+     * @var StockResolverResourceModel
+     */
+    private $stockResolverResourceModel;
 
     /**
-     * @var StockFactory
+     * @var StockRepositoryInterface
      */
-    private $stockFactory;
+    private $stockRepositoryInterface;
 
     /**
      * StockResolver constructor.
-     * @param StockFactory $stockFactory
-     * @param StockResolver $stockResolver
+     *
+     * @param StockRepositoryInterface $stockRepositoryInterface
+     * @param StockResolverResourceModel $stockResolverResourceModel
      */
     public function __construct(
-        StockFactory $stockFactory,
-        StockResolver $stockResolver)
+        StockRepositoryInterface $stockRepositoryInterface,
+        StockResolverResourceModel $stockResolverResourceModel)
     {
-        $this->stockFactory = $stockFactory;
-        $this->stockResolver = $stockResolver;
+        $this->stockRepositoryInterface = $stockRepositoryInterface;
+        $this->stockResolverResourceModel = $stockResolverResourceModel;
     }
 
     /**
@@ -42,12 +46,12 @@ class StockResolver implements StockResolverInterface
      *
      * @param string $type
      * @param string $code
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return StockInterface
      */
     public function get(string $type, string $code): StockInterface
     {
-        $stockId = $this->stockResolver->resolve($type, $code);
-        $stockModel = $this->stockFactory->create()->getItemById($stockId);
-        return $stockModel;
+        $stockId = $this->stockResolverResourceModel->resolve($type, $code);
+        return $this->stockRepositoryInterface->get($stockId);
     }
 }

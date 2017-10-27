@@ -9,12 +9,12 @@ namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventorySales\Model\SalesChannelFactory;
+use Magento\InventorySales\Setup\Operation\CreateSalesChannelTable;
 
 /**
- * The resource model responsible for retrieving StockItem Quantity.
- * Used by Service Contracts that are agnostic to the Data Access Layer.
+ * Provides linked sales channels by given stock id.
  */
-class SalesChannelsResolver
+class SalesChannelsProvider
 {
     /**
      * @var ResourceConnection
@@ -48,25 +48,13 @@ class SalesChannelsResolver
         $connection = $this->resource->getConnection();
 
         $tableName = $this->resource->getTableName(
-            SalesChannel::TABLE_NAME_SALES_CHANNEL
+            CreateSalesChannelTable::TABLE_NAME_SALES_CHANNEL
         );
 
         $select = $connection->select()
             ->from($tableName)
             ->where('stock_id' . ' = ?', $stockId);
 
-        $salesChannelItems = $connection->fetchAssoc($select);
-
-        $retArray = array();
-        foreach ($salesChannelItems as $channelItem)
-        {
-            $salesChannel = $this->salesChannelFactory->create();
-            $salesChannel->setSalesChannelId($channelItem['id']);
-            $salesChannel->setType($channelItem['type']);
-            $salesChannel->setCode($channelItem['code']);
-            $retArray[] = $salesChannel;
-        }
-
-        return $retArray;
+        return $connection->fetchAssoc($select);
     }
 }
