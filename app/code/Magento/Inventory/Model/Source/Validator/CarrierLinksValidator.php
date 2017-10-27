@@ -14,7 +14,7 @@ use Magento\Shipping\Model\Config;
 /**
  * Check that carrier links is valid
  */
-class CarrierLinks implements SourceValidatorInterface
+class CarrierLinksValidator implements SourceValidatorInterface
 {
     /**
      * @var ValidationResultFactory
