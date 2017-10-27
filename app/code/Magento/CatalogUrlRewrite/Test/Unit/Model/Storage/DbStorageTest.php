@@ -57,7 +57,6 @@ class DbStorageTest extends TestCase
     {
         parent::setUp();
 
-
         $this->urlRewriteFactory = $this
             ->getMockBuilder(UrlRewriteFactory::class)
             ->setMethods(['create'])

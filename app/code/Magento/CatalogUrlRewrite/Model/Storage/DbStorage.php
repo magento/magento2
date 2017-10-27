@@ -17,12 +17,9 @@ class DbStorage extends BaseDbStorage
      */
     protected function prepareSelect(array $data)
     {
-        if (
-            !array_key_exists(UrlRewrite::ENTITY_ID, $data)
-            ||
-            !array_key_exists(UrlRewrite::ENTITY_TYPE, $data)
-            ||
-            !array_key_exists(UrlRewrite::STORE_ID, $data)
+        if (!array_key_exists(UrlRewrite::ENTITY_ID, $data)
+            || !array_key_exists(UrlRewrite::ENTITY_TYPE, $data)
+            || !array_key_exists(UrlRewrite::STORE_ID, $data)
         ) {
             throw new \InvalidArgumentException(
                 UrlRewrite::ENTITY_ID . ', ' . UrlRewrite::ENTITY_TYPE
