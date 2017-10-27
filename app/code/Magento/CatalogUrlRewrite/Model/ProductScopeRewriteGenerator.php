@@ -207,7 +207,11 @@ class ProductScopeRewriteGenerator
      */
     public function isCategoryProperForGenerating(Category $category, $storeId)
     {
-        if ($category->getParentId() != \Magento\Catalog\Model\Category::TREE_ROOT_ID) {
+        $parentId = $category->getParentId();
+        if (
+            $parentId != Category::ROOT_CATEGORY_ID
+            && $parentId != Category::TREE_ROOT_ID
+        ) {
             list(, $rootCategoryId) = $category->getParentIds();
             return $rootCategoryId == $this->storeManager->getStore($storeId)->getRootCategoryId();
         }
