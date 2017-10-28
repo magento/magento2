@@ -15,6 +15,8 @@ namespace Magento\InventorySales\Model;
 interface ReplaceSalesChannelsOnStockInterface
 {
     /**
+     * Replace existing or non existing Sales Channels for Stock
+     *
      * @param array $salesChannels
      * @param int $stockId
      * @return void

@@ -9,8 +9,10 @@
     <!-- SalesChannel -->
     <preference for="Magento\InventorySalesApi\Api\Data\SalesChannelInterface" type="Magento\InventorySales\Model\SalesChannel"/>
     <preference for="Magento\InventorySales\Model\GetAssignedSalesChannelsForStockInterface" type="Magento\InventorySales\Model\GetAssignedSalesChannelsForStock"/>
+    <preference for="Magento\InventorySales\Model\ReplaceSalesChannelsOnStockInterface" type="Magento\InventorySales\Model\ReplaceSalesChannelsOnStock"/>
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
         <plugin name="data_after_getplugin" type="Magento\InventorySales\Plugin\Inventory\StockRepository\SalesChannel\DataAfterGetPlugin" />
         <plugin name="data_after_getlistplugin" type="Magento\InventorySales\Plugin\Inventory\StockRepository\SalesChannel\DataAfterGetListPlugin" />
+        <plugin name="data_after_saveplugin" type="Magento\InventorySales\Plugin\Inventory\StockRepository\SalesChannel\DataAfterSavePlugin" />
     </type>
 </config>

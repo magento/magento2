@@ -3,24 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Model\StockSourceLink\Command;
+declare(strict_types=1);
 
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\InputException;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink\SaveMultiple;
-use Magento\InventorySales\Model\SalesChannel;
-use Magento\InventorySalesApi\Api\AssignSalesChannelsToStockInterface;
+namespace Magento\InventorySales\Model;
+
+use Magento\InventorySales\Model\ResourceModel\ReplaceSalesChannelsOnStock as ReplaceResourceModel;
 use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
  */
-class AssignSalesChannelsToStock implements AssignSalesChannelsToStockInterface
+class ReplaceSalesChannelsOnStock implements ReplaceSalesChannelsOnStockInterface
 {
     /**
-     * @var SaveMultiple
+     * @var ReplaceResourceModel
      */
-    private $saveMultiple;
+    private $replace;
 
     /**
      * @var LoggerInterface
@@ -28,38 +26,25 @@ class AssignSalesChannelsToStock implements AssignSalesChannelsToStockInterface
     private $logger;
 
     /**
-     * @param SaveMultiple $saveMultiple
+     * @param ReplaceResourceModel $replace
      * @param LoggerInterface $logger
      */
     public function __construct(
-        SaveMultiple $saveMultiple,
+        ReplaceResourceModel $replace,
         LoggerInterface $logger
     ) {
-        $this->saveMultiple = $saveMultiple;
+        $this->replace = $replace;
         $this->logger = $logger;
     }
 
     /**
-     * Assign Sources to Stock
+     * Replace existing or non existing Sales Channels for Stock
      *
-     * If one of the Sources or Stock with given id don't exist then exception will be throw
-     *
-     * @param SalesChannel[] $salesChannels
+     * @param array $salesChannels
      * @param int $stockId
      * @return void
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(array $salesChannels, int $stockId);
+    public function execute(array $salesChannels, int $stockId)
     {
-    try{
-
-}
-        try {
-            $this->saveMultiple->execute($salesChannels, $stockId);
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not assign SalesChannels to Stock'), $e);
-        }
     }
 }
