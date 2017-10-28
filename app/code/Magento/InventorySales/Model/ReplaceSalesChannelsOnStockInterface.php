@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySalesApi\Api;
+namespace Magento\InventorySales\Model;
 
 /**
- * Used fully qualified namespaces in annotations for proper work of WebApi request parser
+ * TODO: SPI description
  *
  * @api
  */
