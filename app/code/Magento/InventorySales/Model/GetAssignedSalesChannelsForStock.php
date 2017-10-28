@@ -24,11 +24,11 @@ class GetAssignedSalesChannelsForStock implements GetAssignedSalesChannelsForSto
     private $salesChannelFactory;
 
     /**
-     * @param GetAssignedSalesChannelsDataForStock $getAssignedSalesChannelsDataForStock
+     * @param SalesChannelsProvider $getAssignedSalesChannelsDataForStock
      * @param SalesChannelInterfaceFactory $salesChannelFactory
      */
     public function __construct(
-        GetAssignedSalesChannelsDataForStock $getAssignedSalesChannelsDataForStock,
+        SalesChannelsProvider $getAssignedSalesChannelsDataForStock,
         SalesChannelInterfaceFactory $salesChannelFactory
     ) {
         $this->getAssignedSalesChannelsDataForStock = $getAssignedSalesChannelsDataForStock;
