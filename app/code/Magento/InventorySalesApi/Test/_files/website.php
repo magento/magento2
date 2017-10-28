@@ -8,7 +8,7 @@ for ($i = 0; $i < 3; $i++) {
     /** @var $website \Magento\Store\Model\Website */
     $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Website::class);
     $website->setData([
-        'code' => 'test-' . $i,
+        'code' => 'test_' . $i,
         'name' => 'Test Website ' . $i,
         'default_group_id' => '1',
         'is_default' => '0',

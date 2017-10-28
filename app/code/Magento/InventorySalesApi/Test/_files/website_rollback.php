@@ -13,7 +13,7 @@ $registry->register('isSecureArea', true);
 for ($i = 0; $i < 3; $i++) {
     /** @var \Magento\Store\Model\Website $website */
     $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Website::class);
-    $website->load('test-' . $i);
+    $website->load('test_' . $i);
     $website->delete();
 }
 
