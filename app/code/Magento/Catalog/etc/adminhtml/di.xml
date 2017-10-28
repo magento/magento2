@@ -143,6 +143,10 @@
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Attributes</item>
                     <item name="sortOrder" xsi:type="number">120</item>
                 </item>
+                <item name="alerts" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Alerts</item>
+                    <item name="sortOrder" xsi:type="number">130</item>
+                </item>
                 <item name="advanced-pricing-tier-price-type" xsi:type="array">
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\TierPrice</item>
                     <item name="sortOrder" xsi:type="number">150</item>
