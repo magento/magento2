@@ -9,39 +9,41 @@ namespace Magento\InventorySales\Plugin\Inventory\StockRepository\SalesChannel;
 
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\InventorySales\Model\ResourceModel\ReplaceSalesChannelsOnStock;
 
+/**
+ * TODO
+ */
 class DataAfterSavePlugin
 {
     /**
-     * @var AddExtensionAttributeToStock
+     * @var ReplaceSalesChannelsOnStock
      */
-    private $addExtensionAttributeToStock;
+    private $replaceSalesChannelsOnStock;
 
     /**
-     * SalesChannelDataAfterGetPlugin constructor.
-     *
-     * @param AddExtensionAttributeToStock $addExtensionAttributeToStock
+     * @param ReplaceSalesChannelsOnStock $replaceSalesChannelsOnStock
      */
     public function __construct(
-        AddExtensionAttributeToStock $addExtensionAttributeToStock
+        ReplaceSalesChannelsOnStock $replaceSalesChannelsOnStock
     ) {
-        $this->addExtensionAttributeToStock = $addExtensionAttributeToStock;
+        $this->replaceSalesChannelsOnStock = $replaceSalesChannelsOnStock;
     }
 
     /**
      * Saves sales channel for given stock.
      *
      * @param StockRepositoryInterface $subject
-     * @param StockInterface $result
+     * @param StockInterface $stock
      * @return StockInterface
      */
-    public function afterSave(StockRepositoryInterface $subject, StockInterface $result): StockInterface
+    public function afterSave(StockRepositoryInterface $subject, StockInterface $stock): StockInterface
     {
-        $extensionAttributes = $$result->getExtensionAttributes();
-        $salesChannelSearchResults = $this->getSalesChannelByStock->get($result->getStockId());
-        $extensionAttributes->setSalesChannels($salesChannelSearchResults);
-        $result->setExtensionAttributes($extensionAttributes);
-
-        return $result;
+        $extensionAttributes = $stock->getExtensionAttributes();
+        $salesChannels = $extensionAttributes->getSalesChannels();
+        if (null !== $salesChannels) {
+            $this->replaceSalesChannelsOnStock->execute($salesChannels, $stock->getStockId());
+        }
+        return $stock;
     }
 }
