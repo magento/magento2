@@ -22,22 +22,6 @@ class SalesChannel extends AbstractExtensibleModel implements SalesChannelInterf
     /**
      * @inheritdoc
      */
-    public function getSalesChannellId()
-    {
-        return $this->getData(self::ID);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setSalesChannelId(int $salesChannelId)
-    {
-        $this->setData(self::ID, $salesChannelId);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getType()
     {
         return $this->getData(self::TYPE);
@@ -83,7 +67,7 @@ class SalesChannel extends AbstractExtensibleModel implements SalesChannelInterf
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(SalesChannelExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes($extensionAttributes)
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }
