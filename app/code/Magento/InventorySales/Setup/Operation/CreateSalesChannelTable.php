@@ -79,6 +79,6 @@ class CreateSalesChannelTable
             'stock_id',
             $setup->getTable('inventory_stock'),
             'stock_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_RESTRICT);
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE);
     }
 }
