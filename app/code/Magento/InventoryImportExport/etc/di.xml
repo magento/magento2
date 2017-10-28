@@ -29,6 +29,8 @@
     </type>
 
     <!-- Export -->
+    <preference for="Magento\InventoryImportExport\Api\SourceItemCollectionFactoryInterface" type="Magento\InventoryImportExport\Model\Export\SourceItemCollectionFactory"/>
+    <preference for="Magento\InventoryImportExport\Api\ColumnProviderInterface" type="\Magento\InventoryImportExport\Model\Export\ColumnProvider"/>
     <type name="Magento\InventoryImportExport\Model\Export\FilterProcessorAggregator">
         <arguments>
             <argument name="handler" xsi:type="array">

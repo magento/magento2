@@ -15,7 +15,7 @@ use Magento\InventoryImportExport\Model\Export\Source\StockStatus;
 /**
  * @api
  */
-class CollectionBuilder
+class AttributeCollectionProvider
 {
     /**
      * @var Collection
@@ -44,7 +44,7 @@ class CollectionBuilder
      * @return Collection
      * @throws \Exception
      */
-    public function create(): Collection
+    public function get(): Collection
     {
         if (count($this->collection) === 0) {
             /** @var \Magento\Eav\Model\Entity\Attribute $sourceIdAttribute */
