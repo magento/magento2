@@ -101,7 +101,7 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $price = (double)sprintf('%F', $formattedPrice);
         $priceType = $object->getPriceType();
 
-        if ($object->getPrice() && $priceType) {
+        if (isset($price) && $priceType) {
             //save for store_id = 0
             $select = $this->getConnection()->select()->from(
                 $priceTable,
@@ -143,7 +143,7 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE
             && $priceType
-            && $object->getPrice()
+            && isset($price)
             && $object->getStoreId() != \Magento\Store\Model\Store::DEFAULT_STORE_ID
         ) {
             $baseCurrency = $this->_config->getValue(
@@ -199,7 +199,7 @@ class Value extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
         } else {
             if ($scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE
-                && !$object->getPrice()
+                && !isset($price)
                 && !$priceType
             ) {
                 $storeIds = $this->_storeManager->getStore($object->getStoreId())->getWebsite()->getStoreIds();
