@@ -25,6 +25,9 @@ interface SalesChannelInterface extends ExtensibleDataInterface
     const CODE = 'code';
     /**#@-*/
 
+    /**
+     * Default sales channel type
+     */
     const TYPE_WEBSITE = 'website';
 
     /**

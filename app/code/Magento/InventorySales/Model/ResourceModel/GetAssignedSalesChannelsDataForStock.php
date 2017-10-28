@@ -8,33 +8,25 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventorySales\Model\SalesChannelFactory;
 use Magento\InventorySales\Setup\Operation\CreateSalesChannelTable;
 
 /**
  * Provides linked sales channels by given stock id.
  */
-class SalesChannelsProvider
+class GetAssignedSalesChannelsDataForStock
 {
     /**
      * @var ResourceConnection
      */
     private $resource;
-    /**
-     * @var SalesChannelFactory
-     */
-    private $salesChannelFactory;
 
     /**
      * @param ResourceConnection $resource
-     * @param SalesChannelFactory $salesChannelFactory
      */
     public function __construct(
-        ResourceConnection $resource,
-        SalesChannelFactory $salesChannelFactory
+        ResourceConnection $resource
     ) {
         $this->resource = $resource;
-        $this->salesChannelFactory = $salesChannelFactory;
     }
 
     /**
@@ -43,7 +35,7 @@ class SalesChannelsProvider
      * @param int $stockId
      * @return array
      */
-    public function resolve(int $stockId): array
+    public function execute(int $stockId): array
     {
         $connection = $this->resource->getConnection();
 
@@ -53,7 +45,7 @@ class SalesChannelsProvider
 
         $select = $connection->select()
             ->from($tableName)
-            ->where('stock_id' . ' = ?', $stockId);
+            ->where('stock_id = ?', $stockId);
 
         return $connection->fetchAssoc($select);
     }

@@ -13,23 +13,21 @@ use Magento\InventoryApi\Api\StockRepositoryInterface;
 class DataAfterGetPlugin
 {
     /**
-     * @var AddExtensionAttributeToStock
+     * @var AddSalesChannelsToStock
      */
     private $addExtensionAttributeToStock;
 
     /**
-     * SalesChannelDataAfterGetPlugin constructor.
-     *
-     * @param AddExtensionAttributeToStock $addExtensionAttributeToStock
+     * @param AddSalesChannelsToStock $addSalesChannelsToStock
      */
     public function __construct(
-        AddExtensionAttributeToStock $addExtensionAttributeToStock
+        AddSalesChannelsToStock $addSalesChannelsToStock
     ) {
-        $this->addExtensionAttributeToStock = $addExtensionAttributeToStock;
+        $this->addExtensionAttributeToStock = $addSalesChannelsToStock;
     }
 
     /**
-     * Enrich the given Stock Object with the assigned sales channel entitys
+     * Enrich the given Stock Object with the assigned sales channel entities
      *
      * @param StockRepositoryInterface $subject
      * @param StockInterface $result

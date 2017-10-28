@@ -13,38 +13,36 @@ use Magento\InventoryApi\Api\StockRepositoryInterface;
 class DataAfterGetListPlugin
 {
     /**
-     * @var AddExtensionAttributeToStock
+     * @var AddSalesChannelsToStock
      */
     private $addExtensionAttributeToStock;
 
     /**
-     * SalesChannelDataAfterGetPlugin constructor.
-     *
-     * @param AddExtensionAttributeToStock $addExtensionAttributeToStock
-     * @internal param GetSalesChannelsByStockInterface $getSalesChannelByStock
+     * @param AddSalesChannelsToStock $addSalesChannelsToStock
      */
     public function __construct(
-        AddExtensionAttributeToStock $addExtensionAttributeToStock
+        AddSalesChannelsToStock $addSalesChannelsToStock
     ) {
-        $this->addExtensionAttributeToStock = $addExtensionAttributeToStock;
+        $this->addExtensionAttributeToStock = $addSalesChannelsToStock;
     }
 
     /**
-     * Enrich the given Stock Objects with the assigned sales channel entitys
+     * Enrich the given Stock Objects with the assigned sales channel entities
      *
      * @param StockRepositoryInterface $subject
      * @param StockSearchResultsInterface $result
      * @return StockSearchResultsInterface
      */
-    public function afterGetList(StockRepositoryInterface $subject, StockSearchResultsInterface $result): StockSearchResultsInterface
-    {
-        $items = $result->getItems();
-        $stockItems = [];
-        foreach($items as $item)
-        {
-            $stockItems[] = $this->addExtensionAttributeToStock->addAttributeToStock($item);
+    public function afterGetList(
+        StockRepositoryInterface $subject,
+        StockSearchResultsInterface $result
+    ): StockSearchResultsInterface {
+
+        $stocks = [];
+        foreach($result->getItems() as $item) {
+            $stocks[] = $this->addExtensionAttributeToStock->addAttributeToStock($item);
         }
-        $result->setItems($stockItems);
-        return  $result;
+        $result->setItems($stocks);
+        return $result;
     }
 }
