@@ -11,7 +11,8 @@ use Magento\ImportExport\Model\Export;
 use Magento\ImportExport\Model\Export\AbstractEntity;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection as SourceItemCollection;
-use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
+use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory as SourceItemCollectionFactory;
+use Exception;
 
 /**
  * @inheritdoc
@@ -24,7 +25,7 @@ class Sources extends AbstractEntity
     private $collectionBuilder;
 
     /**
-     * @var CollectionFactory
+     * @var SourceItemCollectionFactory
      */
     private $sourceItemCollectionFactory;
 
@@ -39,7 +40,7 @@ class Sources extends AbstractEntity
      * @param Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory
      * @param CollectionBuilder $collectionBuilder
-     * @param CollectionFactory $sourceItemCollectionFactory
+     * @param SourceItemCollectionFactory $sourceItemCollectionFactory
      * @param FilterProcessorAggregator $filterProcessor
      * @param array $data
      */
@@ -49,7 +50,7 @@ class Sources extends AbstractEntity
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory,
         CollectionBuilder $collectionBuilder,
-        CollectionFactory $sourceItemCollectionFactory,
+        SourceItemCollectionFactory $sourceItemCollectionFactory,
         FilterProcessorAggregator $filterProcessor,
         array $data = []
     ) {
@@ -69,10 +70,8 @@ class Sources extends AbstractEntity
     }
 
     /**
-     * Export process
-     *
-     * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @inheritdoc
+     * @throws LocalizedException
      */
     public function export()
     {
@@ -97,7 +96,7 @@ class Sources extends AbstractEntity
 
     /**
      * @param SourceItemCollection $collection
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function applyFilters(SourceItemCollection $collection)
     {
@@ -136,10 +135,8 @@ class Sources extends AbstractEntity
     }
 
     /**
-     * Get header columns
-     *
-     * @return array
-     * @throws \Exception
+     * @inheritdoc
+     * @throws Exception
      */
     protected function _getHeaderColumns()
     {
@@ -164,10 +161,7 @@ class Sources extends AbstractEntity
     }
 
     /**
-     * Export one item
-     *
-     * @param \Magento\Framework\Model\AbstractModel $item
-     * @return void
+     * @inheritdoc
      */
     public function exportItem($item)
     {
@@ -175,9 +169,7 @@ class Sources extends AbstractEntity
     }
 
     /**
-     * Entity type code getter
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getEntityTypeCode()
     {
@@ -185,9 +177,7 @@ class Sources extends AbstractEntity
     }
 
     /**
-     * Get entity collection
-     *
-     * @return \Magento\Framework\Data\Collection\AbstractDb
+     * @inheritdoc
      */
     protected function _getEntityCollection()
     {
