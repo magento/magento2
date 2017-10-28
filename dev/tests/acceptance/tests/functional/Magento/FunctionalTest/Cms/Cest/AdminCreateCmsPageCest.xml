@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="AdminCreateCmsPageCest">
+        <annotations>
+            <features value="CMS Page Creation"/>
+            <stories value="Create a CMS Page via the Admin"/>
+        </annotations>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" mergeKey="amOnLogoutPage"/>
+        </after>
+        <test name="CreateNewPage">
+            <annotations>
+                <title value="Create a CMS Page"/>
+                <description value="You should be able to create a CMS Page via the Admin."/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-25580"/>
+                <group value="cms"/>
+                <env value="chrome"/>
+                <env value="firefox"/>
+                <env value="headless"/>
+            </annotations>
+            <amOnPage url="{{AdminLoginPage.url}}" mergeKey="navigateToAdmin"/>
+            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
+            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" mergeKey="fillPassword"/>
+            <click selector="{{AdminLoginFormSection.signIn}}" mergeKey="clickLogin"/>
+            <amOnPage url="{{CmsPagesPage.url}}" mergeKey="amOnPagePagesGrid"/>
+            <waitForPageLoad mergeKey="waitForPageLoad1"/>
+            <click selector="{{CmsPagesPageActionsSection.addNewPage}}" mergeKey="clickAddNewPage"/>
+            <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" mergeKey="fillFieldTitle"/>
+            <click selector="{{CmsNewPagePageContentSection.header}}" mergeKey="clickExpandContent"/>
+            <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{_defaultCmsPage.content_heading}}" mergeKey="fillFieldContentHeading"/>
+            <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{_defaultCmsPage.content}}" mergeKey="fillFieldContent"/>
+            <click selector="{{CmsNewPagePageSeoSection.header}}" mergeKey="clickExpandSearchEngineOptimisation"/>
+            <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" mergeKey="fillFieldUrlKey"/>
+            <click selector="{{CmsNewPagePageActionsSection.savePage}}" mergeKey="clickSavePage"/>
+            <see userInput="You saved the page." mergeKey="seeSuccessMessage"/>
+            <amOnPage url="{{_defaultCmsPage.identifier}}" mergeKey="amOnPageTestPage"/>
+            <waitForPageLoad mergeKey="waitForPageLoad2"/>
+            <see userInput="{{_defaultCmsPage.content_heading}}" mergeKey="seeContentHeading"/>
+            <see userInput="{{_defaultCmsPage.content}}" mergeKey="seeContent"/>
+        </test>
+    </cest>
+</config>

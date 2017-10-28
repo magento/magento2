@@ -1,0 +1,50 @@
+{
+    "name": "magento/magento2-functional-test-admin-notification",
+    "description": "Magento 2 Acceptance Test Module Admin Notification",
+    "repositories": [
+        {
+            "type" : "composer",
+            "url" : "https://repo.magento.com/"
+        }
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.0",
+        "allure-framework/allure-codeception": "dev-master",
+        "codeception/codeception": "2.2|2.3",
+        "consolidation/robo": "^1.0.0",
+        "henrikbjorn/lurker": "^1.2",
+        "magento/magento2-functional-testing-framework": "dev-develop",
+        "vlucas/phpdotenv": "~2.4"
+    },
+    "suggest": {
+        "magento/magento2-functional-test-module-store": "dev-master",
+        "magento/magento2-functional-test-module-backend": "dev-master",
+        "magento/magento2-functional-test-media-storage": "dev-master",
+        "magento/magento2-functional-test-module-ui": "dev-master"
+    },
+    "type": "magento2-test-module",
+    "version": "dev-master",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Magento\\FunctionalTest\\": [
+                "tests/functional/Magento/FunctionalTest",
+                "generated/Magento/FunctionalTest"
+            ]
+        }
+    },
+    "extra": {
+        "map": [
+            [
+                "*",
+                "tests/functional/Magento/FunctionalTest/AdminNotification"
+            ]
+        ]
+    }
+}

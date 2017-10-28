@@ -127,10 +127,12 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
         $this->uploader->expects($this->any())->method('getTmpDir')->will($this->returnValue(''));
         $this->uploader->expects($this->once())->method('_setUploadFile')->will($this->returnSelf());
         $this->uploader->expects($this->once())->method('save')->with($destDir . '/' . $expectedFileName)
-            ->willReturn(['name' => $expectedFileName]);
+            ->willReturn(['name' => $expectedFileName, 'path' => 'absPath']);
 
         $this->uploader->setDestDir($destDir);
-        $this->assertEquals(['name' => $expectedFileName], $this->uploader->move($fileUrl));
+        $result = $this->uploader->move($fileUrl);
+        $this->assertEquals(['name' => $expectedFileName], $result);
+        $this->assertArrayNotHasKey('path', $result);
     }
 
     public function testMoveFileName()

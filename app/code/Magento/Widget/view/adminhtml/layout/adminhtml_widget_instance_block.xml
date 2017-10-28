@@ -25,7 +25,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="instance_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.widget.instance.grid.columnSet.instance_id" as="instance_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Widget ID</argument>
                             <argument name="index" xsi:type="string">instance_id</argument>
@@ -33,13 +33,13 @@
                             <argument name="header_css_class" xsi:type="string">col-id</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="title">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.widget.instance.grid.columnSet.title" as="title">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Widget</argument>
                             <argument name="index" xsi:type="string">title</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="type">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.widget.instance.grid.columnSet.type" as="type">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Type</argument>
                             <argument name="index" xsi:type="string">instance_type</argument>
@@ -47,7 +47,7 @@
                             <argument name="options" xsi:type="options" model="Magento\Widget\Model\ResourceModel\Widget\Instance\Options\Types"/>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="theme_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.widget.instance.grid.columnSet.theme_id" as="theme_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Design Theme</argument>
                             <argument name="index" xsi:type="string">theme_id</argument>
@@ -56,7 +56,7 @@
                             <argument name="with_empty" xsi:type="string">1</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="sort_order">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.widget.instance.grid.columnSet.sort_order" as="sort_order">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Sort Order</argument>
                             <argument name="index" xsi:type="string">sort_order</argument>

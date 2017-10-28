@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat\Action;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\Store;
 
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 {
@@ -34,11 +35,11 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
     /**
      * Return index table name
      *
-     * @param \Magento\Store\Model\Store $store
+     * @param Store $store
      * @param bool $useTempTable
      * @return string
      */
-    protected function getTableNameByStore(\Magento\Store\Model\Store $store, $useTempTable)
+    protected function getTableNameByStore(Store $store, $useTempTable)
     {
         $tableName = $this->getMainStoreTable($store->getId());
         return $useTempTable ? $this->addTemporaryTableSuffix($tableName) : $tableName;
@@ -55,50 +56,8 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
     {
         $stores = $this->storeManager->getStores();
 
-        /* @var $store \Magento\Store\Model\Store */
         foreach ($stores as $store) {
-            $tableName = $this->getTableNameByStore($store, $useTempTable);
-
-            if (!$this->connection->isTableExists($tableName)) {
-                continue;
-            }
-
-            /** @TODO Do something with chunks */
-            $categoriesIdsChunks = array_chunk($entityIds, 500);
-            foreach ($categoriesIdsChunks as $categoriesIdsChunk) {
-                $categoriesIdsChunk = $this->filterIdsByStore($categoriesIdsChunk, $store);
-
-                $attributesData = $this->getAttributeValues($categoriesIdsChunk, $store->getId());
-                $data = [];
-                foreach ($categoriesIdsChunk as $categoryId) {
-                    if (!isset($attributesData[$categoryId])) {
-                        continue;
-                    }
-
-                    try {
-                        $category = $this->categoryRepository->get($categoryId);
-                    } catch (NoSuchEntityException $e) {
-                        continue;
-                    }
-
-                    $data[] = $this->prepareValuesToInsert(
-                        array_merge(
-                            $category->getData(),
-                            $attributesData[$categoryId],
-                            ['store_id' => $store->getId()]
-                        )
-                    );
-                }
-
-                foreach ($data as $row) {
-                    $updateFields = [];
-                    foreach (array_keys($row) as $key) {
-                        $updateFields[$key] = $key;
-                    }
-                    $this->connection->insertOnDuplicate($tableName, $row, $updateFields);
-                }
-            }
-            $this->deleteNonStoreCategories($store, $useTempTable);
+            $this->reindexStore($store, $entityIds, $useTempTable);
         }
 
         return $this;
@@ -107,11 +66,11 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
     /**
      * Delete non stores categories
      *
-     * @param \Magento\Store\Model\Store $store
+     * @param Store $store
      * @param bool $useTempTable
      * @return void
      */
-    protected function deleteNonStoreCategories(\Magento\Store\Model\Store $store, $useTempTable)
+    protected function deleteNonStoreCategories(Store $store, $useTempTable)
     {
         $rootId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
 
@@ -142,7 +101,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * Filter category ids by store
      *
      * @param int[] $ids
-     * @param \Magento\Store\Model\Store $store
+     * @param Store $store
      * @return int[]
      */
     protected function filterIdsByStore(array $ids, $store)
@@ -168,5 +127,98 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
             $resultIds[] = $category['entity_id'];
         }
         return $resultIds;
+    }
+
+    /**
+     * Reindex data for store
+     *
+     * @param Store $store
+     * @param int[] $entityIds
+     * @param bool $useTempTable
+     */
+    private function reindexStore(Store $store, array $entityIds, $useTempTable)
+    {
+        $tableName = $this->getTableNameByStore($store, $useTempTable);
+        if (!$this->connection->isTableExists($tableName)) {
+            return;
+        }
+
+        $categoriesIdsChunks = array_chunk($entityIds, 500);
+        foreach ($categoriesIdsChunks as $categoriesIdsChunk) {
+            $categoriesIdsChunk = $this->filterIdsByStore($categoriesIdsChunk, $store);
+            $attributesData = $this->getAttributeValues($categoriesIdsChunk, $store->getId());
+            $indexData = $this->buildIndexData($store, $categoriesIdsChunk, $attributesData);
+            $this->updateIndexData($tableName, $indexData);
+        }
+
+        $this->deleteNonStoreCategories($store, $useTempTable);
+    }
+
+    /**
+     * Build data for insert into index
+     *
+     * @param Store $store
+     * @param int[] $categoriesIdsChunk
+     * @param array[] $attributesData
+     * @return array
+     */
+    private function buildIndexData(Store $store, $categoriesIdsChunk, $attributesData)
+    {
+        $data = [];
+        foreach ($categoriesIdsChunk as $categoryId) {
+            try {
+                $categoryAttributesData = [];
+                if (isset($attributesData[$categoryId]) && is_array($attributesData[$categoryId])) {
+                    $categoryAttributesData = $attributesData[$categoryId];
+                }
+                $categoryIndexData = $this->buildCategoryIndexData(
+                    $store,
+                    $categoryId,
+                    $categoryAttributesData
+                );
+                $data[] = $categoryIndexData;
+            } catch (NoSuchEntityException $e) {
+                // ignore
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * @param Store $store
+     * @param int $categoryId
+     * @param array $categoryAttributesData
+     * @return array
+     * @throws NoSuchEntityException
+     */
+    private function buildCategoryIndexData(Store $store, $categoryId, array $categoryAttributesData)
+    {
+        $category = $this->categoryRepository->get($categoryId);
+        $categoryAttributesData = [];
+        $data = $this->prepareValuesToInsert(
+            array_merge(
+                $category->getData(),
+                $categoryAttributesData,
+                ['store_id' => $store->getId()]
+            )
+        );
+        return $data;
+    }
+
+    /**
+     * Insert or update index data
+     *
+     * @param string $tableName
+     * @param $data
+     */
+    private function updateIndexData($tableName, $data)
+    {
+        foreach ($data as $row) {
+            $updateFields = [];
+            foreach (array_keys($row) as $key) {
+                $updateFields[$key] = $key;
+            }
+            $this->connection->insertOnDuplicate($tableName, $row, $updateFields);
+        }
     }
 }

@@ -27,7 +27,6 @@ use Magento\Store\Api\Data\StoreInterface;
  * @method int getSortOrder()
  * @method int getStoreId()
  * @method Store setSortOrder($value)
- * @method Store setIsActive($value)
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -1086,6 +1085,22 @@ class Store extends AbstractExtensibleModel implements
     public function setStoreGroupId($storeGroupId)
     {
         return $this->setGroupId($storeGroupId);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIsActive()
+    {
+        return $this->_getData('is_active');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsActive($isActive)
+    {
+        return $this->setData('is_active', $isActive);
     }
 
     /**
