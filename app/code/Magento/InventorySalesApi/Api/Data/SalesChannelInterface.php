@@ -20,7 +20,6 @@ interface SalesChannelInterface extends ExtensibleDataInterface
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const ID = 'id';
     const TYPE = 'type';
     const CODE = 'code';
     /**#@-*/
