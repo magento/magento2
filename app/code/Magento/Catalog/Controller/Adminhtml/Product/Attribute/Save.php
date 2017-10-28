@@ -78,8 +78,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\View\LayoutFactory $layoutFactory
-    )
-    {
+    ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->buildFactory = $buildFactory;
         $this->filterManager = $filterManager;
@@ -193,7 +192,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                     $data['frontend_input']
                 );
             }
-            
             $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0, 'apply_to' => []];
 
             if ($model->getIsUserDefined()) {
