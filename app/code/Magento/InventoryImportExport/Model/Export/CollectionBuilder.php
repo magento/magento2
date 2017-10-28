@@ -58,6 +58,7 @@ class CollectionBuilder
             /** @var \Magento\Eav\Model\Entity\Attribute $skuAttribute */
             $skuAttribute = $this->attributeFactory->create();
             $skuAttribute->setId(SourceItemInterface::SKU);
+            $skuAttribute->setBackendType('varchar');
             $skuAttribute->setDefaultFrontendLabel(SourceItemInterface::SKU);
             $skuAttribute->setAttributeCode(SourceItemInterface::SKU);
             $this->collection->addItem($skuAttribute);

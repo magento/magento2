@@ -27,4 +27,17 @@
             </argument>
         </arguments>
     </type>
+
+    <!-- Export -->
+    <type name="Magento\InventoryImportExport\Model\Export\FilterProcessorAggregator">
+        <arguments>
+            <argument name="handler" xsi:type="array">
+                <item name="int" xsi:type="object">Magento\InventoryImportExport\Model\Export\Filter\IntFilter</item>
+                <!-- IntFilter is also used for 'decimal' type -->
+                <item name="decimal" xsi:type="object">Magento\InventoryImportExport\Model\Export\Filter\IntFilter</item>
+                <item name="datetime" xsi:type="object">Magento\InventoryImportExport\Model\Export\Filter\DatetimeFilter</item>
+                <item name="varchar" xsi:type="object">Magento\InventoryImportExport\Model\Export\Filter\VarcharFilter</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

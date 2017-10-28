@@ -6,7 +6,7 @@
 
 namespace Magento\InventoryImportExport\Model\Export;
 
-use Magento\Framework\Data\Collection;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\ImportExport\Model\Export;
 use Magento\ImportExport\Model\Export\AbstractEntity;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
@@ -29,12 +29,18 @@ class Sources extends AbstractEntity
     private $sourceItemCollectionFactory;
 
     /**
+     * @var FilterProcessorAggregator
+     */
+    private $filterProcessor;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory
      * @param CollectionBuilder $collectionBuilder
      * @param CollectionFactory $sourceItemCollectionFactory
+     * @param FilterProcessorAggregator $filterProcessor
      * @param array $data
      */
     public function __construct(
@@ -44,10 +50,12 @@ class Sources extends AbstractEntity
         \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory,
         CollectionBuilder $collectionBuilder,
         CollectionFactory $sourceItemCollectionFactory,
+        FilterProcessorAggregator $filterProcessor,
         array $data = []
     ) {
         $this->collectionBuilder = $collectionBuilder;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
+        $this->filterProcessor = $filterProcessor;
         parent::__construct($scopeConfig, $storeManager, $collectionFactory, $resourceColFactory, $data);
     }
 
@@ -88,101 +96,30 @@ class Sources extends AbstractEntity
     }
 
     /**
-     * @param Collection $collection
+     * @param SourceItemCollection $collection
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function applyFilters(Collection $collection)
+    private function applyFilters(SourceItemCollection $collection)
     {
         foreach ($this->retrieveFilterDataFromRequest() as $columnName => $value) {
             $attributeDefinition = $this->getAttributeCollection()->getItemById($columnName);
-            $type = null;
-            if ($attributeDefinition) {
-                $type = $attributeDefinition->getData('backend_type');
+            if (!$attributeDefinition) {
+                throw new LocalizedException(__(
+                    'Given column name "%columnName" is not present in collection.',
+                    ['columnName' => $columnName]
+                ));
             }
 
-            $filterMethodName = 'applyFilterFor' . ucfirst($type);
-            if (method_exists($this, $filterMethodName)) {
-                $this->$filterMethodName($collection, $columnName, $value);
-            } else {
-                $this->applyDefaultFilter($collection, $columnName, $value);
+            $type = $attributeDefinition->getData('backend_type');
+            if (!$type) {
+                throw new LocalizedException(__(
+                    'There is no backend type specified for column "%columnName".',
+                    ['columnName' => $columnName]
+                ));
             }
+
+            $this->filterProcessor->process($type, $collection, $columnName, $value);
         }
-    }
-
-    /**
-     * @param Collection $collection
-     * @param string $columnName
-     * @param mixed $value
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function applyFilterForInt(Collection $collection, $columnName, $value)
-    {
-        if (is_array($value)) {
-            $from = $value[0] ?? null;
-            $to = $value[1] ?? null;
-
-            if (is_numeric($from) && !empty($from)) {
-                $collection->addFieldToFilter($columnName, ['from' => $from]);
-            }
-
-            if (is_numeric($to) && !empty($to)) {
-                $collection->addFieldToFilter($columnName, ['to' => $to]);
-            }
-
-            return;
-        }
-
-        $collection->addFieldToFilter($columnName, ['eq' => $value]);
-    }
-
-    /**
-     * @param Collection $collection
-     * @param string $columnName
-     * @param mixed $value
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function applyFilterForDecimal(Collection $collection, $columnName, $value)
-    {
-        $this->applyFilterForInt($collection, $columnName, $value);
-    }
-
-    /**
-     * @param Collection $collection
-     * @param string $columnName
-     * @param mixed $value
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function applyDefaultFilter(Collection $collection, $columnName, $value)
-    {
-        $collection->addFieldToFilter($columnName, ['like' => '%' . $value . '%']);
-    }
-
-    /**
-     * @param Collection $collection
-     * @param string $columnName
-     * @param mixed $value
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function applyFilterForDatetime(Collection $collection, $columnName, $value)
-    {
-        if (is_array($value)) {
-            $from = $value[0] ?? null;
-            $to = $value[1] ?? null;
-
-            if (is_scalar($from) && !empty($from)) {
-                $date = (new \DateTime($from))->format('m/d/Y');
-                $collection->addFieldToFilter($columnName, ['from' => $date, 'date' => true]);
-            }
-
-            if (is_scalar($to) && !empty($to)) {
-                $date = (new \DateTime($to))->format('m/d/Y');
-                $collection->addFieldToFilter($columnName, ['to' => $date, 'date' => true]);
-            }
-
-            return;
-        }
-
-        $this->applyDefaultFilter($collection, $columnName, $value);
     }
 
     /**
