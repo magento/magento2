@@ -14,7 +14,7 @@ use Magento\InventorySales\Model\ResourceModel\ReplaceSalesChannelsOnStock;
 /**
  * TODO
  */
-class DataAfterSavePlugin
+class SaveSalesChannelsLinksPlugin
 {
     /**
      * @var ReplaceSalesChannelsOnStock
@@ -34,16 +34,21 @@ class DataAfterSavePlugin
      * Saves sales channel for given stock.
      *
      * @param StockRepositoryInterface $subject
+     * @param callable $proceed
      * @param StockInterface $stock
-     * @return StockInterface
+     * @return int
      */
-    public function afterSave(StockRepositoryInterface $subject, StockInterface $stock): StockInterface
-    {
+    public function aroundSave(
+        StockRepositoryInterface $subject,
+        callable $proceed,
+        StockInterface $stock
+    ): int {
         $extensionAttributes = $stock->getExtensionAttributes();
         $salesChannels = $extensionAttributes->getSalesChannels();
+        $stockId = $proceed($stock);
         if (null !== $salesChannels) {
-            $this->replaceSalesChannelsOnStock->execute($salesChannels, $stock->getStockId());
+            $this->replaceSalesChannelsOnStock->execute($salesChannels, $stockId);
         }
-        return $stock;
+        return $stockId;
     }
 }

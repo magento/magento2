@@ -13,6 +13,6 @@
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
         <plugin name="data_after_getplugin" type="Magento\InventorySales\Plugin\Inventory\StockRepository\SalesChannel\DataAfterGetPlugin" />
         <plugin name="data_after_getlistplugin" type="Magento\InventorySales\Plugin\Inventory\StockRepository\SalesChannel\DataAfterGetListPlugin" />
-        <plugin name="data_after_saveplugin" type="Magento\InventorySales\Plugin\Inventory\StockRepository\SalesChannel\DataAfterSavePlugin" />
+        <plugin name="data_after_saveplugin" type="Magento\InventorySales\Plugin\Inventory\StockRepository\SalesChannel\SaveSalesChannelsLinksPlugin" />
     </type>
 </config>
