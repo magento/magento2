@@ -5,23 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Model;
+namespace Magento\InventorySalesApi\Api;
 
 /**
- * Get linked the linked sales channels for given stockId.
- *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
-
-interface GetSalesChannelsByStockInterface
+interface ReplaceSalesChannelsOnStockInterface
 {
     /**
-     * Get linked sales channels objects for given stockId.
-     *
+     * @param array $salesChannels
      * @param int $stockId
-     * @return SalesChannel[]
+     * @return void
      */
-    public function get(int $stockId): array;
+    public function execute(array $salesChannels, int $stockId);
 }

@@ -6,9 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <!-- Stock -->
+    <!-- SalesChannel -->
     <preference for="Magento\InventorySalesApi\Api\Data\SalesChannelInterface" type="Magento\InventorySales\Model\SalesChannel"/>
-    <preference for="Magento\InventorySales\Model\GetSalesChannelsByStockInterface" type="Magento\InventorySales\Model\GetSalesChannelsByStock"/>
+    <preference for="Magento\InventorySales\Model\GetAssignedSalesChannelsForStockInterface" type="Magento\InventorySales\Model\GetAssignedSalesChannelsForStock"/>
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
         <plugin name="data_after_getplugin" type="Magento\InventorySales\Plugin\Inventory\StockRepository\SalesChannel\DataAfterGetPlugin" />
         <plugin name="data_after_getlistplugin" type="Magento\InventorySales\Plugin\Inventory\StockRepository\SalesChannel\DataAfterGetListPlugin" />
