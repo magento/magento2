@@ -6,21 +6,22 @@
 
 namespace Magento\InventoryImportExport\Model\Export;
 
-use Magento\Eav\Model\Entity\AttributeFactory;
 use Magento\Framework\Data\Collection;
 use Magento\ImportExport\Model\Export;
 use Magento\ImportExport\Model\Export\AbstractEntity;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection as SourceItemCollection;
 use Magento\Inventory\Model\ResourceModel\SourceItem\CollectionFactory;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryImportExport\Model\Export\Source\StockStatus;
 
 /**
  * @inheritdoc
  */
 class Sources extends AbstractEntity
 {
+    /**
+     * @var CollectionBuilder
+     */
+    private $collectionBuilder;
 
     /**
      * @var CollectionFactory
@@ -28,21 +29,25 @@ class Sources extends AbstractEntity
     private $sourceItemCollectionFactory;
 
     /**
-     * @var AttributeFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Export\Factory $collectionFactory
+     * @param \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory
+     * @param CollectionBuilder $collectionBuilder
+     * @param CollectionFactory $sourceItemCollectionFactory
+     * @param array $data
      */
-    private $attributeFactory;
-
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory,
+        CollectionBuilder $collectionBuilder,
         CollectionFactory $sourceItemCollectionFactory,
-        AttributeFactory $attributeFactory,
         array $data = []
     ) {
+        $this->collectionBuilder = $collectionBuilder;
         $this->sourceItemCollectionFactory = $sourceItemCollectionFactory;
-        $this->attributeFactory = $attributeFactory;
         parent::__construct($scopeConfig, $storeManager, $collectionFactory, $resourceColFactory, $data);
     }
 
@@ -52,42 +57,7 @@ class Sources extends AbstractEntity
      */
     public function getAttributeCollection()
     {
-        if (count($this->_attributeCollection) === 0) {
-            /** @var \Magento\Eav\Model\Entity\Attribute $skuAttribute */
-            $skuAttribute = $this->attributeFactory->create();
-            $skuAttribute->setId(SourceItemInterface::SKU);
-            $skuAttribute->setDefaultFrontendLabel(SourceItemInterface::SKU);
-            $skuAttribute->setAttributeCode(SourceItemInterface::SKU);
-            $this->_attributeCollection->addItem($skuAttribute);
-
-            /** @var \Magento\Eav\Model\Entity\Attribute $sourceIdAttribute */
-            $sourceIdAttribute = $this->attributeFactory->create();
-            $sourceIdAttribute->setId(SourceItemInterface::SOURCE_ID);
-            $sourceIdAttribute->setDefaultFrontendLabel(SourceItemInterface::SOURCE_ID);
-            $sourceIdAttribute->setAttributeCode(SourceItemInterface::SOURCE_ID);
-            $sourceIdAttribute->setBackendType('int');
-            $this->_attributeCollection->addItem($sourceIdAttribute);
-
-            /** @var \Magento\Eav\Model\Entity\Attribute $statusIdAttribute */
-            $statusIdAttribute = $this->attributeFactory->create();
-            $statusIdAttribute->setId(SourceItemInterface::STATUS);
-            $statusIdAttribute->setDefaultFrontendLabel(SourceItemInterface::STATUS);
-            $statusIdAttribute->setAttributeCode(SourceItemInterface::STATUS);
-            $statusIdAttribute->setBackendType('int');
-            $statusIdAttribute->setFrontendInput('select');
-            $statusIdAttribute->setSourceModel(StockStatus::class);
-            $this->_attributeCollection->addItem($statusIdAttribute);
-
-            /** @var \Magento\Eav\Model\Entity\Attribute $quantityAttribute */
-            $quantityAttribute = $this->attributeFactory->create();
-            $quantityAttribute->setId(SourceItemInterface::QUANTITY);
-            $quantityAttribute->setBackendType('decimal');
-            $quantityAttribute->setDefaultFrontendLabel(SourceItemInterface::QUANTITY);
-            $quantityAttribute->setAttributeCode(SourceItemInterface::QUANTITY);
-            $this->_attributeCollection->addItem($quantityAttribute);
-        }
-
-        return $this->_attributeCollection;
+        return $this->collectionBuilder->create();
     }
 
     /**
@@ -232,15 +202,14 @@ class Sources extends AbstractEntity
      * Get header columns
      *
      * @return array
+     * @throws \Exception
      */
     protected function _getHeaderColumns()
     {
-        $columns = [
-            SourceItemInterface::SOURCE_ID,
-            SourceItemInterface::SKU,
-            SourceItemInterface::STATUS,
-            SourceItemInterface::QUANTITY
-        ];
+        $columns = [];
+        foreach ($this->getAttributeCollection()->getItems() as $item) {
+            $columns[] = $item->getData('id');
+        }
 
         if (!isset($this->_parameters[Export::FILTER_ELEMENT_SKIP])) {
             return $columns;
