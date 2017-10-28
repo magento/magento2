@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventoryConfiguration\Model;
 
 use Magento\InventoryConfiguration\Api\Data\SourceItemConfigurationInterface;
@@ -24,7 +26,7 @@ class SourceItemConfiguration extends AbstractExtensibleModel implements SourceI
     /**
      * @inheritdoc
      */
-    public function setSourceItemId($sourceItemId)
+    public function setSourceItemId(string $sourceItemId)
     {
         if (!$this->getSourceItemId()) {
             $this->setData(self::SOURCE_ITEM_ID, $sourceItemId);

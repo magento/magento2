@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 
 use Magento\Framework\App\ResourceConnection;
@@ -44,19 +46,21 @@ class GetSourceItemConfiguration
     /**
      * Get the source item configuration.
      *
-     * @param $sourceId
-     * @param $sku
+     * @param string $sourceId
+     * @param string $sku
      * @return SourceItemConfigurationInterface
      */
-    public function execute($sourceId, $sku)
+    public function execute(string $sourceId, string $sku)
     {
         $connection = $this->resourceConnection->getConnection();
 
-        $select = $connection->select()->columns(['source_id', SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY])->from(
-            ['mt' => $this->getMainTable()]
+        $select = $connection->select()->from(
+            ['mt' => $this->getMainTable()],
+            [SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]
         )->joinLeft(
             ['sit' => $this->getJoinTable()],
-            'mt.source_item_id=sit.source_item_id'
+            'mt.source_item_id=sit.source_item_id',
+            ['source_item_id', 'source_id']
         )->where(
             'source_id=:source_id AND sku=:sku'
         );

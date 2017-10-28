@@ -19,9 +19,9 @@ interface GetSourceItemConfigurationInterface
     /**
      * Get the source item configuration.
      *
-     * @param int $sourceId
+     * @param string $sourceId
      * @param string $sku
      * @return SourceItemConfigurationInterface
      */
-    public function getSourceItemConfiguration(int $sourceId, string $sku): SourceItemConfigurationInterface;
+    public function getSourceItemConfiguration(string $sourceId, string $sku): SourceItemConfigurationInterface;
 }

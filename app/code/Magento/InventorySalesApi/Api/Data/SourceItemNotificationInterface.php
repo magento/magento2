@@ -3,21 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\InventoryConfiguration\Api\Data;
+namespace Magento\InventorySalesApi\Api\Data;
 
 /**
- * Represents a configuration object.
+ * Represents amount of product on physical storage
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
-interface SourceItemConfigurationInterface
+interface SourceItemNotificationInterface
 {
     /**
      * Constant for fields in data array.
      */
-    const SOURCE_ITEM_ID = 'source_item_id';
     const INVENTORY_NOTIFY_QTY = 'notify_quantity';
 
     /**
@@ -25,27 +24,27 @@ interface SourceItemConfigurationInterface
      *
      * @return int
      */
-    public function getSourceItemId();
+    public function getSourceItemId(): int;
 
     /**
      * Set source item id.
      *
-     * @param string $sourceItemId
+     * @param $itemId
      */
-    public function setSourceItemId(string $sourceItemId);
+    public function setSourceItemId(int $itemId);
 
     /**
-     * Get the configuration for source items.
+     * Get the notification quantity.
      *
-     * @return float
+     * @return float|null
      */
     public function getNotifyQuantity(): float;
 
     /**
-     * Set the notify quantity.
+     * Set notification quantity.
      *
-     * @param float $quantity
+     * @param float|null $quantity
      * @return void
      */
-    public function setNotifyQuantity(float $quantity);
+    public function setNotifyQuantity($quantity);
 }

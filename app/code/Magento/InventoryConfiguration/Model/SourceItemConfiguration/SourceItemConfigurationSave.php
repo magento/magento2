@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration;
 
 use Magento\InventoryConfiguration\Api\Data\SourceItemConfigurationInterface;
@@ -57,7 +59,7 @@ class SourceItemConfigurationSave implements SourceItemConfigurationSaveInterfac
             $this->saveConfiguration->execute($configuration);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not save Source Item'), $e);
+            throw new CouldNotSaveException(__('Could not save Source Item Configuration'), $e);
         }
     }
 }

@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration;
 
 use Magento\InventoryConfiguration\Api\Data\SourceItemConfigurationInterface;
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\SaveSourceItemConfiguration as SaveSourceItemConfigurationModel;
 use Magento\InventoryConfiguration\Api\GetSourceItemConfigurationInterface;
+use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\GetSourceItemConfiguration as ResourceGetSourceItemConfiguration;
 use Psr\Log\LoggerInterface;
 
 
@@ -19,7 +21,7 @@ class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
 {
 
     /**
-     * @var SaveSourceItemConfigurationModel
+     * @var ResourceGetSourceItemConfiguration
      */
     protected $getConfiguration;
 
@@ -29,13 +31,13 @@ class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
     protected $logger;
 
     /**
-     * SaveSourceItemConfiguration constructor.
+     * ResourceGetSourceItemConfiguration constructor.
      *
-     * @param GetSourceItemConfiguration $getConfiguration
+     * @param ResourceGetSourceItemConfiguration $getConfiguration
      * @param LoggerInterface $logger
      */
     public function __construct(
-        GetSourceItemConfiguration $getConfiguration,
+        ResourceGetSourceItemConfiguration $getConfiguration,
         LoggerInterface $logger
     )
     {
@@ -46,7 +48,7 @@ class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function getSourceItemConfiguration(int $sourceId, string $sku): SourceItemConfigurationInterface
+    public function getSourceItemConfiguration(string $sourceId, string $sku): SourceItemConfigurationInterface
     {
         return $this->getConfiguration->execute($sourceId, $sku);
     }
