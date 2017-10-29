@@ -5,9 +5,8 @@
 define([
     'Magento_Ui/js/grid/columns/column',
     'mage/template',
-    'text!Magento_InventorySales/template/stock/grid/cell/sales-channel-content.html',
-    'mage/translate'
-], function (Column, mageTemplate, channelTemplate, $t) {
+    'text!Magento_InventorySales/template/stock/grid/cell/sales-channel-content.html'
+], function (Column, mageTemplate, channelTemplate) {
     'use strict';
 
     return Column.extend({
@@ -17,28 +16,30 @@ define([
 
         /**
          * render all sales channel records and return complete html
+         * each over all sales channels and render html for each channel
          *
-         * @param records {object} contains all results
-         * @returns {string} return rendered html content
+         * @param {Object} records contains all results
+         * @return {String} return rendered html content
          */
         renderRecords: function (records) {
-            var sales_channels = records['sales_channels'];
-            var htmlContent = '';
+            var salesChannels = records['sales_channels'],
+                htmlContent = '',
+                channelType;
 
-            /**
-             * each over all sales channels and render html for each channel
-             */
-            for (var channelType in sales_channels) {
-                var channelTypeString = channelType.charAt(0).toUpperCase() + channelType.slice(1);
-                htmlContent = htmlContent + mageTemplate(
+            if (typeof salesChannels !== 'object') {
+                throw new Error("Provided wrong salesChannel type " + typeof salesChannels + ' the correct type would be object.');
+            }
+            for (channelType in salesChannels) {
+                htmlContent += mageTemplate(
                     channelTemplate,
                     {
                         data: {
-                            channelType: $t(channelTypeString),
-                            values: sales_channels[channelType]
+                            channelType: channelType.charAt(0).toUpperCase() + channelType.slice(1),
+                            values: salesChannels[channelType]
                         }
                     });
             }
+
             return htmlContent;
         }
     });
