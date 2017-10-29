@@ -53,13 +53,16 @@ class SaveHandler
      */
     public function execute($entityType, $entity)
     {
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity*/
         $link = $entity->getData($this->metadataPool->getMetadata($entityType)->getLinkField());
-        if ($this->linkResource->hasProductLinks($link)) {
-            /** @var \Magento\Catalog\Api\Data\ProductInterface $entity*/
-            foreach ($this->productLinkRepository->getList($entity) as $link) {
-                $this->productLinkRepository->delete($link);
-            }
-        }
+        if(!$entity->getIsDuplicate()) {
+          if ($this->linkResource->hasProductLinks($link)) {
+              /** @var \Magento\Catalog\Api\Data\ProductInterface $entity*/
+              foreach ($this->productLinkRepository->getList($entity) as $link) {
+                  $this->productLinkRepository->delete($link);
+              }
+          }
+      }
         $productLinks = $entity->getProductLinks();
         if (count($productLinks) > 0) {
             foreach ($entity->getProductLinks() as $link) {
