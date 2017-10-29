@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Magento\InventorySales\Setup\Operation;
 
@@ -11,6 +11,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\Inventory\Model\ResourceModel\Stock;
 
 class CreateSalesChannelTable
 {
@@ -75,10 +76,17 @@ class CreateSalesChannelTable
             'idx_primary',
             [SalesChannelInterface::TYPE, SalesChannelInterface::CODE],
             ['type' => AdapterInterface::INDEX_TYPE_PRIMARY]
-        )->addForeignKey($setup->getFkName('inventory_stock_sales_channel', 'stock_id', 'inventory_stock', 'stock_id'),
-            'stock_id',
-            $setup->getTable('inventory_stock'),
-            'stock_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_RESTRICT);
+        )->addForeignKey(
+            $setup->getFkName(
+                self::TABLE_NAME_SALES_CHANNEL,
+                self::STOCK_ID,
+                Stock::TABLE_NAME_STOCK,
+                self::STOCK_ID
+            ),
+            self::STOCK_ID,
+            $setup->getTable(Stock::TABLE_NAME_STOCK),
+            self::STOCK_ID,
+            Table::ACTION_CASCADE
+        );
     }
 }

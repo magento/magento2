@@ -35,8 +35,8 @@ class StockResolver implements StockResolverInterface
      */
     public function __construct(
         StockRepositoryInterface $stockRepositoryInterface,
-        StockResolverResourceModel $stockResolverResourceModel)
-    {
+        StockResolverResourceModel $stockResolverResourceModel
+    ) {
         $this->stockRepositoryInterface = $stockRepositoryInterface;
         $this->stockResolverResourceModel = $stockResolverResourceModel;
     }
