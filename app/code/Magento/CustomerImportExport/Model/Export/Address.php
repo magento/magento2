@@ -69,8 +69,8 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
         self::COLUMN_WEBSITE,
         self::COLUMN_EMAIL,
         self::COLUMN_CUSTOMER_ID,
-        self::COLUMN_ADDRESS_ID]
-    ;
+        self::COLUMN_ADDRESS_ID
+    ];
 
     /**
      * Attributes with index (not label) value
