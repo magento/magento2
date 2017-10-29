@@ -43,13 +43,11 @@ class SaveSalesChannelsLinksPlugin
         callable $proceed,
         StockInterface $stock
     ): int {
-        $stockId = $proceed($stock);
         $extensionAttributes = $stock->getExtensionAttributes();
-        if (null !== $extensionAttributes) {
-            $salesChannels = $extensionAttributes->getSalesChannels();
-            if (null !== $salesChannels) {
-                $this->replaceSalesChannelsOnStock->execute($salesChannels, $stockId);
-            }
+        $salesChannels = $extensionAttributes->getSalesChannels();
+        $stockId = $proceed($stock);
+        if (null !== $salesChannels) {
+            $this->replaceSalesChannelsOnStock->execute($salesChannels, $stockId);
         }
         return $stockId;
     }
