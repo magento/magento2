@@ -14,6 +14,8 @@ use Magento\Framework\Data\Collection as AttributeCollection;
 interface ColumnProviderInterface
 {
     /**
+     * Returns header names for exported file
+     *
      * @param AttributeCollection $attributeCollection
      * @param array $filters
      * @return array
@@ -21,6 +23,8 @@ interface ColumnProviderInterface
     public function getHeaders(AttributeCollection $attributeCollection, array $filters): array;
 
     /**
+     * Returns column names for Collection Select
+     *
      * @param AttributeCollection $attributeCollection
      * @param array $filters
      * @return array

@@ -16,6 +16,8 @@ use Magento\Framework\Data\Collection as AttributeCollection;
 interface SourceItemCollectionFactoryInterface
 {
     /**
+     * SourceItemCollection is used to gather all the data (with filters applied) which need to be exported
+     *
      * @param AttributeCollection $attributeCollection
      * @param array $filters
      * @return Collection
