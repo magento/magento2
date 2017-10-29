@@ -92,7 +92,7 @@ class SourceItemCollectionFactory implements SourceItemCollectionFactoryInterfac
     {
         return array_filter(
             $filters[Export::FILTER_ELEMENT_GROUP] ?? [],
-            function($value) {
+            function ($value) {
                 return $value !== '';
             }
         );
