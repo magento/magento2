@@ -48,8 +48,8 @@ class DebugHints
      * Allowed values:
      *     dev/debug/template_hints_storefront
      *     dev/debug/template_hints_admin
-     *
-     * @var string
+     *     null
+     * @var string|null
      */
     protected $debugHintsPath;
 
@@ -58,14 +58,14 @@ class DebugHints
      * @param StoreManagerInterface $storeManager
      * @param DevHelper $devHelper
      * @param DebugHintsFactory $debugHintsFactory
-     * @param string $debugHintsPath
+     * @param string|null $debugHintsPath
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
         DevHelper $devHelper,
         DebugHintsFactory $debugHintsFactory,
-        $debugHintsPath
+        $debugHintsPath = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
@@ -88,7 +88,8 @@ class DebugHints
         TemplateEngineInterface $invocationResult
     ) {
         $storeCode = $this->storeManager->getStore()->getCode();
-        if ($this->scopeConfig->getValue($this->debugHintsPath, ScopeInterface::SCOPE_STORE, $storeCode)
+        if ($this->debugHintsPath &&
+            $this->scopeConfig->getValue($this->debugHintsPath, ScopeInterface::SCOPE_STORE, $storeCode)
             && $this->devHelper->isDevAllowed()) {
             $showBlockHints = $this->scopeConfig->getValue(
                 self::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS,
