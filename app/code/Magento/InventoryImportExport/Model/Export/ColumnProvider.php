@@ -16,9 +16,7 @@ use Magento\ImportExport\Model\Export;
 class ColumnProvider implements ColumnProviderInterface
 {
     /**
-     * @param AttributeCollection $attributeCollection
-     * @param array $filters
-     * @return array
+     * @inheritdoc
      */
     public function getHeaders(AttributeCollection $attributeCollection, array $filters): array
     {
@@ -43,9 +41,7 @@ class ColumnProvider implements ColumnProviderInterface
     }
 
     /**
-     * @param AttributeCollection $attributeCollection
-     * @param array $filters
-     * @return array
+     * @inheritdoc
      */
     public function getColumns(AttributeCollection $attributeCollection, array $filters): array
     {
