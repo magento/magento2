@@ -45,7 +45,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_customerData = ['website_id' => 1, 'store_id' => 1, self::ATTRIBUTE_CODE => 1];
+    protected $_customerData = ['entity_id'=> 1,'website_id' => 1, 'store_id' => 1, self::ATTRIBUTE_CODE => 1];
 
     /**
      * Customer export model
@@ -225,8 +225,10 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     {
         $websiteColumn = Customer::COLUMN_WEBSITE;
         $storeColumn = Customer::COLUMN_STORE;
+        $entityIdColumn = Customer::COLUMN_ENTITY_ID;
         $this->assertEquals($this->_websites[$this->_customerData['website_id']], $row[$websiteColumn]);
         $this->assertEquals($this->_stores[$this->_customerData['store_id']], $row[$storeColumn]);
+        $this->assertEquals($this->_customerData['entity_id'], $row[$entityIdColumn]);
         $this->assertEquals($this->_customerData[self::ATTRIBUTE_CODE], $row[self::ATTRIBUTE_CODE]);
     }
 }
