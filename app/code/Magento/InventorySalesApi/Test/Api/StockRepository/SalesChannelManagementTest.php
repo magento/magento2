@@ -21,21 +21,28 @@ class SalesChannelManagementTest extends WebapiAbstract
     /**#@-*/
 
     /**
-     * @param array $salesChannels
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock.php
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/website.php
-     * @dataProvider dataProviderSalesChannelsLinks
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites.php
      */
-    public function testSalesChannelManagement(array $salesChannels)
+    public function testCreateStockWithSalesChannels()
     {
         $stockId = 10;
+        $salesChannels = [
+            [
+                SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                SalesChannelInterface::CODE => 'test_0',
+            ],
+            [
+                SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                SalesChannelInterface::CODE => 'test_1',
+            ],
+        ];
         $expectedData = [
             StockInterface::NAME => 'stockName',
             ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => [
                 'sales_channels' => $salesChannels,
             ],
         ];
-
         $this->saveStock($stockId, $expectedData);
         $stockData = $this->getStockDataById($stockId);
 
@@ -45,26 +52,37 @@ class SalesChannelManagementTest extends WebapiAbstract
             $salesChannels
         );
     }
-
     /**
-     * @return array
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_with_sales_channels.php
      */
-    public function dataProviderSalesChannelsLinks(): array
+    public function testUpdateStockWithSalesChannelsReplacing()
     {
-        return [
-            'add_sales_channels_link' => [
-                [
-                    [
-                        SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                        SalesChannelInterface::CODE => 'test_0',
-                    ],
-                    [
-                        SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                        SalesChannelInterface::CODE => 'test_1',
-                    ],
-                ],
-            ]
+        $stockId = 10;
+        $salesChannels = [
+            [
+                SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                SalesChannelInterface::CODE => 'test_1',
+            ],
+            [
+                SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                SalesChannelInterface::CODE => 'test_2',
+            ],
         ];
+        $expectedData = [
+            StockInterface::NAME => 'stockName',
+            ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => [
+                'sales_channels' => $salesChannels,
+            ],
+        ];
+        $this->saveStock($stockId, $expectedData);
+        $stockData = $this->getStockDataById($stockId);
+
+        self::assertArrayHasKey('sales_channels', $stockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
+        self::assertEquals(
+            $stockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['sales_channels'],
+            $salesChannels
+        );
     }
 
     /**
