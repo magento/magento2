@@ -11,4 +11,7 @@
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
         <plugin name="prevent_default_stock_deletion" type="Magento\InventoryCatalog\Plugin\Model\StockRepositoryPlugin" sortOrder="1"/>
     </type>
+    <type name="Magento\InventoryApi\Api\ReservationsAppendInterface">
+        <plugin name="legacy_catalog_inventory_plugin" type="Magento\InventoryCatalog\Plugin\Model\LegacyCatalogInventoryPlugin" sortOrder="1"/>
+    </type>
 </config>
