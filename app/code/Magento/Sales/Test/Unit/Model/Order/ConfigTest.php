@@ -24,9 +24,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $orderStatusCollectionFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\StatusFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderStatusFactoryMock;
+    protected $statusFactoryMock;
 
     /**
      * @var \Magento\Sales\Model\Order\Status
@@ -46,7 +46,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->orderStatusModel = $objectManager->getObject(\Magento\Sales\Model\Order\Status::class, [
             'storeManager' => $this->storeManagerMock,
         ]);
-        $this->orderStatusFactoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\StatusFactory::class)
+        $this->statusFactoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\StatusFactory::class)
             ->setMethods(['load', 'create'])
             ->getMock();
         $this->orderStatusCollectionFactoryMock = $this->createPartialMock(
@@ -57,7 +57,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->getObject(
                 \Magento\Sales\Model\Order\Config::class,
                 [
-                    'orderStatusFactory' => $this->orderStatusFactoryMock,
+                    'orderStatusFactory' => $this->statusFactoryMock,
                     'orderStatusCollectionFactory' => $this->orderStatusCollectionFactoryMock
                 ]
             );
@@ -170,10 +170,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('joinStates')
             ->will($this->returnValue($collectionData));
 
-        $this->orderStatusFactoryMock->method('create')
+        $this->statusFactoryMock->method('create')
             ->willReturnSelf();
 
-        $this->orderStatusFactoryMock->method('load')
+        $this->statusFactoryMock->method('load')
             ->willReturn($this->orderStatusModel);
 
         $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
