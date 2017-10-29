@@ -37,7 +37,8 @@ define([
                             channelType: channelType.charAt(0).toUpperCase() + channelType.slice(1),
                             values: salesChannels[channelType]
                         }
-                    });
+                    }
+                );
             }
 
             return htmlContent;
