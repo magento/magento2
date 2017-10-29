@@ -11,7 +11,7 @@
     <span>
         <% _.each(data.values, function(value, key) { %>
             <% var separator = ((data.values.length -1) != key) ? ', ' : ''; %>
-            <%- value %><%- separator %>
+            <%- value.name %> (<%- value.code %>)<%- separator %>
         <% }); %>
     </span>
 </div>

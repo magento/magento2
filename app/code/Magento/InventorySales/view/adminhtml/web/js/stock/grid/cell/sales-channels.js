@@ -39,7 +39,6 @@ define([
                         }
                     });
             }
-
             return htmlContent;
         }
     });
