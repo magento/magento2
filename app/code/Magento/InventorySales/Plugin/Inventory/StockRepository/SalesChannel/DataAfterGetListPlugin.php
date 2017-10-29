@@ -39,7 +39,7 @@ class DataAfterGetListPlugin
     ): StockSearchResultsInterface {
 
         $stocks = [];
-        foreach($result->getItems() as $item) {
+        foreach ($result->getItems() as $item) {
             $stocks[] = $this->addExtensionAttributeToStock->addAttributeToStock($item);
         }
         $result->setItems($stocks);

@@ -75,5 +75,4 @@ interface SalesChannelInterface extends ExtensibleDataInterface
      * @return void
      */
     public function setExtensionAttributes($extensionAttributes);
-
 }
