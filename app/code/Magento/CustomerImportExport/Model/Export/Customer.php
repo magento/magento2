@@ -71,7 +71,12 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      *
      * @var string[]
      */
-    protected $_permanentAttributes = [self::COLUMN_EMAIL, self::COLUMN_ENTITY_ID, self::COLUMN_WEBSITE, self::COLUMN_STORE];
+    protected $_permanentAttributes = [
+        self::COLUMN_EMAIL,
+        self::COLUMN_ENTITY_ID,
+        self::COLUMN_WEBSITE,
+        self::COLUMN_STORE
+    ];
 
     /**
      * Customers whose data is exported
