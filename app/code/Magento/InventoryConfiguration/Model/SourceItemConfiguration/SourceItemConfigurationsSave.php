@@ -7,11 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration;
 
-use Magento\InventoryConfiguration\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\SaveSourceItemConfiguration as SaveSourceItemConfigurationModel;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use Magento\InventoryConfiguration\Api\SourceItemConfigurationSaveInterface;
+use Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface;
 use Psr\Log\LoggerInterface;
 
 
@@ -19,7 +18,7 @@ use Psr\Log\LoggerInterface;
  * Implementation of SourceItem Quantity notification save multiple operation for specific db layer
  * Save Multiple used here for performance efficient purposes over single save operation
  */
-class SourceItemConfigurationSave implements SourceItemConfigurationSaveInterface
+class SourceItemConfigurationsSave implements SourceItemConfigurationsSaveInterface
 {
 
     /**
@@ -50,7 +49,7 @@ class SourceItemConfigurationSave implements SourceItemConfigurationSaveInterfac
     /**
      * @inheritdoc
      */
-    public function saveSourceItemConfiguration(array $configuration)
+    public function execute(array $configuration)
     {
         if (empty($configuration)) {
             throw new InputException(__('Input data is empty'));

@@ -11,8 +11,8 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryConfiguration\Model\SourceItemConfiguration\GetSourceItemConfiguration;
-use Magento\InventoryConfiguration\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 
 
 /**
@@ -26,17 +26,17 @@ class Configuration extends AbstractModifier
     private $locator;
 
     /**
-     * @var GetSourceItemConfiguration
+     * @var GetSourceItemConfigurationInterface
      */
     private $getSourceItemConfiguration;
 
     /**
      * @param LocatorInterface $locator
-     * @param GetSourceItemConfiguration $getSourceItemConfiguration
+     * @param GetSourceItemConfigurationInterface $getSourceItemConfiguration
      */
     public function __construct(
         LocatorInterface $locator,
-        GetSourceItemConfiguration $getSourceItemConfiguration
+        GetSourceItemConfigurationInterface $getSourceItemConfiguration
     ) {
         $this->locator = $locator;
         $this->getSourceItemConfiguration = $getSourceItemConfiguration;
@@ -62,7 +62,7 @@ class Configuration extends AbstractModifier
     private function getSourceItemsConfigurationData(array $assignedSources, ProductInterface $product): array
     {
         foreach ($assignedSources as &$source) {
-            $sourceConfiguration = $this->getSourceItemConfiguration->getSourceItemConfiguration(
+            $sourceConfiguration = $this->getSourceItemConfiguration->get(
                 $source[SourceInterface::SOURCE_ID],
                 $product->getSku()
             );

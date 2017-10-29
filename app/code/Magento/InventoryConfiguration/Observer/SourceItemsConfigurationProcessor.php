@@ -9,10 +9,10 @@ namespace Magento\InventoryConfiguration\Observer;
 
 use Magento\Framework\Exception\InputException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryConfiguration\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface;
 use Magento\InventoryConfiguration\Model\SourceItemConfiguration\DeleteInterface;
-use Magento\InventoryConfiguration\Model\SourceItemConfiguration\GetSourceItemConfiguration;
-use Magento\InventoryConfiguration\Model\SourceItemConfiguration\SourceItemConfigurationSave;
 use Magento\InventoryConfiguration\Model\SourceItemConfigurationFactory;
 
 use Magento\Framework\Api\DataObjectHelper;
@@ -23,7 +23,7 @@ use Magento\Framework\Api\DataObjectHelper;
 class SourceItemsConfigurationProcessor
 {
     /**
-     * @var GetSourceItemConfiguration
+     * @var GetSourceItemConfigurationInterface
      */
     private $getSourceItemConfiguration;
 
@@ -32,7 +32,7 @@ class SourceItemsConfigurationProcessor
      */
     private $sourceItemConfigurationFactory;
     /**
-     * @var SourceItemConfigurationSave
+     * @var SourceItemConfigurationsSaveInterface
      */
     private $sourceItemConfigurationSave;
     /**
@@ -47,15 +47,15 @@ class SourceItemsConfigurationProcessor
 
     /**
      * @param SourceItemConfigurationFactory $sourceItemConfigurationFactory
-     * @param SourceItemConfigurationSave $sourceItemConfigurationSave
-     * @param GetSourceItemConfiguration $getSourceItemConfiguration
+     * @param SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave
+     * @param GetSourceItemConfigurationInterface $getSourceItemConfiguration
      * @param DeleteInterface $sourceItemConfigurationDelete
      * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         SourceItemConfigurationFactory $sourceItemConfigurationFactory,
-        SourceItemConfigurationSave $sourceItemConfigurationSave,
-        GetSourceItemConfiguration $getSourceItemConfiguration,
+        SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave,
+        GetSourceItemConfigurationInterface $getSourceItemConfiguration,
         DeleteInterface $sourceItemConfigurationDelete,
         DataObjectHelper $dataObjectHelper
     ) {
@@ -95,7 +95,7 @@ class SourceItemsConfigurationProcessor
             unset($sourceItemsForDelete[$sourceId]);
         }
         if ($sourceItemsForSave) {
-            $this->sourceItemConfigurationSave->saveSourceItemConfiguration($sourceItemsForSave);
+            $this->sourceItemConfigurationSave->execute($sourceItemsForSave);
         }
         if ($sourceItemsForDelete) {
             $this->deleteSourceItemsConfiguration($sourceItemsForDelete);
@@ -116,7 +116,7 @@ class SourceItemsConfigurationProcessor
         /** @var \Magento\Inventory\Model\SourceItem $sourceItem */
         foreach($sourceItemsData as $sourceItem) {
             $sourceId = $sourceItem[SourceItemInterface::SOURCE_ID];
-            $sourceItems[] = $this->getSourceItemConfiguration->getSourceItemConfiguration($sourceId, $sku);
+            $sourceItems[] = $this->getSourceItemConfiguration->get($sourceId, $sku);
         }
 
         $sourceItemMap = [];

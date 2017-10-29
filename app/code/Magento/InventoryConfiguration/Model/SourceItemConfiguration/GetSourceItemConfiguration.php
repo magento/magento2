@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration;
 
-use Magento\InventoryConfiguration\Api\Data\SourceItemConfigurationInterface;
-use Magento\InventoryConfiguration\Api\GetSourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
 use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\GetSourceItemConfiguration as ResourceGetSourceItemConfiguration;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 
@@ -23,12 +25,12 @@ class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
     /**
      * @var ResourceGetSourceItemConfiguration
      */
-    protected $getConfiguration;
+    private $getConfiguration;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
      * ResourceGetSourceItemConfiguration constructor.
@@ -48,8 +50,16 @@ class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function getSourceItemConfiguration(string $sourceId, string $sku): SourceItemConfigurationInterface
+    public function get(string $sourceId, string $sku): SourceItemConfigurationInterface
     {
-        return $this->getConfiguration->execute($sourceId, $sku);
+        if (empty($sourceId) || empty($sku)) {
+            throw new InputException(__('SourceId oder Sku missing'));
+        }
+        try {
+            return $this->getConfiguration->execute($sourceId, $sku);
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+            throw new LocalizedException(__('Could not load Source Item Configuration.'), $e);
+        }
     }
 }

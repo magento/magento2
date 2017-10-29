@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryConfiguration\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
 use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
-use Magento\InventoryConfiguration\Model\SourceItemConfigurationFactory;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 
 /**
@@ -25,18 +25,17 @@ class GetSourceItemConfiguration
     private $resourceConnection;
 
     /**
-     * @var SourceItemConfigurationFactory
+     * @var SourceItemConfigurationInterfaceFactory
      */
     private $sourceItemConfigurationFactory;
 
-
     /**
      * @param ResourceConnection $resourceConnection
-     * @param SourceItemConfigurationFactory $sourceItemConfigurationFactory
+     * @param SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        SourceItemConfigurationFactory $sourceItemConfigurationFactory
+        SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory
     )
     {
         $this->resourceConnection = $resourceConnection;
@@ -54,11 +53,14 @@ class GetSourceItemConfiguration
     {
         $connection = $this->resourceConnection->getConnection();
 
+        $mainTable = $this->resourceConnection->getTableName(SourceItemConfiguration::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
+        $joinTable = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
+
         $select = $connection->select()->from(
-            ['mt' => $this->getMainTable()],
+            ['mt' => $mainTable],
             [SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]
-        )->joinLeft(
-            ['sit' => $this->getJoinTable()],
+        )->joinRight(
+            ['sit' => $joinTable],
             'mt.source_item_id=sit.source_item_id',
             ['source_item_id', 'source_id']
         )->where(
@@ -71,31 +73,17 @@ class GetSourceItemConfiguration
         ];
 
         $row = $connection->fetchRow($select, $bind);
-        $object = $this->sourceItemConfigurationFactory->create()->setData($row);
+        $object = $this->sourceItemConfigurationFactory->create();
+
+        if ($row && count($row) > 0) {
+            foreach ($row as $key => $column) {
+                if ($column === null) {
+                    unset($row[$key]);
+                }
+            }
+            $object = $this->sourceItemConfigurationFactory->create()->setData($row);
+        }
 
         return $object;
     }
-
-    /**
-     * Get the main table.
-     *
-     * @return string
-     */
-    protected function getMainTable()
-    {
-        return $this->resourceConnection->getTableName(SourceItemConfiguration::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
-    }
-
-    /**
-     * Get the join table.#
-     *
-     * @return string
-     */
-    protected function getJoinTable()
-    {
-        return $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
-    }
-
-
-
 }

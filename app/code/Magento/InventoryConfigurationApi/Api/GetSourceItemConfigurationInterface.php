@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\InventoryConfiguration\Api;
+namespace Magento\InventoryConfigurationApi\Api;
 
-use Magento\InventoryConfiguration\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 
 /**
- * Represents amount of product on physical storage
+ * Get the source configuration for a product.
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
@@ -21,7 +21,7 @@ interface GetSourceItemConfigurationInterface
      *
      * @param string $sourceId
      * @param string $sku
-     * @return SourceItemConfigurationInterface
+     * @return \Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface
      */
-    public function getSourceItemConfiguration(string $sourceId, string $sku): SourceItemConfigurationInterface;
+    public function get(string $sourceId, string $sku): SourceItemConfigurationInterface;
 }

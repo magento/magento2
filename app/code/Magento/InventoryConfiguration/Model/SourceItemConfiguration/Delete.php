@@ -9,7 +9,7 @@ namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration as SourceItemConfigurationResourceModel;
-use Magento\InventoryConfiguration\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -48,7 +48,7 @@ class Delete implements DeleteInterface
             $this->sourceItemConfigurationResource->delete($sourceItemConfiguration);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotDeleteException(__('Could not delete SourceItem'), $e);
+            throw new CouldNotDeleteException(__('Could not delete SourceItem Configuration.'), $e);
         }
     }
 }

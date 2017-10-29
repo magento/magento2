@@ -3,7 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\InventoryConfiguration\Api\Data;
+namespace Magento\InventoryConfigurationApi\Api\Data;
+
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Represents a configuration object.
@@ -12,18 +14,18 @@ namespace Magento\InventoryConfiguration\Api\Data;
  *
  * @api
  */
-interface SourceItemConfigurationInterface
+interface SourceItemConfigurationInterface extends ExtensibleDataInterface
 {
     /**
      * Constant for fields in data array.
      */
     const SOURCE_ITEM_ID = 'source_item_id';
-    const INVENTORY_NOTIFY_QTY = 'notify_quantity';
+    const INVENTORY_NOTIFY_QTY = 'notify_stock_qty';
 
     /**
      * Get source item id.
      *
-     * @return int
+     * @return int|null
      */
     public function getSourceItemId();
 
@@ -39,7 +41,7 @@ interface SourceItemConfigurationInterface
      *
      * @return float
      */
-    public function getNotifyQuantity(): float;
+    public function getNotifyQuantity();
 
     /**
      * Set the notify quantity.
@@ -47,5 +49,5 @@ interface SourceItemConfigurationInterface
      * @param float $quantity
      * @return void
      */
-    public function setNotifyQuantity(float $quantity);
+    public function setNotifyQuantity($quantity);
 }

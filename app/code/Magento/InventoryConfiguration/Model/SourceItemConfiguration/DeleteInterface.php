@@ -6,7 +6,7 @@
 namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\InventoryConfiguration\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 
 /**
  * Delete SourceItem Configuration

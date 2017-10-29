@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\InventoryConfiguration\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 
 /**
  * Implementation of basic operations for Source Item Notification entity for specific db layer

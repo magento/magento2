@@ -23,7 +23,7 @@ class ProcessSourceItemsConfigurationObserver implements ObserverInterface
     /**
      * @var SourceItemsConfigurationProcessor
      */
-    private $processSourceItemsConfigurationObserver;
+    private $sourceItemsConfigurationProcessor;
 
     /**
      * ProcessSourceItemsConfigurationObserver constructor.
@@ -33,7 +33,7 @@ class ProcessSourceItemsConfigurationObserver implements ObserverInterface
         SourceItemsConfigurationProcessor $processSourceItemsConfigurationObserver
     )
     {
-        $this->processSourceItemsConfigurationObserver = $processSourceItemsConfigurationObserver;
+        $this->sourceItemsConfigurationProcessor = $processSourceItemsConfigurationObserver;
     }
 
     /**
@@ -52,6 +52,6 @@ class ProcessSourceItemsConfigurationObserver implements ObserverInterface
             ? $sources['assigned_sources']
             : [];
 
-        $this->processSourceItemsConfigurationObserver->process($product->getSku(), $assignedSources);
+        $this->sourceItemsConfigurationProcessor->process($product->getSku(), $assignedSources);
     }
 }

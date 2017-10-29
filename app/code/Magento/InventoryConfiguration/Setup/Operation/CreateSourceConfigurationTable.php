@@ -11,8 +11,9 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
+use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
-use Magento\InventoryConfiguration\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 
 class CreateSourceConfigurationTable
 {
@@ -61,9 +62,9 @@ class CreateSourceConfigurationTable
             null,
             [
                 Table::OPTION_UNSIGNED => false,
-                Table::OPTION_NULLABLE => false,
-                Table::OPTION_DEFAULT => 0,
-                Table::OPTION_PRECISION => 10,
+                Table::OPTION_NULLABLE => true,
+                Table::OPTION_DEFAULT => null,
+                Table::OPTION_PRECISION => 12,
                 Table::OPTION_SCALE => 4,
             ],
             'Notify Quantity'
@@ -85,11 +86,11 @@ class CreateSourceConfigurationTable
                 $notifyQtyTable->getName(),
                 SourceItemConfigurationInterface::SOURCE_ITEM_ID,
                 $sourceItemTable,
-                SourceItemConfigurationInterface::SOURCE_ITEM_ID
+                SourceItem::ID_FIELD_NAME
             ),
             SourceItemConfigurationInterface::SOURCE_ITEM_ID,
             $sourceItemTable,
-            SourceItemConfigurationInterface::SOURCE_ITEM_ID,
+            SourceItem::ID_FIELD_NAME,
             AdapterInterface::FK_ACTION_CASCADE
         );
     }
