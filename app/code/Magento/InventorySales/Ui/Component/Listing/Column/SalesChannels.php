@@ -36,8 +36,7 @@ class SalesChannels extends Column
         UiComponentFactory $uiComponentFactory,
         array $components = [],
         array $data = []
-    )
-    {
+    ) {
         $this->salesChannelNameResolver = $salesChannelNameResolver;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }

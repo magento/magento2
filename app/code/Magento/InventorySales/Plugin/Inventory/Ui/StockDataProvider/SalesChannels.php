@@ -35,8 +35,7 @@ class SalesChannels
     public function __construct(
         GetAssignedSalesChannelsForStockInterface $channelsByStock,
         StockRepository $stockRepository
-    )
-    {
+    ) {
         $this->channelsByStock = $channelsByStock;
         $this->stockRepository = $stockRepository;
     }
