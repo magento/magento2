@@ -112,8 +112,8 @@ class SourcesTest extends TestCase
         $beforeImportData = $this->buildDataArray($sourceItems->getItems());
 
         $bunch = [
-            $this->buildRowDataArray(10, 'SKU-1', 6.88, 1),
-            $this->buildRowDataArray(20, 'SKU-1', 5, 1),
+            $this->buildRowDataArray(10, 'SKU-1', 6.8800, 1),
+            $this->buildRowDataArray(20, 'SKU-1', 5.0000, 1),
             $this->buildRowDataArray(50, 'SKU-2', 15, 1),
             $this->buildRowDataArray(10, 'SKU-2', 33, 1),
         ];
@@ -244,7 +244,7 @@ class SourcesTest extends TestCase
             $data[$key] = $this->buildRowDataArray(
                 $bunchData[Sources::COL_SOURCE],
                 $bunchData[Sources::COL_SKU],
-                $bunchData[Sources::COL_QTY],
+                number_format($bunchData[Sources::COL_QTY], 4),
                 $bunchData[Sources::COL_STATUS]
             );
         }
