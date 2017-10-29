@@ -12,8 +12,8 @@ use Magento\ImportExport\Model\Export\Factory as ExportFactory;
 use Magento\ImportExport\Model\Export\AbstractEntity;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection as SourceItemCollection;
-use Magento\InventoryImportExport\Api\SourceItemCollectionFactoryInterface;
-use Magento\InventoryImportExport\Api\ColumnProviderInterface;
+use Magento\InventoryImportExport\Model\Export\SourceItemCollectionFactoryInterface;
+use Magento\InventoryImportExport\Model\Export\ColumnProviderInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
 

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\InventoryImportExport\Api;
+namespace Magento\InventoryImportExport\Model\Export;
 
 use Magento\Framework\Data\Collection as AttributeCollection;
 

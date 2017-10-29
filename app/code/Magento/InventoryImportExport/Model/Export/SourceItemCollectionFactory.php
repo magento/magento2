@@ -10,8 +10,8 @@ use Magento\Framework\Data\Collection as AttributeCollection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
-use Magento\InventoryImportExport\Api\ColumnProviderInterface;
-use Magento\InventoryImportExport\Api\SourceItemCollectionFactoryInterface;
+use Magento\InventoryImportExport\Model\Export\ColumnProviderInterface;
+use Magento\InventoryImportExport\Model\Export\SourceItemCollectionFactoryInterface;
 use Magento\ImportExport\Model\Export;
 
 /**

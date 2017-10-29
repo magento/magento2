@@ -7,7 +7,7 @@
 namespace Magento\InventoryImportExport\Model\Export;
 
 use Magento\Framework\Data\Collection as AttributeCollection;
-use Magento\InventoryImportExport\Api\ColumnProviderInterface;
+use Magento\InventoryImportExport\Model\Export\ColumnProviderInterface;
 use Magento\ImportExport\Model\Export;
 
 /**

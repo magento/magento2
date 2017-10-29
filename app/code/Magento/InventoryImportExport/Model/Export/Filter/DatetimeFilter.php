@@ -7,7 +7,7 @@
 namespace Magento\InventoryImportExport\Model\Export\Filter;
 
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
-use Magento\InventoryImportExport\Api\FilterProcessorInterface;
+use Magento\InventoryImportExport\Model\Export\FilterProcessorInterface;
 
 /**
  * @inheritdoc

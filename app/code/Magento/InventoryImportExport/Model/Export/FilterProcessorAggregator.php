@@ -8,7 +8,7 @@ namespace Magento\InventoryImportExport\Model\Export;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
-use Magento\InventoryImportExport\Api\FilterProcessorInterface;
+use Magento\InventoryImportExport\Model\Export\FilterProcessorInterface;
 
 /**
  * @api

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\InventoryImportExport\Api;
+namespace Magento\InventoryImportExport\Model\Export;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Inventory\Model\ResourceModel\SourceItem\Collection;
