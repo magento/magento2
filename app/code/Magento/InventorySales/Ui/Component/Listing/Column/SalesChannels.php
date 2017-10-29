@@ -18,15 +18,11 @@ class SalesChannels extends Column
      * Prepare column value
      *
      * @param array $salesChannelData
-     * @return string
+     * @return array
      */
-    private function prepareStockChannelData(array $salesChannelData)
+    private function prepareSalesChannelData(array $salesChannelData): array
     {
-        $websiteData = '';
-        foreach ($salesChannelData as $key => $channelData) {
-            $websiteData .= $key . ': ' . implode(',', $channelData);
-        }
-        return $websiteData;
+        return $salesChannelData;
     }
 
     /**
@@ -39,7 +35,7 @@ class SalesChannels extends Column
     {
         if ($dataSource['data']['totalRecords'] > 0) {
             foreach ($dataSource['data']['items'] as &$row) {
-                $row['sales_channels'] = $this->prepareStockChannelData($row['sales_channels']);
+                $row['sales_channels'] = $this->prepareSalesChannelData($row['sales_channels']);
             }
         }
         unset($row);

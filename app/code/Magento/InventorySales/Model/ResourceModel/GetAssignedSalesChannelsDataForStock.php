@@ -47,6 +47,6 @@ class GetAssignedSalesChannelsDataForStock
             ->from($tableName)
             ->where('stock_id = ?', $stockId);
 
-        return $connection->fetchAssoc($select);
+        return $connection->fetchAll($select);
     }
 }
