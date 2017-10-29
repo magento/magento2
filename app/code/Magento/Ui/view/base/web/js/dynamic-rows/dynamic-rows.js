@@ -548,6 +548,13 @@ define([
                     });
 
                     this.labels.push(data);
+
+                    /**
+                     * Sort the array after an element was added to fix an bug where
+                     * additional added field labels in ui_components haven't the right
+                     * sort order.
+                     */
+                    this.labels.sort(this._compare);
                 }, this);
             }
         },
@@ -912,6 +919,24 @@ define([
             this.elems(this.elems().sort(function (propOne, propTwo) {
                 return ~~propOne.position - ~~propTwo.position;
             }));
+        },
+
+        /**
+         * Compare two objects by the sortOrder property.
+         *
+         * @param {Object} $object1
+         * @param {Object} $object2
+         * @returns {Number}
+         * @private
+         */
+        _compare: function ($object1, $object2) {
+            if ($object1.sortOrder > $object2.sortOrder) {
+                return 1;
+            } else if ($object1.sortOrder < $object2.sortOrder) {
+                return -1;
+            }
+
+            return 0;
         },
 
         /**
