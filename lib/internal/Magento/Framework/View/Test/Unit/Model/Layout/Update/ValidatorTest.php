@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Model\Layout\Update;
 
-use \Magento\Framework\View\Model\Layout\Update\Validator;
+use Magento\Framework\View\Model\Layout\Update\Validator;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,6 +13,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $_objectHelper;
+
+    /**
+     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $validationState;
 
     protected function setUp()
     {
@@ -29,12 +34,16 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $domConfigFactory = $this->getMockBuilder(
             'Magento\Framework\Config\DomFactory'
         )->disableOriginalConstructor()->getMock();
+        $this->validationState = $this->getMockBuilder(
+            \Magento\Framework\Config\ValidationStateInterface::class
+        )->disableOriginalConstructor()->getMock();
 
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $params = [
             'xml' => '<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
                 trim($layoutUpdate) . '</layout>',
             'schemaFile' => $urnResolver->getRealPath('urn:magento:framework:View/Layout/etc/page_layout.xsd'),
+            'validationState' => $this->validationState,
         ];
 
         $exceptionMessage = 'validation exception';
@@ -52,7 +61,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $urnResolver = $this->_objectHelper->getObject('Magento\Framework\Config\Dom\UrnResolver');
         $model = $this->_objectHelper->getObject(
             'Magento\Framework\View\Model\Layout\Update\Validator',
-            ['domConfigFactory' => $domConfigFactory, 'urnResolver' => $urnResolver]
+            [
+                'domConfigFactory' => $domConfigFactory,
+                'urnResolver' => $urnResolver,
+                'validationState' => $this->validationState,
+            ]
         );
 
         return $model;
