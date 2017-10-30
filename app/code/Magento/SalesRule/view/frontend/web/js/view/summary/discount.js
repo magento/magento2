@@ -44,6 +44,22 @@ define([
             return this.totals()['coupon_label'];
         },
 
+        getTitle: function () {
+            if (!this.totals()) {
+                return null;
+            }
+
+            var total = this.totals();
+
+            for(var i = 0, len = total.total_segments.length; i < len; i++) {
+                if(total.total_segments[i].code == "discount") {
+                    return total.total_segments[i].title;
+                }
+            }
+
+            return null;
+        },
+
         /**
          * @return {Number}
          */
