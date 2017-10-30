@@ -164,12 +164,16 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      */
     protected function _isSecure()
     {
-        if (true === parent::_isSecure()) {
+        if ($this->_request->isSecure()) {
+            if ($this->getRouteParamsResolver()->hasData('secure')) {
+                return (bool) $this->getRouteParamsResolver()->getData('secure');
+            }
             return true;
         }
 
-        // backend specific checks
-        // if ($this->hasData('secure_is_forced') already processed in parent class
+        if ($this->getRouteParamsResolver()->hasData('secure_is_forced')) {
+            return (bool) $this->getRouteParamsResolver()->getData('secure');
+        }
 
         if ($this->_scopeConfig->isSetFlag('web/secure/use_in_adminhtml')) {
             if ($this->getRouteParamsResolver()->hasData('secure')) {
