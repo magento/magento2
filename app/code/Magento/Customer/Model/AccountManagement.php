@@ -1127,7 +1127,7 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerInterface $customer
      * @return bool
      */
-    protected function isConfirmationRequired($customer)
+    public function isConfirmationRequired($customer)
     {
         if ($this->canSkipConfirmation($customer)) {
             return false;
