@@ -44,7 +44,7 @@ class Advanced extends Generic
     protected $disableScopeChangeList;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface
+     * @var ResolverInterface
      */
     protected $localeResolver;
     
