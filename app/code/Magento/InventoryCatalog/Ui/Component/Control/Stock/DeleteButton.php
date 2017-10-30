@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\InventorySales\Model\GetAssignedSalesChannelsForStockInterface;
 
 /**
  * Represents delete button with pre-configured options
@@ -29,6 +30,11 @@ class DeleteButton implements ButtonProviderInterface
     private $defaultStockProvider;
 
     /**
+     * @var GetAssignedSalesChannelsForStockInterface
+     */
+    private $assignedSalesChannelsForStock;
+
+    /**
      * @var RequestInterface
      */
     private $request;
@@ -36,15 +42,18 @@ class DeleteButton implements ButtonProviderInterface
     /**
      * @param StockDeleteButton $deleteButton
      * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param GetAssignedSalesChannelsForStockInterface $assignedSalesChannelsForStock
      * @param RequestInterface $request
      */
     public function __construct(
         StockDeleteButton $deleteButton,
         DefaultStockProviderInterface $defaultStockProvider,
+        GetAssignedSalesChannelsForStockInterface $assignedSalesChannelsForStock,
         RequestInterface $request
     ) {
         $this->deleteButton = $deleteButton;
         $this->defaultStockProvider = $defaultStockProvider;
+        $this->assignedSalesChannelsForStock = $assignedSalesChannelsForStock;
         $this->request = $request;
     }
 
@@ -53,7 +62,9 @@ class DeleteButton implements ButtonProviderInterface
      */
     public function getButtonData()
     {
-        if ((int)$this->request->getParam(StockInterface::STOCK_ID) === $this->defaultStockProvider->getId()) {
+        $stockId = (int)$this->request->getParam(StockInterface::STOCK_ID);
+        $assignSalesChannels = $this->assignedSalesChannelsForStock->execute($stockId);
+        if ($stockId === $this->defaultStockProvider->getId() || count($assignSalesChannels)) {
             return [];
         }
 
