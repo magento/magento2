@@ -319,6 +319,11 @@ abstract class AbstractBackup implements BackupInterface
         return $this;
     }
 
+    /**
+     * Get if keep files of backup
+     *
+     * @return boolean
+     */
     public function keepSourceFile()
     {
         return $this->keepSourceFile;
