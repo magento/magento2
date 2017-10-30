@@ -6,9 +6,14 @@
 
 namespace Magento\Rule\Model\Condition\Sql;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Combine;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Model\Product;
 
 /**
  * Class SQL Builder
@@ -44,11 +49,21 @@ class Builder
     protected $_expressionFactory;
 
     /**
-     * @param ExpressionFactory $expressionFactory
+     * @var AttributeRepositoryInterface
      */
-    public function __construct(ExpressionFactory $expressionFactory)
-    {
+    private $attributeRepository;
+
+    /**
+     * @param ExpressionFactory $expressionFactory
+     * @param AttributeRepositoryInterface|null $attributeRepository
+     */
+    public function __construct(
+        ExpressionFactory $expressionFactory,
+        AttributeRepositoryInterface $attributeRepository = null
+    ) {
         $this->_expressionFactory = $expressionFactory;
+        $this->attributeRepository = $attributeRepository ?:
+            ObjectManager::getInstance()->get(AttributeRepositoryInterface::class);
     }
 
     /**
@@ -118,6 +133,7 @@ class Builder
     protected function _getMappedSqlCondition(AbstractCondition $condition, $value = '')
     {
         $argument = $condition->getMappedSqlField();
+        $isAttributeEavAndNotGlobal = $this->isAttributeEavAndNotGlobal($condition);
         if ($argument) {
             $conditionOperator = $condition->getOperatorForValidate();
 
@@ -125,9 +141,13 @@ class Builder
                 throw new \Magento\Framework\Exception\LocalizedException(__('Unknown condition operator'));
             }
 
-            if (is_array($argument)) {
-                $fields = [];
-                foreach ($argument as $field) {
+            if ($isAttributeEavAndNotGlobal) {
+                $attribute = $this->attributeRepository->get(Product::ENTITY, $condition->getAttribute());
+                $arguments = [
+                    $argument,
+                    'at_' . $attribute->getAttributeCode() . '_default.value'
+                ];
+                foreach ($arguments as $field) {
                     $fields[] = $this->_connection->quoteIdentifier($field);
                 }
                 $sql = str_replace(
@@ -195,5 +215,22 @@ class Builder
             // Select ::where method adds braces even on empty expression
             $collection->getSelect()->where($whereExpression);
         }
+    }
+
+    /**
+     * Check if attribute is eav and not global
+     *
+     * @param AbstractCondition $condition
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function isAttributeEavAndNotGlobal(AbstractCondition $condition)
+    {
+        try {
+            $attribute = $this->attributeRepository->get(Product::ENTITY, $condition->getAttribute());
+        } catch (NoSuchEntityException $e) {
+            throw new LocalizedException(__('Attribute %1 doesn\'t exist', $condition->getAttribute()));
+        }
+        return $attribute->getAttributeId() && !$attribute->isScopeGlobal();
     }
 }

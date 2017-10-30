@@ -605,7 +605,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         if ($this->getAttribute() == 'sku') {
             $mappedSqlField = 'e.sku';
         } elseif (!$this->isAttributeSetOrCategory()) {
-            $mappedSqlField = $this->getEavAttributeTableAliases();
+            $mappedSqlField = $this->getEavAttributeTableAlias() . '.value';
         } elseif ($this->getAttribute() == 'category_ids') {
             $mappedSqlField = 'e.entity_id';
         } else {
@@ -720,20 +720,5 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $attribute = $this->getAttributeObject();
 
         return 'at_' . $attribute->getAttributeCode();
-    }
-
-    /**
-     * Get eav attribute aliases
-     *
-     * @return array
-     */
-    private function getEavAttributeTableAliases()
-    {
-        $attribute = $this->getAttributeObject();
-
-        return [
-            'at_' . $attribute->getAttributeCode() . '.value',
-            'at_' . $attribute->getAttributeCode() . '_default.value'
-        ];
     }
 }
