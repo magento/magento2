@@ -30,7 +30,7 @@
                 <env value="chrome"/>
             </annotations>
 
-            <amOnPage url="{{AdminCategoryPage.urlPath}}" mergeKey="amOnCategoryGridPage"/>
+            <amOnPage url="{{AdminCategoryPage.url}}" mergeKey="amOnCategoryGridPage"/>
             <waitForPageLoad mergeKey="waitForPageLoad1"/>
 
             <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" mergeKey="clickOnAddSubCategory"/>
