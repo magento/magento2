@@ -162,6 +162,7 @@
         "magento/module-product-video": "100.3.0-dev",
         "magento/module-quote": "100.3.0-dev",
         "magento/module-quote-analytics": "100.3.0-dev",
+        "magento/module-release-notification": "100.3.0",
         "magento/module-reports": "100.3.0-dev",
         "magento/module-require-js": "100.3.0-dev",
         "magento/module-review": "100.3.0-dev",
