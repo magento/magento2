@@ -8,7 +8,7 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="InvoiceNewPage" urlPath="/admin/sales/order_invoice/new/order_id/" module="Sales">
+    <page name="InvoiceNewPage" url="/admin/sales/order_invoice/new/order_id/" module="Sales">
         <section name="InvoiceNewSection"/>
     </page>
 </config>
