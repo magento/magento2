@@ -89,13 +89,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * Retrieve store Id (From Quote)
+     * Retrieve store Id (From Quote) 
      *
      * @return int
      */
     public function getStoreId()
     {
-        return (int)$this->_quote->getStoreId();
+        return (int)$this->_productCollectionFactory->create()->getStoreId();
     }
 
     /**
