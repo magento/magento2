@@ -54,7 +54,7 @@ class SaveHandler
     public function execute($entityType, $entity)
     {
         $link = $entity->getData($this->metadataPool->getMetadata($entityType)->getLinkField());
-        if(!$entity->getIsDuplicate()){
+        if (!$entity->getIsDuplicate()) {
             if ($this->linkResource->hasProductLinks($link)) {
                 /** @var \Magento\Catalog\Api\Data\ProductInterface $entity*/
                 foreach ($this->productLinkRepository->getList($entity) as $link) {
