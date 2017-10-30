@@ -71,7 +71,7 @@ class CanViewNotification implements VisibilityConditionInterface
             $this->viewerLogger->log($userId, $version);
             return true;
         } else {
-            return true;
+            return false;
         }
     }
 
