@@ -202,6 +202,13 @@ class View extends AbstractConfigureBlock
     private $videoContainer = 'div.fotorama-video-container';
 
     /**
+     * Success message block after add to cart click.
+     *
+     * @var string
+     */
+    private $addToCartSuccess = '.message-success';
+
+    /**
      * Get block price.
      *
      * @return Price
@@ -247,6 +254,7 @@ class View extends AbstractConfigureBlock
     public function clickAddToCart()
     {
         $this->_rootElement->find($this->addToCart, Locator::SELECTOR_CSS)->click();
+        $this->waitForElementVisible($this->addToCartSuccess);
     }
 
     /**

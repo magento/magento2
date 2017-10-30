@@ -37,6 +37,10 @@ function init(config) {
                 host: host,
                 template: render(files.template),
                 vendor: files.requireJs,
+                junit: {
+                    path: "var/log/js-unit/",
+                    consolidate: true
+                },
 
                 /**
                  * @todo rename "helpers" to "specs" (implies overriding grunt-contrib-jasmine code)
