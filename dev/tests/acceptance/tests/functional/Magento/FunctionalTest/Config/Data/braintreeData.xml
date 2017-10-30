@@ -34,4 +34,32 @@
     <entity name="samplePrivateKey" type="private_key">
         <data key="value">somePrivateKey</data>
     </entity>
+
+    <!-- default configuration used to restore Magento config -->
+    <entity name="defaultBraintreeConfig" type="braintree_config_state">
+        <required-entity type="title">defaultTitle</required-entity>
+        <required-entity type="payment_action">defaultPaymentAction</required-entity>
+        <required-entity type="environment">defaultEnvironment</required-entity>
+        <required-entity type="merchant_id">defaultMerchantId</required-entity>
+        <required-entity type="public_key">defaultPublicKey</required-entity>
+        <required-entity type="private_key">defaultPrivateKey</required-entity>
+    </entity>
+    <entity name="defaultTitle" type="title">
+        <data key="value"/>
+    </entity>
+    <entity name="defaultPaymentAction" type="payment_action">
+        <data key="value"/>
+    </entity>
+    <entity name="defaultEnvironment" type="environment">
+        <data key="value"/>
+    </entity>
+    <entity name="defaultMerchantId" type="merchant_id">
+        <data key="value"/>
+    </entity>
+    <entity name="defaultPublicKey" type="public_key">
+        <data key="value"/>
+    </entity>
+    <entity name="defaultPrivateKey" type="private_key">
+        <data key="value"/>
+    </entity>
 </config>
