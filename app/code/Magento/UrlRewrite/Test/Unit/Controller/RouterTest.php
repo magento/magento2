@@ -137,26 +137,24 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->urlFinder
             ->expects($this->any())
             ->method('findOneByData')
-            ->will(
-                $this->returnValueMap([
+            ->willReturnMap([
+                [
                     [
-                        [
-                            UrlRewrite::REQUEST_PATH => $initialRequestPath,
-                            UrlRewrite::STORE_ID     => $oldStoreId,
-                        ],
-                        $oldUrlRewrite,
+                        UrlRewrite::REQUEST_PATH => $initialRequestPath,
+                        UrlRewrite::STORE_ID     => $oldStoreId,
                     ],
+                    $oldUrlRewrite,
+                ],
+                [
                     [
-                        [
-                            UrlRewrite::ENTITY_TYPE   => $rewriteEntityType,
-                            UrlRewrite::ENTITY_ID     => $rewriteEntityId,
-                            UrlRewrite::STORE_ID      => $currentStoreId,
-                            UrlRewrite::REDIRECT_TYPE => 0,
-                        ],
-                        $urlRewrite,
+                        UrlRewrite::ENTITY_TYPE   => $rewriteEntityType,
+                        UrlRewrite::ENTITY_ID     => $rewriteEntityId,
+                        UrlRewrite::STORE_ID      => $currentStoreId,
+                        UrlRewrite::REDIRECT_TYPE => 0,
                     ],
-                ])
-            );
+                    $urlRewrite,
+                ],
+            ]);
 
         $this->url
             ->expects($this->once())
@@ -174,12 +172,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->actionFactory
             ->expects($this->once())
             ->method('create')
-            ->with(Redirect::class)
-            ->willReturn(
-                $this->getMockBuilder(Redirect::class)
-                    ->disableOriginalConstructor()
-                    ->getMock()
-            );
+            ->with(Redirect::class);
 
         $this->router->match($this->request);
     }
