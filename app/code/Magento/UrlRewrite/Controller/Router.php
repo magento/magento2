@@ -5,12 +5,15 @@
  */
 namespace Magento\UrlRewrite\Controller;
 
-use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\App\Action\Redirect;
+use Magento\Framework\App\ActionInterface;
 
 /**
  * UrlRewrite Controller Router
@@ -35,7 +38,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface
+     * @var \Magento\Framework\App\ResponseInterface|HttpResponse
      */
     protected $response;
 
@@ -68,8 +71,8 @@ class Router implements \Magento\Framework\App\RouterInterface
     /**
      * Match corresponding URL Rewrite and modify request
      *
-     * @param \Magento\Framework\App\RequestInterface|Http $request
-     * @return \Magento\Framework\App\ActionInterface|null
+     * @param \Magento\Framework\App\RequestInterface|HttpRequest $request
+     * @return ActionInterface|null
      */
     public function match(\Magento\Framework\App\RequestInterface $request)
     {
@@ -139,7 +142,7 @@ class Router implements \Magento\Framework\App\RouterInterface
     /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param UrlRewrite $rewrite
-     * @return \Magento\Framework\App\ActionInterface|null
+     * @return ActionInterface|null
      */
     protected function processRedirect($request, $rewrite)
     {
@@ -153,16 +156,17 @@ class Router implements \Magento\Framework\App\RouterInterface
     }
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface|HttpRequest $request
      * @param string $url
      * @param int $code
-     * @return \Magento\Framework\App\ActionInterface
+     * @return ActionInterface
      */
     protected function redirect($request, $url, $code)
     {
         $this->response->setRedirect($url, $code);
         $request->setDispatched(true);
-        return $this->actionFactory->create(\Magento\Framework\App\Action\Redirect::class);
+
+        return $this->actionFactory->create(Redirect::class);
     }
 
     /**
