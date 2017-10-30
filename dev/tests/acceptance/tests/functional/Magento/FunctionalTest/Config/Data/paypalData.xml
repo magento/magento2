@@ -38,4 +38,24 @@
     <entity name="sampleUseProxy" type="use_proxy">
         <data key="value">0</data>
     </entity>
+
+    <!-- default configuration used to restore Magento config -->
+    <entity name="defaultPayPalConfig" type="paypal_config_state">
+        <required-entity type="business_account">defaultBusinessAccount</required-entity>
+        <required-entity type="api_username">defaultApiUsername</required-entity>
+        <required-entity type="api_password">defaultApiPassword</required-entity>
+        <required-entity type="api_signature">defaultApiSignature</required-entity>
+    </entity>
+    <entity name="defaultBusinessAccount" type="business_account">
+        <data key="value"/>
+    </entity>
+    <entity name="defaultApiUsername" type="api_username">
+        <data key="value"/>
+    </entity>
+    <entity name="defaultApiPassword" type="api_password">
+        <data key="value"/>
+    </entity>
+    <entity name="defaultApiSignature" type="api_signature">
+        <data key="value"/>
+    </entity>
 </config>
