@@ -196,11 +196,11 @@ function switchDefaultValueField()
 
         <?php foreach ($this->helper('Magento\Catalog\Helper\Data')->getAttributeHiddenFields() as $type => $fields): ?>
             case '<?= /* @escapeNotVerified */ $type ?>':
-                var is_front_tab_hidden = false;
+                var isFrontTabHidden = false;
                 <?php foreach ($fields as $one): ?>
                     <?php if ($one == '_front_fieldset'): ?>
                         getFrontTab().hide();
-                        is_front_tab_hidden = true;
+                        isFrontTabHidden = true;
                     <?php elseif ($one == '_default_value'): ?>
                         defaultValueTextVisibility =
                         defaultValueTextareaVisibility =
@@ -213,7 +213,7 @@ function switchDefaultValueField()
                     <?php endif; ?>
                 <?php endforeach; ?>
 
-                if (!is_front_tab_hidden){
+                if (!isFrontTabHidden){
                   getFrontTab().show();
                 }
             break;
