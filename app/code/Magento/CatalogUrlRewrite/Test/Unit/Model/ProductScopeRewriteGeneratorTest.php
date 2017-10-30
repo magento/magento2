@@ -120,9 +120,6 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->any())->method('getStoreIds')->will($this->returnValue([1]));
         $this->storeViewService->expects($this->once())->method('doesEntityHaveOverriddenUrlKeyForStore')
             ->will($this->returnValue(false));
-        $this->categoryMock->expects($this->once())
-            ->method('getParentId')
-            ->willReturn(2);
         $this->initObjectRegistryFactory([]);
         $canonical = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializer);
         $canonical->setRequestPath('category-1')
@@ -161,14 +158,12 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     public function testGenerationForSpecificStore()
     {
         $storeRootCategoryId = 2;
-        $parent_id = 3;
         $category_id = 4;
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
         $product->expects($this->never())->method('getStoreIds');
         $this->categoryMock->expects($this->any())->method('getParentIds')
             ->will($this->returnValue(['root-id', $storeRootCategoryId]));
-        $this->categoryMock->expects($this->any())->method('getParentId')->will($this->returnValue($parent_id));
         $this->categoryMock->expects($this->any())->method('getId')->will($this->returnValue($category_id));
         $this->initObjectRegistryFactory([$this->categoryMock]);
         $canonical = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite([], $this->serializer);
@@ -219,15 +214,13 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * Test the possibility of url rewrite generation.
      *
-     * @param int $parentId
      * @param array $parentIds
      * @param bool $expectedResult
      * @dataProvider isCategoryProperForGeneratingDataProvider
      */
-    public function testIsCategoryProperForGenerating($parentId, $parentIds, $expectedResult)
+    public function testIsCategoryProperForGenerating($parentIds, $expectedResult)
     {
         $storeId = 1;
-        $this->categoryMock->expects(self::any())->method('getParentId')->willReturn($parentId);
         $this->categoryMock->expects(self::any())->method('getParentIds')->willReturn($parentIds);
         $result = $this->productScopeGenerator->isCategoryProperForGenerating(
             $this->categoryMock,
@@ -247,10 +240,10 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     public function isCategoryProperForGeneratingDataProvider()
     {
         return [
-            ['0', ['0'], false],
-            ['1', ['1'], false],
-            ['2', ['1', '2'], true],
-            ['2', ['1', '3'], false],
+            [['0'], false],
+            [['1'], false],
+            [['1', '2'], true],
+            [['1', '3'], false],
         ];
     }
 }
