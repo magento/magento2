@@ -120,7 +120,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->any())->method('getStoreIds')->will($this->returnValue([1]));
         $this->storeViewService->expects($this->once())->method('doesEntityHaveOverriddenUrlKeyForStore')
             ->will($this->returnValue(false));
-        $this->categoryMock->expects($this->exactly(2))
+        $this->categoryMock->expects($this->once())
             ->method('getParentId')
             ->willReturn(2);
         $this->initObjectRegistryFactory([]);
