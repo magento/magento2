@@ -18,6 +18,7 @@ use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 use Magento\Eav\Helper\Data;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\ResolverInterface;
 
 /**
  * @api
@@ -43,6 +44,11 @@ class Advanced extends Generic
     protected $disableScopeChangeList;
 
     /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    protected $localeResolver;
+    
+    /**
      * @var PropertyLocker
      */
     private $propertyLocker;
@@ -55,6 +61,7 @@ class Advanced extends Generic
      * @param Data $eavData
      * @param array $disableScopeChangeList
      * @param array $data
+     * @param ResolverInterface $localeResolver
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -63,11 +70,14 @@ class Advanced extends Generic
         Yesno $yesNo,
         Data $eavData,
         array $disableScopeChangeList = ['sku'],
-        array $data = []
+        array $data = [],
+        ResolverInterface $localeResolver = null
     ) {
         $this->_yesNo = $yesNo;
         $this->_eavData = $eavData;
         $this->disableScopeChangeList = $disableScopeChangeList;
+        $this->localeResolver = $localeResolver ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(ResolverInterface::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -111,6 +121,13 @@ class Advanced extends Generic
             ]
         );
 
+        $defaultValue = $attributeObject->getDefaultValue();
+        $hasDefaultValue = (string)$defaultValue != '';
+        if ($attributeObject->getBackendType() == 'decimal' && $hasDefaultValue) {
+            $numberFormatter = new \NumberFormatter($this->localeResolver->getLocale(), \NumberFormatter::DECIMAL);
+            $defaultValue = $numberFormatter->format($defaultValue);
+        }
+
         $fieldset->addField(
             'default_value_text',
             'text',
@@ -118,7 +135,7 @@ class Advanced extends Generic
                 'name' => 'default_value_text',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
-                'value' => $attributeObject->getDefaultValue()
+                'value' => $defaultValue
             ]
         );
 
