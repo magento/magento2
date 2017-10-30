@@ -95,7 +95,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * Retrieve store Id (From Quote) 
+     * Retrieve store Id (From Quote)
      *
      * @return int
      */
