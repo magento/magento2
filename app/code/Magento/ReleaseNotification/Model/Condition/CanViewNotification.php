@@ -43,6 +43,7 @@ class CanViewNotification implements VisibilityConditionInterface
      *
      * @param Logger $viewerLogger
      * @param Session $session
+     * @param ProductMetadataInterface $productMetadata
      */
     public function __construct(
         Logger $viewerLogger,
