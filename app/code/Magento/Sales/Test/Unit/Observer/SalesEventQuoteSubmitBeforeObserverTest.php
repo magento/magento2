@@ -27,7 +27,6 @@ class SalesEventQuoteSubmitBeforeObserverTest extends \PHPUnit\Framework\TestCas
      */
     private $fieldsetConfig;
 
-
     protected function setUp()
     {
         $this->fieldsetConfig = $this->createPartialMock(Config::class, ['getFieldset']);
@@ -77,7 +76,7 @@ class SalesEventQuoteSubmitBeforeObserverTest extends \PHPUnit\Framework\TestCas
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function createPartialMockForAbstractClass($className, $methods =[])
+    private function createPartialMockForAbstractClass($className, $methods = [])
     {
         return $this->getMockForAbstractClass(
             $className,
