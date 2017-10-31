@@ -38,7 +38,7 @@ class SalesChannelManagementTest extends WebapiAbstract
             ],
         ];
         $expectedData = [
-            StockInterface::NAME => 'stockName',
+            StockInterface::NAME => 'stock-name',
             ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => [
                 'sales_channels' => $salesChannels,
             ],
@@ -70,7 +70,7 @@ class SalesChannelManagementTest extends WebapiAbstract
             ],
         ];
         $expectedData = [
-            StockInterface::NAME => 'stockName',
+            StockInterface::NAME => 'stock-name',
             ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => [
                 'sales_channels' => $salesChannels,
             ],

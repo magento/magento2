@@ -16,12 +16,12 @@ use Magento\Inventory\Model\ResourceModel\Stock;
 class CreateSalesChannelTable
 {
     /**
-     * Constant for key of data array. It is defined here because it's not part of the interface.
+     * Constant for key of data array. It is defined here because it's not part of the interface
      */
     const STOCK_ID = 'stock_id';
 
     /**
-     * Sales Channels Tablename
+     * Sales Channels tablename
      */
     const TABLE_NAME_SALES_CHANNEL = 'inventory_stock_sales_channel';
 

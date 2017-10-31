@@ -15,7 +15,7 @@ use Magento\InventoryApi\Api\Data\StockInterface;
 interface StockResolverInterface
 {
     /**
-     * Get Stock Entity by sales channel type and code
+     * Resolve Stock by Sales Channel type and code
      *
      * @param string $type
      * @param string $code

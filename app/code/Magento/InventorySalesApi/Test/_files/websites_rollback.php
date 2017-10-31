@@ -4,15 +4,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+use Magento\Framework\Registry;
+use Magento\Store\Model\Website;
+use Magento\TestFramework\Helper\Bootstrap;
+
+/** @var Registry $registry */
+$registry = Bootstrap::getObjectManager()->get(Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 for ($i = 0; $i < 3; $i++) {
-    /** @var \Magento\Store\Model\Website $website */
-    $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Website::class);
+    /** @var Website $website */
+    $website = Bootstrap::getObjectManager()->create(Website::class);
     $website->load('test_' . $i);
     $website->delete();
 }
