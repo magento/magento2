@@ -59,7 +59,7 @@ class SaveSalesChannelsLinksPlugin
             return $this->doAroundSave($proceed, $stock);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not save Sales Channels Link for Stock'), $e);
+            throw new CouldNotSaveException(__('Could not replace Sales Channels for Stock'), $e);
         }
     }
 
