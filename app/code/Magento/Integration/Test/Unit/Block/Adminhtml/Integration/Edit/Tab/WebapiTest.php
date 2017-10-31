@@ -155,7 +155,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     {
         $this->webapiBlock = $this->getWebapiBlock();
         $resources = [
-            1 => [ 'children' => [1, 2, 3] ]
+            1 => [ 'id' => 'Magento_Backend::admin', 'children' => [1, 2, 3] ]
         ];
         $this->aclResourceProvider->expects($this->once())
             ->method('getAclResources')
