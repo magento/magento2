@@ -7,9 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model;
 
-use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\InventorySales\Model\ResourceModel\ReplaceSalesChannelsDataForStock;
-use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc

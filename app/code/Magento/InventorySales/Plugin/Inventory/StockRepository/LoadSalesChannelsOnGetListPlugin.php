@@ -69,7 +69,7 @@ class LoadSalesChannelsOnGetListPlugin
     {
         $stocks = [];
         foreach ($stockSearchResults->getItems() as $stock) {
-            $salesChannels = $this->getAssignedSalesChannelsForStock->execute($stock->getStockId());
+            $salesChannels = $this->getAssignedSalesChannelsForStock->execute((int)$stock->getStockId());
 
             $extensionAttributes = $stock->getExtensionAttributes();
             $extensionAttributes->setSalesChannels($salesChannels);

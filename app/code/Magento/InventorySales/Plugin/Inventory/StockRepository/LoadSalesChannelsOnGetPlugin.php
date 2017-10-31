@@ -52,7 +52,7 @@ class LoadSalesChannelsOnGetPlugin
     public function afterGet(StockRepositoryInterface $subject, StockInterface $stock): StockInterface
     {
         try {
-            $salesChannels = $this->getAssignedSalesChannelsForStock->execute($stock->getStockId());
+            $salesChannels = $this->getAssignedSalesChannelsForStock->execute((int)$stock->getStockId());
 
             $extensionAttributes = $stock->getExtensionAttributes();
             $extensionAttributes->setSalesChannels($salesChannels);
