@@ -58,10 +58,6 @@ class ValidationMessageTest extends \PHPUnit\Framework\TestCase
             ->with('sales/minimum_order/amount', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->willReturn($minimumAmount);
 
-        $storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getCurrentCurrencyCode']);
-        $storeMock->expects($this->once())->method('getCurrentCurrencyCode')->willReturn($currencyCode);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
-
         $this->priceHelperMock->expects(
             $this->once()
         )->method(

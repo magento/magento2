@@ -21,7 +21,6 @@ class ValidationMessage
      * @var \Magento\Framework\Pricing\Helper\Data
      */
     private $priceHelper;
-
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
