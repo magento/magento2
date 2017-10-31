@@ -614,8 +614,7 @@ define([
             var key, sortOrderIndex = 0;
 
             for (key in parent.children) {
-                if (child.index === key
-                    && _.isUndefined(parent.children[key].sortOrder)) {
+                if (child.index === key && _.isUndefined(parent.children[key].sortOrder)) {
                     child.sortOrder = sortOrderIndex;
                     break;
                 }
