@@ -8,11 +8,9 @@ namespace Magento\Rule\Model\Condition\Sql;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Combine;
 use Magento\Eav\Api\AttributeRepositoryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Model\Product;
 
 /**
@@ -133,7 +131,6 @@ class Builder
     protected function _getMappedSqlCondition(AbstractCondition $condition, $value = '')
     {
         $argument = $condition->getMappedSqlField();
-        $isAttributeEavAndNotGlobal = $this->isAttributeEavAndNotGlobal($condition);
         if ($argument) {
             $conditionOperator = $condition->getOperatorForValidate();
 
@@ -141,27 +138,19 @@ class Builder
                 throw new \Magento\Framework\Exception\LocalizedException(__('Unknown condition operator'));
             }
 
-            if ($isAttributeEavAndNotGlobal) {
-                $attribute = $this->attributeRepository->get(Product::ENTITY, $condition->getAttribute());
-                $arguments = [
-                    $argument,
-                    'at_' . $attribute->getAttributeCode() . '_default.value'
-                ];
-                foreach ($arguments as $field) {
-                    $fields[] = $this->_connection->quoteIdentifier($field);
-                }
-                $sql = str_replace(
-                    ':field',
-                    $this->_connection->getIfNullSql($fields[0], $fields[1]),
-                    $this->_conditionOperatorMap[$conditionOperator]
-                );
-            } else {
-                $sql = str_replace(
-                    ':field',
-                    $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument)),
-                    $this->_conditionOperatorMap[$conditionOperator]
-                );
+            $attribute = $this->attributeRepository->get(Product::ENTITY, $condition->getAttribute());
+
+            $defaultValue = 0;
+            if ($this->hasDefaultValue($attribute)) {
+                $defaultField = 'at_' . $attribute->getAttributeCode() . '_default.value';
+                $defaultValue = $this->_connection->quoteIdentifier($defaultField);
             }
+
+            $sql = str_replace(
+                ':field',
+                $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), $defaultValue),
+                $this->_conditionOperatorMap[$conditionOperator]
+            );
 
             return $this->_expressionFactory->create(
                 ['expression' => $value . $this->_connection->quoteInto($sql, $condition->getBindArgumentValue())]
@@ -218,19 +207,13 @@ class Builder
     }
 
     /**
-     * Check if attribute is eav and not global
+     * Check if attribute has default value
      *
-     * @param AbstractCondition $condition
+     * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
      * @return bool
-     * @throws LocalizedException
      */
-    private function isAttributeEavAndNotGlobal(AbstractCondition $condition)
+    private function hasDefaultValue(\Magento\Eav\Api\Data\AttributeInterface $attribute)
     {
-        try {
-            $attribute = $this->attributeRepository->get(Product::ENTITY, $condition->getAttribute());
-        } catch (NoSuchEntityException $e) {
-            throw new LocalizedException(__('Attribute %1 doesn\'t exist', $condition->getAttribute()));
-        }
-        return $attribute->getAttributeId() && !$attribute->isScopeGlobal();
+        return !$attribute->isScopeGlobal();
     }
 }
