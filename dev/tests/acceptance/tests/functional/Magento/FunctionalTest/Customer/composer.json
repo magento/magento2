@@ -7,23 +7,20 @@
             "url" : "https://repo.magento.com/"
         }
     ],
-    "config": {
-        "sort-packages": true
-    },
     "require": {
         "php": "~7.0",
-        "allure-framework/allure-codeception": "dev-master",
         "codeception/codeception": "2.2|2.3",
+        "allure-framework/allure-codeception": "dev-master",
         "consolidation/robo": "^1.0.0",
         "henrikbjorn/lurker": "^1.2",
+        "vlucas/phpdotenv": "~2.4",
         "magento/magento2-functional-testing-framework": "dev-develop",
-        "vlucas/phpdotenv": "~2.4"
+        "magento/magento2-functional-test-module-catalog": "dev-master"
     },
     "suggest": {
         "magento/magento2-functional-test-module-store": "dev-master",
         "magento/magento2-functional-test-module-eav": "dev-master",
         "magento/magento2-functional-test-module-directory": "dev-master",
-        "magento/magento2-functional-test-module-catalog": "dev-master",
         "magento/magento2-functional-test-module-newsletter": "dev-master",
         "magento/magento2-functional-test-module-sales": "dev-master",
         "magento/magento2-functional-test-module-checkout": "dev-master",

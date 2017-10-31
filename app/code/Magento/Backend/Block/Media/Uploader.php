@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Block\Media;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+
 /**
  * Adminhtml media library uploader
  * @api
@@ -28,16 +31,24 @@ class Uploader extends \Magento\Backend\Block\Widget
     protected $_fileSizeService;
 
     /**
+     * @var Json
+     */
+    private $jsonEncoder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\File\Size $fileSize
      * @param array $data
+     * @param Json $jsonEncoder
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
-        array $data = []
+        array $data = [],
+        Json $jsonEncoder = null
     ) {
         $this->_fileSizeService = $fileSize;
+        $this->jsonEncoder = $jsonEncoder ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $data);
     }
 
@@ -107,7 +118,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      */
     public function getConfigJson()
     {
-        return $this->_coreData->jsonEncode($this->getConfig()->getData());
+        return $this->jsonEncoder->encode($this->getConfig()->getData());
     }
 
     /**
