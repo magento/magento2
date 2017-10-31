@@ -45,6 +45,7 @@ class Calculator extends Validator
 
                 case Rule::FREE_SHIPPING_ADDRESS:
                     $address->setFreeShipping(true);
+                    $item->setFreeShipping(true);
                     break;
             }
             if ($rule->getStopRulesProcessing()) {
