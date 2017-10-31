@@ -44,12 +44,12 @@ class SalesChannelManagementTest extends WebapiAbstract
             ],
         ];
         $this->saveStock($stockId, $stockData);
-        $stockData = $this->getStockDataById($stockId);
+        $actualStockData = $this->getStockDataById($stockId);
 
         self::assertArrayHasKey('sales_channels', $stockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
         self::assertEquals(
             $salesChannels,
-            $stockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['sales_channels']
+            $actualStockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['sales_channels']
         );
     }
     /**
@@ -76,12 +76,12 @@ class SalesChannelManagementTest extends WebapiAbstract
             ],
         ];
         $this->saveStock($stockId, $stockData);
-        $stockData = $this->getStockDataById($stockId);
+        $actualStockData = $this->getStockDataById($stockId);
 
         self::assertArrayHasKey('sales_channels', $stockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
         self::assertEquals(
             $salesChannels,
-            $stockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['sales_channels']
+            $actualStockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['sales_channels']
         );
     }
 
