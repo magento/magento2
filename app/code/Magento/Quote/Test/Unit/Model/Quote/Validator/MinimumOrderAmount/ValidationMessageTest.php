@@ -46,7 +46,6 @@ class ValidationMessageTest extends \PHPUnit\Framework\TestCase
     {
         $minimumAmount = 20;
         $minimumAmountCurrency = '$20';
-        $currencyCode = 'currency_code';
 
         $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')
