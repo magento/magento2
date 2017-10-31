@@ -37,19 +37,19 @@ class SalesChannelManagementTest extends WebapiAbstract
                 SalesChannelInterface::CODE => 'test_1',
             ],
         ];
-        $expectedData = [
+        $stockData = [
             StockInterface::NAME => 'stock-name',
             ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => [
                 'sales_channels' => $salesChannels,
             ],
         ];
-        $this->saveStock($stockId, $expectedData);
+        $this->saveStock($stockId, $stockData);
         $stockData = $this->getStockDataById($stockId);
 
         self::assertArrayHasKey('sales_channels', $stockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
         self::assertEquals(
-            $stockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['sales_channels'],
-            $salesChannels
+            $salesChannels,
+            $stockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['sales_channels']
         );
     }
     /**
@@ -69,19 +69,19 @@ class SalesChannelManagementTest extends WebapiAbstract
                 SalesChannelInterface::CODE => 'test_2',
             ],
         ];
-        $expectedData = [
+        $stockData = [
             StockInterface::NAME => 'stock-name',
             ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => [
                 'sales_channels' => $salesChannels,
             ],
         ];
-        $this->saveStock($stockId, $expectedData);
+        $this->saveStock($stockId, $stockData);
         $stockData = $this->getStockDataById($stockId);
 
         self::assertArrayHasKey('sales_channels', $stockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
         self::assertEquals(
-            $stockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['sales_channels'],
-            $salesChannels
+            $salesChannels,
+            $stockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['sales_channels']
         );
     }
 
