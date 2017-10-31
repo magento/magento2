@@ -16,6 +16,7 @@ use Magento\Framework\Filesystem\Glob;
  * Encapsulates application installation, initialization and uninstall
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Application
 {
@@ -128,6 +129,11 @@ class Application
      * @var bool
      */
     private $loadTestExtensionAttributes;
+
+    /**
+     * @var bool
+     */
+    protected $dumpDb = true;
 
     /**
      * Constructor
@@ -483,7 +489,7 @@ class Application
         );
 
         // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
-        if (!$db->isDbDumpExists()) {
+        if (!$db->isDbDumpExists() && $this->dumpDb) {
             $this->getDbInstance()->storeDbDump();
         }
     }
