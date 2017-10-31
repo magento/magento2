@@ -103,6 +103,11 @@ class Encryptor implements EncryptorInterface
     protected $keys = [];
 
     /**
+     * @var Random
+     */
+    protected $random;
+
+    /**
      * @param Random $random
      * @param DeploymentConfig $deploymentConfig
      */

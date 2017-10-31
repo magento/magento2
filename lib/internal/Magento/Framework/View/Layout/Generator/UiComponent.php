@@ -6,15 +6,15 @@
 namespace Magento\Framework\View\Layout\Generator;
 
 use Magento\Framework\View\Element\BlockFactory;
-use Magento\Framework\View\Layout\Data\Structure as DataStructure;
-use Magento\Framework\View\Layout\Element;
-use Magento\Framework\View\Layout\GeneratorInterface;
+use Magento\Framework\View\Element\UiComponent\ContainerInterface;
+use Magento\Framework\View\Element\UiComponent\ContextFactory as UiComponentContextFactory;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\Element\UiComponent\ContainerInterface;
-use Magento\Framework\View\Layout\Reader\Context as ReaderContext;
+use Magento\Framework\View\Layout\Data\Structure as DataStructure;
+use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\Generator\Context as GeneratorContext;
-use Magento\Framework\View\Element\UiComponent\ContextFactory as UiComponentContextFactory;
+use Magento\Framework\View\Layout\GeneratorInterface;
+use Magento\Framework\View\Layout\Reader\Context as ReaderContext;
 use Magento\Framework\View\LayoutInterface;
 
 /**
@@ -41,6 +41,11 @@ class UiComponent implements GeneratorInterface
      * @var UiComponentContextFactory
      */
     protected $contextFactory;
+
+    /**
+     * @var BlockFactory
+     */
+    protected $blockFactory;
 
     /**
      * Constructor

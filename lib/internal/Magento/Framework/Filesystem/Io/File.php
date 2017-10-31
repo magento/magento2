@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\Filesystem\Io;
 
-use Magento\Framework\Filesystem\DriverInterface;
-use Symfony\Component\Finder\Tests\Iterator\DateRangeFilterIteratorTest;
-
 /**
  * Filesystem client
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -78,6 +75,11 @@ class File extends AbstractIo
      * @var bool
      */
     protected $_streamLocked = false;
+
+    /**
+     * @var \Exception
+     */
+    protected $_streamException;
 
     /**
      * Destruct
