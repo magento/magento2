@@ -540,7 +540,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(
                 [
                     new \Magento\Framework\DataObject(
-                        ['url' => 'product.html', 'updated_at' => '2012-12-21 00:00:00']
+                        ['url' => 'product.html', 'updated_at' => '0000-00-00 00:00:00']
                     ),
                     new \Magento\Framework\DataObject(
                         [
