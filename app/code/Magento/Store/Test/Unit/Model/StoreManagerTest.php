@@ -72,6 +72,9 @@ class StoreManagerTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with($storeId)
             ->willReturn($storeMock);
+        $this->storeRepositoryMock->expects($this->atLeastOnce())
+            ->method('getList')
+            ->willReturn([$storeId => $storeMock]);
         $actualStore = $this->model->getStore($storeId);
         $this->assertInstanceOf(\Magento\Store\Api\Data\StoreInterface::class, $actualStore);
         $this->assertEquals($storeMock, $actualStore);

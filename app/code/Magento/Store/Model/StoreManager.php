@@ -152,22 +152,34 @@ class StoreManager implements
     public function getStore($storeId = null)
     {
         if (!isset($storeId) || '' === $storeId || $storeId === true) {
-            if (null === $this->currentStoreId) {
-                \Magento\Framework\Profiler::start('store.resolve');
-                $this->currentStoreId = $this->storeResolver->getCurrentStoreId();
-                \Magento\Framework\Profiler::stop('store.resolve');
-            }
-            $storeId = $this->currentStoreId;
+            $storeId = $this->getCurrentStoreId();
         }
         if ($storeId instanceof \Magento\Store\Api\Data\StoreInterface) {
             return $storeId;
         }
 
-        $store = is_numeric($storeId)
-            ? $this->storeRepository->getById($storeId)
-            : $this->storeRepository->get($storeId);
+        if (is_numeric($storeId)) {
+            $store = $this->storeRepository->getById($storeId);
+        } elseif (key_exists($storeId, $this->storeRepository->getList())) {
+            $store = $this->storeRepository->get($storeId);
+        } else {
+            $store = $this->storeRepository->getById($this->getCurrentStoreId());
+        }
 
         return $store;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrentStoreId()
+    {
+        if (null === $this->currentStoreId || '' === $this->currentStoreId) {
+            \Magento\Framework\Profiler::start('store.resolve');
+            $this->currentStoreId = $this->storeResolver->getCurrentStoreId();
+            \Magento\Framework\Profiler::stop('store.resolve');
+        }
+        return $this->currentStoreId;
     }
 
     /**
