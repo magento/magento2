@@ -614,6 +614,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             ->unsetData('controller_name')
             ->unsetData('action_name');
         $this->_queryParamsResolver->unsetData('secure');
+        /* $data='route_front_name'; use route ID as route name if route front name is not equal to route ID (issue-7557) */
+        $routeId = $this->_routeConfig->getRouteByFrontName($data);
+        if ($routeId && ($routeId != $data)) {
+            $this->setData('route_front_name', $data);
+            $data = $routeId;
+        }
         return $this->setData('route_name', $data);
     }
 
