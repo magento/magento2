@@ -14,6 +14,7 @@ use Magento\Store\Model\Store;
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Address extends AbstractCustomer
 {
