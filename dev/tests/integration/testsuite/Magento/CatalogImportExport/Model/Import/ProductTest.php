@@ -22,11 +22,10 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Registry;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
-use Magento\UrlRewrite\Model\UrlRewrite;
 
 /**
  * Class ProductTest
@@ -1917,6 +1916,25 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 $productRepository->get($sku, false, null, true)->getPrice(),
                 'Check that all products were updated'
             );
+        }
+    }
+
+    /**
+     * Test that product import with images for non-default store works properly.
+     *
+     * @magentoDataIsolation enabled
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoAppIsolation enabled
+     */
+    public function testImportImageForNonDefaultStore()
+    {
+        $this->importDataForMediaTest('import_media_two_stores.csv');
+        $product = $this->getProductBySku('simple_with_images');
+        $mediaGallery = $product->getData('media_gallery');
+        foreach ($mediaGallery['images'] as $image) {
+            $image['file'] === 'magento_image.jpg'
+                ? self::assertSame('1', $image['disabled'])
+                : self::assertSame('0', $image['disabled']);
         }
     }
 }

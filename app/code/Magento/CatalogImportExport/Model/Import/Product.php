@@ -8,7 +8,6 @@ namespace Magento\CatalogImportExport\Model\Import;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
@@ -1694,10 +1693,25 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 // 5. Media gallery phase
                 $disabledImages = [];
                 list($rowImages, $rowLabels) = $this->getImagesFromRow($rowData);
+                $storeId = !empty($rowData[self::COL_STORE])
+                    ? $this->getStoreIdByCode($rowData[self::COL_STORE])
+                    : Store::DEFAULT_STORE_ID;
                 if (isset($rowData['_media_is_disabled'])) {
                     $disabledImages = array_flip(
                         explode($this->getMultipleValueSeparator(), $rowData['_media_is_disabled'])
                     );
+                    foreach ($disabledImages as $disabledImage => $position) {
+                        $uploadedFile = $this->uploadMediaFiles($disabledImage, true);
+                        $uploadedFile = $uploadedFile ?: $this->getSystemFile($disabledImage);
+                        $mediaGallery[$storeId][$rowSku][$uploadedFile] = [
+                            'attribute_id' => $this->getMediaGalleryAttributeId(),
+                            'label' => $rowLabels[self::COL_MEDIA_IMAGE][$position] ?? '',
+                            'position' => $position,
+                            'disabled' => 1,
+                            'value' => $disabledImage,
+                            'store_id' => $storeId,
+                        ];
+                    }
                 }
                 $rowData[self::COL_MEDIA_IMAGE] = [];
 
@@ -1730,7 +1744,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             $rowData[$column] = $uploadedFile;
                         }
 
-                        if ($uploadedFile && !isset($mediaGallery[$rowSku][$uploadedFile])) {
+                        if ($uploadedFile && !isset($mediaGallery[$storeId][$rowSku][$uploadedFile])) {
                             if (isset($existingImages[$rowSku][$uploadedFile])) {
                                 if (isset($rowLabels[$column][$columnImageKey])
                                     && $rowLabels[$column][$columnImageKey] != $existingImages[$rowSku][$uploadedFile]['label']
@@ -1744,7 +1758,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 if ($column == self::COL_MEDIA_IMAGE) {
                                     $rowData[$column][] = $uploadedFile;
                                 }
-                                $mediaGallery[$rowSku][$uploadedFile] = [
+                                $mediaGallery[$storeId][$rowSku][$uploadedFile] = [
                                     'attribute_id' => $this->getMediaGalleryAttributeId(),
                                     'label' => isset($rowLabels[$column][$columnImageKey]) ? $rowLabels[$column][$columnImageKey] : '',
                                     'position' => ++$position,
@@ -1756,6 +1770,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     }
                 }
 
+                //Add images to restore "hide from product page" value for specified store and product.
+                if (empty($mediaGallery[$storeId][$rowSku])) {
+                    $mediaGallery[$storeId][$rowSku]['all'] = ['restore' => true];
+                }
                 // 6. Attributes phase
                 $rowStore = (self::SCOPE_STORE == $rowScope)
                     ? $this->storeResolver->getStoreCodeToId($rowData[self::COL_STORE])
@@ -2075,66 +2093,64 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return $this;
         }
         $this->initMediaGalleryResources();
-        $productIds = [];
         $imageNames = [];
         $multiInsertData = [];
         $valueToProductId = [];
-        foreach ($mediaGalleryData as $productSku => $mediaGalleryRows) {
-            $productId = $this->skuProcessor->getNewSku($productSku)[$this->getProductEntityLinkField()];
-            $productIds[] = $productId;
-            $insertedGalleryImgs = [];
-            foreach ($mediaGalleryRows as $insertValue) {
-                if (!in_array($insertValue['value'], $insertedGalleryImgs)) {
-                    $valueArr = [
-                        'attribute_id' => $insertValue['attribute_id'],
-                        'value' => $insertValue['value'],
-                    ];
-                    $valueToProductId[$insertValue['value']][] = $productId;
-                    $imageNames[] = $insertValue['value'];
-                    $multiInsertData[] = $valueArr;
-                    $insertedGalleryImgs[] = $insertValue['value'];
+        $mediaGalleryData = $this->restoreDisableImage($mediaGalleryData);
+        foreach (array_keys($mediaGalleryData) as $storeId) {
+            foreach ($mediaGalleryData[$storeId] as $productSku => $mediaGalleryRows) {
+                $productId = $this->skuProcessor->getNewSku($productSku)[$this->getProductEntityLinkField()];
+
+                $insertedGalleryImgs = [];
+                foreach ($mediaGalleryRows as $insertValue) {
+                    if (!in_array($insertValue['value'], $insertedGalleryImgs)) {
+                        $valueArr = [
+                            'attribute_id' => $insertValue['attribute_id'],
+                            'value' => $insertValue['value'],
+                        ];
+                        $valueToProductId[$insertValue['value']][] = $productId;
+                        $imageNames[] = $insertValue['value'];
+                        $multiInsertData[] = $valueArr;
+                        $insertedGalleryImgs[] = $insertValue['value'];
+                    }
                 }
             }
         }
-        $oldMediaValues = $this->_connection->fetchAssoc(
-            $this->_connection->select()->from($this->mediaGalleryTableName, ['value_id', 'value'])
-                ->where('value IN (?)', $imageNames)
-        );
-        $this->_connection->insertOnDuplicate($this->mediaGalleryTableName, $multiInsertData, []);
-        $multiInsertData = [];
+        $multiInsertData = $this->filterImageInsertData($multiInsertData, $imageNames);
+        if ($multiInsertData) {
+            $this->_connection->insertOnDuplicate($this->mediaGalleryTableName, $multiInsertData);
+        }
         $newMediaSelect = $this->_connection->select()->from($this->mediaGalleryTableName, ['value_id', 'value'])
             ->where('value IN (?)', $imageNames);
-        if (array_keys($oldMediaValues)) {
-            $newMediaSelect->where('value_id NOT IN (?)', array_keys($oldMediaValues));
-        }
-
         $dataForSkinnyTable = [];
+        $multiInsertData = [];
         $newMediaValues = $this->_connection->fetchAssoc($newMediaSelect);
-        foreach ($mediaGalleryData as $productSku => $mediaGalleryRows) {
-            foreach ($mediaGalleryRows as $insertValue) {
-                foreach ($newMediaValues as $value_id => $values) {
-                    if ($values['value'] == $insertValue['value']) {
-                        $insertValue['value_id'] = $value_id;
-                        $insertValue[$this->getProductEntityLinkField()]
-                            = array_shift($valueToProductId[$values['value']]);
-                        unset($newMediaValues[$value_id]);
-                        break;
+        foreach (array_keys($mediaGalleryData) as $storeId) {
+            foreach ($mediaGalleryData[$storeId] as $productSku => $mediaGalleryRows) {
+                foreach ($mediaGalleryRows as $insertValue) {
+                    foreach ($newMediaValues as $value_id => $values) {
+                        if ($values['value'] == $insertValue['value']) {
+                            $insertValue['value_id'] = $value_id;
+                            $insertValue[$this->getProductEntityLinkField()]
+                                = array_shift($valueToProductId[$values['value']]);
+                            break;
+                        }
                     }
-                }
-                if (isset($insertValue['value_id'])) {
-                    $valueArr = [
-                        'value_id' => $insertValue['value_id'],
-                        'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
-                        $this->getProductEntityLinkField() => $insertValue[$this->getProductEntityLinkField()],
-                        'label' => $insertValue['label'],
-                        'position' => $insertValue['position'],
-                        'disabled' => $insertValue['disabled'],
-                    ];
-                    $multiInsertData[] = $valueArr;
-                    $dataForSkinnyTable[] = [
-                        'value_id' => $insertValue['value_id'],
-                        $this->getProductEntityLinkField() => $insertValue[$this->getProductEntityLinkField()],
-                    ];
+                    if (isset($insertValue['value_id'])) {
+                        $valueArr = [
+                            'value_id' => $insertValue['value_id'],
+                            'store_id' => $storeId,
+                            $this->getProductEntityLinkField() => $insertValue[$this->getProductEntityLinkField()],
+                            'label' => $insertValue['label'],
+                            'position' => $insertValue['position'],
+                            'disabled' => $insertValue['disabled'],
+                        ];
+                        $multiInsertData[] = $valueArr;
+                        $dataForSkinnyTable[] = [
+                            'value_id' => $insertValue['value_id'],
+                            $this->getProductEntityLinkField() => $insertValue[$this->getProductEntityLinkField()],
+                        ];
+                    }
                 }
             }
         }
@@ -2155,6 +2171,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $this->_connection->quoteInto('value_id IN (?)', $newMediaValues)
             );
         }
+
         return $this;
     }
 
@@ -2975,5 +2992,65 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function getExistingSku($sku)
     {
         return $this->_oldSku[strtolower($sku)];
+    }
+
+    /**
+     * Set product images 'disable' = 0 for specified store.
+     *
+     * @param array $mediaGalleryData
+     * @return array
+     */
+    private function restoreDisableImage(array $mediaGalleryData)
+    {
+        $restoreData = [];
+        foreach (array_keys($mediaGalleryData) as $storeId) {
+            foreach ($mediaGalleryData[$storeId] as $productSku => $mediaGalleryRows) {
+                $productId = $this->skuProcessor->getNewSku($productSku)[$this->getProductEntityLinkField()];
+                $restoreData[] = sprintf(
+                    'store_id = %s and %s = %s',
+                    $storeId,
+                    $this->getProductEntityLinkField(),
+                    $productId
+                );
+                if (isset($mediaGalleryRows['all']['restore'])) {
+                    unset($mediaGalleryData[$storeId][$productSku]);
+                }
+            }
+        }
+
+        $this->_connection->update(
+            $this->mediaGalleryValueTableName,
+            ['disabled' => 0],
+            new \Zend_Db_Expr(implode(' or ', $restoreData))
+        );
+
+        return $mediaGalleryData;
+    }
+
+    /**
+     * Remove existed images from insert data.
+     *
+     * @param array $multiInsertData
+     * @param array $imageNames
+     * @return array
+     */
+    private function filterImageInsertData(array $multiInsertData, array $imageNames)
+    {
+        //Remove image duplicates for stores.
+        $multiInsertData = array_map("unserialize", array_unique(array_map("serialize", $multiInsertData)));
+        $oldMediaValues = $this->_connection->fetchAssoc(
+            $this->_connection->select()->from($this->mediaGalleryTableName, ['value_id', 'value', 'attribute_id'])
+                ->where('value IN (?)', $imageNames)
+        );
+        foreach ($multiInsertData as $key => $data) {
+            foreach ($oldMediaValues as $mediaValue) {
+                if ($data['value'] == $mediaValue['value'] && $data['attribute_id'] == $mediaValue['attribute_id']) {
+                    unset($multiInsertData[$key]);
+                    break;
+                }
+            }
+        }
+
+        return $multiInsertData;
     }
 }
