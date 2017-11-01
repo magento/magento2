@@ -175,14 +175,15 @@ class Login extends \Magento\Framework\App\Action\Action
             $this->customerSession->setCustomerDataAsLoggedIn($customer);
             $this->customerSession->regenerateId();
             $redirectRoute = $this->getAccountRedirect()->getRedirectCookie();
+            
+            if(isset($credentials['context']) && $credentials['context'] == 'checkout'){
+                $response['redirectUrl'] = $this->_redirect->success($this->_url->getUrl('checkout', ['_secure' => true]));
+                $this->getAccountRedirect()->clearRedirectCookie();
+            }
+            
             if (!$this->getScopeConfig()->getValue('customer/startup/redirect_dashboard') && $redirectRoute) {
                 $response['redirectUrl'] = $this->_redirect->success($redirectRoute);
                 $this->getAccountRedirect()->clearRedirectCookie();
-            }else{
-                if(isset($credentials['context']) && $credentials['context'] == 'checkout'){
-                    $response['redirectUrl'] = $this->_redirect->success($this->_url->getUrl('checkout', ['_secure' => true]));
-                    $this->getAccountRedirect()->clearRedirectCookie();
-                }
             }
         } catch (EmailNotConfirmedException $e) {
             $response = [
