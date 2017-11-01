@@ -176,8 +176,9 @@ class Login extends \Magento\Framework\App\Action\Action
             $this->customerSession->regenerateId();
             $redirectRoute = $this->getAccountRedirect()->getRedirectCookie();
             
-            if(isset($credentials['context']) && $credentials['context'] == 'checkout'){
-                $response['redirectUrl'] = $this->_redirect->success($this->_url->getUrl('checkout', ['_secure' => true]));
+            if (isset($credentials['context']) && $credentials['context'] == 'checkout') {
+                $url_checkout = $this->_url->getUrl('checkout', ['_secure' => true]);
+                $response['redirectUrl'] = $this->_redirect->success($url_checkout);
                 $this->getAccountRedirect()->clearRedirectCookie();
             }
             
