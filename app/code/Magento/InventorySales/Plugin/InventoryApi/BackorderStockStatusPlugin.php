@@ -5,18 +5,21 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Plugin\Model;
+namespace Magento\InventorySales\Plugin\InventoryApi;
 
-use Magento\CatalogInventory\Model\Stock\Item;
-use Magento\InventoryApi\Api\IsProductInStockInterface;
-use Magento\CatalogInventory\Model\Stock\StockItemRepository;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
-use Magento\Catalog\Model\ProductRepository;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\InventoryApi\Api\IsProductInStockInterface;
 
+/**
+ * Adapt backorders to IsProductInStockInterface
+ */
 class BackorderStockStatusPlugin
 {
     /**
-     * @var StockItemRepository
+     * @var StockItemRepositoryInterface
      */
     private $stockItemRepository;
 
@@ -26,14 +29,19 @@ class BackorderStockStatusPlugin
     private $stockItemCriteriaFactory;
 
     /**
-     * @var ProductRepository
+     * @var ProductRepositoryInterface
      */
     private $productRepository;
 
+    /**
+     * @param StockItemRepositoryInterface $stockItemRepository
+     * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
+     * @param ProductRepositoryInterface $productRepository
+     */
     public function __construct(
-        StockItemRepository $stockItemRepository,
+        StockItemRepositoryInterface $stockItemRepository,
         StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory,
-        ProductRepository $productRepository
+        ProductRepositoryInterface $productRepository
     ) {
         $this->stockItemRepository = $stockItemRepository;
         $this->stockItemCriteriaFactory = $stockItemCriteriaFactory;
@@ -63,13 +71,12 @@ class BackorderStockStatusPlugin
         $stockItemCriteria->setProductsFilter($productId);
         $stockItemsCollection = $this->stockItemRepository->getList($stockItemCriteria);
 
-        /** @var Item $stockItem */
-        $stockItem = current($stockItemsCollection->getItems());
+        /** @var StockItemInterface $legacyStockItem */
+        $legacyStockItem = current($stockItemsCollection->getItems());
 
-        if ($stockItem->getBackorders() > 0) {
+        if ($legacyStockItem->getBackorders() > 0) {
             return true;
         }
-
         return $proceed($sku, $stockId);
     }
 }
