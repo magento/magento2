@@ -30,10 +30,7 @@ class SalesChannels extends Column
     }
 
     /**
-     * Prepare data source
-     *
-     * @param array $dataSource
-     * @return array
+     * @inheritdoc
      */
     public function prepareDataSource(array $dataSource)
     {

@@ -14,7 +14,7 @@ use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventorySales\Model\ResourceModel\StockIdResolver;
 
 /**
- * The stock resolver is responsible for getting the linked stock for a certain sales channel
+ * @inheritdoc
  */
 class StockResolver implements StockResolverInterface
 {

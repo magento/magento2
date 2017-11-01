@@ -10,6 +10,7 @@ namespace Magento\InventorySales\Setup\Operation;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Inventory\Model\ResourceModel\Stock;
 
@@ -81,11 +82,11 @@ class CreateSalesChannelTable
                 self::TABLE_NAME_SALES_CHANNEL,
                 self::STOCK_ID,
                 Stock::TABLE_NAME_STOCK,
-                self::STOCK_ID
+                StockInterface::STOCK_ID
             ),
             self::STOCK_ID,
             $setup->getTable(Stock::TABLE_NAME_STOCK),
-            self::STOCK_ID,
+            StockInterface::STOCK_ID,
             Table::ACTION_CASCADE
         );
     }
