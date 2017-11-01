@@ -361,47 +361,42 @@ class Address extends AbstractCustomer
         AbstractAttribute $attribute,
         array $indexAttributes = []
     ) {
-            $options = parent::getAttributeOptions(
-                $attribute,
-                $indexAttributes
-            );
-            if ($attribute->getAttributeCode() === 'country_id') {
-                //If we want to get available options for country field then we
-                //have to use alternative source to get actual data
-                //for each website.
-                $optionsWithWebsites
-                    = $this->countryWithWebsites->getAllOptions();
-                //Available country options now will be sorted by websites.
-                $code = $attribute->getAttributeCode();
-                if (!array_key_exists($code, $this->optionsByWebsite)) {
-                    $websiteOptions = [Store::DEFAULT_STORE_ID => $options];
-                    foreach ($optionsWithWebsites as $optionWithWebsites) {
-                        if (array_key_exists(
-                            'website_ids',
-                            $optionWithWebsites
-                        )) {
-                            foreach (
-                                $optionWithWebsites['website_ids'] as $websiteId
-                            ) {
-                                if (!array_key_exists(
-                                    $websiteId,
-                                    $websiteOptions
-                                )) {
-                                    $websiteOptions[$websiteId] = [];
-                                }
-                                $optionId = mb_strtolower(
-                                    $optionWithWebsites['value']
-                                );
-                                $websiteOptions[$websiteId][$optionId]
-                                    = $optionWithWebsites['value'];
+        $standardOptions = parent::getAttributeOptions(
+            $attribute,
+            $indexAttributes
+        );
+
+        if ($attribute->getAttributeCode() === 'country_id') {
+            //If we want to get available options for country field then we
+            //have to use alternative source to get actual data
+            //for each website.
+            $options = $this->countryWithWebsites->getAllOptions();
+            //Available country options now will be sorted by websites.
+            $code = $attribute->getAttributeCode();
+            if (!array_key_exists($code, $this->optionsByWebsite)) {
+                $websiteOptions = [Store::DEFAULT_STORE_ID => $standardOptions];
+
+                foreach ($options as $option) {
+                    if (array_key_exists('website_ids', $option)) {
+                        foreach ($option['website_ids'] as $websiteId) {
+                            if (!array_key_exists(
+                                $websiteId,
+                                $websiteOptions
+                            )) {
+                                $websiteOptions[$websiteId] = [];
                             }
+                            $optionId = mb_strtolower($option['value']);
+                            $websiteOptions[$websiteId][$optionId]
+                                = $option['value'];
                         }
                     }
-                    $this->optionsByWebsite[$code] = $websiteOptions;
                 }
-            }
 
-            return $options;
+                $this->optionsByWebsite[$code] = $websiteOptions;
+            }
+        }
+
+        return $standardOptions;
     }
 
     /**
@@ -615,7 +610,6 @@ class Address extends AbstractCustomer
                 }
             }
         }
-
 
         foreach (self::getDefaultAddressAttributeMapping() as $columnName => $attributeCode) {
             if (!empty($rowData[$columnName])) {
