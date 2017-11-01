@@ -2060,6 +2060,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $res = $this->_getUploader()->move($fileName, $renameFileOff);
             return $res['file'];
         } catch (\Exception $e) {
+            $this->_logger->critical($e);
             return '';
         }
     }
