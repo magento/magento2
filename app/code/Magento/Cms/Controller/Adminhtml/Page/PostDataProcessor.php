@@ -84,15 +84,15 @@ class PostDataProcessor
     public function validate($data)
     {
         if (!empty($data['layout_update_xml']) || !empty($data['custom_layout_update_xml'])) {
-            /** @var $validatorCustomLayout \Magento\Framework\View\Model\Layout\Update\Validator */
-            $validatorCustomLayout = $this->validatorFactory->create(
+            /** @var $layoutXmlValidator \Magento\Framework\View\Model\Layout\Update\Validator */
+            $layoutXmlValidator = $this->validatorFactory->create(
                 [
                     'validationState' => $this->validationState,
                 ]
             );
 
-            if (!$this->validateData($data, $validatorCustomLayout)) {
-                $validatorMessages = $validatorCustomLayout->getMessages();
+            if (!$this->validateData($data, $layoutXmlValidator)) {
+                $validatorMessages = $layoutXmlValidator->getMessages();
                 foreach ($validatorMessages as $message) {
                     $this->messageManager->addErrorMessage($message);
                 }
@@ -131,17 +131,17 @@ class PostDataProcessor
      * Validate data, avoid cyclomatic complexity
      *
      * @param array $data
-     * @param \Magento\Framework\View\Model\Layout\Update\Validator $validatorCustomLayout
+     * @param \Magento\Framework\View\Model\Layout\Update\Validator $layoutXmlValidator
      * @return bool
      */
-    private function validateData($data, $validatorCustomLayout)
+    private function validateData($data, $layoutXmlValidator)
     {
         try {
-            if (!empty($data['layout_update_xml']) && !$validatorCustomLayout->isValid($data['layout_update_xml'])) {
+            if (!empty($data['layout_update_xml']) && !$layoutXmlValidator->isValid($data['layout_update_xml'])) {
                 return false;
             }
             if (!empty($data['custom_layout_update_xml']) &&
-                !$validatorCustomLayout->isValid($data['custom_layout_update_xml'])
+                !$layoutXmlValidator->isValid($data['custom_layout_update_xml'])
             ) {
                 return false;
             }
