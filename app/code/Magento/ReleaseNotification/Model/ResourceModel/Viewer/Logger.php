@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ReleaseNotification\Model\ResourceModel\Viewer;
 
 use Magento\ReleaseNotification\Model\Viewer\Log;
@@ -49,39 +51,34 @@ class Logger
      *
      * @param int $viewerId
      * @param string $lastViewVersion
-     * @return $this
+     * @return bool
      */
-    public function log($viewerId, $lastViewVersion)
+    public function log(int $viewerId, string $lastViewVersion) : bool
     {
         /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
         $connection = $this->resource->getConnection(ResourceConnection::DEFAULT_CONNECTION);
-
         $connection->insertOnDuplicate(
             $this->resource->getTableName(self::LOG_TABLE_NAME),
             [
                 'viewer_id' => $viewerId,
                 'last_view_version' => $lastViewVersion
             ],
-            ['viewer_id', 'last_view_version']
+            [
+                'last_view_version'
+            ]
         );
-
-        return $this;
+        return true;
     }
 
     /**
      * Get log by viewer Id.
      *
      * @param int $viewerId
-     * @return Log|null
+     * @return Log
      */
-    public function get($viewerId)
+    public function get(int $viewerId) : Log
     {
-        $data = $this->loadLogData($viewerId);
-        if (is_array($data)) {
-            return $this->logFactory->create(['data' => $data]);
-        } else {
-            return null;
-        }
+        return $this->logFactory->create(['data' => $this->loadLogData($viewerId)]);
     }
 
     /**
@@ -90,20 +87,17 @@ class Logger
      * @param int $viewerId
      * @return array
      */
-    private function loadLogData($viewerId)
+    private function loadLogData(int $viewerId) : array
     {
         $connection = $this->resource->getConnection();
-
         $select = $connection->select()
-            ->from(
-                $this->resource->getTableName(self::LOG_TABLE_NAME)
-            )->where(
-                'viewer_id = ?',
-                $viewerId
-            )->order(
-                'id DESC'
-            )->limit(1);
+            ->from($this->resource->getTableName(self::LOG_TABLE_NAME))
+            ->where('viewer_id = ?', $viewerId);
 
-        return $connection->fetchRow($select);
+        $data = $connection->fetchRow($select);
+        if (!$data) {
+            $data = [];
+        }
+        return $data;
     }
 }

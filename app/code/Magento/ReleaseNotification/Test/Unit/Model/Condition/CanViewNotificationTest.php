@@ -38,8 +38,14 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
      */
     private $sessionMock;
 
+    /** @var  Log|\PHPUnit_Framework_MockObject_MockObject */
+    private $logMock;
+
+
     public function setUp()
     {
+        $this->logMock = $this->getMockBuilder(Log::class)
+            ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUser', 'getId'])
@@ -63,14 +69,11 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $expected
-     * @param string $variableName
-     * @param int $callNum
      * @param string $version
-     * @param string $lastViewVersion
+     * @param string|null $lastViewVersion
      * @dataProvider isVisibleProvider
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function testIsVisible($expected, $variableName, $callNum, $version, $lastViewVersion = null)
+    public function testIsVisible($expected, $version, $lastViewVersion)
     {
         $this->sessionMock->expects($this->once())
             ->method('getUser')
@@ -81,32 +84,26 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
         $this->productMetadataMock->expects($this->once())
             ->method('getVersion')
             ->willReturn($version);
-        $viewerLogMock = $this->getMockBuilder(Log::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $viewerLogMock->expects($this->any())
+        $this->logMock->expects($this->once())
             ->method('getLastViewVersion')
             ->willReturn($lastViewVersion);
-        $viewerLogNull = null;
         $this->viewerLoggerMock->expects($this->once())
             ->method('get')
             ->with(1)
-            ->willReturn($$variableName);
-        $this->viewerLoggerMock->expects($this->exactly($callNum))
-            ->method('log')
-            ->with(1, $version);
+            ->willReturn($this->logMock);
         $this->assertEquals($expected, $this->canViewNotification->isVisible([]));
     }
 
     public function isVisibleProvider()
     {
         return [
-            [true, 'viewerLogNull', 1, '2.2.1-dev'],
-            [true, 'viewerLogMock', 1, '2.2.1-dev', null],
-            [true, 'viewerLogMock', 1, '2.2.1-dev', '2.2.1'],
-            [true, 'viewerLogMock', 1, '2.2.1-dev', '2.2.0'],
-            [true, 'viewerLogMock', 1, '2.3.0', '2.2.0'],
-            [false, 'viewerLogMock', 0, '2.2.2', '2.2.2'],
+            [false, '2.2.1-dev', '999.999.999-alpha'],
+            [true, '2.2.1-dev', '2.0.0'],
+            [true, '2.2.1-dev', null],
+            [false, '2.2.1-dev', '2.2.1'],
+            [true, '2.2.1-dev', '2.2.0'],
+            [true, '2.3.0', '2.2.0'],
+            [false, '2.2.2', '2.2.2'],
         ];
     }
 }

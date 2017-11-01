@@ -42,7 +42,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'last_view_version',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            10,
+            16,
             ['nullable' => false],
             'Viewer last view on product version'
         )->addIndex(

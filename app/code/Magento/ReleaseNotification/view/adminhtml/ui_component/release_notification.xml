@@ -21,6 +21,15 @@
         </deps>
     </settings>
     <dataSource name="release_notification_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="data" xsi:type="array">
+                        <item name="logAction" xsi:type="url" path="releaseNotification/notification/markUserNotified"/>
+                    </item>
+                </item>
+            </argument>
+        </argument>
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
@@ -28,7 +37,7 @@
         </argument>
         <dataProvider class="Magento\ReleaseNotification\Ui\DataProvider\DataProvider" name="release_notification_data_source"/>
     </dataSource>
-    <modal name="release_notification_modal">
+    <modal name="release_notification_modal" component="Magento_ReleaseNotification/js/modal/component">
         <settings>
             <onCancel>actionCancel</onCancel>
             <state>true</state>
@@ -105,7 +114,7 @@
             </container>
         </fieldset>
     </modal>
-    <modal name="analytics_modal">
+    <modal name="analytics_modal" component="Magento_ReleaseNotification/js/modal/component">
         <settings>
             <onCancel>actionCancel</onCancel>
             <options>
@@ -189,7 +198,7 @@
             </container>
         </fieldset>
     </modal>
-    <modal name="developer_experience_modal">
+    <modal name="developer_experience_modal" component="Magento_ReleaseNotification/js/modal/component">
         <settings>
             <onCancel>actionCancel</onCancel>
             <options>
@@ -277,7 +286,7 @@
             </container>
         </fieldset>
     </modal>
-    <modal name="b2b_modal">
+    <modal name="b2b_modal" component="Magento_ReleaseNotification/js/modal/component">
         <settings>
             <onCancel>actionCancel</onCancel>
             <options>
@@ -350,7 +359,7 @@
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = b2b_modal</item>
-                                    <item name="actionName" xsi:type="string">closeModal</item>
+                                    <item name="actionName" xsi:type="string">closeReleaseNotes</item>
                                 </item>
                             </item>
                         </item>
