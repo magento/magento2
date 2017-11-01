@@ -49,9 +49,10 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
             throw new StateException(__('Attribute %1 doesn\'t work with options', $attributeCode));
         }
 
+        $optionLabel = $option->getLabel();
         $optionId = $this->getOptionId($option);
         $options = [];
-        $options['value'][$optionId][0] = $option->getLabel();
+        $options['value'][$optionId][0] = $optionLabel;
         $options['order'][$optionId] = $option->getSortOrder();
 
         if (is_array($option->getStoreLabels())) {
@@ -67,11 +68,14 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
         $attribute->setOption($options);
         try {
             $this->resourceModel->save($attribute);
+            if ($optionLabel && $attribute->getAttributeCode()) {
+                $option->setValue($attribute->getSource()->getOptionId($optionLabel));
+            }
         } catch (\Exception $e) {
             throw new StateException(__('Cannot save attribute %1', $attributeCode));
         }
 
-        return true;
+        return $option;
     }
 
     /**

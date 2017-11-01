@@ -80,7 +80,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->once())->method('setDefault')->with(['new_option']);
         $attributeMock->expects($this->once())->method('setOption')->with($option);
         $this->resourceModelMock->expects($this->once())->method('save')->with($attributeMock);
-        $this->assertTrue($this->model->add($entityType, $attributeCode, $optionMock));
+        $this->assertEquals($optionMock, $this->model->add($entityType, $attributeCode, $optionMock));
     }
 
     /**
