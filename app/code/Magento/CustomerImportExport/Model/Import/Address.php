@@ -5,7 +5,11 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Source as Sources;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -238,6 +242,18 @@ class Address extends AbstractCustomer
     protected $postcodeValidator;
 
     /**
+     * @var CountryWithWebsites
+     */
+    private $countryWithWebsites;
+
+    /**
+     * Options for certain attributes sorted by websites.
+     *
+     * @var array[][] With path as <attributeCode> => <websiteID> => options[].
+     */
+    private $optionsByWebsite = [];
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -256,6 +272,7 @@ class Address extends AbstractCustomer
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator
      * @param array $data
+     * @param Sources\CountryWithWebsites|null $countryWithWebsites
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -278,7 +295,8 @@ class Address extends AbstractCustomer
         \Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory $attributesFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator,
-        array $data = []
+        array $data = [],
+        Sources\CountryWithWebsites $countryWithWebsites = null
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_addressFactory = $addressFactory;
@@ -286,6 +304,10 @@ class Address extends AbstractCustomer
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
         $this->postcodeValidator = $postcodeValidator;
+        $this->countryWithWebsites = $countryWithWebsites ?
+            $countryWithWebsites
+            : ObjectManager::getInstance()
+                ->get(Sources\CountryWithWebsites::class);
 
         if (!isset($data['attribute_collection'])) {
             /** @var $attributeCollection \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection */
@@ -330,6 +352,56 @@ class Address extends AbstractCustomer
 
         $this->_initAttributes();
         $this->_initAddresses()->_initCountryRegions();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAttributeOptions(
+        AbstractAttribute $attribute,
+        array $indexAttributes = []
+    ) {
+            $options = parent::getAttributeOptions(
+                $attribute,
+                $indexAttributes
+            );
+            if ($attribute->getAttributeCode() === 'country_id') {
+                //If we want to get available options for country field then we
+                //have to use alternative source to get actual data
+                //for each website.
+                $optionsWithWebsites
+                    = $this->countryWithWebsites->getAllOptions();
+                //Available country options now will be sorted by websites.
+                $code = $attribute->getAttributeCode();
+                if (!array_key_exists($code, $this->optionsByWebsite)) {
+                    $websiteOptions = [Store::DEFAULT_STORE_ID => $options];
+                    foreach ($optionsWithWebsites as $optionWithWebsites) {
+                        if (array_key_exists(
+                            'website_ids',
+                            $optionWithWebsites
+                        )) {
+                            foreach (
+                                $optionWithWebsites['website_ids'] as $websiteId
+                            ) {
+                                if (!array_key_exists(
+                                    $websiteId,
+                                    $websiteOptions
+                                )) {
+                                    $websiteOptions[$websiteId] = [];
+                                }
+                                $optionId = mb_strtolower(
+                                    $optionWithWebsites['value']
+                                );
+                                $websiteOptions[$websiteId][$optionId]
+                                    = $optionWithWebsites['value'];
+                            }
+                        }
+                    }
+                    $this->optionsByWebsite[$code] = $websiteOptions;
+                }
+            }
+
+            return $options;
     }
 
     /**
@@ -738,6 +810,26 @@ class Address extends AbstractCustomer
                 } else {
                     // check simple attributes
                     foreach ($this->_attributes as $attributeCode => $attributeParams) {
+                        //Adjusting attribute's details for given website.
+                        $websiteId = $this->_websiteCodeToId[$website];
+                        if ($attributeCode === 'country_id') {
+                            if (array_key_exists(
+                                $attributeCode,
+                                $this->optionsByWebsite
+                            )) {
+                                //There can be different options for different
+                                //websites.
+                                $websiteOptions
+                                    = $this->optionsByWebsite[$attributeCode];
+                                //Replacing options for default website with
+                                //relevant ones.
+                                $attributeParams['options'] = array_key_exists(
+                                    $websiteId,
+                                    $websiteOptions
+                                ) ? $websiteOptions[$websiteId] : [];
+                            }
+                        }
+
                         if (in_array($attributeCode, $this->_ignoredAttributes)) {
                             continue;
                         }
