@@ -52,23 +52,16 @@ class SalesChannelManagementTest extends WebapiAbstract
             $actualStockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['sales_channels']
         );
     }
+
     /**
+     * @param array $salesChannels
      * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_with_sales_channels.php
+     * @dataProvider updateStockWithSalesChannelsReplacingDataProvider
      */
-    public function testUpdateStockWithSalesChannelsReplacing()
+    public function testUpdateStockWithSalesChannelsReplacing(array $salesChannels)
     {
         $stockId = 10;
-        $salesChannels = [
-            [
-                SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                SalesChannelInterface::CODE => 'test_1',
-            ],
-            [
-                SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                SalesChannelInterface::CODE => 'test_2',
-            ],
-        ];
         $stockData = [
             StockInterface::NAME => 'stock-name',
             ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => [
@@ -83,6 +76,26 @@ class SalesChannelManagementTest extends WebapiAbstract
             $salesChannels,
             $actualStockData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['sales_channels']
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function updateStockWithSalesChannelsReplacingDataProvider(): array
+    {
+        return [
+            'replace_sales_channels' => [
+                [
+                    SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                    SalesChannelInterface::CODE => 'test_1',
+                ],
+                [
+                    SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
+                    SalesChannelInterface::CODE => 'test_2',
+                ],
+            ],
+            'remove_sales_channels' => [],
+        ];
     }
 
     /**

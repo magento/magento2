@@ -55,26 +55,16 @@ class SaveSalesChannelsLinksPlugin
         callable $proceed,
         StockInterface $stock
     ): int {
-        try {
-            return $this->doAroundSave($proceed, $stock);
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not replace Sales Channels for Stock'), $e);
-        }
-    }
-
-    /**
-     * @param callable $proceed
-     * @param StockInterface $stock
-     * @return int
-     */
-    private function doAroundSave(callable $proceed, StockInterface $stock)
-    {
         $extensionAttributes = $stock->getExtensionAttributes();
         $salesChannels = $extensionAttributes->getSalesChannels();
         $stockId = $proceed($stock);
         if (null !== $salesChannels) {
-            $this->replaceSalesChannelsOnStock->execute($salesChannels, $stockId);
+            try {
+                $this->replaceSalesChannelsOnStock->execute($salesChannels, $stockId);
+            } catch (\Exception $e) {
+                $this->logger->error($e->getMessage());
+                throw new CouldNotSaveException(__('Could not replace Sales Channels for Stock'), $e);
+            }
         }
         return $stockId;
     }

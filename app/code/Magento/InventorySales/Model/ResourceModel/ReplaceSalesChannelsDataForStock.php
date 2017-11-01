@@ -44,14 +44,16 @@ class ReplaceSalesChannelsDataForStock
 
         $connection->delete($tableName, [CreateSalesChannelTable::STOCK_ID . ' = ?' => $stockId]);
 
-        $salesChannelsToInsert = [];
-        foreach ($salesChannels as $salesChannel) {
-            $salesChannelsToInsert[] = [
-                SalesChannelInterface::TYPE => $salesChannel->getType(),
-                SalesChannelInterface::CODE => $salesChannel->getCode(),
-                CreateSalesChannelTable::STOCK_ID => $stockId,
-            ];
+        if (count($salesChannels)) {
+            $salesChannelsToInsert = [];
+            foreach ($salesChannels as $salesChannel) {
+                $salesChannelsToInsert[] = [
+                    SalesChannelInterface::TYPE => $salesChannel->getType(),
+                    SalesChannelInterface::CODE => $salesChannel->getCode(),
+                    CreateSalesChannelTable::STOCK_ID => $stockId,
+                ];
+            }
+            $connection->insertMultiple($tableName, $salesChannelsToInsert);
         }
-        $connection->insertMultiple($tableName, $salesChannelsToInsert);
     }
 }
