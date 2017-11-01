@@ -663,17 +663,17 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Test redirect customer to account dashboard after logging in.
      *
-     * @param bool|null $redirectDashboardValue
+     * @param bool|null $redirectDashboard
      * @param string $redirectUrl
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @dataProvider loginPostRedirectDataProvider
      */
-    public function testLoginPostRedirect($redirectDashboardValue, string $redirectUrl)
+    public function testLoginPostRedirect($redirectDashboard, string $redirectUrl)
     {
-        if (isset($redirectDashboardValue)) {
-            $this->_objectManager->get(ScopeConfigInterface::class)->setValue('customer/startup/redirect_dashboard', $redirectDashboardValue);
+        if (isset($redirectDashboard)) {
+            $this->_objectManager->get(ScopeConfigInterface::class)->setValue('customer/startup/redirect_dashboard', $redirectDashboard);
         }
 
         $this->_objectManager->get(Redirect::class)->setRedirectCookie('test');
