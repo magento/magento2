@@ -7,6 +7,8 @@ namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Pricing\Price;
+use Magento\Framework\Pricing;
 
 /**
  * Product View block
@@ -30,7 +32,6 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @deprecated 101.1.0
      */
     protected $priceCurrency;
 
@@ -383,5 +384,25 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     protected function getCustomerId()
     {
         return $this->customerSession->getCustomerId();
+    }
+
+    /**
+     * Retrieves a product`s price info
+     * @param string $priceType
+     * @return \Magento\Framework\Pricing\Price\PriceInterface
+     */
+    public function getProductPriceInfo($priceType = Price\RegularPrice::PRICE_CODE)
+    {
+        return $this->getProduct()->getPriceInfo()->getPrice($priceType);
+    }
+
+    /**
+     * Render a product amount with the default precision
+     * @param Pricing\Amount\AmountInterface $amount
+     * @return float
+     */
+    public function renderAmount(Pricing\Amount\AmountInterface $amount)
+    {
+        return $this->priceCurrency->round($amount->getValue());
     }
 }
