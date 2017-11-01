@@ -140,7 +140,7 @@ class Builder
             }
 
             $defaultValue = 0;
-            if ($this->hasDefaultValue($condition->getAttribute())) {
+            if ($this->canAttributeHaveDefaultValue($condition->getAttribute())) {
                 $defaultField = 'at_' . $condition->getAttribute() . '_default.value';
                 $defaultValue = $this->_connection->quoteIdentifier($defaultField);
             }
@@ -206,12 +206,12 @@ class Builder
     }
 
     /**
-     * Check if attribute has default value
+     * Check if attribute can have default value
      *
      * @param string $attributeCode
      * @return bool
      */
-    private function hasDefaultValue($attributeCode)
+    private function canAttributeHaveDefaultValue($attributeCode)
     {
         try {
             $attribute = $this->attributeRepository->get(Product::ENTITY, $attributeCode);
@@ -219,6 +219,6 @@ class Builder
             // It's not exceptional case as we want to check if we have such attribute or not
             $attribute = null;
         }
-        return !$attribute->isScopeGlobal();
+        return $attribute !== null && !$attribute->isScopeGlobal();
     }
 }
