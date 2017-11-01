@@ -8,6 +8,7 @@ namespace Magento\Rule\Model\Condition\Sql;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Combine;
 use Magento\Eav\Api\AttributeRepositoryInterface;
@@ -138,11 +139,9 @@ class Builder
                 throw new \Magento\Framework\Exception\LocalizedException(__('Unknown condition operator'));
             }
 
-            $attribute = $this->attributeRepository->get(Product::ENTITY, $condition->getAttribute());
-
             $defaultValue = 0;
-            if ($this->hasDefaultValue($attribute)) {
-                $defaultField = 'at_' . $attribute->getAttributeCode() . '_default.value';
+            if ($this->hasDefaultValue($condition->getAttribute())) {
+                $defaultField = 'at_' . $condition->getAttribute() . '_default.value';
                 $defaultValue = $this->_connection->quoteIdentifier($defaultField);
             }
 
@@ -209,11 +208,17 @@ class Builder
     /**
      * Check if attribute has default value
      *
-     * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
+     * @param string $attributeCode
      * @return bool
      */
-    private function hasDefaultValue(\Magento\Eav\Api\Data\AttributeInterface $attribute)
+    private function hasDefaultValue($attributeCode)
     {
+        try {
+            $attribute = $this->attributeRepository->get(Product::ENTITY, $attributeCode);
+        } catch (NoSuchEntityException $e) {
+            // It's not exceptional case as we want to check if we have such attribute or not
+            $attribute = null;
+        }
         return !$attribute->isScopeGlobal();
     }
 }
