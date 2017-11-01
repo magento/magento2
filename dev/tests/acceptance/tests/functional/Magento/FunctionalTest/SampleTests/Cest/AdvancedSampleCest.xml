@@ -36,7 +36,7 @@
             </createData>
 
             <!-- Parameterized url -->
-            <amOnPage url="{{SamplePage('foo', SamplePerson.bar)}}" mergeKey="amOnPage"/>
+            <amOnPage url="{{SamplePage.url('foo', SamplePerson.bar)}}" mergeKey="amOnPage"/>
 
             <!-- Parameterized selector -->
             <grabTextFrom selector="{{SampleSection.twoParamElement(SamplePerson.foo, 'bar')}}" returnVariable="myReturnVar" mergeKey="grabTextFrom"/>

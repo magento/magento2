@@ -6,7 +6,7 @@
   */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="AdminSystemStorePage" urlPath="/admin/admin/system_store/" module="Store">
+    <page name="AdminSystemStorePage" url="/admin/admin/system_store/" module="Store">
         <section name="AdminStoresMainActionsSection"/>
         <section name="AdminStoresGridSection"/>
     </page>

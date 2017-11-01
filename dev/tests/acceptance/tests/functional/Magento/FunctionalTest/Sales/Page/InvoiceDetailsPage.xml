@@ -8,7 +8,7 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="InvoiceDetailsPage" urlPath="/admin/sales/invoice/view/invoice_id/" module="Sales">
+    <page name="InvoiceDetailsPage" url="/admin/sales/invoice/view/invoice_id/" module="Sales">
         <section name="InvoiceDetailsInformationSection"/>
     </page>
 </config>
