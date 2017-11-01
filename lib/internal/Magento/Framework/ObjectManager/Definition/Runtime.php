@@ -17,7 +17,7 @@ class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
     /**
      * @var \Magento\Framework\Code\Reader\ClassReaderInterface
      */
-    protected $_reader;
+    private $_reader;
 
     /**
      * @param \Magento\Framework\Code\Reader\ClassReaderInterface $reader

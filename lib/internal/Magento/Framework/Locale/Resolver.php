@@ -50,7 +50,7 @@ class Resolver implements ResolverInterface
     /**
      * @var string
      */
-    protected $defaultLocalePath;
+    private $defaultLocalePath;
 
     /**
      * @param ScopeConfigInterface $scopeConfig

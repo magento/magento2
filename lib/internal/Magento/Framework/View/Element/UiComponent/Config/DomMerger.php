@@ -61,7 +61,7 @@ class DomMerger implements DomMergerInterface
     /**
      * @var string
      */
-    protected $schema;
+    private $schema;
 
     /**
      * Build DOM with initial XML contents and specifying identifier attributes for merging

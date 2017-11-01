@@ -55,14 +55,15 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
 
     /**
      * @var DirectoryList
+     * @deprecated Unused class property
      */
-    protected $directoryList;
+    private $directoryList;
 
     /**
      * @param DirReader $moduleReader
      * @param FileIteratorFactory $iteratorFactory
      * @param DesignInterface $designInterface
-     * @param DirectoryList $directoryList
+     * @param DirectoryList $directoryList @deprecated
      * @param Filesystem $filesystem
      * @param ResolverInterface $resolver
      */

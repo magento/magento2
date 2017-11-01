@@ -79,7 +79,7 @@ class File extends AbstractIo
     /**
      * @var \Exception
      */
-    protected $_streamException;
+    private $_streamException;
 
     /**
      * Destruct

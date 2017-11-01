@@ -45,7 +45,7 @@ class UiComponent implements GeneratorInterface
     /**
      * @var BlockFactory
      */
-    protected $blockFactory;
+    private $blockFactory;
 
     /**
      * Constructor

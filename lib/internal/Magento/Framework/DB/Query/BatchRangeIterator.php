@@ -35,6 +35,7 @@ class BatchRangeIterator implements BatchIteratorInterface
 
     /**
      * @var string
+     * @deprecated unused class property
      */
     private $rangeFieldAlias;
 
@@ -85,7 +86,7 @@ class BatchRangeIterator implements BatchIteratorInterface
      * @param int $batchSize
      * @param string $correlationName
      * @param string|array $rangeField
-     * @param string $rangeFieldAlias
+     * @param string $rangeFieldAlias @deprecated
      */
     public function __construct(
         Select $select,

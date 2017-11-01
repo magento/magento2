@@ -105,7 +105,7 @@ class Encryptor implements EncryptorInterface
     /**
      * @var Random
      */
-    protected $random;
+    private $random;
 
     /**
      * @param Random $random
