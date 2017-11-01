@@ -5,6 +5,11 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\Indexer\Category\Product\Action\Full;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Test class for \Magento\Catalog\Model\Category.
  * - tree knowledge is tested
@@ -17,15 +22,37 @@ namespace Magento\Catalog\Model;
 class CategoryTreeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Category
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $_objectManager;
+
+    /**
+     * @var Category
      */
     protected $_model;
 
+    /**
+     * @var \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
+     */
+    private $_indexer;
+
+    /**
+     * @var CategoryRepositoryInterface $categoryRepository
+     */
+    private $_categoryRepository;
+
+    /**
+     * @var ResourceConnection
+     */
+    private $_resource;
+
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Category::class
-        );
+        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->_model = $this->_objectManager->create(Category::class);
+        $this->_indexer = $this->_objectManager->create(Full::class);
+        $this->_categoryRepository = $this->_objectManager->create(CategoryRepositoryInterface::class);
+        $this->_resource = $this->_objectManager->create(ResourceConnection::class);
     }
 
     /**
@@ -217,5 +244,60 @@ class CategoryTreeTest extends \PHPUnit\Framework\TestCase
         $this->_model->unsetData();
         $this->_model->load(3);
         $this->assertTrue($this->_model->isInRootCategoryList());
+    }
+
+    /**
+     * Test correct partial reindex on enabling / disabling category.
+     *
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/category_reindexing.php
+     */
+    public function testReindexingOnIsActiveChange()
+    {
+        /* @var StoreManagerInterface $storeManager */
+        $storeManager = $this->_objectManager->get(StoreManagerInterface::class);
+        $storeManager->setCurrentStore(0);
+
+        $categoryAId = 3;
+        $categoryBId = 4;
+        $categoryCId = 5;
+
+        $categoryB = $this->_categoryRepository->get($categoryBId);
+        $categoryC = $this->_categoryRepository->get($categoryCId);
+
+        self::assertCount(0, $this->getCategoryProductIndexRecords($categoryAId));
+
+        $categoryB->setIsActive(true)->save();
+        self::assertCount(1, $this->getCategoryProductIndexRecords($categoryAId));
+
+        $categoryC->setIsActive(true)->save();
+        self::assertCount(1, $this->getCategoryProductIndexRecords($categoryAId));
+
+        // We need to reload models because bug is present in CategoryRepository
+        // which returns incorrect dataHasChangedFor value.
+        $categoryB = $this->_objectManager->create(Category::class)->load($categoryBId);
+        $categoryC = $this->_objectManager->create(Category::class)->load($categoryCId);
+
+        $categoryB->setIsActive(false)->save();
+        self::assertCount(1, $this->getCategoryProductIndexRecords($categoryAId));
+
+        $categoryC->setIsActive(false)->save();
+        self::assertCount(0, $this->getCategoryProductIndexRecords($categoryAId));
+    }
+
+    /**
+     * @param int $categoryId
+     * @return \Magento\Framework\DB\Select
+     */
+    private function getCategoryProductIndexRecords(int $categoryId)
+    {
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+        $connection = $this->_resource->getConnection();
+        /** @var \Magento\Framework\DB\Select $select */
+        $select = $connection->select();
+        $select
+            ->from($this->_indexer::MAIN_INDEX_TABLE)
+            ->where('category_id = ?', $categoryId);
+        return $select->query()->fetchAll();
     }
 }

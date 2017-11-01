@@ -1108,7 +1108,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         }
         $productIndexer = $this->indexerRegistry->get(Indexer\Category\Product::INDEXER_ID);
         if (!$productIndexer->isScheduled()
-            && (!empty($this->getAffectedProductIds()) || $this->dataHasChangedFor('is_anchor'))
+            && (
+                !empty($this->getAffectedProductIds())
+                || $this->dataHasChangedFor('is_anchor')
+                || $this->dataHasChangedFor('is_active')
+            )
         ) {
             $productIndexer->reindexList($this->getPathIds());
         }
