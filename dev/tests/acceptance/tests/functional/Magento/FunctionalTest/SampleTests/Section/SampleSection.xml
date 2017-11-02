@@ -14,4 +14,7 @@
         <element name="threeParamElement" type="button" selector="#{{var1}}-{{var2}} .{{var3}}" parameterized="true"/>
         <element name="timeoutElement" type="button" selector="#foo" timeout="30"/>
     </section>
+    <section name="ColumnSection">
+        <element name="panelFieldLabel" type="text" selector='//div[@data-index="{{arg1}}"]/descendant::div[@data-index="{{arg2}}"]/label | //div[@data-index="{{arg3}}"]/descendant::*[@class="admin__field-label"]/span[text()="{{arg4}}"]' parameterized="true" />
+    </section>
 </config>
