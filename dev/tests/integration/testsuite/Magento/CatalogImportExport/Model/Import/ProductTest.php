@@ -34,6 +34,7 @@ use Psr\Log\LoggerInterface;
  * @magentoDbIsolation enabled
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 {
