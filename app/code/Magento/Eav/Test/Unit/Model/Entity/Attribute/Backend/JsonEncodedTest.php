@@ -95,4 +95,18 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
         $this->model->afterLoad($product);
         $this->assertEquals([1, 2, 3], $product->getData('json_encoded'));
     }
+
+    /**
+     * Test after load handler with null attribute value
+     */
+    public function testAfterLoadWithNullAttributeValue()
+    {
+        $product = new \Magento\Framework\DataObject(
+            [
+                'json_encoded' => null
+            ]
+        );
+        $this->model->afterLoad($product);
+        $this->assertEquals([], $product->getData('json_encoded'));
+    }
 }
