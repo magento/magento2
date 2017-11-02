@@ -35,7 +35,7 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
         $userModel = Bootstrap::getObjectManager()->get(\Magento\User\Model\User::class);
         $adminUserNameFromFixture = 'adminUser';
         $adminUserId = $userModel->loadByUsername($adminUserNameFromFixture)->getId();
-        $this->assertNull($this->logger->get($adminUserId));
+        $this->assertEmpty($this->logger->get($adminUserId)->getId());
         $firstLogVersion = '2.2.2';
         $this->logger->log($adminUserId, $firstLogVersion);
         $firstLog = $this->logger->get($adminUserId);
