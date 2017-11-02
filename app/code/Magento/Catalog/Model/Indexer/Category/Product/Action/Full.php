@@ -117,7 +117,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Return select for remove unnecessary data
      *
      * @return \Magento\Framework\DB\Select
-     * @deprecated Not needed anymore.
+     * @deprecated 102.0.1 Not needed anymore.
      */
     protected function getSelectUnnecessaryData()
     {
@@ -143,7 +143,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @return void
      *
-     * @deprecated Not needed anymore.
+     * @deprecated 102.0.1 Not needed anymore.
      */
     protected function removeUnnecessaryData()
     {
