@@ -418,7 +418,7 @@ class Address extends AbstractCustomer
         if ($attributeData['code'] === 'country_id') {
             $attributeOptions = $this->optionsByWebsite[$attributeData['code']];
             if (array_key_exists($websiteId, $attributeOptions)) {
-                $attributeParams['options'] = $attributeOptions[$websiteId];
+                $attributeData['options'] = $attributeOptions[$websiteId];
             }
         }
 
@@ -582,7 +582,6 @@ class Address extends AbstractCustomer
     {
         $email = strtolower($rowData[self::COLUMN_EMAIL]);
         $customerId = $this->_getCustomerId($email, $rowData[self::COLUMN_WEBSITE]);
-
         // entity table data
         $entityRowNew = [];
         $entityRowUpdate = [];
@@ -590,7 +589,6 @@ class Address extends AbstractCustomer
         $attributes = [];
         // customer default addresses
         $defaults = [];
-
         $newAddress = true;
         // get address id
         if (isset(
@@ -610,8 +608,8 @@ class Address extends AbstractCustomer
             'parent_id' => $customerId,
             'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
         ];
-
         $websiteId = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
+
         foreach ($this->_attributes as $attributeAlias => $attributeParams) {
             if (array_key_exists($attributeAlias, $rowData)) {
                 $attributeParams = $this->adjustAttributeDataForWebsite(
