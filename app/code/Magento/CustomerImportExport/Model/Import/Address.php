@@ -243,7 +243,7 @@ class Address extends AbstractCustomer
     protected $postcodeValidator;
 
     /**
-     * @var CountryWithWebsites
+     * @var Sources\CountryWithWebsites
      */
     private $countryWithWebsites;
 

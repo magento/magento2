@@ -550,10 +550,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $directoryWrite = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         //Validate
         $adapter = ImportAdapter::findAdapterFor($sourceFile, $directoryWrite);
-        $result = $this->_entityAdapter->setSource($adapter)
-            ->validateData()
-            ->hasToBeTerminated();
-        $this->assertTrue($result, 'Validation result must be true.');
+        $errors = $this->_entityAdapter->setSource($adapter)
+            ->validateData();
+        $this->assertEmpty($errors->getErrorsCount(), 'CSV must be valid');
         //Import
         $imported = $this->_entityAdapter->importData();
         $this->assertTrue($imported, 'Must be successfully imported');
