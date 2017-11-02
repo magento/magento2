@@ -1,0 +1,27 @@
+<!-- ko if: showButton -->
+<button type="button"
+        class="action primary onetouch"
+        id="product-onetouch-button"
+        data-bind="click: instantPurchase, attr:{title: buttonText}">
+    <span data-bind="text: buttonText"></span>
+</button>
+
+<!-- ko if: options.selectAddressAvailable() -->
+<div class="field">
+    <label for="address-selector"><!-- ko i18n: 'Select shipping address' --><!-- /ko -->:</label>
+    <select name="customer_address" id="address-selector"
+            data-bind="options: options.addresses, optionsText: 'address', optionsValue: 'id', value: options.defaultShipping, event: {change: changeShipping}">
+    </select>
+</div>
+<!-- /ko -->
+
+<!-- ko if: options.cards().length > 0 -->
+<div class="field">
+    <label for="address-selector"><!-- ko i18n: 'Select credit card' --><!-- /ko -->:</label>
+    <select name="customer_cc" id="cc-selector"
+            data-bind="options: options.cards, optionsText: 'card', optionsValue: 'id', event: {change: changeCc}">
+    </select>
+</div>
+<!-- /ko -->
+
+<!-- /ko -->
