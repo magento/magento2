@@ -21,6 +21,8 @@ use Magento\ReleaseNotification\Controller\Adminhtml\Notification\MarkUserNotifi
 
 /**
  * Class MarkUserNotifiedTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
 {
@@ -126,7 +128,7 @@ class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
             ->willReturn('999.999.999-alpha');
         $this->notificationLoggerMock->expects($this->once())
             ->method('log')
-            ->with(1 , '999.999.999-alpha')
+            ->with(1, '999.999.999-alpha')
             ->willReturn(true);
         $this->resultMock->expects($this->once())
             ->method('setData')

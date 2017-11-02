@@ -109,7 +109,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->logMock);
         $this->cacheStorageMock->expects($this->once())
             ->method('save')
-            ->with(false,'release-notification-popup-1');
+            ->with(false, 'release-notification-popup-1');
         $this->assertEquals($expected, $this->canViewNotification->isVisible([]));
     }
 
