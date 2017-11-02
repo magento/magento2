@@ -11,6 +11,9 @@ use Magento\InventorySales\Model\ResourceModel\GetAssignedSalesChannelsDataForSt
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
+/**
+ * @inheritdoc
+ */
 class GetAssignedSalesChannelsForStock implements GetAssignedSalesChannelsForStockInterface
 {
     /**
