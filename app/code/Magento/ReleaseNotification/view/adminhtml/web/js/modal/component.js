@@ -2,6 +2,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery',
     'Magento_Ui/js/modal/modal-component',
@@ -16,6 +17,7 @@ define([
                 logAction:  '${ $.provider }:data.logAction'
             }
         },
+
         /**
          * Error handler.
          *
@@ -36,7 +38,9 @@ define([
          */
         logReleaseNotesShow: function () {
             var self = this,
-                data = {"form_key": window.FORM_KEY};
+                data = {
+                    'form_key': window.FORM_KEY
+                };
 
             $.ajax({
                 type: 'POST',
