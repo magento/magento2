@@ -61,7 +61,7 @@ class Login extends \Magento\Framework\App\Action\Action
     /**
      * @var url
      */
-    protected $_url;
+    private $url;
 
     /**
      * Initialize Login controller
@@ -177,8 +177,8 @@ class Login extends \Magento\Framework\App\Action\Action
             $redirectRoute = $this->getAccountRedirect()->getRedirectCookie();
             
             if (isset($credentials['context']) && $credentials['context'] == 'checkout') {
-                $url_checkout = $this->_url->getUrl('checkout', ['_secure' => true]);
-                $response['redirectUrl'] = $this->_redirect->success($url_checkout);
+                $checkoutUrl = $this->url->getUrl('checkout', ['_secure' => true]);
+                $response['redirectUrl'] = $this->_redirect->success($checkoutUrl);
                 $this->getAccountRedirect()->clearRedirectCookie();
             }
             
