@@ -167,7 +167,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @var int
      */
-    protected $lastModMinTsVal;
+    private $lastModMinTsVal;
 
     /**
      * Initialize dependencies.
