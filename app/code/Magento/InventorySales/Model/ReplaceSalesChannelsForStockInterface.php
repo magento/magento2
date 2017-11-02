@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model;
 
 /**
- * Implementation of links replacement between Stock and Sales Channels
+ * Implementation of links replacement between Stock and Sales Channels (Service Provider Interface - SPI)
  * Provide own implementation of this interface if you would like to replace channels management strategy
  *
  * @api

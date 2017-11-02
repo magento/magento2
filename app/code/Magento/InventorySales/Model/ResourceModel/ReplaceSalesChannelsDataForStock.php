@@ -8,13 +8,17 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\InventorySales\Model\ReplaceSalesChannelsForStockInterface;
 use Magento\InventorySales\Setup\Operation\CreateSalesChannelTable;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
  * Implementation of links replacement between Stock and Sales Channels for specific db layer
+ *
+ * There is no additional business logic on SPI (Service Provider Interface) level so could use resource model as
+ * SPI implementation directly
  */
-class ReplaceSalesChannelsDataForStock
+class ReplaceSalesChannelsDataForStock implements ReplaceSalesChannelsForStockInterface
 {
     /**
      * @var ResourceConnection
