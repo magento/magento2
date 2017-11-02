@@ -296,7 +296,7 @@ class CategoryTreeTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\DB\Select $select */
         $select = $connection->select();
         $select
-            ->from($this->_indexer::MAIN_INDEX_TABLE)
+            ->from($this->_resource->getTableName($this->_indexer::MAIN_INDEX_TABLE))
             ->where('category_id = ?', $categoryId);
         return $select->query()->fetchAll();
     }
