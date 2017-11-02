@@ -103,10 +103,11 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
         return [
             [true, 'viewerLogNull', 1, '2.2.1-dev'],
             [true, 'viewerLogMock', 1, '2.2.1-dev', null],
-            [true, 'viewerLogMock', 1, '2.2.1-dev', '2.2.1'],
+            [true, 'viewerLogMock', 1, '2.2.1', '2.2.1-dev'],
             [true, 'viewerLogMock', 1, '2.2.1-dev', '2.2.0'],
             [true, 'viewerLogMock', 1, '2.3.0', '2.2.0'],
             [false, 'viewerLogMock', 0, '2.2.2', '2.2.2'],
+            [false, 'viewerLogMock', 0, '2.2.1-dev', '2.2.1'],
         ];
     }
 }
