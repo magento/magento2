@@ -41,7 +41,6 @@ class AbstractGridTest extends \PHPUnit\Framework\TestCase
             \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid::class,
             ['_storeManager' => $this->storeManagerMock]
         );
-
     }
 
     /**
