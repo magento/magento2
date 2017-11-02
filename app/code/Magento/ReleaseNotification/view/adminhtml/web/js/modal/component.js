@@ -55,7 +55,7 @@ define([
         },
 
         /**
-         *
+         * Close release notes
          */
         closeReleaseNotes: function () {
             this.logReleaseNotesShow();
