@@ -48,6 +48,10 @@
             <actionGroup ref="SampleActionGroup" mergeKey="actionGroup">
                 <argument name="person" value="OverrideDefaultPerson"/>
             </actionGroup>
+
+            <actionGroup ref="ValidateSlideOutPanelField" mergeKey="seeAppearanceMinHeightProperty">
+                <argument name="property" value="AppearanceMinHeightProperty"/>
+            </actionGroup>
         </test>
     </cest>
 </config>
