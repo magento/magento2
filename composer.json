@@ -47,6 +47,7 @@
         "sjparkinson/static-review": "~4.1",
         "symfony/console": "~2.3, !=2.7.0",
         "symfony/event-dispatcher": "~2.1",
+        "symfony/http-foundation": "^3.3",
         "symfony/process": "~2.1",
         "tedivm/jshrink": "~1.1.0",
         "tubalmartin/cssmin": "4.1.0",
