@@ -406,14 +406,14 @@ class Address extends AbstractCustomer
      * website-specific data.
      *
      * @param array $attributeData Data from $this->_attributes.
-     * @param int   $websiteId
+     * @param int $websiteId
      *
      * @return array Adjusted data in the same format.
      *
      */
     private function adjustAttributeDataForWebsite(
         array $attributeData,
-        int $websiteId
+        $websiteId
     ) {
         if ($attributeData['code'] === 'country_id') {
             $attributeOptions = $this->optionsByWebsite[$attributeData['code']];
