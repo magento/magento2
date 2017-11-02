@@ -932,7 +932,15 @@ define([
 
             _.each($('.' + this.options.classes.attributeOptionsWrapper), function (element) {
                 if ($(element).find('.' + this.options.classes.optionClass + '.selected').length === 0) {
-                    $(this.options.normalPriceLabelSelector).show();
+                    if ($(element).find('.' + this.options.classes.selectClass).length > 0) {
+                        _.each($(element).find('.' + this.options.classes.selectClass), function (element) {
+                            if ($(element).val() === '0') {
+                                $(this.options.normalPriceLabelSelector).show();
+                            }
+                        }.bind(this));
+                    } else {
+                        $(this.options.normalPriceLabelSelector).show();
+                    }
                 }
             }.bind(this));
         },
