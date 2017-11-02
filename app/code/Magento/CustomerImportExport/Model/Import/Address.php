@@ -401,6 +401,31 @@ class Address extends AbstractCustomer
     }
 
     /**
+     * Attributes' data may vary depending on website settings,
+     * this method adjusts an attribute's data from $this->_attributes to
+     * website-specific data.
+     *
+     * @param array $attributeData Data from $this->_attributes.
+     * @param int   $websiteId
+     *
+     * @return array Adjusted data in the same format.
+     *
+     */
+    private function adjustAttributeDataForWebsite(
+        array $attributeData,
+        int $websiteId
+    ) {
+        if ($attributeData['code'] === 'country_id') {
+            $attributeOptions = $this->optionsByWebsite[$attributeData['code']];
+            if (array_key_exists($websiteId, $attributeOptions)) {
+                $attributeParams['options'] = $attributeOptions[$websiteId];
+            }
+        }
+
+        return $attributeData;
+    }
+
+    /**
      * Customer entity getter
      *
      * @return \Magento\Customer\Model\Customer
@@ -586,30 +611,13 @@ class Address extends AbstractCustomer
             'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
         ];
 
-        /** @var int|null $websiteId */
-        if (array_key_exists(self::COLUMN_WEBSITE, $rowData)) {
-            if (array_key_exists(
-                $rowData[self::COLUMN_WEBSITE],
-                $this->_websiteCodeToId
-            )) {
-                $websiteId
-                    = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
-            }
-        } else {
-            $websiteId = null;
-        }
+        $websiteId = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
         foreach ($this->_attributes as $attributeAlias => $attributeParams) {
             if (array_key_exists($attributeAlias, $rowData)) {
-                //Adjusting attribute's params according to the website stated
-                //in the row data
-                if ($attributeAlias === 'country_id') {
-                    $attributeOptions
-                        = $this->optionsByWebsite[$attributeAlias];
-                    if (array_key_exists($websiteId, $attributeOptions)) {
-                        $attributeParams['options']
-                            = $attributeOptions[$websiteId];
-                    }
-                }
+                $attributeParams = $this->adjustAttributeDataForWebsite(
+                    $attributeParams,
+                    $websiteId
+                );
 
                 if (!strlen($rowData[$attributeAlias])) {
                     if ($newAddress) {
@@ -828,25 +836,11 @@ class Address extends AbstractCustomer
                 } else {
                     // check simple attributes
                     foreach ($this->_attributes as $attributeCode => $attributeParams) {
-                        //Adjusting attribute's details for given website.
                         $websiteId = $this->_websiteCodeToId[$website];
-                        if ($attributeCode === 'country_id') {
-                            if (array_key_exists(
-                                $attributeCode,
-                                $this->optionsByWebsite
-                            )) {
-                                //There can be different options for different
-                                //websites.
-                                $websiteOptions
-                                    = $this->optionsByWebsite[$attributeCode];
-                                //Replacing options for default website with
-                                //relevant ones.
-                                $attributeParams['options'] = array_key_exists(
-                                    $websiteId,
-                                    $websiteOptions
-                                ) ? $websiteOptions[$websiteId] : [];
-                            }
-                        }
+                        $attributeParams = $this->adjustAttributeDataForWebsite(
+                            $attributeParams,
+                            $websiteId
+                        );
 
                         if (in_array($attributeCode, $this->_ignoredAttributes)) {
                             continue;
