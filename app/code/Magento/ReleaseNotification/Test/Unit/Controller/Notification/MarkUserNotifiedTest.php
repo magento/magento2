@@ -30,11 +30,6 @@ class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
     private $storageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Context
-     */
-    private $contextMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Auth
      */
     private $authMock;
@@ -43,11 +38,6 @@ class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
      */
     private $loggerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ResultFactory
-     */
-    private $resultFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Json
@@ -77,10 +67,10 @@ class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
         $this->authMock = $this->getMockBuilder(Auth::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock = $this->getMockBuilder(Context::class)
+        $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock->expects($this->once())
+        $contextMock->expects($this->once())
             ->method('getAuth')
             ->willReturn($this->authMock);
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
@@ -90,13 +80,13 @@ class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
+        $resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultFactoryMock->expects($this->once())
+        $resultFactoryMock->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_JSON)
             ->willReturn($this->resultMock);
@@ -104,10 +94,10 @@ class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
         $this->action = $objectManagerHelper->getObject(
             MarkUserNotified::class,
             [
-                'resultFactory' => $this->resultFactoryMock,
+                'resultFactory' => $resultFactoryMock,
                 'productMetadata' => $this->productMetadataMock,
                 'notificationLogger' => $this->notificationLoggerMock,
-                'context' => $this->contextMock,
+                'context' => $contextMock,
                 'logger' => $this->loggerMock
             ]
         );
@@ -126,7 +116,7 @@ class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
             ->willReturn('999.999.999-alpha');
         $this->notificationLoggerMock->expects($this->once())
             ->method('log')
-            ->with(1 , '999.999.999-alpha')
+            ->with(1, '999.999.999-alpha')
             ->willReturn(true);
         $this->resultMock->expects($this->once())
             ->method('setData')
