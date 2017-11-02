@@ -64,7 +64,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * @var \Magento\Cron\Model\ResourceModel\Schedule\Collection
      */
-    protected $_runningSchedules;
+    protected $runningSchedules;
 
     /**
      * @var \Magento\Cron\Model\ConfigInterface
@@ -262,7 +262,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     protected function isJobRunning($jobCode)
     {
-        $runningJobs = $this->_getRunningSchedules();
+        $runningJobs = $this->getRunningSchedules();
 
         /** @var \Magento\Cron\Model\Schedule $schedule */
         foreach ($runningJobs as $schedule) {
@@ -346,15 +346,15 @@ class ProcessCronQueueObserver implements ObserverInterface
      *
      * @return \Magento\Cron\Model\ResourceModel\Schedule\Collection
      */
-    protected function _getRunningSchedules()
+    protected function getRunningSchedules()
     {
-        if (!$this->_runningSchedules) {
-            $this->_runningSchedules = $this->_scheduleFactory->create()->getCollection()->addFieldToFilter(
+        if (!$this->runningSchedules) {
+            $this->runningSchedules = $this->_scheduleFactory->create()->getCollection()->addFieldToFilter(
                 'status',
                 Schedule::STATUS_RUNNING
             )->load();
         }
-        return $this->_runningSchedules;
+        return $this->runningSchedules;
     }
 
     /**
