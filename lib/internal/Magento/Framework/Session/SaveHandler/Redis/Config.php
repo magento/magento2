@@ -6,9 +6,9 @@
 namespace Magento\Framework\Session\SaveHandler\Redis;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
 /**
  * Redis session save handler
@@ -126,6 +126,11 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+
+    /**
+     * @var State
+     */
+    private $appState;
 
     /**
      * @param DeploymentConfig $deploymentConfig
