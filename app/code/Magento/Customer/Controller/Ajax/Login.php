@@ -57,6 +57,11 @@ class Login extends \Magento\Framework\App\Action\Action
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
+    
+    /**
+     * @var url
+     */
+    private $url;
 
     /**
      * Initialize Login controller
@@ -82,6 +87,7 @@ class Login extends \Magento\Framework\App\Action\Action
         $this->customerAccountManagement = $customerAccountManagement;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultRawFactory = $resultRawFactory;
+        $this->_url = $context->getUrl();
     }
 
     /**
@@ -169,6 +175,13 @@ class Login extends \Magento\Framework\App\Action\Action
             $this->customerSession->setCustomerDataAsLoggedIn($customer);
             $this->customerSession->regenerateId();
             $redirectRoute = $this->getAccountRedirect()->getRedirectCookie();
+            
+            if (isset($credentials['context']) && $credentials['context'] == 'checkout') {
+                $checkoutUrl = $this->url->getUrl('checkout', ['_secure' => true]);
+                $response['redirectUrl'] = $this->_redirect->success($checkoutUrl);
+                $this->getAccountRedirect()->clearRedirectCookie();
+            }
+            
             if (!$this->getScopeConfig()->getValue('customer/startup/redirect_dashboard') && $redirectRoute) {
                 $response['redirectUrl'] = $this->_redirect->success($redirectRoute);
                 $this->getAccountRedirect()->clearRedirectCookie();
