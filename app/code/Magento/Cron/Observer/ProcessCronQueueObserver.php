@@ -260,7 +260,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      *
      * @return bool
      */
-    protected function isJobRunning($jobCode)
+    private function isJobRunning($jobCode)
     {
         $runningJobs = $this->getRunningSchedules();
 
