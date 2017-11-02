@@ -1,27 +1,29 @@
 <!-- ko if: showButton -->
 <button type="button"
-        class="action primary onetouch"
-        id="product-onetouch-button"
+        class="action primary instant-purchase"
         data-bind="click: instantPurchase, attr:{title: buttonText}">
     <span data-bind="text: buttonText"></span>
 </button>
-
-<!-- ko if: options.selectAddressAvailable() -->
-<div class="field">
-    <label for="address-selector"><!-- ko i18n: 'Select shipping address' --><!-- /ko -->:</label>
-    <select name="customer_address" id="address-selector"
-            data-bind="options: options.addresses, optionsText: 'address', optionsValue: 'id', value: options.defaultShipping, event: {change: changeShipping}">
-    </select>
-</div>
+<!-- ko if: paymentToken -->
+<input type="hidden"
+       name="instant_purchase_payment_token"
+       data-bind="value: paymentToken().publicHash">
 <!-- /ko -->
-
-<!-- ko if: options.cards().length > 0 -->
-<div class="field">
-    <label for="address-selector"><!-- ko i18n: 'Select credit card' --><!-- /ko -->:</label>
-    <select name="customer_cc" id="cc-selector"
-            data-bind="options: options.cards, optionsText: 'card', optionsValue: 'id', event: {change: changeCc}">
-    </select>
-</div>
+<!-- ko if: shippingAddress -->
+<input type="hidden"
+       name="instant_purchase_shipping_address"
+       data-bind="value: shippingAddress().id">
 <!-- /ko -->
-
+<!-- ko if: billingAddress -->
+<input type="hidden"
+       name="instant_purchase_billing_address"
+       data-bind="value: billingAddress().id">
+<!-- ko if: shippingMethod -->
+<input type="hidden"
+       name="instant_purchase_carrier"
+       data-bind="value: shippingMethod().carrier">
+<input type="hidden"
+       name="instant_purchase_shipping"
+       data-bind="value: shippingMethod().method">
+<!-- /ko -->
 <!-- /ko -->

@@ -5,107 +5,110 @@
  */
 namespace Magento\InstantPurchase\Model;
 
-use Exception;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\DataObject;
-use Magento\Quote\Api\CartManagementInterface;
-use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Customer\Model\Customer;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\InstantPurchase\Model\QuoteManagement\PaymentConfiguration;
+use Magento\InstantPurchase\Model\QuoteManagement\Purchase;
+use Magento\InstantPurchase\Model\QuoteManagement\QuoteCreation;
+use Magento\InstantPurchase\Model\QuoteManagement\QuoteFilling;
+use Magento\InstantPurchase\Model\QuoteManagement\ShippingConfiguration;
+use Magento\Store\Model\Store;
 
 /**
- * Class PlaceOrder
+ * Place an order using instant purchase option.
+ *
  * @api
  */
 class PlaceOrder
 {
     /**
-     * @var CartManagementInterface
+     * @var QuoteCreation
      */
-    private $cartManagementInterface;
+    private $quoteCreation;
+
     /**
-     * @var CartRepositoryInterface
+     * @var QuoteFilling
      */
-    private $quoteRepository;
+    private $quoteFilling;
+
     /**
-     * @var QuotePreparer
+     * @var ShippingConfiguration
      */
-    private $prepareQuote;
+    private $shippingConfiguration;
+
     /**
-     * @var ShippingRateChooser
+     * @var PaymentConfiguration
      */
-    private $shippingRateChooser;
+    private $paymentConfiguration;
+
     /**
-     * @var Config
+     * @var Purchase
      */
-    private $instantPurchaseConfig;
-    /**
-     * @var PaymentPreparer
-     */
-    private $paymentPreparer;
+    private $purchase;
 
     /**
      * PlaceOrder constructor.
-     * @param CartRepositoryInterface $quoteRepository
-     * @param CartManagementInterface $cartManagementInterface
-     * @param QuotePreparer $prepareQuote
-     * @param PaymentPreparer $paymentPreparer
-     * @param ShippingRateChooser $shippingRateChooser
-     * @param Config $instantPurchaseConfig
+     * @param QuoteCreation $quoteCreation
+     * @param QuoteFilling $quoteFilling
+     * @param ShippingConfiguration $shippingConfiguration
+     * @param PaymentConfiguration $paymentConfiguration
+     * @param Purchase $purchase
      */
     public function __construct(
-        CartRepositoryInterface $quoteRepository,
-        CartManagementInterface $cartManagementInterface,
-        QuotePreparer $prepareQuote,
-        PaymentPreparer $paymentPreparer,
-        ShippingRateChooser $shippingRateChooser,
-        Config $instantPurchaseConfig
+        QuoteCreation $quoteCreation,
+        QuoteFilling $quoteFilling,
+        ShippingConfiguration $shippingConfiguration,
+        PaymentConfiguration $paymentConfiguration,
+        Purchase $purchase
     ) {
-        $this->cartManagementInterface = $cartManagementInterface;
-        $this->quoteRepository = $quoteRepository;
-        $this->prepareQuote = $prepareQuote;
-        $this->shippingRateChooser = $shippingRateChooser;
-        $this->instantPurchaseConfig = $instantPurchaseConfig;
-        $this->paymentPreparer = $paymentPreparer;
+        $this->quoteCreation = $quoteCreation;
+        $this->quoteFilling = $quoteFilling;
+        $this->shippingConfiguration = $shippingConfiguration;
+        $this->paymentConfiguration = $paymentConfiguration;
+        $this->purchase = $purchase;
     }
 
     /**
+     * Place an order.
+     *
+     * @param Store $store
+     * @param Customer $customer
+     * @param InstantPurchaseOption $instantPurchaseOption
      * @param Product $product
-     * @param CustomerDataGetter $customerData
-     * @param array $params
-     * @throws Exception
-     * @return int
+     * @param array $productRequest
+     * @return int order identifier
+     * @throws LocalizedException if order can not be placed.
      */
-    public function placeOrder(Product $product, CustomerDataGetter $customerData, array $params): int
-    {
-        $paramsObject = $this->getProductRequest($params);
-        $quote = $this->prepareQuote->prepare($customerData, $paramsObject);
-        $quote->addProduct($product, $paramsObject);
-        $this->shippingRateChooser->choose($quote);
-        $this->paymentPreparer->prepare($quote, $customerData->getCustomerId(), $paramsObject->getCustomerCc());
-        $this->quoteRepository->save($quote);
-        return $this->cartManagementInterface->placeOrder($quote->getId());
-    }
-
-    /**
-     * @param $requestInfo
-     * @return DataObject
-     * @throws Exception
-     */
-    private function getProductRequest($requestInfo): DataObject
-    {
-        if ($requestInfo instanceof DataObject) {
-            $request = $requestInfo;
-        } elseif (is_numeric($requestInfo)) {
-            $request = new DataObject(['qty' => $requestInfo]);
-        } elseif (is_array($requestInfo)) {
-            $request = new DataObject($requestInfo);
-        } else {
-            throw new Exception(
-                __('We found an invalid request for adding product to quote.')
-            );
-        }
-        if (!$this->instantPurchaseConfig->isSelectAddressEnabled()) {
-            $request->unsetData('customer_address');
-        }
-        return $request;
+    public function placeOrder(
+        Store $store,
+        Customer $customer,
+        InstantPurchaseOption $instantPurchaseOption,
+        Product $product,
+        array $productRequest
+    ) : int {
+        $quote = $this->quoteCreation->createQuote(
+            $store,
+            $customer,
+            $instantPurchaseOption->getShippingAddress(),
+            $instantPurchaseOption->getBillingAddress()
+        );
+        $quote = $this->quoteFilling->fillQuote(
+            $quote,
+            $product,
+            $productRequest
+        );
+        $quote = $this->shippingConfiguration->configureShippingMethod(
+            $quote,
+            $instantPurchaseOption->getShippingMethod()
+        );
+        $quote = $this->paymentConfiguration->configurePayment(
+            $quote,
+            $instantPurchaseOption->getPaymentToken()
+        );
+        $orderId = $this->purchase->purchase(
+            $quote
+        );
+        return $orderId;
     }
 }

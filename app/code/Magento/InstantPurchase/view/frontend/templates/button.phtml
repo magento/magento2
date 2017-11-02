@@ -6,6 +6,8 @@
 
 /** @var \Magento\InstantPurchase\Block\Button $block */
 ?>
+
+<?php if ($block->isEnabled()) : ?>
 <div id="instant-purchase" data-bind="scope:'instant-purchase'">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>
@@ -16,3 +18,4 @@
         }
     }
 </script>
+<?php endif; ?>

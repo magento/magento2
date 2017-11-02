@@ -8,11 +8,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <sales>
-            <one_touch>
+            <instant_purchase>
                 <active>1</active>
                 <button_text>Instant Purchase</button_text>
-                <address_select>0</address_select>
-            </one_touch>
+            </instant_purchase>
         </sales>
     </default>
 </config>

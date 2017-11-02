@@ -14,7 +14,6 @@
     "magento/module-customer": "100.3.*",
     "magento/module-sales": "100.3.*",
     "magento/module-quote": "100.3.*",
-    "magento/module-braintree": "100.3.*",
     "magento/module-vault": "100.3.*",
     "magento/framework": "100.3.*"
   },

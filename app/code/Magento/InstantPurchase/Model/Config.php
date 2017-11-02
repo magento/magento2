@@ -6,18 +6,17 @@
 namespace Magento\InstantPurchase\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Instant purchase configuration.
+ */
 class Config
 {
-    const ONE_TOUCH_ORDERING_MODULE_ACTIVE = 'sales/one_touch/active';
-    const ONE_TOUCH_ORDERING_MODULE_BUTTON_TEXT = 'sales/one_touch/button_text';
-    const ONE_TOUCH_ORDERING_MODULE_ADDRESS_SELECT = 'sales/one_touch/address_select';
+    const ACTIVE = 'sales/instant_purchase/active';
+    const BUTTON_TEXT = 'sales/instant_purchase/button_text';
 
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
     /**
      * @var ScopeConfigInterface
      */
@@ -25,64 +24,65 @@ class Config
 
     /**
      * Data constructor.
-     * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig
     ) {
-        $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
     }
 
     /**
+     * Defines is feature enabled.
+     *
+     * @param int $storeId
      * @return bool
      */
-    public function isModuleEnabled(): bool
+    public function isModuleEnabled(int $storeId): bool
     {
-        return $this->isSetFlag(self::ONE_TOUCH_ORDERING_MODULE_ACTIVE);
+        return $this->isSetFlag(self::ACTIVE, $storeId);
     }
 
     /**
-     * @return bool
-     */
-    public function isSelectAddressEnabled(): string
-    {
-        return $this->isSetFlag(self::ONE_TOUCH_ORDERING_MODULE_ADDRESS_SELECT);
-    }
-
-    /**
+     * Defines instant purchase trigger button title on product page.
+     *
+     * @param int $storeId
      * @return string
      */
-    public function getButtonText(): string
+    public function getButtonText(int $storeId): string
     {
-        return strip_tags($this->getValue(self::ONE_TOUCH_ORDERING_MODULE_BUTTON_TEXT));
+        return $this->getValue(self::BUTTON_TEXT, $storeId);
     }
 
     /**
-     * @param $path
+     * Fetches value from generic config.
+     *
+     * @param string $path
+     * @param int $storeId
      * @return mixed
      */
-    private function getValue($path)
+    private function getValue(string $path, int $storeId)
     {
         return $this->scopeConfig->getValue(
             $path,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $this->storeManager->getStore()->getId()
+            ScopeInterface::SCOPE_STORE,
+            $storeId
         );
     }
 
     /**
-     * @param $path
+     * Fetches switcher value from generic config.
+     *
+     * @param string $path
+     * @param int $storeId
      * @return bool
      */
-    private function isSetFlag($path)
+    private function isSetFlag(string $path, int $storeId): bool
     {
         return $this->scopeConfig->isSetFlag(
             $path,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $this->storeManager->getStore()->getId()
+            ScopeInterface::SCOPE_STORE,
+            $storeId
         );
     }
 }

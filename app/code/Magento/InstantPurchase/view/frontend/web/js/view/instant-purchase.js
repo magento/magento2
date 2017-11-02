@@ -9,7 +9,6 @@ define(
         'Magento_Customer/js/customer-data',
         'mage/url',
         'mage/template',
-        'underscore',
         'jquery/ui',
         'mage/translate'
     ], function (
@@ -19,15 +18,16 @@ define(
         $,
         customerData,
         urlBuilder,
-        mageTemplate,
-        _
+        mageTemplate
     ) {
         'use strict';
 
         return Component.extend({
             showButton: ko.observable(false),
-            currentCard: ko.observable(null),
-            currentShipping: ko.observable(null),
+            paymentToken: ko.observable(null),
+            shippingAddress: ko.observable(null),
+            billingAddress: ko.observable(null),
+            shippingMethod: ko.observable(null),
             defaults: {
                 template: 'Magento_InstantPurchase/instant-purchase',
                 buttonText: $.mage.__('Instant Purchase'),
@@ -36,67 +36,28 @@ define(
             options: {
                 message: $.mage.__('Are you sure you want to place order and pay?'),
                 formSelector: '#product_addtocart_form',
-                addresses: ko.observable([]),
-                cards: ko.observable([]),
-                selectAddressAvailable: ko.observable(false),
-                defaultBilling: ko.observable(0),
-                defaultShipping: ko.observable(0),
                 confirmTemplate: '<p class="message"><%- data.message %></p>' +
-                '<strong>' + $.mage.__('Shipping Address') + ':</strong>' +
-                '<p><%- data.shippingAddress %></p>' +
-                '<strong>' + $.mage.__('Billing Address') + ':</strong>' +
-                '<p><%- data.billingAddress %></p>' +
-                '<strong>' + $.mage.__('Credit Card') + ':</strong>\n' +
-                '<p><%- data.creditCard %></p>'
+                                 '<strong>' + $.mage.__('Shipping Address') + ':</strong>' +
+                                 '<p><%- data.shippingAddress().summary %></p>' +
+                                 '<strong>' + $.mage.__('Billing Address') + ':</strong>' +
+                                 '<p><%- data.billingAddress().summary %></p>' +
+                                 '<strong>' + $.mage.__('Payment Method') + ':</strong>\n' +
+                                 '<p><%- data.paymentToken().summary %></p>' +
+                                 '<strong>' + $.mage.__('Shipping Method') + ':</strong>\n' +
+                                 '<p><%- data.shippingMethod().summary %></p>'
             },
 
             /** @inheritdoc */
             initialize: function () {
-                var self = this;
+                var self = this,
+                    data = customerData.get('instant-purchase')();
 
                 this._super();
-                $.get(urlBuilder.build('instantpurchase/button/available')).done(function (data) {
-                    if (typeof data.available !== 'undefined') {
-                        self.showButton(data.available);
-                        self.options.cards(data.cards);
-                        self.currentCard(_.first(data.cards).card);
-                        self.options.addresses(data.addresses);
-                        self.options.defaultShipping(data.defaultShipping);
-                        self.options.selectAddressAvailable(data.selectAddressAvailable);
-                        self.options.defaultBilling(
-                            _.find(data.addresses, function (obj) {
-                                return obj.id === data.defaultBilling;
-                            }).address
-                        );
-                        self.currentShipping(
-                            _.find(data.addresses, function (obj) {
-                                return obj.id === data.defaultShipping;
-                            }).address
-                        );
-                    }
-                });
-            },
-
-            /**
-             * Change shipping method
-             */
-            changeShipping: function (object, event) {
-                this.currentShipping(
-                    _.find(this.options.addresses(), function (obj) {
-                        return obj.id === event.target.value;
-                    }).address
-                );
-            },
-
-            /**
-             * Change credit card method
-             */
-            changeCc: function (object, event) {
-                this.currentCard(
-                    _.find(this.options.cards(), function (obj) {
-                        return obj.id === event.target.value;
-                    }).card
-                );
+                self.showButton(data.available);
+                self.paymentToken(data.paymentToken);
+                self.shippingAddress(data.shippingAddress);
+                self.billingAddress(data.billingAddress);
+                self.shippingMethod(data.shippingMethod);
             },
 
             /**
@@ -110,14 +71,17 @@ define(
                 if (!(form.validation() && form.validation('isValid'))) {
                     return;
                 }
+
                 confirm({
+                    title: $.mage.__('Instant Purchase Confirmation'),
                     content: confirmTemplate(
                         {
                             data: {
                                 message: self.options.message,
-                                shippingAddress: self.currentShipping(),
-                                billingAddress: self.options.defaultBilling(),
-                                creditCard: self.currentCard()
+                                paymentToken: self.paymentToken,
+                                shippingAddress: self.shippingAddress,
+                                billingAddress: self.billingAddress,
+                                shippingMethod: self.shippingMethod
                             }
                         }
                     ),
@@ -134,7 +98,7 @@ define(
                                 beforeSend: function () {
                                     $('body').trigger('processStart');
                                 }
-                            }).done(function () {
+                            }).always(function () {
                                 $('body').trigger('processStop');
                             });
                         }
