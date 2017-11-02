@@ -64,7 +64,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * @var \Magento\Cron\Model\ResourceModel\Schedule\Collection
      */
-    protected $runningSchedules;
+    private $runningSchedules;
 
     /**
      * @var \Magento\Cron\Model\ConfigInterface
