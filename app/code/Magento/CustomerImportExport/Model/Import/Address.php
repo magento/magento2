@@ -586,8 +586,31 @@ class Address extends AbstractCustomer
             'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
         ];
 
+        /** @var int|null $websiteId */
+        if (array_key_exists(self::COLUMN_WEBSITE, $rowData)) {
+            if (array_key_exists(
+                $rowData[self::COLUMN_WEBSITE],
+                $this->_websiteCodeToId
+            )) {
+                $websiteId
+                    = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
+            }
+        } else {
+            $websiteId = null;
+        }
         foreach ($this->_attributes as $attributeAlias => $attributeParams) {
             if (array_key_exists($attributeAlias, $rowData)) {
+                //Adjusting attribute's params according to the website stated
+                //in the row data
+                if ($attributeAlias === 'country_id') {
+                    $attributeOptions
+                        = $this->optionsByWebsite[$attributeAlias];
+                    if (array_key_exists($websiteId, $attributeOptions)) {
+                        $attributeParams['options']
+                            = $attributeOptions[$websiteId];
+                    }
+                }
+
                 if (!strlen($rowData[$attributeAlias])) {
                     if ($newAddress) {
                         $value = null;
