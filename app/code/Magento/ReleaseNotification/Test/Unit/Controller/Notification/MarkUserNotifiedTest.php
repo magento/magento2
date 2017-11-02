@@ -21,6 +21,8 @@ use Magento\ReleaseNotification\Controller\Adminhtml\Notification\MarkUserNotifi
 
 /**
  * Class MarkUserNotifiedTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
 {
