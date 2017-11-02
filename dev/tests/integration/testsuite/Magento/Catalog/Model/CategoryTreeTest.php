@@ -46,6 +46,9 @@ class CategoryTreeTest extends \PHPUnit\Framework\TestCase
      */
     private $_resource;
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
