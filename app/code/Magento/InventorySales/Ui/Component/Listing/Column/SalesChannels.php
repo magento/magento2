@@ -30,16 +30,15 @@ class SalesChannels extends Column
     }
 
     /**
-     * Prepare data source
-     *
-     * @param array $dataSource
-     * @return array
+     * @inheritdoc
      */
     public function prepareDataSource(array $dataSource)
     {
         if ($dataSource['data']['totalRecords'] > 0) {
             foreach ($dataSource['data']['items'] as &$row) {
-                $row['sales_channels'] = $this->prepareStockChannelData($row['sales_channels']);
+                if (isset($row['sales_channels'])) {
+                    $row['sales_channels'] = $this->prepareStockChannelData($row['sales_channels']);
+                }
             }
         }
         unset($row);
