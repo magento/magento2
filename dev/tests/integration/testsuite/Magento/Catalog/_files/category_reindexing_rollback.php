@@ -5,22 +5,25 @@
  */
 
 /** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
-$product->loadByAttribute('name', 'Product for category_reindexing test');
+$product = $productRepository->get('simple', false, null, true);
 if ($product->getId()) {
     $product->delete();
 }
 
-/** @var $category \Magento\Catalog\Model\Category */
-$category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Category::class);
+/** @var Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository */
+$categoryRepository = $objectManager->get(Magento\Catalog\Api\CategoryRepositoryInterface::class);
 $categoryIds = [3, 4, 5];
 foreach ($categoryIds as $categoryId) {
-    $category->load($categoryId);
+    /** @var $category \Magento\Catalog\Model\Category */
+    $category = $categoryRepository->get($categoryId);
     if ($category->getId()) {
         $category->delete();
     }
