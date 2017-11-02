@@ -19,6 +19,11 @@ use Psr\Log\LoggerInterface;
 class MarkUserNotified extends Action
 {
     /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
+    /**
      * @var ProductMetadataInterface
      */
     private $productMetadata;
