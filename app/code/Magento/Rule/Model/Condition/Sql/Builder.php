@@ -13,7 +13,7 @@ use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Combine;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ProductFactory;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 
 /**
  * Class SQL Builder
@@ -54,27 +54,23 @@ class Builder
     private $attributeRepository;
 
     /**
-     * Product factory
+     * Product collection
      *
-     * @var ProductFactory
+     * @var AbstractCollection
      */
-    private $productFactory;
+    private $productCollection;
 
     /**
      * @param ExpressionFactory $expressionFactory
      * @param AttributeRepositoryInterface|null $attributeRepository
-     * @param ProductFactory|null $productFactory
      */
     public function __construct(
         ExpressionFactory $expressionFactory,
-        AttributeRepositoryInterface $attributeRepository = null,
-        ProductFactory $productFactory = null
+        AttributeRepositoryInterface $attributeRepository = null
     ) {
         $this->_expressionFactory = $expressionFactory;
         $this->attributeRepository = $attributeRepository ?:
             ObjectManager::getInstance()->get(AttributeRepositoryInterface::class);
-        $this->productFactory = $productFactory ?:
-            ObjectManager::getInstance()->get(ProductFactory::class);
     }
 
     /**
@@ -209,6 +205,7 @@ class Builder
         Combine $combine
     ) {
         $this->_connection = $collection->getResource()->getConnection();
+        $this->productCollection = $collection;
         $this->_joinTablesToCollection($collection, $combine);
         $whereExpression = (string)$this->_getMappedSqlCombination($combine);
         if (!empty($whereExpression)) {
@@ -231,9 +228,8 @@ class Builder
             // It's not exceptional case as we want to check if we have such attribute or not
             $attribute = null;
         }
-        $productCollection = $this->productFactory->create()->getCollection();
-        $storeId = $productCollection->getStoreId();
-        $defaultStoreId = $productCollection->getDefaultStoreId() ;
+        $storeId = $this->productCollection->getStoreId();;
+        $defaultStoreId = $this->productCollection->getDefaultStoreId();
 
         return $storeId != $defaultStoreId && $attribute !== null && !$attribute->isScopeGlobal();
     }
