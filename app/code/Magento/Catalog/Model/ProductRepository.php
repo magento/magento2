@@ -510,7 +510,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                     $existingEntry['removed'] = true;
                 }
                 if (isset($entriesById[$existingEntry['value_id']])) {
-                    $updatedEntry               = $entriesById[$existingEntry['value_id']];
+                    $updatedEntry = $entriesById[$existingEntry['value_id']];
                     $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
                 } else {
                     //set the removed flag
