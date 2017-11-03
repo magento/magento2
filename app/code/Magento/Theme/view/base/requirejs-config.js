@@ -47,7 +47,8 @@ var config = {
         'jquery/jquery-storageapi': 'jquery/jquery.storageapi.min',
         'text': 'mage/requirejs/text',
         'domReady': 'requirejs/domReady',
-        'tinymce': 'tiny_mce/tiny_mce_src'
+        'tinymce': 'tiny_mce_4/tinymce.min',
+        'wysiwygAdapter': 'mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter'
     },
     'deps': [
         'jquery/jquery-migrate'

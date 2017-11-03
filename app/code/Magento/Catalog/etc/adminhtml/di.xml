@@ -184,6 +184,21 @@
             <argument name="scopeOverriddenValue" xsi:type="object">Magento\Catalog\Model\Attribute\ScopeOverriddenValue</argument>
         </arguments>
     </type>
+    <virtualType name="UiModifierPool" type="Magento\Ui\DataProvider\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="wysiwyg-category" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Category\Form\Modifier\WysiwygConfigModifier</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Model\Category\DataProvider">
+        <arguments>
+            <argument name="pool" xsi:type="object">UiModifierPool</argument>
+        </arguments>
+    </type>
     <type name="Magento\Eav\Api\AttributeSetRepositoryInterface">
         <plugin name="remove_products" type="Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts"/>
     </type>

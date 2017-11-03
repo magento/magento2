@@ -28,6 +28,11 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
     const WYSIWYG_STATUS_CONFIG_PATH = 'cms/wysiwyg/enabled';
 
     /**
+     * Wysiwyg status configuration path
+     */
+    const WYSIWYG_EDITOR_CONFIG_PATH = 'cms/wysiwyg/editor';
+
+    /**
      *
      */
     const WYSIWYG_SKIN_IMAGE_PLACEHOLDER_ID = 'Magento_Cms::images/wysiwyg_skin_image.png';
@@ -166,24 +171,24 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
             [
                 'enabled' => $this->isEnabled(),
                 'hidden' => $this->isHidden(),
+                'baseStaticUrl' => $this->_assetRepo->getStaticViewFileContext()->getBaseUrl(),
+                'baseStaticDefaultUrl' => str_replace('index.php/', '', $this->_backendUrl->getBaseUrl())
+                    . $this->filesystem->getUri(DirectoryList::STATIC_VIEW) . '/',
+                'directives_url' => $this->_backendUrl->getUrl('cms/wysiwyg/directive'),
                 'use_container' => false,
                 'add_variables' => true,
                 'add_widgets' => true,
                 'no_display' => false,
                 'encode_directives' => true,
-                'baseStaticUrl' => $this->_assetRepo->getStaticViewFileContext()->getBaseUrl(),
-                'baseStaticDefaultUrl' => str_replace('index.php/', '', $this->_backendUrl->getBaseUrl())
-                    . $this->filesystem->getUri(DirectoryList::STATIC_VIEW) . '/',
-                'directives_url' => $this->_backendUrl->getUrl('cms/wysiwyg/directive'),
-                'popup_css' => $this->_assetRepo->getUrl(
-                    'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/dialog.css'
-                ),
-                'content_css' => $this->_assetRepo->getUrl(
-                    'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/content.css'
-                ),
                 'width' => '100%',
                 'height' => '500px',
-                'plugins' => [],
+                'tinymce4' => [
+                    'toolbar' => 'formatselect | bold italic underline | alignleft aligncenter alignright | '
+                        . 'bullist numlist | link image table charmap',
+                    'plugins' => 'advlist autolink lists link image charmap media table contextmenu paste code help '
+                        . 'table'
+                ],
+                'plugins' => []
             ]
         );
 

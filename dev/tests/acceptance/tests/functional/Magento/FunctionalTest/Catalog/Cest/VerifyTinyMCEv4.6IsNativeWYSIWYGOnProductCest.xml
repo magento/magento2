@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="VerifyTinyMCEv4IsNativeWYSIWYGOnProductCest">
+        <annotations>
+            <features value="TinyMCEv4"/>
+            <stories value="TinyMCE v3 WYSIWYG extension"/>
+            <group value="WYSIWYG"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <env value="phantomjs"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" mergeKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYG" mergeKey="enableWYSIWYG"/>
+        </before>
+        <test name="DefaultTinyMCEv4onProductPage">
+            <annotations>
+                <title value="Admin see TinyMCEv4.6 is native WYSIWYG on Product Page"/>
+                <description value="Admin should be able to switch between 2 version of Tinymce in the admin back-end."/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-81819"/>
+            </annotations>
+            <amOnPage url="{{AdminProductEditPage.url}}" mergeKey="navigateToNewProduct"/>
+            <waitForPageLoad time="100" mergeKey="wait1"/>
+            <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" mergeKey="fillName"/>
+            <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" mergeKey="fillPrice"/>
+            <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" mergeKey="fillSKU"/>
+            <waitForPageLoad time="30" mergeKey="wait2"/>
+            <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" mergeKey="fillQuantity"/>
+            <wait time="5" mergeKey="wait3"/>
+            <click selector="{{AdminProductFormSection.contentTab}}" mergeKey="clickContentTab" />
+            <waitForElementVisible selector="{{ProductWYSIWYGSection.TinymceDescription4}}" time="100" mergeKey="waitForDescription" />
+            <seeElement selector="{{ProductWYSIWYGSection.TinymceDescription4}}" mergeKey="TinyMCE4Description" />
+            <waitForElementVisible selector="{{ProductWYSIWYGSection.TinymceShortDescription4}}" time="100" mergeKey="waitForShortDescription" />
+            <seeElement selector="{{ProductWYSIWYGSection.TinymceShortDescription4}}" mergeKey="TinyMCE4ShortDescription" />
+            <executeJS function="tinyMCE.get('product_form_description').setContent('Bluefoot Content');" mergeKey="executeJSFillContent"/>
+            <executeJS function="tinyMCE.get('product_form_short_description').setContent('Bluefoot Short Content');" mergeKey="executeJSFillContent1"/>
+            <waitForPageLoad time="30" mergeKey="wait7"/>
+            <click selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" mergeKey="clickShowHideBtn" />
+            <seeElement selector="{{CmsWYSIWYGSection.InsertImageBtn}}" mergeKey="insertImage"/>
+            <dontSee selector="{{CmsWYSIWYGSection.InsertWidget}}" mergeKey="insertWidget" />
+            <dontSee selector="{{CmsWYSIWYGSection.InsertVariable}}" mergeKey="insertVariable" />
+            <click selector="{{AdminProductFormActionSection.saveButton}}" mergeKey="saveProduct"/>
+            <!-- Go to storefront product page, assert product content -->
+            <amOnPage url="{{_defaultProduct.name}}.html" mergeKey="navigateToProductPage"/>
+            <waitForPageLoad time="100" mergeKey="waitForPageLoad2"/>
+            <see userInput="Bluefoot Content" selector="{{StorefrontProductInfoMainSection.productDescription}}" mergeKey="assertProductDescription"/>
+            <see userInput="Bluefoot Short Content" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" mergeKey="assertProductShortDescription"/>
+        </test>
+        <after>
+            <actionGroup ref="DisabledWYSIWYG" mergeKey="disabledWYSIWYG"/>
+            <amOnPage url="admin/admin/auth/logout/" mergeKey="amOnLogoutPage"/>
+        </after>
+    </cest>
+</config>

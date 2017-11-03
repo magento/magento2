@@ -11,4 +11,24 @@
     <section name="CmsNewPagePageActionsSection">
         <element name="savePage" type="button" selector="#save" timeout="30"/>
     </section>
+    <section name="CmsWYSIWYGSection">
+        <element name="ShowHideBtn" type="button" selector="#togglecms_page_form_content"/>
+        <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
+        <element name="InsertWidget" type="button" selector=".scalable.action-add-widget.plugin"/>
+        <element name="InsertVariable" type="button" selector=".scalable.add-variable.plugin"/>
+        <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by"/>
+        <element name="Style" type="button" selector=".mce-txt" />
+        <element name="Bold" type="button" selector=".mce-i-bold" />
+        <element name="Italic" type="button" selector=".mce-i-italic" />
+        <element name="Underline" type="button" selector=".mce-i-underline" />
+        <element name="AlignLeft" type="button" selector=".mce-i-alignleft" />
+        <element name="AlignCenter" type="button" selector=".mce-i-aligncenter" />
+        <element name="AlignRight" type="button" selector=".mce-i-alignright" />
+        <element name="Bullet" type="button" selector=".mce-i-bullist" />
+        <element name="Numlist" type="button" selector=".mce-i-numlist" />
+        <element name="InsertLink" type="button" selector=".mce-i-link" />
+        <element name="InsertImage" type="button" selector=".mce-i-image" />
+        <element name="InsertTable" type="button" selector=".mce-i-table" />
+        <element name="SpecialCharacter" type="button" selector=".mce-i-charmap" />
+    </section>
 </config>

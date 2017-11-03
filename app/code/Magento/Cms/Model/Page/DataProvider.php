@@ -7,11 +7,12 @@ namespace Magento\Cms\Model\Page;
 
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
  * Class DataProvider
  */
-class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
+class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 {
     /**
      * @var \Magento\Cms\Model\ResourceModel\Page\Collection
@@ -34,6 +35,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string $requestFieldName
      * @param CollectionFactory $pageCollectionFactory
      * @param DataPersistorInterface $dataPersistor
+     * @param PoolInterface|null $pool
      * @param array $meta
      * @param array $data
      */
@@ -44,11 +46,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         CollectionFactory $pageCollectionFactory,
         DataPersistorInterface $dataPersistor,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        PoolInterface $pool = null
     ) {
         $this->collection = $pageCollectionFactory->create();
         $this->dataPersistor = $dataPersistor;
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
         $this->meta = $this->prepareMeta($this->meta);
     }
 

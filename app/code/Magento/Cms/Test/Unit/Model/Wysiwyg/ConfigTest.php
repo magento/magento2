@@ -150,12 +150,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->backendUrlMock->expects($this->once())
             ->method('getBaseUrl')
             ->willReturn('localhost/index.php/');
-        $this->assetRepoMock->expects($this->atLeastOnce())
-            ->method('getUrl')
-            ->withConsecutive(
-                ['mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/dialog.css'],
-                ['mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/content.css']
-            );
         $this->filesystemMock->expects($this->once())
             ->method('getUri')
             ->willReturn('pub/static');

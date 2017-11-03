@@ -36,7 +36,7 @@ require([
     'Magento_Ui/js/modal/confirm',
     'mage/mage',
     'prototype'
-], function(jQuery, tinyMCE, prompt, confirm){
+], function(jQuery, wysiwyg, prompt, confirm){
 
 //<![CDATA[
     jQuery('#newsletter_template_edit_form').mage('form').mage('validation');
@@ -124,7 +124,7 @@ require([
                 $('change_flag_element').value = '1';
             }
             if(this.isEditor()) {
-                tinyMCE.triggerSave();
+                wysiwyg.triggerSave();
             }
             // Temporary solution will be replaced after refactoring of newsletter functionality
             jQuery('#newsletter_template_edit_form').triggerHandler('save');
@@ -167,7 +167,7 @@ require([
             $('save_as_flag').value = '1';
 
             if(this.isEditor()) {
-                tinyMCE.triggerSave();
+                wysiwyg.triggerSave();
             }
             // Temporary solution will be replaced after refactoring of newsletter functionality
             jQuery('#newsletter_template_edit_form').triggerHandler('save');
@@ -180,10 +180,10 @@ require([
             } else {
                 $('preview_type').value = <?= $block->escapeJs($block->getTemplateType()) ?>;
             }
-            if (this.isEditor() && tinyMCE.get(this.id)) {
-                tinyMCE.triggerSave();
-                $('preview_text').value = tinyMCE.get(this.id).getContent();
-                tinyMCE.triggerSave();
+            if (this.isEditor() && wysiwyg.get(this.id)) {
+                wysiwyg.triggerSave();
+                $('preview_text').value = wysiwyg.get(this.id).getContent();
+                wysiwyg.triggerSave();
             } else {
                 $('preview_text').value = $(this.id).value;
             }
