@@ -6,8 +6,8 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
 
 class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
 {
@@ -30,12 +30,17 @@ class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
                 $updatedTypes++;
             }
             if ($updatedTypes > 0) {
-                $this->messageManager->addSuccess(__("%1 cache type(s) refreshed.", $updatedTypes));
+                $this->messageManager->addSuccessMessage(__("%1 cache type(s) refreshed.", $updatedTypes));
             }
         } catch (LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addComplexErrorMessage(
+                'addUnescapedMessage',
+                [
+                    'text' => $e->getMessage(),
+                ]
+            );
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('An error occurred while refreshing cache.'));
+            $this->messageManager->addExceptionMessage($e, __('An error occurred while refreshing cache.'));
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

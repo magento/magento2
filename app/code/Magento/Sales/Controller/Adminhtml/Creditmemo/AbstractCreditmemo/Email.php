@@ -33,7 +33,7 @@ class Email extends \Magento\Backend\App\Action
         $this->_objectManager->create(\Magento\Sales\Api\CreditmemoManagementInterface::class)
             ->notify($creditmemoId);
 
-        $this->messageManager->addSuccess(__('You sent the message.'));
+        $this->messageManager->addSuccessMessage(__('You sent the message.'));
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('sales/order_creditmemo/view', ['creditmemo_id' => $creditmemoId]);
         return $resultRedirect;

@@ -5,8 +5,8 @@
  */
 namespace Magento\Security\Model\Plugin;
 
-use Magento\Security\Model\AdminSessionsManager;
 use Magento\Backend\Controller\Adminhtml\Auth\Login;
+use Magento\Security\Model\AdminSessionsManager;
 
 /**
  * Magento\Backend\Controller\Adminhtml\Auth\Login decorator
@@ -53,7 +53,7 @@ class LoginController
     {
         $logoutReasonCode = $this->securityCookie->getLogoutReasonCookie();
         if ($this->isLoginForm($login) && $logoutReasonCode >= 0) {
-            $this->messageManager->addError(
+            $this->messageManager->addErrorMessage(
                 $this->sessionsManager->getLogoutReasonMessageByStatus($logoutReasonCode)
             );
             $this->securityCookie->deleteLogoutReasonCookie();

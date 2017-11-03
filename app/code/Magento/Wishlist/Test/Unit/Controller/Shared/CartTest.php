@@ -266,7 +266,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
 
         $successMessage = __('You added %1 to your shopping cart.', $productName);
         $this->messageManager->expects($this->any())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with($successMessage)
             ->willReturnSelf();
 

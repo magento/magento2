@@ -10,8 +10,8 @@ use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\Action\Context;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -135,17 +135,17 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
 
                 $status = $this->_subscriberFactory->create()->subscribe($email);
                 if ($status == \Magento\Newsletter\Model\Subscriber::STATUS_NOT_ACTIVE) {
-                    $this->messageManager->addSuccess(__('The confirmation request has been sent.'));
+                    $this->messageManager->addSuccessMessage(__('The confirmation request has been sent.'));
                 } else {
-                    $this->messageManager->addSuccess(__('Thank you for your subscription.'));
+                    $this->messageManager->addSuccessMessage(__('Thank you for your subscription.'));
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addException(
+                $this->messageManager->addExceptionMessage(
                     $e,
                     __('There was a problem with the subscription: %1', $e->getMessage())
                 );
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong with the subscription.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong with the subscription.'));
             }
         }
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());

@@ -6,8 +6,8 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Adminhtml sales orders creation process controller
@@ -317,7 +317,7 @@ abstract class Create extends \Magento\Backend\App\Action
                 }
             }
             if (!$isApplyDiscount) {
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __(
                         '"%1" coupon code was not applied. Do not apply discount is selected for item(s)',
                         $this->escaper->escapeHtml($couponCode)
@@ -325,14 +325,14 @@ abstract class Create extends \Magento\Backend\App\Action
                 );
             } else {
                 if ($this->_getQuote()->getCouponCode() !== $couponCode) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         __(
                             '"%1" coupon code is not valid.',
                             $this->escaper->escapeHtml($couponCode)
                         )
                     );
                 } else {
-                    $this->messageManager->addSuccess(__('The coupon code has been accepted.'));
+                    $this->messageManager->addSuccessMessage(__('The coupon code has been accepted.'));
                 }
             }
         }

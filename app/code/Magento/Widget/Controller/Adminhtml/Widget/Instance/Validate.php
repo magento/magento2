@@ -20,7 +20,7 @@ class Validate extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
         $widgetInstance = $this->_initWidgetInstance();
         $result = $widgetInstance->validate();
         if ($result !== true && is_string($result)) {
-            $this->messageManager->addError($result);
+            $this->messageManager->addErrorMessage($result);
             $this->_view->getLayout()->initMessages();
             $response->setError(true);
             $response->setHtmlMessage($this->_view->getLayout()->getMessagesBlock()->getGroupedHtml());

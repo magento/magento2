@@ -6,7 +6,7 @@
 
 namespace Magento\Wishlist\Test\Unit\Observer;
 
-use \Magento\Wishlist\Observer\AddToCart as Observer;
+use Magento\Wishlist\Observer\AddToCart as Observer;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -167,7 +167,7 @@ class AddToCartTest extends \PHPUnit\Framework\TestCase
             ->with([])
             ->willReturnSelf();
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($message)
             ->willReturnSelf();
         $event->expects($this->once())

@@ -71,8 +71,10 @@ class Post extends \Magento\Contact\Controller\Index
         }
         try {
             $this->sendEmail($this->validatedParams());
-            $this->messageManager->addSuccess(
-                __('Thanks for contacting us with your comments and questions. We\'ll respond to you very soon.')
+            $this->messageManager->addSuccessMessage(
+                __(
+                    'Thanks for contacting us with your comments and questions. We\'ll respond to you very soon.'
+                )
             );
             $this->getDataPersistor()->clear('contact_us');
         } catch (LocalizedException $e) {
@@ -96,8 +98,7 @@ class Post extends \Magento\Contact\Controller\Index
     private function getDataPersistor()
     {
         if ($this->dataPersistor === null) {
-            $this->dataPersistor = ObjectManager::getInstance()
-                ->get(DataPersistorInterface::class);
+            $this->dataPersistor = ObjectManager::getInstance()->get(DataPersistorInterface::class);
         }
 
         return $this->dataPersistor;

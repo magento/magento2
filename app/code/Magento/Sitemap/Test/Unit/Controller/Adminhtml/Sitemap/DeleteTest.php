@@ -83,7 +83,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->any())->method('getParam')->with('sitemap_id')->willReturn(0);
         $this->responseMock->expects($this->once())->method('setRedirect');
         $this->messageManagerMock->expects($this->any())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('We can\'t find a sitemap to delete.');
 
         $this->deleteController->execute();
@@ -103,11 +103,11 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['load'])
             ->getMock();
 
-        $sitemapMock->expects($this->once())->method('load')->with($id)->willThrowException(new \Exception);
+        $sitemapMock->expects($this->once())->method('load')->with($id)->willThrowException(new \Exception());
         $this->sitemapFactoryMock->expects($this->once())->method('create')->willReturn($sitemapMock);
         $this->responseMock->expects($this->once())->method('setRedirect');
         $this->messageManagerMock->expects($this->any())
-            ->method('addError');
+            ->method('addErrorMessage');
 
         $this->deleteController->execute();
     }
@@ -142,7 +142,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
 
         $this->responseMock->expects($this->once())->method('setRedirect');
         $this->messageManagerMock->expects($this->any())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
 
         $this->deleteController->execute();
     }

@@ -5,13 +5,13 @@
  */
 namespace Magento\ProductAlert\Controller\Add;
 
-use Magento\ProductAlert\Controller\Add as AddController;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\ProductAlert\Controller\Add as AddController;
 
 class Stock extends AddController
 {
@@ -61,13 +61,13 @@ class Stock extends AddController
                         ->getWebsiteId()
                 );
             $model->save();
-            $this->messageManager->addSuccess(__('Alert subscription has been saved.'));
+            $this->messageManager->addSuccessMessage(__('Alert subscription has been saved.'));
         } catch (NoSuchEntityException $noEntityException) {
-            $this->messageManager->addError(__('There are not enough parameters.'));
+            $this->messageManager->addErrorMessage(__('There are not enough parameters.'));
             $resultRedirect->setUrl($backUrl);
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t update the alert subscription right now.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t update the alert subscription right now.'));
         }
         $resultRedirect->setUrl($this->_redirect->getRedirectUrl());
         return $resultRedirect;

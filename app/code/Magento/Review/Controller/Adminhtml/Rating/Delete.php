@@ -5,8 +5,8 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Rating;
 
-use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 
 class Delete extends RatingController
 {
@@ -22,9 +22,9 @@ class Delete extends RatingController
                 /** @var \Magento\Review\Model\Rating $model */
                 $model = $this->_objectManager->create(\Magento\Review\Model\Rating::class);
                 $model->load($this->getRequest()->getParam('id'))->delete();
-                $this->messageManager->addSuccess(__('You deleted the rating.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the rating.'));
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $resultRedirect->setPath('review/rating/edit', ['id' => $this->getRequest()->getParam('id')]);
                 return $resultRedirect;
             }

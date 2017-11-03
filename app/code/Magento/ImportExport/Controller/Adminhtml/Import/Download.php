@@ -5,9 +5,9 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Download sample file controller
@@ -76,7 +76,7 @@ class Download extends ImportController
 
         if (!$directoryRead->isFile($filePath)) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-            $this->messageManager->addError(__('There is no sample file for this entity.'));
+            $this->messageManager->addErrorMessage(__('There is no sample file for this entity.'));
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('*/import');
             return $resultRedirect;

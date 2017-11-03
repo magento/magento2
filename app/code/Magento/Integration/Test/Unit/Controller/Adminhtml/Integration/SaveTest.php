@@ -6,12 +6,12 @@
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Framework\Exception\IntegrationException;
-use Magento\Framework\Exception\State\UserLockedException;
-use Magento\Framework\Exception\AuthenticationException;
 
 class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
 {
@@ -19,27 +19,54 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
     {
         // Use real translate model
         $this->_translateModelMock = null;
-        $this->_requestMock->expects($this->any())
-            ->method('getPostValue')
-            ->will($this->returnValue([IntegrationController::PARAM_INTEGRATION_ID => self::INTEGRATION_ID]));
+        $this->_requestMock->expects(
+            $this->any()
+        )->method(
+            'getPostValue'
+        )->will(
+            $this->returnValue(
+                [
+                    IntegrationController::PARAM_INTEGRATION_ID => self::INTEGRATION_ID,
+                ]
+            )
+        );
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
         $intData = $this->_getSampleIntegrationData();
-        $this->_integrationSvcMock->expects($this->any())
-            ->method('get')
-            ->with(self::INTEGRATION_ID)
-            ->will($this->returnValue($intData));
-        $this->_integrationSvcMock->expects($this->any())
-            ->method('update')
-            ->with($this->anything())
-            ->will($this->returnValue($intData));
-        // verify success message
-        $this->_messageManager->expects($this->once())
-            ->method('addSuccess')
-            ->with(__('The integration \'%1\' has been saved.', $intData[Info::DATA_NAME]));
+        $this->_integrationSvcMock->expects(
+            $this->any()
+        )->method(
+            'get'
+        )->with(
+            self::INTEGRATION_ID
+        )->will(
+            $this->returnValue($intData)
+        );
 
-        $this->_escaper->expects($this->once())
-            ->method('escapeHtml')
-            ->willReturnArgument(0);
+        $this->_integrationSvcMock->expects(
+            $this->any()
+        )->method(
+            'update'
+        )->with(
+            $this->anything()
+        )->will(
+            $this->returnValue($intData)
+        );
+        // verify success message
+        $this->_messageManager->expects(
+            $this->once()
+        )->method(
+            'addComplexSuccessMessage'
+        )->with(
+            'addUnescapedMessage',
+            [
+                'text' => __(
+                    'The integration \'%1\' has been saved.',
+                    $intData[Info::DATA_NAME]
+                ),
+            ]
+        );
+
+        $this->_escaper->expects($this->once())->method('escapeHtml')->willReturnArgument(0);
 
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
@@ -51,12 +78,19 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
 
         // Have integration service throw an exception to test exception path
         $exceptionMessage = 'Internal error. Check exception log for details.';
-        $this->_integrationSvcMock->expects($this->any())
-            ->method('get')
-            ->with(self::INTEGRATION_ID)
-            ->will($this->throwException(new \Magento\Framework\Exception\LocalizedException(__($exceptionMessage))));
+        $this->_integrationSvcMock->expects(
+            $this->any()
+        )->method(
+            'get'
+        )->with(
+            self::INTEGRATION_ID
+        )->will(
+            $this->throwException(new \Magento\Framework\Exception\LocalizedException(__($exceptionMessage)))
+        );
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with(
+            $this->equalTo($exceptionMessage)
+        );
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -77,11 +111,11 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             $this->throwException(new IntegrationException(__($exceptionMessage)))
         );
 
-        $this->_escaper->expects($this->once())
-            ->method('escapeHtml')
-            ->willReturnArgument(0);
+        $this->_escaper->expects($this->once())->method('escapeHtml')->willReturnArgument(0);
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with(
+            $this->equalTo($exceptionMessage)
+        );
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -123,14 +157,18 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_messageManager->expects(
             $this->once()
         )->method(
-            'addSuccess'
+            'addComplexSuccessMessage'
         )->with(
-            __('The integration \'%1\' has been saved.', $integration->getName())
+            'addUnescapedMessage',
+            [
+                'text' => __(
+                    'The integration \'%1\' has been saved.',
+                    $integration->getName()
+                ),
+            ]
         );
 
-        $this->_escaper->expects($this->once())
-            ->method('escapeHtml')
-            ->willReturnArgument(0);
+        $this->_escaper->expects($this->once())->method('escapeHtml')->willReturnArgument(0);
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -168,13 +206,11 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             $this->returnValue(null)
         );
 
-        $this->_escaper->expects($this->once())
-            ->method('escapeHtml')
-            ->willReturnArgument(0);
+        $this->_escaper->expects($this->once())->method('escapeHtml')->willReturnArgument(0);
         // Use real translate model
         $this->_translateModelMock = null;
         // Verify success message
-        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($exceptionMessage);
         $integrationController = $this->_createIntegrationController('Save');
         $integrationController->execute();
     }
@@ -184,28 +220,26 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $exceptionMessage = 'Cannot edit integrations created via config file.';
         $intData = new \Magento\Framework\DataObject(
             [
-                Info::DATA_NAME => 'nameTest',
-                Info::DATA_ID => self::INTEGRATION_ID,
-                'id' => self::INTEGRATION_ID,
-                Info::DATA_EMAIL => 'test@magento.com',
-                Info::DATA_ENDPOINT => 'http://magento.ll/endpoint',
+                Info::DATA_NAME       => 'nameTest',
+                Info::DATA_ID         => self::INTEGRATION_ID,
+                'id'                  => self::INTEGRATION_ID,
+                Info::DATA_EMAIL      => 'test@magento.com',
+                Info::DATA_ENDPOINT   => 'http://magento.ll/endpoint',
                 Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_CONFIG,
             ]
         );
 
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
-        $this->_integrationSvcMock
-            ->expects($this->once())
-            ->method('get')
-            ->with(self::INTEGRATION_ID)
-            ->will($this->returnValue($intData));
+        $this->_integrationSvcMock->expects($this->once())->method('get')->with(self::INTEGRATION_ID)->will(
+            $this->returnValue($intData)
+        );
 
-        $this->_escaper->expects($this->once())
-            ->method('escapeHtml')
-            ->willReturnArgument(0);
+        $this->_escaper->expects($this->once())->method('escapeHtml')->willReturnArgument(0);
 
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with(
+            $this->equalTo($exceptionMessage)
+        );
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -218,31 +252,25 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $exceptionMessage = __('Your account is temporarily disabled.');
         $passwordString = '1234567';
 
-        $this->_requestMock->expects($this->exactly(2))
-            ->method('getParam')
-            ->withConsecutive(
-                [\Magento\Integration\Controller\Adminhtml\Integration\Save::PARAM_INTEGRATION_ID],
-                [\Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD]
-            )
-            ->willReturnOnConsecutiveCalls(self::INTEGRATION_ID, $passwordString);
+        $this->_requestMock->expects($this->exactly(2))->method('getParam')->withConsecutive(
+            [\Magento\Integration\Controller\Adminhtml\Integration\Save::PARAM_INTEGRATION_ID],
+            [\Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD]
+        )->willReturnOnConsecutiveCalls(self::INTEGRATION_ID, $passwordString);
 
         $intData = $this->_getSampleIntegrationData();
-        $this->_integrationSvcMock->expects($this->once())
-            ->method('get')
-            ->with(self::INTEGRATION_ID)
-            ->willReturn($intData);
+        $this->_integrationSvcMock->expects($this->once())->method('get')->with(self::INTEGRATION_ID)->willReturn(
+            $intData
+        );
 
-        $this->_userMock->expects($this->any())
-            ->method('performIdentityCheck')
-            ->with($passwordString)
-            ->will($this->throwException(new UserLockedException(__($exceptionMessage))));
+        $this->_userMock->expects($this->any())->method('performIdentityCheck')->with($passwordString)->will(
+            $this->throwException(new UserLockedException(__($exceptionMessage)))
+        );
 
-        $this->_authMock->expects($this->once())
-            ->method('logout');
+        $this->_authMock->expects($this->once())->method('logout');
 
-        $this->securityCookieMock->expects($this->once())
-            ->method('setLogoutReasonCookie')
-            ->with(\Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED);
+        $this->securityCookieMock->expects($this->once())->method('setLogoutReasonCookie')->with(
+            \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
+        );
 
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
@@ -256,27 +284,24 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $passwordString = '1234567';
         $exceptionMessage = __('You have entered an invalid password for current user.');
 
-        $this->_requestMock->expects($this->any())
-            ->method('getParam')
-            ->withConsecutive(
-                [\Magento\Integration\Controller\Adminhtml\Integration\Save::PARAM_INTEGRATION_ID],
-                [\Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD]
-            )
-            ->willReturnOnConsecutiveCalls(self::INTEGRATION_ID, $passwordString);
+        $this->_requestMock->expects($this->any())->method('getParam')->withConsecutive(
+            [\Magento\Integration\Controller\Adminhtml\Integration\Save::PARAM_INTEGRATION_ID],
+            [\Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD]
+        )->willReturnOnConsecutiveCalls(self::INTEGRATION_ID, $passwordString);
 
         $intData = $this->_getSampleIntegrationData();
-        $this->_integrationSvcMock->expects($this->once())
-            ->method('get')
-            ->with(self::INTEGRATION_ID)
-            ->willReturn($intData);
+        $this->_integrationSvcMock->expects($this->once())->method('get')->with(self::INTEGRATION_ID)->willReturn(
+            $intData
+        );
 
-        $this->_userMock->expects($this->any())
-            ->method('performIdentityCheck')
-            ->with($passwordString)
-            ->will($this->throwException(new AuthenticationException(__($exceptionMessage))));
+        $this->_userMock->expects($this->any())->method('performIdentityCheck')->with($passwordString)->will(
+            $this->throwException(new AuthenticationException(__($exceptionMessage)))
+        );
 
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with(
+            $this->equalTo($exceptionMessage)
+        );
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }

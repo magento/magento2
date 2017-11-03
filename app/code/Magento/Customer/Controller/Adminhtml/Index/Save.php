@@ -46,7 +46,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         }
 
         if (isset($customerData['disable_auto_group_change'])) {
-            $customerData['disable_auto_group_change'] = (int) filter_var(
+            $customerData['disable_auto_group_change'] = (int)filter_var(
                 $customerData['disable_auto_group_change'],
                 FILTER_VALIDATE_BOOLEAN
             );
@@ -87,9 +87,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         foreach ($formAttributes as $attribute) {
             /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute */
             $attributeCode = $attribute->getAttributeCode();
-            if ($attribute->getFrontendInput() != 'boolean'
-                && $formData[$attributeCode] === false
-            ) {
+            if ($attribute->getFrontendInput() != 'boolean' && $formData[$attributeCode] === false) {
                 unset($formData[$attributeCode]);
             }
         }
@@ -258,7 +256,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->_getSession()->unsCustomerFormData();
                 // Done Saving customer, finish save action
                 $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
-                $this->messageManager->addSuccess(__('You saved the customer.'));
+                $this->messageManager->addSuccessMessage(__('You saved the customer.'));
                 $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
             } catch (\Magento\Framework\Validator\Exception $exception) {
                 $messages = $exception->getMessages();
@@ -273,7 +271,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->_getSession()->setCustomerFormData($originalRequestData);
                 $returnToEdit = true;
             } catch (\Exception $exception) {
-                $this->messageManager->addException($exception, __('Something went wrong while saving the customer.'));
+                $this->messageManager->addExceptionMessage(
+                    $exception,
+                    __('Something went wrong while saving the customer.')
+                );
                 $this->_getSession()->setCustomerFormData($originalRequestData);
                 $returnToEdit = true;
             }
@@ -362,9 +363,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     {
         $originalRequestData = $this->getRequest()->getPostValue(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
-        $customerId = isset($originalRequestData['entity_id'])
-            ? $originalRequestData['entity_id']
-            : null;
+        $customerId = isset($originalRequestData['entity_id']) ? $originalRequestData['entity_id'] : null;
 
         return $customerId;
     }

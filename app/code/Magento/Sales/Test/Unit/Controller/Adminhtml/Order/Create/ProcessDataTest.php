@@ -7,7 +7,6 @@
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Create;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-
 use Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData;
 
 /**
@@ -87,7 +86,7 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
                 'setDispatched',
                 'getModuleName',
                 'getActionName',
-                'getCookie'
+                'getCookie',
             ]
         );
         $response = $this->getMockForAbstractClass(
@@ -116,22 +115,20 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
         $this->escaper = $this->createPartialMock(\Magento\Framework\Escaper::class, ['escapeHtml']);
 
         $this->resultForward = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->resultForwardFactory = $this->getMockBuilder(\Magento\Backend\Model\View\Result\ForwardFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])
+                ->getMock();
 
-        $this->resultForwardFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->resultForward);
+        $this->resultForwardFactory->expects($this->once())->method('create')->willReturn($this->resultForward);
 
         $this->processData = $objectManagerHelper->getObject(
             \Magento\Sales\Controller\Adminhtml\Order\Create\ProcessData::class,
             [
-                'context' => $context,
-                'escaper' => $this->escaper,
+                'context'              => $context,
+                'escaper'              => $this->escaper,
                 'resultForwardFactory' => $this->resultForwardFactory,
             ]
         );
@@ -155,13 +152,13 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
         $paramReturnMap = [
             ['customer_id', null, null],
             ['store_id', null, null],
-            ['currency_id', null, null]
+            ['currency_id', null, null],
         ];
         $this->request->expects($this->atLeastOnce())->method('getParam')->willReturnMap($paramReturnMap);
 
         $objectManagerParamMap = [
             [\Magento\Sales\Model\AdminOrder\Create::class, $create],
-            [\Magento\Backend\Model\Session\Quote::class, $this->session]
+            [\Magento\Backend\Model\Session\Quote::class, $this->session],
         ];
         $this->objectManager->expects($this->atLeastOnce())->method('get')->willReturnMap($objectManagerParamMap);
 
@@ -226,12 +223,12 @@ class ProcessDataTest extends \PHPUnit\Framework\TestCase
         );
         $this->escaper->expects($this->once())->method('escapeHtml')->with($couponCode)->willReturn($couponCode);
 
-        $this->messageManager->expects($this->once())->method('addError')->with($errorMessageManager)->willReturnSelf();
-
-        $this->resultForward->expects($this->once())
-            ->method('forward')
-            ->with('index')
+        $this->messageManager->expects($this->once())
+            ->method('addErrorMessage')
+            ->with($errorMessageManager)
             ->willReturnSelf();
+
+        $this->resultForward->expects($this->once())->method('forward')->with('index')->willReturnSelf();
         $this->assertInstanceOf(\Magento\Backend\Model\View\Result\Forward::class, $this->processData->execute());
     }
 

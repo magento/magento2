@@ -167,14 +167,14 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
                 $this->_handleCmsPageUrlRewrite($model);
                 $model->save();
 
-                $this->messageManager->addSuccess(__('The URL Rewrite has been saved.'));
+                $this->messageManager->addSuccessMessage(__('The URL Rewrite has been saved.'));
                 $this->_redirect('adminhtml/*/');
                 return;
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $session->setUrlRewriteData($data);
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving URL Rewrite.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving URL Rewrite.'));
                 $session->setUrlRewriteData($data);
             }
         }

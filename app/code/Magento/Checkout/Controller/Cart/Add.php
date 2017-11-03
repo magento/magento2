@@ -88,9 +88,11 @@ class Add extends \Magento\Checkout\Controller\Cart
         try {
             if (isset($params['qty'])) {
                 $filter = new \Zend_Filter_LocalizedToNormalized(
-                    ['locale' => $this->_objectManager->get(
-                        \Magento\Framework\Locale\ResolverInterface::class
-                    )->getLocale()]
+                    [
+                        'locale' => $this->_objectManager->get(
+                            \Magento\Framework\Locale\ResolverInterface::class
+                        )->getLocale(),
+                    ]
                 );
                 $params['qty'] = $filter->filter($params['qty']);
             }
@@ -132,13 +134,13 @@ class Add extends \Magento\Checkout\Controller\Cart
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
-                $this->messageManager->addNotice(
+                $this->messageManager->addNoticeMessage(
                     $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($e->getMessage())
                 );
             } else {
                 $messages = array_unique(explode("\n", $e->getMessage()));
                 foreach ($messages as $message) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($message)
                     );
                 }
@@ -153,7 +155,10 @@ class Add extends \Magento\Checkout\Controller\Cart
 
             return $this->goBack($url);
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t add this item to your shopping cart right now.'));
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('We can\'t add this item to your shopping cart right now.')
+            );
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return $this->goBack();
         }
@@ -179,7 +184,7 @@ class Add extends \Magento\Checkout\Controller\Cart
         } else {
             if ($product && !$product->getIsSalable()) {
                 $result['product'] = [
-                    'statusText' => __('Out of stock')
+                    'statusText' => __('Out of stock'),
                 ];
             }
         }

@@ -8,7 +8,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\DataObject;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
-use \Magento\Sales\Model\Order\CreditmemoFactory;
+use Magento\Sales\Model\Order\CreditmemoFactory;
 
 /**
  * Class CreditmemoLoader
@@ -138,7 +138,7 @@ class CreditmemoLoader extends DataObject
          * Check order existing
          */
         if (!$order->getId()) {
-            $this->messageManager->addError(__('The order no longer exists.'));
+            $this->messageManager->addErrorMessage(__('The order no longer exists.'));
             return false;
         }
 
@@ -146,7 +146,7 @@ class CreditmemoLoader extends DataObject
          * Check creditmemo create availability
          */
         if (!$order->canCreditmemo()) {
-            $this->messageManager->addError(__('We can\'t create credit memo for the order.'));
+            $this->messageManager->addErrorMessage(__('We can\'t create credit memo for the order.'));
             return false;
         }
         return true;

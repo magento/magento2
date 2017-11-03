@@ -6,17 +6,16 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
-use Magento\Backend\App\Action;
-use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-use Magento\Ui\Component\MassAction\Filter;
 use Magento\Backend\App\Action\Context;
-use Magento\Shipping\Model\Shipping\LabelGenerator;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory as ShipmentCollectionFactory;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory as ShipmentCollectionFactory;
+use Magento\Shipping\Model\Shipping\LabelGenerator;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -105,7 +104,7 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
             );
         }
 
-        $this->messageManager->addError(__('There are no shipping labels related to selected orders.'));
+        $this->messageManager->addErrorMessage(__('There are no shipping labels related to selected orders.'));
         return $this->resultRedirectFactory->create()->setPath('sales/order/');
     }
 }

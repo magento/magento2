@@ -38,7 +38,7 @@ class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->dispatch('backend/admin/system_currency/fetchRates');
 
         $this->assertSessionMessages(
-            $this->contains('We can\'t initialize the import model.'),
+            $this->contains('We can&#039;t initialize the import model.'),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
@@ -51,7 +51,7 @@ class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->runActionWithMockedImportService(['We can\'t retrieve a rate from url']);
 
         $this->assertSessionMessages(
-            $this->contains('Click "Save" to apply the rates we found.'),
+            $this->contains('Click &quot;Save&quot; to apply the rates we found.'),
             \Magento\Framework\Message\MessageInterface::TYPE_WARNING
         );
     }
@@ -64,7 +64,7 @@ class FetchRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->runActionWithMockedImportService();
 
         $this->assertSessionMessages(
-            $this->contains('Click "Save" to apply the rates we found.'),
+            $this->contains('Click &quot;Save&quot; to apply the rates we found.'),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
     }
