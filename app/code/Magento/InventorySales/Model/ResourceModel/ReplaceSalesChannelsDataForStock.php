@@ -8,15 +8,17 @@ declare(strict_types=1);
 namespace Magento\InventorySales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
+use Magento\InventorySales\Model\ReplaceSalesChannelsForStockInterface;
 use Magento\InventorySales\Setup\Operation\CreateSalesChannelTable;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
- * Implementation of Link Replacement between Stock and Sales Channels - delete and save multiple operation for specific db layer
- * Save Multiple used here for performance efficient purposes over single save operation
+ * Implementation of links replacement between Stock and Sales Channels for specific db layer
+ *
+ * There is no additional business logic on SPI (Service Provider Interface) level so could use resource model as
+ * SPI implementation directly
  */
-class ReplaceSalesChannelsOnStock
+class ReplaceSalesChannelsDataForStock implements ReplaceSalesChannelsForStockInterface
 {
     /**
      * @var ResourceConnection
@@ -28,30 +30,34 @@ class ReplaceSalesChannelsOnStock
      */
     public function __construct(
         ResourceConnection $resourceConnection
-    )
-    {
+    ) {
         $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * Replace existing or non existing Sales Channels for Stock
+     * Replace Sales Channels for Stock
      *
      * @param SalesChannelInterface[] $salesChannels
      * @param int $stockId
+     * @return void
      */
     public function execute(array $salesChannels, int $stockId)
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(CreateSalesChannelTable::TABLE_NAME_SALES_CHANNEL);
+
         $connection->delete($tableName, [CreateSalesChannelTable::STOCK_ID . ' = ?' => $stockId]);
-        $salesChannelsToInsert = [];
-        foreach ($salesChannels as $salesChannel) {
-            $salesChannelsToInsert[] = [
-                SalesChannelInterface::TYPE => $salesChannel->getType(),
-                SalesChannelInterface::CODE => $salesChannel->getCode(),
-                CreateSalesChannelTable::STOCK_ID => $stockId,
-            ];
+
+        if (count($salesChannels)) {
+            $salesChannelsToInsert = [];
+            foreach ($salesChannels as $salesChannel) {
+                $salesChannelsToInsert[] = [
+                    SalesChannelInterface::TYPE => $salesChannel->getType(),
+                    SalesChannelInterface::CODE => $salesChannel->getCode(),
+                    CreateSalesChannelTable::STOCK_ID => $stockId,
+                ];
+            }
+            $connection->insertMultiple($tableName, $salesChannelsToInsert);
         }
-        $connection->insertMultiple($tableName, $salesChannelsToInsert);
     }
 }

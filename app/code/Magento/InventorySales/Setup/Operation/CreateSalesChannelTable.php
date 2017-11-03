@@ -10,18 +10,19 @@ namespace Magento\InventorySales\Setup\Operation;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Inventory\Model\ResourceModel\Stock;
 
 class CreateSalesChannelTable
 {
     /**
-     * Constant for key of data array. It is defined here because it's not part of the interface.
+     * Constant for key of data array. It is defined here because it's not part of the interface
      */
     const STOCK_ID = 'stock_id';
 
     /**
-     * Sales Channels Tablename
+     * Sales Channels tablename
      */
     const TABLE_NAME_SALES_CHANNEL = 'inventory_stock_sales_channel';
 
@@ -81,11 +82,11 @@ class CreateSalesChannelTable
                 self::TABLE_NAME_SALES_CHANNEL,
                 self::STOCK_ID,
                 Stock::TABLE_NAME_STOCK,
-                self::STOCK_ID
+                StockInterface::STOCK_ID
             ),
             self::STOCK_ID,
             $setup->getTable(Stock::TABLE_NAME_STOCK),
-            self::STOCK_ID,
+            StockInterface::STOCK_ID,
             Table::ACTION_CASCADE
         );
     }
