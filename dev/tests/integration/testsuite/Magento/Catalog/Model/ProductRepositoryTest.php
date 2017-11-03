@@ -43,6 +43,25 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->productFactory = $this->objectManager->create(ProductFactory::class);
     }
 
+    public static function tearDownAfterClass()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var Config $config */
+        $config = $objectManager->get(Config::class);
+        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
+        $mediaDirectory = $objectManager->get(
+            Filesystem::class
+        )->getDirectoryWrite(
+            DirectoryList::MEDIA
+        );
+        if ($mediaDirectory->isExist($config->getBaseMediaPath())) {
+            $mediaDirectory->delete($config->getBaseMediaPath());
+        }
+        if ($mediaDirectory->isExist($config->getBaseTmpMediaPath())) {
+            $mediaDirectory->delete($config->getBaseTmpMediaPath());
+        }
+    }
+
     public function testAddImageToMediaGallery()
     {
         // Model accepts only files in tmp media path, we need to copy fixture file there
