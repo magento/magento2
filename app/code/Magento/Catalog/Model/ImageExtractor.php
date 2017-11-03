@@ -31,8 +31,11 @@ class ImageExtractor implements TypeDataExtractorInterface
                 if ($attribute->nodeType != XML_ELEMENT_NODE) {
                     continue;
                 }
-                if ($attribute->tagName == 'background') {
+                $attributeTagName = $attribute->tagName;
+                if ($attributeTagName === 'background') {
                     $nodeValue = $this->processImageBackground($attribute->nodeValue);
+                } elseif ($attributeTagName === 'width' || $attributeTagName === 'height') {
+                    $nodeValue = intval($attribute->nodeValue);
                 } else {
                     $nodeValue = $attribute->nodeValue;
                 }
