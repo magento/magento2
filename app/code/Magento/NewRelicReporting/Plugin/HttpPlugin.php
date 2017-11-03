@@ -5,6 +5,7 @@
  */
 namespace Magento\NewRelicReporting\Plugin;
 
+use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Http;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
@@ -33,7 +34,17 @@ class HttpPlugin
         $this->newRelicWrapper = $newRelicWrapper;
     }
 
-    public function beforeCatchException(Http $subject, $bootstrap, $exception)
+    /**
+     * Report exception to New Relic
+     *
+     * @param Http $subject
+     * @param Bootstrap $bootstrap
+     * @param \Exception $exception
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeCatchException(Http $subject, Bootstrap $bootstrap, \Exception $exception)
     {
         if ($this->config->isNewRelicEnabled()) {
             $this->newRelicWrapper->reportError($exception);
