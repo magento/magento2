@@ -530,6 +530,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * Case when attribute settings for two websites are different.
      *
      * @magentoAppArea adminhtml
+     * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/CustomerImportExport/_files/two_addresses.php
      */
