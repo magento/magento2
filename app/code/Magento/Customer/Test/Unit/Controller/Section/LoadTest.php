@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Test\Unit\Controller\Address;
+namespace Magento\Customer\Test\Unit\Controller\Section;
 
 use Magento\Customer\Controller\Section\Load;
 use Magento\Customer\CustomerData\Section\Identifier;
