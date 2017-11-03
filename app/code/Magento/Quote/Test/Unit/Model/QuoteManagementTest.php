@@ -132,6 +132,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     private $addressRepositoryMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $quoteFactoryMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -241,10 +246,15 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
 
-        $quoteAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $quoteAddress = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setCollectShippingRates'])
+            ->getMock();
 
         $quoteMock->expects($this->any())->method('setBillingAddress')->with($quoteAddress)->willReturnSelf();
         $quoteMock->expects($this->any())->method('setShippingAddress')->with($quoteAddress)->willReturnSelf();
+        $quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($quoteAddress);
+        $quoteAddress->expects($this->once())->method('setCollectShippingRates')->with(true);
 
         $this->quoteAddressFactory->expects($this->any())->method('create')->willReturn($quoteAddress);
 
