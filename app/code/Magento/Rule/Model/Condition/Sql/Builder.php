@@ -13,6 +13,7 @@ use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Combine;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductFactory;
 
 /**
  * Class SQL Builder
@@ -53,16 +54,27 @@ class Builder
     private $attributeRepository;
 
     /**
+     * Product factory
+     *
+     * @var ProductFactory
+     */
+    private $productFactory;
+
+    /**
      * @param ExpressionFactory $expressionFactory
      * @param AttributeRepositoryInterface|null $attributeRepository
+     * @param ProductFactory|null $productFactory
      */
     public function __construct(
         ExpressionFactory $expressionFactory,
-        AttributeRepositoryInterface $attributeRepository = null
+        AttributeRepositoryInterface $attributeRepository = null,
+        ProductFactory $productFactory = null
     ) {
         $this->_expressionFactory = $expressionFactory;
         $this->attributeRepository = $attributeRepository ?:
             ObjectManager::getInstance()->get(AttributeRepositoryInterface::class);
+        $this->productFactory = $productFactory ?:
+            ObjectManager::getInstance()->get(ProductFactory::class);
     }
 
     /**
@@ -219,6 +231,10 @@ class Builder
             // It's not exceptional case as we want to check if we have such attribute or not
             $attribute = null;
         }
-        return $attribute !== null && !$attribute->isScopeGlobal();
+        $productCollection = $this->productFactory->create()->getCollection();
+        $storeId = $productCollection->getStoreId();
+        $defaultStoreId = $productCollection->getDefaultStoreId() ;
+
+        return $storeId != $defaultStoreId && $attribute !== null && !$attribute->isScopeGlobal();
     }
 }
