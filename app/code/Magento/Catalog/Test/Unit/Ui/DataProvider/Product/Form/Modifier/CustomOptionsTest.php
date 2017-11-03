@@ -164,7 +164,6 @@ class CustomOptionsTest extends AbstractModifierTest
             . '.' . CustomOptions::GRID_OPTIONS_NAME;
 
         $this->assertEquals($expectedTargetName, $buttonAddTargetName);
-
     }
 
     /**
