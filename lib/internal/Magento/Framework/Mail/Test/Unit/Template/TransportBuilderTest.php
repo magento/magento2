@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Mail\Test\Unit\Template;
 
 use Magento\Framework\App\TemplateTypesInterface;
@@ -165,6 +166,25 @@ class TransportBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->builder->setFrom($sender);
+    }
+
+    /**
+     * @return void
+     */
+    public function setFromByStore()
+    {
+        $sender = ['email' => 'from@example.com', 'name' => 'name'];
+        $store = 1;
+        $this->senderResolverMock->expects($this->once())
+            ->method('resolve')
+            ->with($sender, $store)
+            ->willReturn($sender);
+        $this->messageMock->expects($this->once())
+            ->method('setFrom')
+            ->with('from@example.com', 'name')
+            ->willReturnSelf();
+
+        $this->builder->setFromByStore($sender);
     }
 
     /**
