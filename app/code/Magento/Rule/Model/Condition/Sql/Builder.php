@@ -212,6 +212,7 @@ class Builder
             // Select ::where method adds braces even on empty expression
             $collection->getSelect()->where($whereExpression);
         }
+        $this->productCollection = null;
     }
 
     /**
@@ -228,9 +229,10 @@ class Builder
             // It's not exceptional case as we want to check if we have such attribute or not
             $attribute = null;
         }
-        $storeId = $this->productCollection->getStoreId();;
-        $defaultStoreId = $this->productCollection->getDefaultStoreId();
+        $isNotDefaultStoreUsed = $this->productCollection !== null
+            ? (int)$this->productCollection->getStoreId() !== (int) $this->productCollection->getDefaultStoreId()
+            : false;
 
-        return $storeId != $defaultStoreId && $attribute !== null && !$attribute->isScopeGlobal();
+        return $isNotDefaultStoreUsed && $attribute !== null && !$attribute->isScopeGlobal();
     }
 }
