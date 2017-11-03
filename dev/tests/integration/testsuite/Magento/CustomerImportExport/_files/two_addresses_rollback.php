@@ -75,4 +75,3 @@ $throttler->resetAuthenticationFailuresCount(
     'customer2@example.com',
     RequestThrottler::USER_TYPE_CUSTOMER
 );
-
