@@ -19,8 +19,7 @@ class SalesChannels
     /**
      * @var GetAssignedSalesChannelsForStockInterface
      */
-
-    private $channelsByStock;
+    private $getAssignedSalesChannelsForStock;
 
     /**
      * @var StockRepository
@@ -28,16 +27,14 @@ class SalesChannels
     private $stockRepository;
 
     /**
-     * SalesChannels constructor.
-     * @param GetAssignedSalesChannelsForStockInterface $channelsByStock
+     * @param GetAssignedSalesChannelsForStockInterface $getAssignedSalesChannelsForStock
      * @param StockRepository $stockRepository
      */
     public function __construct(
-        GetAssignedSalesChannelsForStockInterface $channelsByStock,
+        GetAssignedSalesChannelsForStockInterface $getAssignedSalesChannelsForStock,
         StockRepository $stockRepository
-    )
-    {
-        $this->channelsByStock = $channelsByStock;
+    ) {
+        $this->getAssignedSalesChannelsForStock = $getAssignedSalesChannelsForStock;
         $this->stockRepository = $stockRepository;
     }
 
@@ -50,12 +47,12 @@ class SalesChannels
     {
         if ('inventory_stock_form_data_source' === $subject->getName()) {
             foreach ($data as &$stockData) {
-                $stockData['sales_channels'] = $this->getSalesChannelsDataForStock($data);
+                $stockData['sales_channels'] = $this->getSalesChannelsDataForStock($stockData['general']);
             }
             unset($stockData);
         } elseif ($data['totalRecords'] > 0) {
             foreach ($data['items'] as &$stockData) {
-                $stockData['sales_channels'] = $this->getSalesChannelsDataForStock($data);
+                $stockData['sales_channels'] = $this->getSalesChannelsDataForStock($stockData);
             }
             unset($stockData);
         }
@@ -63,19 +60,17 @@ class SalesChannels
     }
 
     /**
-     * @param bool $data
+     * @param array $stock
      * @return array
      */
-    private function getSalesChannelsDataForStock($data): array
+    private function getSalesChannelsDataForStock(array $stock): array
     {
-        $stockData = [];
-        foreach ($data['items'] as $stock) {
-            foreach ($stock['extension_attributes'] as $salesChannels) {
-                foreach ($salesChannels as $salesChannel) {
-                    $stockData[$salesChannel['type']][] = $salesChannel['code'];
-                }
+        $salesChannelsData = [];
+        foreach ($stock['extension_attributes'] as $salesChannels) {
+            foreach ($salesChannels as $salesChannel) {
+                $salesChannelsData[$salesChannel['type']][] = $salesChannel['code'];
             }
         }
-        return $stockData;
+        return $salesChannelsData;
     }
 }

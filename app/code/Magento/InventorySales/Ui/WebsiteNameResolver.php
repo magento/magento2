@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Ui;
 
+use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 
 /**
- * Add grid column for sales channels
+ * {@inheritdoc}
+ *
+ * In default implementation works only with website
  */
-class SalesChannelNameResolver
+class WebsiteNameResolver implements SalesChannelNameResolverInterface
 {
     /**
      * @var WebsiteRepositoryInterface
@@ -20,27 +23,19 @@ class SalesChannelNameResolver
     private $websiteRepository;
 
     /**
-     * SalesChannelNameResolver constructor.
      * @param WebsiteRepositoryInterface $websiteRepository
      */
     public function __construct(
         WebsiteRepositoryInterface $websiteRepository
-    )
-    {
+    ) {
         $this->websiteRepository = $websiteRepository;
     }
 
     /**
-     * resolve the name by providing the code
-     *
-     * @param string $type
-     * @param string $code
-     * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function resolve(string $type, string $code): string
     {
-        $name = $this->websiteRepository->get($code)->getName();
-        return $name;
+        return SalesChannelInterface::TYPE_WEBSITE === $code ? $this->websiteRepository->get($code)->getName() : $code;
     }
 }
