@@ -374,27 +374,22 @@ class Address extends AbstractCustomer
             $options = $this->countryWithWebsites->getAllOptions();
             //Available country options now will be sorted by websites.
             $code = $attribute->getAttributeCode();
-            if (!array_key_exists($code, $this->optionsByWebsite)) {
-                $websiteOptions = [Store::DEFAULT_STORE_ID => $standardOptions];
-
-                foreach ($options as $option) {
-                    if (array_key_exists('website_ids', $option)) {
-                        foreach ($option['website_ids'] as $websiteId) {
-                            if (!array_key_exists(
-                                $websiteId,
-                                $websiteOptions
-                            )) {
-                                $websiteOptions[$websiteId] = [];
-                            }
-                            $optionId = mb_strtolower($option['value']);
-                            $websiteOptions[$websiteId][$optionId]
-                                = $option['value'];
+            $websiteOptions = [Store::DEFAULT_STORE_ID => $standardOptions];
+            //Sorting options by website.
+            foreach ($options as $option) {
+                if (array_key_exists('website_ids', $option)) {
+                    foreach ($option['website_ids'] as $websiteId) {
+                        if (!array_key_exists($websiteId, $websiteOptions)) {
+                            $websiteOptions[$websiteId] = [];
                         }
+                        $optionId = mb_strtolower($option['value']);
+                        $websiteOptions[$websiteId][$optionId]
+                            = $option['value'];
                     }
                 }
-
-                $this->optionsByWebsite[$code] = $websiteOptions;
             }
+            //Storing sorted
+            $this->optionsByWebsite[$code] = $websiteOptions;
         }
 
         return $standardOptions;
