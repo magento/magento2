@@ -214,6 +214,7 @@ class Translate implements \Magento\Framework\TranslateInterface
         if (!isset($this->_config['module'])) {
             $this->_config['module'] = $this->getControllerModuleName();
         }
+        $this->getCacheId(true);
         return $this;
     }
 
