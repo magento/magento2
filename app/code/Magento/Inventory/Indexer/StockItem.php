@@ -101,9 +101,9 @@ class StockItem implements StockItemIndexerInterface
     /**
      * @inheritdoc
      */
-    public function executeRow($sourceItemId)
+    public function executeRow($stockItemId)
     {
-        $this->executeList([$sourceItemId]);
+        $this->executeList([$stockItemId]);
     }
 
     /**
