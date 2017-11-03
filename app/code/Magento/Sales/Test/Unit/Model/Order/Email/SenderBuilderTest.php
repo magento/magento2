@@ -67,7 +67,8 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->transportBuilder = $this->createPartialMock(\Magento\Framework\Mail\Template\TransportBuilder::class,
+        $this->transportBuilder = $this->createPartialMock(
+            \Magento\Framework\Mail\Template\TransportBuilder::class,
             [
                 'addTo',
                 'addBcc',
@@ -76,7 +77,8 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
                 'setTemplateOptions',
                 'setTemplateVars',
                 'setFromByStore',
-            ]);
+            ]
+        );
 
         $this->templateContainerMock->expects($this->once())
             ->method('getTemplateId')
