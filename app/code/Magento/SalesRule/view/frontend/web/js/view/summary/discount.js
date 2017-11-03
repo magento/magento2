@@ -44,20 +44,21 @@ define([
             return this.totals()['coupon_label'];
         },
 
+        /**
+         * Get discount title
+         *
+         * @returns {null|string}
+         */
         getTitle: function () {
+            var discountSegments = null;
             if (!this.totals()) {
                 return null;
             }
 
-            var total = this.totals();
-
-            for(var i = 0, len = total.total_segments.length; i < len; i++) {
-                if(total.total_segments[i].code == "discount") {
-                    return total.total_segments[i].title;
-                }
-            }
-
-            return null;
+            discountSegments = this.totals()['total_segments'].filter(function (segment) {
+                return (segment.code === 'discount');
+            });
+            return discountSegments.length ? discountSegments[0].title : null;
         },
 
         /**
