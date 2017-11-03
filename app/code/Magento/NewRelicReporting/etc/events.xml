@@ -10,7 +10,4 @@
         <observer name="newrelicreporting_observer_report_sales_order_place" instance="Magento\NewRelicReporting\Model\Observer\ReportOrderPlaced" />
         <observer name="newrelicreporting_newrelic_report_sales_order_place" instance="Magento\NewRelicReporting\Model\Observer\ReportOrderPlacedToNewRelic" />
     </event>
-    <event name="application_handled_exception">
-        <observer name="newrelicreporting_newrelic_report_application_handled_exception" instance="Magento\NewRelicReporting\Model\Observer\ReportApplicationHandledExceptionToNewRelic" />
-    </event>
 </config>
