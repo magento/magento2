@@ -168,8 +168,6 @@ class PluginList extends Scoped implements InterceptionPluginList
             if (is_array($plugins) && count($plugins)) {
                 $this->filterPlugins($plugins);
                 uasort($plugins, [$this, '_sort']);
-                $this->trimInstanceStartingBackslash($plugins);
-                $this->_inherited[$type] = $plugins;
                 $lastPerMethod = [];
                 foreach ($plugins as $key => $plugin) {
                     // skip disabled plugins
@@ -177,6 +175,8 @@ class PluginList extends Scoped implements InterceptionPluginList
                         unset($plugins[$key]);
                         continue;
                     }
+                    $this->trimInstanceStartingBackslash($plugin);
+
                     $pluginType = $this->_omConfig->getOriginalInstanceType($plugin['instance']);
                     if (!class_exists($pluginType)) {
                         throw new \InvalidArgumentException('Plugin class ' . $pluginType . ' doesn\'t exist');
@@ -196,6 +196,7 @@ class PluginList extends Scoped implements InterceptionPluginList
                         }
                     }
                 }
+                $this->_inherited[$type] = $plugins;
             }
             return $plugins;
         }
@@ -205,14 +206,12 @@ class PluginList extends Scoped implements InterceptionPluginList
     /**
      * Trims starting backslash from plugin instance name
      *
-     * @param array $plugins
+     * @param array $plugin
      * @return void
      */
-    private function trimInstanceStartingBackslash(&$plugins)
+    private function trimInstanceStartingBackslash(&$plugin)
     {
-        foreach ($plugins as &$plugin) {
-            $plugin['instance'] = ltrim($plugin['instance'], '\\');
-        }
+        $plugin['instance'] = ltrim($plugin['instance'], '\\');
     }
 
     /**
