@@ -141,17 +141,6 @@ sub vcl_backend_response {
         set beresp.do_gzip = true;
     }
 
-    # cache only successfully responses and 404s
-    if (beresp.status != 200 && beresp.status != 404) {
-        set beresp.ttl = 0s;
-        set beresp.uncacheable = true;
-        return (deliver);
-    } elsif (beresp.http.Cache-Control ~ "private") {
-        set beresp.uncacheable = true;
-        set beresp.ttl = 86400s;
-        return (deliver);
-    }
-
     if (beresp.http.X-Magento-Debug) {
         set beresp.http.X-Magento-Cache-Control = beresp.http.Cache-Control;
     }
@@ -161,14 +150,25 @@ sub vcl_backend_response {
         unset beresp.http.set-cookie;
     }
 
-   # If page is not cacheable then bypass varnish for 2 minutes as Hit-For-Pass
-   if (beresp.ttl <= 0s ||
+    # cache only successfully responses and 404s
+    if (beresp.status != 200 && beresp.status != 404) {
+        set beresp.ttl = 0s;
+        set beresp.uncacheable = true;
+    } elseif (beresp.ttl <= 0s ||
         beresp.http.Surrogate-control ~ "no-store" ||
-        (!beresp.http.Surrogate-Control && beresp.http.Vary == "*")) {
+        (!beresp.http.Surrogate-Control &&
+        beresp.http.Cache-Control ~ "no-cache|no-store" ||
+        beresp.http.Vary == "*")
+    ) {
+        # If page is not cacheable then bypass varnish for 2 minutes as Hit-For-Pass
         # Mark as Hit-For-Pass for the next 2 minutes
         set beresp.ttl = 120s;
         set beresp.uncacheable = true;
+     } elsif (beresp.http.Cache-Control ~ "private") {
+        set beresp.uncacheable = true;
+        set beresp.ttl = 86400s;
     }
+
     return (deliver);
 }
 
