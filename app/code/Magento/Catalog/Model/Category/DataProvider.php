@@ -161,7 +161,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param CategoryFactory $categoryFactory
      * @param array $meta
      * @param array $data
-     * @param PoolInterface $pool
+     * @param PoolInterface|null $pool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
