@@ -567,7 +567,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 ProcessingError::ERROR_LEVEL_CRITICAL,
                 null,
                 null,
-                null,
                 $e->getMessage()
             );
         }

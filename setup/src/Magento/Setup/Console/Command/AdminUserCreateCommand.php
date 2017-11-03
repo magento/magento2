@@ -6,13 +6,14 @@
 
 namespace Magento\Setup\Console\Command;
 
-use Magento\Setup\Model\AdminAccount;
 use Magento\Framework\Setup\ConsoleLogger;
+use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\User\Model\UserValidationRules;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 class AdminUserCreateCommand extends AbstractSetupCommand
 {
@@ -51,13 +52,105 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     }
 
     /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
+        /** @var \Symfony\Component\Console\Helper\QuestionHelper $questionHelper */
+        $questionHelper = $this->getHelper('question');
+
+        if (!$input->getOption(AdminAccount::KEY_USER)) {
+            $question = new Question('<question>Admin user:</question> ', '');
+            $this->addNotEmptyValidator($question);
+
+            $input->setOption(
+                AdminAccount::KEY_USER,
+                $questionHelper->ask($input, $output, $question)
+            );
+        }
+
+        if (!$input->getOption(AdminAccount::KEY_PASSWORD)) {
+            $question = new Question('<question>Admin password:</question> ', '');
+            $question->setHidden(true);
+
+            $question->setValidator(function ($value) use ($output) {
+                $user = new \Magento\Framework\DataObject();
+                $user->setPassword($value);
+
+                $validator = new \Magento\Framework\Validator\DataObject();
+                $this->validationRules->addPasswordRules($validator);
+
+                $validator->isValid($user);
+                foreach ($validator->getMessages() as $message) {
+                    throw new \Exception($message);
+                }
+
+                return $value;
+            });
+
+            $input->setOption(
+                AdminAccount::KEY_PASSWORD,
+                $questionHelper->ask($input, $output, $question)
+            );
+        }
+
+        if (!$input->getOption(AdminAccount::KEY_EMAIL)) {
+            $question = new Question('<question>Admin email:</question> ', '');
+            $this->addNotEmptyValidator($question);
+
+            $input->setOption(
+                AdminAccount::KEY_EMAIL,
+                $questionHelper->ask($input, $output, $question)
+            );
+        }
+
+        if (!$input->getOption(AdminAccount::KEY_FIRST_NAME)) {
+            $question = new Question('<question>Admin first name:</question> ', '');
+            $this->addNotEmptyValidator($question);
+
+            $input->setOption(
+                AdminAccount::KEY_FIRST_NAME,
+                $questionHelper->ask($input, $output, $question)
+            );
+        }
+
+        if (!$input->getOption(AdminAccount::KEY_LAST_NAME)) {
+            $question = new Question('<question>Admin last name:</question> ', '');
+            $this->addNotEmptyValidator($question);
+
+            $input->setOption(
+                AdminAccount::KEY_LAST_NAME,
+                $questionHelper->ask($input, $output, $question)
+            );
+        }
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Question\Question $question
+     * @return void
+     */
+    private function addNotEmptyValidator(Question $question)
+    {
+        $question->setValidator(function ($value) {
+            if (trim($value) == '') {
+                throw new \Exception('The value cannot be empty');
+            }
+
+            return $value;
+        });
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $errors = $this->validate($input);
         if ($errors) {
-            $output->writeln('<error>' . implode('</error>' . PHP_EOL .  '<error>', $errors) . '</error>');
+            $output->writeln('<error>' . implode('</error>' . PHP_EOL . '<error>', $errors) . '</error>');
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
@@ -113,7 +206,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
                 ? '' : $input->getOption(AdminAccount::KEY_PASSWORD)
             );
 
-        $validator = new \Magento\Framework\Validator\DataObject;
+        $validator = new \Magento\Framework\Validator\DataObject();
         $this->validationRules->addUserInfoRules($validator);
         $this->validationRules->addPasswordRules($validator);
 
