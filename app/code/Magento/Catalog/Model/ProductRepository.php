@@ -522,6 +522,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $newEntries = $mediaGalleryEntries;
         }
         $images = $product->getMediaGallery('images');
+
+        $this->getMediaGalleryProcessor()->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
         if ($images) {
             foreach ($images as $image) {
                 if (!isset($image['removed']) && !empty($image['types'])) {
@@ -529,7 +531,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 }
             }
         }
-        $this->getMediaGalleryProcessor()->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
         foreach ($newEntries as $newEntry) {
             if (isset($newEntry['file'])) {
                 if (!empty($newEntry['types'])) {
