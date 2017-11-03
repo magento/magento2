@@ -141,6 +141,7 @@
         "magento/module-grouped-product": "100.3.0-dev",
         "magento/module-import-export": "100.3.0-dev",
         "magento/module-indexer": "100.3.0-dev",
+        "magento/module-instant-purchase": "100.3.0-dev",
         "magento/module-integration": "100.3.0-dev",
         "magento/module-layered-navigation": "100.3.0-dev",
         "magento/module-media-storage": "100.3.0-dev",
