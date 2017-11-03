@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Controller\Adminhtml\Source;
 
 use Magento\Backend\App\Action;
@@ -48,7 +50,7 @@ class Edit extends Action
     {
         $sourceId = $this->getRequest()->getParam(SourceInterface::SOURCE_ID);
         try {
-            $source = $this->sourceRepository->get($sourceId);
+            $source = $this->sourceRepository->get((int)$sourceId);
 
             /** @var Page $result */
             $result = $this->resultFactory->create(ResultFactory::TYPE_PAGE);

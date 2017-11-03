@@ -63,7 +63,7 @@ class InlineEdit extends Action
             foreach ($requestData as $itemData) {
                 try {
                     $stock = $this->stockRepository->get(
-                        $itemData[StockInterface::STOCK_ID]
+                        (int)$itemData[StockInterface::STOCK_ID]
                     );
                     $this->dataObjectHelper->populateWithArray($stock, $itemData, StockInterface::class);
                     $this->stockRepository->save($stock);

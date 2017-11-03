@@ -63,7 +63,7 @@ class InlineEdit extends Action
             foreach ($requestData as $itemData) {
                 try {
                     $source = $this->sourceRepository->get(
-                        $itemData[SourceInterface::SOURCE_ID]
+                        (int)$itemData[SourceInterface::SOURCE_ID]
                     );
                     $this->dataObjectHelper->populateWithArray($source, $itemData, SourceInterface::class);
                     $this->sourceRepository->save($source);
