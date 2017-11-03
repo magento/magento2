@@ -37,7 +37,7 @@ class NewRelicWrapper
     public function reportError($exception)
     {
         if (extension_loaded('newrelic')) {
-           newrelic_notice_error($exception->getMessage(), $exception);
+            newrelic_notice_error($exception->getMessage(), $exception);
         }
     }
 
