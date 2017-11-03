@@ -19,7 +19,7 @@ define([
          * each over all sales channels and render html for each channel
          *
          * @param {Object} records contains all results
-         * @return {String} return rendered html content
+         * @returns {String} return rendered html content
          */
         renderRecords: function (records) {
             var salesChannels = records['sales_channels'],
@@ -27,8 +27,11 @@ define([
                 channelType;
 
             if (typeof salesChannels !== 'object') {
-                throw new Error("Provided wrong salesChannel type " + typeof salesChannels + ' the correct type would be object.');
+                throw new Error(
+                    'Provided wrong salesChannel type ' + typeof salesChannels + ' the correct type would be object.'
+                );
             }
+
             for (channelType in salesChannels) {
                 htmlContent += mageTemplate(
                     channelTemplate,
