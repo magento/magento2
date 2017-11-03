@@ -24,9 +24,9 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * @param string $filename
-         */
+            /**
+             * @param string $filename
+             */
             function ($filename) {
                 $errors = [];
                 $fileContent = file_get_contents($filename);
@@ -158,9 +158,9 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * @param string $filename
-         */
+            /**
+             * @param string $filename
+             */
             function ($filename) {
                 $errors = [];
                 $fileContent = file_get_contents($filename);
