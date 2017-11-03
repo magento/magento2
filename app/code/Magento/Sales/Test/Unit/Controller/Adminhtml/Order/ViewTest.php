@@ -248,7 +248,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('critical')
             ->with($exception);
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Exception occurred during order load')
             ->willReturnSelf();
         $this->setPath('sales/order/index');
@@ -289,7 +289,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     protected function initOrderFail()
     {
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('This order no longer exists.')
             ->willReturnSelf();
         $this->actionFlagMock->expects($this->once())

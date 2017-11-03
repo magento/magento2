@@ -21,9 +21,9 @@ class Delete extends \Magento\Variable\Controller\Adminhtml\System\Variable
         if ($variable->getId()) {
             try {
                 $variable->delete();
-                $this->messageManager->addSuccess(__('You deleted the custom variable.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the custom variable.'));
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 return $resultRedirect->setPath('adminhtml/*/edit', ['_current' => true]);
             }
         }

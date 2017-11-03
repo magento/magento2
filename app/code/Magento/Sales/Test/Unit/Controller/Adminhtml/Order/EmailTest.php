@@ -119,7 +119,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->messageManager = $this->createPartialMock(
             \Magento\Framework\Message\Manager::class,
-            ['addSuccess', 'addError']
+            ['addSuccessMessage', 'addErrorMessage']
         );
 
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
@@ -171,7 +171,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->with($orderId)
             ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You sent the order email.');
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
@@ -198,7 +198,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
                 new \Magento\Framework\Exception\NoSuchEntityException(__('Requested entity doesn\'t exist'))
             );
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('This order no longer exists.');
 
         $this->actionFlag->expects($this->once())

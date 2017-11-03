@@ -31,7 +31,7 @@ class Save extends \Magento\Variable\Controller\Adminhtml\System\Variable
             $variable->setData($data);
             try {
                 $variable->save();
-                $this->messageManager->addSuccess(__('You saved the custom variable.'));
+                $this->messageManager->addSuccessMessage(__('You saved the custom variable.'));
                 if ($back) {
                     $resultRedirect->setPath(
                         'adminhtml/*/edit',
@@ -42,7 +42,7 @@ class Save extends \Magento\Variable\Controller\Adminhtml\System\Variable
                 }
                 return $resultRedirect;
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 return $resultRedirect->setPath('adminhtml/*/edit', ['_current' => true]);
             }
         }

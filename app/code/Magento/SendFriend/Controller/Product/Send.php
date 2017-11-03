@@ -57,7 +57,7 @@ class Send extends \Magento\SendFriend\Controller\Product
         }
 
         if ($this->sendFriend->getMaxSendsToFriend() && $this->sendFriend->isExceedLimit()) {
-            $this->messageManager->addNotice(
+            $this->messageManager->addNoticeMessage(
                 __('You can\'t send messages more than %1 times an hour.', $this->sendFriend->getMaxSendsToFriend())
             );
         }

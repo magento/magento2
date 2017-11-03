@@ -65,15 +65,15 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
                 );
                 $customization->delete($removeJsFiles);
                 $singleFile->update($theme, $customCssData);
-                $this->messageManager->addSuccess(__('You saved the theme.'));
+                $this->messageManager->addSuccessMessage(__('You saved the theme.'));
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_getSession()->setThemeData($themeData);
             $this->_getSession()->setThemeCustomCssData($customCssData);
             $redirectBack = true;
         } catch (\Exception $e) {
-            $this->messageManager->addError('The theme was not saved');
+            $this->messageManager->addErrorMessage('The theme was not saved');
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
         $redirectBack

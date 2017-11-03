@@ -7,15 +7,15 @@
 
 namespace Magento\Customer\Controller\Adminhtml\Customer;
 
-use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Address\Mapper;
-use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\DataObjectFactory;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 
 /**
  * Class to invalidate tokens for customers
@@ -131,14 +131,14 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
         if ($customerId = $this->getRequest()->getParam('customer_id')) {
             try {
                 $this->tokenService->revokeCustomerAccessToken($customerId);
-                $this->messageManager->addSuccess(__('You have revoked the customer\'s tokens.'));
+                $this->messageManager->addSuccessMessage(__('You have revoked the customer\'s tokens.'));
                 $resultRedirect->setPath('customer/index/edit', ['id' => $customerId, '_current' => true]);
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $resultRedirect->setPath('customer/index/edit', ['id' => $customerId, '_current' => true]);
             }
         } else {
-            $this->messageManager->addError(__('We can\'t find a customer to revoke.'));
+            $this->messageManager->addErrorMessage(__('We can\'t find a customer to revoke.'));
             $resultRedirect->setPath('customer/index/index');
         }
         return $resultRedirect;

@@ -666,12 +666,15 @@ class Onepage
         $confirmationStatus = $this->accountManagement->getConfirmationStatus($customer->getId());
         if ($confirmationStatus === \Magento\Customer\Model\AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED) {
             $url = $this->_customerUrl->getEmailConfirmationUrl($customer->getEmail());
-            $this->messageManager->addSuccess(
+            $this->messageManager->addComplexSuccessMessage(
                 // @codingStandardsIgnoreStart
-                __(
-                    'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
-                    $url
-                )
+                'addUnescapedMessage',
+                [
+                    'text' => __(
+                        'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
+                        $url
+                    ),
+                ]
                 // @codingStandardsIgnoreEnd
             );
         } else {

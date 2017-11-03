@@ -122,7 +122,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         );
         $this->messageManager = $this->createPartialMock(
             \Magento\Framework\Message\Manager::class,
-            ['addSuccess', 'addError']
+            ['addSuccessMessage', 'addErrorMessage']
         );
         $this->session = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
         $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
@@ -206,7 +206,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->with($orderShipment)
             ->will($this->returnValue(true));
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You sent the shipment.');
         $path = '*/*/view';
         $arguments = ['shipment_id' => $shipmentId];

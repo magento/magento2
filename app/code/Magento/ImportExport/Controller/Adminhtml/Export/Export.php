@@ -5,13 +5,13 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
-use Magento\Framework\Controller\ResultFactory;
-use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\ImportExport\Model\Export as ExportModel;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
+use Magento\ImportExport\Model\Export as ExportModel;
 
 class Export extends ExportController
 {
@@ -62,13 +62,13 @@ class Export extends ExportController
                     $model->getContentType()
                 );
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->messageManager->addError(__('Please correct the data sent value.'));
+                $this->messageManager->addErrorMessage(__('Please correct the data sent value.'));
             }
         } else {
-            $this->messageManager->addError(__('Please correct the data sent value.'));
+            $this->messageManager->addErrorMessage(__('Please correct the data sent value.'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

@@ -6,9 +6,9 @@
 namespace Magento\Captcha\Observer;
 
 use Magento\Customer\Model\AuthenticationInterface;
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\ObserverInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -119,9 +119,9 @@ class CheckUserEditObserver implements ObserverInterface
                         'The account is locked. Please wait and try again or contact %1.',
                         $this->scopeConfig->getValue('contact/email/recipient_email')
                     );
-                    $this->messageManager->addError($message);
+                    $this->messageManager->addErrorMessage($message);
                 }
-                $this->messageManager->addError(__('Incorrect CAPTCHA'));
+                $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA'));
                 $this->actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $this->redirect->redirect($controller->getResponse(), '*/*/edit');
             }

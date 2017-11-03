@@ -122,7 +122,7 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->messageManager = $this->createPartialMock(
             \Magento\Framework\Message\Manager::class,
-            ['addSuccess', 'addError']
+            ['addSuccessMessage', 'addErrorMessage']
         );
         $this->session = $this->createPartialMock(
             \Magento\Backend\Model\Session::class,

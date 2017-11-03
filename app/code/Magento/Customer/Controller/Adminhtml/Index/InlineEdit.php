@@ -6,11 +6,10 @@
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Backend\App\Action;
-use Magento\Customer\Model\EmailNotificationInterface;
-use Magento\Customer\Test\Block\Form\Login;
-use Magento\Customer\Ui\Component\Listing\AttributeRepository;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -214,13 +213,13 @@ class InlineEdit extends \Magento\Backend\App\Action
         try {
             $this->customerRepository->save($customer);
         } catch (\Magento\Framework\Exception\InputException $e) {
-            $this->getMessageManager()->addError($this->getErrorWithCustomerId($e->getMessage()));
+            $this->getMessageManager()->addErrorMessage($this->getErrorWithCustomerId($e->getMessage()));
             $this->logger->critical($e);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->getMessageManager()->addError($this->getErrorWithCustomerId($e->getMessage()));
+            $this->getMessageManager()->addErrorMessage($this->getErrorWithCustomerId($e->getMessage()));
             $this->logger->critical($e);
         } catch (\Exception $e) {
-            $this->getMessageManager()->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
+            $this->getMessageManager()->addErrorMessage($this->getErrorWithCustomerId('We can\'t save the customer.'));
             $this->logger->critical($e);
         }
     }

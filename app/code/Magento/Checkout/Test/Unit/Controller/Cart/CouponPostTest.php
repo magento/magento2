@@ -80,10 +80,22 @@ class CouponPostTest extends \PHPUnit\Framework\TestCase
     private $redirectFactory;
 
     /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $logger;
+
+    /**
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $escaper;
+
+    /**
      * @return void
      */
     protected function setUp()
     {
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->escaper = $this->createMock(\Magento\Framework\Escaper::class);
         $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->quote = $this->createPartialMock(\Magento\Quote\Model\Quote::class, [
@@ -236,7 +248,7 @@ class CouponPostTest extends \PHPUnit\Framework\TestCase
             ->willReturn('CODE');
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->willReturnSelf();
 
         $this->objectManagerMock->expects($this->once())
@@ -290,7 +302,7 @@ class CouponPostTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->willReturnSelf();
 
         $this->objectManagerMock->expects($this->once())
@@ -344,7 +356,7 @@ class CouponPostTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You canceled the coupon code.')
             ->willReturnSelf();
 
@@ -386,12 +398,23 @@ class CouponPostTest extends \PHPUnit\Framework\TestCase
             ->willReturn($coupon);
 
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
+            ->with(__('The coupon code "%1" is not valid.', 'CODE'))
             ->willReturnSelf();
 
-        $this->objectManagerMock->expects($this->once())
+        $this->escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->with('CODE')
+            ->willReturn('CODE');
+
+        $this->objectManagerMock->expects($this->any())
             ->method('get')
-            ->willReturnSelf();
+            ->willReturnMap(
+                [
+                    [\Psr\Log\LoggerInterface::class, $this->logger],
+                    [\Magento\Framework\Escaper::class, $this->escaper],
+                ]
+            );
 
         $this->controller->execute();
     }

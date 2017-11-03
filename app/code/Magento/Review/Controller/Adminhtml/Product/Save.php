@@ -5,9 +5,9 @@
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
-use Magento\Review\Controller\Adminhtml\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Review\Controller\Adminhtml\Product as ProductController;
 
 class Save extends ProductController
 {
@@ -22,19 +22,20 @@ class Save extends ProductController
         if (($data = $this->getRequest()->getPostValue()) && ($reviewId = $this->getRequest()->getParam('id'))) {
             $review = $this->reviewFactory->create()->load($reviewId);
             if (!$review->getId()) {
-                $this->messageManager->addError(__('The review was removed by another user or does not exist.'));
+                $this->messageManager->addErrorMessage(__('The review was removed by another user or does not exist.'));
             } else {
                 try {
                     $review->addData($data)->save();
 
                     $arrRatingId = $this->getRequest()->getParam('ratings', []);
                     /** @var \Magento\Review\Model\Rating\Option\Vote $votes */
-                    $votes = $this->_objectManager->create(\Magento\Review\Model\Rating\Option\Vote::class)
-                        ->getResourceCollection()
-                        ->setReviewFilter($reviewId)
-                        ->addOptionInfo()
-                        ->load()
-                        ->addRatingOptions();
+                    $votes =
+                        $this->_objectManager->create(\Magento\Review\Model\Rating\Option\Vote::class)
+                            ->getResourceCollection()
+                            ->setReviewFilter($reviewId)
+                            ->addOptionInfo()
+                            ->load()
+                            ->addRatingOptions();
                     foreach ($arrRatingId as $ratingId => $optionId) {
                         if ($vote = $votes->getItemByColumnValue('rating_id', $ratingId)) {
                             $this->ratingFactory->create()
@@ -51,11 +52,14 @@ class Save extends ProductController
 
                     $review->aggregate();
 
-                    $this->messageManager->addSuccess(__('You saved the review.'));
+                    $this->messageManager->addSuccessMessage(__('You saved the review.'));
                 } catch (LocalizedException $e) {
-                    $this->messageManager->addError($e->getMessage());
+                    $this->messageManager->addErrorMessage($e->getMessage());
                 } catch (\Exception $e) {
-                    $this->messageManager->addException($e, __('Something went wrong while saving this review.'));
+                    $this->messageManager->addExceptionMessage(
+                        $e,
+                        __('Something went wrong while saving this review.')
+                    );
                 }
             }
 

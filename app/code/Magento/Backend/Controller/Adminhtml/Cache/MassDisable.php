@@ -6,10 +6,10 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\State;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Controller disables some types of cache
@@ -60,12 +60,17 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
             }
             if ($updatedTypes > 0) {
                 $this->_cacheState->persist();
-                $this->messageManager->addSuccess(__("%1 cache type(s) disabled.", $updatedTypes));
+                $this->messageManager->addSuccessMessage(__("%1 cache type(s) disabled.", $updatedTypes));
             }
         } catch (LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addComplexErrorMessage(
+                'addUnescapedMessage',
+                [
+                    'text' => $e->getMessage(),
+                ]
+            );
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('An error occurred while disabling cache.'));
+            $this->messageManager->addExceptionMessage($e, __('An error occurred while disabling cache.'));
         }
     }
 

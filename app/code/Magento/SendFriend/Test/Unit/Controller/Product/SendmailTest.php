@@ -216,7 +216,7 @@ class SendmailTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('The link to a friend was sent.'))
             ->willReturnSelf();
 
@@ -338,7 +338,7 @@ class SendmailTest extends \PHPUnit\Framework\TestCase
             ->method('send');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('Some error'))
             ->willReturnSelf();
 
@@ -465,7 +465,7 @@ class SendmailTest extends \PHPUnit\Framework\TestCase
             ->method('send');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('We found some problems with the data.'))
             ->willReturnSelf();
 
@@ -592,7 +592,7 @@ class SendmailTest extends \PHPUnit\Framework\TestCase
             ->method('send');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('Localized Exception.'))
             ->willReturnSelf();
 
@@ -720,7 +720,7 @@ class SendmailTest extends \PHPUnit\Framework\TestCase
             ->method('send');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with($exception, __('Some emails were not sent.'))
             ->willReturnSelf();
 

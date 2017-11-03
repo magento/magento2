@@ -5,8 +5,8 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
-use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
 
 class Index extends ImportController
 {
@@ -17,8 +17,12 @@ class Index extends ImportController
      */
     public function execute()
     {
-        $this->messageManager->addNotice(
-            $this->_objectManager->get(\Magento\ImportExport\Helper\Data::class)->getMaxUploadSizeMessage()
+        $message = $this->_objectManager->get(\Magento\ImportExport\Helper\Data::class)->getMaxUploadSizeMessage();
+        $this->messageManager->addComplexNoticeMessage(
+            'addUnescapedMessage',
+            [
+                'text' => $message,
+            ]
         );
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);

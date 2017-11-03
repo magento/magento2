@@ -5,11 +5,11 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\ImportExport\Model\Import;
-use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
@@ -59,7 +59,7 @@ class Validate extends ImportResultController
             $resultBlock->addError(__('The file was not uploaded.'));
             return $resultLayout;
         }
-        $this->messageManager->addError(__('Sorry, but the data is invalid or the file is not uploaded.'));
+        $this->messageManager->addErrorMessage(__('Sorry, but the data is invalid or the file is not uploaded.'));
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');

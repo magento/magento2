@@ -7,7 +7,6 @@
 namespace Magento\User\Test\Unit\Controller\Adminhtml\User;
 
 use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * Test class for \Magento\User\Controller\Adminhtml\User\Delete testing
@@ -193,19 +192,19 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
                 'currentUserPassword' => '123123q',
                 'userId'              => 1,
                 'currentUserId'       => 2,
-                'resultMethod'        => 'addSuccess',
+                'resultMethod'        => 'addSuccessMessage',
             ],
             [
                 'currentUserPassword' => '123123q',
                 'userId'              => 0,
                 'currentUserId'       => 2,
-                'resultMethod'        => 'addError',
+                'resultMethod'        => 'addErrorMessage',
             ],
             [
                 'currentUserPassword' => '123123q',
                 'userId'              => 1,
                 'currentUserId'       => 1,
-                'resultMethod'        => 'addError',
+                'resultMethod'        => 'addErrorMessage',
             ],
         ];
     }

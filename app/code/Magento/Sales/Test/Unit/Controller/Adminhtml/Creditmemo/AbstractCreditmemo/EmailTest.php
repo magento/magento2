@@ -76,7 +76,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->context = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
+        $this->context = $this->createPartialMock(
+            \Magento\Backend\App\Action\Context::class,
+            [
                 'getRequest',
                 'getResponse',
                 'getMessageManager',
@@ -85,31 +87,32 @@ class EmailTest extends \PHPUnit\Framework\TestCase
                 'getSession',
                 'getActionFlag',
                 'getHelper',
-                'getResultRedirectFactory'
-            ]);
+                'getResultRedirectFactory',
+            ]
+        );
         $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
             ['setRedirect', 'sendResponse']
         );
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->request =
+            $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)->disableOriginalConstructor()->getMock();
         $this->objectManager = $this->createPartialMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,
             ['create']
         );
-        $this->messageManager = $this->createPartialMock(\Magento\Framework\Message\Manager::class, ['addSuccess']);
+        $this->messageManager =
+            $this->createPartialMock(\Magento\Framework\Message\Manager::class, ['addSuccessMessage']);
         $this->session = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
         $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             \Magento\Backend\Model\View\Result\RedirectFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        $this->resultRedirectMock =
+            $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
         $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);
         $this->context->expects($this->once())->method('getResponse')->willReturn($this->response);
@@ -117,13 +120,13 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->context->expects($this->once())->method('getSession')->willReturn($this->session);
         $this->context->expects($this->once())->method('getActionFlag')->willReturn($this->actionFlag);
         $this->context->expects($this->once())->method('getHelper')->willReturn($this->helper);
-        $this->context->expects($this->once())
-            ->method('getResultRedirectFactory')
-            ->willReturn($this->resultRedirectFactoryMock);
+        $this->context->expects($this->once())->method('getResultRedirectFactory')->willReturn(
+            $this->resultRedirectFactoryMock
+        );
         $this->creditmemoEmail = $objectManagerHelper->getObject(
             \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Email::class,
             [
-                'context' => $this->context
+                'context' => $this->context,
             ]
         );
     }
@@ -135,20 +138,12 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $cmManagementMock = $this->createMock($cmManagement);
         $this->prepareRedirect($cmId);
 
-        $this->request->expects($this->once())
-            ->method('getParam')
-            ->with('creditmemo_id')
-            ->willReturn($cmId);
-        $this->objectManager->expects($this->once())
-            ->method('create')
-            ->with($cmManagement)
-            ->willReturn($cmManagementMock);
-        $cmManagementMock->expects($this->once())
-            ->method('notify')
-            ->willReturn(true);
-        $this->messageManager->expects($this->once())
-            ->method('addSuccess')
-            ->with('You sent the message.');
+        $this->request->expects($this->once())->method('getParam')->with('creditmemo_id')->willReturn($cmId);
+        $this->objectManager->expects($this->once())->method('create')->with($cmManagement)->willReturn(
+            $cmManagementMock
+        );
+        $cmManagementMock->expects($this->once())->method('notify')->willReturn(true);
+        $this->messageManager->expects($this->once())->method('addSuccessMessage')->with('You sent the message.');
 
         $this->assertInstanceOf(
             \Magento\Backend\Model\View\Result\Redirect::class,
@@ -159,10 +154,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
     public function testEmailNoCreditmemoId()
     {
-        $this->request->expects($this->once())
-            ->method('getParam')
-            ->with('creditmemo_id')
-            ->will($this->returnValue(null));
+        $this->request->expects($this->once())->method('getParam')->with('creditmemo_id')->will(
+            $this->returnValue(null)
+        );
 
         $this->assertNull($this->creditmemoEmail->execute());
     }
@@ -172,12 +166,12 @@ class EmailTest extends \PHPUnit\Framework\TestCase
      */
     protected function prepareRedirect($cmId)
     {
-        $this->resultRedirectFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->resultRedirectMock);
-        $this->resultRedirectMock->expects($this->once())
-            ->method('setPath')
-            ->with('sales/order_creditmemo/view', ['creditmemo_id' => $cmId])
-            ->willReturnSelf();
+        $this->resultRedirectFactoryMock->expects($this->once())->method('create')->willReturn(
+            $this->resultRedirectMock
+        );
+        $this->resultRedirectMock->expects($this->once())->method('setPath')->with(
+            'sales/order_creditmemo/view',
+            ['creditmemo_id' => $cmId]
+        )->willReturnSelf();
     }
 }

@@ -61,20 +61,20 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
                 }
                 $sitemap->delete();
                 // display success message
-                $this->messageManager->addSuccess(__('You deleted the sitemap.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the sitemap.'));
                 // go to grid
                 $this->_redirect('adminhtml/*/');
                 return;
             } catch (\Exception $e) {
                 // display error message
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 // go back to edit form
                 $this->_redirect('adminhtml/*/edit', ['sitemap_id' => $id]);
                 return;
             }
         }
         // display error message
-        $this->messageManager->addError(__('We can\'t find a sitemap to delete.'));
+        $this->messageManager->addErrorMessage(__('We can\'t find a sitemap to delete.'));
         // go to grid
         $this->_redirect('adminhtml/*/');
     }
