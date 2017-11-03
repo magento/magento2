@@ -197,6 +197,7 @@
         "magento/theme-adminhtml-backend": "100.3.0-dev",
         "magento/theme-frontend-blank": "100.3.0-dev",
         "magento/theme-frontend-luma": "100.3.0-dev",
+        "magento/theme-frontend-rush": "100.3.0-dev",
         "magento/language-de_de": "100.3.0-dev",
         "magento/language-en_us": "100.3.0-dev",
         "magento/language-es_es": "100.3.0-dev",

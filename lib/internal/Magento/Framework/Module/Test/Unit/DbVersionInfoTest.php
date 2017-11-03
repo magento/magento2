@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\DbVersionInfo;
+use Magento\Framework\Module\DbVersionInfo;
 
 class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
 {
@@ -23,6 +23,11 @@ class DbVersionInfoTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\Module\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $moduleResource;
+
+    /**
+     * @var \Magento\Framework\Module\Output\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $_outputConfig;
 
     protected function setUp()
     {

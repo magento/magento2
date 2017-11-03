@@ -1346,6 +1346,7 @@ class Files
         $directories = [
             '/dev/tools',
             '/dev/tests/api-functional/framework',
+            '/dev/tests/setup-integration/framework',
             '/dev/tests/integration/framework',
             '/dev/tests/integration/framework/tests/unit/testsuite',
             '/dev/tests/integration/testsuite',
