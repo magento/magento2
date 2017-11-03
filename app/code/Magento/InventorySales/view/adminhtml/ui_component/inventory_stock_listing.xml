@@ -10,7 +10,7 @@
         <column name="sales_channels"
                 class="Magento\InventorySales\Ui\Component\Listing\Column\SalesChannels"
                 component="Magento_InventorySales/js/stock/grid/cell/sales-channels"
-                sortOrder="30">
+                sortOrder="40">
             <settings>
                 <label translate="true">Sales Channels</label>
             </settings>

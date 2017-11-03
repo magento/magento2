@@ -18,7 +18,7 @@
             <opened>true</opened>
             <dataScope>sales_channels</dataScope>
         </settings>
-        <field name="websites" formElement="multiselect" sortOrder="20">
+        <field name="website" formElement="multiselect" sortOrder="20">
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">Websites</label>

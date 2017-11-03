@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Ui\Component\Listing\Column;
 
-use Magento\InventorySales\Ui\SalesChannelNameResolver;
+use Magento\InventorySales\Ui\SalesChannelNameResolverInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -18,45 +18,46 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 class SalesChannels extends Column
 {
     /**
-     * @var SalesChannelNameResolver
+     * @var SalesChannelNameResolverInterface
      */
     private $salesChannelNameResolver;
 
     /**
-     * SalesChannels constructor.
-     * @param SalesChannelNameResolver $salesChannelNameResolver
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
+     * @param SalesChannelNameResolverInterface $salesChannelNameResolver
      * @param array $components
      * @param array $data
      */
     public function __construct(
-        SalesChannelNameResolver $salesChannelNameResolver,
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
+        SalesChannelNameResolverInterface $salesChannelNameResolver,
         array $components = [],
         array $data = []
     ) {
-        $this->salesChannelNameResolver = $salesChannelNameResolver;
         parent::__construct($context, $uiComponentFactory, $components, $data);
+        $this->salesChannelNameResolver = $salesChannelNameResolver;
     }
 
     /**
-     * Prepare column value
+     * Prepare sales value
      *
      * @param array $salesChannelData
      * @return array
      */
     private function prepareSalesChannelData(array $salesChannelData): array
     {
-        $refactoredChannelData = [];
+        $preparedChannelData = [];
         foreach ($salesChannelData as $type => $salesChannel) {
             foreach ($salesChannel as $key => $code) {
-                $refactoredChannelData[$type][$key]['name'] = $this->salesChannelNameResolver->resolve($type, $code);
-                $refactoredChannelData[$type][$key]['code'] = $code;
+                $preparedChannelData[$type][$key] = [
+                    'name' => $this->salesChannelNameResolver->resolve($type, $code),
+                    'code' => $code,
+                ];
             }
         }
-        return $refactoredChannelData;
+        return $preparedChannelData;
     }
 
     /**
