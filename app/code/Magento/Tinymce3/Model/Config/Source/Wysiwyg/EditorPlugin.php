@@ -12,8 +12,9 @@ class EditorPlugin
      *
      * @param \Magento\Cms\Model\Config\Source\Wysiwyg\Editor $subject
      * @param $optionArray
-     *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterToOptionArray(\Magento\Cms\Model\Config\Source\Wysiwyg\Editor $subject, $optionArray)
     {
