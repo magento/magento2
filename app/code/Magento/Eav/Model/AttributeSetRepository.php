@@ -128,7 +128,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $collection
      * @return void
      */
-    protected function addFilterGroupToCollection(
+    private function addFilterGroupToCollection(
         \Magento\Framework\Api\Search\FilterGroup $filterGroup,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $collection
     ) {
