@@ -13,7 +13,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     protected $translator;
 
     /**
-     * @var \Magento\Framework\Phrase\Renderer\Translate
+     * @var \Magento\Framework\Phrase\Renderer\Inline
      */
     protected $renderer;
 
