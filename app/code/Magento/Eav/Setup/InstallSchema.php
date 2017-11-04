@@ -863,13 +863,13 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getTable('eav_attribute_group')
         )->addColumn(
             'attribute_group_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
             ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
             'Attribute Group Id'
         )->addColumn(
             'attribute_set_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Attribute Set Id'
