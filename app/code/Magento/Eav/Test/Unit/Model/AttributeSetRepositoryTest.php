@@ -215,7 +215,7 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock->expects($this->exactly(2))->method('getFilterGroups')->willReturn([$filterGroupMock]);
 
         $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
-        $filterGroupMock->expects($this->once())->method('getFilters')->willReturn([$filterMock]);
+        $filterGroupMock->expects($this->exactly(2))->method('getFilters')->willReturn([$filterMock]);
 
         $filterMock->expects($this->once())->method('getField')->willReturn('entity_type_code');
         $filterMock->expects($this->once())->method('getValue')->willReturn($entityTypeCode);
