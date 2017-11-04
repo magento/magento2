@@ -12,10 +12,8 @@ namespace Magento\Sales\Api\Data;
  * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
  * a purchase order, is emailed to the customer.
  * This interface is used for saving properly CustomerQuoteAddressId in SalesOrderAddress table
- * @api
- * @since 100.0.2
  */
-interface OrderQuoteAddressInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface OrderQuoteAddressInterface
 {
     /**
      * Quote address ID.
@@ -25,13 +23,13 @@ interface OrderQuoteAddressInterface extends \Magento\Framework\Api\ExtensibleDa
     /**
      * Gets the quote address ID for the order address.
      *
-     * @return int Quote address ID.
+     * @return int|null Quote address ID.
      */
     public function getQuoteAddressId();
 
     /**
-     * @param int $addressId
+     * @param int|null $addressId
      * @return $this
      */
-    public function setQuoteAddressId(int $addressId);
+    public function setQuoteAddressId($addressId);
 }
