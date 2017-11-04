@@ -346,7 +346,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      *
      * @return \Magento\Cron\Model\ResourceModel\Schedule\Collection
      */
-    protected function getRunningSchedules()
+    private function getRunningSchedules()
     {
         if (!$this->runningSchedules) {
             $this->runningSchedules = $this->_scheduleFactory->create()->getCollection()->addFieldToFilter(
