@@ -212,12 +212,12 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteriaInterface');
 
         $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
+        $searchCriteriaMock->expects($this->exactly(2))->method('getFilterGroups')->willReturn([$filterGroupMock]);
 
         $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
-        $filterGroupMock->expects($this->once())->method('getFilters')->willReturn([$filterMock]);
+        $filterGroupMock->expects($this->exactly(2))->method('getFilters')->willReturn([$filterMock]);
 
-        $filterMock->expects($this->once())->method('getField')->willReturn('entity_type_code');
+        $filterMock->expects($this->exactly(2))->method('getField')->willReturn('entity_type_code');
         $filterMock->expects($this->once())->method('getValue')->willReturn($entityTypeCode);
 
         $collectionMock = $this->getMock(
@@ -273,7 +273,7 @@ class AttributeSetRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetListIfEntityTypeCodeIsNull()
     {
         $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteriaInterface');
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([]);
+        $searchCriteriaMock->expects($this->exactly(2))->method('getFilterGroups')->willReturn([]);
 
         $collectionMock = $this->getMock(
             '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection',

@@ -105,6 +105,10 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
             $collection->setEntityTypeFilter($this->eavConfig->getEntityType($entityTypeCode)->getId());
         }
 
+        foreach ($searchCriteria->getFilterGroups() as $group) {
+            $this->addFilterGroupToCollection($group, $collection);
+        }
+
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
 
@@ -113,6 +117,29 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
+    }
+
+    /**
+     * Helper function that adds a FilterGroup to the collection.
+     *
+     * @deprecated already removed in 2.2-develop. Use CollectionProcessorInterface to process search criteria
+     *
+     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $collection
+     * @return void
+     */
+    private function addFilterGroupToCollection(
+        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $collection
+    ) {
+        foreach ($filterGroup->getFilters() as $filter) {
+            /** entity type filter is already set on collection */
+            if ($filter->getField() === 'entity_type_code') {
+                continue;
+            }
+            $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+            $collection->addFieldToFilter($filter->getField(), [$conditionType, $filter->getValue()]);
+        }
     }
 
     /**
