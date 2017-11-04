@@ -31,7 +31,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         if (version_compare($context->getVersion(), '2.1.2', '<')) {
-            $this->modifyAttributeLengthIndex($setup);
+            $this->ModifyColumnsSetIdGroupIdLength($setup);
 
         }
         $setup->endSetup();
@@ -41,7 +41,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * @param SchemaSetupInterface $setup
      * @return void
      */
-    private function modifyAttributeLengthIndex(SchemaSetupInterface $setup)
+    private function ModifyColumnsSetIdGroupIdLength(SchemaSetupInterface $setup)
     {
         $setup->getConnection()->modifyColumn(
             $setup->getTable('eav_attribute_group'),
