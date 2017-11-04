@@ -19,7 +19,7 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
  */
 class ConfigurablePanel extends AbstractModifier
 {
-    const GROUP_CONFIGURABLE = 'configurable';
+    const GROUP_CONFIGURABLE = 'group_configurable';
     const ASSOCIATED_PRODUCT_MODAL = 'configurable_associated_product_modal';
     const ASSOCIATED_PRODUCT_LISTING = 'configurable_associated_product_listing';
     const CONFIGURABLE_MATRIX = 'configurable-matrix';
