@@ -82,7 +82,6 @@ class Alert extends \Magento\Framework\App\Config\Value
         $cronExprString = join(' ', $cronExprArray);
 
         try {
-
             $this->_configValueFactory->create()->load(
                 self::CRON_STRING_PATH,
                 'path'
