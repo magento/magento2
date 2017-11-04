@@ -463,10 +463,10 @@ class Store extends AbstractExtensibleModel implements
         $storeLabelRule->setMessage(__('Name is required'), \Zend_Validate_NotEmpty::IS_EMPTY);
         $validator->addRule($storeLabelRule, 'name');
 
-        $storeCodeRule = new \Zend_Validate_Regex('/^[a-zA-Z]+[a-z0-9_]*$/');
+        $storeCodeRule = new \Zend_Validate_Regex('/^[a-z]+[a-z0-9_]*$/i');
         $storeCodeRule->setMessage(
             __(
-                'The store code may contain only letters (a-zA-Z), numbers (0-9) or underscore (_),'
+                'The store code may contain only letters (a-z), numbers (0-9) or underscore (_),'
                 . ' and the first character must be a letter.'
             ),
             \Zend_Validate_Regex::NOT_MATCH
