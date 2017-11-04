@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Backup\Db;
 
+use Magento\Framework\ObjectManagerInterface;
+
 /**
  * @api
  */
@@ -14,7 +16,7 @@ class BackupFactory
     /**
      * Object manager
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $_objectManager;
 
@@ -29,12 +31,12 @@ class BackupFactory
     private $_backupDbInstanceName;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param string $backupInstanceName
      * @param string $backupDbInstanceName
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        ObjectManagerInterface $objectManager,
         $backupInstanceName,
         $backupDbInstanceName
     ) {
