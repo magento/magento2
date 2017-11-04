@@ -29,7 +29,38 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '2.1.1', '<')) {
             $this->modifyAttributeCodeColumnForNotNullable($setup);
         }
+
+        if (version_compare($context->getVersion(), '2.1.2', '<')) {
+            $this->ModifyColumnsSetIdGroupIdLength($setup);
+
+        }
         $setup->endSetup();
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function ModifyColumnsSetIdGroupIdLength(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->modifyColumn(
+            $setup->getTable('eav_attribute_group'),
+            'attribute_group_id',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                'nullable' => false,
+                'comment' => 'Attribute group id',
+            ]
+        )
+        ->modifyColumn(
+            $setup->getTable('eav_attribute_group'),
+            'attribute_set_id',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                'nullable' => false,
+                'comment' => 'Attribute set id',
+            ]
+        );
     }
 
     /**
