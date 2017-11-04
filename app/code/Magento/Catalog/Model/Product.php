@@ -29,6 +29,7 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
  * @method \Magento\Catalog\Model\ResourceModel\Product\Collection getCollection()
  * @method string getUrlKey()
  * @method Product setUrlKey(string $urlKey)
+ * @method Product setUrlPath(string $urlKey)
  * @method Product setRequestPath(string $requestPath)
  * @method Product setWebsiteIds(array $ids)
  *
