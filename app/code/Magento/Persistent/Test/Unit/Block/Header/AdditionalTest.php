@@ -280,6 +280,8 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
         $this->sessionMock->expects($this->never())
             ->method('getSessionId')
             ->willReturn($sessionId);
+        $customerId ? $this->escaperMock->expects(self::once())->method('escapeHtml')->willReturn('Not you?')
+            : $this->escaperMock->expects(self::never())->method('escapeHtml');
 
         // call protected _toHtml method
         $sessionMock = $this->createPartialMock(\Magento\Persistent\Model\Session::class, ['getCustomerId']);

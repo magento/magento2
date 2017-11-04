@@ -71,7 +71,7 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
     protected function _toHtml()
     {
         if ($this->_persistentSessionHelper->getSession()->getCustomerId()) {
-            return '<span><a ' . $this->getLinkAttributes() . ' >' . __('Not you?')
+            return '<span><a ' . $this->getLinkAttributes() . ' >' . $this->escapeHtml(__('Not you?'))
             . '</a></span>';
         }
 

@@ -6,6 +6,8 @@
 
 namespace Magento\Persistent\Block\Header;
 
+use Magento\Framework\Phrase;
+
 /**
  * @magentoDataFixture Magento/Persistent/_files/persistent.php
  */
@@ -61,5 +63,34 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
             $this->_block->toHtml()
         );
         $this->_customerSession->logout();
+    }
+
+    /**
+     * @magentoConfigFixture current_store persistent/options/customer 1
+     * @magentoConfigFixture current_store persistent/options/enabled 1
+     * @magentoConfigFixture current_store persistent/options/remember_enabled 1
+     * @magentoConfigFixture current_store persistent/options/remember_default 1
+     * @magentoAppArea frontend
+     * @magentoAppIsolation enabled
+     */
+    public function testToHtmlEscapeSingleQuote()
+    {
+        /** @var Phrase\Renderer\Placeholder|\PHPUnit_Framework_MockObject_MockObject $rendererMock */
+        $rendererMock = $this->getMockBuilder(Phrase\Renderer\Placeholder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $rendererMock->expects(self::any())->method('render')->willReturn("Test 'phrase 'with 'quotes");
+
+        $defaultRenderer = Phrase::getRenderer();
+        Phrase::setRenderer($rendererMock);
+        $this->_customerSession->loginById(1);
+        $translation = 'Test &#039;phrase &#039;with &#039;quotes';
+
+        $this->assertStringMatchesFormat(
+            '<span><a href="' . $this->_block->getHref() . '"%A>' . $translation . '</a></span>',
+            $this->_block->toHtml()
+        );
+        $this->_customerSession->logout();
+        Phrase::setRenderer($defaultRenderer);
     }
 }
