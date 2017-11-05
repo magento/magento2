@@ -944,13 +944,13 @@ class InstallSchema implements InstallSchemaInterface
             'Entity Type Id'
         )->addColumn(
             'attribute_set_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Attribute Set Id'
         )->addColumn(
             'attribute_group_id',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Attribute Group Id'

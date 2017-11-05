@@ -30,7 +30,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->modifyAttributeCodeColumnForNotNullable($setup);
         }
 
-
         if (version_compare($context->getVersion(), '2.1.2', '<')) {
             $this->ModifyColumnsSetIdGroupIdLength($setup);
 
@@ -56,6 +55,25 @@ class UpgradeSchema implements UpgradeSchemaInterface
         )
         ->modifyColumn(
             $setup->getTable('eav_attribute_group'),
+            'attribute_set_id',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                'nullable' => false,
+                'comment' => 'Attribute set id',
+            ]
+
+        )
+        ->modifyColumn(
+            $setup->getTable('eav_entity_attribute'),
+            'attribute_group_id',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                'nullable' => false,
+                'comment' => 'Attribute group id',
+            ]
+        )
+       ->modifyColumn(
+            $setup->getTable('eav_entity_attribute'),
             'attribute_set_id',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
