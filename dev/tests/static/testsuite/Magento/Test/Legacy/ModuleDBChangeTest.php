@@ -51,7 +51,7 @@ class ModuleDBChangeTest extends \PHPUnit\Framework\TestCase
                 preg_match_all('|^(\d+\.\d+)|m', file_get_contents($branchesFile), $matches);
 
                 //check is this a latest release branch
-                self::$actualBranch = ($branchName == max($matches[0]));
+                self::$actualBranch = ($branchName >= max($matches[0]) - 0.1);
             }
         }
 
