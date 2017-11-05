@@ -88,7 +88,7 @@ class SampleFileProvider
     {
         $directoryRead = $this->getDirectoryRead($entityName);
         $moduleName = $this->getModuleName($entityName);
-        $moduleDir = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);;
+        $moduleDir = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
         $fileAbsolutePath = $moduleDir . '/Files/Sample/' . $entityName . '.csv';
 
         $filePath = $directoryRead->getRelativePath($fileAbsolutePath);
@@ -120,7 +120,7 @@ class SampleFileProvider
      */
     private function getModuleName($entityName): string
     {
-        if(!isset($this->samples[$entityName])) {
+        if (!isset($this->samples[$entityName])) {
             throw new NoSuchEntityException();
         }
 

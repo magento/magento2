@@ -69,7 +69,7 @@ class Download extends ImportController
         $this->componentRegistrar = $componentRegistrar;
         $this->sampleFileProvider = $sampleFileProvider
             ?: \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\ImportExport\Model\Import\SampleFileProvider::class);
+            ->get(\Magento\ImportExport\Model\Import\SampleFileProvider::class);
     }
 
     /**
@@ -83,8 +83,7 @@ class Download extends ImportController
 
         try {
             $fileContents = $this->sampleFileProvider->getFileContents($entityName);
-        } catch (NoSuchEntityException $e)
-        {
+        } catch (NoSuchEntityException $e) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $this->messageManager->addError(__('There is no sample file for this entity.'));
             $resultRedirect = $this->resultRedirectFactory->create();
