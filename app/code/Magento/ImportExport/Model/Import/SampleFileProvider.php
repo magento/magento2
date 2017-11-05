@@ -11,12 +11,11 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
  * Import Sample File Provider model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class SampleFileProvider
 {
     /**
+     * Associate an import entity to its module, e.g ['entity_name' => 'module_name']
      * @var array
      */
     private $samples;
@@ -32,7 +31,6 @@ class SampleFileProvider
     private $readFactory;
 
     /**
-     * SampleFilePathProvider constructor.
      * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
      * @param ComponentRegistrar $componentRegistrar
      * @param array $samples
@@ -50,11 +48,11 @@ class SampleFileProvider
     /**
      * Returns the Size for the given file associated to an Import entity
      *
-     * @param $fileName
+     * @param string $fileName
      * @throws NoSuchEntityException
      * @return int
      */
-    public function getSize(string $entityName)
+    public function getSize(string $entityName): int
     {
         $directoryRead = $this->getDirectoryRead($entityName);
         $filePath = $this->getPath($entityName);
@@ -71,7 +69,7 @@ class SampleFileProvider
      * @throws NoSuchEntityException
      * @return string
      */
-    public function getFileContents(string $entityName)
+    public function getFileContents(string $entityName): string
     {
         $directoryRead = $this->getDirectoryRead($entityName);
         $filePath = $this->getPath($entityName);
@@ -81,10 +79,10 @@ class SampleFileProvider
 
     /**
      * @param $entityName
-     * @return string
+     * @return string $entityName
      * @throws NoSuchEntityException
      */
-    private function getPath($entityName)
+    private function getPath(string $entityName): string
     {
         $directoryRead = $this->getDirectoryRead($entityName);
         $moduleName = $this->getModuleName($entityName);
@@ -101,10 +99,10 @@ class SampleFileProvider
     }
 
     /**
-     * @param $fileName
+     * @param string $entityName
      * @return ReadInterface
      */
-    private function getDirectoryRead($entityName): ReadInterface
+    private function getDirectoryRead(string $entityName): ReadInterface
     {
         $moduleName = $this->getModuleName($entityName);
         $moduleDir = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
@@ -114,11 +112,11 @@ class SampleFileProvider
     }
 
     /**
-     * @param $entityName
+     * @param string $entityName
      * @return string
      * @throws NoSuchEntityException
      */
-    private function getModuleName($entityName): string
+    private function getModuleName(string $entityName): string
     {
         if (!isset($this->samples[$entityName])) {
             throw new NoSuchEntityException();

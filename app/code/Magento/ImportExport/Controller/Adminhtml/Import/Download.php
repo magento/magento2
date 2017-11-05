@@ -40,7 +40,7 @@ class Download extends ImportController
     /**
      * @var \Magento\ImportExport\Model\Import\SampleFileProvider
      */
-    protected $sampleFileProvider;
+    private $sampleFileProvider;
 
     /**
      * Constructor
