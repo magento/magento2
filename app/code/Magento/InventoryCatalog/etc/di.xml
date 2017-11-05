@@ -9,9 +9,9 @@
     <preference for="Magento\InventoryCatalog\Api\DefaultStockProviderInterface" type="Magento\InventoryCatalog\Model\DefaultStockProvider"/>
     <preference for="Magento\InventoryCatalog\Api\DefaultSourceProviderInterface" type="Magento\InventoryCatalog\Model\DefaultSourceProvider"/>
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
-        <plugin name="prevent_default_stock_deletion" type="Magento\InventoryCatalog\Plugin\Model\StockRepositoryPlugin" sortOrder="1"/>
+        <plugin name="prevent_default_stock_deletion" type="Magento\InventoryCatalog\Plugin\Model\StockRepositoryPlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\ReservationsAppendInterface">
-        <plugin name="legacy_catalog_inventory_plugin" type="Magento\InventoryCatalog\Plugin\Model\LegacyCatalogInventoryPlugin" sortOrder="1"/>
+        <plugin name="update_legacy_catalog_inventory_plugin" type="Magento\InventoryCatalog\Plugin\Model\UpdateLegacyCatalogInventoryPlugin"/>
     </type>
 </config>
