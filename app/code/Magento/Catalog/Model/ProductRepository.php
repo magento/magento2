@@ -7,19 +7,19 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
-use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -278,6 +278,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     protected function initializeProductData(array $productData, $createNew)
     {
+        if (empty($productData['type_id'])) {
+            $productData['type_id'] = \Magento\Catalog\Model\Product\Type::DEFAULT_TYPE;
+        }
+
         unset($productData['media_gallery']);
         if ($createNew) {
             $product = $this->productFactory->create();
@@ -304,7 +308,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
         if (!$this->storeManager->hasSingleStore()) {
-
             if ($this->storeManager->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
                 $websiteIds = array_keys($this->storeManager->getWebsites());
             } else {
