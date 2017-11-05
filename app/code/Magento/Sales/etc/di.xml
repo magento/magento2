@@ -56,6 +56,7 @@
     <preference for="Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface" type="Magento\Sales\Model\Order\Invoice\CreationArguments"/>
     <preference for="Magento\Sales\Api\Data\InvoiceItemCreationInterface" type="Magento\Sales\Model\Order\Invoice\ItemCreation"/>
     <preference for="Magento\Sales\Api\Data\InvoiceCommentCreationInterface" type="Magento\Sales\Model\Order\Invoice\CommentCreation"/>
+    <preference for="Magento\Sales\Api\InvoiceCancelInterface" type="Magento\Sales\Model\Order\InvoiceCancel"/>
     <preference for="Magento\Sales\Api\Data\ShipmentCommentCreationInterface" type="Magento\Sales\Model\Order\Shipment\CommentCreation"/>
     <preference for="Magento\Sales\Api\Data\CreditmemoCommentCreationInterface" type="Magento\Sales\Model\Order\Creditmemo\CommentCreation"/>
     <preference for="Magento\Sales\Api\OrderAddressRepositoryInterface" type="Magento\Sales\Model\Order\AddressRepository"/>
