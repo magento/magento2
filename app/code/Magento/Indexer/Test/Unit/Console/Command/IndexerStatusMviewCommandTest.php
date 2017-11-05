@@ -13,6 +13,9 @@ use Symfony\Component\Console\Helper\TableHelper;
 use Magento\Store\Model\Website;
 use Magento\Framework\Console\Cli;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class IndexerStatusMviewCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -101,28 +104,7 @@ class IndexerStatusMviewCommandTest extends \PHPUnit_Framework_TestCase
         foreach ($mviews as $data) {
             $this->collection->addItem($this->generateMviewStub($data['view'], $data['changelog']));
         }
-
-        /** @var Mview\View\Changelog|\PHPUnit_Framework_MockObject_MockObject $stub */
-        $changelog = $this->getMockBuilder(\Magento\Framework\Mview\View\Changelog::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $changelog->expects($this->any())
-            ->method('getVersion')
-            ->willThrowException(
-                new Mview\View\ChangelogTableNotExistsException(new \Magento\Framework\Phrase("Do not render"))
-            );
-
-        /** @var Mview\View|\PHPUnit_Framework_MockObject_MockObject $notInitiatedMview */
-        $notInitiatedMview = $this->getMockBuilder(\Magento\Framework\Mview\View::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $notInitiatedMview->expects($this->any())
-            ->method('getChangelog')
-            ->willReturn($changelog);
-
-        $this->collection->addItem($notInitiatedMview);
+        $this->collection->addItem($this->getNeverEnabledMviewIndexerWithNoTable());
 
         $tester = new CommandTester($this->command);
         $this->assertEquals(Cli::RETURN_SUCCESS, $tester->execute([]));
@@ -210,6 +192,34 @@ class IndexerStatusMviewCommandTest extends \PHPUnit_Framework_TestCase
         $stub->setData($viewData);
 
         return $stub;
+    }
+
+    /**
+     * @return Mview\View|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getNeverEnabledMviewIndexerWithNoTable()
+    {
+        /** @var Mview\View\Changelog|\PHPUnit_Framework_MockObject_MockObject $stub */
+        $changelog = $this->getMockBuilder(\Magento\Framework\Mview\View\Changelog::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $changelog->expects($this->any())
+            ->method('getVersion')
+            ->willThrowException(
+                new Mview\View\ChangelogTableNotExistsException(new \Magento\Framework\Phrase("Do not render"))
+            );
+
+        /** @var Mview\View|\PHPUnit_Framework_MockObject_MockObject $notInitiatedMview */
+        $notInitiatedMview = $this->getMockBuilder(\Magento\Framework\Mview\View::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $notInitiatedMview->expects($this->any())
+            ->method('getChangelog')
+            ->willReturn($changelog);
+
+        return $notInitiatedMview;
     }
 
     public function testExecuteExceptionNoVerbosity()
