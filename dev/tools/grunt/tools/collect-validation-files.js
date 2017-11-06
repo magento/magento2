@@ -32,12 +32,17 @@ module.exports = {
             blackList = this.readFiles(blackListFiles),
             whiteList = this.readFiles(whiteListFiles),
             files = [];
-        console.log(blackList);
+
+        console.log("Lists overview");
+        console.log(JSON.stringify(blackList));
+        console.log(JSON.stringify(whiteList));
+        console.log("WhiteListLoop");
         fst.arrayRead(whiteList, function (data) {
             console.log(data);
             files = _.difference(data, blackList);
         });
-        console.log(files);
+        console.log("Result");
+        console.log(JSON.stringify(files));
         return files;
     },
 
