@@ -15,12 +15,12 @@ class HttpPlugin
     /**
      * @var Config
      */
-    protected $config;
+    private $config;
 
     /**
      * @var NewRelicWrapper
      */
-    protected $newRelicWrapper;
+    private $newRelicWrapper;
 
     /**
      * @param Config $config
