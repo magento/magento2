@@ -9,19 +9,22 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 use Magento\Framework\Mview\View;
+use Magento\Framework\Mview\View\CollectionFactory;
+use Magento\Framework\Console\Cli;
 
 /**
  * Command for displaying status of mview indexers.
  */
 class IndexerStatusMviewCommand extends Command
 {
-    /** @var \Magento\Framework\Mview\View\CollectionInterface $mviewIndexersCollection */
-    private $mviewIndexersCollection;
+    /** @var \Magento\Framework\Mview\View\CollectionInterface $mviewCollection */
+    private $mviewCollection;
 
     public function __construct(
-        \Magento\Framework\Mview\View\CollectionInterface $collection
+        CollectionFactory $collectionFactory
     ) {
-        $this->mviewIndexersCollection = $collection;
+        $this->mviewCollection = $collectionFactory->create();
+
         parent::__construct();
     }
 
@@ -47,10 +50,10 @@ class IndexerStatusMviewCommand extends Command
 
             $rows = [];
 
-            /** @var \Magento\Framework\Mview\View $indexer */
-            foreach ($this->mviewIndexersCollection as $indexer) {
-                $state = $indexer->getState();
-                $changelog = $indexer->getChangelog();
+            /** @var \Magento\Framework\Mview\View $view */
+            foreach ($this->mviewCollection as $view) {
+                $state = $view->getState();
+                $changelog = $view->getChangelog();
 
                 try {
                     $currentVersionId = $changelog->getVersion();
@@ -66,11 +69,11 @@ class IndexerStatusMviewCommand extends Command
                 }
 
                 $rows[] = [
-                    $indexer->getData('view_id'),
-                    $state->getData('mode'),
-                    $state->getData('status'),
-                    $state->getData('updated'),
-                    $state->getData('version_id'),
+                    $view->getId(),
+                    $state->getMode(),
+                    $state->getStatus(),
+                    $state->getUpdated(),
+                    $state->getVersionId(),
                     $pendingString,
                 ];
             }
@@ -82,14 +85,14 @@ class IndexerStatusMviewCommand extends Command
             $table->addRows($rows);
             $table->render($output);
 
-            return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+            return Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                 $output->writeln($e->getTraceAsString());
             }
 
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
     }
 }
