@@ -1,4 +1,5 @@
 app/code/**/*.js
+app/code/Magento/Tinymce3/view/base/web/tiny_mce/**/*.js
 app/design/**/*.js
 dev/tests/js/jasmine/tests/**/*.js
 lib/web/css/docs/source/js/dropdown.js
