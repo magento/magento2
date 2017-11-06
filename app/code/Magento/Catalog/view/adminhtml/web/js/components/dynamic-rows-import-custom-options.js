@@ -34,7 +34,7 @@ define([
             values.each(function (value) {
                 delete value['option_id'];
                 delete value['option_type_id'];
-            })
+            });
         },
 
         /** @inheritdoc */
@@ -62,9 +62,8 @@ define([
                     }
 
                     if (currentOption.values.length > 0) {
-                        this.__cleanOptionValuesUp(currentOption.values);
+                        self.__cleanOptionValuesUp(currentOption.values);
                     }
-                    
                     options.push(currentOption);
                 });
             });
