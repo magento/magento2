@@ -36,6 +36,6 @@ class WebsiteNameResolver implements SalesChannelNameResolverInterface
      */
     public function resolve(string $type, string $code): string
     {
-        return SalesChannelInterface::TYPE_WEBSITE === $code ? $this->websiteRepository->get($code)->getName() : $code;
+        return SalesChannelInterface::TYPE_WEBSITE === $type ? $this->websiteRepository->get($code)->getName() : $code;
     }
 }

@@ -4,4 +4,16 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="sales-grid-cell data-grid-cell-content" html="$col.renderRecords($row())"/>
+<div class="data-grid-cell-content">
+    <ul data-bind="foreach: { data: $col.getSalesChannelsGroupedByType($row()), as: '$salesChannels' }">
+        <li>
+            <strong data-bind="text: $salesChannels.type"></strong>
+            <ul data-bind="foreach: { data: $salesChannels.channels, as: '$salesChannel' }">
+                <li>
+                    <span data-bind="text: $salesChannel.name"></span>
+                    (<span data-bind="text: $salesChannel.code"></span>)
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
