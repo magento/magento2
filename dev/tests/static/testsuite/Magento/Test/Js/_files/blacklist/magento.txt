@@ -14,7 +14,7 @@ app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/marked.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/object-assign-pollyfill.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/swagger-oauth.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/underscore-min.js
-app/code/Magento/Tinymce3/view/base/web/tiny_mce/**/*.js
+app/code/Magento/Tinymce3/view/base/web/tiny_mce/**
 
 // TO REFACTORING
 app/code/Magento/Authorizenet/view/adminhtml/web/js/direct-post.js
