@@ -55,8 +55,7 @@ class PopulateWithWebsiteSalesChannelsObserver implements ObserverInterface
             }
         }
 
-        if (
-            isset($requestData['sales_channels'][SalesChannelInterface::TYPE_WEBSITE])
+        if (isset($requestData['sales_channels'][SalesChannelInterface::TYPE_WEBSITE])
             && is_array($requestData['sales_channels'][SalesChannelInterface::TYPE_WEBSITE])
         ) {
             foreach ($requestData['sales_channels'][SalesChannelInterface::TYPE_WEBSITE] as $websiteCode) {
