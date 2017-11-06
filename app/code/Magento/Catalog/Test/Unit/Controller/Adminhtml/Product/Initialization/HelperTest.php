@@ -293,10 +293,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturnMap([
                 [
-                    ['data' => $optionsData['option2']],
+                    ['data' => array_merge($optionsData['option2'], ['option_id' => null])],
                     $customOptionMockClone1->setData($optionsData['option2'])
                 ], [
-                    ['data' => $optionsData['option3']],
+                    ['data' => array_merge($optionsData['option3'], ['option_id' => null])],
                     $customOptionMockClone2->setData($optionsData['option3'])
                 ]
             ]);
@@ -719,9 +719,24 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     private function getOptionsData()
     {
         $optionsData = [
-            'option1' => ['is_delete' => true, 'name' => 'name1', 'price' => 'price1', 'option_id' => ''],
-            'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '13'],
-            'option3' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '14'],
+            'option1' => [
+                'is_delete' => true,
+                'name'      => 'name1',
+                'price'     => 'price1',
+                'option_id' => '',
+            ],
+            'option2' => [
+                'is_delete' => false,
+                'name'      => 'name2',
+                'price'     => 'price1',
+                'option_id' => '13',
+            ],
+            'option3' => [
+                'is_delete' => false,
+                'name'      => 'name1',
+                'price'     => 'price1',
+                'option_id' => '14',
+            ],
         ];
 
         return $optionsData;
