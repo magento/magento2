@@ -16,8 +16,8 @@ define([
         /**
          * Get sales channels grouped by type
          *
-         * @param {Object} record - Result object
-         * @returns {Object}
+         * @param {Object} record - Record object
+         * @returns {Object} Result object
          */
         getSalesChannelsGroupedByType: function (record) {
             var result = [];
