@@ -178,8 +178,6 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPriceOnDifferentStoreViews" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation14" summary="An error appears on open tier price with locale formatting" ticketId="MAGETWO-62076">
-            <data name="tag" xsi:type="string">stable:no</data>
-            <data name="issue" xsi:type="string">MAGETWO-80353: PHP 7.1 compatibility: Jenkins Failures related to PHP 7.1 upgrade</data>
             <data name="initialProduct/dataset" xsi:type="string">simple_with_hight_tier_price</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductFormattingTierPrice" />
         </variation>
