@@ -9,9 +9,6 @@ use Magento\Ui\DataProvider\Modifier\WysiwygModifierInterface;
 
 /**
  * Class DefaultWysiwygSettings
- *
- *
- * @since 101.0.0
  */
 class DefaultWysiwygSettings implements WysiwygModifierInterface
 {

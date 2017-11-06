@@ -5,14 +5,12 @@
  */
 namespace Magento\Ui\DataProvider\Modifier\Wysiwyg;
 
-use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Ui\DataProvider\Modifier\WysiwygModifierInterface;
 
 /**
  * Class WysiwygModifierComposite
  *
  * @api
- *
  */
 class WysiwygModifierComposite implements WysiwygModifierInterface
 {
@@ -22,12 +20,13 @@ class WysiwygModifierComposite implements WysiwygModifierInterface
     private $modifiers;
 
     /**
-     * @var
+     * @var string
      */
     private $currentEditorName;
 
     /**
      * WysiwygModifierComposite constructor.
+     *
      * @param array $modifiers
      * @param string $currentEditorName
      */

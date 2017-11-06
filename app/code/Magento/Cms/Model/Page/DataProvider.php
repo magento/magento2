@@ -35,9 +35,9 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param string $requestFieldName
      * @param CollectionFactory $pageCollectionFactory
      * @param DataPersistorInterface $dataPersistor
-     * @param PoolInterface|null $pool
      * @param array $meta
      * @param array $data
+     * @param PoolInterface|null $pool
      */
     public function __construct(
         $name,

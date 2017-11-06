@@ -21,9 +21,9 @@ class ModifierPoolDataProvider extends AbstractDataProvider
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param PoolInterface|null $pool
      * @param array $meta
      * @param array $data
+     * @param PoolInterface|null $pool
      */
     public function __construct(
         $name,
