@@ -75,7 +75,7 @@ class CreateSalesChannelTable
             'Stock Id'
         )->addIndex(
             'idx_primary',
-            [SalesChannelInterface::TYPE, SalesChannelInterface::CODE],
+            [SalesChannelInterface::TYPE, SalesChannelInterface::CODE, self::STOCK_ID],
             ['type' => AdapterInterface::INDEX_TYPE_PRIMARY]
         )->addForeignKey(
             $setup->getFkName(

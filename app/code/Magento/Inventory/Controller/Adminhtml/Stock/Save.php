@@ -138,8 +138,8 @@ class Save extends Action
         $this->eventManager->dispatch(
             'save_stock_controller_populate_stock_with_data',
             [
-                $requestData,
-                $stock
+                'request_data' => $requestData,
+                'stock' => $stock,
             ]
         );
         $stockId = $this->stockRepository->save($stock);
