@@ -194,6 +194,8 @@ class Processor
             'position' => $position,
             'label' => '',
             'disabled' => (int)$exclude,
+            'media_type' => 'image',
+            'types'      => $mediaAttribute
         ];
 
         $product->setData($attrCode, $mediaGalleryData);

@@ -488,26 +488,30 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @throws InputException
      * @throws StateException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function processMediaGallery(ProductInterface $product, $mediaGalleryEntries)
     {
         $existingMediaGallery = $product->getMediaGallery('images');
         $newEntries = [];
-        $entriesById = [];
         if (!empty($existingMediaGallery)) {
+            $entriesById = [];
             foreach ($mediaGalleryEntries as $entry) {
                 if (isset($entry['value_id'])) {
+                    $entriesById[$entry['value_id']] = $entry;
+                } elseif (isset($entry['id'])) {
+                    $entry['value_id'] = $entry['id'];
                     $entriesById[$entry['value_id']] = $entry;
                 } else {
                     $newEntries[] = $entry;
                 }
             }
             foreach ($existingMediaGallery as $key => &$existingEntry) {
+                if (!isset($existingEntry['value_id'])) {
+                    $existingEntry['removed'] = true;
+                }
                 if (isset($entriesById[$existingEntry['value_id']])) {
                     $updatedEntry = $entriesById[$existingEntry['value_id']];
-                    if ($updatedEntry['file'] === null) {
-                        unset($updatedEntry['file']);
-                    }
                     $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
                 } else {
                     //set the removed flag
@@ -518,9 +522,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         } else {
             $newEntries = $mediaGalleryEntries;
         }
+        $images = $product->getMediaGallery('images');
 
         $this->getMediaGalleryProcessor()->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
-        $images = $product->getMediaGallery('images');
         if ($images) {
             foreach ($images as $image) {
                 if (!isset($image['removed']) && !empty($image['types'])) {
@@ -528,8 +532,17 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 }
             }
         }
-
         foreach ($newEntries as $newEntry) {
+            if (isset($newEntry['file'])) {
+                if (!empty($newEntry['types'])) {
+                    $this->getMediaGalleryProcessor()->setMediaAttribute(
+                        $product,
+                        $newEntry['types'],
+                        $newEntry['file']
+                    );
+                }
+                continue;
+            }
             if (!isset($newEntry['content'])) {
                 throw new InputException(__('The image content is not valid.'));
             }
@@ -548,6 +561,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $finalGallery['images'][$newEntryId] = $newEntry;
             $product->setData('media_gallery', $finalGallery);
         }
+
         return $this;
     }
 
@@ -586,8 +600,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $product = $this->initializeProductData($productDataArray, empty($existingProduct));
 
         $this->processLinks($product, $productLinks);
-        if (isset($productDataArray['media_gallery'])) {
-            $this->processMediaGallery($product, $productDataArray['media_gallery']['images']);
+        if (isset($productDataArray['media_gallery']['images'])) {
+            $mediaGalleryEntries = $productDataArray['media_gallery']['images'];
+            unset($productDataArray['media_gallery']);
+            $this->processMediaGallery($product, $mediaGalleryEntries);
         }
 
         if (!$product->getOptionsReadonly()) {
