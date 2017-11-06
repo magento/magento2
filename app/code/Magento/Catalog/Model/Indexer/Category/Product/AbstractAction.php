@@ -395,6 +395,10 @@ abstract class AbstractAction
             \Magento\Catalog\Model\Category::ENTITY,
             'is_anchor'
         )->getId();
+        $isActiveAttributeId = $this->config->getAttribute(
+            \Magento\Catalog\Model\Category::ENTITY,
+            'is_active'
+        )->getId();
         $statusAttributeId = $this->config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status')->getId();
         $visibilityAttributeId = $this->config->getAttribute(
             \Magento\Catalog\Model\Product::ENTITY,
@@ -410,7 +414,7 @@ abstract class AbstractAction
         $productLinkField = $productMetadata->getLinkField();
         $categoryLinkField = $categoryMetadata->getLinkField();
 
-        return $this->connection->select()->from(
+        $select = $this->connection->select()->from(
             ['cc' => $this->getTable('catalog_category_entity')],
             []
         )->joinInner(
@@ -419,6 +423,16 @@ abstract class AbstractAction
                 ',',
                 $rootCatIds
             ) . ')',
+            []
+        )->joinInner(
+            ['cceid' => $this->getTable('catalog_category_entity_int')],
+            'cceid.' . $categoryLinkField . ' = cc2.child_id  AND cceid.store_id = ' . $store::DEFAULT_STORE_ID .
+            ' AND cceid.attribute_id = ' . $isActiveAttributeId,
+            []
+        )->joinLeft(
+            ['cceis' => $this->getTable('catalog_category_entity_int')],
+            'cceis.' . $categoryLinkField . ' = cc2.child_id  AND cceis.store_id = ' . $store->getId() .
+            ' AND cceis.attribute_id = ' . $isActiveAttributeId,
             []
         )->joinInner(
             ['ccp' => $this->getTable('catalog_category_product')],
@@ -482,6 +496,9 @@ abstract class AbstractAction
         )->where(
             $this->connection->getIfNullSql('ccas.value', 'ccad.value') . ' = ?',
             1
+        )->where(
+            $this->connection->getIfNullSql('cceis.value', 'cceid.value') . ' = ?',
+            1
         )->columns(
             [
                 'category_id' => 'cc.entity_id',
@@ -492,6 +509,8 @@ abstract class AbstractAction
                 'visibility' => new \Zend_Db_Expr($this->connection->getIfNullSql('cpvs.value', 'cpvd.value')),
             ]
         );
+
+        return $select;
     }
 
     /**
