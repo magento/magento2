@@ -293,10 +293,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturnMap([
                 [
-                    ['data' => array_merge($optionsData['option2'], ['option_id' => null])],
+                    ['data' => $optionsData['option2']],
                     $customOptionMockClone1->setData($optionsData['option2'])
                 ], [
-                    ['data' => array_merge($optionsData['option3'], ['option_id' => null])],
+                    ['data' => $optionsData['option3']],
                     $customOptionMockClone2->setData($optionsData['option3'])
                 ]
             ]);
