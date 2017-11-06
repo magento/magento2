@@ -488,6 +488,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @throws InputException
      * @throws StateException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function processMediaGallery(ProductInterface $product, $mediaGalleryEntries)
     {

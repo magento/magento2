@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Media\Config;
+use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
