@@ -15,6 +15,7 @@
         "magento/module-config": "100.3.*",
         "magento/module-customer": "100.3.*",
         "magento/module-directory": "100.3.*",
+        "magento/module-instant-purchase": "100.3.*",
         "magento/module-payment": "100.3.*",
         "magento/module-paypal": "100.3.*",
         "magento/module-quote": "100.3.*",
