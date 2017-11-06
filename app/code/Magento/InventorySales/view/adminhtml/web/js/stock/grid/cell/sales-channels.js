@@ -21,6 +21,7 @@ define([
          */
         getSalesChannelsGroupedByType: function (record) {
             var result = [];
+
             _.each(record[this.index], function (channels, type) {
                 result.push({
                     type: type,
