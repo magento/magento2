@@ -11,7 +11,6 @@ use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
-
 /**
  * Tests product repository.
  *
@@ -78,7 +77,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 'small_image',
                 'thumbnail',
             ],
-            false, false
+            false,
+            false
         );
         $this->productRepository->save($product);
         $gallery = $product->getData('media_gallery');

@@ -534,7 +534,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         foreach ($newEntries as $newEntry) {
             if (isset($newEntry['file'])) {
                 if (!empty($newEntry['types'])) {
-                    $this->getMediaGalleryProcessor()->setMediaAttribute($product, $newEntry['types'], $newEntry['file']);
+                    $this->getMediaGalleryProcessor()->setMediaAttribute(
+                        $product,
+                        $newEntry['types'],
+                        $newEntry['file']
+                    );
                 }
                 continue;
             }
