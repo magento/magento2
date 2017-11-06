@@ -14,6 +14,7 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 
 class Post extends \Magento\Contact\Controller\Index
@@ -56,7 +57,8 @@ class Post extends \Magento\Contact\Controller\Index
         $this->context       = $context;
         $this->mail          = $mail;
         $this->dataPersistor = $dataPersistor;
-        $this->logger        = $logger;
+        $this->logger        = $logger ?:
+            ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**

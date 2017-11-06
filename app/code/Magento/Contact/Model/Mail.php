@@ -8,6 +8,7 @@ namespace Magento\Contact\Model;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Area;
 
 class Mail implements MailInterface
@@ -44,12 +45,13 @@ class Mail implements MailInterface
         ConfigInterface $contactsConfig,
         TransportBuilder $transportBuilder,
         StateInterface $inlineTranslation,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager = null
     ) {
         $this->contactsConfig    = $contactsConfig;
         $this->transportBuilder  = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
-        $this->storeManager      = $storeManager;
+        $this->storeManager      = $storeManager ?:
+            ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -70,7 +72,7 @@ class Mail implements MailInterface
                 ->setTemplateIdentifier($this->contactsConfig->emailTemplate())
                 ->setTemplateOptions(
                     [
-                        'area' => Area::AREA_FRONTEND,
+                        'area'  => Area::AREA_FRONTEND,
                         'store' => $this->storeManager->getStore()->getId()
                     ]
                 )
