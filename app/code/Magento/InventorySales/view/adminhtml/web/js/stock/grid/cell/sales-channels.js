@@ -28,6 +28,7 @@ define([
                     channels: channels
                 });
             });
+
             return result;
         }
     });
