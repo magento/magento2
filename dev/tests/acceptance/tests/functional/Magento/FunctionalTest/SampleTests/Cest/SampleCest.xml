@@ -105,9 +105,9 @@
             <performOn selector=".rememberMe" function="function (WebDriver $I) { $I->see('Remember me next time'); $I->seeElement('#LoginForm_rememberMe'); $I->dontSee('Login'); }" mergeKey="performOn1"/>
             <performOn selector=".rememberMe" function="ActionSequence::build()->see('Warning')->see('Are you sure you want to delete this?')->click('Yes')" mergeKey="performOn2"/>
             <pressKey selector="#page" userInput="a" mergeKey="pressKey1"/>
-            <pressKey selector="#page" parameterArray="array('ctrl','a'),'new'" mergeKey="pressKey2"/>
-            <pressKey selector="#page" parameterArray="array('shift','111'),'1','x'" mergeKey="pressKey3"/>
-            <pressKey selector="#page" parameterArray="array('ctrl', 'a'), \Facebook\WebDriver\WebDriverKeys::DELETE" mergeKey="pressKey4"/>
+            <pressKey selector="#page" parameterArray="[['ctrl','a'],'new']" mergeKey="pressKey2"/>
+            <pressKey selector="#page" parameterArray="[['shift','111'],'1','x']" mergeKey="pressKey3"/>
+            <pressKey selector="#page" parameterArray="[['ctrl', 'a'], \Facebook\WebDriver\WebDriverKeys::DELETE]" mergeKey="pressKey4"/>
             <!--pressKey selector="descendant-or-self::*[@id='page']" userInput="u" mergeKey="pressKey5"/-->
             <reloadPage mergeKey="reloadPage"/>
             <resetCookie userInput="cookie" mergeKey="resetCookie1"/>
@@ -135,7 +135,7 @@
             <seeInField userInput="Stuff" selector="#field" mergeKey="seeInField1"/>
             <seeInField userInput="Stuff" selectorArray="['name' => 'search']" mergeKey="seeInField2"/>
             <seeInFormFields selector="form[name=myform]" parameterArray="['input1' => 'value','input2' => 'other value']" mergeKey="seeInFormFields1"/>
-            <seeInFormFields selector=".form-class" parameterArray="['multiselect' => ['value1','value2'],'checkbox[]' => ['a checked value','another checked value',]]" mergeKey="seeInFormFields2"/>
+            <seeInFormFields selector=".form-class" parameterArray="[['multiselect' => ['value1','value2'],'checkbox[]]' => ['a checked value','another checked value',]]" mergeKey="seeInFormFields2"/>
             <!--<seeInPageSource html="<h1></h1>" mergeKey="seeInPageSource"/>-->
             <seeInPopup userInput="Yes in Popup" mergeKey="seeInPopup"/>
             <!--<seeInSource html="<h1></h1>" mergeKey="seeInSource"/>-->
@@ -146,8 +146,8 @@
             <seeNumberOfElements selector="tr" userInput="[0, 10]" mergeKey="seeNumberOfElements2"/>
             <seeOptionIsSelected selector=".option" userInput="Visa" mergeKey="seeOptionIsSelected"/>
             <selectOption selector=".dropDown" userInput="Option Name" mergeKey="selectOption1"/>
-            <selectOption selector="//form/select[@name=account]" parameterArray="array('Windows','Linux')" mergeKey="selectOption2"/>
-            <selectOption selector="Which OS do you use?" parameterArray="array('text' => 'Windows')" mergeKey="selectOption3"/>
+            <selectOption selector="//form/select[@name=account]" parameterArray="['Windows','Linux']" mergeKey="selectOption2"/>
+            <selectOption selector="Which OS do you use?" parameterArray="['text' => 'Windows']" mergeKey="selectOption3"/>
             <setCookie userInput="PHPSESSID" value="stuff" mergeKey="setCookie1"/>
             <setCookie userInput="PHPSESSID" value="stuff" parameterArray="['domainName' => 'www.google.com']" mergeKey="setCookie2"/>
             <submitForm selector="#my-form" parameterArray="['field' => ['value','another value',]]" button="#submit" mergeKey="submitForm2"/>
