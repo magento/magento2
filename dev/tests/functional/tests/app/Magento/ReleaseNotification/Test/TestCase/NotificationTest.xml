@@ -16,6 +16,7 @@
             <data name="user/dataset" xsi:type="string">custom_admin_with_default_role</data>
             <constraint name="Magento\ReleaseNotification\Test\Constraint\AssertReleaseNotificationPopupExist" />
             <constraint name="Magento\ReleaseNotification\Test\Constraint\AssertLoginAgainReleaseNotificationPopupNotExist" />
+            <constraint name="Magento\ReleaseNotification\Test\Constraint\AssertLoginAgainAfterFlushCacheReleaseNotificationPopupExist" />
         </variation>
     </testCase>
 </config>
