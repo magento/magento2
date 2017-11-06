@@ -24,10 +24,24 @@ define([
             identificationDRProperty: 'option_id'
         },
 
+        /**
+         * Cleans options' values from IDs because otherwise wrong IDs will be assigned.
+         *
+         * @param {Array} values
+         * @private
+         */
+        __cleanOptionValuesUp: function (values) {
+            values.each(function (value) {
+                delete value['option_id'];
+                delete value['option_type_id'];
+            })
+        },
+
         /** @inheritdoc */
         processingInsertData: function (data) {
             var options = [],
-                currentOption;
+                currentOption,
+                self = this;
 
             if (!data) {
                 return;
@@ -42,14 +56,13 @@ define([
                     if (currentOption.hasOwnProperty('sort_order')) {
                         delete currentOption['sort_order'];
                     }
+
                     if (currentOption.hasOwnProperty('option_id')) {
                         delete currentOption['option_id'];
                     }
+
                     if (currentOption.values.length > 0) {
-                        currentOption.values.each(function (optionValue) {
-                            delete optionValue['option_id'];
-                            delete optionValue['option_type_id'];
-                        })
+                        this.__cleanOptionValuesUp(currentOption.values);
                     }
                     
                     options.push(currentOption);
