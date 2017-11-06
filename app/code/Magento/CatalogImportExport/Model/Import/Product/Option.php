@@ -1443,7 +1443,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $typeTitles
      * @return array
      */
-    public function getRestoreOriginalOptionTypeIds(array $typeValues, array $typeTitles)
+    private function getRestoreOriginalOptionTypeIds(array $typeValues, array $typeTitles)
     {
         $optionsForRestore = [];
         foreach ($typeValues as $optionId => $optionTypes) {
@@ -1476,7 +1476,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $optionsForRestore
      * @return array
      */
-    public function restoreTypeValues(array $typeValues, array $optionsForRestore)
+    private function restoreTypeValues(array $typeValues, array $optionsForRestore)
     {
         foreach ($optionsForRestore as $restoreValues) {
             if (isset($typeValues[$restoreValues['optionId']][$restoreValues['optionTypeKey']])) {
@@ -1493,7 +1493,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $optionsForRestore
      * @return array
      */
-    public function restoreOptionTypesData(array $optionDataArray, array $optionsForRestore)
+    private function restoreOptionTypesData(array $optionDataArray, array $optionsForRestore)
     {
         foreach ($optionsForRestore as $restoreValues) {
             $replaceKey = $restoreValues['replaceKey'];
