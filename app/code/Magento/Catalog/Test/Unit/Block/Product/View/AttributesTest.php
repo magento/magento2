@@ -65,9 +65,6 @@ class AttributesTest extends TestCase
 
     protected function setUp()
     {
-        // @codingStandardsIgnoreStart
-        $this->phrase = new Phrase(__(''));
-        // @codingStandardsIgnoreEnd
         $this->attribute = $this
             ->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
@@ -132,9 +129,7 @@ class AttributesTest extends TestCase
      */
     public function testGetAttributeNoValue()
     {
-        // @codingStandardsIgnoreStart
-        $this->phrase = new Phrase(__(''));
-        // @codingStandardsIgnoreEnd
+        $this->phrase = '';
         $this->frontendAttribute
             ->expects($this->any())
             ->method('getValue')
@@ -148,7 +143,7 @@ class AttributesTest extends TestCase
      */
     public function testGetAttributeHasValue()
     {
-        $this->phrase = new Phrase(__('Yes'));
+        $this->phrase = __('Yes');
         $this->frontendAttribute
             ->expects($this->any())
             ->method('getValue')
