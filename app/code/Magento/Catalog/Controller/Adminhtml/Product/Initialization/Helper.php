@@ -453,8 +453,9 @@ class Helper
                 continue;
             }
 
-            //Ignoring ID because front-end messes it up.
-            $customOptionData['option_id'] = null;
+            if (empty($customOptionData['option_id'])) {
+                $customOptionData['option_id'] = null;
+            }
             if (isset($customOptionData['values'])) {
                 $customOptionData['values'] = array_filter(
                     $customOptionData['values'],
