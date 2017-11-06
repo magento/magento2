@@ -1,5 +1,4 @@
 // 3RD PARTY LIBS
-app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/backbone-min.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/handlebars.min-v4.0.10.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/highlight.9.1.0.pack.js
