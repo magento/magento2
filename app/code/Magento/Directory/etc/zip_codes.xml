@@ -319,7 +319,7 @@
     </zip>
     <zip countryCode="NL">
         <codes>
-            <code id="pattern_1" active="true" example="1234 AB">^[0-9]{4}\s?[a-zA-Z]{2}$</code>
+            <code id="pattern_1" active="true" example="1234 AB/1234AB">^[1-9][0-9]{3}\s?[a-zA-Z]{2}$</code>
         </codes>
     </zip>
     <zip countryCode="NO">
