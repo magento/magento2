@@ -7,7 +7,10 @@
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <columns name="inventory_stock_listing_columns">
-        <column name="sales_channels" class="Magento\InventorySales\Ui\Component\Listing\Column\SalesChannels" sortOrder="30">
+        <column name="sales_channels"
+                class="Magento\InventorySales\Ui\Component\Listing\Column\SalesChannels"
+                component="Magento_InventorySales/js/stock/grid/cell/sales-channels"
+                sortOrder="40">
             <settings>
                 <label translate="true">Sales Channels</label>
             </settings>
