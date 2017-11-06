@@ -10,7 +10,7 @@ use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 class WysiwygConfigModifier implements ModifierInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -18,7 +18,7 @@ class WysiwygConfigModifier implements ModifierInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {

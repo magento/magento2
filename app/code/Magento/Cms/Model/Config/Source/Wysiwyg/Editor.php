@@ -11,7 +11,7 @@ namespace Magento\Cms\Model\Config\Source\Wysiwyg;
 class Editor implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

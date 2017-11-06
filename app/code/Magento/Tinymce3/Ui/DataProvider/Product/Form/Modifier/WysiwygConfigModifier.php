@@ -16,14 +16,12 @@ use Magento\Ui\DataProvider\Modifier\WysiwygModifierInterface;
  * @api
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
- * @since 101.0.0
  */
 class WysiwygConfigModifier implements ModifierInterface
 {
     /**
      * @param array $data
      * @return array
-     * @since 100.1.0
      */
     public function modifyData(array $data)
     {
@@ -33,7 +31,6 @@ class WysiwygConfigModifier implements ModifierInterface
     /**
      * @param array $meta
      * @return array
-     * @since 100.1.0
      */
     public function modifyMeta(array $meta)
     {

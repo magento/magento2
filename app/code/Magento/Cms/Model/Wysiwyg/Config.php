@@ -13,6 +13,7 @@ use Magento\Ui\Component\Wysiwyg\ConfigInterface;
  * Wysiwyg Config for Editor HTML Element
  *
  * @api
+ * @deprecated file will be moved to UI module in future release
  * @since 100.0.2
  */
 class Config extends \Magento\Framework\DataObject implements ConfigInterface
