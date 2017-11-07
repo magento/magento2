@@ -1,0 +1,4 @@
+source_id,sku,status,quantity
+30,SKU-1,0,10.0000
+40,SKU-1,1,10.0000
+50,SKU-2,1,5.0000

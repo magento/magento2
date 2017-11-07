@@ -16,7 +16,6 @@ use Magento\InventoryApi\Api\IsProductInStockInterface;
  *
  * @see \Magento\InventoryApi\Api\GetProductQuantityInStockInterface
  * @see \Magento\Inventory\Model\Stock\Command\IsInStockInterface
- * @api
  */
 class IsProductInStock implements IsProductInStockInterface
 {
