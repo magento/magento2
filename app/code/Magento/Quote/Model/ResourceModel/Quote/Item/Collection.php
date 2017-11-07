@@ -149,6 +149,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
 
     /**
      * Join product entities to select existing products items only
+     *
+     * @return void
      */
     protected function _beforeLoad()
     {
