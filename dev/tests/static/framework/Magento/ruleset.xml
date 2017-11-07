@@ -19,6 +19,12 @@
     <rule ref="Magento.LiteralNamespaces.LiteralNamespaces">
         <exclude-pattern>*/_files/*</exclude-pattern>
     </rule>
+    <rule ref="Magento.MagentoModule.ForbiddenFunctions">
+        <include-pattern>*/(app/code|vendor)/*</include-pattern>
+    </rule>
+    <rule ref="Magento.MagentoModule.GlobalVariables">
+        <include-pattern>*/(app/code|vendor)/*</include-pattern>
+    </rule>
 
     <rule ref="Generic.Functions.CallTimePassByReference"/>
     <rule ref="Generic.PHP.DeprecatedFunctions"/>
