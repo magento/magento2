@@ -35,10 +35,12 @@ module.exports = {
 
         fst.arrayRead(whiteList, function (data) {
             fst.arrayRead(blackList, function (blackListData) {
+                console.log(JSON.stringify(data));
+                console.log(JSON.stringify(blackListData));
                 files = _.difference(data, blackListData);
             });
         });
-
+        console.log(JSON.stringify(files));
         return files;
     },
 
