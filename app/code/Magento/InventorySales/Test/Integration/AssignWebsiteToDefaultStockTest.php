@@ -40,6 +40,20 @@ class AssignWebsiteToDefaultStockTest extends TestCase
     }
 
     /**
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites.php
+     */
+    public function testCreateWebsitesViaFixtureIfSalesChannelsAreEmpty()
+    {
+        $defaultStockId = $this->defaultStockProvider->getId();
+        $defaultStock = $this->stockRepository->get($defaultStockId);
+
+        $extensionAttributes = $defaultStock->getExtensionAttributes();
+        $salesChannels = $extensionAttributes->getSalesChannels();
+        $this->assertContainsOnlyInstancesOf(SalesChannelInterface::class, $salesChannels);
+        $this->assertCount(3, $salesChannels);
+    }
+
+    /**
      * Creates website inside of test so need to enable db isolation to prevent change db state after test execution
      * @magentoDbIsolation enabled
      */
