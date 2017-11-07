@@ -15,4 +15,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="\Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="convert_special_price" type="Magento\Catalog\Plugin\Model\ProductRepository\ConvertSpecialPrice"/>
+    </type>
 </config>
