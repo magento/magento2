@@ -11,6 +11,7 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\Framework\EntityManager\EventManager;
 
 /**
  * Save Controller
@@ -28,15 +29,23 @@ class Save extends Action
     private $stockSaveProcessor;
 
     /**
+     * @var EventManager
+     */
+    private $eventManager;
+
+    /**
      * @param Context $context
      * @param StockSaveProcessor $stockSaveProcessor
+     * @param EventManager $eventManager
      */
     public function __construct(
         Context $context,
-        StockSaveProcessor $stockSaveProcessor
+        StockSaveProcessor $stockSaveProcessor,
+        EventManager $eventManager
     ) {
         parent::__construct($context);
         $this->stockSaveProcessor = $stockSaveProcessor;
+        $this->eventManager = $eventManager;
     }
 
     /**

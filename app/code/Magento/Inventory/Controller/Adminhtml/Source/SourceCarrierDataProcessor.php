@@ -46,28 +46,12 @@ class SourceCarrierDataProcessor
             && isset($data['carrier_codes'])
             && is_array($data['carrier_codes'])
         ) {
-            $this->checkCarrierCodes($data['carrier_codes']);
             $data[SourceInterface::CARRIER_LINKS] = $this->getCarrierLinksData($data['carrier_codes']);
         } else {
             $data[SourceInterface::CARRIER_LINKS] = [];
         }
         unset($data['carrier_codes']);
         return $data;
-    }
-
-    /**
-     * @param array $carrierCodes
-     * @return void
-     * @throws InputException
-     */
-    private function checkCarrierCodes(array $carrierCodes)
-    {
-        $availableCarriers = $this->shippingConfig->getAllCarriers();
-
-        // TODO: move validation to service (management + tests)
-        if (count(array_intersect_key(array_flip($carrierCodes), $availableCarriers)) !== count($carrierCodes)) {
-            throw new InputException(__('Wrong carrier codes data'));
-        }
     }
 
     /**
