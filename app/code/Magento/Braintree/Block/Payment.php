@@ -48,6 +48,10 @@ class Payment extends Template
         $payment = $this->config->getConfig()['payment'];
         $config = $payment[$this->getCode()];
         $config['code'] = $this->getCode();
+        $config['clientTokenUrl'] = $this->_urlBuilder->getUrl(
+            'braintree/payment/getClientToken',
+            ['_secure' => true]
+        );
         return json_encode($config, JSON_UNESCAPED_SLASHES);
     }
 

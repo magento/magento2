@@ -5,11 +5,14 @@
  */
 namespace Magento\Braintree\Gateway\Request;
 
-use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Magento\Sales\Model\Order\Payment;
+use Magento\Braintree\Gateway\SubjectReader;
 
-class VoidDataBuilder implements BuilderInterface
+/**
+ * This builder is used for correct store resolving and used only to retrieve correct store ID.
+ * The data from this build won't be send to Braintree Gateway.
+ */
+class StoreConfigBuilder implements BuilderInterface
 {
     /**
      * @var SubjectReader
@@ -17,8 +20,6 @@ class VoidDataBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
-     * Constructor
-     *
      * @param SubjectReader $subjectReader
      */
     public function __construct(SubjectReader $subjectReader)
@@ -27,21 +28,15 @@ class VoidDataBuilder implements BuilderInterface
     }
 
     /**
-     * Builds ENV request
-     *
-     * @param array $buildSubject
-     * @return array
+     * @inheritdoc
      */
     public function build(array $buildSubject)
     {
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
-
-        /** @var Payment $payment */
-        $payment = $paymentDO->getPayment();
+        $order = $paymentDO->getOrder();
 
         return [
-            'transaction_id' => $payment->getParentTransactionId()
-                ?: $payment->getLastTransId()
+            'store_id' => $order->getStoreId()
         ];
     }
 }

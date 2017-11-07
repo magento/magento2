@@ -11,7 +11,7 @@ use Magento\Braintree\Gateway\Response\CardDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Braintree\Gateway\Config\Config;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 
 /**
  * Class CardDetailsHandlerTest

@@ -7,8 +7,10 @@ namespace Magento\Braintree\Test\Unit\Gateway\Http\Client;
 
 use Magento\Braintree\Gateway\Http\Client\TransactionSale;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -22,35 +24,41 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var Logger|MockObject
      */
-    private $loggerMock;
+    private $logger;
 
     /**
-     * @var BraintreeAdapter|\PHPUnit_Framework_MockObject_MockObject
+     * @var BraintreeAdapter|MockObject
      */
     private $adapter;
 
     /**
-     * Set up
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function setUp()
     {
-        $criticalLoggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->loggerMock = $this->getMockBuilder(Logger::class)
+        /** @var LoggerInterface|MockObject $criticalLogger */
+        $criticalLogger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->adapter = $this->getMockBuilder(BraintreeAdapter::class)
             ->disableOriginalConstructor()
             ->getMock();
+        /** @var BraintreeAdapterFactory|MockObject $adapterFactory */
+        $adapterFactory = $this->getMockBuilder(BraintreeAdapterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $adapterFactory->method('create')
+            ->willReturn($this->adapter);
 
-        $this->model = new TransactionSale($criticalLoggerMock, $this->loggerMock, $this->adapter);
+        $this->model = new TransactionSale($criticalLogger, $this->logger, $adapterFactory);
     }
 
     /**
-     * Run test placeRequest method (exception)
+     * Runs test placeRequest method (exception)
      *
      * @return void
      *
@@ -59,8 +67,7 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
      */
     public function testPlaceRequestException()
     {
-        $this->loggerMock->expects($this->once())
-            ->method('debug')
+        $this->logger->method('debug')
             ->with(
                 [
                     'request' => $this->getTransferData(),
@@ -69,11 +76,10 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->adapter->expects($this->once())
-            ->method('sale')
+        $this->adapter->method('sale')
             ->willThrowException(new \Exception('Test messages'));
 
-        /** @var TransferInterface|\PHPUnit_Framework_MockObject_MockObject $transferObjectMock */
+        /** @var TransferInterface|MockObject $transferObjectMock */
         $transferObjectMock = $this->getTransferObjectMock();
 
         $this->model->placeRequest($transferObjectMock);
@@ -87,14 +93,11 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
     public function testPlaceRequestSuccess()
     {
         $response = $this->getResponseObject();
-        $this->adapter->expects($this->once())
-            ->method('sale')
+        $this->adapter->method('sale')
             ->with($this->getTransferData())
-            ->willReturn($response)
-        ;
+            ->willReturn($response);
 
-        $this->loggerMock->expects($this->once())
-            ->method('debug')
+        $this->logger->method('debug')
             ->with(
                 [
                     'request' => $this->getTransferData(),
@@ -110,19 +113,22 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return TransferInterface|\PHPUnit_Framework_MockObject_MockObject
+     * Creates mock object for TransferInterface.
+     *
+     * @return TransferInterface|MockObject
      */
     private function getTransferObjectMock()
     {
         $transferObjectMock = $this->createMock(TransferInterface::class);
-        $transferObjectMock->expects($this->once())
-            ->method('getBody')
+        $transferObjectMock->method('getBody')
             ->willReturn($this->getTransferData());
 
         return $transferObjectMock;
     }
 
     /**
+     * Creates stub for a response.
+     *
      * @return \stdClass
      */
     private function getResponseObject()
@@ -134,6 +140,8 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Creates stub request data.
+     *
      * @return array
      */
     private function getTransferData()
