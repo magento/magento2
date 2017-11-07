@@ -135,32 +135,32 @@ class IndexerStatusMviewCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Version ID', trim($headerValues[4]));
         $this->assertEquals('Backlog', trim($headerValues[5]));
 
-        $catalogCategoryProductMviewData = array_values(array_filter(explode('|', $linesOutput[3])));
-        $this->assertEquals('catalog_category_product', trim($catalogCategoryProductMviewData[0]));
-        $this->assertEquals('enabled', trim($catalogCategoryProductMviewData[1]));
-        $this->assertEquals('idle', trim($catalogCategoryProductMviewData[2]));
-        $this->assertEquals('2017-01-01 11:11:11', trim($catalogCategoryProductMviewData[3]));
-        $this->assertEquals('100', trim($catalogCategoryProductMviewData[4]));
-        $this->assertEquals('10', trim($catalogCategoryProductMviewData[5]));
-        unset($catalogCategoryProductMviewData);
+        $categoryProduct = array_values(array_filter(explode('|', $linesOutput[3])));
+        $this->assertEquals('catalog_category_product', trim($categoryProduct[0]));
+        $this->assertEquals('enabled', trim($categoryProduct[1]));
+        $this->assertEquals('idle', trim($categoryProduct[2]));
+        $this->assertEquals('2017-01-01 11:11:11', trim($categoryProduct[3]));
+        $this->assertEquals('100', trim($categoryProduct[4]));
+        $this->assertEquals('10', trim($categoryProduct[5]));
+        unset($categoryProduct);
 
-        $catalogProductAttributeMviewData = array_values(array_filter(explode('|', $linesOutput[4])));
-        $this->assertEquals('catalog_product_attribute', trim($catalogProductAttributeMviewData[0]));
-        $this->assertEquals('enabled', trim($catalogProductAttributeMviewData[1]));
-        $this->assertEquals('idle', trim($catalogProductAttributeMviewData[2]));
-        $this->assertEquals('2017-01-01 11:11:11', trim($catalogProductAttributeMviewData[3]));
-        $this->assertEquals('100', trim($catalogProductAttributeMviewData[4]));
-        $this->assertEquals('0', trim($catalogProductAttributeMviewData[5]));
-        unset($catalogProductAttributeMviewData);
+        $productAttribute = array_values(array_filter(explode('|', $linesOutput[4])));
+        $this->assertEquals('catalog_product_attribute', trim($productAttribute[0]));
+        $this->assertEquals('enabled', trim($productAttribute[1]));
+        $this->assertEquals('idle', trim($productAttribute[2]));
+        $this->assertEquals('2017-01-01 11:11:11', trim($productAttribute[3]));
+        $this->assertEquals('100', trim($productAttribute[4]));
+        $this->assertEquals('0', trim($productAttribute[5]));
+        unset($productAttribute);
 
-        $catalogCategoryProductMviewData = array_values(array_filter(explode('|', $linesOutput[5])));
-        $this->assertEquals('catalog_product_category', trim($catalogCategoryProductMviewData[0]));
-        $this->assertEquals('disabled', trim($catalogCategoryProductMviewData[1]));
-        $this->assertEquals('idle', trim($catalogCategoryProductMviewData[2]));
-        $this->assertEquals('2017-01-01 11:11:11', trim($catalogCategoryProductMviewData[3]));
-        $this->assertEquals('100', trim($catalogCategoryProductMviewData[4]));
-        $this->assertEquals('100', trim($catalogCategoryProductMviewData[5]));
-        unset($catalogCategoryProductMviewData);
+        $productCategory = array_values(array_filter(explode('|', $linesOutput[5])));
+        $this->assertEquals('catalog_product_category', trim($productCategory[0]));
+        $this->assertEquals('disabled', trim($productCategory[1]));
+        $this->assertEquals('idle', trim($productCategory[2]));
+        $this->assertEquals('2017-01-01 11:11:11', trim($productCategory[3]));
+        $this->assertEquals('100', trim($productCategory[4]));
+        $this->assertEquals('100', trim($productCategory[5]));
+        unset($productCategory);
     }
 
     /**
