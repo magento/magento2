@@ -18,7 +18,7 @@ $priceModel = $block->getPriceType('regular_price');
 $finalPriceModel = $block->getPriceType('final_price');
 
 /** @var \Magento\Framework\Pricing\Price\PriceInterface $highestPriceModel */
-$highestPriceModel = $this->getPriceType('highest_price');
+$highestPriceModel = $block->getPriceType('highest_price');
 
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 $schema = ($block->getZone() == 'item_view') ? true : false;

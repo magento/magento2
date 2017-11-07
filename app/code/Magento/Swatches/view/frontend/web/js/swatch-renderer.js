@@ -930,11 +930,11 @@ define([
 
             $(this.options.normalPriceLabelSelector).hide();
 
-            _.each($('.' + this.options.classes.attributeOptionsWrapper), function (element) {
-                if ($(element).find('.' + this.options.classes.optionClass + '.selected').length === 0) {
-                    if ($(element).find('.' + this.options.classes.selectClass).length > 0) {
-                        _.each($(element).find('.' + this.options.classes.selectClass), function (element) {
-                            if ($(element).val() === '0') {
+            _.each($('.' + this.options.classes.attributeOptionsWrapper), function (attribute) {
+                if ($(attribute).find('.' + this.options.classes.optionClass + '.selected').length === 0) {
+                    if ($(attribute).find('.' + this.options.classes.selectClass).length > 0) {
+                        _.each($(attribute).find('.' + this.options.classes.selectClass), function (dropdown) {
+                            if ($(dropdown).val() === '0') {
                                 $(this.options.normalPriceLabelSelector).show();
                             }
                         }.bind(this));
