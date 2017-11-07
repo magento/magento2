@@ -4,16 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Unit\Plugin\Model\ProductRepository;
+namespace Magento\Catalog\Test\Unit\Plugin\ServiceInputProcessor;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Plugin\Model\ProductRepository\ConvertSpecialPrice;
+use Magento\Catalog\Plugin\ServiceInputProcessor\ConvertSpecialPrice;
 use Magento\Catalog\Pricing\Price\SpecialPrice;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Webapi\Rest\Request;
+use Magento\Framework\Webapi\ServiceInputProcessor;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,11 +28,6 @@ class ConvertSpecialPriceTest extends TestCase
     private $testSubject;
 
     /**
-     * @var Request|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $requestMock;
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -42,16 +38,16 @@ class ConvertSpecialPriceTest extends TestCase
             ->getMock();
         $this->testSubject = $objectManager->getObject(
             ConvertSpecialPrice::class,
-            ['request' => $this->requestMock]
+            ['mapping' => ['custom_attributes' => 'custom_attributes', 'attribute_code' => 'attribute_code']]
         );
     }
 
     /**
-     * Test ConvertSpecialPrice::beforeSave convert product special price, if it sets in request as empty string.
+     * Test ConvertSpecialPrice::aroundProcess convert product special price, if it sets in input array as empty string.
      */
-    public function testBeforeSave()
+    public function testAroundProcess()
     {
-        $bodyParams = [
+        $inputArray = [
             'product' => [
                 CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => [
                     [
@@ -61,13 +57,10 @@ class ConvertSpecialPriceTest extends TestCase
                 ],
             ],
         ];
-        $this->requestMock->expects(self::once())
-            ->method('getBodyParams')
-            ->willReturn($bodyParams);
-        /** @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject $productRepository */
-        $productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
+        /** @var ServiceInputProcessor|\PHPUnit_Framework_MockObject_MockObject $inputProcessorMock */
+        $inputProcessorMock = $this->getMockBuilder(ServiceInputProcessor::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         /** @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
@@ -76,6 +69,15 @@ class ConvertSpecialPriceTest extends TestCase
         $product->expects(self::once())
             ->method('setCustomAttribute')
             ->with(self::identicalTo(SpecialPrice::PRICE_CODE), self::identicalTo(''));
-        $this->testSubject->beforeSave($productRepository, $product);
+        $proceed = function () use ($product) {
+            return [$product, false];
+        };
+        $this->testSubject->aroundProcess(
+            $inputProcessorMock,
+            $proceed,
+            ProductRepositoryInterface::class,
+            'save',
+            $inputArray
+        );
     }
 }
