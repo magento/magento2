@@ -13,12 +13,42 @@
         "[data-role=swatch-options]": {
             "Magento_Swatches/js/swatch-renderer": {
                 "jsonConfig": <?php /* @escapeNotVerified */ echo $swatchOptions = $block->getJsonConfig(); ?>,
-                "jsonSwatchConfig": <?php /* @escapeNotVerified */
-                    echo $swatchOptions = $block->getJsonSwatchConfig(); ?>,
+                "jsonSwatchConfig": <?php /* @escapeNotVerified */ echo $block->getJsonSwatchConfig(); ?>,
                 "mediaCallback": "<?php /* @escapeNotVerified */ echo $block->getMediaCallback() ?>",
                 "gallerySwitchStrategy": "<?php /* @escapeNotVerified */ echo $block->getVar('gallery_switch_strategy',
                     'Magento_ConfigurableProduct') ?: 'replace'; ?>"
             }
         }
     }
+</script>
+
+<script>
+    require([
+        'jquery',
+        'Magento_ConfigurableProduct/js/options-updater'
+    ], function($, Updater) {
+        var selectors = {
+                formSelector: '#product_addtocart_form',
+                swatchSelector: '.swatch-opt'
+            },
+            swatchWidgetName = 'mageSwatchRenderer',
+            widgetInitEvent = 'swatch.initialized',
+            clickEventName = 'emulateClick',
+            swatchOptions = <?php /* @escapeNotVerified */ echo $swatchOptions ?>
+
+        /**
+         * Sets default configurable swatch attribute's selected
+         */
+        selectDefaultSwatchOptions = function () {
+            var swatchWidget = $(selectors.swatchSelector).data(swatchWidgetName);
+
+            if (!swatchWidget || !swatchWidget._EmulateSelectedByAttributeId) {
+                return;
+            }
+            swatchWidget._EmulateSelectedByAttributeId(swatchOptions.defaultValues, clickEventName);
+        },
+
+        updater = new Updater(widgetInitEvent, selectDefaultSwatchOptions);
+        updater.listen();
+    });
 </script>
