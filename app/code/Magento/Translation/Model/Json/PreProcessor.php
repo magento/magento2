@@ -77,11 +77,12 @@ class PreProcessor implements PreProcessorInterface
             if ($context instanceof FallbackContext) {
                 $themePath = $context->getThemePath();
                 $areaCode = $context->getAreaCode();
-                $this->translate->setLocale($context->getLocale());
             }
 
             $area = $this->areaList->getArea($areaCode);
             $area->load(\Magento\Framework\App\Area::PART_TRANSLATE);
+
+            $this->translate->setLocale($context->getLocale())->loadData($areaCode, true);
 
             $chain->setContent(json_encode($this->dataProvider->getData($themePath)));
             $chain->setContentType('json');

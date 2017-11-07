@@ -75,7 +75,8 @@
         "zendframework/zend-text": "^2.6.0",
         "zendframework/zend-uri": "^2.5.1",
         "zendframework/zend-validator": "^2.6.0",
-        "zendframework/zend-view": "^2.8.1"
+        "zendframework/zend-view": "^2.8.1",
+        "webonyx/graphql-php": "^0.11.1"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "~2.1.1",
@@ -135,10 +136,12 @@
         "magento/module-google-adwords": "100.3.0-dev",
         "magento/module-google-analytics": "100.3.0-dev",
         "magento/module-google-optimizer": "100.3.0-dev",
+        "magento/module-graph-ql": "100.0.0-dev",
         "magento/module-grouped-import-export": "100.3.0-dev",
         "magento/module-grouped-product": "100.3.0-dev",
         "magento/module-import-export": "100.3.0-dev",
         "magento/module-indexer": "100.3.0-dev",
+        "magento/module-instant-purchase": "100.3.0-dev",
         "magento/module-integration": "100.3.0-dev",
         "magento/module-layered-navigation": "100.3.0-dev",
         "magento/module-media-storage": "100.3.0-dev",
@@ -195,6 +198,7 @@
         "magento/theme-adminhtml-backend": "100.3.0-dev",
         "magento/theme-frontend-blank": "100.3.0-dev",
         "magento/theme-frontend-luma": "100.3.0-dev",
+        "magento/theme-frontend-rush": "100.3.0-dev",
         "magento/language-de_de": "100.3.0-dev",
         "magento/language-en_us": "100.3.0-dev",
         "magento/language-es_es": "100.3.0-dev",

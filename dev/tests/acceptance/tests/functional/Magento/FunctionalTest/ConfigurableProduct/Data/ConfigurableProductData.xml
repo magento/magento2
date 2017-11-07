@@ -8,7 +8,21 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="ConfigurableProductOne" type="configurableProduct">
-        <data key="configurableProductName">data</data>
+    <entity name="BaseConfigurableProduct" type="product">
+        <data key="sku" unique="suffix">configurable</data>
+        <data key="type_id">configurable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">configurable</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">configurableurlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <required-entity type="product_extension_attribute">EavStockItem</required-entity>
+        <required-entity type="custom_attribute_array">CustomAttributeCategoryIds</required-entity>
+    </entity>
+    <entity name="ConfigurableProductAddChild" type="ConfigurableProductAddChild">
+        <var key="sku" entityKey="sku" entityType="product" />
+        <var key="childSku" entityKey="sku" entityType="product"/>
     </entity>
 </config>
