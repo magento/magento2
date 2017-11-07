@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Braintree\Gateway\Helper;
+namespace Magento\Braintree\Gateway;
 
 use Braintree\Transaction;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;

@@ -7,7 +7,7 @@
 namespace Magento\Braintree\Gateway\Command;
 
 use Exception;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Validator\PaymentNonceResponseValidator;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Payment\Gateway\Command\Result\ArrayResultFactory;
