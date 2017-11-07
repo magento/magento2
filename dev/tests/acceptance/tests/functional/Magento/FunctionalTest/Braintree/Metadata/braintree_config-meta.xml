@@ -8,7 +8,7 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
-    <operation name="createBraintreeConfigState" dataType="braintree_config_state" type="create" auth="adminFormKey" url="/admin/system_config/save/section/payment/" method="POST">
+    <operation name="CreateBraintreeConfigState" dataType="braintree_config_state" type="create" auth="adminFormKey" url="/admin/system_config/save/section/payment/" method="POST">
         <object key="groups" dataType="braintree_config_state">
             <object key="braintree_section" dataType="braintree_config_state">
                 <object key="groups" dataType="braintree_config_state">

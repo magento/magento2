@@ -8,7 +8,7 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="StorefrontProductPage" url="admin/catalog/product/view" module="Magento_Catalog">
+    <page name="AdminProductPage" url="admin/catalog/product/view" module="Magento_Catalog">
         <section name="StorefrontProductInfoMainSection" />
         <section name="StorefrontProductInfoDetailsSection" />
         <section name="StorefrontProductImageSection" />
