@@ -10,12 +10,12 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <cest name="SetPaymentConfigurationCest">
         <test name="SetPaypalConfigurationTest">
-            <createData entity="samplePaypalConfig" mergeKey="createSamplePaypalConfig"/>
-            <createData entity="defaultPaypalConfig" mergeKey="restoreDefaultPaypalConfig"/>
+            <createData entity="SamplePaypalConfig" mergeKey="createSamplePaypalConfig"/>
+            <createData entity="DefaultPayPalConfig" mergeKey="restoreDefaultPaypalConfig"/>
         </test>
         <test name="SetBraintreeConfigurationTest">
-            <createData entity="sampleBraintreeConfig" mergeKey="createSampleBraintreeConfig"/>
-            <createData entity="defaultBraintreeConfig" mergeKey="restoreDefaultBraintreeConfig"/>
+            <createData entity="SampleBraintreeConfig" mergeKey="createSampleBraintreeConfig"/>
+            <createData entity="DefaultBraintreeConfig" mergeKey="restoreDefaultBraintreeConfig"/>
         </test>
     </cest>
 </config>
