@@ -62,8 +62,8 @@ class Relation implements RelationInterface
                 $this->shipmentItemResource->save($item);
             }
         }
-        if (null !== $object->getTracks()) {
-            foreach ($object->getTracks() as $track) {
+        if (null !== $object->getTracksCollection()) {
+            foreach ($object->getTracksCollection() as $track) {
                 $track->setParentId($object->getId());
                 $this->shipmentTrackResource->save($track);
             }
