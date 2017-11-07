@@ -1,0 +1,3 @@
+"_website","_email","_entity_id","city","company","country_id","fax","firstname","lastname","middlename","postcode","prefix","region","region_id","street","suffix","telephone","vat_id","vat_is_valid","vat_request_date","vat_request_id","vat_request_success","_address_default_billing_","_address_default_shipping_"
+"base","customer@example.com",1,"Montgivray",,"FR",,"John","Smith",,36400,,"Paris",257,"1 Avenue du Lion d'Argent",,"33254060414",,,,,,1,1
+"test","customer2@example.com",2,"Madrid",,"ES",,"First","Last",,28045,,"Madrid",161,"Calle de Méndez Álvaro, 72",,"34912759224",,,,,,1,1
