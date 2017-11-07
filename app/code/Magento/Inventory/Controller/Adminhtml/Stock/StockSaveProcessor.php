@@ -16,6 +16,7 @@ use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\Framework\EntityManager\EventManager;
 
 /**
  * Save stock processor for save stock controller
@@ -43,21 +44,29 @@ class StockSaveProcessor
     private $dataObjectHelper;
 
     /**
+     * @var EventManager
+     */
+    private $eventManager;
+
+    /**
      * @param StockInterfaceFactory $stockFactory
      * @param StockRepositoryInterface $stockRepository
      * @param StockSourceLinkProcessor $stockSourceLinkProcessor
      * @param DataObjectHelper $dataObjectHelper
+     * @param EventManager $eventManager
      */
     public function __construct(
         StockInterfaceFactory $stockFactory,
         StockRepositoryInterface $stockRepository,
         StockSourceLinkProcessor $stockSourceLinkProcessor,
-        DataObjectHelper $dataObjectHelper
+        DataObjectHelper $dataObjectHelper,
+        EventManager $eventManager
     ) {
         $this->stockFactory = $stockFactory;
         $this->stockRepository = $stockRepository;
         $this->stockSourceLinkProcessor = $stockSourceLinkProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -79,6 +88,13 @@ class StockSaveProcessor
                 $stock = $this->stockRepository->get($stockId);
             }
             $this->dataObjectHelper->populateWithArray($stock, $requestData['general'], StockInterface::class);
+            $this->eventManager->dispatch(
+                'save_stock_controller_populate_stock_with_data',
+                [
+                    'request_data' => $requestData,
+                    'stock' => $stock,
+                ]
+            );
             $stockId = $this->stockRepository->save($stock);
 
             $assignedSources =
