@@ -1,15 +1,18 @@
 {
     "name": "magento/module-msrp",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "magento/module-store": "100.3.*",
+        "magento/framework": "100.3.*",
         "magento/module-catalog": "101.2.*",
         "magento/module-downloadable": "100.3.*",
         "magento/module-eav": "100.3.*",
         "magento/module-grouped-product": "100.3.*",
-        "magento/module-tax": "100.3.*",
-        "magento/framework": "100.3.*"
+        "magento/module-store": "100.3.*",
+        "magento/module-tax": "100.3.*"
     },
     "suggest": {
         "magento/module-bundle": "100.3.*",

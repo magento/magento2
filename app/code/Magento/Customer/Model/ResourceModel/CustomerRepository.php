@@ -237,7 +237,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $savedCustomer = $this->get($customer->getEmail(), $customer->getWebsiteId());
         $this->eventManager->dispatch(
             'customer_save_after_data_object',
-            ['customer_data_object' => $savedCustomer, 'orig_customer_data_object' => $customer]
+            ['customer_data_object' => $savedCustomer, 'orig_customer_data_object' => $prevCustomerData]
         );
         return $savedCustomer;
     }
