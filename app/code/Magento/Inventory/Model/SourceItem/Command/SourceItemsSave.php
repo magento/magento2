@@ -8,9 +8,8 @@ namespace Magento\Inventory\Model\SourceItem\Command;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Validation\ValidationException;
-use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\Inventory\Model\ResourceModel\SourceItem\SaveMultiple;
-use Magento\Inventory\Model\SourceItem\Validator\SourceItemValidatorInterface;
+use Magento\Inventory\Model\SourceItem\Validator\SourceItemsValidator;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Psr\Log\LoggerInterface;
 
@@ -20,9 +19,9 @@ use Psr\Log\LoggerInterface;
 class SourceItemsSave implements SourceItemsSaveInterface
 {
     /**
-     * @var SourceItemValidatorInterface
+     * @var SourceItemsValidator
      */
-    private $sourceItemValidator;
+    private $sourceItemsValidator;
 
     /**
      * @var SaveMultiple
@@ -33,32 +32,24 @@ class SourceItemsSave implements SourceItemsSaveInterface
      * @var LoggerInterface
      */
     private $logger;
-    /**
-     * @var ValidationResultFactory
-     */
-    private $validationResultFactory;
 
     /**
-     * @param ValidationResultFactory $validationResultFactory
-     * @param SourceItemValidatorInterface $sourceItemValidator
+     * @param SourceItemsValidator $sourceItemsValidator
      * @param SaveMultiple $saveMultiple
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ValidationResultFactory $validationResultFactory,
-        SourceItemValidatorInterface $sourceItemValidator,
+        SourceItemsValidator $sourceItemsValidator,
         SaveMultiple $saveMultiple,
         LoggerInterface $logger
     ) {
-        $this->validationResultFactory = $validationResultFactory;
-        $this->sourceItemValidator = $sourceItemValidator;
+        $this->sourceItemsValidator = $sourceItemsValidator;
         $this->saveMultiple = $saveMultiple;
         $this->logger = $logger;
     }
 
     /**
      * @inheritdoc
-     * @throws \Magento\Framework\Validation\ValidationException
      */
     public function execute(array $sourceItems)
     {
@@ -66,18 +57,8 @@ class SourceItemsSave implements SourceItemsSaveInterface
             throw new InputException(__('Input data is empty'));
         }
 
-        // @todo should this be moved because of single responsibility
-        $errors = [];
-        foreach ($sourceItems as $sourceItem) {
-            $validationResult = $this->sourceItemValidator->validate($sourceItem);
-
-            if (!$validationResult->isValid()) {
-                $errors = array_merge($errors, $validationResult->getErrors());
-            }
-        }
-
-        if (count($errors)) {
-            $validationResult = $this->validationResultFactory->create(['errors' => $errors]);
+        $validationResult = $this->sourceItemsValidator->validate($sourceItems);
+        if (!$validationResult->isValid()) {
             throw new ValidationException(__('Validation Failed'), null, 0, $validationResult);
         }
 
