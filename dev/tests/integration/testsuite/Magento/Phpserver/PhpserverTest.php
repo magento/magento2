@@ -17,7 +17,7 @@ namespace Magento\Phpserver;
  */
 class PhpserverTest extends \PHPUnit\Framework\TestCase
 {
-   const BASE_URL = '127.0.0.1:8082';
+    const BASE_URL = '127.0.0.1:8082';
 
     private static $serverPid;
 
