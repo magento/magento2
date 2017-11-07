@@ -29,13 +29,11 @@
                 <testCaseId value="MAGETWO-82551"/>
             </annotations>
             <amOnPage url="{{AdminCategoryPage.url}}" mergeKey="navigateToNewCatalog"/>
-            <waitForPageLoad time="50" mergeKey="wait1"/>
-            <waitForElementVisible selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" time="100" mergeKey="waitForAdd" />
-            <wait time="15" mergeKey="wait2" />
+            <waitForPageLoad mergeKey="wait1"/>
             <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" mergeKey="clickOnAddSubCategory"/>
             <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" mergeKey="enterCategoryName"/>
             <click selector="{{AdminProductFormSection.contentTab}}" mergeKey="clickContentTab"/>
-            <waitForElementVisible selector="{{CatalogWYSIWYGSection.TinyMCE4}}" time="50" mergeKey="waitForTinyMCE4" />
+            <waitForElementVisible selector="{{CatalogWYSIWYGSection.TinyMCE4}}" mergeKey="waitForTinyMCE4" />
             <seeElement selector="{{CatalogWYSIWYGSection.ShowHideBtn}}" mergeKey="seeShowHideBtn" />
             <seeElement selector="{{CatalogWYSIWYGSection.TinyMCE4}}" mergeKey="TinyMCE4" />
             <seeElement selector="{{CatalogWYSIWYGSection.Style}}" mergeKey="assertInfo2"/>
@@ -53,11 +51,10 @@
             <seeElement selector="{{CatalogWYSIWYGSection.SpecialCharacter}}" mergeKey="assertInfo14"/>
             <executeJS function="tinyMCE.get('category_form_description').setContent('Hello World!');" mergeKey="executeJSFillContent"/>
             <click selector="{{CatalogWYSIWYGSection.ShowHideBtn}}" mergeKey="clickShowHideBtn" />
-            <wait time="10" mergeKey="wait3" />
+            <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertImageBtn}}" mergeKey="waitForInsertImage" />
             <seeElement selector="{{CmsWYSIWYGSection.InsertImageBtn}}" mergeKey="insertImage"/>
             <dontSee selector="{{CmsWYSIWYGSection.InsertWidget}}" mergeKey="insertWidget" />
             <dontSee selector="{{CmsWYSIWYGSection.InsertVariable}}" mergeKey="insertVariable" />
-
             <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" mergeKey="saveCatalog"/>
             <!-- Go to storefront product page, assert product content -->
             <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" mergeKey="goToCategoryFrontPage"/>
