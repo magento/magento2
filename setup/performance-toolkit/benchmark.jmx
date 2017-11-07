@@ -1039,8 +1039,8 @@ props.put("category_name", vars.get("category_name"));</stringProp>
       <hashTree/>
     </hashTree>
   
-    <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Retrive configurable products" enabled="true">
-  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/setup/retrive_configurable_products.jmx</stringProp>
+    <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Extract configurable products" enabled="true">
+  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/setup/extract_configurable_products.jmx</stringProp>
 </TestFragmentController>
     <hashTree>
       <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="SetUp - Retrieve configurable products" enabled="true"/>
@@ -1242,8 +1242,8 @@ productList.add(productMap);</stringProp>
       </hashTree>
     </hashTree>
   
-    <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Retrive simple products" enabled="true">
-  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/setup/retrive_simple_products.jmx</stringProp>
+    <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Extract simple products" enabled="true">
+  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/setup/extract_simple_products.jmx</stringProp>
 </TestFragmentController>
     <hashTree>
       <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="SetUp - Retrieve simple products" enabled="true"/>
@@ -1501,8 +1501,8 @@ productList.add(productMap);</stringProp>
       </hashTree>
     </hashTree>
   
-    <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Retrive customers" enabled="true">
-  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/setup/retrive_customers.jmx</stringProp>
+    <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Extract customers" enabled="true">
+  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/setup/extract_customers.jmx</stringProp>
 </TestFragmentController>
     <hashTree>
       <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - Open Customer Grid" enabled="true">
@@ -32240,20 +32240,6 @@ if (testLabel
             <boolProp name="HTTPArgument.always_encode">true</boolProp>
             <stringProp name="Argument.name">export_filter[gift_wrapping_price][]</stringProp>
             <stringProp name="Argument.value">,</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-          </elementProp>
-          <elementProp name="export_filter[giftcard_amounts][]" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.name">export_filter[giftcard_amounts][]</stringProp>
-            <stringProp name="Argument.value">,</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-          </elementProp>
-          <elementProp name="export_filter[giftcard_type]" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.name">export_filter[giftcard_type]</stringProp>
-            <stringProp name="Argument.value"/>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
           </elementProp>
