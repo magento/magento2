@@ -470,6 +470,15 @@
             <argument name="entityRelationComposite" xsi:type="object">CreditmemoRelationsComposite</argument>
         </arguments>
     </type>
+    
+    <virtualType name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedOrderDataProvider" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\Sales\Model\ResourceModel\Provider\UpdatedIdListProvider</item>
+                <item name="updated_at" xsi:type="string">Magento\Sales\Model\ResourceModel\Provider\UpdatedAtListProvider</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
         <arguments>
             <argument name="mainTableName" xsi:type="string">sales_order</argument>
@@ -520,6 +529,7 @@
                 <item name="payment_method" xsi:type="string">sales_order_payment.method</item>
                 <item name="total_refunded" xsi:type="string">sales_order.total_refunded</item>
             </argument>
+            <argument name="notSyncedDataProvider" xsi:type="object">Magento\Sales\Model\ResourceModel\Provider\NotSyncedOrderDataProvider</argument>
         </arguments>
     </virtualType>
     <virtualType name="ShipmentGridAggregator" type="Magento\Sales\Model\ResourceModel\Grid">
