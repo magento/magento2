@@ -31,16 +31,17 @@ module.exports = {
             whiteListFiles = glob.sync(pc.static.whitelist + '*.txt'),
             blackList = this.readFiles(blackListFiles),
             whiteList = this.readFiles(whiteListFiles),
-            files = [];
+            files = [],
+            entireBlackList = [];
+
+        fst.arrayRead(blackList, function (data) {
+            entireBlackList = _.union(entireBlackList, data);
+        });
 
         fst.arrayRead(whiteList, function (data) {
-            fst.arrayRead(blackList, function (blackListData) {
-                console.log(JSON.stringify(data));
-                console.log(JSON.stringify(blackListData));
-                files = _.difference(data, blackListData);
-            });
+            files = _.difference(data, entireBlackList);
         });
-        console.log(JSON.stringify(files));
+
         return files;
     },
 
