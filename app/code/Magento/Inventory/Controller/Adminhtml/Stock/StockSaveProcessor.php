@@ -12,7 +12,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
@@ -77,7 +76,6 @@ class StockSaveProcessor
      *
      * @return int
      * @throws LocalizedException
-     * @throws ValidationException
      */
     public function process($stockId, array $requestData): int
     {
