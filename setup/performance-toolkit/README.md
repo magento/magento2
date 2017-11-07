@@ -236,32 +236,6 @@ By default, the percentage ratio between the thread groups is as follows:
 - Browsing, adding items to cart and checkout as guest (GuestChkt suffix in reports) -  4%
 - Browsing, adding items to cart and checkout as registered customer (CustomerChkt suffix in reports) - 4%
 
-### Results Interpretation
-
-In order to build an aggregate report from the results of the `benchmark.kmx` scenario run, use the script `generate-b2c.php` in the folder `setup/performance-toolkit/aggregate-report`.
-
-The script parses the JTL file and generates an aggregate report in CSV format. The report consists of the following four sections separated by two empty lines:
-
-1. Summary information: Checkouts Per Hour, Page Views Per Hour and Test Duration (in seconds)
-2. Aggregated information about all requests within each thread group (median time, average time, min/max, amount of hits per hour, etc.)
-3. Aggregated information about common requests (open home page, category page, product page, login, etc.) across the entire scenario
-4. List of the requests that weren't executed during the scenario run
-
-Also, the aggregate report can include information about the memory usage for each request type. This requires additional configuration. You should add the following code at the end of `pub/index.php`:
-
-    if (strpos($_SERVER['REQUEST_URI'], '/banner/ajax/load/') === false) {
-        if (!file_exists('../var/log/memory_usage.log')) {
-            file_put_contents('../var/log/memory_usage.log', str_pad('Usage', 12, ' ', STR_PAD_LEFT) . ' ' . str_pad('Real Usage', 12, ' ', STR_PAD_LEFT) . '  URI' . "\n", FILE_APPEND | LOCK_EX);
-        }
-        $result = str_pad(memory_get_peak_usage(), 12, ' ', STR_PAD_LEFT) . ' ' . str_pad(memory_get_peak_usage(true), 12, ' ', STR_PAD_LEFT) . '  ' . $_SERVER['REQUEST_URI'];
-        file_put_contents('../var/log/memory_usage.log', $result . "\n", FILE_APPEND | LOCK_EX);
-    }
-After that, the information about memory usage for each request will be logged in the file `var/log/memory_usage.log`.
-
-To generate the aggregate report, run the following command from the Magento root directory:
-
-    php setup/performance-toolkit/aggregate-report/generate-b2c.php -j {path to folder with JTL file}/jmeter_report.jtl -m var/log/memory_usage.log -o aggregate_report.csv
-
 **Legacy Scenario**
 
 It is convenient to use *Summary Report* for the results analysis. To evaluate the number of each request per hour, use the value in the *Throughput* column.
