@@ -28,6 +28,7 @@ class AssertConfigurableProductPage extends AssertProductPage
     protected function verify()
     {
         $errors = parent::verify();
+        $errors[] = $this->verifyPriceLabel();
         $errors[] = $this->verifyAttributes();
 
         return array_filter($errors);
@@ -135,5 +136,64 @@ class AssertConfigurableProductPage extends AssertProductPage
         }
 
         return $price;
+    }
+
+    /**
+     * Returns highest possible price of a configurable product.
+     *
+     * @return string
+     */
+    protected function getHighestConfigurablePrice()
+    {
+        $price = null;
+
+        $configurableOptions = $this->product->getConfigurableAttributesData();
+
+        foreach ($configurableOptions['matrix'] as $option) {
+            $optionPrice = $option['price'];
+
+            if (isset($option['special_price'])) {
+                $optionPrice = min($optionPrice, $option['special_price']);
+            }
+
+            $price = max($price, $optionPrice);
+        }
+
+        return $price;
+    }
+
+    /**
+     * Verifies displayed product price label on a product page (front-end)
+     * equals passed from the fixture.
+     *
+     * @return string|null
+     */
+    protected function verifyPriceLabel()
+    {
+        /** @var \Magento\ConfigurableProduct\Test\Block\Product\Price $priceBlock */
+        $priceBlock = $this->productView->getPriceBlock();
+
+        $fixtureLowestPrice = $this->getLowestConfigurablePrice();
+        $fixtureHighestPrice = $this->getHighestConfigurablePrice();
+
+        if ($fixtureLowestPrice === $fixtureHighestPrice) {
+            if ($priceBlock->getPriceLabel()->isVisible()) {
+                return "Product price label should not be displayed.";
+            }
+        } else {
+            if (!$priceBlock->getPriceLabel()->isVisible()) {
+                return "Product price label should be displayed.";
+            } else {
+                $expectedPriceLabel = 'As low as';
+                $actualPriceLabel = $priceBlock->getPriceLabel()->getText();
+
+                if ($expectedPriceLabel !== $actualPriceLabel) {
+                    return "Displayed product price label on product page (front-end) not equals passed from fixture. "
+                        . "Actual: {$actualPriceLabel}, expected: {$expectedPriceLabel}.";
+                }
+            }
+        }
+
+        return null;
     }
 }
