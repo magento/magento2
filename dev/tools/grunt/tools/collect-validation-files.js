@@ -42,7 +42,6 @@ module.exports = {
             files = _.difference(data, entireBlackList);
         });
 
-        console.log(JSON.stringify(files));
         return files;
     },
 
