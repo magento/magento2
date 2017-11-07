@@ -17,11 +17,13 @@ namespace Magento\Phpserver;
  */
 class PhpserverTest extends \PHPUnit\Framework\TestCase
 {
-
-    const BASE_URL = '127.0.0.1:8082';
+   const BASE_URL = '127.0.0.1:8082';
 
     private static $serverPid;
 
+    /**
+     * @var \Zend\Http\Client
+     */
     private $httpClient;
 
     /**
@@ -29,9 +31,12 @@ class PhpserverTest extends \PHPUnit\Framework\TestCase
      */
     public static function setUpBeforeClass()
     {
+        if (!(defined('TRAVIS') && TRAVIS === true)) {
+            self::markTestSkipped('Travis environment test');
+        }
         $return = [];
 
-        $baseDir = __DIR__.'/../../../../../../';
+        $baseDir = __DIR__ . '/../../../../../../';
         $command = sprintf(
             'cd %s && php -S %s -t ./pub/ ./phpserver/router.php >/dev/null 2>&1 & echo $!',
             $baseDir,
