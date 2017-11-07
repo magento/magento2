@@ -79,23 +79,22 @@ class ConvertSpecialPriceTest extends TestCase
             'rest' => [
                 'area_code' => Area::AREA_WEBAPI_REST,
                 'input_array' => [
-                    'product' =>
-                        [
-                            'sku' => 'simple',
-                            'name' => 'Simple Product',
-                            'visibility' => 4,
-                            'type_id' => 'simple',
-                            'price' => 3.62,
-                            'status' => 1,
-                            'attribute_set_id' => 4,
-                            'custom_attributes' =>
+                    'product' => [
+                        'sku' => 'simple',
+                        'name' => 'Simple Product',
+                        'visibility' => 4,
+                        'type_id' => 'simple',
+                        'price' => 3.62,
+                        'status' => 1,
+                        'attribute_set_id' => 4,
+                        'custom_attributes' =>
+                            [
                                 [
-                                    [
-                                        'attribute_code' => 'special_price',
-                                        'value' => '',
-                                    ],
+                                    'attribute_code' => 'special_price',
+                                    'value' => '',
                                 ],
-                        ],
+                            ],
+                    ],
                     'sku' => 'simple',
                 ],
             ],
