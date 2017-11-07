@@ -42,12 +42,12 @@ class StatusValidator implements SourceItemValidatorInterface
      */
     public function validate(SourceItemInterface $source): ValidationResult
     {
-        $value = (string)$source->getStatus();
+        $value = $source->getStatus();
 
-        $allowedStatus = array_column($this->sourceItemStatus->toOptionArray(), 'value');
+        $allowedStatuses = array_column($this->sourceItemStatus->toOptionArray(), 'value');
 
         $errors = [];
-        if (!in_array($value, $allowedStatus)) {
+        if (!in_array($value, $allowedStatuses, true)) {
             $errors[] = __(
                 '"%field" should a known status.',
                 ['field' => SourceItemInterface::STATUS]

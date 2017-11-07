@@ -152,7 +152,7 @@ class ValidationTest extends WebapiAbstract
     public function failedValidationDataProvider(): array
     {
         return [
-            'empty_' . SourceItemInterface::SKU => [
+            'null_' . SourceItemInterface::SKU => [
                 SourceItemInterface::SKU,
                 null,
                 [
@@ -214,37 +214,7 @@ class ValidationTest extends WebapiAbstract
             ],
             'null_' . SourceItemInterface::QUANTITY => [
                 SourceItemInterface::QUANTITY,
-                NULL,
-                [
-                    'message' => 'Validation Failed',
-                    'errors' => [
-                        [
-                            'message' => '"%field" should be numeric.',
-                            'parameters' => [
-                                'field' => SourceItemInterface::QUANTITY,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'empty_' . SourceItemInterface::QUANTITY => [
-                SourceItemInterface::QUANTITY,
-                '',
-                [
-                    'message' => 'Validation Failed',
-                    'errors' => [
-                        [
-                            'message' => '"%field" should be numeric.',
-                            'parameters' => [
-                                'field' => SourceItemInterface::QUANTITY,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'string_' . SourceItemInterface::QUANTITY => [
-                SourceItemInterface::QUANTITY,
-                'test',
+                null,
                 [
                     'message' => 'Validation Failed',
                     'errors' => [
@@ -259,7 +229,7 @@ class ValidationTest extends WebapiAbstract
             ],
             'null_' . SourceItemInterface::SOURCE_ID => [
                 SourceItemInterface::SOURCE_ID,
-                NULL,
+                null,
                 [
                     'message' => 'Validation Failed',
                     'errors' => [
@@ -270,36 +240,80 @@ class ValidationTest extends WebapiAbstract
                             ],
                         ],
                     ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param string $field
+     * @param string|null $value
+     * @param array $expectedErrorData
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @dataProvider failedValidationRelatedOnlyForRestDataProvider
+     */
+    public function testFailedValidationOnCreateRelatedOnlyForRest(string $field, $value, array $expectedErrorData)
+    {
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            $this->markTestSkipped(
+                'Test works only for REST adapter because in SOAP one parameters would be converted'
+                . ' into zero (zero is allowed input value)'
+            );
+        }
+
+        $data = $this->validData;
+        $data[$field] = $value;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'Execute',
+            ],
+        ];
+        $this->webApiCall($serviceInfo, $data, $expectedErrorData);
+    }
+
+    /**
+     * @return array
+     */
+    public function failedValidationRelatedOnlyForRestDataProvider(): array
+    {
+        return [
+            'empty_' . SourceItemInterface::QUANTITY => [
+                SourceItemInterface::QUANTITY,
+                '',
+                [
+                    'message' => 'Error occurred during "' . SourceItemInterface::QUANTITY
+                        . '" processing. Invalid type for value: "". Expected Type: "float".',
+                ],
+            ],
+            'string_' . SourceItemInterface::QUANTITY => [
+                SourceItemInterface::QUANTITY,
+                'test',
+                [
+                    'message' => 'Error occurred during "' . SourceItemInterface::QUANTITY
+                        . '" processing. Invalid type for value: "test". Expected Type: "float".',
                 ],
             ],
             'empty_' . SourceItemInterface::SOURCE_ID => [
                 SourceItemInterface::SOURCE_ID,
                 '',
                 [
-                    'message' => 'Validation Failed',
-                    'errors' => [
-                        [
-                            'message' => '"%field" should be numeric.',
-                            'parameters' => [
-                                'field' => SourceItemInterface::SOURCE_ID,
-                            ],
-                        ],
-                    ],
+                    'message' => 'Error occurred during "' . SourceItemInterface::SOURCE_ID
+                        . '" processing. Invalid type for value: "". Expected Type: "int".',
                 ],
             ],
             'array_' . SourceItemInterface::SOURCE_ID => [
                 SourceItemInterface::SOURCE_ID,
                 [],
                 [
-                    'message' => 'Validation Failed',
-                    'errors' => [
-                        [
-                            'message' => '"%field" should be numeric.',
-                            'parameters' => [
-                                'field' => SourceItemInterface::SOURCE_ID,
-                            ],
-                        ],
-                    ],
+                    'message' => 'Error occurred during "' . SourceItemInterface::SOURCE_ID
+                        . '" processing. Invalid type for value: "array". Expected Type: "int".',
                 ],
             ],
         ];
@@ -331,7 +345,13 @@ class ValidationTest extends WebapiAbstract
                         'params' => $error['parameters'],
                     ];
                 }
-                $this->checkSoapFault($exception, $expectedErrorData['message'], 'env:Sender', [], $expectedWrappedErrors);
+                $this->checkSoapFault(
+                    $exception,
+                    $expectedErrorData['message'],
+                    'env:Sender',
+                    [],
+                    $expectedWrappedErrors
+                );
             } else {
                 throw $exception;
             }

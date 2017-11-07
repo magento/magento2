@@ -25,7 +25,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Inventory\Model\SourceItem\Validator\SourceItemsValidator">
+    <type name="Magento\Inventory\Model\Source\Command\Save">
         <arguments>
             <argument name="sourceValidator" xsi:type="object">Magento\Inventory\Model\Source\Validator\ValidatorChain</argument>
         </arguments>
@@ -48,7 +48,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Inventory\Model\SourceItem\Command\SourceItemsSave">
+    <type name="Magento\Inventory\Model\SourceItem\Validator\SourceItemsValidator">
         <arguments>
             <argument name="sourceItemValidator" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\ValidatorChain</argument>
         </arguments>
