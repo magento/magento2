@@ -29,16 +29,4 @@ class Denied extends \Magento\Backend\Block\Template
         $this->_authSession = $authSession;
         parent::__construct($context, $data);
     }
-
-    /**
-     * @return bool
-     */
-    public function hasAvailableResources()
-    {
-        $user = $this->_authSession->getUser();
-        if ($user && $user->getHasAvailableResources()) {
-            return true;
-        }
-        return false;
-    }
 }
