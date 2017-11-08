@@ -38,6 +38,8 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
      * @param LinkedProductSelectBuilderInterface $linkedProductSelectBuilder
      * @param CollectionFactory $collectionFactory
      * @param OptionsCollectionProvider|null $optionsCollectionProvider
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ResourceConnection $resourceConnection,

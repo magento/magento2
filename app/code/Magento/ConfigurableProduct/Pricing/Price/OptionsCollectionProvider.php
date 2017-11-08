@@ -45,10 +45,8 @@ class OptionsCollectionProvider
      *
      * @return Collection
      */
-    public function getCollection(
-        array $linkedProductSelects,
-        array $attributesToSelect = ['price', 'special_price']
-    ) {
+    public function getCollection(array $linkedProductSelects, array $attributesToSelect = ['price', 'special_price'])
+    {
         $productIds = $this->resource->getConnection()->fetchCol(
             '(' . implode(') UNION (', $linkedProductSelects) . ')'
         );
