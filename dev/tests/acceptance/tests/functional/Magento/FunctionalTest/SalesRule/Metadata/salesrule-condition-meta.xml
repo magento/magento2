@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateSaleRuleCondition" dataType="salesrule_condition" type="create">
+        <field key="condition_type" required="true">string</field>
+        <array key="conditions" required="true">
+            <value>salesrule_condition</value>
+        </array>
+        <field key="aggregator_type" required="true">string</field>
+        <field key="operator" required="true">string</field>
+        <field key="attribute_name" required="true">string</field>
+        <field key="value" required="true">mixed</field>
+        <field key="extension_attributes">empty_extension_attribute</field>
+    </operation>
+
+    <operation name="UpdateSaleRuleCondition" dataType="salesrule_condition" type="update">
+        <field key="condition_type">string</field>
+        <array key="conditions">
+            <value>salesrule_condition</value>
+        </array>
+        <field key="aggregator_type">string</field>
+        <field key="operator">string</field>
+        <field key="attribute_name">string</field>
+        <field key="value">mixed</field>
+        <field key="extension_attributes">empty_extension_attribute</field>
+    </operation>
+</config>

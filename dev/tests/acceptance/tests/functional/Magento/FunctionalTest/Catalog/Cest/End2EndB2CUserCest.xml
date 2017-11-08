@@ -18,6 +18,7 @@
             <env value="phantomjs"/>
         </annotations>
         <before>
+            <resetCookie userInput="PHPSESSID" mergeKey="resetCookieForCart"/>
             <createData entity="_defaultCategory" mergeKey="createCategory"/>
             <createData entity="_defaultProduct" mergeKey="createSimpleProduct1">
                 <required-entity persistedKey="createCategory"/>
@@ -25,15 +26,23 @@
             <createData entity="_defaultProduct" mergeKey="createSimpleProduct2">
                 <required-entity persistedKey="createCategory"/>
             </createData>
-            <!--<createData entity="ConfigurableProductOne" mergeKey="createConfigurableProduct">-->
-                <!--<required-entity persistedKey="createCategory"/>-->
-            <!--</createData>-->
+            <createData entity="_defaultCategory" mergeKey="createCategory1"/>
+            <createData entity="_defaultProduct" mergeKey="createSimpleProduct11">
+                <required-entity persistedKey="createCategory1"/>
+            </createData>
+            <createData entity="_defaultSalesRule" mergeKey="createSalesRule"/>
+            <createData entity="_defaultSalesRuleCoupon" mergeKey="createSalesRuleCoupon">
+                <required-entity persistedKey="createSalesRule"/>
+            </createData>
+
         </before>
         <after>
             <deleteData createDataKey="createCategory" mergeKey="deleteCategory"/>
+            <deleteData createDataKey="createCategory1" mergeKey="deleteCategory1"/>
             <deleteData createDataKey="createSimpleProduct1" mergeKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createSimpleProduct2" mergeKey="deleteSimpleProduct2"/>
-            <!--<deleteData createDataKey="createConfigurableProduct" mergeKey="deleteConfigurableProduct"/>-->
+            <deleteData createDataKey="createSimpleProduct11" mergeKey="deleteSimpleProduct11"/>
+            <deleteData createDataKey="createSalesRule" mergeKey="deleteSalesRule"/>
         </after>
         <test name="End2EndB2CUser">
             <annotations>
@@ -90,6 +99,7 @@
             <seeInTitle userInput="Search results for: 'testProductName'" mergeKey="searchAssertQuickSearchTitleCommonPart"/>
             <see userInput="Search results for: 'testProductName'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" mergeKey="searchAssertQuickSearchNameCommonPart"/>
             <click selector="{{StorefrontCategoryFilterSection.CategoryFilter}}" mergeKey="searchClickCategoryFilterTitleCommonPart" />
+            <scrollTo selector="{{StorefrontCategoryFilterSection.CategoryByName($$createCategory.name$$)}}" mergeKey="searchScrollToClickCategoryFilterCommonPart"/>
             <click selector="{{StorefrontCategoryFilterSection.CategoryByName($$createCategory.name$$)}}" mergeKey="searchClickCategoryFilterCommonPart" />
             <see userInput="2" selector="{{StorefrontCategoryMainSection.productCount}} span" mergeKey="searchAssertCategoryProductCount"/>
             <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" mergeKey="searchAssertCategorySimpleProduct1Name"/>
@@ -107,15 +117,92 @@
             <see userInput="Search results for: 'nonexistent$$createSimpleProduct1.name$$nonexistent'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" mergeKey="searchAssertQuickSearchNameNonExistent"/>
             <see userInput="Your search returned no results." selector="{{StorefrontQuickSearchMainSection.message}}" mergeKey="searchAssertQuickSearchMessageNonExistent"/>
 
-            <!-- Step 3 -->
+            <!-- Step 3: User adds products to cart -->
             <!-- Add Simple Product 1 to cart -->
             <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" mergeKey="cartClickCategory" />
             <click selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" mergeKey="cartClickSimpleProduct1"/>
             <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" mergeKey="cartClickAddSimpleProduct1ToCart" />
+            <waitForElement selector="{{StorefrontMessageSection.message('You added $$createSimpleProduct1.name$$ to your shopping cart.')}}" time="30" mergeKey="cartMessageSimpleProduct1AddedToCart"/>
+
             <!-- Add Simple Product 2 to cart -->
             <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" mergeKey="cartClickCategory1" />
             <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('2')}}" mergeKey="cartMoveMouseOverSimpleProduct2" />
             <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByNumber('2')}}" mergeKey="cartClickAddSimpleProduct2ToCart" />
+            <waitForElement selector="{{StorefrontMessageSection.message('You added $$createSimpleProduct2.name$$ to your shopping cart.')}}" time="30" mergeKey="cartMessageSimpleProduct2AddedToCart"/>
+
+            <!-- Check products in minicart -->
+            <waitForElement selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" mergeKey="cartWaitForMinicartSimpleProduct1" />
+            <click selector="{{StorefrontMinicartSection.ShowCart}}" mergeKey="cartClickShowMinicart" />
+            <click selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" mergeKey="cartClickMinicartSimpleProduct1" />
+            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="cartAssertMinicartSimpleProduct1Name"/>
+            <waitForElement selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" mergeKey="cartWaitForMinicartSimpleProduct2" />
+            <click selector="{{StorefrontMinicartSection.ShowCart}}" mergeKey="cartClickShowMinicart1" />
+            <click selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" mergeKey="cartClickMinicartSimpleProduct2" />
+            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="cartAssertMinicartSimpleProduct2Name"/>
+
+            <!-- Check products in cart -->
+            <amOnPage url="{{CheckoutCartPage}}" mergeKey="cartOnCheckoutCart"/>
+            <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" mergeKey="cartAssertCartSimpleProduct1Name"/>
+            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{CheckoutCartProductSection.ProductPriceByName($$createSimpleProduct1.name$$)}}" mergeKey="cartAssertCartSimpleProduct1Price"/>
+            <seeInField userInput="1" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct1.name$$)}}" mergeKey="cartAssertCartSimpleProduct1Quantity"/>
+            <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" mergeKey="cartClickCartSimpleProduct1" />
+            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="cartAssertAfterCartSimpleProduct1Name"/>
+            <waitForElement selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" mergeKey="cartWaitForMinicartSimpleProduct21" />
+            <click selector="{{StorefrontMinicartSection.ShowCart}}" mergeKey="cartClickShowMinicart2" />
+            <click selector="{{StorefrontMinicartSection.ViewAndEditCart}}" mergeKey="cartClickViewAndEditCart" />
+            <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" mergeKey="cartAssertCartSimpleProduct2Name"/>
+            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{CheckoutCartProductSection.ProductPriceByName($$createSimpleProduct2.name$$)}}" mergeKey="cartAssertCartSimpleProduct2Price"/>
+            <seeInField userInput="1" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct2.name$$)}}" mergeKey="cartAssertCartSimpleProduct2Quantity"/>
+            <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" mergeKey="cartClickCartSimpleProduct2" />
+            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="cartAssertAfterCartSimpleProduct2Name"/>
+
+            <!-- Step 4: User compares products -->
+            <!-- Add Simple Product 1 to comparison -->
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" mergeKey="compareClickCategory"/>
+            <click selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" mergeKey="compareClickSimpleProduct1"/>
+            <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" mergeKey="compareScrollToAddSimpleProduct1ToCompare"/>
+            <click selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" mergeKey="compareClickAddSimpleProduct1ToCompare"/>
+            <waitForElement selector="{{StorefrontMessageSection.message('You added product $$createSimpleProduct1.name$$ to the comparison list.')}}" time="30" mergeKey="compareMessageSimpleProduct1AddedToCompare"/>
+
+            <!-- Add Simple Product 2 to comparison -->
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" mergeKey="compareClickCategory1" />
+            <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('2')}}" mergeKey="compareMoveMouseOverSimpleProduct2" />
+            <click selector="{{StorefrontCategoryProductSection.ProductAddToCompareByNumber('2')}}" mergeKey="compareClickAddSimpleProduct2ToCompare"/>
+            <waitForElement selector="{{StorefrontMessageSection.message('You added product $$createSimpleProduct2.name$$ to the comparison list.')}}" time="30" mergeKey="compareMessageSimpleProduct2AddedToCompare"/>
+
+            <!-- Check products in comparison sidebar -->
+            <waitForElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" mergeKey="compareSimpleProduct1InSidebar"/>
+            <waitForElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" mergeKey="compareSimpleProduct2InSidebar"/>
+
+            <!-- Check products on comparison page -->
+            <click selector="{{StorefrontComparisonSidebarSection.Compare}}" mergeKey="compareClickCompare"/>
+            <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" mergeKey="compareAssertCompareSimpleProduct1Name"/>
+            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName($$createSimpleProduct1.name$$)}}" mergeKey="compareAssertCompareSimpleProduct1Price"/>
+            <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" mergeKey="compareAssertCompareSimpleProduct2Name"/>
+            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName($$createSimpleProduct2.name$$)}}" mergeKey="compareAssertCompareSimpleProduct2Price"/>
+
+            <!-- Clear comparison sidebar -->
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" mergeKey="compareClickCategoryBeforeClear"/>
+            <waitForElementVisible selector="{{StorefrontComparisonSidebarSection.ClearAll}}" time="30" mergeKey="compareWaitForClearAll"/>
+            <click selector="{{StorefrontComparisonSidebarSection.ClearAll}}" mergeKey="compareClickClearAll"/>
+            <waitForPageLoad mergeKey="compareWaitForPageClearOk"/>
+            <waitForElement selector="{{ModalConfirmationSection.OkButton}}" time="30" mergeKey="compareWaitForClearOk"/>
+            <scrollTo selector="{{ModalConfirmationSection.OkButton}}" mergeKey="compareClickClearOk"/>
+            <click selector="{{ModalConfirmationSection.OkButton}}" mergeKey="compareClickClearOk"/>
+            <waitForElement selector="{{StorefrontMessageSection.message('You cleared the comparison list.')}}" time="30" mergeKey="compareMessageCleared"/>
+            <waitForElement selector="{{StorefrontComparisonSidebarSection.NoItemsMessage}}" time="30" mergeKey="compareNoItems"/>
+
+            <!-- Step 5: User uses coupon codes -->
+            <amOnPage url="{{CheckoutCartPage}}" mergeKey="couponOnCartPage"/>
+            <click selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" mergeKey="couponClickCouponHeader" />
+            <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" mergeKey="couponWaitForCouponField" />
+            <fillField userInput="$$createSalesRuleCoupon.code$$" selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" mergeKey="couponFillCouponField"/>
+            <click selector="{{StorefrontSalesRuleCartCouponSection.applyButton}}" mergeKey="couponClickApplyButton"/>
+            <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.discountTotal}}" mergeKey="couponWaitForDiscountTotal" />
+            <!--<see userInput="$$createSalesRule.store_labels[0]['store_label']$$" selector="{{StorefrontSalesRuleCartCouponSection.discountLabel}}" mergeKey="couponAssertDiscountLabel" />-->
+            <see userInput="-$24.60" selector="{{StorefrontSalesRuleCartCouponSection.discountTotal}}" mergeKey="couponAssertDiscountTotal" />
+
+
 
         </test>
     </cest>

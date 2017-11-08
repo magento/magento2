@@ -16,5 +16,7 @@
         
         <element name="productAttributeTitle1" type="text" selector="#product-options-wrapper div[tabindex='0'] label"/>
         <element name="productAttributeOptions1" type="select" selector="#product-options-wrapper div[tabindex='0'] option"/>
+
+        <element name="productAddToCompare" type="button" selector="a.action.tocompare"/>
     </section>
 </config>

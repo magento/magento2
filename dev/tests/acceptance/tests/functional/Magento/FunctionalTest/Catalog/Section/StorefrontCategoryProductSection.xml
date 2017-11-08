@@ -12,5 +12,6 @@
         <element name="ProductTitleByNumber" type="button" selector="//main//li[{{var1}}]//a[@class='product-item-link']" parameterized="true"/>
         <element name="ProductPriceByNumber" type="text" selector="//main//li[{{var1}}]//span[@class='price']" parameterized="true"/>
         <element name="ProductInfoByNumber" type="text" selector="//main//li[{{var1}}]//div[@class='product-item-info']" parameterized="true"/>
+        <element name="ProductAddToCompareByNumber" type="text" selector="//main//li[{{var1}}]//a[contains(@class, 'tocompare')]" parameterized="true"/>
     </section>
 </config>

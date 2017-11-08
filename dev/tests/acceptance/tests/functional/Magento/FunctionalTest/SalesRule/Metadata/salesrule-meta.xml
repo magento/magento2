@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <!-- TODO: Change dataType to salesrule after MQE-467 is fixed -->
+    <operation name="CreateSaleRule" dataType="rule" type="create" auth="adminOauth" url="/V1/salesRules" method="POST">
+        <contentType>application/json</contentType>
+        <object key="rule" dataType="rule">
+            <field key="rule_id">integer</field>
+            <field key="name" required="true">string</field>
+            <array key="store_labels">
+                <value>salesrule_label</value>
+            </array>
+            <field key="description" required="true">string</field>
+            <array key="website_ids" required="true">
+                <value>integer</value>
+            </array>
+            <array key="customer_group_ids" required="true">
+                <value>integer</value>
+            </array>
+            <field key="from_date">string</field>
+            <field key="to_date">string</field>
+            <field key="uses_per_customer" required="true">integer</field>
+            <field key="is_active" required="true">boolean</field>
+            <field key="condition">salesrule_condition</field>
+            <field key="action_condition">salesrule_condition</field>
+            <field key="stop_rules_processing" required="true">boolean</field>
+            <array key="product_ids">
+                <value>integer</value>
+            </array>
+            <field key="sort_order" required="true">integer</field>
+            <field key="simple_action" required="true">string</field>
+            <!-- TODO: change to float after MQE-469 is fixed -->
+            <field key="discount_amount" required="true">double</field>
+            <!-- TODO: change to float after MQE-469 is fixed -->
+            <field key="discount_qty" required="true">double</field>
+            <field key="discount_step" required="true">integer</field>
+            <field key="apply_to_shipping" required="true">boolean</field>
+            <field key="times_used" required="true">integer</field>
+            <field key="is_rss" required="true">boolean</field>
+            <field key="coupon_type" required="true">string</field>
+            <field key="use_auto_generation" required="true">boolean</field>
+            <field key="uses_per_coupon" required="true">integer</field>
+            <field key="simple_free_shipping" required="true">string</field>
+            <field key="extension_attributes">empty_extension_attribute</field>
+        </object>
+    </operation>
+
+    <!-- TODO: Change dataType to salesrule after MQE-467 is fixed -->
+    <operation name="UpdateSaleRule" dataType="rule" type="update" auth="adminOauth" url="/V1/salesRules" method="PUT">
+        <contentType>application/json</contentType>
+        <object key="rule" dataType="rule">
+            <field key="rule_id" required="true">integer</field>
+            <field key="name" required="true">string</field>
+            <array key="store_labels">
+                <value>salesrule_label</value>
+            </array>
+            <field key="description" required="true">string</field>
+            <array key="website_ids" required="true">
+                <value>integer</value>
+            </array>
+            <array key="customer_group_ids" required="true">
+                <value>integer</value>
+            </array>
+            <field key="from_date">string</field>
+            <field key="to_date">string</field>
+            <field key="uses_per_customer" required="true">integer</field>
+            <field key="is_active" required="true">boolean</field>
+            <field key="condition">salesrule_condition</field>
+            <field key="action_condition">salesrule_condition</field>
+            <field key="stop_rules_processing" required="true">boolean</field>
+            <array key="product_ids">
+                <value>integer</value>
+            </array>
+            <field key="sort_order" required="true">integer</field>
+            <field key="simple_action" required="true">string</field>
+            <!-- TODO: change to float after MQE-469 is fixed -->
+            <field key="discount_amount" required="true">double</field>
+            <!-- TODO: change to float after MQE-469 is fixed -->
+            <field key="discount_qty" required="true">double</field>
+            <field key="discount_step" required="true">integer</field>
+            <field key="apply_to_shipping" required="true">boolean</field>
+            <field key="times_used" required="true">integer</field>
+            <field key="is_rss" required="true">boolean</field>
+            <field key="coupon_type" required="true">string</field>
+            <field key="use_auto_generation" required="true">boolean</field>
+            <field key="uses_per_coupon" required="true">integer</field>
+            <field key="simple_free_shipping" required="true">string</field>
+            <field key="extension_attributes">empty_extension_attribute</field>
+        </object>
+    </operation>
+
+    <!-- TODO: Change dataType to salesrule after MQE-467 is fixed -->
+    <operation name="DeleteSaleRule" dataType="rule" type="delete" auth="adminOauth" url="/V1/salesRules" method="DELETE">
+        <contentType>application/json</contentType>
+        <param key="rule_id" type="path">{rule_id}</param>
+    </operation>
+</config>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="StorefrontProductCompareMainSection">
+        <element name="ProductLinkByName" type="button" selector="//*[@id='product-comparison']//tr//strong[@class='product-item-name']/a[contains(text(), '{{var1}}')]" parameterized="true"/>
+        <element name="ProductPriceByName" type="text" selector="//*[@id='product-comparison']//td[.//strong[@class='product-item-name']/a[contains(text(), '{{var1}}')]]//span[@class='price']" parameterized="true"/>
+    </section>
+</config>

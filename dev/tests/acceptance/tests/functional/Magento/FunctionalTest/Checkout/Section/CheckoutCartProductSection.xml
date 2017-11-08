@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+    <section name="CheckoutCartProductSection">
+        <element name="ProductLinkByName" type="button"
+                 selector="//main//table[@id='shopping-cart-table']//tbody//tr//strong[contains(@class, 'product-item-name')]//a[contains(text(), '{{var1}}')]"
+                 parameterized="true"/>
+        <element name="ProductPriceByName" type="text"
+                 selector="//main//table[@id='shopping-cart-table']//tbody//tr[..//strong[contains(@class, 'product-item-name')]//a/text()='{{var1}}'][1]//td[contains(@class, 'price')]//span[@class='price']"
+                 parameterized="true"/>
+        <element name="ProductQuantityByName" type="input"
+                 selector="//main//table[@id='shopping-cart-table']//tbody//tr[..//strong[contains(@class, 'product-item-name')]//a/text()='{{var1}}'][1]//td[contains(@class, 'qty')]//input[contains(@class, 'qty')]"
+                 parameterized="true"/>
+    </section>
+</config>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateSaleRuleLabel" dataType="salesrule_label" type="create">
+        <field key="store_id" required="true">integer</field>
+        <field key="store_label" required="true">string</field>
+        <field key="extension_attributes">empty_extension_attribute</field>
+    </operation>
+
+    <operation name="UpdateSaleRuleLabel" dataType="salesrule_label" type="update">
+        <field key="store_id">integer</field>
+        <field key="store_label">string</field>
+        <field key="extension_attributes">empty_extension_attribute</field>
+    </operation>
+</config>
