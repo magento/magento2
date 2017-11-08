@@ -6,7 +6,6 @@
 
 namespace Magento\GraphQl\Model\Type;
 
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -32,13 +31,13 @@ class HandlerFactory
      *
      * @param string $typeClassName
      * @return HandlerInterface
-     * @throws InputException
+     * @throws \LogicException
      */
     public function create($typeClassName)
     {
         $typeHandlerClass = $this->objectManager->create($typeClassName);
         if (!($typeHandlerClass instanceof HandlerInterface)) {
-            throw new InputException(__('Invalid type name. Type handler does not exist.'));
+            throw new \LogicException(__('Invalid type name. Type handler does not exist.'));
         }
 
         return $typeHandlerClass;
