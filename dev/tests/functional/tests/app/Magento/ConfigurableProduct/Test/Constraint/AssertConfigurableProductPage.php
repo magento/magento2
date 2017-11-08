@@ -171,7 +171,7 @@ class AssertConfigurableProductPage extends AssertProductPage
     protected function verifyPriceLabel()
     {
         /** @var \Magento\ConfigurableProduct\Test\Block\Product\Price $priceBlock */
-        $priceBlock = $this->productView->getPriceBlock();
+        $priceBlock = $this->productView->getPriceBlock($this->product);
 
         $fixtureLowestPrice = $this->getLowestConfigurablePrice();
         $fixtureHighestPrice = $this->getHighestConfigurablePrice();
