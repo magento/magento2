@@ -6,10 +6,12 @@
 
 namespace Magento\GraphQl\Controller;
 
-use GraphQL\Error\FormattedError;
+use \GraphQL\Error\FormattedError;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\Response;
 use Magento\GraphQl\Model\SchemaGeneratorInterface;
 
@@ -29,17 +31,23 @@ class GraphQl implements FrontControllerInterface
     private $schemaGenerator;
 
     /**
-     * Initialize dependencies
-     *
+     * @var SerializerInterface
+     */
+    private $jsonSerializer;
+
+    /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
+     * @param SerializerInterface $jsonSerializer
      */
     public function __construct(
         Response $response,
-        SchemaGeneratorInterface $schemaGenerator
+        SchemaGeneratorInterface $schemaGenerator,
+        SerializerInterface $jsonSerializer
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
+        $this->jsonSerializer = $jsonSerializer;
     }
 
     /**
@@ -54,10 +62,10 @@ class GraphQl implements FrontControllerInterface
             if ($request->getHeader('Content-Type')
                 && strpos($request->getHeader('Content-Type'), 'application/json') !== false
             ) {
-                $raw = file_get_contents('php://input') ?: '';
-                $data = json_decode($raw, true);
+                $content = $request->getContent();
+                $data = $this->jsonSerializer->unserialize($content);
             } else {
-                $data = $_REQUEST;
+                throw new LocalizedException(__('Request content type must be application/json'));
             }
             $schema = $this->schemaGenerator->generate();
             $result = \GraphQL\GraphQL::execute(
@@ -71,7 +79,10 @@ class GraphQl implements FrontControllerInterface
             $result['extensions']['exception'] = FormattedError::createFromException($error);
             $this->response->setStatusCode(500);
         }
-        $this->response->setBody(json_encode($result))->setHeader('Content-Type', 'application/json');
+        $this->response->setBody($this->jsonSerializer->serialize($result))->setHeader(
+            'Content-Type',
+            'application/json'
+        );
         return $this->response;
     }
 }

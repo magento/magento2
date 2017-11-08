@@ -8,12 +8,16 @@ namespace Magento\GraphQl\Model\Resolver;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
+use \GraphQL\Type\Definition\ResolveInfo;
+use Magento\GraphQl\Model\ResolverInterface;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Product field resolver, used for GraphQL request processing.
  */
-class Product
+class Product implements ResolverInterface
 {
     /**
      * @var ProductRepositoryInterface
@@ -31,20 +35,40 @@ class Product
     private $mediaGalleryResolver;
 
     /**
-     * Initialize dependencies
-     *
+     * @var SerializerInterface
+     */
+    private $jsonSerializer;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param ServiceOutputProcessor $serviceOutputProcessor
      * @param MediaGalleryEntries $mediaGalleryResolver
+     * @param SerializerInterface $jsonSerializer
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         ServiceOutputProcessor $serviceOutputProcessor,
-        MediaGalleryEntries $mediaGalleryResolver
+        MediaGalleryEntries $mediaGalleryResolver,
+        SerializerInterface $jsonSerializer
     ) {
         $this->productRepository = $productRepository;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->mediaGalleryResolver = $mediaGalleryResolver;
+        $this->jsonSerializer = $jsonSerializer;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resolve(array $args, ResolveInfo $info)
+    {
+        if (isset($args['sku'])) {
+            return $this->getProduct($args['sku']);
+        } elseif (isset($args['id'])) {
+            return $this->getProductById($args['id']);
+        }
+
+        throw new InputException(__('Missing arguments for correct type resolution.'));
     }
 
     /**
@@ -94,16 +118,20 @@ class Product
             ProductRepositoryInterface::class,
             'get'
         );
-        $product = array_merge($product, $product['extension_attributes']);
+        if (isset($product['extension_attributes'])) {
+            $product = array_merge($product, $product['extension_attributes']);
+        }
+        $customAttributes = [];
         if (isset($product['custom_attributes'])) {
-            $customAttributes = [];
             foreach ($product['custom_attributes'] as $attribute) {
                 $isArray = false;
                 if (is_array($attribute['value'])) {
                     $isArray = true;
                     foreach ($attribute['value'] as $attributeValue) {
                         if (is_array($attributeValue)) {
-                            $customAttributes[$attribute['attribute_code']] = json_encode($attribute['value']);
+                            $customAttributes[$attribute['attribute_code']] = $this->jsonSerializer->serialize(
+                                $attribute['value']
+                            );
                             continue;
                         }
                         $customAttributes[$attribute['attribute_code']] = implode(',', $attribute['value']);
