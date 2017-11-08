@@ -5,6 +5,9 @@
  */
 namespace Magento\GraphQl\Model\GraphQl;
 
+/**
+ * Class Operator
+ */
 class Operator
 {
     /**

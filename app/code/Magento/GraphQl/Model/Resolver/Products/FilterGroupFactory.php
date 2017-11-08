@@ -10,19 +10,21 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Magento\GraphQl\Model\GraphQl\Clause;
 use Magento\GraphQl\Model\GraphQl\Connective;
 use Magento\GraphQl\Model\GraphQl\Operator;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
 
 /**
- * Product field resolver, used for GraphQL request processing.
+ * Class FilterGroupFactory
  */
 class FilterGroupFactory
 {
-    /** @var \Magento\Framework\Api\FilterBuilder */
+    /** @var FilterBuilder */
     private $filterBuilder;
 
-    /** @var \Magento\Framework\Api\Search\FilterGroupBuilder */
+    /** @var FilterGroupBuilder */
     private $filterGroupBuilder;
 
-    /** @var \Magento\GraphQl\Model\Resolver\Products\ProductFilterResolver */
+    /** @var ProductFilterResolver */
     private $filterResolver;
 
     /**
@@ -41,7 +43,7 @@ class FilterGroupFactory
     }
 
     /**
-     * Creates a filter groups from an AST
+     * Create a filter groups from an AST
      *
      * @param ResolveInfo $info
      * @return \Magento\Framework\Api\Search\FilterGroup[]
@@ -88,7 +90,7 @@ class FilterGroupFactory
     }
 
     /**
-     * Processes an AST Connective
+     * Process an AST Connective
      *
      * @param Connective $connective
      * @return \Magento\Framework\Api\Search\FilterGroup
@@ -114,7 +116,7 @@ class FilterGroupFactory
     }
 
     /**
-     * Processes an AST Clause
+     * Process an AST Clause
      *
      * @param Clause $clause
      * @return \Magento\Framework\Api\Search\FilterGroup

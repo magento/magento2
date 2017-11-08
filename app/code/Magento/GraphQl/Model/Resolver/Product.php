@@ -72,7 +72,7 @@ class Product implements ResolverInterface
     }
 
     /**
-     * Resolves product by Sku
+     * Resolve product by Sku
      *
      * @param string $sku
      * @return array|null
@@ -89,7 +89,7 @@ class Product implements ResolverInterface
     }
 
     /**
-     * Resolves product by Id
+     * Resolve product by Id
      *
      * @param int $productId
      * @return array|null

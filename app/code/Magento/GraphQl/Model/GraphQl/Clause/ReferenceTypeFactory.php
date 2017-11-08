@@ -27,7 +27,7 @@ class ReferenceTypeFactory
     }
 
     /**
-     * Creates a ReferenceType
+     * Create ReferenceType
      *
      * @param string $entityType
      * @param string|null $linkField

@@ -17,7 +17,7 @@ use Magento\GraphQl\Model\GraphQl\Connective;
 use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
 
 /**
- * Class Product FilterResolver
+ * Product field resolver, used for GraphQL request processing
  */
 class ProductFilterResolver
 {
@@ -68,7 +68,7 @@ class ProductFilterResolver
     }
 
     /**
-     * Gets a clause from an AST
+     * Get a clause from an AST
      *
      * @param ReferenceType $referenceType
      * @param NodeList $nodeList
@@ -109,7 +109,7 @@ class ProductFilterResolver
     }
 
     /**
-     * Gets the fields from catalog product
+     * Get the fields from catalog product
      *
      * @return array
      */
@@ -135,7 +135,7 @@ class ProductFilterResolver
     }
 
     /**
-     * Gets a connective filter from an AST
+     * Get a connective filter from an AST
      *
      * @param string $entityType
      * @param SelectionNode $node

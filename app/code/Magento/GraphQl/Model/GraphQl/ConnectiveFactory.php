@@ -26,7 +26,7 @@ class ConnectiveFactory
         $this->objectManager = $objectManager;
     }
     /**
-     * Creates a connective class
+     * Create a connective class
      *
      * @param array $conditions
      * @param string|null $operator

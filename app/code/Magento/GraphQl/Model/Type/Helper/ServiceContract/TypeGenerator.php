@@ -59,7 +59,7 @@ class TypeGenerator
     }
 
     /**
-     * Converts service contract data schema array to ObjectType
+     * Convert service contract data schema array to ObjectType
      *
      * Format of input array should be [
      *     'NameOfType' => [

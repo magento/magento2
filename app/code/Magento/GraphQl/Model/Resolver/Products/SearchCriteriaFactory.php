@@ -9,15 +9,16 @@ namespace Magento\GraphQl\Model\Resolver\Products;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use GraphQL\Type\Definition\ResolveInfo;
+use Magento\Framework\Api\SearchCriteriaInterfaceFactory;
 
 /**
- * Product field resolver, used for GraphQL request processing.
+ * Create a search criteria from AST.
  */
 class SearchCriteriaFactory
 {
     const DEFAULT_PAGE_SIZE = 20;
 
-    /** @var \Magento\Framework\Api\SearchCriteriaInterfaceFactory */
+    /** @var SearchCriteriaInterfaceFactory */
     private $searchCriteriaFactory;
 
     /** @var SortOrderBuilder */
@@ -42,7 +43,7 @@ class SearchCriteriaFactory
     }
 
     /**
-     * Creates a search criteria from an AST
+     * Create a search criteria from an AST method
      *
      * @param ResolveInfo $info
      * @return \Magento\Framework\Api\SearchCriteriaInterface

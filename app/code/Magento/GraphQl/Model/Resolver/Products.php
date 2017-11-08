@@ -9,9 +9,10 @@ namespace Magento\GraphQl\Model\Resolver;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use GraphQL\Type\Definition\ResolveInfo;
 use Magento\GraphQl\Model\ResolverInterface;
+use Magento\GraphQl\Model\Resolver\Products\SearchCriteriaFactory;
 
 /**
- * Product field resolver, used for GraphQL request processing.
+ * Products field resolver, used for GraphQL request processing.
  */
 class Products implements ResolverInterface
 {
@@ -20,7 +21,7 @@ class Products implements ResolverInterface
      */
     private $productRepository;
 
-    /** @var \Magento\GraphQl\Model\Resolver\Products\SearchCriteriaFactory */
+    /** @var SearchCriteriaFactory */
     private $searchCriteriaFactory;
 
     /**
@@ -54,7 +55,7 @@ class Products implements ResolverInterface
         }
 
         $maxPages = ceil($itemsResults->getTotalCount() / $searchCriteria->getPageSize());
-        if ($searchCriteria->getCurrentPage() > $maxPages) {
+        if ($searchCriteria->getCurrentPage() > $maxPages && $itemsResults->getTotalCount() > 0) {
             throw new \GraphQL\Error\Error(sprintf('Current page is bigger than maximum %s', $maxPages));
         }
 

@@ -13,7 +13,7 @@ use Magento\GraphQl\Model\Type\Generator;
 use Magento\GraphQl\Model\ResolverFactory;
 
 /**
- * Generates query field and concrete types for GraphQL scehma
+ * Generate a query field and concrete types for GraphQL schema
  */
 class SchemaGenerator implements SchemaGeneratorInterface
 {

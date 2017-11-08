@@ -28,7 +28,7 @@ class ClauseFactory
     }
 
     /**
-     * Creates a clause
+     * Create a clause
      *
      * @param ReferenceType $referenceType
      * @param string $fieldName
