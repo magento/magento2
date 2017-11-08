@@ -61,6 +61,7 @@ define([
             /*eslint-enable no-unused-vars*/
             var options = ko.utils.peekObservable(valueAccessor()),
                 templateName,
+                isSync,
                 updated;
 
             if (typeof options === 'object') {
@@ -78,9 +79,10 @@ define([
                 consoleLogger.error('Could not build a template binding', options);
             }
             engine._trackRender(templateName);
+            isSync = engine._hasTemplateLoaded(templateName);
             updated = origUpdate.apply(this, arguments);
 
-            if (engine._hasTemplateLoaded(templateName)) {
+            if (isSync) {
                 engine._releaseRender(templateName, 'sync');
             }
 
