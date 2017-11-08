@@ -6,8 +6,9 @@
 // @codingStandardsIgnoreStart
 namespace Magento\Framework\Reflection\Test\Unit;
 
-use Zend\Code\Reflection\ClassReflection;
 use Magento\Framework\Exception\SerializationException;
+use Magento\Framework\Reflection\Test\Unit\Fixture\TSample;
+use Zend\Code\Reflection\ClassReflection;
 
 /**
  * Type processor Test
@@ -259,5 +260,36 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
     public function testGetOperationName()
     {
         $this->assertEquals("resNameMethodName", $this->_typeProcessor->getOperationName("resName", "methodName"));
+    }
+
+    /**
+     * Checks a case when method has only `@inheritdoc` annotation.
+     */
+    public function testGetReturnTypeWithInheritDocBlock()
+    {
+        $expected = [
+            'type' => 'string',
+            'isRequired' => true,
+            'description' => null,
+            'parameterCount' => 0
+        ];
+
+        $classReflection = new ClassReflection(TSample::class);
+        $methodReflection = $classReflection->getMethod('getPropertyName');
+
+        self::assertEquals($expected, $this->_typeProcessor->getGetterReturnType($methodReflection));
+    }
+
+    /**
+     * Checks a case when method and parent interface don't have `@return` annotation.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Getter return type must be specified using @return annotation. See Magento\Framework\Reflection\Test\Unit\Fixture\TSample::getName()
+     */
+    public function testGetReturnTypeWithoutReturnTag()
+    {
+        $classReflection = new ClassReflection(TSample::class);
+        $methodReflection = $classReflection->getMethod('getName');
+        $this->_typeProcessor->getGetterReturnType($methodReflection);
     }
 }
