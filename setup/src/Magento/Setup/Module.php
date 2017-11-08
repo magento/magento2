@@ -31,6 +31,13 @@ class Module implements
         /** @var \Zend\EventManager\SharedEventManager $sharedEvents */
         $sharedEvents = $events->getSharedManager();
 
+        // register DiStrictAbstractServiceFactory explicitly
+        $serviceManager = $application->getServiceManager();
+
+        $strictAbstractFactory = $serviceManager->get('DiStrictAbstractServiceFactory');
+        $serviceManager->addAbstractFactory($strictAbstractFactory);
+        $serviceManager->get('controllermanager')->addAbstractFactory($strictAbstractFactory);
+
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($events);
 

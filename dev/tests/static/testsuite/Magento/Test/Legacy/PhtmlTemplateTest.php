@@ -13,11 +13,11 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * Test usage of methods and variables in template through $this
-         *
-         * @param string $file
-         */
+            /**
+             * Test usage of methods and variables in template through $this
+             *
+             * @param string $file
+             */
             function ($file) {
                 $this->assertNotRegExp(
                     '/this->(?!helper)\S*/iS',
@@ -61,12 +61,12 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * "text/javascript" type attribute in not obligatory to use in templates due to HTML5 standards.
-         * For more details please go to "http://www.w3.org/TR/html5/scripting-1.html".
-         *
-         * @param string $file
-         */
+            /**
+             * "text/javascript" type attribute in not obligatory to use in templates due to HTML5 standards.
+             * For more details please go to "http://www.w3.org/TR/html5/scripting-1.html".
+             *
+             * @param string $file
+             */
             function ($file) {
                 $this->assertNotRegexp(
                     '/type="text\/javascript"/',
