@@ -5,8 +5,8 @@
  */
 namespace Magento\Inventory\Indexer\StockItem;
 
-use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
+use Magento\Inventory\Indexer\ActiveTableSwitcher;
 use Magento\Inventory\Indexer\Alias;
 use Magento\Inventory\Indexer\IndexName;
 use Magento\Inventory\Indexer\IndexNameResolverInterface;

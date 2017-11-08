@@ -5,8 +5,6 @@
  */
 namespace Magento\Inventory\Indexer;
 
-use Magento\Framework\App\ResourceConnection;
-
 /**
  * Logic for switching active and replica index tables by IndexName object
  *
