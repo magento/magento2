@@ -327,6 +327,7 @@ class CartRepositoryTest extends WebapiAbstract
      */
     public function testSaveQuoteWithMinimalCustomerInfo()
     {
+        //for SOAP all necessary fields for customer are mandatory.
         $this->_markTestAsRestOnly();
         $token = $this->getToken();
         /** @var Quote $quote */
@@ -342,12 +343,6 @@ class CartRepositoryTest extends WebapiAbstract
                 'resourcePath' => self::$mineCartUrl,
                 'httpMethod'   => Request::HTTP_METHOD_PUT,
                 'token'        => $token
-            ],
-            'soap' => [
-                'service'        => 'quoteCartRepositoryV1',
-                'serviceVersion' => 'V1',
-                'operation'      => 'quoteCartRepositoryV1Save',
-                'token'          => $token
             ]
         ];
 
