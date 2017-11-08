@@ -94,4 +94,11 @@
             <resource ref="Magento_InventoryApi::source_stock_link"/>
         </resources>
     </route>
+    <!-- SourceItem -->
+    <route url="/V1/inventory/source-items" method="POST">
+        <service class="Magento\InventoryApi\Api\SourceItemsSaveInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
 </routes>
