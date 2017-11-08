@@ -146,8 +146,12 @@ class Cart extends AbstractIndex
         }
 
         // Set qty
-        $qty = $this->getRequest()->getPost('qty') ? $this->getRequest()->getPost('qty') :
-            $this->getRequest()->getParam('qty');
+        if (method_exists($this->getRequest(), 'getPost')) {
+            $qty = $this->getRequest()->getPost('qty') ? $this->getRequest()->getPost('qty') :
+                $this->getRequest()->getParam('qty');
+        } else {
+            $qty = $this->getRequest()->getParam('qty');
+        }
         if (is_array($qty)) {
             if (isset($qty[$itemId])) {
                 $qty = $qty[$itemId];
