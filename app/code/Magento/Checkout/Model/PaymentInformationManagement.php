@@ -15,6 +15,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
 {
     /**
      * @var \Magento\Quote\Api\BillingAddressManagementInterface
+     * @deprecated This call was substituted to eliminate extra quote::save call.
      */
     protected $billingAddressManagement;
 
@@ -46,6 +47,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     private $logger;
 
     /**
+     * Provide active quote.
+     *
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     private $cartRepository;
@@ -127,7 +130,17 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         if ($billingAddress) {
-            $this->billingAddressManagement->assign($cartId, $billingAddress);
+            /** @var \Magento\Quote\Model\Quote $quote */
+            $quote = $this->cartRepository->getActive($cartId);
+            $quote->removeAddress($quote->getBillingAddress()->getId());
+            $quote->setBillingAddress($billingAddress);
+            $quote->setDataChanges(true);
+            $shippingAddress = $quote->getShippingAddress();
+            if ($shippingAddress && $shippingAddress->getShippingMethod()) {
+                $shippingDataArray = explode('_', $shippingAddress->getShippingMethod());
+                $shippingCarrier = array_shift($shippingDataArray);
+                $shippingAddress->setLimitCarrier($shippingCarrier);
+            }
         }
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
 

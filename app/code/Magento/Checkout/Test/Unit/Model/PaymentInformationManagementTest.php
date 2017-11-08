@@ -62,7 +62,7 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $this->checkoutHelperMock = $this->getMockBuilder(\Magento\Checkout\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = $objectManager->getObject(
+         $this->model = $objectManager->getObject(
             \Magento\Checkout\Model\PaymentInformationManagement::class,
             [
                 'billingAddressManagement' => $this->billingAddressManagementMock,
@@ -70,6 +70,7 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
                 'cartManagement' => $this->cartManagementMock,
                 'checkoutHelper' => $this->checkoutHelperMock,
                 'logger' => $this->loggerMock,
+                'cartRepository' => $this->cartRepositoryMock
             ]
         );
     }
@@ -81,9 +82,7 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $paymentMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class);
         $billingAddressMock = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
-        $this->billingAddressManagementMock->expects($this->once())
-            ->method('assign')
-            ->with($cartId, $billingAddressMock);
+        $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->with($cartId)->willReturn($orderId);
 
@@ -103,9 +102,7 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $paymentMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class);
         $billingAddressMock = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
-        $this->billingAddressManagementMock->expects($this->once())
-            ->method('assign')
-            ->with($cartId, $billingAddressMock);
+        $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
         $exception = new \Exception(__('DB exception'));
         $this->loggerMock->expects($this->once())->method('critical');
@@ -120,7 +117,6 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $orderId = 200;
         $paymentMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class);
 
-        $this->billingAddressManagementMock->expects($this->never())->method('assign');
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->with($cartId)->willReturn($orderId);
 
@@ -136,9 +132,7 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $paymentMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class);
         $billingAddressMock = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
-        $this->billingAddressManagementMock->expects($this->once())
-            ->method('assign')
-            ->with($cartId, $billingAddressMock);
+        $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
 
         $this->assertTrue($this->model->savePaymentInformation($cartId, $paymentMock, $billingAddressMock));
@@ -149,7 +143,6 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $cartId = 100;
         $paymentMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class);
 
-        $this->billingAddressManagementMock->expects($this->never())->method('assign');
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
 
         $this->assertTrue($this->model->savePaymentInformation($cartId, $paymentMock));
@@ -165,9 +158,8 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $paymentMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class);
         $billingAddressMock = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
 
-        $this->billingAddressManagementMock->expects($this->once())
-            ->method('assign')
-            ->with($cartId, $billingAddressMock);
+        $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
+
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
         $phrase = new \Magento\Framework\Phrase(__('DB exception'));
         $exception = new \Magento\Framework\Exception\LocalizedException($phrase);
@@ -176,5 +168,32 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $this->checkoutHelperMock->expects($this->any())->method('sendPaymentFailedEmail')->willReturnSelf();
 
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $paymentMock, $billingAddressMock);
+    }
+
+    /**
+     * @param int $cartId
+     * @param \PHPUnit_Framework_MockObject_MockObject $billingAddressMock
+     */
+    private function getMockForAssignBillingAddress($cartId, $billingAddressMock)
+    {
+        $billingAddressId = 1;
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $quoteBillingAddress = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $quoteShippingAddress = $this->getMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['setLimitCarrier', 'getShippingMethod'],
+            [],
+            '',
+            false
+        );
+        $this->cartRepositoryMock->expects($this->any())->method('getActive')->with($cartId)->willReturn($quoteMock);
+        $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($quoteBillingAddress);
+        $quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($quoteShippingAddress);
+        $quoteBillingAddress->expects($this->once())->method('getId')->willReturn($billingAddressId);
+        $quoteMock->expects($this->once())->method('removeAddress')->with($billingAddressId);
+        $quoteMock->expects($this->once())->method('setBillingAddress')->with($billingAddressMock);
+        $quoteMock->expects($this->once())->method('setDataChanges')->willReturnSelf();
+        $quoteShippingAddress->expects($this->any())->method('getShippingMethod')->willReturn('flatrate_flatrate');
+        $quoteShippingAddress->expects($this->once())->method('setLimitCarrier')->with('flatrate')->willReturnSelf();
     }
 }

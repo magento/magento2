@@ -3,17 +3,16 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\App\Test\Unit\DeploymentConfig\Writer;
 
-use \Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
+use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 
 class PhpFormatterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider formatWithCommentDataProvider
-     * @param string|array $data
-     * @param array $comments
+     * @param string[] $data
+     * @param string[] $comments
      * @param string $expectedResult
      */
     public function testFormat($data, $comments, $expectedResult)
@@ -22,6 +21,9 @@ class PhpFormatterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $formatter->format($data, $comments));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function formatWithCommentDataProvider()
     {
         $array = [
@@ -45,9 +47,9 @@ class PhpFormatterTest extends \PHPUnit_Framework_TestCase
         ];
         $comments1 = ['ns2' => 'comment for namespace 2'];
         $comments2 = [
-            'ns1' => 'comment for namespace 1',
-            'ns2' => "comment for namespace 2.\nNext comment for namespace 2",
-            'ns3' => 'comment for namespace 3',
+            'ns1' => 'comment for\' namespace 1',
+            'ns2' => "comment for namespace 2.\nNext comment for' namespace 2",
+            'ns3' => 'comment for" namespace 3',
             'ns4' => 'comment for namespace 4',
             'ns5' => 'comment for unexisted namespace 5',
         ];
@@ -68,7 +70,8 @@ return array (
     ),
   ),
   /**
-   * 'comment for namespace 2'
+   * For the section: ns2
+   * comment for namespace 2
    */
   'ns2' => 
   array (
@@ -78,7 +81,7 @@ return array (
     ),
   ),
   'ns3' => 'just text',
-  'ns4' => 'just text'
+  'ns4' => 'just text',
 );
 
 TEXT;
@@ -86,7 +89,8 @@ TEXT;
 <?php
 return array (
   /**
-   * 'comment for namespace 1'
+   * For the section: ns1
+   * comment for' namespace 1
    */
   'ns1' => 
   array (
@@ -102,8 +106,9 @@ return array (
     ),
   ),
   /**
-   * 'comment for namespace 2.
-   * Next comment for namespace 2'
+   * For the section: ns2
+   * comment for namespace 2.
+   * Next comment for' namespace 2
    */
   'ns2' => 
   array (
@@ -113,13 +118,15 @@ return array (
     ),
   ),
   /**
-   * 'comment for namespace 3'
+   * For the section: ns3
+   * comment for" namespace 3
    */
   'ns3' => 'just text',
   /**
-   * 'comment for namespace 4'
+   * For the section: ns4
+   * comment for namespace 4
    */
-  'ns4' => 'just text'
+  'ns4' => 'just text',
 );
 
 TEXT;
