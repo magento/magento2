@@ -297,6 +297,7 @@
             <argument name="processors" xsi:type="array">
                 <item name="default" xsi:type="string">Magento\Config\Console\Command\ConfigSet\DefaultProcessor</item>
                 <item name="lock" xsi:type="string">Magento\Config\Console\Command\ConfigSet\LockProcessor</item>
+                <item name="share" xsi:type="string">Magento\Config\Console\Command\ConfigSet\ShareProcessor</item>
             </argument>
         </arguments>
     </type>
