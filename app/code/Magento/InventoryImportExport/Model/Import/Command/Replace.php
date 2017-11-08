@@ -32,7 +32,7 @@ class Replace implements CommandInterface
     private $sourceItemsDelete;
 
     /**
-     * @param SourceItemConvert $sourceItemFactory
+     * @param SourceItemConvert $sourceItemConvert
      * @param SourceItemsSaveInterface $sourceItemsSave
      * @param SourceItemsDeleteInterface $sourceItemsDelete
      */
