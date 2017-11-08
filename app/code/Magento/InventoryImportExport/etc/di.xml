@@ -27,4 +27,18 @@
             </argument>
         </arguments>
     </type>
+
+    <!-- Export -->
+    <preference for="Magento\InventoryImportExport\Model\Export\SourceItemCollectionFactoryInterface" type="Magento\InventoryImportExport\Model\Export\SourceItemCollectionFactory"/>
+    <preference for="Magento\InventoryImportExport\Model\Export\ColumnProviderInterface" type="\Magento\InventoryImportExport\Model\Export\ColumnProvider"/>
+    <type name="Magento\InventoryImportExport\Model\Export\FilterProcessorAggregator">
+        <arguments>
+            <argument name="handler" xsi:type="array">
+                <item name="int" xsi:type="object">Magento\InventoryImportExport\Model\Export\Filter\IntFilter</item>
+                <!-- IntFilter is also used for 'decimal' type -->
+                <item name="decimal" xsi:type="object">Magento\InventoryImportExport\Model\Export\Filter\IntFilter</item>
+                <item name="varchar" xsi:type="object">Magento\InventoryImportExport\Model\Export\Filter\VarcharFilter</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -12,7 +12,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 /**
  * @inheritdoc
  */
-class Json implements SerializerInterface, LegacyJsonHelperInterface
+class Json implements SerializerInterface
 {
     /**
      * @var SerializerInterface
@@ -31,8 +31,10 @@ class Json implements SerializerInterface, LegacyJsonHelperInterface
     /**
      * Encode the mixed $valueToEncode into the JSON format
      *
+     * @deprecated 100.2.0 @see \Magento\Framework\Serialize\Serializer\Json
      * @param mixed $valueToEncode
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function jsonEncode($valueToEncode)
     {
@@ -43,8 +45,10 @@ class Json implements SerializerInterface, LegacyJsonHelperInterface
      * Decodes the given $encodedValue string which is
      * encoded in the JSON format
      *
+     * @deprecated 100.2.0 @see \Magento\Framework\Serialize\Serializer\Json
      * @param string $encodedValue
      * @return mixed
+     * @throws \InvalidArgumentException
      */
     public function jsonDecode($encodedValue)
     {
