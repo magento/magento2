@@ -410,9 +410,18 @@ class Category extends AbstractResource
          * Update product positions in category
          */
         if (!empty($update)) {
+            $newPositions = [];
             foreach ($update as $productId => $position) {
-                $where = ['category_id = ?' => (int)$id, 'product_id = ?' => (int)$productId];
-                $bind = ['position' => (int)$position];
+                $delta = $position - $oldProducts[$productId];
+                if (!isset($newPositions[$delta])) {
+                    $newPositions[$delta] = [];
+                }
+                $newPositions[$delta][] = $productId;
+            }
+
+            foreach ($newPositions as $delta => $productIds) {
+                $bind = ['position' => new \Zend_Db_Expr("position + ({$delta})")];
+                $where = ['category_id = ?' => (int)$id, 'product_id IN (?)' => $productIds];
                 $connection->update($this->getCategoryProductTable(), $bind, $where);
             }
         }
@@ -423,6 +432,8 @@ class Category extends AbstractResource
                 'catalog_category_change_products',
                 ['category' => $category, 'product_ids' => $productIds]
             );
+
+            $category->setChangedProductIds($productIds);
         }
 
         if (!empty($insert) || !empty($update) || !empty($delete)) {

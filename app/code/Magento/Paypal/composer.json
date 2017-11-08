@@ -19,13 +19,14 @@
         "magento/framework": "101.0.*",
         "magento/module-ui": "101.0.*",
         "magento/module-vault": "101.0.*",
+        "magento/module-instant-purchase": "100.2.*",
         "lib-libxml": "*"
     },
     "suggest": {
         "magento/module-checkout-agreements": "100.2.*"
     },
     "type": "magento2-module",
-    "version": "100.2.0-dev",
+    "version": "100.2.0",
     "license": [
         "proprietary"
     ],
