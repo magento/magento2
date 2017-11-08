@@ -569,7 +569,7 @@ define([
                         'currencyFormat': this.options.spConfig.currencyFormat,
                         'priceUtils': priceUtils
                     });
-                    if(options.tierPrices.length){
+                    if (options.tierPrices.length) {
                         $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
                     }
                 }
