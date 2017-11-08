@@ -435,6 +435,8 @@ define([
             if (parent && parent.component) {
                 name = child.name || child;
 
+                this.setChildSortOrderIfUndefined(parent, child);
+
                 this.insert(name, parent.name, child.sortOrder);
             }
 
@@ -600,6 +602,24 @@ define([
             });
 
             return result;
+        },
+
+        /**
+         * Set sort order for child if it is undefined.
+         *
+         * @param {Object} parent
+         * @param {Object} child
+         */
+        setChildSortOrderIfUndefined: function (parent, child) {
+            var key, sortOrderIndex = 0;
+
+            for (key in parent.children) {
+                if (child.index === key && _.isUndefined(parent.children[key].sortOrder)) {
+                    child.sortOrder = sortOrderIndex;
+                    break;
+                }
+                sortOrderIndex++;
+            }
         }
     });
 
