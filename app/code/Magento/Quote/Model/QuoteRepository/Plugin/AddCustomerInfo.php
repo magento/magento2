@@ -79,7 +79,7 @@ class AddCustomerInfo
     {
         $result = '';
         switch ($property) {
-            case OrderInterface::CUSTOMER_EMAIL :
+            case OrderInterface::CUSTOMER_EMAIL:
                 $result = $customer->getEmail();
                 break;
             case OrderInterface::CUSTOMER_FIRSTNAME:
