@@ -37,7 +37,7 @@ class HandlerFactory
     {
         $typeHandlerClass = $this->objectManager->create($typeClassName);
         if (!($typeHandlerClass instanceof HandlerInterface)) {
-            throw new \LogicException(__('Invalid type name. Type handler does not exist.'));
+            throw new \LogicException('Invalid type name. Type handler does not exist.');
         }
 
         return $typeHandlerClass;
