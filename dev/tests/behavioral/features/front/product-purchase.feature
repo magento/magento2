@@ -61,7 +61,7 @@ Feature: Product purchase
     Then I wait for page to load "/index.php/checkout/#payment"
     And I wait for element with xpath "//*[@id='checkout-payment-method-load']/div/div/div[2]/div[2]/div[4]/div/button/span" to appear
     And I click on the element with xpath "//*[@id='checkout-payment-method-load']/div/div/div[2]/div[2]/div[4]/div/button/span"
-  
+
     #Success
     Then I wait for page to load "/index.php/checkout/onepage/success/"
     And I wait for element containing unique text "Your order # is" to appear
