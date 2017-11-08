@@ -1296,7 +1296,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 if ($salableOnly) {
                     $collection = $this->salableProcessor->process($collection);
                 }
-                $usedProducts = $collection->getItems();
+                $usedProducts = array_values($collection->getItems());
                 $this->saveUsedProductsCacheData($product, $usedProducts, $cacheKey);
             }
             $product->setData($dataFieldName, $usedProducts);
