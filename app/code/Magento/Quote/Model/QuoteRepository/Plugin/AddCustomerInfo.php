@@ -7,6 +7,7 @@
 namespace Magento\Quote\Model\QuoteRepository\Plugin;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -25,7 +26,6 @@ class AddCustomerInfo
         OrderInterface::CUSTOMER_EMAIL,
         OrderInterface::CUSTOMER_FIRSTNAME,
         OrderInterface::CUSTOMER_LASTNAME,
-        OrderInterface::CUSTOMER_GROUP_ID,
     ];
 
     /**
@@ -55,16 +55,41 @@ class AddCustomerInfo
     public function beforeSave(CartRepositoryInterface $subject, CartInterface $quote)
     {
         if ($quote->getCustomerId() !== null) {
+            $customer = $this->customerRepository->getById($quote->getCustomerId());
             foreach ($this->fields as $property) {
-                if (!$quote->getData($property)) {
-                    $customer = $this->customerRepository->getById($quote->getCustomerId());
-                    $quote->setCustomer($customer);
-                    $quote->setCustomerIsGuest(false);
-                    break;
+                if ($quote->getData($property) === null) {
+                    $value = $this->getCustomerData($customer, $property);
+                    $quote->setData($property, $value);
                 }
             }
+            $quote->setCustomerGroupId($customer->getGroupId());
+            $quote->setCustomerIsGuest(false);
         }
 
         return null;
+    }
+
+    /**
+     * @param CustomerInterface $customer
+     * @param string $property
+     *
+     * @return null|string
+     */
+    private function getCustomerData(CustomerInterface $customer, string $property)
+    {
+        $result = '';
+        switch ($property) {
+            case OrderInterface::CUSTOMER_EMAIL :
+                $result = $customer->getEmail();
+                break;
+            case OrderInterface::CUSTOMER_FIRSTNAME:
+                $result = $customer->getFirstname();
+                break;
+            case OrderInterface::CUSTOMER_LASTNAME:
+                $result = $customer->getLastname();
+                break;
+        }
+
+        return $result;
     }
 }

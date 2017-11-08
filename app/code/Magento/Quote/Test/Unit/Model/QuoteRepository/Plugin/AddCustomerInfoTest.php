@@ -53,12 +53,28 @@ class AddCustomerInfoTest extends TestCase
      */
     public function testBeforeSave()
     {
-        $customerId = 1;
+        $customerId = '1';
+        $customerEmail = 'customer@exampel.com';
+        $customerFirstName = 'John';
+        $customerLastName = 'Doe';
+        $customerGroupId = 1;
 
         /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $customer */
         $customer = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $customer->expects(self::once())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+        $customer->expects(self::once())
+            ->method('getFirstName')
+            ->willReturn($customerFirstName);
+        $customer->expects(self::once())
+            ->method('getLastName')
+            ->willReturn($customerLastName);
+        $customer->expects(self::once())
+            ->method('getGroupId')
+            ->willReturn($customerGroupId);
 
         $this->customerRepository->expects(self::once())
             ->method('getById')
@@ -73,21 +89,30 @@ class AddCustomerInfoTest extends TestCase
         /** @var CartInterface|\PHPUnit_Framework_MockObject_MockObject $cart */
         $cart = $this->getMockBuilder(CartInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerIsGuest', 'getCustomerId', 'getData', 'setCustomer', 'setCustomerIsGuest'])
+            ->setMethods(['getCustomerId', 'getData', 'setCustomerIsGuest', 'setData', 'setCustomerGroupId'])
             ->getMockForAbstractClass();
-        $cart->expects(self::once())
-            ->method('getCustomerIsGuest')
-            ->willReturn(false);
         $cart->expects(self::exactly(2))
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $cart->expects(self::once())
+        $cart->expects(self::exactly(3))
             ->method('getData')
-            ->with(self::identicalTo(OrderInterface::CUSTOMER_EMAIL))
+            ->withConsecutive(
+                self::identicalTo(OrderInterface::CUSTOMER_EMAIL),
+                self::identicalTo(OrderInterface::CUSTOMER_FIRSTNAME),
+                self::identicalTo(OrderInterface::CUSTOMER_LASTNAME)
+            )
             ->willReturn(null);
+        $cart->expects(self::exactly(3))
+            ->method('setData')
+            ->withConsecutive(
+                self::identicalTo(OrderInterface::CUSTOMER_EMAIL),
+                self::identicalTo(OrderInterface::CUSTOMER_FIRSTNAME),
+                self::identicalTo(OrderInterface::CUSTOMER_LASTNAME)
+            )
+            ->willReturnSelf();
         $cart->expects(self::once())
-            ->method('setCustomer')
-            ->with(self::identicalTo($customer))
+            ->method('setCustomerGroupId')
+            ->with($customerGroupId)
             ->willReturnSelf();
         $cart->expects(self::once())
             ->method('setCustomerIsGuest')
