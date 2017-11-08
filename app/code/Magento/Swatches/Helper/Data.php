@@ -10,6 +10,8 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Catalog\Model\Product as ModelProduct;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Unserialize\SecureUnserializer;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory as SwatchCollectionFactory;
 use Magento\Swatches\Model\Swatch;
@@ -18,6 +20,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Framework\App\ObjectManager;
 use Magento\Swatches\Model\SwatchAttributesProvider;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Helper Data
@@ -69,6 +72,18 @@ class Data
     private $swatchAttributesProvider;
 
     /**
+     * @var SecureUnserializer
+     */
+    private $secureUnserializer;
+
+    /**
+     * Describes a logger instance.
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Data key which should populated to Attribute entity from "additional_data" field
      *
      * @var array
@@ -80,12 +95,15 @@ class Data
     ];
 
     /**
+     * Data constructor.
      * @param CollectionFactory $productCollectionFactory
      * @param ProductRepositoryInterface $productRepository
      * @param StoreManagerInterface $storeManager
      * @param SwatchCollectionFactory $swatchCollectionFactory
      * @param Image $imageHelper
-     * @param SwatchAttributesProvider $swatchAttributesProvider
+     * @param SwatchAttributesProvider|null $swatchAttributesProvider
+     * @param SecureUnserializer|null $secureUnserializer
+     * @param LoggerInterface $logger
      */
     public function __construct(
         CollectionFactory $productCollectionFactory,
@@ -93,7 +111,9 @@ class Data
         StoreManagerInterface $storeManager,
         SwatchCollectionFactory $swatchCollectionFactory,
         Image $imageHelper,
-        SwatchAttributesProvider $swatchAttributesProvider = null
+        SwatchAttributesProvider $swatchAttributesProvider = null,
+        SecureUnserializer $secureUnserializer = null,
+        LoggerInterface $logger = null
     ) {
         $this->productCollectionFactory   = $productCollectionFactory;
         $this->productRepository = $productRepository;
@@ -102,18 +122,28 @@ class Data
         $this->imageHelper = $imageHelper;
         $this->swatchAttributesProvider = $swatchAttributesProvider
             ?: ObjectManager::getInstance()->get(SwatchAttributesProvider::class);
+        $this->secureUnserializer = $secureUnserializer
+            ?: ObjectManager::getInstance()->get(SecureUnserializer::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
      * @param Attribute $attribute
      * @return $this
+     * @throws LocalizedException
      */
     public function assembleAdditionalDataEavAttribute(Attribute $attribute)
     {
         $initialAdditionalData = [];
         $additionalData = (string) $attribute->getData('additional_data');
         if (!empty($additionalData)) {
-            $additionalData = unserialize($additionalData);
+            try {
+                $additionalData = $this->secureUnserializer->unserialize($additionalData);
+            } catch (\Exception $e) {
+                $this->logger->critical("Additional data for EAV attribute cannot be assembled\n" . $e->getMessage());
+                throw new LocalizedException(__('Swatch cannot be saved'));
+            }
+
             if (is_array($additionalData)) {
                 $initialAdditionalData = $additionalData;
             }
@@ -134,17 +164,28 @@ class Data
     /**
      * @param Attribute $attribute
      * @return $this
+     * @throws LocalizedException
      */
     private function populateAdditionalDataEavAttribute(Attribute $attribute)
     {
-        $additionalData = unserialize($attribute->getData('additional_data'));
-        if (isset($additionalData) && is_array($additionalData)) {
-            foreach ($this->eavAttributeAdditionalDataKeys as $key) {
-                if (isset($additionalData[$key])) {
-                    $attribute->setData($key, $additionalData[$key]);
+        $additionalData = (string) $attribute->getData('additional_data');
+        if (!empty($additionalData)) {
+            try {
+                $additionalData = $this->secureUnserializer->unserialize($additionalData);
+            } catch (\Exception $e) {
+                $this->logger->critical("Additional data for EAV attribute cannot be populated\n" . $e->getMessage());
+                throw new LocalizedException(__('Swatch cannot be saved'));
+            }
+
+            if (is_array($additionalData)) {
+                foreach ($this->eavAttributeAdditionalDataKeys as $key) {
+                    if (isset($additionalData[$key])) {
+                        $attribute->setData($key, $additionalData[$key]);
+                    }
                 }
             }
         }
+        
         return $this;
     }
 
@@ -343,6 +384,7 @@ class Data
      *
      * @param Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
+     * @throws LocalizedException
      */
     private function getSwatchAttributes(Product $product)
     {
@@ -467,6 +509,7 @@ class Data
      *
      * @param Attribute $attribute
      * @return bool
+     * @throws LocalizedException
      */
     public function isSwatchAttribute(Attribute $attribute)
     {
@@ -479,6 +522,7 @@ class Data
      *
      * @param Attribute $attribute
      * @return bool
+     * @throws LocalizedException
      */
     public function isVisualSwatch(Attribute $attribute)
     {
@@ -493,12 +537,14 @@ class Data
      *
      * @param Attribute $attribute
      * @return bool
+     * @throws LocalizedException
      */
     public function isTextSwatch(Attribute $attribute)
     {
         if (!$attribute->hasData(Swatch::SWATCH_INPUT_TYPE_KEY)) {
             $this->populateAdditionalDataEavAttribute($attribute);
         }
+        
         return $attribute->getData(Swatch::SWATCH_INPUT_TYPE_KEY) == Swatch::SWATCH_INPUT_TYPE_TEXT;
     }
 }

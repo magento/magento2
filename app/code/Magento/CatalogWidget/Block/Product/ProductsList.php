@@ -233,7 +233,12 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             : $this->getData('conditions');
 
         if ($conditions) {
-            $conditions = $this->conditionsHelper->decode($conditions);
+            try {
+                $conditions = $this->conditionsHelper->decode($conditions);
+            } catch (\InvalidArgumentException $e) {
+                $this->_logger->critical($e);
+                $conditions = '';
+            }
         }
 
         $this->rule->loadPost(['conditions' => $conditions]);
