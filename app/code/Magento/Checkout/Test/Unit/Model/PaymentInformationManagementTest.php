@@ -41,6 +41,11 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
      */
     private $cartRepositoryMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $checkoutHelperMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -54,16 +59,20 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
         $this->cartRepositoryMock = $this->getMockBuilder(\Magento\Quote\Api\CartRepositoryInterface::class)->getMock();
-        $this->model = $objectManager->getObject(
+        $this->checkoutHelperMock = $this->getMockBuilder(\Magento\Checkout\Helper\Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+         $this->model = $objectManager->getObject(
             \Magento\Checkout\Model\PaymentInformationManagement::class,
             [
                 'billingAddressManagement' => $this->billingAddressManagementMock,
                 'paymentMethodManagement' => $this->paymentMethodManagementMock,
                 'cartManagement' => $this->cartManagementMock,
+                'checkoutHelper' => $this->checkoutHelperMock,
+                'logger' => $this->loggerMock,
                 'cartRepository' => $this->cartRepositoryMock
             ]
         );
-        $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
     }
 
     public function testSavePaymentInformationAndPlaceOrder()
@@ -156,6 +165,7 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $exception = new \Magento\Framework\Exception\LocalizedException($phrase);
         $this->loggerMock->expects($this->never())->method('critical');
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
+        $this->checkoutHelperMock->expects($this->any())->method('sendPaymentFailedEmail')->willReturnSelf();
 
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $paymentMock, $billingAddressMock);
     }
