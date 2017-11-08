@@ -56,7 +56,7 @@ class Products implements ResolverInterface
 
         $maxPages = ceil($itemsResults->getTotalCount() / $searchCriteria->getPageSize());
         if ($searchCriteria->getCurrentPage() > $maxPages && $itemsResults->getTotalCount() > 0) {
-            throw new \GraphQL\Error\Error(sprintf('Current page is bigger than maximum %s', $maxPages));
+            throw new \GraphQL\Error\Error(sprintf('The value specified in the currentPage attribute is greater than the number of pages available (%s).', $maxPages));
         }
 
         return [
