@@ -53,7 +53,7 @@ class DeleteMultiple
      * @param array $sourceItems
      * @return string
      */
-    private function buildWhereSqlPart(array $sourceItems)
+    private function buildWhereSqlPart(array $sourceItems): string
     {
         $connection = $this->resourceConnection->getConnection();
 
