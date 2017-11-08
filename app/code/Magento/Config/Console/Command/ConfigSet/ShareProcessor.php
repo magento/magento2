@@ -15,13 +15,13 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
- * Processes file lock flow of config:set command.
- * This processor saves the value of configuration into app/etc/env.php
+ * Processes file share flow of config:set command.
+ * This processor saves the value of configuration into app/etc/config.php
  * and locks it for editing in Admin interface.
  *
  * {@inheritdoc}
  */
-class LockProcessor implements ConfigSetProcessorInterface
+class ShareProcessor implements ConfigSetProcessorInterface
 {
     /**
      * The factory for prepared value
@@ -98,7 +98,7 @@ class LockProcessor implements ConfigSetProcessorInterface
                  * we'll write value just after all validations are triggered.
                  */
                 $this->deploymentConfigWriter->saveConfig(
-                    [ConfigFilePool::APP_ENV => $this->arrayManager->set($configPath, [], $value)],
+                    [ConfigFilePool::APP_CONFIG => $this->arrayManager->set($configPath, [], $value)],
                     false
                 );
             }

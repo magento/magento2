@@ -34,6 +34,7 @@ class ConfigSetCommand extends Command
     const OPTION_SCOPE = 'scope';
     const OPTION_SCOPE_CODE = 'scope-code';
     const OPTION_LOCK = 'lock';
+    const OPTION_SHARE = 'share';
     /**#@-*/
 
     /**#@-*/
@@ -112,7 +113,13 @@ class ConfigSetCommand extends Command
                     static::OPTION_LOCK,
                     'l',
                     InputOption::VALUE_NONE,
-                    'Lock value which prevents modification in the Admin'
+                    'Lock value which prevents modification in the Admin (will be saved in app/etc/env.php)'
+                ),
+                new InputOption(
+                    static::OPTION_SHARE,
+                    's',
+                    InputOption::VALUE_NONE,
+                    'Lock and share value with other installations, prevents modification in the Admin (will be saved in app/etc/config.php)'
                 ),
             ]);
 
@@ -151,7 +158,8 @@ class ConfigSetCommand extends Command
                     $input->getArgument(static::ARG_VALUE),
                     $input->getOption(static::OPTION_SCOPE),
                     $input->getOption(static::OPTION_SCOPE_CODE),
-                    $input->getOption(static::OPTION_LOCK)
+                    $input->getOption(static::OPTION_LOCK),
+                    $input->getOption(static::OPTION_SHARE)
                 );
             });
 

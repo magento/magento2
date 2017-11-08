@@ -96,13 +96,14 @@ class ProcessorFacade
      * @param string $scope The configuration scope (default, website, or store)
      * @param string $scopeCode The scope code
      * @param boolean $lock The lock flag
+     * @param boolean $share The share flag
      * @return string Processor response message
      * @throws ValidatorException If some validation is wrong
      * @throws CouldNotSaveException If cannot save config value
      * @throws ConfigurationMismatchException If processor can not be instantiated
      * @since 100.2.0
      */
-    public function process($path, $value, $scope, $scopeCode, $lock)
+    public function process($path, $value, $scope, $scopeCode, $lock, $share = false)
     {
         try {
             $this->scopeValidator->isValid($scope, $scopeCode);
@@ -111,14 +112,25 @@ class ProcessorFacade
             throw new ValidatorException(__($exception->getMessage()), $exception);
         }
 
-        $processor = $lock
-            ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK)
-            : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT);
-        $message = $lock
-            ? 'Value was saved and locked.'
-            : 'Value was saved.';
+        $processor =
+            $share
+            ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_SHARE)
+            : (
+                $lock
+                ? $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_LOCK)
+                : $this->configSetProcessorFactory->create(ConfigSetProcessorFactory::TYPE_DEFAULT)
+            );
 
-        // The processing flow depends on --lock option.
+        $message =
+            $share
+            ? 'Value was saved in app/etc/config.php and locked.'
+            : (
+                $lock
+                ? 'Value was saved in app/etc/env.php and locked.'
+                : 'Value was saved.'
+            );
+
+        // The processing flow depends on --lock and --share options.
         $processor->process($path, $value, $scope, $scopeCode);
 
         $this->hash->regenerate(System::CONFIG_TYPE);

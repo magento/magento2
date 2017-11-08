@@ -28,6 +28,7 @@ class ConfigSetProcessorFactory
      */
     const TYPE_DEFAULT = 'default';
     const TYPE_LOCK = 'lock';
+    const TYPE_SHARE = 'share';
     /**#@-*/
 
     /**#@-*/
