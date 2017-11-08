@@ -174,7 +174,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'getWebsiteIds',
                 'load',
                 'setData',
-                'getMediaGallery'
+                'getMediaGallery',
             ],
             [],
             '',
@@ -195,7 +195,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'setProductLinks',
                 'validate',
                 'save',
-                'getMediaGalleryEntries'
+                'getMediaGalleryEntries',
             ],
             [],
             '',
