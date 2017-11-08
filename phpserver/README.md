@@ -21,13 +21,10 @@ php bin/magento setup:install --base-url=http://127.0.0.1:8082
 --db-host=localhost --db-name=magento --db-user=magento --db-password=magento
 --admin-firstname=Magento --admin-lastname=User --admin-email=user@example.com
 --admin-user=admin --admin-password=admin123 --language=en_US
---currency=USD --timezone=America/Chicago --use-rewrites=0
+--currency=USD --timezone=America/Chicago --use-rewrites=1
 ```
 
-It's important to note that the router is not able to work with rewrite urls, that's why the flag `use-rewrites` is set to `0`.
-
 Notes:
-- You must use `--use-rewrites=0` because the web server cannot rewrite URLs
 - By default, Magento creates a random Admin URI for you. Make sure to write this value down because it's how you access the Magento Admin later. For example : ```http://127.0.0.1:8082/index.php/admin_1vpn01```.
 
 For more informations about the installation process using the CLI, you can consult the dedicated documentation that can found in [the developer documentation](https://github.com/magento/devdocs/blob/develop/guides/v2.0/install-gde/install/cli/install-cli-install.md).
