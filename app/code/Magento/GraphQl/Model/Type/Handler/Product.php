@@ -6,8 +6,8 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use \GraphQL\Type\Definition\InterfaceType;
-use \GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\InterfaceType;
+use GraphQL\Type\Definition\Type;
 use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;

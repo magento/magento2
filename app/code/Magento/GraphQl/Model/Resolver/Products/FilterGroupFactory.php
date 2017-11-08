@@ -6,7 +6,7 @@
 
 namespace Magento\GraphQl\Model\Resolver\Products;
 
-use \GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\ResolveInfo;
 use Magento\GraphQl\Model\GraphQl\Clause;
 use Magento\GraphQl\Model\GraphQl\Connective;
 use Magento\GraphQl\Model\GraphQl\Operator;

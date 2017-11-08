@@ -7,7 +7,7 @@
 namespace Magento\GraphQl\Model\Type\Handler;
 
 use GraphQL\Type\Definition\ObjectType;
-use \GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\Type;
 use Magento\GraphQl\Model\Type\HandlerFactory;
 
 /**

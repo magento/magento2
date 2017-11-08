@@ -6,9 +6,9 @@
 
 namespace Magento\GraphQl\Model\Type\Helper\ServiceContract;
 
-use \GraphQL\Type\Definition\ListOfType;
-use \GraphQL\Type\Definition\Type;
-use \GraphQL\Type\Definition\ObjectType;
+use GraphQL\Type\Definition\ListOfType;
+use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ObjectType;
 use Magento\GraphQl\Model\Type\Handler\Pool;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Webapi\Model\ServiceMetadata;

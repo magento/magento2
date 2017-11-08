@@ -6,9 +6,9 @@
 
 namespace Magento\GraphQl\Model;
 
-use \GraphQL\Type\Definition\ResolveInfo;
-use \GraphQL\Type\Definition\ObjectType;
-use \GraphQL\Type\Schema;
+use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\ObjectType;
+use GraphQL\Type\Schema;
 use Magento\GraphQl\Model\Type\Generator;
 use Magento\GraphQl\Model\ResolverFactory;
 

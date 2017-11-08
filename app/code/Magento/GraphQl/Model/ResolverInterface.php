@@ -6,7 +6,7 @@
 
 namespace Magento\GraphQl\Model;
 
-use \GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\ResolveInfo;
 
 /**
  * Retrieve resolve function for GraphQL type

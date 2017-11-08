@@ -5,9 +5,9 @@
  */
 namespace Magento\GraphQl\Model\Resolver\Products;
 
-use \GraphQL\Language\AST\ListValueNode;
-use \GraphQL\Language\AST\SelectionNode;
-use \GraphQL\Language\AST\NodeList;
+use GraphQL\Language\AST\ListValueNode;
+use GraphQL\Language\AST\SelectionNode;
+use GraphQL\Language\AST\NodeList;
 use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\GraphQl\Model\GraphQl\Clause\ReferenceTypeFactory;
 use Magento\GraphQl\Model\GraphQl\Clause\ReferenceType;

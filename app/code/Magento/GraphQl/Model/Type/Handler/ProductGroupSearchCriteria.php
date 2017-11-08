@@ -6,8 +6,8 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use \GraphQL\Type\Definition\InputObjectType;
-use \GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\InputObjectType;
+use GraphQL\Type\Definition\Type;
 use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 

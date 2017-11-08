@@ -6,8 +6,8 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use \GraphQL\Type\Definition\ListOfType;
-use \GraphQL\Type\Definition\ObjectType;
+use GraphQL\Type\Definition\ListOfType;
+use GraphQL\Type\Definition\ObjectType;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 
 /**

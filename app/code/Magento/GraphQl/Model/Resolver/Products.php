@@ -7,7 +7,7 @@
 namespace Magento\GraphQl\Model\Resolver;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use \GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\ResolveInfo;
 use Magento\GraphQl\Model\ResolverInterface;
 
 /**

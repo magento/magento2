@@ -10,7 +10,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
-use \GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\ResolveInfo;
 use Magento\GraphQl\Model\ResolverInterface;
 use Magento\Framework\Exception\InputException;
 

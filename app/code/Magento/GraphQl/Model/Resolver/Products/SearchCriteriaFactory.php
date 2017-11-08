@@ -8,7 +8,7 @@ namespace Magento\GraphQl\Model\Resolver\Products;
 
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
-use \GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\ResolveInfo;
 
 /**
  * Product field resolver, used for GraphQL request processing.

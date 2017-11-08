@@ -6,7 +6,7 @@
 
 namespace Magento\GraphQl\Controller;
 
-use \GraphQL\Error\FormattedError;
+use GraphQL\Error\FormattedError;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
