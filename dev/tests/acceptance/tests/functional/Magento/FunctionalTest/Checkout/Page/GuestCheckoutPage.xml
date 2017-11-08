@@ -8,7 +8,7 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="GuestCheckoutPage" urlPath="/checkout" module="Checkout">
+    <page name="GuestCheckoutPage" url="/checkout" module="Checkout">
         <section name="GuestCheckoutShippingSection"/>
         <section name="GuestCheckoutPaymentSection"/>
     </page>

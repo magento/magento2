@@ -37,7 +37,7 @@
             <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" mergeKey="fillSKU"/>
             <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" mergeKey="fillPrice"/>
             <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" mergeKey="fillQuantity"/>
-            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="['$$createPreReqCategory.name$$']" mergeKey="searchAndSelectCategory"/>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createPreReqCategory.name$$]" mergeKey="searchAndSelectCategory"/>
             <click selector="{{AdminProductSEOSection.sectionHeader}}" mergeKey="openSeoSection"/>
             <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" mergeKey="fillUrlKey"/>
             <click selector="{{AdminProductFormActionSection.saveButton}}" mergeKey="saveProduct"/>
