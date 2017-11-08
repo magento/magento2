@@ -231,13 +231,14 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
         $attribute = $this->getAttribute();
         $attrCode = $attribute->getAttributeCode();
         $value = $object->getData($attrCode);
+        $label = $attribute->getFrontend()->getLabel();
 
         if ($attribute->getIsVisible()
             && $attribute->getIsRequired()
             && $attribute->isValueEmpty($value)
             && $attribute->isValueEmpty($attribute->getDefaultValue())
         ) {
-            throw new LocalizedException(__('The value of attribute "%1" must be set', $attrCode));
+            throw new LocalizedException(__('The value of attribute "%1" must be set', $label));
         }
 
         if ($attribute->getIsUnique()
@@ -248,8 +249,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
         }
 
         if ($attribute->getIsUnique()) {
-            if (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $object)) {
-                $label = $attribute->getFrontend()->getLabel();
+            if (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $object)) {               
                 throw new LocalizedException(__('The value of attribute "%1" must be unique', $label));
             }
         }
