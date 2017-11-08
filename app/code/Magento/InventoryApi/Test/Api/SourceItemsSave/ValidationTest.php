@@ -111,7 +111,7 @@ class ValidationTest extends WebapiAbstract
                     'message' => 'Validation Failed',
                     'errors' => [
                         [
-                            'message' => '"%field" should a known status.',
+                            'message' => '"%field" should be numeric.',
                             'parameters' => [
                                 'field' => SourceItemInterface::STATUS,
                             ],
