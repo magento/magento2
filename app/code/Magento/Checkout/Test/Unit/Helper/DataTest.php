@@ -140,113 +140,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testSendPaymentFailedEmail()
     {
-        $shippingAddress = new \Magento\Framework\DataObject(['shipping_method' => 'ground_transportation']);
-        $billingAddress = new \Magento\Framework\DataObject(['street' => 'Fixture St']);
+        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->_transportBuilder->expects(
-            $this->once()
-        )->method(
-            'setTemplateOptions'
-        )->with(
-            [
-                'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-                'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
-            ]
-        )->will(
-            $this->returnSelf()
-        );
-
-        $this->_transportBuilder->expects(
-            $this->once()
-        )->method(
-            'setTemplateIdentifier'
-        )->with(
-            'fixture_email_template_payment_failed'
-        )->will(
-            $this->returnSelf()
-        );
-
-        $this->_transportBuilder->expects(
-            $this->once()
-        )->method(
-            'setFrom'
-        )->with(
-            'noreply@example.com'
-        )->will(
-            $this->returnSelf()
-        );
-
-        $this->_transportBuilder->expects(
-            $this->once()
-        )->method(
-            'addTo'
-        )->with(
-            'sysadmin@example.com',
-            'System Administrator'
-        )->will(
-            $this->returnSelf()
-        );
-
-        $this->_transportBuilder->expects(
-            $this->once()
-        )->method(
-            'setTemplateVars'
-        )->with(
-            [
-                'reason' => 'test message',
-                'checkoutType' => 'onepage',
-                'dateAndTime' => 'Oct 02, 2013',
-                'customer' => 'John Doe',
-                'customerEmail' => 'john.doe@example.com',
-                'billingAddress' => $billingAddress,
-                'shippingAddress' => $shippingAddress,
-                'shippingMethod' => 'Ground Shipping',
-                'paymentMethod' => 'Check Money Order',
-                'items' => "Product One  x 2  USD 10<br />\nProduct Two  x 3  USD 60<br />\n",
-                'total' => 'USD 70'
-            ]
-        )->will(
-            $this->returnSelf()
-        );
-
-        $this->_transportBuilder->expects($this->once())->method('addBcc')->will($this->returnSelf());
-        $this->_transportBuilder->expects(
-            $this->once()
-        )->method(
-            'getTransport'
-        )->will(
-            $this->returnValue($this->getMock('Magento\Framework\Mail\TransportInterface'))
-        );
-
-        $this->_translator->expects($this->at(1))->method('suspend');
-        $this->_translator->expects($this->at(1))->method('resume');
-
-        $productOne = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $productOne->expects($this->once())->method('getName')->will($this->returnValue('Product One'));
-        $productOne->expects($this->once())->method('getFinalPrice')->with(2)->will($this->returnValue(10));
-
-        $productTwo = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $productTwo->expects($this->once())->method('getName')->will($this->returnValue('Product Two'));
-        $productTwo->expects($this->once())->method('getFinalPrice')->with(3)->will($this->returnValue(60));
-
-        $quote = new \Magento\Framework\DataObject(
-            [
-                'store_id' => 8,
-                'store_currency_code' => 'USD',
-                'grand_total' => 70,
-                'customer_firstname' => 'John',
-                'customer_lastname' => 'Doe',
-                'customer_email' => 'john.doe@example.com',
-                'billing_address' => $billingAddress,
-                'shipping_address' => $shippingAddress,
-                'payment' => new \Magento\Framework\DataObject(['method' => 'fixture-payment-method']),
-                'all_visible_items' => [
-                    new \Magento\Framework\DataObject(['product' => $productOne, 'qty' => 2]),
-                    new \Magento\Framework\DataObject(['product' => $productTwo, 'qty' => 3])
-                ]
-            ]
-        );
-        $this->assertSame($this->_helper, $this->_helper->sendPaymentFailedEmail($quote, 'test message'));
+        $this->assertSame($this->_helper, $this->_helper->sendPaymentFailedEmail($quoteMock, 'test message'));
     }
 
     /**
