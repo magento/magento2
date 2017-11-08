@@ -650,24 +650,38 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Framework\Api\Search\FilterGroup $filterGroup,
         Collection $collection
     ) {
-        $fields = [];
-        $categoryFilter = [];
+        $customFilterValues = [];
+        $customFilterMethods = [];
         foreach ($filterGroup->getFilters() as $filter) {
             $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
 
-            if ($filter->getField() == 'category_id') {
-                $categoryFilter[$conditionType][] = $filter->getValue();
-                continue;
+            switch ($filter->getField()) {
+                case 'category_id':
+                    $customFilterValues['category_id'][$conditionType][] = $filter->getValue();
+                    $customFilterMethods['category_id'] = 'addCategoriesFilter';
+                    break;
+                case 'store':
+                    $customFilterValues['store'] = $filter->getValue();
+                    $customFilterMethods['store'] = 'addStoreFilter';
+                    break;
+                case 'website_id':
+                    $value = $filter->getValue();
+                    if (strpos($value, ',') !== false) {
+                        $value = explode(',', $value);
+                    }
+                    $customFilterValues['website_id'] = is_array($value) ? $value : [$value];
+                    $customFilterMethods['website_id'] = 'addWebsiteFilter';
+                    break;
+                default:
+                    $customFilterValues['fields'][] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
+                    $customFilterMethods['fields'] = 'addFieldToFilter';
+                    break;
             }
-            $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
         }
 
-        if ($categoryFilter) {
-            $collection->addCategoriesFilter($categoryFilter);
-        }
-
-        if ($fields) {
-            $collection->addFieldToFilter($fields);
+        foreach ($customFilterValues as $filterName => $filterValue) {
+            $filterMethod = $customFilterMethods[$filterName];
+            $collection->$filterMethod($filterValue);
         }
     }
 
