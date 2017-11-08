@@ -673,7 +673,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                     $customFilterMethods['website_id'] = 'addWebsiteFilter';
                     break;
                 default:
-                    $customFilterValues['fields'][] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
+                    $customFilterValues['fields'][] = [
+                        'attribute' => $filter->getField(),
+                        $conditionType => $filter->getValue(),
+                    ];
                     $customFilterMethods['fields'] = 'addFieldToFilter';
                     break;
             }
