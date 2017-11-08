@@ -32,8 +32,7 @@ class CustomerView extends CoreGeneric
         Context $context,
         Registry $registry,
         UrlBuilder $actionUrlBuilder
-    )
-    {
+    ) {
         $this->context = $context;
         $this->registry = $registry;
         $this->actionUrlBuilder = $actionUrlBuilder;
