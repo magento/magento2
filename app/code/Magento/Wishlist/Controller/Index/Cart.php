@@ -145,13 +145,8 @@ class Cart extends AbstractIndex
             return $resultRedirect;
         }
 
-        // Set qty
-        if (method_exists($this->getRequest(), 'getPost')) {
-            $qty = $this->getRequest()->getPost('qty') ? $this->getRequest()->getPost('qty') :
-                $this->getRequest()->getParam('qty');
-        } else {
-            $qty = $this->getRequest()->getParam('qty');
-        }
+        $qty = $this->getQty();
+
         if (is_array($qty)) {
             if (isset($qty[$itemId])) {
                 $qty = $qty[$itemId];
@@ -224,5 +219,16 @@ class Cart extends AbstractIndex
 
         $resultRedirect->setUrl($redirectUrl);
         return $resultRedirect;
+    }
+
+    private function getQty()
+    {
+        if (method_exists($this->getRequest(), 'getPost')) {
+            $qty = $this->getRequest()->getPost('qty') ? $this->getRequest()->getPost('qty') :
+                $this->getRequest()->getParam('qty');
+        } else {
+            $qty = $this->getRequest()->getParam('qty');
+        }
+        return $qty;
     }
 }
