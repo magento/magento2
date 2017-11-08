@@ -2389,26 +2389,6 @@ vars.put("product_sku", product.get("sku"));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
-            </ResponseAssertion>
-            <hashTree/>
         </hashTree>
     </hashTree>
   
@@ -2475,26 +2455,6 @@ vars.put("product_sku", product.get("sku"));
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
                 <boolProp name="Assertion.assume_success">false</boolProp>
                 <intProp name="Assertion.test_type">2</intProp>
-            </ResponseAssertion>
-            <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
             </ResponseAssertion>
             <hashTree/>
         </hashTree>
@@ -2754,26 +2714,6 @@ vars.put("product_url_key", product);
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
                 <boolProp name="Assertion.assume_success">false</boolProp>
                 <intProp name="Assertion.test_type">2</intProp>
-            </ResponseAssertion>
-            <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
             </ResponseAssertion>
             <hashTree/>
         </hashTree>
@@ -3145,26 +3085,6 @@ vars.put("product_url_key", product);
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
-            </ResponseAssertion>
-            <hashTree/>
         </hashTree>
     </hashTree>
   </hashTree>
@@ -3484,26 +3404,6 @@ vars.put("product_url_key", product);
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
-            </ResponseAssertion>
-            <hashTree/>
         </hashTree>
     </hashTree>
   </hashTree>
@@ -3774,26 +3674,6 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
-            </ResponseAssertion>
-            <hashTree/>
         </hashTree>
     
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product ${_counter} Add To Cart" enabled="true">
@@ -4015,26 +3895,6 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
                 <boolProp name="Assertion.assume_success">false</boolProp>
                 <intProp name="Assertion.test_type">2</intProp>
-            </ResponseAssertion>
-            <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
             </ResponseAssertion>
             <hashTree/>
         </hashTree>
@@ -4657,26 +4517,6 @@ vars.put("product_sku", product.get("sku"));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
-            </ResponseAssertion>
-            <hashTree/>
         </hashTree>
     
       <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product Add To Wishlist" enabled="true">
@@ -5118,26 +4958,6 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
-            </ResponseAssertion>
-            <hashTree/>
         </hashTree>
     
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product ${_counter} Comparison Add" enabled="true">
@@ -5314,26 +5134,6 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
                 <boolProp name="Assertion.assume_success">false</boolProp>
                 <intProp name="Assertion.test_type">2</intProp>
-            </ResponseAssertion>
-            <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
             </ResponseAssertion>
             <hashTree/>
         </hashTree>
@@ -5757,26 +5557,6 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
-            </ResponseAssertion>
-            <hashTree/>
         </hashTree>
     
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product ${_counter} Add To Cart" enabled="true">
@@ -5998,26 +5778,6 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
                 <boolProp name="Assertion.assume_success">false</boolProp>
                 <intProp name="Assertion.test_type">2</intProp>
-            </ResponseAssertion>
-            <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
             </ResponseAssertion>
             <hashTree/>
         </hashTree>
@@ -7116,26 +6876,6 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
-            </ResponseAssertion>
-            <hashTree/>
         </hashTree>
     
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product ${_counter} Add To Cart" enabled="true">
@@ -7357,26 +7097,6 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
                 <boolProp name="Assertion.assume_success">false</boolProp>
                 <intProp name="Assertion.test_type">2</intProp>
-            </ResponseAssertion>
-            <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
             </ResponseAssertion>
             <hashTree/>
         </hashTree>
@@ -25940,26 +25660,6 @@ vars.put("product_sku", product.get("sku"));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
-            </ResponseAssertion>
-            <hashTree/>
         </hashTree>
     
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product 1 Rate and Review" enabled="true">
@@ -29894,26 +29594,6 @@ vars.put("product_sku", product.get("sku"));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
-            </ResponseAssertion>
-            <hashTree/>
         </hashTree>
     </hashTree>
   
@@ -29980,26 +29660,6 @@ vars.put("product_sku", product.get("sku"));
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
                 <boolProp name="Assertion.assume_success">false</boolProp>
                 <intProp name="Assertion.test_type">2</intProp>
-            </ResponseAssertion>
-            <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
             </ResponseAssertion>
             <hashTree/>
         </hashTree>
@@ -30462,26 +30122,6 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
-            </ResponseAssertion>
-            <hashTree/>
         </hashTree>
     
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product ${_counter} Add To Cart" enabled="true">
@@ -30703,26 +30343,6 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
                 <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
                 <boolProp name="Assertion.assume_success">false</boolProp>
                 <intProp name="Assertion.test_type">2</intProp>
-            </ResponseAssertion>
-            <hashTree/>
-            <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="XPath Extractor: Extract product id" enabled="true">
-                <stringProp name="XPathExtractor.default"/>
-                <stringProp name="XPathExtractor.refname">product_id</stringProp>
-                <stringProp name="XPathExtractor.xpathQuery">.//input[@type="hidden" and @name="product"]/@value</stringProp>
-                <boolProp name="XPathExtractor.validate">false</boolProp>
-                <boolProp name="XPathExtractor.tolerant">true</boolProp>
-                <boolProp name="XPathExtractor.namespace">false</boolProp>
-            </XPathExtractor>
-            <hashTree/>
-            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert id" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                    <stringProp name="89649215">^\d+$</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">1</intProp>
-                <stringProp name="Assertion.scope">variable</stringProp>
-                <stringProp name="Scope.variable">product_id</stringProp>
             </ResponseAssertion>
             <hashTree/>
         </hashTree>
