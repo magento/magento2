@@ -7,7 +7,7 @@
 namespace Magento\GraphQl\Model\Type;
 
 /**
- * Generate configured top level GraphQL types, and their children types as defined by type handlers
+ * Generate configured GraphQL type schema and top-level fields of base query object
  */
 interface GeneratorInterface
 {
@@ -15,7 +15,7 @@ interface GeneratorInterface
      * Generate type definitions for all fields of given GraphQl query or mutation name
      *
      * @param string $typeName
-     * @return array
+     * @return array Represented as ['fields' => ['fieldName' => Type, {...}], 'types' => Types[]]
      */
     public function generateTypes(string $typeName);
 }

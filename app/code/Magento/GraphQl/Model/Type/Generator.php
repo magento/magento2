@@ -57,12 +57,13 @@ class Generator implements GeneratorInterface
         $mappedFields = $this->typeMap[$typeName];
         foreach ($mappedFields['fields'] as $fieldName => $values) {
             $arguments = [];
-            if (isset($values['args'])) {
-                foreach ($values['args'] as $argName => $argType) {
-                    // Replace '[]' with an 's' to express plurality
-                    $realArgName = str_replace('!', '', str_replace('[]', 's', $argName));
-                    $arguments[$realArgName] = ['type' => $this->decorateType($argName, $argType)];
-                }
+            if (!isset($values['args'])) {
+                $values['args'] = [];
+            }
+            foreach ($values['args'] as $argName => $argType) {
+                // Replace '[]' with an 's' to express plurality
+                $realArgName = str_replace('!', '', str_replace('[]', 's', $argName));
+                $arguments[$realArgName] = ['type' => $this->decorateType($argName, $argType)];
             }
 
             $fields[$fieldName] = ['type' => $this->typePool->getType($values['type']), 'args' => $arguments];

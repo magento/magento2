@@ -84,7 +84,7 @@ class TypeGenerator
     }
 
     /**
-     * Gets service contract type data from associative service contract name
+     * Get service contract type data from associative service contract name
      *
      * @param string $type
      * @return array
@@ -190,7 +190,7 @@ class TypeGenerator
     }
 
     /**
-     * Checks if array is associative
+     * Check if array is associative
      *
      * @param $arr
      * @return bool
@@ -201,7 +201,7 @@ class TypeGenerator
     }
 
     /**
-     * Transforms string from underscore to camelcase
+     * Transform string from underscore to camelcase
      *
      * @param string $value
      * @return string
