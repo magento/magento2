@@ -82,7 +82,8 @@ QUERY;
     }
 
     /**
-     * Request items that are visible in Catalog, Search or Both matching SKU or NAME and price < $60 with a special price and weight = 1 sorted by price in DESC
+     * Requesting for items that are visible in Catalog, Search or Both matching SKU or NAME
+     * and price < $60 with a special price and weight = 1 sorted by price in DESC
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -424,6 +425,62 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(0, $response['products']['total_count']);
         $this->assertEmpty($response['products']['items'], "No items should be returned.");
+    }
+
+    /**
+     * Asserts that exception is thrown when current page > totalCount of items returned
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testQueryPageOutOfBoundException()
+    {
+        $query
+            = <<<QUERY
+{
+    products(
+        find:
+        {
+          and:
+          {
+            price:{eq:"10"}
+
+           }
+        }
+         pageSize:2
+         currentPage:2
+         sort:
+         {
+          name:ASC
+         }
+    )
+    {
+      items
+      {
+        sku
+        price
+        name
+        status
+        type_id
+           weight
+           visibility
+           attribute_set_id
+         }
+        total_count
+        page_info
+        {
+          page_size
+          current_page
+        }
+
+    }
+}
+QUERY;
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: The value' . ' ' .
+            'specified in the currentPage attribute is greater than the number of pages available (1).');
+        $this->graphQlQuery($query);
     }
 
     /**
