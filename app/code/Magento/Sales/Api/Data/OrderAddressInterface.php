@@ -27,6 +27,11 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Customer address ID.
      */
     const CUSTOMER_ADDRESS_ID = 'customer_address_id';
+
+    /**
+     * Quote address ID.
+     */
+    const QUOTE_ADDRESS_ID = 'quote_address_id';
     /*
      * Region ID.
      */
@@ -154,6 +159,13 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @return int|null Country address ID.
      */
     public function getCustomerAddressId();
+
+    /**
+     * Gets the quote address ID for the order address.
+     *
+     * @return int|null Quote address ID.
+     */
+    public function getQuoteAddressId();
 
     /**
      * Gets the customer ID for the order address.
@@ -321,10 +333,18 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the country address ID for the order address.
      *
+     * @param int $addressId
+     * @return $this
+     */
+    public function setCustomerAddressId($addressId);
+
+    /**
+     * Sets the quote address ID for the order address.
+     *
      * @param int $id
      * @return $this
      */
-    public function setCustomerAddressId($id);
+    public function setQuoteAddressId($id);
 
     /**
      * Sets the region ID for the order address.

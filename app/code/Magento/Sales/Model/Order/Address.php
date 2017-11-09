@@ -5,10 +5,9 @@
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Model\Address\AddressModelInterface;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Model\AbstractModel;
-use Magento\Customer\Model\Address\AddressModelInterface;
 
 /**
  * Sales order address model
@@ -88,7 +87,6 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
             $resourceCollection,
             $data
         );
-
     }
 
     /**
@@ -309,6 +307,16 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
+     * Returns quote_address_id
+     *
+     * @return int
+     */
+    public function getQuoteAddressId()
+    {
+        return $this->getData(OrderAddressInterface::QUOTE_ADDRESS_ID);
+    }
+
+    /**
      * Returns customer_id
      *
      * @return int
@@ -523,6 +531,14 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     public function setCustomerAddressId($id)
     {
         return $this->setData(OrderAddressInterface::CUSTOMER_ADDRESS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQuoteAddressId($addressId)
+    {
+        return $this->setData(OrderAddressInterface::QUOTE_ADDRESS_ID, $addressId);
     }
 
     /**
