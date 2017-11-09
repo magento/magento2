@@ -30,6 +30,7 @@
             </annotations>
             <amOnPage url="{{AdminCategoryPage.url}}" mergeKey="navigateToNewCatalog"/>
             <waitForPageLoad mergeKey="wait1"/>
+            <waitForLoadingMaskToDisappear mergeKey="wait2" />
             <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" mergeKey="clickOnAddSubCategory"/>
             <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" mergeKey="enterCategoryName"/>
             <click selector="{{AdminProductFormSection.contentTab}}" mergeKey="clickContentTab"/>

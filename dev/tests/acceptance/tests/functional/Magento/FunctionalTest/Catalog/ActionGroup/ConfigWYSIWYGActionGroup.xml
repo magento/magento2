@@ -13,7 +13,6 @@
         <waitForPageLoad mergeKey="wait1"/>
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="expandWYSIWYGOptions1" />
         <wait time="2" mergeKey="wait" />
-        <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" time="100" mergeKey="waitForEnableWYSIWYGDropdown1" />
         <selectOption selector="{{ContentManagementSection.EnableWYSIWYG}}" userInput="Enabled by Default" mergeKey="selectOption1"/>
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="expandWYSIWYGOptions2" />
         <click selector="{{ContentManagementSection.Save}}" mergeKey="saveConfig" />
@@ -23,7 +22,6 @@
         <waitForPageLoad mergeKey="wait3"/>
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="collapseWYSIWYGOptions3" />
         <wait time="2" mergeKey="wait" />
-        <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" time="100" mergeKey="waitForEnableWYSIWYGDropdown2" />
         <selectOption selector="{{ContentManagementSection.EnableWYSIWYG}}" userInput="Disabled Completely" mergeKey="selectOption2"/>
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="collapseWYSIWYGOptions4" />
         <click selector="{{ContentManagementSection.Save}}" mergeKey="saveConfig" />
