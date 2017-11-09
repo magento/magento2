@@ -9,7 +9,7 @@ namespace Magento\InventoryApi\Api;
 
 /**
  * Service method for source items delete multiple
- * Performance efficient API, used for stock synchronization
+ * Performance efficient API
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
