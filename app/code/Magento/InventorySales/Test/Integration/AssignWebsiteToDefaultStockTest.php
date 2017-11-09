@@ -40,7 +40,7 @@ class AssignWebsiteToDefaultStockTest extends TestCase
     }
 
     /**
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites.php
      */
     public function testCreateWebsitesViaFixtureIfSalesChannelsAreEmpty()
     {

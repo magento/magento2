@@ -193,7 +193,6 @@ class SourcesTest extends TestCase
 
         $this->assertArrayHasKey('20-SKU-1', $afterImportData);
         $this->assertArrayHasKey('50-SKU-2', $afterImportData);
-        $this->assertCount(2, $afterImportData);
     }
 
     /**
