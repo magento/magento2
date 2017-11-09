@@ -106,23 +106,5 @@ class ProductItem extends CatalogProductItem
         $this->_rootElement->hover();
 
         parent::clickAddToCart();
-
-        $this->waitUntilAddToCartButtonEnabled();
-    }
-
-    /**
-     * Wait until Add to Cart button is enabled.
-     *
-     * @return mixed
-     */
-    public function waitUntilAddToCartButtonEnabled()
-    {
-        return $this->browser->waitUntil(
-            function () {
-                $element = $this->_rootElement->find($this->addToCard, Locator::SELECTOR_CSS);
-                return !$element->isDisabled() ? true : null;
-            }
-        );
-
     }
 }
