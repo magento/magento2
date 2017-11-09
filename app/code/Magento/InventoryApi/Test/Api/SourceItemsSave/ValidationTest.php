@@ -17,7 +17,7 @@ class ValidationTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source-items';
+    const RESOURCE_PATH = '/V1/inventory/source-item';
     const SERVICE_NAME = 'inventoryApiSourceItemsSaveV1';
     /**#@-*/
 
@@ -54,7 +54,7 @@ class ValidationTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Execute',
             ],
         ];
-        $this->webApiCall($serviceInfo, $data, $expectedErrorData);
+        $this->webApiCall($serviceInfo, [$data], $expectedErrorData);
     }
 
     /**
@@ -145,11 +145,12 @@ class ValidationTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Execute',
             ],
         ];
-        $this->webApiCall($serviceInfo, $data, $expectedErrorData);
+        $this->webApiCall($serviceInfo, [$data], $expectedErrorData);
     }
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function failedValidationDataProvider(): array
     {
@@ -244,6 +245,13 @@ class ValidationTest extends WebapiAbstract
                     ],
                 ],
             ],
+            'not_exists_' . SourceItemInterface::SOURCE_ID => [
+                SourceItemInterface::SOURCE_ID,
+                100,
+                [
+                    'message' => 'Could not save Source Item',
+                ],
+            ],
         ];
     }
 
@@ -277,7 +285,7 @@ class ValidationTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Execute',
             ],
         ];
-        $this->webApiCall($serviceInfo, $data, $expectedErrorData);
+        $this->webApiCall($serviceInfo, [$data], $expectedErrorData);
     }
 
     /**
@@ -322,16 +330,38 @@ class ValidationTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     */
+    public function testCreateWithEmptyData()
+    {
+        $sourceItems = [];
+        $expectedErrorData = ['message' => 'Input data is empty'];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'Execute',
+            ],
+        ];
+        $this->webApiCall($serviceInfo, $sourceItems, $expectedErrorData);
+    }
+
+    /**
      * @param array $serviceInfo
-     * @param array $data
+     * @param array $sourceItems
      * @param array $expectedErrorData
      * @return void
      * @throws \Exception
      */
-    private function webApiCall(array $serviceInfo, array $data, array $expectedErrorData)
+    private function webApiCall(array $serviceInfo, array $sourceItems, array $expectedErrorData)
     {
         try {
-            $this->_webApiCall($serviceInfo, ['sourceItems' => [$data]]);
+            $this->_webApiCall($serviceInfo, ['sourceItems' => $sourceItems]);
             $this->fail('Expected throwing exception');
         } catch (\Exception $exception) {
             if (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST) {
