@@ -11,4 +11,7 @@
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
         <plugin name="prevent_default_stock_deletion" type="Magento\InventoryCatalog\Plugin\Model\StockRepositoryPlugin" sortOrder="1"/>
     </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
+        <plugin name="migrate_single_stock_data" type="Magento\InventoryCatalog\Plugin\Model\ResourceModel\StockItemPlugin" sortOrder="1"/>
+    </type>
 </config>
