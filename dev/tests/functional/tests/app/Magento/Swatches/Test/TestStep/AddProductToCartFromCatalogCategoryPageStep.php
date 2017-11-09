@@ -94,6 +94,7 @@ class AddProductToCartFromCatalogCategoryPageStep implements TestStepInterface
                 ],
             ],
         ];
+        $this->categoryView->getMessagesBlock()->waitSuccessMessage();
 
         return [
             'cart' => $this->fixtureFactory->createByCode('cart', $cart),
