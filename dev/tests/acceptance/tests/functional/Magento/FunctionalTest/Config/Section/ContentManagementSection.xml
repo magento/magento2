@@ -14,9 +14,6 @@
         <element name="EnableWYSIWYG" type="button" selector="#cms_wysiwyg_enabled"/>
         <element name="SwitcherSystemValue" type="button" selector="#cms_wysiwyg_editor_inherit"/>
         <element name="Switcher" type="button" selector="#cms_wysiwyg_editor" />
-
-        <element name="CHECK" type="button" selector="#cms_wysiwyg-head.open"/>
-
-
+        <element name="CHECK" type="button" selector="#cms_wysiwyg-head:not(.open)"/>
     </section>
 </config>
