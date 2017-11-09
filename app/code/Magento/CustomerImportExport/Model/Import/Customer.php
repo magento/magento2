@@ -277,6 +277,12 @@ class Customer extends AbstractCustomer
         return $this;
     }
 
+    /**
+     * Filter the entity that are being updated so we only change fields found in the importer file
+     *
+     * @param array $entitiesToUpdate
+     * @return array
+     */
     private function getCustomerEntityFieldsToUpdate(array $entitiesToUpdate): array
     {
         $firstCustomer = reset($entitiesToUpdate);
