@@ -47,18 +47,17 @@ class Mail implements MailInterface
         StateInterface $inlineTranslation,
         StoreManagerInterface $storeManager = null
     ) {
-        $this->contactsConfig    = $contactsConfig;
-        $this->transportBuilder  = $transportBuilder;
+        $this->contactsConfig = $contactsConfig;
+        $this->transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
-        $this->storeManager      = $storeManager ?:
-            ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
      * Send email from contact form
      *
      * @param string $replyTo
-     * @param array  $variables
+     * @param array $variables
      * @return void
      */
     public function send($replyTo, array $variables)
@@ -72,7 +71,7 @@ class Mail implements MailInterface
                 ->setTemplateIdentifier($this->contactsConfig->emailTemplate())
                 ->setTemplateOptions(
                     [
-                        'area'  => Area::AREA_FRONTEND,
+                        'area' => Area::AREA_FRONTEND,
                         'store' => $this->storeManager->getStore()->getId()
                     ]
                 )
