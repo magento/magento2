@@ -23,4 +23,3 @@ $product
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 8.5, 'is_in_stock' => 1])
     ->setQty(8.5)
     ->save();
-

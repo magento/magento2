@@ -51,7 +51,6 @@ class UpdateLegacyCatalogInventoryPluginTest extends TestCase
      */
     private $indexer;
 
-
     protected function setUp()
     {
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
@@ -133,7 +132,6 @@ class UpdateLegacyCatalogInventoryPluginTest extends TestCase
         $collectionAfterChange = $this->oldStockItemRepository->getList($criteria);
         $oldStockItem = current($collectionAfterChange->getItems());
         $quantityAfterCheck = $oldStockItem->getQty();
-
 
         $this->assertEquals($this->getProductQtyInStock->execute('SKU-1', 10), $quantityAfterCheck);
     }
