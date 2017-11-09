@@ -12,7 +12,7 @@
         <annotations>
             <features value="TinyMCEv4"/>
             <stories value="Apply new WYSIWYG on Categories Page"/>
-            <group value="WYSIWYG"/>
+            <group value="test"/>
             <env value="chrome"/>
             <env value="firefox"/>
             <env value="phantomjs"/>
