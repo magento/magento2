@@ -25,6 +25,9 @@
     <type name="Magento\Catalog\Model\Category\DataProvider">
         <plugin name="category_ui_form_url_key_plugin" type="Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab\Attributes"/>
     </type>
+    <type name="Magento\Eav\Api\AttributeSetRepositoryInterface">
+        <plugin name="attribute_set_delete_plugin" type="Magento\CatalogUrlRewrite\Plugin\Eav\AttributeSetRepository\RemoveProductUrlRewrite"/>
+    </type>
     <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">
