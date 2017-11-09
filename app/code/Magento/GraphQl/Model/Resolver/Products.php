@@ -59,7 +59,7 @@ class Products implements ResolverInterface
             throw new \GraphQL\Error\Error(
                 sprintf(
                     'The value specified in the currentPage attribute is greater than the number'
-                    . 'of pages available (%s).',
+                    . ' of pages available (%s).',
                     $maxPages
                 )
             );
