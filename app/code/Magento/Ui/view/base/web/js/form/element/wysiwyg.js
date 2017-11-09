@@ -94,7 +94,7 @@ define([
             this.$wysiwygEditorButton.attr('disabled', status);
 
             /* eslint-disable no-undef */
-            if (tinyMCE) {
+            if (tinyMCE && tinyMCE.activeEditor) {
                 _.each(tinyMCE.activeEditor.controlManager.controls, function (property, index, controls) {
                     controls[property.id].setDisabled(status);
                 });
