@@ -127,7 +127,10 @@ class Render extends AbstractAction
     {
         if (isset($dataProviderConfigData['aclResource'])) {
             if (!$this->_authorization->isAllowed($dataProviderConfigData['aclResource'])) {
-                $this->_redirect('admin/denied');
+                if (!$this->_request->isAjax()) {
+                    $this->_redirect('admin/denied');
+                }
+
                 return false;
             }
         }
