@@ -10,8 +10,8 @@
 <?php /** @var $block \Magento\Checkout\Block\Onepage\Success */ ?>
 
 <?php if ($block->getCanViewOrder() && $block->getCanPrintOrder()) :?>
-    <a href="<?= /* @escapeNotVerified */ echo $block->getPrintUrl() ?>" target="_blank" class="print">
-        <?= /* @escapeNotVerified */ echo __('Print receipt') ?>
+    <a href="<?= /* @escapeNotVerified */ $block->getPrintUrl() ?>" target="_blank" class="print">
+        <?= /* @escapeNotVerified */ __('Print receipt') ?>
     </a>
     <?= $block->getChildHtml() ?>
 <?php endif;?>
