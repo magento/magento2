@@ -40,6 +40,7 @@ class AssertSwatchConfigurableProductPage extends AssertProductPage
             AddProductToCartFromCatalogCategoryPageStep::class,
             [
                 'product' => $product,
+                'waitSuccessMessage' => false,
             ]
         )->run();
 

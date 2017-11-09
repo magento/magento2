@@ -49,22 +49,32 @@ class AddProductToCartFromCatalogCategoryPageStep implements TestStepInterface
     private $cmsIndex;
 
     /**
+     * Flag wait success added product to cart message or not.
+     *
+     * @var bool
+     */
+    private $waitSuccessMessage;
+
+    /**
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $categoryView
      * @param InjectableFixture $product
+     * @param bool $waitSuccessMessage
      */
     public function __construct(
         FixtureFactory $fixtureFactory,
         CmsIndex $cmsIndex,
         CatalogCategoryView $categoryView,
-        InjectableFixture $product
+        InjectableFixture $product,
+        $waitSuccessMessage = true
     ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->cmsIndex = $cmsIndex;
         $this->categoryView = $categoryView;
         $this->product = $product;
+        $this->waitSuccessMessage = $waitSuccessMessage;
     }
 
     /**
@@ -94,7 +104,10 @@ class AddProductToCartFromCatalogCategoryPageStep implements TestStepInterface
                 ],
             ],
         ];
-        $this->categoryView->getMessagesBlock()->waitSuccessMessage();
+
+        if ($this->waitSuccessMessage) {
+            $this->categoryView->getMessagesBlock()->waitSuccessMessage();
+        }
 
         return [
             'cart' => $this->fixtureFactory->createByCode('cart', $cart),
