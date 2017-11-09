@@ -150,6 +150,7 @@ class ValidationTest extends WebapiAbstract
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function failedValidationDataProvider(): array
     {
