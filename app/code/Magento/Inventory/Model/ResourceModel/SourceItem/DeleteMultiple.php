@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Inventory\Model\ResourceModel\SourceItem;
 
@@ -41,19 +42,33 @@ class DeleteMultiple
         if (!count($sourceItems)) {
             return;
         }
-
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
-        $skuList = [];
+        $whereSql = $this->buildWhereSqlPart($sourceItems);
+        $connection->delete($tableName, $whereSql);
+    }
+
+    /**
+     * @param array $sourceItems
+     * @return string
+     */
+    private function buildWhereSqlPart(array $sourceItems): string
+    {
+        $connection = $this->resourceConnection->getConnection();
+
+        $condition = [];
         foreach ($sourceItems as $sourceItem) {
-            $skuList[] = $sourceItem->getSku();
+            $skuCondition = $connection->quoteInto(
+                SourceItemInterface::SKU . ' = ?',
+                $sourceItem->getSku()
+            );
+            $sourceIdCondition = $connection->quoteInto(
+                SourceItemInterface::SOURCE_ID . ' = ?',
+                $sourceItem->getSourceId()
+            );
+            $condition[] = '(' . $skuCondition . ' AND ' . $sourceIdCondition . ')';
         }
-
-        $whereCond = [
-            $connection->quoteInto(SourceItemInterface::SKU . ' IN(?)', array_unique($skuList))
-        ];
-
-        $connection->delete($tableName, $whereCond);
+        return implode(' OR ', $condition);
     }
 }

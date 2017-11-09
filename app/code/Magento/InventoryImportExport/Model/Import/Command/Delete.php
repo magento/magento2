@@ -27,8 +27,8 @@ class Delete implements CommandInterface
     private $sourceItemsDelete;
 
     /**
-     * @param SourceItemConvert $sourceItemConvert ,
-     * @param SourceItemsDeleteInterface $sourceItemsSave
+     * @param SourceItemConvert $sourceItemConvert
+     * @param SourceItemsDeleteInterface $sourceItemsDelete
      */
     public function __construct(
         SourceItemConvert $sourceItemConvert,

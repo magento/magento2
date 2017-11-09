@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Observer;
+namespace Magento\InventoryCatalog\Observer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Save;
@@ -35,6 +35,7 @@ class ProcessSourceItemsObserver implements ObserverInterface
      * Process source items during product saving via controller
      *
      * @param EventObserver $observer
+     *
      * @return void
      */
     public function execute(EventObserver $observer)
@@ -46,8 +47,7 @@ class ProcessSourceItemsObserver implements ObserverInterface
 
         $sources = $controller->getRequest()->getParam('sources', []);
         $assignedSources = isset($sources['assigned_sources']) && is_array($sources['assigned_sources'])
-            ? $sources['assigned_sources']
-            : [];
+            ? $sources['assigned_sources'] : [];
 
         $this->sourceItemsProcessor->process(
             $product->getSku(),
