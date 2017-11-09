@@ -417,6 +417,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         }
 
         if ($this->_needCollect) {
+            $this->getQuote()->getShippingAddress()->unsCachedItemsAll();
+            $this->getQuote()->setTotalsCollectedFlag(false);
             $this->getQuote()->collectTotals();
         }
 
