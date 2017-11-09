@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\InventoryApi\Test\Api\SourceItemRepository;
 
@@ -13,9 +14,6 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\TestFramework\Assert\AssertArrayContains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
-/**
- * @covers Magento\InventoryApi\Api\SourceItemRepositoryInterface
- */
 class GetListTest extends WebapiAbstract
 {
     /**#@+
@@ -29,7 +27,6 @@ class GetListTest extends WebapiAbstract
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @covers Magento\InventoryApi\Api\SourceItemRepositoryInterface::getList
      */
     public function testGetList()
     {

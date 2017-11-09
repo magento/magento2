@@ -17,7 +17,7 @@ class ValidationTest extends WebapiAbstract
     /**#@+
      * Service constants
      */
-    const RESOURCE_PATH = '/V1/inventory/source-items';
+    const RESOURCE_PATH = '/V1/inventory/source-item';
     const SERVICE_NAME = 'inventoryApiSourceItemsSaveV1';
     /**#@-*/
 
