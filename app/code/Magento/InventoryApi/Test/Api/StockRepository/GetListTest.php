@@ -89,7 +89,7 @@ class GetListTest extends WebapiAbstract
                     SearchCriteria::CURRENT_PAGE => 2,
                     SearchCriteria::PAGE_SIZE => 2,
                 ],
-                3,
+                4,
                 [
                     [
                         StockInterface::NAME => 'EU-stock',

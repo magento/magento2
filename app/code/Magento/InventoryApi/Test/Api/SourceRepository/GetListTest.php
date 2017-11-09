@@ -54,7 +54,7 @@ class GetListTest extends WebapiAbstract
                 SearchCriteria::PAGE_SIZE => 2,
             ],
         ];
-        $expectedTotalCount = 4;
+        $expectedTotalCount = 5;
         $expectedItemsData = [
             [
                 SourceInterface::ENABLED => true,
