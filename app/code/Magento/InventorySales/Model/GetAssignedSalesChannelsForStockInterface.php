@@ -10,8 +10,8 @@ namespace Magento\InventorySales\Model;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 
 /**
- * TODO: describe SPI
- * Get assigned Sales Channels for Stock
+ * Get assigned Sales Channels for Stock (Service Provider Interface - SPI)
+ * Provide own implementation of this interface if you would like to replace channels management strategy
  *
  * @api
  */

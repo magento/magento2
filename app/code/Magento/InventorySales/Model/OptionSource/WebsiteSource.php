@@ -42,7 +42,7 @@ class WebsiteSource implements OptionSourceInterface
             }
             $websites[] = [
                 'value' => $website->getCode(),
-                'label' => $website->getName()
+                'label' => $website->getName(),
             ];
         }
         return $websites;

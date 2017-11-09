@@ -7,51 +7,49 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventorySalesApi\Api\StockResolverInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\InventorySales\Model\ResourceModel\StockResolver as StockResolverResourceModel;
+use Magento\InventorySales\Model\ResourceModel\StockIdResolver;
 
 /**
- * The stock resolver is responsible for getting the linked stock for a certain sales channel.
+ * @inheritdoc
  */
 class StockResolver implements StockResolverInterface
 {
     /**
-     * @var StockResolverResourceModel
-     */
-    private $stockResolverResourceModel;
-
-    /**
      * @var StockRepositoryInterface
      */
-    private $stockRepositoryInterface;
+    private $stockRepository;
 
     /**
-     * StockResolver constructor.
-     *
+     * @var StockIdResolver
+     */
+    private $stockIdResolver;
+
+    /**
      * @param StockRepositoryInterface $stockRepositoryInterface
-     * @param StockResolverResourceModel $stockResolverResourceModel
+     * @param StockIdResolver $stockIdResolver
      */
     public function __construct(
         StockRepositoryInterface $stockRepositoryInterface,
-        StockResolverResourceModel $stockResolverResourceModel
+        StockIdResolver $stockIdResolver
     ) {
-        $this->stockRepositoryInterface = $stockRepositoryInterface;
-        $this->stockResolverResourceModel = $stockResolverResourceModel;
+        $this->stockRepository = $stockRepositoryInterface;
+        $this->stockIdResolver = $stockIdResolver;
     }
 
     /**
-     * Get Stock Object by given type and code.
-     *
-     * @param string $type
-     * @param string $code
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return StockInterface
+     * @inheritdoc
      */
     public function get(string $type, string $code): StockInterface
     {
-        $stockId = $this->stockResolverResourceModel->resolve($type, $code);
-        return $this->stockRepositoryInterface->get($stockId);
+        $stockId = $this->stockIdResolver->resolve($type, $code);
+
+        if (null === $stockId) {
+            throw new NoSuchEntityException(__('No linked stock found!'));
+        }
+        return $this->stockRepository->get($stockId);
     }
 }

@@ -10,12 +10,14 @@ namespace Magento\InventorySalesApi\Api;
 use Magento\InventoryApi\Api\Data\StockInterface;
 
 /**
+ * The stock resolver is responsible for getting the linked stock for a certain sales channel
+ *
  * @api
  */
 interface StockResolverInterface
 {
     /**
-     * Get Stock Entity by sales channel type and code
+     * Resolve Stock by Sales Channel type and code
      *
      * @param string $type
      * @param string $code

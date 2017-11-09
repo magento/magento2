@@ -18,7 +18,6 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
  */
 class SalesChannel extends AbstractExtensibleModel implements SalesChannelInterface
 {
-
     /**
      * @inheritdoc
      */
