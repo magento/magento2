@@ -6,7 +6,6 @@
 namespace Magento\InventoryApi\Api;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
 
 /**
@@ -43,13 +42,4 @@ interface SourceItemRepositoryInterface
      * @return \Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria): SourceItemSearchResultsInterface;
-
-    /**
-     * Delete SourceItem data
-     *
-     * @param \Magento\InventoryApi\Api\Data\SourceItemInterface $sourceItem
-     * @return void
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     */
-    public function delete(SourceItemInterface $sourceItem);
 }

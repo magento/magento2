@@ -10,6 +10,7 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\EntityManager\EventManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -49,24 +50,32 @@ class Save extends Action
     private $stockSourceLinkProcessor;
 
     /**
+     * @var EventManager
+     */
+    private $eventManager;
+
+    /**
      * @param Context $context
      * @param StockInterfaceFactory $stockFactory
      * @param StockRepositoryInterface $stockRepository
      * @param DataObjectHelper $sourceHydrator
      * @param StockSourceLinkProcessor $stockSourceLinkProcessor
+     * @param EventManager $eventManager
      */
     public function __construct(
         Context $context,
         StockInterfaceFactory $stockFactory,
         StockRepositoryInterface $stockRepository,
         DataObjectHelper $sourceHydrator,
-        StockSourceLinkProcessor $stockSourceLinkProcessor
+        StockSourceLinkProcessor $stockSourceLinkProcessor,
+        EventManager $eventManager
     ) {
         parent::__construct($context);
         $this->stockFactory = $stockFactory;
         $this->stockRepository = $stockRepository;
         $this->dataObjectHelper = $sourceHydrator;
         $this->stockSourceLinkProcessor = $stockSourceLinkProcessor;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -126,6 +135,13 @@ class Save extends Action
             $stock = $this->stockRepository->get($stockId);
         }
         $this->dataObjectHelper->populateWithArray($stock, $requestData['general'], StockInterface::class);
+        $this->eventManager->dispatch(
+            'save_stock_controller_populate_stock_with_data',
+            [
+                'request_data' => $requestData,
+                'stock' => $stock,
+            ]
+        );
         $stockId = $this->stockRepository->save($stock);
 
         $assignedSources =
