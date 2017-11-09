@@ -17,7 +17,7 @@
         </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Order\PrintShipment" name="sales.order.print" template="order/view.phtml">
-                <block class="Magento\Sales\Block\Order\PrintShipment" name="order_items" template="order/items.phtml">
+                <block class="Magento\Sales\Block\Order\Items" name="order_items" template="order/items.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="sales.order.print.renderers" as="renderer.list" />
                     <block class="Magento\Sales\Block\Order\Totals" name="order_totals" template="order/totals.phtml">
                         <arguments>
