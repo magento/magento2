@@ -84,7 +84,7 @@ class SalesChannelManagementTest extends WebapiAbstract
     public function updateStockWithSalesChannelsReplacingDataProvider(): array
     {
         return [
-            'replace_sales_channels' => [
+            'replace_sales_channels' => [[
                 [
                     SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
                     SalesChannelInterface::CODE => 'test_1',
@@ -93,8 +93,8 @@ class SalesChannelManagementTest extends WebapiAbstract
                     SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
                     SalesChannelInterface::CODE => 'test_2',
                 ],
-            ],
-            'remove_sales_channels' => [],
+            ]],
+            'remove_sales_channels' => [[]],
         ];
     }
 
