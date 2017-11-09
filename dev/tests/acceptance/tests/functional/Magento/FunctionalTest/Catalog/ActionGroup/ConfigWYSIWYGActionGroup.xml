@@ -12,16 +12,18 @@
         <amOnPage url="admin/admin/system_config/edit/section/cms/" mergeKey="navigateToConfigurationPage" />
         <waitForPageLoad mergeKey="wait1"/>
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="expandWYSIWYGOptions1" />
-        <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" mergeKey="waitForEnableWYSIWYGDropdown1" />
+        <wait time="2" mergeKey="wait" />
+        <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" time="100" mergeKey="waitForEnableWYSIWYGDropdown1" />
         <selectOption selector="{{ContentManagementSection.EnableWYSIWYG}}" userInput="Enabled by Default" mergeKey="selectOption1"/>
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="expandWYSIWYGOptions2" />
         <click selector="{{ContentManagementSection.Save}}" mergeKey="saveConfig" />
     </actionGroup>
     <actionGroup name="DisabledWYSIWYG">
         <amOnPage url="admin/admin/system_config/edit/section/cms/" mergeKey="navigateToConfigurationPage" />
-        <waitForPageLoad mergeKey="wait2"/>
+        <waitForPageLoad mergeKey="wait3"/>
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="collapseWYSIWYGOptions3" />
-        <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" mergeKey="waitForEnableWYSIWYGDropdown2" />
+        <wait time="2" mergeKey="wait" />
+        <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" time="100" mergeKey="waitForEnableWYSIWYGDropdown2" />
         <selectOption selector="{{ContentManagementSection.EnableWYSIWYG}}" userInput="Disabled Completely" mergeKey="selectOption2"/>
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="collapseWYSIWYGOptions4" />
         <click selector="{{ContentManagementSection.Save}}" mergeKey="saveConfig" />
