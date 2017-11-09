@@ -349,6 +349,7 @@ class DataGrid extends Grid
         $toggle->click();
         if (is_array($action)) {
             $locator = sprintf($this->actionList, end($action));
+            $this->getGridHeaderElement()->find($locator, Locator::SELECTOR_XPATH)->hover();
             $this->getGridHeaderElement()->find($locator, Locator::SELECTOR_XPATH)->click();
         }
     }
