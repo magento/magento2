@@ -18,7 +18,7 @@ class ProductSearchTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testQueryFilterSimpleProduct()
+    public function testFilterProductsWithinSpecificPriceRangeSortedByNameDesc()
     {
         $query
             = <<<QUERY
@@ -32,7 +32,7 @@ class ProductSearchTest extends GraphQlAbstract
             or:
             {
               sku:{like:"simple%"}
-              name:{like:"simple%"}              
+              name:{like:"Simple%"}              
              }
            }          
         }
@@ -68,12 +68,10 @@ QUERY;
          * @var ProductRepositoryInterface $productRepository
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        // $product = $productRepository->get($prductSku, false, null, true);
         $product1 = $productRepository->get('simple1');
         $product2 = $productRepository->get('simple2');
         $product3 = $productRepository->get('simple3');
         $filteredProducts = [$product3, $product2, $product1];
-        // rsort($filteredProducts);
 
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('products', $response);
@@ -84,12 +82,12 @@ QUERY;
     }
 
     /**
-     * Requesting for items with either a matching SKU or NAME with a price < $60 and having a special price
+     * Request items that are visible in Catalog, Search or Both matching SKU or NAME and price < $60 with a special price and weight = 1 sorted by price in DESC
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testQueryFilterProductsWithPriceDesc()
+    public function testFilterVisibleProductsWithMatchingSkuOrNameWithSpecialPrice()
     {
         $query
             = <<<QUERY
@@ -108,8 +106,8 @@ QUERY;
             }
              or:
              {
-              visibility:{in:["1", "2", "3","4"]}
-              weight:{gt:"1"}              
+              visibility:{in:["2", "3","4"]}
+              weight:{eq:"1"}              
              }
           }                    
         }
@@ -156,12 +154,12 @@ QUERY;
     }
 
     /**
-     * Requesting for items that match a specific SKU or NAME within a certain price range sorted by NAME in DESC order
+     * Requesting for items that match a specific SKU or NAME within a certain price range sorted by Price in ASC order
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testQuerySortAndPaginationMixedProducts1()
+    public function testQueryProductsInCurrentPageSortedByPriceASC()
     {
         $query
             = <<<QUERY
@@ -174,8 +172,8 @@ QUERY;
             price:{gt: "5", lt: "50"}
             or:
             {
-                sku:{like:"simple%"}
-                name:{like:"simple%"}              
+              sku:{like:"simple%"}
+              name:{like:"simple%"}              
              }
            }          
         }
@@ -183,7 +181,7 @@ QUERY;
          currentPage:1
          sort:
          {
-          name:ASC
+          price:ASC
          } 
     ) 
     {
@@ -204,7 +202,6 @@ QUERY;
           page_size
           current_page
         }
-        
     }
 }
 QUERY;
@@ -212,30 +209,28 @@ QUERY;
          * @var ProductRepositoryInterface $productRepository
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        // $product = $productRepository->get($prductSku, false, null, true);
-        $childProduct1 = $productRepository->get('simple_31');
-        $childProduct2 = $productRepository->get('simple_32');
-        $childProduct3 = $productRepository->get('simple_41');
-        $childProduct4 = $productRepository->get('simple_42');
-       // $filteredChildProducts = [$childProduct1, $childProduct3, $childProduct2, $childProduct4];
+        $childProduct1 = $productRepository->get('simple1');
+        $childProduct2 = $productRepository->get('simple2');
+        $childProduct3 = $productRepository->get('simple_31');
+        $childProduct4 = $productRepository->get('simple_32');
         $filteredChildProducts = [$childProduct1, $childProduct2, $childProduct3, $childProduct4];
 
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('total_count', $response['products']);
-        $this->assertEquals(7, $response['products']['total_count']);
+        $this->assertEquals(6, $response['products']['total_count']);
         $this->assertProductItems($filteredChildProducts, $response);
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
         $this->assertEquals(1, $response['products']['page_info']['current_page']);
     }
 
     /**
-     * Verify the items in the second page is correct after sorting their name in ASC
+     * Verify the items in the second page is correct after sorting their name in ASC order
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testQuerySortAndPaginationMixedProducts2()
+    public function testFilterProductsInNextPageSortedByNameASC()
     {
         $query
             = <<<QUERY
@@ -261,13 +256,13 @@ QUERY;
          } 
     ) 
     {
-        items
-         {
-           sku
-           price
-           name
-           status
-           type_id
+      items
+      {
+        sku
+        price
+        name
+        status
+        type_id
            weight
            visibility
            attribute_set_id
@@ -286,8 +281,6 @@ QUERY;
          * @var ProductRepositoryInterface $productRepository
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        // $product = $productRepository->get($prductSku, false, null, true);
-
         $product = $productRepository->get('simple1');
         $filteredProducts = [$product];
 
@@ -297,57 +290,59 @@ QUERY;
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
         $this->assertEquals(2, $response['products']['page_info']['current_page']);
     }
+
     /**
-     * Tests the items with special price returned after sorting sku in ASC
+     * Sorting by visibility and price in the DESC order from the filtered items with default pageSize
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testQueryFilterProductsWithSpecialPrice()
+    public function testQuerySortByVisibilityAndPriceDESCWithDefaultPageSize()
     {
         $query
             = <<<QUERY
 {
-    products(
+  products(
         find:
         {
           and:
           {
-            special_price:{neq:"null"}
-            price:{lt:"50"}
-            visibility:{neq:"1"}
-           or:
+            price:{gt: "5", lt: "60"}
+            or:
             {
-              sku:{like:"simple%"}
-              name:{like:"config%"}
-            }           
-          }                    
+              sku:{like:"%simple%"}
+              name:{like:"%Configurable%"}              
+             }
+            or:
+            {
+              weight:{gt:"0"}
+           	}
+          }
         }
-        pageSize:7
-        currentPage:1
-        sort:
-       {
-        sku:ASC
-       } 
-    )    
-    {
-        items
+         sort:
          {
-           sku
-           price
-           name
-           weight
-           status
-           type_id
-           visibility
-           attribute_set_id
-         }    
+          visibility:DESC
+          price:DESC
+         }
+     ) 
+    {
+      items
+      {
+        sku
+        price
+        name
+        weight
+        status
+        type_id
+        visibility
+        attribute_set_id       
+      }           
         total_count
         page_info
         {
           page_size
           current_page
-        }
+        }        
     }
 }
 QUERY;
@@ -355,24 +350,27 @@ QUERY;
          * @var ProductRepositoryInterface $productRepository
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        // $product = $productRepository->get($prductSku, false, null, true);
 
-        $productSplPrice1 = $productRepository->get('simple1');
-        $productSplPrice2 = $productRepository->get('simple2');
-        $productSplPrice3 = $productRepository->get('simple3');
-        $filteredProducts = [$productSplPrice1, $productSplPrice2, $productSplPrice3];
+        $visibleProduct1 = $productRepository->get('simple1');
+        $visibleProduct2 = $productRepository->get('simple2');
+        $visibleProduct3 = $productRepository->get('simple_42');
+        $visibleProduct4 = $productRepository->get('simple_41');
+        $visibleProduct5 = $productRepository->get('simple_32');
+        $visibleProduct6 = $productRepository->get('simple_31');
+        $filteredProducts = [$visibleProduct1, $visibleProduct2,
+                             $visibleProduct3, $visibleProduct4, $visibleProduct5, $visibleProduct6];
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(3, $response['products']['total_count']);
+        $this->assertEquals(6, $response['products']['total_count']);
         $this->assertProductItems($filteredProducts, $response);
-        $this->assertEquals(7, $response['products']['page_info']['page_size']);
+        $this->assertEquals(20, $response['products']['page_info']['page_size']);
         $this->assertEquals(1, $response['products']['page_info']['current_page']);
     }
 
     /**
      * No items are returned if the conditions are not met
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testQueryFilterNoMatchingItems()
