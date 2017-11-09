@@ -129,7 +129,7 @@ class RollbackCommand extends AbstractSetupCommand
             }
 
             $questionKeep = new ConfirmationQuestion(
-                '<info>you want to keep the backups?[y/N]<info>',
+                '<info>Do you want to keep the backups?[y/N]<info>',
                 false
             );
             $keepSourceFile = $helper->ask($input, $output, $questionKeep);
@@ -161,7 +161,11 @@ class RollbackCommand extends AbstractSetupCommand
         $inputOptionProvided = false;
         $rollbackHandler = $this->backupRollbackFactory->create($output);
         if ($input->getOption(self::INPUT_KEY_CODE_BACKUP_FILE)) {
-            $rollbackHandler->codeRollback($input->getOption(self::INPUT_KEY_CODE_BACKUP_FILE), $keepSourceFile);
+            $rollbackHandler->codeRollback(
+                $input->getOption(self::INPUT_KEY_CODE_BACKUP_FILE),
+                Factory::TYPE_FILESYSTEM,
+                $keepSourceFile
+            );
             $inputOptionProvided = true;
         }
         if ($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE)) {
