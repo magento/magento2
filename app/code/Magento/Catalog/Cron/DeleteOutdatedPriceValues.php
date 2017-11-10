@@ -55,7 +55,8 @@ class DeleteOutdatedPriceValues
     public function execute()
     {
         $priceScope = $this->scopeConfig->getValue(Store::XML_PATH_PRICE_SCOPE);
-        if ($priceScope == Store::PRICE_SCOPE_GLOBAL) {
+        $priceScope = $priceScope === null ? null : (int)$priceScope;
+        if ($priceScope === Store::PRICE_SCOPE_GLOBAL) {
             /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $priceAttribute */
             $priceAttribute = $this->attributeRepository
                 ->get(ProductAttributeInterface::ENTITY_TYPE_CODE, ProductAttributeInterface::CODE_PRICE);
