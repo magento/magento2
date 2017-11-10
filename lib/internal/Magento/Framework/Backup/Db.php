@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Backup;
 
+use Magento\Framework\Archive;
+use Magento\Framework\Backup\Filesystem\Iterator\File;
+
 /**
  * Class to work with database backups
  *
@@ -37,14 +40,16 @@ class Db extends AbstractBackup
 
         $this->_lastOperationSucceed = false;
 
-        $archiveManager = new \Magento\Framework\Archive();
+        $archiveManager = new Archive();
         $source = $archiveManager->unpack($this->getBackupPath(), $this->getBackupsDir());
 
-        $file = new \Magento\Framework\Backup\Filesystem\Iterator\File($source);
+        $file = new File($source);
         foreach ($file as $statement) {
             $this->getResourceModel()->runCommand($statement);
         }
-        @unlink($source);
+        if (!$this->keepSourceFile()) {
+            @unlink($source);
+        }
 
         $this->_lastOperationSucceed = true;
 
@@ -57,7 +62,7 @@ class Db extends AbstractBackup
      * @param string $line
      * @return bool
      */
-    protected function _isLineLastInCommand($line)
+    protected function isLineLastInCommand($line)
     {
         $cleanLine = trim($line);
         $lineLength = strlen($cleanLine);

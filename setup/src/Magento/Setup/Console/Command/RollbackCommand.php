@@ -127,9 +127,15 @@ class RollbackCommand extends AbstractSetupCommand
             if (!$helper->ask($input, $output, $question) && $input->isInteractive()) {
                 return \Magento\Framework\Console\Cli::RETURN_FAILURE;
             }
-            $this->doRollback($input, $output);
-            $output->writeln('<info>Please set file permission of bin/magento to executable</info>');
 
+            $questionKeep = new ConfirmationQuestion(
+                '<info>you want to keep the backups?[y/N]<info>',
+                false
+            );
+            $keep = $helper->ask($input, $output, $questionKeep);
+
+            $this->doRollback($input, $output, $keep);
+            $output->writeln('<info>Please set file permission of bin/magento to executable</info>');
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             // we must have an exit code higher than zero to indicate something was wrong
@@ -146,24 +152,29 @@ class RollbackCommand extends AbstractSetupCommand
      *
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @param boolean $keep
      * @return void
      * @throws \InvalidArgumentException
      */
-    private function doRollback(InputInterface $input, OutputInterface $output)
+    private function doRollback(InputInterface $input, OutputInterface $output, $keep)
     {
         $inputOptionProvided = false;
         $rollbackHandler = $this->backupRollbackFactory->create($output);
         if ($input->getOption(self::INPUT_KEY_CODE_BACKUP_FILE)) {
-            $rollbackHandler->codeRollback($input->getOption(self::INPUT_KEY_CODE_BACKUP_FILE));
+            $rollbackHandler->codeRollback($input->getOption(self::INPUT_KEY_CODE_BACKUP_FILE), $keep);
             $inputOptionProvided = true;
         }
         if ($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE)) {
-            $rollbackHandler->codeRollback($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE), Factory::TYPE_MEDIA);
+            $rollbackHandler->codeRollback(
+                $input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE),
+                Factory::TYPE_MEDIA,
+                $keep
+            );
             $inputOptionProvided = true;
         }
         if ($input->getOption(self::INPUT_KEY_DB_BACKUP_FILE)) {
             $this->setAreaCode();
-            $rollbackHandler->dbRollback($input->getOption(self::INPUT_KEY_DB_BACKUP_FILE));
+            $rollbackHandler->dbRollback($input->getOption(self::INPUT_KEY_DB_BACKUP_FILE), $keep);
             $inputOptionProvided = true;
         }
         if (!$inputOptionProvided) {

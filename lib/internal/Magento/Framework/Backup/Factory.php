@@ -10,6 +10,9 @@
 
 namespace Magento\Framework\Backup;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
+
 class Factory
 {
     /**
@@ -17,7 +20,7 @@ class Factory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $_objectManager;
+    private $objectManager;
 
     /**
      * Backup type constant for database backup
@@ -56,7 +59,7 @@ class Factory
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
         $this->_allowedTypes = [
             self::TYPE_DB,
             self::TYPE_FILESYSTEM,
@@ -71,19 +74,19 @@ class Factory
      *
      * @param string $type
      * @return BackupInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function create($type)
     {
         if (!in_array($type, $this->_allowedTypes)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase(
+            throw new LocalizedException(
+                new Phrase(
                     'Current implementation not supported this type (%1) of backup.',
                     [$type]
                 )
             );
         }
         $class = 'Magento\Framework\Backup\\' . ucfirst($type);
-        return $this->_objectManager->create($class);
+        return $this->objectManager->create($class);
     }
 }

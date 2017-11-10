@@ -41,7 +41,7 @@ class Snapshot extends Filesystem
      */
     public function __construct(AppFilesystem $filesystem, Factory $backupFactory)
     {
-        $this->_filesystem = $filesystem;
+        $this->_filesystem    = $filesystem;
         $this->_backupFactory = $backupFactory;
     }
 
