@@ -13,7 +13,7 @@
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "100.0.10",
+    "version": "100.0.11",
     "license": [
         "proprietary"
     ],
