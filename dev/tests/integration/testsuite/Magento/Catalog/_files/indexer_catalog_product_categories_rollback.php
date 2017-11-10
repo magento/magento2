@@ -14,7 +14,9 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
-$collection = $objectManager->create(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
+$collection = $objectManager->create(
+    \Magento\Catalog\Model\ResourceModel\Category\Collection::class
+);
 $collection
     ->addAttributeToFilter('level', ['gteq' => 2])
     ->load()
