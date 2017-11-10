@@ -92,13 +92,13 @@ class FieldTypeTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['attr1', 'static', 'select', 'integer'],
-            ['attr1', 'static', 'text', 'string'],
+            ['attr1', 'static', 'text', 'text'],
             ['attr1', 'timestamp', 'select', 'date'],
             ['attr1', 'datetime', 'text', 'date'],
             ['attr1', 'int', 'select', 'integer'],
             ['attr1', 'decimal', 'text', 'float'],
-            ['attr1', 'varchar', 'select', 'string'],
-            ['attr1', 'array', 'multiselect', 'string'],
+            ['attr1', 'varchar', 'select', 'text'],
+            ['attr1', 'array', 'multiselect', 'text'],
             ['price', 'int', 'text', 'integer'],
             ['tier_price', 'int', 'text', 'integer'],
             ['tier_price', 'smallint', 'text', 'integer'],

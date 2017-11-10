@@ -251,19 +251,19 @@ class ProductFieldMapperTest extends \PHPUnit\Framework\TestCase
                 'category_ids',
                 'select',
                 ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, 'advSearch' => false],
-                ['category_ids' => ['type' => 'integer'], 'category_ids_value' => ['type' => 'string']]
+                ['category_ids' => ['type' => 'keyword'], 'category_ids_value' => ['type' => 'text']]
             ],
             [
                 'attr_code',
                 'text',
                 ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, 'advSearch' => false],
-                ['attr_code' => ['type' => 'integer', 'index' => 'no']]
+                ['attr_code' => ['type' => 'keyword']]
             ],
             [
                 'attr_code',
                 'text',
                 ['searchable' => '0', 'filterable' => '0', 'filterableInSearch' => '0', 'advSearch' => '0'],
-                ['attr_code' => ['type' => 'integer', 'index' => 'no']]
+                ['attr_code' => ['type' => 'keyword']]
             ],
             [
                 'attr_code',

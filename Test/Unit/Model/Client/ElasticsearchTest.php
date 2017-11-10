@@ -350,7 +350,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                             [
                                 'price_mapping' => [
                                     'match' => 'price_*',
-                                    'match_mapping' => 'string',
+                                    'match_mapping_type' => 'string',
                                     'mapping' => [
                                         'type' => 'float'
                                     ],
@@ -359,7 +359,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                             [
                                 'string_mapping' => [
                                     'match' => '*',
-                                    'match_mapping' => 'string',
+                                    'match_mapping_type' => 'string',
                                     'mapping' => [
                                         'type' => 'string',
                                         'index' => 'no'
@@ -369,7 +369,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                             [
                                 'position_mapping' => [
                                     'match' => 'position_*',
-                                    'match_mapping' => 'string',
+                                    'match_mapping_type' => 'string',
                                     'mapping' => [
                                         'type' => 'int'
                                     ],
@@ -405,18 +405,18 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                     'product' => [
                         '_all' => [
                             'enabled' => true,
-                            'type' => 'string'
+                            'type' => 'text'
                         ],
                         'properties' => [
                             'name' => [
-                                'type' => 'string',
+                                'type' => 'text',
                             ],
                         ],
                         'dynamic_templates' => [
                             [
                                 'price_mapping' => [
                                     'match' => 'price_*',
-                                    'match_mapping' => 'string',
+                                    'match_mapping_type' => 'string',
                                     'mapping' => [
                                         'type' => 'float'
                                     ],
@@ -425,17 +425,16 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                             [
                                 'string_mapping' => [
                                     'match' => '*',
-                                    'match_mapping' => 'string',
+                                    'match_mapping_type' => 'string',
                                     'mapping' => [
-                                        'type' => 'string',
-                                        'index' => 'no'
+                                        'type'  => 'keyword',
                                     ],
                                 ],
                             ],
                             [
                                 'position_mapping' => [
                                     'match' => 'position_*',
-                                    'match_mapping' => 'string',
+                                    'match_mapping_type' => 'string',
                                     'mapping' => [
                                         'type' => 'int'
                                     ],
