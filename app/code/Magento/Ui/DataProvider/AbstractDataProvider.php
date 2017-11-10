@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\DataProvider;
 
+use Magento\Framework\Api\Filter;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
@@ -76,6 +77,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
     {
         return $this->collection;
     }
+
     /**
      * Get Data Provider name
      *
@@ -149,13 +151,14 @@ abstract class AbstractDataProvider implements DataProviderInterface
     /**
      * @inheritdoc
      */
-    public function addFilter(\Magento\Framework\Api\Filter $filter)
+    public function addFilter(Filter $filter)
     {
         $this->getCollection()->addFieldToFilter(
             $filter->getField(),
             [$filter->getConditionType() => $this->getFilterValue($filter)]
         );
     }
+
     /**
      * Returns search criteria
      *
@@ -281,10 +284,10 @@ abstract class AbstractDataProvider implements DataProviderInterface
     /**
      * You need to escape backslashes twice in LIKE statement.
      *
-     * @param $filter
+     * @param Filter $filter
      * @return string
      */
-    protected function getFilterValue($filter)
+    protected function getFilterValue(Filter $filter)
     {
         if ($filter->getConditionType() === "like" &&
             strpos($filter->getValue(), "\\") !== false) {
