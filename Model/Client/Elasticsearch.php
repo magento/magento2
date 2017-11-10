@@ -245,7 +245,8 @@ class Elasticsearch implements ClientInterface
                                 'match' => '*',
                                 'match_mapping_type' => 'string',
                                 'mapping' => [
-                                    'type' => 'keyword',
+                                    'type' => 'text',
+                                    'index' => 'no',
                                 ],
                             ],
                         ],

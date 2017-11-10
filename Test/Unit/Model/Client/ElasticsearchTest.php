@@ -339,11 +339,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                     'product' => [
                         '_all' => [
                             'enabled' => true,
-                            'type' => 'string'
+                            'type' => 'text'
                         ],
                         'properties' => [
                             'name' => [
-                                'type' => 'string',
+                                'type' => 'text',
                             ],
                         ],
                         'dynamic_templates' => [
@@ -361,7 +361,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                     'match' => '*',
                                     'match_mapping_type' => 'string',
                                     'mapping' => [
-                                        'type' => 'string',
+                                        'type' => 'text',
                                         'index' => 'no'
                                     ],
                                 ],
@@ -382,7 +382,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         $this->model->addFieldsMapping(
             [
                 'name' => [
-                    'type' => 'string',
+                    'type' => 'text',
                 ],
             ],
             'indexName',
@@ -427,7 +427,8 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                     'match' => '*',
                                     'match_mapping_type' => 'string',
                                     'mapping' => [
-                                        'type'  => 'keyword',
+                                        'type' => 'text',
+                                        'index' => 'no',
                                     ],
                                 ],
                             ],
@@ -448,7 +449,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         $this->model->addFieldsMapping(
             [
                 'name' => [
-                    'type' => 'string',
+                    'type' => 'text',
                 ],
             ],
             'indexName',

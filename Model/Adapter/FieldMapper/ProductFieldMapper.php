@@ -127,7 +127,11 @@ class ProductFieldMapper implements FieldMapperInterface
             if (!$attribute->getIsSearchable() && !$this->isAttributeUsedInAdvancedSearch($attribute)
                 && !in_array($attributeCode, $alwaysIndexableAttributes, true)
             ) {
-                $allAttributes[$attributeCode]['type'] = FieldType::ES_DATA_TYPE_KEYWORD;
+                if ($attribute->getIsFilterable() || $attribute->getIsFilterableInSearch()) {
+                    $allAttributes[$attributeCode]['type'] = FieldType::ES_DATA_TYPE_KEYWORD;
+                } else if ($allAttributes[$attributeCode]['type'] === FieldType::ES_DATA_TYPE_TEXT) {
+                    $allAttributes[$attributeCode]['index'] = false;
+                }
             } else if ($attributeCode == "category_ids") {
                 $allAttributes[$attributeCode] = [
                     'type' => FieldType::ES_DATA_TYPE_INT,

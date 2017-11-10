@@ -257,13 +257,13 @@ class ProductFieldMapperTest extends \PHPUnit\Framework\TestCase
                 'attr_code',
                 'text',
                 ['searchable' => false, 'filterable' => false, 'filterableInSearch' => false, 'advSearch' => false],
-                ['attr_code' => ['type' => 'keyword']]
+                ['attr_code' => ['type' => 'integer']]
             ],
             [
                 'attr_code',
                 'text',
                 ['searchable' => '0', 'filterable' => '0', 'filterableInSearch' => '0', 'advSearch' => '0'],
-                ['attr_code' => ['type' => 'keyword']]
+                ['attr_code' => ['type' => 'integer']]
             ],
             [
                 'attr_code',
