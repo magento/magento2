@@ -61,7 +61,8 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
                 'commit',
                 'delete',
                 'getIdFieldName',
-                'rollBack'
+                'rollBack',
+                'getValidationRulesBeforeSave'
             ]);
         $this->resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
@@ -172,5 +173,61 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->model->hasDataChanges());
         $this->model->setDataChanges(true);
         $this->assertTrue($this->model->hasDataChanges());
+    }
+
+    public function testBeforeSaveValidatorExceptionWithSimpleArrayErrorMessages()
+    {
+        $errorMessages = ['invalid_data' => 'Invalid Data'];
+
+        $validatorMock = $this->createMock(\Zend_Validate_Interface::class);
+        $validatorMock->expects($this->once())
+            ->method('isValid')
+            ->will($this->returnValue(false));
+
+        $validatorMock->expects($this->once())
+            ->method('getMessages')
+            ->will($this->returnValue($errorMessages));
+
+        $this->resourceMock->expects($this->once())
+            ->method('getValidationRulesBeforeSave')
+            ->will($this->returnValue($validatorMock));
+
+        $this->expectException(\Magento\Framework\Validator\Exception::class);
+        $this->expectExceptionMessage('Invalid Data');
+
+        $this->model->validateBeforeSave();
+    }
+
+    public function testBeforeSaveValidatorExceptionWithMultidimensionalArrayErrorMessages()
+    {
+        $errorMessages = [
+            'invalid_data' => [
+                'Invalid Data Reason 1',
+                'Invalid Data Reason 2',
+                'Invalid Data Reason 3'
+            ]
+        ];
+
+        $validatorMock = $this->createMock(\Zend_Validate_Interface::class);
+        $validatorMock->expects($this->once())
+            ->method('isValid')
+            ->will($this->returnValue(false));
+
+        $validatorMock->expects($this->once())
+            ->method('getMessages')
+            ->will($this->returnValue($errorMessages));
+
+        $this->resourceMock->expects($this->once())
+            ->method('getValidationRulesBeforeSave')
+            ->will($this->returnValue($validatorMock));
+
+        $this->expectException(\Magento\Framework\Validator\Exception::class);
+        $this->expectExceptionMessage(
+            'Invalid Data Reason 1' . PHP_EOL .
+            'Invalid Data Reason 2' . PHP_EOL .
+            'Invalid Data Reason 3'
+        );
+
+        $this->model->validateBeforeSave();
     }
 }
