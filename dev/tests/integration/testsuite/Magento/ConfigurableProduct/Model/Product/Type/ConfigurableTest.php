@@ -237,6 +237,26 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * Test getUsedProducts returns array with same indexes regardless collections was cache or not.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     */
+    public function testGetUsedProductsCached()
+    {
+        /** @var  \Magento\Framework\App\Cache\StateInterface $cacheState */
+        $cacheState = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache\StateInterface::class);
+        $cacheState->setEnabled(\Magento\Framework\App\Cache\Type\Collection::TYPE_IDENTIFIER, true);
+
+        $products = $this->getUsedProducts();
+        $productsCached = $this->getUsedProducts();
+        self::assertEquals(
+            array_keys($products),
+            array_keys($productsCached)
+        );
+    }
+
     public function testGetUsedProductCollection()
     {
         $this->assertInstanceOf(
@@ -570,5 +590,15 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->model->prepareForCart($buyRequest, $product);
 
         return $product;
+    }
+
+    /**
+     * @return ProductInterface[]
+     */
+    protected function getUsedProducts()
+    {
+        $product = Bootstrap::getObjectManager()->create(Product::class);
+        $product->load(1);
+        return $this->model->getUsedProducts($product);
     }
 }
