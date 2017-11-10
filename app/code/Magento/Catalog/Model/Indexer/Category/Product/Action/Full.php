@@ -94,6 +94,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     public function execute()
     {
+        $this->connection->truncateTable($this->activeTableSwitcher
+            ->getAdditionalTableName($this->getMainTable()));
         $this->reindex();
         $this->activeTableSwitcher->switchTable($this->connection, [$this->getMainTable()]);
         return $this;
