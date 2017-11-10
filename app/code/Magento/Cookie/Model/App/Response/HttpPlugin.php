@@ -30,6 +30,7 @@ class HttpPlugin
      *
      * @param Http $subject
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSendResponse(Http $subject)
     {
