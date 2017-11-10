@@ -57,7 +57,7 @@ class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
             $categoryIds = array_column($indexData, 'id');
 
             if (count($categoryIds)) {
-                $result = ['category_ids' => implode(' ', $categoryIds)];
+                $result = ['category_ids' => $categoryIds];
                 foreach ($indexData as $data) {
                     $result['position_category_' . $data['id']] = $data['position'];
                     $result['name_category_' . $data['id']] = $data['name'];
