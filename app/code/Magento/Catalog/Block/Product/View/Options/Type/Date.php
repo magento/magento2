@@ -83,11 +83,9 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         $yearEnd = $this->_catalogProductOptionTypeDate->getYearEnd();
 
         $dateFormat = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
-        /** Escape RTL characters which are present in some locales and corrupt formatting */
-        $patterns = [];
-        $patterns[0] = '/[^[:print:]]/';
-        $patterns[1] = '/[^MmDdYy\/\.\-]/';
-        $escapedDateFormat = preg_replace($patterns, '', $dateFormat);
+        /** Escape invisible characters which are present in some locales and may corrupt formatting */
+        $escapedDateFormat = preg_replace('/[^[:print:]]/', '', $dateFormat);
+
         $calendar = $this->getLayout()->createBlock(
             'Magento\Framework\View\Element\Html\Date'
         )->setId(
