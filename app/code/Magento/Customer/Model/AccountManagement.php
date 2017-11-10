@@ -531,17 +531,8 @@ class AccountManagement implements AccountManagementInterface
                     $this->getEmailNotification()->passwordResetConfirmation($customer);
                     break;
                 default:
-                    throw new InputException(
-                        __(
-                            'Invalid value of "%value" provided for the %fieldName field. Possible values are %template1 or %template2.',
-                            [
-                                'value' => $template,
-                                'fieldName' => 'template',
-                                'template1' => AccountManagement::EMAIL_REMINDER,
-                                'template2' => AccountManagement::EMAIL_RESET
-                            ]
-                        )
-                    );
+                    $this->handleUnknownTemplate($template);
+                    break;
             }
             return true;
         } catch (MailException $e) {
@@ -549,6 +540,25 @@ class AccountManagement implements AccountManagementInterface
             $this->logger->critical($e);
         }
         return false;
+    }
+
+    /**
+     * Handle not supported template
+     *
+     * @param string $template
+     * @throws InputException
+     */
+    private function handleUnknownTemplate($template)
+    {
+        throw new InputException(__(
+            'Invalid value of "%value" provided for the %fieldName field. Possible values: %template1 or %template2.',
+            [
+                'value' => $template,
+                'fieldName' => 'template',
+                'template1' => AccountManagement::EMAIL_REMINDER,
+                'template2' => AccountManagement::EMAIL_RESET
+            ]
+        ));
     }
 
     /**
