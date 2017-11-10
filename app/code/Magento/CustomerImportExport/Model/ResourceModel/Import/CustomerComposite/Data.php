@@ -28,16 +28,18 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Json\Helper\Data $coreHelper
+     * @param \Magento\ImportExport\Model\ResourceModel\Import\Data\IteratorFactory $iteratorFactory,
      * @param string $connectionName
      * @param array $arguments
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
+        \Magento\ImportExport\Model\ResourceModel\Import\Data\IteratorFactory $iteratorFactory,
         $connectionName = null,
         array $arguments = []
     ) {
-        parent::__construct($context, $jsonHelper, $connectionName);
+        parent::__construct($context, $jsonHelper, $iteratorFactory, $connectionName);
 
         if (isset($arguments['entity_type'])) {
             $this->_entityType = $arguments['entity_type'];

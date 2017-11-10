@@ -26,6 +26,11 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     protected $jsonHelper;
 
     /**
+     * @var Data\IteratorFactory
+     */
+    protected $iteratorFactory;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -35,10 +40,13 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
+        \Magento\ImportExport\Model\ResourceModel\Import\Data\IteratorFactory $iteratorFactory,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
+
         $this->jsonHelper = $jsonHelper;
+        $this->iteratorFactory = $iteratorFactory;
     }
 
     /**
@@ -58,20 +66,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      */
     public function getIterator()
     {
-        $connection = $this->getConnection();
-        $select = $connection->select()->from($this->getMainTable(), ['data'])->order('id ASC');
-        $stmt = $connection->query($select);
-
-        $stmt->setFetchMode(\Zend_Db::FETCH_NUM);
-        if ($stmt instanceof \IteratorAggregate) {
-            $iterator = $stmt->getIterator();
-        } else {
-            // Statement doesn't support iterating, so fetch all records and create iterator ourself
-            $rows = $stmt->fetchAll();
-            $iterator = new \ArrayIterator($rows);
-        }
-
-        return $iterator;
+        return $this->iteratorFactory->create();
     }
 
     /**
