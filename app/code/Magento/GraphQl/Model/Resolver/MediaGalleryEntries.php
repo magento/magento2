@@ -27,8 +27,6 @@ class MediaGalleryEntries
     private $serviceOutputProcessor;
 
     /**
-     * MediaGalleryEntries constructor.
-     *
      * @param ProductAttributeMediaGalleryManagementInterface $mediaGalleryManagement
      * @param ServiceOutputProcessor $serviceOutputProcessor
      */
