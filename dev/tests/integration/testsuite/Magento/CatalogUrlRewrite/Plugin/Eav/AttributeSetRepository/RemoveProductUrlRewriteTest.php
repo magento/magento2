@@ -34,7 +34,7 @@ class RemoveProductUrlRewriteTest extends TestCase
      * Test url rewrite will be removed for product with given attribute set, if one will be deleted.
      *
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/attribute_set_with_product.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      */
     public function testAroundDelete()
     {
