@@ -43,7 +43,7 @@
             <state>true</state>
             <options>
                 <option name="modalClass" xsi:type="string">release-notification-modal</option>
-                <option name="title" xsi:type="string" translate="true">What's new for Magento 2.2.2</option>
+                <option name="title" xsi:type="string" translate="true">What's new with Magento 2.2.2</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
