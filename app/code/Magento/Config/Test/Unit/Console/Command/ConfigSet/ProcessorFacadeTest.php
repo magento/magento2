@@ -218,8 +218,29 @@ class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
             ->method('clean');
 
         $this->assertSame(
-            'Value was saved and locked.',
+            'Value was saved in app/etc/env.php and locked.',
             $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, true)
+        );
+    }
+
+    public function testExecuteShare()
+    {
+        $this->scopeValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(true);
+        $this->configSetProcessorFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(ConfigSetProcessorFactory::TYPE_SHARE)
+            ->willReturn($this->processorMock);
+        $this->processorMock->expects($this->once())
+            ->method('process')
+            ->with('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
+        $this->configMock->expects($this->once())
+            ->method('clean');
+
+        $this->assertSame(
+            'Value was saved in app/etc/config.php and locked.',
+            $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false, true)
         );
     }
 }
