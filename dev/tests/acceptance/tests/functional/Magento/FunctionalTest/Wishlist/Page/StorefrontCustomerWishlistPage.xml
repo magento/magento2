@@ -8,7 +8,7 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="StorefrontCustomerWishlistPage" urlPath="/wishlist/" module="Magento_Wishlist">
+    <page name="StorefrontCustomerWishlistPage" url="/wishlist/" module="Magento_Wishlist">
         <section name="StorefrontCustomerWishlistSection" />
     </page>
 </config>
