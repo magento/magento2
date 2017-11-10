@@ -7,10 +7,11 @@
 define([
     'jquery',
     'mage/translate',
+    'uiRegistry',
     'Magento_Ui/js/modal/modal',
     'jquery/ui',
     'prototype'
-], function (jQuery, $t) {
+], function (jQuery, $t, registry) {
     'use strict';
 
     window.Variables = {
@@ -154,24 +155,28 @@ define([
         /**
          * @param {String} url
          * @param {*} textareaId
+         *
          */
         loadChooser: function (url, textareaId) {
             this.textareaId = textareaId;
 
-            if (this.variables == null) {
-                new Ajax.Request(url, {
-                    parameters: {},
-                    onComplete: function (transport) {
-                        if (transport.responseText.isJSON()) {
-                            Variables.init(null, 'MagentovariablePlugin.insertVariable');
-                            this.variables = transport.responseText.evalJSON();
-                            this.openChooser(this.variables);
-                        }
-                    }.bind(this)
-                });
-            } else {
-                this.openChooser(this.variables);
-            }
+            var modal = registry.get('variables_modal.variables_modal.insert_variables', function (modal) {
+                modal.openModal();
+            });
+            // if (this.variables == null) {
+            //     new Ajax.Request(url, {
+            //         parameters: {},
+            //         onComplete: function (transport) {
+            //             if (transport.responseText.isJSON()) {
+            //                 Variables.init(null, 'MagentovariablePlugin.insertVariable');
+            //                 this.variables = transport.responseText.evalJSON();
+            //                 this.openChooser(this.variables);
+            //             }
+            //         }.bind(this)
+            //     });
+            // } else {
+            //     this.openChooser(this.variables);
+            // }
 
             return;
         },

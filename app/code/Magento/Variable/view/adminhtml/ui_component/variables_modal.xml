@@ -1,0 +1,80 @@
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">variables_modal.variables_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Variables</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <namespace>variables_modal</namespace>
+        <deps>
+            <dep>variables_modal.variables_data_source</dep>
+        </deps>
+        <buttons>
+            <button name="save_and_continue" class="Magento\Cms\Block\Adminhtml\Page\Edit\SaveAndContinueButton"/>
+            <button name="save" class="Magento\Cms\Block\Adminhtml\Page\Edit\SaveButton"/>
+            <button name="reset" class="Magento\Cms\Block\Adminhtml\Page\Edit\ResetButton"/>
+            <button name="delete" class="Magento\Cms\Block\Adminhtml\Page\Edit\DeleteButton"/>
+            <button name="back" class="Magento\Cms\Block\Adminhtml\Page\Edit\BackButton"/>
+        </buttons>
+        <dataScope>data</dataScope>
+    </settings>
+    <dataSource name="variables_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <dataProvider class="Magento\Variable\Ui\Component\VariablesDataProvider"
+                      name="variables_data_source">
+            <settings>
+                <requestFieldName>code</requestFieldName>
+                <primaryFieldName>code</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <modal name="insert_variables" provider="variables_modal.variables_data_source">
+        <settings>
+            <options>
+                <option name="buttons" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="text" xsi:type="string">Insert Variable</item>
+                        <item name="class" xsi:type="string">action-primary</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="targetName" xsi:type="string">${ $.name }</item>
+                                <item name="actionName" xsi:type="string">actionDone</item>
+                            </item>
+                        </item>
+                    </item>
+                </option>
+                <option name="title" xsi:type="string">Insert Vairables...</option>
+            </options>
+            <onCancel>actionDone</onCancel>
+            <dataScope>data.product</dataScope>
+        </settings>
+        <columns name="variables">
+            <column name="variable_name">
+                <settings>
+                    <filter>textRange</filter>
+                    <label translate="true">Variable Name</label>
+                    <sortable>false</sortable>
+                </settings>
+            </column>
+            <column name="variable_type">
+                <settings>
+                    <filter>textRange</filter>
+                    <label translate="true">Type</label>
+                    <sorting>asc</sorting>
+                </settings>
+            </column>
+            <column name="code">
+                <settings>
+                    <filter>textRange</filter>
+                    <label translate="true">Code</label>
+                </settings>
+            </column>
+        </columns>
+    </modal>
+</form>
