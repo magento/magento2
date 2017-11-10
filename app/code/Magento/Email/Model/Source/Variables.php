@@ -12,6 +12,8 @@ use Magento\Store\Model\Store;
  */
 class Variables implements \Magento\Framework\Option\ArrayInterface
 {
+    const DEFAULT_VARIABLE_TYPE = "default";
+
     /**
      * Assoc array of configuration variables
      *
