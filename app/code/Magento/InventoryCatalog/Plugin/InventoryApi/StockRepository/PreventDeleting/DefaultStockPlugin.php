@@ -3,17 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\InventoryCatalog\Plugin\Model;
+namespace Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
-use Magento\InventorySales\Model\GetAssignedSalesChannelsForStockInterface;
 
 /**
- * Class provide Before Plugin on StockRepositoryInterface::deleteByItem to prevent default stock could be deleted
+ * Prevent deleting of Default Stock
  */
-class StockRepositoryPlugin
+class DefaultStockPlugin
 {
     /**
      * @var DefaultStockProviderInterface
@@ -21,28 +20,19 @@ class StockRepositoryPlugin
     private $defaultStockProvider;
 
     /**
-     * @var GetAssignedSalesChannelsForStockInterface
-     */
-    private $assignedSalesChannelsForStock;
-
-    /**
      * @param DefaultStockProviderInterface $defaultStockProvider
-     * @param GetAssignedSalesChannelsForStockInterface $assignedSalesChannelsForStock
      */
     public function __construct(
-        DefaultStockProviderInterface $defaultStockProvider,
-        GetAssignedSalesChannelsForStockInterface $assignedSalesChannelsForStock
+        DefaultStockProviderInterface $defaultStockProvider
     ) {
         $this->defaultStockProvider = $defaultStockProvider;
-        $this->assignedSalesChannelsForStock = $assignedSalesChannelsForStock;
     }
 
     /**
-     * Prevent default source to be deleted
+     * Prevent deleting of Default Stock
      *
      * @param StockRepositoryInterface $subject
      * @param int $stockId
-     *
      * @return void
      * @throws CouldNotDeleteException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -51,10 +41,6 @@ class StockRepositoryPlugin
     {
         if ($stockId === $this->defaultStockProvider->getId()) {
             throw new CouldNotDeleteException(__('Default Stock could not be deleted.'));
-        }
-        $assignSalesChannels = $this->assignedSalesChannelsForStock->execute($stockId);
-        if (count($assignSalesChannels)) {
-            throw new CouldNotDeleteException(__('Stock has at least one sale channel and could not be deleted.'));
         }
     }
 }
