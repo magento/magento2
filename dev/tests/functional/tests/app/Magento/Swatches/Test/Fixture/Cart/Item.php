@@ -13,5 +13,5 @@ use Magento\ConfigurableProduct\Test\Fixture\Cart\Item as ConfigurableCart;
  */
 class Item extends ConfigurableCart
 {
-    //
+
 }

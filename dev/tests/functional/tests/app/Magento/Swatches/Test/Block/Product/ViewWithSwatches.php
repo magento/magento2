@@ -31,13 +31,10 @@ class ViewWithSwatches extends View
     {
         /** @var array $checkoutData */
         $checkoutData = $product->getCheckoutData();
-
         /** @var array $availableAttributes */
         $availableAttributes = $product->getConfigurableAttributesData();
-
         /** @var array $attributesData */
         $attributesData = $availableAttributes['attributes_data'];
-
         /** @var array $formData */
         $formData = [];
 
@@ -48,12 +45,9 @@ class ViewWithSwatches extends View
                 $this->swatchAttributeSelector,
                 $attributesData[$item['title']]['attribute_code']
             );
-
             $this->waitForElementVisible($selector);
-
             /** @var string $selected */
             $selected = $this->_rootElement->find($selector)->getText();
-
             $formData[$item['title']] = $selected;
         }
 

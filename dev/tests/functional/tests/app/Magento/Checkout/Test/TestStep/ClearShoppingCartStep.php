@@ -19,7 +19,7 @@ class ClearShoppingCartStep implements TestStepInterface
      *
      * @var CheckoutCart
      */
-    protected $checkoutCart;
+    private $checkoutCart;
 
     /**
      * @param CheckoutCart $checkoutCart

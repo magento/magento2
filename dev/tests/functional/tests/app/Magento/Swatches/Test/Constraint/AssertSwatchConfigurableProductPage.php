@@ -24,7 +24,7 @@ class AssertSwatchConfigurableProductPage extends AssertProductPage
      *
      * @var ViewWithSwatches
      */
-    protected $productView;
+    private $productView;
 
     /**
      * {@inheritdoc}
@@ -43,10 +43,8 @@ class AssertSwatchConfigurableProductPage extends AssertProductPage
                 'waitSuccessMessage' => false,
             ]
         )->run();
-
         /*we need this line to wait until page will be fully loaded*/
         $this->productView->getSelectedSwatchOptions($this->product);
-
         /** @var array $errors */
         $errors = $this->verify();
 
@@ -93,13 +91,10 @@ class AssertSwatchConfigurableProductPage extends AssertProductPage
     {
         /** @var array $out */
         $out = [];
-
         /** @var array $checkoutData */
         $checkoutData = $product->getCheckoutData();
-
         /** @var array $availableAttributes */
         $availableAttributes = $product->getConfigurableAttributesData();
-
         /** @var array $attributesData */
         $attributesData = $availableAttributes['attributes_data'];
 

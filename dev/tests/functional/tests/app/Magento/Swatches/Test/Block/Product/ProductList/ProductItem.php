@@ -50,16 +50,12 @@ class ProductItem extends CatalogProductItem
     {
         /** @var array $checkoutData */
         $checkoutData = $product->getCheckoutData();
-
         /** @var array $options */
         $options = $checkoutData['options']['configurable_options'];
-
         /** @var array $confAttrData */
         $confAttrData = $product->getDataFieldConfig('configurable_attributes_data');
-
         /** @var ConfigurableProduct\ConfigurableAttributesData $confAttrSource */
         $confAttrSource = $confAttrData['source'];
-
         /** @var SwatchesProductAttribute[] $attributes */
         $attributes = $confAttrSource->getAttributes();
 
@@ -67,10 +63,8 @@ class ProductItem extends CatalogProductItem
             if (!isset($attributes[$option['title']])) {
                 continue;
             }
-
             /** @var array $availableOptions */
             $availableOptions = $attributes[$option['title']]->getOptions();
-
             /** @var string $optionKey */
             $optionKey = str_replace('option_key_', '', $option['value']);
 
@@ -80,7 +74,6 @@ class ProductItem extends CatalogProductItem
 
             /** @var array $optionForSelect */
             $optionForSelect = $availableOptions[$optionKey];
-
             $this->clickOnSwatch($optionForSelect['id']);
         }
     }
@@ -94,7 +87,6 @@ class ProductItem extends CatalogProductItem
     {
         /** @var string $selector */
         $selector = sprintf($this->swatchItemSelector, $optionId);
-
         $this->_rootElement->find($selector, Locator::SELECTOR_CSS)->click();
     }
 
@@ -104,7 +96,6 @@ class ProductItem extends CatalogProductItem
     public function clickAddToCart()
     {
         $this->_rootElement->hover();
-
         parent::clickAddToCart();
     }
 }
