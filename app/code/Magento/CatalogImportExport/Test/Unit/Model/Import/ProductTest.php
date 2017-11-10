@@ -6,7 +6,6 @@
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Stdlib\DateTime;
 use Magento\ImportExport\Model\Import;
 
 /**
@@ -513,25 +512,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 ]
             ]
         ];
-        $entityTable = 'catalog_product_entity';
-        $resource = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getTable'])
-            ->getMock();
-        $resource->expects($this->once())->method('getTable')->with($entityTable)->willReturnArgument(0);
-        $this->_resourceFactory->expects($this->once())->method('create')->willReturn($resource);
-        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $selectMock->expects($this->once())->method('from')->with($entityTable, '*', null)->willReturnSelf();
-        $selectMock->expects($this->once())->method('where')->with('sku = ?', $testSku)->willReturnSelf();
-        $selectMock->expects($this->once())->method('columns')->with('entity_id')->willReturnSelf();
-        $this->_connection->expects($this->any())->method('fetchOne')->willReturn(self::ENTITY_ID);
-        $this->_connection->expects($this->any())->method('select')->willReturn($selectMock);
-        $this->_connection->expects($this->any())
-            ->method('quoteInto')
-            ->willReturnCallback([$this, 'returnQuoteCallback']);
-
         $tableData[] = [
             'entity_id' => self::ENTITY_ID,
             'attribute_id' => $attributeId,
@@ -541,6 +521,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->_connection->expects($this->once())
             ->method('insertOnDuplicate')
             ->with($testTable, $tableData, ['value']);
+        $this->setPropertyValue($this->importProduct, '_oldSku', [$testSku => ['entity_id' => self::ENTITY_ID]]);
         $object = $this->invokeMethod($this->importProduct, '_saveProductAttributes', [$attributesData]);
         $this->assertEquals($this->importProduct, $object);
     }
