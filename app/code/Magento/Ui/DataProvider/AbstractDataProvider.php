@@ -284,12 +284,11 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * @param $filter
      * @return string
      */
-    protected function getFilterValue(&$filter)
+    protected function getFilterValue($filter)
     {
         if ($filter->getConditionType() === "like" &&
-            strpos($filter->getValue(), "\\") !== false &&
-            strpos($filter->getValue(), "\\\\") === false) {
-            $filter->setValue(str_replace("\\", "\\\\", $filter->getValue()));
+            strpos($filter->getValue(), "\\") !== false) {
+            return str_replace("\\", "\\\\", $filter->getValue());
         }
         return $filter->getValue();
     }
