@@ -6,6 +6,9 @@
 
 namespace Magento\Sales\Test\Unit\Model;
 
+/**
+ * Tests \Magento\Sales\Model\OrderIncrementIdChecker.
+ */
 class OrderIncrementIdCheckerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -59,13 +62,13 @@ class OrderIncrementIdCheckerTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManagerHelper->getObject(
             \Magento\Sales\Model\OrderIncrementIdChecker::class,
             [
-                'resourceModel' => $this->resourceMock
+                'resourceModel' => $this->resourceMock,
             ]
         );
     }
 
     /**
-     * Unit test to verify if isOrderIncrementIdUsed method works with different types increment ids
+     * Unit test to verify if isOrderIncrementIdUsed method works with different types increment ids.
      *
      * @param array $value
      * @return void

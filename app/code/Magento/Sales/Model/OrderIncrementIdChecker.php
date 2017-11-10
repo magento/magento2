@@ -7,7 +7,7 @@
 namespace Magento\Sales\Model;
 
 /**
- * This class uses for checking if reserved order id was already used for some order
+ * This class uses for checking if reserved order id was already used for some order.
  */
 class OrderIncrementIdChecker
 {
