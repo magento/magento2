@@ -15,4 +15,9 @@
     <node2>
         <title translate="true">Phrase 1</title>
     </node2>
+    <node3 translate="comment">
+        <comment>
+            <![CDATA[Comment from new line.]]>
+        </comment>
+    </node3>
 </layout>

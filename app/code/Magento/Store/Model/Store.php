@@ -12,10 +12,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeInterface as AppScopeInterface;
-use Magento\Framework\Filesystem;
 use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
@@ -463,7 +463,7 @@ class Store extends AbstractExtensibleModel implements
         $storeLabelRule->setMessage(__('Name is required'), \Zend_Validate_NotEmpty::IS_EMPTY);
         $validator->addRule($storeLabelRule, 'name');
 
-        $storeCodeRule = new \Zend_Validate_Regex('/^[a-z]+[a-z0-9_]*$/');
+        $storeCodeRule = new \Zend_Validate_Regex('/^[a-z]+[a-z0-9_]*$/i');
         $storeCodeRule->setMessage(
             __(
                 'The store code may contain only letters (a-z), numbers (0-9) or underscore (_),'

@@ -7,14 +7,17 @@
             "url" : "https://repo.magento.com/"
         }
     ],
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~7.0",
-        "codeception/codeception": "2.2|2.3",
         "allure-framework/allure-codeception": "dev-master",
+        "codeception/codeception": "2.2|2.3",
         "consolidation/robo": "^1.0.0",
         "henrikbjorn/lurker": "^1.2",
-        "vlucas/phpdotenv": "~2.4",
-        "magento/magento2-functional-testing-framework": "dev-develop"
+        "magento/magento2-functional-testing-framework": "dev-develop",
+        "vlucas/phpdotenv": "~2.4"
     },
     "type": "magento2-test-module",
     "version": "dev-master",
