@@ -35,7 +35,7 @@
 ############################################
 ## adjust memory limit
 
-    php_value memory_limit 768M
+    php_value memory_limit 756M
     php_value max_execution_time 18000
 
 ############################################
@@ -111,7 +111,8 @@
 ############################################
 ## enable rewrites
 
-    Options +FollowSymLinks
+    # The following line has better security but add some performance overhead - see https://httpd.apache.org/docs/2.4/en/misc/perf-tuning.html
+    Options -FollowSymLinks +SymLinksIfOwnerMatch
     RewriteEngine on
 
 ############################################

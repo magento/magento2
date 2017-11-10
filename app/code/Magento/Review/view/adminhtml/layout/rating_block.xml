@@ -25,7 +25,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="rating_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.rating.grid.columnSet.rating_id" as="rating_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">ID</argument>
                             <argument name="index" xsi:type="string">rating_id</argument>
@@ -33,19 +33,19 @@
                             <argument name="header_css_class" xsi:type="string">col-id</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="rating_code">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.rating.grid.columnSet.rating_code" as="rating_code">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Rating</argument>
                             <argument name="index" xsi:type="string">rating_code</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="position">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.rating.grid.columnSet.position" as="position">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Sort Order</argument>
                             <argument name="index" xsi:type="string">position</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="is_active">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.rating.grid.columnSet.is_active" as="is_active">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Is Active</argument>
                             <argument name="index" xsi:type="string">is_active</argument>
