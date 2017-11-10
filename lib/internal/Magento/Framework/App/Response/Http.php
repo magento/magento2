@@ -51,6 +51,11 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     protected $dateTime;
 
     /**
+     * @var \Magento\Framework\Session\SessionManagerInterface
+     */
+    private $sessionManager;
+
+    /**
      * @param HttpRequest $request
      * @param CookieManagerInterface $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
@@ -183,6 +188,19 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
             \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
         );
         $this->request = $objectManager->get(\Magento\Framework\App\Request\Http::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function sendResponse()
+    {
+        if (!$this->sessionManager) {
+            $objectManager = ObjectManager::getInstance();
+            $this->sessionManager = $objectManager->get(\Magento\Framework\Session\SessionManagerInterface::class);
+        }
+        $this->sessionManager->start();
+        parent::sendResponse();
     }
 
     /**
