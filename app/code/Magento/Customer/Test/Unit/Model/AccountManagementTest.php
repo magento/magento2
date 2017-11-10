@@ -1175,7 +1175,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "" provided for the email type field
+     * @expectedExceptionMessage Invalid value of "" provided for the template field. Possible values are email_reminder or email_reset.
      */
     public function testInitiatePasswordResetNoTemplate()
     {
