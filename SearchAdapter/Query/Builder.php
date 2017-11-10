@@ -76,7 +76,7 @@ class Builder
             'body' => [
                 'from' => $request->getFrom(),
                 'size' => $request->getSize(),
-                'fields' => ['_id', '_score'],
+                'stored_fields' => ['_id', '_score'],
                 'query' => [],
             ],
         ];
