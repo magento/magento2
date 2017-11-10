@@ -346,7 +346,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'mimeTypeExtensionMap' => $this->mimeTypeExtensionMapMock,
                 'imageProcessor' => $this->imageProcessorMock,
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
-                'mediaGalleryProcessor' => $this->mediaGalleryProcessor
+                'mediaGalleryProcessor' => $this->mediaGalleryProcessor,
             ]
         );
     }
@@ -1246,6 +1246,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->mediaGalleryProcessor->expects($this->once())->method('addImage')
             ->with(self::callback(function () use ($imageFileUri, $newEntriesData) {
                 $this->initializedProductMock->addData(['media_gallery' => $newEntriesData]);
+
                 return $imageFileUri;
             }))
             ->willReturn($imageFileUri);
@@ -1376,7 +1377,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ['category_id'],
             ['store'],
             ['website_id'],
-            ['field']
+            ['field'],
         ];
     }
 }
