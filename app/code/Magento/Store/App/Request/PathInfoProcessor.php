@@ -38,7 +38,20 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
             /** @var \Magento\Store\Api\Data\StoreInterface $store */
             $store = $this->storeManager->getStore($storeCode);
         } catch (NoSuchEntityException $e) {
-            return $pathInfo;
+            try {
+                /** get the store by url */
+                $requestUri = $request->getUri();
+                if (empty($requestUri)) {
+                    return $pathInfo;
+                }
+                $store = $this->storeManager->getStoreByUrl($requestUri);
+                $storeBaseUrl = $store->getBaseUrl();
+                $baseUrlUri = \Zend\Uri\UriFactory::factory($storeBaseUrl);
+                $baseUrlPath = $baseUrlUri->getPath();
+                $pathInfo = preg_replace('#^' . $baseUrlPath . '#', '', $pathInfo);
+            } catch (NoSuchEntityException $e) {
+                return $pathInfo;
+            }
         }
 
         if ($store->isUseStoreInUrl()) {
