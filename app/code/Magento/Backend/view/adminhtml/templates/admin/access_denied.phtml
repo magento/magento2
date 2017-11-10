@@ -21,15 +21,9 @@
         <li><span><?= $block->escapeHtml(__('Contact a system administrator or store owner to gain permissions.')) ?></span></li>
         <li>
             <span><?= $block->escapeHtml(__('Return to ')) ?>
-                <a href="<?= $block->escapeHtmlAttr(__('javascript:history.back()')) ?>"
-                   onclick="<?= $block->escapeHtmlAttr(__('goBackToReferer(); return false;')) ?>">
+                <a href="<?= $block->escapeHtmlAttr(__('javascript:history.back()')) ?>">
                     <?= $block->escapeHtml(__('previous page')) ?></a><?= $block->escapeHtml(__('.')) ?>
             </span>
         </li>
     </ul>
 </div>
-<script>
-    function goBackToReferer() {
-        window.location.href = document.referrer;
-    }
-</script>
