@@ -24,7 +24,7 @@ class AssertSwatchConfigurableProductPage extends AssertProductPage
      *
      * @var ViewWithSwatches
      */
-    private $productView;
+    protected $productView;
 
     /**
      * {@inheritdoc}
