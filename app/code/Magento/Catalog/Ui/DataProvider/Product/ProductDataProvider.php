@@ -6,11 +6,12 @@
 namespace Magento\Catalog\Ui\DataProvider\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
  * Class ProductDataProvider
  */
-class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
+class ProductDataProvider extends AbstractDataProvider
 {
     /**
      * Product collection
@@ -101,7 +102,7 @@ class ProductDataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 ->addFilter(
                     $this->getCollection(),
                     $filter->getField(),
-                    [$filter->getConditionType() => $filter->getValue()]
+                    [$filter->getConditionType() => $this->getFilterValue($filter)]
                 );
         } else {
             parent::addFilter($filter);
