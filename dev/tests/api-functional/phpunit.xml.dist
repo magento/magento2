@@ -20,6 +20,9 @@
             <directory suffix="Test.php">testsuite</directory>
             <directory suffix="Test.php">../../../app/code/*/*/Test/Api</directory>
         </testsuite>
+        <testsuite name="msi">
+            <directory suffix="Test.php">../../../app/code/*/*/Test/Api</directory>
+        </testsuite>
     </testsuites>
 
     <!-- Code coverage filters -->
