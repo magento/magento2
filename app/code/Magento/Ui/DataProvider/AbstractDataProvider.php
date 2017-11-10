@@ -5,8 +5,8 @@
  */
 namespace Magento\Ui\DataProvider;
 
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
 abstract class AbstractDataProvider implements DataProviderInterface
 {
@@ -153,7 +153,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
     {
         $this->getCollection()->addFieldToFilter(
             $filter->getField(),
-            [$filter->getConditionType() => $filter->getValue()]
+            [$filter->getConditionType() => $this->getFilterValue($filter)]
         );
     }
     /**
@@ -276,5 +276,21 @@ abstract class AbstractDataProvider implements DataProviderInterface
     public function setConfigData($config)
     {
         $this->data['config'] = $config;
+    }
+
+    /**
+     * You need to escape backslashes twice in LIKE statement.
+     *
+     * @param $filter
+     * @return string
+     */
+    protected function getFilterValue(&$filter)
+    {
+        if ($filter->getConditionType() === "like" &&
+            strpos($filter->getValue(), "\\") !== false &&
+            strpos($filter->getValue(), "\\\\") === false) {
+            $filter->setValue(str_replace("\\", "\\\\", $filter->getValue()));
+        }
+        return $filter->getValue();
     }
 }
