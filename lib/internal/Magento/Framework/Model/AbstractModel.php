@@ -707,7 +707,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         if ($validator && !$validator->isValid($this)) {
             $errors = $validator->getMessages();
             $exception = new \Magento\Framework\Validator\Exception(
-                new Phrase(implode(PHP_EOL, $errors))
+                new Phrase($this->_recursiveImplode($errors))
             );
             foreach ($errors as $errorMessage) {
                 $exception->addMessage(new \Magento\Framework\Message\Error($errorMessage));
@@ -715,6 +715,30 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
             throw $exception;
         }
         return $this;
+    }
+
+    /**
+     * Recursively implodes an array
+     *
+     * @param array $array
+     * @param string $glue
+     * @return string imploded array
+     */
+    private function _recursiveImplode(array $array, $glue = PHP_EOL)
+    {
+        $implodedString = '';
+
+        // Recursively iterates array and adds key/value to glued string
+        array_walk_recursive($array, function($value) use ($glue, &$implodedString) {
+            $implodedString .= $value.$glue;
+        });
+
+        // Removes last $glue from string
+        if (strlen($glue) > 0) {
+            $implodedString = substr($implodedString, 0, -strlen($glue));
+        }
+
+        return (string) $implodedString;
     }
 
     /**
