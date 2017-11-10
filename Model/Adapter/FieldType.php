@@ -17,7 +17,8 @@ class FieldType
     /**#@+
      * Text flags for Elasticsearch field types
      */
-    const ES_DATA_TYPE_STRING = 'string';
+    const ES_DATA_TYPE_TEXT = 'text';
+    const ES_DATA_TYPE_KEYWORD = 'keyword';
     const ES_DATA_TYPE_FLOAT = 'float';
     const ES_DATA_TYPE_INT = 'integer';
     const ES_DATA_TYPE_DATE = 'date';
@@ -46,7 +47,7 @@ class FieldType
         } elseif ($backendType === 'decimal') {
             $fieldType = self::ES_DATA_TYPE_FLOAT;
         } else {
-            $fieldType = self::ES_DATA_TYPE_STRING;
+            $fieldType = self::ES_DATA_TYPE_TEXT;
         }
 
         return $fieldType;

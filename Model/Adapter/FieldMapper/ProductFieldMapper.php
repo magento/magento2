@@ -88,7 +88,7 @@ class ProductFieldMapper implements FieldMapperInterface
         if (empty($context['type'])) {
             $fieldName = $attributeCode;
         } elseif ($context['type'] === FieldMapperInterface::TYPE_FILTER) {
-            if ($fieldType === 'string') {
+            if ($fieldType === FieldType::ES_DATA_TYPE_TEXT) {
                 return $this->getFieldName(
                     $attributeCode,
                     array_merge($context, ['type' => FieldMapperInterface::TYPE_QUERY])
@@ -121,21 +121,24 @@ class ProductFieldMapper implements FieldMapperInterface
             $attribute = $this->eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode);
 
             $allAttributes[$attributeCode] = [
-                'type' => $this->fieldType->getFieldType($attribute)
+                'type' => $this->fieldType->getFieldType($attribute),
             ];
 
             if (!$attribute->getIsSearchable() && !$this->isAttributeUsedInAdvancedSearch($attribute)
                 && !in_array($attributeCode, $alwaysIndexableAttributes, true)
             ) {
-                $allAttributes[$attributeCode] = array_merge(
-                    $allAttributes[$attributeCode],
-                    ['index' => 'no']
-                );
+                $allAttributes[$attributeCode]['type'] = FieldType::ES_DATA_TYPE_KEYWORD;
+            } else if ($attributeCode == "category_ids") {
+                $allAttributes[$attributeCode] = [
+                    'type' => FieldType::ES_DATA_TYPE_INT,
+                ];
             }
 
-            if ($attribute->getFrontendInput() === 'select' || $attribute->getFrontendInput() === 'multiselect') {
+            if ($attribute->usesSource() || $attribute->getFrontendInput() === 'select' || $attribute->getFrontendInput() === 'multiselect') {
+                $allAttributes[$attributeCode]['type'] = FieldType::ES_DATA_TYPE_KEYWORD;
+
                 $allAttributes[$attributeCode . '_value'] = [
-                    'type' => FieldType::ES_DATA_TYPE_STRING,
+                    'type' => FieldType::ES_DATA_TYPE_TEXT,
                 ];
             }
         }

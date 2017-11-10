@@ -227,35 +227,34 @@ class Elasticsearch implements ClientInterface
                 $entityType => [
                     '_all' => [
                         'enabled' => true,
-                        'type' => 'string'
+                        'type' => 'text',
                     ],
                     'properties' => [],
                     'dynamic_templates' => [
                         [
                             'price_mapping' => [
                                 'match' => 'price_*',
-                                'match_mapping' => 'string',
+                                'match_mapping_type' => 'string',
                                 'mapping' => [
-                                    'type' => 'float'
+                                    'type' => 'float',
                                 ],
                             ],
                         ],
                         [
                             'string_mapping' => [
                                 'match' => '*',
-                                'match_mapping' => 'string',
+                                'match_mapping_type' => 'string',
                                 'mapping' => [
-                                    'type' => 'string',
-                                    'index' => 'no'
+                                    'type' => 'keyword',
                                 ],
                             ],
                         ],
                         [
                             'position_mapping' => [
                                 'match' => 'position_*',
-                                'match_mapping' => 'string',
+                                'match_mapping_type' => 'string',
                                 'mapping' => [
-                                    'type' => 'int'
+                                    'type' => 'int',
                                 ],
                             ],
                         ],
