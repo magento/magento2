@@ -60,22 +60,22 @@
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
                         <item name="text" xsi:type="string" translate="true"><![CDATA[
-                        <p>Magento 2.2.2 offers an exciting set of features and enhancements, including:</p>
+                        <p>Magento 2.2.2 offers advanced new features, including:</p>
                         <br />
                         <div class="analytics-highlight">
                         <h3>Advanced Reporting</h3>
                         <p>Gain valuable insights through a dynamic suite of product, order, and customer reports,
                         powered by Magento Business Intelligence.</p>
                         </div>
-                        <div class="developer-experience-highlight">
-                        <h3>Developer Experience</h3>
-                        <p>We've improved the entire development lifecycle - installation, development, and maintenance
-                        - while ensuring Magento's commitment to quality.</p>
+                        <div class="instant-purchase-highlight">
+                        <h3>Instant Purchase</h3>
+                        <p>Simplify ordering and boost conversion rates by allowing your customers to use stored
+                        payment and shipping information to skip tedious checkout steps.</p>
                         </div>
-                        <div class="b2b-highlight">
-                        <h3>Business-to-Business (B2B) <span>Magento Commerce only</span></h3>
-                        <p>Features to manage your complex company accounts, rapid reordering, new buyers' roles and
-                        permissions, and more.</p>
+                        <div class="email-marketing-highlight">
+                        <h3>Email Marketing Automation</span></h3>
+                        <p>Send smarter, faster email campaigns with marketing automation from dotmailer, powered by
+                        your Magento store's live data.</p>
                         </div>
                         <p>Release notes and additional details can be found at
                         <a href="http://devdocs.magento.com/" target="_blank">Magento DevDocs</a>.
@@ -184,7 +184,7 @@
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = developer_experience_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -198,12 +198,12 @@
             </container>
         </fieldset>
     </modal>
-    <modal name="developer_experience_modal" component="Magento_ReleaseNotification/js/modal/component">
+    <modal name="instant_purchase_modal" component="Magento_ReleaseNotification/js/modal/component">
         <settings>
             <onCancel>actionCancel</onCancel>
             <options>
-                <option name="modalClass" xsi:type="string">developer-experience-modal</option>
-                <option name="title" xsi:type="string" translate="true">Developer Experience</option>
+                <option name="modalClass" xsi:type="string">instant-purchase-modal</option>
+                <option name="title" xsi:type="string" translate="true">Instant Purchase</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
@@ -220,17 +220,20 @@
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
                         <item name="text" xsi:type="string" translate="true"><![CDATA[
-                        <p>Magento's 2.2.2 release offers a set of improvements that were developed using increased
-                        quality standards. The release includes these features, among others:
+                        <p>Now you can deliver an Amazon-like experience with a new, streamlined checkout option.
+                        Logged-in customers can use previously-stored payment credentials and shipping information
+                        to skip steps, making the process faster and easier, especially for mobile shoppers. Key
+                        features include:
                         </p>
                         <ul>
-                        <li><span>GitHub Community Moderator Team</span></li>
-                        <li><span>GitHub Community Videos</span></li>
-                        <li><span>DevDocs Enhancements</span></li>
-                        </ul>
-                        <p>Find the 2.2.2 details and future plans in the
-                        <a href="http://community.magento.com/devblog" target="_blank">Magento DevBlog</a>.
-                        </p>]]>
+                        <li><span>Configurable “Instant Purchase” button to place orders</span></li>
+                        <li><span>Support for all payment solutions using Braintree Vault, including Braintree Credit
+                        Card, Braintree PayPal, and PayPal Payflow Pro.</span></li>
+                        <li><span>Shipping to the customer’s default address using the lowest cost, available shipping
+                        method</span></li>
+                        <li><span>Ability for developers to customize the Instant Purchase business logic to meet
+                        merchant needs</span></li>
+                        </ul>]]>
                         </item>
                     </item>
                 </argument>
@@ -247,7 +250,7 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = developer_experience_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
@@ -268,11 +271,11 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = developer_experience_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = b2b_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -286,13 +289,12 @@
             </container>
         </fieldset>
     </modal>
-    <modal name="b2b_modal" component="Magento_ReleaseNotification/js/modal/component">
+    <modal name="email_marketing_modal" component="Magento_ReleaseNotification/js/modal/component">
         <settings>
             <onCancel>actionCancel</onCancel>
             <options>
-                <option name="modalClass" xsi:type="string">b2b-modal</option>
-                <option name="title" xsi:type="string" translate="true"><![CDATA[Business-to-Business (B2B)
-                <span>Magento Commerce only</span>]]></option>
+                <option name="modalClass" xsi:type="string">email-marketing-modal</option>
+                <option name="title" xsi:type="string" translate="true">Email Marketing Automation</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
@@ -309,17 +311,18 @@
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
                         <item name="text" xsi:type="string" translate="true"><![CDATA[
-                        <p>Magento Commerce 2.2.2 offers rich new functionality that empowers B2B merchants to transform
-                        their online purchasing experience to achieve greater operational efficiency, improved customer
-                        service, and sales growth. New capabilities include:
+                        <p>Unlock an unparalleled level of insight and control of your eCommerce marketing with
+                        dotmailer Email Marketing Automation. Included with Magento 2.2.2 for easy set-up, dotmailer
+                        ensures every customer’s journey is captured, segmented, and personalized, enabling you to
+                        deliver customer-centric campaigns that beat your results over and over again. Benefits include:
                         </p>
                         <ul>
-                        <li><span>Company accounts with multiple tiers of buyers</span></li>
-                        <li><span>Buyer roles and permissions</span></li>
-                        <li><span>Custom catalogs and pricing</span></li>
-                        <li><span>Quoting support</span></li>
-                        <li><span>Rapid reorder experience</span></li>
-                        <li><span>Payments on credit</span></li>
+                        <li><span>No obligation 14-day trial.</span></li>
+                        <li><span>Automation campaigns using your live Magento store data that drive revenue,
+                        including abandoned cart, abandoned browse, product replenishment, and many more</span></li>
+                        <li><span>Custom catalogs and pricing.</span></li>
+                        <li><span>Built-in solution for transactional emails.</span></li>
+                        <li><span>Telephone support and advice from marketing experts included.</span></li>
                         </ul>]]>
                         </item>
                     </item>
@@ -337,11 +340,11 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-back</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = b2b_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
                                     <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                                 <item name="1" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = developer_experience_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = instant_purchase_modal</item>
                                     <item name="actionName" xsi:type="string">openModal</item>
                                 </item>
                             </item>
@@ -358,7 +361,7 @@
                             <item name="buttonClasses" xsi:type="string">release-notification-button-next</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = b2b_modal</item>
+                                    <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = email_marketing_modal</item>
                                     <item name="actionName" xsi:type="string">closeReleaseNotes</item>
                                 </item>
                             </item>
