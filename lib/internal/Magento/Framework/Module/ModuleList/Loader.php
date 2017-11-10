@@ -48,24 +48,32 @@ class Loader
     private $filesystemDriver;
 
     /**
+     * @var Sorter
+     */
+    private $sorter;
+
+    /**
      * Constructor
      *
      * @param Dom $converter
      * @param Parser $parser
      * @param ComponentRegistrarInterface $moduleRegistry
      * @param DriverInterface $filesystemDriver
+     * @param Sorter $sorter
      */
     public function __construct(
         Dom $converter,
         Parser $parser,
         ComponentRegistrarInterface $moduleRegistry,
-        DriverInterface $filesystemDriver
+        DriverInterface $filesystemDriver,
+        Sorter $sorter = null
     ) {
         $this->converter = $converter;
         $this->parser = $parser;
         $this->parser->initErrorHandler();
         $this->moduleRegistry = $moduleRegistry;
         $this->filesystemDriver = $filesystemDriver;
+        $this->sorter = $sorter ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Sorter::class);
     }
 
     /**
@@ -97,7 +105,7 @@ class Loader
                 $result[$name] = $data[$name];
             }
         }
-        return $this->sortBySequence($result);
+        return $this->sorter->sort($result);
     }
 
     /**
@@ -119,69 +127,5 @@ class Loader
             $filePath = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, "$modulePath/etc/module.xml");
             yield [$filePath, $this->filesystemDriver->fileGetContents($filePath)];
         }
-    }
-
-    /**
-     * Sort the list of modules using "sequence" key in meta-information
-     *
-     * @param array $origList
-     * @return array
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
-    private function sortBySequence($origList)
-    {
-        ksort($origList);
-        $expanded = [];
-        foreach ($origList as $moduleName => $value) {
-            $expanded[] = [
-                'name' => $moduleName,
-                'sequence' => $this->expandSequence($origList, $moduleName),
-            ];
-        }
-
-        // Use "bubble sorting" because usort does not check each pair of elements and in this case it is important
-        $total = count($expanded);
-        for ($i = 0; $i < $total - 1; $i++) {
-            for ($j = $i; $j < $total; $j++) {
-                if (in_array($expanded[$j]['name'], $expanded[$i]['sequence'])) {
-                    $temp = $expanded[$i];
-                    $expanded[$i] = $expanded[$j];
-                    $expanded[$j] = $temp;
-                }
-            }
-        }
-
-        $result = [];
-        foreach ($expanded as $pair) {
-            $result[$pair['name']] = $origList[$pair['name']];
-        }
-
-        return $result;
-    }
-
-    /**
-     * Accumulate information about all transitive "sequence" references
-     *
-     * @param array $list
-     * @param string $name
-     * @param array $accumulated
-     * @return array
-     * @throws \Exception
-     */
-    private function expandSequence($list, $name, $accumulated = [])
-    {
-        $accumulated[] = $name;
-        $result = $list[$name]['sequence'];
-        foreach ($result as $relatedName) {
-            if (in_array($relatedName, $accumulated)) {
-                throw new \Exception("Circular sequence reference from '{$name}' to '{$relatedName}'.");
-            }
-            if (!isset($list[$relatedName])) {
-                continue;
-            }
-            $relatedResult = $this->expandSequence($list, $relatedName, $accumulated);
-            $result = array_unique(array_merge($result, $relatedResult));
-        }
-        return $result;
     }
 }
