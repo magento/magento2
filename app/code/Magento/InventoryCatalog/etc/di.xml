@@ -9,9 +9,9 @@
     <preference for="Magento\InventoryCatalog\Api\DefaultStockProviderInterface" type="Magento\InventoryCatalog\Model\DefaultStockProvider"/>
     <preference for="Magento\InventoryCatalog\Api\DefaultSourceProviderInterface" type="Magento\InventoryCatalog\Model\DefaultSourceProvider"/>
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
-        <plugin name="prevent_deleting_default_stock"
+        <plugin name="prevent_default_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
-        <plugin name="prevent_deleting_stock_assigned_to_sales_channels"
-                type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\StockAssignedToSalesChannelsPlugin"/>
+        <plugin name="prevent_assigned_to_sales_channels_stock_deleting"
+                type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\AssignedToSalesChannelsStockPlugin"/>
     </type>
 </config>
