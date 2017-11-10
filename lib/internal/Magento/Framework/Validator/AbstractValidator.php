@@ -127,6 +127,30 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      */
     protected function _addMessages(array $messages)
     {
-        $this->_messages = array_merge_recursive($this->_messages, $messages);
+        $mergedMessages = array_merge_recursive($this->_messages, $messages);
+
+        $this->_messages = $this->removeDuplicatedMessages($mergedMessages);
+    }
+
+    /**
+     * @param $messages
+     * @return mixed
+     */
+    private function removeDuplicatedMessages($messages)
+    {
+        foreach ($messages as $messageKey => $messageValue) {
+            if (is_array($messageValue)) {
+                if (array_filter($messageValue, 'is_array')) {
+                    $messageValue = $this->removeDuplicatedMessages($messageValue);
+                }
+
+                $messageValue = array_unique($messageValue);
+
+                if (count($messageValue) === 1) {
+                    $messages[$messageKey] = $messageValue[0];
+                }
+            }
+        }
+        return $messages;
     }
 }
