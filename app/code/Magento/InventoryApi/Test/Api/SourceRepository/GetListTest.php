@@ -54,7 +54,7 @@ class GetListTest extends WebapiAbstract
                 SearchCriteria::PAGE_SIZE => 2,
             ],
         ];
-        $expectedTotalCount = 5;
+        $expectedTotalCount = 4;
         $expectedItemsData = [
             [
                 SourceInterface::ENABLED => true,
@@ -83,7 +83,7 @@ class GetListTest extends WebapiAbstract
             : $this->_webApiCall($serviceInfo, $requestData);
 
         AssertArrayContains::assert($requestData['searchCriteria'], $response['search_criteria']);
-        self::assertEquals($expectedTotalCount, $response['total_count']);
+        self::assertGreaterThanOrEqual($expectedTotalCount, $response['total_count']);
         AssertArrayContains::assert($expectedItemsData, $response['items']);
     }
 }

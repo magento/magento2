@@ -46,7 +46,7 @@ class GetListTest extends WebapiAbstract
             : $this->_webApiCall($serviceInfo, $requestData);
 
         AssertArrayContains::assert($searchCriteria, $response['search_criteria']);
-        self::assertEquals($expectedTotalCount, $response['total_count']);
+        self::assertGreaterThanOrEqual($expectedTotalCount, $response['total_count']);
         AssertArrayContains::assert($expectedItemsData, $response['items']);
     }
 
@@ -89,7 +89,7 @@ class GetListTest extends WebapiAbstract
                     SearchCriteria::CURRENT_PAGE => 2,
                     SearchCriteria::PAGE_SIZE => 2,
                 ],
-                4,
+                3,
                 [
                     [
                         StockInterface::NAME => 'EU-stock',
