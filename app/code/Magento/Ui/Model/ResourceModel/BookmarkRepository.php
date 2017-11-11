@@ -5,16 +5,15 @@
  */
 namespace Magento\Ui\Model\ResourceModel;
 
+use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SortOrder;
-use Magento\Ui\Api\BookmarkRepositoryInterface;
-use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Ui\Api\Data\BookmarkInterface;
-use Magento\Ui\Model\ResourceModel\Bookmark\Collection;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Ui\Api\BookmarkRepositoryInterface;
+use Magento\Ui\Api\Data\BookmarkInterface;
+use Magento\Ui\Model\ResourceModel\Bookmark\Collection;
 
 /**
  * Class BookmarkRepository
@@ -55,7 +54,6 @@ class BookmarkRepository implements BookmarkRepositoryInterface
         \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory,
         CollectionProcessorInterface $collectionProcessor = null
     ) {
-
         $this->bookmarkResourceModel = $bookmarkResourceModel;
         $this->bookmarkFactory = $bookmarkFactory;
         $this->searchResultsFactory = $searchResultsFactory;

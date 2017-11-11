@@ -7,8 +7,8 @@
 namespace Magento\Store\Test\Constraint;
 
 use Magento\Backend\Test\Page\Adminhtml\SystemConfig;
-use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Class AssertStoreBackend

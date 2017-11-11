@@ -6,16 +6,16 @@
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Store\Model\Store;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\Store\Model\Website;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\Website;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * @magentoAppIsolation enabled

@@ -5,9 +5,9 @@
  */
 namespace Magento\Signifyd\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Signifyd\Test\Fixture\SignifydData;
 use Magento\Signifyd\Test\Page\Adminhtml\OrdersGrid;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that Signifyd Guarantee Status is present in Orders grid.

@@ -6,10 +6,10 @@
 namespace Magento\Theme\Model\Design\Config;
 
 use Magento\Framework\Event\ManagerInterface as EventManager;
-use Magento\Store\Model\StoreManagerInterface as StoreManager;
-use Magento\Theme\Model\DesignConfigRepository;
-use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface as StoreManager;
+use Magento\Theme\Api\Data\DesignConfigInterface;
+use Magento\Theme\Model\DesignConfigRepository;
 
 class Plugin
 {

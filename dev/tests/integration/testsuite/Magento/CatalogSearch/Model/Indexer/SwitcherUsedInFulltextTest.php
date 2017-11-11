@@ -6,8 +6,6 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\CatalogSearch\Model\Indexer\IndexSwitcherMock;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 

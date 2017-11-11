@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Exception\Test\Unit;
 
-use \Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 
 /**

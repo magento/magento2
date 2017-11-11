@@ -121,7 +121,7 @@ class DiRule implements RuleInterface
         $result = [];
         foreach (self::$tagNameMap as $tagName => $attributeNames) {
             $nodes = $doc->getElementsByTagName($tagName);
-        /** @var \DOMElement $node */
+            /** @var \DOMElement $node */
             foreach ($nodes as $node) {
                 foreach ($attributeNames as $attributeName) {
                     $result[] = $node->getAttribute($attributeName);

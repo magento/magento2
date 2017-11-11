@@ -10,7 +10,6 @@ use Magento\Setup\Module\Di\Code\Reader\InvalidFileException;
 
 class FileClassScannerTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testInvalidFileThrowsException()
     {
         $this->expectException(InvalidFileException::class);
@@ -209,7 +208,8 @@ PHP
         $scanner = $this->getMockBuilder(FileClassScanner::class)->disableOriginalConstructor()->setMethods([
             'getFileContents'
         ])->getMock();
-        $scanner->expects(self::once())->method('getFileContents')->willReturn(<<<'PHP'
+        $scanner->expects(self::once())->method('getFileContents')->willReturn(
+            <<<'PHP'
 <?php
 
 namespace This\Is\My\Ns;

@@ -6,9 +6,9 @@
 
 namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType;
 
-use Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType\CatalogCategoryLink\Form;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
+use Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType\CatalogCategoryLink\Form;
 
 /**
  * Filling Widget Options that have catalog category link type.

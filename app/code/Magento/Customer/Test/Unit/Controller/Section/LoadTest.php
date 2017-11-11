@@ -9,11 +9,11 @@ use Magento\Customer\Controller\Section\Load;
 use Magento\Customer\CustomerData\Section\Identifier;
 use Magento\Customer\CustomerData\SectionPoolInterface;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Escaper;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\App\Request\Http as HttpRequest;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class LoadTest extends \PHPUnit\Framework\TestCase
 {

@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\View\Element\UiComponent\Argument\Interpreter;
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class ConfigurableObject

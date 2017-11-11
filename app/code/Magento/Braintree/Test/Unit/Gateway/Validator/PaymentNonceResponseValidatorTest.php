@@ -5,11 +5,10 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 
-use Braintree\Transaction;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Validator\PaymentNonceResponseValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use Magento\Braintree\Gateway\SubjectReader;
 
 /**
  * Class PaymentNonceResponseValidatorTest

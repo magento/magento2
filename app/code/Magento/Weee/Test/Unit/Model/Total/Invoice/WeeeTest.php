@@ -136,7 +136,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
 
         //verify invoice data
         foreach ($expectedResults['invoice_data'] as $key => $value) {
-            $this->assertEquals($value, $this->invoice->getData($key), 'Invoice data field '.$key.' is incorrect');
+            $this->assertEquals($value, $this->invoice->getData($key), 'Invoice data field ' . $key . ' is incorrect');
         }
         //verify invoice item data
         foreach ($expectedResults['invoice_items'] as $itemKey => $itemData) {
@@ -149,7 +149,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
                     $this->assertEquals(
                         $value,
                         $invoiceItem->getData($key),
-                        'Invoice item field '.$key.' is incorrect'
+                        'Invoice item field ' . $key . ' is incorrect'
                     );
                 }
             }

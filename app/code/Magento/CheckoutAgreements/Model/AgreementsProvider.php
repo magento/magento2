@@ -5,8 +5,8 @@
  */
 namespace Magento\CheckoutAgreements\Model;
 
-use Magento\Store\Model\ScopeInterface;
 use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory as AgreementCollectionFactory;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Provide Agreements stored in db

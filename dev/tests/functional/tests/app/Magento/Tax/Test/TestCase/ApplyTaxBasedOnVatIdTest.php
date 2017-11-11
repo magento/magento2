@@ -6,12 +6,12 @@
 
 namespace Magento\Tax\Test\TestCase;
 
-use Magento\Tax\Test\Fixture\TaxRule;
 use Magento\Checkout\Test\Fixture\Cart;
-use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\Sales\Test\Fixture\OrderInjectable;
+use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Customer\Test\TestCase\AbstractApplyVatIdTest;
+use Magento\Sales\Test\Fixture\OrderInjectable;
+use Magento\Tax\Test\Fixture\TaxRule;
 
 /**
  * Preconditions:

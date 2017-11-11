@@ -6,16 +6,16 @@
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
+use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
 use Magento\Setup\Console\Command\InstallCommand;
+use Magento\Setup\Model\AdminAccount;
+use Magento\Setup\Model\StoreConfigurationDataMapper;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Setup\Model\AdminAccount;
-use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
-use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
-use Magento\Setup\Model\StoreConfigurationDataMapper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

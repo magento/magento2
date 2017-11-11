@@ -5,8 +5,8 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
-use Magento\ImportExport\Model\Import;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
+use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**

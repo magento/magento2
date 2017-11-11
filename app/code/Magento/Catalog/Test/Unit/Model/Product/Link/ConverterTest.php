@@ -79,7 +79,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->once())
             ->method('__toArray')
             ->willReturn(['qty' => 33]);
-        
+
         $this->assertEquals($linksAsArray, $this->converter->convertLinksToGroupedArray($productMock));
     }
 }

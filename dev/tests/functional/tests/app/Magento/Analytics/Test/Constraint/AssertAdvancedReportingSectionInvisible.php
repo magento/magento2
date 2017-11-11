@@ -5,8 +5,8 @@
  */
 namespace Magento\Analytics\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that Advanced Reporting section is invisibile.

@@ -8,15 +8,15 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\ConfigurableProduct\Api\Data\OptionInterface;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
-use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
 use Magento\Catalog\Model\Product as ProductModel;
+use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
-use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
 
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

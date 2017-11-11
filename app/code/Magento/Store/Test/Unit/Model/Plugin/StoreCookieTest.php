@@ -6,11 +6,11 @@
 
 namespace Magento\Store\Test\Unit\Model\Plugin;
 
+use InvalidArgumentException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\StoreResolverInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreIsInactiveException;
-use \InvalidArgumentException;
 
 /**
  * Unit tests for \Magento\Store\Model\Plugin\StoreCookie class.
@@ -121,7 +121,7 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
             ->willReturn($storeCode);
         $this->storeRepositoryMock->expects($this->once())
             ->method('getActiveStoreByCode')
-            ->willThrowException(new NoSuchEntityException);
+            ->willThrowException(new NoSuchEntityException());
         $this->storeCookieManagerMock->expects($this->once())
             ->method('deleteStoreCookie')
             ->with($this->storeMock);
@@ -144,7 +144,7 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
             ->willReturn($storeCode);
         $this->storeRepositoryMock->expects($this->once())
             ->method('getActiveStoreByCode')
-            ->willThrowException(new StoreIsInactiveException);
+            ->willThrowException(new StoreIsInactiveException());
         $this->storeCookieManagerMock->expects($this->once())
             ->method('deleteStoreCookie')
             ->with($this->storeMock);
@@ -167,7 +167,7 @@ class StoreCookieTest extends \PHPUnit\Framework\TestCase
             ->willReturn($storeCode);
         $this->storeRepositoryMock->expects($this->once())
             ->method('getActiveStoreByCode')
-            ->willThrowException(new InvalidArgumentException);
+            ->willThrowException(new InvalidArgumentException());
         $this->storeCookieManagerMock->expects($this->once())
             ->method('deleteStoreCookie')
             ->with($this->storeMock);

@@ -5,8 +5,8 @@
  */
 namespace Magento\Backend\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that Locale field has correct visibility.

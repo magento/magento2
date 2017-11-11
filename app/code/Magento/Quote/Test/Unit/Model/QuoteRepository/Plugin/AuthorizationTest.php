@@ -5,8 +5,8 @@
  */
 namespace Magento\Quote\Test\Unit\Model\QuoteRepository\Plugin;
 
-use Magento\Quote\Model\QuoteRepository\Plugin\Authorization;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Quote\Model\QuoteRepository\Plugin\Authorization;
 
 /**
  * Class AuthorizationTest

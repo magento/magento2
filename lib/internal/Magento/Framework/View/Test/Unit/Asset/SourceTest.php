@@ -11,8 +11,8 @@ namespace Magento\Framework\View\Test\Unit\Asset;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
+use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\View\Asset\Source;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
@@ -84,7 +84,8 @@ class SourceTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\App\Config\ScopeConfigInterface $config */
 
         $this->chainFactory = $this->getMockBuilder(
-            \Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface::class)
+            \Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface::class
+        )
             ->getMock();
         $this->chain = $this->getMockBuilder(\Magento\Framework\View\Asset\PreProcessor\Chain::class)
             ->disableOriginalConstructor()

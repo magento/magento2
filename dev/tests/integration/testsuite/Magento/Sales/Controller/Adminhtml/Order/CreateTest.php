@@ -5,8 +5,8 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Backend\Model\Session\Quote;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 
 /**

@@ -7,9 +7,9 @@
 namespace Magento\Wishlist\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Wishlist\Test\Page\WishlistIndex;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Wishlist\Test\Page\WishlistIndex;
 
 /**
  * Assert that the correct option details are displayed on the "See Details" tooltip.

@@ -6,9 +6,9 @@
 
 namespace Magento\Backend\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\Mtf\Util\Command\Cli\StaticContent;
 

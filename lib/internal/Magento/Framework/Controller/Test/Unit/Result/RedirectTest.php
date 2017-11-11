@@ -6,11 +6,11 @@
 
 namespace Magento\Framework\Controller\Test\Unit\Result;
 
-use \PHPUnit\Framework\TestCase;
-use \Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
-use \Magento\Framework\App\Response\RedirectInterface;
-use \Magento\Framework\Controller\Result\Redirect;
-use \Magento\Framework\UrlInterface;
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\TestCase;
 
 class RedirectTest extends TestCase
 {

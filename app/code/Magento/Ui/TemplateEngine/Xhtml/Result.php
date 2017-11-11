@@ -5,11 +5,11 @@
  */
 namespace Magento\Ui\TemplateEngine\Xhtml;
 
-use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\TemplateEngine\Xhtml\Template;
-use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;
+use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\Template;
 use Psr\Log\LoggerInterface;
 
 /**

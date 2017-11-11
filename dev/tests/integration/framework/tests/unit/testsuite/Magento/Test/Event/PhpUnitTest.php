@@ -103,7 +103,7 @@ class PhpUnitTest extends \PHPUnit\Framework\TestCase
     public function testStartTestDoNotFireEvent()
     {
         $this->_eventManager->expects($this->never())->method('fireEvent');
-     //   $this->_object->startTest(new \PHPUnit\Framework\Warning());
+        //   $this->_object->startTest(new \PHPUnit\Framework\Warning());
         $this->_object->startTest($this->createMock(\PHPUnit\Framework\Test::class));
     }
 
@@ -116,7 +116,7 @@ class PhpUnitTest extends \PHPUnit\Framework\TestCase
     public function testEndTestDoNotFireEvent()
     {
         $this->_eventManager->expects($this->never())->method('fireEvent');
-   //     $this->_object->endTest(new \PHPUnit\Framework\Warning(), 0);
+        //     $this->_object->endTest(new \PHPUnit\Framework\Warning(), 0);
         $this->_object->endTest($this->createMock(\PHPUnit\Framework\Test::class), 0);
     }
 }

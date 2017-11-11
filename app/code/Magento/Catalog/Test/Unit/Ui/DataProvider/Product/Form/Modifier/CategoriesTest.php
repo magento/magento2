@@ -5,9 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Framework\UrlInterface;
@@ -126,7 +126,7 @@ class CategoriesTest extends AbstractModifierTest
             ->with(Categories::CATEGORY_TREE_ID . '_');
         $cacheManager->expects($this->once())
             ->method('save');
-        
+
         $modifier = $this->createModel();
         $cacheContextProperty = new \ReflectionProperty(
             Categories::class,

@@ -8,8 +8,8 @@ namespace Magento\Setup\Module\Di\Code\Scanner;
 use Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator;
 use Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator;
 use Magento\Framework\ObjectManager\Code\Generator\Factory as FactoryGenerator;
+use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Setup\Module\Di\Compiler\Log\Log;
-use \Magento\Framework\Reflection\TypeProcessor;
 
 class PhpScanner implements ScannerInterface
 {

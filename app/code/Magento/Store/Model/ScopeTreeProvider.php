@@ -7,9 +7,6 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeTreeProviderInterface;
-use Magento\Store\Model\Group;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\Website;
 
 class ScopeTreeProvider implements ScopeTreeProviderInterface
 {

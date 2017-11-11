@@ -5,8 +5,6 @@
  */
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
-use Magento\TestFramework\TestCase\AbstractBackendController;
-
 class ImportExportTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     public function setUp()

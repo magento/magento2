@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout;
 
-use \Magento\Framework\View\Layout\ScheduledStructure;
+use Magento\Framework\View\Layout\ScheduledStructure;
 
 /**
  * Test class for \Magento\Framework\View\Layout\ScheduledStructure

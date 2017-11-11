@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Sale;
 
-use Magento\Framework\Data\Collection\EntityFactory;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as Logger;
 
 /**

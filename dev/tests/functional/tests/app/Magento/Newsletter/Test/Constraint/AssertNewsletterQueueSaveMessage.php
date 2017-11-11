@@ -18,7 +18,7 @@ class AssertNewsletterQueueSaveMessage extends AbstractAssertForm
      * Text value to be checked.
      */
     const SUCCESS_MESSAGE = 'You saved the newsletter queue.';
-    
+
     /**
      * Assert that Newsletter Queue success save message is present.
      *

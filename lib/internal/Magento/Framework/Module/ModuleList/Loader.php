@@ -6,11 +6,11 @@
 
 namespace Magento\Framework\Module\ModuleList;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
-use Magento\Framework\Component\ComponentRegistrarInterface;
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Loader of module list information from the filesystem

@@ -6,8 +6,8 @@
 
 namespace Magento\Quote\Model\Quote\Address;
 
-use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 class ConverterTest extends TestCase
 {
@@ -33,7 +33,7 @@ class ConverterTest extends TestCase
         /** @var \Magento\Quote\Model\Quote\Address $quoteAddress */
         $quoteAddress = $this->objectManager->create(\Magento\Quote\Model\Quote\Address::class);
         $quoteAddress->setBaseShippingDiscountTaxCompensationAmount($amountValue);
-        
+
         $orderAddressData = $this->objectCopyService->getDataFromFieldset(
             'sales_convert_quote_address',
             'to_order',

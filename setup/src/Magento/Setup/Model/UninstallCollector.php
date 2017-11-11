@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\UninstallInterface;
 use Magento\Setup\Module\DataSetupFactory;

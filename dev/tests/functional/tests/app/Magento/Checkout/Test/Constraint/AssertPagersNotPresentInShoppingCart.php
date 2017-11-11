@@ -6,8 +6,8 @@
 
 namespace Magento\Checkout\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Checkout\Test\Page\CheckoutCart;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that pagers aren't visible on checkout/cart/index page.

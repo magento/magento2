@@ -6,12 +6,12 @@
 
 namespace Magento\Sitemap\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Cms\Test\Fixture\CmsPage;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Sitemap\Test\Fixture\Sitemap;
 use Magento\Sitemap\Test\Page\Adminhtml\SitemapIndex;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Cover updating Sitemap Entity

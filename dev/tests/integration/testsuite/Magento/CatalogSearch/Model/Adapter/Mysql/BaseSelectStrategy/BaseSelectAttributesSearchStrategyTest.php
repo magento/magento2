@@ -6,10 +6,10 @@
 
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerFactory;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
+use Magento\Store\Model\StoreManagerInterface;
 
 class BaseSelectAttributesSearchStrategyTest extends \PHPUnit\Framework\TestCase
 {

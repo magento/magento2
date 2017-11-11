@@ -6,11 +6,11 @@
 namespace Magento\Multishipping\Model\Checkout\Type;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\ObjectManager;
-use Magento\Directory\Model\AllowedCountries;
 
 /**
  * Multishipping checkout model
@@ -993,7 +993,7 @@ class Multishipping extends \Magento\Framework\DataObject
      */
     protected function isAddressIdApplicable($addressId)
     {
-        $applicableAddressIds = array_map(function($address) {
+        $applicableAddressIds = array_map(function ($address) {
             /** @var \Magento\Customer\Api\Data\AddressInterface $address */
             return $address->getId();
         }, $this->getCustomer()->getAddresses());

@@ -5,9 +5,9 @@
  */
 namespace Magento\Setup\Module\Di\Code\Reader\Decorator;
 
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 use Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator;
-use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Class Area

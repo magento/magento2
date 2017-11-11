@@ -6,7 +6,6 @@
 
 namespace Magento\Mtf\Util\Generate;
 
-use Magento\Framework\App;
 use Magento\Framework\ObjectManagerInterface;
 
 /**

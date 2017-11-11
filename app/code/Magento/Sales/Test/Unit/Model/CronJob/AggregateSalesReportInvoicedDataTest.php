@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\CronJob;
 
-use \Magento\Sales\Model\CronJob\AggregateSalesReportInvoicedData;
+use Magento\Sales\Model\CronJob\AggregateSalesReportInvoicedData;
 
 /**
  * Tests Magento\Sales\Model\CronJob\AggregateSalesReportInvoicedDataTest

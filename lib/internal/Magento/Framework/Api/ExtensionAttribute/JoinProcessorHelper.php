@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Api\ExtensionAttribute;
 
-use Magento\Framework\Api\ExtensionAttribute\Config;
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter as Converter;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 

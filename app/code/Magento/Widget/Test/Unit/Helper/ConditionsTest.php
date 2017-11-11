@@ -6,8 +6,8 @@
 
 namespace Magento\Widget\Test\Unit\Helper;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Data\Wysiwyg\Normalizer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class ConditionsTest

@@ -6,12 +6,11 @@
 
 namespace Magento\Newsletter\Test\TestCase;
 
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Newsletter\Test\Fixture\Queue;
 use Magento\Newsletter\Test\Fixture\Template;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateIndex;
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateQueue;
-use Magento\Newsletter\Test\Page\Adminhtml\TemplateQueueIndex;
 
 /**
  * Test to create Newsletter Queue.

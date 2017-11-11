@@ -6,8 +6,6 @@
 namespace Magento\Vault\Model;
 
 use Magento\Framework\Model\AbstractModel;
-use Magento\Vault\Api\Data\PaymentTokenExtensionInterface;
-use Magento\Vault\Model\ResourceModel;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 
 /**

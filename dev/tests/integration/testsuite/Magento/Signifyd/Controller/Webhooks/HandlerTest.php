@@ -5,12 +5,12 @@
  */
 namespace Magento\Signifyd\Controller\Webhooks;
 
-use Magento\TestFramework\TestCase\AbstractController;
-use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
-use Magento\Signifyd\Api\CaseRepositoryInterface;
-use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Signifyd\Api\CaseRepositoryInterface;
+use Magento\Signifyd\Api\Data\CaseInterface;
+use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
+use Magento\TestFramework\TestCase\AbstractController;
 
 /**
  * Class tests handling webhook post from Signifyd service.

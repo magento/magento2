@@ -9,8 +9,8 @@ namespace Magento\Framework\Interception\ObjectManager\Config;
 
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
-use Magento\Framework\ObjectManager\RelationsInterface;
 use Magento\Framework\ObjectManager\InterceptableValidator;
+use Magento\Framework\ObjectManager\RelationsInterface;
 
 class Developer extends \Magento\Framework\ObjectManager\Config\Config implements ConfigInterface
 {

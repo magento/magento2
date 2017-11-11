@@ -5,12 +5,12 @@
  */
 namespace Magento\Setup\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\Json\Json;
-use Zend\View\Model\JsonModel;
-use Magento\Setup\Model\PackagesData;
 use Magento\Setup\Model\PackagesAuth;
+use Magento\Setup\Model\PackagesData;
+use Zend\Json\Json;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 class Marketplace extends AbstractActionController
 {
@@ -41,7 +41,7 @@ class Marketplace extends AbstractActionController
      */
     public function indexAction()
     {
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTemplate('/error/404.phtml');
         $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
         return $view;

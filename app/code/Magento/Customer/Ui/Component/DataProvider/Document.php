@@ -6,12 +6,12 @@
 namespace Magento\Customer\Ui\Component\DataProvider;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -125,7 +125,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     private function setGenderValue()
     {
         $value = $this->getData(self::$genderAttributeCode);
-        
+
         if (!$value) {
             $this->setCustomAttribute(self::$genderAttributeCode, 'N/A');
             return;

@@ -22,8 +22,8 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Registry;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
@@ -763,7 +763,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             copy($item['source'], $item['dest']);
         }
     }
-
 
     /**
      * Export CSV string to array
@@ -1599,13 +1598,17 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $product1 = $productRepository->get('simple1');
         $this->assertEquals('\'", =|', $product1->getData('text_attribute'));
-        $this->assertEquals(implode(',', [$multiselectOptions[3]->getValue(), $multiselectOptions[2]->getValue()]),
-            $product1->getData('multiselect_attribute'));
+        $this->assertEquals(
+            implode(',', [$multiselectOptions[3]->getValue(), $multiselectOptions[2]->getValue()]),
+            $product1->getData('multiselect_attribute')
+        );
 
         $product2 = $productRepository->get('simple2');
         $this->assertEquals('', $product2->getData('text_attribute'));
-        $this->assertEquals(implode(',', [$multiselectOptions[1]->getValue(), $multiselectOptions[2]->getValue()]),
-            $product2->getData('multiselect_attribute'));
+        $this->assertEquals(
+            implode(',', [$multiselectOptions[1]->getValue(), $multiselectOptions[2]->getValue()]),
+            $product2->getData('multiselect_attribute')
+        );
     }
 
     /**

@@ -6,9 +6,9 @@
 
 namespace Magento\Weee\Test\Block\Product;
 
-use Magento\Weee\Test\Block\Product\ProductList\ProductItem;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Weee\Test\Block\Product\ProductList\ProductItem;
 
 /**
  * Product list block.

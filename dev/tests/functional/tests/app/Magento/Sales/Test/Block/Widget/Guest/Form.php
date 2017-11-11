@@ -6,12 +6,10 @@
 
 namespace Magento\Sales\Test\Block\Widget\Guest;
 
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Orders and Returns form search block.
@@ -46,7 +44,7 @@ class Form extends \Magento\Mtf\Block\Form
         $searchData = $fixture->getData('customer_id')
             ? $fixture->getDataFieldConfig('customer_id')['source']->getCustomer()->getData()
             : $fixture->getDataFieldConfig('billing_address_id')['source']->getData();
-        
+
         $data = [
             'order_id' => $fixture->getId(),
             'billing_last_name' => $searchData['lastname'],

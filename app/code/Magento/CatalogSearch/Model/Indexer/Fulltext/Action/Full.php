@@ -389,7 +389,7 @@ class Full
             }
             $products = $this->dataProvider
                 ->getSearchableProducts($storeId, $staticFields, $productIds, $lastProductId);
-        };
+        }
     }
 
     /**

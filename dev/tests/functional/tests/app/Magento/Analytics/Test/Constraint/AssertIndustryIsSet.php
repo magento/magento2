@@ -5,8 +5,8 @@
  */
 namespace Magento\Analytics\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Analytics\Test\Page\Adminhtml\ConfigAnalytics;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert Advance Reporting Industry is set.

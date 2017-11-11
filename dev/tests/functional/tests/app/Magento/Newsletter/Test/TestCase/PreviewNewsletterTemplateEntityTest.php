@@ -6,10 +6,10 @@
 
 namespace Magento\Newsletter\Test\TestCase;
 
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Newsletter\Test\Fixture\Template;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateIndex;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateNewIndex;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Newsletter Templates Preview on Newsletter Template page

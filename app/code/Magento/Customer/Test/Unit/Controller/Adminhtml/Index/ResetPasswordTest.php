@@ -8,7 +8,6 @@
 
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -147,7 +146,8 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
         )->getMock();
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class)
+            \Magento\Backend\Model\View\Result\RedirectFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

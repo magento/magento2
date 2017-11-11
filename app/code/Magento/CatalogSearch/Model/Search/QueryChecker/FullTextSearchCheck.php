@@ -6,9 +6,9 @@
 
 namespace Magento\CatalogSearch\Model\Search\QueryChecker;
 
-use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\Query\Filter;
+use Magento\Framework\Search\Request\QueryInterface;
 
 /**
  * Class is responsible for checking if fulltext search is required for search query

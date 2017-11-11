@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
-use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 /**
  * Catalog Product Eav Select and Multiply Select Attributes Indexer resource model

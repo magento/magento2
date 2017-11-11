@@ -6,9 +6,9 @@
 
 namespace Magento\Ui\Test\Block\Adminhtml;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Grid;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Backend Data Grid with advanced functionality for managing entities.

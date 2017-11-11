@@ -5,10 +5,10 @@
  */
 namespace Magento\Ui\Component\Filters\Type;
 
-use Magento\Ui\Component\AbstractComponent;
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Component\AbstractComponent;
 use Magento\Ui\Component\Filters\FilterModifier;
 
 /**

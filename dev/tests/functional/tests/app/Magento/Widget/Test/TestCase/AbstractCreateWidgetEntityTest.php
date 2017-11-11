@@ -6,12 +6,12 @@
 
 namespace Magento\Widget\Test\TestCase;
 
+use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Util\Command\Cli\Cache;
 use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceEdit;
 use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceIndex;
 use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceNew;
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\Util\Command\Cli\Cache;
-use Magento\Cms\Test\Page\CmsIndex;
 
 /**
  * Test Creation for New Instance of WidgetEntity.

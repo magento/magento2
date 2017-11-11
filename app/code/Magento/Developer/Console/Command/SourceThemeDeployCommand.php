@@ -5,14 +5,13 @@
  */
 namespace Magento\Developer\Console\Command;
 
-use Magento\Framework\App\State;
+use Magento\Framework\App\View\Asset\Publisher;
 use Magento\Framework\Validator\Locale;
 use Magento\Framework\View\Asset\Repository;
 use Symfony\Component\Console\Command\Command;
-use Magento\Framework\App\View\Asset\Publisher;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**

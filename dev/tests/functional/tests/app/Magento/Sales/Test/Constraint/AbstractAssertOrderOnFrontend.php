@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Test\Constraint;
 
-use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\System\Event\EventManagerInterface;

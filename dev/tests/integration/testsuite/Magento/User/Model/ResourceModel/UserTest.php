@@ -6,8 +6,8 @@
 namespace Magento\User\Model\ResourceModel;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\User\Model\User;
 use Magento\User\Model\ResourceModel\User as UserResourceModel;
+use Magento\User\Model\User;
 
 /**
  * @magentoAppArea adminhtml

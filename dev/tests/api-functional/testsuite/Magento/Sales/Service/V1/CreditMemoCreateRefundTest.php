@@ -54,7 +54,7 @@ class CreditMemoCreateRefundTest extends WebapiAbstract
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_READ_NAME.'refund',
+                'operation' => self::SERVICE_READ_NAME . 'refund',
             ],
         ];
         $data = [

@@ -7,9 +7,9 @@ namespace Magento\Catalog\Model\Indexer\Product;
 
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Indexer\Model\Indexer;
+use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -68,9 +68,9 @@ class CategoryTest extends TestCase
                     $product,
                     $category->getId()
                 ),
-                'Product "' .$product->getName() .'" is'
-                .($visible? '' : ' not') .' supposed to be in category "'
-                .$category->getName() .'"'
+                'Product "' . $product->getName() . '" is'
+                . ($visible ? '' : ' not') . ' supposed to be in category "'
+                . $category->getName() . '"'
             );
         }
     }

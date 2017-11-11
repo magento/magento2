@@ -6,9 +6,9 @@
 
 namespace Magento\Security\Test\Unit\Controller\Adminhtml\Session;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test class for \Magento\Security\Controller\Adminhtml\Session\Activity testing

@@ -6,7 +6,6 @@
 namespace Magento\Wishlist\Controller;
 
 use Magento\Framework\App\Action;
-use Magento\Wishlist\Controller\IndexInterface;
 
 /**
  * Class AbstractIndex

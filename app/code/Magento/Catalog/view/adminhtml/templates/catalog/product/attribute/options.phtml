@@ -86,7 +86,7 @@ $stores = $block->getStoresSortedBySortOrder();
     </script>
     <?php
     $values = [];
-    foreach($block->getOptionValues() as $value) {
+    foreach ($block->getOptionValues() as $value) {
         $value = $value->getData();
         $values[] = is_array($value) ? array_map("htmlspecialchars_decode", $value) : $value;
     }

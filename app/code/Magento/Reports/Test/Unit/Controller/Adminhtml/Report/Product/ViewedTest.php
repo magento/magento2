@@ -6,9 +6,9 @@
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Product;
 
-use Magento\Reports\Controller\Adminhtml\Report\Product\Viewed;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
+use Magento\Reports\Controller\Adminhtml\Report\Product\Viewed;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

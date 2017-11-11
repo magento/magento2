@@ -5,9 +5,9 @@
  */
 namespace Magento\Quote\Api;
 
+use Magento\Quote\Api\Data\AddressInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Quote\Api\Data\AddressInterface;
 
 class GuestShipmentEstimationTest extends WebapiAbstract
 {

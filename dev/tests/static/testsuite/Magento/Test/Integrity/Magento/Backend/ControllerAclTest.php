@@ -5,9 +5,9 @@
  */
 namespace Magento\Test\Integrity\Magento\Backend;
 
-use Magento\TestFramework\Utility\ChangedFiles;
-use Magento\Framework\App\Utility\Files;
 use Magento\Backend\App\AbstractAction;
+use Magento\Framework\App\Utility\Files;
+use Magento\TestFramework\Utility\ChangedFiles;
 
 class ControllerAclTest extends \PHPUnit\Framework\TestCase
 {
@@ -97,7 +97,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
                 $inheritanceMessage = "Backend controller $className have to inherit " . AbstractAction::class;
                 $errorMessages[] = $inheritanceMessage;
                 continue;
-            };
+            }
 
             $isAclRedefinedInTheChildClass = $this->isConstantOverwritten($controllerClass)
                 || $this->isMethodOverwritten($controllerClass);

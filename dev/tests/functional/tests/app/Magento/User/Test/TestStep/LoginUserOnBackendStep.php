@@ -7,9 +7,9 @@
 namespace Magento\User\Test\TestStep;
 
 use Magento\Backend\Test\Page\AdminAuthLogin;
+use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\User\Test\Fixture\User;
-use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 
 /**
  * Login user on backend.

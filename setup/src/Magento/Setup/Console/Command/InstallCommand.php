@@ -6,16 +6,16 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
+use Magento\Framework\Setup\ConsoleLogger;
+use Magento\Setup\Model\ConfigModel;
+use Magento\Setup\Model\InstallerFactory;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Setup\Model\InstallerFactory;
-use Magento\Framework\Setup\ConsoleLogger;
 use Symfony\Component\Console\Input\InputOption;
-use Magento\Setup\Model\ConfigModel;
-use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * Command to install Magento application
@@ -316,7 +316,6 @@ class InstallCommand extends AbstractSetupCommand
         }
 
         $question->setValidator(function ($answer) use ($option, $validateInline) {
-
             if ($option instanceof \Magento\Framework\Setup\Option\SelectConfigOption) {
                 $answer = $option->getSelectOptions()[$answer];
             }

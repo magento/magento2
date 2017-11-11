@@ -5,17 +5,17 @@
  */
 namespace Magento\SampleData\Test\Unit\Console\Command;
 
+use Composer\Console\Application;
+use Composer\Console\ApplicationFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\SampleData\Console\Command\SampleDataDeployCommand;
-use Magento\Setup\Model\PackagesAuth;
-use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\SampleData\Console\Command\SampleDataDeployCommand;
 use Magento\SampleData\Model\Dependency;
+use Magento\Setup\Model\PackagesAuth;
 use Symfony\Component\Console\Input\ArrayInputFactory;
-use Composer\Console\ApplicationFactory;
-use Composer\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

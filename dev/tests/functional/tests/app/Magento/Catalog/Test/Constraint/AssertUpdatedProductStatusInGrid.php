@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 class AssertUpdatedProductStatusInGrid extends AbstractConstraint

@@ -7,9 +7,7 @@ namespace Magento\CatalogInventory\Model\ResourceModel\Stock;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
-use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 
 /**
  * Stock item resource model

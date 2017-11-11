@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Modal;
 
-use Magento\Ui\Test\Block\Adminhtml\FormSections;
 use Magento\Backend\Test\Block\Template;
 use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
 
 /**
  * Add new attribute modal.

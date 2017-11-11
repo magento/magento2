@@ -6,10 +6,10 @@
 
 namespace Magento\Setup\Model\ConfigOptionsList;
 
-use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Validator\RedisConnectionValidator;

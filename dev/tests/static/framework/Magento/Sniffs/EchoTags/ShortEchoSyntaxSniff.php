@@ -5,8 +5,8 @@
  */
 namespace Magento\Sniffs\EchoTags;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Util\Tokens;
 
 class ShortEchoSyntaxSniff implements Sniff

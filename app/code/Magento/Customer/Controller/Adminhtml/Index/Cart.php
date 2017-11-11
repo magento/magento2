@@ -11,8 +11,8 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Address\Mapper;
-use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\DataObjectFactory as ObjectFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

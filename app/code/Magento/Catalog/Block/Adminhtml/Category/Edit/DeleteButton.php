@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Edit;
 
-use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Catalog\Block\Adminhtml\Category\AbstractCategory;
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
  * Class DeleteButton

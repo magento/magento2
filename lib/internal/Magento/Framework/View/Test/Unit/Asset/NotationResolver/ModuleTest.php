@@ -51,7 +51,10 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
      * @dataProvider convertModuleNotationToPathModularSeparatorDataProvider
      */
     public function testConvertModuleNotationToPathModularSeparator(
-        $assetRelPath, $relatedFieldId, $similarRelPath, $expectedResult
+        $assetRelPath,
+        $relatedFieldId,
+        $similarRelPath,
+        $expectedResult
     ) {
         $similarAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $similarAsset->expects($this->any())

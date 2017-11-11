@@ -6,7 +6,6 @@
 namespace Magento\Signifyd\Model\SignifydGateway;
 
 use Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface;
-use Magento\Signifyd\Model\SignifydGateway\ApiClient;
 
 /**
  * Signifyd Gateway.

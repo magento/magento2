@@ -5,8 +5,8 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoAppArea adminhtml
@@ -74,7 +74,6 @@ class MassAssignGroupTest extends \Magento\TestFramework\TestCase\AbstractBacken
      */
     public function testLargeGroupMassAssignGroupAction()
     {
-
         for ($i = 1; $i < 22; $i++) {
             $customer = $this->customerRepository->getById($i);
             $this->assertEquals(1, $customer->getGroupId());

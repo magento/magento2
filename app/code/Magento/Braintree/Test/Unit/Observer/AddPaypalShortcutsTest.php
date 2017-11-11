@@ -6,10 +6,10 @@
 namespace Magento\Braintree\Test\Unit\Observer;
 
 use Magento\Braintree\Block\Paypal\Button;
+use Magento\Braintree\Observer\AddPaypalShortcuts;
 use Magento\Catalog\Block\ShortcutButtons;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Braintree\Observer\AddPaypalShortcuts;
 use Magento\Framework\View\LayoutInterface;
 
 /**

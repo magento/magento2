@@ -9,7 +9,6 @@
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
 use Magento\Customer\Block\Widget\Gender;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class GenderTest extends \PHPUnit\Framework\TestCase

@@ -213,7 +213,8 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
     public function testProcessSimpleTypeException($value, $type)
     {
         $this->expectException(
-            SerializationException::class, 'Invalid type for value: "' . $value . '". Expected Type: "' . $type . '"'
+            SerializationException::class,
+            'Invalid type for value: "' . $value . '". Expected Type: "' . $type . '"'
         );
         $this->_typeProcessor->processSimpleAndAnyType($value, $type);
     }

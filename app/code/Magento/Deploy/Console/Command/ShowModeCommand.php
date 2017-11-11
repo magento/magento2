@@ -6,11 +6,11 @@
 
 namespace Magento\Deploy\Console\Command;
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\ObjectManagerInterface;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command to show application mode

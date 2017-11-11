@@ -6,12 +6,12 @@
 
 namespace Magento\Review\Test\Constraint;
 
-use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Review\Test\Fixture\Review;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
+use Magento\Review\Test\Fixture\Review;
 
 /**
  * Assert that product review available on product page.

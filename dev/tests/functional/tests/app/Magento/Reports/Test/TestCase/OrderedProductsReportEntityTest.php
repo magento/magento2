@@ -6,9 +6,9 @@
 
 namespace Magento\Reports\Test\TestCase;
 
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Reports\Test\Page\Adminhtml\OrderedProductsReport;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

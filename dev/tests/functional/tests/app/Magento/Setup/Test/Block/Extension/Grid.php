@@ -164,7 +164,7 @@ class Grid extends AbstractGrid
                 return ($message && !$grid) || (!$message && $grid);
             }
         );
-        
+
         if ($this->_rootElement->find($this->notFoundMessage)->isVisible()) {
             return false;
         }

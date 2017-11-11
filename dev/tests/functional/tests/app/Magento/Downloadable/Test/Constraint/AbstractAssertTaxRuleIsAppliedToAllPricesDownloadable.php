@@ -6,13 +6,13 @@
 
 namespace Magento\Downloadable\Test\Constraint;
 
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\Tax\Test\Constraint\AbstractAssertTaxRuleIsAppliedToAllPrices;
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Tax\Test\Constraint\AbstractAssertTaxRuleIsAppliedToAllPrices;
 
 /**
  * Checks that product prices excl tax on category, product and cart pages are equal to specified in dataset.

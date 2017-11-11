@@ -5,10 +5,10 @@
  */
 namespace Magento\CatalogImportExport\Test\Constraint;
 
-use Magento\Mtf\Util\Command\File\ExportInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\Util\Command\File\Export\Data;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Util\Command\File\Export\Data;
+use Magento\Mtf\Util\Command\File\ExportInterface;
 
 /**
  * Assert that exported file contains correct product data.

@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\View\Layout\ScheduledStructure;
 
-use Magento\Framework\View\Layout;
 use Magento\Framework\App\State;
+use Magento\Framework\View\Layout;
 
 class Helper
 {

@@ -5,7 +5,6 @@
  */
 namespace Magento\Search\Model;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\AbstractResource;

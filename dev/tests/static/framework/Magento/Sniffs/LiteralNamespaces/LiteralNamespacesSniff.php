@@ -5,8 +5,8 @@
  */
 namespace Magento\Sniffs\LiteralNamespaces;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
  * Custom phpcs sniff to detect usages of literal class and interface names.

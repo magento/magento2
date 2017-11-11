@@ -6,9 +6,9 @@
 
 namespace Magento\Newsletter\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Newsletter\Test\Fixture\Template;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateQueue;
-use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Class AssertNewsletterQueue

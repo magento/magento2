@@ -9,6 +9,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\TestFramework\Backend\App;
+
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**

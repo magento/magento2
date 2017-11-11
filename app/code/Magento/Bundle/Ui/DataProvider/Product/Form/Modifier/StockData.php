@@ -5,9 +5,9 @@
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Bundle\Model\Product\Type;
 
 /**
  * Class StockData hides unnecessary fields in Advanced Inventory Modal

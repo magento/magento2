@@ -5,9 +5,9 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
-use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface;
 use Magento\Customer\Api\Data\GroupInterface;
-use \Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
 
 class CustomerGroup
 {

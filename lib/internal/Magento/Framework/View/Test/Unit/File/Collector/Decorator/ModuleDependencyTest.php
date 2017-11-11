@@ -33,7 +33,8 @@ class ModuleDependencyTest extends \PHPUnit\Framework\TestCase
             ->method('getNames')
             ->will($this->returnValue(['Fixture_ModuleB', 'Fixture_ModuleA']));
         $this->_model = new \Magento\Framework\View\File\Collector\Decorator\ModuleDependency(
-            $this->_fileSource, $this->_moduleListMock
+            $this->_fileSource,
+            $this->_moduleListMock
         );
     }
 

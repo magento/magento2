@@ -6,11 +6,11 @@
 
 namespace Magento\UrlRewrite\Model\Message;
 
-use Magento\Framework\Message\ExceptionMessageFactoryInterface;
-use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
-use Magento\Framework\Message\MessageInterface;
-use Magento\Framework\Message\Factory;
 use Magento\Framework\Exception\RuntimeException;
+use Magento\Framework\Message\ExceptionMessageFactoryInterface;
+use Magento\Framework\Message\Factory;
+use Magento\Framework\Message\MessageInterface;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 
 class UrlRewriteExceptionMessageFactory implements ExceptionMessageFactoryInterface
 {

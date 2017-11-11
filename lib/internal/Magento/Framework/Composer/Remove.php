@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Composer;
 
-use Magento\Composer\MagentoComposerApplication;
-
 /**
  * Class to run composer remove command
  */

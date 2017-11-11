@@ -5,14 +5,14 @@
  */
 namespace Magento\Integration\Model;
 
+use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
 use Magento\Integration\Helper\Oauth\Data as IntegrationOauthHelper;
 use Magento\Integration\Model\Oauth\Consumer as ConsumerModel;
 use Magento\Integration\Model\Oauth\ConsumerFactory;
 use Magento\Integration\Model\Oauth\Token as OauthTokenModel;
-use Magento\Integration\Model\Oauth\TokenFactory as TokenFactory;
 use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
-use Magento\Framework\Exception\IntegrationException;
+use Magento\Integration\Model\Oauth\TokenFactory as TokenFactory;
 
 /**
  * Integration oAuth service.

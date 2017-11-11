@@ -654,7 +654,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if (isset($matches[6]) && (
             strpos($matches[6], "'") !== false ||
             strpos($matches[6], ':') !== false ||
-            strpos($matches[6], '?') !== false)
+            strpos($matches[6], '?') !== false
+        )
         ) {
             $bindName = ':_mage_bind_var_' . (++$this->_bindIncrement);
             $this->_bindParams[$bindName] = $this->_unQuote($matches[6]);

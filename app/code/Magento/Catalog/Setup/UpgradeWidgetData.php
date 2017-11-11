@@ -5,11 +5,11 @@
  */
 namespace Magento\Catalog\Setup;
 
+use Magento\Eav\Setup\EavSetup;
+use Magento\Framework\DB\AggregatedFieldDataConverter;
+use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Widget\Setup\LayoutUpdateConverter;
-use Magento\Eav\Setup\EavSetup;
-use Magento\Framework\DB\FieldToConvert;
-use Magento\Framework\DB\AggregatedFieldDataConverter;
 
 /**
  * Convert serialized widget data for categories and products tables to JSON

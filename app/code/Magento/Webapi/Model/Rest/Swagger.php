@@ -5,8 +5,6 @@
  */
 namespace Magento\Webapi\Model\Rest;
 
-use Magento\Webapi\Model\Config as ModelConfig;
-
 /**
  * Webapi Swagger Specification Model
  *

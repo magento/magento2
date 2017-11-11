@@ -7,8 +7,8 @@ namespace Magento\Ui\Test\Unit\Component\Form\Element;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Ui\Component\Form\Element\AbstractElement;
 use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Ui\Component\Form\Element\AbstractElement;
 
 /**
  * Class AbstractElementTest

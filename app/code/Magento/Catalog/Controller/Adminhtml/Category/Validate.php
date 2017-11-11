@@ -41,7 +41,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Category
 
         $resultJson = $this->resultJsonFactory->create();
         $resultJson->setData($response);
-        
+
         return $resultJson;
     }
 }

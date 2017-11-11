@@ -6,9 +6,9 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product;
 
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Product creation form.

@@ -6,8 +6,8 @@
 
 namespace Magento\Backend\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Steps:

@@ -5,13 +5,12 @@
  */
 namespace Magento\Setup\Controller;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Setup\Lists;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 class CustomizeYourStore extends AbstractActionController
 {

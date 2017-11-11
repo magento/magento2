@@ -6,8 +6,6 @@
 
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
-use Magento\Setup\Module\Di\Code\Scanner;
-
 /**
  * Class ServiceDataAttributesGeneratorTest
  */

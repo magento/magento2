@@ -5,10 +5,10 @@
  */
 namespace Magento\Security\Model\Plugin;
 
-use Magento\Security\Model\SecurityManager;
 use Magento\Customer\Model\AccountManagement as AccountManagementOriginal;
 use Magento\Framework\Exception\SecurityViolationException;
 use Magento\Security\Model\PasswordResetRequestEvent;
+use Magento\Security\Model\SecurityManager;
 
 /**
  * Magento\Customer\Model\AccountManagement decorator

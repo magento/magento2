@@ -126,9 +126,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
+            \Magento\Store\Model\Store::class,
+            [
             'websiteRepository' => $websiteRepository,
-        ]);
+        ]
+        );
         $model->setWebsiteId($websiteId);
 
         $this->assertEquals($website, $model->getWebsite());
@@ -144,9 +146,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
+            \Magento\Store\Model\Store::class,
+            [
             'websiteRepository' => $websiteRepository,
-        ]);
+        ]
+        );
         $model->setWebsiteId(null);
 
         $this->assertFalse($model->getWebsite());
@@ -167,9 +171,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
+            \Magento\Store\Model\Store::class,
+            [
             'groupRepository' => $groupRepository,
-        ]);
+        ]
+        );
         $model->setGroupId($groupId);
 
         $this->assertEquals($group, $model->getGroup());
@@ -185,9 +191,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
+            \Magento\Store\Model\Store::class,
+            [
             'groupRepository' => $groupRepository,
-        ]);
+        ]
+        );
         $model->setGroupId(null);
 
         $this->assertFalse($model->getGroup());
@@ -498,10 +506,12 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
+            \Magento\Store\Model\Store::class,
+            [
             'config' => $configMock,
             'currencyInstalled' => $currencyPath,
-        ]);
+        ]
+        );
 
         $this->assertEquals($expectedResult, $model->getAllowedCurrencies());
     }

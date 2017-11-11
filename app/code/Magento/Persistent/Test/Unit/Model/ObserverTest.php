@@ -47,7 +47,6 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->persistentSessionMock = $this->getMockBuilder(\Magento\Persistent\Helper\Session::class)
             ->disableOriginalConstructor()

@@ -217,7 +217,7 @@ class TierpriceTest extends \PHPUnit\Framework\TestCase
                 1,
                 5,
             ],
-            'delete all' => [[], 1, 0,],
+            'delete all' => [[], 1, 0],
         ];
     }
 }

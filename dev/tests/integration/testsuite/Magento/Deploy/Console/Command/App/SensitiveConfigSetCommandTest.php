@@ -300,7 +300,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
     {
         $inputMock = $this->createMock(InputInterface::class);
         $isInteractive = $key === null;
-        
+
         if (!$isInteractive) {
             $inputMock->expects($this->exactly(2))
                 ->method('getArgument')

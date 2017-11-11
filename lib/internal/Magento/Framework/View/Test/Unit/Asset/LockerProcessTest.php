@@ -5,12 +5,12 @@
  */
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-use Magento\Framework\Filesystem;
-use Magento\Framework\View\Asset\LockerProcess;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Asset\LockerProcess;
 
 /**
  * Class LockerProcessTest

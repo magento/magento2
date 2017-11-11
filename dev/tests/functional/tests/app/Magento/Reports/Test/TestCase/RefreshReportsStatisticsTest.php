@@ -6,9 +6,9 @@
 
 namespace Magento\Reports\Test\TestCase;
 
-use Magento\Reports\Test\Page\Adminhtml\Statistics;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\Reports\Test\Page\Adminhtml\Statistics;
 
 /**
  * Preconditions:

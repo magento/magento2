@@ -26,7 +26,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\Escaper::class);
         $this->assertStringMatchesFormat(
-            '%A' . __('<a href="%1" onclick="this.target=\'blank\'">%2 %3</a> <a href="mailto:%4">(%4)</a>',
+            '%A' . __(
+                '<a href="%1" onclick="this.target=\'blank\'">%2 %3</a> <a href="mailto:%4">(%4)</a>',
                 '%A',
                 $escaper->escapeHtml($customer->getFirstname()),
                 $escaper->escapeHtml($customer->getLastname()),

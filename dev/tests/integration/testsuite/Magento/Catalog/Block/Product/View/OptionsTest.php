@@ -113,9 +113,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     {
         return [
             0 => [
-                'prices' =>
-                    ['oldPrice' =>
-                        ['amount' => 10, 'adjustments' => []],
+                'prices' => ['oldPrice' => ['amount' => 10, 'adjustments' => []],
                         'basePrice' => ['amount' => 10],
                         'finalPrice' => ['amount' => 10]
                     ],
@@ -123,9 +121,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
                     'name' => 'drop_down option 1',
             ],
             1 => [
-                'prices' =>
-                    ['oldPrice' =>
-                        ['amount' => 40, 'adjustments' => []],
+                'prices' => ['oldPrice' => ['amount' => 40, 'adjustments' => []],
                         'basePrice' => ['amount' => 40],
                         'finalPrice' => ['amount' => 40],
                     ],

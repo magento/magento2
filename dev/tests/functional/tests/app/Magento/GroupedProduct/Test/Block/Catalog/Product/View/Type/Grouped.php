@@ -11,7 +11,6 @@ use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class Grouped

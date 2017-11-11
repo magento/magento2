@@ -6,9 +6,9 @@
 
 namespace Magento\Install\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Install\Test\Page\Install;
 use Magento\Install\Test\Fixture\Install as InstallConfig;
+use Magento\Install\Test\Page\Install;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that selected encryption key displays on success full install page.

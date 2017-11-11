@@ -64,7 +64,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
                     return json_decode($value, true);
                 }
             );
-        
+
         $this->currentUrlRewritesRegenerator = $this->getMockBuilder(
             \Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator::class
         )->disableOriginalConstructor()->getMock();
@@ -79,7 +79,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->category = $this->createMock(\Magento\Catalog\Model\Category::class);
         $this->categoryRepository = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
         $mergeDataProviderFactory = $this->createPartialMock(\Magento\UrlRewrite\Model\MergeDataProviderFactory::class, ['create']);
-        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider;
+        $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider();
         $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
 
         $this->categoryUrlRewriteGenerator = (new ObjectManager($this))->getObject(

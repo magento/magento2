@@ -50,7 +50,7 @@ class Url implements ConverterInterface
     {
         $result[Converter::NAME_ATTRIBUTE_KEY] = $this->converterUtils->getComponentName($node);
         if ($node->localName != 'param') {
-             $result[Dom::TYPE_ATTRIBUTE] = 'url';
+            $result[Dom::TYPE_ATTRIBUTE] = 'url';
         }
         if ($this->hasChildNodes($node)) {
             $result = array_merge($result, $this->processChildNodes($node));

@@ -8,8 +8,8 @@ namespace Magento\Framework\Controller\Result;
 
 use Magento\Framework\App;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
-use Magento\Framework\Controller\AbstractResult;
 use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\Controller\AbstractResult;
 use Magento\Framework\UrlInterface;
 
 /**

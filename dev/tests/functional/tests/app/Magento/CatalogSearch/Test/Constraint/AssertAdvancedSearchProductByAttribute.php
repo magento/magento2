@@ -8,11 +8,11 @@ namespace Magento\CatalogSearch\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\CatalogSearch\Test\Page\AdvancedSearch;
+use Magento\CatalogSearch\Test\Page\CatalogsearchResult;
 use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\CatalogSearch\Test\Page\CatalogsearchResult;
 
 /**
  * Assert that product attribute is searchable on Frontend.

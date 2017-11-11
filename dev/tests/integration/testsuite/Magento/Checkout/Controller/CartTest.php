@@ -12,12 +12,12 @@ namespace Magento\Checkout\Controller;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Session;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
-use Magento\Framework\Data\Form\FormKey;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Request;
 use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\Data\Form\FormKey;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OrderItemCollection;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Request;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -12,6 +12,7 @@ use Magento\Customer\Api\Data\AddressSearchResultsInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Data\Address;
 use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -22,6 +23,7 @@ use Magento\Framework\Session\Generic;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Multishipping\Helper\Data;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping;
+use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\Method\SpecificationInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartExtension;
@@ -34,6 +36,7 @@ use Magento\Quote\Model\Quote\Address\ToOrderAddress;
 use Magento\Quote\Model\Quote\AddressFactory;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\ToOrderItem;
+use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Model\Quote\Payment\ToOrderPayment;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor;
 use Magento\Quote\Model\Quote\TotalsCollector;
@@ -43,10 +46,6 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject;
-use \PHPUnit\Framework\TestCase;
-use Magento\Quote\Model\Quote\Payment;
-use Magento\Payment\Model\Method\AbstractMethod;
-use Magento\Directory\Model\AllowedCountries;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

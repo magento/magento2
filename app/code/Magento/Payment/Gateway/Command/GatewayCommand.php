@@ -9,7 +9,6 @@ use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferFactoryInterface;
-use Magento\Payment\Gateway\Request;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Gateway\Response;
 use Magento\Payment\Gateway\Response\HandlerInterface;

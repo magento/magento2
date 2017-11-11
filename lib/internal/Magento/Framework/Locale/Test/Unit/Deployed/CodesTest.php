@@ -11,7 +11,7 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Locale\Deployed\Codes;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\Design\ThemeInterface;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Test for Codes class.

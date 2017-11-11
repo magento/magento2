@@ -7,10 +7,10 @@
 namespace Magento\Reports\Test\TestCase;
 
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Reports\Test\Page\Adminhtml\CustomerOrdersReport;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Reports\Test\Page\Adminhtml\CustomerOrdersReport;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Preconditions:

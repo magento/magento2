@@ -60,7 +60,7 @@ class ConvertToCsv
         $component = $this->filter->getComponent();
 
         $name = md5(microtime());
-        $file = 'export/'. $component->getName() . $name . '.csv';
+        $file = 'export/' . $component->getName() . $name . '.csv';
 
         $this->filter->prepareComponent($component);
         $this->filter->applySelectionOnTargetProvider();

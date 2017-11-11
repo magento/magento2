@@ -6,11 +6,11 @@
 
 namespace Magento\Bundle\Api;
 
+use Magento\Bundle\Api\Data\LinkInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Bundle\Api\Data\LinkInterface;
 
 /**
  * Class ProductServiceTest for testing Bundle Product API

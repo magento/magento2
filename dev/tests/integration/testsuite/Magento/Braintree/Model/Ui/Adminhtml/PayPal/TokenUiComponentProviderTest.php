@@ -5,7 +5,6 @@
  */
 namespace Magento\Braintree\Model\Ui\Adminhtml\PayPal;
 
-use Magento\Braintree\Model\Ui\Adminhtml\PayPal\TokenUiComponentProvider;
 use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;

@@ -6,10 +6,10 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Precondition:

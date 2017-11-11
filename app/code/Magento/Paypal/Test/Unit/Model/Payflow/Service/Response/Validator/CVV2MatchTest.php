@@ -5,9 +5,9 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Validator;
 
+use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\CVV2Match;
 use Magento\Paypal\Model\Payflow\Transparent;
-use Magento\Payment\Model\Method\ConfigInterface;
 
 /**
  * Class CVV2MatchTest

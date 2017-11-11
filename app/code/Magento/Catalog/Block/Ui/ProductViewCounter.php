@@ -6,15 +6,15 @@
 namespace Magento\Catalog\Block\Ui;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ProductRenderFactory;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite;
+use Magento\Framework\EntityManager\Hydrator;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Url;
 use Magento\Framework\View\Element\Template;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\ProductRenderFactory;
-use Magento\Catalog\Model\ProductRepository;
-use Magento\Framework\EntityManager\Hydrator;
 use Magento\Store\Model\StoreManager;
 
 /**

@@ -13,10 +13,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
-use Magento\Framework\Registry;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Entity\Attribute;
-use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Registry;
 
 class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 {

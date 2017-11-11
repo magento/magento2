@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Controller;
 
-use Magento\Composer\InfoCommand;
 use Magento\Setup\Model\SystemPackage;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
@@ -36,7 +35,7 @@ class SelectVersion extends AbstractActionController
      */
     public function indexAction()
     {
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTerminal(true);
         $view->setTemplate('/magento/setup/select-version.phtml');
         return $view;

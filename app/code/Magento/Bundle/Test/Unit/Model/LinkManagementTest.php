@@ -136,7 +136,8 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectionCollection = $this->getMockBuilder(
-            \Magento\Bundle\Model\ResourceModel\Selection\Collection::class)
+            \Magento\Bundle\Model\ResourceModel\Selection\Collection::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)

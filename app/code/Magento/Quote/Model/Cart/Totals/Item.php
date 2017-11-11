@@ -5,8 +5,8 @@
  */
 namespace Magento\Quote\Model\Cart\Totals;
 
-use Magento\Quote\Api\Data\TotalsItemInterface;
 use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\Quote\Api\Data\TotalsItemInterface;
 
 /**
  * Cart item totals.

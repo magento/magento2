@@ -6,10 +6,10 @@
  */
 namespace Magento\Catalog\Api;
 
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 
 class CategoryRepositoryTest extends WebapiAbstract
 {

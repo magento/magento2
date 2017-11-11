@@ -6,11 +6,11 @@
 
 namespace Magento\ConfigurableProduct\Test\TestCase;
 
+use Magento\Catalog\Test\Constraint\AssertProductSaveMessage as assertProductSaveMessage;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
-use Magento\Catalog\Test\Constraint\AssertProductSaveMessage as assertProductSaveMessage;
 use Magento\Mtf\TestCase\Injectable;
 
 /**

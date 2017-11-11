@@ -83,7 +83,7 @@ class FileClassScanner
             // Is either a literal brace or an interpolated brace with a variable
             if ($token == '{' || (is_array($token) && in_array($token[0], $allowedOpenBraces))) {
                 $braceLevel++;
-            } else if ($token == '}') {
+            } elseif ($token == '}') {
                 $braceLevel--;
             }
             // The namespace keyword was found in the last loop
@@ -97,7 +97,7 @@ class FileClassScanner
                 $namespace .= $token[1];
 
                 // The class keyword was found in the last loop
-            } else if ($triggerClass && $token[0] == T_STRING) {
+            } elseif ($triggerClass && $token[0] == T_STRING) {
                 $triggerClass = false;
                 $class = $token[1];
             }
@@ -141,7 +141,7 @@ class FileClassScanner
             if (!is_array($this->tokens[$index])) {
                 if ($this->tokens[$index] == ';') {
                     return false;
-                } else if ($this->tokens[$index] == '{') {
+                } elseif ($this->tokens[$index] == '{') {
                     return true;
                 }
                 continue;

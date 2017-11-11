@@ -7,10 +7,10 @@
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Api\DataObjectHelper;
 use Magento\Customer\Model\Session;
-use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
 
 class Edit extends \Magento\Customer\Controller\AbstractAccount
 {

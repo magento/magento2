@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
-use Magento\Framework\Module\Plugin\DbStatusValidator;
-
 class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**

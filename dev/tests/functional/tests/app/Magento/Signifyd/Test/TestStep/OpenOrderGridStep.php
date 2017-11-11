@@ -6,11 +6,11 @@
 namespace Magento\Signifyd\Test\TestStep;
 
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect as AssertOrderStatus;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect as AssertOrderStatus;
-use Magento\Signifyd\Test\Constraint\AssertSignifydCaseInOrdersGrid as AssertOrdersGrid;
 use Magento\Signifyd\Test\Constraint\AssertCaseInfoOnAdmin;
+use Magento\Signifyd\Test\Constraint\AssertSignifydCaseInOrdersGrid as AssertOrdersGrid;
 use Magento\Signifyd\Test\Fixture\SignifydData;
 use Magento\Signifyd\Test\Page\Adminhtml\OrdersGrid;
 

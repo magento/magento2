@@ -6,8 +6,8 @@
 
 namespace Magento\Indexer\Test\Block\Adminhtml\IndexManagement;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Grid as WidgetGrid;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Grid in Index Management Page.

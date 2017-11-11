@@ -5,8 +5,8 @@
  */
 namespace Magento\Wishlist\Controller\Index;
 
-use Magento\Framework\App\Action;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Framework\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
@@ -211,7 +211,7 @@ class Cart extends \Magento\Wishlist\Controller\AbstractIndex
             $resultJson->setData(['backUrl' => $redirectUrl]);
             return $resultJson;
         }
-        
+
         $resultRedirect->setUrl($redirectUrl);
         return $resultRedirect;
     }

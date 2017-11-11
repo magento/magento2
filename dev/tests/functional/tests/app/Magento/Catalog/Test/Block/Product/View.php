@@ -661,7 +661,7 @@ class View extends AbstractConfigureBlock
      */
     public function checkVideoDataPresence($videoData)
     {
-        $dataVideoSelector = $this->productVideo . '[data-code="' . $videoData. '"]';
+        $dataVideoSelector = $this->productVideo . '[data-code="' . $videoData . '"]';
         return $this->_rootElement->find($dataVideoSelector)->isPresent();
     }
 }

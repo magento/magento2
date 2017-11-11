@@ -6,12 +6,6 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
-use Magento\Catalog\Test\Fixture\Category;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Magento\Mtf\TestCase\Injectable;
-
 /**
  * Steps:
  * 1. Login to the backend.

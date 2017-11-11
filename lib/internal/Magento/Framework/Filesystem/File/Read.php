@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Filesystem\File;
 
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\DriverInterface;
 
 class Read implements ReadInterface
 {

@@ -6,9 +6,9 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Locks;
 
+use Magento\Backend\App\Action;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Backend\App\Action;
 
 /**
  * Unlock Customer Controller

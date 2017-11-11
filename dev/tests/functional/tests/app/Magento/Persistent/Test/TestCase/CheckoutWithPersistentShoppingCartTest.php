@@ -6,14 +6,14 @@
 
 namespace Magento\Persistent\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Customer\Test\Page\CustomerAccountCreate;
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\Mtf\Client\BrowserInterface;
+use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Customer\Test\Page\CustomerAccountCreate;
 use Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep;
+use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 

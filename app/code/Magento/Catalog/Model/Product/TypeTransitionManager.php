@@ -11,7 +11,6 @@
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Type;
 
 class TypeTransitionManager
 {

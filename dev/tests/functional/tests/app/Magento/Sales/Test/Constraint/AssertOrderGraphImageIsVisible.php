@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\TestStep\TestStepFactory;
-use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 
 /**
  * Assert order graph image is visible on admin dashboard.

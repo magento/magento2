@@ -5,9 +5,7 @@
  */
 namespace Magento\Setup\Module\I18n;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Filesystem;
 
 /**
  *  Context

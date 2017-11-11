@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\Pricing\Test\Unit\Render;
 
-use Magento\Framework\Pricing\Render\RendererPool;
-use Magento\Framework\Pricing\Render\Amount;
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\Render\Amount;
+use Magento\Framework\Pricing\Render\RendererPool;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Test class for \Magento\Framework\Pricing\Render\Amount

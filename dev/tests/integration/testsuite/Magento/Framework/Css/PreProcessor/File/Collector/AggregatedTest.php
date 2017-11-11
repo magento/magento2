@@ -61,11 +61,13 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Framework\View\File\Collector\Base $sourceBase */
         $sourceBase = $this->objectManager->create(
-            \Magento\Framework\View\File\Collector\Base::class, ['filesystem' => $filesystem, 'subDir' => 'web']
+            \Magento\Framework\View\File\Collector\Base::class,
+            ['filesystem' => $filesystem, 'subDir' => 'web']
         );
         /** @var \Magento\Framework\View\File\Collector\Base $sourceBase */
         $overriddenBaseFiles = $this->objectManager->create(
-            \Magento\Framework\View\File\Collector\Override\Base::class, ['filesystem' => $filesystem, 'subDir' => 'web']
+            \Magento\Framework\View\File\Collector\Override\Base::class,
+            ['filesystem' => $filesystem, 'subDir' => 'web']
         );
         $this->model = $this->objectManager->create(
             \Magento\Framework\Css\PreProcessor\File\Collector\Aggregated::class,

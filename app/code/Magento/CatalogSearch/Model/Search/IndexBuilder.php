@@ -6,22 +6,22 @@
 
 namespace Magento\CatalogSearch\Model\Search;
 
+use Magento\CatalogSearch\Model\Search\BaseSelectStrategy\BaseSelectStrategyInterface;
+use Magento\CatalogSearch\Model\Search\BaseSelectStrategy\StrategyMapper as BaseSelectStrategyMapper;
+use Magento\CatalogSearch\Model\Search\FilterMapper\DimensionsProcessor;
+use Magento\CatalogSearch\Model\Search\FilterMapper\FilterMapper;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\CatalogSearch\Model\Search\FilterMapper\DimensionsProcessor;
-use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
-use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerBuilder;
-use Magento\CatalogSearch\Model\Search\BaseSelectStrategy\StrategyMapper as BaseSelectStrategyMapper;
-use Magento\CatalogSearch\Model\Search\BaseSelectStrategy\BaseSelectStrategyInterface;
-use Magento\CatalogSearch\Model\Search\FilterMapper\FilterMapper;
 
 /**
  * Build base Query for Index

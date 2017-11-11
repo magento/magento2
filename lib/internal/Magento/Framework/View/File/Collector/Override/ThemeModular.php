@@ -7,12 +7,12 @@ namespace Magento\Framework\View\File\Collector\Override;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\File\CollectorInterface;
-use Magento\Framework\View\Helper\PathPattern;
 use Magento\Framework\View\File\Factory as FileFactory;
+use Magento\Framework\View\Helper\PathPattern;
 
 /**
  * Source of view files that explicitly override modular files of ancestor themes

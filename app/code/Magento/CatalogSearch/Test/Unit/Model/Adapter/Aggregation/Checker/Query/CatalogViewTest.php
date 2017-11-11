@@ -6,14 +6,14 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Aggregation\Checker\Query;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\CatalogView;
-use Magento\Framework\Search\RequestInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Search\Request\QueryInterface;
-use Magento\Framework\Search\Request\Query\Filter;
-use Magento\Framework\Search\Request\Filter\Term;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\CatalogSearch\Model\Adapter\Aggregation\Checker\Query\CatalogView;
+use Magento\Framework\Search\Request\Filter\Term;
+use Magento\Framework\Search\Request\Query\Filter;
+use Magento\Framework\Search\Request\QueryInterface;
+use Magento\Framework\Search\RequestInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class CatalogViewTest extends \PHPUnit\Framework\TestCase
 {

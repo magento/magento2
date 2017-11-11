@@ -6,11 +6,11 @@
 
 namespace Magento\Framework\Stdlib\Test\Unit\Cookie;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata;
-use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
-use Magento\Framework\Stdlib\Cookie\CookieScope;
 use Magento\Framework\Stdlib\Cookie\CookieMetadata;
+use Magento\Framework\Stdlib\Cookie\CookieScope;
+use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
+use Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test CookieScope

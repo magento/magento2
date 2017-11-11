@@ -427,7 +427,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
             'HTTPS off with HTTP_ prefixed proxy set to https' => [true, 'off', 'HTTP_HEADER_FROM_PROXY', 'https', 1],
         ];
     }
-    
+
     /**
      * @dataProvider setPathInfoDataProvider
      * @param string $requestUri

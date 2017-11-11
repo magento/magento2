@@ -7,20 +7,20 @@ namespace Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
-use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Framework\Phrase;
-use Magento\Ui\Component\Modal;
-use Magento\Ui\Component\Form;
-use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
-use Magento\Framework\UrlInterface;
-use Magento\Ui\Component\DynamicRows;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Image as ImageHelper;
-use Magento\Eav\Api\AttributeSetRepositoryInterface;
+use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Framework\Locale\CurrencyInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\UrlInterface;
+use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
+use Magento\Ui\Component\DynamicRows;
+use Magento\Ui\Component\Form;
+use Magento\Ui\Component\Modal;
 
 /**
  * Data provider for Grouped products
@@ -295,8 +295,7 @@ class Grouped extends AbstractModifier
                     'config' => [
                         'componentType' => Modal::NAME,
                         'dataScope' => '',
-                        'provider' =>
-                            $this->uiComponentsConfig['form']
+                        'provider' => $this->uiComponentsConfig['form']
                             . '.'
                             . $this->uiComponentsConfig['form']
                             . '_data_source',
@@ -341,21 +340,18 @@ class Grouped extends AbstractModifier
                         'autoRender' => false,
                         'componentType' => 'insertListing',
                         'dataScope' => $this->uiComponentsConfig['listing'],
-                        'externalProvider' =>
-                            $this->uiComponentsConfig['listing']
+                        'externalProvider' => $this->uiComponentsConfig['listing']
                             . '.'
                             . $this->uiComponentsConfig['listing']
                             . '_data_source',
-                        'selectionsProvider' =>
-                            $this->uiComponentsConfig['listing']
+                        'selectionsProvider' => $this->uiComponentsConfig['listing']
                             . '.'
                             . $this->uiComponentsConfig['listing']
                             . '.product_columns.ids',
                         'ns' => $this->uiComponentsConfig['listing'],
                         'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
                         'realTimeLink' => true,
-                        'provider' =>
-                            $this->uiComponentsConfig['form']
+                        'provider' => $this->uiComponentsConfig['form']
                             . '.'
                             . $this->uiComponentsConfig['form']
                             . '_data_source',
@@ -408,8 +404,7 @@ class Grouped extends AbstractModifier
                                 'component' => 'Magento_Ui/js/form/components/button',
                                 'actions' => [
                                     [
-                                        'targetName' =>
-                                            $this->uiComponentsConfig['form'] . '.' . $this->uiComponentsConfig['form']
+                                        'targetName' => $this->uiComponentsConfig['form'] . '.' . $this->uiComponentsConfig['form']
                                             . '.'
                                             . static::GROUP_GROUPED
                                             . '.'
@@ -417,8 +412,7 @@ class Grouped extends AbstractModifier
                                         'actionName' => 'openModal',
                                     ],
                                     [
-                                        'targetName' =>
-                                            $this->uiComponentsConfig['form'] . '.' . $this->uiComponentsConfig['form']
+                                        'targetName' => $this->uiComponentsConfig['form'] . '.' . $this->uiComponentsConfig['form']
                                             . '.'
                                             . static::GROUP_GROUPED
                                             . '.'

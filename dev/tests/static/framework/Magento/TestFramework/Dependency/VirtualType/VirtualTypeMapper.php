@@ -91,7 +91,7 @@ class VirtualTypeMapper
             $doc = new DOMDocument();
             $doc->loadXML(file_get_contents($file));
             $nodes = $doc->getElementsByTagName('virtualType');
-/** @var \DOMElement $node */
+            /** @var \DOMElement $node */
             foreach ($nodes as $node) {
                 $name = $node->getAttribute('name');
                 $type = $node->getAttribute('type');

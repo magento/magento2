@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\Reflection\Test\Unit;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\ExtensionAttributesProcessor;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class DataObjectProcessorTest extends \PHPUnit\Framework\TestCase
 {

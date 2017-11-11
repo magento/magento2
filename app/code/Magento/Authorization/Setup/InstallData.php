@@ -6,11 +6,11 @@
 
 namespace Magento\Authorization\Setup;
 
+use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
-use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * @codeCoverageIgnore

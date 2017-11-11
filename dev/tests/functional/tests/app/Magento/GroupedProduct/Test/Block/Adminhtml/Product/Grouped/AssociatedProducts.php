@@ -9,8 +9,8 @@ namespace Magento\GroupedProduct\Test\Block\Adminhtml\Product\Grouped;
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\GroupedProduct\Test\Block\Adminhtml\Product\Grouped\AssociatedProducts\ListAssociatedProducts;
 use Magento\GroupedProduct\Test\Block\Adminhtml\Product\Grouped\AssociatedProducts\Search\Grid;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Grouped products tab.

@@ -5,11 +5,11 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-use Magento\Framework\FlagFactory;
-use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\Flag;
+use Magento\Framework\Flag\FlagResource;
+use Magento\Framework\FlagFactory;
 use Magento\Framework\FlagManager;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit_Framework_MockObject_MockObject as Mock;
 
 /**
  * Class FlagManagerTest

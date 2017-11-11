@@ -9,7 +9,6 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
@@ -179,7 +178,9 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getMediaGalleryEntries'
             ]);
 
-        $this->initializedProductMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
+        $this->initializedProductMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            [
                 'getWebsiteIds',
                 'setProductOptions',
                 'load',
@@ -217,7 +218,8 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
             $this->getMockBuilder(\Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap::class)->getMock();
         $this->contentFactoryMock = $this->createPartialMock(\Magento\Framework\Api\Data\ImageContentInterfaceFactory::class, ['create']);
         $this->contentValidatorMock = $this->getMockBuilder(
-            \Magento\Framework\Api\ImageContentValidatorInterface::class)
+            \Magento\Framework\Api\ImageContentValidatorInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $this->linkTypeProviderMock = $this->createPartialMock(\Magento\Catalog\Model\Product\LinkTypeProvider::class, ['getLinkTypes']);

@@ -5,8 +5,6 @@
  */
 namespace Magento\ProductVideo\Test\Unit\Controller\Adminhtml\Product\Gallery;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

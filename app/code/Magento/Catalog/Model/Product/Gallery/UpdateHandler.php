@@ -5,8 +5,6 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
-use Magento\Framework\EntityManager\Operation\ExtensionInterface;
-
 /**
  * Update handler for catalog product gallery.
  *

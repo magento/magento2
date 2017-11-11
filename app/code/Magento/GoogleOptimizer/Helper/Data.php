@@ -10,7 +10,7 @@
 
 namespace Magento\GoogleOptimizer\Helper;
 
-use \Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @api

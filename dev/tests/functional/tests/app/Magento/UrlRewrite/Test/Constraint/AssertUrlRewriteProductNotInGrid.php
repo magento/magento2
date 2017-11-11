@@ -6,9 +6,9 @@
 
 namespace Magento\UrlRewrite\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that url rewrite product not in grid.

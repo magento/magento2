@@ -53,8 +53,7 @@ class OperationFactory
      * @var array
      */
     private $operationsDefinitions = [
-        self::DATA_ATTRIBUTES_GENERATOR =>
-            \Magento\Setup\Module\Di\App\Task\Operation\ServiceDataAttributesGenerator::class,
+        self::DATA_ATTRIBUTES_GENERATOR => \Magento\Setup\Module\Di\App\Task\Operation\ServiceDataAttributesGenerator::class,
         self::AREA_CONFIG_GENERATOR => \Magento\Setup\Module\Di\App\Task\Operation\Area::class,
         self::APPLICATION_CODE_GENERATOR => \Magento\Setup\Module\Di\App\Task\Operation\ApplicationCodeGenerator::class,
         self::INTERCEPTION => \Magento\Setup\Module\Di\App\Task\Operation\Interception::class,

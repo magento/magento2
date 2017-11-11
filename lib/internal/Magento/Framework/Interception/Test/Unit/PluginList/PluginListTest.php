@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Interception\Test\Unit\PluginList;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';

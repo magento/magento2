@@ -8,8 +8,8 @@
 
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
-use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**

@@ -6,10 +6,10 @@
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface as ModelScopeInterface;
-use Magento\Payment\Model\MethodInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Store\Model\ScopeInterface as ModelScopeInterface;
 
 /**
  * Class AbstractConfigTest

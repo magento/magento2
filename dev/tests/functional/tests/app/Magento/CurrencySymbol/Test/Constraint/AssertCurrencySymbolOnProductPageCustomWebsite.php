@@ -6,10 +6,10 @@
 
 namespace Magento\CurrencySymbol\Test\Constraint;
 
-use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Check that correct currency symbol displayed on Product Page on Custom Website.

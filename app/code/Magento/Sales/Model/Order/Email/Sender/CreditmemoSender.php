@@ -5,15 +5,15 @@
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
 
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
-use Magento\Sales\Model\Order\Address\Renderer;
-use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class CreditmemoSender
@@ -102,7 +102,7 @@ class CreditmemoSender extends Sender
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $creditmemo->getOrder();
-            
+
             $transport = [
                 'order' => $order,
                 'creditmemo' => $creditmemo,

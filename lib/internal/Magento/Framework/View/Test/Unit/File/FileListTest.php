@@ -105,10 +105,12 @@ class FileListTest extends \PHPUnit\Framework\TestCase
             ->method('collate')
             ->with(
                 $this->equalTo($files),
-                $this->equalTo([
+                $this->equalTo(
+                    [
                     $this->_baseFile->getFileIdentifier() => $this->_baseFile,
                     $this->_themeFile->getFileIdentifier() => $this->_themeFile, ]
-                ))
+                )
+            )
             ->will($this->returnValue($result));
         $this->assertNull($this->_model->replace($files));
         $this->assertSame($result, $this->_model->getAll());

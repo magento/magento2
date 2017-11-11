@@ -5,8 +5,8 @@
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
  * Class ClassNamingSniff
@@ -22,7 +22,6 @@ use PHP_CodeSniffer\Files\File;
  */
 class ClassNamingSniff implements Sniff
 {
-
     const STRING_HELPER_CLASSES_PREFIX = '_';
 
     const STRING_ALLOWED_UNDERSCORES = '__';

@@ -6,7 +6,7 @@
 namespace Magento\Cron\Model;
 
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use \Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test \Magento\Cron\Model\Schedule

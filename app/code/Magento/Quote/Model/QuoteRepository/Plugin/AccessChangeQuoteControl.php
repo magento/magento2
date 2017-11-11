@@ -6,10 +6,10 @@
 namespace Magento\Quote\Model\QuoteRepository\Plugin;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Quote\Model\Quote;
 use Magento\Framework\Exception\StateException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
 
 /**
  * The plugin checks if the user has ability to change the quote.

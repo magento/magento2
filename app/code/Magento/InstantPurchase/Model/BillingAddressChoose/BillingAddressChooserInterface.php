@@ -5,8 +5,8 @@
  */
 namespace Magento\InstantPurchase\Model\BillingAddressChoose;
 
-use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Address;
+use Magento\Customer\Model\Customer;
 
 /**
  * Interface to choose billing address for a customer if available.

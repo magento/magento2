@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Shell\Test\Unit;
 
-use \Magento\Framework\Shell\ComplexParameter;
+use Magento\Framework\Shell\ComplexParameter;
 
 class ComplexParameterTest extends \PHPUnit\Framework\TestCase
 {

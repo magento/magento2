@@ -236,7 +236,8 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->method('populateWithArray')
             ->with(
                 $customerMock,
-                ['group_id' => 1], \Magento\Customer\Api\Data\CustomerInterface::class
+                ['group_id' => 1],
+                \Magento\Customer\Api\Data\CustomerInterface::class
             );
 
         $this->formFactoryMock->expects($this->any())->method('create')->will($this->returnValue($customerFormMock));

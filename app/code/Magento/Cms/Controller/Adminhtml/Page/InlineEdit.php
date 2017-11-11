@@ -6,9 +6,9 @@
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface as PageRepository;
 use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Cms\Api\Data\PageInterface;
 
 /**
  * Cms page grid inline edit controller

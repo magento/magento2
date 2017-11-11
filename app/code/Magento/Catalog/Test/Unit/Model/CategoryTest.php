@@ -8,8 +8,8 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
-use Magento\Catalog\Model\Indexer;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Indexer;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)

@@ -8,9 +8,8 @@
 
 namespace Magento\Bundle\Test\Unit\Pricing\Adjustment;
 
-use Magento\Bundle\Model\ResourceModel\Selection\Collection;
-use \Magento\Bundle\Pricing\Adjustment\Calculator;
 use Magento\Bundle\Model\Product\Price as ProductPrice;
+use Magento\Bundle\Pricing\Adjustment\Calculator;
 use Magento\Bundle\Pricing\Price;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -110,7 +109,8 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
             \Magento\Bundle\Pricing\Adjustment\SelectionPriceListProviderInterface::class
         )->getMock();
 
-        $this->model = (new ObjectManager($this))->getObject(\Magento\Bundle\Pricing\Adjustment\Calculator::class,
+        $this->model = (new ObjectManager($this))->getObject(
+            \Magento\Bundle\Pricing\Adjustment\Calculator::class,
             [
                 'calculator' => $this->baseCalculator,
                 'amountFactory' => $this->amountFactory,
@@ -577,7 +577,8 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
 
         $result = $calculatorMock->getOptionsAmount(
             $this->saleableItem,
-            $exclude, $searchMin,
+            $exclude,
+            $searchMin,
             $amount,
             $useRegularPrice
         );

@@ -5,12 +5,11 @@
  */
 namespace Magento\Config\Model\Config\Reader\Source\Deployed;
 
-use Magento\Config\Model\Config\Reader;
+use Magento\Config\Model\Placeholder\PlaceholderFactory;
+use Magento\Config\Model\Placeholder\PlaceholderInterface;
+use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Config\Model\Placeholder\PlaceholderInterface;
-use Magento\Config\Model\Placeholder\PlaceholderFactory;
-use Magento\Framework\App\Config\ScopeCodeResolver;
 
 /**
  * Class for checking settings that defined in config file

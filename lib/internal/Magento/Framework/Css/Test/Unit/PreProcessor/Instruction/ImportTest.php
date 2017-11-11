@@ -36,7 +36,6 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-
         $this->notationResolver = $this->createMock(\Magento\Framework\View\Asset\NotationResolver\Module::class);
         $contextMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Asset\ContextInterface::class,

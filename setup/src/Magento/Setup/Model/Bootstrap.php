@@ -5,8 +5,8 @@
  */
 namespace Magento\Setup\Model;
 
-use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\Bootstrap as MagentoAppBootstrap;
+use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Class Bootstrap

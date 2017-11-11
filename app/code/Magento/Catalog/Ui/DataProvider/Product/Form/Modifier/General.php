@@ -7,8 +7,8 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Ui\Component\Form;
 
 /**
  * Data provider for main panel of product page

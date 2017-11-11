@@ -6,11 +6,11 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
-use Magento\Store\Api\StoreManagementInterface;
-use Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface;
+use Magento\Store\Api\StoreManagementInterface;
 
 /**
  * Estimator of the EAV index table row size.

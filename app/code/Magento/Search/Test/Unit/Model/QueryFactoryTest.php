@@ -5,14 +5,14 @@
  */
 namespace Magento\Search\Test\Unit\Model;
 
-use Magento\Search\Helper\Data;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Search\Model\QueryFactory;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Search\Helper\Data;
 use Magento\Search\Model\Query;
+use Magento\Search\Model\QueryFactory;
 
 /**
  * Class QueryFactoryTest tests Magento\Search\Model\QueryFactory

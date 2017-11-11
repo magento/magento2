@@ -19,7 +19,8 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * @var array
      */
     protected $_config = [
-        'protocols' => (CURLPROTO_HTTP
+        'protocols' => (
+            CURLPROTO_HTTP
             | CURLPROTO_HTTPS
             | CURLPROTO_FTP
             | CURLPROTO_FTPS

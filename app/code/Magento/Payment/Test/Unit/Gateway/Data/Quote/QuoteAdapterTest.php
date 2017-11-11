@@ -5,9 +5,9 @@
  */
 namespace Magento\Payment\Test\Unit\Gateway\Data\Quote;
 
+use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Payment\Gateway\Data\Quote\QuoteAdapter;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 
 /**
  * Class QuoteAdapterTest

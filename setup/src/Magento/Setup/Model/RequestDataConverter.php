@@ -5,10 +5,10 @@
  */
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
-use Magento\Setup\Model\StoreConfigurationDataMapper as UserConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
 use Magento\Setup\Console\Command\InstallCommand;
+use Magento\Setup\Model\StoreConfigurationDataMapper as UserConfig;
 
 /**
  * Converter of request data into format compatible with models.

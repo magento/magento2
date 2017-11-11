@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit;
 
-use \Magento\Framework\Data\SearchResultProcessor;
+use Magento\Framework\Data\SearchResultProcessor;
 
 /**
  * Class SearchResultProcessorTest

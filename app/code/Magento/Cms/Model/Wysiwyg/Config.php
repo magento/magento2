@@ -5,8 +5,8 @@
  */
 namespace Magento\Cms\Model\Wysiwyg;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 
 /**

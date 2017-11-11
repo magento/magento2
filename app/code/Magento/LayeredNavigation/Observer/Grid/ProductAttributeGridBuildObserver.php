@@ -7,8 +7,8 @@
  */
 namespace Magento\LayeredNavigation\Observer\Grid;
 
-use Magento\Framework\Module\Manager;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Module\Manager;
 
 class ProductAttributeGridBuildObserver implements ObserverInterface
 {

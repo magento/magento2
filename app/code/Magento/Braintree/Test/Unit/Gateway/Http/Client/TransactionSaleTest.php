@@ -133,7 +133,7 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
      */
     private function getResponseObject()
     {
-        $obj = new \stdClass;
+        $obj = new \stdClass();
         $obj->success = true;
 
         return $obj;

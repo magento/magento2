@@ -6,13 +6,12 @@
 
 namespace Magento\CatalogRule\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\CatalogRule\Test\Fixture\CatalogRule;
-use Magento\Customer\Test\Fixture\Customer;
-use Magento\Mtf\Util\Command\Cli\Cron;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleEdit;
-use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\Mtf\Util\Command\Cli\Cron;
 
 /**
  * Preconditions:

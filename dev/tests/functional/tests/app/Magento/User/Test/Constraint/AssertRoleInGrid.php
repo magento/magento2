@@ -6,9 +6,9 @@
 
 namespace Magento\User\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\User\Test\Fixture\Role;
 use Magento\User\Test\Page\Adminhtml\UserRoleIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertRoleInGrid

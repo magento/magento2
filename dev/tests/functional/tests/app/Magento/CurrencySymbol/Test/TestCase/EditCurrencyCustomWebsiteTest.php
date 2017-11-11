@@ -6,10 +6,10 @@
 
 namespace Magento\CurrencySymbol\Test\TestCase;
 
-use Magento\Store\Test\Fixture\Store;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
-use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Preconditions:

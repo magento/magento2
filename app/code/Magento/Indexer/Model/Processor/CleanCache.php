@@ -5,7 +5,7 @@
  */
 namespace Magento\Indexer\Model\Processor;
 
-use \Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\CacheInterface;
 
 class CleanCache
 {

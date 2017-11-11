@@ -39,7 +39,6 @@ class ConfigDataTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetWrongKey($key, $expectedException)
     {
-
         $configData = new ConfigData('testKey');
 
         $this->expectException('InvalidArgumentException', $expectedException);

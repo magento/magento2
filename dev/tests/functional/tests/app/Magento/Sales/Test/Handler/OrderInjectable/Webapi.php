@@ -9,11 +9,10 @@ namespace Magento\Sales\Test\Handler\OrderInjectable;
 use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Downloadable\Test\Fixture\DownloadableProduct;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Handler\Webapi as AbstractWebapi;
 use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Create new order via web API.
@@ -68,7 +67,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
 
         /** @var OrderInjectable $fixture */
         $this->createQuote($fixture);
-        $url = $this->isCustomerGuest ? 'guest-carts/' . $this->quote  : 'carts/' . (int)$this->quote;
+        $url = $this->isCustomerGuest ? 'guest-carts/' . $this->quote : 'carts/' . (int)$this->quote;
         $this->url = $_ENV['app_frontend_url'] . $this->prepareWebsiteUrl($fixture) . '/V1/' . $url;
 
         $this->setProducts($fixture);

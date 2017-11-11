@@ -7,7 +7,6 @@
  */
 namespace Magento\Framework\Webapi;
 
-use Magento\Framework\Exception\ErrorMessage;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 

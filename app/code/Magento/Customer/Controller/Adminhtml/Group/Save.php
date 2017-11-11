@@ -7,7 +7,6 @@
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
-use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 
 class Save extends \Magento\Customer\Controller\Adminhtml\Group

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Pricing\Test\Unit\Render;
 
-use \Magento\Framework\Pricing\Render\Layout;
+use Magento\Framework\Pricing\Render\Layout;
 
 /**
  * Test class for \Magento\Framework\Pricing\Render\Layout

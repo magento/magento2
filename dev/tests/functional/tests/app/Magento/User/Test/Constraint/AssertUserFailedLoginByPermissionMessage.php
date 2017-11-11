@@ -7,8 +7,8 @@
 namespace Magento\User\Test\Constraint;
 
 use Magento\Backend\Test\Page\AdminAuthLogin;
-use Magento\User\Test\Fixture\User;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\User\Test\Fixture\User;
 
 /**
  * Verify incorrect credentials message while login to admin.

@@ -7,8 +7,8 @@ namespace Magento\Signifyd\Test\Unit\Model\SignifydGateway\Response;
 
 use Magento\Framework\Json\DecoderInterface;
 use Magento\Signifyd\Model\Config;
-use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequestValidator;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
+use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequestValidator;
 
 /**
  * Class WebhookRequestValidatorTest

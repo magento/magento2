@@ -5,8 +5,8 @@
  */
 namespace Magento\CatalogSearch\Model\Adapter\Aggregation;
 
-use Magento\Framework\Search\RequestInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Framework\Search\RequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 class RequestCheckerComposite implements RequestCheckerInterface

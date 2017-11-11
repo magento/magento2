@@ -5,9 +5,9 @@
  */
 namespace Magento\Deploy\Collector;
 
-use Magento\Deploy\Source\SourcePool;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFactory;
+use Magento\Deploy\Source\SourcePool;
 use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 
 /**

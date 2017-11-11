@@ -6,16 +6,16 @@
 
 namespace Magento\Cron\Console\Command;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Magento\Framework\App\ObjectManagerFactory;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManager;
 use Magento\Cron\Observer\ProcessCronQueueObserver;
+use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Shell\ComplexParameter;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for executing cron jobs

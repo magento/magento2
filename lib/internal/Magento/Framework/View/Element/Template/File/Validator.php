@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Element\Template\File;
 
-use \Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 
 /**

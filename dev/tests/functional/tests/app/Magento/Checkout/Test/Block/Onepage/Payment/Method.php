@@ -7,7 +7,6 @@
 namespace Magento\Checkout\Test\Block\Onepage\Payment;
 
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\Locator;
 
 /**
  * Checkout payment method block.
@@ -104,7 +103,7 @@ class Method extends Block
         $this->waitForElementNotVisible($this->waitElement);
         return $currentWindow;
     }
-    
+
     /**
      * Click "Check out with PayPal" button.
      */

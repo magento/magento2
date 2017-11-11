@@ -6,8 +6,8 @@
 namespace Magento\Signifyd\Model\CaseServices;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
 use Magento\Signifyd\Model\Config;
+use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
 
 /**
  * Creates instance of case updating service configured with specific message generator.

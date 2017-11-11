@@ -6,10 +6,10 @@
 
 namespace Magento\Search\Test\TestCase;
 
-use Magento\Search\Test\Page\Adminhtml\SynonymGroupIndex;
-use Magento\Search\Test\Page\Adminhtml\SynonymGroupNew;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Search\Test\Fixture\SynonymGroup;
+use Magento\Search\Test\Page\Adminhtml\SynonymGroupIndex;
+use Magento\Search\Test\Page\Adminhtml\SynonymGroupNew;
 
 /**
  * Preconditions:

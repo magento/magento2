@@ -7,8 +7,6 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\Module\Dir;
-
 class CarrierConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**

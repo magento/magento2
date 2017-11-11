@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Stdlib\DateTime;
 
-use \Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
 /**

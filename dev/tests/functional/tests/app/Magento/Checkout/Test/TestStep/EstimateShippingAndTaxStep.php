@@ -6,11 +6,11 @@
 
 namespace Magento\Checkout\Test\TestStep;
 
-use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\Checkout\Test\Fixture\Cart;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Customer\Test\Fixture\Address;
 use Magento\Checkout\Test\Constraint\AssertEstimateShippingAndTax;
+use Magento\Checkout\Test\Fixture\Cart;
+use Magento\Checkout\Test\Page\CheckoutCart;
+use Magento\Customer\Test\Fixture\Address;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**

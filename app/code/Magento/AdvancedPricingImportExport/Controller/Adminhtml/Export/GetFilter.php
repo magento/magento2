@@ -5,10 +5,10 @@
  */
 namespace Magento\AdvancedPricingImportExport\Controller\Adminhtml\Export;
 
-use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing as ExportAdvancedPricing;
 use Magento\Catalog\Model\Product as CatalogProduct;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 
 class GetFilter extends ExportController
 {

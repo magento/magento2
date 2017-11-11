@@ -5,7 +5,6 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Handler;
 
-use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\CreditCardValidationHandler;
 

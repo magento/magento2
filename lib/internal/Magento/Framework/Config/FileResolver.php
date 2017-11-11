@@ -7,13 +7,13 @@
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\Module\Dir\Reader as DirReader;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Module\Dir\Reader as DirReader;
+use Magento\Framework\View\Design\Fallback\RulePool;
+use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
-use Magento\Framework\View\Design\Fallback\RulePool;
 
 /**
  * Class FileResolver
@@ -105,7 +105,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
                     );
                     if (file_exists($designPath)) {
                         try {
-                            $designDom = new \DOMDocument;
+                            $designDom = new \DOMDocument();
                             $designDom->load($designPath);
                             $iterator[$designPath] = $designDom->saveXML();
                         } catch (\Exception $e) {
@@ -174,7 +174,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
                 $theme->getParentTheme()
             );
 
-            $parentDom = new \DOMDocument;
+            $parentDom = new \DOMDocument();
             $parentDom->load($parentDesignPath);
 
             $iterator[$index] = $parentDom->saveXML();

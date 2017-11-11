@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\Message\Test\Unit;
 
-use Magento\Framework\Message\ExceptionMessageFactoryInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\ExceptionMessageFactoryInterface;
 
 class ExceptionMessageFactoryPoolTest extends \PHPUnit\Framework\TestCase
 {

@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Indexer\Price;
 
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductRelationsCalculator;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice;
 
 class CompositeProductRelationsCalculatorTest extends \PHPUnit\Framework\TestCase
 {

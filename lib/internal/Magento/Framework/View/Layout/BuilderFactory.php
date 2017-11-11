@@ -6,7 +6,6 @@
 namespace Magento\Framework\View\Layout;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\View;
 
 /**
  * Class BuilderFactory

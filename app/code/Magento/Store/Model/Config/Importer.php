@@ -10,9 +10,9 @@ use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\ProcessorFactory;
+use Magento\Store\Model\ResourceModel\Website;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\ResourceModel\Website;
 
 /**
  * Imports stores, websites and groups from transmitted data.

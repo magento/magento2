@@ -6,10 +6,10 @@
 
 namespace Magento\Catalog\Test\TestStep;
 
-use Magento\Mtf\ObjectManager;
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Click "Save" button on attribute form on product page.

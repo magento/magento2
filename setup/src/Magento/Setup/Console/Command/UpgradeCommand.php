@@ -6,9 +6,9 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
-use Magento\Framework\App\State as AppState;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
 use Symfony\Component\Console\Input\ArrayInput;

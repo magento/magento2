@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Webapi\Test\Unit\Rest\Response;
 
-use \Magento\Framework\Webapi\Rest\Response\FieldsFilter;
+use Magento\Framework\Webapi\Rest\Response\FieldsFilter;
 
 /**
  * Unit test for FieldsFilter

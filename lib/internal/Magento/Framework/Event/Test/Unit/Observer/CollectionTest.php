@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Event\Test\Unit\Observer;
 
-use \Magento\Framework\Event\Observer\Collection;
+use Magento\Framework\Event\Observer\Collection;
 
 /**
  * Class CollectionTest

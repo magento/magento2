@@ -6,8 +6,8 @@
 
 namespace Magento\Checkout\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that item quantity in mini shopping cart is equal to fixture value
