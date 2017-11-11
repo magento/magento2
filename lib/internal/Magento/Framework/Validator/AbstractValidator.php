@@ -138,19 +138,30 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      */
     private function removeDuplicatedMessages($messages)
     {
-        foreach ($messages as $messageKey => $messageValue) {
-            if (is_array($messageValue)) {
-                if (array_filter($messageValue, 'is_array')) {
-                    $messageValue = $this->removeDuplicatedMessages($messageValue);
-                }
-
-                $messageValue = array_unique($messageValue);
-
-                if (count($messageValue) === 1) {
-                    $messages[$messageKey] = $messageValue[0];
-                }
+        foreach ($messages as $messageKey => $message) {
+            if ($this->isMessageList($message) && !$this->hasMessageListProperFormat($message)) {
+                $messages[$messageKey] = current($message);
             }
         }
+
         return $messages;
+    }
+
+    /**
+     * @param $messageList
+     * @return bool
+     */
+    private function hasMessageListProperFormat($messageList)
+    {
+        return array_keys($messageList) !== range(0, count($messageList) - 1);
+    }
+
+    /**
+     * @param $message
+     * @return bool
+     */
+    private function isMessageList($message)
+    {
+        return is_array($message);
     }
 }
