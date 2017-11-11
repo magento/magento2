@@ -140,7 +140,12 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
     {
         foreach ($messages as $messageKey => $message) {
             if ($this->isMessageList($message) && !$this->hasMessageListProperFormat($message)) {
-                $messages[$messageKey] = current($message);
+
+                $message = $this->removeDuplicatedMessagesFromMessageList($message);
+
+                if ($this->hasMessageListOnlyOneMessage($message)) {
+                    $messages[$messageKey] = $this->getFirstMessageFromMessageList($message);
+                }
             }
         }
 
@@ -163,5 +168,31 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
     private function isMessageList($message)
     {
         return is_array($message);
+    }
+
+    /**
+     * @param $message
+     * @return array
+     */
+    private function removeDuplicatedMessagesFromMessageList($messageList)
+    {
+        return array_unique($messageList, SORT_REGULAR);
+    }
+
+    /**
+     * @param $message
+     * @return bool
+     */
+    private function hasMessageListOnlyOneMessage($message)
+    {
+        return count($message) === 1;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getFirstMessageFromMessageList($messageList)
+    {
+        return current($messageList);
     }
 }
