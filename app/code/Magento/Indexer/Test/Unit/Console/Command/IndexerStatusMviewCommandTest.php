@@ -17,7 +17,7 @@ use Magento\Framework\Mview\View\CollectionFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexerStatusMviewCommandTest extends \PHPUnit_Framework_TestCase
+class IndexerStatusMviewCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var IndexerStatusMviewCommand
