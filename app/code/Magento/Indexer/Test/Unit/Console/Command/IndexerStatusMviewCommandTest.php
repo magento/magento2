@@ -176,14 +176,11 @@ class IndexerStatusMviewCommandTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $list = [];
-        if ($changelogData['version_id'] !== $stateData['version_id']) {
-            $list = range($stateData['version_id']+1, $changelogData['version_id']);
-        }
+        $listSize = $changelogData['version_id'] - $stateData['version_id'];
 
         $changelog->expects($this->any())
-            ->method('getList')
-            ->willReturn($list);
+            ->method('getListSize')
+            ->willReturn($listSize);
 
         $changelog->expects($this->any())
             ->method('getVersion')

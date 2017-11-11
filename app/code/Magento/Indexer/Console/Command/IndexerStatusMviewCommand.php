@@ -61,7 +61,7 @@ class IndexerStatusMviewCommand extends Command
                     continue;
                 }
 
-                $pendingCount = count($changelog->getList($state->getVersionId(), $currentVersionId));
+                $pendingCount = $changelog->getListSize($state->getVersionId(), $currentVersionId);
 
                 $pendingString = "<error>$pendingCount</error>";
                 if ($pendingCount <= 0) {

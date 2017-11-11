@@ -43,6 +43,15 @@ interface ChangelogInterface
     public function getList($fromVersionId, $toVersionId);
 
     /**
+     * Retrieve the count of entity ids in the range [$fromVersionId..$toVersionId]
+     *
+     * @param $fromVersionId
+     * @param $toVersionId
+     * @return mixed
+     */
+    public function getListSize($fromVersionId, $toVersionId);
+
+    /**
      * Get maximum version_id from changelog
      *
      * @return int

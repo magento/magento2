@@ -127,14 +127,12 @@ class Changelog implements ChangelogInterface
     }
 
     /**
-     * Retrieve entity ids by range [$fromVersionId..$toVersionId]
-     *
      * @param int $fromVersionId
      * @param int $toVersionId
-     * @return int[]
+     * @return \Magento\Framework\DB\Select
      * @throws ChangelogTableNotExistsException
      */
-    public function getList($fromVersionId, $toVersionId)
+    protected function getListSelect($fromVersionId, $toVersionId)
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
         if (!$this->connection->isTableExists($changelogTableName)) {
@@ -154,7 +152,37 @@ class Changelog implements ChangelogInterface
             (int)$toVersionId
         );
 
+        return $select;
+    }
+
+    /**
+     * Retrieve entity ids by range [$fromVersionId..$toVersionId]
+     *
+     * @param int $fromVersionId
+     * @param int $toVersionId
+     * @return int[]
+     * @throws ChangelogTableNotExistsException
+     */
+    public function getList($fromVersionId, $toVersionId)
+    {
+        $select = $this->getListSelect($fromVersionId, $toVersionId);
         return $this->connection->fetchCol($select);
+    }
+
+    /**
+     * Retrieve the count of entity ids in the range [$fromVersionId..$toVersionId]
+     *
+     * @param int $fromVersionId
+     * @param int $toVersionId
+     * @return int[]
+     * @throws ChangelogTableNotExistsException
+     */
+    public function getListSize($fromVersionId, $toVersionId)
+    {
+        $countSelect = $this->getListSelect($fromVersionId, $toVersionId);
+        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT " . $this->getColumnName() . ")")));
+        return $this->connection->fetchOne($countSelect);
     }
 
     /**
