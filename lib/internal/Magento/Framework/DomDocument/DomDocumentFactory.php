@@ -34,11 +34,12 @@ class DomDocumentFactory
      *
      * @return DOMDocument
      */
-    public function create($data = null)
+    public function create(string $data = null)
     {
+        /** @var DOMDocument $dom */
         $dom = $this->objectManager->create(DOMDocument::class);
 
-        if (!empty($data) && is_string($data)) {
+        if (!empty($data)) {
             $dom->loadXML($data);
         }
 

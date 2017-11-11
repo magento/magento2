@@ -7,14 +7,28 @@ namespace Magento\Developer\Model\XmlCatalog\Format\PhpStorm;
 
 use DOMDocument;
 
-class DomDocumentFactory extends \Magento\Framework\DomDocument\DomDocumentFactory
+class DomDocumentFactory
 {
+    /**
+     * @var \Magento\Framework\DomDocument\DomDocumentFactory
+     */
+    private $documentFactory;
+
+    /**
+     * DomDocumentFactory constructor.
+     * @param \Magento\Framework\DomDocument\DomDocumentFactory $documentFactory
+     */
+    public function __construct(\Magento\Framework\DomDocument\DomDocumentFactory $documentFactory)
+    {
+        $this->documentFactory = $documentFactory;
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function create($data = null)
+    public function create(string $data = null)
     {
-        $dom = parent::create($data);
+        $dom = $this->documentFactory->create($data);
 
         if (empty($data)) {
             $this->initializeDocument($dom);
