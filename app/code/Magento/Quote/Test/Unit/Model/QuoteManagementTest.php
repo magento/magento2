@@ -571,7 +571,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                 $shippingAddress,
                 [
                     'address_type' => 'shipping',
-                    'email' => 'customer@example.com'
+                    'email' => 'customer@example.com',
+                    'quote_address_id' => null
                 ]
             )
             ->willReturn($convertedShippingAddress);
@@ -581,7 +582,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                 $billingAddress,
                 [
                     'address_type' => 'billing',
-                    'email' => 'customer@example.com'
+                    'email' => 'customer@example.com',
+                    'quote_address_id' => null
                 ]
             )
             ->willReturn($convertedBillingAddress);
@@ -1023,7 +1025,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                 $shippingAddress,
                 [
                     'address_type' => 'shipping',
-                    'email' => 'customer@example.com'
+                    'email' => 'customer@example.com',
+                    'quote_address_id' => null
                 ]
             )
             ->willReturn($convertedShippingAddress);
@@ -1033,7 +1036,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                 $billingAddress,
                 [
                     'address_type' => 'billing',
-                    'email' => 'customer@example.com'
+                    'email' => 'customer@example.com',
+                    'quote_address_id' => null
                 ]
             )
             ->willReturn($convertedBillingAddress);

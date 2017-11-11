@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order;
 
 use Magento\Customer\Model\Address\AddressModelInterface;
 use Magento\Sales\Api\Data\OrderAddressInterface;
+use Magento\Sales\Api\Data\OrderQuoteAddressInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
@@ -19,7 +20,7 @@ use Magento\Sales\Model\AbstractModel;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @since 100.0.2
  */
-class Address extends AbstractModel implements OrderAddressInterface, AddressModelInterface
+class Address extends AbstractModel implements OrderAddressInterface, AddressModelInterface, OrderQuoteAddressInterface
 {
     /**
      * Possible customer address types
@@ -307,6 +308,16 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     /**
+     * Returns quote_address_id
+     *
+     * @return int
+     */
+    public function getQuoteAddressId()
+    {
+        return $this->getData(OrderQuoteAddressInterface::QUOTE_ADDRESS_ID);
+    }
+
+    /**
      * Returns customer_id
      *
      * @return int
@@ -521,6 +532,14 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     public function setCustomerAddressId($id)
     {
         return $this->setData(OrderAddressInterface::CUSTOMER_ADDRESS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQuoteAddressId($addressId)
+    {
+        return $this->setData(OrderQuoteAddressInterface::QUOTE_ADDRESS_ID, $addressId);
     }
 
     /**

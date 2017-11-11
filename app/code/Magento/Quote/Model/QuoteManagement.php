@@ -472,7 +472,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 $quote->getShippingAddress(),
                 [
                     'address_type' => 'shipping',
-                    'email' => $quote->getCustomerEmail()
+                    'email' => $quote->getCustomerEmail(),
+                    'quote_address_id' => $quote->getShippingAddress()->getId()
                 ]
             );
             $addresses[] = $shippingAddress;
@@ -483,7 +484,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $quote->getBillingAddress(),
             [
                 'address_type' => 'billing',
-                'email' => $quote->getCustomerEmail()
+                'email' => $quote->getCustomerEmail(),
+                'quote_address_id' => $quote->getBillingAddress()->getId()
             ]
         );
         $addresses[] = $billingAddress;
