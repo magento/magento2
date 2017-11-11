@@ -68,14 +68,14 @@ EOT;
             ->with(DOMDocument::class)
             ->willReturn($this->domDocumentMock);
 
-        if (empty($data) || !is_string($data)) {
-            $this->domDocumentMock->expects($this->never())
-                ->method('loadXML');
-        } else {
+        if (!empty($data)) {
             $this->domDocumentMock->expects($this->once())
                 ->method('loadXML')
                 ->with($data)
                 ->willReturn(true);
+        } else {
+            $this->domDocumentMock->expects($this->never())
+                ->method('loadXML');
         }
 
         $this->domDocumentFactory->create($data);

@@ -7,10 +7,11 @@
 namespace Magento\Developer\Model\XmlCatalog\Format;
 
 use Magento\Developer\Model\XmlCatalog\Format\PhpStorm\DomDocumentFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Filesystem\File\WriteFactory as FileWriteFactory;
+use Magento\Framework\Filesystem\File\WriteFactory;
 
 /**
  * Class PhpStorm generates URN catalog for PhpStorm 9
@@ -23,7 +24,7 @@ class PhpStorm implements FormatInterface
     private $currentDirRead;
 
     /**
-     * @var FileWriteFactory
+     * @var WriteFactory
      */
     private $fileWriteFactory;
 
@@ -34,17 +35,17 @@ class PhpStorm implements FormatInterface
 
     /**
      * @param ReadFactory $readFactory
-     * @param FileWriteFactory $fileWriteFactory
+     * @param WriteFactory $fileWriteFactory
      * @param DomDocumentFactory $domDocumentFactory
      */
     public function __construct(
         ReadFactory $readFactory,
-        FileWriteFactory $fileWriteFactory,
-        DomDocumentFactory $domDocumentFactory
+        WriteFactory $fileWriteFactory,
+        DomDocumentFactory $domDocumentFactory = null
     ) {
         $this->currentDirRead = $readFactory->create(getcwd());
         $this->fileWriteFactory = $fileWriteFactory;
-        $this->domDocumentFactory = $domDocumentFactory;
+        $this->domDocumentFactory = $domDocumentFactory ?: ObjectManager::getInstance()->get(DomDocumentFactory::class);
     }
 
     /**
