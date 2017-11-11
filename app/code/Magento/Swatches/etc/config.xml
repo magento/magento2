@@ -26,5 +26,12 @@
                 <swatch_image_position>stretch</swatch_image_position>
             </watermark>
         </design>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <attribute_image_folder>attribute</attribute_image_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
     </default>
 </config>
