@@ -5,12 +5,15 @@
  */
 namespace Magento\Framework\Backup;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
+
 /**
  * Class to work with archives
  *
  * @api
  */
-abstract class AbstractBackup implements BackupInterface
+abstract class AbstractBackup implements BackupInterface, SourceFileInterface
 {
     /**
      * Backup name
@@ -67,6 +70,11 @@ abstract class AbstractBackup implements BackupInterface
      * @var string
      */
     protected $_lastErrorMessage;
+
+    /**
+     * @var boolean
+     */
+    private $keepSourceFile = false;
 
     /**
      * Set Backup Extension
@@ -138,14 +146,14 @@ abstract class AbstractBackup implements BackupInterface
      * Set root directory of Magento installation
      *
      * @param string $rootDir
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return $this
      */
     public function setRootDir($rootDir)
     {
         if (!is_dir($rootDir)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('Bad root directory')
+            throw new LocalizedException(
+                new Phrase('Bad root directory')
             );
         }
 
@@ -295,5 +303,25 @@ abstract class AbstractBackup implements BackupInterface
         $name = str_replace(' ', '_', $name);
 
         return $name;
+    }
+
+    /**
+     * Set if keep files of backup
+     *
+     * @param bool $keepSourceFile
+     * @return $this
+     */
+    public function setKeepSourceFile(bool $keepSourceFile)
+    {
+        $this->keepSourceFile = $keepSourceFile;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function keepSourceFile()
+    {
+        return $this->keepSourceFile;
     }
 }
