@@ -94,4 +94,23 @@
             <resource ref="Magento_InventoryApi::source_stock_link"/>
         </resources>
     </route>
+    <!-- SourceItem -->
+    <route url="/V1/inventory/source-item" method="GET">
+        <service class="Magento\InventoryApi\Api\SourceItemRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
+    <route url="/V1/inventory/source-item" method="POST">
+        <service class="Magento\InventoryApi\Api\SourceItemsSaveInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
+    <route url="/V1/inventory/source-item" method="DELETE">
+        <service class="Magento\InventoryApi\Api\SourceItemsDeleteInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::source"/>
+        </resources>
+    </route>
 </routes>

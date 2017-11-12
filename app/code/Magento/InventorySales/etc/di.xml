@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- SalesChannel -->
+    <preference for="Magento\InventorySalesApi\Api\Data\SalesChannelInterface" type="Magento\InventorySales\Model\SalesChannel"/>
+    <preference for="Magento\InventorySales\Model\GetAssignedSalesChannelsForStockInterface" type="Magento\InventorySales\Model\GetAssignedSalesChannelsForStock"/>
+    <preference for="Magento\InventorySales\Model\ReplaceSalesChannelsForStockInterface" type="Magento\InventorySales\Model\ResourceModel\ReplaceSalesChannelsDataForStock"/>
+    <preference for="Magento\InventorySales\Ui\SalesChannelNameResolverInterface" type="Magento\InventorySales\Ui\WebsiteNameResolver"/>
+    <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
+        <plugin name="load_sales_channels_on_get_list" type="Magento\InventorySales\Plugin\Inventory\StockRepository\LoadSalesChannelsOnGetListPlugin"/>
+        <plugin name="load_sales_channels_on_get" type="Magento\InventorySales\Plugin\Inventory\StockRepository\LoadSalesChannelsOnGetPlugin"/>
+        <plugin name="save_sales_channels_links" type="Magento\InventorySales\Plugin\Inventory\StockRepository\SaveSalesChannelsLinksPlugin"/>
+    </type>
+    <type name="Magento\Inventory\Ui\DataProvider\StockDataProvider">
+        <plugin name="sales_channel_data" type="Magento\InventorySales\Plugin\Inventory\Ui\StockDataProvider\SalesChannels" />
+    </type>
+    <type name="Magento\InventoryApi\Api\IsProductInStockInterface">
+        <plugin name="backorder_inventory_stock_status" type="Magento\InventorySales\Plugin\InventoryApi\BackorderStockStatusPlugin"/>
+    </type>
+</config>
