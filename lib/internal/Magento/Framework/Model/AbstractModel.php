@@ -730,7 +730,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         $implodedString = '';
 
         // Recursively iterates array and adds key/value to glued string
-        array_walk_recursive($array, function($value) use ($glue, &$implodedString) {
+        array_walk_recursive($array, function ($value) use ($glue, &$implodedString) {
             $implodedString .= $value.$glue;
         });
 

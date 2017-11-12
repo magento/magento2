@@ -140,9 +140,7 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
     {
         foreach ($messages as $messageKey => $message) {
             if ($this->isMessageList($message) && !$this->hasMessageListProperFormat($message)) {
-
                 $message = $this->removeDuplicatedMessagesFromMessageList($message);
-
                 if ($this->hasMessageListOnlyOneMessage($message)) {
                     $messages[$messageKey] = $this->getFirstMessageFromMessageList($message);
                 }
