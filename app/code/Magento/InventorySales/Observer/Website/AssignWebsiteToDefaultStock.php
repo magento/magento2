@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Observer;
+namespace Magento\InventorySales\Observer\Website;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -17,7 +17,7 @@ use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
 use Magento\Store\Model\Website;
 
 /**
- * Event Observer Class after website_save_after to assign the current saved website to the default stock
+ * Assign the website to the default stock
  */
 class AssignWebsiteToDefaultStock implements ObserverInterface
 {

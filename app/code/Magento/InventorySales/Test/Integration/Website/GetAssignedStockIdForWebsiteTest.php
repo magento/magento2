@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Test\Integration;
+namespace Magento\InventorySales\Test\Integration\Website;
 
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventorySales\Model\GetAssignedStockIdForWebsiteInterface;
@@ -46,20 +46,17 @@ class GetAssignedStockIdForWebsiteTest extends TestCase
     }
 
     /**
-     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites.php
-     *
      * Creates website inside of test so need to enable db isolation to prevent change db state after test execution
      * @magentoDbIsolation enabled
      */
     public function testGetAssignedStocksForWebsite()
     {
-        // Use website model because we haven't api interfaces for website saving
+        $websiteCode = 'test_1';
 
         /** @var Website $website */
         $website = $this->websiteFactory->create();
-        $websiteCode = 'test_1';
-        $website->load($websiteCode);
         $website->setCode($websiteCode);
+        // Use website model because we haven't api interfaces for website saving
         $website->save();
 
         $stockId = $this->getAssignedStockIdForWebsite->execute($websiteCode);

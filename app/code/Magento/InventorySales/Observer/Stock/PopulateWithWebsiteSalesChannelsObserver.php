@@ -49,9 +49,11 @@ class PopulateWithWebsiteSalesChannelsObserver implements ObserverInterface
         $extensionAttributes = $stock->getExtensionAttributes();
         $assignedSalesChannels = $extensionAttributes->getSalesChannels();
 
-        foreach ($assignedSalesChannels as $key => $assignedSalesChannel) {
-            if ($assignedSalesChannel->getType() === SalesChannelInterface::TYPE_WEBSITE) {
-                unset($assignedSalesChannels[$key]);
+        if (null !== $assignedSalesChannels) {
+            foreach ($assignedSalesChannels as $key => $assignedSalesChannel) {
+                if ($assignedSalesChannel->getType() === SalesChannelInterface::TYPE_WEBSITE) {
+                    unset($assignedSalesChannels[$key]);
+                }
             }
         }
 
