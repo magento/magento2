@@ -142,7 +142,18 @@
     <type name="Magento\Config\Model\Config\Structure\ConcealInProductionConfigList">
         <arguments>
             <argument name="configs" xsi:type="array">
-                <item name="dev" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
+                <item name="dev/restrict" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
+                <item name="dev/front_end_development_workflow" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
+                <item name="dev/template" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
+                <item name="dev/translate_inline" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
+                <item name="dev/js" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
+                <item name="dev/css" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
+                <item name="dev/image" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
+                <item name="dev/static" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
+                <item name="dev/grid" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
+                <item name="dev/debug/template_hints_storefront" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
+                <item name="dev/debug/template_hints_admin" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
+                <item name="dev/debug/template_hints_blocks" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::HIDDEN</item>
                 <item name="general/locale/code" xsi:type="const">Magento\Config\Model\Config\Structure\ElementVisibilityInterface::DISABLED</item>
             </argument>
         </arguments>
