@@ -150,13 +150,14 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
-     * @param \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
+     * @param \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory ,
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param QuoteFactory $quoteFactory
+     * @param QuoteIdMaskFactory|null $quoteIdMaskFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -179,7 +180,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
-        \Magento\Quote\Model\QuoteFactory $quoteFactory
+        \Magento\Quote\Model\QuoteFactory $quoteFactory,
+        \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory = null
     ) {
         $this->eventManager = $eventManager;
         $this->quoteValidator = $quoteValidator;
@@ -201,6 +203,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->accountManagement = $accountManagement;
         $this->customerSession = $customerSession;
         $this->quoteFactory = $quoteFactory;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Quote\Model\QuoteIdMaskFactory::class);
     }
 
     /**
@@ -268,9 +272,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         $quote->setCustomer($customer);
         $quote->setCustomerIsGuest(0);
-        $quoteIdMaskFactory = $this->getQuoteIdMaskFactory();
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = $quoteIdMaskFactory->create()->load($cartId, 'quote_id');
+        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'quote_id');
         if ($quoteIdMask->getId()) {
             $quoteIdMask->delete();
         }
@@ -558,18 +561,5 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
             $shipping->setIsDefaultBilling(true);
         }
-    }
-
-    /**
-     * @return \Magento\Quote\Model\QuoteIdMaskFactory
-     * @deprecated
-     */
-    private function getQuoteIdMaskFactory()
-    {
-        if (!$this->quoteIdMaskFactory) {
-            $this->quoteIdMaskFactory = ObjectManager::getInstance()
-                ->get(\Magento\Quote\Model\QuoteIdMaskFactory::class);
-        }
-        return $this->quoteIdMaskFactory;
     }
 }

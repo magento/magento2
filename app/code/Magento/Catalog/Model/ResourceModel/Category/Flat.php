@@ -97,6 +97,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param string $connectionName
+     * @param CategoryFlatCollectionFactory $categoryFlatCollectionFactory
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -106,7 +107,8 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        $connectionName = null
+        $connectionName = null,
+        CategoryFlatCollectionFactory $categoryFlatCollectionFactory = null
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
@@ -114,6 +116,11 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
         $this->_catalogConfig = $catalogConfig;
         $this->_eventManager = $eventManager;
         parent::__construct($context, $tableStrategy, $connectionName);
+        if (null === $categoryFlatCollectionFactory) {
+            $categoryFlatCollectionFactory = ObjectManager::getInstance()
+                ->get(CategoryFlatCollectionFactory::class);
+        }
+        $this->categoryFlatCollectionFactory = $categoryFlatCollectionFactory;
     }
 
     /**
@@ -169,9 +176,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      */
     public function getMainStoreTable($storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID)
     {
-        if (is_string($storeId)) {
-            $storeId = intval($storeId);
-        }
+        $storeId = (int)$storeId;
 
         if ($storeId) {
             $suffix = sprintf('store_%d', $storeId);
@@ -407,7 +412,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
             );
             $parentPath = $this->getConnection()->fetchOne($select);
 
-            $collection = $this->getCategoryFlatCollectionFactory()
+            $collection = $this->categoryFlatCollectionFactory
                 ->create()
                 ->addNameToResult()
                 ->addUrlRewriteToResult()

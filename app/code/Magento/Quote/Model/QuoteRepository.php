@@ -71,6 +71,8 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      */
     private $loadHandler;
 
+    private $quoteCollectionFactory;
+
     /**
      * @param QuoteFactory $quoteFactory
      * @param StoreManagerInterface $storeManager
@@ -84,12 +86,15 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
         StoreManagerInterface $storeManager,
         \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteCollection,
         \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory,
-        JoinProcessorInterface $extensionAttributesJoinProcessor
+        JoinProcessorInterface $extensionAttributesJoinProcessor,
+        QuoteCollectionFactory $quoteCollectionFactory = null
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;
         $this->searchResultsDataFactory = $searchResultsDataFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->quoteCollectionFactory = $quoteCollectionFactory
+            ?: ObjectManager::getInstance()->get(QuoteCollectionFactory::class);
     }
 
     /**
@@ -201,16 +206,13 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 
     /**
      * Get quote collection
-     * Temporary method to support release backward compatibility.
      *
      * @deprecated
      * @return QuoteCollection
      */
     protected function getQuoteCollection()
     {
-        /** @var \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $collectionFactory */
-        $collectionFactory = ObjectManager::getInstance()->get(QuoteCollectionFactory::class);
-        return $collectionFactory->create();
+        return $this->quoteCollectionFactory->create();
     }
 
     /**

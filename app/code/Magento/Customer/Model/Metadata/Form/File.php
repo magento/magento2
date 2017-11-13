@@ -73,6 +73,7 @@ class File extends AbstractData
      * @param Filesystem $fileSystem
      * @param UploaderFactory $uploaderFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -85,13 +86,18 @@ class File extends AbstractData
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator,
         Filesystem $fileSystem,
-        UploaderFactory $uploaderFactory
+        UploaderFactory $uploaderFactory,
+        FileProcessorFactory $fileProcessorFactory = null
     ) {
         parent::__construct($localeDate, $logger, $attribute, $localeResolver, $value, $entityTypeCode, $isAjax);
         $this->urlEncoder = $urlEncoder;
         $this->_fileValidator = $fileValidator;
         $this->_fileSystem = $fileSystem;
         $this->uploaderFactory = $uploaderFactory;
+        if (null === $fileProcessorFactory) {
+            $fileProcessorFactory = ObjectManager::getInstance()->get(FileProcessorFactory::class);
+        }
+        $this->fileProcessorFactory = $fileProcessorFactory;
     }
 
     /**
@@ -402,10 +408,6 @@ class File extends AbstractData
      */
     protected function getFileProcessorFactory()
     {
-        if ($this->fileProcessorFactory === null) {
-            $this->fileProcessorFactory = ObjectManager::getInstance()
-                ->get('Magento\Customer\Model\FileProcessorFactory');
-        }
         return $this->fileProcessorFactory;
     }
 }

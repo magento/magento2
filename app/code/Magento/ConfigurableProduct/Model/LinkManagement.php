@@ -6,6 +6,8 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
+use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -38,7 +40,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     private $optionsFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
+     * @var AttributeFactory
      */
     private $attributeFactory;
 
@@ -47,17 +49,24 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      * @param \Magento\Catalog\Api\Data\ProductInterfaceFactory $productFactory
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param AttributeFactory|null $attributeFactory
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Api\Data\ProductInterfaceFactory $productFactory,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        AttributeFactory $attributeFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;
         $this->configurableType = $configurableType;
         $this->dataObjectHelper = $dataObjectHelper;
+        if (null !== $attributeFactory) {
+            $attributeFactory = ObjectManager::getInstance()->get(AttributeFactory::class);
+        }
+        $this->attributeFactory = $attributeFactory;
     }
 
     /**
@@ -176,26 +185,10 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     private function getOptionsFactory()
     {
         if (!$this->optionsFactory) {
-            $this->optionsFactory = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->optionsFactory = ObjectManager::getInstance()
                 ->get(\Magento\ConfigurableProduct\Helper\Product\Options\Factory::class);
         }
         return $this->optionsFactory;
-    }
-
-    /**
-     * Get Attribute Factory
-     *
-     * @return \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
-     *
-     * @deprecated
-     */
-    private function getAttributeFactory()
-    {
-        if (!$this->attributeFactory) {
-            $this->attributeFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory::class);
-        }
-        return $this->attributeFactory;
     }
 
     /**
@@ -208,7 +201,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     {
         $configurableAttributesData = [];
         $attributeValues = [];
-        $attributes = $this->getAttributeFactory()->create()
+        $attributes = $this->attributeFactory->create()
             ->getCollection()
             ->addFieldToFilter('attribute_id', $attributeIds)
             ->getItems();
