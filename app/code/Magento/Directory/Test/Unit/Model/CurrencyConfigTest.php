@@ -7,27 +7,29 @@
 namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Config\App\Config\Type\System;
-use Magento\Directory\Model\CurrencySystemConfig;
+use Magento\Directory\Model\CurrencyConfig;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Provide tests for CurrencySystemConfig model.
+ * Provide tests for CurrencyConfig model.
  */
 class CurrencyConfigTest extends TestCase
 {
     /**
-     * @var CurrencySystemConfig
+     * @var CurrencyConfig
      */
     private $testSubject;
 
     /**
      * @var System|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $systemConfig;
+    private $config;
 
     /**
      * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -35,82 +37,91 @@ class CurrencyConfigTest extends TestCase
     private $storeManager;
 
     /**
+     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $appState;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->systemConfig = $this->getMockBuilder(System::class)
+        $this->config = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->setMethods(['getStores', 'getWebsites'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->appState = $this->getMockBuilder(State::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManager = new ObjectManager($this);
         $this->testSubject = $objectManager->getObject(
-            CurrencySystemConfig::class,
+            CurrencyConfig::class,
             [
-                'systemConfig' => $this->systemConfig,
                 'storeManager' => $this->storeManager,
+                'appState' => $this->appState,
+                'config' => $this->config,
             ]
         );
     }
 
     /**
+     * Test get currency config for admin and storefront areas.
+     *
+     * @dataProvider getConfigCurrenciesDataProvider
      * @return void
      */
-    public function testGetConfigCurrencies()
+    public function testGetConfigCurrencies(string $areCode)
     {
         $path = 'test/path';
-        $expected = [
-            0 => 'ARS',
-            1 => 'AUD',
-            3 => 'BZD',
-            4 => 'CAD',
-            5 => 'CLP',
-            6 => 'EUR',
-            7 => 'USD',
-        ];
+        $expected = ['ARS', 'AUD', 'BZD'];
+
+        $this->appState->expects(self::once())
+            ->method('getAreaCode')
+            ->willReturn($areCode);
 
         /** @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject $store */
         $store = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getId'])
+            ->setMethods(['getCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $store->expects(self::once())
-            ->method('getId')
-            ->willReturn(1);
+            ->method('getCode')
+            ->willReturn('testCode');
 
-        /** @var WebsiteInterface|\PHPUnit_Framework_MockObject_MockObject $website */
-        $website = $this->getMockBuilder(WebsiteInterface::class)
-            ->setMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $website->expects(self::once())
-            ->method('getId')
-            ->willReturn(1);
+        if ($areCode === Area::AREA_ADMINHTML) {
+            $this->storeManager->expects(self::once())
+                ->method('getStores')
+                ->willReturn([$store]);
+        } else {
+            $this->storeManager->expects(self::once())
+                ->method('getStore')
+                ->willReturn($store);
+        }
 
-        $this->systemConfig->expects(self::exactly(3))
-            ->method('get')
-            ->withConsecutive(
-                self::identicalTo('default/test/path'),
-                self::identicalTo('websites/1/test/path'),
-                self::identicalTo('stores/1/test/path')
-            )->willReturnOnConsecutiveCalls(
-                'USD,EUR',
-                'AUD,ARS',
-                'BZD,CAD,AUD,CLP'
-            );
-
-        $this->storeManager->expects(self::once())
-            ->method('getStores')
-            ->willReturn([$store]);
-        $this->storeManager->expects(self::once())
-            ->method('getWebsites')
-            ->willReturn([$website]);
+        $this->config->expects(self::once())
+            ->method('getValue')
+            ->with(
+                self::identicalTo($path)
+            )->willReturn('ARS,AUD,BZD');
 
         $result = $this->testSubject->getConfigCurrencies($path);
 
         self::assertEquals($expected, $result);
+    }
+
+    /**
+     * Provide test data for getConfigCurrencies test.
+     *
+     * @return array
+     */
+    public function getConfigCurrenciesDataProvider()
+    {
+        return [
+            ['areaCode' => Area::AREA_ADMINHTML],
+            ['areaCode' => Area::AREA_FRONTEND],
+        ];
     }
 }
