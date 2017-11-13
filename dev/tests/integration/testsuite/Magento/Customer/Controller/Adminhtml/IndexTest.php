@@ -347,6 +347,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
                 'email' => 'customer@example.com',
                 'firstname' => 'test firstname',
                 'lastname' => 'test lastname',
+                'sendemail_store_id' => 1
             ],
             'subscription' => '0'
         ];
