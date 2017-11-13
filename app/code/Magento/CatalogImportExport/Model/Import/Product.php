@@ -1293,20 +1293,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveProductAttributes(array $attributesData)
     {
+        $linkField = $this->getProductEntityLinkField();
         foreach ($attributesData as $tableName => $skuData) {
             $tableData = [];
             foreach ($skuData as $sku => $attributes) {
-                $linkId = $this->_connection->fetchOne(
-                    $this->_connection->select()
-                        ->from($this->getResource()->getTable('catalog_product_entity'))
-                        ->where('sku = ?', (string)$sku)
-                        ->columns($this->getProductEntityLinkField())
-                );
-
+                $linkId = $this->_oldSku[strtolower($sku)][$linkField];
                 foreach ($attributes as $attributeId => $storeValues) {
                     foreach ($storeValues as $storeId => $storeValue) {
                         $tableData[] = [
-                            $this->getProductEntityLinkField() => $linkId,
+                            $linkField => $linkId,
                             'attribute_id' => $attributeId,
                             'store_id' => $storeId,
                             'value' => $storeValue,
@@ -1316,6 +1311,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
             $this->_connection->insertOnDuplicate($tableName, $tableData, ['value']);
         }
+
         return $this;
     }
 

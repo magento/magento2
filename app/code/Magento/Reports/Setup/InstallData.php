@@ -83,8 +83,7 @@ class InstallData implements \Magento\Framework\Setup\InstallDataInterface
         // @codingStandardsIgnoreStart
         $reportLayoutUpdate = '<!--
     <referenceContainer name="right">
-        <action method="unsetChild"><argument name="alias" xsi:type="string">right.reports.product.viewed</argument></action>
-        <action method="unsetChild"><argument name="alias" xsi:type="string">right.reports.product.compared</argument></action>
+        <referenceBlock name="catalog.compare.sidebar" remove="true" />
     </referenceContainer>-->';
         // @codingStandardsIgnoreEnd
 
