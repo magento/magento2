@@ -313,12 +313,12 @@ define([
                 data = this.serializeData(this.billingAddressContainer);
             } else {
                 data = this.serializeData(this.shippingAddressContainer);
-                areasToLoad.push('shipping_method');
             }
+            areasToLoad.push('shipping_method');
             data = data.toObject();
             data['shipping_as_billing'] = flag ? 1 : 0;
             data['reset_shipping'] = 1;
-            this.loadArea( areasToLoad, true, data);
+            this.loadArea(areasToLoad, true, data);
         },
 
         resetShippingMethod : function(data){
