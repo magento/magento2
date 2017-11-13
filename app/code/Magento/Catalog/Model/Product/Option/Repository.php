@@ -65,8 +65,8 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource,
         \Magento\Catalog\Model\Product\Option\Converter $converter,
-        \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory
+        \Magento\Catalog\Model\Product\OptionFactory $optionFactory = null,
+        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->optionResource = $optionResource;
