@@ -54,11 +54,11 @@ class Builder
     private $attributeRepository;
 
     /**
-     * Product collection
+     * EAV collection
      *
      * @var AbstractCollection
      */
-    private $productCollection;
+    private $eavCollection;
 
     /**
      * @param ExpressionFactory $expressionFactory
@@ -148,6 +148,7 @@ class Builder
             }
 
             $defaultValue = 0;
+            // Check if attribute has a table with default value and add it to the query
             if ($this->canAttributeHaveDefaultValue($condition->getAttribute())) {
                 $defaultField = 'at_' . $condition->getAttribute() . '_default.value';
                 $defaultValue = $this->_connection->quoteIdentifier($defaultField);
@@ -205,14 +206,14 @@ class Builder
         Combine $combine
     ) {
         $this->_connection = $collection->getResource()->getConnection();
-        $this->productCollection = $collection;
+        $this->eavCollection = $collection;
         $this->_joinTablesToCollection($collection, $combine);
         $whereExpression = (string)$this->_getMappedSqlCombination($combine);
         if (!empty($whereExpression)) {
             // Select ::where method adds braces even on empty expression
             $collection->getSelect()->where($whereExpression);
         }
-        $this->productCollection = null;
+        $this->eavCollection = null;
     }
 
     /**
@@ -229,8 +230,8 @@ class Builder
             // It's not exceptional case as we want to check if we have such attribute or not
             $attribute = null;
         }
-        $isNotDefaultStoreUsed = $this->productCollection !== null
-            ? (int)$this->productCollection->getStoreId() !== (int) $this->productCollection->getDefaultStoreId()
+        $isNotDefaultStoreUsed = $this->eavCollection !== null
+            ? (int)$this->eavCollection->getStoreId() !== (int) $this->eavCollection->getDefaultStoreId()
             : false;
 
         return $isNotDefaultStoreUsed && $attribute !== null && !$attribute->isScopeGlobal();
