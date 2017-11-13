@@ -180,7 +180,6 @@ class AbstractMapperTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($criteriaParts));
         $this->expectException(\InvalidArgumentException::class);
         $mapper->map($criteriaMock);
-
     }
 
     /**
