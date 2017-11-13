@@ -58,11 +58,11 @@ class AssignWebsiteToDefaultStockTest extends TestCase
 
         $extensionAttributes = $defaultStock->getExtensionAttributes();
         $salesChannels = $extensionAttributes->getSalesChannels();
-        $this->assertContainsOnlyInstancesOf(SalesChannelInterface::class, $salesChannels);
-        $this->assertCount(1, $salesChannels);
+        self::assertContainsOnlyInstancesOf(SalesChannelInterface::class, $salesChannels);
+        self::assertCount(1, $salesChannels);
 
         $salesChannel = reset($salesChannels);
-        $this->assertEquals($website->getCode(), $salesChannel->getCode());
-        $this->assertEquals(SalesChannelInterface::TYPE_WEBSITE, $salesChannel->getType());
+        self::assertEquals($website->getCode(), $salesChannel->getCode());
+        self::assertEquals(SalesChannelInterface::TYPE_WEBSITE, $salesChannel->getType());
     }
 }

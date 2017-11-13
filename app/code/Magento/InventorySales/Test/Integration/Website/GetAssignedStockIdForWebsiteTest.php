@@ -42,7 +42,7 @@ class GetAssignedStockIdForWebsiteTest extends TestCase
 
     public function testGetAssignedStocksForNotExistedWebsite()
     {
-        $this->assertNull($this->getAssignedStockIdForWebsite->execute('not_existed_website_code'));
+        self::assertNull($this->getAssignedStockIdForWebsite->execute('not_existed_website_code'));
     }
 
     /**
@@ -60,6 +60,6 @@ class GetAssignedStockIdForWebsiteTest extends TestCase
         $website->save();
 
         $stockId = $this->getAssignedStockIdForWebsite->execute($websiteCode);
-        $this->assertEquals($this->defaultStockProvider->getId(), $stockId);
+        self::assertEquals($this->defaultStockProvider->getId(), $stockId);
     }
 }

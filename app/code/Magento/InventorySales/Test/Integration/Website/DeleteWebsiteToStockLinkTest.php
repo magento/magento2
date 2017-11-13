@@ -50,7 +50,7 @@ class DeleteWebsiteToStockLinkTest extends TestCase
         $this->deleteWebsite($website);
 
         $stockId = $this->getAssignedStockIdForWebsite->execute($websiteCode);
-        $this->assertNull($stockId);
+        self::assertNull($stockId);
     }
 
     /**
