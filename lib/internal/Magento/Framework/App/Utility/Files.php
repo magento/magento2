@@ -993,7 +993,7 @@ class Files
     {
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
             $pattern = '/^' . preg_quote("{$modulePath}/", '/') . 'view\/([a-z]+)\/web\/(.+)$/i';
-            if (preg_match($pattern,$file,$matches) === 1) {
+            if (preg_match($pattern, $file, $matches) === 1) {
                 list(, $area, $filePath) = $matches;
                 return [$area, '', '', $moduleName, $filePath, $file];
             }

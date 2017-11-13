@@ -100,6 +100,7 @@ class Helper
      * @param ProductRepository $productRepository
      * @param CustomOptionFactory $customOptionFactory
      * @param DateTime $dateTimeFilter
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         RequestInterface $request,

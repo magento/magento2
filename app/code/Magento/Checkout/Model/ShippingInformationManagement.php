@@ -103,6 +103,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
      * @param ShippingFactory|null $shippingFactory
      * @codeCoverageIgnore
      * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,

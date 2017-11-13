@@ -18,6 +18,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Image extends File
 {
     /**
@@ -41,6 +44,7 @@ class Image extends File
      * @param FileProcessorFactory|null $fileProcessorFactory
      * @param ImageContentFactory|null $imageContentFactory
      * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
