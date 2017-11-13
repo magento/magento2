@@ -8,8 +8,8 @@ namespace Magento\Framework\App\Utility;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
-use Magento\Framework\View\Design\Theme\ThemePackageList;
 use Magento\Framework\Filesystem\Glob;
+use Magento\Framework\View\Design\Theme\ThemePackageList;
 
 /**
  * A helper to gather specific kind of files in Magento application
@@ -992,12 +992,8 @@ class Files
     protected function _parseModuleStatic($file)
     {
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
-            if (preg_match(
-                    '/^' . preg_quote("{$modulePath}/", '/') . 'view\/([a-z]+)\/web\/(.+)$/i',
-                    $file,
-                    $matches
-                ) === 1
-            ) {
+            $pattern = '/^' . preg_quote("{$modulePath}/", '/') . 'view\/([a-z]+)\/web\/(.+)$/i';
+            if (preg_match($pattern,$file,$matches) === 1) {
                 list(, $area, $filePath) = $matches;
                 return [$area, '', '', $moduleName, $filePath, $file];
             }
