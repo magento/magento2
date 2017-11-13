@@ -21,7 +21,7 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
     public function __construct($mapper = '')
     {
         $this->mapperInterfaceName = $mapper ?: \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\StockItemCriteriaMapper::class;
-        $this->data['initial_condition'] = true;
+        $this->data['initial_condition'] = [true];
     }
 
     /**
@@ -38,7 +38,7 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
      */
     public function setStockFilter($stock)
     {
-        $this->data['stock_filter'] = $stock;
+        $this->data['stock_filter'] = [$stock];
         return true;
     }
 
@@ -47,7 +47,7 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
      */
     public function setScopeFilter($scope)
     {
-        $this->data['website_filter'] = $scope;
+        $this->data['website_filter'] = [$scope];
         return true;
     }
 
@@ -56,7 +56,7 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
      */
     public function setProductsFilter($products)
     {
-        $this->data['products_filter'] = $products;
+        $this->data['products_filter'] = [$products];
         return true;
     }
 
@@ -65,7 +65,7 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
      */
     public function setManagedFilter($isStockManagedInConfig)
     {
-        $this->data['managed_filter'] = $isStockManagedInConfig;
+        $this->data['managed_filter'] = [$isStockManagedInConfig];
         return true;
     }
 

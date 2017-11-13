@@ -21,7 +21,7 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
     public function __construct($mapper = '')
     {
         $this->mapperInterfaceName = $mapper ?: \Magento\CatalogInventory\Model\ResourceModel\Stock\Status\StockStatusCriteriaMapper::class;
-        $this->data['initial_condition'] = true;
+        $this->data['initial_condition'] = [true];
     }
 
     /**
@@ -29,7 +29,7 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
      */
     public function setScopeFilter($scope)
     {
-        $this->data['website_filter'] = $scope;
+        $this->data['website_filter'] = [$scope];
     }
 
     /**
@@ -37,7 +37,7 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
      */
     public function setProductsFilter($products)
     {
-        $this->data['products_filter'] = $products;
+        $this->data['products_filter'] = [$products];
     }
 
     /**
@@ -45,7 +45,7 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
      */
     public function setQtyFilter($qty)
     {
-        $this->data['qty_filter'] = $qty;
+        $this->data['qty_filter'] = [$qty];
     }
 
     /**
