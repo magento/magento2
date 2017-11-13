@@ -30,7 +30,7 @@
                 <env value="chrome"/>
             </annotations>
 
-            <amOnPage url="{{AdminCategoryPage.urlPath}}" mergeKey="amOnCategoryGridPage"/>
+            <amOnPage url="{{AdminCategoryPage.url}}" mergeKey="amOnCategoryGridPage"/>
             <waitForPageLoad mergeKey="waitForPageLoad1"/>
 
             <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" mergeKey="clickOnAddSubCategory"/>
@@ -48,7 +48,7 @@
             <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" mergeKey="fillSKU"/>
             <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" mergeKey="fillPrice"/>
             <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" mergeKey="fillQuantity"/>
-            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="['{{_defaultCategory.name}}']" mergeKey="searchAndSelectCategory"/>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{_defaultCategory.name}}]" mergeKey="searchAndSelectCategory"/>
             <click selector="{{AdminProductSEOSection.sectionHeader}}" mergeKey="openSeoSection"/>
             <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" mergeKey="fillUrlKey"/>
 

@@ -19,4 +19,9 @@
         <data key="foo">fizz</data>
         <data key="bar">buzz</data>
     </entity>
+    <entity name="AppearanceMinHeightProperty" type="min_height_property">
+        <data key="name">Minimum Height</data>
+        <data key="section">appearance</data>
+        <data key="fieldName">min_height</data>
+    </entity>
 </config>
