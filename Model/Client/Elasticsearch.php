@@ -31,6 +31,11 @@ class Elasticsearch implements ClientInterface
     protected $pingResult;
 
     /**
+     * @var string
+     */
+    protected $version;
+
+    /**
      * Initialize Elasticsearch Client
      *
      * @param array $options
@@ -66,6 +71,7 @@ class Elasticsearch implements ClientInterface
         if ($this->pingResult === null) {
             $this->pingResult = $this->client->ping(['client' => ['timeout' => $this->clientOptions['timeout']]]);
         }
+
         return $this->pingResult;
     }
 
@@ -225,10 +231,10 @@ class Elasticsearch implements ClientInterface
             'type' => $entityType,
             'body' => [
                 $entityType => [
-                    '_all' => [
+                    '_all' => $this->prepareFieldInfo([
                         'enabled' => true,
                         'type' => 'text',
-                    ],
+                    ]),
                     'properties' => [],
                     'dynamic_templates' => [
                         [
@@ -244,10 +250,10 @@ class Elasticsearch implements ClientInterface
                             'string_mapping' => [
                                 'match' => '*',
                                 'match_mapping_type' => 'string',
-                                'mapping' => [
+                                'mapping' => $this->prepareFieldInfo([
                                     'type' => 'text',
                                     'index' => 'no',
-                                ],
+                                ]),
                             ],
                         ],
                         [
@@ -264,9 +270,34 @@ class Elasticsearch implements ClientInterface
             ],
         ];
         foreach ($fields as $field => $fieldInfo) {
-            $params['body'][$entityType]['properties'][$field] = $fieldInfo;
+            $params['body'][$entityType]['properties'][$field] = $this->prepareFieldInfo($fieldInfo);
         }
+
         $this->client->indices()->putMapping($params);
+    }
+
+    /**
+     * Fix backward compatibility of field definition.
+     * Allow to run both 2.x and 5.x servers.
+     *
+     * @param array $query
+     *
+     * @return array
+     */
+    private function prepareFieldInfo($fieldInfo) {
+
+        if (strcmp($this->getVersion(), '5') < 0) {
+            if ($fieldInfo['type'] == 'keyword') {
+                $fieldInfo['type'] = 'string';
+                $fieldInfo['index'] = isset($fieldInfo['index']) ? $fieldInfo['index'] : 'not_analyzed';
+            }
+
+            if ($fieldInfo['type'] == 'text') {
+                $fieldInfo['type'] = 'string';
+            }
+        }
+
+        return $fieldInfo;
     }
 
     /**
@@ -292,7 +323,29 @@ class Elasticsearch implements ClientInterface
      */
     public function query($query)
     {
+        $query = $this->prepareSearchQuery($query);
+
         return $this->client->search($query);
+    }
+
+    /**
+     * Fix backward compatibility of the search queries.
+     * Allow to run both 2.x and 5.x servers.
+     *
+     * @param array $query
+     *
+     * @return array
+     */
+    private function prepareSearchQuery($query)
+    {
+        if (strcmp($this->getVersion(), '5') < 0) {
+            if( isset($query['body']) && isset($query['body']['stored_fields'])) {
+                $query['body']['fields'] = $query['body']['stored_fields'];
+                unset($query['body']['stored_fields']);
+            }
+        }
+
+        return $query;
     }
 
     /**
@@ -304,5 +357,20 @@ class Elasticsearch implements ClientInterface
     public function suggest($query)
     {
         return $this->client->suggest($query);
+    }
+
+    /**
+     * Retrieve ElasticSearch server current version.
+     *
+     * @return string
+     */
+    private function getVersion()
+    {
+        if ($this->version === null) {
+            $info = $this->client->info();
+            $this->version = $info['version']['number'];
+        }
+
+        return $this->version;
     }
 }

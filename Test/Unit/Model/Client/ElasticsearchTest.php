@@ -45,6 +45,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                 'search',
                 'scroll',
                 'suggest',
+                'info',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -59,7 +60,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                 'stats',
                 'updateAliases',
                 'existsAlias',
-                'getAlias'
+                'getAlias',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -69,6 +70,9 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         $this->elasticsearchClientMock->expects($this->any())
             ->method('ping')
             ->willReturn(true);
+        $this->elasticsearchClientMock->expects($this->any())
+            ->method('info')
+            ->willReturn(['version' => ['number' => '5.0.0']]);
 
         $this->objectManager = new ObjectManagerHelper($this);
         $this->model = $this->objectManager->getObject(
