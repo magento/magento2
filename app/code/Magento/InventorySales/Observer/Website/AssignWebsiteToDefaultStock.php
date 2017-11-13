@@ -14,6 +14,7 @@ use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventorySales\Model\GetAssignedStockIdForWebsiteInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterfaceFactory;
+use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\Website;
 
 /**
@@ -67,6 +68,10 @@ class AssignWebsiteToDefaultStock implements ObserverInterface
         /** @var Website $website */
         $website = $observer->getData('website');
         $websiteCode = $website->getCode();
+
+        if ($websiteCode === WebsiteInterface::ADMIN_CODE) {
+            return;
+        }
 
         // checks is some stock already assigned to this website
         if ($this->getAssignedStockIdForWebsite->execute($websiteCode) !== null) {

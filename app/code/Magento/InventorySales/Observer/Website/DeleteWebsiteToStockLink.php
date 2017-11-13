@@ -11,6 +11,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\InventorySales\Model\DeleteSalesChannelToStockLinkInterface;
 use Magento\InventorySalesApi\Api\Data\SalesChannelInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\Website;
 
 /**
@@ -39,7 +40,11 @@ class DeleteWebsiteToStockLink implements ObserverInterface
     {
         /** @var Website $website */
         $website = $observer->getData('website');
+        $websiteCode = $website->getCode();
 
-        $this->deleteSalesChannelToStockLink->execute(SalesChannelInterface::TYPE_WEBSITE, $website->getCode());
+        if ($websiteCode === WebsiteInterface::ADMIN_CODE) {
+            return;
+        }
+        $this->deleteSalesChannelToStockLink->execute(SalesChannelInterface::TYPE_WEBSITE, $websiteCode);
     }
 }
