@@ -89,18 +89,6 @@ class DbStorageTest extends TestCase
 
     public function testPrepareSelect()
     {
-        //Not passing requried parameters.
-        try {
-            $this->storage->findOneByData(['SomeOtherParam'=>42]);
-            $this->fail('Didn\'t ask for required parameters');
-        } catch (\InvalidArgumentException $exception) {
-            $this->assertEquals(
-                UrlRewrite::ENTITY_ID . ', ' . UrlRewrite::ENTITY_TYPE
-                . ' and ' . UrlRewrite::STORE_ID . ' parameters are required.',
-                $exception->getMessage()
-            );
-        }
-
         //Passing expected parameters, checking select built.
         $entityType = 'custom';
         $entityId= 42;
@@ -116,7 +104,7 @@ class DbStorageTest extends TestCase
         $this->select
             ->expects($this->at(3))
             ->method('where')
-            ->with('url_rewrite.entity_type = ?', $entityType)
+            ->with('url_rewrite.entity_type IN (?)', $entityType)
             ->willReturn($this->select);
         $this->select
             ->expects($this->at(4))
@@ -126,7 +114,7 @@ class DbStorageTest extends TestCase
         $this->select
             ->expects($this->at(5))
             ->method('where')
-            ->with('url_rewrite.redirect_type = ?', $redirectType)
+            ->with('url_rewrite.redirect_type IN (?)', $redirectType)
             ->willReturn($this->select);
         $this->select
             ->expects($this->at(6))
