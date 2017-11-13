@@ -6,8 +6,8 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ResponseInterface;
 
 class ExportXml extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
 {

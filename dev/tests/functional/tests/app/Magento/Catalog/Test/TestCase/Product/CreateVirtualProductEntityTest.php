@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductVirtual;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\Mtf\TestCase\Injectable;

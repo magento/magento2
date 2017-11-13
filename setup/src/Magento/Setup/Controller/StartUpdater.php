@@ -7,10 +7,10 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Setup\Model\UpdaterTaskCreator;
+use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
-use Zend\Json\Json;
 
 /**
  * Controller for updater tasks

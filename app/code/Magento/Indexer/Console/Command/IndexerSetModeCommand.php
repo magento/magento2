@@ -6,10 +6,10 @@
 namespace Magento\Indexer\Console\Command;
 
 use Magento\Framework\Exception\LocalizedException;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for setting index mode for indexers.
@@ -87,7 +87,7 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
         $modeOptions[] = new InputArgument(
             self::INPUT_KEY_MODE,
             InputArgument::OPTIONAL,
-            'Indexer mode type ['. self::INPUT_KEY_REALTIME . '|' . self::INPUT_KEY_SCHEDULE .']'
+            'Indexer mode type [' . self::INPUT_KEY_REALTIME . '|' . self::INPUT_KEY_SCHEDULE . ']'
         );
         $optionsList = array_merge($modeOptions, parent::getInputList());
         return $optionsList;
@@ -107,7 +107,7 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
 
         $inputMode = $input->getArgument(self::INPUT_KEY_MODE);
         if (!$inputMode) {
-            $errors[] = 'Missing argument \'' . self::INPUT_KEY_MODE .'\'.' . $acceptedValues;
+            $errors[] = 'Missing argument \'' . self::INPUT_KEY_MODE . '\'.' . $acceptedValues;
         } elseif (!in_array($inputMode, [self::INPUT_KEY_REALTIME, self::INPUT_KEY_SCHEDULE])) {
             $errors[] = $acceptedValues;
         }

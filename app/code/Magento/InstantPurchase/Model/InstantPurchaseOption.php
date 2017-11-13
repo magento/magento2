@@ -5,11 +5,11 @@
  */
 namespace Magento\InstantPurchase\Model;
 
+use InvalidArgumentException;
 use Magento\Customer\Model\Address;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use InvalidArgumentException;
 
 /**
  * Option to make instant purchase.

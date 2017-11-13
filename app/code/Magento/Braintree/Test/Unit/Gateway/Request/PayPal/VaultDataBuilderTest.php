@@ -5,8 +5,8 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request\PayPal;
 
-use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Request\PayPal\VaultDataBuilder;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;

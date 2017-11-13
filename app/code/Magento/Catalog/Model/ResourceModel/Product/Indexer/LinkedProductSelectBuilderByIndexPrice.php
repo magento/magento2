@@ -7,9 +7,9 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
+use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
-use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 
 class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuilderInterface
 {

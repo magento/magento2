@@ -5,12 +5,11 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 
-use Braintree\Transaction;
+use Magento\Braintree\Gateway\SubjectReader;
+use Magento\Braintree\Gateway\Validator\GeneralResponseValidator;
 use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use Magento\Braintree\Gateway\Validator\GeneralResponseValidator;
-use Magento\Braintree\Gateway\SubjectReader;
 
 class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
 {

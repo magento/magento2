@@ -5,8 +5,6 @@
  */
 namespace Magento\Setup\Mvc\Bootstrap;
 
-use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\ContainerException;
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Request\Http;
@@ -19,8 +17,6 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Mvc\Application;
 use Zend\Mvc\MvcEvent;
 use Zend\Router\Http\RouteMatch;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\RequestInterface;

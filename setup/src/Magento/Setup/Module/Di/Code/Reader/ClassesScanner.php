@@ -60,7 +60,6 @@ class ClassesScanner implements ClassesScannerInterface
      */
     public function getList($path)
     {
-
         $realPath = realpath($path);
         $isGeneration = strpos($realPath, $this->generationDirectory) === 0;
 

@@ -7,8 +7,8 @@ namespace Magento\ConfigurableProduct\Helper\Product\Options;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**

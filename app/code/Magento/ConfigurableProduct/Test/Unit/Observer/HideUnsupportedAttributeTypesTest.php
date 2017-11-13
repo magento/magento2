@@ -6,13 +6,10 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Observer;
 
-use Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Main as MainBlock;
 use Magento\ConfigurableProduct\Observer\HideUnsupportedAttributeTypes;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Element\BlockInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**

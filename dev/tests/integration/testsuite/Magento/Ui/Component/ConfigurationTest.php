@@ -7,12 +7,12 @@ namespace Magento\Ui\Component;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentFile;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Ui\Config\Reader\DefinitionMap;
-use Magento\Framework\Component\ComponentRegistrar;
 
 class ConfigurationTest extends \PHPUnit\Framework\TestCase
 {
@@ -171,7 +171,6 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
      */
     private function hasXpaths(array &$data, array &$result, $counter)
     {
-
         foreach ($data as $name => &$child) {
             if (!is_array($child)) {
                 continue;

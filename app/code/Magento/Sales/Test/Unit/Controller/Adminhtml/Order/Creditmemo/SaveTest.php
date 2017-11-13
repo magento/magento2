@@ -78,7 +78,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->_responseMock->headersSentThrowsException = false;
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $constructArguments = $objectManager->getConstructArguments(\Magento\Backend\Model\Session::class,
+        $constructArguments = $objectManager->getConstructArguments(
+            \Magento\Backend\Model\Session::class,
             ['storage' => new \Magento\Framework\Session\Storage()]
         );
         $this->_sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
@@ -86,7 +87,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs($constructArguments)
             ->getMock();
         $this->resultForwardFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\ForwardFactory::class)
+            \Magento\Backend\Model\View\Result\ForwardFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -94,7 +96,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class)
+            \Magento\Backend\Model\View\Result\RedirectFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

@@ -7,9 +7,9 @@
 namespace Magento\Reports\Test\Constraint;
 
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Reports\Test\Page\Adminhtml\OrderedProductsReport;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert product name, sku and qty in Ordered Products report

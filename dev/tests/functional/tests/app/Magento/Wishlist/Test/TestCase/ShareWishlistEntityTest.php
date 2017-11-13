@@ -9,9 +9,9 @@ namespace Magento\Wishlist\Test\TestCase;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Wishlist\Test\Page\WishlistIndex;
 use Magento\Wishlist\Test\Page\WishlistShare;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

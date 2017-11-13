@@ -6,12 +6,12 @@
 
 namespace Magento\CurrencySymbol\Test\TestCase;
 
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Config\Test\Page\Adminhtml\ConfigCurrencySetup;
 use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencyIndex;
 use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencySymbolIndex;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Abstract class for currency symbol tests.

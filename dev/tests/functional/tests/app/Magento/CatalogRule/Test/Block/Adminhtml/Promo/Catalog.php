@@ -6,9 +6,9 @@
 
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo;
 
-use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Backend\Test\Block\Widget\Grid;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Backend catalog price rule grid.

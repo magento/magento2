@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Check mass update success message.

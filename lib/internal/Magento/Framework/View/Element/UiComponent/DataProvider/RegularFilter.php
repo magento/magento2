@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
-use Magento\Framework\Data\Collection;
 use Magento\Framework\Api\Filter;
+use Magento\Framework\Data\Collection;
 
 /**
  * Class RegularFilter

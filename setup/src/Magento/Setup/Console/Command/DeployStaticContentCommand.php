@@ -5,19 +5,19 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Deploy\Console\InputValidator;
 use Magento\Deploy\Console\ConsoleLoggerFactory;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
+use Magento\Deploy\Console\InputValidator;
+use Magento\Deploy\Service\DeployStaticContent;
+use Magento\Framework\App\Cache;
+use Magento\Framework\App\Cache\Type\Dummy as DummyCache;
 use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\App\Cache;
-use Magento\Framework\App\Cache\Type\Dummy as DummyCache;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Deploy\Service\DeployStaticContent;
 
 /**
  * Deploy static content command

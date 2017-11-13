@@ -6,13 +6,12 @@
 
 namespace Magento\Integration\Model;
 
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\Integration\Model\Oauth\Token as TokenModel;
+use Magento\Integration\Model\Oauth\Token\RequestLog\Config as TokenThrottlerConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\User\Model\User as UserModel;
-use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
-use Magento\Integration\Model\Oauth\Token\RequestLog\Config as TokenThrottlerConfig;
 
 /**
  * api-functional test for \Magento\Integration\Model\AdminTokenService.

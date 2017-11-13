@@ -6,9 +6,9 @@
 
 namespace Magento\Sitemap\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sitemap\Test\Fixture\Sitemap;
 use Magento\Sitemap\Test\Page\Adminhtml\SitemapIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertSitemapNotInGrid

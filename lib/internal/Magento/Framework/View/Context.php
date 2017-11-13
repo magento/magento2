@@ -12,11 +12,11 @@ use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\Request\Http as Request;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Event\ManagerInterface;
-use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Session\SessionManager;
 use Magento\Framework\TranslateInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Application Runtime Context

@@ -5,13 +5,13 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Helper\CacheCleaner;
+use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\CacheInterface;
-use Magento\Store\Api\StoreResolverInterface;
 use Magento\Framework\Serialize\Serializer\Json as Serializer;
-use Magento\Eav\Model\Entity\Attribute;
+use Magento\Store\Api\StoreResolverInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\CacheCleaner;
 
 /**
  * @magentoAppIsolation enabled

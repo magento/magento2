@@ -6,10 +6,10 @@
 
 namespace Magento\Analytics\ReportXml\DB\Assembler;
 
+use Magento\Analytics\ReportXml\DB\ColumnsResolver;
+use Magento\Analytics\ReportXml\DB\ConditionResolver;
 use Magento\Analytics\ReportXml\DB\NameResolver;
 use Magento\Analytics\ReportXml\DB\SelectBuilder;
-use Magento\Analytics\ReportXml\DB\ConditionResolver;
-use Magento\Analytics\ReportXml\DB\ColumnsResolver;
 use Magento\Framework\App\ResourceConnection;
 
 /**

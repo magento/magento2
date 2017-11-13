@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\EntityManager\Operation\Read;
 
-use Magento\Framework\EntityManager\TypeResolver;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\EntityManager\Operation\AttributePool;
+use Magento\Framework\EntityManager\TypeResolver;
 
 /**
  * Class ReadAttributes

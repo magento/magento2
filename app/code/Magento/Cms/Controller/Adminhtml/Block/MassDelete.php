@@ -6,10 +6,10 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class MassDelete

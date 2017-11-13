@@ -16,7 +16,6 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
-use Magento\Vault\Model\Method\Vault;
 use Magento\Vault\Observer\PaymentTokenAssigner;
 
 /**

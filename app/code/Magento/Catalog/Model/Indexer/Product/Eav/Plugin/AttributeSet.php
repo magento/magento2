@@ -5,10 +5,9 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Eav\Plugin;
 
-use Magento\Eav\Model\Entity\Attribute\Set as EavAttributeSet;
 use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
+use Magento\Eav\Model\Entity\Attribute\Set as EavAttributeSet;
 use Magento\Eav\Model\Entity\Attribute\SetFactory;
-use Magento\Framework\App\ObjectManager;
 
 class AttributeSet
 {

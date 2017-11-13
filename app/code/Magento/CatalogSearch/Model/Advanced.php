@@ -15,8 +15,8 @@ use Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection as ProductColl
 use Magento\CatalogSearch\Model\ResourceModel\AdvancedFactory;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
-use Magento\Framework\Model\Context;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface;
 

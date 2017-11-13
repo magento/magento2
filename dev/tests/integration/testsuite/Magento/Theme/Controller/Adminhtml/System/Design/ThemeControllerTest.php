@@ -5,7 +5,6 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
 
 /**

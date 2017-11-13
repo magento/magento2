@@ -5,10 +5,10 @@
  */
 namespace Magento\Signifyd\Test\TestStep;
 
-use Magento\Checkout\Test\TestStep\FillShippingAddressStep;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
-use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Checkout\Test\TestStep\FillShippingAddressStep;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
 use Magento\Signifyd\Test\Fixture\SignifydAddress;
 

@@ -7,9 +7,9 @@
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit;
 
 use Magento\Backend\Test\Block\Template;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Ui\Test\Block\Adminhtml\FormSections;
 
 /**

@@ -44,7 +44,8 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->will($this->returnCallback(
+            ->will(
+                $this->returnCallback(
                     function ($arg) {
                         return round($arg * 0.5, 2);
                     }
@@ -52,7 +53,8 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
             );
         $this->priceCurrencyMock->expects($this->any())
             ->method('convert')
-            ->will($this->returnCallback(
+            ->will(
+                $this->returnCallback(
                 function ($arg) {
                     return $arg * 0.5;
                 }

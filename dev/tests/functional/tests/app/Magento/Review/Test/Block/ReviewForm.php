@@ -6,12 +6,12 @@
 
 namespace Magento\Review\Test\Block;
 
+use Magento\Mtf\Block\Form as AbstractForm;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Review\Test\Fixture\Rating;
 use Magento\Review\Test\Fixture\Review;
-use Magento\Mtf\Block\Form as AbstractForm;
 
 /**
  * Review form on frontend.

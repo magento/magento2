@@ -9,7 +9,6 @@ use Magento\Catalog\Block\Product\Context;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Url\Helper\Data;
-use Magento\Framework\View\LayoutInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

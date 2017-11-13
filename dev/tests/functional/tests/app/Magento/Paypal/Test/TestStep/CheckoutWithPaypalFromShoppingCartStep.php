@@ -6,8 +6,8 @@
 
 namespace Magento\Paypal\Test\TestStep;
 
-use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Checkout\Test\Page\CheckoutCart;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Checkout with PayPal from Shopping Cart.

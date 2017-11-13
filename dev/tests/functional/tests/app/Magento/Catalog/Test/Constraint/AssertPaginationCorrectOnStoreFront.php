@@ -6,10 +6,10 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Checks correct pagination for list of products on storefront.

@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\CreditMemoIndex;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that refund is absent in the refunds grid.

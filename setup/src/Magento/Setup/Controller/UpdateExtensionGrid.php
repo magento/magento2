@@ -5,10 +5,10 @@
  */
 namespace Magento\Setup\Controller;
 
+use Magento\Setup\Model\Grid;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
-use Magento\Setup\Model\Grid;
 
 /**
  * Controller for update extensions grid tasks

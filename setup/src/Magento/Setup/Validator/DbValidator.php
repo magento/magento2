@@ -52,7 +52,7 @@ class DbValidator
         if ($prefix !== '' && !preg_match('/^([a-zA-Z])([[:alnum:]_]+)$/', $prefix)) {
             throw new \InvalidArgumentException(
                 'Please correct the table prefix format, should contain only numbers, letters or underscores.'
-                .' The first character should be a letter.'
+                . ' The first character should be a letter.'
             );
         }
 
@@ -125,7 +125,7 @@ class DbValidator
         }
         throw new \Magento\Setup\Exception(
             "Database '{$dbName}' does not exist "
-            ."or specified database server user does not have privileges to access this database."
+            . "or specified database server user does not have privileges to access this database."
         );
     }
 

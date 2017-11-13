@@ -5,8 +5,8 @@
  */
 namespace Magento\Weee\Helper;
 
-use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteAbstractItem;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;

@@ -5,10 +5,10 @@
  */
 namespace Magento\ProductVideo\Test\Constraint;
 
-use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Assert that video is displayed on product page.
@@ -44,7 +44,7 @@ class AssertVideoConfigurableProductView extends AbstractConstraint
             $catalogProductView->getViewBlock()->checkVideoDataPresence($youtubeDataCode),
             'Configurable product video data is not displayed on product view when it should.'
         );
-       // select configurable product variation
+        // select configurable product variation
         $catalogProductView->getConfigurableAttributesBlock()->selectConfigurableOption($product, $variation);
         // assert video and video data of simple product option is presented on page
         \PHPUnit_Framework_Assert::assertTrue(

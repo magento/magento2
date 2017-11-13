@@ -5,8 +5,6 @@
  */
 namespace Magento\Payment\Test\Unit\Block;
 
-use Magento\Framework\DataObject;
-
 class InfoTest extends \PHPUnit\Framework\TestCase
 {
     /**

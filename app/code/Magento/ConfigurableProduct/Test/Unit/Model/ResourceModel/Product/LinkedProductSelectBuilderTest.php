@@ -5,11 +5,11 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product;
 
-use Magento\Framework\DB\Select;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\LinkedProductSelectBuilder;
+use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class LinkedProductSelectBuilderTest extends \PHPUnit\Framework\TestCase
 {

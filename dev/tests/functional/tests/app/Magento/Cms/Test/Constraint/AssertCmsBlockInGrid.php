@@ -29,7 +29,7 @@ class AssertCmsBlockInGrid extends AbstractConstraint
     {
         $cmsBlockIndex->open();
         $data = $cmsBlock->getData();
-        $data['is_active'] = $data['is_active'] == 'Yes' ?  'Enabled' : 'Disabled';
+        $data['is_active'] = $data['is_active'] == 'Yes' ? 'Enabled' : 'Disabled';
         $filter = [
             'title' => $data['title'],
             'identifier' => $data['identifier'],

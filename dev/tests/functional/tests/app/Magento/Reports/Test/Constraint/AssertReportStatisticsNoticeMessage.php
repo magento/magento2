@@ -6,9 +6,8 @@
 
 namespace Magento\Reports\Test\Constraint;
 
-use Magento\Reports\Test\Page\Adminhtml\SalesReport;
-use Magento\Sales\Test\Fixture\OrderInjectable;
 use DateTime;
+use Magento\Reports\Test\Page\Adminhtml\SalesReport;
 
 /**
  * Assert that message in Sales Reports Pages displays correct date/time.

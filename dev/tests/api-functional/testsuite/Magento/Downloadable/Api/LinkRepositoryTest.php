@@ -5,7 +5,6 @@
  */
 namespace Magento\Downloadable\Api;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Link;
 use Magento\TestFramework\Helper\Bootstrap;

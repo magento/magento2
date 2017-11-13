@@ -6,8 +6,8 @@
 
 namespace Magento\Newsletter\Test\Constraint;
 
-use Magento\Newsletter\Test\Page\Adminhtml\TemplateIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Newsletter\Test\Page\Adminhtml\TemplateIndex;
 
 /**
  * Class AssertNewsletterSuccessCreateMessage

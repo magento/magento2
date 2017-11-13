@@ -84,7 +84,8 @@ class DiscountCalculatorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(100));
         $this->priceInfoMock->expects($this->once())
             ->method('getPrices')
-            ->will($this->returnValue(
+            ->will(
+                $this->returnValue(
                 [
                     $this->getPriceMock(30),
                     $this->getPriceMock(20),
@@ -105,7 +106,8 @@ class DiscountCalculatorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->priceInfoMock));
         $this->priceInfoMock->expects($this->once())
             ->method('getPrices')
-            ->will($this->returnValue(
+            ->will(
+                $this->returnValue(
                     [
                         $this->getPriceMock(30),
                         $this->getPriceMock(20),

@@ -5,14 +5,14 @@
  */
 namespace Magento\Store\Test\Unit\Model\Config\Reader\Source\Dynamic;
 
-use Magento\Framework\DataObject;
-use Magento\Store\Model\Config\Reader\Source\Dynamic\Website as WebsiteSource;
 use Magento\Framework\App\Config\Scope\Converter;
+use Magento\Framework\DataObject;
+use Magento\Store\Model\Config\Reader\Source\Dynamic\DefaultScope;
+use Magento\Store\Model\Config\Reader\Source\Dynamic\Website as WebsiteSource;
 use Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\WebsiteFactory;
 use Magento\Store\Model\Website;
-use Magento\Store\Model\Config\Reader\Source\Dynamic\DefaultScope;
+use Magento\Store\Model\WebsiteFactory;
 
 /**
  * Class WebsiteTest

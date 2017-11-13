@@ -10,13 +10,13 @@ namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Model\Group\RetrieverInterface as CustomerGroupRetrieverInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
-use Magento\Customer\Model\Group\RetrieverInterface as CustomerGroupRetrieverInterface;
 
 /**
  * @api

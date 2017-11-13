@@ -6,9 +6,9 @@
 
 namespace Magento\Setup\Test\Constraint\Extension;
 
-use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Setup\Test\Fixture\Extension;
+use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 
 /**
  * Check that extension and version is correct.
@@ -22,7 +22,7 @@ class AssertExtensionAndVersionCheck extends AbstractConstraint
     const TYPE_UNINSTALL = 2;
     const TYPE_UPDATE = 3;
     /*#@-*/
-    
+
     /**
      * Assert that extension and version is correct.
      *

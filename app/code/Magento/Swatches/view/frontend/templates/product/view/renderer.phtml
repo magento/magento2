@@ -17,8 +17,10 @@
                 "jsonSwatchConfig": <?php /* @escapeNotVerified */
                     echo $swatchOptions = $block->getJsonSwatchConfig(); ?>,
                 "mediaCallback": "<?= /* @escapeNotVerified */ $block->getMediaCallback() ?>",
-                "gallerySwitchStrategy": "<?php /* @escapeNotVerified */ echo $block->getVar('gallery_switch_strategy',
-                    'Magento_ConfigurableProduct') ?: 'replace'; ?>"
+                "gallerySwitchStrategy": "<?php /* @escapeNotVerified */ echo $block->getVar(
+                        'gallery_switch_strategy',
+                    'Magento_ConfigurableProduct'
+                    ) ?: 'replace'; ?>"
             }
         }
     }

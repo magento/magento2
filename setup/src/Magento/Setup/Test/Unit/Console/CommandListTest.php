@@ -15,9 +15,9 @@ class CommandListTest extends \PHPUnit\Framework\TestCase
      */
     private $commandList;
 
-     /**
-      * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceManager
-      */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceManager
+     */
     private $serviceManager;
 
     public function setUp()

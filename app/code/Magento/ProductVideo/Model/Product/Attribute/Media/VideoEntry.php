@@ -6,8 +6,8 @@
  */
 namespace Magento\ProductVideo\Model\Product\Attribute\Media;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Api\Data\VideoContentInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * VideoEntry class

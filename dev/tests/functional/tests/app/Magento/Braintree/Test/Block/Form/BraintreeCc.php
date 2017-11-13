@@ -6,8 +6,8 @@
 
 namespace Magento\Braintree\Test\Block\Form;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\ObjectManager;
 use Magento\Payment\Test\Block\Form\PaymentCc;

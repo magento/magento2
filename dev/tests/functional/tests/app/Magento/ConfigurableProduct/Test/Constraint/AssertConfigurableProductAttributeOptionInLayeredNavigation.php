@@ -6,13 +6,11 @@
 
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
-use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
-use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Check whether OOS product attribute options for configurable product are displayed on frontend in Layered navigation.

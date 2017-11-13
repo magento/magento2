@@ -6,8 +6,8 @@
 
 namespace Magento\GiftMessage\Test\Block\Adminhtml\Order\Create;
 
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Block\Form as ParentForm;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**

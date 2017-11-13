@@ -7,8 +7,8 @@
 namespace Magento\CatalogImportExport\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that products are present on storefront.

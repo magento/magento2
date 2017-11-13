@@ -6,8 +6,8 @@
 
 namespace Magento\Backend\Test\Block\Widget;
 
-use Magento\Ui\Test\Block\Adminhtml\AbstractContainer;
 use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\AbstractContainer;
 
 /**
  * Is used to represent any tab on the page.

@@ -5,8 +5,8 @@
  */
 namespace Magento\Sales\Model\Order\Reorder;
 
-use Magento\Sales\Model\Order\Item;
 use Magento\Framework\Exception\ConfigurationMismatchException;
+use Magento\Sales\Model\Order\Item;
 
 /**
  * Class for checking availability of different product types

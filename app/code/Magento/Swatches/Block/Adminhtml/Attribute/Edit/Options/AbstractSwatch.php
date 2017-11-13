@@ -5,8 +5,6 @@
  */
 namespace Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options;
 
-use \Magento\Swatches\Model\Swatch as SwatchModel;
-
 /**
  * Backend swatch abstract block
  */
@@ -114,7 +112,7 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
             $this->addCollectionStoreFilter($valuesCollection, $storeId);
             $valuesCollection->getSelect()->joinLeft(
                 ['swatch_table' => $valuesCollection->getTable('eav_attribute_option_swatch')],
-                'swatch_table.option_id = main_table.option_id AND swatch_table.store_id = '.$storeId,
+                'swatch_table.option_id = main_table.option_id AND swatch_table.store_id = ' . $storeId,
                 'swatch_table.value AS label'
             );
             $valuesCollection->load();

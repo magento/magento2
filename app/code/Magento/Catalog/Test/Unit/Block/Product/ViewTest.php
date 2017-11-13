@@ -77,7 +77,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(1));
         $this->registryMock->expects($this->any())
             ->method('registry')
-            ->will($this->returnValueMap(
+            ->will(
+                $this->returnValueMap(
                 [
                     ['product', $product],
                     ['current_category', $category],

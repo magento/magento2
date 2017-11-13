@@ -119,7 +119,9 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($expectedPriceHtml));
 
         $this->assertEquals($expectedPriceHtml, $this->block->getProductPriceHtml(
-            $product, 'price_code', 'zone_code'
+            $product,
+            'price_code',
+            'zone_code'
         ));
     }
 

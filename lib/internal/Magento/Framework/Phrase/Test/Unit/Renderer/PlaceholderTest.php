@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 
-use \Magento\Framework\Phrase\Renderer\Placeholder;
+use Magento\Framework\Phrase\Renderer\Placeholder;
 
 class PlaceholderTest extends \PHPUnit\Framework\TestCase
 {

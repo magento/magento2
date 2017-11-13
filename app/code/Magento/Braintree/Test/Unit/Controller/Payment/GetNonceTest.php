@@ -15,8 +15,8 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Webapi\Exception;
 use Magento\Payment\Gateway\Command\ResultInterface as CommandResultInterface;
-use Psr\Log\LoggerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class GetNonceTest

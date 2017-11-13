@@ -62,7 +62,8 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $orderCreateMock = $this->createPartialMock(\Magento\Sales\Model\AdminOrder\Create::class, ['__wakeup']);
         $taxData = $this->getMockBuilder(\Magento\Tax\Helper\Data::class)->disableOriginalConstructor()->getMock();
         $this->priceCurrency = $this->getMockBuilder(
-            \Magento\Framework\Pricing\PriceCurrencyInterface::class)->getMock(
+            \Magento\Framework\Pricing\PriceCurrencyInterface::class
+        )->getMock(
             );
         $sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session\Quote::class)
             ->disableOriginalConstructor()

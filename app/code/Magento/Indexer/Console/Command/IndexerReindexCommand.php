@@ -5,16 +5,16 @@
  */
 namespace Magento\Indexer\Console\Command;
 
+use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\Config\DependencyInfoProvider;
+use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Indexer\ConfigInterface;
-use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Command to run indexers
@@ -186,7 +186,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                     $this->getDependentIndexerIds($id)
                 );
             }
-        };
+        }
 
         return array_unique($dependentIndexerIds);
     }

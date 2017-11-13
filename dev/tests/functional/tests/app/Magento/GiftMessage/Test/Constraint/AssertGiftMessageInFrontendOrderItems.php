@@ -9,9 +9,9 @@ namespace Magento\GiftMessage\Test\Constraint;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
-use Magento\Sales\Test\Page\OrderHistory;
-use Magento\Sales\Test\Page\CustomerOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Sales\Test\Page\CustomerOrderView;
+use Magento\Sales\Test\Page\OrderHistory;
 
 /**
  * Class AssertGiftMessageInFrontendOrderItems

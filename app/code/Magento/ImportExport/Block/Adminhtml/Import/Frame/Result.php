@@ -5,8 +5,6 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Frame;
 
-use Magento\Framework\View\Element\Template;
-
 /**
  * Import frame result block.
  *

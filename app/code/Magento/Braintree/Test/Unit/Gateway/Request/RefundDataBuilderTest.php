@@ -5,9 +5,9 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
-use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Gateway\Request\RefundDataBuilder;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order\Payment;

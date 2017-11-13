@@ -7,9 +7,9 @@ namespace Magento\Theme\Model\Design\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
-use Magento\Theme\Api\Data\DesignConfigInterface;
-use Magento\Framework\DB\TransactionFactory;
 use Magento\Framework\App\Config\ValueInterface;
+use Magento\Framework\DB\TransactionFactory;
+use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Theme\Model\Data\Design\ConfigFactory;
 use Magento\Theme\Model\Design\BackendModelFactory;
 

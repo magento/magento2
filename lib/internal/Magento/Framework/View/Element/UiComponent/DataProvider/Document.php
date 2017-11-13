@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Class Document

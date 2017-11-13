@@ -6,12 +6,11 @@
 
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
-use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Search\RequestInterface;
+use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Request\Dimension;
-use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
 
 /**
  * Class DimensionsProcessor

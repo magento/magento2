@@ -6,7 +6,6 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\BlockInterface;
-use Magento\Cms\Model\ResourceModel\Block as ResourceCmsBlock;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 

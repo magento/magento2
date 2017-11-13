@@ -25,7 +25,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         );
         /** @var \Magento\Catalog\Model\View\Asset\Placeholder $defualtPlaceholder */
         $defualtPlaceholder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Catalog\Model\View\Asset\Placeholder::class,
+            ->create(
+                \Magento\Catalog\Model\View\Asset\Placeholder::class,
                 ['type' => 'image']
             );
 

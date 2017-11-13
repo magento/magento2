@@ -6,13 +6,13 @@
 
 namespace Magento\Framework\Stdlib;
 
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
+use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
+use Magento\Framework\Stdlib\Cookie\FailureToSendException;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 use Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata;
-use Magento\Framework\Stdlib\Cookie\FailureToSendException;
-use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
-use Magento\Framework\Stdlib\Cookie\CookieMetadata;
-use Magento\Framework\Exception\InputException;
 
 /**
  * CookieManager helps manage the setting, retrieving and deleting of cookies.

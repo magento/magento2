@@ -6,9 +6,9 @@
 
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
+use Magento\Framework\Api\Filter;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\Api\Filter;
 
 /**
  * Class Fulltext

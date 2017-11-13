@@ -6,10 +6,10 @@
 
 namespace Magento\ProductVideo\Model\Product\Attribute\Media;
 
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
 
 /**
  * Converter for External Video media gallery type

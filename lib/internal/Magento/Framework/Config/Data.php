@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Represents loaded and cached configuration data, should be used to gain access to different types

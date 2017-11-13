@@ -5,8 +5,6 @@
  */
 namespace Magento\OfflineShipping\Model\Config\Backend;
 
-use Magento\Framework\Model\AbstractModel;
-
 /**
  * Backend model for shipping table rates CSV importing
  *

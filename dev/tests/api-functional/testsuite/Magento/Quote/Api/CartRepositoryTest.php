@@ -7,13 +7,13 @@ namespace Magento\Quote\Api;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Quote\Model\Quote;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Quote\Model\Quote;
-use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Framework\Webapi\Rest\Request;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -7,7 +7,6 @@ namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Catalog product Media Gallery attribute processor.

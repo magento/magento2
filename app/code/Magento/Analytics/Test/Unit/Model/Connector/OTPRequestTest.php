@@ -71,7 +71,7 @@ class OTPRequestTest extends \PHPUnit\Framework\TestCase
         $this->responseResolverMock = $this->getMockBuilder(ResponseResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->subject = new OTPRequest(
             $this->analyticsTokenMock,
             $this->httpClientMock,

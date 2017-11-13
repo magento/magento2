@@ -8,13 +8,13 @@
 
 namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab;
 
-use Magento\Paypal\Model\ResourceModel\Billing\Agreement as BillingAgreementResource;
-use Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory;
+use Magento\Backend\Block\Template\Context as TemplateContext;
 use Magento\Backend\Block\Widget\Grid\Extended as ExtendedGrid;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
-use Magento\Backend\Block\Template\Context as TemplateContext;
 use Magento\Backend\Helper\Data as BackendHelper;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory;
+use Magento\Paypal\Model\ResourceModel\Billing\Agreement as BillingAgreementResource;
 
 /**
  * Adminhtml billing agreement related orders tab

@@ -5,13 +5,12 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
-use Braintree\Result\Successful;
 use Braintree\Transaction;
+use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Gateway\Response\CardDetailsHandler;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Braintree\Gateway\Config\Config;
-use Magento\Braintree\Gateway\SubjectReader;
 
 /**
  * Class CardDetailsHandlerTest

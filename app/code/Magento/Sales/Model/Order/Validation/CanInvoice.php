@@ -44,7 +44,7 @@ class CanInvoice implements ValidatorInterface
             $order->getState() === Order::STATE_CLOSED
         ) {
             return false;
-        };
+        }
 
         return true;
     }

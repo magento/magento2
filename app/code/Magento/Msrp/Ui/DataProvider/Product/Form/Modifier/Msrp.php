@@ -7,8 +7,8 @@ namespace Magento\Msrp\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Msrp\Model\Config as MsrpConfig;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Msrp\Model\Config as MsrpConfig;
 
 /**
  * Class Msrp

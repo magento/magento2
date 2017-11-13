@@ -7,8 +7,8 @@ namespace Magento\Checkout\Helper;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Checkout default helper

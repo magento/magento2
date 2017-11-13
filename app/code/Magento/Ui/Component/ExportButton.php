@@ -5,8 +5,8 @@
  */
 namespace Magento\Ui\Component;
 
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
  * Class ExportButton

@@ -8,8 +8,8 @@ namespace Magento\Framework\Pricing\Render;
 
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\View\Element\Template;
 
 /**
@@ -88,7 +88,7 @@ class PriceBox extends Template implements PriceBoxRenderInterface, IdentityInte
     {
         return parent::hasCacheLifetime() ? parent::getCacheLifetime() : null;
     }
-    
+
     /**
      * @return SaleableInterface
      */

@@ -8,13 +8,13 @@ namespace Magento\Tax\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
+use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterfaceFactory;
 use Magento\Tax\Ui\DataProvider\Product\Listing\Collector\Tax;
 
 class TaxTest extends \PHPUnit\Framework\TestCase

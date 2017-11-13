@@ -105,7 +105,12 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
      * @dataProvider renderResultDataProvider
      */
     public function testRenderResult(
-        $httpCode, $headerName, $headerValue, $replaceHeader, $setHttpResponseCodeCount, $setHeaderCount
+        $httpCode,
+        $headerName,
+        $headerValue,
+        $replaceHeader,
+        $setHttpResponseCodeCount,
+        $setHeaderCount
     ) {
         $layoutOutput = 'output';
 

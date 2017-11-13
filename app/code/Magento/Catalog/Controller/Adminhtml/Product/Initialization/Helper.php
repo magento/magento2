@@ -8,11 +8,11 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOptionFactory;
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 
 /**
  * @api

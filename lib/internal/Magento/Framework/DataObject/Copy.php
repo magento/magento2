@@ -167,7 +167,8 @@ class Copy
             $source instanceof \Magento\Framework\Api\AbstractSimpleObject) && (
             is_array($target) || $target instanceof \Magento\Framework\DataObject ||
             $target instanceof \Magento\Framework\Api\ExtensibleDataInterface ||
-            $target instanceof \Magento\Framework\Api\AbstractSimpleObject);
+            $target instanceof \Magento\Framework\Api\AbstractSimpleObject
+            );
     }
 
     /**

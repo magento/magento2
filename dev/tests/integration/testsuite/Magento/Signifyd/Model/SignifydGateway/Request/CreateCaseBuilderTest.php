@@ -5,15 +5,15 @@
  */
 namespace Magento\Signifyd\Model\SignifydGateway\Request;
 
-use Magento\Framework\Config\ScopeInterface;
-use Magento\Signifyd\Model\SignifydOrderSessionId;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Model\Order;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Signifyd\Model\SignifydOrderSessionId;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class CreateCaseBuilderTest

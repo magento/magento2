@@ -13,8 +13,8 @@ use Magento\Customer\Model\Customer;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
-use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @magentoAppIsolation enabled

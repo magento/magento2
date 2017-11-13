@@ -97,7 +97,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
             ->method('post');
         $curlMock->expects($this->once())
             ->method('getBody')
-            ->will($this->throwException(new \Exception));
+            ->will($this->throwException(new \Exception()));
         $this->partnersModelMock->expects($this->exactly(3))
             ->method('getCurlClient')
             ->will($this->returnValue($curlMock));

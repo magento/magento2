@@ -238,7 +238,8 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->quoteMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue('customerGroupId')
+            ->will(
+                $this->returnValue('customerGroupId')
         );
         $this->customerMock->expects($this->once())->method('getId')->will($this->returnValue('1'));
         $this->groupManagementMock->expects($this->once())
@@ -376,6 +377,5 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->customerMock);
         $this->model->execute($this->observerMock);
-
     }
 }

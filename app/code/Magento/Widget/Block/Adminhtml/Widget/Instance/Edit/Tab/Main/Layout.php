@@ -6,11 +6,11 @@
 
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main;
 
-use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Backend\Block\Template;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Widget Instance page groups (predefined layouts group) to display on

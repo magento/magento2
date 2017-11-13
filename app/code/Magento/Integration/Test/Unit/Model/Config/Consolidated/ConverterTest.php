@@ -5,7 +5,7 @@
  */
 namespace Magento\Integration\Test\Unit\Model\Config\Consolidated;
 
-use \Magento\Integration\Model\Config\Consolidated\Converter;
+use Magento\Integration\Model\Config\Consolidated\Converter;
 
 /**
  * Test for conversion of integration XML config into array representation.

@@ -38,6 +38,6 @@ class RenderersPool implements PoolInterface
     {
         return !isset($this->renderers[$rendererCode])
                 ? null
-                :$this->renderers[$rendererCode];
+                : $this->renderers[$rendererCode];
     }
 }

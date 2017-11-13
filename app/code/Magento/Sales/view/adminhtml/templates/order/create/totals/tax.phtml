@@ -28,8 +28,8 @@ $taxAmount = $block->getTotal()->getValue();
         <?php $isTop = 1; ?>
         <?php foreach ($block->getTotal()->getFullInfo() as $info): ?>
                 <?php if (isset($info['hidden']) && $info['hidden']) {
-                    continue;
-                } ?>
+    continue;
+} ?>
                 <?php $percent = $info['percent']; ?>
                 <?php $amount = $info['amount']; ?>
                 <?php $rates = $info['rates']; ?>

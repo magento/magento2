@@ -5,8 +5,8 @@
  */
 namespace Magento\Sniffs\MicroOptimizations;
 
-use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 class IsNullSniff implements Sniff
 {

@@ -7,8 +7,8 @@
 namespace Magento\CatalogSearch\Test\Block\Advanced\CustomAttribute;
 
 use Magento\Mtf\Block\Form as BaseForm;
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Advanced search form with custom Select attribute.

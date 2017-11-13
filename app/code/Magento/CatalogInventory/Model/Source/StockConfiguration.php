@@ -5,8 +5,8 @@
  */
 namespace Magento\CatalogInventory\Model\Source;
 
-use Magento\Framework\Data\ValueSourceInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\Framework\Data\ValueSourceInterface;
 
 /**
  * Class StockConfiguration

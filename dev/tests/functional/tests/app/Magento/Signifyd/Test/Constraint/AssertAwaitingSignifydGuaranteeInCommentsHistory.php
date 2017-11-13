@@ -58,7 +58,7 @@ class AssertAwaitingSignifydGuaranteeInCommentsHistory extends AbstractConstrain
             $this->historyCommentStatus,
             $orderComments[$key]['status'],
             'Message about awaiting the Signifyd guarantee disposition' .
-            ' doesn\'t have status "'. $this->historyCommentStatus.'"' .
+            ' doesn\'t have status "' . $this->historyCommentStatus . '"' .
             ' in Comments History section for the order #' . $orderId
         );
     }

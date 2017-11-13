@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\EntityManager\Operation\Create;
 
-use Magento\Framework\EntityManager\TypeResolver;
 use Magento\Framework\EntityManager\Operation\ExtensionPool;
+use Magento\Framework\EntityManager\TypeResolver;
 
 /**
  * Class CreateExtensions

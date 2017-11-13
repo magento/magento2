@@ -7,8 +7,8 @@
 namespace Magento\Test\Php;
 
 use Magento\Framework\App\Utility\Files;
-use Magento\TestFramework\Utility\XssOutputValidator;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\TestFramework\Utility\XssOutputValidator;
 
 /**
  * Find not escaped output in phtml templates

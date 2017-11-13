@@ -550,7 +550,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setMethod('POST')
             ->setPostValue([
                 'form_key'         => $this->_objectManager->get(
-                    FormKey::class)->getFormKey(),
+                    FormKey::class
+                )->getFormKey(),
                 'firstname'        => 'John',
                 'lastname'         => 'Doe',
                 'email'            => 'johndoe@email.com',
@@ -611,7 +612,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setMethod('POST')
             ->setPostValue([
                 'form_key'         => $this->_objectManager->get(
-                    FormKey::class)->getFormKey(),
+                    FormKey::class
+                )->getFormKey(),
                 'firstname'        => 'John',
                 'lastname'         => 'Doe',
                 'email'            => 'johndoe@email.com',
@@ -641,7 +643,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setMethod('POST')
             ->setPostValue([
                 'form_key'         => $this->_objectManager->get(
-                    FormKey::class)->getFormKey(),
+                    FormKey::class
+                )->getFormKey(),
                 'firstname'        => 'John',
                 'lastname'         => 'Doe',
                 'email'            => 'johndoe@email.com',

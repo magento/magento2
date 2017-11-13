@@ -1277,7 +1277,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 // process linked product positions
                 $this->_connection->insertOnDuplicate(
                     $resource->getAttributeTypeTable('int'),
-                    $positionRows, ['value']
+                    $positionRows,
+                    ['value']
                 );
             }
         }
@@ -2648,7 +2649,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function parseAttributesWithWrappedValues($attributesData)
     {
         $attributes = [];
-        preg_match_all('~((?:[a-zA-Z0-9_])+)="((?:[^"]|""|"' . $this->getMultiLineSeparatorForRegexp() . '")+)"+~',
+        preg_match_all(
+            '~((?:[a-zA-Z0-9_])+)="((?:[^"]|""|"' . $this->getMultiLineSeparatorForRegexp() . '")+)"+~',
             $attributesData,
             $matches
         );

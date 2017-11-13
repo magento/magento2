@@ -6,9 +6,9 @@
 
 namespace Magento\User\Test\TestCase;
 
-use Magento\User\Test\Fixture\User;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\User\Test\Fixture\User;
 
 /**
  * Preconditions:

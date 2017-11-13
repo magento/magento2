@@ -6,10 +6,9 @@
 namespace Magento\Review\Ui\DataProvider\Product;
 
 use Magento\Framework\App\RequestInterface;
-use Magento\Ui\DataProvider\AbstractDataProvider;
-use Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory;
 use Magento\Review\Model\ResourceModel\Review\Product\Collection;
-use Magento\Review\Model\Review;
+use Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
  * Class ReviewDataProvider

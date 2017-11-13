@@ -6,12 +6,12 @@
 
 namespace Magento\Security\Test\TestCase;
 
+use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountCreate;
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
-use Magento\Config\Test\Fixture\ConfigData;
 
 /**
  * Test Flow:

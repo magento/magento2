@@ -7,10 +7,10 @@ namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Paypal\Model\PayflowConfig;
-use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\PayflowConfig;
 use Magento\Store\Model\ScopeInterface;
 
 /**

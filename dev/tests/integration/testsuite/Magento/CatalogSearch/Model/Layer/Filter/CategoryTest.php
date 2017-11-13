@@ -37,9 +37,11 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->_category->load(5);
         $layer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(
-                \Magento\Catalog\Model\Layer\Category::class, [
+                \Magento\Catalog\Model\Layer\Category::class,
+                [
                 'data' => ['current_category' => $this->_category]
-            ]);
+            ]
+            );
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\CatalogSearch\Model\Layer\Filter\Category::class, ['layer' => $layer]);
         $this->_model->setRequestVar('cat');

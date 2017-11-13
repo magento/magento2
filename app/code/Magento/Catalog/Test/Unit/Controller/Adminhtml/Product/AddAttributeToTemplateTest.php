@@ -5,22 +5,22 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Api\AttributeSetRepositoryInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\AddAttributeToTemplate;
+use Magento\Catalog\Controller\Adminhtml\Product\Builder as ProductBuilder;
+use Magento\Eav\Api\AttributeGroupRepositoryInterface;
+use Magento\Eav\Api\Data\AttributeGroupInterface;
+use Magento\Eav\Api\Data\AttributeGroupInterfaceFactory;
+use Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface;
+use Magento\Eav\Api\Data\AttributeSetInterface;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Backend\App\Action\Context;
-use Magento\Catalog\Controller\Adminhtml\Product\Builder as ProductBuilder;
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\App\RequestInterface;
-use Magento\Catalog\Api\AttributeSetRepositoryInterface;
-use Magento\Eav\Api\Data\AttributeSetInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Eav\Api\AttributeGroupRepositoryInterface;
-use Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface;
-use Magento\Eav\Api\Data\AttributeGroupInterfaceFactory;
-use Magento\Eav\Api\Data\AttributeGroupInterface;
-use Magento\Framework\Controller\Result\Json;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

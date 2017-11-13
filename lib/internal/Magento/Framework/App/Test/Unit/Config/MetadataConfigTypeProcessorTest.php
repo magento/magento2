@@ -11,7 +11,7 @@ use Magento\Framework\App\Config\Data\ProcessorFactory;
 use Magento\Framework\App\Config\Data\ProcessorInterface;
 use Magento\Framework\App\Config\Initial;
 use Magento\Framework\App\Config\MetadataConfigTypeProcessor;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class MetadataConfigTypeProcessorTest extends \PHPUnit\Framework\TestCase
 {

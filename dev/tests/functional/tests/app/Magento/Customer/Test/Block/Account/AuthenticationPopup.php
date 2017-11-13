@@ -5,8 +5,8 @@
  */
 namespace Magento\Customer\Test\Block\Account;
 
-use Magento\Mtf\Block\Form;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\Block\Form;
 
 /**
  * Authentication popup block.

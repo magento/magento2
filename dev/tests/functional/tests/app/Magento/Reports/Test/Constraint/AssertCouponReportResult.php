@@ -6,9 +6,9 @@
 
 namespace Magento\Reports\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Reports\Test\Page\Adminhtml\SalesCouponReportView;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertCouponReportResult

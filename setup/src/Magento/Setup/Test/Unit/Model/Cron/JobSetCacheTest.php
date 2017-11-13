@@ -7,8 +7,8 @@ namespace Magento\Setup\Test\Unit\Model\Cron;
 
 use Magento\Setup\Model\Cron\JobSetCache;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -5,8 +5,6 @@
  */
 namespace Magento\Signifyd\Model\SignifydGateway\Client;
 
-use Magento\Framework\HTTP\ZendClient;
-
 /**
  * Class RequestBuilder
  * Creates HTTP client, sends request to Signifyd and handles response

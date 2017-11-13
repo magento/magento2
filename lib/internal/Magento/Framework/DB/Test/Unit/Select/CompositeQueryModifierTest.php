@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\DB\Test\Unit\Select;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Select\QueryModifierInterface;
 use Magento\Framework\DB\Select\CompositeQueryModifier;
+use Magento\Framework\DB\Select\QueryModifierInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class CompositeQueryModifierTest extends \PHPUnit\Framework\TestCase
 {

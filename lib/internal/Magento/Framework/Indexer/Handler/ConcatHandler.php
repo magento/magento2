@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Indexer\Handler;
 
-use Magento\Framework\Indexer\HandlerInterface;
 use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
+use Magento\Framework\Indexer\HandlerInterface;
 
 class ConcatHandler implements HandlerInterface
 {

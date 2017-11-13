@@ -5,8 +5,8 @@
  */
 namespace Magento\InstantPurchase\Model\ShippingMethodChoose;
 
-use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Address;
+use Magento\Customer\Model\Customer;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
 
 /**

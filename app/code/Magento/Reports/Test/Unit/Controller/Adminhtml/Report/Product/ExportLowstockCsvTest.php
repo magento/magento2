@@ -6,8 +6,6 @@
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Product;
 
-use Magento\Reports\Controller\Adminhtml\Report\Product\ExportLowstockCsv;
-
 class ExportLowstockCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest
 {
     /**

@@ -6,8 +6,8 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Customer\Test\Fixture\Address;
+use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**

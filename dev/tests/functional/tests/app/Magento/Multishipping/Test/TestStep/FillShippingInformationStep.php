@@ -6,8 +6,8 @@
 namespace Magento\Multishipping\Test\TestStep;
 
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Multishipping\Test\Page\MultishippingCheckoutShipping;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Multishipping\Test\Page\MultishippingCheckoutShipping;
 
 /**
  * Fill customer shipping information and proceed to next step.

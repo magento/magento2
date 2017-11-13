@@ -5,8 +5,8 @@
  */
 namespace Magento\Quote\Model\Quote\Item;
 
-use Magento\Quote\Model\Quote\Item;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Quote\Model\Quote\Item;
 
 /**
  * Quote item abstract model

@@ -5,10 +5,10 @@
  */
 namespace Magento\Msrp\Model;
 
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Escaper;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Config
 {

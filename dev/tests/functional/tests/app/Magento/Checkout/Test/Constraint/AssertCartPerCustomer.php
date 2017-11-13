@@ -6,9 +6,9 @@
 
 namespace Magento\Checkout\Test\Constraint;
 
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\TestStep\TestStepFactory;
 
 /**

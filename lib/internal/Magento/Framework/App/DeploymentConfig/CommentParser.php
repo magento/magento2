@@ -6,9 +6,9 @@
 namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\Config\CommentParserInterface;
-use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Filesystem;
 
 /**
  * Parses and retrieves comments from configuration files.

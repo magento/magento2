@@ -8,8 +8,6 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ProductLink;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-
 class ManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -206,7 +204,8 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
         $this->productRepositoryMock->expects($this->once())
             ->method('get')
             ->will($this->throwException(
-                new \Magento\Framework\Exception\NoSuchEntityException(__('Requested product doesn\'t exist'))));
+                new \Magento\Framework\Exception\NoSuchEntityException(__('Requested product doesn\'t exist'))
+            ));
         $this->model->setProductLinks($productSku, $links);
     }
 

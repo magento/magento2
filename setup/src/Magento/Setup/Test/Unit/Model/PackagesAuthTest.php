@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\PackagesAuth;
+use Magento\Setup\Model\PackagesAuth;
 
 /**
  * Tests Magento\Setup\Model\PackagesAuth

@@ -9,7 +9,6 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configura
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

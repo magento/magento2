@@ -8,8 +8,8 @@ namespace Magento\Sales\Test\Constraint;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\CreditMemoView;
-use Magento\Sales\Test\Page\OrderHistory;
 use Magento\Sales\Test\Page\CustomerOrderView;
+use Magento\Sales\Test\Page\OrderHistory;
 
 /**
  * Assert that refunded grand total is equal to data from fixture on My Account page.

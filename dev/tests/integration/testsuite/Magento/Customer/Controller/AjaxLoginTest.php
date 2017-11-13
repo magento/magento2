@@ -40,4 +40,3 @@ class AjaxLoginTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('Logout Successful', $logoutMessage['message']);
     }
 }
-

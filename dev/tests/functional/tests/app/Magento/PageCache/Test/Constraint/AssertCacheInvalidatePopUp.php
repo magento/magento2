@@ -6,8 +6,8 @@
 
 namespace Magento\PageCache\Test\Constraint;
 
-use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 
 /**
  * Assert cache invalidate pop up.

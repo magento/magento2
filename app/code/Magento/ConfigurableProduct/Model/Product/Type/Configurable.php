@@ -9,11 +9,11 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
 use Magento\Catalog\Model\Config;
+use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
+use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 
 /**
  * Configurable product type implementation
@@ -266,7 +266,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $productRepository,
             $serializer
         );
-
     }
 
     /**
@@ -664,7 +663,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $attributeData['attribute_id'] = $configurableAttribute->getAttributeId();
                 } elseif (!empty($attributeData['attribute_id'])) {
                     $attribute = $this->_eavConfig->getAttribute(
-                        \Magento\Catalog\Model\Product::ENTITY, $attributeData['attribute_id']
+                        \Magento\Catalog\Model\Product::ENTITY,
+                        $attributeData['attribute_id']
                     );
                     $attributeData['attribute_id'] = $attribute->getId();
                     if (!$this->canUseAttribute($attribute)) {

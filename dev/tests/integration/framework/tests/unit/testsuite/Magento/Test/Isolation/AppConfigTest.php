@@ -9,9 +9,6 @@
  */
 namespace Magento\Test\Isolation;
 
-use Magento\Framework\ObjectManagerInterface;
-use Magento\TestFramework\ObjectManager;
-
 class AppConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**

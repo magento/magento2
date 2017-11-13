@@ -5,12 +5,11 @@
  */
 namespace Magento\Quote\Test\Unit\Model;
 
-use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\QuoteRepository\LoadHandler;
 use Magento\Quote\Model\QuoteRepository\SaveHandler;
-use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

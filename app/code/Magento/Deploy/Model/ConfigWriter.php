@@ -6,13 +6,13 @@
 namespace Magento\Deploy\Model;
 
 use Magento\Config\App\Config\Type\System;
+use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Config\Model\PreparedValueFactory;
 
 /**
  * Class ConfigWriter. Save configuration values into config file.

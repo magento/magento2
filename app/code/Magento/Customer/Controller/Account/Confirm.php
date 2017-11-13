@@ -6,18 +6,18 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Model\Url;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Helper\Address;
-use Magento\Framework\UrlFactory;
-use Magento\Framework\Exception\StateException;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\UrlFactory;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Confirm

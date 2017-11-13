@@ -92,7 +92,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         $cartId = $quote->getId();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH .  $cartId . '/items',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/items',
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -164,7 +164,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         $itemId = $quote->getItemByProduct($product)->getId();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH .  $cartId . '/items/' . $itemId,
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/items/' . $itemId,
                 'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
             'soap' => [

@@ -10,7 +10,6 @@ use Magento\Catalog\Test\Block\Product\View\CustomOptions;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class AbstractConfigureBlock

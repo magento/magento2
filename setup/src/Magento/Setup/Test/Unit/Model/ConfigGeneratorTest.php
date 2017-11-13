@@ -6,8 +6,8 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\State;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Setup\Model\ConfigGenerator;

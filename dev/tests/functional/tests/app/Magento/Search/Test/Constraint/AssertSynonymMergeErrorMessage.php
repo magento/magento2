@@ -6,8 +6,8 @@
 
 namespace Magento\Search\Test\Constraint;
 
-use Magento\Search\Test\Page\Adminhtml\SynonymGroupNew;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Search\Test\Page\Adminhtml\SynonymGroupNew;
 
 /**
  * Assert that after save block successful message appears.

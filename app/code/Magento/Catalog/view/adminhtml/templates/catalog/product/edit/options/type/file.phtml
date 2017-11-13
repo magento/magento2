@@ -42,9 +42,11 @@
                 <td>
                     <input name="product[options][<%- data.option_id %>][file_extension]" class="input-text" type="text" value="<%- data.file_extension %>">
                 </td>
-                <td class="col-file"><?php /* @escapeNotVerified */ echo __('%1 <span>x</span> %2 <span>px.</span>',
+                <td class="col-file"><?php /* @escapeNotVerified */ echo __(
+    '%1 <span>x</span> %2 <span>px.</span>',
                     '<input class="input-text" type="text" name="product[options][<%- data.option_id %>][image_size_x]" value="<%- data.image_size_x %>">',
-                    '<input class="input-text" type="text" name="product[options][<%- data.option_id %>][image_size_y]" value="<%- data.image_size_y %>">') ?>
+                    '<input class="input-text" type="text" name="product[options][<%- data.option_id %>][image_size_y]" value="<%- data.image_size_y %>">'
+) ?>
                     <div class="note"><?= /* @escapeNotVerified */ __('Please leave blank if it is not an image.') ?></div>
                 </td>
             </tr>

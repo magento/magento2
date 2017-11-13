@@ -9,8 +9,8 @@ namespace Magento\Setup\Model;
 use Magento\Authorization\Model\Acl\Role\Group;
 use Magento\Authorization\Model\Acl\Role\User;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 
 class AdminAccount
 {

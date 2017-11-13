@@ -8,10 +8,10 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use Magento\Sales\Model\ResourceModel\OrderFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection as ItemCollection;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\OrderFactory;
 
 /**
  * Class CreditmemoTest
@@ -50,10 +50,12 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             'context' => $this->createMock(\Magento\Framework\Model\Context::class),
             'registry' => $this->createMock(\Magento\Framework\Registry::class),
             'localeDate' => $this->createMock(
-                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class),
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class
+            ),
             'dateTime' => $this->createMock(\Magento\Framework\Stdlib\DateTime::class),
             'creditmemoConfig' => $this->createMock(
-                \Magento\Sales\Model\Order\Creditmemo\Config::class),
+                \Magento\Sales\Model\Order\Creditmemo\Config::class
+            ),
             'orderFactory' => $this->orderFactory,
             'cmItemCollectionFactory' => $this->cmItemCollectionFactoryMock,
             'calculatorFactory' => $this->createMock(\Magento\Framework\Math\CalculatorFactory::class),
@@ -136,7 +138,8 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
 
         /** @var ItemCollection|\PHPUnit_Framework_MockObject_MockObject $itemCollectionMock */
         $itemCollectionMock = $this->getMockBuilder(
-            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection::class)
+            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $itemCollectionMock->expects($this->once())
@@ -164,7 +167,8 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
 
         /** @var ItemCollection|\PHPUnit_Framework_MockObject_MockObject $itemCollectionMock */
         $itemCollectionMock = $this->getMockBuilder(
-            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection::class)
+            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $itemCollectionMock->expects($this->once())

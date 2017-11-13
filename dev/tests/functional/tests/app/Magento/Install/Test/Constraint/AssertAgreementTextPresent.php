@@ -8,7 +8,6 @@ namespace Magento\Install\Test\Constraint;
 
 use Magento\Install\Test\Page\Install;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\TestFramework\Inspection\Exception;
 
 /**
  * Check that agreement text present on Terms & Agreement page during install.

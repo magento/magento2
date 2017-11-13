@@ -43,7 +43,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->categoryFactory = $this->createPartialMock(\Magento\Catalog\Model\CategoryFactory::class, ['create']);
         $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
 
-        $this->form = (new ObjectManager($this))->getObject(\Magento\UrlRewrite\Block\Catalog\Edit\Form::class,
+        $this->form = (new ObjectManager($this))->getObject(
+            \Magento\UrlRewrite\Block\Catalog\Edit\Form::class,
             [
                 'layout' => $this->layout,
                 'productFactory' => $this->productFactory,
@@ -58,8 +59,10 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testAddErrorMessageWhenProductWithoutStores()
     {
         $form = $this->createMock(\Magento\Framework\Data\Form::class);
-        $form->expects($this->any())->method('getElement')->will($this->returnValue(
-            $this->getMockForAbstractClass(\Magento\Framework\Data\Form\Element\AbstractElement::class, [], '', false))
+        $form->expects($this->any())->method('getElement')->will(
+            $this->returnValue(
+            $this->getMockForAbstractClass(\Magento\Framework\Data\Form\Element\AbstractElement::class, [], '', false)
+        )
         );
         $this->formFactory->expects($this->once())
             ->method('create')

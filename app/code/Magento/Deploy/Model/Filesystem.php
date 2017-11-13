@@ -137,7 +137,7 @@ class Filesystem
                 DirectoryList::STATIC_VIEW
             ]
         );
-        
+
         // Trigger code generation
         $this->compile($output);
         // Trigger static assets compilation and deployment

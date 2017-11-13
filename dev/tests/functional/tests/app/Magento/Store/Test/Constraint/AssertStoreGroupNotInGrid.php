@@ -7,8 +7,8 @@
 namespace Magento\Store\Test\Constraint;
 
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
-use Magento\Store\Test\Fixture\StoreGroup;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Store\Test\Fixture\StoreGroup;
 
 /**
  * Class AssertStoreGroupNotInGrid

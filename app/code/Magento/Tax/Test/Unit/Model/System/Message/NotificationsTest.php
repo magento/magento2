@@ -6,12 +6,12 @@
 
 namespace Magento\Tax\Test\Unit\Model\System\Message;
 
-use Magento\Tax\Model\Config as TaxConfig;
-use Magento\Tax\Model\System\Message\Notifications;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Tax\Model\Config as TaxConfig;
 use Magento\Tax\Model\System\Message\NotificationInterface;
+use Magento\Tax\Model\System\Message\Notifications;
 
 /**
  * Test class for @see \Magento\Tax\Model\System\Message\Notifications

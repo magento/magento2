@@ -114,7 +114,7 @@ class FilterModifierTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 [
-                    'filter1' => ['condition_type' => 'eq', 'value' => '5',]
+                    'filter1' => ['condition_type' => 'eq', 'value' => '5']
                 ],
                 'filter1',
                 'eq',

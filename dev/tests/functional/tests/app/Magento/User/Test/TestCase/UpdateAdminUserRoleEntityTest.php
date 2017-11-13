@@ -8,11 +8,11 @@ namespace Magento\User\Test\TestCase;
 
 use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\User\Test\Fixture\Role;
 use Magento\User\Test\Fixture\User;
 use Magento\User\Test\Page\Adminhtml\UserRoleEditRole;
 use Magento\User\Test\Page\Adminhtml\UserRoleIndex;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for UpdateAdminUserRoleEntity

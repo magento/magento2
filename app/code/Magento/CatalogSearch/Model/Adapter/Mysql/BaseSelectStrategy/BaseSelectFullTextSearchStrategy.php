@@ -8,8 +8,8 @@ namespace Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy;
 
 use Magento\CatalogSearch\Model\Search\BaseSelectStrategy\BaseSelectStrategyInterface;
 use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 
 /**
  * Class BaseSelectFullTextSearchStrategy

@@ -5,13 +5,13 @@
  */
 namespace Magento\Ui\Controller\Adminhtml\Index;
 
-use Magento\Ui\Controller\Adminhtml\AbstractAction;
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Element\UiComponentFactory;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\Escaper;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Controller\Adminhtml\AbstractAction;
+use Psr\Log\LoggerInterface;
 
 class Render extends AbstractAction
 {

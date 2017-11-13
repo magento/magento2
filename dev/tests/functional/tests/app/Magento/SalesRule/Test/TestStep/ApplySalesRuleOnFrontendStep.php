@@ -7,8 +7,8 @@
 namespace Magento\SalesRule\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 
 /**
  * Apply Sales Rule before one page checkout.

@@ -5,13 +5,13 @@
  */
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
+use Magento\Catalog\Test\Constraint\AssertProductForm;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Catalog\Test\Constraint\AssertProductForm;
 use Magento\Sales\Test\Constraint\AssertProductsQtyAfterOrderCancel;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Assert that products quantity is correct after reorder.

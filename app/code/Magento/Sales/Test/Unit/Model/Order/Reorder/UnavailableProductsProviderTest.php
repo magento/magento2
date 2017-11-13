@@ -6,10 +6,10 @@
 namespace Magento\Sales\Test\Unit\Model\Order\Reorder;
 
 use Magento\Sales\Model\Config;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker;
 use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
-use Magento\Sales\Model\Order;
 
 /**
  * Class UnavailableProductsProviderTest

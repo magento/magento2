@@ -5,9 +5,9 @@
  */
 namespace Magento\Ui\Config\Converter;
 
+use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Ui\Config\Converter;
 use Magento\Ui\Config\ConverterInterface;
-use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Ui\Config\ConverterUtils;
 
 /**

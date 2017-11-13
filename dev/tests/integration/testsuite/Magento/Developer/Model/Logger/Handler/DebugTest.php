@@ -6,6 +6,7 @@
 namespace Magento\Developer\Model\Logger\Handler;
 
 use Magento\Config\Console\Command\ConfigSetCommand;
+use Magento\Deploy\Model\Mode;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -13,7 +14,6 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Logger\Monolog;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Deploy\Model\Mode;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

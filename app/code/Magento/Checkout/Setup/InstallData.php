@@ -54,7 +54,7 @@ class InstallData implements InstallDataInterface
     {
         /** @var EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
-        
+
         $setup->startSetup();
 
         $connection = $setup->getConnection();

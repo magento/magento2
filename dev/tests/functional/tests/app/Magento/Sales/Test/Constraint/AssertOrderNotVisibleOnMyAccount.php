@@ -8,9 +8,9 @@ namespace Magento\Sales\Test\Constraint;
 
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\OrderHistory;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert order is not visible in customer account on frontend.

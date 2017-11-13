@@ -8,8 +8,8 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Save

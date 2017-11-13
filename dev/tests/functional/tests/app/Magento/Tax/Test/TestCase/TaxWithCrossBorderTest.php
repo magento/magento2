@@ -9,9 +9,9 @@ namespace Magento\Tax\Test\TestCase;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\CatalogRule\Test\Fixture\CatalogRule;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 
 /**
  * Steps:

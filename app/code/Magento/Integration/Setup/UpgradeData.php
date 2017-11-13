@@ -5,9 +5,9 @@
  */
 namespace Magento\Integration\Setup;
 
-use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * Upgrade data script for Integration module

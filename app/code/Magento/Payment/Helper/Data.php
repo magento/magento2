@@ -5,15 +5,15 @@
  */
 namespace Magento\Payment\Helper;
 
-use Magento\Quote\Model\Quote;
-use Magento\Store\Model\Store;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\View\LayoutInterface;
 use Magento\Payment\Block\Form;
 use Magento\Payment\Model\InfoInterface;
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\LayoutInterface;
-use Magento\Framework\View\LayoutFactory;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Store\Model\Store;
 
 /**
  * Payment module base helper

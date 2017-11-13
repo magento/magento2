@@ -9,9 +9,9 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\ResourceConnection;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteData;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Psr\Log\LoggerInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteData;
 
 class DbStorage extends AbstractStorage
 {

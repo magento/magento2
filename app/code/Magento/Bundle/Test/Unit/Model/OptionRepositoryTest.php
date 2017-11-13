@@ -292,7 +292,6 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
         );
         $optionCollectionMock->expects($this->once())->method('getFirstItem')->willReturn($optionMock);
 
-
         $metadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
         $metadataMock->expects($this->once())->method('getLinkField')->willReturn('product_option');
 

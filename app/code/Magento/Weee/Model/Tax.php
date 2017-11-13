@@ -6,11 +6,10 @@
 namespace Magento\Weee\Model;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Website;
-use Magento\Tax\Model\Calculation;
-use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Catalog\Model\Product\Type;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

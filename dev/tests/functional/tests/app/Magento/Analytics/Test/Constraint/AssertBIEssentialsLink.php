@@ -6,9 +6,9 @@
 
 namespace Magento\Analytics\Test\Constraint;
 
+use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 
 /**
  * Assert BI Essentials Sign Up page is opened by admin menu link

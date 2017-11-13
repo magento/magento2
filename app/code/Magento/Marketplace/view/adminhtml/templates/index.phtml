@@ -73,8 +73,10 @@
     {
         "*": {
             "Magento_Marketplace/default": {
-                "url": "<?= $block->getUrl('marketplace/partners/index',
-                    ['_current' => true, 'block' => '', 'period' => '']) ?>"
+                "url": "<?= $block->getUrl(
+                    'marketplace/partners/index',
+                    ['_current' => true, 'block' => '', 'period' => '']
+                ) ?>"
             }
         }
     }

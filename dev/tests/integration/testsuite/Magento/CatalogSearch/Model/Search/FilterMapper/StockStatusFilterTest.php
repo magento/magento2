@@ -5,12 +5,12 @@
  */
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
-use Magento\Framework\DB\Select;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 
 class StockStatusFilterTest extends \PHPUnit\Framework\TestCase
 {

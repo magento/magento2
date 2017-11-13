@@ -5,8 +5,6 @@
  */
 namespace Magento\Paypal\Model;
 
-use Magento\Paypal\Model\IpnFactory;
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 
@@ -64,7 +62,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $creditmemoItems = $order->getCreditmemosCollection()->getItems();
         $creditmemo = current($creditmemoItems);
 
-        $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
+        $this->assertEquals(Order::STATE_CLOSED, $order->getState());
         $this->assertEquals(1, count($creditmemoItems));
         $this->assertEquals(Creditmemo::STATE_REFUNDED, $creditmemo->getState());
         $this->assertEquals(10, $order->getSubtotalRefunded());
@@ -108,13 +106,13 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $comments = $order->load($order->getId())->getAllStatusHistory();
         $commentData = reset($comments);
         $commentOrigin = sprintf(
-            'IPN "Refunded". Refund issued by merchant. Registered notification about refunded amount of $%d.00. '.
+            'IPN "Refunded". Refund issued by merchant. Registered notification about refunded amount of $%d.00. ' .
             'Transaction ID: "%s". Credit Memo has not been created. Please create offline Credit Memo.',
             abs($refundAmount),
             $ipnData['txn_id']
         );
 
-        $this->assertEquals(Order::STATE_PROCESSING, $order->getState()) ;
+        $this->assertEquals(Order::STATE_PROCESSING, $order->getState());
         $this->assertEmpty(count($creditmemoItems));
         $this->assertEquals(1, count($comments));
         $this->assertEquals($commentOrigin, $commentData->getComment());
@@ -146,7 +144,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
 
         $creditmemoItems = $order->getCreditmemosCollection()->getItems();
 
-        $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
+        $this->assertEquals(Order::STATE_CLOSED, $order->getState());
         $this->assertEquals(2, count($creditmemoItems));
         $this->assertEquals(10, $order->getSubtotalRefunded());
         $this->assertEquals(10, $order->getBaseSubtotalRefunded());

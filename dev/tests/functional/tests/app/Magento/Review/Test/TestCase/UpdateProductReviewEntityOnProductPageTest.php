@@ -7,12 +7,12 @@
 namespace Magento\Review\Test\TestCase;
 
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\RatingEdit;
 use Magento\Review\Test\Page\Adminhtml\RatingIndex;
 use Magento\Review\Test\Page\Adminhtml\ReviewEdit;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

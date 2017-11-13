@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Composer;
 
-use Composer\Package\Link;
 use Composer\Package\CompletePackageInterface;
+use Composer\Package\Link;
 use Magento\Framework\App\ObjectManager;
 
 /**

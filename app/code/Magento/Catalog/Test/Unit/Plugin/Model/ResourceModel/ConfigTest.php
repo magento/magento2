@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Unit\Plugin\Model\ResourceModel;
 
-use Magento\Catalog\Plugin\Model\ResourceModel\Config;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 

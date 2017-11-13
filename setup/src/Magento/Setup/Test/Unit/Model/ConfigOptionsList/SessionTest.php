@@ -6,9 +6,9 @@
 
 namespace Magento\Setup\Test\Unit\Model\ConfigOptionsList;
 
-use Magento\Setup\Model\ConfigOptionsList\Session as SessionConfigOptionsList;
-use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
+use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Setup\Model\ConfigOptionsList\Session as SessionConfigOptionsList;
 
 class SessionTest extends \PHPUnit\Framework\TestCase
 {

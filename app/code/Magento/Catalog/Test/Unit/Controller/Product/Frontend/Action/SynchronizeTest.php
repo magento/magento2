@@ -5,12 +5,12 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Product\Frontend\Action;
 
-use Magento\Framework\App\Action\Context;
-use Magento\Catalog\Model\Product\ProductFrontendAction\Synchronizer;
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\Controller\Result\Json;
-use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Controller\Product\Frontend\Action\Synchronize;
+use Magento\Catalog\Model\Product\ProductFrontendAction\Synchronizer;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
 
 class SynchronizeTest extends \PHPUnit\Framework\TestCase
 {
@@ -101,7 +101,7 @@ class SynchronizeTest extends \PHPUnit\Framework\TestCase
 
         $this->synchronize->execute();
     }
-    
+
     public function testExecuteActionException()
     {
         $data = [
@@ -128,7 +128,7 @@ class SynchronizeTest extends \PHPUnit\Framework\TestCase
 
         $this->synchronizerMock->expects($this->once())
             ->method('syncActions')
-            ->willThrowException(new \Exception);
+            ->willThrowException(new \Exception());
 
         $jsonObject->expects($this->once())
             ->method('setStatusHeader')

@@ -5,10 +5,10 @@
  */
 namespace Magento\Setup\Module\Di\App\Task\Operation;
 
+use Magento\Framework\App;
+use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Magento\Setup\Module\Di\Code\Generator\InterceptionConfigurationBuilder;
-use Magento\Framework\Interception\Code\Generator\Interceptor;
-use Magento\Framework\App;
 use Magento\Setup\Module\Di\Code\GeneratorFactory;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 

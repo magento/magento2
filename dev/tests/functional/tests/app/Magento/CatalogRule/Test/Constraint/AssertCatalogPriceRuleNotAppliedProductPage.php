@@ -6,10 +6,10 @@
 
 namespace Magento\CatalogRule\Test\Constraint;
 
+use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 
 /**
  * Assert that Catalog Price Rule is not applied on Product page.

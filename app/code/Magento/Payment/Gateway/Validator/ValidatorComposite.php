@@ -7,7 +7,6 @@ namespace Magento\Payment\Gateway\Validator;
 
 use Magento\Framework\ObjectManager\TMap;
 use Magento\Framework\ObjectManager\TMapFactory;
-use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 /**
  * Class ValidatorComposite

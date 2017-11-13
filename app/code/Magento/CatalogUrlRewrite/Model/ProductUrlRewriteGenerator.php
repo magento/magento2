@@ -6,12 +6,12 @@
 namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\Product\Visibility;
 
 /**
  * Class ProductUrlRewriteGenerator

@@ -6,8 +6,6 @@
 
 namespace Magento\Webapi\Routing;
 
-use Magento\Framework\Exception\AuthorizationException;
-
 /**
  * SOAP error handling test.
  */

@@ -268,7 +268,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             ? $arguments['display_minimal_price']
             : true;
 
-            /** @var \Magento\Framework\Pricing\Render $priceRender */
+        /** @var \Magento\Framework\Pricing\Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
 
         $price = '';

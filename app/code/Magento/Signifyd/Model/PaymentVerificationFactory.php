@@ -5,10 +5,10 @@
  */
 namespace Magento\Signifyd\Model;
 
+use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Api\PaymentVerificationInterface;
 use Magento\Payment\Gateway\ConfigInterface;
-use Magento\Framework\Exception\ConfigurationMismatchException;
 
 /**
  * Creates verification service for provided payment method, or PaymentVerificationInterface::class

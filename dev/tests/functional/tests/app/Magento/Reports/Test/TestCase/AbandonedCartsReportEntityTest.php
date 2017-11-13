@@ -6,11 +6,11 @@
 
 namespace Magento\Reports\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Client\BrowserInterface;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:

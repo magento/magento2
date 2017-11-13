@@ -9,8 +9,8 @@ namespace Magento\OfflineShipping\Test\Unit\Model\ResourceModel\Carrier\Tablerat
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\File\ReadInterface;
-use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnResolverFactory;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnResolver;
+use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnResolverFactory;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowParser;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\DataHashGenerator;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import;

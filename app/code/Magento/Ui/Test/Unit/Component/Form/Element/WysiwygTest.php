@@ -5,10 +5,10 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Form\Element;
 
-use Magento\Ui\Component\Form\Element\Wysiwyg;
-use Magento\Framework\Data\Form\Element\Editor;
 use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\Editor;
 use Magento\Framework\Data\FormFactory;
+use Magento\Ui\Component\Form\Element\Wysiwyg;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 
 /**

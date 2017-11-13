@@ -6,12 +6,12 @@
 
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\DB\Select;
-use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Eav\Model\Config as EavConfig;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\Framework\Search\Request\FilterInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class VisibilityFilter

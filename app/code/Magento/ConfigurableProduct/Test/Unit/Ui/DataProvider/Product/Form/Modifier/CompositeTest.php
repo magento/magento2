@@ -5,15 +5,15 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Composite as CompositeModifier;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\AssociatedProducts;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
-use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\AllowedProductTypes;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
+use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Composite as CompositeModifier;
+use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\AssociatedProducts;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

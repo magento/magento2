@@ -6,11 +6,10 @@
 
 namespace Magento\Test\Less;
 
-use Magento\Framework\App\Utility;
-use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
-use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\LessWrapper;
 use Magento\Framework\App\Utility\Files;
 use Magento\Test\Php\LiveCodeTest as PHPCodeTest;
+use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
+use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\LessWrapper;
 
 /**
  * Set of tests for static code style

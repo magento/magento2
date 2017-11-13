@@ -5,16 +5,16 @@
  */
 namespace Magento\Framework\EntityManager\Test\Unit\Sequence;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Sequence\SequenceInterface;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Sequence\SequenceApplier;
 use Magento\Framework\EntityManager\Sequence\SequenceManager;
 use Magento\Framework\EntityManager\Sequence\SequenceRegistry;
 use Magento\Framework\EntityManager\TypeResolver;
-use Magento\Framework\DataObject;
-use Magento\Framework\EntityManager\HydratorInterface;
-use Magento\Framework\EntityManager\EntityMetadataInterface;
-use Magento\Framework\DB\Sequence\SequenceInterface;
 
 class SequenceApplierTest extends \PHPUnit\Framework\TestCase
 {

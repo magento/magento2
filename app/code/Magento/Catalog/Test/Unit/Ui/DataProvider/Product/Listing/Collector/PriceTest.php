@@ -5,11 +5,11 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 
+use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
+use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
-use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterfaceFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class PriceTest extends \PHPUnit\Framework\TestCase

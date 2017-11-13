@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\View\TemplateEngine\Xhtml;
 
-use Magento\Framework\Phrase;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Phrase;
 
 /**
  * Class CompilerFactory

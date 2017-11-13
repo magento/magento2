@@ -76,14 +76,16 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $this->flatTableBuilder = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class);
 
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class, [
+            \Magento\Catalog\Model\Indexer\Product\Flat\Action\Row::class,
+            [
             'resource' => $this->resource,
             'storeManager' => $this->storeManager,
             'productHelper' => $this->productIndexerHelper,
             'flatItemEraser' => $this->flatItemEraser,
             'flatItemWriter' => $this->flatItemWriter,
             'flatTableBuilder' => $this->flatTableBuilder
-        ]);
+        ]
+        );
     }
 
     /**
@@ -118,4 +120,3 @@ class RowTest extends \PHPUnit\Framework\TestCase
         $this->model->execute('product_id_1');
     }
 }
-

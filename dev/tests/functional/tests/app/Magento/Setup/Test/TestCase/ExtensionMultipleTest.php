@@ -6,17 +6,17 @@
 
 namespace Magento\Setup\Test\TestCase;
 
-use Magento\Setup\Test\Constraint\Extension\AssertFindExtensionOnGrid;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Setup\Test\Fixture\Extension;
-use Magento\Setup\Test\Fixture\BackupOptions;
-use Magento\Setup\Test\Fixture\RepoCredentials;
 use Magento\Setup\Test\Constraint\AssertSuccessfulReadinessCheck;
-use Magento\Setup\Test\Constraint\Extension\AssertSuccessMessage;
-use Magento\Setup\Test\Constraint\Extension\AssertMultipleSuccessMessage;
-use Magento\Setup\Test\Constraint\Extension\AssertMultipleExtensionAndVersionCheck;
 use Magento\Setup\Test\Constraint\Extension\AssertExtensionAndVersionCheck;
+use Magento\Setup\Test\Constraint\Extension\AssertFindExtensionOnGrid;
+use Magento\Setup\Test\Constraint\Extension\AssertMultipleExtensionAndVersionCheck;
+use Magento\Setup\Test\Constraint\Extension\AssertMultipleSuccessMessage;
 use Magento\Setup\Test\Constraint\Extension\AssertSelectSeveralExtensions;
+use Magento\Setup\Test\Constraint\Extension\AssertSuccessMessage;
+use Magento\Setup\Test\Fixture\BackupOptions;
+use Magento\Setup\Test\Fixture\Extension;
+use Magento\Setup\Test\Fixture\RepoCredentials;
 
 /**
  * ExtensionMultipleTest checks installing of several extensions

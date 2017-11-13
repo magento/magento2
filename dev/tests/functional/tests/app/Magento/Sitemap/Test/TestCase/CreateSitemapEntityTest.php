@@ -6,10 +6,10 @@
 
 namespace Magento\Sitemap\Test\TestCase;
 
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Sitemap\Test\Fixture\Sitemap;
 use Magento\Sitemap\Test\Page\Adminhtml\SitemapIndex;
 use Magento\Sitemap\Test\Page\Adminhtml\SitemapNew;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Cover creating SitemapEntity

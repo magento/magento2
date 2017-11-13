@@ -6,13 +6,13 @@
 namespace Magento\Setup\Test\Unit\Module;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Model\ConfigGenerator;
-use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Setup\Model\CryptKeyGenerator;
 use PHPUnit\Framework\TestCase;
 

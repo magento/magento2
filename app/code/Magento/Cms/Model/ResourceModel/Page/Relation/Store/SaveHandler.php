@@ -5,10 +5,10 @@
  */
 namespace Magento\Cms\Model\ResourceModel\Page\Relation\Store;
 
-use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\ResourceModel\Page;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class SaveHandler

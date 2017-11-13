@@ -6,8 +6,8 @@
 namespace Magento\Tax\Model;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
 
 /**
  * Class CalculationTest

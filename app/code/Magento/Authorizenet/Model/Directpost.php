@@ -478,6 +478,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             case self::ACTION_AUTHORIZE:
                 $requestType = self::REQUEST_TYPE_AUTH_ONLY;
                 //intentional
+                // no break
             case self::ACTION_AUTHORIZE_CAPTURE:
                 $requestType = $requestType ?: self::REQUEST_TYPE_AUTH_CAPTURE;
                 $payment = $this->getInfoInstance();

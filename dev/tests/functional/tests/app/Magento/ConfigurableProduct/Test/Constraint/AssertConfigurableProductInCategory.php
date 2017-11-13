@@ -6,9 +6,9 @@
 
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
+use Magento\Catalog\Test\Constraint\AssertProductInCategory;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
-use Magento\Catalog\Test\Constraint\AssertProductInCategory;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**

@@ -6,9 +6,9 @@
 
 namespace Magento\Security\Test\Constraint;
 
+use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Customer\Test\Page\CustomerAccountCreate;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Config\Test\Fixture\ConfigData;
 
 /**
  * Assert error message is displayed after customer enter password.

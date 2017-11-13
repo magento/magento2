@@ -301,8 +301,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->_setupFieldsInheritCheckbox($fieldId, false, $expectedConfigValue);
 
         if ($isDbOverrideValue) {
-            $backendModel = $this->field->getAttribute('backend_model') ? : \Magento\Framework\App\Config\Value::class;
-            $path = $this->section->getId() .'/'. $this->group->getId() . '/' . $this->field->getId();
+            $backendModel = $this->field->getAttribute('backend_model') ?: \Magento\Framework\App\Config\Value::class;
+            $path = $this->section->getId() . '/' . $this->group->getId() . '/' . $this->field->getId();
             $model = Bootstrap::getObjectManager()->create($backendModel);
             $model->setPath($path);
             $model->setScopeId($currentScopeCode);
@@ -332,7 +332,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $fieldsetHtml = $fieldset->getElementHtml();
 
-        $elementId = $this->section->getId() .'_'. $this->group->getId() . '_' . $this->field->getId();
+        $elementId = $this->section->getId() . '_' . $this->group->getId() . '_' . $this->field->getId();
         if (is_array($expectedConfigValue)) {
             $expectedConfigValue = implode('|', $expectedConfigValue);
         }

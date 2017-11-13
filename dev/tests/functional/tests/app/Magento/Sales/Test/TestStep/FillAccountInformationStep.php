@@ -7,8 +7,8 @@
 namespace Magento\Sales\Test\TestStep;
 
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 
 /**
  * Fill order account information.

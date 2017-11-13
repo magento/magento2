@@ -7,11 +7,11 @@ namespace Magento\Signifyd\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
+use Magento\Sales\Api\OrderStatusHistoryRepositoryInterface;
 use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\CommentsHistoryUpdater;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Sales\Api\OrderStatusHistoryRepositoryInterface;
 
 /**
  * Contains tests for comments history updater class.

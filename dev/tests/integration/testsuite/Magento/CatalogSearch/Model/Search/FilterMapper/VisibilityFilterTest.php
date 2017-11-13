@@ -5,13 +5,13 @@
  */
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
-use Magento\Framework\Search\Request\Filter\Term;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\Framework\Search\Request\Filter\Term;
+use Magento\Store\Model\StoreManagerInterface;
 
 class VisibilityFilterTest extends \PHPUnit\Framework\TestCase
 {

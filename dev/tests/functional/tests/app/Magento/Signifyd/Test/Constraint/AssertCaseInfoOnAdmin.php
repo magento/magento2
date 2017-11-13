@@ -5,9 +5,9 @@
  */
 namespace Magento\Signifyd\Test\Constraint;
 
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Signifyd\Test\Fixture\SignifydData;
 
 /**

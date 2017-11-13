@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\App\Test\Unit\PageCache;
 
-use \Magento\Framework\App\PageCache\Kernel;
-use \Magento\Framework\App\Http\ContextFactory;
-use \Magento\Framework\App\Response\HttpFactory;
+use Magento\Framework\App\Http\ContextFactory;
+use Magento\Framework\App\PageCache\Kernel;
+use Magento\Framework\App\Response\HttpFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

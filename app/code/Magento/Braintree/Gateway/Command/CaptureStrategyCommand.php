@@ -14,11 +14,11 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
-use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 /**
  * Class CaptureStrategyCommand

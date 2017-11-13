@@ -6,10 +6,10 @@
 
 namespace Magento\Tax\Test\TestCase;
 
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Tax\Test\Fixture\TaxRate;
 use Magento\Tax\Test\Page\Adminhtml\TaxRateIndex;
 use Magento\Tax\Test\Page\Adminhtml\TaxRateNew;
-use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Flow:

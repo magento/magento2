@@ -7,8 +7,8 @@ namespace Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form;
 use Magento\Backend\Block\Widget\Form\Generic;
-use Magento\Ui\Component\Layout\Tabs\TabInterface;
 use Magento\Rule\Model\Condition\AbstractCondition;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 class Conditions extends Generic implements TabInterface
 {

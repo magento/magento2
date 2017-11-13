@@ -9,26 +9,26 @@
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
 use Magento\Directory\Model\Currency;
+use Magento\Directory\Model\Region;
+use Magento\Directory\Model\RegionFactory;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Rate;
-use Magento\Quote\Model\ResourceModel\Quote\Address\Rate\CollectionFactory as RateCollectionFactory;
-use Magento\Quote\Model\ResourceModel\Quote\Address\Rate\Collection as RatesCollection;
-use Magento\Shipping\Model\Rate\Result;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Directory\Model\RegionFactory;
-use Magento\Quote\Model\Quote\Address\RateFactory;
+use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
 use Magento\Quote\Model\Quote\Address\RateCollectorInterfaceFactory;
+use Magento\Quote\Model\Quote\Address\RateFactory;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
-use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
-use Magento\Quote\Model\ResourceModel\Quote\Address\Item\CollectionFactory;
+use Magento\Quote\Model\Quote\Address\RateResult\AbstractResult;
 use Magento\Quote\Model\ResourceModel\Quote\Address\Item\Collection;
-use Magento\Directory\Model\Region;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Quote\Model\ResourceModel\Quote\Address\Item\CollectionFactory;
+use Magento\Quote\Model\ResourceModel\Quote\Address\Rate\Collection as RatesCollection;
+use Magento\Quote\Model\ResourceModel\Quote\Address\Rate\CollectionFactory as RateCollectionFactory;
+use Magento\Shipping\Model\Rate\Result;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
-use Magento\Quote\Model\Quote\Address\RateResult\AbstractResult;
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Test class for sales quote address model

@@ -8,7 +8,6 @@ namespace Magento\Framework\View\File\Collector\Decorator;
 
 use Magento\Framework\Module\Manager;
 use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Framework\View\File;
 use Magento\Framework\View\File\CollectorInterface;
 
 /**

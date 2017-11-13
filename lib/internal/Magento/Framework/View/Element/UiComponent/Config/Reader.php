@@ -5,11 +5,7 @@
  */
 namespace Magento\Framework\View\Element\UiComponent\Config;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\Config\ConverterInterface;
-use Magento\Framework\Config\FileIteratorFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
  * Class Reader

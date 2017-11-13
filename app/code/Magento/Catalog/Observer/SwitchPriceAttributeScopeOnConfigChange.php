@@ -5,13 +5,13 @@
  */
 namespace Magento\Catalog\Observer;
 
-use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Store\Model\Store;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Observer is responsible for changing scope for all price attributes in system

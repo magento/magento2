@@ -6,11 +6,11 @@
 namespace Magento\ConfigurableProduct\Setup;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 
 /**
  * Upgrade Data script

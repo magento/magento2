@@ -5,10 +5,10 @@
  */
 namespace Magento\Backend\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
-use Magento\Mtf\Util\Command\Cli\DeployMode;
+use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
+use Magento\Mtf\Util\Command\Cli\DeployMode;
 
 /**
  * Verify visibility of form elements on Configuration page.
@@ -64,7 +64,7 @@ class LoginAfterJSMinificationTest extends Injectable
     ) {
         $this->configData = $configData;
 
-       //Pre-conditions
+        //Pre-conditions
         $cli->setDeployModeToDeveloper();
         $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,

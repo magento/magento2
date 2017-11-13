@@ -65,7 +65,8 @@ class SetLoadPersistentQuoteObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if (!(($this->_persistentSession->isPersistent() && !$this->_customerSession->isLoggedIn())
+        if (!(
+            ($this->_persistentSession->isPersistent() && !$this->_customerSession->isLoggedIn())
             && !$this->_persistentData->isShoppingCartPersist()
         )) {
             return;

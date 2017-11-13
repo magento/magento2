@@ -7,11 +7,11 @@ namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Date;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
 
 /**

@@ -86,8 +86,7 @@ class AssertUrlRewriteProductInGrid extends AbstractConstraint
                     'store_id' => $storeName
                 ],
                 [
-                    'request_path' =>
-                        $rootCategoryArray[$rootCategoryName]['name'] . '/' . $product->getUrlKey() . '.html',
+                    'request_path' => $rootCategoryArray[$rootCategoryName]['name'] . '/' . $product->getUrlKey() . '.html',
                     'target_path' => $this->getTargetPath($product, $category),
                     'store_id' => $storeName
                 ],

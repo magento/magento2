@@ -5,8 +5,6 @@
  */
 namespace Magento\Customer\Block\Account;
 
-use Magento\Customer\Block\Account\SortLinkInterface;
-
 /**
  * Class Link
  *

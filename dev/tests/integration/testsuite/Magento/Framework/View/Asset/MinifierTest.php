@@ -6,11 +6,11 @@
 namespace Magento\Framework\View\Asset;
 
 use Magento\Deploy\Console\ConsoleLogger;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\State as AppState;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Deploy\Strategy\DeployStrategyFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State as AppState;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Tests for minifier

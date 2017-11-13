@@ -5,9 +5,9 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order;
 
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Sales\Model\ResourceModel\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Spi\OrderAddressResourceInterface;
-use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 
 /**
  * Flat sales order address resource

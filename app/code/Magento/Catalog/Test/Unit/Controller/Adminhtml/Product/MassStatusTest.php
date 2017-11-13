@@ -6,12 +6,12 @@
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
-use Magento\Ui\Component\MassAction\Filter;
 use Magento\Backend\Model\View\Result\Redirect;
-use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Catalog\Controller\Adminhtml\Product\Builder;
-use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Catalog\Model\Product\Action;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class MassStatusTest

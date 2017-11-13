@@ -5,11 +5,11 @@
  */
 namespace Magento\Wishlist\Block\Adminhtml;
 
-use Magento\Framework\Registry;
 use Magento\Backend\Block\Template\Context;
-use Magento\Ui\Component\Layout\Tabs\TabWrapper;
-use Magento\Ui\Component\Layout\Tabs\TabInterface;
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Framework\Registry;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
+use Magento\Ui\Component\Layout\Tabs\TabWrapper;
 
 /**
  * Class WishlistTab

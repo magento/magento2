@@ -75,7 +75,8 @@ class ItemRepositoryTest extends WebapiAbstract
 
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = $this->objectManager->create(\Magento\Integration\Api\CustomerTokenServiceInterface::class
+        $customerTokenService = $this->objectManager->create(
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
@@ -125,7 +126,7 @@ class ItemRepositoryTest extends WebapiAbstract
         $itemId = $quote->getItemByProduct($product)->getId();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/gift-message/' .  $itemId,
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/gift-message/' . $itemId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -163,7 +164,8 @@ class ItemRepositoryTest extends WebapiAbstract
 
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = $this->objectManager->create(\Magento\Integration\Api\CustomerTokenServiceInterface::class
+        $customerTokenService = $this->objectManager->create(
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
@@ -178,7 +180,7 @@ class ItemRepositoryTest extends WebapiAbstract
         $itemId = $quote->getItemByProduct($product)->getId();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . 'mine/gift-message/' .  $itemId,
+                'resourcePath' => self::RESOURCE_PATH . 'mine/gift-message/' . $itemId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
                 'token' => $token,
             ],

@@ -6,8 +6,8 @@
 
 namespace Magento\Framework\Api\Test\Unit;
 
-use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\CustomAttributesDataInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

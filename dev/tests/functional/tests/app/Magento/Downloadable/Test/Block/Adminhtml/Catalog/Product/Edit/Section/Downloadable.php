@@ -6,12 +6,12 @@
 
 namespace Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section;
 
-use Magento\Mtf\Client\Element;
-use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Ui\Test\Block\Adminhtml\Section;
-use Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Downloadable\Samples;
 use Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Downloadable\Links;
+use Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Downloadable\Samples;
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\Section;
 
 /**
  * Product downloadable section.

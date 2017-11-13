@@ -6,10 +6,10 @@
 
 namespace Magento\Tax\Setup;
 
+use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Directory\Model\RegionFactory;
 
 /**
  * @codeCoverageIgnore

@@ -5,8 +5,8 @@
  */
 namespace Magento\Store\Test\Unit\Model;
 
-use Magento\Store\Model\ScopeTypeNormalizer;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\ScopeTypeNormalizer;
 
 class ScopeTypeNormalizerTest extends \PHPUnit\Framework\TestCase
 {

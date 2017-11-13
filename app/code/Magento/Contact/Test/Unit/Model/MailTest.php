@@ -8,8 +8,8 @@ namespace Magento\Contact\Test\Unit\Model;
 
 use Magento\Contact\Model\ConfigInterface;
 use Magento\Contact\Model\Mail;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class MailTest extends \PHPUnit\Framework\TestCase
 {

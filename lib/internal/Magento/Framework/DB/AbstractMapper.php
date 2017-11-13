@@ -10,7 +10,6 @@ use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\ObjectFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Framework\DataObject;
 
 /**
  * Class AbstractMapper

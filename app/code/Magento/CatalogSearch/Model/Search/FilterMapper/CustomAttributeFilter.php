@@ -6,14 +6,14 @@
 
 namespace Magento\CatalogSearch\Model\Search\FilterMapper;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
-use Magento\Framework\DB\Select;
+use Magento\Catalog\Model\Product;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\Eav\Model\Config as EavConfig;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
-use Magento\Catalog\Model\Product;
 
 /**
  * Class CustomAttributeFilter

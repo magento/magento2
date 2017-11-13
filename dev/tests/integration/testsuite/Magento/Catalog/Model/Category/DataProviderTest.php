@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Model\Category;
 
-use Magento\Catalog\Model\Category\DataProvider;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 

@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Customization;
 
-use \Magento\Theme\Model\Theme\Customization\Config;
+use Magento\Theme\Model\Theme\Customization\Config;
 
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {

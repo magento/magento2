@@ -6,9 +6,9 @@
 namespace Magento\Ui\Config\Reader\Definition;
 
 use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Ui\Config\Converter;
-use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Ui\Config\Reader\Definition;
 use Magento\Ui\Config\Reader\DefinitionFactory;
 

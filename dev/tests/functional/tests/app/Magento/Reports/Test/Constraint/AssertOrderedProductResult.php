@@ -7,9 +7,9 @@
 namespace Magento\Reports\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Reports\Test\Page\Adminhtml\OrderedProductsReport;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertOrderedProductResult
