@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Ui\Component\Design\Config\SearchRobots;
@@ -47,13 +47,15 @@ class ResetButton extends Field
     private function getRobotsDefaultCustomInstructions()
     {
         return trim((string)$this->scopeConfig->getValue(
-            self::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS, ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            self::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         ));
     }
 
     /**
      * Add js listener to reset button
      *
+     * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function prepare()
