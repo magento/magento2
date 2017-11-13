@@ -33,7 +33,7 @@ class Elasticsearch implements ClientInterface
     /**
      * @var string
      */
-    protected $version;
+    private $serverVersion;
 
     /**
      * Initialize Elasticsearch Client
@@ -286,7 +286,7 @@ class Elasticsearch implements ClientInterface
      */
     private function prepareFieldInfo($fieldInfo) {
 
-        if (strcmp($this->getVersion(), '5') < 0) {
+        if (strcmp($this->getServerVersion(), '5') < 0) {
             if ($fieldInfo['type'] == 'keyword') {
                 $fieldInfo['type'] = 'string';
                 $fieldInfo['index'] = isset($fieldInfo['index']) ? $fieldInfo['index'] : 'not_analyzed';
@@ -338,7 +338,7 @@ class Elasticsearch implements ClientInterface
      */
     private function prepareSearchQuery($query)
     {
-        if (strcmp($this->getVersion(), '5') < 0) {
+        if (strcmp($this->getServerVersion(), '5') < 0) {
             if( isset($query['body']) && isset($query['body']['stored_fields'])) {
                 $query['body']['fields'] = $query['body']['stored_fields'];
                 unset($query['body']['stored_fields']);
@@ -364,13 +364,13 @@ class Elasticsearch implements ClientInterface
      *
      * @return string
      */
-    private function getVersion()
+    private function getServerVersion()
     {
-        if ($this->version === null) {
+        if ($this->serverVersion === null) {
             $info = $this->client->info();
-            $this->version = $info['version']['number'];
+            $this->serverVersion = $info['version']['number'];
         }
 
-        return $this->version;
+        return $this->serverVersion;
     }
 }
