@@ -142,6 +142,21 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
+     * Join product entities to select existing products items only
+     *
+     * @return void
+     */
+    protected function _beforeLoad()
+    {
+        parent::_beforeLoad();
+        $this->join(
+            ['cpe' => $this->getResource()->getTable('catalog_product_entity')],
+            "cpe.entity_id = main_table.product_id",
+            []
+        );
+    }
+
+    /**
      * After load processing
      *
      * @return $this
