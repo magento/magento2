@@ -50,6 +50,8 @@ class ShippingMethodManagementTest extends WebapiAbstract
     }
 
     /**
+     * @magentoConfigFixture carriers/flatrate/active 1
+     * @magentoConfigFixture carriers/freeshipping/active 1
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */
     public function testGetList()
@@ -70,6 +72,8 @@ class ShippingMethodManagementTest extends WebapiAbstract
     }
 
     /**
+     * @magentoConfigFixture carriers/flatrate/active 1
+     * @magentoConfigFixture carriers/freeshipping/active 1
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */

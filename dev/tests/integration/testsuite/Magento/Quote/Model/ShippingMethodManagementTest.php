@@ -110,8 +110,8 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that getList returns all available shipping methods.
      *
-     * @magentoConfigFixture current_store carriers/tablerate/active 1
-     * @magentoConfigFixture current_store carriers/tablerate/condition_name package_qty
+     * @magentoConfigFixture carriers/freeshipping/active 1
+     * @magentoConfigFixture carriers/flatrate/active 1
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/OfflineShipping/_files/tablerates.php
      * @magentoDbIsolation enabled
@@ -140,7 +140,7 @@ class ShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
         );
         self::assertEquals(
             $result[1]->getCarrierCode(),
-            'tablerate'
+            'freeshipping'
         );
     }
 }
