@@ -141,7 +141,6 @@ class AbstractMapperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->selectMock, $mapper->map($criteriaMock));
     }
 
-
     public function testMapException()
     {
         $mapperMethods = [
