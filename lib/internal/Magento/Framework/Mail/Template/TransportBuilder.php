@@ -172,20 +172,6 @@ class TransportBuilder
     }
 
     /**
-     * Set mail from address by store.
-     *
-     * @param string|array $from
-     * @param string|int $store
-     * @return $this
-     */
-    public function setFromByStore($from, $store)
-    {
-        $result = $this->_senderResolver->resolve($from, $store);
-        $this->message->setFrom($result['email'], $result['name']);
-        return $this;
-    }
-
-    /**
      * Set template identifier
      *
      * @param string $templateIdentifier
