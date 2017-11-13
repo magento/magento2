@@ -46,7 +46,7 @@ class TransportBuilderByStoreTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function setFromByStore()
+    public function testSetFromByStore()
     {
         $sender = ['email' => 'from@example.com', 'name' => 'name'];
         $store = 1;
