@@ -5,8 +5,6 @@
  */
 namespace Magento\Directory\Test\Unit\Model;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-
 /**
  * Class CountryInformationAcquirerTest
  */
@@ -36,6 +34,11 @@ class CountryInformationAcquirerTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
+
+    /**
+     * @var \Magento\Directory\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $directoryHelper;
 
     /**
      * Setup the test

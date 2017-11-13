@@ -68,6 +68,11 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     private $collectionProcessor;
 
     /**
+     * @var Address
+     */
+    private $addressResource;
+
+    /**
      * @param \Magento\Customer\Model\AddressFactory $addressFactory
      * @param \Magento\Customer\Model\AddressRegistry $addressRegistry
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry

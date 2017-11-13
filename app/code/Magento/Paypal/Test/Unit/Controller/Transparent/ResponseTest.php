@@ -49,9 +49,14 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     private $responseValidatorMock;
 
     /**
-     * @var Transparent | \PHPUnit_Framework_MockObject_MockObject
+     * @var Transparent|\PHPUnit_Framework_MockObject_MockObject
      */
     private $payflowFacade;
+
+    /**
+     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $viewMock;
 
     protected function setUp()
     {

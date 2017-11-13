@@ -6,7 +6,7 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-use \Magento\Persistent\Observer\RemoveGuestPersistenceOnEmptyCartObserver;
+use Magento\Persistent\Observer\RemoveGuestPersistenceOnEmptyCartObserver;
 
 class RemoveGuestPersistenceOnEmptyCartObserverTest extends \PHPUnit\Framework\TestCase
 {
@@ -44,6 +44,11 @@ class RemoveGuestPersistenceOnEmptyCartObserverTest extends \PHPUnit\Framework\T
      * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cartRepositoryMock;
+
+    /**
+     * @var \Magento\Persistent\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $sessionModelMock;
 
     protected function setUp()
     {
@@ -125,7 +130,7 @@ class RemoveGuestPersistenceOnEmptyCartObserverTest extends \PHPUnit\Framework\T
     public function testExecuteWithNonexistentCart()
     {
         $customerId = 1;
-        $exception = new \Magento\Framework\Exception\NoSuchEntityException;
+        $exception = new \Magento\Framework\Exception\NoSuchEntityException();
 
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);

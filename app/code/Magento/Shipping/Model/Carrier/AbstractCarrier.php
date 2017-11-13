@@ -9,6 +9,7 @@
 namespace Magento\Shipping\Model\Carrier;
 
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
+use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Shipment\Request;
 
 /**
@@ -34,6 +35,11 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @var array|null
      */
     protected $_rates;
+
+    /**
+     * @var Result
+     */
+    protected $_result;
 
     /**
      * Number of boxes in package

@@ -36,6 +36,11 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     /**#@-*/
 
     /**
+     * @var StockRegistryInterface
+     */
+    protected $stockRegistry;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param ExtensionAttributesFactory $extensionFactory

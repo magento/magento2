@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
 
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
 
 /**
  * @api
@@ -23,6 +23,11 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
      * @var \Magento\Framework\Locale\CurrencyInterface
      */
     protected $localeCurrency;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * @param ContextInterface $context

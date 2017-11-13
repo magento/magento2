@@ -9,7 +9,6 @@ namespace Magento\Quote\Test\Unit\Model\Webapi;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\Webapi\ParamOverriderCartId;
 
 /**
@@ -23,9 +22,14 @@ class ParamOverriderCartIdTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var UserContextInterface
+     * @var UserContextInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $userContext;
+
+    /**
+     * @var \Magento\Quote\Api\CartManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cartManagement;
 
     protected function setUp()
     {

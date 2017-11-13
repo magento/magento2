@@ -15,7 +15,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->dataStorage = $this->createMock(\Magento\Search\Model\SearchEngine\Config\Data::class);
+        $this->dataStorageMock = $this->createMock(\Magento\Search\Model\SearchEngine\Config\Data::class);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
@@ -23,9 +23,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $config = $this->objectManager->getObject(
             \Magento\Search\Model\SearchEngine\Config::class,
-            ['dataStorage' => $this->dataStorage]
+            ['dataStorage' => $this->dataStorageMock]
         );
-        $this->dataStorage->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
+        $this->dataStorageMock->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
         $this->assertEquals(['synonyms'], $config->getDeclaredFeatures('mysql'));
     }
 
@@ -33,9 +33,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $config = $this->objectManager->getObject(
             \Magento\Search\Model\SearchEngine\Config::class,
-            ['dataStorage' => $this->dataStorage]
+            ['dataStorage' => $this->dataStorageMock]
         );
-        $this->dataStorage->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
+        $this->dataStorageMock->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
         $this->assertEquals(true, $config->isFeatureSupported('synonyms', 'mysql'));
     }
 }

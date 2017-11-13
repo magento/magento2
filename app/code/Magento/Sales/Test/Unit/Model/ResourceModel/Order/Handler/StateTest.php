@@ -22,6 +22,16 @@ class StateTest extends \PHPUnit\Framework\TestCase
      */
     protected $orderMock;
 
+    /**
+     * @var \Magento\Sales\Model\Order\Address|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressMock;
+
+    /**
+     * @var \Magento\Sales\Model\ResourceModel\Order\Address\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressCollectionMock;
+
     protected function setUp()
     {
         $this->orderMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, [

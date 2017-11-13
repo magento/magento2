@@ -26,6 +26,11 @@ class Logout extends \Magento\Framework\App\Action\Action
     protected $resultJsonFactory;
 
     /**
+     * @var \Magento\Customer\Model\Session
+     */
+    protected $customerSession;
+
+    /**
      * Initialize Logout controller
      *
      * @param \Magento\Framework\App\Action\Context $context

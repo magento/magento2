@@ -10,20 +10,35 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 class TierPriceTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\CatalogImportExport\Model\Import\Product\Validator\TierPrice */
+    /**
+     * @var \Magento\CatalogImportExport\Model\Import\Product\Validator\TierPrice
+     */
     protected $tierPrice;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $groupRepositoryInterface;
 
-    /** @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $searchCriteriaBuilder;
 
-    /** @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $storeResolver;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $searchCriteriaSearch;
 
     protected function setUp()
     {

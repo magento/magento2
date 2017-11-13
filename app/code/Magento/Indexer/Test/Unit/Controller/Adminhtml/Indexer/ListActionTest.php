@@ -14,49 +14,59 @@ class ListActionTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \Magento\Backend\App\Action\Context
+     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\View\Element\AbstractBlock
+     * @var \Magento\Framework\View\Element\AbstractBlock|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $block;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $layout;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface
+     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $view;
 
     /**
-     * @var \Magento\Framework\View\Result\Page
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $page;
 
     /**
-     * @var \Magento\Backend\Model\Menu
+     * @var \Magento\Backend\Model\Menu|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $menu;
 
     /**
-     * @var \Magento\Framework\View\Page\Config
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\Backend\Model\Menu\Item
+     * @var \Magento\Backend\Model\Menu\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $items;
 
     /**
-     * @var \Title
+     * @var \Title|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $title;
+
+    /**
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $request;
+
+    /**
+     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $response;
 
     /**
      * Set up test

@@ -37,6 +37,11 @@ class UpdateQty extends \Magento\Backend\App\Action
     protected $resultRawFactory;
 
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory

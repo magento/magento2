@@ -31,6 +31,11 @@ class GetAttributes extends Action
     protected $jsonHelper;
 
     /**
+     * @var AttributesListInterface
+     */
+    protected $attributesList;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper

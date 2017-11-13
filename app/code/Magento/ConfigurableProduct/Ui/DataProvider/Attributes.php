@@ -14,6 +14,11 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $collection;
 
     /**
+     * @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler
+     */
+    protected $configurableAttributeHandler;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName

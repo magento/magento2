@@ -13,44 +13,49 @@ use Magento\Downloadable\Model\LinkRepository;
 class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductRepository|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $repositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\Link\ContentValidator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contentValidatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Api\Data\File\ContentUploaderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contentUploaderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $jsonEncoderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\LinkFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $linkFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\Product\Type|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productTypeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Api\Data\LinkInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $linkDataObjectFactory;
+
+    /**
+     * @var \Magento\Downloadable\Api\Data\SampleInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $sampleDataObjectFactory;
 
     /**
      * @var LinkRepository
@@ -58,17 +63,17 @@ class LinkRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $service;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\Product\TypeHandler\Link|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $linkHandlerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\EntityMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entityMetadataMock;
 

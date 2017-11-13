@@ -19,14 +19,18 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
         /** @var $layout DOMNode */
         foreach ($xpath->query('/page_layouts/layout') as $layout) {
+            /** @noinspection PhpUndefinedFieldInspection */
             $layoutAttributes = $layout->attributes;
             $id = $layoutAttributes->getNamedItem('id')->nodeValue;
             $pageLayouts[$id]['code'] = $id;
 
             /** @var $layoutSubNode DOMNode */
+            /** @noinspection PhpUndefinedFieldInspection */
             foreach ($layout->childNodes as $layoutSubNode) {
+                /** @noinspection PhpUndefinedFieldInspection */
                 switch ($layoutSubNode->nodeName) {
                     case 'label':
+                        /** @noinspection PhpUndefinedFieldInspection */
                         $pageLayouts[$id][$layoutSubNode->nodeName] = $layoutSubNode->nodeValue;
                         break;
                     default:

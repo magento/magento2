@@ -22,6 +22,11 @@ class MatrixTest extends \PHPUnit\Framework\TestCase
      */
     protected $stockRegistryMock;
 
+    /**
+     * @var \Magento\Config\Block\System\Config\Form
+     */
+    protected $_object;
+
     protected function setUp()
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

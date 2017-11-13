@@ -32,6 +32,11 @@ class TaxTest extends \PHPUnit\Framework\TestCase
      */
     protected $selectMock;
 
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManager;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

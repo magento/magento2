@@ -236,6 +236,11 @@ class Address extends AbstractCustomer
     protected $postcodeValidator;
 
     /**
+     * @var \Magento\Directory\Model\Region[]
+     */
+    protected $_regionCollection;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory

@@ -8,12 +8,12 @@
 
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
-use Magento\CatalogImportExport\Model\Import\Product;
-use Magento\Framework\App\ResourceConnection;
-use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection as ProductOptionValueCollection;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory as ProductOptionValueCollectionFactory;
+use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\App\ResourceConnection;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Entity class which provide possibility to import product custom options
@@ -222,6 +222,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
      */
     protected $_optionCollection;
+
+    /**
+     * @var array
+     */
+    protected $_invalidRows;
 
     /**#@+
      * Error codes
@@ -947,7 +952,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $multiRowData = $this->_getMultiRowFormat($rowData);
 
         foreach ($multiRowData as $optionData) {
-
             $combinedData = array_merge($rowData, $optionData);
 
             if ($this->_isRowWithCustomOption($combinedData)) {
@@ -1202,11 +1206,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $childCount = [];
 
             foreach ($bunch as $rowNumber => $rowData) {
-
                 $multiRowData = $this->_getMultiRowFormat($rowData);
 
                 foreach ($multiRowData as $optionData) {
-
                     $combinedData = array_merge($rowData, $optionData);
 
                     if (!$this->isRowAllowedToImport($combinedData, $rowNumber)) {

@@ -24,6 +24,11 @@ class AnchorRendererTest extends \PHPUnit\Framework\TestCase
     private $menuItemMock;
 
     /**
+     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $menuItemWithoutChildrenMock;
+
+    /**
      * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
      */
     private $escaperMock;

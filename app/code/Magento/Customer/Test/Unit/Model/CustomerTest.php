@@ -69,7 +69,6 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_config = $this->createMock(\Magento\Eav\Model\Config::class);
         $this->_attribute = $this->createMock(\Magento\Eav\Model\Attribute::class);
         $this->_storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
-        $this->_storetMock = $this->createMock(\Magento\Store\Model\Store::class);
         $this->_scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->_transportBuilderMock = $this->createMock(\Magento\Framework\Mail\Template\TransportBuilder::class);
         $this->_transportMock = $this->createMock(\Magento\Framework\Mail\TransportInterface::class);

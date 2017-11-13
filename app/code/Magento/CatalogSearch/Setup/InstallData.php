@@ -5,11 +5,11 @@
  */
 namespace Magento\CatalogSearch\Setup;
 
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\Indexer\IndexerInterfaceFactory;
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
 class InstallData implements InstallDataInterface
 {
@@ -17,6 +17,11 @@ class InstallData implements InstallDataInterface
      * @var IndexerInterfaceFactory
      */
     private $indexerFactory;
+
+    /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $attributeRepository;
 
     /**
      * @param IndexerInterfaceFactory $indexerFactory

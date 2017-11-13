@@ -25,6 +25,11 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
      */
     protected $currencyFactory;
 
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $logger;
+
     protected function setUp()
     {
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)

@@ -30,6 +30,11 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
     protected $customerRepository;
 
     /**
+     * @var bool
+     */
+    protected $isScopePrivate;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Template\Context $context

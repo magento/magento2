@@ -8,41 +8,51 @@ namespace Magento\Tax\Test\Unit\App\Action;
 class ContextPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Tax\Helper\Data
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerSessionMock;
+
+    /**
+     * @var \Magento\Tax\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $taxHelperMock;
 
     /**
-     * @var \Magento\Weee\Helper\Data
+     * @var \Magento\Weee\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $weeeHelperMock;
 
     /**
-     * @var \Magento\Weee\Model\Tax
+     * @var \Magento\Weee\Model\Tax|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $weeeTaxMock;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $httpContextMock;
 
     /**
-     * @var \Magento\Tax\Model\Calculation\Proxy
+     * @var \Magento\Tax\Model\Calculation\Proxy|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $taxCalculationMock;
 
     /**
      * Module manager
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     private $moduleManagerMock;
 
     /**
      * Cache config
      *
-     * @var \Magento\PageCache\Model\Config
+     * @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     private $cacheConfigMock;
 

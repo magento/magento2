@@ -55,6 +55,11 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      */
     protected $_fieldFactoryMock;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_scopeConfigMock;
+
     protected function setUp()
     {
         $this->_testData = [

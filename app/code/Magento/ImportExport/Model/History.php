@@ -43,6 +43,11 @@ class History extends \Magento\Framework\Model\AbstractModel
     protected $reportHelper;
 
     /**
+     * @var \Magento\Backend\Model\Auth\Session
+     */
+    protected $session;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Framework\Model\Context $context
@@ -139,7 +144,7 @@ class History extends \Magento\Framework\Model\AbstractModel
     {
         if ($import->isReportEntityType()) {
             $this->load($this->getLastItemId());
-             $this->setExecutionTime(self::IMPORT_FAILED);
+            $this->setExecutionTime(self::IMPORT_FAILED);
             $this->save();
         }
         return $this;

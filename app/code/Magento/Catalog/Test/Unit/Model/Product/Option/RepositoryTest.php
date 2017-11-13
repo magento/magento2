@@ -5,9 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Option;
 
-use \Magento\Catalog\Model\Product\Option\Repository;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
-use \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory;
+use Magento\Catalog\Model\Product\Option\Repository;
+use Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -40,9 +40,14 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     protected $optionCollectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productMock;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Option\Converter|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $converterMock;
 
     protected function setUp()
     {

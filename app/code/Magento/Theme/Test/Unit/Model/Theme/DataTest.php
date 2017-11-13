@@ -16,6 +16,46 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
+    /**
+     * @var \Magento\Framework\View\Design\Theme\CustomizationFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customizationFactory;
+
+    /**
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resourceCollection;
+
+    /**
+     * @var \Magento\Framework\View\Design\Theme\ImageFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_imageFactory;
+
+    /**
+     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $themeFactory;
+
+    /**
+     * @var \Magento\Framework\View\Design\Theme\Domain\Factory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $domainFactory;
+
+    /**
+     * @var \Magento\Theme\Model\ThemeFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $themeModelFactory;
+
+    /**
+     * @var \Magento\Framework\View\Design\Theme\Validator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $validator;
+
+    /**
+     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $appState;
+
     protected function setUp()
     {
         $customizationConfig = $this->createMock(\Magento\Theme\Model\Config\Customization::class);

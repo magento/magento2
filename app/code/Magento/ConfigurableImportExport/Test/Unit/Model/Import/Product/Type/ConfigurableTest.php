@@ -63,19 +63,30 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
      */
     protected $_entityModel;
 
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $resource;
 
-    /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_connection;
 
-    /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $select;
 
     /**
      * @var string
      */
     protected $productEntityLinkField = 'entity_id';
+
+    /**
+     * @var array
+     */
+    protected $_oldSku;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -423,7 +434,6 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'attribute_code' => 'testattr3',
                 'is_global' => '1',
                 'is_visible' => '1',
-                'is_static' => '0',
                 'is_required' => '0',
                 'is_unique' => '0',
                 'frontend_label' => 'testattr3',
@@ -446,28 +456,60 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
      */
     public function testSaveData()
     {
-        $newSkus = array_change_key_case([
-            'configurableskuI22' =>
-                [$this->productEntityLinkField => 1, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr3v1' =>
-                [$this->productEntityLinkField => 2, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr30v1' =>
-                [$this->productEntityLinkField => 20, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testconf2-attr2val1-testattr3v2' =>
-                [$this->productEntityLinkField => 3, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testSimple' =>
-                [$this->productEntityLinkField => 4, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'testSimpleToSkip' =>
-                [$this->productEntityLinkField => 5, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
-            'configurableskuI22withoutLabels' =>
-                [$this->productEntityLinkField => 6, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22withoutVariations' =>
-                [$this->productEntityLinkField => 7, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22Duplicated' =>
-                [$this->productEntityLinkField => 8, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-            'configurableskuI22BadPrice' =>
-                [$this->productEntityLinkField => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
-        ]);
+        $newSkus = array_change_key_case(
+            [
+                'configurableskuI22' => [
+                    $this->productEntityLinkField => 1,
+                    'type_id' => 'configurable',
+                    'attr_set_code' => 'Default'
+                ],
+                'testconf2-attr2val1-testattr3v1' => [
+                    $this->productEntityLinkField => 2,
+                    'type_id' => 'simple',
+                    'attr_set_code' => 'Default'
+                ],
+                'testconf2-attr2val1-testattr30v1' => [
+                    $this->productEntityLinkField => 20,
+                    'type_id' => 'simple',
+                    'attr_set_code' => 'Default'
+                ],
+                'testconf2-attr2val1-testattr3v2' => [
+                    $this->productEntityLinkField => 3,
+                    'type_id' => 'simple',
+                    'attr_set_code' => 'Default'
+                ],
+                'testSimple' => [
+                    $this->productEntityLinkField => 4,
+                    'type_id' => 'simple',
+                    'attr_set_code' => 'Default'
+                ],
+                'testSimpleToSkip' => [
+                    $this->productEntityLinkField => 5,
+                    'type_id' => 'simple',
+                    'attr_set_code' => 'Default'
+                ],
+                'configurableskuI22withoutLabels' => [
+                    $this->productEntityLinkField => 6,
+                    'type_id' => 'configurable',
+                    'attr_set_code' => 'Default'
+                ],
+                'configurableskuI22withoutVariations' => [
+                    $this->productEntityLinkField => 7,
+                    'type_id' => 'configurable',
+                    'attr_set_code' => 'Default'
+                ],
+                'configurableskuI22Duplicated' => [
+                    $this->productEntityLinkField => 8,
+                    'type_id' => 'configurable',
+                    'attr_set_code' => 'Default'
+                ],
+                'configurableskuI22BadPrice' => [
+                    $this->productEntityLinkField => 9,
+                    'type_id' => 'configurable',
+                    'attr_set_code' => 'Default'
+                ],
+            ]
+        );
         $this->_entityModel->expects($this->any())
             ->method('getNewSku')
             ->will($this->returnValue($newSkus));

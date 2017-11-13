@@ -132,6 +132,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     private $addressRepositoryMock;
 
     /**
+     * @var \Magento\Quote\Model\QuoteFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $quoteFactoryMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()

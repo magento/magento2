@@ -13,6 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class NewActionTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class NewActionTest extends \PHPUnit\Framework\TestCase
 {
@@ -85,6 +86,16 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $pageTitleMock;
+
+    /**
+     * @var \Magento\Shipping\Model\Shipping\LabelGenerator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $labelGenerator;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentSender|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $shipmentSender;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)

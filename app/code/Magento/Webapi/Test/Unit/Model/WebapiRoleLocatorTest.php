@@ -43,6 +43,11 @@ class WebapiRoleLocatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $role;
 
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $_objectManager;
+
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

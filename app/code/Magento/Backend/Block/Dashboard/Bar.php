@@ -23,6 +23,11 @@ class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     protected $_currentCurrencyCode = null;
 
     /**
+     * @var \Magento\Directory\Model\Currency
+     */
+    protected $_currency;
+
+    /**
      * @return array
      */
     public function getTotals()

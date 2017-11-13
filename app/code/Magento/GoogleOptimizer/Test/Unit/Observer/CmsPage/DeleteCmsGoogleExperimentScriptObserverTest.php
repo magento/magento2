@@ -8,12 +8,12 @@ namespace Magento\GoogleOptimizer\Test\Unit\Observer\CmsPage;
 class DeleteCmsGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\GoogleOptimizer\Model\Code|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_codeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_eventObserverMock;
 
@@ -21,6 +21,11 @@ class DeleteCmsGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\Tes
      * @var \Magento\GoogleOptimizer\Observer\CmsPage\DeleteCmsGoogleExperimentScriptObserver
      */
     protected $_model;
+
+    /**
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_requestMock;
 
     protected function setUp()
     {

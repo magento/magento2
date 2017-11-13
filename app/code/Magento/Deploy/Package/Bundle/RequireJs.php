@@ -7,9 +7,9 @@ namespace Magento\Deploy\Package\Bundle;
 
 use Magento\Deploy\Config\BundleConfig;
 use Magento\Deploy\Package\BundleInterface;
-use Magento\Framework\Filesystem;
-use \Magento\Framework\Filesystem\File\WriteInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\File\WriteInterface;
 use Magento\Framework\View\Asset\Minification;
 
 /**
@@ -103,6 +103,11 @@ class RequireJs implements BundleInterface
      * @var string
      */
     private $pathToBundleDir;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
 
     /**
      * Bundle constructor
