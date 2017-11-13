@@ -24,20 +24,20 @@ class Index extends Action
     /**
      * @var State
      */
-    protected $state;
+    private $state;
 
     /**
      * @param Context $context
      * @param ProductMetadataInterface $productMetadata
-     * @param State $state
+     * @param State|null $state
      */
     public function __construct(
         Context $context,
         ProductMetadataInterface $productMetadata,
-        State $state
+        State $state = null
     ) {
         $this->productMetadata = $productMetadata;
-        $this->state = $state;
+        $this->state = $state ?: \Magento\Framework\App\ObjectManager::getInstance()->get(State::class);
         parent::__construct($context);
     }
 
@@ -49,7 +49,7 @@ class Index extends Action
      */
     public function execute()
     {
-        if ($this->state->getMode() == State::MODE_PRODUCTION) {
+        if ($this->state->getMode() === State::MODE_PRODUCTION) {
             $this->_forward('index', 'noroute', 'cms');
             return;
         }
