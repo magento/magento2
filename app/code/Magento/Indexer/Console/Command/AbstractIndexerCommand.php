@@ -28,6 +28,7 @@ abstract class AbstractIndexerCommand extends Command
      * @var ObjectManagerInterface
      */
     private $objectManager;
+
     /**
      * @var IndexerCollectionFactory|null
      */

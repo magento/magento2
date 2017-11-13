@@ -84,6 +84,8 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
      * @param LinksInitializer $linkInitializer
      * @param Management $linkManagement
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param ProductLinkInterfaceFactory $productLinkFactory
+     * @param ProductLinkExtensionFactory $productLinkExtensionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

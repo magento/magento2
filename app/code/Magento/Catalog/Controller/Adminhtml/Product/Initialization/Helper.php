@@ -109,10 +109,10 @@ class Helper
         Js $jsHelper,
         DateFilter $dateFilter,
         LinkTypeProvider $linkTypeProvider = null,
-        CustomOptionFactory $customOptionFactory,
-        ProductLinkFactory $productLinkFactory,
-        ProductRepository $productRepository,
-        DateTime $dateTimeFilter
+        CustomOptionFactory $customOptionFactory = null,
+        ProductLinkFactory $productLinkFactory = null,
+        ProductRepository $productRepository = null,
+        DateTime $dateTimeFilter = null
     ) {
         if (null === $linkTypeProvider) {
             $linkTypeProvider = ObjectManager::getInstance()->get(LinkTypeProvider::class);

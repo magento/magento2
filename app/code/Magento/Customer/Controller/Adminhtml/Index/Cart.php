@@ -26,6 +26,35 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
      */
     private $quoteFactory;
 
+    /**
+     * Cart constructor.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Customer\Model\AddressFactory $addressFactory
+     * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
+     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
+     * @param \Magento\Customer\Helper\View $viewHelper
+     * @param \Magento\Framework\Math\Random $random
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param Mapper $addressMapper
+     * @param AccountManagementInterface $customerAccountManagement
+     * @param AddressRepositoryInterface $addressRepository
+     * @param CustomerInterfaceFactory $customerDataFactory
+     * @param AddressInterfaceFactory $addressDataFactory
+     * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param DataObjectHelper $dataObjectHelper
+     * @param ObjectFactory $objectFactory
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param QuoteFactory|null $quoteFactory
+     */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
@@ -86,7 +115,6 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
         }
         $this->quoteFactory = $quoteFactory;
     }
-
 
     /**
      * Handle and then get cart grid contents

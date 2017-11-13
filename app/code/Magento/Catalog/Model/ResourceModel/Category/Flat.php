@@ -703,19 +703,4 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
 
         return $this->getConnection()->fetchPairs($select, $bind);
     }
-
-    /**
-     * Get instance of CategoryFlatCollectionFactory
-     *
-     * @return CategoryFlatCollectionFactory
-     */
-    private function getCategoryFlatCollectionFactory()
-    {
-        if (!$this->categoryFlatCollectionFactory instanceof CategoryFlatCollectionFactory) {
-            $this->categoryFlatCollectionFactory = ObjectManager::getInstance()
-                ->get(CategoryFlatCollectionFactory::class);
-        }
-
-        return $this->categoryFlatCollectionFactory;
-    }
 }

@@ -72,8 +72,8 @@ class File extends AbstractData
      * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator
      * @param Filesystem $fileSystem
      * @param UploaderFactory $uploaderFactory
+     * @param FileProcessorFactory|null $fileProcessorFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,

@@ -34,6 +34,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $scopeConfig;
+
     /**
      * @var ZendClientFactory|null
      */

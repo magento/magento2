@@ -20,6 +20,7 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
      * Indexer name option
      */
     const INPUT_KEY_INDEXERS = 'index';
+
     /**
      * @var IndexerFactory|null
      */
