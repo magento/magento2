@@ -33,6 +33,7 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
      * Set source item id.
      *
      * @param string $sourceItemId
+     * @return void
      */
     public function setSourceItemId(string $sourceItemId);
 
