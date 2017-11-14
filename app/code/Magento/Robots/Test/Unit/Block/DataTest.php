@@ -5,6 +5,8 @@
  */
 namespace Magento\Robots\Test\Unit\Block;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -28,6 +30,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     private $storeResolver;
 
     /**
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
      * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $eventManagerMock;
@@ -44,6 +51,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())
             ->method('getEventManager')
             ->willReturn($this->eventManagerMock);
+
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMockForAbstractClass();
+        $this->context->expects($this->any())
+            ->method('getScopeConfig')
+            ->willReturn($this->scopeConfigMock);
 
         $this->robots = $this->getMockBuilder(\Magento\Robots\Model\Robots::class)
             ->disableOriginalConstructor()
@@ -68,6 +81,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $data = 'test';
 
         $this->initEventManagerMock($data);
+
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(
+                'advanced/modules_disable_output/Magento_Robots',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                null
+            )
+            ->willReturn(false);
 
         $this->robots->expects($this->once())
             ->method('getData')
