@@ -76,17 +76,17 @@ class LoginTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\Stdlib\CookieManagerInterface| \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cookieManager;
+    private $cookieManager;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory| \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cookieMetadataFactory;
+    private $cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadata| \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cookieMetadata;
+    private $cookieMetadata;
 
     protected function setUp()
     {
