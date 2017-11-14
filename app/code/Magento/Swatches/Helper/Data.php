@@ -77,15 +77,11 @@ class Data
     private $swatchAttributesProvider;
 
     /**
-     * Data key which should populated to Attribute entity from "additional_data" field
+     * Data key which should populated to Attribute entity from "additional_data" field (populated in the constructor)
      *
      * @var array
      */
-    protected $eavAttributeAdditionalDataKeys = [
-        Swatch::SWATCH_INPUT_TYPE_KEY,
-        'update_product_preview_image',
-        'use_product_image_for_swatch'
-    ];
+    protected $eavAttributeAdditionalDataKeys = [];
 
     /**
      * Serializer to/from JSON.
@@ -120,6 +116,8 @@ class Data
         $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
         $this->swatchAttributesProvider = $swatchAttributesProvider
             ?: ObjectManager::getInstance()->get(SwatchAttributesProvider::class);
+        // Populate eavAttributeAdditionalDataKeys property so it is equal with the one used in the swatch attribute provider
+        $this->eavAttributeAdditionalDataKeys = $this->swatchAttributesProvider->getEavAttributeAdditionalDataKeys();
     }
 
     /**
@@ -146,26 +144,6 @@ class Data
         }
         $additionalData = array_merge($initialAdditionalData, $dataToAdd);
         $attribute->setData('additional_data', $this->serializer->serialize($additionalData));
-        return $this;
-    }
-
-    /**
-     * @param Attribute $attribute
-     * @return $this
-     */
-    private function populateAdditionalDataEavAttribute(Attribute $attribute)
-    {
-        $serializedAdditionalData = $attribute->getData('additional_data');
-        if ($serializedAdditionalData) {
-            $additionalData = $this->serializer->unserialize($serializedAdditionalData);
-            if (isset($additionalData) && is_array($additionalData)) {
-                foreach ($this->eavAttributeAdditionalDataKeys as $key) {
-                    if (isset($additionalData[$key])) {
-                        $attribute->setData($key, $additionalData[$key]);
-                    }
-                }
-            }
-        }
         return $this;
     }
 
@@ -527,8 +505,7 @@ class Data
      */
     public function isSwatchAttribute(Attribute $attribute)
     {
-        $result = $this->isVisualSwatch($attribute) || $this->isTextSwatch($attribute);
-        return $result;
+        return $this->swatchAttributesProvider->isSwatchAttribute($attribute);
     }
 
     /**
@@ -539,10 +516,7 @@ class Data
      */
     public function isVisualSwatch(Attribute $attribute)
     {
-        if (!$attribute->hasData(Swatch::SWATCH_INPUT_TYPE_KEY)) {
-            $this->populateAdditionalDataEavAttribute($attribute);
-        }
-        return $attribute->getData(Swatch::SWATCH_INPUT_TYPE_KEY) == Swatch::SWATCH_INPUT_TYPE_VISUAL;
+        return $this->swatchAttributesProvider->isVisualSwatch($attribute);
     }
 
     /**
@@ -553,10 +527,7 @@ class Data
      */
     public function isTextSwatch(Attribute $attribute)
     {
-        if (!$attribute->hasData(Swatch::SWATCH_INPUT_TYPE_KEY)) {
-            $this->populateAdditionalDataEavAttribute($attribute);
-        }
-        return $attribute->getData(Swatch::SWATCH_INPUT_TYPE_KEY) == Swatch::SWATCH_INPUT_TYPE_TEXT;
+        return $this->swatchAttributesProvider->isTextSwatch($attribute);
     }
 
     /**
