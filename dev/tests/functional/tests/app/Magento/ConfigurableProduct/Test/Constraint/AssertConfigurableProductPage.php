@@ -14,6 +14,14 @@ use Magento\Catalog\Test\Constraint\AssertProductPage;
  */
 class AssertConfigurableProductPage extends AssertProductPage
 {
+
+    /**
+     * Price format.
+     *
+     * @var int
+     */
+    protected $priceFormat = 2;
+
     /**
      * Verify displayed product data on product page(front-end) equals passed from fixture:
      * 1. Product Name
@@ -45,7 +53,7 @@ class AssertConfigurableProductPage extends AssertProductPage
         $formPrice = $priceBlock->isOldPriceVisible() ? $priceBlock->getOldPrice() : $priceBlock->getPrice();
         $fixturePrice = $this->getLowestConfigurablePrice();
 
-        if ($fixturePrice != $formPrice) {
+        if ($fixturePrice != number_format($formPrice, $this->priceFormat)) {
             return "Displayed product price on product page(front-end) not equals passed from fixture. "
             . "Actual: {$formPrice}, expected: {$fixturePrice}.";
         }

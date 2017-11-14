@@ -3,6 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Test\Block\Product;
 
 use Magento\Mtf\Client\Locator;
@@ -15,11 +16,22 @@ use Magento\Mtf\Client\Element\SimpleElement;
 class Price extends \Magento\Catalog\Test\Block\Product\Price
 {
     /**
-     * A CSS selector for a price label.
+     * A CSS selector for a Price label.
      *
      * @var string
      */
     protected $priceLabel = '.normal-price .price-label';
+
+    /**
+     * Mapping for different types of Price.
+     *
+     * @var array
+     */
+    protected $mapTypePrices = [
+        'special_price' => [
+            'selector' => '.normal-price .price'
+        ]
+    ];
 
     /**
      * This method returns the price represented by the block.
@@ -28,6 +40,11 @@ class Price extends \Magento\Catalog\Test\Block\Product\Price
      */
     public function getPriceLabel()
     {
-        return $this->_rootElement->find($this->priceLabel, Locator::SELECTOR_CSS);
+        return $this->_rootElement->find($this->priceLabel);
     }
+
+//    protected function init()
+//    {
+//        parent::init();
+//    }
 }
