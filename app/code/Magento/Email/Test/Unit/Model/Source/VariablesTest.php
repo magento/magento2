@@ -81,7 +81,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
     public function testToOptionArrayWithGroup()
     {
         $optionArray = $this->model->toOptionArray(true);
-        $this->assertEquals('Web', $optionArray[0]['label']->getText());
+        $this->assertEquals('Web', $optionArray[0]['label']);
         $optionArrayValues = $optionArray[0]['value'];
         $this->assertEquals(count($this->configVariables['web']), count($optionArrayValues));
         $expectedResults = $this->getExpectedOptionsResults();

@@ -36,9 +36,16 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
     {
         $this->configStructure = $configStructure;
         foreach ($configPaths as $groupPath => $groupElements) {
-            $this->_configVariables[$groupPath]['label'] = __(
-                $configStructure->getElementByConfigPath($groupPath)->getLabel()
-            );
+            $groupPathElements = explode('/', $groupPath);
+            $path = [];
+            $labels = [];
+            foreach ($groupPathElements as $key => $groupPathElement) {
+                $path[] = $groupPathElement;
+                $labels[] = __(
+                    $configStructure->getElementByConfigPath(implode('/', $path))->getLabel()
+                );
+            }
+            $this->_configVariables[$groupPath]['label'] = implode(' / ', $labels);
             foreach ($groupElements as $elementPath => $groupElement) {
                 $this->_configVariables[$groupPath]['elements'][] = [
                     'value' => $elementPath,
