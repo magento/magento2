@@ -378,7 +378,7 @@ abstract class AbstractEntity
     /**
      * Validate data rows and save bunches to DB.
      *
-     * @return $this|void
+     * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _saveValidatedBunches()

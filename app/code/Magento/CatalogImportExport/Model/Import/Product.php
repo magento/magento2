@@ -2758,7 +2758,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Validate data rows and save bunches to DB
      *
-     * @return $this
+     * @return $this|\Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveValidatedBunches()
     {
