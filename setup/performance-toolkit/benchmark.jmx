@@ -264,6 +264,11 @@
             <stringProp name="Argument.value">${__P(cache_indicator,0)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="catalogGraphQLPercentage" elementType="Argument">
+            <stringProp name="Argument.name">catalogGraphQLPercentage</stringProp>
+            <stringProp name="Argument.value">${__P(catalogGraphQLPercentage,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="categories_count" elementType="Argument">
             <stringProp name="Argument.name">categories_count</stringProp>
             <stringProp name="Argument.value">${__P(categories_count,100)}</stringProp>
@@ -34170,6 +34175,1172 @@ vars.put("grid_pages_count_filtered", pageCount);
       </hashTree>
     </hashTree>
   </hashTree>
+  </hashTree>
+
+  
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="Catalog GraphQL" enabled="true">
+      <intProp name="ThroughputController.style">1</intProp>
+      <boolProp name="ThroughputController.perThread">false</boolProp>
+      <intProp name="ThroughputController.maxThroughput">1</intProp>
+      <stringProp name="ThroughputController.percentThroughput">${catalogGraphQLPercentage}</stringProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/_system/scenario_controller_tmpl.jmx</stringProp></ThroughputController>
+    <hashTree>
+        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Set Test Label" enabled="true">
+            <stringProp name="script">
+var testLabel = "${testLabel}" ? " (${testLabel})" : "";
+if (testLabel
+    &amp;&amp; sampler.getClass().getName() == 'org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy'
+) {
+    if (sampler.getName().indexOf(testLabel) == -1) {
+       sampler.setName(sampler.getName() + testLabel);
+    }
+} else if (sampler.getName().indexOf("SetUp - ") == -1) {
+    sampler.setName("SetUp - " + sampler.getName());
+}
+            </stringProp>
+            <stringProp name="scriptLanguage">javascript</stringProp>
+        <stringProp name="TestPlan.comments">mpaf/tool/fragments/_system/setup_label.jmx</stringProp></JSR223PreProcessor>
+        <hashTree/>
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
+            <stringProp name="BeanShellSampler.query">
+                vars.put("testLabel", "Catalog GraphQL");
+            </stringProp>
+            <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
+        </BeanShellSampler>
+        <hashTree/>
+    
+    <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+      <collectionProp name="HeaderManager.headers">
+        <elementProp name="" elementType="Header">
+          <stringProp name="Header.name">Content-Type</stringProp>
+          <stringProp name="Header.value">application/json</stringProp>
+        </elementProp>
+        <elementProp name="" elementType="Header">
+          <stringProp name="Header.name">Accept</stringProp>
+          <stringProp name="Header.value">*/*</stringProp>
+        </elementProp>
+      </collectionProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/header_manager_before_token.jmx</stringProp></HeaderManager>
+    <hashTree/>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - Admin Token Retrieval" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"username":"${admin_user}","password":"${admin_password}"}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/admin_token_retrieval.jmx</stringProp></HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="jp@gc - JSON Path Extractor" enabled="true">
+        <stringProp name="VAR">admin_token</stringProp>
+        <stringProp name="JSONPATH">$</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert token not null" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="484395188">^[a-z0-9-]+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">admin_token</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+      <collectionProp name="HeaderManager.headers">
+        <elementProp name="" elementType="Header">
+          <stringProp name="Header.name">Authorization</stringProp>
+          <stringProp name="Header.value">Bearer ${admin_token}</stringProp>
+        </elementProp>
+      </collectionProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/header_manager.jmx</stringProp></HeaderManager>
+    <hashTree/>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query multiple products" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{	"query":"{\n  products(\n    find: {\n          and: {\n            price: {gt: \"10\"}\n            or: {\n\t\t\t\t\t\t\t\tsku:{like:\"%Product%\"}             \n                name:{like:\"%Configurable Product%\"}              \n             }\n           }          \n        }\n    pageSize: 200\n    currentPage: 1\n    sort: {\n      price: ASC\n      name:DESC\n    }\n  ) {\n    total_count\n    items {\n        attribute_set_id\n        country_of_manufacture\n        created_at\n        custom_design\n        custom_design_from\n        custom_design_to\n        custom_layout\n        custom_layout_update\n        description\n        gallery\n        gift_message_available\n        has_options\n        image\n        image_label\n        links_exist\n        links_purchased_separately\n        links_title\n        media_gallery\n        meta_description\n        meta_keyword\n        meta_title\n        minimal_price\n        msrp\n        msrp_display_actual_price_type\n        name\n        news_from_date\n        news_to_date\n        old_id\n        options_container\n        page_layout\n        price\n        price_type\n        price_view\n        required_options\n        samples_title\n        shipment_type\n        short_description\n        sku\n        small_image\n        small_image_label\n        special_from_date\n        special_price\n        special_to_date\n        status\n        swatch_image\n        tax_class_id\n        thumbnail\n        thumbnail_label\n        tier_price\n        type_id\n        updated_at\n        url_key\n        url_path\n        visibility\n        website_ids\n        weight\n        weight_type\n    }\n    page_info {\n      page_size\n      current_page\n    }\n  }\n}\n\n","variables":null,"operationName":null}&#xD;
+</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_multiple_products_with_extensible_data_objects.jmx</stringProp></HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract total_count" enabled="true">
+        <stringProp name="VAR">graphql_products_query_total_count</stringProp>
+        <stringProp name="JSONPATH">$.data.products.total_count</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+      <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Assert total count &gt; 300" enabled="true">
+        <stringProp name="BeanShellAssertion.query">String totalCount=vars.get("graphql_products_query_total_count");
+
+if (totalCount == null) {
+        Failure = true;
+        FailureMessage = "Not Expected \"totalCount\" to be null";
+    } else {
+    	if (Integer.parseInt(totalCount) &lt; 300) {
+        Failure = true;
+        FailureMessage = "Expected \"totalCount\" to be &gt; 300, Actual: " + totalCount;
+    	} else {
+    		Failure = false;
+    	}
+    }
+
+
+</stringProp>
+        <stringProp name="BeanShellAssertion.filename"/>
+        <stringProp name="BeanShellAssertion.parameters"/>
+        <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+      </BeanShellAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create product with extensible data objects" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{&#xD;
+    "product": {&#xD;
+        "sku": "apsku-test-${__time()}-${__threadNum}-${__Random(1,1000000)}",&#xD;
+        "name": "Extensible_Product_${__time()}-${__threadNum}-${__Random(1,1000000)}",&#xD;
+        "visibility": "4",&#xD;
+        "type_id": "simple",&#xD;
+        "price": "3.62",&#xD;
+        "status": "1",&#xD;
+        "attribute_set_id": "4",&#xD;
+        "custom_attributes": [&#xD;
+            {&#xD;
+                "attribute_code": "cost",&#xD;
+                "value": ""&#xD;
+            },&#xD;
+            {&#xD;
+                "attribute_code": "description",&#xD;
+                "value": "Description"&#xD;
+            }&#xD;
+        ],&#xD;
+        "extension_attributes":{&#xD;
+		"stock_item":{&#xD;
+		"manage_stock": true,    &#xD;
+		"is_in_stock": true,&#xD;
+		"qty":"100"&#xD;
+		}&#xD;
+    	   }        ,&#xD;
+    	   "media_gallery_entries":&#xD;
+    	   	[{&#xD;
+    	   		"id": null,&#xD;
+    	   		"label":"test_label_${__time()}-${__threadNum}-${__Random(1,1000000)}",&#xD;
+    	   		"position":1,&#xD;
+    	   		"disabled":false,&#xD;
+    	   		"media_type":"image",&#xD;
+    	   		"types":["image"],&#xD;
+    	   		"content":{&#xD;
+    	   			"base64_encoded_data": "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",&#xD;
+        "type": "image/jpeg",&#xD;
+        "name": "test_image_${__time(YMDHMS)}-${__threadNum}-${__Random(1,1000000)}.jpeg"&#xD;
+    	   			}&#xD;
+    	   	}&#xD;
+    	   	]&#xD;
+    }&#xD;
+}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/products</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/create_product_with_extensible_data_objects.jmx</stringProp></HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract product id" enabled="true">
+        <stringProp name="VAR">simple_product_id</stringProp>
+        <stringProp name="JSONPATH">$.id</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract product sku" enabled="true">
+        <stringProp name="VAR">simple_product_sku</stringProp>
+        <stringProp name="JSONPATH">$.sku</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract stock item id" enabled="true">
+        <stringProp name="VAR">simple_stock_item_id</stringProp>
+        <stringProp name="JSONPATH">$.extension_attributes.stock_item.item_id</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert product id not null" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="89649215">^\d+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">simple_product_id</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert product sku not null" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="484395188">^[a-z0-9-]+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">simple_product_sku</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert stock item id not null" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="89649215">^\d+$</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">simple_stock_item_id</stringProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query simple product" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{"query":"{\n    product(sku: \"${simple_product_sku}\")\n    {\n        attribute_set_id\n        category_ids\n        category_links\n        {\n            category_id\n            position\n        }\n        cost\n        country_of_manufacture\n        created_at\n        custom_design\n        custom_design_from\n        custom_design_to\n        custom_layout\n        custom_layout_update\n        description\n        gallery\n        gift_message_available\n        has_options\n        id\n        image\n        image_label\n        links_exist\n        links_purchased_separately\n        links_title\n        media_gallery\n        meta_description\n        meta_keyword\n        meta_title\n        media_gallery_entries\n        {\n            disabled\n            file\n            id\n            label\n            media_type\n            position\n            types\n            content\n            {\n                base64_encoded_data\n                type\n                name\n            }\n            video_content\n            {\n                media_type\n                video_description\n                video_metadata\n                video_provider\n                video_title\n                video_url\n            }\n        }\n        minimal_price\n        msrp\n        msrp_display_actual_price_type\n        name\n        news_from_date\n        news_to_date\n        old_id\n        options_container\n        options\n        {\n            file_extension\n            image_size_x\n            image_size_y\n            is_require\n            max_characters\n            option_id\n            price\n            price_type\n            product_sku\n            sku\n            sort_order\n            title\n            type\n            values\n            {\n                title\n                sort_order\n                price\n                price_type\n                sku\n                option_type_id\n            }\n        }\n        page_layout\n        price\n        price_type\n        price_view\n        product_links\n        {\n            link_type\n            linked_product_sku\n            linked_product_type\n            position\n            qty\n            sku\n        }\n        required_options\n        samples_title\n        shipment_type\n        short_description\n        sku\n        small_image\n        small_image_label\n        special_from_date\n        special_price\n        special_to_date\n        status\n        swatch_image\n        tax_class_id\n        thumbnail\n        thumbnail_label\n        tier_price\n        tier_prices\n        {\n            customer_group_id\n            percentage_value\n            qty\n            value\n            website_id\n        }\n        type_id\n        updated_at\n        url_key\n        url_path\n        visibility\n        website_ids\n        weight\n        weight_type\n    }\n}","variables":null,"operationName":null}</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain"/>
+            <stringProp name="HTTPSampler.port"/>
+            <stringProp name="HTTPSampler.connect_timeout"/>
+            <stringProp name="HTTPSampler.response_timeout"/>
+            <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+            <stringProp name="HTTPSampler.contentEncoding"/>
+            <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.monitor">false</boolProp>
+            <stringProp name="HTTPSampler.embedded_url_re"/>
+        <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_simple_product_with_extensible_data_objects.jmx</stringProp></HTTPSamplerProxy>
+        <hashTree>
+            <com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion" testname="Assert product sku" enabled="true">
+                <stringProp name="JSON_PATH">$.data.product.sku</stringProp>
+                <stringProp name="EXPECTED_VALUE">${simple_product_sku}</stringProp>
+                <boolProp name="JSONVALIDATION">true</boolProp>
+                <boolProp name="EXPECT_NULL">false</boolProp>
+                <boolProp name="INVERT">false</boolProp>
+                <boolProp name="ISREGEX">true</boolProp>
+            </com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>
+            <hashTree/>
+        </hashTree>
+    
+    <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Create configurable product" enabled="true">
+  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/create_configurable_product_with_extensible_data_objects.jmx</stringProp>
+</OnceOnlyController>
+    <hashTree>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="configurable_product_attribute_color_1" elementType="Argument">
+            <stringProp name="Argument.name">configurable_product_attribute_color_1</stringProp>
+            <stringProp name="Argument.value">color123X</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="configurable_product_attribute_color_2" elementType="Argument">
+            <stringProp name="Argument.name">configurable_product_attribute_color_2</stringProp>
+            <stringProp name="Argument.value">color567Y</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="color_attribute_section" elementType="Argument">
+            <stringProp name="Argument.name">color_attribute_section</stringProp>
+            <stringProp name="Argument.value">0</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If color is assigned to default attribute set" enabled="true">
+        <stringProp name="IfController.condition">"${color_attribute_section}" == "0"</stringProp>
+        <boolProp name="IfController.evaluateAll">false</boolProp>
+      </IfController>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="API - Assign color to attribute set" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xD;
+          "attributeSetId": 4,&#xD;
+          "attributeGroupId": 7,&#xD;
+          "attributeCode": "color",&#xD;
+          "sortOrder": 0&#xD;
+}&#xD;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"/>
+          <stringProp name="HTTPSampler.port"/>
+          <stringProp name="HTTPSampler.connect_timeout"/>
+          <stringProp name="HTTPSampler.response_timeout"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"/>
+          <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/products/attribute-sets/attributes</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"/>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Id" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="1865724479">^\"\d+\"$</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">1</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract color_attribute_section id" enabled="true">
+            <stringProp name="VAR">color_attribute_section</stringProp>
+            <stringProp name="JSONPATH">$</stringProp>
+            <stringProp name="DEFAULT"/>
+            <stringProp name="VARIABLE"/>
+            <stringProp name="SUBJECT">BODY</stringProp>
+          </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="API - Get color values ids" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+          <collectionProp name="Arguments.arguments"/>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain"/>
+        <stringProp name="HTTPSampler.port"/>
+        <stringProp name="HTTPSampler.connect_timeout"/>
+        <stringProp name="HTTPSampler.response_timeout"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"/>
+        <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/products/attributes/color/options</stringProp>
+        <stringProp name="HTTPSampler.method">GET</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+        <boolProp name="HTTPSampler.monitor">false</boolProp>
+        <stringProp name="HTTPSampler.embedded_url_re"/>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract color value #1" enabled="true">
+          <stringProp name="JSONPostProcessor.referenceNames">color_1_value_id</stringProp>
+          <stringProp name="JSONPostProcessor.jsonPathExprs">$.[?(@.label =~ /${configurable_product_attribute_color_1}/i)].value</stringProp>
+          <stringProp name="JSONPostProcessor.match_numbers"/>
+          <stringProp name="JSONPostProcessor.defaultValues">null</stringProp>
+        </JSONPostProcessor>
+        <hashTree/>
+        <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract color value #2" enabled="true">
+          <stringProp name="JSONPostProcessor.referenceNames">color_2_value_id</stringProp>
+          <stringProp name="JSONPostProcessor.jsonPathExprs">$.[?(@.label =~ /${configurable_product_attribute_color_2}/i)].value</stringProp>
+          <stringProp name="JSONPostProcessor.match_numbers"/>
+          <stringProp name="JSONPostProcessor.defaultValues">null</stringProp>
+        </JSONPostProcessor>
+        <hashTree/>
+      </hashTree>
+      <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If color value #1 is null" enabled="true">
+        <stringProp name="IfController.condition">"${color_1_value_id}" == "null"</stringProp>
+        <boolProp name="IfController.evaluateAll">false</boolProp>
+      </IfController>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="API - Create color #1 from existing color attribute " enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xD;
+  "option": {&#xD;
+      "label": "${configurable_product_attribute_color_1}"&#xD;
+  }&#xD;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"/>
+          <stringProp name="HTTPSampler.port"/>
+          <stringProp name="HTTPSampler.connect_timeout"/>
+          <stringProp name="HTTPSampler.response_timeout"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"/>
+          <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/products/attributes/color/options</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"/>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert True" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="3569038">true</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">1</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="API - Get color values ids" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"/>
+          <stringProp name="HTTPSampler.port"/>
+          <stringProp name="HTTPSampler.connect_timeout"/>
+          <stringProp name="HTTPSampler.response_timeout"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"/>
+          <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/products/attributes/color/options</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"/>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract color value #1" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">color_1_value_id</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.[?(@.label =~ /${configurable_product_attribute_color_1}/i)].value</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"/>
+          </JSONPostProcessor>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If color value #2 is null" enabled="true">
+        <stringProp name="IfController.condition">"${color_2_value_id}" == "null"</stringProp>
+        <boolProp name="IfController.evaluateAll">false</boolProp>
+      </IfController>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="API - Create color #2 from existing color attribute " enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xD;
+  "option": {&#xD;
+      "label": "${configurable_product_attribute_color_2}"&#xD;
+  }&#xD;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"/>
+          <stringProp name="HTTPSampler.port"/>
+          <stringProp name="HTTPSampler.connect_timeout"/>
+          <stringProp name="HTTPSampler.response_timeout"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"/>
+          <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/products/attributes/color/options</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"/>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert True" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="3569038">true</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">1</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="API - Get color values ids" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"/>
+          <stringProp name="HTTPSampler.port"/>
+          <stringProp name="HTTPSampler.connect_timeout"/>
+          <stringProp name="HTTPSampler.response_timeout"/>
+          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"/>
+          <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/products/attributes/color/options</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"/>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extract color value #1" enabled="true">
+            <stringProp name="JSONPostProcessor.referenceNames">color_2_value_id</stringProp>
+            <stringProp name="JSONPostProcessor.jsonPathExprs">$.[?(@.label =~ /${configurable_product_attribute_color_2}/i)].value</stringProp>
+            <stringProp name="JSONPostProcessor.match_numbers"/>
+          </JSONPostProcessor>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="API - Create configurable product with extensible data objects" enabled="true">
+        <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="" elementType="HTTPArgument">
+              <boolProp name="HTTPArgument.always_encode">false</boolProp>
+              <stringProp name="Argument.value">{&#xD;
+    "product": {&#xD;
+        "sku": "configurable-apsku-test-${__time(YMDHMS)}-${__threadNum}-${__Random(1,1000000)}",&#xD;
+        "name": "Configurable Extensible_Product_${__time(YMDHMS)}-${__threadNum}-${__Random(1,1000000)}",&#xD;
+        "visibility": "4",&#xD;
+        "type_id": "configurable",&#xD;
+        "price": "99",&#xD;
+        "status": "1",&#xD;
+        "attribute_set_id": "4",&#xD;
+        "custom_attributes": [&#xD;
+            {&#xD;
+                "attribute_code": "cost",&#xD;
+                "value": ""&#xD;
+            },&#xD;
+            {&#xD;
+                "attribute_code": "description",&#xD;
+                "value": "Description"&#xD;
+            }&#xD;
+        ],&#xD;
+        "extension_attributes":{&#xD;
+		"stock_item":{&#xD;
+		"manage_stock": true,    &#xD;
+		"is_in_stock": true,&#xD;
+		"qty":"100"&#xD;
+		}&#xD;
+    	   }        ,&#xD;
+    	   "media_gallery_entries":&#xD;
+    	   	[{&#xD;
+    	   		"id": null,&#xD;
+    	   		"label":"configurable_test_label_${__time(YMDHMS)}-${__threadNum}-${__Random(1,1000000)}",&#xD;
+    	   		"position":1,&#xD;
+    	   		"disabled":false,&#xD;
+    	   		"media_type":"image",&#xD;
+    	   		"types":["image"],&#xD;
+    	   		"content":{&#xD;
+    	   			"base64_encoded_data": "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",&#xD;
+        "type": "image/jpeg",&#xD;
+        "name": "configurable_test_image_${__time(YMDHMS)}-${__threadNum}-${__Random(1,1000000)}.jpeg"&#xD;
+    	   			}&#xD;
+    	   	}&#xD;
+    	   	]&#xD;
+    }&#xD;
+}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain"/>
+        <stringProp name="HTTPSampler.port"/>
+        <stringProp name="HTTPSampler.connect_timeout"/>
+        <stringProp name="HTTPSampler.response_timeout"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"/>
+        <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/products</stringProp>
+        <stringProp name="HTTPSampler.method">POST</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+        <boolProp name="HTTPSampler.monitor">false</boolProp>
+        <stringProp name="HTTPSampler.embedded_url_re"/>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract product id" enabled="true">
+          <stringProp name="VAR">configurable_product_id</stringProp>
+          <stringProp name="JSONPATH">$.id</stringProp>
+          <stringProp name="DEFAULT"/>
+          <stringProp name="VARIABLE"/>
+          <stringProp name="SUBJECT">BODY</stringProp>
+        </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+        <hashTree/>
+        <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract product sku" enabled="true">
+          <stringProp name="VAR">configurable_product_sku</stringProp>
+          <stringProp name="JSONPATH">$.sku</stringProp>
+          <stringProp name="DEFAULT"/>
+          <stringProp name="VARIABLE"/>
+          <stringProp name="SUBJECT">BODY</stringProp>
+        </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+        <hashTree/>
+        <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract stock item id" enabled="true">
+          <stringProp name="VAR">configurable_stock_item_id</stringProp>
+          <stringProp name="JSONPATH">$.extension_attributes.stock_item.item_id</stringProp>
+          <stringProp name="DEFAULT"/>
+          <stringProp name="VARIABLE"/>
+          <stringProp name="SUBJECT">BODY</stringProp>
+        </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+        <hashTree/>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert product id not null" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="89649215">^\d+$</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">1</intProp>
+          <stringProp name="Assertion.scope">variable</stringProp>
+          <stringProp name="Scope.variable">configurable_product_id</stringProp>
+        </ResponseAssertion>
+        <hashTree/>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert product sku not null" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="484395188">^[a-z0-9-]+$</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">1</intProp>
+          <stringProp name="Assertion.scope">variable</stringProp>
+          <stringProp name="Scope.variable">configurable_product_sku</stringProp>
+        </ResponseAssertion>
+        <hashTree/>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert stock item id not null" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="89649215">^\d+$</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">1</intProp>
+          <stringProp name="Assertion.scope">variable</stringProp>
+          <stringProp name="Scope.variable">configurable_stock_item_id</stringProp>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="API - Create child product with variation red" enabled="true">
+        <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="" elementType="HTTPArgument">
+              <boolProp name="HTTPArgument.always_encode">false</boolProp>
+              <stringProp name="Argument.value">{&#xD;
+    "product": {&#xD;
+        "sku": "apsku-test-${configurable_product_attribute_color_1}",&#xD;
+        "name": "Extensible_Product_${configurable_product_attribute_color_1}",&#xD;
+        "visibility": "1",&#xD;
+        "type_id": "simple",&#xD;
+        "price": "3.62",&#xD;
+        "status": "1",&#xD;
+        "attribute_set_id": "4",&#xD;
+        "custom_attributes": [&#xD;
+            {&#xD;
+                "attribute_code": "cost",&#xD;
+                "value": ""&#xD;
+            },&#xD;
+            {&#xD;
+                "attribute_code": "description",&#xD;
+                "value": "Description"&#xD;
+            },&#xD;
+            {&#xD;
+                "attribute_code": "color",&#xD;
+                "value": "${color_1_value_id}"&#xD;
+            }&#xD;
+        ],&#xD;
+        "extension_attributes":{&#xD;
+		"stock_item":{&#xD;
+		"manage_stock": true,    &#xD;
+		"is_in_stock": true,&#xD;
+		"qty":"100"&#xD;
+		}&#xD;
+    	   }        ,&#xD;
+    	   "media_gallery_entries":&#xD;
+    	   	[{&#xD;
+    	   		"id": null,&#xD;
+    	   		"label":"test_label_${__time(YMDHMS)}-${__threadNum}-${__Random(1,1000000)}",&#xD;
+    	   		"position":1,&#xD;
+    	   		"disabled":false,&#xD;
+    	   		"media_type":"image",&#xD;
+    	   		"types":["image"],&#xD;
+    	   		"content":{&#xD;
+    	   			"base64_encoded_data": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCABgAGADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3+iioLy8t9Ps5bu7lWKCIZd26KKaTbshpX0RPRXN/8J/4V/6DVv8Ak3+FH/Cf+Ff+g1b/AJN/hXR9SxP/AD7l9zNPYVf5X9x0lFc3/wAJ/wCFf+g1b/k3+FH/AAn/AIV/6DVv+Tf4UfUsT/z7l9zD2FX+V/cdJRXN/wDCf+Ff+g1b/k3+FH/Cf+Ff+g1b/k3+FH1LE/8APuX3MPYVf5X9x0lFc3/wn/hX/oNW/wCTf4Uf8J/4V/6DVv8Ak3+FH1LE/wDPuX3MPYVf5X9x0lFVdP1G01WyS8sZ1nt3JCyL0ODg/qKtVzyi4u0lZmbTTswrm/H3/Iiav/1x/wDZhXSVzfj7/kRNX/64/wDswrowf+80/wDEvzNKH8WPqj5voorB1zS7OLT7m7SHE5YNu3HqWGeM471+kYutOhSdSEU7Jt3dtF20f6H1FacqcHJK9vO36M3qKzTa6foqPdxwlWxswrFi2T0AJ9aRdVmjkT7XYSW8TsFEm8MAT0yB0qfrcafu1tJeV2l2u7K3zsL2yjpPR+V3+NjTorPn1GVbt7a1s2uJIwDJ84ULnpyaik1SWTTrp47Z0uIQRJGzAFOPvZ70Sx1GLau9L9H03SdrNrsgdeCuu3k+hq0VR0ma4msImuIih2LtYvuLjA+b2zV6uijUVWmprqaQkpxUl1PoP4Xf8iBYf78v/oxq7GuO+F3/ACIFh/vy/wDoxq7GvzTMf98q/wCJ/mfLYn+NP1YVzfj7/kRNX/64/wDswrpK5vx9/wAiJq//AFx/9mFRg/8Aeaf+JfmTQ/ix9UfN9ZniD/kB3H/Af/QhWnTZI45kKSIroeqsMg1+l4mk61GdNfaTX3o+pqw54Sj3Rma/GXsI3BcLFMruU+8F5yR+dUZ4tOeNFOq3tx5jACNZg5J+mK6PrUMdrbxPvjgiR/7yoAa48TgPa1HNW1STvfp2s1+JjVw/PJy017mbe/YTqTB7iWzuQgPmhtocfjwajiupbjTtTieUXCxRsqTKMb8qePwrYlghnAE0UcgHQOoP86ckaRoERFVR/CowKbwU3UclJJO+19brqr203vvoHsJczd7J3/H8PmVNJnhm063WOVHZIkDhTkqcd/yNXajighg3eTFHHu67FAz+VSV2UIShTjGe67G9NOMUpbn0H8Lv+RAsP9+X/wBGNXY1x3wu/wCRAsP9+X/0Y1djX5tmP++Vf8T/ADPl8T/Gn6sK5vx9/wAiJq//AFx/9mFdJXN+Pv8AkRNX/wCuP/swqMH/ALzT/wAS/Mmh/Fj6o+b6KKK/Uj60KKKKACiiigAooooA+g/hd/yIFh/vy/8Aoxq7GuO+F3/IgWH+/L/6Mauxr8wzH/fKv+J/mfKYn+NP1YVzfj7/AJETV/8Arj/7MK6Sub8ff8iJq/8A1x/9mFRg/wDeaf8AiX5k0P4sfVHzfRRRX6kfWhRRRQAUUUUAFFFFAH0H8Lv+RAsP9+X/ANGNXY1x3wu/5ECw/wB+X/0Y1djX5hmP++Vf8T/M+UxP8afqwqC8s7fULOW0u4llglGHRujCp6K5E2ndGKdtUc3/AMIB4V/6Atv+bf40f8IB4V/6Atv+bf410lFdH13E/wDPyX3s09vV/mf3nN/8IB4V/wCgLb/m3+NH/CAeFf8AoC2/5t/jXSUUfXcT/wA/Jfew9vV/mf3nN/8ACAeFf+gLb/m3+NH/AAgHhX/oC2/5t/jXSUUfXcT/AM/Jfew9vV/mf3nN/wDCAeFf+gLb/m3+NH/CAeFf+gLb/m3+NdJRR9dxP/PyX3sPb1f5n95V0/TrTSrJLOxgWC3QkrGvQZOT+pq1RRXPKTk7yd2Zttu7P//Z",&#xD;
+        "type": "image/jpeg",&#xD;
+        "name": "test_image_${__time(YMDHMS)}-${__threadNum}-${__Random(1,1000000)}.jpeg"&#xD;
+    	   			}&#xD;
+    	   	}&#xD;
+    	   	]&#xD;
+    }&#xD;
+}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain"/>
+        <stringProp name="HTTPSampler.port"/>
+        <stringProp name="HTTPSampler.connect_timeout"/>
+        <stringProp name="HTTPSampler.response_timeout"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"/>
+        <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/products</stringProp>
+        <stringProp name="HTTPSampler.method">POST</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+        <boolProp name="HTTPSampler.monitor">false</boolProp>
+        <stringProp name="HTTPSampler.embedded_url_re"/>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract product id" enabled="true">
+          <stringProp name="VAR">configurable_red_product_id</stringProp>
+          <stringProp name="JSONPATH">$.id</stringProp>
+          <stringProp name="DEFAULT"/>
+          <stringProp name="VARIABLE"/>
+          <stringProp name="SUBJECT">BODY</stringProp>
+        </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+        <hashTree/>
+        <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract product sku" enabled="true">
+          <stringProp name="VAR">configurable_red_product_sku</stringProp>
+          <stringProp name="JSONPATH">$.sku</stringProp>
+          <stringProp name="DEFAULT"/>
+          <stringProp name="VARIABLE"/>
+          <stringProp name="SUBJECT">BODY</stringProp>
+        </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+        <hashTree/>
+        <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract stock item id" enabled="true">
+          <stringProp name="VAR">configurable_red_stock_item_id</stringProp>
+          <stringProp name="JSONPATH">$.extension_attributes.stock_item.item_id</stringProp>
+          <stringProp name="DEFAULT"/>
+          <stringProp name="VARIABLE"/>
+          <stringProp name="SUBJECT">BODY</stringProp>
+        </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+        <hashTree/>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert product id not null" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="89649215">^\d+$</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">1</intProp>
+          <stringProp name="Assertion.scope">variable</stringProp>
+          <stringProp name="Scope.variable">configurable_red_product_id</stringProp>
+        </ResponseAssertion>
+        <hashTree/>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert product sku not null" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="-425311000">^[A-Za-z0-9-]+$</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">1</intProp>
+          <stringProp name="Assertion.scope">variable</stringProp>
+          <stringProp name="Scope.variable">configurable_red_product_sku</stringProp>
+        </ResponseAssertion>
+        <hashTree/>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert stock item id not null" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="89649215">^\d+$</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">1</intProp>
+          <stringProp name="Assertion.scope">variable</stringProp>
+          <stringProp name="Scope.variable">configurable_red_stock_item_id</stringProp>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="API - Create child product with variation blue" enabled="true">
+        <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="" elementType="HTTPArgument">
+              <boolProp name="HTTPArgument.always_encode">false</boolProp>
+              <stringProp name="Argument.value">{&#xD;
+    "product": {&#xD;
+        "sku": "apsku-test-${configurable_product_attribute_color_2}",&#xD;
+        "name": "Extensible_Product_${configurable_product_attribute_color_2}",&#xD;
+        "visibility": "1",&#xD;
+        "type_id": "simple",&#xD;
+        "price": "3.62",&#xD;
+        "status": "1",&#xD;
+        "attribute_set_id": "4",&#xD;
+        "custom_attributes": [&#xD;
+            {&#xD;
+                "attribute_code": "cost",&#xD;
+                "value": ""&#xD;
+            },&#xD;
+            {&#xD;
+                "attribute_code": "description",&#xD;
+                "value": "Description"&#xD;
+            },&#xD;
+            {&#xD;
+                "attribute_code": "color",&#xD;
+                "value": "${color_2_value_id}"&#xD;
+            }&#xD;
+        ],&#xD;
+        "extension_attributes":{&#xD;
+		"stock_item":{&#xD;
+		"manage_stock": true,    &#xD;
+		"is_in_stock": true,&#xD;
+		"qty":"100"&#xD;
+		}&#xD;
+    	   }        ,&#xD;
+    	   "media_gallery_entries":&#xD;
+    	   	[{&#xD;
+    	   		"id": null,&#xD;
+    	   		"label":"test_label_${__time(YMDHMS)}-${__threadNum}-${__Random(1,1000000)}",&#xD;
+    	   		"position":1,&#xD;
+    	   		"disabled":false,&#xD;
+    	   		"media_type":"image",&#xD;
+    	   		"types":["image"],&#xD;
+    	   		"content":{&#xD;
+    	   			"base64_encoded_data": "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",&#xD;
+        "type": "image/jpeg",&#xD;
+        "name": "test_image_${__time(YMDHMS)}-${__threadNum}-${__Random(1,1000000)}.jpeg"&#xD;
+    	   			}&#xD;
+    	   	}&#xD;
+    	   	]&#xD;
+    }&#xD;
+}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain"/>
+        <stringProp name="HTTPSampler.port"/>
+        <stringProp name="HTTPSampler.connect_timeout"/>
+        <stringProp name="HTTPSampler.response_timeout"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"/>
+        <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/products</stringProp>
+        <stringProp name="HTTPSampler.method">POST</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+        <boolProp name="HTTPSampler.monitor">false</boolProp>
+        <stringProp name="HTTPSampler.embedded_url_re"/>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract product id" enabled="true">
+          <stringProp name="VAR">configurable_blue_product_id</stringProp>
+          <stringProp name="JSONPATH">$.id</stringProp>
+          <stringProp name="DEFAULT"/>
+          <stringProp name="VARIABLE"/>
+          <stringProp name="SUBJECT">BODY</stringProp>
+        </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+        <hashTree/>
+        <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract product sku" enabled="true">
+          <stringProp name="VAR">configurable_blue_product_sku</stringProp>
+          <stringProp name="JSONPATH">$.sku</stringProp>
+          <stringProp name="DEFAULT"/>
+          <stringProp name="VARIABLE"/>
+          <stringProp name="SUBJECT">BODY</stringProp>
+        </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+        <hashTree/>
+        <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract stock item id" enabled="true">
+          <stringProp name="VAR">configurable_blue_stock_item_id</stringProp>
+          <stringProp name="JSONPATH">$.extension_attributes.stock_item.item_id</stringProp>
+          <stringProp name="DEFAULT"/>
+          <stringProp name="VARIABLE"/>
+          <stringProp name="SUBJECT">BODY</stringProp>
+        </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+        <hashTree/>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert product id not null" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="89649215">^\d+$</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">1</intProp>
+          <stringProp name="Assertion.scope">variable</stringProp>
+          <stringProp name="Scope.variable">configurable_blue_product_id</stringProp>
+        </ResponseAssertion>
+        <hashTree/>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert product sku not null" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="-425311000">^[A-Za-z0-9-]+$</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">1</intProp>
+          <stringProp name="Assertion.scope">variable</stringProp>
+          <stringProp name="Scope.variable">configurable_blue_product_sku</stringProp>
+        </ResponseAssertion>
+        <hashTree/>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert stock item id not null" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="89649215">^\d+$</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">1</intProp>
+          <stringProp name="Assertion.scope">variable</stringProp>
+          <stringProp name="Scope.variable">configurable_blue_stock_item_id</stringProp>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="API - Create color option for configurable product" enabled="true">
+        <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="" elementType="HTTPArgument">
+              <boolProp name="HTTPArgument.always_encode">false</boolProp>
+              <stringProp name="Argument.value">{&#xD;
+  "option": {&#xD;
+    "attribute_id": "93",&#xD;
+    "label": "Color",&#xD;
+    "position": 0,&#xD;
+    "is_use_default": true,&#xD;
+    "values": [&#xD;
+      {&#xD;
+        "value_index": 0&#xD;
+      }&#xD;
+    ]&#xD;
+  }&#xD;
+}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain"/>
+        <stringProp name="HTTPSampler.port"/>
+        <stringProp name="HTTPSampler.connect_timeout"/>
+        <stringProp name="HTTPSampler.response_timeout"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"/>
+        <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/configurable-products/${configurable_product_sku}/options</stringProp>
+        <stringProp name="HTTPSampler.method">POST</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+        <boolProp name="HTTPSampler.monitor">false</boolProp>
+        <stringProp name="HTTPSampler.embedded_url_re"/>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert option id" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="1865724479">^\"\d+\"$</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">1</intProp>
+          <stringProp name="Scope.variable"/>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="API - Create children from variation color #1" enabled="true">
+        <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="" elementType="HTTPArgument">
+              <boolProp name="HTTPArgument.always_encode">false</boolProp>
+              <stringProp name="Argument.value">{"childSku": "apsku-test-${configurable_product_attribute_color_1}"}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain"/>
+        <stringProp name="HTTPSampler.port"/>
+        <stringProp name="HTTPSampler.connect_timeout"/>
+        <stringProp name="HTTPSampler.response_timeout"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"/>
+        <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/configurable-products/${configurable_product_sku}/child</stringProp>
+        <stringProp name="HTTPSampler.method">POST</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+        <boolProp name="HTTPSampler.monitor">false</boolProp>
+        <stringProp name="HTTPSampler.embedded_url_re"/>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert True" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="3569038">true</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">1</intProp>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="API - Create children from variation color #2" enabled="true">
+        <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="" elementType="HTTPArgument">
+              <boolProp name="HTTPArgument.always_encode">false</boolProp>
+              <stringProp name="Argument.value">{"childSku": "apsku-test-${configurable_product_attribute_color_2}"}</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain"/>
+        <stringProp name="HTTPSampler.port"/>
+        <stringProp name="HTTPSampler.connect_timeout"/>
+        <stringProp name="HTTPSampler.response_timeout"/>
+        <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"/>
+        <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/configurable-products/${configurable_product_sku}/child</stringProp>
+        <stringProp name="HTTPSampler.method">POST</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+        <boolProp name="HTTPSampler.monitor">false</boolProp>
+        <stringProp name="HTTPSampler.embedded_url_re"/>
+      </HTTPSamplerProxy>
+      <hashTree>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert True" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="3569038">true</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">1</intProp>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query configurable product" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"{\n  product(sku:\"${configurable_product_sku}\") {\n \tattribute_set_id\n        category_ids\n        category_links\n        {\n            category_id\n            position\n        }\n        cost\n        country_of_manufacture\n        created_at\n        custom_design\n        custom_design_from\n        custom_design_to\n        custom_layout\n        custom_layout_update\n        description\n        gallery\n        gift_message_available\n        has_options\n        id\n        image\n        image_label\n        links_exist\n        links_purchased_separately\n        links_title\n        media_gallery\n        meta_description\n        meta_keyword\n        meta_title\n        media_gallery_entries\n        {\n            disabled\n            file\n            id\n            label\n            media_type\n            position\n            types\n            content\n            {\n                base64_encoded_data\n                type\n                name\n            }\n            video_content\n            {\n                media_type\n                video_description\n                video_metadata\n                video_provider\n                video_title\n                video_url\n            }\n        }\n        minimal_price\n        msrp\n        msrp_display_actual_price_type\n        name\n        news_from_date\n        news_to_date\n        old_id\n        options_container\n        options\n        {\n            file_extension\n            image_size_x\n            image_size_y\n            is_require\n            max_characters\n            option_id\n            price\n            price_type\n            product_sku\n            sku\n            sort_order\n            title\n            type\n            values\n            {\n                title\n                sort_order\n                price\n                price_type\n                sku\n                option_type_id\n            }\n        }\n        page_layout\n        price\n        price_type\n        price_view\n        product_links\n        {\n            link_type\n            linked_product_sku\n            linked_product_type\n            position\n            qty\n            sku\n        }\n        required_options\n        samples_title\n        shipment_type\n        short_description\n        sku\n        small_image\n        small_image_label\n        special_from_date\n        special_price\n        special_to_date\n        status\n        swatch_image\n        tax_class_id\n        thumbnail\n        thumbnail_label\n        tier_price\n        tier_prices\n        {\n            customer_group_id\n            percentage_value\n            qty\n            value\n            website_id\n        }\n        type_id\n        updated_at\n        url_key\n        url_path\n        visibility\n        website_ids\n        weight\n        weight_type\n    ... on ConfigurableProduct {\n      configurable_product_options {\n        id\n        attribute_id\n        label\n        position\n        is_use_default\n        values {\n          value_index\n        }\n        product_id\n      }\n      configurable_product_links {\n          sku\n          color\n          attribute_set_id\n          category_ids\n          category_links\n          {\n              category_id\n              position\n          }\n          cost\n          country_of_manufacture\n          created_at\n          custom_design\n          custom_design_from\n          custom_design_to\n          custom_layout\n          custom_layout_update\n          description\n          gallery\n          gift_message_available\n          has_options\n          id\n          image\n          image_label\n          links_exist\n          links_purchased_separately\n          links_title\n          media_gallery\n          meta_description\n          meta_keyword\n          meta_title\n          media_gallery_entries\n          {\n              disabled\n              file\n              id\n              label\n              media_type\n              position\n              types\n              content\n              {\n                  base64_encoded_data\n                  type\n                  name\n              }\n              video_content\n              {\n                  media_type\n                  video_description\n                  video_metadata\n                  video_provider\n                  video_title\n                  video_url\n              }\n          }\n          minimal_price\n          msrp\n          msrp_display_actual_price_type\n          name\n          news_from_date\n          news_to_date\n          old_id\n          options_container\n          options\n          {\n              file_extension\n              image_size_x\n              image_size_y\n              is_require\n              max_characters\n              option_id\n              price\n              price_type\n              product_sku\n              sku\n              sort_order\n              title\n              type\n              values\n              {\n                  title\n                  sort_order\n                  price\n                  price_type\n                  sku\n                  option_type_id\n              }\n          }\n          page_layout\n          price\n          price_type\n          price_view\n          product_links\n          {\n              link_type\n              linked_product_sku\n              linked_product_type\n              position\n              qty\n              sku\n          }\n          required_options\n          samples_title\n          shipment_type\n          short_description\n          sku\n          small_image\n          small_image_label\n          special_from_date\n          special_price\n          special_to_date\n          status\n          swatch_image\n          tax_class_id\n          thumbnail\n          thumbnail_label\n          tier_price\n          tier_prices\n          {\n              customer_group_id\n              percentage_value\n              qty\n              value\n              website_id\n          }\n          type_id\n          updated_at\n          url_key\n          url_path\n          visibility\n          website_ids\n          weight\n          weight_type\n      }\n    }\n  } \n}\n\n","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_configurable_product_with_extensible_data_objects.jmx</stringProp></HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion" testname="Assert configurable product sku" enabled="true">
+        <stringProp name="JSON_PATH">$.data.product.sku</stringProp>
+        <stringProp name="EXPECTED_VALUE">${configurable_product_sku}</stringProp>
+        <boolProp name="JSONVALIDATION">true</boolProp>
+        <boolProp name="EXPECT_NULL">false</boolProp>
+        <boolProp name="INVERT">false</boolProp>
+        <boolProp name="ISREGEX">true</boolProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>
+      <hashTree/>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion" testname="Assert configurable child product sku #1" enabled="true">
+        <stringProp name="JSON_PATH">$.data.product.configurable_product_links[?(@.sku =~ /apsku-test-${configurable_product_attribute_color_1}/i)].sku</stringProp>
+        <stringProp name="EXPECTED_VALUE">["apsku-test-${configurable_product_attribute_color_1}"]</stringProp>
+        <boolProp name="JSONVALIDATION">true</boolProp>
+        <boolProp name="EXPECT_NULL">false</boolProp>
+        <boolProp name="INVERT">false</boolProp>
+        <boolProp name="ISREGEX">false</boolProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>
+      <hashTree/>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion" testname="Assert configurable child product sku #2" enabled="true">
+        <stringProp name="JSON_PATH">$.data.product.configurable_product_links[?(@.sku =~ /apsku-test-${configurable_product_attribute_color_2}/i)].sku</stringProp>
+        <stringProp name="EXPECTED_VALUE">["apsku-test-${configurable_product_attribute_color_2}"]</stringProp>
+        <boolProp name="JSONVALIDATION">true</boolProp>
+        <boolProp name="EXPECT_NULL">false</boolProp>
+        <boolProp name="INVERT">false</boolProp>
+        <boolProp name="ISREGEX">false</boolProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>
+      <hashTree/>
+    </hashTree>
   </hashTree>
 
   </hashTree>
