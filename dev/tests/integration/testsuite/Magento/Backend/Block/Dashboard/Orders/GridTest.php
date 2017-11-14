@@ -8,6 +8,10 @@ namespace Magento\Backend\Block\Dashboard\Orders;
 
 use Magento\Backend\Block\Template\Context;
 
+/**
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
+ */
 class GridTest extends \PHPUnit\Framework\TestCase
 {
     /**
