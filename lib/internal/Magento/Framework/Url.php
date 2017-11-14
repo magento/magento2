@@ -531,10 +531,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         if (!empty($routePieces)) {
             while (!empty($routePieces)) {
                 $key = array_shift($routePieces);
+                $value = '';
                 if (!empty($routePieces)) {
                     $value = array_shift($routePieces);
-                    $this->getRouteParamsResolver()->setRouteParam($key, $value);
                 }
+                $this->getRouteParamsResolver()->setRouteParam($key, $value);
             }
         }
 
@@ -588,9 +589,10 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             if ($this->_getRouteParams()) {
                 foreach ($this->_getRouteParams() as $key => $value) {
                     if ($value === null || false === $value || '' === $value || !is_scalar($value)) {
-                        continue;
+                        $routePath .= $key . '/';
+                    } else {
+                        $routePath .= $key . '/' . $value . '/';
                     }
-                    $routePath .= $key . '/' . $value . '/';
                 }
             }
             $this->setData('route_path', $routePath);
