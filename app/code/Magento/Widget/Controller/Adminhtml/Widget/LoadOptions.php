@@ -13,6 +13,13 @@ use Magento\Framework\App\ObjectManager;
 class LoadOptions extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
+
+    /**
      * @var \Magento\Widget\Helper\Conditions
      */
     private $conditionsHelper;

@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Type;
 
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\AbstractOptions;
 use Magento\Mtf\Client\Element\SimpleElement;
 
@@ -30,7 +31,12 @@ class DropDown extends AbstractOptions
      */
     public function fillOptions(array $fields, SimpleElement $element = null)
     {
-        $this->_rootElement->find($this->addValueButton)->click();
+        $actionType = isset($fields['action_type']) ? $fields['action_type'] : Options::ACTION_ADD;
+        unset($fields['action_type']);
+
+        if ($actionType == Options::ACTION_ADD) {
+            $this->_rootElement->find($this->addValueButton)->click();
+        }
 
         return parent::fillOptions($fields, $element);
     }

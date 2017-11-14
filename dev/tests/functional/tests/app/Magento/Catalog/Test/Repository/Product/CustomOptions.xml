@@ -109,6 +109,22 @@
             </field>
         </dataset>
 
+        <dataset name="drop_down_with_one_option_percent_price_updated">
+            <field name="0" xsi:type="array">
+                <item name="use_default_title" xsi:type="string">No</item>
+                <item name="title" xsi:type="string">custom option drop down updated %isolation%</item>
+                <item name="action_type" xsi:type="string">update</item>
+                <item name="options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="use_default_title" xsi:type="string">No</item>
+                        <item name="title" xsi:type="string">40 Percent updated</item>
+                        <item name="sort_order" xsi:type="string">0</item>
+                        <item name="action_type" xsi:type="string">update</item>
+                    </item>
+                </item>
+            </field>
+        </dataset>
+
         <dataset name="options_suite">
             <field name="0" xsi:type="array">
                 <item name="title" xsi:type="string">Test1 option %isolation%</item>

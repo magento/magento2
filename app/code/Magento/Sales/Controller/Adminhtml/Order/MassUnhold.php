@@ -13,6 +13,13 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 class MassUnhold extends AbstractMassAction
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::unhold';
+
+    /**
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory

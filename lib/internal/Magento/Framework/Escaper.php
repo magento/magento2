@@ -6,15 +6,15 @@
 namespace Magento\Framework;
 
 /**
- * Magento escape methods
+ * Magento escape methods.
  */
 class Escaper extends \Zend\Escaper\Escaper
 {
     /**
-     * Escape html entities
+     * Escape HTML entities.
      *
-     * @param  string|array $data
-     * @param  array $allowedTags
+     * @param string|array $data
+     * @param array|null $allowedTags
      * @return string|array
      */
     public function escapeHtml($data, $allowedTags = null)
@@ -25,29 +25,30 @@ class Escaper extends \Zend\Escaper\Escaper
                 $result[] = $this->escapeHtml($item);
             }
         } elseif (strlen($data)) {
-            if (is_array($allowedTags) and !empty($allowedTags)) {
+            if (is_array($allowedTags) && !empty($allowedTags)) {
                 $allowed = implode('|', $allowedTags);
                 $result = preg_replace('/<([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)>/si', '##$1$2$3##', $data);
-                $result = htmlspecialchars($result, ENT_COMPAT, 'UTF-8', false);
+                $result = htmlspecialchars($result, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
                 $result = preg_replace('/##([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)##/si', '<$1$2$3>', $result);
             } else {
-                $result = htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false);
+                $result = htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
             }
         } else {
             $result = $data;
         }
+
         return $result;
     }
 
     /**
-     * Escape html entities in url
+     * Escape URL.
      *
      * @param string $data
      * @return string
      */
     public function escapeUrl($data)
     {
-        return htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false);
+        return $this->escapeHtml($this->escapeXssInUrl($data));
     }
 
     /**

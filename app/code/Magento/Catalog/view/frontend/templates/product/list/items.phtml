@@ -203,7 +203,7 @@ switch ($type = $block->getType()) {
                                 <?php echo $block->getReviewsSummaryHtml($_item, $templateType) ?>
                             <?php endif; ?>
 
-                            <?php if (!$_item->isComposite() && $_item->isSaleable() && $type == 'related'): ?>
+                            <?php if ($canItemsAddToCart && !$_item->isComposite() && $_item->isSaleable() && $type == 'related'): ?>
                                 <?php if (!$_item->getRequiredOptions()): ?>
                                     <div class="field choice related">
                                         <input type="checkbox" class="checkbox related" id="related-checkbox<?php /* @escapeNotVerified */ echo $_item->getId() ?>" name="related_products[]" value="<?php /* @escapeNotVerified */ echo $_item->getId() ?>" />
@@ -252,7 +252,7 @@ switch ($type = $block->getType()) {
                             <?php endif; ?>
                         </div>
                     </div>
-                    <?php echo($iterator == count($items)+1) ? '</li>' : '' ?>
+                    <?php echo($iterator == count($items) + 1) ? '</li>' : '' ?>
                 <?php endforeach ?>
             </ol>
         </div>

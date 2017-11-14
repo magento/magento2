@@ -52,64 +52,6 @@ define([
             it('check for chainable', function () {
                 expect(model.initConfig({})).toEqual(model);
             });
-            it('check with empty value and caption', function () {
-                var config = {
-                    options: [{
-                        label: 'Caption',
-                        value: null
-                    }, {
-                        label: 'Some label',
-                        value: 'Some value'
-                    }],
-                    caption: 'Main caption'
-                },
-                expected = {
-                    options: [config.options[1]],
-                    caption: config.caption
-                };
-
-                expect(model.initConfig(config)).toEqual(model);
-                expect(config).toEqual(expected);
-            });
-            it('check with empty value', function () {
-                var config = {
-                        options: [{
-                            label: 'Caption',
-                            value: null
-                        }, {
-                            label: 'Some label',
-                            value: 'Some value'
-                        }]
-                    },
-                    expected = {
-                        options: [config.options[1]],
-                        caption: config.options[0].label
-                    };
-
-                expect(model.initConfig(config)).toEqual(model);
-                expect(config).toEqual(expected);
-            });
-            it('check with multiple empty value', function () {
-                var config = {
-                        options: [{
-                            label: 'Caption',
-                            value: null
-                        }, {
-                            label: 'Some label',
-                            value: 'Some value'
-                        }, {
-                            label: 'Another caption',
-                            value: null
-                        }]
-                    },
-                    expected = {
-                        options: [config.options[1]],
-                        caption: config.options[0].label
-                    };
-
-                expect(model.initConfig(config)).toEqual(model);
-                expect(config).toEqual(expected);
-            });
         });
         describe('initObservable method', function () {
             it('check for chainable', function () {

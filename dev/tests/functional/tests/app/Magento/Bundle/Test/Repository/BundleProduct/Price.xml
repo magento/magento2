@@ -132,5 +132,10 @@
             <field name="price_from" xsi:type="string">100.00</field>
             <field name="price_to" xsi:type="string">100.00</field>
         </dataset>
+
+        <dataset name="fixed_two_options-100">
+            <field name="price_from" xsi:type="string">120.00</field>
+            <field name="price_to" xsi:type="string">200.00</field>
+        </dataset>
     </repository>
 </config>

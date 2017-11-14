@@ -166,7 +166,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">desc</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                 </item>
             </argument>
@@ -187,6 +186,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Purchase Date</item>
+                    <item name="sorting" xsi:type="string">desc</item>
                     <item name="dateFormat" xsi:type="string">MMM dd, YYYY, H:mm:ss A</item>
                 </item>
             </argument>

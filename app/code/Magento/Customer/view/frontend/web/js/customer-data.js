@@ -340,7 +340,7 @@ define([
         var sections,
             redirects;
 
-        if (settings.type.match(/post|put/i)) {
+        if (settings.type.match(/post|put|delete/i)) {
             sections = sectionConfig.getAffectedSections(settings.url);
 
             if (sections) {
@@ -361,7 +361,7 @@ define([
     $(document).on('submit', function (event) {
         var sections;
 
-        if (event.target.method.match(/post|put/i)) {
+        if (event.target.method.match(/post|put|delete/i)) {
             sections = sectionConfig.getAffectedSections(event.target.action);
 
             if (sections) {

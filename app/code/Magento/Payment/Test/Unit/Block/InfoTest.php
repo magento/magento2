@@ -157,7 +157,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
             [[], false, []],
             ['string', true, [0 => 'string']],
             ['string', false, ['string']],
-            [['key' => 'v"a!@#%$%^^&&*(*/\'\]l'], true, ['key' => 'v&quot;a!@#%$%^^&amp;&amp;*(*/\'\]l']],
+            [['key' => 'v"a!@#%$%^^&&*(*/\'\]l'], true, ['key' => 'v&quot;a!@#%$%^^&amp;&amp;*(*/&#039;\]l']],
             [['key' => 'val'], false, ['key' => 'val']]
         ];
     }

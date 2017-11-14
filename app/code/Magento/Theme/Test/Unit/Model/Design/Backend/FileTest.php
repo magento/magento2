@@ -22,25 +22,25 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $context = $this->getMockObject('Magento\Framework\Model\Context');
-        $registry = $this->getMockObject('Magento\Framework\Registry');
-        $config = $this->getMockObjectForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
-        $cacheTypeList = $this->getMockObjectForAbstractClass('Magento\Framework\App\Cache\TypeListInterface');
-        $uploaderFactory = $this->getMockObject('Magento\MediaStorage\Model\File\UploaderFactory', ['create']);
+        $context = $this->getMockObject(\Magento\Framework\Model\Context::class);
+        $registry = $this->getMockObject(\Magento\Framework\Registry::class);
+        $config = $this->getMockObjectForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $cacheTypeList = $this->getMockObjectForAbstractClass(\Magento\Framework\App\Cache\TypeListInterface::class);
+        $uploaderFactory = $this->getMockObject(\Magento\MediaStorage\Model\File\UploaderFactory::class, ['create']);
         $requestData = $this->getMockObjectForAbstractClass(
-            'Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface'
+            \Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface::class
         );
-        $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mediaDirectory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+        $this->mediaDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMockForAbstractClass();
 
         $filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectory);
-        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
 
         $this->fileBackend = new File(
@@ -131,42 +131,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ],
             $this->fileBackend->getValue()
         );
-    }
-
-    public function testBeforeSave()
-    {
-        $value = 'filename.jpg';
-        $tmpMediaPath = 'tmp/design/file/' . $value;
-        $this->fileBackend->setScope('store');
-        $this->fileBackend->setScopeId(1);
-        $this->fileBackend->setValue(
-            [
-                [
-                    'url' => 'http://magento2.com/pub/media/tmp/image/' . $value,
-                    'file' => $value,
-                    'size' => 234234,
-                ]
-            ]
-        );
-        $this->fileBackend->setFieldConfig(
-            [
-                'upload_dir' => [
-                    'value' => 'value',
-                    'config' => 'system/filesystem/media',
-                ],
-            ]
-        );
-
-        $this->mediaDirectory->expects($this->once())
-            ->method('copyFile')
-            ->with($tmpMediaPath, '/' . $value)
-            ->willReturn(true);
-        $this->mediaDirectory->expects($this->once())
-            ->method('delete')
-            ->with($tmpMediaPath);
-
-        $this->fileBackend->beforeSave();
-        $this->assertEquals('filename.jpg', $this->fileBackend->getValue());
     }
 
     /**

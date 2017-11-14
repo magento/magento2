@@ -14,13 +14,13 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Option|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $valueMock;
 
     protected function setUp()
     {
-        $configMock = $this->getMock('Magento\Catalog\Model\ProductOptions\ConfigInterface');
+        $configMock = $this->getMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
         $priceConfigMock = new \Magento\Catalog\Model\Config\Source\Product\Options\Price();
         $config = [
             [
@@ -46,7 +46,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         ];
         $configMock->expects($this->once())->method('getAll')->will($this->returnValue($config));
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', '__wakeup', 'getData'];
-        $this->valueMock = $this->getMock('Magento\Catalog\Model\Product\Option', $methods, [], '', false);
+        $this->valueMock = $this->getMock(\Magento\Catalog\Model\Product\Option::class, $methods, [], '', false);
         $this->validator = new \Magento\Catalog\Model\Product\Option\Validator\Select(
             $configMock,
             $priceConfigMock
@@ -73,6 +73,9 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->validator->getMessages());
     }
 
+    /**
+     * @return array
+     */
     public function isValidSuccessDataProvider()
     {
         $value = [
@@ -87,7 +90,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
 
         return [
             'all_data' => [$value],
-            'not_all_data' => [$valueWithoutAllData]
+            'not_all_data' => [$valueWithoutAllData],
         ];
     }
 
@@ -127,6 +130,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
      * @param string $priceType
      * @param int $price
      * @param string|null $title
+     * @return void
      * @dataProvider isValidateWithInvalidDataDataProvider
      */
     public function testIsValidateWithInvalidData($priceType, $price, $title)
@@ -148,12 +152,68 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($messages, $this->validator->getMessages());
     }
 
+    /**
+     * @return array
+     */
     public function isValidateWithInvalidDataDataProvider()
     {
         return [
             'invalid_price' => ['fixed', -10, 'Title'],
             'invalid_price_type' => ['some_value', '10', 'Title'],
-            'empty_title' => ['fixed', 10, null]
+            'empty_title' => ['fixed', 10, null],
+        ];
+    }
+
+    /**
+     * @param array $value
+     * @param bool $isValid
+     * @return void
+     * @dataProvider validateDeletedOptionValueDataProvider
+     */
+    public function testValidateWithDeletedOptionValue(array $value, $isValid)
+    {
+        $this->valueMock->expects($this->once())->method('getTitle')->willReturn('option_title');
+        $this->valueMock->expects($this->exactly(2))->method('getType')->willReturn('name 1.1');
+        $this->valueMock->expects($this->never())->method('getPriceType');
+        $this->valueMock->expects($this->never())->method('getPrice');
+        $this->valueMock->expects($this->any())->method('getData')->with('values')->willReturn($value);
+        
+        $this->assertEquals($isValid, $this->validator->isValid($this->valueMock));
+    }
+
+    /**
+     * @return array
+     */
+    public function validateDeletedOptionValueDataProvider()
+    {
+        return [
+            'All option values deleted' => [
+                [
+                    [
+                        'price_type' => 'fixed',
+                        'price'      => 10,
+                        'title'      => 'Title',
+                        'is_delete'  => 1,
+                    ],
+                ],
+                false,
+            ],
+            'Single option value deleted' => [
+                [
+                    [
+                        'price_type' => 'fixed',
+                        'price'      => 10,
+                        'title'      => 'Title 1',
+                        'is_delete'  => 0
+                    ],
+                    [
+                        'price_type' => 'fixed',
+                        'price'      => -11,
+                        'is_delete'  => 1,
+                    ],
+                ],
+                true,
+            ],
         ];
     }
 }

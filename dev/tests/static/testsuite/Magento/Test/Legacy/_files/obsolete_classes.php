@@ -4068,6 +4068,10 @@ return [
     ['Magento\Persistent\Model\Observer\PreventExpressCheckout', 'Magento\Persistent\Observer\*'],
     ['Magento\Persistent\Model\Observer\PreventClearCheckoutSession', 'Magento\Persistent\Observer\*'],
     ['Magento\Persistent\Model\Observer\MakePersistentQuoteGuest', 'Magento\Persistent\Observer\*'],
+    [
+        'Magento\Persistent\Observer\RemovePersistentCookieObserver',
+        '\Magento\Persistent\Observer\RemovePersistentCookieOnRegisterObserver'
+    ],
     ['Magento\CmsUrlRewrite\Model\Observer', 'Magento\CmsUrlRewrite\Observer\*'],
     ['Magento\Cms\Model\Observer', 'Magento\Cms\Observer\*'],
     ['Magento\OfflinePayments\Model\Observer', 'Magento\OfflinePayments\Observer\*'],
@@ -4093,7 +4097,8 @@ return [
     ['Magento\PageCache\Model\Observer\FlushAllCache', 'Magento\PageCache\Observer\*'],
     ['Magento\PageCache\Model\Observer\InvalidateCache', 'Magento\PageCache\Observer\*'],
     ['Magento\PageCache\Model\Observer\RegisterFormKeyFromCookie', 'Magento\PageCache\Observer\*'],
-    ['Magento\PageCache\Model\Observer\FlushFormKeyOnLogout', 'Magento\PageCache\Observer\*'],
+    ['Magento\PageCache\Model\Observer\FlushFormKeyOnLogout', 'Magento\PageCache\Observer\FlushFormKey'],
+    ['Magento\PageCache\Model\FlushFormKeyOnLogout', 'Magento\PageCache\Observer\FlushFormKey'],
     ['Magento\GoogleOptimizer\Model\Observer\Product\Save', 'Magento\GoogleOptimizer\Observer\*'],
     ['Magento\GoogleOptimizer\Model\Observer\Product\Delete', 'Magento\GoogleOptimizer\Observer\*'],
     ['Magento\GoogleOptimizer\Model\Observer\Category\Save', 'Magento\GoogleOptimizer\Observer\*'],

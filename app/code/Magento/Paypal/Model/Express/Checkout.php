@@ -12,8 +12,6 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Cart as PaypalCart;
-use Magento\Framework\App\ObjectManager;
-use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
  * Wrapper that performs Paypal Express and Checkout communication
@@ -269,13 +267,6 @@ class Checkout
      * @var \Magento\Quote\Model\Quote\TotalsCollector
      */
     protected $totalsCollector;
-
-    /**
-     * Order repository interface.
-     *
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
@@ -805,8 +796,7 @@ class Checkout
 
         $this->ignoreAddressValidation();
         $this->_quote->collectTotals();
-        $orderId = $this->quoteManagement->placeOrder($this->_quote->getId());
-        $order = $this->getOrderRepository()->get($orderId);
+        $order = $this->quoteManagement->submit($this->_quote);
 
         if (!$order) {
             return;
@@ -1173,22 +1163,5 @@ class Checkout
             ->setCustomerIsGuest(true)
             ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
         return $this;
-    }
-
-    /**
-     * Returns order repository instance.
-     *
-     * @return OrderRepositoryInterface
-     *
-     * @deprecated
-     */
-    private function getOrderRepository()
-    {
-        if ($this->orderRepository === null) {
-            $this->orderRepository = ObjectManager::getInstance()
-                ->get(OrderRepositoryInterface::class);
-        }
-
-        return $this->orderRepository;
     }
 }
