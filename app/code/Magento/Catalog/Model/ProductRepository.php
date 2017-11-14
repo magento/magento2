@@ -650,42 +650,56 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Framework\Api\Search\FilterGroup $filterGroup,
         Collection $collection
     ) {
-        $customFilterValues = [];
-        $customFilterMethods = [];
+        $fields = [];
+
         foreach ($filterGroup->getFilters() as $filter) {
             $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+            $isApplied = $this->applyCustomFilter($collection, $filter, $conditionType);
 
-            switch ($filter->getField()) {
-                case 'category_id':
-                    $customFilterValues['category_id'][$conditionType][] = $filter->getValue();
-                    $customFilterMethods['category_id'] = 'addCategoriesFilter';
-                    break;
-                case 'store':
-                    $customFilterValues['store'] = $filter->getValue();
-                    $customFilterMethods['store'] = 'addStoreFilter';
-                    break;
-                case 'website_id':
-                    $value = $filter->getValue();
-                    if (strpos($value, ',') !== false) {
-                        $value = explode(',', $value);
-                    }
-                    $customFilterValues['website_id'] = is_array($value) ? $value : [$value];
-                    $customFilterMethods['website_id'] = 'addWebsiteFilter';
-                    break;
-                default:
-                    $customFilterValues['fields'][] = [
-                        'attribute' => $filter->getField(),
-                        $conditionType => $filter->getValue(),
-                    ];
-                    $customFilterMethods['fields'] = 'addFieldToFilter';
-                    break;
+            if (!$isApplied) {
+                $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
             }
         }
 
-        foreach ($customFilterValues as $filterName => $filterValue) {
-            $filterMethod = $customFilterMethods[$filterName];
-            $collection->$filterMethod($filterValue);
+        if ($fields) {
+            $collection->addFieldToFilter($fields);
         }
+    }
+
+    /**
+     * Apply custom filters to product collection.
+     *
+     * @param Collection $collection
+     * @param \Magento\Framework\Api\Filter $filter
+     * @param string $conditionType
+     * @return bool
+     */
+    private function applyCustomFilter(Collection $collection, \Magento\Framework\Api\Filter $filter, $conditionType)
+    {
+        $isApplied = false;
+        $categoryFilter = [];
+
+        if ($filter->getField() == 'category_id') {
+            $categoryFilter[$conditionType][] = $filter->getValue();
+            $collection->addCategoriesFilter($categoryFilter);
+            $isApplied = true;
+        }
+
+        if ($filter->getField() == 'store') {
+            $collection->addStoreFilter($filter->getValue());
+            $isApplied = true;
+        }
+
+        if ($filter->getField() == 'website_id') {
+            $value = $filter->getValue();
+            if (strpos($value, ',') !== false) {
+                $value = explode(',', $value);
+            }
+            $collection->addWebsiteFilter($value);
+            $isApplied = true;
+        }
+
+        return $isApplied;
     }
 
     /**
