@@ -42,9 +42,4 @@ class Price extends \Magento\Catalog\Test\Block\Product\Price
     {
         return $this->_rootElement->find($this->priceLabel);
     }
-
-//    protected function init()
-//    {
-//        parent::init();
-//    }
 }
