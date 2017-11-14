@@ -117,7 +117,7 @@ define([
 
             return content;
         },
-        
+
         /**
          * @param {*} value
          */
