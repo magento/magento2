@@ -3,44 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Test\Api\StockRepository;
 
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
-/**
- * Class CouldNotDeleteDefaultStockExceptionTest
- */
-class CouldNotDeleteDefaultStockExceptionTest extends WebapiAbstract
+class PreventAssignedToSalesChannelsStockDeletingTest extends WebapiAbstract
 {
     /**
-     * @var DefaultStockProviderInterface
-     */
-    private $defaultStockProvider;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
-    }
-
-    /**
-     * Test that default Stock could not be deleted
-     *
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_with_sales_channels.php
      * @throws \Exception
      */
     public function testCouldNotDeleteException()
     {
+        $stockId = 10;
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/inventory/stock/' . $this->defaultStockProvider->getId(),
+                'resourcePath' => '/V1/inventory/stock/' . $stockId,
                 'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
@@ -48,10 +30,11 @@ class CouldNotDeleteDefaultStockExceptionTest extends WebapiAbstract
                 'operation' => 'inventoryApiStockRepositoryV1DeleteById',
             ],
         ];
-        $expectedMessage = 'Default Stock could not be deleted.';
+        $expectedMessage = 'Stock has at least one sale channel and could not be deleted.';
         try {
-            (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) ? $this->_webApiCall($serviceInfo) :
-                $this->_webApiCall($serviceInfo, ['stockId' => $this->defaultStockProvider->getId()]);
+            (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+                ? $this->_webApiCall($serviceInfo)
+                : $this->_webApiCall($serviceInfo, ['stockId' => $stockId]);
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {

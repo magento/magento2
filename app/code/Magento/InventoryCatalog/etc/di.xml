@@ -9,7 +9,10 @@
     <preference for="Magento\InventoryCatalog\Api\DefaultStockProviderInterface" type="Magento\InventoryCatalog\Model\DefaultStockProvider"/>
     <preference for="Magento\InventoryCatalog\Api\DefaultSourceProviderInterface" type="Magento\InventoryCatalog\Model\DefaultSourceProvider"/>
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
-        <plugin name="prevent_default_stock_deletion" type="Magento\InventoryCatalog\Plugin\Model\StockRepositoryPlugin" sortOrder="1"/>
+        <plugin name="prevent_default_stock_deleting"
+                type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
+        <plugin name="prevent_assigned_to_sales_channels_stock_deleting"
+                type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\AssignedToSalesChannelsStockPlugin"/>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
         <plugin name="migrate_single_stock_data" type="Magento\InventoryCatalog\Plugin\Model\ResourceModel\StockItemPlugin" sortOrder="1"/>
