@@ -30,18 +30,18 @@ $product->setStoreId(0)
         ]
     )->save();
 $image = array_shift($product->getData('media_gallery')['images']);
-$product->setStoreId(1)->setData(
+$product = $productRepository->get('simple', false, 1, true);
+$product->setData(
     'media_gallery',
     [
         'images' => [
             [
-                'file' => $image['file'],
                 'value_id' => $image['value_id'],
-                'position' => 1,
-                'label' => 'Image Alt Text',
+                'file' => $image['file'],
                 'disabled' => 1,
                 'media_type' => 'image',
             ],
         ],
     ]
-)->save();
+);
+$productRepository->save($product);
