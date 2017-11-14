@@ -8,10 +8,6 @@ namespace Magento\Backend\Block\Dashboard\Orders;
 
 use Magento\Backend\Block\Template\Context;
 
-/**
- * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
- */
 class GridTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -39,6 +35,10 @@ class GridTest extends \PHPUnit\Framework\TestCase
     public function testGetPreparedCollection()
     {
         $collection = $this->block->getPreparedCollection();
-        $this->assertEquals('firstname lastname', $collection->getItems()[1]->getCustomer());
+        foreach ($collection->getItems() as $item) {
+            if ($item->getIncrementId() == '100000001') {
+                $this->assertEquals('firstname lastname', $item->getCustomer());
+            }
+        }
     }
 }
