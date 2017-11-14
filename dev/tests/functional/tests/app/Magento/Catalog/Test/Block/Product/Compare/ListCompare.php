@@ -17,6 +17,13 @@ use Magento\Mtf\Client\Element\SimpleElement;
 class ListCompare extends Block
 {
     /**
+     * Price displaying format.
+     *
+     * @var int
+     */
+    protected $priceFormat = 2;
+
+    /**
      * Selector by product info.
      *
      * @var string
@@ -101,11 +108,7 @@ class ListCompare extends Block
             $price = $infoBlock->find($this->priceSelector, Locator::SELECTOR_XPATH)->getText();
             preg_match_all('`([a-z]+).*?([\d\.]+)`i', $price, $prices);
             if (!empty($prices[0])) {
-                $resultPrice = [];
-                foreach ($prices[1] as $key => $value) {
-                    $resultPrice['price_' . lcfirst($value)] = $prices[2][$key];
-                }
-                return $resultPrice;
+                return number_format(end($prices)[0], $this->priceFormat);
             }
             return trim($price, $currency);
         } else {
