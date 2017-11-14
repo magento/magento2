@@ -255,7 +255,7 @@ define([
          * @param {Object} o
          */
         openFileBrowser: function (o) {
-            var typeTitle,
+            var typeTitle = this.translate('Select Images'),
                 storeId = this.config['store_id'] !== null ? this.config['store_id'] : 0,
                 frameDialog = jQuery(o.win.frameElement).parents('[role="dialog"]'),
                 wUrl = this.config['files_browser_window_url'] +
@@ -266,10 +266,7 @@ define([
             this.mediaBrowserTargetElementId = o.field;
 
             if (typeof o.type != 'undefined' && o.type != '') { //eslint-disable-line eqeqeq
-                typeTitle =  o.type == 'image' ? this.translate('Insert Image...') : this.translate('Insert Media...'); //eslint-disable-line
                 wUrl = wUrl + 'type/' + o.type + '/';
-            } else {
-                typeTitle = this.translate('Insert File...');
             }
 
             frameDialog.hide();
