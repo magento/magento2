@@ -1815,7 +1815,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ) {
                         $attrValue = $this->dateTime->formatDate($attrValue, false);
                     } elseif ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
-                        $attrValue = $this->dateTime->gmDate(
+                        $attrValue = gmdate(
                             'Y-m-d H:i:s',
                             $this->_localeDate->date($attrValue)->getTimestamp()
                         );
@@ -2240,7 +2240,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         $stockItemDo->setData($row);
                         $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo);
                         if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
-                            $row['low_stock_date'] = $this->dateTime->gmDate(
+                            $row['low_stock_date'] = gmdate(
                                 'Y-m-d H:i:s',
                                 (new \DateTime())->getTimestamp()
                             );
