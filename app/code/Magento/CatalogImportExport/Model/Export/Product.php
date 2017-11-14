@@ -1104,6 +1104,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param \Magento\Catalog\Model\Product $item
      * @param int $storeId
      * @return bool
+     * @deprecated
      */
     protected function hasMultiselectData($item, $storeId)
     {

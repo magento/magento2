@@ -303,11 +303,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product = $productRepository->get('simple', 1);
         $mediaGallery = $product->getData('media_gallery');
         $image = array_shift($mediaGallery['images']);
-        $expected = [
-            'hide_from_product_page' => 'hide_from_product_page',
-            '' => '',
-            $image['file'] => $image['file'],
-        ];
         $this->model->setWriter(
             $this->objectManager->create(
                 \Magento\ImportExport\Model\Export\Adapter\Csv::class
@@ -320,7 +315,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $varDirectory->writeFile('test_product_with_image.csv', $exportData);
         /** @var \Magento\Framework\File\Csv $csv */
         $csv = $this->objectManager->get(\Magento\Framework\File\Csv::class);
-        $data = $csv->getDataPairs($varDirectory->getAbsolutePath('test_product_with_image.csv'), 76, 76);
-        self::assertSame($expected, $data);
+        $data = $csv->getData($varDirectory->getAbsolutePath('test_product_with_image.csv'));
+        foreach ($data[0] as $columnNumber => $columnName) {
+            if ($columnName === 'hide_from_product_page') {
+                self::assertSame($image['file'], $data[2][$columnNumber]);
+            }
+        }
     }
 }
