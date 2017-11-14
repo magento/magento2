@@ -5,6 +5,8 @@
  */
 namespace Magento\Sitemap\Test\Unit\Block;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -41,6 +43,11 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
     private $eventManagerMock;
 
     /**
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $storeManager;
@@ -58,6 +65,12 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
             ->method('getEventManager')
             ->willReturn($this->eventManagerMock);
 
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMockForAbstractClass();
+        $this->context->expects($this->any())
+            ->method('getScopeConfig')
+            ->willReturn($this->scopeConfigMock);
+
         $this->storeResolver = $this->getMockBuilder(\Magento\Store\Model\StoreResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -66,6 +79,7 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
             \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory::class
         )
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $this->sitemapHelper = $this->getMockBuilder(\Magento\Sitemap\Helper\Data::class)
@@ -95,6 +109,15 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
         $expected = '';
 
         $this->initEventManagerMock($expected);
+
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(
+                'advanced/modules_disable_output/Magento_Sitemap',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                null
+            )
+            ->willReturn(false);
 
         $this->storeResolver->expects($this->once())
             ->method('getCurrentStoreId')
