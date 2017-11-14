@@ -100,7 +100,7 @@ class SaveSourceItemConfiguration
         foreach ($sourceItems as $sourceItem) {
             $bind = array_merge($bind, [
                 $sourceItem->getSourceItemId(),
-                $sourceItem->getNotifyQuantity()
+                $sourceItem->getNotifyStockQty()
             ]);
         }
         return $bind;

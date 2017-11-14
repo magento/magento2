@@ -42,7 +42,7 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
      *
      * @return float
      */
-    public function getNotifyQuantity();
+    public function getNotifyStockQty();
 
     /**
      * Set the notify quantity.
@@ -50,5 +50,5 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
      * @param float $quantity
      * @return void
      */
-    public function setNotifyQuantity($quantity);
+    public function setNotifyStockQty($quantity);
 }

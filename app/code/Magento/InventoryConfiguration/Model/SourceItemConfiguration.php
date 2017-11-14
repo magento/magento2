@@ -36,7 +36,7 @@ class SourceItemConfiguration extends AbstractExtensibleModel implements SourceI
     /**
      * @inheritdoc
      */
-    public function getNotifyQuantity()
+    public function getNotifyStockQty()
     {
         return $this->getData(self::INVENTORY_NOTIFY_QTY);
     }
@@ -44,7 +44,7 @@ class SourceItemConfiguration extends AbstractExtensibleModel implements SourceI
     /**
      * @inheritdoc
      */
-    public function setNotifyQuantity($quantity)
+    public function setNotifyStockQty($quantity)
     {
         $this->setData(self::INVENTORY_NOTIFY_QTY, $quantity);
     }
