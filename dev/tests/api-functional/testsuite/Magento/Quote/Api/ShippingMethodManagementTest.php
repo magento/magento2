@@ -62,7 +62,6 @@ class ShippingMethodManagementTest extends WebapiAbstract
         if (!$cartId) {
             $this->fail('quote fixture failed');
         }
-        $quote->getShippingAddress()->collectShippingRates();
         $expectedData = $this->getExpectedShippingMethods();
         $requestData = ["cartId" => $cartId];
         $returnedRates = $this->_webApiCall($this->getListServiceInfo($cartId), $requestData);

@@ -3,10 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-$bootstrap = \Magento\TestFramework\Helper\Bootstrap::getInstance();
-$bootstrap->loadArea('adminhtml');
-$objectManager = $bootstrap::getObjectManager();
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$objectManager->get(
-    \Magento\Framework\App\Config\MutableScopeConfigInterface::class
-)->setValue('carriers/freeshipping/active', 1, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+/**
+ * @var $configWriter \Magento\Framework\App\Config\Storage\WriterInterface
+ */
+$configWriter = $objectManager->get(\Magento\Framework\App\Config\Storage\WriterInterface::class);
+$configWriter->save('carriers/freeshipping/active', 1);

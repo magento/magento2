@@ -78,7 +78,6 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
-        $quote->getShippingAddress()->collectShippingRates();
         $expectedData = $this->getExpectedShippingMethods();
         $requestData = ["cartId" => $cartId];
         $returnedRates = $this->_webApiCall($this->getListServiceInfo($cartId), $requestData);
