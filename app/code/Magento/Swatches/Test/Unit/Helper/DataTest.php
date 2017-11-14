@@ -49,6 +49,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Swatches\Model\SwatchAttributesProvider */
     private $swatchAttributesProviderMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Unserialize\SecureUnserializer
+     */
+    protected $secureUnserializerMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -120,6 +125,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->secureUnserializerMock = $this->getMock(
+            \Magento\Framework\Unserialize\SecureUnserializer::class,
+            ['unserializer'],
+            [],
+            '',
+            false
+        );
+
         $this->swatchHelperObject = $this->objectManager->getObject(
             \Magento\Swatches\Helper\Data::class,
             [
@@ -130,6 +143,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'swatchCollectionFactory' => $this->swatchCollectionFactoryMock,
                 'imageHelper' => $this->imageHelperMock,
                 'swatchAttributesProvider' => $this->swatchAttributesProviderMock,
+                'unserializer' => $this->secureUnserializerMock,
             ]
         );
     }
@@ -817,7 +831,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 serialize($additionalData),
                 [
                     'getData' => 1,
-                    'setData' => 3,
+                    'setData' => 0,
                 ],
                 'visual',
                 true,
@@ -874,7 +888,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 serialize($additionalData),
                 [
                     'getData' => 1,
-                    'setData' => 3,
+                    'setData' => 0,
                 ],
                 'text',
                 true,
