@@ -184,16 +184,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getVariables()
     {
-        $variables = [];
-        $variables[] = $this->_variables->toOptionArray(true);
+        $variables = $this->_variables->toOptionArray(true);
         $customVariables = $this->_variableFactory->create()->getVariablesOptionArray(true);
         if ($customVariables) {
-            $variables[] = $customVariables;
+            $variables = array_merge_recursive($variables, $customVariables);
         }
         /* @var $template \Magento\Email\Model\Template */
         $template = $this->_coreRegistry->registry('current_email_template');
         if ($template->getId() && ($templateVariables = $template->getVariablesOptionArray(true))) {
-            $variables[] = $templateVariables;
+            $variables = array_merge_recursive($variables, $templateVariables);
         }
         return $variables;
     }
