@@ -57,7 +57,7 @@
         <h2 class="page-sub-title">Magento Marketplace</h2>
         <p>Sign in to sync your Magento Marketplace purchases.</p>
         <fieldset class="form-fieldset">
-            <form  ng-submit="saveAuthJson();" name="auth" role="form">
+            <form  ng-submit="saveAuthJson();" name="auth" role="form" autocomplete="off">
                 <div class="row form-row">
                     <div class="col-m-3">
                         <label class="form-label required" for="username">Public Access Key</label>
@@ -74,6 +74,7 @@
                                    || (auth.username.$error.required && user.submitted)}"
                                    autofocus
                                    required
+                                   autocomplete="off"
                                 >
                             <div class="error-container">
                                 This is a required field.
@@ -100,7 +101,7 @@
                                    ng-class="{ 'invalid' : (auth.password.$error.required && !auth.password.$pristine)
                                    || (auth.password.$error.required && user.submitted) }"
                                    required
-                                   autocomplete="off"
+                                   autocomplete="new-password"
                                 >
                             <div class="error-container">
                                 This is a required field.

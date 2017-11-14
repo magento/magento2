@@ -9,7 +9,7 @@
 ?>
 <?php
 /**
- * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol
+ * @var \Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol $block
  */
 ?>
 
@@ -27,7 +27,7 @@
                 <input id="custom_currency_symbol<?php /* @escapeNotVerified */ echo $code; ?>"
                        class="required-entry admin__control-text"
                        type="text"
-                       value="<?php echo $block->escapeQuote($data['displaySymbol']); ?>"
+                       value="<?php echo $this->helper(\Magento\Framework\EscapeHelper::class)->escapeHtmlAttr($data['displaySymbol']); ?>"
                        <?php echo $data['inherited'] ? ' disabled="disabled"' : '';?>
                        name="custom_currency_symbol[<?php /* @escapeNotVerified */ echo $code; ?>]">
                 <div class="admin__field admin__field-option">

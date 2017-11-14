@@ -54,6 +54,7 @@
             <field name="current_password" xsi:type="string">%current_password%</field>
             <field name="roles_resources" xsi:type="array">
                 <item name="Dashboard" xsi:type="string">Magento_Backend::dashboard</item>
+                <item name="Cms" xsi:type="string">Magento_Cms::save</item>
             </field>
         </dataset>
     </repository>

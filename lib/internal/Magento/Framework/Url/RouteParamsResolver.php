@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Url;
 
-use Magento\Framework\Url\RouteParamsResolverInterface;
-
 /**
  * Route params resolver.
  *
@@ -32,18 +30,27 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
     protected $queryParamsResolver;
 
     /**
+     * @var \Magento\Framework\Url\ParamEncoder
+     */
+    protected $paramEncoder;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param array $data
+     * @param \Magento\Framework\Url\ParamEncoder $paramEncoder
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Url\ParamEncoder $paramEncoder = null
     ) {
         parent::__construct($data);
         $this->request = $request;
         $this->queryParamsResolver = $queryParamsResolver;
+        $this->paramEncoder = $paramEncoder ?: \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Url\ParamEncoder::class);
     }
 
     /**
@@ -102,7 +109,14 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
         }
 
         foreach ($data as $key => $value) {
-            $this->setRouteParam($key, $value);
+            if (!is_scalar($value) || $key == 'key' || !$this->getData('escape_params')) {
+                $this->setRouteParam($key, $value);
+            } else {
+                $this->setRouteParam(
+                    $this->paramEncoder->encode($key),
+                    $this->paramEncoder->encode($value)
+                );
+            }
         }
 
         return $this;

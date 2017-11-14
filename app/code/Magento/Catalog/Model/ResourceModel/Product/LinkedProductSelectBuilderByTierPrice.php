@@ -100,15 +100,15 @@ class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilde
             ->limit(1);
         $priceSelect = $this->baseSelectProcessor->process($priceSelect);
 
-        $priceSelectDefault = clone $priceSelect;
-        $priceSelectDefault->where('t.website_id = ?', self::DEFAULT_WEBSITE_ID);
-        $select[] = $priceSelectDefault;
-
         if (!$this->catalogHelper->isPriceGlobal()) {
-            $priceSelect->where('t.website_id = ?', $this->storeManager->getStore()->getWebsiteId());
-            $select[] = $priceSelect;
+            $priceSelectStore = clone $priceSelect;
+            $priceSelectStore->where('t.website_id = ?', $this->storeManager->getStore()->getWebsiteId());
+            $selects[] = $priceSelectStore;
         }
 
-        return $select;
+        $priceSelect->where('t.website_id = ?', self::DEFAULT_WEBSITE_ID);
+        $selects[] = $priceSelect;
+
+        return $selects;
     }
 }

@@ -19,9 +19,6 @@ define([
             };
 
         });
-        it('has defaults', function () {
-            expect(typeof linksObj.defaults).toEqual('object');
-        });
         it('has setLinks method', function () {
             returnedValue = linksObj.setLinks(undefined, 'imports');
             expect(typeof returnedValue).toEqual('object');

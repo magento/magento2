@@ -794,12 +794,24 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface" type="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor" />
+    <preference for="Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface" type="Magento\Catalog\Model\ResourceModel\Product\CompositeWithWebsiteProcessor" />
     <type name="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
         <arguments>
             <argument name="baseSelectProcessors" xsi:type="array">
                 <item name="status" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\StatusBaseSelectProcessor</item>
             </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Model\ResourceModel\Product\CompositeWithWebsiteProcessor" type="Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor">
+        <arguments>
+            <argument name="baseSelectProcessors" xsi:type="array">
+                <item name="website" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Website\SelectProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice">
+        <arguments>
+            <argument name="baseSelectProcessor" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor</argument>
         </arguments>
     </type>
     <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">

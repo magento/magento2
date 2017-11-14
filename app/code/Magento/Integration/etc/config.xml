@@ -21,6 +21,10 @@
                 <max_failures_count>6</max_failures_count>
                 <timeout>1800</timeout>
             </authentication_lock>
+            <access_token_lifetime>
+                <customer>1</customer>
+                <admin>4</admin>
+            </access_token_lifetime>
         </oauth>
     </default>
 </config>

@@ -336,5 +336,21 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
         </variation>
+        <variation name="CreateBundleProductEntityTestVariation17" summary="Check price for fixed bundle product with options with percent and fixed prices" ticketId="MAGETWO-65214">
+            <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
+            <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
+            <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>
+            <data name="product/data/price_type" xsi:type="string">No</data>
+            <data name="product/data/price/value" xsi:type="string">100</data>
+            <data name="product/data/price/dataset" xsi:type="string">fixed_two_options-100</data>
+            <data name="product/data/category" xsi:type="string">category_%isolation%</data>
+            <data name="product/data/shipment_type" xsi:type="string">Together</data>
+            <data name="product/data/price_view" xsi:type="string">Price Range</data>
+            <data name="product/data/bundle_selections/dataset" xsi:type="string">with_two_options_with_percent_and_fixed_prices</data>
+            <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductForm" />
+            <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory" />
+            <constraint name="Magento\Bundle\Test\Constraint\AssertBundleItemsOnProductPage" />
+            <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
+        </variation>
     </testCase>
 </config>

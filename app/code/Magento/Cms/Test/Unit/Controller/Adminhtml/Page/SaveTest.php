@@ -71,6 +71,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $saveController;
 
     /**
+     * @var \Magento\Cms\Model\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $pageFactory;
+
+    /**
      * @var int
      */
     protected $pageId = 1;
@@ -79,13 +84,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
+        $this->contextMock = $this->getMock(\Magento\Backend\App\Action\Context::class, [], [], '', false);
 
-        $this->resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+        $this->resultRedirectFactory = $this->getMockBuilder(\Magento\Backend\Model\View\Result\RedirectFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $this->resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectFactory->expects($this->atLeastOnce())
@@ -93,18 +98,18 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resultRedirect);
 
         $this->dataProcessorMock = $this->getMock(
-            'Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor',
+            \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor::class,
             ['filter'],
             [],
             '',
             false
         );
 
-        $this->dataPersistorMock = $this->getMockBuilder('Magento\Framework\App\Request\DataPersistorInterface')
+        $this->dataPersistorMock = $this->getMockBuilder(\Magento\Framework\App\Request\DataPersistorInterface::class)
             ->getMock();
 
         $this->requestMock = $this->getMockForAbstractClass(
-            'Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             [],
             '',
             false,
@@ -113,12 +118,20 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ['getParam', 'getPostValue']
         );
 
-        $this->pageMock = $this->getMockBuilder('Magento\Cms\Model\Page')->disableOriginalConstructor()->getMock();
+        $this->pageMock = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface', [], [], '', false);
+        $this->messageManagerMock = $this->getMock(
+            \Magento\Framework\Message\ManagerInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->eventManagerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Event\ManagerInterface',
+            \Magento\Framework\Event\ManagerInterface::class,
             [],
             '',
             false,
@@ -127,25 +140,25 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ['dispatch']
         );
 
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
-            ->disableOriginalConstructor()
-            ->setMethods(['get', 'create'])
-            ->getMock();
-
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
-        $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $this->contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManagerMock);
         $this->contextMock->expects($this->any())->method('getEventManager')->willReturn($this->eventManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactory);
 
+        $this->pageFactory = $this->getMockBuilder(\Magento\Cms\Model\PageFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->saveController = $this->objectManager->getObject(
-            'Magento\Cms\Controller\Adminhtml\Page\Save',
+            \Magento\Cms\Controller\Adminhtml\Page\Save::class,
             [
                 'context' => $this->contextMock,
                 'dataProcessor' => $this->dataProcessorMock,
                 'dataPersistor' => $this->dataPersistorMock,
+                'pageFactory'   => $this->pageFactory,
             ]
         );
     }
@@ -153,11 +166,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     public function testSaveAction()
     {
         $postData = [
-        'title' => '"><img src=y onerror=prompt(document.domain)>;',
-        'identifier' => 'unique_title_123',
-        'stores' => ['0'],
-        'is_active' => true,
-        'content' => '"><script>alert("cookie: "+document.cookie)</script>'
+            'title' => '"><img src=y onerror=prompt(document.domain)>;',
+            'identifier' => 'unique_title_123',
+            'stores' => ['0'],
+            'is_active' => true,
+            'content' => '"><script>alert("cookie: "+document.cookie)</script>'
         ];
 
         $filteredPostData = [
@@ -183,9 +196,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->objectManagerMock->expects($this->atLeastOnce())
+        $this->pageFactory->expects($this->once())
             ->method('create')
-            ->with($this->equalTo('Magento\Cms\Model\Page'))
             ->willReturn($this->pageMock);
 
         $this->pageMock->expects($this->any())
@@ -233,9 +245,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('filter')
             ->willReturnArgument(0);
 
-        $this->objectManagerMock->expects($this->atLeastOnce())
+        $this->pageFactory->expects($this->once())
             ->method('create')
-            ->with($this->equalTo('Magento\Cms\Model\Page'))
             ->willReturn($this->pageMock);
 
         $this->pageMock->expects($this->any())
@@ -279,9 +290,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('filter')
             ->willReturnArgument(0);
 
-        $this->objectManagerMock->expects($this->atLeastOnce())
+        $this->pageFactory->expects($this->once())
             ->method('create')
-            ->with($this->equalTo('Magento\Cms\Model\Page'))
             ->willReturn($this->pageMock);
 
         $this->pageMock->expects($this->any())

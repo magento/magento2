@@ -1576,6 +1576,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function setAccountData($accountData)
     {
         $customer = $this->getQuote()->getCustomer();
+        if (empty($accountData['email'])) {
+            $accountData['email'] = $customer->getEmail();
+        }
         $form = $this->_createCustomerForm($customer);
 
         // emulate request
@@ -1670,8 +1673,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     protected function _customerIsInStore($store)
     {
-        $customerId = (int)$this->getSession()->getCustomerId();
-        $customer = $this->customerRepository->getById($customerId);
+        $customer = $this->getQuote()->getCustomer();
 
         return $customer->getWebsiteId() == $store->getWebsiteId()
             || $this->accountManagement->isCustomerInStore($customer->getWebsiteId(), $store->getId());

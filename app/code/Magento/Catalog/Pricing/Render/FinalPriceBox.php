@@ -99,7 +99,7 @@ class FinalPriceBox extends BasePriceBox
      *
      * @return bool
      */
-    private function isMsrpPriceApplicable()
+    protected function isMsrpPriceApplicable()
     {
         $moduleManager = $this->getModuleManager();
 

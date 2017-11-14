@@ -6,7 +6,6 @@
 
 namespace Magento\Multishipping\Test\Block\Checkout;
 
-use Magento\Multishipping\Test\Fixture\GuestPaypalDirect;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
@@ -56,5 +55,23 @@ class Shipping extends Block
     public function clickContinueButton()
     {
         $this->_rootElement->find($this->continueButton)->click();
+    }
+
+    /**
+     * Click change button.
+     *
+     * @param string $street
+     * @return void
+     */
+    public function clickChangeAddress($street)
+    {
+        $addresses = $this->_rootElement->getElements('.box-shipping-address');
+        foreach ($addresses as $address) {
+            $arrayAddr = explode(PHP_EOL, $address->find('address')->getText());
+            if ($arrayAddr[2] == $street) {
+                $address->find('a')->click();
+                break;
+            }
+        }
     }
 }

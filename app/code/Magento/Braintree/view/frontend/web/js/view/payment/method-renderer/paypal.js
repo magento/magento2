@@ -296,7 +296,7 @@ define([
         getShippingAddress: function () {
             var address = quote.shippingAddress();
 
-            if (address.postcode === null) {
+            if (_.isNull(address.postcode) || _.isUndefined(address.postcode)) {
 
                 return {};
             }

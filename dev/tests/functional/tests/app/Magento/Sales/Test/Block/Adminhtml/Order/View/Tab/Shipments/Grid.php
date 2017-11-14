@@ -6,34 +6,35 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Shipments;
 
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
+
 /**
- * Class Grid
- * Shipments grid on order view page
+ * Shipments grid on order view page.
  */
-class Grid extends \Magento\Backend\Test\Block\Widget\Grid
+class Grid extends DataGrid
 {
     /**
-     * Locator value for link in action column
+     * Locator value for link in action column.
      *
      * @var string
      */
     protected $editLink = '[data-column="real_shipment_id"]';
 
     /**
-     * Locator for shipment ids
+     * Locator for shipment ids.
      *
      * @var string
      */
-    protected $shipmentId = 'tbody td[data-column="real_shipment_id"]';
+    protected $shipmentId = 'tbody td:nth-child(2)';
 
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */
     protected $filters = [
         'id' => [
-            'selector' => 'input[name="real_shipment_id"]',
+            'selector' => 'input[name="increment_id"]',
         ],
         'qty_from' => [
             'selector' => '[name="total_qty[from]"]',
@@ -44,12 +45,13 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     ];
 
     /**
-     * Get shipment ids
+     * Get shipment ids.
      *
      * @return array
      */
     public function getIds()
     {
+        $this->waitLoader();
         $result = [];
         $shipmentIds = $this->_rootElement->getElements($this->shipmentId);
         foreach ($shipmentIds as $shipmentId) {

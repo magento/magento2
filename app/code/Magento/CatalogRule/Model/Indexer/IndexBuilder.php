@@ -10,9 +10,10 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -96,6 +97,11 @@ class IndexBuilder
     protected $connection;
 
     /**
+     * @var ProductLoader
+     */
+    private $productLoader;
+
+    /**
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -106,6 +112,7 @@ class IndexBuilder
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param int $batchCount
+     * @param ProductLoader|null $productLoader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -118,7 +125,8 @@ class IndexBuilder
         \Magento\Framework\Stdlib\DateTime $dateFormat,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        $batchCount = 1000
+        $batchCount = 1000,
+        ProductLoader $productLoader = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -131,6 +139,8 @@ class IndexBuilder
         $this->dateTime = $dateTime;
         $this->productFactory = $productFactory;
         $this->batchCount = $batchCount;
+        $this->productLoader = $productLoader ?:
+            ObjectManager::getInstance()->get(ProductLoader::class);
     }
 
     /**
@@ -175,9 +185,10 @@ class IndexBuilder
     {
         $this->cleanByIds($ids);
 
+        $products = $this->productLoader->getProducts($ids);
         foreach ($this->getActiveRules() as $rule) {
-            foreach ($ids as $productId) {
-                $this->applyRule($rule, $this->getProduct($productId));
+            foreach ($products as $product) {
+                $this->applyRule($rule, $product);
             }
         }
     }

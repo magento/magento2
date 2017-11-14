@@ -124,7 +124,7 @@ class BundleSelectionPrice extends AbstractPrice
                 $value = $product->getData('final_price') * ($selectionPriceValue / 100);
             } else {
                 // calculate price for selection type fixed
-                $value = $this->priceCurrency->convert($selectionPriceValue) * $this->quantity;
+                $value = $this->priceCurrency->convert($selectionPriceValue);
             }
         }
         if (!$this->useRegularPrice) {

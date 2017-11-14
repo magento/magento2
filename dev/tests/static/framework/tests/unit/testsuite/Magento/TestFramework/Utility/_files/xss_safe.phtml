@@ -10,8 +10,8 @@
 <?php /* @escapeNotVerified */ echo $block->getSomeData();?>
 <?php /* @noEscape */ echo $block->getSomeData();?>
 <input name="form_key" type="hidden" value="<?php echo $block->escapeUrl($var) ?>" />
-<input name="form_key" type="hidden" value="<?php echo $block->escapeQuote('bla') ?>" />
-<input name="form_key" type="hidden" value="<?php echo $block->escapeXssInUrl("bla bla") ?>" />
+<input name="form_key" type="hidden" value="<?php echo $this->helper(\Magento\Framework\EscapeHelper::class)->escapeHtmlAttr('bla') ?>" />
+<input name="form_key" type="hidden" value="<?php echo $this->helper(\Magento\Framework\EscapeHelper::class)->escapeJs("bla bla") ?>" />
 echo $var;
 <?php echo $block->getHtmlId("bla bla") ?>
 <?php echo $block->getIdHtml("bla bla") ?>
@@ -27,7 +27,7 @@ echo $var;
 <?php pecho($var);?>
 <?php echo $object->methodHtml() .
     (bool)$var .
-    $block->escapeXssInUrl("bla bla");
+    $block->escapeUrl("bla bla");
 ?>
 <?php /* @noEscape */ echo '\'' . $code . '\',\'' . $block->escapeQuote($data['parentSymbol']) . '\''; ?>
 <?= $block->getExtendedElement($switchAttributeCode)->toHtml(); ?>

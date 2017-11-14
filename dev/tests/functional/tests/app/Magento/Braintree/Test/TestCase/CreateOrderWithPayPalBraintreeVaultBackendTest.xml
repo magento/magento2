@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Braintree\Test\TestCase\CreateOrderWithPayPalBraintreeVaultBackendTest" summary="Checkout with PayPal Braintree Vault token from Admin">
         <variation name="CreateOrderWithPayPalBraintreeVaultBackendTestVariation1" summary="Checkout with PayPal Braintree Vault token from Admin" ticketId="MAGETWO-59259">
-            <data name="tag" xsi:type="string">est_type:3rd_party_test, severity:S0</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S0</data>
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>

@@ -13,6 +13,13 @@ use Magento\Framework\View\Result\LayoutFactory;
 class Grid extends Action
 {
     /**
+     * Authorization level of a basic admin session.
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+
+    /**
      * @var LayoutFactory
      */
     protected $resultPageFactory;
@@ -28,6 +35,7 @@ class Grid extends Action
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
     }
+
     /**
      * Index action
      *

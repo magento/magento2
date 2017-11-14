@@ -11,6 +11,17 @@
             <label>OAuth</label>
             <tab>service</tab>
             <resource>Magento_Integration::config_oauth</resource>
+            <group id="access_token_lifetime" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Access Token Expiration</label>
+                <field id="customer" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Customer Token Lifetime (hours)</label>
+                    <comment>We will disable this feature if the value is empty.</comment>
+                </field>
+                <field id="admin" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Admin Token Lifetime (hours)</label>
+                    <comment>We will disable this feature if the value is empty.</comment>
+                </field>
+            </group>
             <group id="cleanup" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Cleanup Settings</label>
                 <field id="cleanup_probability" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">

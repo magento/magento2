@@ -148,7 +148,11 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     public function getResourcesTreeJson()
     {
         $resources = $this->_resourceProvider->getAclResources();
-        $aclResourcesTree = $this->_integrationData->mapResources($resources[1]['children']);
+        $configResource = array_filter($resources, function ($node) {
+            return isset($node['id']) && $node['id'] == 'Magento_Backend::admin';
+        });
+        $configResource = reset($configResource);
+        $aclResourcesTree = $this->_integrationData->mapResources($configResource['children']);
 
         return $this->encoder->encode($aclResourcesTree);
     }
@@ -167,7 +171,11 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         $selectedResources = $this->_selectedResources;
         if ($this->isEverythingAllowed()) {
             $resources = $this->_resourceProvider->getAclResources();
-            $selectedResources = $this->_getAllResourceIds($resources[1]['children']);
+            $configResource = array_filter($resources, function ($node) {
+                return isset($node['id']) && $node['id'] == 'Magento_Backend::admin';
+            });
+            $configResource = reset($configResource);
+            $selectedResources = $this->_getAllResourceIds($configResource['children']);
         }
         return $this->encoder->encode($selectedResources);
     }

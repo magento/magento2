@@ -48,18 +48,29 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
         $this->_product->setNewVariationsAttributeSetId(4);
         // Default attribute set id
         $generatedProducts = $this->_model->generateSimpleProducts($this->_product, $productsData);
-        $this->assertEquals(3, count($generatedProducts));
+        $this->assertEquals(4, count($generatedProducts));
         foreach ($generatedProducts as $productId) {
             $stockItem = $this->stockRegistry->getStockItem($productId);
             /** @var $product \Magento\Catalog\Model\Product */
             $product = Bootstrap::getObjectManager()->create(
-                'Magento\Catalog\Model\Product'
+                \Magento\Catalog\Model\Product::class
             );
             $product->load($productId);
+
+            $productDataWeight = null;
+            foreach ($productsData as $productItemData) {
+                if ($productItemData['name'] == $product->getName()
+                    && isset($productItemData['weight'])
+                ) {
+                    $productDataWeight = (int)$productItemData['weight'];
+                    break;
+                }
+            }
+
             $this->assertNotNull($product->getName());
             $this->assertNotNull($product->getSku());
             $this->assertNotNull($product->getPrice());
-            $this->assertNotNull($product->getWeight());
+            $this->assertEquals($productDataWeight, (int)$product->getWeight());
             $this->assertEquals('1', $stockItem->getIsInStock());
         }
     }
@@ -112,6 +123,14 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
                         'sku' => '1-ccc',
                         'quantity_and_stock_status' => ['qty' => '5'],
                         'weight' => '6'
+                    ],
+                    [
+                        'name' => '1-ddd',
+                        'configurable_attribute' => '{"configurable_attribute":"22"}',
+                        'price' => '3',
+                        'sku' => '1-ddd',
+                        'quantity_and_stock_status' => ['qty' => '5'],
+                        'weight' => ''
                     ],
                 ],
             ]
