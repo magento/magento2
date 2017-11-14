@@ -2029,6 +2029,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Return a new file name if the same file is already exists.
      *
      * @param string $fileName
+     * @param bool   $renameFileOff [optional] boolean to pass. Default is false
+     *                              which will set not to rename the file after import.
      * @return string
      */
     protected function uploadMediaFiles($fileName, $renameFileOff = false)
