@@ -63,12 +63,12 @@ class Login extends \Magento\Framework\App\Action\Action
     /**
      * @var CookieManagerInterface
      */
-    protected $cookieManager;
+    private $cookieManager;
 
     /**
      * @var CookieMetadataFactory
      */
-    protected $cookieMetadataFactory;
+    private $cookieMetadataFactory;
 
     /**
      * Initialize Login controller
@@ -89,8 +89,8 @@ class Login extends \Magento\Framework\App\Action\Action
         AccountManagementInterface $customerAccountManagement,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        CookieManagerInterface $cookieManager,
-        CookieMetadataFactory $cookieMetadataFactory
+        CookieManagerInterface $cookieManager = null,
+        CookieMetadataFactory $cookieMetadataFactory = null
     ) {
         parent::__construct($context);
         $this->customerSession = $customerSession;
@@ -98,8 +98,8 @@ class Login extends \Magento\Framework\App\Action\Action
         $this->customerAccountManagement = $customerAccountManagement;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultRawFactory = $resultRawFactory;
-        $this->cookieManager = $cookieManager;
-        $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->cookieManager = $cookieManager ?: ObjectManager::getInstance()->get(CookieManagerInterface::class);
+        $this->cookieMetadataFactory = $cookieMetadataFactory ?: ObjectManager::getInstance()->get(CookieMetadataFactory::class);
     }
 
     /**
