@@ -62,22 +62,22 @@ class StockItemPlugin
     /**
      * @param Interceptor $subject
      * @param callable $proceed
-     * @param Item $object
+     * @param Item $stockItem
      *
      * @return AbstractDb
      * @throws \Exception
      * @throws AlreadyExistsException;
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(Interceptor $subject, callable $proceed, Item $object): AbstractDb
+    public function aroundSave(Interceptor $subject, callable $proceed, Item $stockItem): AbstractDb
     {
-        $product = $this->productRepository->getById($object->getProductId());
+        $product = $this->productRepository->getById($stockItem->getProductId());
         $this->sourceItem->setSourceId($this->defaultSourceProvider->getId());
         $this->sourceItem->setSku($product->getSku());
-        $this->sourceItem->setQuantity($object->getQty());
-        $this->sourceItem->setStatus((int)$object->getIsInStock());
+        $this->sourceItem->setQuantity($stockItem->getQty());
+        $this->sourceItem->setStatus((int)$stockItem->getIsInStock());
         $this->sourceItemsSave->execute([$this->sourceItem]);
 
-        return $proceed($object);
+        return $proceed($stockItem);
     }
 }
