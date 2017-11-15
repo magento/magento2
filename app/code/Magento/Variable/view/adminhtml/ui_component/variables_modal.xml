@@ -5,7 +5,14 @@
         </item>
     </argument>
     <settings>
-        <spinner>insert_variables.variables</spinner>
+        <buttons>
+            <button name="insert">
+                <url path="*/*/new" />
+                <class>primary</class>
+                <label translate="true">Add New Page</label>
+            </button>
+        </buttons>
+        <spinner>variables</spinner>
         <deps>
             <dep>variables_modal.variables_data_source</dep>
         </deps>
@@ -26,47 +33,27 @@
             </settings>
         </dataProvider>
     </dataSource>
-    <modal name="insert_variables" provider="variables_modal.variables_data_source">
-        <settings>
-            <options>
-                <option name="buttons" xsi:type="array">
-                    <item name="0" xsi:type="array">
-                        <item name="text" xsi:type="string">Insert Variable</item>
-                        <item name="class" xsi:type="string">action-primary</item>
-                        <item name="actions" xsi:type="array">
-                            <item name="0" xsi:type="array">
-                                <item name="targetName" xsi:type="string">${ $.name }</item>
-                                <item name="actionName" xsi:type="string">actionDone</item>
-                            </item>
-                        </item>
-                    </item>
-                </option>
-                <option name="title" xsi:type="string">Insert Vairables...</option>
-            </options>
-            <onCancel>actionDone</onCancel>
-            <dataScope>data.product</dataScope>
-        </settings>
-        <columns name="variables">
-            <column name="variable_name">
-                <settings>
-                    <filter>textRange</filter>
-                    <label translate="true">Variable Name</label>
-                    <sortable>false</sortable>
-                </settings>
-            </column>
-            <column name="variable_type">
-                <settings>
-                    <filter>textRange</filter>
-                    <label translate="true">Type</label>
-                    <sorting>asc</sorting>
-                </settings>
-            </column>
-            <column name="code">
-                <settings>
-                    <filter>textRange</filter>
-                    <label translate="true">Code</label>
-                </settings>
-            </column>
-        </columns>
-    </modal>
+    <columns name="variables">
+        <column name="variable_name">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Variable Name</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="variable_type">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Type</label>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+        <column name="code">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Code</label>
+            </settings>
+        </column>
+    </columns>
+
 </listing>

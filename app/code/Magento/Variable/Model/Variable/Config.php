@@ -88,6 +88,8 @@ class Config
      */
     public function getVariablesWysiwygActionUrl()
     {
-        return $this->_url->getUrl('adminhtml/system_variable/wysiwygPlugin');
+        return $this->_url->getUrl('mui/index/render',
+            ['namespace' => 'variables_modal']
+        );
     }
 }

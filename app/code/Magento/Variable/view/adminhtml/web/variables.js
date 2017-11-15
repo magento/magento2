@@ -8,10 +8,12 @@ define([
     'jquery',
     'mage/translate',
     'uiRegistry',
+    'ko',
+    'mage/apply/main',
     'Magento_Ui/js/modal/modal',
     'jquery/ui',
     'prototype'
-], function (jQuery, $t, registry) {
+], function (jQuery, $t, registry, ko, mageApply) {
     'use strict';
 
     window.Variables = {
@@ -49,24 +51,8 @@ define([
          * @param {Object} variables
          */
         openVariableChooser: function (variables) {
-            if (this.variablesContent == null && variables) {
-                this.variablesContent = '<ul class="insert-variable">';
-                variables.each(function (variableGroup) {
-                    if (variableGroup.label && variableGroup.value) {
-                        this.variablesContent += '<li><b>' + variableGroup.label + '</b></li>';
-                        variableGroup.value.each(function (variable) {
-                            if (variable.value && variable.label) {
-                                this.variablesContent += '<li>' +
-                                    this.prepareVariableRow(variable.value, variable.label) + '</li>';
-                            }
-                        }.bind(this));
-                    }
-                }.bind(this));
-                this.variablesContent += '</ul>';
-            }
-
-            if (this.variablesContent) {
-                this.openDialogWindow(this.variablesContent);
+            if (variables) {
+                this.openDialogWindow(variables);
             }
         },
 
@@ -76,7 +62,7 @@ define([
         openDialogWindow: function (variablesContent) {
             var windowId = this.dialogWindowId;
 
-            jQuery('<div id="' + windowId + '">' + Variables.variablesContent + '</div>').modal({
+            jQuery('<div id="' + windowId + '">' + variablesContent + '</div>').modal({
                 title: $t('Insert Variable...'),
                 type: 'slide',
                 buttons: [],
@@ -88,8 +74,8 @@ define([
             });
 
             jQuery('#' + windowId).modal('openModal');
-
-            variablesContent.evalScripts.bind(variablesContent).defer();
+            jQuery('#' + windowId).applyBindings();
+            mageApply.apply(document.getElementById(windowId));
         },
 
         /**
@@ -160,23 +146,23 @@ define([
         loadChooser: function (url, textareaId) {
             this.textareaId = textareaId;
 
-            var modal = registry.get('variables_modal.variables_modal.insert_variables', function (modal) {
-                modal.openModal();
-            });
-            // if (this.variables == null) {
-            //     new Ajax.Request(url, {
-            //         parameters: {},
-            //         onComplete: function (transport) {
-            //             if (transport.responseText.isJSON()) {
-            //                 Variables.init(null, 'MagentovariablePlugin.insertVariable');
-            //                 this.variables = transport.responseText.evalJSON();
-            //                 this.openChooser(this.variables);
-            //             }
-            //         }.bind(this)
-            //     });
-            // } else {
-            //     this.openChooser(this.variables);
-            // }
+            // var modal = registry.get('variables_modal.variables_modal.insert_variables', function (modal) {
+            //     modal.openModal();
+            // });
+            if (this.variables == null) {
+                new Ajax.Request(url, {
+                    parameters: {},
+                    onComplete: function (transport) {
+                        //if (transport.responseText.isJSON()) {
+                            Variables.init(null, 'MagentovariablePlugin.insertVariable');
+                            this.variables = transport.responseText;
+                            this.openChooser(this.variables);
+                        //}
+                    }.bind(this)
+                });
+            } else {
+                this.openChooser(this.variables);
+            }
 
             return;
         },
