@@ -64,6 +64,18 @@ class Options
     }
 
     /**
+     * @param $options
+     * @param bool $isOptional
+     * @return array|bool
+     *
+     * @deprecated See prepareNamePrefixSuffixOptions
+     */
+    protected function _prepareNamePrefixSuffixOptions($options, $isOptional = false)
+    {
+        return $this->prepareNamePrefixSuffixOptions($options, $isOptional);
+    }
+
+    /**
      * Unserialize and clear name prefix or suffix options
      * If field is optional, add an empty first option.
      *
