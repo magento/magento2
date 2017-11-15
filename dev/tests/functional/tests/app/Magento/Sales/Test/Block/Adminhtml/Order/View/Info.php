@@ -35,7 +35,7 @@ class Info extends Block
      * @var string
      */
     protected $itemOptions = '//div[@class=\'product-sku-block\' and contains(normalize-space(.), \'{SKU}\')]'
-    . '/following-sibling::*[@class="item-options"]';
+        . '/following-sibling::*[@class="item-options"]';
 
     /**
      * Get email from the data inside block

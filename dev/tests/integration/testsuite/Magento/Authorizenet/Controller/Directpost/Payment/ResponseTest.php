@@ -183,8 +183,8 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
                 'x_MD5_Hash' => 'F9AE81A5DA36057D1312D71C904FCCF2',
                 'error_msg' => 'The%20transaction%20was%20declined%20because%20the%20'
                     . 'response%20hash%20validation%20failed.',
-                'post' => $postArray
-            ]
+                'post' => $postArray,
+            ],
         ];
     }
 
@@ -242,7 +242,7 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
         return [
             'success' => [
                 'x_MD5_Hash' => '35DCF749F7760193FB8254886E1D1522',
-                'post' => $postArray
+                'post' => $postArray,
             ],
         ];
     }
