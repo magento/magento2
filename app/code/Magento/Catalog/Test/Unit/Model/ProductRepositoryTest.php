@@ -1374,10 +1374,10 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     public function fieldName()
     {
         return [
-//            ['category_id'],
-//            ['store'],
+            ['category_id'],
+            ['store'],
             ['website_id'],
-//            ['field'],
+            ['field'],
         ];
     }
 }

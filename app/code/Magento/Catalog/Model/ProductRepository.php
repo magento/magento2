@@ -676,18 +676,15 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     private function applyCustomFilter(Collection $collection, \Magento\Framework\Api\Filter $filter, $conditionType)
     {
-        $isApplied = false;
-        $categoryFilter = [];
-
         if ($filter->getField() == 'category_id') {
             $categoryFilter[$conditionType][] = $filter->getValue();
             $collection->addCategoriesFilter($categoryFilter);
-            $isApplied = true;
+            return true;
         }
 
         if ($filter->getField() == 'store') {
             $collection->addStoreFilter($filter->getValue());
-            $isApplied = true;
+            return true;
         }
 
         if ($filter->getField() == 'website_id') {
@@ -696,10 +693,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $value = explode(',', $value);
             }
             $collection->addWebsiteFilter($value);
-            $isApplied = true;
+            return true;
         }
 
-        return $isApplied;
+        return false;
     }
 
     /**
