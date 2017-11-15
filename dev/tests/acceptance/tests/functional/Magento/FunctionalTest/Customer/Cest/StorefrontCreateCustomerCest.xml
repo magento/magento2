@@ -21,7 +21,9 @@
                 <testCaseId value="MAGETWO-23546"/>
                 <group value="customer"/>
                 <group value="create"/>
+                <env value="chrome"/>
                 <env value="firefox"/>
+                <env value="headless"/>
             </annotations>
             <amOnPage mergeKey="amOnStorefrontPage"  url="/"/>
             <click mergeKey="clickOnCreateAccountLink" selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}"/>

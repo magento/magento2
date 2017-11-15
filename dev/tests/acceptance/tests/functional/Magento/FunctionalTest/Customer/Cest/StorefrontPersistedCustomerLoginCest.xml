@@ -26,7 +26,10 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-72103"/>
                 <group value="customer"/>
+                <env value="chrome"/>
                 <env value="firefox"/>
+                <env value="phantomjs"/>
+                <env value="headless"/>
             </annotations>
             <amOnPage mergeKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>
             <fillField  mergeKey="fillEmail" userInput="$$customer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>

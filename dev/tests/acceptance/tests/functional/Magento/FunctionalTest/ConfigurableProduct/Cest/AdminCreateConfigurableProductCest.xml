@@ -27,7 +27,7 @@
                 <testCaseId value="MAGETWO-26041"/>
                 <group value="configurable"/>
                 <group value="product"/>
-                <env value="firefox"/>
+                <env value="chrome"/>
             </annotations>
 
             <amOnPage url="{{AdminCategoryPage.url}}" mergeKey="amOnCategoryGridPage"/>

@@ -21,7 +21,8 @@
                 <testCaseId value="MAGETWO-72095"/>
                 <group value="customer"/>
                 <group value="create"/>
-                <env value="firefox"/>
+                <env value="chrome"/>
+                <env value="headless"/>
             </annotations>
             <amOnPage url="{{AdminLoginPage.url}}" mergeKey="navigateToAdmin"/>
             <fillField userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" selector="{{AdminLoginFormSection.username}}" mergeKey="fillUsername"/>

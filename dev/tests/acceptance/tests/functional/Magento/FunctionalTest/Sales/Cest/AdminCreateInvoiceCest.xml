@@ -27,7 +27,8 @@
                 <severity value="NORMAL"/>
                 <testCaseId value="MAGETWO-72096"/>
                 <group value="sales"/>
-                <env value="firefox"/>
+                <env value="chrome"/>
+                <env value="headless"/>
             </annotations>
 
             <!-- todo: Create an order via the api instead of driving the browser  -->
