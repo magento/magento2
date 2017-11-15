@@ -144,6 +144,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
             testFunctionCall(function () {
                 return {
                     'someProperty': test,
+                    'someOtherProperty': '<?php echo \$block->getUrl('test/path/path'); ?>//',
                     'someMethod': function () {
                         alert(<?php echo \$block->getJsAlert() ?>);
                     }
@@ -173,6 +174,7 @@ TEXT;
             testFunctionCall(function () {
                 return {
                     'someProperty': test,
+                    'someOtherProperty': '<?php echo \$block->getUrl('test/path/path'); ?>//',
                     'someMethod': function () {
                         alert(<?php echo \$block->getJsAlert() ?>);
                     }
