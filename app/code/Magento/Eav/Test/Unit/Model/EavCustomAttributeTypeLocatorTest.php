@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Eav\Api\AttributeRepositoryInterface;
@@ -99,13 +97,19 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit\Framework\TestCase
             $serviceInterface => [$mediaBackEndModelClass => $mediaAttributeDataInterface]
         ];
 
-        $attribute = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, ['getBackendModel']);
+        $attribute = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            ['getBackendModel']
+        );
 
         $attribute->expects($this->any())
             ->method('getBackendModel')
             ->willReturn($mediaBackEndModelClass);
 
-        $attributeNoBackendModel = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, ['getBackendModel', 'getFrontendInput']);
+        $attributeNoBackendModel = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            ['getBackendModel', 'getFrontendInput']
+        );
 
         $attributeNoBackendModel->expects($this->any())
             ->method('getBackendModel')
@@ -169,12 +173,11 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit\Framework\TestCase
                 'attributeRepositoryResponse' => $attributeNoBackendModel,
                 'stringUtility' => $stringUtility,
                 'serviceEntityTypeMapData' => [$serviceInterface => 'image'],
-                'serviceBackendModelDataInterfaceMapData' =>
-                    [
-                        $serviceInterface =>
-                            [\Magento\Eav\Model\Attribute\Data\Image::class => $mediaAttributeDataInterface
-                            ]
-                    ],
+                'serviceBackendModelDataInterfaceMapData' => [
+                    $serviceInterface => [
+                        \Magento\Eav\Model\Attribute\Data\Image::class => $mediaAttributeDataInterface
+                    ]
+                ],
                 'expected' => $mediaAttributeDataInterface
             ]
         ];
@@ -222,7 +225,10 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit\Framework\TestCase
         ];
         $stringUtility = new \Magento\Framework\Stdlib\StringUtils();
         $this->eavCustomAttributeTypeLocator = new EavCustomAttributeTypeLocator(
-            $this->attributeRepository, $stringUtility, [], $serviceBackendModelDataInterfaceMapData
+            $this->attributeRepository,
+            $stringUtility,
+            [],
+            $serviceBackendModelDataInterfaceMapData
         );
         $this->assertEquals(
             ['ServiceDataInterfaceA', 'ServiceDataInterfaceB', 'ServiceDataInterfaceC', 'ServiceDataInterfaceD'],

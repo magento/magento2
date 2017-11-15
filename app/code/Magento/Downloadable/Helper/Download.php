@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Downloadable\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -146,7 +144,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
             throw new CoreException(__('Please set resource file and link type.'));
         }
 
-        if (is_null($this->_handle)) {
+        if ($this->_handle === null) {
             if ($this->_linkType == self::LINK_TYPE_URL) {
                 $path = $this->_resourceFile;
                 $protocol = strtolower(parse_url($path, PHP_URL_SCHEME));
@@ -284,6 +282,10 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getContentDisposition($store = null)
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_CONTENT_DISPOSITION, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_CONTENT_DISPOSITION,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 }

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -334,13 +332,9 @@ class DobTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMinDateRange($validationRules, $expectedValue)
     {
-        $this->attribute->expects(
-            $this->once()
-        )->method(
-                'getValidationRules'
-            )->will(
-                $this->returnValue($validationRules)
-            );
+        $this->attribute->expects($this->once())
+            ->method('getValidationRules')
+            ->will($this->returnValue($validationRules));
         $this->assertEquals($expectedValue, $this->_block->getMinDateRange());
     }
 
@@ -404,13 +398,9 @@ class DobTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMaxDateRange($validationRules, $expectedValue)
     {
-        $this->attribute->expects(
-            $this->once()
-        )->method(
-                'getValidationRules'
-            )->will(
-                $this->returnValue($validationRules)
-            );
+        $this->attribute->expects($this->once())
+            ->method('getValidationRules')
+            ->will($this->returnValue($validationRules));
         $this->assertEquals($expectedValue, $this->_block->getMaxDateRange());
     }
 
@@ -465,7 +455,8 @@ class DobTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->_block->getMaxDateRange());
     }
     
-    public function testGetHtmlExtraParamsWithoutRequiredOption() {
+    public function testGetHtmlExtraParamsWithoutRequiredOption()
+    {
         $this->attribute->expects($this->once())
             ->method("isRequired")
             ->willReturn(false);
@@ -473,7 +464,8 @@ class DobTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_block->getHtmlExtraParams(), 'data-validate="{\'validate-date-au\':true}"');
     }
 
-    public function testGetHtmlExtraParamsWithRequiredOption() {
+    public function testGetHtmlExtraParamsWithRequiredOption()
+    {
         $this->attribute->expects($this->once())
             ->method("isRequired")
             ->willReturn(true);

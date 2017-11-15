@@ -6,7 +6,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// @codingStandardsIgnoreStart
 
 return [
     ['__get', 'Magento\Framework\DataObject'],

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Mview;
 
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;

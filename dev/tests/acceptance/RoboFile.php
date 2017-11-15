@@ -6,7 +6,7 @@
 
 /** This is project's console commands configuration for Robo task runner.
  *
- * @codingStandardsIgnoreFile
+ * @codingStandardsIgnoreStart
  * @see http://robo.li/
  */
 class RoboFile extends \Robo\Tasks
@@ -119,7 +119,8 @@ class RoboFile extends \Robo\Tasks
      */
     function group($args = '')
     {
-        $this->taskExec('./vendor/bin/codecept run functional --verbose --steps --env chrome --skip-group skip --group')->args($args)->run();
+        $this->taskExec('./vendor/bin/codecept run functional --verbose --steps --env chrome --skip-group skip --group')
+            ->args($args)->run();
     }
 
     /**
@@ -160,7 +161,9 @@ class RoboFile extends \Robo\Tasks
      */
     function allure2Generate()
     {
-        return $this->_exec('allure generate tests/_output/allure-results/ --output tests/_output/allure-report/ --clean');
+        return $this->_exec(
+            'allure generate tests/_output/allure-results/ --output tests/_output/allure-report/ --clean'
+        );
     }
 
     /**

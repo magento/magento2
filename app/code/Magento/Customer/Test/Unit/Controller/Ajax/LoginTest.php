@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test customer ajax login controller
  */
@@ -77,15 +75,21 @@ class LoginTest extends \PHPUnit\Framework\TestCase
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->response = $this->createPartialMock(\Magento\Framework\App\ResponseInterface::class, ['setRedirect', 'sendResponse', 'representJson', 'setHttpResponseCode']);
-        $this->customerSession = $this->createPartialMock(\Magento\Customer\Model\Session::class, [
+        $this->response = $this->createPartialMock(
+            \Magento\Framework\App\ResponseInterface::class,
+            ['setRedirect', 'sendResponse', 'representJson', 'setHttpResponseCode']
+        );
+        $this->customerSession = $this->createPartialMock(
+            \Magento\Customer\Model\Session::class,
+            [
                 'isLoggedIn',
                 'getLastCustomerId',
                 'getBeforeAuthUrl',
                 'setBeforeAuthUrl',
                 'setCustomerDataAsLoggedIn',
                 'regenerateId'
-            ]);
+            ]
+        );
         $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['get']);
         $this->customerAccountManagementMock =
             $this->createPartialMock(\Magento\Customer\Model\AccountManagement::class, ['authenticate']);
