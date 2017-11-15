@@ -834,5 +834,16 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
         return $this->_setExtensionAttributes($extensionAttributes);
     }
 
+    /**
+     * Synchronize object's stored data with the actual data
+     *
+     * @return $this
+     */
+    public function resetStoredData()
+    {
+        $this->updateStoredData();
+        return $this;
+    }
+
     //@codeCoverageIgnoreEnd
 }
