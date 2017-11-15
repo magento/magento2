@@ -118,6 +118,12 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
         if (!empty($extensionData)) {
             $extensionAttributes = $this->extensionAttributesFactory->create($extensibleEntityClass, $extensionData);
             $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] = $extensionAttributes;
+        } elseif (array_key_exists(ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY, $data)) {
+            $extensionAttributes = $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY];
+            $extensionAttributeClass = $this->extensionAttributesFactory->getExtensibleInterfaceName($extensibleEntityClass);
+            if (!is_subclass_of($extensionAttributes, $extensionAttributeClass)) {
+                unset($data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
+            }
         }
         return $data;
     }
