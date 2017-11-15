@@ -21,7 +21,7 @@
                 <item name="name" xsi:type="object">Magento\Inventory\Model\Source\Validator\NameValidator</item>
                 <item name="postcode" xsi:type="object">Magento\Inventory\Model\Source\Validator\PostcodeValidator</item>
                 <item name="country" xsi:type="object">Magento\Inventory\Model\Source\Validator\CountryValidator</item>
-                <item name="carrier_links" xsi:type="object">Magento\Inventory\Model\Source\Validator\CarrierLinks</item>
+                <item name="carrier_links" xsi:type="object">Magento\Inventory\Model\Source\Validator\CarrierLinksValidator</item>
             </argument>
         </arguments>
     </type>
@@ -33,10 +33,25 @@
     <!-- Source Item -->
     <preference for="Magento\InventoryApi\Api\SourceItemRepositoryInterface" type="Magento\Inventory\Model\SourceItemRepository"/>
     <preference for="Magento\InventoryApi\Api\SourceItemsSaveInterface" type="Magento\Inventory\Model\SourceItem\Command\SourceItemsSave"/>
+    <preference for="Magento\InventoryApi\Api\SourceItemsDeleteInterface" type="Magento\Inventory\Model\SourceItem\Command\SourceItemsDelete"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceItemInterface" type="Magento\Inventory\Model\SourceItem"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface" type="Magento\Inventory\Model\SourceItemSearchResults"/>
-    <preference for="Magento\Inventory\Model\SourceItem\Command\DeleteInterface" type="Magento\Inventory\Model\SourceItem\Command\Delete"/>
     <preference for="Magento\Inventory\Model\SourceItem\Command\GetListInterface" type="Magento\Inventory\Model\SourceItem\Command\GetList"/>
+    <type name="Magento\Inventory\Model\SourceItem\Validator\ValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="sku" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\SkuValidator</item>
+                <item name="sourceId" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\SourceIdValidator</item>
+                <item name="quantity" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\QuantityValidator</item>
+                <item name="status" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\StatusValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Inventory\Model\SourceItem\Validator\SourceItemsValidator">
+        <arguments>
+            <argument name="sourceItemValidator" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\ValidatorChain</argument>
+        </arguments>
+    </type>
     <!-- Stock -->
     <preference for="Magento\InventoryApi\Api\StockRepositoryInterface" type="Magento\Inventory\Model\StockRepository"/>
     <preference for="Magento\InventoryApi\Api\Data\StockInterface" type="Magento\Inventory\Model\Stock"/>

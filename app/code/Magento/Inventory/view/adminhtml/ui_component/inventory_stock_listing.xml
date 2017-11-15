@@ -118,7 +118,7 @@
                 </editor>
             </settings>
         </column>
-        <actionsColumn name="actions" class="Magento\Backend\Ui\Component\Listing\Column\EditAction">
+        <actionsColumn name="actions" class="Magento\Backend\Ui\Component\Listing\Column\EditAction" sortOrder="100">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="editUrlPath" xsi:type="string">inventory/stock/edit</item>
