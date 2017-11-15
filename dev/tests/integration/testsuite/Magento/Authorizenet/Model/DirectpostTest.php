@@ -46,9 +46,12 @@ class DirectpostTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->directPost = $this->objectManager->create(Directpost::class, [
-            'httpClientFactory' => $this->httpClientFactory,
-        ]);
+        $this->directPost = $this->objectManager->create(
+            Directpost::class,
+            [
+                'httpClientFactory' => $this->httpClientFactory,
+            ]
+        );
     }
 
     /**

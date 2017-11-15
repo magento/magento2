@@ -60,7 +60,7 @@ class Info extends Block
     /**
      * Get Product options.
      *
-     * @param int $sku
+     * @param string $sku
      * @return array
      */
     public function getProductOptions($sku)
