@@ -30,7 +30,8 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-72094"/>
                 <group value="checkout"/>
-                <env value="firefox"/>
+                <env value="chrome"/>
+                <env value="headless"/>
             </annotations>
             <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" mergeKey="onCategoryPage"/>
             <waitForPageLoad mergeKey="waitForPageLoad1"/>

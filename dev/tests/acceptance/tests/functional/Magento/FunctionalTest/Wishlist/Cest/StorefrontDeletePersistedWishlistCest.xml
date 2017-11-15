@@ -11,7 +11,9 @@
         <annotations>
             <features value="Delete a persist wishlist for a customer"/>
             <stories value="Delete a persist wishlist for a customer"/>
+            <env value="chrome"/>
             <env value="firefox"/>
+            <env value="phantomjs"/>
             <group value="wishlist"/>
         </annotations>
         <before>

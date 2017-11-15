@@ -24,7 +24,9 @@
                 <testCaseId value="MAGETWO-25580"/>
                 <group value="cms"/>
                 <group value="skip"/>
+                <env value="chrome"/>
                 <env value="firefox"/>
+                <env value="headless"/>
             </annotations>
             <amOnPage url="{{AdminLoginPage.url}}" mergeKey="navigateToAdmin"/>
             <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
@@ -36,7 +38,7 @@
             <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" mergeKey="fillFieldTitle"/>
             <click selector="{{CmsNewPagePageContentSection.header}}" mergeKey="clickExpandContent"/>
             <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{_defaultCmsPage.content_heading}}" mergeKey="fillFieldContentHeading"/>
-            <!-- As of 2017/11/15, this test is failing to find the selector below (Jenkins only, works locally). See MQE-282. -->
+            <!-- As of 2017/11/15, this test is failing here (Jenkins only, works locally). See MQE-282. -->
             <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{_defaultCmsPage.content}}" mergeKey="fillFieldContent"/>
             <click selector="{{CmsNewPagePageSeoSection.header}}" mergeKey="clickExpandSearchEngineOptimisation"/>
             <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" mergeKey="fillFieldUrlKey"/>

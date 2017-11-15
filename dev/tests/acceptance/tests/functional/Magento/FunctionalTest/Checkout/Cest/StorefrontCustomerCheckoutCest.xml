@@ -32,7 +32,8 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="#"/>
                 <group value="checkout"/>
-                <env value="firefox"/>
+                <env value="chrome"/>
+                <env value="headless"/>
             </annotations>
 
             <amOnPage mergeKey="s1"  url="customer/account/login/"/>
