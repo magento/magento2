@@ -271,12 +271,4 @@ class DependencyDecorator implements IndexerInterface
             $this->indexerRegistry->get($indexerId)->reindexList($ids);
         }
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isHidden()
-    {
-        return $this->indexer->isHidden();
-    }
 }

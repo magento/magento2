@@ -43,9 +43,6 @@ class DataCollection extends Collection
         if (!$this->isLoaded()) {
             foreach (array_keys($this->config->getIndexers()) as $indexerId) {
                 $indexer = $this->indexerRegistry->get($indexerId);
-                if ($indexer->isHidden()) {
-                    continue;
-                }
                 $item = $this->getNewEmptyItem();
                 $data = [
                     'indexer_id' => $indexer->getId(),

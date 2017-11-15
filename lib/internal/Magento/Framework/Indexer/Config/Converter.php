@@ -32,7 +32,6 @@ class Converter implements ConverterInterface
             $data['view_id'] = $this->getAttributeValue($indexerNode, 'view_id');
             $data['action_class'] = $this->getAttributeValue($indexerNode, 'class');
             $data['shared_index'] = $this->getAttributeValue($indexerNode, 'shared_index');
-            $data['hidden'] = $this->getAttributeValue($indexerNode, 'hidden');
             $data['title'] = '';
             $data['description'] = '';
             $data['dependencies'] = [];

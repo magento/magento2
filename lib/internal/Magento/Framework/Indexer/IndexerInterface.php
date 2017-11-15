@@ -179,11 +179,4 @@ interface IndexerInterface
      * @return void
      */
     public function reindexList($ids);
-
-    /**
-     * Check if Indexer 'hidden'.
-     *
-     * @return bool
-     */
-    public function isHidden();
 }

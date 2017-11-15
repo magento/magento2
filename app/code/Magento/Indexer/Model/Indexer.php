@@ -445,16 +445,4 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
         $this->getActionInstance()->executeList($ids);
         $this->getState()->save();
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isHidden()
-    {
-        if ($this->hasData('hidden') && true === (bool)$this->getData('hidden')) {
-            return true;
-        }
-
-        return false;
-    }
 }
