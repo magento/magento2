@@ -12,4 +12,10 @@
             <resource ref="anonymous" /> <!-- TODO: tmp solution, change to actual -->
         </resources>
     </route>
+    <route url="/V1/inventory/configuration" method="POST">
+        <service class="Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface" method="execute"/>
+        <resources>
+            <resource ref="anonymous" /> <!-- TODO: tmp solution, change to actual -->
+        </resources>
+    </route>
 </routes>

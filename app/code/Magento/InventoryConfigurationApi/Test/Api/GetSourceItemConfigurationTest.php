@@ -1,10 +1,14 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\InventoryConfigurationApi\Test\Api;
 
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Framework\Webapi\Rest\Request;
 
 class GetSourceItemConfigurationTest extends WebapiAbstract
 {
