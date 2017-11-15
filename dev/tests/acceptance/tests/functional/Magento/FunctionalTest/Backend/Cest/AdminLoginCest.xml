@@ -21,10 +21,7 @@
                 <testCaseId value="MAGETWO-71572"/>
                 <group value="example"/>
                 <group value="login"/>
-                <env value="chrome"/>
                 <env value="firefox"/>
-                <env value="phantomjs"/>
-                <env value="headless"/>
             </annotations>
             <amOnPage url="{{AdminLoginPage.url}}" mergeKey="amOnAdminLoginPage"/>
             <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
