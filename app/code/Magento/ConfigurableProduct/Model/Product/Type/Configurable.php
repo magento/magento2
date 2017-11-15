@@ -449,9 +449,8 @@ class Configurable extends AbstractType
     /**
      * @param Product $product
      *
-     * @return string
-     * @throws \InvalidArgumentException When it's impossible to generate cache
-     * ID for the product.
+     * @return string|null Null is returned when it's impossible to generate
+     * cache ID for the product.
      */
     private function generateConfigurableAttributesCacheId(
         Product $product
@@ -461,9 +460,7 @@ class Configurable extends AbstractType
         /** @var string|null $productId */
         $productId = $product->getData($metadata->getLinkField());
         if (!$productId) {
-            throw new \InvalidArgumentException(
-                'Impossible to generate cache ID for the product'
-            );
+            return null;
         }
 
         return __CLASS__ . $productId . '_' . $product->getStoreId();
@@ -474,18 +471,14 @@ class Configurable extends AbstractType
      *
      * @param Product $product
      *
-     * @return ProductTypeConfigurable\Attribute\Collection
-     * @throws \RuntimeException When can't find the cached attributes.
+     * @return ProductTypeConfigurable\Attribute\Collection|null Null when
+     * attributes for given product cannot be found in cache.
      */
     private function findCachedConfigurableAttributes(
         Product $product
     ) {
         //Trying to load attributes from cache.
-        try {
-            $cacheId = $this->generateConfigurableAttributesCacheId($product);
-        } catch (\Exception $exception) {
-            $cacheId = null;
-        }
+        $cacheId = $this->generateConfigurableAttributesCacheId($product);
         if ($cacheId) {
             $configurableAttributes = $this->getCache()->load($cacheId);
             $configurableAttributes
@@ -520,9 +513,7 @@ class Configurable extends AbstractType
             return $configurableAttributes;
         }
 
-        throw new \RuntimeException(
-            'Couldn\'t find attributes for configurable product.'
-        );
+        return null;
     }
 
     /**
@@ -544,11 +535,12 @@ class Configurable extends AbstractType
         /** @var string $productHashId */
         $productHashId = spl_object_hash($product);
 
-        if ($productId) {
+        $cacheId = $this->generateConfigurableAttributesCacheId($product);
+        if ($productId && $cacheId) {
             $this->getCache()
                 ->save(
                     serialize($collection),
-                    $this->generateConfigurableAttributesCacheId($product),
+                    $cacheId,
                     array_merge(
                         $product->getIdentities(),
                         [self::TYPE_CODE . '_' . $productId]
@@ -574,10 +566,10 @@ class Configurable extends AbstractType
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if (!$product->hasData($this->_configurableAttributes)) {
-            try {
-                $configurableAttributes
+            $configurableAttributes
                     = $this->findCachedConfigurableAttributes($product);
-            } catch (\RuntimeException $exception) {
+
+            if (!$configurableAttributes) {
                 //Couldn't find attributes in cache, loading.
                 $configurableAttributes
                     = $this->getConfigurableAttributeCollection($product);
