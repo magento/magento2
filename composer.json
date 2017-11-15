@@ -134,6 +134,7 @@
         "magento/module-grouped-product": "100.2.0",
         "magento/module-import-export": "100.2.0",
         "magento/module-indexer": "100.2.0",
+        "magento/module-instant-purchase": "100.2.0",
         "magento/module-integration": "100.2.0",
         "magento/module-layered-navigation": "100.2.0",
         "magento/module-media-storage": "100.2.0",
