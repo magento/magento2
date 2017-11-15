@@ -401,4 +401,11 @@ interface StockItemInterface extends ExtensibleDataInterface
     public function setExtensionAttributes(
         \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface $extensionAttributes
     );
+
+    /**
+     * Synchronize object's stored data with the actual data
+     *
+     * @return $this
+     */
+    public function resetStoredData();
 }

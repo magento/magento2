@@ -109,6 +109,7 @@ class StockManagement implements StockManagementInterface
             }
             if ($this->canSubtractQty($stockItem)) {
                 $stockItem->setQty($stockItem->getQty() - $orderedQty);
+                $stockItem->resetStoredData();
             }
             $registeredItems[$productId] = $orderedQty;
             if (!$this->stockState->verifyStock($productId, $stockItem->getWebsiteId())
