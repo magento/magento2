@@ -221,7 +221,7 @@ define([
             var shippingAddress;
 
             if (quote.billingAddress()) {
-                selectBillingAddress(quote.billingAddress());
+                selectBillingAddress(quote.shippingAddress());
 
                 return;
             }
