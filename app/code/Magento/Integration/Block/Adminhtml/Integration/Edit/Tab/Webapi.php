@@ -141,7 +141,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * Retrieve saved resource
-     * 
+     *
      * @return array|bool
      */
     protected function retrieveFormResources()
@@ -176,8 +176,12 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     public function getTree()
     {
         $resources = $this->aclResourceProvider->getAclResources();
+        $configResource = array_filter($resources, function ($node) {
+            return isset($node['id']) && $node['id'] == 'Magento_Backend::admin';
+        });
+        $configResource = reset($configResource);
         $rootArray = $this->integrationData->mapResources(
-            isset($resources[1]['children']) ? $resources[1]['children'] : []
+            isset($configResource['children']) ? $configResource['children'] : []
         );
         return $rootArray;
     }

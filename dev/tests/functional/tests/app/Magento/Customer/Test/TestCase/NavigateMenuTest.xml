@@ -18,7 +18,7 @@
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
         <variation name="NavigateMenuTest24">
-            <data name="menuItem" xsi:type="string">Stores > Customer Groups</data>
+            <data name="menuItem" xsi:type="string">Customers > Customer Groups</data>
             <data name="pageTitle" xsi:type="string">Customer Groups</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
         </variation>
