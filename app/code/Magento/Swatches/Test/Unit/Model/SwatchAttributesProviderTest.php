@@ -94,8 +94,7 @@ class SwatchAttributesProviderTest extends \PHPUnit\Framework\TestCase
         $expected = [];
 
         // Test cases where swatchAttributeCodes::getCodes returns attribute codes which are no longer swatch attributes
-        foreach ($dataForIsSwatchAttribute as $attributeId => $isSwatchAttribute)
-        {
+        foreach ($dataForIsSwatchAttribute as $attributeId => $isSwatchAttribute) {
             $productAttributeMock = $this->createPartialMock(
                 \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
                 ['setData', 'hasData', 'getData']

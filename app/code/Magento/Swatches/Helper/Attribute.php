@@ -7,6 +7,7 @@ namespace Magento\Swatches\Helper;
 
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Swatches\Model\Swatch;
 
 /**
  * Provide list of swatch attributes for product.
@@ -35,7 +36,7 @@ class Attribute
     public function getEavAttributeAdditionalDataKeys()
     {
         return [
-            \Magento\Swatches\Model\Swatch::SWATCH_INPUT_TYPE_KEY,
+            Swatch::SWATCH_INPUT_TYPE_KEY,
             'update_product_preview_image',
             'use_product_image_for_swatch'
         ];
@@ -113,10 +114,10 @@ class Attribute
      */
     public function isVisualSwatch(AbstractAttribute $attribute)
     {
-        if (!$attribute->hasData(\Magento\Swatches\Model\Swatch::SWATCH_INPUT_TYPE_KEY)) {
+        if (!$attribute->hasData(Swatch::SWATCH_INPUT_TYPE_KEY)) {
             $this->populateAdditionalDataEavAttribute($attribute);
         }
-        return $attribute->getData(\Magento\Swatches\Model\Swatch::SWATCH_INPUT_TYPE_KEY) == \Magento\Swatches\Model\Swatch::SWATCH_INPUT_TYPE_VISUAL;
+        return $attribute->getData(Swatch::SWATCH_INPUT_TYPE_KEY) == Swatch::SWATCH_INPUT_TYPE_VISUAL;
     }
 
     /**
@@ -130,6 +131,6 @@ class Attribute
         if (!$attribute->hasData(\Magento\Swatches\Model\Swatch::SWATCH_INPUT_TYPE_KEY)) {
             $this->populateAdditionalDataEavAttribute($attribute);
         }
-        return $attribute->getData(\Magento\Swatches\Model\Swatch::SWATCH_INPUT_TYPE_KEY) == \Magento\Swatches\Model\Swatch::SWATCH_INPUT_TYPE_TEXT;
+        return $attribute->getData(Swatch::SWATCH_INPUT_TYPE_KEY) == Swatch::SWATCH_INPUT_TYPE_TEXT;
     }
 }
