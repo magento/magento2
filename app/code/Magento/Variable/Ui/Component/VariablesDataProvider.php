@@ -92,6 +92,27 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
     }
 
     /**
+     * Prepare custom variables
+     *
+     * @return array
+     */
+    private function getCustomVariables()
+    {
+        $customVariables = $this->collectionFactory->create();
+
+        $variables = [];
+        foreach ($customVariables->getData() as $variable) {
+            $variables[] = [
+                'code' => $variable['code'],
+                'variable_name' => $variable['name'],
+                'variable_type' => 'custom'
+            ];
+        }
+
+        return $variables;
+    }
+
+    /**
      * Merge variables from different sources:
      * custom variables and default (stores configuration variables)
      *
@@ -99,12 +120,33 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
      */
     public function getData()
     {
-        $customVariables = $this->collectionFactory->create();
-        $customVariableData = $customVariables->getData();
-        $items = array_merge(
-            $this->getDefaultVariables(),
-            $customVariableData
-        );
+        $searchCriteria = $this->getSearchCriteria();
+
+        // sort items by variable_type
+        $sortOrder = $searchCriteria->getSortOrders();
+        if (!empty($sortOrder) && $sortOrder[0]->getDirection() == 'DESC') {
+            $items = array_merge(
+                $this->getCustomVariables(),
+                $this->getDefaultVariables()
+            );
+        } else {
+            $items = array_merge(
+                $this->getDefaultVariables(),
+                $this->getCustomVariables()
+            );
+        }
+
+        // filter array by variable_name and search value
+        $filterGroups = $searchCriteria->getFilterGroups();
+        if(!empty($filterGroups)) {
+            $filters = $filterGroups[0]->getFilters();
+            if(!empty($filters)) {
+                $value = str_replace('%', '', $filters[0]->getValue());
+                $items = array_values(array_filter($items, function ($item) use($value) {
+                    return strpos(strtolower($item['variable_name']), strtolower($value)) !== false;
+                }));
+            }
+        }
 
         return [
             'items' => $items

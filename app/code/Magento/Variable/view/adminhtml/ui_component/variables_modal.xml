@@ -33,27 +33,29 @@
             </settings>
         </dataProvider>
     </dataSource>
+    <listingToolbar name="listing_top">
+        <filterSearch name="fulltext"/>
+        <filters name="listing_filters"/>
+    </listingToolbar>
     <columns name="variables">
         <column name="variable_name">
             <settings>
-                <filter>textRange</filter>
                 <label translate="true">Variable Name</label>
                 <sortable>false</sortable>
             </settings>
         </column>
         <column name="variable_type">
             <settings>
-                <filter>textRange</filter>
+                <filter>text</filter>
                 <label translate="true">Type</label>
                 <sorting>asc</sorting>
             </settings>
         </column>
         <column name="code">
             <settings>
-                <filter>textRange</filter>
                 <label translate="true">Code</label>
+                <sortable>false</sortable>
             </settings>
         </column>
     </columns>
-
 </listing>
