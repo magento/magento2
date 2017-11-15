@@ -94,12 +94,12 @@ class ListCompare extends Block
     protected $messageBlock = '#messages';
 
     /**
-     * Get product info.
+     * Get Product info.
      *
      * @param int $index
      * @param string $attributeKey
      * @param string $currency
-     * @return string
+     * @return string|array
      */
     public function getProductInfo($index, $attributeKey, $currency = ' $')
     {
@@ -108,7 +108,11 @@ class ListCompare extends Block
             $price = $infoBlock->find($this->priceSelector, Locator::SELECTOR_XPATH)->getText();
             preg_match_all('`([a-z]+).*?([\d\.]+)`i', $price, $prices);
             if (!empty($prices[0])) {
-                return number_format(end($prices)[0], $this->priceFormat);
+                $resultPrice = [];
+                foreach ($prices[1] as $key => $value) {
+                    $resultPrice['price_' . lcfirst($value)] = $prices[2][$key];
+                }
+                return $resultPrice;
             }
             return trim($price, $currency);
         } else {

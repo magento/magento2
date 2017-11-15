@@ -10,6 +10,11 @@
         <dataset name="default">
             <field name="category_price" xsi:type="string">1</field>
         </dataset>
+        <dataset name="price_as-40.00">
+            <field name="compare_price" xsi:type="array">
+                <item name="price_as" xsi:type="string">40.00</item>
+            </field>
+        </dataset>
         <dataset name="price_40">
             <field name="category_price" xsi:type="string">40</field>
             <field name="compare_price" xsi:type="string">40.00</field>
