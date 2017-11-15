@@ -8,8 +8,7 @@ namespace Magento\Swatches\Model;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Swatches\Helper\Attribute as AttributeHelper;
 
 /**
  * Provide list of swatch attributes for product.
@@ -33,23 +32,23 @@ class SwatchAttributesProvider
     private $attributesPerProduct;
 
     /**
-     * @var SerializerInterface
+     * @var AttributeHelper
      */
-    protected $serializer;
+    protected $attributeHelper;
 
     /**
      * @param Configurable $typeConfigurable
      * @param SwatchAttributeCodes $swatchAttributeCodes
-     * @param SerializerInterface $serializer
+     * @param AttributeHelper $attributeHelper
      */
     public function __construct(
         Configurable $typeConfigurable,
         SwatchAttributeCodes $swatchAttributeCodes,
-        SerializerInterface $serializer
+        AttributeHelper $attributeHelper
     ) {
         $this->typeConfigurable = $typeConfigurable;
         $this->swatchAttributeCodes = $swatchAttributeCodes;
-        $this->serializer = $serializer;
+        $this->attributeHelper = $attributeHelper;
     }
 
     /**
@@ -74,7 +73,7 @@ class SwatchAttributesProvider
                     $productAttribute = $configurableAttribute->getProductAttribute();
 
                     // Check if product attribute is actually an swatch attribute
-                    if ($productAttribute && $this->isSwatchAttribute($productAttribute)) {
+                    if ($productAttribute && $this->attributeHelper->isSwatchAttribute($productAttribute)) {
                         $swatchAttributes[$configurableAttribute->getAttributeId()] = $productAttribute;
                     }
                 }
@@ -82,84 +81,5 @@ class SwatchAttributesProvider
             $this->attributesPerProduct[$product->getId()] = $swatchAttributes;
         }
         return $this->attributesPerProduct[$product->getId()];
-    }
-
-    /**
-     * Get data key which should populated to attribute entity from "additional_data" field
-     *
-     * @return array
-     */
-    public function getEavAttributeAdditionalDataKeys()
-    {
-        return [
-            \Magento\Swatches\Model\Swatch::SWATCH_INPUT_TYPE_KEY,
-            'update_product_preview_image',
-            'use_product_image_for_swatch'
-        ];
-    }
-
-    /**
-     * Populate eav attribute with additional data from "additional_data" field
-     *
-     * @param AbstractAttribute $attribute
-     * @return $this
-     */
-    public function populateAdditionalDataEavAttribute(AbstractAttribute $attribute)
-    {
-        $serializedAdditionalData = $attribute->getData('additional_data');
-
-        if ($serializedAdditionalData) {
-            $additionalData = $this->serializer->unserialize($serializedAdditionalData);
-
-            if (isset($additionalData) && is_array($additionalData)) {
-                foreach ($this->getEavAttributeAdditionalDataKeys() as $key) {
-                    if (isset($additionalData[$key])) {
-                        $attribute->setData($key, $additionalData[$key]);
-                    }
-                }
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Check if an attribute is Swatch
-     *
-     * @param AbstractAttribute $attribute
-     * @return bool
-     */
-    public function isSwatchAttribute(AbstractAttribute $attribute)
-    {
-        $result = $this->isVisualSwatch($attribute) || $this->isTextSwatch($attribute);
-        return $result;
-    }
-
-    /**
-     * Is attribute Visual Swatch
-     *
-     * @param AbstractAttribute $attribute
-     * @return bool
-     */
-    public function isVisualSwatch(AbstractAttribute $attribute)
-    {
-        if (!$attribute->hasData(\Magento\Swatches\Model\Swatch::SWATCH_INPUT_TYPE_KEY)) {
-            $this->populateAdditionalDataEavAttribute($attribute);
-        }
-        return $attribute->getData(\Magento\Swatches\Model\Swatch::SWATCH_INPUT_TYPE_KEY) == \Magento\Swatches\Model\Swatch::SWATCH_INPUT_TYPE_VISUAL;
-    }
-
-    /**
-     * Is attribute Textual Swatch
-     *
-     * @param AbstractAttribute $attribute
-     * @return bool
-     */
-    public function isTextSwatch(AbstractAttribute $attribute)
-    {
-        if (!$attribute->hasData(\Magento\Swatches\Model\Swatch::SWATCH_INPUT_TYPE_KEY)) {
-            $this->populateAdditionalDataEavAttribute($attribute);
-        }
-        return $attribute->getData(\Magento\Swatches\Model\Swatch::SWATCH_INPUT_TYPE_KEY) == \Magento\Swatches\Model\Swatch::SWATCH_INPUT_TYPE_TEXT;
     }
 }

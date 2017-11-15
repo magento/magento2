@@ -58,6 +58,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     private $swatchAttributesProvider;
 
+    /**
+     * @var \Magento\Swatches\Helper\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeHelper;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -115,6 +120,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->swatchAttributesProvider = $this->getMockBuilder(SwatchAttributesProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->attributeHelper = $this->objectManager->getObject(
+            \Magento\Swatches\Helper\Attribute::class,
+            ['serializer' => $serializer]
+        );
 
         $this->swatchHelperObject = $this->objectManager->getObject(
             \Magento\Swatches\Helper\Data::class,
@@ -127,6 +136,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'imageHelper' => $this->imageHelperMock,
                 'serializer' => $serializer,
                 'swatchAttributesProvider' => $this->swatchAttributesProvider,
+                'attributeHelper' => $this->attributeHelper
             ]
         );
         $this->objectManager->setBackwardCompatibleProperty(
