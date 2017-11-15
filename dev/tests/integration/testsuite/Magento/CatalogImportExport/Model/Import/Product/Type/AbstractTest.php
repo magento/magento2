@@ -28,9 +28,15 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $this->_model = $this->getMockForAbstractClass(
             \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class,
             [
-                $this->objectManager->get(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class),
-                $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class),
-                $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class),
+                $this->objectManager->get(
+                    \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class
+                ),
+                $this->objectManager->get(
+                    \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class
+                ),
+                $this->objectManager->get(
+                    \Magento\Framework\App\ResourceConnection::class
+                ),
                 $params
             ]
         );
