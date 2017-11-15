@@ -23,8 +23,7 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-23414"/>
                 <group value="product"/>
-                <env value="chrome"/>
-                <env value="headless"/>
+                <env value="firefox"/>
             </annotations>
             <amOnPage url="{{AdminLoginPage.url}}" mergeKey="navigateToAdmin"/>
             <fillField userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" selector="{{AdminLoginFormSection.username}}" mergeKey="fillUsername"/>

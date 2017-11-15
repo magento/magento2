@@ -11,9 +11,7 @@
         <annotations>
             <features value="Create a store group in admin"/>
             <stories value="Create a store group in admin"/>
-            <env value="chrome"/>
             <env value="firefox"/>
-            <env value="phantomjs"/>
             <group value="store"/>
         </annotations>
         <before>
