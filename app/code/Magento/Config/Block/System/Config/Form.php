@@ -3,6 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Block\System\Config;
 
 use Magento\Config\App\Config\Type\System;
@@ -350,20 +351,20 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 $data = $this->_configData[$path];
                 $inherit = false;
 
-                if ($field->hasBackendModel()) {
-                    $backendModel = $field->getBackendModel();
-                    $backendModel->setPath($path)
-                        ->setValue($data)
-                        ->setWebsite($this->getWebsiteCode())
-                        ->setStore($this->getStoreCode())
-                        ->afterLoad();
-                    $data = $backendModel->getValue();
-                }
-
             } elseif ($field->getConfigPath() !== null) {
                 $data = $this->getConfigValue($field->getConfigPath());
             } else {
                 $data = $this->getConfigValue($path);
+            }
+
+            if ($field->hasBackendModel()) {
+                $backendModel = $field->getBackendModel();
+                $backendModel->setPath($path)
+                    ->setValue($data)
+                    ->setWebsite($this->getWebsiteCode())
+                    ->setStore($this->getStoreCode())
+                    ->afterLoad();
+                $data = $backendModel->getValue();
             }
         }
         $fieldRendererClass = $field->getFrontendModel();
