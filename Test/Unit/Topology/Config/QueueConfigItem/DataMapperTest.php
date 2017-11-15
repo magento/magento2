@@ -10,9 +10,6 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
 use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem\DataMapper;
 
-/**
- * @codingStandardsIgnoreFile
- */
 class DataMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**

@@ -8,9 +8,6 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Consumer\Config\Validator;
 use Magento\Framework\MessageQueue\Consumer\Config\Validator\Handlers as HandlersValidator;
 use Magento\Framework\Reflection\MethodsMap;
 
-/**
- * @codingStandardsIgnoreFile
- */
 class HandlersTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -106,7 +103,8 @@ class HandlersTest extends \PHPUnit\Framework\TestCase
                         'maxMessages' => '100',
                     ]
                 ],
-                "'consumer1' consumer declaration is invalid. Every handler element must be an array. It must contain 'type' and 'method' elements."
+                "'consumer1' consumer declaration is invalid. Every handler element must be an array."
+                . " It must contain 'type' and 'method' elements."
             ],
             'invalid, no required fields' => [
                 [
@@ -121,7 +119,8 @@ class HandlersTest extends \PHPUnit\Framework\TestCase
                         'maxMessages' => '100',
                     ]
                 ],
-                "'consumer1' consumer declaration is invalid. Every handler element must be an array. It must contain 'type' and 'method' elements."
+                "'consumer1' consumer declaration is invalid. Every handler element must be an array."
+                . " It must contain 'type' and 'method' elements."
             ],
             'invalid, no method' => [
                 [
@@ -136,7 +135,8 @@ class HandlersTest extends \PHPUnit\Framework\TestCase
                         'maxMessages' => '100',
                     ]
                 ],
-                "'consumer1' consumer declaration is invalid. Every handler element must be an array. It must contain 'type' and 'method' elements."
+                "'consumer1' consumer declaration is invalid. Every handler element must be an array."
+                . " It must contain 'type' and 'method' elements."
             ],
             'invalid, no type' => [
                 [
@@ -151,7 +151,8 @@ class HandlersTest extends \PHPUnit\Framework\TestCase
                         'maxMessages' => '100',
                     ]
                 ],
-                "'consumer1' consumer declaration is invalid. Every handler element must be an array. It must contain 'type' and 'method' elements."
+                "'consumer1' consumer declaration is invalid. Every handler element must be an array."
+                . " It must contain 'type' and 'method' elements."
             ]
         ];
     }
@@ -170,7 +171,8 @@ class HandlersTest extends \PHPUnit\Framework\TestCase
                 'maxMessages' => '100',
             ]
         ];
-        $expectedExceptionMessage = 'Service method specified as handler for of consumer "consumer1" is not available. Given "handlerClassOne::handlerMethodOne"';
+        $expectedExceptionMessage = 'Service method specified as handler for of consumer "consumer1" is not available.'
+        . ' Given "handlerClassOne::handlerMethodOne"';
         $this->expectException('\LogicException', $expectedExceptionMessage);
 
         $this->methodsMap->expects($this->once())

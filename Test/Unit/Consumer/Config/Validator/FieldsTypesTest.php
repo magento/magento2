@@ -7,9 +7,6 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Consumer\Config\Validator;
 
 use Magento\Framework\MessageQueue\Consumer\Config\Validator\FieldsTypes as FieldsTypesValidator;
 
-/**
- * @codingStandardsIgnoreFile
- */
 class FieldsTypesTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -96,7 +93,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         'maxMessages' => '100',
                     ]
                 ],
-                "Type of 'name' field specified in configuration of 'consumer1' consumer is invalid. Given 'boolean', 'string' was expected."
+                "Type of 'name' field specified in configuration of 'consumer1' consumer is invalid."
+                . " Given 'boolean', 'string' was expected."
             ],
             'invalid queue' => [
                 [
@@ -109,7 +107,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         'maxMessages' => '100',
                     ]
                 ],
-                "Type of 'queue' field specified in configuration of 'consumer1' consumer is invalid. Given 'integer', 'string' was expected."
+                "Type of 'queue' field specified in configuration of 'consumer1' consumer is invalid."
+                . " Given 'integer', 'string' was expected."
             ],
             'invalid consumerInstance' => [
                 [
@@ -122,7 +121,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         'maxMessages' => '100',
                     ]
                 ],
-                "Type of 'consumerInstance' field specified in configuration of 'consumer1' consumer is invalid. Given 'object', 'string' was expected."
+                "Type of 'consumerInstance' field specified in configuration of 'consumer1' consumer is invalid."
+                . " Given 'object', 'string' was expected."
             ],
             'invalid connection' => [
                 [
@@ -135,7 +135,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         'maxMessages' => '100',
                     ]
                 ],
-                "Type of 'connection' field specified in configuration of 'consumer1' consumer is invalid. Given 'array', 'string' was expected."
+                "Type of 'connection' field specified in configuration of 'consumer1' consumer is invalid."
+                . " Given 'array', 'string' was expected."
             ],
             'invalid handlers' => [
                 [
@@ -148,7 +149,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         'maxMessages' => '100',
                     ]
                 ],
-                "Type of 'handlers' field specified in configuration of 'consumer1' consumer is invalid. Given 'string', 'array' was expected."
+                "Type of 'handlers' field specified in configuration of 'consumer1' consumer is invalid."
+                . " Given 'string', 'array' was expected."
             ],
             'invalid maxMessages' => [
                 [
@@ -161,7 +163,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         'maxMessages' => 'abc',
                     ]
                 ],
-                "Type of 'maxMessages' field specified in configuration of 'consumer1' consumer is invalid. Given 'string', 'int|null' was expected."
+                "Type of 'maxMessages' field specified in configuration of 'consumer1' consumer is invalid."
+                . " Given 'string', 'int|null' was expected."
             ],
         ];
     }

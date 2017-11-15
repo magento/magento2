@@ -7,9 +7,6 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Consumer\Config\Validator;
 
 use Magento\Framework\MessageQueue\Consumer\Config\Validator\RequiredFields as RequiredFieldsValidator;
 
-/**
- * @codingStandardsIgnoreFile
- */
 class RequiredFieldsTest extends \PHPUnit\Framework\TestCase
 {
     /**

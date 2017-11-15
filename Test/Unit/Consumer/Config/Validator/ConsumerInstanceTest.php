@@ -7,9 +7,6 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Consumer\Config\Validator;
 
 use Magento\Framework\MessageQueue\Consumer\Config\Validator\ConsumerInstance as ConsumerInstanceValidator;
 
-/**
- * @codingStandardsIgnoreFile
- */
 class ConsumerInstanceTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -87,7 +84,11 @@ class ConsumerInstanceTest extends \PHPUnit\Framework\TestCase
                         'maxMessages' => '100',
                     ]
                 ],
-                "'Magento\\Framework\\MessageQueue\\Test\\Unit\\Consumer\\Config\\Validator\\ConsumerInstanceTest' cannot be specified as 'consumerInstance' for 'consumer1' consumer, unless it implements 'Magento\\Framework\\MessageQueue\\ConsumerInterface' interface"
+                // @codingStandardsIgnoreStart
+                "'Magento\\Framework\\MessageQueue\\Test\\Unit\\Consumer\\Config\\Validator\\ConsumerInstanceTest'"
+                . " cannot be specified as 'consumerInstance' for 'consumer1' consumer, unless it implements"
+                . " 'Magento\\Framework\\MessageQueue\\ConsumerInterface' interface"
+                // @codingStandardsIgnoreEnd
             ],
             'invalid, consumerInstance class does not exist' => [
                 [
@@ -102,7 +103,8 @@ class ConsumerInstanceTest extends \PHPUnit\Framework\TestCase
                         'maxMessages' => '100',
                     ]
                 ],
-                "'consumerClass1' does not exist and thus cannot be used as 'consumerInstance' for 'consumer1' consumer."
+                "'consumerClass1' does not exist and thus cannot be used as 'consumerInstance'"
+                . " for 'consumer1' consumer."
             ]
         ];
     }

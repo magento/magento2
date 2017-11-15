@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue\Test\Unit\Topology;
 
-/**
- * @codingStandardsIgnoreFile
- */
 class MergedXsdTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -49,6 +46,7 @@ class MergedXsdTest extends \PHPUnit\Framework\TestCase
      */
     public function exemplarXmlDataProvider()
     {
+        // @codingStandardsIgnoreStart
         return [
             /** Valid configurations */
             'valid' => [
@@ -124,5 +122,6 @@ class MergedXsdTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
+        // @codingStandardsIgnoreEnd
     }
 }

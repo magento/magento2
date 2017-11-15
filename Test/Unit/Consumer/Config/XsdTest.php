@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue\Test\Unit\Consumer\Config;
 
-/**
- * @codingStandardsIgnoreFile
- */
 class XsdTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -49,6 +46,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
      */
     public function exemplarXmlDataProvider()
     {
+        // @codingStandardsIgnoreStart
         return [
             /** Valid configurations */
             'valid' => [
@@ -125,5 +123,6 @@ class XsdTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
+        // @codingStandardsIgnoreEnd
     }
 }

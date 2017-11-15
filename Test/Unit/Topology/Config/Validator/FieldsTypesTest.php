@@ -7,9 +7,6 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Topology\Config\Validator;
 
 use Magento\Framework\MessageQueue\Topology\Config\Validator\FieldsTypes;
 
-/**
- * @codingStandardsIgnoreFile
- */
 class FieldsTypesTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -88,7 +85,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
-                "Type of 'name' field specified in configuration of 'ex01' exchange is invalid. Given 'boolean', 'string' was expected."
+                "Type of 'name' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'boolean', 'string' was expected."
             ],
             'type type' => [
                 [
@@ -136,7 +134,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
-                "Value of 'type' field specified in configuration of 'ex01' exchange is invalid. Given 'some', 'topic' was expected."
+                "Value of 'type' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'some', 'topic' was expected."
             ],
             'type connection' => [
                 [
@@ -160,7 +159,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
-                "Type of 'connection' field specified in configuration of 'ex01' exchange is invalid. Given 'boolean', 'string' was expected."
+                "Type of 'connection' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'boolean', 'string' was expected."
             ],
             'type durable' => [
                 [
@@ -184,7 +184,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
-                "Type of 'durable' field specified in configuration of 'ex01' exchange is invalid. Given 'integer', 'boolean' was expected."
+                "Type of 'durable' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'integer', 'boolean' was expected."
             ],
             'type internal' => [
                 [
@@ -208,7 +209,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
-                "Type of 'internal' field specified in configuration of 'ex01' exchange is invalid. Given 'NULL', 'boolean' was expected."
+                "Type of 'internal' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'NULL', 'boolean' was expected."
             ],
             'type autoDelete' => [
                 [
@@ -232,7 +234,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
-                "Type of 'autoDelete' field specified in configuration of 'ex01' exchange is invalid. Given 'integer', 'boolean' was expected."
+                "Type of 'autoDelete' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'integer', 'boolean' was expected."
             ],
             'type arguments' => [
                 [
@@ -256,7 +259,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
-                "Type of 'arguments' field specified in configuration of 'ex01' exchange is invalid. Given 'string', 'array' was expected."
+                "Type of 'arguments' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'string', 'array' was expected."
             ],
             'type bindings' => [
                 [
@@ -271,7 +275,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         'bindings' => false,
                     ],
                 ],
-                "Type of 'bindings' field specified in configuration of 'ex01' exchange is invalid. Given 'boolean', 'array' was expected."
+                "Type of 'bindings' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'boolean', 'array' was expected."
             ],
             'type binding id' => [
                 [
@@ -295,7 +300,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
-                "Type of 'id' field specified in configuration of 'ex01' exchange is invalid. Given 'integer', 'string' was expected."
+                "Type of 'id' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'integer', 'string' was expected."
             ],
             'type binding destinationType' => [
                 [
@@ -319,7 +325,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
-                "Type of 'destinationType' field specified in configuration of 'ex01' exchange is invalid. Given 'boolean', 'string' was expected."
+                "Type of 'destinationType' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'boolean', 'string' was expected."
             ],
             'invalid binding destinationType' => [
                 [
@@ -343,7 +350,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
-                "Value of 'destinationType' field specified in configuration of 'ex01' exchange is invalid. Given 'test', 'queue' was expected."
+                "Value of 'destinationType' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'test', 'queue' was expected."
             ],
             'type binding destination' => [
                 [
@@ -364,10 +372,11 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                                 'topic' => 'topic01',
                                 'arguments' => ['some' => 'arg']
                             ]
-                       ],
+                        ],
                     ],
                 ],
-                "Type of 'destination' field specified in configuration of 'ex01' exchange is invalid. Given 'NULL', 'string' was expected."
+                "Type of 'destination' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'NULL', 'string' was expected."
             ],
             'type binding disabled' => [
                 [
@@ -391,7 +400,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         ],
                     ],
                 ],
-                "Type of 'disabled' field specified in configuration of 'ex01' exchange is invalid. Given 'integer', 'boolean' was expected."
+                "Type of 'disabled' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'integer', 'boolean' was expected."
             ],
             'type binding topic' => [
                 [
@@ -415,7 +425,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         ]
                     ],
                 ],
-                "Type of 'topic' field specified in configuration of 'ex01' exchange is invalid. Given 'boolean', 'string' was expected."
+                "Type of 'topic' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'boolean', 'string' was expected."
             ],
             'type binding arguments' => [
                 [
@@ -439,7 +450,8 @@ class FieldsTypesTest extends \PHPUnit\Framework\TestCase
                         ]
                     ],
                 ],
-                "Type of 'arguments' field specified in configuration of 'ex01' exchange is invalid. Given 'string', 'array' was expected."
+                "Type of 'arguments' field specified in configuration of 'ex01' exchange is invalid."
+                . " Given 'string', 'array' was expected."
             ],
         ];
     }
