@@ -24,7 +24,6 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
      *
      * @param \Magento\Config\Model\Config\Structure\SearchInterface $configStructure
      * @param array $configPaths
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function __construct(
         \Magento\Config\Model\Config\Structure\SearchInterface $configStructure,
