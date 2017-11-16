@@ -75,7 +75,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
             $date = (new \DateTime())->setTimestamp($date);
         } elseif (!($date instanceof \DateTime)) {
             // normalized format expecting Y-m-d[ H:i:s]  - time is optional
-            $date = new \DateTime($date);
+            $date = $this->_localeDate->date($date, null, true);
         }
         return $date->format('Y-m-d H:i:s');
     }
