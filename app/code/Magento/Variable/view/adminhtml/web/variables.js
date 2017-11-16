@@ -56,6 +56,10 @@ define([
             }
         },
 
+        getButtonHtml: function () {
+
+        },
+
         /**
          * @param {*} variablesContent
          */
