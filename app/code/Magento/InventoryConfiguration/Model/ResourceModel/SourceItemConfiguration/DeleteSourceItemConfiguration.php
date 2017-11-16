@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
+use Magento\InventoryConfiguration\Setup\Operation\CreateSourceConfigurationTable;
 
 /**
  * Implementation of SourceItem Configuration delete operation for specific db layer
@@ -39,7 +39,7 @@ class DeleteSourceItemConfiguration
     {
         $connection = $this->resourceConnection->getConnection();
         $mainTable = $this->resourceConnection
-            ->getTableName(SourceItemConfiguration::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
+            ->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
         $condition = ['source_item_id = ?' => $sourceItemId];
 
         $connection->delete($mainTable, $condition);

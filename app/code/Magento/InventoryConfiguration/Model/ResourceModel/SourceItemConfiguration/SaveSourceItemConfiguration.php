@@ -9,8 +9,8 @@ namespace Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfigura
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryConfiguration\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 
 /**
  * Implementation of SourceItem Quantity notification save multiple operation for specific db layer
@@ -46,7 +46,7 @@ class SaveSourceItemConfiguration
         }
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection
-            ->getTableName(SourceItemConfiguration::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
+            ->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
 
         $columnsSql = $this->buildColumnsSqlPart([
             SourceItemConfigurationInterface::SOURCE_ITEM_ID,

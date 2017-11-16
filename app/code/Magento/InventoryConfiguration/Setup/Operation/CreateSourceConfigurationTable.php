@@ -12,11 +12,12 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 
 class CreateSourceConfigurationTable
 {
+    const TABLE_NAME_SOURCE_ITEM_CONFIGURATION = 'inventory_source_item_configuration';
+
     /**C
      * @param SchemaSetupInterface $setup
      * @return void
@@ -24,7 +25,7 @@ class CreateSourceConfigurationTable
     public function execute(SchemaSetupInterface $setup)
     {
         $notifyQtyTable = $setup->getConnection()->newTable(
-            $setup->getTable(SourceItemConfiguration::TABLE_NAME_SOURCE_ITEM_CONFIGURATION)
+            $setup->getTable(self::TABLE_NAME_SOURCE_ITEM_CONFIGURATION)
         )->setComment(
             'Inventory Notification Table'
         );

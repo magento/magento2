@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\InventoryConfiguration\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 
 /**
@@ -53,7 +53,7 @@ class GetSourceItemConfiguration
         $connection = $this->resourceConnection->getConnection();
 
         $mainTable = $this->resourceConnection
-            ->getTableName(SourceItemConfiguration::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
+            ->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
         $joinTable = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
         $select = $connection->select()->from(
