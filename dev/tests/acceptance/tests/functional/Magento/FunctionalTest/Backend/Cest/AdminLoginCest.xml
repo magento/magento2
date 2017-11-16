@@ -30,7 +30,7 @@
             <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
             <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" mergeKey="fillPassword"/>
             <click selector="{{AdminLoginFormSection.signIn}}" mergeKey="clickOnSignIn"/>
-            <seeInCurrentUrl url="{{AdminLoginPage}}" mergeKey="seeAdminLoginUrl"/>
+            <seeInCurrentUrl url="{{AdminLoginPage.url}}" mergeKey="seeAdminLoginUrl"/>
         </test>
     </cest>
 </config>
