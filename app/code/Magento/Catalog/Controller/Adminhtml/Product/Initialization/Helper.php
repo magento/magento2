@@ -100,6 +100,7 @@ class Helper
      * @param ProductRepository $productRepository
      * @param CustomOptionFactory $customOptionFactory
      * @param DateTime $dateTimeFilter
+     * @param LinkResolver $linkResolver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -113,7 +114,8 @@ class Helper
         CustomOptionFactory $customOptionFactory = null,
         ProductLinkFactory $productLinkFactory = null,
         ProductRepository $productRepository = null,
-        DateTime $dateTimeFilter = null
+        DateTime $dateTimeFilter = null,
+        LinkResolver $linkResolver = null
     ) {
         if (null === $linkTypeProvider) {
             $linkTypeProvider = ObjectManager::getInstance()->get(LinkTypeProvider::class);
@@ -130,6 +132,9 @@ class Helper
         if (null === $dateTimeFilter) {
             $dateTimeFilter = ObjectManager::getInstance()->get(DateTime::class);
         }
+        if (null === $linkResolver) {
+            $linkResolver = ObjectManager::getInstance()->get(LinkResolver::class);
+        }
         $this->request = $request;
         $this->storeManager = $storeManager;
         $this->stockFilter = $stockFilter;
@@ -141,6 +146,7 @@ class Helper
         $this->productLinkFactory = $productLinkFactory;
         $this->productRepository = $productRepository;
         $this->dateTimeFilter = $dateTimeFilter;
+        $this->linkResolver = $linkResolver;
     }
 
     /**
@@ -251,8 +257,7 @@ class Helper
                             return empty($valueData['is_delete']);
                         });
                     }
-
-                    $customOption = $this->getCustomOptionFactory()->create(['data' => $customOptionData]);
+                    $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
                     $customOption->setProductSku($product->getSku());
                     $customOptions[] = $customOption;
                 }

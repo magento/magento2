@@ -193,8 +193,9 @@ class Image extends File
     {
         $temporaryFile = FileProcessor::TMP_DIR . '/' . ltrim($value['file'], '/');
 
-        if ($this->getFileProcessor()->isExist($temporaryFile)) {
-            $base64EncodedData = $this->getFileProcessor()->getBase64EncodedData($temporaryFile);
+        $fileProcessor = $this->fileProcessorFactory->create();
+        if ($fileProcessor->isExist($temporaryFile)) {
+            $base64EncodedData = $fileProcessor->getBase64EncodedData($temporaryFile);
 
             /** @var ImageContentInterface $imageContentDataObject */
             $imageContentDataObject = $this->imageContentFactory->create()
@@ -203,7 +204,7 @@ class Image extends File
                 ->setType($value['type']);
 
             // Remove temporary file
-            $this->getFileProcessor()->removeUploadedFile($temporaryFile);
+            $fileProcessor->removeUploadedFile($temporaryFile);
 
             return $imageContentDataObject;
         }

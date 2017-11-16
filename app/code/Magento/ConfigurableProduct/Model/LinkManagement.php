@@ -6,7 +6,6 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
-use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\StateException;
@@ -40,7 +39,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     private $optionsFactory;
 
     /**
-     * @var AttributeFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
      */
     private $attributeFactory;
 
@@ -49,7 +48,8 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      * @param \Magento\Catalog\Api\Data\ProductInterfaceFactory $productFactory
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param AttributeFactory|null $attributeFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory|null $attributeFactory
+     * @param \Magento\ConfigurableProduct\Helper\Product\Options\Factory|null $optionsFactory
      * @throws \RuntimeException
      */
     public function __construct(
@@ -57,16 +57,25 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         \Magento\Catalog\Api\Data\ProductInterfaceFactory $productFactory,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        AttributeFactory $attributeFactory = null
+        \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory = null,
+        \Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionsFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;
         $this->configurableType = $configurableType;
         $this->dataObjectHelper = $dataObjectHelper;
-        if (null !== $attributeFactory) {
-            $attributeFactory = ObjectManager::getInstance()->get(AttributeFactory::class);
+        if (null === $attributeFactory) {
+            $attributeFactory = ObjectManager::getInstance()->get(
+                \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory::class
+            );
         }
         $this->attributeFactory = $attributeFactory;
+        if (null === $optionsFactory) {
+            $optionsFactory = ObjectManager::getInstance()->get(
+                \Magento\ConfigurableProduct\Helper\Product\Options\Factory::class
+            );
+        }
+        $this->optionsFactory = $optionsFactory;
     }
 
     /**
@@ -136,9 +145,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         }
         $configurableOptionData = $this->getConfigurableAttributesData($attributeIds);
 
-        /** @var \Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionFactory */
-        $optionFactory = $this->getOptionsFactory();
-        $options = $optionFactory->create($configurableOptionData);
+        $options = $this->optionsFactory->create($configurableOptionData);
         $childrenIds[] = $child->getId();
         $product->getExtensionAttributes()->setConfigurableProductOptions($options);
         $product->getExtensionAttributes()->setConfigurableProductLinks($childrenIds);
@@ -173,22 +180,6 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         $product->getExtensionAttributes()->setConfigurableProductLinks($ids);
         $this->productRepository->save($product);
         return true;
-    }
-
-    /**
-     * Get Options Factory
-     *
-     * @return \Magento\ConfigurableProduct\Helper\Product\Options\Factory
-     *
-     * @deprecated
-     */
-    private function getOptionsFactory()
-    {
-        if (!$this->optionsFactory) {
-            $this->optionsFactory = ObjectManager::getInstance()
-                ->get(\Magento\ConfigurableProduct\Helper\Product\Options\Factory::class);
-        }
-        return $this->optionsFactory;
     }
 
     /**

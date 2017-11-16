@@ -392,7 +392,7 @@ class File extends AbstractData
     protected function getFileProcessor()
     {
         if ($this->fileProcessor === null) {
-            $this->fileProcessor = $this->getFileProcessorFactory()->create([
+            $this->fileProcessor = $this->fileProcessorFactory->create([
                 'entityTypeCode' => $this->_entityTypeCode,
             ]);
         }

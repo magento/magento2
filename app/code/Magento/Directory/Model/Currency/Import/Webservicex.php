@@ -24,7 +24,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
     /**
      * Http Client Factory
      *
-     * @var ZendClientFactory
+     * @var ZendClientFactory|null
      */
     protected $httpClientFactory;
 
@@ -36,23 +36,18 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
     private $scopeConfig;
 
     /**
-     * @var ZendClientFactory|null
-     */
-    private $zendClientFactory;
-
-    /**
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param ZendClientFactory|null $zendClientFactory
+     * @param ZendClientFactory|null $httpClientFactory
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        ZendClientFactory $zendClientFactory = null
+        ZendClientFactory $httpClientFactory = null
     ) {
         parent::__construct($currencyFactory);
         $this->scopeConfig = $scopeConfig;
-        $this->zendClientFactory = $zendClientFactory ?: ObjectManager::getInstance()->get(ZendClientFactory::class);
+        $this->httpClientFactory = $httpClientFactory ?: ObjectManager::getInstance()->get(ZendClientFactory::class);
     }
 
     /**
@@ -66,7 +61,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
         $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
         $url = str_replace('{{CURRENCY_TO}}', $currencyTo, $url);
         /** @var \Magento\Framework\HTTP\ZendClient $httpClient */
-        $httpClient = $this->zendClientFactory->create();
+        $httpClient = $this->httpClientFactory->create();
 
         try {
             $response = $httpClient->setUri(

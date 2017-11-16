@@ -5,6 +5,7 @@
  */
 namespace Magento\Indexer\Console\Command;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Indexer\Model\IndexerFactory;
