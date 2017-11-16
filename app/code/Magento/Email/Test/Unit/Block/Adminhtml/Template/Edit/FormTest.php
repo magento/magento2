@@ -16,7 +16,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registryMock;
 
-    /** @var \Magento\Email\Model\Source\Variables|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Variable\Model\Source\Variables|\PHPUnit_Framework_MockObject_MockObject */
     protected $variablesMock;
 
     /** @var \Magento\Variable\Model\VariableFactory|\PHPUnit_Framework_MockObject_MockObject */
@@ -34,7 +34,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['registry'])
             ->getMock();
-        $this->variablesMock = $this->getMockBuilder(\Magento\Email\Model\Source\Variables::class)
+        $this->variablesMock = $this->getMockBuilder(\Magento\Variable\Model\Source\Variables::class)
             ->disableOriginalConstructor()
             ->setMethods(['toOptionArray'])
             ->getMock();

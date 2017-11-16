@@ -6,7 +6,7 @@
 namespace Magento\Variable\Test\Unit\Model\Source;
 
 /**
- * Unit test for Magento\Email\Model\Source\Variables
+ * Unit test for Magento\Variable\Model\Source\Variables
  */
 class VariablesTest extends \PHPUnit\Framework\TestCase
 {
