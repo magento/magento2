@@ -172,51 +172,6 @@
             <waitForJS function="return $.active == 0;" time="30" mergeKey="waitForJS"/>
             <waitForText userInput="foo" time="30" mergeKey="waitForText1"/>
             <waitForText userInput="foo" selector=".title" time="30" mergeKey="waitForText2"/>
-            <!-- Codeception Assert -->
-            <assertArrayHasKey mergeKey="assertArrayHasKey" expected="apple" actualArray="[['orange' => 2], ['apple' => 1]" message="pass"/>
-            <assertArrayNotHasKey mergeKey="assertArrayNotHasKey" expected="kiwi" actualArray="[['orange' => 2], ['apple' => 1]" message="pass"/>
-            <assertArraySubset mergeKey="assertArraySubset" expectedArray="[1, 2]" actualArray="[5, 3, 2, 1]" message="pass"/>
-            <assertContains mergeKey="assertContains" expected="ab" actualArray="[['item1' => 'a'], ['item2' => 'ab']" message="pass"/>
-            <assertCount mergeKey="assertCount" expected="2" actualArray="['a', 'b']" message="pass"/>
-            <assertEmpty mergeKey="assertEmpty1" actual="''" message="pass"/>
-            <assertEmpty mergeKey="assertEmpty2" actual="[]" message="pass"/>
-            <assertEmpty mergeKey="assertEmpty3" actualVariable="value1" message="pass"/>
-            <assertEquals mergeKey="assertEquals1" expected="abc" actual="abc" message="pass"/>
-            <assertEquals mergeKey="assertEquals2" expected="2" actualVariable="value1" message="pass"/>
-            <assertFalse mergeKey="assertFalse" actualVariable="value1" message="pass"/>
-            <assertFileExists mergeKey="assertFileExists1" actual="/out.txt" message="pass"/>
-            <assertFileExists mergeKey="assertFileExists2" actualVariable="value1" message="pass"/>
-            <assertFileNotExists mergeKey="assertFileNotExists1" actual="/out.txt" message="pass"/>
-            <assertFileNotExists mergeKey="assertFileNotExists2" actual="file" message="pass"/>
-            <assertGreaterOrEquals mergeKey="assertGreaterOrEquals" expected="5" actual="2" message="pass"/>
-            <assertGreaterThan mergeKey="assertGreaterThan" expected="5" actual="2" message="pass"/>
-            <assertGreaterThanOrEqual mergeKey="assertGreaterThanOrEqual" expected="5" actual="2" message="pass"/>
-            <assertInstanceOf mergeKey="assertInstanceOf" class="User::class" actualVariable="value1" message="pass"/>
-            <assertInternalType mergeKey="assertInternalType1" expected="string" actual="xyz" message="pass"/>
-            <assertInternalType mergeKey="assertInternalType2" type="string" actual="xyz" message="pass"/>
-            <assertInternalType mergeKey="assertInternalType3" type="string" actualVariable="value1" message="pass"/>
-            <assertIsEmpty mergeKey="assertIsEmpty" actualVariable="value1" message="pass"/>
-            <assertLessOrEquals mergeKey="assertLessOrEquals" expected="2" actual="5" message="pass"/>
-            <assertLessThan mergeKey="assertLessThan" expected="2" actual="5" message="pass"/>
-            <assertLessThanOrEqual mergeKey="assertLessThanOrEqual" expected="2" actual="5" message="pass"/>
-            <assertNotContains mergeKey="assertNotContains1" expected="bc" actualArray="[['item1' => 'a'], ['item2' => 'ab']" message="pass"/>
-            <assertNotContains mergeKey="assertNotContains2" expected="bc" actualVariable="value1" message="pass"/>
-            <assertNotEmpty mergeKey="assertNotEmpty1" actual="[1, 2]" message="pass"/>
-            <assertNotEmpty mergeKey="assertNotEmpty2" actualVariable="value1" message="pass"/>
-            <assertNotEquals mergeKey="assertNotEquals" expected="2" actual="5" message="pass" delta=""/>
-            <assertNotInstanceOf mergeKey="assertNotInstanceOf" expected="RuntimeException::class" actual="21" message="pass"/>
-            <assertNotNull mergeKey="assertNotNull1" actual="abc" message="pass"/>
-            <assertNotNull mergeKey="assertNotNull2" actualVariable="value1" message="pass"/>
-            <assertNotRegExp mergeKey="assertNotRegExp" expected="/foo/" actual="bar" message="pass"/>
-            <assertNotSame mergeKey="assertNotSame" expected="log" actual="tag" message="pass"/>
-            <assertNull mergeKey="assertNull" actualVariable="value1" message="pass"/>
-            <assertRegExp mergeKey="assertRegExp" expected="/foo/" actual="foo" message="pass"/>
-            <assertSame mergeKey="assertSame" expected="bar" actual="bar" message="pass"/>
-            <assertStringStartsNotWith mergeKey="assertStringStartsNotWith" expected="a" actual="banana" message="pass"/>
-            <assertStringStartsWith mergeKey="assertStringStartsWith" expected="a" actual="apple" message="pass"/>
-            <assertTrue mergeKey="assertTrue" actual="true" message="pass"/>
-            <expectException mergeKey="expectException" class="new MyException('exception msg')" function="function() {$this->doSomethingBad();}"/>
-            <fail mergeKey="fail" message="fail"/>
         </test>
         <test name="AllCustomMethodsTest">
             <annotations>
@@ -334,22 +289,6 @@
             <!-- userInput that uses created data -->
             <fillField selector="#sample" userInput="Hello $testScopeData.firstname$ $testScopeData.lastname$" mergeKey="f1"/>
             <fillField selector="#sample" userInput="Hello $$createData1.firstname$$ $$createData1.lastname$$" mergeKey="f2"/>
-
-            <!-- expected, actual that use created data -->
-            <assertStringStartsNotWith mergeKey="assert1" expected="D" actual="$$createData2.lastname$$, $$createData2.firstname$$" message="fail"/>
-            <assertStringStartsWith mergeKey="assert2" expected="W" actual="$testScopeData2.firstname$ $testScopeData2.lastname$" message="pass"/>
-            <assertEquals mergeKey="assert5" expected="$$createData1.lastname$$" actual="$$createData1.lastname$$" message="pass"/>
-            <assertFileExists mergeKey="assert6" actual="../Data/SampleData.xml" message="pass"/>
-
-            <!-- expectedArray, actualArray that use created data -->
-            <assertArraySubset mergeKey="assert9" expectedArray="[$$createData2.lastname$$, $$createData2.firstname$$]" actualArray="[$$createData2.lastname$$, $$createData2.firstname$$, 1]" message="pass"/>
-            <assertArraySubset mergeKey="assert10" expectedArray="[$testScopeData2.firstname$, $testScopeData2.lastname$]" actualArray="[$testScopeData2.firstname$, $testScopeData2.lastname$, 1]" message="pass"/>
-            <assertArrayHasKey mergeKey="assert3" expected="lastname" actualArray="[['lastname' => $$createData1.lastname$$], ['firstname' => $$createData1.firstname$$]" message="pass"/>
-            <assertArrayHasKey mergeKey="assert4" expected="lastname" actualArray="[['lastname' => $testScopeData.lastname$], ['firstname' => $testScopeData.firstname$]" message="pass"/>
-
-            <!-- message that uses created data -->
-            <fail mergeKey="assert7" message="$testScopeData.firstname$ $testScopeData.lastname$"/>
-            <fail mergeKey="assert8" message="$$createData1.firstname$$ $$createData1.lastname$$"/>
         </test>
     </cest>
 </config>
