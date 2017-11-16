@@ -21,8 +21,9 @@
         </after>
         <test name="AssertTest">
             <createData entity="Simple_US_Customer" mergeKey="createData2"/>
-            <amOnUrl url="http://magento3.loc/index.php/simplesubcategory5a05d3129ab3d2.html" mergeKey="amOnPage"/>
-            <grabTextFrom returnVariable="text" selector=".copyright>span" mergeKey="grabTextFrom1"/>
+            <amOnUrl url="https://www.yahoo.com" mergeKey="amOnPage"/>
+            <waitForElementVisible mergeKey="wait1" selector="#uh-logo" time="10"/>
+            <grabTextFrom returnVariable="text" selector="#uh-logo" mergeKey="grabTextFrom1"/>
 
             <!-- asserts without variable replacement -->
             <comment mergeKey="c1" userInput="asserts without variable replacement"/>
@@ -32,8 +33,8 @@
             <assertContains mergeKey="assertContains" expected="ab" expectedType="string" actual="['item1' => 'a', 'item2' => 'ab']" message="pass"/>
             <assertCount mergeKey="assertCount" expected="2" expectedType="int" actual="['a', 'b']" message="pass"/>
             <assertEmpty mergeKey="assertEmpty" actual="[]" message="pass"/>
-            <assertEquals mergeKey="assertEquals1" expected="text" expectedType="variable" actual="Copyright © 2013-2017 Magento, Inc. All rights reserved." actualType="string" message="pass"/>
-            <assertEquals mergeKey="assertEquals2" expected="Copyright © 2013-2017 Magento, Inc. All rights reserved." expectedType="string" actual="text" actualType="variable" message="pass"/>
+            <assertEquals mergeKey="assertEquals1" expected="text" expectedType="variable" actual="Yahoo" actualType="string" message="pass"/>
+            <assertEquals mergeKey="assertEquals2" expected="Yahoo" expectedType="string" actual="text" actualType="variable" message="pass"/>
             <assertFalse mergeKey="assertFalse1" actual="0" actualType="bool" message="pass"/>
             <assertFileNotExists mergeKey="assertFileNotExists1" actual="/out.txt" actualType="string" message="pass"/>
             <assertFileNotExists mergeKey="assertFileNotExists2" actual="text" actualType="variable" message="pass"/>
