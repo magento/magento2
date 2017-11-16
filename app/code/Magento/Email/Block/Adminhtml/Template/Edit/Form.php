@@ -174,7 +174,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getEmailTemplate()
     {
-        return $this->_coreRegistry->registry('current_email_template');
+        return $this->getData('email_template');
     }
 
     /**
