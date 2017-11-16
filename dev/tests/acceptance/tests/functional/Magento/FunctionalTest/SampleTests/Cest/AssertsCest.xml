@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="AssertCest">
+        <annotations>
+            <features value="Test Asserts"/>
+            <group value="skip"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" mergeKey="createData1"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createData1" mergeKey="deleteData1"/>
+        </after>
+        <test name="AssertTest">
+            <createData entity="Simple_US_Customer" mergeKey="createData2"/>
+            <amOnUrl url="http://magento3.loc/index.php/simplesubcategory5a05d3129ab3d2.html" mergeKey="amOnPage"/>
+            <grabTextFrom returnVariable="text" selector=".copyright>span" mergeKey="grabTextFrom1"/>
+
+            <!-- asserts without variable replacement -->
+            <comment mergeKey="c1" userInput="asserts without variable replacement"/>
+            <assertArrayHasKey mergeKey="assertArrayHasKey" expected="apple" expectedType="string" actual="['orange' => 2, 'apple' => 1]" actualType="const" message="pass"/>
+            <assertArrayNotHasKey mergeKey="assertArrayNotHasKey" expected="kiwi" expectedType="string" actual="['orange' => 2, 'apple' => 1]" message="pass"/>
+            <assertArraySubset mergeKey="assertArraySubset" expected="[1, 2]" actual="[1, 2, 3, 5]" message="pass"/>
+            <assertContains mergeKey="assertContains" expected="ab" expectedType="string" actual="['item1' => 'a', 'item2' => 'ab']" message="pass"/>
+            <assertCount mergeKey="assertCount" expected="2" expectedType="int" actual="['a', 'b']" message="pass"/>
+            <assertEmpty mergeKey="assertEmpty" actual="[]" message="pass"/>
+            <assertEquals mergeKey="assertEquals1" expected="text" expectedType="variable" actual="Copyright © 2013-2017 Magento, Inc. All rights reserved." actualType="string" message="pass"/>
+            <assertEquals mergeKey="assertEquals2" expected="Copyright © 2013-2017 Magento, Inc. All rights reserved." expectedType="string" actual="text" actualType="variable" message="pass"/>
+            <assertFalse mergeKey="assertFalse1" actual="0" actualType="bool" message="pass"/>
+            <assertFileNotExists mergeKey="assertFileNotExists1" actual="/out.txt" actualType="string" message="pass"/>
+            <assertFileNotExists mergeKey="assertFileNotExists2" actual="text" actualType="variable" message="pass"/>
+            <assertGreaterOrEquals mergeKey="assertGreaterOrEquals" expected="2" expectedType="int" actual="5" actualType="int" message="pass"/>
+            <assertGreaterThan mergeKey="assertGreaterThan" expected="2" expectedType="int" actual="5" actualType="int" message="pass"/>
+            <assertGreaterThanOrEqual mergeKey="assertGreaterThanOrEqual" expected="2" expectedType="int" actual="5" actualType="int" message="pass"/>
+            <assertInternalType mergeKey="assertInternalType1" expected="string" expectedType="string" actual="xyz" actualType="string" message="pass"/>
+            <assertInternalType mergeKey="assertInternalType2" expected="int" expectedType="string" actual="21" actualType="int" message="pass"/>
+            <assertInternalType mergeKey="assertInternalType3" expected="string" expectedType="string" actual="text" actualType="variable" message="pass"/>
+            <assertLessOrEquals mergeKey="assertLessOrEquals" expected="5" expectedType="int" actual="2" actualType="int" message="pass"/>
+            <assertLessThan mergeKey="assertLessThan" expected="5" expectedType="int" actual="2" actualType="int" message="pass"/>
+            <assertLessThanOrEqual mergeKey="assertLessThanOrEqual" expected="5" expectedType="int" actual="2" actualType="int" message="pass"/>
+            <assertNotContains mergeKey="assertNotContains1" expected="bc" expectedType="string" actual="['item1' => 'a', 'item2' => 'ab']" message="pass"/>
+            <assertNotContains mergeKey="assertNotContains2" expected="bc" expectedType="string" actual="text" actualType="variable" message="pass"/>
+            <assertNotEmpty mergeKey="assertNotEmpty1" actual="[1, 2]" message="pass"/>
+            <assertNotEmpty mergeKey="assertNotEmpty2" actual="text" actualType="variable" message="pass"/>
+            <assertNotEquals mergeKey="assertNotEquals" expected="2" expectedType="int" actual="5" actualType="int" message="pass" delta=""/>
+            <assertNotNull mergeKey="assertNotNull1" actual="abc" actualType="string" message="pass"/>
+            <assertNotNull mergeKey="assertNotNull2" actual="text" actualType="variable" message="pass"/>
+            <assertNotRegExp mergeKey="assertNotRegExp" expected="/foo/" expectedType="string" actual="bar" actualType="string" message="pass"/>
+            <assertNotSame mergeKey="assertNotSame" expected="log" expectedType="string" actual="tag" actualType="string" message="pass"/>
+            <assertRegExp mergeKey="assertRegExp" expected="/foo/" expectedType="string" actual="foo" actualType="string" message="pass"/>
+            <assertSame mergeKey="assertSame" expected="bar" expectedType="string" actual="bar" actualType="string" message="pass"/>
+            <assertStringStartsNotWith mergeKey="assertStringStartsNotWith" expected="a" expectedType="string" actual="banana" actualType="string" message="pass"/>
+            <assertStringStartsWith mergeKey="assertStringStartsWith" expected="a" expectedType="string" actual="apple" actualType="string" message="pass"/>
+            <assertTrue mergeKey="assertTrue" actual="1" actualType="bool" message="pass"/>
+
+            <!-- string type that use created data -->
+            <comment mergeKey="c2" userInput="string type that use created data"/>
+            <assertStringStartsWith mergeKey="assert1" expected="D" expectedType="string" actual="$$createData1.lastname$$, $$createData1.firstname$$" actualType="string" message="fail"/>
+            <assertStringStartsNotWith mergeKey="assert2" expected="W" expectedType="string" actual="$createData2.firstname$ $createData2.lastname$" actualType="string" message="pass"/>
+            <assertEquals mergeKey="assert5" expected="$$createData1.lastname$$" expectedType="string" actual="$$createData1.lastname$$" actualType="string" message="pass"/>
+
+            <!-- array type that use created data -->
+            <comment mergeKey="c3" userInput="array type that use created data"/>
+            <assertArraySubset mergeKey="assert9" expected="[$$createData1.lastname$$, $$createData1.firstname$$]" expectedType="array" actual="[$$createData1.lastname$$, $$createData1.firstname$$, 1]" actualType="array" message="pass"/>
+            <assertArraySubset mergeKey="assert10" expected="[$createData2.firstname$, $createData2.lastname$]" expectedType="array" actual="[$createData2.firstname$, $createData2.lastname$, 1]" actualType="array" message="pass"/>
+            <assertArrayHasKey mergeKey="assert3" expected="lastname" expectedType="string" actual="['lastname' => $$createData1.lastname$$, 'firstname' => $$createData1.firstname$$]" actualType="array" message="pass"/>
+            <assertArrayHasKey mergeKey="assert4" expected="lastname" expectedType="string" actual="['lastname' => $createData2.lastname$, 'firstname' => $createData2.firstname$]" actualType="array" message="pass"/>
+
+            <!-- comment this section before running this test -->
+            <comment mergeKey="c4" userInput="comment this section before running this test"/>
+            <assertInstanceOf mergeKey="assertInstanceOf" expected="User::class" actual="text" actualType="variable" message="pass"/>
+            <assertNotInstanceOf mergeKey="assertNotInstanceOf" expected="User::class" actual="21" actualType="int" message="pass"/>
+            <assertFileExists mergeKey="assertFileExists2" actual="text" actualType="variable" message="pass"/>
+            <assertFileExists mergeKey="assert6" actual="AssertCest.php" actualType="string" message="pass"/>
+            <assertIsEmpty mergeKey="assertIsEmpty" actual="text" actualType="variable" message="pass"/>
+            <assertNull mergeKey="assertNull" actual="text" actualType="variable" message="pass"/>
+            <expectException mergeKey="expectException" expected="new MyException('exception msg')" actual="function() {$this->doSomethingBad();}"/>
+            <fail mergeKey="fail" message="fail"/>
+            <fail mergeKey="assert7" message="$createData2.firstname$ $createData2.lastname$"/>
+            <fail mergeKey="assert8" message="$$createData1.firstname$$ $$createData1.lastname$$"/>
+            <!-- comment end -->
+            <comment mergeKey="c5" userInput="comment end"/>
+
+            <deleteData createDataKey="createData2" mergeKey="deleteData2"/>
+        </test>
+    </cest>
+</config>
