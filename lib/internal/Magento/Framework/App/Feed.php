@@ -27,12 +27,12 @@ class Feed implements FeedInterface
      * 
      * @return string
      */
-    public function getFormatedContentAs(
-        $format = self::DEFAULT_FORMAT
+    public function getFormattedContentAs(
+        $format = self::FORMAT_XML
     ) {
         $feed = $this->feed::importArray(
             $this->data, 
-            FeedFactoryInterface::DEFAULT_FORMAT
+            FeedFactoryInterface::FORMAT_RSS
         );
         return $this->feed->saveXml();
     }

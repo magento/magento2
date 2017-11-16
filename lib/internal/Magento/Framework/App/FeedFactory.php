@@ -27,7 +27,7 @@ class FeedFactory implements FeedFactoryInterface
     /**
      * @var ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManger
@@ -54,7 +54,7 @@ class FeedFactory implements FeedFactoryInterface
      */
     public function create(
         array $data, 
-        $format = FeedFactoryInterface::DEFAULT_FORMAT
+        $format = FeedFactoryInterface::FORMAT_RSS
     ) {
         if (!isset($this->formats[$format])) {
             throw new \Magento\Framework\Exception\InputException(
@@ -62,6 +62,14 @@ class FeedFactory implements FeedFactoryInterface
                 $e
             );
         }
+
+        if (!is_subclass_of($this->formats[$format], '\Magento\Framework\App\FeedInterface')) {
+            throw new \Magento\Framework\Exception\InputException(
+                __('Wrong format handler type'),
+                $e
+            );   
+        }
+
         try {
             return $this->objectManager->create(
                 $this->formats[$format],
@@ -69,7 +77,7 @@ class FeedFactory implements FeedFactoryInterface
             );
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new \Magento\Framework\Exception\InputException(
+            throw new \Magento\Framework\Exception\RuntimeException(
                 __('There has been an error with import'),
                 $e
             );
