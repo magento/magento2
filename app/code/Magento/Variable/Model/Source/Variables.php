@@ -24,6 +24,7 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
      *
      * @param \Magento\Config\Model\Config\Structure\SearchInterface $configStructure
      * @param array $configPaths
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function __construct(
         \Magento\Config\Model\Config\Structure\SearchInterface $configStructure,
@@ -33,14 +34,14 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
             $groupPathElements = explode('/', $groupPath);
             $path = [];
             $labels = [];
-            foreach ($groupPathElements as $key => $groupPathElement) {
+            foreach ($groupPathElements as $groupPathElement) {
                 $path[] = $groupPathElement;
                 $labels[] = __(
                     $configStructure->getElementByConfigPath(implode('/', $path))->getLabel()
                 );
             }
             $this->configVariables[$groupPath]['label'] = implode(' / ', $labels);
-            foreach ($groupElements as $elementPath => $groupElement) {
+            foreach (array_keys($groupElements) as $elementPath) {
                 $this->configVariables[$groupPath]['elements'][] = [
                     'value' => $elementPath,
                     'label' => __($configStructure->getElementByConfigPath($elementPath)->getLabel()),
