@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Email\Test\Unit\Model\Source;
+namespace Magento\Variable\Test\Unit\Model\Source;
 
 /**
  * Unit test for Magento\Email\Model\Source\Variables
@@ -13,7 +13,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
     /**
      * Variables model
      *
-     * @var \Magento\Email\Model\Source\Variables
+     * @var \Magento\Variable\Model\Source\Variables
      */
     protected $model;
 
@@ -59,7 +59,7 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
             ['web/secure/base_url', $element2]
         ]);
 
-        $this->model = $helper->getObject(\Magento\Email\Model\Source\Variables::class, [
+        $this->model = $helper->getObject(\Magento\Variable\Model\Source\Variables::class, [
             'configStructure' => $this->configMock,
             'configPaths' => $this->configVariables
         ]);

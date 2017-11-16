@@ -12,7 +12,7 @@ namespace Magento\Email\Block\Adminhtml\Template\Edit;
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
-     * @var \Magento\Email\Model\Source\Variables
+     * @var \Magento\Variable\Model\Source\Variables
      */
     protected $_variables;
 
@@ -31,7 +31,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Variable\Model\VariableFactory $variableFactory
-     * @param \Magento\Email\Model\Source\Variables $variables
+     * @param \Magento\Variable\Model\Source\Variables $variables
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @throws \RuntimeException
@@ -41,7 +41,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Variable\Model\VariableFactory $variableFactory,
-        \Magento\Email\Model\Source\Variables $variables,
+        \Magento\Variable\Model\Source\Variables $variables,
         array $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
@@ -189,8 +189,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if ($customVariables) {
             $variables = array_merge_recursive($variables, $customVariables);
         }
-        /* @var $template \Magento\Email\Model\Template */
-        $template = $this->_coreRegistry->registry('current_email_template');
+        $template = $this->getEmailTemplate();
         if ($template->getId() && ($templateVariables = $template->getVariablesOptionArray(true))) {
             $variables = array_merge_recursive($variables, $templateVariables);
         }
