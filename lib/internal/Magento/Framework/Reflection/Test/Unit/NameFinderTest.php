@@ -27,7 +27,7 @@ class NameFinderTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSetterMethodName()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $class = new ClassReflection(\Magento\Framework\Reflection\Test\Unit\DataObject::class);
         $setterName = $this->nameFinder->getSetterMethodName($class, 'AttrName');
         $this->assertEquals("setAttrName", $setterName);
 
@@ -43,7 +43,7 @@ class NameFinderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSetterMethodNameInvalidAttribute()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $class = new ClassReflection(\Magento\Framework\Reflection\Test\Unit\DataObject::class);
         $this->nameFinder->getSetterMethodName($class, 'InvalidAttribute');
     }
 
@@ -55,7 +55,7 @@ class NameFinderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSetterMethodNameWrongCamelCasedAttribute()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $class = new ClassReflection(\Magento\Framework\Reflection\Test\Unit\DataObject::class);
         $this->nameFinder->getSetterMethodName($class, 'ActivE');
     }
 
