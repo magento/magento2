@@ -93,6 +93,7 @@
             <argument name="prices" xsi:type="array">
                 <item name="regular_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\ConfigurableRegularPrice</item>
                 <item name="final_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\FinalPrice</item>
+                <item name="highest_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\HighestPrice</item>
             </argument>
             <argument name="target" xsi:type="object">Magento\Catalog\Pricing\Price\Pool</argument>
         </arguments>
@@ -134,6 +135,11 @@
     <type name="Magento\ConfigurableProduct\Pricing\Price\FinalPrice">
         <arguments>
             <argument name="priceResolver" xsi:type="object">ConfigurableFinalPriceResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Pricing\Price\HighestPrice">
+        <arguments>
+            <argument name="priceResolver" xsi:type="object">Magento\ConfigurableProduct\Pricing\Price\HighestPriceResolver</argument>
         </arguments>
     </type>
     <virtualType name="ConfigurableRegularPriceResolver" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver">
