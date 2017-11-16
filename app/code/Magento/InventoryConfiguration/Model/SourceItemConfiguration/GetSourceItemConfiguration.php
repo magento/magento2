@@ -14,14 +14,12 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
-
 /**
  * Implementation of SourceItem Quantity notification save multiple operation for specific db layer
  * Save Multiple used here for performance efficient purposes over single save operation
  */
 class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
 {
-
     /**
      * @var ResourceGetSourceItemConfiguration
      */
@@ -41,8 +39,7 @@ class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
     public function __construct(
         ResourceGetSourceItemConfiguration $getConfiguration,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->getConfiguration = $getConfiguration;
         $this->logger = $logger;
     }
@@ -50,7 +47,7 @@ class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function get(string $sourceId, string $sku): SourceItemConfigurationInterface
+    public function get(int $sourceId, string $sku): SourceItemConfigurationInterface
     {
         if (empty($sourceId) || empty($sku)) {
             throw new InputException(__('SourceId oder Sku missing'));

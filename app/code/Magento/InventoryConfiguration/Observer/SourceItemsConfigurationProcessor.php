@@ -89,7 +89,11 @@ class SourceItemsConfigurationProcessor
             }
 
             $sourceItemData[SourceItemInterface::SKU] = $sku;
-            $this->dataObjectHelper->populateWithArray($sourceItem, $sourceItemData, SourceItemConfigurationInterface::class);
+            $this->dataObjectHelper->populateWithArray(
+                $sourceItem,
+                $sourceItemData,
+                SourceItemConfigurationInterface::class
+            );
 
             $sourceItemsForSave[] = $sourceItem;
             unset($sourceItemsForDelete[$sourceId]);
@@ -114,7 +118,7 @@ class SourceItemsConfigurationProcessor
         $sourceItems = [];
 
         /** @var \Magento\Inventory\Model\SourceItem $sourceItem */
-        foreach($sourceItemsData as $sourceItem) {
+        foreach ($sourceItemsData as $sourceItem) {
             $sourceId = $sourceItem[SourceItemInterface::SOURCE_ID];
             $sourceItems[] = $this->getSourceItemConfiguration->get($sourceId, $sku);
         }

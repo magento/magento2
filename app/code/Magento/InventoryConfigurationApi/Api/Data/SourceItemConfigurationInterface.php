@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventoryConfigurationApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
@@ -32,10 +34,10 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
     /**
      * Set source item id.
      *
-     * @param string $sourceItemId
+     * @param int $sourceItemId
      * @return void
      */
-    public function setSourceItemId(string $sourceItemId);
+    public function setSourceItemId(int $sourceItemId);
 
     /**
      * Get the configuration for source items.

@@ -3,9 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\InventoryConfigurationApi\Api;
+declare(strict_types=1);
 
-use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
+namespace Magento\InventoryConfigurationApi\Api;
 
 /**
  * Save the sources configurations for a the product.

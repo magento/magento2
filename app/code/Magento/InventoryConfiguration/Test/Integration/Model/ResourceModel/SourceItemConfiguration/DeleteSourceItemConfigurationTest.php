@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Test\Integration\Model\ResourceModel\SourceItemConfiguration;
 
@@ -58,22 +59,22 @@ class DeleteSourceItemConfigurationTest extends TestCase
         $sourceItemConfiguration->setNotifyStockQty($notifyStockQty);
 
         $itemConfigurationFromDb = $this->getItemConfiguration($sourceId, $sku);
-        $this->assertEquals(1, $itemConfigurationFromDb->getSourceItemId());
+        $this->assertEquals(2, $itemConfigurationFromDb->getNotifyStockQty());
 
         $this->inventoryItemConfigurationDelete->delete($sourceItemConfiguration);
 
         $itemConfigurationFromDb = $this->getItemConfiguration($sourceId, $sku);
 
-        $this->assertEquals(null, $itemConfigurationFromDb->getSourceItemId());
+        $this->assertEquals(null, $itemConfigurationFromDb->getNotifyStockQty());
     }
 
     /**
-     * @param $sourceItemId
+     * @param $sourceId
      * @param $sku
      * @return SourceItemConfigurationInterface
      */
-    private function getItemConfiguration($sourceItemId, $sku)
+    private function getItemConfiguration(int $sourceId, string $sku): SourceItemConfigurationInterface
     {
-        return $this->getSourceItemConfiguration->get($sourceItemId, $sku);
+        return $this->getSourceItemConfiguration->get($sourceId, $sku);
     }
 }

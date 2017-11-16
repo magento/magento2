@@ -26,7 +26,7 @@ class SourceItemConfiguration extends AbstractExtensibleModel implements SourceI
     /**
      * @inheritdoc
      */
-    public function setSourceItemId(string $sourceItemId)
+    public function setSourceItemId(int $sourceItemId)
     {
         if (!$this->getSourceItemId()) {
             $this->setData(self::SOURCE_ITEM_ID, $sourceItemId);

@@ -36,8 +36,7 @@ class GetSourceItemConfiguration
     public function __construct(
         ResourceConnection $resourceConnection,
         SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory
-    )
-    {
+    ) {
         $this->resourceConnection = $resourceConnection;
         $this->sourceItemConfigurationFactory = $sourceItemConfigurationFactory;
     }
@@ -45,15 +44,16 @@ class GetSourceItemConfiguration
     /**
      * Get the source item configuration.
      *
-     * @param string $sourceId
+     * @param int $sourceId
      * @param string $sku
      * @return SourceItemConfigurationInterface
      */
-    public function execute(string $sourceId, string $sku)
+    public function execute(int $sourceId, string $sku): SourceItemConfigurationInterface
     {
         $connection = $this->resourceConnection->getConnection();
 
-        $mainTable = $this->resourceConnection->getTableName(SourceItemConfiguration::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
+        $mainTable = $this->resourceConnection
+            ->getTableName(SourceItemConfiguration::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
         $joinTable = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
         $select = $connection->select()->from(

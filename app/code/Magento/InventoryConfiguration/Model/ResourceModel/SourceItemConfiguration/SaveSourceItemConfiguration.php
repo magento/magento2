@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 
@@ -28,8 +29,7 @@ class SaveSourceItemConfiguration
      */
     public function __construct(
         ResourceConnection $resourceConnection
-    )
-    {
+    ) {
         $this->resourceConnection = $resourceConnection;
     }
 
@@ -45,7 +45,8 @@ class SaveSourceItemConfiguration
             return;
         }
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName(SourceItemConfiguration::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
+        $tableName = $this->resourceConnection
+            ->getTableName(SourceItemConfiguration::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
 
         $columnsSql = $this->buildColumnsSqlPart([
             SourceItemConfigurationInterface::SOURCE_ITEM_ID,
