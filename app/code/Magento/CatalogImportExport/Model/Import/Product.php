@@ -1552,7 +1552,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _saveProducts()
     {
@@ -1816,7 +1816,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ) {
                         $attrValue = $this->dateTime->formatDate($attrValue, false);
                     } elseif ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
-                        $attrValue = gmdate(
+                        $attrValue = $this->dateTime->gmDate(
                             'Y-m-d H:i:s',
                             $this->_localeDate->date($attrValue)->getTimestamp()
                         );
@@ -2031,8 +2031,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Return a new file name if the same file is already exists.
      *
      * @param string $fileName
-     * @param bool   $renameFileOff [optional] boolean to pass. Default is false
-     *                              which will set not to rename the file after import.
+     * @param bool $renameFileOff
      * @return string
      */
     protected function uploadMediaFiles($fileName, $renameFileOff = false)
@@ -2241,7 +2240,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         $stockItemDo->setData($row);
                         $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo);
                         if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
-                            $row['low_stock_date'] = gmdate(
+                            $row['low_stock_date'] = $this->dateTime->gmDate(
                                 'Y-m-d H:i:s',
                                 (new \DateTime())->getTimestamp()
                             );
@@ -2757,9 +2756,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Validate data rows and save bunches to DB
-     *
-     * @return $this|\Magento\ImportExport\Model\Import\Entity\AbstractEntity
+     * {@inheritdoc}
      */
     protected function _saveValidatedBunches()
     {
