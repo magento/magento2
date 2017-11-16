@@ -46,7 +46,7 @@ class Delete implements DeleteInterface
     {
         try {
             $sourceItemId = $sourceItemConfiguration->getSourceItemId();
-            $this->deleteSourceItemConfiguration->execute((int)$sourceItemId); //todo remove int after refactoring
+            $this->deleteSourceItemConfiguration->execute($sourceItemId);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotDeleteException(__('Could not delete SourceItem Configuration.'), $e);

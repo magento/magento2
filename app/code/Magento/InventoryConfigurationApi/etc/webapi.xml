@@ -9,13 +9,13 @@
     <route url="/V1/inventory/configuration/:sourceId/:sku" method="GET">
         <service class="Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface" method="get"/>
         <resources>
-            <resource ref="anonymous" /> <!-- TODO: tmp solution, change to actual -->
+            <resource ref="Magento_InventoryApi::stock"/>
         </resources>
     </route>
     <route url="/V1/inventory/configuration" method="POST">
         <service class="Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface" method="execute"/>
         <resources>
-            <resource ref="anonymous" /> <!-- TODO: tmp solution, change to actual -->
+            <resource ref="Magento_InventoryApi::stock"/>
         </resources>
     </route>
 </routes>
