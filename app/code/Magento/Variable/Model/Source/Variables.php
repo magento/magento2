@@ -6,35 +6,29 @@
 namespace Magento\Variable\Model\Source;
 
 /**
- * Store Contact Information source model
+ * Store Contact Information source model.
  */
 class Variables implements \Magento\Framework\Option\ArrayInterface
 {
     const DEFAULT_VARIABLE_TYPE = "default";
 
     /**
-     * Assoc array of configuration variables
+     * Assoc array of configuration variables.
      *
      * @var array
      */
-    protected $_configVariables = [];
+    private $configVariables = [];
 
     /**
-     * @var \Magento\Config\Model\Config\Structure
-     */
-    private $configStructure;
-
-    /**
-     * Constructor
-     * @param \Magento\Config\Model\Config\Structure $configStructure
+     * Constructor.
+     *
+     * @param \Magento\Config\Model\Config\Structure\SearchInterface $configStructure
      * @param array $configPaths
      */
     public function __construct(
-        \Magento\Config\Model\Config\Structure $configStructure,
+        \Magento\Config\Model\Config\Structure\SearchInterface $configStructure,
         array $configPaths = []
-    )
-    {
-        $this->configStructure = $configStructure;
+    ) {
         foreach ($configPaths as $groupPath => $groupElements) {
             $groupPathElements = explode('/', $groupPath);
             $path = [];
@@ -45,19 +39,19 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
                     $configStructure->getElementByConfigPath(implode('/', $path))->getLabel()
                 );
             }
-            $this->_configVariables[$groupPath]['label'] = implode(' / ', $labels);
+            $this->configVariables[$groupPath]['label'] = implode(' / ', $labels);
             foreach ($groupElements as $elementPath => $groupElement) {
-                $this->_configVariables[$groupPath]['elements'][] = [
+                $this->configVariables[$groupPath]['elements'][] = [
                     'value' => $elementPath,
                     'label' => __($configStructure->getElementByConfigPath($elementPath)->getLabel()),
                 ];
             }
         }
-        $this->_configVariables;
+        $this->configVariables;
     }
 
     /**
-     * Retrieve option array of store contact variables
+     * Retrieve option array of store contact variables.
      *
      * @param bool $withGroup
      * @return array
@@ -66,7 +60,7 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
     {
         $optionArray = [];
         if ($withGroup) {
-            foreach ($this->_configVariables as $configVariableGroup) {
+            foreach ($this->configVariables as $configVariableGroup) {
                 $group = [
                     'label' => $configVariableGroup['label']
                 ];
@@ -81,7 +75,7 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
                 $optionArray[] = $group;
             }
         } else {
-            foreach ($this->_configVariables as $configVariableGroup) {
+            foreach ($this->configVariables as $configVariableGroup) {
                 foreach ($configVariableGroup['elements'] as $element) {
                     $optionArray[] = [
                         'value' => '{{config path="' . $element['value'] . '"}}',
@@ -94,13 +88,13 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
     }
 
     /**
-     * Return available config variables
+     * Return available config variables.
      *
      * @return array
      * @codeCoverageIgnore
      */
     public function getData()
     {
-        return $this->_configVariables;
+        return $this->configVariables;
     }
 }

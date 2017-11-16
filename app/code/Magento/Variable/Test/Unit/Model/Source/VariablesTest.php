@@ -25,16 +25,16 @@ class VariablesTest extends \PHPUnit\Framework\TestCase
     protected $configVariables;
 
     /**
-     * @var \Magento\Config\Model\Config\Structure|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Config\Model\Config\Structure\SearchInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configMock;
 
     protected function setup()
     {
-        $this->configMock = $this->getMockBuilder(\Magento\Config\Model\Config\Structure::class)
+        $this->configMock = $this->getMockBuilder(\Magento\Config\Model\Config\Structure\SearchInterface::class)
             ->setMethods(['getElementByConfigPath'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->configVariables = [
             'web' => [
