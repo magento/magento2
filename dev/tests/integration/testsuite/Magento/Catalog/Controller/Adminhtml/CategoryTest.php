@@ -263,8 +263,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                     'meta_keywords' => 'Custom keywords',
                     'meta_description' => 'Custom meta description',
                     'custom_layout_update' => null,
-                    'custom_design_from' => '2015-05-21 00:00:00',
-                    'custom_design_to' => '2015-05-29 00:00:00',
+                    'custom_design_from' => '2015-05-20 17:00:00',
+                    'custom_design_to' => '2015-05-28 17:00:00',
                     'filter_price_range' => null
                 ],
             ],
