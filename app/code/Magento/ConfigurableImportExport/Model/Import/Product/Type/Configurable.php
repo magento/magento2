@@ -487,7 +487,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function _parseVariations($rowData)
     {
         $additionalRows = [];
-        if (!isset($rowData['configurable_variations'])) {
+        if (empty($rowData['configurable_variations'])) {
             return $additionalRows;
         }
         $variations = explode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['configurable_variations']);
