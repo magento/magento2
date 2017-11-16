@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\GraphQl\Controller\GraphQl" />
+    <preference for="Magento\GraphQl\Model\SchemaGeneratorInterface" type="Magento\GraphQl\Model\SchemaGenerator" />
+    <preference for="Magento\GraphQl\Model\Type\GeneratorInterface" type="Magento\GraphQl\Model\Type\Generator" />
+    <type name="Magento\GraphQl\Model\Type\Generator">
+        <arguments>
+            <argument name="typeMap" xsi:type="array">
+                <item name="types" xsi:type="array">
+                    <item name="Product" xsi:type="object">Magento\GraphQl\Model\Type\Handler\Product</item>
+                    <item name="SimpleProduct" xsi:type="object">Magento\GraphQl\Model\Type\Handler\SimpleProduct</item>
+                    <item name="ConfigurableProduct" xsi:type="object">Magento\GraphQl\Model\Type\Handler\ConfigurableProduct</item>
+                    <item name="Products" xsi:type="object">Magento\GraphQl\Model\Type\Handler\Products</item>
+                </item>
+                <item name="Query" xsi:type="array">
+                    <item name="fields" xsi:type="array">
+                        <item name="product" xsi:type="array">
+                            <item name="type" xsi:type="string">Product</item>
+                            <item name="args" xsi:type="array">
+                                <item name="sku!" xsi:type="string">String</item>
+                            </item>
+                        </item>
+                        <item name="products" xsi:type="array">
+                            <item name="type" xsi:type="string">Products</item>
+                            <item name="args" xsi:type="array">
+                                <item name="find!" xsi:type="string">ProductGroupSearchCriteria</item>
+                                <item name="pageSize" xsi:type="string">Int</item>
+                                <item name="currentPage" xsi:type="string">Int</item>
+                                <item name="sort" xsi:type="string">ProductSort</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

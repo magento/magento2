@@ -15,4 +15,10 @@
         <fillField selector="#foo" userInput="{{person.foo}}" mergeKey="fillField1"/>
         <fillField selector="#bar" userInput="{{person.bar}}" mergeKey="fillField2"/>
     </actionGroup>
+    <actionGroup name="ValidateSlideOutPanelField">
+        <arguments>
+            <argument name="property" defaultValue=""/>
+        </arguments>
+        <see userInput="{{property.name}}" selector="{{ColumnSection.panelFieldLabel(property.section, property.fieldName, property.section, property.name)}}" mergeKey="seePropertyLabel"/>
+    </actionGroup>
 </config>

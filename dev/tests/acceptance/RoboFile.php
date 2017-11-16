@@ -14,7 +14,9 @@ class RoboFile extends \Robo\Tasks
     use Robo\Task\Base\loadShortcuts;
 
     /**
-     * Duplicate the Example configuration files used to customize the Project for customization
+     * Duplicate the Example configuration files used to customize the Project for customization.
+     *
+     * @return void
      */
     function cloneFiles()
     {
@@ -24,8 +26,10 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Clone the Example configuration files
-     * Build the Codeception project
+     * Duplicate the Example configuration files for the Project.
+     * Build the Codeception project.
+     *
+     * @return void
      */
     function buildProject()
     {
@@ -34,17 +38,43 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Generate all Tests
+     * Generate all Tests in PHP.
+     *
+     * @param array $opts
+     * @return void
      */
-    function generateTests()
+    function generateTests($opts = ['config' => null])
     {
-        require 'tests/functional/_bootstrap.php';
-        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance()->createAllCestFiles();
+        require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
+        \Magento\FunctionalTestingFramework\Util\TestGenerator::getInstance()->createAllCestFiles($opts['config']);
         $this->say("Generate Tests Command Run");
     }
 
     /**
-     * Run all Functional tests using the Chrome environment
+     * Generate a suite based on name(s) passed in as args.
+     *
+     * @param array $args
+     * @throws Exception
+     * @return void
+     */
+    function generateSuite(array $args)
+    {
+        if (empty($args)) {
+            throw new Exception("Please provide suite name(s) after generate:suite command");
+        }
+
+        require 'tests'. DIRECTORY_SEPARATOR . 'functional' . DIRECTORY_SEPARATOR . '_bootstrap.php';
+        $sg = \Magento\FunctionalTestingFramework\Suite\SuiteGenerator::getInstance();
+
+        foreach ($args as $arg) {
+            $sg->generateSuite($arg);
+        }
+    }
+
+    /**
+     * Run all Functional tests using the Chrome environment.
+     *
+     * @return void
      */
     function chrome()
     {
@@ -52,7 +82,9 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Functional tests using the FireFox environment
+     * Run all Functional tests using the FireFox environment.
+     *
+     * @return void
      */
     function firefox()
     {
@@ -60,7 +92,9 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Functional tests using the PhantomJS environment
+     * Run all Functional tests using the PhantomJS environment.
+     *
+     * @return void
      */
     function phantomjs()
     {
@@ -68,7 +102,9 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Functional tests using the Chrome Headless environment
+     * Run all Functional tests using the Chrome Headless environment.
+     *
+     * @return void
      */
     function headless()
     {
@@ -76,8 +112,10 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Tests with the specified @group tag, excluding @group 'skip', using the Chrome environment
+     * Run all Tests with the specified @group tag, excluding @group 'skip', using the Chrome environment.
+     *
      * @param string $args
+     * @return void
      */
     function group($args = '')
     {
@@ -85,8 +123,10 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Functional tests located under the Directory Path provided using the Chrome environment
+     * Run all Functional tests located under the Directory Path provided using the Chrome environment.
+     *
      * @param string $args
+     * @return void
      */
     function folder($args = '')
     {
@@ -94,7 +134,9 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Tests marked with the @group tag 'example', using the Chrome environment
+     * Run all Tests marked with the @group tag 'example', using the Chrome environment.
+     *
+     * @return void
      */
     function example()
     {
@@ -103,6 +145,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Generate the HTML for the Allure report based on the Test XML output - Allure v1.4.X
+     *
+     * @return \Robo\Result
      */
     function allure1Generate()
     {
@@ -111,6 +155,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Generate the HTML for the Allure report based on the Test XML output - Allure v2.3.X
+     *
+     * @return \Robo\Result
      */
     function allure2Generate()
     {
@@ -118,7 +164,9 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Open the HTML Allure report - Allure v1.4.xX
+     * Open the HTML Allure report - Allure v1.4.X
+     *
+     * @return void
      */
     function allure1Open()
     {
@@ -127,6 +175,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Open the HTML Allure report - Allure v2.3.X
+     *
+     * @return void
      */
     function allure2Open()
     {
@@ -135,6 +185,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Generate and open the HTML Allure report - Allure v1.4.X
+     *
+     * @return void
      */
     function allure1Report()
     {
@@ -147,6 +199,8 @@ class RoboFile extends \Robo\Tasks
 
     /**
      * Generate and open the HTML Allure report - Allure v2.3.X
+     *
+     * @return void
      */
     function allure2Report()
     {
@@ -155,5 +209,15 @@ class RoboFile extends \Robo\Tasks
         if ($result1->wasSuccessful()) {
             $this->allure2Open();
         }
+    }
+
+    /**
+     * Run the Pre-Install system check script.
+     *
+     * @return void
+     */
+    function preInstall()
+    {
+        $this->_exec('php pre-install.php');
     }
 }

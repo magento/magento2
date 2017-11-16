@@ -41,3 +41,5 @@ Layouts,Layouts
 "API interfaces reflection data","API interfaces reflection data"
 "Database DDL operations","Database DDL operations"
 "Results of DDL queries, such as describing tables or indexes","Results of DDL queries, such as describing tables or indexes"
+"Compiled Config","Compiled Config"
+"Compilation configuration","Compilation configuration"

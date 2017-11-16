@@ -463,14 +463,4 @@ class Cache
     {
         return $this->_references;
     }
-
-    /**
-     * Get all references by object
-     *
-     * @return array
-     */
-    public function getAllReferencesByObject()
-    {
-        return $this->_referencesByObject;
-    }
 }
