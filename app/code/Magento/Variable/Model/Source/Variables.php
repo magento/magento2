@@ -95,6 +95,22 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
      */
     public function getData()
     {
-        return $this->configVariables;
+        return $this->getFlatConfigVars();
+    }
+
+    /**
+     * Get flattened config variables.
+     *
+     * @return array
+     */
+    private function getFlatConfigVars()
+    {
+        $result = [];
+        foreach ($this->configVariables as $configVariableGroup) {
+            foreach ($configVariableGroup['elements'] as $element) {
+                $result[] = $element;
+            }
+        }
+        return $result;
     }
 }
