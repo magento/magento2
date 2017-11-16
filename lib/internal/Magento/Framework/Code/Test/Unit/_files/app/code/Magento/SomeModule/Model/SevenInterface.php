@@ -5,6 +5,7 @@
  */
 
 /**
+ * @codingStandardsIgnoreStart
  * Coding Standards have to be ignored in this file, as it is just a data source for tests.
  */
 
@@ -31,7 +32,7 @@ interface SevenInterface extends \Magento\Framework\Code\Generator\CodeGenerator
      * @param array $data
      * @return TestThree
      */
-    public static function testMethod1(array &$data = []);
+    public static function testMethod1(array &$data = array());
 
     /**
      * Method short description
@@ -44,8 +45,7 @@ interface SevenInterface extends \Magento\Framework\Code\Generator\CodeGenerator
      */
     public function testMethod2($data = 'test_default', $flag = true);
 
-    /**
-     * @return mixed
-     */
     public function testMethod3();
+
+
 }
