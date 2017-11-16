@@ -49,6 +49,11 @@
         <filters name="listing_filters"/>
     </listingToolbar>
     <columns name="variables">
+        <column name="variable_selector" component="Magento_Ui/js/grid/columns/radioselect">
+            <settings>
+                <label>Select</label>
+            </settings>
+        </column>
         <column name="variable_name">
             <settings>
                 <label translate="true">Variable Name</label>
