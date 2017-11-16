@@ -8,7 +8,7 @@ namespace Magento\Tax\Test\Unit;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GetterSetterTest extends \PHPUnit_Framework_TestCase
+class GetterSetterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $className

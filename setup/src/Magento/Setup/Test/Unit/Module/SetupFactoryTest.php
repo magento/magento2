@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Module;
 
 use Magento\Setup\Module\SetupFactory;
 
-class SetupFactoryTest extends \PHPUnit_Framework_TestCase
+class SetupFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreate()
     {
@@ -20,8 +20,8 @@ class SetupFactoryTest extends \PHPUnit_Framework_TestCase
         $objectManager->expects($this->once())
             ->method('get')
             ->with(\Magento\Framework\App\ResourceConnection::class)
-            ->willReturn($this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false));
-        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+            ->willReturn($this->createMock(\Magento\Framework\App\ResourceConnection::class));
+        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $factory = new SetupFactory($objectManagerProvider);
         $this->assertInstanceOf(\Magento\Setup\Module\Setup::class, $factory->create());
@@ -36,8 +36,8 @@ class SetupFactoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $objectManager->expects($this->never())->method('get');
-        $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
-        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $factory = new SetupFactory($objectManagerProvider);
         $this->assertInstanceOf(\Magento\Setup\Module\Setup::class, $factory->create($resource));

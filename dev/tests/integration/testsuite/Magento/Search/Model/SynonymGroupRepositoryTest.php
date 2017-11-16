@@ -5,7 +5,7 @@
  */
 namespace Magento\Search\Model;
 
-class SynonymGroupRepositoryTest extends \PHPUnit_Framework_TestCase
+class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Search\Model\SynonymGroupRepository

@@ -7,7 +7,7 @@ namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class DownloadTest extends \PHPUnit_Framework_TestCase
+class DownloadTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Download
@@ -64,7 +64,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $this->storageFactoryMock = $this->getMockBuilder(
             \Magento\MediaStorage\Model\File\Storage\DatabaseFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->setMethods(['create', 'checkDbUsage'])
             ->getMock();
         $this->httpFileFactoryMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
             ->disableOriginalConstructor()

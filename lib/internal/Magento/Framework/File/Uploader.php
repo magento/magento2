@@ -261,7 +261,7 @@ class Uploader
      * @param string $file
      * @return void
      *
-     * @deprecated
+     * @deprecated 100.0.8
      */
     protected function chmod($file)
     {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Webapi\Test\Unit\Rest\Request\Deserializer;
 
-class XmlTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_xmlParserMock;
@@ -19,8 +19,11 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->_xmlParserMock = $this->getMock(\Magento\Framework\Xml\Parser::class, ['xmlToArray', 'loadXML']);
-        $this->_appStateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->_xmlParserMock = $this->createPartialMock(
+            \Magento\Framework\Xml\Parser::class,
+            ['xmlToArray', 'loadXML']
+        );
+        $this->_appStateMock = $this->createMock(\Magento\Framework\App\State::class);
         /** Initialize SUT. */
         $this->_xmlDeserializer = new \Magento\Framework\Webapi\Rest\Request\Deserializer\Xml(
             $this->_xmlParserMock,
@@ -39,7 +42,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
 
     public function testDeserializeInvalidArgumentException()
     {
-        $this->setExpectedException('InvalidArgumentException', '"boolean" data type is invalid. String is expected.');
+        $this->expectException('InvalidArgumentException', '"boolean" data type is invalid. String is expected.');
         $this->_xmlDeserializer->deserialize(false);
     }
 

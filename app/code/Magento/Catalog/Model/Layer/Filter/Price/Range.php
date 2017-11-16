@@ -10,6 +10,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Range
 {
     const XML_PATH_RANGE_STEP = 'catalog/layered_navigation/price_range_step';

@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
@@ -84,26 +84,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['dispatch'])
             ->getMock();
 
-        $this->context = $this->getMock(
-            \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher'],
-            [],
-            '',
-            false
-        );
+        $this->context = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
         $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventDispatcher);
 
-        $this->registry = $this->getMock(
-            \Magento\Framework\Registry::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
 
-        $this->customerSession = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
+        $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
 
-        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup'], [], '', false);
+        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup']);
         $store->expects($this->any())->method('getId')->willReturn($this->storeId);
         $this->storeManager = $this->getMockForAbstractClass(
             \Magento\Store\Model\StoreManagerInterface::class,
@@ -111,32 +99,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
-        $this->stockConfiguration = $this->getMock(
-            \Magento\CatalogInventory\Api\StockConfigurationInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->stockConfiguration = $this->createMock(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
 
         $this->stockItemRepository = $this->getMockForAbstractClass(
             \Magento\CatalogInventory\Api\StockItemRepositoryInterface::class
         );
 
-        $this->resource = $this->getMock(
-            \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resource = $this->createMock(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
 
-        $this->resourceCollection = $this->getMock(
-            \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection::class,
-            [],
-            [],
-            '',
-            false
+        $this->resourceCollection = $this->createMock(
+            \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection::class
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -184,20 +156,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testSetProduct()
     {
-        $product = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [
+        $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 'getId',
                 'getName',
                 'getStoreId',
                 'getTypeId',
                 'dataHasChangedFor',
                 'getIsChangedWebsites',
-                '__wakeup'],
-            [],
-            '',
-            false
-        );
+                '__wakeup']);
         $productId = 2;
         $productName = 'Some Name';
         $storeId = 3;
@@ -477,33 +443,37 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      *
      * @param $eventName
      * @param $methodName
+     * @param $objectName
      *
      * @dataProvider eventsDataProvider
      */
-    public function testDispatchEvents($eventName, $methodName)
+    public function testDispatchEvents($eventName, $methodName, $objectName)
     {
         $isCalledWithRightPrefix = 0;
+        $isObjectNameRight = 0;
         $this->eventDispatcher->expects($this->any())->method('dispatch')->with(
             $this->callback(function ($arg) use (&$isCalledWithRightPrefix, $eventName) {
                 $isCalledWithRightPrefix |= ($arg === $eventName);
                 return true;
             }),
-            $this->anything()
+            $this->callback(function ($data) use (&$isObjectNameRight, $objectName) {
+                $isObjectNameRight |= isset($data[$objectName]);
+                return true;
+            })
         );
 
         $this->item->$methodName();
-        $this->assertEquals(
-            1,
-            (int) $isCalledWithRightPrefix,
-            sprintf("Event %s doesn't dispatched", $eventName)
+        $this->assertTrue(
+            ($isCalledWithRightPrefix && $isObjectNameRight),
+            sprintf('Event "%s" with object name "%s" doesn\'t dispatched properly', $eventName, $objectName)
         );
     }
 
     public function eventsDataProvider()
     {
         return [
-            ['cataloginventory_stock_item_save_before', 'beforeSave'],
-            ['cataloginventory_stock_item_save_after', 'afterSave'],
+            ['cataloginventory_stock_item_save_before', 'beforeSave', 'item'],
+            ['cataloginventory_stock_item_save_after', 'afterSave', 'item'],
         ];
     }
 }

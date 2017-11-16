@@ -11,7 +11,7 @@ use \Magento\Framework\Pricing\Price\Pool;
 /**
  * Test for Pool
  */
-class PoolTest extends \PHPUnit_Framework_TestCase
+class PoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Pricing\Price\Pool

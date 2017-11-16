@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api;
 /**
  * Interface AttributeSetFinderInterface
  * @api
+ * @since 101.0.0
  */
 interface AttributeSetFinderInterface
 {
@@ -17,6 +18,7 @@ interface AttributeSetFinderInterface
      *
      * @param array $productIds
      * @return array
+     * @since 101.0.0
      */
     public function findAttributeSetIdsByProductIds(array $productIds);
 }

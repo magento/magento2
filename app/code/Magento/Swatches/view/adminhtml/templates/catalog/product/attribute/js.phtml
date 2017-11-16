@@ -11,7 +11,7 @@
     {
         "*": {
             "swatchesProductAttributes": {
-                "hiddenFields": <?php /* @escapeNotVerified */ echo json_encode($this->helper('Magento\Catalog\Helper\Data')->getAttributeHiddenFields()); ?>
+                "hiddenFields": <?= /* @escapeNotVerified */ json_encode($this->helper('Magento\Catalog\Helper\Data')->getAttributeHiddenFields()) ?>
             },
             "swatchesTypeChange": { }
         }

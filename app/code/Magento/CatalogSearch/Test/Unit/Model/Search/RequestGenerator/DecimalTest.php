@@ -11,7 +11,7 @@ use Magento\CatalogSearch\Model\Search\RequestGenerator\Decimal;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 
-class DecimalTest extends \PHPUnit_Framework_TestCase
+class DecimalTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  Decimal */
     private $decimal;

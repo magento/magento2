@@ -4,14 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Block\Store\Switcher\Form\Renderer;
+
+use \Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Form fieldset renderer
+ * @api
+ * @since 100.0.2
  */
-class Fieldset extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Fieldset extends \Magento\Backend\Block\Template implements RendererInterface
 {
     /**
      * Form element which re-rendering

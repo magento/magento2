@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Unit\Model\Address;
 
-class MapperTest extends \PHPUnit_Framework_TestCase
+class MapperTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $_objectManager;
@@ -71,13 +71,21 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $regionMock->expects($this->any())->method('getRegion')->willReturn('Texas');
         $regionMock->expects($this->any())->method('getRegionId')->willReturn(1);
         $regionMock->expects($this->any())->method('getRegionCode')->willReturn('TX');
-        /** @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject $regionMock */
-        $addressMock = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\AddressInterface::class,
-            [],
-            '',
-            false
-        );
+        $addressMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
+            ->setMethods(
+                [
+                    'getId',
+                    'getDefaultBilling',
+                    'getDefaultShipping',
+                    'getCity',
+                    'getFirstname',
+                    'getLastname',
+                    'getCountryId',
+                    'getRegion',
+                    'getStreet'
+                ]
+            )
+            ->getMockForAbstractClass();
         $addressMock->expects($this->any())->method('getId')->willReturn('1');
         $addressMock->expects($this->any())->method('getDefaultBilling')->willReturn(true);
         $addressMock->expects($this->any())->method('getDefaultShipping')->willReturn(false);

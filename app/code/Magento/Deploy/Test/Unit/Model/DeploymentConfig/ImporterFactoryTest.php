@@ -9,7 +9,7 @@ use Magento\Deploy\Model\DeploymentConfig\ImporterFactory;
 use Magento\Framework\App\DeploymentConfig\ImporterInterface;
 use Magento\Framework\ObjectManagerInterface;
 
-class ImporterFactoryTest extends \PHPUnit_Framework_TestCase
+class ImporterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -47,7 +47,7 @@ class ImporterFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      * @codingStandardsIgnoreStart
-     * @expectedExceptionMessage Type "some/class/name" is not instance on Magento\Framework\App\DeploymentConfig\ImporterInterface
+     * @expectedExceptionMessage Type "some/class/name" is not instance of Magento\Framework\App\DeploymentConfig\ImporterInterface
      * @codingStandardsIgnoreEnd
      */
     public function testCreateWithInvalidArgumentException()

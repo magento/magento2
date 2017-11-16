@@ -5,7 +5,7 @@
  */
 namespace Magento\Sitemap\Test\Unit\Controller\Adminhtml\Sitemap;
 
-class DeleteTest extends \PHPUnit_Framework_TestCase
+class DeleteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sitemap\Controller\Adminhtml\Sitemap\Delete

@@ -44,7 +44,7 @@ class ImporterFactory
 
         if (!$importer instanceof ImporterInterface) {
             throw new \InvalidArgumentException(
-                'Type "' . $className . '" is not instance on ' . ImporterInterface::class
+                'Type "' . $className . '" is not instance of ' . ImporterInterface::class
             );
         }
 

@@ -28,12 +28,15 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @method Category setUrlPath(string $urlPath)
  * @method Category getSkipDeleteChildren()
  * @method Category setSkipDeleteChildren(boolean $value)
+ * @method Category setChangedProductIds(array $categoryIds) Set products ids that inserted or deleted for category
+ * @method array getChangedProductIds() Get products ids that inserted or deleted for category
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Category extends \Magento\Catalog\Model\AbstractModel implements
     \Magento\Framework\DataObject\IdentityInterface,
@@ -85,11 +88,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     const KEY_CHILDREN_DATA = 'children_data';
     /**#@-*/
 
-    /**
-     * Prefix of model events names
-     *
-     * @var string
-     */
+    /**#@-*/
     protected $_eventPrefix = 'catalog_category';
 
     /**
@@ -117,7 +116,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * URL rewrite model
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
-     * @deprecated since 2.2.0
+     * @deprecated 101.1.0
      */
     protected $_urlRewrite;
 
@@ -208,13 +207,19 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected $flatState;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     */
     protected $categoryUrlPathGenerator;
 
-    /** @var UrlFinderInterface */
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     */
     protected $urlFinder;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
 
     /**
@@ -777,11 +782,14 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Retrieve children ids comma separated
      *
+     * @param boolean $recursive
+     * @param boolean $isActive
+     * @param boolean $sortByPosition
      * @return string
      */
-    public function getChildren()
+    public function getChildren($recursive = false, $isActive = true, $sortByPosition = false)
     {
-        return implode(',', $this->getResource()->getChildren($this, false));
+        return implode(',', $this->getResource()->getChildren($this, $recursive, $isActive, $sortByPosition));
     }
 
     /**
@@ -1091,7 +1099,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         if ($this->flatState->isFlatEnabled()) {
             $flatIndexer = $this->indexerRegistry->get(Indexer\Category\Flat\State::INDEXER_ID);
             if (!$flatIndexer->isScheduled()) {
-                $flatIndexer->reindexRow($this->getId());
+                $idsList = [$this->getId()];
+                if ($this->dataHasChangedFor('url_key')) {
+                    $idsList = array_merge($idsList, explode(',', $this->getAllChildren()));
+                }
+                $flatIndexer->reindexList($idsList);
             }
         }
         $productIndexer = $this->indexerRegistry->get(Indexer\Category\Product::INDEXER_ID);

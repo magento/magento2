@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Tax extends \Magento\Framework\View\Element\Template
 {

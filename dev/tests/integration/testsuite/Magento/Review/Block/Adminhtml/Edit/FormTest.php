@@ -8,7 +8,7 @@
 
 namespace Magento\Review\Block\Adminhtml\Edit;
 
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Review/_files/customer_review.php

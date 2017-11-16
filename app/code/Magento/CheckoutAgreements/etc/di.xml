@@ -19,4 +19,7 @@
         <plugin name="validate-agreements" type="Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation"/>
     </type>
     <preference for="Magento\Checkout\Api\AgreementsValidatorInterface" type="Magento\CheckoutAgreements\Model\AgreementsValidator" />
+    <type name="Magento\Checkout\Api\GuestPaymentInformationManagementInterface">
+        <plugin name="validate-guest-agreements" type="Magento\CheckoutAgreements\Model\Checkout\Plugin\GuestValidation"/>
+    </type>
 </config>

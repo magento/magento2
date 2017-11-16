@@ -5,7 +5,7 @@
  */
 namespace Magento\Cms\Test\Unit\Observer;
 
-class NoCookiesObserverTest extends \PHPUnit_Framework_TestCase
+class NoCookiesObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Observer\NoCookiesObserver

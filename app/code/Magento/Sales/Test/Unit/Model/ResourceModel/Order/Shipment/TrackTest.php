@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Shipment;
 /**
  * Class TrackTest
  */
-class TrackTest extends \PHPUnit_Framework_TestCase
+class TrackTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track
@@ -45,40 +45,12 @@ class TrackTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->trackModelMock = $this->getMock(
-            \Magento\Sales\Model\Order\Shipment\Track::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->appResourceMock = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->connectionMock = $this->getMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->validatorMock = $this->getMock(
-            \Magento\Sales\Model\Order\Shipment\Track\Validator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->entitySnapshotMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
-            [],
-            [],
-            '',
-            false
+        $this->trackModelMock = $this->createMock(\Magento\Sales\Model\Order\Shipment\Track::class);
+        $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $this->validatorMock = $this->createMock(\Magento\Sales\Model\Order\Shipment\Track\Validator::class);
+        $this->entitySnapshotMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
@@ -93,15 +65,11 @@ class TrackTest extends \PHPUnit_Framework_TestCase
         $this->trackModelMock->expects($this->any())->method('hasDataChanges')->will($this->returnValue(true));
         $this->trackModelMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
 
-        $relationProcessorMock = $this->getMock(
-            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class,
-            [],
-            [],
-            '',
-            false
+        $relationProcessorMock = $this->createMock(
+            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class
         );
 
-        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
+        $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->appResourceMock);
         $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
 

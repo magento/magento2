@@ -8,7 +8,7 @@ namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveTest extends \PHPUnit_Framework_TestCase
+class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -167,7 +167,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('cms_page');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the page.'));
 
         $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/') ->willReturnSelf();
@@ -214,7 +214,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->pageRepository->expects($this->once())->method('save')->with($page);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the page.'));
 
         $this->dataPersistorMock->expects($this->any())
@@ -262,9 +262,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \Exception('Error message.'));
 
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
         $this->messageManagerMock->expects($this->once())
-            ->method('addException');
+            ->method('addExceptionMessage');
 
         $this->dataPersistorMock->expects($this->any())
             ->method('set')

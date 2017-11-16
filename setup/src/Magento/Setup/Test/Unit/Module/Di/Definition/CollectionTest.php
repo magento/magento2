@@ -12,7 +12,7 @@ namespace Magento\Setup\Test\Unit\Module\Di\Definition;
  * Class CollectionTest
  * @package Magento\Setup\Module\Di\Definition
  */
-class CollectionTest extends \PHPUnit_Framework_TestCase
+class CollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Di\Definition\Collection

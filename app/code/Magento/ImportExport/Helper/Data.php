@@ -12,6 +12,7 @@ namespace Magento\ImportExport\Helper;
  * ImportExport data helper
  *
  * @api
+ * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -24,9 +25,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\File\Size
-     */
+    /**#@-*/
     protected $_fileSize;
 
     /**

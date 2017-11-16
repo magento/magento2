@@ -153,17 +153,17 @@ class Configurable
     protected function getVariationMatrix()
     {
         $result = [];
-        $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', '[]');
-        if ($configurableMatrix != null && !empty($configurableMatrix)) {
+        $configurableMatrix = $this->request->getParam('configurable-matrix-serialized', "[]");
+        if (isset($configurableMatrix) && $configurableMatrix != "") {
             $configurableMatrix = json_decode($configurableMatrix, true);
-        }
 
-        foreach ($configurableMatrix as $item) {
-            if ($item['newProduct']) {
-                $result[$item['variationKey']] = $this->mapData($item);
+            foreach ($configurableMatrix as $item) {
+                if ($item['newProduct']) {
+                    $result[$item['variationKey']] = $this->mapData($item);
 
-                if (isset($item['qty'])) {
-                    $result[$item['variationKey']]['quantity_and_stock_status']['qty'] = $item['qty'];
+                    if (isset($item['qty'])) {
+                        $result[$item['variationKey']]['quantity_and_stock_status']['qty'] = $item['qty'];
+                    }
                 }
             }
         }

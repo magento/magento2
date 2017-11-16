@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PrintPackageTest extends \PHPUnit_Framework_TestCase
+class PrintPackageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
@@ -66,33 +66,24 @@ class PrintPackageTest extends \PHPUnit_Framework_TestCase
         $shipment = [];
         $tracking = [];
 
-        $this->shipmentLoaderMock = $this->getMock(
+        $this->shipmentLoaderMock = $this->createPartialMock(
             \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load'],
-            [],
-            '',
-            false
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
         );
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getParam'], [], '', false);
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
-        $this->sessionMock = $this->getMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice'], [], '', false);
-        $this->actionFlag = $this->getMock(\Magento\Framework\App\ActionFlag::class, ['get'], [], '', false);
-        $this->shipmentMock = $this->getMock(\Magento\Sales\Model\Order\Shipment::class, ['__wakeup'], [], '', false);
-        $this->fileFactoryMock = $this->getMock(
+        $this->requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParam']);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $this->sessionMock = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
+        $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
+        $this->shipmentMock = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['__wakeup']);
+        $this->fileFactoryMock = $this->createPartialMock(
             \Magento\Framework\App\Response\Http\FileFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
-        $contextMock = $this->getMock(
+        $contextMock = $this->createPartialMock(
             \Magento\Backend\App\Action\Context::class,
-            ['getRequest', 'getObjectManager', 'getResponse', 'getSession', 'getActionFlag'],
-            [],
-            '',
-            false
+            ['getRequest', 'getObjectManager', 'getResponse', 'getSession', 'getActionFlag']
         );
 
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
@@ -147,27 +138,9 @@ class PrintPackageTest extends \PHPUnit_Framework_TestCase
         $date = '9999-99-99_77-77-77';
         $content = 'PDF content';
 
-        $packagingMock = $this->getMock(
-            \Magento\Shipping\Model\Order\Pdf\Packaging::class,
-            ['getPdf'],
-            [],
-            '',
-            false
-        );
-        $pdfMock = $this->getMock(
-            \Zend_Pdf::class,
-            ['render'],
-            [],
-            '',
-            false
-        );
-        $dateTimeMock = $this->getMock(
-            \Magento\Framework\Stdlib\DateTime\DateTime::class,
-            ['date'],
-            [],
-            '',
-            false
-        );
+        $packagingMock = $this->createPartialMock(\Magento\Shipping\Model\Order\Pdf\Packaging::class, ['getPdf']);
+        $pdfMock = $this->createPartialMock(\Zend_Pdf::class, ['render']);
+        $dateTimeMock = $this->createPartialMock(\Magento\Framework\Stdlib\DateTime\DateTime::class, ['date']);
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')

@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDataFixture Magento/CatalogRule/_files/two_rules.php
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  */
-class BatchIndexTest extends \PHPUnit_Framework_TestCase
+class BatchIndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ProductRepository
@@ -38,9 +38,34 @@ class BatchIndexTest extends \PHPUnit_Framework_TestCase
         $this->productRepository = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\ProductRepository::class);
     }
 
+    protected function tearDown()
+    {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Registry::class);
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
+        $productCollection = Bootstrap::getObjectManager()->get(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
+        );
+        $productCollection->delete();
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
+
+        parent::tearDown();
+    }
+
     /**
      * @magentoDbIsolation enabled
      * @dataProvider dataProvider
+     * @magentoAppIsolation enabled
+     * @magentoAppArea adminhtml
+     * @magentoDataFixtureBeforeTransaction Magento/CatalogRule/_files/two_rules.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testPriceForSmallBatch($batchCount, $price, $expectedPrice)
     {

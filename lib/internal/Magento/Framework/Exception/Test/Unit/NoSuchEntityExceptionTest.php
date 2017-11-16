@@ -11,7 +11,7 @@ use Magento\Framework\Phrase;
 /**
  * Class NoSuchEntityExceptionTest
  */
-class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
+class NoSuchEntityExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Phrase\RendererInterface */
     private $defaultRenderer;

@@ -9,6 +9,9 @@ namespace Magento\User\Model\ResourceModel;
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\Acl\Role\User as RoleUser;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Acl\Data\CacheInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\User\Model\Backend\Config\ObserverConfig;
 use Magento\User\Model\User as ModelUser;
 
 /**
@@ -16,6 +19,7 @@ use Magento\User\Model\User as ModelUser;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -32,9 +36,14 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\Acl\Data\CacheInterface
+     * @var CacheInterface
      */
     private $aclDataCache;
+
+    /**
+     * @var ObserverConfig|null
+     */
+    private $observerConfig;
 
     /**
      * Construct
@@ -43,21 +52,22 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $connectionName
-     * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
+     * @param CacheInterface $aclDataCache
+     * @param ObserverConfig|null $observerConfig
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null,
-        \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null
+        CacheInterface $aclDataCache = null,
+        ObserverConfig $observerConfig = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_roleFactory = $roleFactory;
         $this->dateTime = $dateTime;
-        $this->aclDataCache = $aclDataCache ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Acl\Data\CacheInterface::class
-        );
+        $this->aclDataCache = $aclDataCache ?: ObjectManager::getInstance()->get(CacheInterface::class);
+        $this->observerConfig = $observerConfig ?: ObjectManager::getInstance()->get(ObserverConfig::class);
     }
 
     /**
@@ -559,12 +569,14 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ->select()
                 ->from($table, 'password_id')
                 ->where('user_id = :user_id')
-                ->order('expires ' . \Magento\Framework\DB\Select::SQL_DESC)
                 ->order('password_id ' . \Magento\Framework\DB\Select::SQL_DESC)
                 ->limit($retainLimit),
             [':user_id' => $userId]
         );
-        $where = ['user_id = ?' => $userId, 'expires <= ?' => time()];
+        $where = [
+            'user_id = ?' => $userId,
+            'last_updated <= ?' => time() - $this->observerConfig->getAdminPasswordLifetime()
+        ];
         if ($retainPasswordIds) {
             $where['password_id NOT IN (?)'] = $retainPasswordIds;
         }
@@ -585,19 +597,21 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param ModelUser $user
      * @param string $passwordHash
-     * @param int $lifetime
+     * @param int $lifetime deprecated, password expiration date doesn't save anymore,
+     *        it is calculated in runtime based on password created date and lifetime config value
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @see \Magento\User\Model\Backend\Config\ObserverConfig::_isLatestPasswordExpired()
      */
-    public function trackPassword($user, $passwordHash, $lifetime)
+    public function trackPassword($user, $passwordHash, $lifetime = 0)
     {
-        $now = time();
         $this->getConnection()->insert(
             $this->getTable('admin_passwords'),
             [
                 'user_id' => $user->getId(),
                 'password_hash' => $passwordHash,
-                'expires' => $now + $lifetime,
-                'last_updated' => $now
+                'last_updated' => time()
             ]
         );
     }

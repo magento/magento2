@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Block\Product\View;
 
-class AdditionalTest extends \PHPUnit_Framework_TestCase
+class AdditionalTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetChildHtmlList()
     {

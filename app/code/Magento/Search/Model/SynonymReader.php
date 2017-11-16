@@ -14,8 +14,6 @@ use Magento\Framework\Registry;
 /**
  * Data model to retrieve synonyms by passed in phrase
  *
- * @method \Magento\Search\Model\ResourceModel\SynonymReader _getResource()
- * @method \Magento\Search\Model\ResourceModel\SynonymReader getResource()
  * @method \Magento\Search\Model\SynonymReader setGroupId(int $group)
  * @method int getGroupId()
  * @method \Magento\Search\Model\SynonymReader setStoreId(int $storeId)
@@ -24,6 +22,8 @@ use Magento\Framework\Registry;
  * @method int getWebsiteId()
  * @method \Magento\Search\Model\SynonymReader setSynonyms(string $value)
  * @method string getSynonyms()
+ * @api
+ * @since 100.1.0
  */
 class SynonymReader extends AbstractModel
 {
@@ -31,6 +31,7 @@ class SynonymReader extends AbstractModel
      * Event prefix
      *
      * @var string
+     * @since 100.1.0
      */
     protected $_eventPrefix = 'search_synonyms';
 
@@ -38,6 +39,7 @@ class SynonymReader extends AbstractModel
      * Event object key name
      *
      * @var string
+     * @since 100.1.0
      */
     protected $_eventObject = 'search_synonyms';
 
@@ -64,6 +66,7 @@ class SynonymReader extends AbstractModel
      * Init resource model
      *
      * @return void
+     * @since 100.1.0
      */
     protected function _construct()
     {
@@ -75,6 +78,7 @@ class SynonymReader extends AbstractModel
      *
      * @param string $phrase
      * @return $this
+     * @since 100.1.0
      */
     public function loadByPhrase($phrase)
     {

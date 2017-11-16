@@ -28,6 +28,9 @@ HTML;
 }
 
 require_once __DIR__ . '/autoload.php';
+// Sets default autoload mappings, may be overridden in Bootstrap::create
+\Magento\Framework\App\Bootstrap::populateAutoloader(BP, []);
+
 require_once BP . '/app/functions.php';
 
 /* Custom umask value may be provided in optional mage_umask file in root */
@@ -46,12 +49,17 @@ if (empty($_SERVER['ENABLE_IIS_REWRITES']) || ($_SERVER['ENABLE_IIS_REWRITES'] !
     unset($_SERVER['ORIG_PATH_INFO']);
 }
 
-if (!empty($_SERVER['MAGE_PROFILER'])
+if (
+    (!empty($_SERVER['MAGE_PROFILER']) || file_exists(BP . '/var/profiler.flag'))
     && isset($_SERVER['HTTP_ACCEPT'])
     && strpos($_SERVER['HTTP_ACCEPT'], 'text/html') !== false
 ) {
+    $profilerFlag = isset($_SERVER['MAGE_PROFILER']) && strlen($_SERVER['MAGE_PROFILER'])
+        ? $_SERVER['MAGE_PROFILER']
+        : trim(file_get_contents(BP . '/var/profiler.flag'));
+
     \Magento\Framework\Profiler::applyConfig(
-        $_SERVER['MAGE_PROFILER'],
+        $profilerFlag,
         BP,
         !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
     );
@@ -59,6 +67,6 @@ if (!empty($_SERVER['MAGE_PROFILER'])
 
 date_default_timezone_set('UTC');
 
-/*  Adjustment of precision value for several versions of PHP */
-ini_set('precision', 17);
-ini_set('serialize_precision', 17);
+/*  For data consistency between displaying (printing) and serialization a float number */
+ini_set('precision', 14);
+ini_set('serialize_precision', 14);

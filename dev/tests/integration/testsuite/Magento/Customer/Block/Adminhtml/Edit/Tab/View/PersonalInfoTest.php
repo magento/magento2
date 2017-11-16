@@ -14,7 +14,7 @@ use Magento\Customer\Controller\RegistryConstants;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea adminhtml
  */
-class PersonalInfoTest extends \PHPUnit_Framework_TestCase
+class PersonalInfoTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Backend\Block\Template\Context */
     private $_context;
@@ -99,8 +99,16 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomer()
     {
-        $expectedCustomerData = $this->_loadCustomer()->__toArray();
-        $actualCustomerData = $this->_block->getCustomer()->__toArray();
+        $expectedCustomer = $this->_loadCustomer();
+        $expectedCustomerData = $this->_dataObjectProcessor->buildOutputDataArray(
+            $expectedCustomer,
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
+        $actualCustomer = $this->_block->getCustomer();
+        $actualCustomerData = $this->_dataObjectProcessor->buildOutputDataArray(
+            $actualCustomer,
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
         foreach ($expectedCustomerData as $property => $value) {
             $expectedValue = is_numeric($value) ? intval($value) : $value;
             $actualValue = isset($actualCustomerData[$property]) ? $actualCustomerData[$property] : null;

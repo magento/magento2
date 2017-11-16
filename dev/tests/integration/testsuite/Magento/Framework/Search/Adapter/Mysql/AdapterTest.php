@@ -5,7 +5,10 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogSearch\Model\ResourceModel\EngineInterface;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Search\Model\EngineResolver;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -18,7 +21,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDataFixture Magento/Framework/Search/_files/products.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdapterTest extends \PHPUnit_Framework_TestCase
+class AdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Search\AdapterInterface
@@ -121,6 +124,20 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param \Magento\Framework\Search\Response\QueryResponse $queryResponse
+     * @param array $expectedIds
+     */
+    private function assertOrderedProductIds($queryResponse, $expectedIds)
+    {
+        $actualIds = [];
+        foreach ($queryResponse as $document) {
+            /** @var \Magento\Framework\Api\Search\Document $document */
+            $actualIds[] = $document->getId();
+        }
+        $this->assertEquals($expectedIds, $actualIds);
+    }
+
+    /**
      * @magentoConfigFixture current_store catalog/search/engine mysql
      */
     public function testMatchQuery()
@@ -131,6 +148,24 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $queryResponse = $this->executeQuery();
 
         $this->assertEquals(1, $queryResponse->count());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Framework/Search/_files/products_multi_option.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     */
+    public function testMatchOrderedQuery()
+    {
+        $expectedIds = [8, 7, 6, 5, 2];
+
+        //Verify that MySql randomized result of equal-weighted results
+        //consistently ordered by entity_id after multiple calls
+        $this->requestBuilder->bind('fulltext_search_query', 'shorts');
+        $this->requestBuilder->setRequestName('one_match');
+        $queryResponse = $this->executeQuery();
+
+        $this->assertEquals(5, $queryResponse->count());
+        $this->assertOrderedProductIds($queryResponse, $expectedIds);
     }
 
     /**
@@ -375,18 +410,18 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomFilterableAttribute()
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-        $attribute = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'select_attribute');
-        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
+        /** @var Attribute $attribute */
+        $attribute = $this->objectManager->get(Attribute::class)
+            ->loadByCode(Product::ENTITY, 'select_attribute');
+        /** @var Collection $selectOptions */
         $selectOptions = $this->objectManager
-            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
+            ->create(Collection::class)
             ->setAttributeFilter($attribute->getId());
 
-        $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'multiselect_attribute');
-        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $multiselectOptions */
+        $attribute->loadByCode(Product::ENTITY, 'multiselect_attribute');
+        /** @var Collection $multiselectOptions */
         $multiselectOptions = $this->objectManager
-            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
+            ->create(Collection::class)
             ->setAttributeFilter($attribute->getId());
 
         $this->requestBuilder->bind('select_attribute', $selectOptions->getLastItem()->getId());
@@ -395,7 +430,72 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $this->requestBuilder->bind('price.to', 100);
         $this->requestBuilder->bind('category_ids', 2);
         $this->requestBuilder->setRequestName('filterable_custom_attributes');
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(1, $queryResponse->count());
+    }
 
+    /**
+     * Data provider for testFilterByAttributeValues.
+     *
+     * @return array
+     */
+    public function filterByAttributeValuesDataProvider()
+    {
+        return [
+            'quick_search_container' => [
+                'quick_search_container',
+                [
+                    // Make sure search uses "should" cause.
+                    'search_term' => 'Simple Product',
+                ],
+            ],
+            'advanced_search_container' => [
+                'advanced_search_container',
+                [
+                    // Make sure "wildcard" feature works.
+                    'sku' => 'simple_product',
+                ]
+            ],
+            'catalog_view_container' => [
+                'catalog_view_container',
+                [
+                    'category_ids' => 2
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Test filtering by two attributes.
+     *
+     * @magentoDataFixture Magento/Framework/Search/_files/filterable_attributes.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @dataProvider filterByAttributeValuesDataProvider
+     * @param string $requestName
+     * @param array $additionalData
+     * @return void
+     */
+    public function testFilterByAttributeValues($requestName, $additionalData)
+    {
+        /** @var Attribute $attribute */
+        $attribute = $this->objectManager->get(Attribute::class)
+            ->loadByCode(Product::ENTITY, 'select_attribute_1');
+        /** @var Collection $selectOptions1 */
+        $selectOptions1 = $this->objectManager
+            ->create(Collection::class)
+            ->setAttributeFilter($attribute->getId());
+        $attribute->loadByCode(Product::ENTITY, 'select_attribute_2');
+        /** @var Collection $selectOptions2 */
+        $selectOptions2 = $this->objectManager
+            ->create(Collection::class)
+            ->setAttributeFilter($attribute->getId());
+        $this->requestBuilder->bind('select_attribute_1', $selectOptions1->getLastItem()->getId());
+        $this->requestBuilder->bind('select_attribute_2', $selectOptions2->getLastItem()->getId());
+        // Binds for specific containers.
+        foreach ($additionalData as $key => $value) {
+            $this->requestBuilder->bind($key, $value);
+        }
+        $this->requestBuilder->setRequestName($requestName);
         $queryResponse = $this->executeQuery();
         $this->assertEquals(1, $queryResponse->count());
     }
@@ -425,12 +525,13 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdvancedSearchCompositeProductWithOutOfStockOption()
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-        $attribute = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'test_configurable');
-        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
+        $this->markTestSkipped('MAGETWO-71445: configurable product created incorrectly - children not linked').
+        /** @var Attribute $attribute */
+        $attribute = $this->objectManager->get(Attribute::class)
+            ->loadByCode(Product::ENTITY, 'test_configurable');
+        /** @var Collection $selectOptions */
         $selectOptions = $this->objectManager
-            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
+            ->create(Collection::class)
             ->setAttributeFilter($attribute->getId());
 
         $firstOption = $selectOptions->getFirstItem();
@@ -456,12 +557,12 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdvancedSearchCompositeProductWithDisabledChild()
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-        $attribute = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'test_configurable');
-        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
+        /** @var Attribute $attribute */
+        $attribute = $this->objectManager->get(Attribute::class)
+            ->loadByCode(Product::ENTITY, 'test_configurable');
+        /** @var Collection $selectOptions */
         $selectOptions = $this->objectManager
-            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
+            ->create(Collection::class)
             ->setAttributeFilter($attribute->getId());
 
         $firstOption = $selectOptions->getFirstItem();
@@ -518,7 +619,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
          * Now we're going to change search weight of one of the attributes to ensure that it will affect
          * how products are ordered in the search result
          */
-        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        /** @var Attribute $attribute */
         $attribute = $productAttributeRepository->get('name');
         $attribute->setSearchWeight(20);
         $productAttributeRepository->save($attribute);

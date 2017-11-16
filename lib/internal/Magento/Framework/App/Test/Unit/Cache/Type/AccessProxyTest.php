@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Cache\Type;
 
-class AccessProxyTest extends \PHPUnit_Framework_TestCase
+class AccessProxyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $method
@@ -18,9 +18,9 @@ class AccessProxyTest extends \PHPUnit_Framework_TestCase
     {
         $identifier = 'cache_type_identifier';
 
-        $frontendMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $frontendMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
 
-        $cacheEnabler = $this->getMock(\Magento\Framework\App\Cache\StateInterface::class);
+        $cacheEnabler = $this->createMock(\Magento\Framework\App\Cache\StateInterface::class);
         $cacheEnabler->expects($this->at(0))->method('isEnabled')->with($identifier)->will($this->returnValue(false));
         $cacheEnabler->expects($this->at(1))->method('isEnabled')->with($identifier)->will($this->returnValue(true));
 

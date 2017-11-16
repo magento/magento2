@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Module\Setup;
 
 use Magento\Setup\Module\Setup\SetupCache;
 
-class SetupCacheTest extends \PHPUnit_Framework_TestCase
+class SetupCacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SetupCache

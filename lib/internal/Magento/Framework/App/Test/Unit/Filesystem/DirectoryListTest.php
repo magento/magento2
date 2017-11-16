@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Filesystem;
 
 use \Magento\Framework\App\Filesystem\DirectoryList;
 
-class DirectoryListTest extends \PHPUnit_Framework_TestCase
+class DirectoryListTest extends \PHPUnit\Framework\TestCase
 {
     public function testRoot()
     {
@@ -23,7 +23,7 @@ class DirectoryListTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($object->getPath(DirectoryList::SYS_TMP));
         $this->assertEquals('/root/dir/foo', $object->getPath(DirectoryList::APP));
         $this->assertEquals('bar', $object->getUrlPath(DirectoryList::APP));
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\FileSystemException::class,
             "Unknown directory type: 'unknown'"
         );

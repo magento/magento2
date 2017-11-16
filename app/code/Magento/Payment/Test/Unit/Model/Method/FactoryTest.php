@@ -5,7 +5,7 @@
  */
 namespace Magento\Payment\Test\Unit\Model\Method;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface|PHPUnit_Framework_MockObject_MockObject
@@ -21,7 +21,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_factory = $objectManagerHelper->getObject(
             \Magento\Payment\Model\Method\Factory::class,
             ['objectManager' => $this->_objectManagerMock]
@@ -31,7 +31,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateMethod()
     {
         $className = \Magento\Payment\Model\Method\AbstractMethod::class;
-        $methodMock = $this->getMock($className, [], [], '', false);
+        $methodMock = $this->createMock($className);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
@@ -50,7 +50,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $className = \Magento\Payment\Model\Method\AbstractMethod::class;
         $data = ['param1', 'param2'];
-        $methodMock = $this->getMock($className, [], [], '', false);
+        $methodMock = $this->createMock($className);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
@@ -72,7 +72,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testWrongTypeException()
     {
         $className = 'WrongClass';
-        $methodMock = $this->getMock($className, [], [], '', false);
+        $methodMock = $this->createMock($className);
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(

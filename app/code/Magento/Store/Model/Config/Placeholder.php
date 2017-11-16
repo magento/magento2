@@ -92,6 +92,7 @@ class Placeholder
                 $value = str_replace('{{' . $placeholder . '}}', $url, $value);
             } elseif (strpos($value, $this->urlPlaceholder) !== false) {
                 $distroBaseUrl = $this->request->getDistroBaseUrl();
+
                 $value = str_replace($this->urlPlaceholder, $distroBaseUrl, $value);
             }
 

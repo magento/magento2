@@ -15,6 +15,7 @@ use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractEntity
 {
@@ -548,6 +549,7 @@ abstract class AbstractEntity
 
     /**
      * Clean cached values
+     * @since 100.1.2
      */
     public function __destruct()
     {

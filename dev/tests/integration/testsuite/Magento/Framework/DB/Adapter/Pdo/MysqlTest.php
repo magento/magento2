@@ -9,7 +9,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\Framework\DB\Ddl\Table;
 
-class MysqlTest extends \PHPUnit_Framework_TestCase
+class MysqlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ResourceConnection

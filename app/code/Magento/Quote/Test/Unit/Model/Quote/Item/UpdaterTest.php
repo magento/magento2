@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  * Tests  for Magento\Quote\Model\Service\Quote\Updater
  *
  */
-class UpdaterTest extends \PHPUnit_Framework_TestCase
+class UpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\Quote\Item\Updater |\PHPUnit_Framework_MockObject_MockObject
@@ -45,32 +45,18 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productMock = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [
+        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 'getStockItem',
                 '__wakeup',
                 'setIsSuperMode',
                 'unsSkipCheckRequiredOption'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
-        $this->localeFormat = $this->getMock(
-            \Magento\Framework\Locale\Format::class,
-            [
+        $this->localeFormat = $this->createPartialMock(\Magento\Framework\Locale\Format::class, [
                 'getNumber', 'getPriceFormat'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
 
-        $this->itemMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            [
+        $this->itemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, [
                 'updateItem',
                 'getProduct',
                 'setQty',
@@ -82,23 +68,14 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
                 'setCustomPrice',
                 'setOriginalCustomPrice',
                 'unsetData',
-                'hasData'
-            ],
-            [],
-            '',
-            false
-        );
+                'hasData',
+                'setIsQtyDecimal'
+            ]);
 
-        $this->stockItemMock = $this->getMock(
-            \Magento\CatalogInventory\Model\Stock\Item::class,
-            [
+        $this->stockItemMock = $this->createPartialMock(\Magento\CatalogInventory\Model\Stock\Item::class, [
                 'getIsQtyDecimal',
                 '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->setMethods(['serialize'])
             ->getMockForAbstractClass();
@@ -149,7 +126,8 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
             ->method('getProduct')
             ->will($this->returnValue($this->productMock));
 
-        $this->object->update($this->itemMock, ['qty' => $qty]);
+        $result = $this->object->update($this->itemMock, ['qty' => $qty]);
+        $this->assertEquals($result, $this->object);
     }
 
     public function qtyProvider()
@@ -211,7 +189,8 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
             ->method('getProduct')
             ->will($this->returnValue($this->productMock));
 
-        $this->object->update($this->itemMock, ['qty' => $qty]);
+        $object = $this->object->update($this->itemMock, ['qty' => $qty]);
+        $this->assertEquals($this->object, $object);
     }
 
     public function testUpdateQtyDecimalWithConfiguredOption()
@@ -232,7 +211,8 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
             ->method('getProduct')
             ->will($this->returnValue($this->productMock));
 
-        $this->object->update($this->itemMock, ['qty' => 3, 'use_discount' => true]);
+        $object = $this->object->update($this->itemMock, ['qty' => 3, 'use_discount' => true]);
+        $this->assertEquals($this->object, $object);
     }
 
     /**
@@ -242,19 +222,13 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
     {
         $customPrice = 9.99;
         $qty = 3;
-        $buyRequestMock = $this->getMock(
-            \Magento\Framework\DataObject::class,
-            [
+        $buyRequestMock = $this->createPartialMock(\Magento\Framework\DataObject::class, [
                 'setCustomPrice',
                 'setValue',
                 'setCode',
                 'setProduct',
                 'getData'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $buyRequestMock->expects($this->any())
             ->method('setCustomPrice')
             ->with($this->equalTo($customPrice));
@@ -304,7 +278,8 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
             ->method('getNumber')
             ->will($this->returnArgument(0));
 
-        $this->object->update($this->itemMock, ['qty' => $qty, 'custom_price' => $customPrice]);
+        $object = $this->object->update($this->itemMock, ['qty' => $qty, 'custom_price' => $customPrice]);
+        $this->assertEquals($this->object, $object);
     }
 
     /**
@@ -313,9 +288,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
     public function testUpdateUnsetCustomPrice()
     {
         $qty = 3;
-        $buyRequestMock = $this->getMock(
-            \Magento\Framework\DataObject::class,
-            [
+        $buyRequestMock = $this->createPartialMock(\Magento\Framework\DataObject::class, [
                 'setCustomPrice',
                 'setValue',
                 'setCode',
@@ -323,11 +296,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
                 'getData',
                 'unsetData',
                 'hasData'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $buyRequestMock->expects($this->never())->method('setCustomPrice');
         $buyRequestMock->expects($this->once())->method('getData')->will($this->returnValue([]));
         $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
@@ -392,6 +361,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
             ->method('getNumber')
             ->will($this->returnArgument(0));
 
-        $this->object->update($this->itemMock, ['qty' => $qty]);
+        $object = $this->object->update($this->itemMock, ['qty' => $qty]);
+        $this->assertEquals($this->object, $object);
     }
 }

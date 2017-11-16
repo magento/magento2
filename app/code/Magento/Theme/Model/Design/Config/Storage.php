@@ -15,13 +15,19 @@ use Magento\Theme\Model\Design\BackendModelFactory;
 
 class Storage
 {
-    /** @var TransactionFactory */
+    /**
+     * @var \Magento\Framework\DB\TransactionFactory
+     */
     protected $transactionFactory;
 
-    /** @var BackendModelFactory */
+    /**
+     * @var \Magento\Theme\Model\Design\BackendModelFactory
+     */
     protected $backendModelFactory;
 
-    /** @var ValueChecker */
+    /**
+     * @var \Magento\Theme\Model\Design\Config\ValueChecker
+     */
     protected $valueChecker;
 
     /**

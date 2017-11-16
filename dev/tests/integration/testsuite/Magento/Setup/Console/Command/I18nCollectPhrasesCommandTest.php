@@ -7,7 +7,7 @@ namespace Magento\Setup\Console\Command;
 
 use Symfony\Component\Console\Tester\CommandTester;
 
-class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
+class I18nCollectPhrasesCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var I18nCollectPhrasesCommand
@@ -35,7 +35,6 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteConsoleOutput()
     {
-        $this->markTestSkipped('MAGETWO-64249: Unexpected test exit on Travis CI');
         $this->tester->execute(
             [
                 'directory' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/',

@@ -6,12 +6,12 @@
 
 namespace Magento\Tax\Test\Unit\Pricing\Render;
 
-use \Magento\Tax\Pricing\Render\Adjustment;
+use Magento\Tax\Pricing\Render\Adjustment;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdjustmentTest extends \PHPUnit_Framework_TestCase
+class AdjustmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Context mock
@@ -44,21 +44,12 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(
+        $this->contextMock = $this->createPartialMock(
             \Magento\Framework\View\Element\Template\Context::class,
-            ['getEventManager', 'getStoreConfig', 'getScopeConfig'],
-            [],
-            '',
-            false
+            ['getEventManager', 'getStoreConfig', 'getScopeConfig']
         );
-        $this->priceCurrencyMock = $this->getMock(\Magento\Directory\Model\PriceCurrency::class, [], [], '', false);
-        $this->taxHelperMock = $this->getMock(
-            \Magento\Tax\Helper\Data::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->priceCurrencyMock = $this->createMock(\Magento\Directory\Model\PriceCurrency::class);
+        $this->taxHelperMock = $this->createMock(\Magento\Tax\Helper\Data::class);
 
         $eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
@@ -324,18 +315,12 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
         $arguments = [];
         $this->model->setZone(\Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW);
 
-        $amountRender = $this->getMock(
-            \Magento\Framework\Pricing\Render\Amount::class,
-            [
+        $amountRender = $this->createPartialMock(\Magento\Framework\Pricing\Render\Amount::class, [
                 'setPriceDisplayLabel',
                 'setPriceWrapperCss',
                 'setPriceId',
                 'getSaleableItem'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $product = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
         $product->expects($this->once())
             ->method('getId');

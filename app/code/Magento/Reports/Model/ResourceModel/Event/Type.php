@@ -11,6 +11,10 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Event;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

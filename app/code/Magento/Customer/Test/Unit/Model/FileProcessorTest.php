@@ -10,7 +10,7 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class FileProcessorTest extends \PHPUnit_Framework_TestCase
+class FileProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
@@ -183,7 +183,10 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
 
         $expectedResult = [
             'file' => 'filename.ext1',
-            'path' => 'filepath',
+        ];
+        $resultWithPath = [
+            'file' => 'filename.ext1',
+            'path' => 'filepath'
         ];
 
         $uploaderMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
@@ -208,7 +211,7 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
         $uploaderMock->expects($this->once())
             ->method('save')
             ->with($absolutePath)
-            ->willReturn($expectedResult);
+            ->willReturn($resultWithPath);
 
         $this->uploaderFactory->expects($this->once())
             ->method('create')

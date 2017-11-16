@@ -13,7 +13,7 @@ use Magento\Sales\Model\Order\Creditmemo;
 /**
  * @magentoAppArea frontend
  */
-class IpnTest extends \PHPUnit_Framework_TestCase
+class IpnTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -214,8 +214,8 @@ class IpnTest extends \PHPUnit_Framework_TestCase
      */
     protected function _createMockedHttpAdapter()
     {
-        $factory = $this->getMock(\Magento\Framework\HTTP\Adapter\CurlFactory::class, ['create'], [], '', false);
-        $adapter = $this->getMock(\Magento\Framework\HTTP\Adapter\Curl::class, ['read', 'write'], [], '', false);
+        $factory = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\CurlFactory::class, ['create']);
+        $adapter = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\Curl::class, ['read', 'write']);
 
         $adapter->expects($this->once())->method('read')->with()->will($this->returnValue("\nVERIFIED"));
 

@@ -65,7 +65,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.0.11
      * @return \Magento\Customer\Model\Options
      */
     private function getOptions()
@@ -345,7 +345,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * Get checkout data helper instance
      *
      * @return Data
-     * @deprecated
+     * @deprecated 100.1.4
      */
     private function getCheckoutDataHelper()
     {
@@ -360,7 +360,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * Retrieve Shipping Configuration.
      *
      * @return \Magento\Shipping\Model\Config
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getShippingConfig()
     {
@@ -375,7 +375,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * Get store resolver.
      *
      * @return StoreResolverInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getStoreResolver()
     {

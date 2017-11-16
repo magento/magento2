@@ -11,26 +11,6 @@ namespace Magento\Framework\DB\Ddl;
 class Sequence
 {
     /**
-     *  Default table engine for sequences tables.
-     */
-    const DEFAULT_ENGINE = 'INNODB';
-
-    /**
-     * Database table engine for creating sequence table.
-     *
-     * @var string
-     */
-    private $dbEngine;
-
-    /**
-     * @param null $dbEngine The database table engine
-     */
-    public function __construct($dbEngine = null)
-    {
-        $this->dbEngine = $dbEngine ?: self::DEFAULT_ENGINE;
-    }
-
-    /**
      * Return SQL for create sequence
      *
      * @param string $name The name of table in create statement
@@ -48,9 +28,9 @@ class Sequence
         $format = "CREATE TABLE %s (
                      sequence_value %s %s NOT NULL AUTO_INCREMENT,
                      PRIMARY KEY (sequence_value)
-            ) AUTO_INCREMENT = %d ENGINE = %s";
+            ) AUTO_INCREMENT = %d ENGINE = INNODB";
 
-        return sprintf($format, $name, $columnType, $unsigned ? 'UNSIGNED' : '', $startNumber, $this->dbEngine);
+        return sprintf($format, $name, $columnType, $unsigned ? 'UNSIGNED' : '', $startNumber);
     }
 
     /**

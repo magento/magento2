@@ -11,7 +11,9 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 class ReadHandler implements ExtensionInterface
 {
-    /** @var  ProductWebsiteLink */
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Website\Link
+     */
     private $productWebsiteLink;
 
     /**

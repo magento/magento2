@@ -7,14 +7,14 @@
  */
 namespace Magento\Payment\Model\Config;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Payment\Model\Config\Reader
      */
     protected $_model;
 
-    /** @var  \Magento\Framework\Config\FileResolverInterface/PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Config\FileResolverInterface/PHPUnit\Framework\MockObject_MockObject */
     protected $_fileResolverMock;
 
     public function setUp()

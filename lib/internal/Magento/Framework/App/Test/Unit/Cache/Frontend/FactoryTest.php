@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Cache\Frontend;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     public static function setUpBeforeClass()
     {
@@ -139,18 +139,18 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             }
         };
         /** @var $objectManager \PHPUnit_Framework_MockObject_MockObject */
-        $objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManager->expects($this->any())->method('create')->will($this->returnCallback($processFrontendFunc));
 
         $dirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $dirMock->expects($this->any())
             ->method('getAbsolutePath')
             ->will($this->returnValue('DIR'));
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($dirMock));
         $filesystem->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($dirMock));
 
-        $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
 
         $model = new \Magento\Framework\App\Cache\Frontend\Factory(
             $objectManager,

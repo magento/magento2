@@ -9,34 +9,34 @@
 ?>
 <?php $_order = $block->getOrder() ?>
 <div class="actions-toolbar">
-    <a href="<?php /* @escapeNotVerified */ echo $block->getPrintAllCreditmemosUrl($_order) ?>"
+    <a href="<?= /* @escapeNotVerified */ $block->getPrintAllCreditmemosUrl($_order) ?>"
        onclick="this.target='_blank'"
        class="action print">
-        <span><?php /* @escapeNotVerified */ echo __('Print All Refunds') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Print All Refunds') ?></span>
     </a>
 </div>
 <?php foreach ($_order->getCreditmemosCollection() as $_creditmemo): ?>
 <div class="order-title">
-    <strong><?php /* @escapeNotVerified */ echo __('Refund #') ?><?php /* @escapeNotVerified */ echo $_creditmemo->getIncrementId(); ?> </strong>
-    <a href="<?php /* @escapeNotVerified */ echo $block->getPrintCreditmemoUrl($_creditmemo) ?>"
+    <strong><?= /* @escapeNotVerified */ __('Refund #') ?><?= /* @escapeNotVerified */ $_creditmemo->getIncrementId() ?> </strong>
+    <a href="<?= /* @escapeNotVerified */ $block->getPrintCreditmemoUrl($_creditmemo) ?>"
        onclick="this.target='_blank'"
        class="action print">
-        <span><?php /* @escapeNotVerified */ echo __('Print Refund') ?></span>
+        <span><?= /* @escapeNotVerified */ __('Print Refund') ?></span>
     </a>
 </div>
 
 <div class="table-wrapper order-items-creditmemo">
-    <table class="data table table-order-items creditmemo" id="my-refund-table-<?php /* @escapeNotVerified */ echo $_creditmemo->getId(); ?>">
-        <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items Refunded') ?></caption>
+    <table class="data table table-order-items creditmemo" id="my-refund-table-<?= /* @escapeNotVerified */ $_creditmemo->getId() ?>">
+        <caption class="table-caption"><?= /* @escapeNotVerified */ __('Items Refunded') ?></caption>
         <thead>
             <tr>
-                <th class="col name"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
-                <th class="col sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
-                <th class="col price"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
-                <th class="col qty"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
-                <th class="col subtotal"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
-                <th class="col discount"><?php /* @escapeNotVerified */ echo __('Discount Amount') ?></th>
-                <th class="col total"><?php /* @escapeNotVerified */ echo __('Row Total') ?></th>
+                <th class="col name"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
+                <th class="col sku"><?= /* @escapeNotVerified */ __('SKU') ?></th>
+                <th class="col price"><?= /* @escapeNotVerified */ __('Price') ?></th>
+                <th class="col qty"><?= /* @escapeNotVerified */ __('Qty') ?></th>
+                <th class="col subtotal"><?= /* @escapeNotVerified */ __('Subtotal') ?></th>
+                <th class="col discount"><?= /* @escapeNotVerified */ __('Discount Amount') ?></th>
+                <th class="col total"><?= /* @escapeNotVerified */ __('Row Total') ?></th>
             </tr>
         </thead>
         <?php $_items = $_creditmemo->getAllItems(); ?>
@@ -46,13 +46,13 @@
     continue;
 } ?>
         <tbody>
-            <?php echo $block->getItemHtml($_item) ?>
+            <?= $block->getItemHtml($_item) ?>
         </tbody>
         <?php endforeach; ?>
         <tfoot>
-            <?php echo $block->getTotalsHtml($_creditmemo);?>
+            <?= $block->getTotalsHtml($_creditmemo) ?>
         </tfoot>
     </table>
 </div>
-<?php echo $block->getCommentsHtml($_creditmemo)?>
+<?= $block->getCommentsHtml($_creditmemo) ?>
 <?php endforeach; ?>

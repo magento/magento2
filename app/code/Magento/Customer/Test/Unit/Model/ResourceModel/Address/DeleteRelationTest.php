@@ -11,19 +11,16 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class AddressTest
  */
-class DeleteRelationTest extends \PHPUnit_Framework_TestCase
+class DeleteRelationTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \Magento\Customer\Model\ResourceModel\Address\DeleteRelation */
     protected $relation;
 
     protected function setUp()
     {
-        $this->customerFactoryMock = $this->getMock(
+        $this->customerFactoryMock = $this->createPartialMock(
             \Magento\Customer\Model\CustomerFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->relation = (new ObjectManagerHelper($this))->getObject(
             \Magento\Customer\Model\ResourceModel\Address\DeleteRelation::class
@@ -41,6 +38,7 @@ class DeleteRelationTest extends \PHPUnit_Framework_TestCase
         /** @var AbstractModel | \PHPUnit_Framework_MockObject_MockObject $addressModel  */
         $addressModel = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getIsCustomerSaveTransaction', 'getId', 'getResource'])
             ->getMock();
         /** @var \Magento\Customer\Model\Customer | \PHPUnit_Framework_MockObject_MockObject $customerModel */
         $customerModel = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
@@ -97,7 +95,8 @@ class DeleteRelationTest extends \PHPUnit_Framework_TestCase
                 $conditionSql
             );
         }
-        $this->relation->deleteRelation($addressModel, $customerModel);
+        $result = $this->relation->deleteRelation($addressModel, $customerModel);
+        $this->assertNull($result);
     }
 
     /**

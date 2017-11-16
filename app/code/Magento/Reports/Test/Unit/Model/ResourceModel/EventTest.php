@@ -8,7 +8,7 @@ namespace Magento\Reports\Test\Unit\Model\ResourceModel;
 
 use Magento\Reports\Model\ResourceModel\Event;
 
-class EventTest extends \PHPUnit_Framework_TestCase
+class EventTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Model\ResourceModel\Event

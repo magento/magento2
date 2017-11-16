@@ -10,7 +10,7 @@ namespace Magento\Framework\Mview\Test\Unit;
 
 use \Magento\Framework\Mview\Config;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Mview\Config
@@ -24,9 +24,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dataMock = $this->getMock(
-            \Magento\Framework\Mview\Config\Data::class, [], [], '', false
-        );
+        $this->dataMock = $this->createMock(\Magento\Framework\Mview\Config\Data::class);
         $this->model = new Config(
             $this->dataMock
         );

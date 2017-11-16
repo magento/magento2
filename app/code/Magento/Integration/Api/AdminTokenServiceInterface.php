@@ -10,6 +10,7 @@ namespace Magento\Integration\Api;
  * Interface providing token generation for Admins
  *
  * @api
+ * @since 100.0.2
  */
 interface AdminTokenServiceInterface
 {

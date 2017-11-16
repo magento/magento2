@@ -14,12 +14,11 @@ use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector;
 use PHPMD\TextUI\Command;
-use PHPUnit_Framework_TestCase;
 
 /**
  * Set of tests for static code analysis, e.g. code style, code complexity, copy paste detecting, etc.
  */
-class LiveCodeTest extends PHPUnit_Framework_TestCase
+class LiveCodeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string

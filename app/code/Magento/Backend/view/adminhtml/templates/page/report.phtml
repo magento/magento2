@@ -8,5 +8,5 @@
 
 ?>
 <?php if ($block->getBugreportUrl()): ?>
-    <a class="link-report" href="<?php /* @escapeNotVerified */ echo $block->getBugreportUrl(); ?>" id="footer_bug_tracking"><?php /* @escapeNotVerified */ echo __('Report an Issue') ?></a>
+    <a class="link-report" href="<?= /* @escapeNotVerified */ $block->getBugreportUrl() ?>" id="footer_bug_tracking"><?= /* @escapeNotVerified */ __('Report an Issue') ?></a>
 <?php endif; ?>

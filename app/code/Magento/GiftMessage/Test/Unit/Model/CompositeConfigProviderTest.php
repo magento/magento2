@@ -5,7 +5,7 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
 
-class CompositeConfigProviderTest extends \PHPUnit_Framework_TestCase
+class CompositeConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GiftMessage\Model\CompositeConfigProvider
@@ -19,7 +19,7 @@ class CompositeConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configProviderMock = $this->getMock(\Magento\Checkout\Model\ConfigProviderInterface::class);
+        $this->configProviderMock = $this->createMock(\Magento\Checkout\Model\ConfigProviderInterface::class);
         $this->model = new \Magento\GiftMessage\Model\CompositeConfigProvider([$this->configProviderMock]);
     }
 

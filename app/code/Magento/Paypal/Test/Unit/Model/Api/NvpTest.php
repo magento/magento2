@@ -9,11 +9,12 @@
 namespace Magento\Paypal\Test\Unit\Model\Api;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Paypal\Model\Info;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NvpTest extends \PHPUnit_Framework_TestCase
+class NvpTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Paypal\Model\Api\Nvp */
     protected $model;
@@ -50,53 +51,37 @@ class NvpTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customerAddressHelper = $this->getMock(\Magento\Customer\Helper\Address::class, [], [], '', false);
-        $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->customerAddressHelper = $this->createMock(\Magento\Customer\Helper\Address::class);
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->customLoggerMock = $this->getMockBuilder(\Magento\Payment\Model\Method\Logger::class)
             ->setConstructorArgs([$this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class)])
             ->setMethods(['debug'])
             ->getMock();
-        $this->resolver = $this->getMock(\Magento\Framework\Locale\ResolverInterface::class);
-        $this->regionFactory = $this->getMock(\Magento\Directory\Model\RegionFactory::class, [], [], '', false);
-        $this->countryFactory = $this->getMock(\Magento\Directory\Model\CountryFactory::class, [], [], '', false);
-        $processableExceptionFactory = $this->getMock(
-            \Magento\Paypal\Model\Api\ProcessableExceptionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->resolver = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
+        $this->regionFactory = $this->createMock(\Magento\Directory\Model\RegionFactory::class);
+        $this->countryFactory = $this->createMock(\Magento\Directory\Model\CountryFactory::class);
+        $processableExceptionFactory = $this->createPartialMock(\Magento\Paypal\Model\Api\ProcessableExceptionFactory::class, ['create']);
         $processableExceptionFactory->expects($this->any())
             ->method('create')
             ->will($this->returnCallback(function ($arguments) {
-                $this->processableException = $this->getMock(
-                    \Magento\Paypal\Model\Api\ProcessableException::class,
-                    null,
-                    [$arguments['phrase'], null, $arguments['code']]
-                );
+                $this->processableException = $this->getMockBuilder(\Magento\Paypal\Model\Api\ProcessableException::class)
+                    ->setConstructorArgs([$arguments['phrase'], null, $arguments['code']])
+                    ->getMock();
                 return $this->processableException;
             }));
-        $exceptionFactory = $this->getMock(
-            \Magento\Framework\Exception\LocalizedExceptionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $exceptionFactory = $this->createPartialMock(\Magento\Framework\Exception\LocalizedExceptionFactory::class, ['create']);
         $exceptionFactory->expects($this->any())
             ->method('create')
             ->will($this->returnCallback(function ($arguments) {
-                $this->exception = $this->getMock(
-                    \Magento\Framework\Exception\LocalizedException::class,
-                    null,
-                    [$arguments['phrase']]
-                );
+                $this->exception = $this->getMockBuilder(\Magento\Framework\Exception\LocalizedException::class)
+                    ->setConstructorArgs([$arguments['phrase']])
+                    ->getMock();
                 return $this->exception;
             }));
-        $this->curl = $this->getMock(\Magento\Framework\HTTP\Adapter\Curl::class, [], [], '', false);
-        $curlFactory = $this->getMock(\Magento\Framework\HTTP\Adapter\CurlFactory::class, ['create'], [], '', false);
+        $this->curl = $this->createMock(\Magento\Framework\HTTP\Adapter\Curl::class);
+        $curlFactory = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\CurlFactory::class, ['create']);
         $curlFactory->expects($this->any())->method('create')->will($this->returnValue($this->curl));
-        $this->config = $this->getMock(\Magento\Paypal\Model\Config::class, [], [], '', false);
+        $this->config = $this->createMock(\Magento\Paypal\Model\Config::class);
 
         $helper = new ObjectManagerHelper($this);
         $this->model = $helper->getObject(
@@ -141,7 +126,7 @@ class NvpTest extends \PHPUnit_Framework_TestCase
     public function testCall($response, $processableErrors, $exception, $exceptionMessage = '', $exceptionCode = null)
     {
         if (isset($exception)) {
-            $this->setExpectedException($exception, $exceptionMessage, $exceptionCode);
+            $this->expectException($exception, $exceptionMessage, $exceptionCode);
         }
         $this->curl->expects($this->once())
             ->method('read')
@@ -211,9 +196,71 @@ class NvpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('testSTATE', $address->getRegion());
     }
 
+    /**
+     * Tests that callDoReauthorization method is called without errors and
+     * needed data is imported from response.
+     */
+    public function testCallDoReauthorization()
+    {
+        $authorizationId = 555;
+        $paymentStatus = 'Completed';
+        $pendingReason = 'none';
+        $protectionEligibility = 'Eligible';
+        $protectionEligibilityType = 'ItemNotReceivedEligible';
+
+        $this->curl->expects($this->once())
+            ->method('read')
+            ->willReturn(
+                "\r\n" . 'ACK=Success'
+                . '&AUTHORIZATIONID=' . $authorizationId
+                . '&PAYMENTSTATUS=' . $paymentStatus
+                . '&PENDINGREASON=' . $pendingReason
+                . '&PROTECTIONELIGIBILITY=' . $protectionEligibility
+                . '&PROTECTIONELIGIBILITYTYPE=' . $protectionEligibilityType
+            );
+
+        $this->model->callDoReauthorization();
+
+        $expectedImportedData = [
+            'authorization_id' => $authorizationId,
+            'payment_status' => Info::PAYMENTSTATUS_COMPLETED,
+            'pending_reason' => $pendingReason,
+            'protection_eligibility' => $protectionEligibility
+        ];
+
+        $this->assertNotContains($protectionEligibilityType, $this->model->getData());
+        $this->assertEquals($expectedImportedData, $this->model->getData());
+    }
+
     public function testGetDebugReplacePrivateDataKeys()
     {
         $debugReplacePrivateDataKeys = $this->_invokeNvpProperty($this->model, '_debugReplacePrivateDataKeys');
         $this->assertEquals($debugReplacePrivateDataKeys, $this->model->getDebugReplacePrivateDataKeys());
+    }
+
+    /**
+     * Tests case if obtained response with code 10415 'Transaction has already
+     * been completed for this token'. It must does not throws the exception and
+     * must returns response array.
+     */
+    public function testCallTransactionHasBeenCompleted ()
+    {
+        $response =    "\r\n" . 'ACK[7]=Failure&L_ERRORCODE0[5]=10415'
+            . '&L_SHORTMESSAGE0[8]=Message.&L_LONGMESSAGE0[15]=Long%20Message.';
+        $processableErrors =[10415];
+        $this->curl->expects($this->once())
+            ->method('read')
+            ->will($this->returnValue($response));
+        $this->model->setProcessableErrors($processableErrors);
+        $this->customLoggerMock->expects($this->once())
+            ->method('debug');
+        $expectedResponse = [
+            'ACK' => 'Failure',
+            'L_ERRORCODE0' => '10415',
+            'L_SHORTMESSAGE0' => 'Message.',
+            'L_LONGMESSAGE0' => 'Long Message.'
+        ];
+
+        $this->assertEquals($expectedResponse, $this->model->call('some method', ['data' => 'some data']));
     }
 }

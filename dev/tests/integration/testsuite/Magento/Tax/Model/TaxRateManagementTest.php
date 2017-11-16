@@ -7,7 +7,7 @@ namespace Magento\Tax\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class TaxRateManagementTest extends \PHPUnit_Framework_TestCase
+class TaxRateManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Api\TaxRuleRepositoryInterface

@@ -15,7 +15,7 @@ use Magento\SalesInventory\Model\Order\ReturnValidator;
 /**
  * Class ReturnValidatorTest
  */
-class ReturnValidatorTest extends \PHPUnit_Framework_TestCase
+class ReturnValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|OrderItemRepositoryInterface

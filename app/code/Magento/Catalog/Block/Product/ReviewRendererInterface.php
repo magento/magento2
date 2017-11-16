@@ -6,6 +6,10 @@
 
 namespace Magento\Catalog\Block\Product;
 
+/**
+ * Interface \Magento\Catalog\Block\Product\ReviewRendererInterface
+ *
+ */
 interface ReviewRendererInterface
 {
     const SHORT_VIEW = 'short';

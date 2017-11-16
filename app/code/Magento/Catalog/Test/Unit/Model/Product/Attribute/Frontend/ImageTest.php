@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Frontend;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ImageTest extends \PHPUnit_Framework_TestCase
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Frontend\Image

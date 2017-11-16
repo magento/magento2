@@ -3,13 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Test class for \Magento\Backend\Block\Widget\Grid\Column
- */
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
-class ColumnTest extends \PHPUnit_Framework_TestCase
+use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
+use Magento\Framework\DataObject;
+
+class ColumnTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Column
@@ -28,19 +27,15 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false, false);
-        $this->_blockMock = $this->getMock(
+        $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
+        $this->_blockMock = $this->createPartialMock(
             \Magento\Framework\View\Element\Template::class,
-            ['setColumn', 'getHtml'],
-            [],
-            '',
-            false,
-            false
+            ['setColumn', 'getHtml']
         );
 
         $arguments = [
             'layout' => $this->_layoutMock,
-            'urlBuilder' => $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false),
+            'urlBuilder' => $this->createMock(\Magento\Backend\Model\Url::class),
         ];
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_block = $objectManagerHelper->getObject(\Magento\Backend\Block\Widget\Grid\Column::class, $arguments);
@@ -370,7 +365,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     {
         $arguments = [
             'layout' => $this->_layoutMock,
-            'urlBuilder' => $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false),
+            'urlBuilder' => $this->createMock(\Magento\Backend\Model\Url::class),
             'data' => $groupedData,
         ];
 
@@ -382,5 +377,98 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     public function columnGroupedDataProvider()
     {
         return [[[], false], [['grouped' => 0], false], [['grouped' => 1], true]];
+    }
+
+    /**
+     * Testing row field export with valid frame callback
+     */
+    public function testGetRowFieldAndExportWithFrameCallback()
+    {
+        $row = new DataObject(['id' => '2', 'title' => 'some item']);
+        /** @var  $rendererMock */
+        $rendererMock = $this->getMockBuilder(AbstractRenderer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['renderExport', 'render'])
+            ->getMock();
+
+        $rendererMock->expects($this->any())->method('renderExport')->willReturnCallback(
+            function (DataObject $row) {
+                return $row->getData('title');
+            }
+        );
+
+        $rendererMock->expects($this->any())->method('render')->willReturnCallback(
+            function (DataObject $row) {
+                return $row->getData('title');
+            }
+        );
+
+        $frameCallbackHostObject = $this->getMockBuilder(\Magento\Backend\Block\Widget::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['decorate'])
+            ->getMock();
+
+        $frameCallbackHostObject->expects($this->any())
+            ->method('decorate')
+            ->willReturnCallback(
+                function ($renderValue) {
+                    return '__callback_decorated_' . $renderValue;
+                }
+            );
+
+        $this->_block->setRenderer($rendererMock);
+        $this->_block->setFrameCallback([$frameCallbackHostObject, 'decorate']);
+        $renderResult = $this->_block->getRowField($row);
+        $exportResult = $this->_block->getRowFieldExport($row);
+        $this->assertEquals('__callback_decorated_some item', $exportResult);
+        $this->assertEquals('__callback_decorated_some item', $renderResult);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Frame callback host must be instance of Magento\Backend\Block\Widget
+     */
+    public function testGetRowFieldExportWithInvalidCallback()
+    {
+        $row = new DataObject(['id' => '2', 'title' => 'some item']);
+        /** @var  $rendererMock */
+        $rendererMock = $this->getMockBuilder(AbstractRenderer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['renderExport', 'render'])
+            ->getMock();
+
+        $rendererMock->expects($this->any())->method('renderExport')->willReturnCallback(
+            function (DataObject $row) {
+                return $row->getData('title');
+            }
+        );
+
+        $this->_block->setRenderer($rendererMock);
+        $this->_block->setFrameCallback([$this, 'testGetRowFieldExportWithFrameCallback']);
+        $this->_block->getRowFieldExport($row);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Frame callback host must be instance of Magento\Backend\Block\Widget
+     */
+    public function testGetRowFieldWithInvalidCallback()
+    {
+        $row = new DataObject(['id' => '2', 'title' => 'some item']);
+        /** @var  $rendererMock */
+        $rendererMock = $this->getMockBuilder(AbstractRenderer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['render'])
+            ->getMock();
+
+        $rendererMock->expects($this->any())->method('render')->willReturnCallback(
+            function (DataObject $row) {
+                return $row->getData('title');
+            }
+        );
+
+        $this->_block->setRenderer($rendererMock);
+        $this->_block->setFrameCallback([$this, 'testGetRowFieldExportWithFrameCallback']);
+        $this->_block->getRowField($row);
     }
 }

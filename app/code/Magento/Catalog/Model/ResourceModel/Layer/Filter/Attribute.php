@@ -5,38 +5,16 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
 
-use Magento\Framework\App\ObjectManager;
-
 /**
  * Catalog Layer Attribute Filter Resource Model
  *
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-    /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
-     */
-    private $frontendResource;
-
-    /**
-     * Attribute constructor.
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param null $connectionName
-     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $frontendResource
-     */
-    public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        $connectionName = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $frontendResource = null
-    ) {
-        $this->frontendResource = $frontendResource ?: ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\FrontendResource::class);
-        parent::__construct($context, $connectionName);
-    }
-
     /**
      * Initialize connection and define main table name
      *
@@ -112,13 +90,5 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         return $connection->fetchPairs($select);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getMainTable()
-    {
-        return $this->frontendResource->getMainTable();
     }
 }

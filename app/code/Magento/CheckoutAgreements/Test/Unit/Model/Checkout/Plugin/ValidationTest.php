@@ -8,7 +8,7 @@ namespace Magento\CheckoutAgreements\Test\Unit\Model\Checkout\Plugin;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
 use Magento\Store\Model\ScopeInterface;
 
-class ValidationTest extends \PHPUnit_Framework_TestCase
+class ValidationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation
@@ -52,19 +52,16 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->agreementsValidatorMock = $this->getMock(\Magento\Checkout\Api\AgreementsValidatorInterface::class);
-        $this->subjectMock = $this->getMock(\Magento\Checkout\Api\PaymentInformationManagementInterface::class);
-        $this->paymentMock = $this->getMock(\Magento\Quote\Api\Data\PaymentInterface::class);
-        $this->addressMock = $this->getMock(\Magento\Quote\Api\Data\AddressInterface::class);
-        $this->extensionAttributesMock = $this->getMock(
+        $this->agreementsValidatorMock = $this->createMock(\Magento\Checkout\Api\AgreementsValidatorInterface::class);
+        $this->subjectMock = $this->createMock(\Magento\Checkout\Api\PaymentInformationManagementInterface::class);
+        $this->paymentMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
+        $this->addressMock = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
+        $this->extensionAttributesMock = $this->createPartialMock(
             \Magento\Quote\Api\Data\PaymentExtension::class,
-            ['getAgreementIds'],
-            [],
-            '',
-            false
+            ['getAgreementIds']
         );
-        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->repositoryMock = $this->getMock(
+        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->repositoryMock = $this->createMock(
             \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface::class
         );
 

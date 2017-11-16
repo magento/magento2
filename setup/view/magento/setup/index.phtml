@@ -8,7 +8,7 @@
 <div class="{{$state.current.type == 'install' && !$state.current.wrapper ?  'container' : 'page-wrapper'}}">
     <div ng-include="'index.php/navigation/header-bar'"></div>
     <main id="anchor-content" class="page-content">
-        <?php echo $this->render('navigation/menu.phtml');?>
+        <?= $this->render('navigation/menu.phtml') ?>
         <div
             id="main"
             class="{{class}}"

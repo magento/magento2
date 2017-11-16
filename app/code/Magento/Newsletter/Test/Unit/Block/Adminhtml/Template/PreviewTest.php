@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Test\Unit\Block\Adminhtml\Template;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class PreviewTest extends \PHPUnit_Framework_TestCase
+class PreviewTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Newsletter\Block\Adminhtml\Template\Preview */
     protected $preview;
@@ -33,12 +33,10 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class, [], [], '', false);
-        $this->appState = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
-        $this->template = $this->getMock(
-            \Magento\Newsletter\Model\Template::class,
-            [
+        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->appState = $this->createMock(\Magento\Framework\App\State::class);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->template = $this->createPartialMock(\Magento\Newsletter\Model\Template::class, [
                 'setTemplateType',
                 'setTemplateText',
                 'setTemplateStyles',
@@ -47,19 +45,12 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
                 'revertDesign',
                 'getProcessedTemplate',
                 'load'
-            ],
-            [],
-            '',
-            false
-        );
-        $templateFactory = $this->getMock(\Magento\Newsletter\Model\TemplateFactory::class, ['create'], [], '', false);
+            ]);
+        $templateFactory = $this->createPartialMock(\Magento\Newsletter\Model\TemplateFactory::class, ['create']);
         $templateFactory->expects($this->once())->method('create')->willReturn($this->template);
-        $this->subscriberFactory = $this->getMock(
+        $this->subscriberFactory = $this->createPartialMock(
             \Magento\Newsletter\Model\SubscriberFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -118,7 +109,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $this->template->expects($this->atLeastOnce())->method('emulateDesign')->with(1);
         $this->template->expects($this->atLeastOnce())->method('revertDesign');
 
-        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
         $store->expects($this->atLeastOnce())->method('getId')->willReturn(1);
 
         $this->storeManager->expects($this->atLeastOnce())->method('getStores')->willReturn([$store]);
@@ -150,7 +141,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
                 ['subscriber', null, 3]
             ]
         );
-        $subscriber = $this->getMock(\Magento\Newsletter\Model\Subscriber::class, [], [], '', false);
+        $subscriber = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
         $subscriber->expects($this->atLeastOnce())->method('load')->with(3)->willReturnSelf();
         $this->subscriberFactory->expects($this->atLeastOnce())->method('create')->willReturn($subscriber);
 

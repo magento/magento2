@@ -9,7 +9,7 @@ namespace Magento\Framework\Interception;
  * Class GeneralTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
+abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -46,7 +46,7 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
         $config = new \Magento\Framework\Interception\ObjectManager\Config\Developer();
         $factory = new \Magento\Framework\ObjectManager\Factory\Dynamic\Developer($config, null);
 
-        $this->_configReader = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
+        $this->_configReader = $this->createMock(\Magento\Framework\Config\ReaderInterface::class);
         $this->_configReader->expects(
             $this->any()
         )->method(
@@ -55,10 +55,10 @@ abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
             $this->returnValue($pluginConfig)
         );
 
-        $areaList = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
+        $areaList = $this->createMock(\Magento\Framework\App\AreaList::class);
         $areaList->expects($this->any())->method('getCodes')->will($this->returnValue([]));
         $configScope = new \Magento\Framework\Config\Scope($areaList, 'global');
-        $cache = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
+        $cache = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
         $cache->expects($this->any())->method('load')->will($this->returnValue(false));
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
         $relations = new \Magento\Framework\ObjectManager\Relations\Runtime();

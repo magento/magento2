@@ -9,7 +9,7 @@
 /** @var \Magento\Wishlist\Block\Rss\Link $block */
 ?>
 <?php if ($block->isRssAllowed() && $block->getLink() && $this->helper('Magento\Wishlist\Helper\Data')->getWishlist()->getItemsCount()): ?>
-    <a href="<?php echo $block->escapeUrl($block->getLink()); ?>" class="action rss wishlist">
-        <span><?php echo $block->escapeHtml(__('RSS Feed')) ?></span>
+    <a href="<?= $block->escapeUrl($block->getLink()) ?>" class="action rss wishlist">
+        <span><?= $block->escapeHtml(__('RSS Feed')) ?></span>
     </a>
 <?php endif; ?>

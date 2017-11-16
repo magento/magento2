@@ -10,7 +10,7 @@ namespace Magento\Cms\Test\Unit\Model\Template;
  *
  * @covers \Magento\Cms\Model\Template\Filter
  */
-class FilterTest extends \PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject

@@ -10,12 +10,12 @@ use Magento\Analytics\Test\TestStep\OpenAnalyticsConfigStep;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert Analytics is enabled in Stores > Configuration > General > Analytics > General menu.
+ * Assert Advanced Reporting Service is enabled.
  */
 class AssertConfigAnalyticsEnabled extends AbstractConstraint
 {
     /**
-     * Assert Analytics is enabled in Stores > Configuration > General > Analytics menu.
+     * Assert Advanced Reporting service is enabled.
      *
      * @param ConfigAnalytics $configAnalytics
      * @param OpenAnalyticsConfigStep $openAnalyticsConfigStep
@@ -27,13 +27,13 @@ class AssertConfigAnalyticsEnabled extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertTrue(
             (bool)$configAnalytics->getAnalyticsForm()->isAnalyticsEnabled(),
-            'Magento Analytics is not enabled.'
+            'Magento Advanced Reporting service is not enabled.'
         );
 
         \PHPUnit_Framework_Assert::assertEquals(
             $configAnalytics->getAnalyticsForm()->getAnalyticsStatus(),
             'Subscription status: Pending',
-            'Magento Analytics status is not pending.'
+            'Magento Advanced Reporting service subscription status is not pending.'
         );
     }
 
@@ -44,7 +44,6 @@ class AssertConfigAnalyticsEnabled extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Magento Analytics is enabled and has Pending status in'
-            . ' Stores > Configuration > General > Analytics > General menu.';
+        return 'Magento Advanced Reporting service is enabled and has Pending status';
     }
 }

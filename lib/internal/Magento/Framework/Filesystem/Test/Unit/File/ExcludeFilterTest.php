@@ -11,7 +11,7 @@ use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 /**
  * Class ExcludeFilterTest
  */
-class ExcludeFilterTest extends \PHPUnit_Framework_TestCase
+class ExcludeFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Iterator

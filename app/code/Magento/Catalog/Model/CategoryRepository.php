@@ -210,7 +210,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     /**
      * @return \Magento\Framework\Api\ExtensibleDataObjectConverter
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getExtensibleDataObjectConverter()
     {

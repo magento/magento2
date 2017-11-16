@@ -16,12 +16,11 @@ use Magento\Framework\Model\AbstractModel;
  * Catalog product option select type model
  *
  * @api
- * @method \Magento\Catalog\Model\ResourceModel\Product\Option\Value _getResource()
- * @method \Magento\Catalog\Model\ResourceModel\Product\Option\Value getResource()
  * @method int getOptionId()
  * @method \Magento\Catalog\Model\Product\Option\Value setOptionId(int $value)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
 class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface
 {
@@ -41,9 +40,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     const KEY_OPTION_TYPE_ID = 'option_type_id';
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     protected $_values = [];
 
     /**

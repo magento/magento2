@@ -7,6 +7,8 @@ namespace Magento\Backend\Model\Locale;
 
 /**
  * Backend locale model
+ * @api
+ * @since 100.0.2
  */
 class Resolver extends \Magento\Framework\Locale\Resolver
 {

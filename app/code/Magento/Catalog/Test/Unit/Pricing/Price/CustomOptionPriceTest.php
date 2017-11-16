@@ -5,18 +5,17 @@
  */
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-use \Magento\Catalog\Pricing\Price\CustomOptionPrice;
-use Magento\Catalog\Model\Product\Option;
-
-use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Catalog\Model\Product\Option\Value;
+
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Framework\Pricing\PriceInfoInterface;
 
 /**
  * Class OptionPriceTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
+class CustomOptionPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Pricing\Price\CustomOptionPrice
@@ -53,43 +52,22 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->product = $this->getMock(
+        $this->product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getOptionById', '__wakeup', 'getPriceInfo', 'getOptions'],
-            [],
-            '',
-            false
+            ['getOptionById', '__wakeup', 'getPriceInfo', 'getOptions']
         );
 
-        $this->priceInfo = $this->getMock(
-            \Magento\Framework\Pricing\PriceInfo\Base::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
 
         $this->product->expects($this->any())
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfo));
 
-        $this->calculator = $this->getMock(
-            \Magento\Framework\Pricing\Adjustment\Calculator::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->calculator = $this->createMock(\Magento\Framework\Pricing\Adjustment\Calculator::class);
 
-        $this->amount = $this->getMock(
-            \Magento\Framework\Pricing\Amount\Base::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->amount = $this->createMock(\Magento\Framework\Pricing\Amount\Base::class);
 
-        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $this->object = new CustomOptionPrice(
             $this->product,

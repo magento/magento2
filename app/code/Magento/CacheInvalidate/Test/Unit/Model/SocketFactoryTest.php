@@ -5,7 +5,7 @@
  */
 namespace Magento\CacheInvalidate\Test\Unit\Model;
 
-class SocketFactoryTest extends \PHPUnit_Framework_TestCase
+class SocketFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreate()
     {

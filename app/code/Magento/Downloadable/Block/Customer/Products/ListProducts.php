@@ -14,6 +14,7 @@ use Magento\Downloadable\Model\Link\Purchased\Item;
  * Block to display downloadable links bought by customer
  *
  * @api
+ * @since 100.0.2
  */
 class ListProducts extends \Magento\Framework\View\Element\Template
 {

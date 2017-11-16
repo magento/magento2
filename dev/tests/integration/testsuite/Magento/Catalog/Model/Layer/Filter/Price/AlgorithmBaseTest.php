@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/Price/_files/products_base.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
+class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Layer model

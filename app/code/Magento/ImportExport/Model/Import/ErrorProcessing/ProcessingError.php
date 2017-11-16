@@ -10,6 +10,7 @@ namespace Magento\ImportExport\Model\Import\ErrorProcessing;
  * Class describe Processing Error
  *
  * @api
+ * @since 100.0.2
  */
 class ProcessingError
 {

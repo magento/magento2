@@ -8,7 +8,7 @@ namespace Magento\Framework\Test\Unit;
 
 use \Magento\Framework\Archive;
 
-class ArchiveTest extends \PHPUnit_Framework_TestCase
+class ArchiveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Archive

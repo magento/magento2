@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
-class ImageTest extends \PHPUnit_Framework_TestCase
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
@@ -55,12 +55,9 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ['critical']
         );
 
-        $this->imageUploader = $this->getMock(
+        $this->imageUploader = $this->createPartialMock(
             \Magento\Catalog\Model\ImageUploader::class,
-            ['moveFileFromTmp'],
-            [],
-            '',
-            false
+            ['moveFileFromTmp']
         );
     }
 
@@ -185,13 +182,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     private function setUpModelForAfterSave()
     {
-        $objectManagerMock = $this->getMock(
-            \Magento\Framework\App\ObjectManager::class,
-            ['get'],
-            [],
-            '',
-            false
-        );
+        $objectManagerMock = $this->createPartialMock(\Magento\Framework\App\ObjectManager::class, ['get']);
 
         $imageUploaderMock = $this->imageUploader;
 
@@ -240,7 +231,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $object = new \Magento\Framework\DataObject(
             [
                 'test_attribute' => $value,
-                '_additional_data_test_attribute' => [['name' => 'test1234.jpg']]
+                '_additional_data_test_attribute' => [['name' => 'test1234.jpg', 'tmp_name' => 'test-test-1234']]
             ]
         );
 
@@ -284,7 +275,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
         $object = new \Magento\Framework\DataObject(
             [
-                '_additional_data_test_attribute' => [['name' => 'test1234.jpg']]
+                '_additional_data_test_attribute' => [['name' => 'test1234.jpg', 'tmp_name' => 'test-test-1234']]
             ]
         );
 

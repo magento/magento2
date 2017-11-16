@@ -8,7 +8,7 @@ namespace Magento\Framework\Config\Test\Unit;
 
 use \Magento\Framework\Config\Scope;
 
-class ScopeTest extends \PHPUnit_Framework_TestCase
+class ScopeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Config\Scope
@@ -22,7 +22,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, ['getCodes'], [], '', false);
+        $this->areaListMock = $this->createPartialMock(\Magento\Framework\App\AreaList::class, ['getCodes']);
         $this->model = new Scope($this->areaListMock);
     }
 

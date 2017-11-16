@@ -21,11 +21,7 @@ class CookieMetadata
     const KEY_DURATION = 'duration';
     /**#@-*/
 
-    /**
-     * Store the metadata in array format to distinguish between null values and no value set.
-     *
-     * @var array
-     */
+    /**#@-*/
     private $metadata;
 
     /**

@@ -29,7 +29,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @codingStandardsIgnoreFile
  */
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Api\Data\ProductInterfaceFactory
@@ -202,13 +202,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->salableProcessor = $this->getMock(
-            SalableProcessor::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->salableProcessor = $this->createMock(SalableProcessor::class);
 
         $this->model = $this->objectHelper->getObject(
             Configurable::class,

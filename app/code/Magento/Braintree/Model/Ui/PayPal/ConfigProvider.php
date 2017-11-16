@@ -54,7 +54,7 @@ class ConfigProvider implements ConfigProviderInterface
                     'title' => $this->config->getTitle(),
                     'isAllowShippingAddressOverride' => $this->config->isAllowToEditShippingAddress(),
                     'merchantName' => $this->config->getMerchantName(),
-                    'locale' => strtolower($this->resolver->getLocale()),
+                    'locale' => $this->resolver->getLocale(),
                     'paymentAcceptanceMarkSrc' =>
                         'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png',
                     'vaultCode' => self::PAYPAL_VAULT_CODE,

@@ -18,8 +18,6 @@ use Magento\User\Api\Data\UserInterface;
  * Admin user model
  *
  * @api
- * @method \Magento\User\Model\ResourceModel\User _getResource()
- * @method \Magento\User\Model\ResourceModel\User getResource()
  * @method string getLogdate()
  * @method \Magento\User\Model\User setLogdate(string $value)
  * @method int getLognum()
@@ -33,6 +31,7 @@ use Magento\User\Api\Data\UserInterface;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @api
+ * @since 100.0.2
  */
 class User extends AbstractModel implements StorageInterface, UserInterface
 {
@@ -299,6 +298,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * New password is compared to at least 4 previous passwords to prevent setting them again
      *
      * @return bool|string[]
+     * @since 100.0.3
      */
     protected function validatePasswordChange()
     {
@@ -419,7 +419,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Send email to when password is resetting
      *
      * @return $this
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function sendPasswordResetNotificationEmail()
     {
@@ -431,6 +431,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Check changes and send notification emails
      *
      * @return $this
+     * @since 100.1.0
      */
     public function sendNotificationEmailsIfRequired()
     {
@@ -450,6 +451,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Create changes description string
      *
      * @return string
+     * @since 100.1.0
      */
     protected function createChangesDescriptionString()
     {
@@ -478,6 +480,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param string $changes
      * @param string $email
      * @return $this
+     * @since 100.1.0
      */
     protected function sendUserNotificationEmail($changes, $email = null)
     {
@@ -877,6 +880,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @return $this
      * @throws \Magento\Framework\Exception\State\UserLockedException
      * @throws \Magento\Framework\Exception\AuthenticationException
+     * @since 100.1.0
      */
     public function performIdentityCheck($passwordString)
     {

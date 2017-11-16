@@ -8,7 +8,8 @@ namespace Magento\Search\Model\Adminhtml\System\Config\Source;
 /**
  * All registered search adapters
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Engine implements \Magento\Framework\Option\ArrayInterface
 {

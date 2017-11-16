@@ -13,6 +13,7 @@ use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
  * Class ValidatorComposite
  * @package Magento\Payment\Gateway\Validator
  * @api
+ * @since 100.0.2
  */
 class ValidatorComposite extends AbstractValidator
 {

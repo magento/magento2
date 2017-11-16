@@ -10,10 +10,6 @@ use Magento\Framework\Data\Form\Element\Fieldset;
 /**
  * Adminhtml order creating gift message item form
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
-/**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic

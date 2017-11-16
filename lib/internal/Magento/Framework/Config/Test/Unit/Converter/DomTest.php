@@ -7,7 +7,7 @@ namespace Magento\Framework\Config\Test\Unit\Converter;
 
 use \Magento\Framework\Config\Converter\Dom;
 
-class DomTest extends \PHPUnit_Framework_TestCase
+class DomTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $sourceFile

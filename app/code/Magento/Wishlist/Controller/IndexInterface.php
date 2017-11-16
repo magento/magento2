@@ -8,6 +8,10 @@ namespace Magento\Wishlist\Controller;
 
 use Magento\Catalog\Controller\Product\View\ViewInterface;
 
+/**
+ * Interface \Magento\Wishlist\Controller\IndexInterface
+ *
+ */
 interface IndexInterface extends \Magento\Framework\App\ActionInterface, ViewInterface
 {
 }

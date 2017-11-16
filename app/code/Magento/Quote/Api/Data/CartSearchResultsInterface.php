@@ -8,6 +8,7 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface CartSearchResultsInterface
  * @api
+ * @since 100.0.2
  */
 interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {

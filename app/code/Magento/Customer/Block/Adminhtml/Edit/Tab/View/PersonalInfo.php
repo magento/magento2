@@ -154,7 +154,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Framework\Registry $coreRegistry
      * @return void
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function setCustomerRegistry(\Magento\Customer\Model\CustomerRegistry $customerRegistry)
     {
@@ -166,7 +166,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
      * Get customer registry
      *
      * @return \Magento\Customer\Model\CustomerRegistry
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function getCustomerRegistry()
     {
@@ -189,9 +189,10 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     {
         if (!$this->customer) {
             $this->customer = $this->customerDataFactory->create();
+            $data = $this->_backendSession->getCustomerData();
             $this->dataObjectHelper->populateWithArray(
                 $this->customer,
-                $this->_backendSession->getCustomerData()['account'],
+                $data['account'],
                 \Magento\Customer\Api\Data\CustomerInterface::class
             );
         }

@@ -11,7 +11,7 @@ use Magento\PageCache\Model\Config;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Catalog\Model\ResourceModel\Attribute;
 
-class SaveTest extends \PHPUnit_Framework_TestCase
+class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
@@ -35,7 +35,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMock(Config::class, ['isEnabled'], [], '', false);
+        $this->config = $this->createPartialMock(Config::class, ['isEnabled']);
         $this->typeList = $this->getMockForAbstractClass(
             TypeListInterface::class,
             [],
@@ -45,7 +45,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             true,
             ['invalidate']
         );
-        $this->subjectMock = $this->getMock(Attribute::class, [], [], '', false);
+        $this->subjectMock = $this->createMock(Attribute::class);
         $this->save = new Save($this->config, $this->typeList);
     }
 

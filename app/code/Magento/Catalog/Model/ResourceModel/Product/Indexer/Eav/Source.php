@@ -33,8 +33,6 @@ class Source extends AbstractEav
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param null|string $connectionName
-     * @param \Magento\Indexer\Model\Indexer\StateFactory|null $stateFactory
-     * @param \Magento\Indexer\Model\ResourceModel\FrontendResource|null $frontendResource
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -42,18 +40,14 @@ class Source extends AbstractEav
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
-        $connectionName = null,
-        \Magento\Indexer\Model\Indexer\StateFactory $stateFactory = null,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $frontendResource = null
+        $connectionName = null
     ) {
         parent::__construct(
             $context,
             $tableStrategy,
             $eavConfig,
             $eventManager,
-            $connectionName,
-            $stateFactory,
-            $frontendResource
+            $connectionName
         );
         $this->_resourceHelper = $resourceHelper;
     }

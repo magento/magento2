@@ -7,7 +7,7 @@ namespace Magento\CatalogInventory\Test\Unit\Observer;
 
 use Magento\CatalogInventory\Observer\UpdateItemsStockUponConfigChangeObserver;
 
-class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit_Framework_TestCase
+class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UpdateItemsStockUponConfigChangeObserver
@@ -31,13 +31,7 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        $this->resourceStock = $this->getMock(
-            \Magento\CatalogInventory\Model\ResourceModel\Stock::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceStock = $this->createMock(\Magento\CatalogInventory\Model\ResourceModel\Stock::class);
 
         $this->event = $this->getMockBuilder(\Magento\Framework\Event::class)
             ->disableOriginalConstructor()

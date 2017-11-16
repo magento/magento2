@@ -12,7 +12,8 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 
 /**
- * Class Filters
+ * @api
+ * @since 100.0.2
  */
 class Filters extends AbstractComponent implements ObserverInterface
 {

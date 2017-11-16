@@ -10,6 +10,7 @@ namespace Magento\MediaStorage\Model\File;
  * Core file uploader model
  *
  * @api
+ * @since 100.0.2
  */
 class Uploader extends \Magento\Framework\File\Uploader
 {

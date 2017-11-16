@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Model\Customer\Attribute\Source;
 use Magento\Customer\Model\Customer\Attribute\Source\Website;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory;
 
-class WebsiteTest extends \PHPUnit_Framework_TestCase
+class WebsiteTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Website */
     protected $model;

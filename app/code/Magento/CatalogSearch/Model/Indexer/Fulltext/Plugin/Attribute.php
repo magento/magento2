@@ -56,10 +56,10 @@ class Attribute extends AbstractPlugin
     ) {
         $this->saveIsNew = $attribute->isObjectNew();
         $this->saveNeedInvalidation = (
-                $attribute->dataHasChangedFor('is_searchable')
-                || $attribute->dataHasChangedFor('is_filterable')
-                || $attribute->dataHasChangedFor('is_visible_in_advanced_search')
-            ) && ! $this->saveIsNew;
+            $attribute->dataHasChangedFor('is_searchable')
+            || $attribute->dataHasChangedFor('is_filterable')
+            || $attribute->dataHasChangedFor('is_visible_in_advanced_search')
+        );
     }
 
     /**

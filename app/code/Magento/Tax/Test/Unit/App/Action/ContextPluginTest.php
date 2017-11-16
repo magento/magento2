@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\App\Action;
 
-class ContextPluginTest extends \PHPUnit_Framework_TestCase
+class ContextPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Tax\Helper\Data
@@ -159,8 +159,11 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             }
 
             $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
-            $request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getActionName'], [], '', false);
-            $this->contextPlugin->beforeDispatch($action, $request);
+            $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
+            $result = $this->contextPlugin->beforeDispatch($action, $request);
+            $this->assertNull($result);
+        } else {
+            $this->assertFalse($loggedIn);
         }
     }
 

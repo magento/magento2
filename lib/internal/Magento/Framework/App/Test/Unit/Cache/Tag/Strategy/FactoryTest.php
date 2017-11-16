@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Cache\Tag\Strategy;
 
 use \Magento\Framework\App\Cache\Tag\Strategy\Factory;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\Tag\Strategy\Identifier
@@ -32,21 +32,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->identifierStrategy = $this->getMock(
-            \Magento\Framework\App\Cache\Tag\Strategy\Identifier::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->identifierStrategy = $this->createMock(\Magento\Framework\App\Cache\Tag\Strategy\Identifier::class);
 
-        $this->dummyStrategy = $this->getMock(
-            \Magento\Framework\App\Cache\Tag\Strategy\Dummy::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->dummyStrategy = $this->createMock(\Magento\Framework\App\Cache\Tag\Strategy\Dummy::class);
 
         $this->customStrategy = $this->getMockForAbstractClass(
             \Magento\Framework\App\Cache\Tag\StrategyInterface::class
@@ -61,7 +49,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStrategyWithScalar()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'Provided argument is not an object');
+        $this->expectException(\InvalidArgumentException::class, 'Provided argument is not an object');
         $this->model->getStrategy('some scalar');
     }
 

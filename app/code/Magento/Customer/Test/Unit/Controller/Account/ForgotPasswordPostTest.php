@@ -20,7 +20,7 @@ use Magento\Framework\Message\ManagerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
+class ForgotPasswordPostTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ForgotPasswordPost

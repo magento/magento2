@@ -87,11 +87,7 @@ class CommonTaxCollector extends AbstractTotal
     const KEY_TAX_DETAILS_APPLIED_TAXES = 'applied_taxes';
     /**#@-*/
 
-    /**
-     * Tax configuration object
-     *
-     * @var \Magento\Tax\Model\Config
-     */
+    /**#@-*/
     protected $_config;
 
     /**

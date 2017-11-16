@@ -7,7 +7,7 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Group\Grid;
 
-class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
+class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var ServiceCollection */
     protected $collection;

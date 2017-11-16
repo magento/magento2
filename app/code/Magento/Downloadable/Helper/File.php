@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Downloadable Products File Helper
  *
  * @api
+ * @since 100.0.2
  */
 class File extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -70,6 +71,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
         $uploader->setFilesDispersion(true);
         $absoluteTmpPath = $this->_mediaDirectory->getAbsolutePath($tmpPath);
         $result = $uploader->save($absoluteTmpPath);
+        unset($result['path']);
 
         return $result;
     }

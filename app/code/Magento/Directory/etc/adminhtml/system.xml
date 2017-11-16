@@ -10,7 +10,7 @@
         <section id="currency" translate="label" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Currency Setup</label>
             <tab>general</tab>
-            <resource>Magento_Backend::currency</resource>
+            <resource>Magento_Config::currency</resource>
             <group id="options" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Currency Options</label>
                 <field id="base" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">

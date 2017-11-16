@@ -15,6 +15,7 @@ use Magento\Shipping\Model\Shipment\Request;
  * Class AbstractCarrier
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractCarrier extends \Magento\Framework\DataObject implements AbstractCarrierInterface
 {
@@ -635,6 +636,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      *
      * @param string $data
      * @return string
+     * @since 100.1.0
      */
     protected function filterDebugData($data)
     {

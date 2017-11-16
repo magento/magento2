@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Model\Layout;
 
-class MergeTest extends \PHPUnit_Framework_TestCase
+class MergeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Fixture XML instruction(s) to be used in tests

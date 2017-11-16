@@ -20,7 +20,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
+class UrlRewriteFinderTest extends \PHPUnit\Framework\TestCase
 {
     /** @var DatabaseMapPool|\PHPUnit_Framework_MockObject_MockObject */
     private $databaseMapPoolMock;
@@ -42,10 +42,10 @@ class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->serializerMock = $this->getMock(Json::class, [], [], '', false);
-        $this->databaseMapPoolMock = $this->getMock(DatabaseMapPool::class, [], [], '', false);
-        $this->urlFinderMock = $this->getMock(UrlFinderInterface::class);
-        $this->urlRewriteFactoryMock = $this->getMock(UrlRewriteFactory::class, ['create'], [], '', false);
+        $this->serializerMock = $this->createMock(Json::class);
+        $this->databaseMapPoolMock = $this->createMock(DatabaseMapPool::class);
+        $this->urlFinderMock = $this->createMock(UrlFinderInterface::class);
+        $this->urlRewriteFactoryMock = $this->createPartialMock(UrlRewriteFactory::class, ['create']);
         $this->urlRewritePrototypeMock = new UrlRewrite([], $this->serializerMock);
 
         $this->urlRewriteFactoryMock->expects($this->any())
@@ -110,7 +110,7 @@ class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $dataProductMapMock = $this->getMock(DataProductUrlRewriteDatabaseMap::class, [], [], '', false);
+        $dataProductMapMock = $this->createMock(DataProductUrlRewriteDatabaseMap::class);
         $this->databaseMapPoolMock->expects($this->once())
             ->method('getDataMap')
             ->with(DataProductUrlRewriteDatabaseMap::class, 1)
@@ -148,7 +148,7 @@ class UrlRewriteFinderTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $dataCategoryMapMock = $this->getMock(DataCategoryUrlRewriteDatabaseMap::class, [], [], '', false);
+        $dataCategoryMapMock = $this->createMock(DataCategoryUrlRewriteDatabaseMap::class);
         $this->databaseMapPoolMock->expects($this->once())
             ->method('getDataMap')
             ->with(DataCategoryUrlRewriteDatabaseMap::class, 1)

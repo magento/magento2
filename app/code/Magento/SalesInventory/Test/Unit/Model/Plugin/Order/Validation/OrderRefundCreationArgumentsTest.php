@@ -17,7 +17,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 /**
  * Class OrderRefundCreatetionArgumentsTest
  */
-class OrderRefundCreationArgumentsTest extends \PHPUnit_Framework_TestCase
+class OrderRefundCreationArgumentsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OrderRefundCreationArguments
@@ -72,7 +72,7 @@ class OrderRefundCreationArgumentsTest extends \PHPUnit_Framework_TestCase
         $this->extencionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
             ->setMethods(['getReturnToStockItems'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->validateResultMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()

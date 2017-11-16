@@ -28,7 +28,9 @@ class ReadHandler implements AttributeInterface
      */
     private $logger;
 
-    /** @var \Magento\Eav\Model\Config */
+    /**
+     * @var \Magento\Eav\Model\Config
+     */
     private $config;
 
     /**

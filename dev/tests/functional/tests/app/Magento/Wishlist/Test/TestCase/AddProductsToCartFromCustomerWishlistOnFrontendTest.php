@@ -40,13 +40,13 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
      * @param bool $toUpdate
      * @return array
      */
-    public function test(Customer $customer, $products, $qty, $toUpdate = true)
+    public function test(Customer $customer, $products, $qty, $toUpdate = true, $toConfigure = false)
     {
         // Preconditions
         $customer->persist();
         $this->loginCustomer($customer);
         $products = $this->createProducts($products);
-        $this->addToWishlist($products);
+        $this->addToWishlist($products, $toConfigure);
 
         // Steps
         $this->addToCart($products, $qty, $toUpdate);

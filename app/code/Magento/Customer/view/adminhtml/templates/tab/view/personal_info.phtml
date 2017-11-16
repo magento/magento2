@@ -16,52 +16,52 @@ $createDateStore = $block->getStoreCreateDate();
 ?>
 <div class="fieldset-wrapper customer-information">
     <div class="fieldset-wrapper-title">
-        <span class="title"><?php echo $block->escapeHtml(__('Personal Information')) ?></span>
+        <span class="title"><?= $block->escapeHtml(__('Personal Information')) ?></span>
     </div>
     <table class="admin__table-secondary">
         <tbody>
-        <?php echo $block->getChildHtml(); ?>
+        <?= $block->getChildHtml() ?>
         <tr>
-            <th><?php echo $block->escapeHtml(__('Last Logged In:')) ?></th>
-            <td><?php echo $block->escapeHtml($lastLoginDateAdmin) ?> (<?php echo $block->escapeHtml($block->getCurrentStatus()) ?>)</td>
+            <th><?= $block->escapeHtml(__('Last Logged In:')) ?></th>
+            <td><?= $block->escapeHtml($lastLoginDateAdmin) ?> (<?= $block->escapeHtml($block->getCurrentStatus()) ?>)</td>
         </tr>
         <?php if ($lastLoginDateAdmin != $lastLoginDateStore): ?>
         <tr>
-            <th><?php echo $block->escapeHtml(__('Last Logged In (%1):', $block->getStoreLastLoginDateTimezone())) ?></th>
-            <td><?php echo $block->escapeHtml($lastLoginDateStore) ?> (<?php echo $block->escapeHtml($block->getCurrentStatus()) ?>)</td>
+            <th><?= $block->escapeHtml(__('Last Logged In (%1):', $block->getStoreLastLoginDateTimezone())) ?></th>
+            <td><?= $block->escapeHtml($lastLoginDateStore) ?> (<?= $block->escapeHtml($block->getCurrentStatus()) ?>)</td>
         </tr>
         <?php endif; ?>
         <tr>
-            <th><?php echo $block->escapeHtml(__('Account Lock:')) ?></th>
-            <td><?php echo $block->escapeHtml($block->getAccountLock()) ?></td>
+            <th><?= $block->escapeHtml(__('Account Lock:')) ?></th>
+            <td><?= $block->escapeHtml($block->getAccountLock()) ?></td>
         </tr>
         <tr>
-            <th><?php echo $block->escapeHtml(__('Confirmed email:')) ?></th>
-            <td><?php echo $block->escapeHtml($block->getIsConfirmedStatus()) ?></td>
+            <th><?= $block->escapeHtml(__('Confirmed email:')) ?></th>
+            <td><?= $block->escapeHtml($block->getIsConfirmedStatus()) ?></td>
         </tr>
         <tr>
-            <th><?php echo $block->escapeHtml(__('Account Created:')) ?></th>
-            <td><?php echo $block->escapeHtml($createDateAdmin) ?></td>
+            <th><?= $block->escapeHtml(__('Account Created:')) ?></th>
+            <td><?= $block->escapeHtml($createDateAdmin) ?></td>
         </tr>
         <?php if ($createDateAdmin != $createDateStore): ?>
             <tr>
-                <th><?php echo $block->escapeHtml(__('Account Created on (%1):', $block->getStoreCreateDateTimezone())) ?></th>
-                <td><?php echo $block->escapeHtml($createDateStore) ?></td>
+                <th><?= $block->escapeHtml(__('Account Created on (%1):', $block->getStoreCreateDateTimezone())) ?></th>
+                <td><?= $block->escapeHtml($createDateStore) ?></td>
             </tr>
         <?php endif; ?>
         <tr>
-            <th><?php echo $block->escapeHtml(__('Account Created in:')) ?></th>
-            <td><?php echo $block->escapeHtml($block->getCreatedInStore()) ?></td>
+            <th><?= $block->escapeHtml(__('Account Created in:')) ?></th>
+            <td><?= $block->escapeHtml($block->getCreatedInStore()) ?></td>
         </tr>
         <tr>
-            <th><?php echo $block->escapeHtml(__('Customer Group:')) ?></th>
-            <td><?php echo $block->escapeHtml($block->getGroupName()) ?></td>
+            <th><?= $block->escapeHtml(__('Customer Group:')) ?></th>
+            <td><?= $block->escapeHtml($block->getGroupName()) ?></td>
         </tr>
         </tbody>
     </table>
     <address>
-        <strong><?php echo $block->escapeHtml(__('Default Billing Address')) ?></strong><br/>
-        <?php echo $block->getBillingAddressHtml() ?>
+        <strong><?= $block->escapeHtml(__('Default Billing Address')) ?></strong><br/>
+        <?= $block->getBillingAddressHtml() ?>
     </address>
 
 </div>

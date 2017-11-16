@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit;
 
 use \Magento\Framework\App\SetupInfo;
 
-class SetupInfoTest extends \PHPUnit_Framework_TestCase
+class SetupInfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * A default fixture
@@ -24,7 +24,7 @@ class SetupInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorExceptions($server, $expectedError)
     {
-        $this->setExpectedException('\InvalidArgumentException', $expectedError);
+        $this->expectException('\InvalidArgumentException', $expectedError);
         new SetupInfo($server);
     }
 

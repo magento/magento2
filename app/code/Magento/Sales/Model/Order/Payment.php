@@ -22,11 +22,10 @@ use Magento\Sales\Api\CreditmemoManagementInterface as CreditmemoManager;
  * Order payment information
  *
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order\Payment _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Payment getResource()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Payment extends Info implements OrderPaymentInterface
 {
@@ -199,6 +198,7 @@ class Payment extends Info implements OrderPaymentInterface
     public function setOrder(Order $order)
     {
         $this->_order = $order;
+
         return $this;
     }
 
@@ -226,6 +226,7 @@ class Payment extends Info implements OrderPaymentInterface
     public function setTransactionId($transactionId)
     {
         $this->setData('transaction_id', $transactionId);
+
         return $this;
     }
 
@@ -248,6 +249,7 @@ class Payment extends Info implements OrderPaymentInterface
     public function setIsTransactionClosed($isClosed)
     {
         $this->setData('is_transaction_closed', (bool)$isClosed);
+
         return $this;
     }
 
@@ -265,6 +267,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns transaction parent
      *
      * @return string
+     * @since 100.1.0
      */
     public function setParentTransactionId($txnId)
     {
@@ -293,6 +296,7 @@ class Payment extends Info implements OrderPaymentInterface
                 return false;
             }
         }
+
         return true;
     }
 
@@ -499,15 +503,16 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function pay($invoice)
     {
-        $this->_updateTotals(
-            [
-                'amount_paid' => $invoice->getGrandTotal(),
-                'base_amount_paid' => $invoice->getBaseGrandTotal(),
-                'shipping_captured' => $invoice->getShippingAmount(),
-                'base_shipping_captured' => $invoice->getBaseShippingAmount(),
-            ]
+        $totals = $this->collectTotalAmounts(
+            $this->getOrder(),
+            ['grand_total', 'base_grand_total', 'shipping_amount', 'base_shipping_amount']
         );
+        $this->setAmountPaid($totals['grand_total']);
+        $this->setBaseAmountPaid($totals['base_grand_total']);
+        $this->setShippingCaptured($totals['shipping_amount']);
+        $this->setBaseShippingCaptured($totals['base_shipping_amount']);
         $this->_eventManager->dispatch('sales_order_payment_pay', ['payment' => $this, 'invoice' => $invoice]);
+
         return $this;
     }
 
@@ -550,6 +555,7 @@ class Payment extends Info implements OrderPaymentInterface
         }
 
         $this->getOrder()->addRelatedObject($invoice);
+
         return $invoice;
     }
 
@@ -567,6 +573,7 @@ class Payment extends Info implements OrderPaymentInterface
                 $this->_canVoidLookup = (bool)$authTransaction && !(int)$authTransaction->getIsClosed();
             }
         }
+
         return $this->_canVoidLookup;
     }
 
@@ -581,6 +588,7 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $this->_void(true);
         $this->_eventManager->dispatch('sales_order_payment_void', ['payment' => $this, 'invoice' => $document]);
+
         return $this;
     }
 
@@ -596,6 +604,7 @@ class Payment extends Info implements OrderPaymentInterface
         if (!$this->hasMessage()) {
             $this->setMessage(__('Registered a Void notification.'));
         }
+
         return $this->_void(false, $amount);
     }
 
@@ -608,6 +617,7 @@ class Payment extends Info implements OrderPaymentInterface
     public function setCreditmemo(Creditmemo $creditmemo)
     {
         $this->setData('creditmemo', $creditmemo);
+
         return $this;
     }
 
@@ -724,6 +734,7 @@ class Payment extends Info implements OrderPaymentInterface
             'sales_order_payment_refund',
             ['payment' => $this, 'creditmemo' => $creditmemo]
         );
+
         return $this;
     }
 
@@ -778,6 +789,7 @@ class Payment extends Info implements OrderPaymentInterface
                 ),
                 false
             );
+
             return $this;
         }
 
@@ -807,6 +819,7 @@ class Payment extends Info implements OrderPaymentInterface
         );
         $message = $this->_appendTransactionToMessage($transaction, $message);
         $this->setOrderStateProcessing($message);
+
         return $this;
     }
 
@@ -830,6 +843,7 @@ class Payment extends Info implements OrderPaymentInterface
             'sales_order_payment_cancel_creditmemo',
             ['payment' => $this, 'creditmemo' => $creditmemo]
         );
+
         return $this;
     }
 
@@ -904,6 +918,7 @@ class Payment extends Info implements OrderPaymentInterface
             );
             $this->setOrderStatePaymentReview($message, $transactionId);
         }
+
         return $this;
     }
 
@@ -944,6 +959,7 @@ class Payment extends Info implements OrderPaymentInterface
             );
             $this->setOrderStatePaymentReview($message, $transactionId);
         }
+
         return $this;
     }
 
@@ -998,7 +1014,8 @@ class Payment extends Info implements OrderPaymentInterface
     {
         if ($invoice instanceof Invoice) {
             $invoice->pay();
-            $this->_updateTotals(['base_amount_paid_online' => $invoice->getBaseGrandTotal()]);
+            $totals = $this->collectTotalAmounts($this->getOrder(), ['base_grand_total']);
+            $this->setBaseAmountPaidOnline($totals['base_grand_total']);
             $this->getOrder()->addRelatedObject($invoice);
         }
     }
@@ -1147,6 +1164,7 @@ class Payment extends Info implements OrderPaymentInterface
         $message = $this->_appendTransactionToMessage($transaction, $message);
         $this->setOrderStateProcessing($message);
         $order->setDataChanges(true);
+
         return $this;
     }
 
@@ -1168,9 +1186,12 @@ class Payment extends Info implements OrderPaymentInterface
         if ($salesDocument) {
             $builder->setSalesDocument($salesDocument);
         }
+
         return $builder->build($type);
     }
 
+    /**
+     */
     public function addTransactionCommentsToOrder($transaction, $message)
     {
         $order = $this->getOrder();
@@ -1200,6 +1221,7 @@ class Payment extends Info implements OrderPaymentInterface
                 $data
             );
         }
+
         return $this;
     }
 
@@ -1233,6 +1255,7 @@ class Payment extends Info implements OrderPaymentInterface
             $txnId = is_object($transaction) ? $transaction->getHtmlTxnId() : $transaction;
             $message .= ' ' . __('Transaction ID: "%1"', $txnId);
         }
+
         return $message;
     }
 
@@ -1258,9 +1281,11 @@ class Payment extends Info implements OrderPaymentInterface
             ) {
                 $comment = $preparedMessage->getComment() . ' ' . $messagePrependTo;
                 $preparedMessage->setComment($comment);
+
                 return $comment;
             }
         }
+
         return $messagePrependTo;
     }
 
@@ -1274,6 +1299,7 @@ class Payment extends Info implements OrderPaymentInterface
     public function formatAmount($amount, $asFloat = false)
     {
         $amount = $this->priceCurrency->round($amount);
+
         return !$asFloat ? (string)$amount : $amount;
     }
 
@@ -1309,6 +1335,7 @@ class Payment extends Info implements OrderPaymentInterface
     public function isCaptureFinal($amountToCapture)
     {
         $total = $this->getOrder()->getBaseTotalDue();
+
         return $this->formatAmount($total, true) == $this->formatAmount($amountToCapture, true);
     }
 
@@ -1352,6 +1379,7 @@ class Payment extends Info implements OrderPaymentInterface
     public function resetTransactionAdditionalInfo()
     {
         $this->transactionAdditionalInfo = [];
+
         return $this;
     }
 
@@ -1408,6 +1436,7 @@ class Payment extends Info implements OrderPaymentInterface
         foreach ($this->getOrder()->getInvoiceCollection() as $invoice) {
             if ($invoice->getTransactionId() == $transactionId) {
                 $invoice->load($invoice->getId());
+
                 // to make sure all data will properly load (maybe not required)
                 return $invoice;
             }
@@ -1418,14 +1447,16 @@ class Payment extends Info implements OrderPaymentInterface
                 )
             ) {
                 $invoice->setTransactionId($transactionId);
+
                 return $invoice;
             }
         }
+
         return false;
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @return OrderStateResolverInterface
      */
     private function getOrderStateResolver()
@@ -1434,7 +1465,7 @@ class Payment extends Info implements OrderPaymentInterface
             $this->orderStateResolver = ObjectManager::getInstance()->get(OrderStateResolverInterface::class);
         }
 
-        return$this->orderStateResolver;
+        return $this->orderStateResolver;
     }
 
     //@codeCoverageIgnoreStart
@@ -1753,7 +1784,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_issue
      *
      * @return string
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsIssue()
     {
@@ -1764,7 +1795,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_start_month
      *
      * @return string
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsStartMonth()
     {
@@ -1775,7 +1806,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_start_year
      *
      * @return string
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function getCcSsStartYear()
     {
@@ -2140,7 +2171,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function setCcSsStartYear($ccSsStartYear)
     {
@@ -2229,7 +2260,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function setCcSsStartMonth($ccSsStartMonth)
     {
@@ -2334,7 +2365,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     public function setCcSsIssue($ccSsIssue)
     {
@@ -2411,6 +2442,7 @@ class Payment extends Info implements OrderPaymentInterface
     public function setIsTransactionPending($flag)
     {
         $this->setData('is_transaction_pending', (bool)$flag);
+
         return $this;
     }
 
@@ -2434,6 +2466,7 @@ class Payment extends Info implements OrderPaymentInterface
     public function setIsFraudDetected($flag)
     {
         $this->setData('is_fraud_detected', (bool)$flag);
+
         return $this;
     }
 
@@ -2457,6 +2490,7 @@ class Payment extends Info implements OrderPaymentInterface
     public function setShouldCloseParentTransaction($flag)
     {
         $this->setData('should_close_parent_transaction', (bool)$flag);
+
         return $this;
     }
 
@@ -2491,4 +2525,26 @@ class Payment extends Info implements OrderPaymentInterface
     }
 
     //@codeCoverageIgnoreEnd
+
+    /**
+     * Collects order invoices totals by provided keys.
+     * Returns result as {key: amount}.
+     *
+     * @param Order $order
+     * @param array $keys
+     * @return array
+     */
+    private function collectTotalAmounts(Order $order, array $keys)
+    {
+        $result = array_fill_keys($keys, 0.00);
+        $invoiceCollection = $order->getInvoiceCollection();
+        /** @var Invoice $invoice */
+        foreach ($invoiceCollection as $invoice) {
+            foreach ($keys as $key) {
+                $result[$key] += $invoice->getData($key);
+            }
+        }
+
+        return $result;
+    }
 }

@@ -36,7 +36,7 @@ use Magento\Wishlist\Model\Wishlist;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SendTest extends \PHPUnit_Framework_TestCase
+class SendTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  Send |\PHPUnit_Framework_MockObject_MockObject */
     protected $model;
@@ -197,6 +197,7 @@ class SendTest extends \PHPUnit_Framework_TestCase
 
         $this->wishlistSession = $this->getMockBuilder(\Magento\Framework\Session\Generic::class)
             ->disableOriginalConstructor()
+            ->setMethods(['setSharingForm'])
             ->getMock();
 
         $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)

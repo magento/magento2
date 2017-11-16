@@ -14,10 +14,14 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
 class CategoriesUrlRewriteGenerator
 {
-    /** @var ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     */
     protected $productUrlPathGenerator;
 
-    /** @var UrlRewriteFactory */
+    /**
+     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
+     */
     protected $urlRewriteFactory;
 
     /**
@@ -31,7 +35,7 @@ class CategoriesUrlRewriteGenerator
     }
 
     /**
-     * Generate list based on categories
+     * Generate product rewrites with categories
      *
      * @param int $storeId
      * @param Product $product

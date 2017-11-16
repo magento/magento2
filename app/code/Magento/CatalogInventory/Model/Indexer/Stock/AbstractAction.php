@@ -10,6 +10,7 @@ namespace Magento\CatalogInventory\Model\Indexer\Stock;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Abstract action reindex class
@@ -71,9 +72,9 @@ abstract class AbstractAction
     private $cacheCleaner;
 
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\FrontendResource
+     * @var MetadataPool
      */
-    private $indexerStockFrontendResource;
+    private $metadataPool;
 
     /**
      * @param ResourceConnection $resource
@@ -81,7 +82,7 @@ abstract class AbstractAction
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Framework\Indexer\CacheContext $cacheContext
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param null|\Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource
+     * @param MetadataPool|null $metadataPool
      */
     public function __construct(
         ResourceConnection $resource,
@@ -89,15 +90,14 @@ abstract class AbstractAction
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Framework\Indexer\CacheContext $cacheContext,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource = null
+        MetadataPool $metadataPool = null
     ) {
         $this->_resource = $resource;
         $this->_indexerFactory = $indexerFactory;
         $this->_catalogProductType = $catalogProductType;
         $this->cacheContext = $cacheContext;
         $this->eventManager = $eventManager;
-        $this->indexerStockFrontendResource = $indexerStockFrontendResource ?: ObjectManager::getInstance()
-            ->get(\Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class);
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
@@ -163,10 +163,15 @@ abstract class AbstractAction
     public function getRelationsByChild($childIds)
     {
         $connection = $this->_getConnection();
-        $select = $connection->select()
-            ->from($this->_getTable('catalog_product_relation'), 'parent_id')
-            ->where('child_id IN(?)', $childIds);
-
+        $linkField = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getLinkField();
+        $select = $connection->select()->from(
+            ['cpe' => $this->_getTable('catalog_product_entity')],
+            'entity_id'
+        )->join(
+            ['relation' => $this->_getTable('catalog_product_relation')],
+            'relation.parent_id = cpe.' . $linkField
+        )->where('child_id IN(?)', $childIds);
         return $connection->fetchCol($select);
     }
 
@@ -195,7 +200,7 @@ abstract class AbstractAction
     protected function _syncData()
     {
         $idxTableName = $this->_getIdxTable();
-        $tableName = $this->indexerStockFrontendResource->getMainTable();
+        $tableName = $this->_getTable('cataloginventory_stock_status');
 
         $this->_deleteOldRelations($tableName);
 
@@ -239,7 +244,8 @@ abstract class AbstractAction
         if (!is_array($productIds)) {
             $productIds = [$productIds];
         }
-
+        $parentIds = $this->getRelationsByChild($productIds);
+        $productIds = $parentIds ? array_unique(array_merge($parentIds, $productIds)) : $productIds;
         $this->getCacheCleaner()->clean($productIds, function () use ($productIds) {
             $this->doReindex($productIds);
         });
@@ -257,13 +263,10 @@ abstract class AbstractAction
     {
         $connection = $this->_getConnection();
 
-        $parentIds = $this->getRelationsByChild($productIds);
-        $processIds = $parentIds ? array_merge($parentIds, $productIds) : $productIds;
-
         // retrieve product types by processIds
         $select = $connection->select()
             ->from($this->_getTable('catalog_product_entity'), ['entity_id', 'type_id'])
-            ->where('entity_id IN(?)', $processIds);
+            ->where('entity_id IN(?)', $productIds);
         $pairs = $connection->fetchPairs($select);
 
         $byType = [];

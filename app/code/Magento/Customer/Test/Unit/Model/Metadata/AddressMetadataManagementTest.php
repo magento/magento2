@@ -10,7 +10,7 @@ use Magento\Customer\Model\Attribute;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Model\Metadata\AddressMetadataManagement;
 
-class AddressMetadataManagementTest extends \PHPUnit_Framework_TestCase
+class AddressMetadataManagementTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AddressMetadataManagement */
     protected $model;

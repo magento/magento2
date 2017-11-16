@@ -12,16 +12,16 @@
 <?php $_excl = $block->getShippingPriceExclTax(); ?>
 <?php $_incl = $block->getShippingPriceInclTax(); ?>
 <?php if ($block->displayShippingPriceExclTax()): ?>
-    <span class="price"><?php /* @escapeNotVerified */ echo $_excl; ?></span>
+    <span class="price"><?= /* @escapeNotVerified */ $_excl ?></span>
 <?php else: ?>
 <?php if ($block->displayShippingBothPrices() && $_incl != $_excl): ?>
-    <span class="price-including-tax" data-label="<?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?>">
+    <span class="price-including-tax" data-label="<?= /* @escapeNotVerified */ __('Incl. Tax') ?>">
 <?php endif; ?>
-    <span class="price"><?php /* @escapeNotVerified */ echo $_incl; ?></span>
+    <span class="price"><?= /* @escapeNotVerified */ $_incl ?></span>
 <?php if ($block->displayShippingBothPrices() && $_incl != $_excl): ?>
     </span>
 <?php endif; ?>
 <?php endif; ?>
 <?php if ($block->displayShippingBothPrices() && $_incl != $_excl): ?>
-    <span class="price-excluding-tax" data-label="<?php /* @escapeNotVerified */ echo __('Excl. Tax'); ?>"><span class="price"><?php /* @escapeNotVerified */ echo $_excl; ?></span></span>
+    <span class="price-excluding-tax" data-label="<?= /* @escapeNotVerified */ __('Excl. Tax') ?>"><span class="price"><?= /* @escapeNotVerified */ $_excl ?></span></span>
 <?php endif; ?>

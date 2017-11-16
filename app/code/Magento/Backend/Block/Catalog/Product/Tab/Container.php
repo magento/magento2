@@ -5,6 +5,10 @@
  */
 namespace Magento\Backend\Block\Catalog\Product\Tab;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Container extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**

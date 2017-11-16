@@ -15,13 +15,19 @@ use Magento\Framework\App\ResourceConnection;
  */
 class CategoryLink
 {
-    /** @var  \Magento\Framework\EntityManager\MetadataPool */
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
     private $metadataPool;
 
-    /** @var  ResourceConnection */
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
     private $resourceConnection;
 
-    /** @var \Magento\Framework\EntityManager\EntityMetadataInterface */
+    /**
+     * @var \Magento\Framework\EntityManager\EntityMetadataInterface
+     */
     private $categoryLinkMetadata;
 
     /**

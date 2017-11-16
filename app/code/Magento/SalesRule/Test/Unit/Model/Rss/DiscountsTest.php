@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class DiscountsTest
  * @package Magento\SalesRule\Model\Rss
  */
-class DiscountsTest extends \PHPUnit_Framework_TestCase
+class DiscountsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\SalesRule\Model\Rss\Discounts
@@ -30,12 +30,9 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->collectionFactory = $this->getMock(
+        $this->collectionFactory = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -49,18 +46,12 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDiscountCollection()
     {
-        $ruleCollection = $this->getMock(
-            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class,
-            [
+        $ruleCollection = $this->createPartialMock(\Magento\SalesRule\Model\ResourceModel\Rule\Collection::class, [
                 'addWebsiteGroupDateFilter',
                 'addFieldToFilter',
                 'setOrder',
                 'load'
-            ],
-            [],
-            '',
-            false
-        );
+            ]);
         $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($ruleCollection));
         $ruleCollection->expects($this->once())->method('addWebsiteGroupDateFilter')->will($this->returnSelf());
         $ruleCollection->expects($this->once())->method('addFieldToFilter')->will($this->returnSelf());

@@ -19,7 +19,9 @@ class Customer extends \Magento\Framework\App\Config\Value
      */
     protected $_eavConfig;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $storeManager;
 
     /**

@@ -9,29 +9,29 @@
 /** @var \Magento\Customer\Block\Address\Book $block */
 ?>
 <div class="block block-addresses-default">
-    <div class="block-title"><strong><?php echo $block->escapeHtml(__('Default Addresses')) ?></strong></div>
+    <div class="block-title"><strong><?= $block->escapeHtml(__('Default Addresses')) ?></strong></div>
     <div class="block-content">
         <?php if ($_pAddsses = $block->getDefaultBilling()): ?>
             <div class="box box-address-billing">
                 <strong class="box-title">
-                    <span><?php echo $block->escapeHtml(__('Default Billing Address')) ?></span>
+                    <span><?= $block->escapeHtml(__('Default Billing Address')) ?></span>
                 </strong>
                 <div class="box-content">
                     <address>
-                        <?php echo $block->getAddressHtml($block->getAddressById($_pAddsses)) ?>
+                        <?= $block->getAddressHtml($block->getAddressById($_pAddsses)) ?>
                     </address>
                 </div>
                 <div class="box-actions">
-                    <a class="action edit" href="<?php echo $block->escapeUrl($block->getAddressEditUrl($_pAddsses)) ?>">
-                        <span><?php echo $block->escapeHtml(__('Change Billing Address')) ?></span>
+                    <a class="action edit" href="<?= $block->escapeUrl($block->getAddressEditUrl($_pAddsses)) ?>">
+                        <span><?= $block->escapeHtml(__('Change Billing Address')) ?></span>
                     </a>
                 </div>
             </div>
         <?php else: ?>
             <div class="box box-billing-address">
-                <strong class="box-title"><span><?php echo $block->escapeHtml(__('Default Billing Address')) ?></span></strong>
+                <strong class="box-title"><span><?= $block->escapeHtml(__('Default Billing Address')) ?></span></strong>
                 <div class="box-content">
-                    <p><?php echo $block->escapeHtml(__('You have no default billing address in your address book.')) ?></p>
+                    <p><?= $block->escapeHtml(__('You have no default billing address in your address book.')) ?></p>
                 </div>
             </div>
         <?php endif ?>
@@ -39,24 +39,24 @@
         <?php if ($_pAddsses = $block->getDefaultShipping()): ?>
             <div class="box box-address-shipping">
                 <strong class="box-title">
-                    <span><?php echo $block->escapeHtml(__('Default Shipping Address')) ?></span>
+                    <span><?= $block->escapeHtml(__('Default Shipping Address')) ?></span>
                 </strong>
                 <div class="box-content">
                     <address>
-                        <?php echo $block->getAddressHtml($block->getAddressById($_pAddsses)) ?>
+                        <?= $block->getAddressHtml($block->getAddressById($_pAddsses)) ?>
                     </address>
                 </div>
                 <div class="box-actions">
-                    <a class="action edit" href="<?php echo $block->escapeUrl($block->getAddressEditUrl($_pAddsses)) ?>">
-                        <span><?php echo $block->escapeHtml(__('Change Shipping Address')) ?></span>
+                    <a class="action edit" href="<?= $block->escapeUrl($block->getAddressEditUrl($_pAddsses)) ?>">
+                        <span><?= $block->escapeHtml(__('Change Shipping Address')) ?></span>
                     </a>
                 </div>
             </div>
         <?php else: ?>
             <div class="box box-shipping-address">
-                <strong class="box-title"><span><?php echo $block->escapeHtml(__('Default Shipping Address')) ?></span></strong>
+                <strong class="box-title"><span><?= $block->escapeHtml(__('Default Shipping Address')) ?></span></strong>
                 <div class="box-content">
-                    <p><?php echo $block->escapeHtml(__('You have no default shipping address in your address book.')) ?></p>
+                    <p><?= $block->escapeHtml(__('You have no default shipping address in your address book.')) ?></p>
                 </div>
             </div>
         <?php endif ?>
@@ -64,34 +64,34 @@
 </div>
 
 <div class="block block-addresses-list">
-    <div class="block-title"><strong><?php echo $block->escapeHtml(__('Additional Address Entries')) ?></strong></div>
+    <div class="block-title"><strong><?= $block->escapeHtml(__('Additional Address Entries')) ?></strong></div>
     <div class="block-content">
         <?php if ($_pAddsses = $block->getAdditionalAddresses()): ?>
             <ol class="items addresses">
                 <?php foreach ($_pAddsses as $_address): ?>
                     <li class="item">
                         <address>
-                            <?php echo $block->getAddressHtml($_address) ?><br />
+                            <?= $block->getAddressHtml($_address) ?><br />
                         </address>
                         <div class="item actions">
-                            <a class="action edit" href="<?php echo $block->escapeUrl($block->getUrl('customer/address/edit', ['id' => $_address->getId()])) ?>"><span><?php echo $block->escapeHtml(__('Edit Address')) ?></span></a>
-                            <a class="action delete" href="#" role="delete-address" data-address="<?php echo $block->escapeHtmlAttr($_address->getId()) ?>"><span><?php echo $block->escapeHtml(__('Delete Address')) ?></span></a>
+                            <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('customer/address/edit', ['id' => $_address->getId()])) ?>"><span><?= $block->escapeHtml(__('Edit Address')) ?></span></a>
+                            <a class="action delete" href="#" role="delete-address" data-address="<?= $block->escapeHtmlAttr($_address->getId()) ?>"><span><?= $block->escapeHtml(__('Delete Address')) ?></span></a>
                         </div>
                     </li>
                 <?php endforeach; ?>
             </ol>
         <?php else: ?>
-            <p class="empty"><?php echo $block->escapeHtml(__('You have no other address entries in your address book.')) ?></p>
+            <p class="empty"><?= $block->escapeHtml(__('You have no other address entries in your address book.')) ?></p>
         <?php endif ?>
     </div>
 </div>
 
 <div class="actions-toolbar">
     <div class="primary">
-        <button type="button" role="add-address" title="<?php echo $block->escapeHtmlAttr(__('Add New Address')) ?>" class="action primary add"><span><?php echo $block->escapeHtml(__('Add New Address')) ?></span></button>
+        <button type="button" role="add-address" title="<?= $block->escapeHtmlAttr(__('Add New Address')) ?>" class="action primary add"><span><?= $block->escapeHtml(__('Add New Address')) ?></span></button>
     </div>
     <div class="secondary">
-        <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>"><span><?php echo $block->escapeHtml(__('Back')) ?></span></a>
+        <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>"><span><?= $block->escapeHtml(__('Back')) ?></span></a>
     </div>
 </div>
 <script type="text/x-magento-init">
@@ -99,9 +99,9 @@
         ".page-main": {
             "address": {
                 "deleteAddress": "li.item a[role='delete-address']",
-                "deleteUrlPrefix": "<?php echo $block->escapeJs($block->escapeUrl($block->getDeleteUrl())) ?>id/",
+                "deleteUrlPrefix": "<?= $block->escapeJs($block->escapeUrl($block->getDeleteUrl())) ?>id/",
                 "addAddress": "button[role='add-address']",
-                "addAddressLocation": "<?php echo $block->escapeJs($block->escapeUrl($block->getAddAddressUrl())) ?>"
+                "addAddressLocation": "<?= $block->escapeJs($block->escapeUrl($block->getAddAddressUrl())) ?>"
             }
         }
     }

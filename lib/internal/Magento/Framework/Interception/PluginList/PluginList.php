@@ -389,7 +389,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getLogger()
     {

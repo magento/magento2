@@ -18,9 +18,7 @@ class Navigation
     const NAV_UPDATER = 'navUpdater';
     /**#@- */
 
-    /**
-     * @var array
-     */
+    /**#@- */
     private $navStates;
 
     /**

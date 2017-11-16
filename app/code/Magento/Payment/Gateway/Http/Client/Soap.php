@@ -15,6 +15,7 @@ use Magento\Payment\Model\Method\Logger;
  * Class Soap
  * @package Magento\Payment\Gateway\Http\Client
  * @api
+ * @since 100.0.2
  */
 class Soap implements ClientInterface
 {

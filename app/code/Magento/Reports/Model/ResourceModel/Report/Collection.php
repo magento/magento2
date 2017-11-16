@@ -11,19 +11,23 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Report;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Collection extends \Magento\Framework\Data\Collection
 {
     /**
      * From value
      *
-     * @var string
+     * @var \DateTime
      */
     protected $_from;
 
     /**
      * To value
      *
-     * @var string
+     * @var \DateTime
      */
     protected $_to;
 
@@ -111,14 +115,14 @@ class Collection extends \Magento\Framework\Data\Collection
      * Set interval
      * @codeCoverageIgnore
      *
-     * @param \DateTime $fromDate
-     * @param \DateTime $toDate
+     * @param \DateTimeInterface $fromDate
+     * @param \DateTimeInterface $toDate
      * @return $this
      */
-    public function setInterval($fromDate, $toDate)
+    public function setInterval(\DateTimeInterface $fromDate, \DateTimeInterface $toDate)
     {
-        $this->_from = $fromDate;
-        $this->_to = $toDate;
+        $this->_from = new \DateTime($fromDate->format('Y-m-d'), $fromDate->getTimezone());
+        $this->_to = new \DateTime($toDate->format('Y-m-d'), $toDate->getTimezone());
 
         return $this;
     }

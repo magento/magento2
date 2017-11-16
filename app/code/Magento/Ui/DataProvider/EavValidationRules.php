@@ -8,12 +8,14 @@ namespace Magento\Ui\DataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
- * Class EavValidationRules
+ * @api
+ * @since 100.0.2
  */
 class EavValidationRules
 {
     /**
      * @var array
+     * @since 100.0.6
      */
     protected $validationRules = [
         'email' => ['validate-email' => true],

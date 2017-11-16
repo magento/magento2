@@ -14,6 +14,7 @@ use Magento\Catalog\Model\Product;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -85,7 +86,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
      */
     private function getCatalogRuleProcessor()

@@ -12,6 +12,7 @@ use Magento\Backend\Block\Widget\Grid\Extended;
  * Sign up for an alert when the product price changes grid
  *
  * @api
+ * @since 100.0.2
  */
 class Price extends Extended
 {

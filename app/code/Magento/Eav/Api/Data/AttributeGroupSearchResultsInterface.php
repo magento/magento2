@@ -9,6 +9,7 @@ namespace Magento\Eav\Api\Data;
 /**
  * Interface AttributeGroupSearchResultsInterface
  * @api
+ * @since 100.0.2
  */
 interface AttributeGroupSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {

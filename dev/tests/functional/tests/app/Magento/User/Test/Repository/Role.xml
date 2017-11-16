@@ -45,6 +45,10 @@
                 <item name="Ship" xsi:type="string">Magento_Sales::ship</item>
                 <item name="Comment" xsi:type="string">Magento_Sales::comment</item>
                 <item name="Send Sales Emails" xsi:type="string">Magento_Sales::emails</item>
+                <item name="System" xsi:type="string">Magento_Backend::system</item>
+                <item name="Other Settings" xsi:type="string">Magento_Backend::system_other_settings</item>
+                <item name="Notifications" xsi:type="string">Magento_AdminNotification::adminnotification</item>
+                <item name="Show list" xsi:type="string">Magento_AdminNotification::show_list</item>
             </field>
         </dataset>
 
@@ -75,6 +79,16 @@
                 <item name="SearchTerms" xsi:type="string">Magento_Search::search</item>
                 <item name="UrlRewrite" xsi:type="string">Magento_UrlRewrite::urlrewrite</item>
                 <item name="Sitemap" xsi:type="string">Magento_Sitemap::sitemap</item>
+            </field>
+        </dataset>
+
+        <dataset name="role_empty_config">
+            <field name="rolename" xsi:type="string">RoleName%isolation%</field>
+            <field name="resource_access" xsi:type="string">Custom</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
+            <field name="roles_resources" xsi:type="array">
+                <item name="Dashboard" xsi:type="string">Magento_Backend::dashboard</item>
+                <item name="Configuration" xsi:type="string">Magento_Config::config</item>
             </field>
         </dataset>
     </repository>

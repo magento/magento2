@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class RowCustomizerTest
  */
-class RowCustomizerTest extends \PHPUnit_Framework_TestCase
+class RowCustomizerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -61,14 +61,11 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->rowCustomizerMock = $this->objectManagerHelper->getObject(
             \Magento\BundleImportExport\Model\Export\RowCustomizer::class
         );
-        $this->productResourceCollection = $this->getMock(
+        $this->productResourceCollection = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
-            ['addAttributeToFilter', 'getIterator'],
-            [],
-            '',
-            false
+            ['addAttributeToFilter', 'getIterator']
         );
-        $this->product = $this->getMock(
+        $this->product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
             [
                 'getEntityId',
@@ -80,10 +77,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
                 'getTypeInstance',
                 'getOptionsCollection',
                 'getSelectionsCollection'
-            ],
-            [],
-            '',
-            false
+            ]
         );
         $this->product->expects($this->any())->method('getEntityId')->willReturn(1);
         $this->product->expects($this->any())->method('getPriceType')->willReturn(1);
@@ -92,21 +86,15 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->any())->method('getPriceView')->willReturn(1);
         $this->product->expects($this->any())->method('getWeightType')->willReturn(1);
         $this->product->expects($this->any())->method('getTypeInstance')->willReturnSelf();
-        $this->optionsCollection = $this->getMock(
+        $this->optionsCollection = $this->createPartialMock(
             \Magento\Bundle\Model\ResourceModel\Option\Collection::class,
-            ['setOrder', 'getIterator'],
-            [],
-            '',
-            false
+            ['setOrder', 'getIterator']
         );
         $this->product->expects($this->any())->method('getOptionsCollection')->willReturn($this->optionsCollection);
         $this->optionsCollection->expects($this->any())->method('setOrder')->willReturnSelf();
-        $this->option = $this->getMock(
+        $this->option = $this->createPartialMock(
             \Magento\Bundle\Model\Option::class,
-            ['getId', 'getTitle', 'getType', 'getRequired'],
-            [],
-            '',
-            false
+            ['getId', 'getTitle', 'getType', 'getRequired']
         );
         $this->option->expects($this->any())->method('getId')->willReturn(1);
         $this->option->expects($this->any())->method('getTitle')->willReturn('title');
@@ -115,23 +103,17 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->optionsCollection->expects($this->any())->method('getIterator')->will(
             $this->returnValue(new \ArrayIterator([$this->option]))
         );
-        $this->selection = $this->getMock(
+        $this->selection = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getSku', 'getSelectionPriceValue', 'getIsDefault', 'getSelectionQty', 'getSelectionPriceType'],
-            [],
-            '',
-            false
+            ['getSku', 'getSelectionPriceValue', 'getIsDefault', 'getSelectionQty', 'getSelectionPriceType']
         );
         $this->selection->expects($this->any())->method('getSku')->willReturn(1);
         $this->selection->expects($this->any())->method('getSelectionPriceValue')->willReturn(1);
         $this->selection->expects($this->any())->method('getSelectionQty')->willReturn(1);
         $this->selection->expects($this->any())->method('getSelectionPriceType')->willReturn(1);
-        $this->selectionsCollection = $this->getMock(
+        $this->selectionsCollection = $this->createPartialMock(
             \Magento\Bundle\Model\ResourceModel\Selection\Collection::class,
-            ['getIterator', 'addAttributeToSort'],
-            [],
-            '',
-            false
+            ['getIterator', 'addAttributeToSort']
         );
         $this->selectionsCollection->expects($this->any())->method('getIterator')->will(
             $this->returnValue(new \ArrayIterator([$this->selection]))
@@ -151,7 +133,8 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareData()
     {
-        $this->rowCustomizerMock->prepareData($this->productResourceCollection, [1]);
+        $result = $this->rowCustomizerMock->prepareData($this->productResourceCollection, [1]);
+        $this->assertNotNull($result);
     }
 
     /**

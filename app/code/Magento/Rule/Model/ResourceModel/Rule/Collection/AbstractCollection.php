@@ -10,6 +10,7 @@ namespace Magento\Rule\Model\ResourceModel\Rule\Collection;
  * Abstract Rule entity resource collection model
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

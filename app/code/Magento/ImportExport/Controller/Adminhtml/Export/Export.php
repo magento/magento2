@@ -21,14 +21,23 @@ class Export extends ExportController
     protected $fileFactory;
 
     /**
+     * @var \Magento\Framework\Session\SessionManagerInterface
+     */
+    private $sessionManager;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\Session\SessionManagerInterface $sessionManager [optional]
      */
     public function __construct(
         Context $context,
-        FileFactory $fileFactory
+        FileFactory $fileFactory,
+        \Magento\Framework\Session\SessionManagerInterface $sessionManager = null
     ) {
         $this->fileFactory = $fileFactory;
+        $this->sessionManager = $sessionManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Session\SessionManagerInterface::class);
         parent::__construct($context);
     }
 
@@ -45,6 +54,7 @@ class Export extends ExportController
                 $model = $this->_objectManager->create(\Magento\ImportExport\Model\Export::class);
                 $model->setData($this->getRequest()->getParams());
 
+                $this->sessionManager->writeClose();
                 return $this->fileFactory->create(
                     $model->getFileName(),
                     $model->export(),

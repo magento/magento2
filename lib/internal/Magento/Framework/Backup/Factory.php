@@ -9,6 +9,9 @@
  */
 namespace Magento\Framework\Backup;
 
+/**
+ * @api
+ */
 class Factory
 {
     /**

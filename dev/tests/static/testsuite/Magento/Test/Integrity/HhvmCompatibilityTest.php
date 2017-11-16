@@ -10,7 +10,7 @@ namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Files;
 
-class HhvmCompatibilityTest extends \PHPUnit_Framework_TestCase
+class HhvmCompatibilityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array

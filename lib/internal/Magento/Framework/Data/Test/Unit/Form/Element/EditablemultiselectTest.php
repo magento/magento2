@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-class EditablemultiselectTest extends \PHPUnit_Framework_TestCase
+class EditablemultiselectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Form\Element\Editablemultiselect

@@ -12,7 +12,7 @@ use Magento\ImportExport\Model\Import;
 /**
  * @magentoAppArea adminhtml
  */
-class BundleTest extends \PHPUnit_Framework_TestCase
+class BundleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Bundle product test Name

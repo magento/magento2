@@ -10,7 +10,7 @@ use Magento\Framework\App\Utility\Files;
 /**
  * Tests @api annotated code integrity
  */
-class PublicCodeTest extends \PHPUnit_Framework_TestCase
+class PublicCodeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * List of simple return types that are used in docblocks.
@@ -254,8 +254,7 @@ class PublicCodeTest extends \PHPUnit_Framework_TestCase
                  *  we don't want to fail test, because Zend is considered public by default,
                  *  and we don't care if Zend classes are @api-annotated
                  */
-                if (
-                    !$parameterClass->isInternal()
+                if (!$parameterClass->isInternal()
                     && $this->areClassesFromSameVendor($parameterClass->getName(), $class)
                     && !$this->isPublished($parameterClass)
                 ) {

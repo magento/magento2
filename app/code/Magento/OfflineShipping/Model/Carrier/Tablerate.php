@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
  * Table rate shipping model
  *
  * @api
+ * @since 100.0.2
  */
 class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
@@ -112,8 +113,9 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
 
         // Free shipping by qty
         $freeQty = 0;
+        $freePackageValue = 0;
+
         if ($request->getAllItems()) {
-            $freePackageValue = 0;
             foreach ($request->getAllItems() as $item) {
                 if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
                     continue;

@@ -10,7 +10,7 @@
  */
 namespace Magento\Test\Legacy;
 
-class ModuleDBChangeTest extends \PHPUnit_Framework_TestCase
+class ModuleDBChangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -51,7 +51,7 @@ class ModuleDBChangeTest extends \PHPUnit_Framework_TestCase
                 preg_match_all('|^(\d+\.\d+)|m', file_get_contents($branchesFile), $matches);
 
                 //check is this a latest release branch
-                self::$actualBranch = ($branchName == max($matches[0]));
+                self::$actualBranch = ($branchName >= max($matches[0]) - 0.1);
             }
         }
 

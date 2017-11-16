@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\Processor;
 /**
  * Class AbstractElementTest
  */
-abstract class AbstractElementTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

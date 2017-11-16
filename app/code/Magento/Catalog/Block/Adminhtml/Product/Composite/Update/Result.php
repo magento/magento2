@@ -11,6 +11,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Composite\Update;
  * for single item
  *
  * @api
+ * @since 100.0.2
  */
 class Result extends \Magento\Framework\View\Element\Template
 {

@@ -90,6 +90,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
 
     /**
      * @return bool|string
+     * @since 100.2.0
      */
     public function getSerializedCheckoutConfig()
     {

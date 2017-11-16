@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Math\Test\Unit;
 
-class RandomTest extends \PHPUnit_Framework_TestCase
+class RandomTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param int    $length

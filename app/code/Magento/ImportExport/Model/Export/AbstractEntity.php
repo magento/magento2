@@ -15,6 +15,7 @@ use Magento\ImportExport\Model\Export;
  * @api
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 abstract class AbstractEntity
 {
@@ -32,11 +33,7 @@ abstract class AbstractEntity
 
     /**#@-*/
 
-    /**
-     * Store manager
-     *
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
+    /**#@-*/
     protected $_storeManager;
 
     /**

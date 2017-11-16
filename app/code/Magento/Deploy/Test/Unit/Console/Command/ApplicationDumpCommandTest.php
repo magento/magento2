@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Test command for dump application state
  */
-class ApplicationDumpCommandTest extends \PHPUnit_Framework_TestCase
+class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var InputInterface|\PHPUnit_Framework_MockObject_MockObject

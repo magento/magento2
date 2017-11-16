@@ -5,6 +5,10 @@
  */
 namespace Magento\AdminNotification\Model\ResourceModel\System;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Message extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**

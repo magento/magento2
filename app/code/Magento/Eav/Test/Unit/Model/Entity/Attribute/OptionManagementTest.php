@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
 
-class OptionManagementTest extends \PHPUnit_Framework_TestCase
+class OptionManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\OptionManagement
@@ -24,15 +24,9 @@ class OptionManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->attributeRepositoryMock = $this->getMock(
-            \Magento\Eav\Model\AttributeRepository::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->attributeRepositoryMock = $this->createMock(\Magento\Eav\Model\AttributeRepository::class);
         $this->resourceModelMock =
-            $this->getMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class, [], [], '', false);
+            $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class);
         $this->model = new \Magento\Eav\Model\Entity\Attribute\OptionManagement(
             $this->attributeRepositoryMock,
             $this->resourceModelMock
@@ -61,7 +55,7 @@ class OptionManagementTest extends \PHPUnit_Framework_TestCase
             true,
             ['usesSource', 'setDefault', 'setOption']
         );
-        $labelMock = $this->getMock(\Magento\Eav\Api\Data\AttributeOptionLabelInterface::class);
+        $labelMock = $this->createMock(\Magento\Eav\Api\Data\AttributeOptionLabelInterface::class);
         $option =
             ['value' => [
                 'new_option' => [
@@ -169,7 +163,7 @@ class OptionManagementTest extends \PHPUnit_Framework_TestCase
             true,
             ['usesSource', 'setDefault', 'setOption']
         );
-        $labelMock = $this->getMock(\Magento\Eav\Api\Data\AttributeOptionLabelInterface::class);
+        $labelMock = $this->createMock(\Magento\Eav\Api\Data\AttributeOptionLabelInterface::class);
         $option =
             ['value' => [
                 'new_option' => [
@@ -345,7 +339,7 @@ class OptionManagementTest extends \PHPUnit_Framework_TestCase
             true,
             ['getOptions']
         );
-        $optionsMock = [$this->getMock(\Magento\Eav\Api\Data\AttributeOptionInterface::class)];
+        $optionsMock = [$this->createMock(\Magento\Eav\Api\Data\AttributeOptionInterface::class)];
         $this->attributeRepositoryMock->expects($this->once())->method('get')->with($entityType, $attributeCode)
             ->willReturn($attributeMock);
         $attributeMock->expects($this->once())->method('getOptions')->willReturn($optionsMock);

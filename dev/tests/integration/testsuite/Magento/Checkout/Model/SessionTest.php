@@ -7,7 +7,7 @@ namespace Magento\Checkout\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class SessionTest extends \PHPUnit_Framework_TestCase
+class SessionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Checkout\Model\Session

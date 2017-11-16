@@ -8,7 +8,7 @@ namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Edit;
 /**
  * @covers \Magento\Email\Block\Adminhtml\Template\Edit\Form
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Email\Block\Adminhtml\Template\Edit\Form */
     protected $form;

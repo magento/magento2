@@ -10,7 +10,7 @@ namespace Magento\Catalog\Block\Adminhtml\Category\Checkboxes;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class TreeTest extends \PHPUnit_Framework_TestCase
+class TreeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree */
     protected $block;

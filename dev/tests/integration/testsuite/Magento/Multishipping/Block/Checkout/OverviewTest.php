@@ -11,7 +11,7 @@ namespace Magento\Multishipping\Block\Checkout;
 /**
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  */
-class OverviewTest extends \PHPUnit_Framework_TestCase
+class OverviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Multishipping\Block\Checkout\Overview
@@ -60,6 +60,12 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
         $quote = $this->_objectManager->create(\Magento\Quote\Model\Quote::class);
         $item->setQuote($quote);
         // assure that default renderer was obtained
-        $this->assertSelectCount('.product.name a', 1, $this->_block->getRowItemHtml($item));
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[contains(@class,"product") and contains(@class,"name")]/a',
+                $this->_block->getRowItemHtml($item)
+            )
+        );
     }
 }

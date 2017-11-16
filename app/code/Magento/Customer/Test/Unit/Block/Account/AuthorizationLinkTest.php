@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\Block\Account;
 /**
  * Test class for \Magento\Customer\Block\Account\AuthorizationLink
  */
-class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
+class AuthorizationLinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

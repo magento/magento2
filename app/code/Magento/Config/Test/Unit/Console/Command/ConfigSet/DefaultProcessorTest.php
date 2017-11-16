@@ -23,7 +23,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see DefaultProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
+class DefaultProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DefaultProcessor
@@ -162,25 +162,6 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap([
                 ['system/default/test/test/test', null],
             ]);
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('isAvailable')
-            ->willReturn(true);
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We can't save this option because Magento is not installed.
-     */
-    public function testProcessNotInstalled()
-    {
-        $path = 'test/test/test';
-        $value = 'value';
-
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('isAvailable')
-            ->willReturn(false);
-
-        $this->model->process($path, $value, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null);
     }
 
     /**
@@ -192,9 +173,6 @@ class DefaultProcessorTest extends \PHPUnit_Framework_TestCase
         $path = 'test/test/test';
         $value = 'value';
 
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('isAvailable')
-            ->willReturn(true);
         $this->deploymentConfigMock->expects($this->once())
             ->method('get')
             ->willReturnMap([

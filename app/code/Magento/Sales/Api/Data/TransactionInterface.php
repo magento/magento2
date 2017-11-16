@@ -10,6 +10,7 @@ namespace Magento\Sales\Api\Data;
  *
  * A transaction is an interaction between a merchant and a customer such as a purchase, a credit, a refund, and so on.
  * @api
+ * @since 100.0.2
  */
 interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

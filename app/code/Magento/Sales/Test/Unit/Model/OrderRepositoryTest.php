@@ -11,31 +11,29 @@ use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFact
 use Magento\Sales\Model\ResourceModel\Metadata;
 
 /**
- * Class OrderRepositoryTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
+class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\OrderRepository
      */
-    protected $model;
+    private $orderRepository;
 
     /**
      * @var Metadata|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $metadata;
+    private $metadata;
 
     /**
      * @var SearchResultFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $searchResultFactory;
+    private $searchResultFactory;
 
     /**
      * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -50,50 +48,39 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
 
         $className = \Magento\Sales\Model\ResourceModel\Metadata::class;
-        $this->metadata = $this->getMock($className, [], [], '', false);
+        $this->metadata = $this->createMock($className);
 
         $className = \Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory::class;
-        $this->searchResultFactory = $this->getMock($className, ['create'], [], '', false);
-        $this->collectionProcessor = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
-            [],
-            [],
-            '',
-            false
+        $this->searchResultFactory = $this->createPartialMock($className, ['create']);
+        $this->collectionProcessor = $this->createMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
         );
-        $this->model = $this->objectManager->getObject(
+        $orderExtensionFactoryMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderExtensionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->orderRepository = $this->objectManager->getObject(
             \Magento\Sales\Model\OrderRepository::class,
             [
                 'metadata' => $this->metadata,
                 'searchResultFactory' => $this->searchResultFactory,
-                'collectionProcessor' => $this->collectionProcessor
+                'collectionProcessor' => $this->collectionProcessor,
+                'orderExtensionFactory' => $orderExtensionFactoryMock
             ]
         );
     }
 
-    /**
-     * TODO: Cover with unit tests the other methods in the repository
-     * test GetList
-     */
     public function testGetList()
     {
-        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
-        $collectionMock = $this->getMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class, [], [], '', false);
+        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $collectionMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
         $itemsMock = $this->getMockBuilder(OrderInterface::class)->disableOriginalConstructor()->getMock();
 
-        $extensionAttributes = $this->getMock(
+        $extensionAttributes = $this->createPartialMock(
             \Magento\Sales\Api\Data\OrderExtension::class,
-            ['getShippingAssignments'],
-            [],
-            '',
-            false
+            ['getShippingAssignments']
         );
-        $shippingAssignmentBuilder = $this->getMock(
-            \Magento\Sales\Model\Order\ShippingAssignmentBuilder::class,
-            [],
-            [],
-            '',
-            false
+        $shippingAssignmentBuilder = $this->createMock(
+            \Magento\Sales\Model\Order\ShippingAssignmentBuilder::class
         );
         $this->collectionProcessor->expects($this->once())
             ->method('process')
@@ -106,7 +93,7 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($collectionMock);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([$itemsMock]);
 
-        $this->assertEquals($collectionMock, $this->model->getList($searchCriteriaMock));
+        $this->assertEquals($collectionMock, $this->orderRepository->getList($searchCriteriaMock));
     }
 
     public function testSave()
@@ -114,13 +101,10 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
         $mapperMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $orderEntity = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
-        $extensionAttributes = $this->getMock(
+        $orderEntity = $this->createMock(\Magento\Sales\Model\Order::class);
+        $extensionAttributes = $this->createPartialMock(
             \Magento\Sales\Api\Data\OrderExtension::class,
-            ['getShippingAssignments'],
-            [],
-            '',
-            false
+            ['getShippingAssignments']
         );
         $shippingAssignment = $this->getMockBuilder(\Magento\Sales\Model\Order\ShippingAssignment::class)
             ->disableOriginalConstructor()
@@ -142,6 +126,6 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->metadata->expects($this->once())->method('getMapper')->willReturn($mapperMock);
         $mapperMock->expects($this->once())->method('save');
         $orderEntity->expects($this->any())->method('getEntityId')->willReturn(1);
-        $this->model->save($orderEntity);
+        $this->orderRepository->save($orderEntity);
     }
 }

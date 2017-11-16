@@ -237,7 +237,7 @@ class Data extends \Magento\Framework\View\Element\Template
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

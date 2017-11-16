@@ -11,6 +11,7 @@ use Magento\Tax\Api\Data\TaxRateInterface;
 /**
  * Interface for managing tax rates.
  * @api
+ * @since 100.0.2
  */
 interface TaxRateManagementInterface
 {

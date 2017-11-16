@@ -8,7 +8,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\ConcealInProductionConfigList;
 use Magento\Framework\App\State;
 
-class ConcealInProductionConfigListTest extends \PHPUnit_Framework_TestCase
+class ConcealInProductionConfigListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var State|\PHPUnit_Framework_MockObject_MockObject

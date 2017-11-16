@@ -12,7 +12,9 @@ use Magento\Framework\Event\ObserverInterface;
 
 class ProductUrlKeyAutogeneratorObserver implements ObserverInterface
 {
-    /** @var ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     */
     protected $productUrlPathGenerator;
 
     /**

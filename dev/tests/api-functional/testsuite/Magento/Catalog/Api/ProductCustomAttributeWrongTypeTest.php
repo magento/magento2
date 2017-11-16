@@ -43,9 +43,9 @@ class ProductCustomAttributeWrongTypeTest extends WebapiAbstract
         ];
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->setExpectedException('Exception', 'Attribute "meta_title" has invalid value.');
+            $this->expectException('Exception', 'Attribute "meta_title" has invalid value.');
         } else {
-            $this->setExpectedException('Exception', 'Attribute \"meta_title\" has invalid value.');
+            $this->expectException('Exception', 'Attribute \"meta_title\" has invalid value.');
         }
 
         $this->_webApiCall($serviceInfo, $this->getRequestData());

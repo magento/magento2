@@ -15,7 +15,9 @@ class FieldsFilter
 {
     const FILTER_PARAMETER = 'fields';
 
-    /** @var RestRequest */
+    /**
+     * @var \Magento\Framework\Webapi\Rest\Request
+     */
     protected $_request;
 
     /**

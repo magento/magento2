@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Model\ResourceModel\Db\Collection;
-use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
+
+use \Magento\Framework\App\ResourceConnection\SourceProviderInterface;
+use \Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Abstract Resource Collection
@@ -15,8 +15,7 @@ use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractCollection extends \Magento\Framework\Data\Collection\AbstractDb
-    implements SourceProviderInterface
+abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
     /**
      * Model name
@@ -233,12 +232,11 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
                     $column = $field;
                 }
 
-                if ($alias !== null && in_array(
-                    $alias,
-                    $columnsToSelect
-                ) ||
+                if ($alias !== null &&
+                    in_array($alias, $columnsToSelect) ||
                     // If field already joined from another table
-                    $alias === null && isset($alias, $columnsToSelect)
+                    $alias === null &&
+                    isset($alias, $columnsToSelect)
                 ) {
                     continue;
                 }
@@ -460,7 +458,9 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
     public function getResource()
     {
         if (empty($this->_resource)) {
-            $this->_resource = \Magento\Framework\App\ObjectManager::getInstance()->create($this->getResourceModelName());
+            $this->_resource = \Magento\Framework\App\ObjectManager::getInstance()->create(
+                $this->getResourceModelName()
+            );
         }
         return $this->_resource;
     }
@@ -597,6 +597,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
 
     /**
      * @inheritdoc
+     * @since 100.0.11
      */
     public function __sleep()
     {
@@ -608,6 +609,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
 
     /**
      * @inheritdoc
+     * @since 100.0.11
      */
     public function __wakeup()
     {

@@ -12,7 +12,7 @@ use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
 /**
  * Unit test for Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Minification
  */
-class MinificationTest extends \PHPUnit_Framework_TestCase
+class MinificationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Minification

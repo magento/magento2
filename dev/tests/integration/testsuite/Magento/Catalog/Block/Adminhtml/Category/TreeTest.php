@@ -8,7 +8,7 @@ namespace Magento\Catalog\Block\Adminhtml\Category;
 /**
  * @magentoAppArea adminhtml
  */
-class TreeTest extends \PHPUnit_Framework_TestCase
+class TreeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Block\Adminhtml\Category\Tree */
     protected $_block;

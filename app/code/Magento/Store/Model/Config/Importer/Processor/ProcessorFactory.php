@@ -23,11 +23,7 @@ class ProcessorFactory
     const TYPE_UPDATE = 'update';
     /**#@-*/
 
-    /**
-     * The Object Manager.
-     *
-     * @var ObjectManagerInterface
-     */
+    /**#@-*/
     private $objectManager;
 
     /**

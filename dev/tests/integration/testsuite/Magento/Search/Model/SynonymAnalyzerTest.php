@@ -9,7 +9,7 @@ namespace Magento\Search\Model;
  * @magentoDataFixture Magento/Search/_files/synonym_reader.php
  * @magentoDbIsolation disabled
  */
-class SynonymAnalyzerTest extends \PHPUnit_Framework_TestCase
+class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Search\Model\SynonymAnalyzer
@@ -42,9 +42,37 @@ class SynonymAnalyzerTest extends \PHPUnit_Framework_TestCase
                 'phrase' => 'universe is enormous',
                 'expectedResult' => [['universe', 'cosmos'], ['is'], ['big', 'huge', 'large', 'enormous']]
             ],
+            'WithCaseMismatch' => [
+                'phrase' => 'GNU\'s Not Unix',
+                'expectedResult' => [['GNU\'s'], ['Not'], ['unix', 'linux'],]
+            ],
+            'WithMultiWordPhrase' => [
+                'phrase' => 'Coastline of Great Britain stretches for 11,073 miles',
+                'expectedResult' => [
+                    ['Coastline'],
+                    ['of'],
+                    ['Great Britain', 'United Kingdom'],
+                    ['Britain'],
+                    ['stretches'],
+                    ['for'],
+                    ['11,073'],
+                    ['miles']
+                ]
+            ],
+            'PartialSynonymMatching' => [
+                'phrase' => 'Magento Engineering',
+                'expectedResult' => [
+                    ['orange', 'magento'],
+                    ['Engineering', 'Technical Staff']
+                ]
+            ],
             'noSynonyms' => [
                 'phrase' => 'this sentence has no synonyms',
                 'expectedResult' => [['this'], ['sentence'], ['has'], ['no'], ['synonyms']]
+            ],
+            'multipleSpaces' => [
+                'phrase' => 'GNU\'s Not   Unix',
+                'expectedResult' => [['GNU\'s'], ['Not'], ['unix', 'linux'],]
             ],
             'oneMoreTest' => [
                 'phrase' => 'schlicht',

@@ -14,9 +14,16 @@ use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class AbstractMassStatus
+ * @deprecated 100.2.0
+ * Never extend from this action. Implement mass-action logic in the "execute" method of your controller.
  */
 abstract class AbstractMassAction extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
+
     /**
      * @var string
      */
@@ -62,8 +69,8 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
     }
 
     /**
-     * Return component referer url
-     * TODO: Technical dept referer url should be implement as a part of Action configuration in in appropriate way
+     * Return component referrer url
+     * TODO: Technical dept referrer url should be implement as a part of Action configuration in in appropriate way
      *
      * @return null|string
      */

@@ -7,7 +7,7 @@ namespace Magento\Sitemap\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ObserverTest extends \PHPUnit_Framework_TestCase
+class ObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -77,14 +77,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->inlineTranslationMock = $this->getMockBuilder(\Magento\Framework\Translate\Inline\StateInterface::class)
             ->getMock();
-        $this->sitemapCollectionMock = $this->getMock(
+        $this->sitemapCollectionMock = $this->createPartialMock(
             \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection::class,
-            ['getIterator'],
-            [],
-            '',
-            false
+            ['getIterator']
         );
-        $this->sitemapMock = $this->getMock(\Magento\Sitemap\Model\Sitemap::class, ['generateXml'], [], '', false);
+        $this->sitemapMock = $this->createPartialMock(\Magento\Sitemap\Model\Sitemap::class, ['generateXml']);
 
         $this->objectManager = new ObjectManager($this);
         $this->observer = $this->objectManager->getObject(
@@ -114,7 +111,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$this->sitemapMock]));
 
-        $this->sitemapMock->expects($this->once())->method('generateXml')->willThrowException(new \Exception);
+        $this->sitemapMock->expects($this->once())->method('generateXml')->willThrowException(new \Exception());
 
         $this->observer->scheduledGenerateSitemaps();
     }

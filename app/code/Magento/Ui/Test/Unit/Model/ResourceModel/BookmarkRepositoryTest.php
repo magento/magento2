@@ -6,7 +6,6 @@
 
 namespace Magento\Ui\Test\Unit\Model\ResourceModel;
 
-use Magento\Framework\Api\SortOrder;
 use Magento\Ui\Model\ResourceModel\BookmarkRepository;
 
 /**
@@ -14,7 +13,7 @@ use Magento\Ui\Model\ResourceModel\BookmarkRepository;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
+class BookmarkRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BookmarkRepository|\PHPUnit_Framework_MockObject_MockObject
@@ -69,12 +68,8 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
             \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory::class
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $searchResultsFactoryMock->expects($this->any())->method('create')->willReturn($this->searchResultsMock);
-        $this->collectionProcessor = $this->getMock(
-            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class,
-            [],
-            [],
-            '',
-            false
+        $this->collectionProcessor = $this->createMock(
+            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
         );
         $this->bookmarkRepository = new BookmarkRepository(
             $bookmarkFactoryMock,
@@ -99,7 +94,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->bookmarkMock)
             ->willThrowException(new \Exception($exceptionMessage));
-        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, __($exceptionMessage));
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class, __($exceptionMessage));
         $this->bookmarkRepository->save($this->bookmarkMock);
     }
 
@@ -126,7 +121,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with($this->bookmarkMock, $notExistsBookmarkId)
             ->willReturn($this->bookmarkMock);
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\NoSuchEntityException::class,
             __('Bookmark with id "%1" does not exist.', $notExistsBookmarkId)
         );
@@ -148,7 +143,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('delete')
             ->with($this->bookmarkMock)
             ->willThrowException(new \Exception($exceptionMessage));
-        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class, __($exceptionMessage));
+        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class, __($exceptionMessage));
         $this->assertTrue($this->bookmarkRepository->delete($this->bookmarkMock));
     }
 

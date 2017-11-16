@@ -7,7 +7,7 @@ namespace Magento\AdvancedPricingImportExport\Model\Export;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
+class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing

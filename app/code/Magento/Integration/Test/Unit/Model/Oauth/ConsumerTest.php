@@ -12,7 +12,7 @@ use Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength;
  * Test for \Magento\Integration\Model\Oauth\Consumer
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConsumerTest extends \PHPUnit_Framework_TestCase
+class ConsumerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Model\Oauth\Consumer
@@ -66,13 +66,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(
-            \Magento\Framework\Model\Context::class,
-            ['getEventDispatcher'],
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
         $eventManagerMock = $this->getMockForAbstractClass(
             \Magento\Framework\Event\ManagerInterface::class,
             [],
@@ -86,45 +80,25 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             ->method('getEventDispatcher')
             ->will($this->returnValue($eventManagerMock));
 
-        $this->registryMock = $this->getMock(
-            \Magento\Framework\Registry::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
 
         $this->keyLengthValidator = new KeyLength();
 
         $this->urlValidator = new UrlValidator();
 
-        $this->oauthDataMock = $this->getMock(
+        $this->oauthDataMock = $this->createPartialMock(
             \Magento\Integration\Helper\Oauth\Data::class,
-            ['getConsumerExpirationPeriod'],
-            [],
-            '',
-            false
+            ['getConsumerExpirationPeriod']
         );
         $this->oauthDataMock->expects($this->any())
             ->method('getConsumerExpirationPeriod')
             ->will($this->returnValue(\Magento\Integration\Helper\Oauth\Data::CONSUMER_EXPIRATION_PERIOD_DEFAULT));
 
-        $this->resourceMock = $this->getMock(
+        $this->resourceMock = $this->createPartialMock(
             \Magento\Integration\Model\ResourceModel\Oauth\Consumer::class,
-            ['getIdFieldName', 'selectByCompositeKey', 'deleteOldEntries'],
-            [],
-            '',
-            false,
-            true,
-            true
+            ['getIdFieldName', 'selectByCompositeKey', 'deleteOldEntries']
         );
-        $this->resourceCollectionMock = $this->getMock(
-            \Magento\Framework\Data\Collection\AbstractDb::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceCollectionMock = $this->createMock(\Magento\Framework\Data\Collection\AbstractDb::class);
         $this->consumerModel = new \Magento\Integration\Model\Oauth\Consumer(
             $this->contextMock,
             $this->registryMock,

@@ -43,9 +43,9 @@ class InfoAdminUriCommand extends Command
         parent::configure();
     }
 
-     /**
-      * {@inheritdoc}
-      */
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln(

@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework;
 
-class ProfilerTest extends \PHPUnit_Framework_TestCase
+class ProfilerTest extends \PHPUnit\Framework\TestCase
 {
     protected function tearDown()
     {

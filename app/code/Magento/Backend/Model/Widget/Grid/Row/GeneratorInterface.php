@@ -7,6 +7,10 @@
  */
 namespace Magento\Backend\Model\Widget\Grid\Row;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 interface GeneratorInterface
 {
     /**

@@ -10,7 +10,7 @@ namespace Magento\Backend\Block;
  *
  * @magentoAppArea adminhtml
  */
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Template
@@ -33,5 +33,27 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testGetFormKey()
     {
         $this->assertGreaterThan(15, strlen($this->_block->getFormKey()));
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @covers \Magento\Backend\Block\Template::isOutputEnabled
+     * @magentoConfigFixture current_store advanced/modules_disable_output/dummy 1
+     */
+    public function testIsOutputEnabledTrue()
+    {
+        $this->_block->setData('module_name', 'dummy');
+        $this->assertFalse($this->_block->isOutputEnabled('dummy'));
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @covers \Magento\Backend\Block\Template::isOutputEnabled
+     * @magentoConfigFixture current_store advanced/modules_disable_output/dummy 0
+     */
+    public function testIsOutputEnabledFalse()
+    {
+        $this->_block->setData('module_name', 'dummy');
+        $this->assertTrue($this->_block->isOutputEnabled('dummy'));
     }
 }

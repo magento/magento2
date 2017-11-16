@@ -26,7 +26,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="queue_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newsletter.queue.grid.columnSet.queue_id" as="queue_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">ID</argument>
                             <argument name="index" xsi:type="string">queue_id</argument>
@@ -34,7 +34,7 @@
                             <argument name="column_css_class" xsi:type="string">col-id</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="start_at">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newsletter.queue.grid.columnSet.start_at" as="start_at">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Queue Start</argument>
                             <argument name="type" xsi:type="string">datetime</argument>
@@ -45,7 +45,7 @@
                             <argument name="column_css_class" xsi:type="string">col-start</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="finish_at">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newsletter.queue.grid.columnSet.finish_at" as="finish_at">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Queue End</argument>
                             <argument name="type" xsi:type="string">datetime</argument>
@@ -56,7 +56,7 @@
                             <argument name="column_css_class" xsi:type="string">col-finish</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="newsletter_subject">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newsletter.queue.grid.columnSet.newsletter_subject" as="newsletter_subject">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Subject</argument>
                             <argument name="index" xsi:type="string">newsletter_subject</argument>
@@ -64,7 +64,7 @@
                             <argument name="column_css_class" xsi:type="string">col-subject</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="status">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newsletter.queue.grid.columnSet.status" as="status">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Status</argument>
                             <argument name="index" xsi:type="string">queue_status</argument>
@@ -74,7 +74,7 @@
                             <argument name="column_css_class" xsi:type="string">col-status</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="subscribers_sent">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newsletter.queue.grid.columnSet.subscribers_sent" as="subscribers_sent">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Processed</argument>
                             <argument name="type" xsi:type="string">number</argument>
@@ -83,7 +83,7 @@
                             <argument name="column_css_class" xsi:type="string">col-processed</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="subscribers_total">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newsletter.queue.grid.columnSet.subscribers_total" as="subscribers_total">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Recipients</argument>
                             <argument name="type" xsi:type="string">number</argument>
@@ -92,7 +92,7 @@
                             <argument name="column_css_class" xsi:type="string">col-recipients</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="action">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.newsletter.queue.grid.columnSet.action" as="action">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Action</argument>
                             <argument name="filter" xsi:type="string">0</argument>

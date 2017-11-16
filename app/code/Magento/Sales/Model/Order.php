@@ -31,8 +31,6 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as History
  *  sales_order_delete_after
  *
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order getResource()
  * @method int getGiftMessageId()
  * @method \Magento\Sales\Model\Order setGiftMessageId(int $value)
  * @method bool hasBillingAddressId()
@@ -49,6 +47,7 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as History
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Order extends AbstractModel implements EntityInterface, OrderInterface
 {
@@ -184,7 +183,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @deprecated Remove unused dependency.
+     * @deprecated 100.1.7 Remove unused dependency.
      */
     protected $productRepository;
 
@@ -618,7 +617,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
          * for this we have additional diapason for 0
          * TotalPaid - contains amount, that were not rounded.
          */
-        if (abs($this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded()) < .0001) {
+        $totalRefunded = $this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded();
+        if (abs($totalRefunded) < .0001) {
+            return false;
+        }
+        // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
+        if (abs($totalRefunded - $this->getAdjustmentNegative()) < .0001) {
             return false;
         }
 

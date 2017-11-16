@@ -58,10 +58,8 @@ try {
     );
 
     if (defined('TESTS_MAGENTO_INSTALLATION') && TESTS_MAGENTO_INSTALLATION === 'enabled') {
-        if (defined('TESTS_CLEANUP') && TESTS_CLEANUP === 'enabled') {
-            $application->cleanup();
-        }
-        $application->install();
+        $cleanup = (defined('TESTS_CLEANUP') && TESTS_CLEANUP === 'enabled');
+        $application->install($cleanup);
     }
 
     $bootstrap = new \Magento\TestFramework\Bootstrap(
@@ -122,7 +120,7 @@ function setCustomErrorHandler()
 
                 $errName = isset($errorNames[$errNo]) ? $errorNames[$errNo] : "";
 
-                throw new \PHPUnit_Framework_Exception(
+                throw new \PHPUnit\Framework\Exception(
                     sprintf("%s: %s in %s:%s.", $errName, $errStr, $errFile, $errLine),
                     $errNo
                 );

@@ -10,11 +10,10 @@ use Magento\Downloadable\Api\Data\SampleInterface;
 /**
  * Downloadable sample model
  *
- * @method \Magento\Downloadable\Model\ResourceModel\Sample _getResource()
- * @method \Magento\Downloadable\Model\ResourceModel\Sample getResource()
  * @method int getProductId()
  *
  * @api
+ * @since 100.0.2
  */
 class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, SampleInterface
 {

@@ -5,6 +5,10 @@
  */
 namespace Magento\Config\Model\Config\Source;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Website implements \Magento\Framework\Option\ArrayInterface
 {
     /**

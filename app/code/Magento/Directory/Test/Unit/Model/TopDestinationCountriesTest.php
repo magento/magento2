@@ -6,7 +6,7 @@
 
 namespace Magento\Directory\Test\Unit\Model;
 
-class TopDestinationCountriesTest extends \PHPUnit_Framework_TestCase
+class TopDestinationCountriesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface

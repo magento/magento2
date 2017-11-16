@@ -12,7 +12,7 @@ use \Magento\Framework\Data\Tree;
  * Tests for \Magento\Framework\Data\FormFactory
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class TreeTest extends \PHPUnit_Framework_TestCase
+class TreeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Tree

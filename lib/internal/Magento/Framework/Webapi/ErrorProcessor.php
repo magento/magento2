@@ -42,9 +42,7 @@ class ErrorProcessor
 
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\Json\Encoder
-     */
+    /**#@-*/
     protected $encoder;
 
     /**

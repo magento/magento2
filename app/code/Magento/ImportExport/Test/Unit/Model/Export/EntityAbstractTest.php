@@ -9,7 +9,7 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Export;
 
-class EntityAbstractTest extends \PHPUnit_Framework_TestCase
+class EntityAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test for setter and getter of file name property

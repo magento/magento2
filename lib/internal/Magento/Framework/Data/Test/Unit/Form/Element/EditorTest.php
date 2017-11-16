@@ -11,7 +11,7 @@ namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
 use Magento\Framework\Data\Form\Element\Editor;
 
-class EditorTest extends \PHPUnit_Framework_TestCase
+class EditorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Editor
@@ -48,19 +48,20 @@ class EditorTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->factoryMock = $this->getMock(\Magento\Framework\Data\Form\Element\Factory::class, [], [], '', false);
-        $this->collectionFactoryMock = $this->getMock(
-            \Magento\Framework\Data\Form\Element\CollectionFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->escaperMock = $this->getMock(\Magento\Framework\Escaper::class, [], [], '', false);
-        $this->configMock = $this->getMock(\Magento\Framework\DataObject::class, ['getData'], [], '', false);
+        $this->factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
+        $this->collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
+        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->configMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getData']);
+
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
 
         $this->model = $this->objectManager->getObject(
             \Magento\Framework\Data\Form\Element\Editor::class,
@@ -68,18 +69,13 @@ class EditorTest extends \PHPUnit_Framework_TestCase
                 'factoryElement' => $this->factoryMock,
                 'factoryCollection' => $this->collectionFactoryMock,
                 'escaper' => $this->escaperMock,
-                'data' => ['config' => $this->configMock]
+                'data' => ['config' => $this->configMock],
+                'serializer' => $this->serializer
             ]
         );
 
-        $this->formMock = $this->getMock(
-            \Magento\Framework\Data\Form::class,
-            ['getHtmlIdPrefix', 'getHtmlIdSuffix'],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->formMock =
+            $this->createPartialMock(\Magento\Framework\Data\Form::class, ['getHtmlIdPrefix', 'getHtmlIdSuffix']);
         $this->model->setForm($this->formMock);
     }
 
@@ -190,7 +186,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfig()
     {
-        $config = $this->getMock(\Magento\Framework\DataObject::class, ['getData'], [], '', false);
+        $config = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getData']);
         $this->assertEquals($config, $this->model->getConfig());
 
         $this->configMock->expects($this->once())->method('getData')->with('test')->willReturn('test');
@@ -202,8 +198,17 @@ class EditorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTranslatedString()
     {
+        $callback = function ($params) {
+            return json_encode($params);
+        };
+
         $this->configMock->expects($this->any())->method('getData')->withConsecutive(['enabled'])->willReturn(true);
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback($callback);
+
         $html = $this->model->getElementHtml();
+
         $this->assertRegExp('/.*"Insert Image...":"Insert Image...".*/i', $html);
     }
 }

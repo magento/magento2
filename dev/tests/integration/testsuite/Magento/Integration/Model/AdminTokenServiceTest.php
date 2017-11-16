@@ -14,7 +14,7 @@ use Magento\User\Model\User as UserModel;
 /**
  * Test class for \Magento\Integration\Model\AdminTokenService.
  */
-class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
+class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Integration\Api\AdminTokenServiceInterface

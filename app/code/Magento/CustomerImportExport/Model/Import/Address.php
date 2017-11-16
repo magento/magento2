@@ -67,11 +67,7 @@ class Address extends AbstractCustomer
 
     /**#@-*/
 
-    /**
-     * Default addresses column names to appropriate customer attribute code
-     *
-     * @var array
-     */
+    /**#@-*/
     protected static $_defaultAddressAttributeMapping = [
         self::COLUMN_DEFAULT_BILLING => 'default_billing',
         self::COLUMN_DEFAULT_SHIPPING => 'default_shipping',
@@ -489,9 +485,9 @@ class Address extends AbstractCustomer
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
+        $multiSeparator = $this->getMultipleValueSeparator();
         $email = strtolower($rowData[self::COLUMN_EMAIL]);
         $customerId = $this->_getCustomerId($email, $rowData[self::COLUMN_WEBSITE]);
-
         // entity table data
         $entityRowNew = [];
         $entityRowUpdate = [];
@@ -499,7 +495,6 @@ class Address extends AbstractCustomer
         $attributes = [];
         // customer default addresses
         $defaults = [];
-
         $newAddress = true;
         // get address id
         if (isset(
@@ -519,7 +514,6 @@ class Address extends AbstractCustomer
             'parent_id' => $customerId,
             'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
         ];
-
         foreach ($this->_attributes as $attributeAlias => $attributeParams) {
             if (array_key_exists($attributeAlias, $rowData)) {
                 if (!strlen($rowData[$attributeAlias])) {
@@ -529,11 +523,17 @@ class Address extends AbstractCustomer
                         continue;
                     }
                 } elseif ($newAddress && !strlen($rowData[$attributeAlias])) {
-                } elseif ('select' == $attributeParams['type']) {
-                    $value = $attributeParams['options'][strtolower($rowData[$attributeAlias])];
+                } elseif (in_array($attributeParams['type'], ['select', 'boolean'])) {
+                    $value = $this->getSelectAttrIdByValue($attributeParams, mb_strtolower($rowData[$attributeAlias]));
                 } elseif ('datetime' == $attributeParams['type']) {
                     $value = (new \DateTime())->setTimestamp(strtotime($rowData[$attributeAlias]));
                     $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                } elseif ('multiselect' == $attributeParams['type']) {
+                    $ids = [];
+                    foreach (explode($multiSeparator, mb_strtolower($rowData[$attributeAlias])) as $subValue) {
+                        $ids[] = $this->getSelectAttrIdByValue($attributeParams, $subValue);
+                    }
+                    $value = implode(',', $ids);
                 } else {
                     $value = $rowData[$attributeAlias];
                 }
@@ -544,7 +544,6 @@ class Address extends AbstractCustomer
                 }
             }
         }
-
         foreach (self::getDefaultAddressAttributeMapping() as $columnName => $attributeCode) {
             if (!empty($rowData[$columnName])) {
                 /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
@@ -552,7 +551,6 @@ class Address extends AbstractCustomer
                 $defaults[$table][$customerId][$attributeCode] = $addressId;
             }
         }
-
         // let's try to find region ID
         $entityRow['region_id'] = null;
         if (!empty($rowData[self::COLUMN_REGION])) {
@@ -565,7 +563,6 @@ class Address extends AbstractCustomer
                 $entityRow['region_id'] = $regionId;
             }
         }
-
         if ($newAddress) {
             $entityRowNew = $entityRow;
             $entityRowNew['created_at'] =
@@ -722,6 +719,7 @@ class Address extends AbstractCustomer
      */
     protected function _validateRowForUpdate(array $rowData, $rowNumber)
     {
+        $multiSeparator = $this->getMultipleValueSeparator();
         if ($this->_checkUniqueKey($rowData, $rowNumber)) {
             $email = strtolower($rowData[self::COLUMN_EMAIL]);
             $website = $rowData[self::COLUMN_WEBSITE];
@@ -740,7 +738,13 @@ class Address extends AbstractCustomer
                             continue;
                         }
                         if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
-                            $this->isAttributeValid($attributeCode, $attributeParams, $rowData, $rowNumber);
+                            $this->isAttributeValid(
+                                $attributeCode,
+                                $attributeParams,
+                                $rowData,
+                                $rowNumber,
+                                $multiSeparator
+                            );
                         } elseif ($attributeParams['is_required'] && (!isset(
                             $this->_addresses[$customerId]
                         ) || !in_array(

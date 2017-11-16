@@ -147,4 +147,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Layout\Generator\Block">
+        <arguments>
+            <argument name="defaultClass" xsi:type="string">Magento\Backend\Block\Template</argument>
+        </arguments>
+    </type>
 </config>

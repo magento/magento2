@@ -5,17 +5,16 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
-use Magento\Framework\View\Element\UiComponent\ContextInterface as UiContext;
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
-use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Ui\Component\Filters\Type\Input;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface as UiContext;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\Filters\Type\Input;
 
 /**
  * Class InputTest
  */
-class InputTest extends \PHPUnit_Framework_TestCase
+class InputTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -48,26 +47,14 @@ class InputTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->uiComponentFactory = $this->getMock(
+        $this->uiComponentFactory = $this->createPartialMock(
             \Magento\Framework\View\Element\UiComponentFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->filterBuilderMock = $this->getMock(
-            \Magento\Framework\Api\FilterBuilder::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filterModifierMock = $this->getMock(
+        $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
+        $this->filterModifierMock = $this->createPartialMock(
             \Magento\Ui\Component\Filters\FilterModifier::class,
-            ['applyFilterModifier'],
-            [],
-            '',
-            false
+            ['applyFilterModifier']
         );
     }
 

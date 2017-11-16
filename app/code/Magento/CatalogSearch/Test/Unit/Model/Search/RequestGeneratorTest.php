@@ -9,7 +9,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorInterface;
 
-class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
+class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManagerHelper;
@@ -170,6 +170,16 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
             $this->countVal($result['catalog_view_container']['queries']),
             'Queries count for "catalog_view_container" doesn\'t match'
         );
+        foreach ($result as $key => $value) {
+            if (isset($value['queries'][$key]['queryReference'])) {
+                foreach ($value['queries'][$key]['queryReference'] as $reference) {
+                    $this->assertEquals(
+                        'must',
+                        $reference['clause']
+                    );
+                }
+            }
+        }
     }
 
     /**

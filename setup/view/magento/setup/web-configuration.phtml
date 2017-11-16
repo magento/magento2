@@ -72,12 +72,12 @@ $hints = [
                 name="base_url"
                 ng-model="config.address.base_url"
                 ng-class="{'invalid': webconfig.base_url.$invalid && webconfig.submitted}"
-                ng-init="config.address.auto_base_url = '<?php echo $this->autoBaseUrl ?>'; fillBaseURL();"
+                ng-init="config.address.auto_base_url = '<?= $this->autoBaseUrl ?>'; fillBaseURL();"
                 ng-blur="addSlash()"
                 ng-change="populateHttps()"
                 ng-pattern="/^(https?:\/\/).*$/"
                 tooltip-placement="right"
-                tooltip-html-unsafe="<?php echo $hints['base_url']; ?>"
+                tooltip-html-unsafe="<?= $hints['base_url'] ?>"
                 tooltip-trigger="focus"
                 tooltip-append-to-body="true"
                 >
@@ -115,10 +115,10 @@ $hints = [
                         ng-pattern="/^[a-zA-Z0-9_]+$/"
                         ng-model="config.address.admin"
                         ng-class="{'invalid' : webconfig.admin.$invalid && webconfig.submitted }"
-                        ng-init="config.address.admin = '<?php echo $this->autoAdminPath ?>';"
+                        ng-init="config.address.admin = '<?= $this->autoAdminPath ?>';"
                         required
                         tooltip-placement="right"
-                        tooltip-html-unsafe="<?php echo $hints['admin']; ?>"
+                        tooltip-html-unsafe="<?= $hints['admin'] ?>"
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true"
                         >
@@ -279,7 +279,7 @@ $hints = [
                         ng-model="config.encrypt.key"
                         ng-class="{'invalid': webconfig.key.$invalid && webconfig.submitted}"
                         tooltip-placement="right"
-                        tooltip-html-unsafe="<?php echo $hints['encrypt_key']; ?>"
+                        tooltip-html-unsafe="<?= $hints['encrypt_key'] ?>"
                         tooltip-trigger="focus"
                         tooltip-append-to-body="true"
                         ng-minlength="4"
@@ -316,7 +316,7 @@ $hints = [
                     tooltip-append-to-body="true"
                     >
                     <?php foreach ($this->sessionSave as $value):?>
-                        <?php echo "<option value=\"" . $value . "\">" . ucfirst($value) . "</option>"; ?>
+                        <?= "<option value=\"" . $value . "\">" . ucfirst($value) . "</option>" ?>
                     <?php endforeach; ?>
                 </select>
             </div>

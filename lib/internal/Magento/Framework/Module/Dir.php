@@ -22,11 +22,7 @@ class Dir
     const MODULE_CONTROLLER_DIR = 'Controller';
     /**#@-*/
 
-    /**
-     * Module registry
-     *
-     * @var ComponentRegistrarInterface
-     */
+    /**#@-*/
     private $componentRegistrar;
 
     /**

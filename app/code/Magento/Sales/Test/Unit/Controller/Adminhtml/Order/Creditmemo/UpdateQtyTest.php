@@ -9,8 +9,9 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
  * Class UpdateQtyTest
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
-class UpdateQtyTest extends \PHPUnit_Framework_TestCase
+class UpdateQtyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\UpdateQty
@@ -117,7 +118,7 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -128,6 +129,19 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+            ->setMethods(
+                [
+                    'getRequest',
+                    'getResponse',
+                    'getObjectManager',
+                    'getTitle',
+                    'getSession',
+                    'getHelper',
+                    'getActionFlag',
+                    'getMessageManager',
+                    'getResultRedirectFactory'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())

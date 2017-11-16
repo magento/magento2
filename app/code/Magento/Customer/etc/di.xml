@@ -59,6 +59,8 @@
                 type="Magento\Customer\Model\Customer\Attribute\Source\Group"/>
     <preference for="Magento\Customer\Block\Account\SortLinkInterface"
                 type="Magento\Customer\Block\Account\SortLink"/>
+    <preference for="Magento\Customer\Model\Group\RetrieverInterface"
+                type="Magento\Customer\Model\Group\Retriever"/>
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
@@ -396,8 +398,8 @@
                 <item name="urlPath" xsi:type="string">customer/index/massAssignGroup</item>
                 <item name="paramName" xsi:type="string">group</item>
                 <item name="confirm" xsi:type="array">
-                    <item name="title" xsi:type="string">Assign a Customer Group</item>
-                    <item name="message" xsi:type="string">Are you sure to assign selected customers to new group?</item>
+                    <item name="title" xsi:type="string" translatable="true">Assign a Customer Group</item>
+                    <item name="message" xsi:type="string" translatable="true">Are you sure to assign selected customers to new group?</item>
                 </item>
             </argument>
         </arguments>

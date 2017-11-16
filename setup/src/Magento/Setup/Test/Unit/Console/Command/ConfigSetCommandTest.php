@@ -10,7 +10,7 @@ use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Console\Command\ConfigSetCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ConfigModel
@@ -29,18 +29,18 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $option = $this->getMock(\Magento\Framework\Setup\Option\TextConfigOption::class, [], [], '', false);
+        $option = $this->createMock(\Magento\Framework\Setup\Option\TextConfigOption::class);
         $option
             ->expects($this->any())
             ->method('getName')
             ->will($this->returnValue('db-host'));
-        $this->configModel = $this->getMock(\Magento\Setup\Model\ConfigModel::class, [], [], '', false);
+        $this->configModel = $this->createMock(\Magento\Setup\Model\ConfigModel::class);
         $this->configModel
             ->expects($this->exactly(2))
             ->method('getAvailableOptions')
             ->will($this->returnValue([$option]));
-        $moduleList = $this->getMock(\Magento\Framework\Module\ModuleList::class, [], [], '', false);
-        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $moduleList = $this->createMock(\Magento\Framework\Module\ModuleList::class);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->command = new ConfigSetCommand($this->configModel, $moduleList, $this->deploymentConfig);
     }
 
@@ -96,14 +96,14 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function checkInteraction($interactionType)
     {
-        $dialog = $this->getMock(\Symfony\Component\Console\Helper\DialogHelper::class, [], [], '', false);
+        $dialog = $this->createMock(\Symfony\Component\Console\Helper\DialogHelper::class);
         $dialog
             ->expects($this->once())
             ->method('askConfirmation')
             ->will($this->returnValue($interactionType));
 
         /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
-        $helperSet = $this->getMock(\Symfony\Component\Console\Helper\HelperSet::class, [], [], '', false);
+        $helperSet = $this->createMock(\Symfony\Component\Console\Helper\HelperSet::class);
         $helperSet
             ->expects($this->once())
             ->method('get')

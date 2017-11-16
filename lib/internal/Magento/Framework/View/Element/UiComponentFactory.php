@@ -48,7 +48,7 @@ class UiComponentFactory extends DataObject
     /**
      * UI component manager
      *
-     * @deprecated since 2.2.0
+     * @deprecated 100.2.0
      * @var ManagerInterface
      */
     protected $componentManager;
@@ -248,6 +248,7 @@ class UiComponentFactory extends DataObject
      * @param array $children
      * @return array
      * @throws LocalizedException
+     * @since 100.1.0
      */
     protected function getBundleChildren(array $children = [])
     {
@@ -290,6 +291,7 @@ class UiComponentFactory extends DataObject
      * @param array $bundleComponents
      * @param bool $reverseMerge
      * @return array
+     * @since 100.1.0
      */
     protected function mergeMetadata($identifier, array $bundleComponents, $reverseMerge = false)
     {
@@ -314,6 +316,7 @@ class UiComponentFactory extends DataObject
      * @param array $data
      * @param bool $reverseMerge
      * @return array
+     * @since 100.1.0
      */
     protected function mergeMetadataElement(array $bundleComponents, $name, array $data, $reverseMerge = false)
     {
@@ -351,6 +354,7 @@ class UiComponentFactory extends DataObject
      * @param bool $reverseMerge
      * @return array
      * @throws LocalizedException
+     * @since 100.1.0
      */
     protected function mergeMetadataItem(array $bundleComponents, array $metadata, $reverseMerge = false)
     {
@@ -403,6 +407,7 @@ class UiComponentFactory extends DataObject
      * @param string $identifier
      * @param array $bundleComponents
      * @return DataProviderInterface|null
+     * @since 100.1.0
      */
     protected function getDataProvider($identifier, array $bundleComponents)
     {

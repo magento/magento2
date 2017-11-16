@@ -13,7 +13,9 @@ class PathProcessor
     /**  Store code alias to indicate that all stores should be affected by action */
     const ALL_STORE_CODE = 'all';
 
-    /**  @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private $storeManager;
 
     /**

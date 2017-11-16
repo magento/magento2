@@ -265,6 +265,7 @@ class ProductRepositoryTest extends WebapiAbstract
         ];
 
         $response = $this->saveProduct($response);
+
         $currentOptions = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'];
 
         $this->assertEquals($options, $currentOptions);

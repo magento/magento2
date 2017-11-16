@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Unit\CustomerData\Section;
 
 use \Magento\Customer\CustomerData\Section\Identifier;
 
-class IdentifierTest extends \PHPUnit_Framework_TestCase
+class IdentifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\CustomerData\Section\Identifier
@@ -27,13 +27,7 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cookieManMock = $this->getMock(
-            \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->cookieManMock = $this->createMock(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class);
         $this->cookieMarkId = '123456';
         $this->model = new Identifier(
             $this->cookieManMock

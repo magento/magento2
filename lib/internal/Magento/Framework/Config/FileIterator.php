@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem\File\ReadFactory;
 
 /**
  * Class FileIterator
+ * @api
  */
 class FileIterator implements \Iterator, \Countable
 {

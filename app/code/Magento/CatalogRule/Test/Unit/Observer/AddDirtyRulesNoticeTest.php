@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Class AddDirtyRulesNoticeTest
  */
-class AddDirtyRulesNoticeTest extends \PHPUnit_Framework_TestCase
+class AddDirtyRulesNoticeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogRule\Observer\AddDirtyRulesNotice

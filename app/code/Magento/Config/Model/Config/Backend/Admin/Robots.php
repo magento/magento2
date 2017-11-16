@@ -12,6 +12,9 @@ namespace Magento\Config\Model\Config\Backend\Admin;
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * @deprecated 100.2.0 robots.txt file is no longer stored in filesystem. It generates as response on request.
+ */
 class Robots extends \Magento\Framework\App\Config\Value
 {
     /**

@@ -10,7 +10,7 @@ namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
  * Class DefaultStockTest
  * @magentoAppArea adminhtml
  */
-class DefaultStockTest extends \PHPUnit_Framework_TestCase
+class DefaultStockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock

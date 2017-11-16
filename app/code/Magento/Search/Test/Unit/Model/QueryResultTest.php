@@ -8,7 +8,7 @@ namespace Magento\Search\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class QueryResultTest extends \PHPUnit_Framework_TestCase
+class QueryResultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

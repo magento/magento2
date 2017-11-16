@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\System\Design\Theme\Tab;
 
-class JsTest extends \PHPUnit_Framework_TestCase
+class JsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js
@@ -19,25 +19,22 @@ class JsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_urlBuilder = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false);
+        $this->_urlBuilder = $this->createMock(\Magento\Backend\Model\Url::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(
             \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js::class,
             [
-                'formFactory' => $this->getMock(\Magento\Framework\Data\FormFactory::class, [], [], '', false),
-                'objectManager' => $this->getMock(\Magento\Framework\ObjectManagerInterface::class),
+                'formFactory' => $this->createMock(\Magento\Framework\Data\FormFactory::class),
+                'objectManager' => $this->createMock(\Magento\Framework\ObjectManagerInterface::class),
                 'urlBuilder' => $this->_urlBuilder
             ]
         );
 
-        $this->_model = $this->getMock(
-            \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js::class,
-            ['_getCurrentTheme'],
-            $constructArguments,
-            '',
-            true
-        );
+        $this->_model = $this->getMockBuilder(\Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js::class)
+            ->setMethods(['_getCurrentTheme'])
+            ->setConstructorArgs($constructArguments)
+            ->getMock();
     }
 
     protected function tearDown()
@@ -76,13 +73,7 @@ class JsTest extends \PHPUnit_Framework_TestCase
     {
         $themeId = 2;
         $uploadUrl = 'upload_url';
-        $themeMock = $this->getMock(
-            \Magento\Theme\Model\Theme::class,
-            ['isVirtual', 'getId', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $themeMock = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['isVirtual', 'getId', '__wakeup']);
         $themeMock->expects($this->any())->method('getId')->will($this->returnValue($themeId));
 
         $this->_model->expects($this->any())->method('_getCurrentTheme')->will($this->returnValue($themeMock));

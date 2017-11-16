@@ -14,7 +14,7 @@ use Magento\Framework\DataObject;
 /**
  * Class RestrictAdminBillingAgreementUsageObserverTest
  */
-class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit_Framework_TestCase
+class RestrictAdminBillingAgreementUsageObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Paypal\Observer\RestrictAdminBillingAgreementUsageObserver

@@ -15,7 +15,7 @@ use Magento\Tax\Model\Calculation\TotalBaseCalculator;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
+class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit\Framework\TestCase
 {
     const STORE_ID = 2300;
     const QUANTITY = 1;
@@ -84,13 +84,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->taxItemDetailsDataObjectFactory = $this->getMock(
-            \Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->taxItemDetailsDataObjectFactory = $this->createPartialMock(\Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory::class, ['create']);
         $this->taxDetailsItem = $this->objectManager->getObject(\Magento\Tax\Model\TaxDetails\ItemDetails::class);
         $this->taxItemDetailsDataObjectFactory->expects($this->any())
             ->method('create')
@@ -108,21 +102,9 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
 
         $this->mockItem = $this->getMockBuilder(\Magento\Tax\Api\Data\QuoteDetailsItemInterface::class)->getMock();
 
-        $this->appliedTaxDataObjectFactory = $this->getMock(
-            \Magento\Tax\Api\Data\AppliedTaxInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->appliedTaxDataObjectFactory = $this->createPartialMock(\Magento\Tax\Api\Data\AppliedTaxInterfaceFactory::class, ['create']);
 
-        $this->appliedTaxRateDataObjectFactory = $this->getMock(
-            \Magento\Tax\Api\Data\AppliedTaxRateInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->appliedTaxRateDataObjectFactory = $this->createPartialMock(\Magento\Tax\Api\Data\AppliedTaxRateInterfaceFactory::class, ['create']);
         $this->appliedTaxRate = $this->objectManager->getObject(\Magento\Tax\Model\TaxDetails\AppliedTaxRate::class);
         $this->appliedTaxRateDataObjectFactory->expects($this->any())
             ->method('create')

@@ -13,6 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Helper to move images from tmp to catalog directory
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Media extends \Magento\Framework\App\Helper\AbstractHelper
 {

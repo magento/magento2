@@ -10,7 +10,9 @@ namespace Magento\Setup\Fixtures\AttributeSet;
  */
 class Pattern
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     private $attributePattern = [
         'is_required' => 1,
         'is_visible_on_front' => 1,

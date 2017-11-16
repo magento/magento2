@@ -9,20 +9,20 @@
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock\Action;
 
-class FullTest extends \PHPUnit_Framework_TestCase
+class FullTest extends \PHPUnit\Framework\TestCase
 {
     public function testExecuteWithAdapterErrorThrowsException()
     {
-        $indexerFactoryMock = $this->getMock(
-            \Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory::class,
-            [],
-            [],
-            '',
-            false
+        $indexerFactoryMock = $this->createMock(
+            \Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory::class
         );
-        $resourceMock = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
-        $productTypeMock = $this->getMock(\Magento\Catalog\Model\Product\Type::class, [], [], '', false);
-        $connectionMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $productTypeMock = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
+        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+
+        $productTypeMock
+            ->method('getTypesByPriority')
+            ->willReturn([]);
 
         $exceptionMessage = 'exception message';
 
@@ -44,7 +44,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
 
         $model->execute();
     }

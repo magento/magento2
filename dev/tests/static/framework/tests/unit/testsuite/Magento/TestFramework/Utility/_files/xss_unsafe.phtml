@@ -6,24 +6,24 @@
 
 // @codingStandardsIgnoreFile
 ?>
-<?php echo $block->getSomeData();?>
-<?=  $block->getTitle();?>
-<?php echo $object->getSomeMethod($block->getHtmlId());?>
-<?php echo "Title: $title";?>
-<?php echo $block->escapeUrl($var) . $var . 'value';?>
-<?php echo $var;?>
-<?= $someVar?>
-<?php echo __("value");?>
+<?= $block->getSomeData() ?>
+<?= $block->getTitle() ?>
+<?= $object->getSomeMethod($block->getHtmlId()) ?>
+<?= "Title: $title" ?>
+<?= $block->escapeUrl($var) . $var . 'value' ?>
+<?= $var ?>
+<?= $someVar ?>
+<?= __("value") ?>
 
-<?php echo $object->methodHtml() .
+<?= $object->methodHtml() .
     $var .
     $block->getSomeData();
 ?>
-<?php echo '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\''; ?>
-<?php echo "\"" . $code . "\",\"" . $block->escapeHtml($data['parentSymbol']) . "\""; ?>
+<?= '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\'' ?>
+<?= "\"" . $code . "\",\"" . $block->escapeHtml($data['parentSymbol']) . "\"" ?>
 
 <?php
 /* This part is commented to remove all <col> tags from the code. */
 /* foreach ($block->getColumns() as $_column): ?>
-    <col <?php echo $_column->getProperty() ?> />
+    <col <?= $_column->getProperty() ?> />
 <?php endforeach; */ ?>

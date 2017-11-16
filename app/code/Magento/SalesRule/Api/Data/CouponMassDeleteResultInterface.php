@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Api\Data;
  * Coupon mass delete results interface.
  *
  * @api
+ * @since 100.0.2
  */
 interface CouponMassDeleteResultInterface
 {

@@ -13,51 +13,51 @@
 <?php foreach ($block->getShipmentsCollection() as $shipment): ?>
     <div class="order-details-items shipments">
         <div class="order-title">
-            <strong><?php /* @escapeNotVerified */ echo __('Shipment #%1', $block->getObjectData($shipment, 'increment_id')); ?></strong>
+            <strong><?= /* @escapeNotVerified */ __('Shipment #%1', $block->getObjectData($shipment, 'increment_id')) ?></strong>
         </div>
         <div class="table-wrapper order-items-shipment">
-            <table class="data table table-order-items shipment" id="my-shipment-table-<?php /* @escapeNotVerified */ echo $block->getObjectData($shipment, 'id') ?>">
-                <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items Invoiced') ?></caption>
+            <table class="data table table-order-items shipment" id="my-shipment-table-<?= /* @escapeNotVerified */ $block->getObjectData($shipment, 'id') ?>">
+                <caption class="table-caption"><?= /* @escapeNotVerified */ __('Items Invoiced') ?></caption>
                 <thead>
                 <tr>
-                    <th class="col name"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
-                    <th class="col sku"><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
-                    <th class="col price"><?php /* @escapeNotVerified */ echo __('Qty Shipped') ?></th>
+                    <th class="col name"><?= /* @escapeNotVerified */ __('Product Name') ?></th>
+                    <th class="col sku"><?= /* @escapeNotVerified */ __('SKU') ?></th>
+                    <th class="col price"><?= /* @escapeNotVerified */ __('Qty Shipped') ?></th>
                 </tr>
                 </thead>
                 <?php foreach ($block->getShipmentItems($shipment) as $item): ?>
                 <tbody>
-                    <?php echo $block->getItemHtml($item) ?>
+                    <?= $block->getItemHtml($item) ?>
                 </tbody>
                 <?php endforeach; ?>
             </table>
         </div>
         <div class="block block-order-details-view">
             <div class="block-title">
-                <strong><?php /* @escapeNotVerified */ echo __('Order Information') ?></strong>
+                <strong><?= /* @escapeNotVerified */ __('Order Information') ?></strong>
             </div>
             <div class="block-content">
                 <div class="box box-order-shipping-address">
                     <div class="box-title">
-                        <strong><?php /* @escapeNotVerified */ echo __('Shipping Address') ?></strong>
+                        <strong><?= /* @escapeNotVerified */ __('Shipping Address') ?></strong>
                     </div>
                     <div class="box-content">
-                        <address><?php echo $block->getShipmentAddressFormattedHtml($shipment); ?></address>
+                        <address><?= $block->getShipmentAddressFormattedHtml($shipment) ?></address>
                     </div>
                 </div>
 
                 <div class="box box-order-shipping-method">
                     <div class="box-title">
-                        <strong><?php /* @escapeNotVerified */ echo __('Shipping Method') ?></strong>
+                        <strong><?= /* @escapeNotVerified */ __('Shipping Method') ?></strong>
                     </div>
                     <div class="box-content">
-                    <?php echo $block->escapeHtml($block->getObjectData($order, 'shipping_description')); ?>
+                    <?= $block->escapeHtml($block->getObjectData($order, 'shipping_description')) ?>
                     <?php $tracks = $block->getShipmentTracks($shipment);
                     if ($tracks): ?>
                         <dl class="order-tracking">
                         <?php foreach ($tracks as $track): ?>
-                            <dt class="tracking-title"><?php echo $block->escapeHtml($block->getObjectData($track, 'title')); ?></dt>
-                            <dd class="tracking-content"><?php echo $block->escapeHtml($block->getObjectData($track, 'number')); ?></dd>
+                            <dt class="tracking-title"><?= $block->escapeHtml($block->getObjectData($track, 'title')) ?></dt>
+                            <dd class="tracking-content"><?= $block->escapeHtml($block->getObjectData($track, 'number')) ?></dd>
                             <?php endforeach; ?>
                         </dl>
                     <?php endif; ?>
@@ -66,19 +66,19 @@
 
                 <div class="box box-order-billing-method">
                     <div class="box-title">
-                        <strong><?php /* @escapeNotVerified */ echo __('Billing Address') ?></strong>
+                        <strong><?= /* @escapeNotVerified */ __('Billing Address') ?></strong>
                     </div>
                     <div class="box-content">
-                        <address><?php echo $block->getBillingAddressFormattedHtml($order); ?></address>
+                        <address><?= $block->getBillingAddressFormattedHtml($order) ?></address>
                     </div>
                 </div>
 
                 <div class="box box-order-billing-method">
                     <div class="box-title">
-                        <strong><?php /* @escapeNotVerified */ echo __('Payment Method') ?></strong>
+                        <strong><?= /* @escapeNotVerified */ __('Payment Method') ?></strong>
                     </div>
                     <div class="box-content">
-                        <?php echo $block->getPaymentInfoHtml() ?>
+                        <?= $block->getPaymentInfoHtml() ?>
                     </div>
                 </div>
             </div>

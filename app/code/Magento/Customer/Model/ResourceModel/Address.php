@@ -120,7 +120,7 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @return DeleteRelation
      */
     private function getDeleteRelation()
@@ -129,7 +129,7 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CustomerRegistry
      */
     private function getCustomerRegistry()

@@ -44,7 +44,7 @@ class Logout extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie manager
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return PhpCookieManager
      */
     private function getCookieManager()
@@ -58,7 +58,7 @@ class Logout extends \Magento\Customer\Controller\AbstractAccount
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @return CookieMetadataFactory
      */
     private function getCookieMetadataFactory()

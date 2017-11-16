@@ -10,7 +10,7 @@ use Magento\Framework\Reflection\FieldNamer;
 /**
  * Field namer Test
  */
-class FieldNamerTest extends \PHPUnit_Framework_TestCase
+class FieldNamerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FieldNamer

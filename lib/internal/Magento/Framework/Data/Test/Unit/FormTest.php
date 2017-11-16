@@ -11,7 +11,7 @@ use \Magento\Framework\Data\Form;
  * Tests for \Magento\Framework\Data\FormFactory
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -35,21 +35,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_factoryElementMock = $this->getMock(
-            \Magento\Framework\Data\Form\Element\Factory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_factoryElementMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
 
-        $this->_factoryCollectionMock = $this->getMock(
-            \Magento\Framework\Data\Form\Element\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->_factoryCollectionMock =
+            $this->createPartialMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class, ['create']);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $collectionModel = $objectManager->getObject(\Magento\Framework\Data\Form\Element\Collection::class);
@@ -59,13 +48,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($collectionModel));
 
-        $this->_formKeyMock = $this->getMock(
-            \Magento\Framework\Data\Form\FormKey::class,
-            ['getFormKey'],
-            [],
-            '',
-            false
-        );
+        $this->_formKeyMock = $this->createPartialMock(\Magento\Framework\Data\Form\FormKey::class, ['getFormKey']);
 
         $this->_form = new Form($this->_factoryElementMock, $this->_factoryCollectionMock, $this->_formKeyMock);
     }

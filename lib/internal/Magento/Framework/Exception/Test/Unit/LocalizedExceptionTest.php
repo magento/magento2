@@ -11,7 +11,7 @@ use Magento\Framework\Phrase;
 /**
  * Class LocalizedExceptionTest
  */
-class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
+class LocalizedExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Phrase\RendererInterface */
     private $defaultRenderer;

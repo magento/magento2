@@ -9,6 +9,8 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Interface PlaceholderInterface
+ * @api
+ * @since 100.1.2
  */
 interface PlaceholderInterface
 {
@@ -19,6 +21,7 @@ interface PlaceholderInterface
      * @param string $scopeType
      * @param string $scopeCode
      * @return string
+     * @since 100.1.2
      */
     public function generate($path, $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null);
 
@@ -27,6 +30,7 @@ interface PlaceholderInterface
      *
      * @param string $template
      * @return string
+     * @since 100.1.2
      */
     public function restore($template);
 
@@ -35,6 +39,7 @@ interface PlaceholderInterface
      *
      * @param string $placeholder
      * @return bool
+     * @since 100.1.2
      */
     public function isApplicable($placeholder);
 }

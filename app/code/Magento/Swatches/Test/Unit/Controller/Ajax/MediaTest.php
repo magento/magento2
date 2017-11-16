@@ -9,7 +9,7 @@ namespace Magento\Swatches\Test\Unit\Controller\Ajax;
 /**
  * Class Media
  */
-class MediaTest extends \PHPUnit_Framework_TestCase
+class MediaTest extends \PHPUnit\Framework\TestCase
 {
     /** @var array */
     private $mediaGallery;
@@ -52,29 +52,20 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->swatchHelperMock = $this->getMock(\Magento\Swatches\Helper\Data::class, [], [], '', false);
-        $this->productModelFactoryMock = $this->getMock(
+        $this->swatchHelperMock = $this->createMock(\Magento\Swatches\Helper\Data::class);
+        $this->productModelFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\ProductFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
-        $this->contextMock = $this->getMock(\Magento\Framework\App\Action\Context::class, [], [], '', false);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
 
-        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->contextMock->method('getRequest')->willReturn($this->requestMock);
-        $this->resultFactory = $this->getMock(
-            \Magento\Framework\Controller\ResultFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->resultFactory = $this->createPartialMock(\Magento\Framework\Controller\ResultFactory::class, ['create']);
         $this->contextMock->method('getResultFactory')->willReturn($this->resultFactory);
 
-        $this->jsonMock = $this->getMock(\Magento\Framework\Controller\Result\Json::class, [], [], '', false);
+        $this->jsonMock = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
         $this->resultFactory->expects($this->once())->method('create')->with('json')->willReturn($this->jsonMock);
 
         $this->controller = $this->objectManager->getObject(

@@ -10,7 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
  *
  * @magentoAppArea adminhtml
  */
-class AddressTest extends \PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $_objectManager;
@@ -194,7 +194,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Data\Form\Element\Select $countryIdField */
         $countryIdField = $fieldset->getElements()->searchById('country_id');
-        $this->assertSelectCount('option', $this->getNumberOfCountryOptions(), $countryIdField->getElementHtml());
+        $this->assertEquals(
+            $this->getNumberOfCountryOptions(),
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//option',
+                $countryIdField->getElementHtml()
+            )
+        );
     }
 
     /**

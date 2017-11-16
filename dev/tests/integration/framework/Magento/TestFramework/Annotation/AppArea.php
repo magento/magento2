@@ -70,9 +70,9 @@ class AppArea
     /**
      * Start test case event observer
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      */
-    public function startTest(\PHPUnit_Framework_TestCase $test)
+    public function startTest(\PHPUnit\Framework\TestCase $test)
     {
         $area = $this->_getTestAppArea($test->getAnnotations());
         if ($this->_application->getArea() !== $area) {

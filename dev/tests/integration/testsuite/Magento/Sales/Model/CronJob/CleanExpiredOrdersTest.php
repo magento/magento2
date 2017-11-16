@@ -8,7 +8,7 @@ namespace Magento\Sales\Model\CronJob;
 use Magento\TestFramework\Helper\Bootstrap;
 use \Magento\Sales\Model\Order;
 
-class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
+class CleanExpiredOrdersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoConfigFixture default sales/orders/delete_pending_after 0

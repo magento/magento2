@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Legacy;
 
-class EmailTemplateTest extends \PHPUnit_Framework_TestCase
+class EmailTemplateTest extends \PHPUnit\Framework\TestCase
 {
     public function testObsoleteDirectives()
     {

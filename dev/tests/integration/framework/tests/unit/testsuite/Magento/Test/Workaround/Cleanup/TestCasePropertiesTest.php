@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Workaround\Cleanup;
 
-class TestCasePropertiesTest extends \PHPUnit_Framework_TestCase
+class TestCasePropertiesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array
@@ -30,16 +30,16 @@ class TestCasePropertiesTest extends \PHPUnit_Framework_TestCase
 
     public function testEndTestSuiteDestruct()
     {
-        $phpUnitTestSuite = new \PHPUnit_Framework_TestSuite();
+        $phpUnitTestSuite = new \PHPUnit\Framework\TestSuite();
         $phpUnitTestSuite->addTestFile(__DIR__ . '/TestCasePropertiesTest/DummyTestCase.php');
         // Because addTestFile() adds classes from file to tests array, use first testsuite
-        /** @var $testSuite \PHPUnit_Framework_TestSuite */
+        /** @var $testSuite \PHPUnit\Framework\TestSuite */
         $testSuite = $phpUnitTestSuite->testAt(0);
         $testSuite->run();
         /** @var $testClass \Magento\Test\Workaround\Cleanup\TestCasePropertiesTest\DummyTestCase */
         $testClass = $testSuite->testAt(0);
 
-        $propertyObjectMock = $this->getMock(\stdClass::class, ['__destruct']);
+        $propertyObjectMock = $this->createPartialMock(\stdClass::class, ['__destruct']);
         $propertyObjectMock->expects($this->atLeastOnce())->method('__destruct');
         $testClass->setPropertyObject($propertyObjectMock);
 

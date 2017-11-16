@@ -71,7 +71,7 @@ originModel.prototype = {
     {
         this.reload = false;
         this.loader = new varienLoader(true);
-        this.regionsUrl = "<?php /* @escapeNotVerified */ echo $block->getUrl('directory/json/countryRegion') ?>";
+        this.regionsUrl = "<?= /* @escapeNotVerified */ $block->getUrl('directory/json/countryRegion') ?>";
 
         this.bindCountryRegionRelation();
     },

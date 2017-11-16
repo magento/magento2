@@ -7,26 +7,40 @@
 namespace Magento\Tax\Model\Rate;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Convert\DataObject as Converter;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
-use Magento\Tax\Model\Calculation\Rate;
+use Magento\Tax\Model\Rate\Provider as RateProvider;
 
 /**
  * Tax rate source model.
  */
 class Source implements \Magento\Framework\Data\OptionSourceInterface
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $options;
 
-    /** @var TaxRateRepositoryInterface */
+    /**
+     * @var \Magento\Tax\Api\TaxRateRepositoryInterface
+     */
     protected $taxRateRepository;
 
-    /** @var SearchCriteriaBuilder */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
     protected $searchCriteriaBuilder;
 
-    /** @var Converter */
+    /**
+     * @var \Magento\Framework\Convert\DataObject
+     */
     protected $converter;
+
+    /**
+     * @var \Magento\Tax\Model\Rate\Provider
+     */
+    protected $rateProvider;
 
     /**
      * Initialize dependencies.
@@ -34,15 +48,18 @@ class Source implements \Magento\Framework\Data\OptionSourceInterface
      * @param TaxRateRepositoryInterface $taxRateRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Converter $converter
+     * @param RateProvider $rateProvider
      */
     public function __construct(
         TaxRateRepositoryInterface $taxRateRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        Converter $converter
+        Converter $converter,
+        RateProvider $rateProvider = null
     ) {
         $this->taxRateRepository = $taxRateRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->converter = $converter;
+        $this->rateProvider = $rateProvider ?: ObjectManager::getInstance()->get(RateProvider::class);
     }
 
     /**
@@ -53,14 +70,14 @@ class Source implements \Magento\Framework\Data\OptionSourceInterface
     public function toOptionArray()
     {
         if (!$this->options) {
-            $searchCriteria = $this->searchCriteriaBuilder->create();
-            $searchResults = $this->taxRateRepository->getList($searchCriteria);
-            $this->options = $this->converter->toOptionArray(
-                $searchResults->getItems(),
-                Rate::KEY_ID,
-                Rate::KEY_CODE
-            );
+            $searchCriteria = $this->searchCriteriaBuilder
+                ->setPageSize($this->rateProvider->getPageSize())
+                ->setCurrentPage(1)
+                ->create();
+
+            $this->options = $this->rateProvider->toOptionArray($searchCriteria);
         }
+
         return $this->options;
     }
 }

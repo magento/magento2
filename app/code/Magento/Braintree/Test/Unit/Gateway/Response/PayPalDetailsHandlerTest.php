@@ -10,13 +10,13 @@ use Magento\Braintree\Gateway\Response\PayPalDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class PayPalDetailsHandlerTest
  */
-class PayPalDetailsHandlerTest extends \PHPUnit_Framework_TestCase
+class PayPalDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PayPalDetailsHandler|MockObject

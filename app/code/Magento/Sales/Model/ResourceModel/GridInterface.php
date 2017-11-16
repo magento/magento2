@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\ResourceModel;
 /**
  * @api
  * Interface GridInterface
+ * @since 100.0.2
  */
 interface GridInterface
 {

@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\App\DeploymentConfig\Writer;
 
+/**
+ * Interface \Magento\Framework\App\DeploymentConfig\Writer\FormatterInterface
+ *
+ */
 interface FormatterInterface
 {
     /**

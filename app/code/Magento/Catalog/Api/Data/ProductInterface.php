@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api\Data;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {

@@ -13,7 +13,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * CheckmoTest contains list of test for block methods testing
  */
-class CheckmoTest extends \PHPUnit_Framework_TestCase
+class CheckmoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Info|MockObject

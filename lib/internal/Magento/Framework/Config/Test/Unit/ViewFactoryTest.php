@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Config\Test\Unit;
 
-class ViewFactoryTest extends \PHPUnit_Framework_TestCase
+class ViewFactoryTest extends \PHPUnit\Framework\TestCase
 {
     const AREA = 'frontend';
 
@@ -31,10 +31,10 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->model = new \Magento\Framework\Config\ViewFactory($this->objectManager);
-        $this->theme = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class);
-        $this->view = $this->getMock(\Magento\Framework\Config\View::class, [], [], '', false);
+        $this->theme = $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class);
+        $this->view = $this->createMock(\Magento\Framework\Config\View::class);
     }
 
     public function testCreate()
@@ -49,13 +49,13 @@ class ViewFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithArguments()
     {
         /** @var \Magento\Theme\Model\View\Design|\PHPUnit_Framework_MockObject_MockObject $design */
-        $design = $this->getMock(\Magento\Theme\Model\View\Design::class, [], [], '', false);
+        $design = $this->createMock(\Magento\Theme\Model\View\Design::class);
         $design->expects($this->once())
             ->method('setDesignTheme')
             ->with($this->theme, self::AREA);
 
         /** @var \Magento\Framework\Config\FileResolver|\PHPUnit_Framework_MockObject_MockObject $fileResolver */
-        $fileResolver = $this->getMock(\Magento\Framework\Config\FileResolver::class, [], [], '', false);
+        $fileResolver = $this->createMock(\Magento\Framework\Config\FileResolver::class);
 
         $valueMap = [
             [\Magento\Theme\Model\View\Design::class, [], $design],

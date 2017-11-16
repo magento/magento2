@@ -123,7 +123,7 @@ class DataProvider implements DataProviderInterface
             }
             if ($paramValue) {
                 $this->data['config']['update_url'] = sprintf(
-                    '%s%s/%s',
+                    '%s%s/%s/',
                     $this->data['config']['update_url'],
                     $paramName,
                     $paramValue

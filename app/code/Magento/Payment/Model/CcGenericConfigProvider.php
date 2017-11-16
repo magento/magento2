@@ -14,6 +14,7 @@ use Magento\Payment\Helper\Data as PaymentHelper;
  * Direct injection as a dependency or extending of this class is not recommended.
  *
  * @api
+ * @since 100.0.2
  */
 class CcGenericConfigProvider implements ConfigProviderInterface
 {
@@ -71,7 +72,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      * Solo/switch card start years
      *
      * @return array
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     protected function getSsStartYears()
     {
@@ -150,7 +151,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      *
      * @param string $methodCode
      * @return bool
-     * @deprecated unused
+     * @deprecated 100.1.0 unused
      */
     protected function hasSsCardType($methodCode)
     {

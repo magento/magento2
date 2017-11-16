@@ -9,5 +9,8 @@ var config = {
             loadPlayer: 'Magento_ProductVideo/js/load-player',
             fotoramaVideoEvents: 'Magento_ProductVideo/js/fotorama-add-video-events'
         }
+    },
+    shim: {
+        vimeoAPI: {}
     }
 };

@@ -19,7 +19,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CalculatorTest extends \PHPUnit_Framework_TestCase
+class CalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -74,12 +74,12 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $priceCurrency = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)->getMock();
-        $priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
+        $priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
         $priceInfo->expects($this->any())->method('getPrice')->will(
             $this->returnCallback(
                 function ($type) {
                     if (!isset($this->priceMocks[$type])) {
-                        throw new \PHPUnit_Framework_ExpectationFailedException('Unexpected type of price model');
+                        throw new \PHPUnit\Framework\ExpectationFailedException('Unexpected type of price model');
                     }
                     return $this->priceMocks[$type];
                 }
@@ -94,20 +94,8 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
         $this->saleableItem->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
-        $this->baseCalculator = $this->getMock(
-            \Magento\Framework\Pricing\Adjustment\Calculator::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->amountFactory = $this->getMock(
-            \Magento\Framework\Pricing\Amount\AmountFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->baseCalculator = $this->createMock(\Magento\Framework\Pricing\Adjustment\Calculator::class);
+        $this->amountFactory = $this->createMock(\Magento\Framework\Pricing\Amount\AmountFactory::class);
 
         $this->selectionFactory = $this->getMockBuilder(\Magento\Bundle\Pricing\Price\BundleSelectionFactory::class)
             ->disableOriginalConstructor()
@@ -136,10 +124,10 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptySelectionPriceList()
     {
-        $option = $this->getMock(\Magento\Bundle\Model\Option::class, ['getSelections', '__wakeup'], [], '', false);
+        $option = $this->createPartialMock(\Magento\Bundle\Model\Option::class, ['getSelections', '__wakeup']);
         $option->expects($this->any())->method('getSelections')
             ->will($this->returnValue(null));
-        $bundleProduct = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $bundleProduct = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->assertSame([], $this->model->createSelectionPriceList($option, $bundleProduct));
     }
 
@@ -164,7 +152,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         }
         $this->selectionPriceListProvider->expects($this->any())->method('getPriceList')->willReturn($optionSelections);
 
-        $price = $this->getMock(\Magento\Bundle\Pricing\Price\BundleOptionPrice::class, [], [], '', false);
+        $price = $this->createMock(\Magento\Bundle\Pricing\Price\BundleOptionPrice::class);
         $this->priceMocks[Price\BundleOptionPrice::PRICE_CODE] = $price;
 
         // Price type of saleable items
@@ -233,7 +221,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     protected function createOptionMock($optionData)
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Option $option */
-        $option = $this->getMock(\Magento\Bundle\Model\Option::class, ['isMultiSelection', '__wakeup'], [], '', false);
+        $option = $this->createPartialMock(\Magento\Bundle\Model\Option::class, ['isMultiSelection', '__wakeup']);
         $option->expects($this->any())->method('isMultiSelection')
             ->will($this->returnValue($optionData['isMultiSelection']));
         $selections = [];

@@ -8,6 +8,7 @@ namespace Magento\Cms\Api\Data;
 /**
  * CMS page interface.
  * @api
+ * @since 100.0.2
  */
 interface PageInterface
 {
@@ -67,6 +68,7 @@ interface PageInterface
      * Get meta title
      *
      * @return string|null
+     * @since 101.0.0
      */
     public function getMetaTitle();
 
@@ -205,6 +207,7 @@ interface PageInterface
      *
      * @param string $metaTitle
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @since 101.0.0
      */
     public function setMetaTitle($metaTitle);
 

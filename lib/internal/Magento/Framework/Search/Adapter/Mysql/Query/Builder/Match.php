@@ -14,6 +14,9 @@ use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
+/**
+ * @api
+ */
 class Match implements QueryInterface
 {
     const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%&^';
@@ -42,6 +45,7 @@ class Match implements QueryInterface
 
     /**
      * @var PreprocessorInterface[]
+     * @since 100.1.0
      */
     protected $preprocessors;
 

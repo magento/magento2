@@ -16,7 +16,7 @@ use \Magento\Theme\Model\Theme\Image\Path;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Design\Theme\Image\PathInterface;
 
-class PathTest extends \PHPUnit_Framework_TestCase
+class PathTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Theme\Image\Path|\PHPUnit_Framework_MockObject_MockObject
@@ -45,12 +45,10 @@ class PathTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $this->mediaDirectory = $this->getMock(
-            \Magento\Framework\Filesystem\Directory\ReadInterface::class, [], [], '', false
-        );
-        $this->_assetRepo = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
-        $this->_storeManager = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->mediaDirectory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $this->_assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
+        $this->_storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
 
         $this->mediaDirectory->expects($this->any())
             ->method('getRelativePath')
@@ -73,18 +71,12 @@ class PathTest extends \PHPUnit_Framework_TestCase
     public function testGetPreviewImageUrl()
     {
         /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
-        $theme = $this->getMock(
-            \Magento\Theme\Model\Theme::class,
-            ['getPreviewImage', 'isPhysical', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $theme = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['getPreviewImage', 'isPhysical', '__wakeup']);
         $theme->expects($this->any())
             ->method('getPreviewImage')
             ->will($this->returnValue('image.png'));
 
-        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
         $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/'));
         $this->_storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->assertEquals('http://localhost/theme/preview/image.png', $this->model->getPreviewImageUrl($theme));
@@ -96,13 +88,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
         $expectedPath = 'theme/preview/preview.jpg';
 
         /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
-        $theme = $this->getMock(
-            \Magento\Theme\Model\Theme::class,
-            ['getPreviewImage', 'isPhysical', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $theme = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['getPreviewImage', 'isPhysical', '__wakeup']);
 
         $this->mediaDirectory->expects($this->once())
             ->method('getAbsolutePath')

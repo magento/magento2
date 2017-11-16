@@ -74,7 +74,7 @@ try {
         $application->cleanup();
     }
     if (!$application->isInstalled()) {
-        $application->install();
+        $application->install($settings->getAsBoolean('TESTS_CLEANUP'));
     }
     $application->initialize([]);
 
@@ -127,7 +127,7 @@ function setCustomErrorHandler()
 
                 $errName = isset($errorNames[$errNo]) ? $errorNames[$errNo] : "";
 
-                throw new \PHPUnit_Framework_Exception(
+                throw new \PHPUnit\Framework\Exception(
                     sprintf("%s: %s in %s:%s.", $errName, $errStr, $errFile, $errLine),
                     $errNo
                 );

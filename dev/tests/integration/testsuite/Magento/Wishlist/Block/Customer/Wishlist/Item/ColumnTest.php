@@ -5,7 +5,7 @@
  */
 namespace Magento\Wishlist\Block\Customer\Wishlist\Item;
 
-class ColumnTest extends \PHPUnit_Framework_TestCase
+class ColumnTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\LayoutInterface

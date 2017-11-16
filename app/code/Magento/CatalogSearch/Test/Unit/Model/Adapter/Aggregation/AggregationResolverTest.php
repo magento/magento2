@@ -17,7 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AggregationResolverTest extends \PHPUnit_Framework_TestCase
+class AggregationResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AttributeSetFinderInterface|\PHPUnit_Framework_MockObject_MockObject

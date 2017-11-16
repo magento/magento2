@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Gateway\Response;
 use Magento\Payment\Gateway\Response\HandlerChain;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 
-class HandlerChainTest extends \PHPUnit_Framework_TestCase
+class HandlerChainTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandle()
     {

@@ -9,7 +9,7 @@
  */
 namespace Magento\Eav\Model\Validator\Attribute;
 
-class BackendTest extends \PHPUnit_Framework_TestCase
+class BackendTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Validator\Attribute\Backend

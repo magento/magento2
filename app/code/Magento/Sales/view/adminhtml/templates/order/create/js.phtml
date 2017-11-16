@@ -17,10 +17,10 @@ require([
     order.sidebarHide();
     if (window.productConfigure) {
         productConfigure.addListType('product_to_add', {
-            urlFetch: '<?php /* @escapeNotVerified */ echo $block->getUrl('sales/order_create/configureProductToAdd') ?>'
+            urlFetch: '<?= /* @escapeNotVerified */ $block->getUrl('sales/order_create/configureProductToAdd') ?>'
         });
         productConfigure.addListType('quote_items', {
-            urlFetch: '<?php /* @escapeNotVerified */ echo $block->getUrl('sales/order_create/configureQuoteItems') ?>'
+            urlFetch: '<?= /* @escapeNotVerified */ $block->getUrl('sales/order_create/configureQuoteItems') ?>'
         });
     }
 

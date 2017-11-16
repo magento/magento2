@@ -9,6 +9,7 @@ namespace Magento\Framework\Backup;
  * Class to work with database backups
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Db extends AbstractBackup
 {

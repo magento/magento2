@@ -13,6 +13,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Main extends \Magento\Backend\Block\Template
 {

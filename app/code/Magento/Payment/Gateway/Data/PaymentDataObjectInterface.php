@@ -11,6 +11,7 @@ use Magento\Payment\Model\InfoInterface;
  * Interface PaymentDataObjectInterface
  * @package Magento\Payment\Gateway\Data
  * @api
+ * @since 100.0.2
  */
 interface PaymentDataObjectInterface
 {

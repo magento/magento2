@@ -13,7 +13,7 @@ namespace Magento\Cookie\Test\Unit\Model\Config\Backend;
 use Magento\Framework\Session\Config\Validator\CookieLifetimeValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class LifetimeTest extends \PHPUnit_Framework_TestCase
+class LifetimeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | CookieLifetimeValidator */
     private $validatorMock;

@@ -10,7 +10,7 @@ use Magento\Analytics\Model\Connector\Http\JsonConverter;
 /**
  * Class JsonConverterTest
  */
-class JsonConverterTest extends \PHPUnit_Framework_TestCase
+class JsonConverterTest extends \PHPUnit\Framework\TestCase
 {
     public function testConverterContainsHeader()
     {

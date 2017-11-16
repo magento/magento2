@@ -14,28 +14,28 @@
         <div class="box box-billing-address">
             <div class="box-content">
                 <address>
-                    <?php echo $block->getAddressAsHtml($_address) ?>
+                    <?= $block->getAddressAsHtml($_address) ?>
                     <?php if ($block->isAddressDefaultBilling($_address)): ?>
-                        <br /><strong><?php /* @escapeNotVerified */ echo __('Default Billing') ?></strong>
+                        <br /><strong><?= /* @escapeNotVerified */ __('Default Billing') ?></strong>
                     <?php endif; ?>
                     <?php if ($block->isAddressDefaultShipping($_address)): ?>
-                        <br /><strong><?php /* @escapeNotVerified */ echo __('Default Shipping') ?></strong>
+                        <br /><strong><?= /* @escapeNotVerified */ __('Default Shipping') ?></strong>
                     <?php endif; ?>
                 </address>
             </div>
             <div class="box-actions">
-                <a href="<?php /* @escapeNotVerified */ echo $block->getEditAddressUrl($_address) ?>" class="action edit"><span><?php /* @escapeNotVerified */ echo __('Edit Address') ?></span></a>
-                <a href="<?php /* @escapeNotVerified */ echo $block->getSetAddressUrl($_address) ?>" class="action select"><span><?php /* @escapeNotVerified */ echo __('Select Address') ?></span></a>
+                <a href="<?= /* @escapeNotVerified */ $block->getEditAddressUrl($_address) ?>" class="action edit"><span><?= /* @escapeNotVerified */ __('Edit Address') ?></span></a>
+                <a href="<?= /* @escapeNotVerified */ $block->getSetAddressUrl($_address) ?>" class="action select"><span><?= /* @escapeNotVerified */ __('Select Address') ?></span></a>
             </div>
         </div>
     <?php endforeach; ?>
     </div>
     <div class="actions-toolbar">
         <div class="primary">
-            <button type="button" class="action add primary" role="add-address" title="<?php /* @escapeNotVerified */ echo __('Add New Address') ?>"><span><?php /* @escapeNotVerified */ echo __('Add New Address') ?></span></button>
+            <button type="button" class="action add primary" role="add-address" title="<?= /* @escapeNotVerified */ __('Add New Address') ?>"><span><?= /* @escapeNotVerified */ __('Add New Address') ?></span></button>
         </div>
         <div class="secondary">
-            <a href="<?php /* @escapeNotVerified */ echo $block->getBackUrl() ?>" class="action back"><span><?php /* @escapeNotVerified */ echo __('Back to Billing Information') ?></span></a>
+            <a href="<?= /* @escapeNotVerified */ $block->getBackUrl() ?>" class="action back"><span><?= /* @escapeNotVerified */ __('Back to Billing Information') ?></span></a>
         </div>
     </div>
 </div>
@@ -44,7 +44,7 @@
         ".actions": {
             "address": {
                 "addAddress": "button[role='add-address']",
-                "addAddressLocation": "<?php /* @escapeNotVerified */ echo $block->getAddNewUrl() ?>"
+                "addAddressLocation": "<?= /* @escapeNotVerified */ $block->getAddNewUrl() ?>"
             }
         }
     }

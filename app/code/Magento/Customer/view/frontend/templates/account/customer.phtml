@@ -21,7 +21,7 @@
                     class="action switch"
                     tabindex="-1"
                     data-action="customer-menu-toggle">
-                <span><?php echo $block->escapeHtml(__('Change'))?></span>
+                <span><?= $block->escapeHtml(__('Change')) ?></span>
             </button>
         </span>
         <script type="text/x-magento-init">
@@ -39,7 +39,7 @@
         </script>
         <?php if($block->getChildHtml()):?>
         <div class="customer-menu" data-target="dropdown">
-            <?php echo $block->getChildHtml();?>
+            <?= $block->getChildHtml() ?>
         </div>
         <?php endif; ?>
     </li>

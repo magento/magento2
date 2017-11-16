@@ -106,7 +106,7 @@ class GuestShippingMethodManagement implements
     /**
      * Get shipment estimation management service
      * @return ShipmentEstimationInterface
-     * @deprecated
+     * @deprecated 100.0.7
      */
     private function getShipmentEstimationManagement()
     {

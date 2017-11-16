@@ -16,7 +16,7 @@ use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product as ProductRes
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StorageTest extends \PHPUnit_Framework_TestCase
+class StorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CategoryStoragePlugin
@@ -92,7 +92,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $this->productResourceModel->expects(static::once())->method('saveMultiple')->willReturnSelf();
 
-        $this->plugin->afterReplace($this->storage, null, $productUrls);
+        $this->plugin->afterReplace($this->storage, $productUrls, $productUrls);
     }
 
     /**

@@ -9,7 +9,7 @@ use Magento\Framework\DataObject;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

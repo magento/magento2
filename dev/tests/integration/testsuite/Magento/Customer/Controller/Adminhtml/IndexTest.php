@@ -347,6 +347,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
                 'email' => 'customer@example.com',
                 'firstname' => 'test firstname',
                 'lastname' => 'test lastname',
+                'sendemail_store_id' => 1
             ],
             'subscription' => '0'
         ];
@@ -761,10 +762,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();
         $name = $this->customerViewHelper->getCustomerName($customer);
-        $transportMock = $this->getMock(
-            \Magento\Framework\Mail\TransportInterface::class,
-            ['sendMessage']
-        );
+
+        $transportMock = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
+            ->setMethods(['sendMessage'])
+            ->getMockForAbstractClass();
         $transportMock->expects($this->exactly($occurrenceNumber))
             ->method('sendMessage');
         $transportBuilderMock = $this->getMockBuilder(\Magento\Framework\Mail\Template\TransportBuilder::class)

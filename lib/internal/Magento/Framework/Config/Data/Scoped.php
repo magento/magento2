@@ -10,6 +10,7 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Provides scoped configuration
+ * @api
  */
 class Scoped extends \Magento\Framework\Config\Data
 {

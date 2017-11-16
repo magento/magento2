@@ -41,7 +41,7 @@ class CollectionFactory implements \Magento\Reports\Model\ResourceModel\Quote\Co
     }
 
     /**
-     *{ @inheritdoc)
+     * {@inheritdoc)
      */
     public function create(array $data = [])
     {

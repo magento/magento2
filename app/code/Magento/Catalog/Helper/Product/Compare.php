@@ -14,6 +14,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Compare extends \Magento\Framework\Url\Helper\Data
 {
@@ -95,7 +96,9 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     protected $postHelper;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     private $_storeManager;
 
     /**

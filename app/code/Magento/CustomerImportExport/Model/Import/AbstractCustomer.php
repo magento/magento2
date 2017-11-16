@@ -5,6 +5,7 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\ImportExport\Model\Import;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
@@ -14,6 +15,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entity\AbstractEav
 {
@@ -50,13 +52,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
 
     /**#@-*/
 
-    /**
-     * Array of attribute codes which will be ignored in validation and import procedures.
-     * For example, when entity attribute has own validation and import procedures
-     * or just to deny this attribute processing.
-     *
-     * @var string[]
-     */
+    /**#@-*/
     protected $_ignoredAttributes = ['website_id', 'store_id',
         self::COLUMN_DEFAULT_BILLING, self::COLUMN_DEFAULT_SHIPPING];
 
@@ -235,7 +231,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $email = strtolower($rowData[static::COLUMN_EMAIL]);
             $website = $rowData[static::COLUMN_WEBSITE];
 
-            if (!\Zend_Validate::is($email, 'EmailAddress')) {
+            if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
                 $this->addRowError(static::ERROR_INVALID_EMAIL, $rowNumber, static::COLUMN_EMAIL);
             } elseif (!isset($this->_websiteCodeToId[$website])) {
                 $this->addRowError(static::ERROR_INVALID_WEBSITE, $rowNumber, static::COLUMN_WEBSITE);
@@ -252,5 +248,33 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     public function getCustomerStorage()
     {
         return $this->_customerStorage;
+    }
+
+    /**
+     * Returns id of option by value for select and multiselect attributes
+     *
+     * @param array $attributeParameters Parameters of an attribute
+     * @param int|string $value A value of an attribute
+     * @return int An option id of attribute
+     * @since 100.2.0
+     */
+    protected function getSelectAttrIdByValue(array $attributeParameters, $value)
+    {
+        return isset($attributeParameters['options'][strtolower($value)])
+            ? $attributeParameters['options'][strtolower($value)]
+            : 0;
+    }
+
+    /**
+     * Returns multiple value separator
+     *
+     * @return string
+     * @since 100.2.0
+     */
+    protected function getMultipleValueSeparator()
+    {
+        return isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
+            ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
+            : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
     }
 }

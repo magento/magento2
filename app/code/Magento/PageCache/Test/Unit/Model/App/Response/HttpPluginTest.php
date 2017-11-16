@@ -8,7 +8,7 @@ namespace Magento\PageCache\Test\Unit\Model\App\Response;
 
 use Magento\PageCache\Model\App\Response\HttpPlugin;
 
-class HttpPluginTest extends \PHPUnit_Framework_TestCase
+class HttpPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param \Magento\Framework\App\Response\FileInterface $responseInstanceClass
@@ -19,7 +19,7 @@ class HttpPluginTest extends \PHPUnit_Framework_TestCase
     public function testBeforeSendResponse($responseInstanceClass, $sendVaryCalled)
     {
         /** @var \Magento\Framework\App\Response\Http | \PHPUnit_Framework_MockObject_MockObject $responseMock */
-        $responseMock = $this->getMock($responseInstanceClass, [], [], '', false);
+        $responseMock = $this->createMock($responseInstanceClass);
         $responseMock->expects($this->exactly($sendVaryCalled))
             ->method('sendVary');
         $plugin = new HttpPlugin();

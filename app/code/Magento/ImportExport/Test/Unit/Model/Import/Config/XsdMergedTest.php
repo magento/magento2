@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\Config;
 
-class XsdMergedTest extends \PHPUnit_Framework_TestCase
+class XsdMergedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Path to xsd schema file

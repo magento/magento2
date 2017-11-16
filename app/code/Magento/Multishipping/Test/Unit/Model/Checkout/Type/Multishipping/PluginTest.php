@@ -8,7 +8,7 @@ namespace Magento\Multishipping\Test\Unit\Model\Checkout\Type\Multishipping;
 use Magento\Checkout\Model\Session;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -27,14 +27,11 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->checkoutSessionMock = $this->getMock(
+        $this->checkoutSessionMock = $this->createPartialMock(
             \Magento\Checkout\Model\Session::class,
-            ['getCheckoutState', 'setCheckoutState'],
-            [],
-            '',
-            false
+            ['getCheckoutState', 'setCheckoutState']
         );
-        $this->cartMock = $this->getMock(\Magento\Checkout\Model\Cart::class, [], [], '', false);
+        $this->cartMock = $this->createMock(\Magento\Checkout\Model\Cart::class);
         $this->model = new \Magento\Multishipping\Model\Checkout\Type\Multishipping\Plugin($this->checkoutSessionMock);
     }
 

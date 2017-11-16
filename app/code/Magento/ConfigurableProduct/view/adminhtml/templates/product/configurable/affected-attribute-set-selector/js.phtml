@@ -48,12 +48,12 @@
 
         $form
             .modal({
-                title: '<?php /* @escapeNotVerified */ echo __('Choose Affected Attribute Set'); ?>',
+                title: '<?= /* @escapeNotVerified */ __('Choose Affected Attribute Set') ?>',
                 closed: function () {
                     resetValidation();
                 },
                 buttons: [{
-                    text: '<?php /* @escapeNotVerified */ echo __('Confirm'); ?>',
+                    text: '<?= /* @escapeNotVerified */ __('Confirm') ?>',
                     attr: {
                         'data-action': 'confirm'
                     },
@@ -77,12 +77,12 @@
 
                         $.ajax({
                             type: 'POST',
-                            url: '<?php /* @escapeNotVerified */ echo $block->getAttributeSetCreationUrl()?>',
+                            url: '<?= /* @escapeNotVerified */ $block->getAttributeSetCreationUrl() ?>',
                             data: {
                                 gotoEdit: 1,
                                 attribute_set_name: $form.find('input[name=new-attribute-set-name]').val(),
                                 skeleton_set: $('#attribute_set_id').val(),
-                                form_key: '<?php /* @escapeNotVerified */ echo $block->getFormKey()?>',
+                                form_key: '<?= /* @escapeNotVerified */ $block->getFormKey() ?>',
                                 return_session_messages_only: 1
                             },
                             dataType: 'json',
@@ -101,8 +101,8 @@
                         return false;
                     }
                 },{
-                    text: '<?php /* @escapeNotVerified */ echo __('Cancel'); ?>',
-                    id: '<?php /* @escapeNotVerified */ echo $block->getJsId('close-button') ?>',
+                    text: '<?= /* @escapeNotVerified */ __('Cancel') ?>',
+                    id: '<?= /* @escapeNotVerified */ $block->getJsId('close-button') ?>',
                     'class': 'action-close',
                     click: function() {
                         $form.modal('closeModal');

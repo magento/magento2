@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\System\Design\Theme\Edit;
 
-class FormTest extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager

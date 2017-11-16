@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Block\Order\Create;
 /**
  * Class TotalsTest
  */
-class TotalsTest extends \PHPUnit_Framework_TestCase
+class TotalsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -87,7 +87,6 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
     public function testGetTotals($isVirtual)
     {
         $expected = 'expected';
-        $this->quoteMock->expects($this->at(0))->method('setTotalsCollectedFlag')->with(false);
         $this->quoteMock->expects($this->at(1))->method('collectTotals');
         $this->quoteMock->expects($this->once())->method('isVirtual')->willreturn($isVirtual);
         if ($isVirtual) {

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Catalog layer filter renderer
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,6 +15,7 @@ use Magento\LayeredNavigation\Block\Navigation\FilterRendererInterface;
  * Catalog layer filter renderer
  *
  * @api
+ * @since 100.0.2
  */
 class FilterRenderer extends Template implements FilterRendererInterface
 {

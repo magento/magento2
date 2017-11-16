@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Block\Plugin;
 
-class ProductViewTest extends \PHPUnit_Framework_TestCase
+class ProductViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Block\Plugin\ProductView

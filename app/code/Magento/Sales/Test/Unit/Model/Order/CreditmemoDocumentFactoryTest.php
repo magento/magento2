@@ -6,6 +6,7 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
 use Magento\Sales\Api\Data\CreditmemoCommentInterface;
@@ -23,7 +24,7 @@ use Magento\Framework\EntityManager\HydratorInterface;
  * Class CreditmemoDocumentFactoryTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoDocumentFactoryTest extends \PHPUnit_Framework_TestCase
+class CreditmemoDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -41,7 +42,7 @@ class CreditmemoDocumentFactoryTest extends \PHPUnit_Framework_TestCase
     private $creditmemoFactoryMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoCommentInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $commentFactoryMock;
 
@@ -102,8 +103,8 @@ class CreditmemoDocumentFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->commentFactoryMock =
-            $this->getMockBuilder('Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory')
-                ->setMethods(['create'])
+            $this->getMockBuilder(CreditmemoCommentInterfaceFactory::class)
+                ->disableOriginalConstructor()
                 ->getMock();
         $this->hydratorPoolMock = $this->getMockBuilder(HydratorPool::class)
             ->disableOriginalConstructor()

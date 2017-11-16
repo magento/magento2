@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\WebConfiguration;
 
-class WebConfigurationTest extends \PHPUnit_Framework_TestCase
+class WebConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     public function testIndexAction()
     {

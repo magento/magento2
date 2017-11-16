@@ -10,7 +10,7 @@ namespace Magento\Widget\Model\Config;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\Config\Reader

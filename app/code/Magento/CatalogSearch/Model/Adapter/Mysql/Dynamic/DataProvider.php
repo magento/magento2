@@ -16,7 +16,6 @@ use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
 use Magento\Store\Model\StoreManager;
 
 /**
@@ -55,11 +54,6 @@ class DataProvider implements DataProviderInterface
     private $connection;
 
     /**
-     * @var FrontendResource
-     */
-    private $indexerFrontendResource;
-
-    /**
      * @var StoreManager
      */
     private $storeManager;
@@ -70,7 +64,6 @@ class DataProvider implements DataProviderInterface
      * @param Session $customerSession
      * @param MysqlDataProviderInterface $dataProvider
      * @param IntervalFactory $intervalFactory
-     * @param FrontendResource $indexerFrontendResource
      * @param StoreManager $storeManager
      */
     public function __construct(
@@ -79,7 +72,6 @@ class DataProvider implements DataProviderInterface
         Session $customerSession,
         MysqlDataProviderInterface $dataProvider,
         IntervalFactory $intervalFactory,
-        FrontendResource $indexerFrontendResource = null,
         StoreManager $storeManager = null
     ) {
         $this->resource = $resource;
@@ -88,9 +80,6 @@ class DataProvider implements DataProviderInterface
         $this->customerSession = $customerSession;
         $this->dataProvider = $dataProvider;
         $this->intervalFactory = $intervalFactory;
-        $this->indexerFrontendResource = $indexerFrontendResource ?: ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\FrontendResource::class
-        );
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManager::class);
     }
 
@@ -116,7 +105,7 @@ class DataProvider implements DataProviderInterface
 
         $select = $this->getSelect();
 
-        $tableName = $this->indexerFrontendResource->getMainTable();
+        $tableName = $this->resource->getTableName('catalog_product_index_price');
         /** @var Table $table */
         $table = $entityStorage->getSource();
         $select->from(['main_table' => $tableName], [])

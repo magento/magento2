@@ -6,7 +6,7 @@
 
 namespace Magento\Eav\Test\Unit\Model\ResourceModel;
 
-class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
+class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Api\AttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -30,7 +30,7 @@ class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->attributeRepositoryMock = $this->getMock(\Magento\Eav\Api\AttributeRepositoryInterface::class);
+        $this->attributeRepositoryMock = $this->createMock(\Magento\Eav\Api\AttributeRepositoryInterface::class);
         $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -56,7 +56,7 @@ class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAttributes($entityType, $attributeSetId, $expectedCondition)
     {
-        $metadataMock = $this->getMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
+        $metadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
         $metadataMock->expects($this->once())
             ->method('getEavEntityType')
             ->willReturn($entityType);
@@ -65,7 +65,7 @@ class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
             ->with($entityType)
             ->willReturn($metadataMock);
 
-        $searchCriteria = $this->getMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
+        $searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('addFilter')
             ->with(
@@ -77,8 +77,8 @@ class AttributeLoaderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($searchCriteria);
 
-        $attributeMock = $this->getMock(\Magento\Eav\Api\Data\AttributeInterface::class);
-        $searchResultMock = $this->getMock(\Magento\Eav\Api\Data\AttributeSearchResultsInterface::class);
+        $attributeMock = $this->createMock(\Magento\Eav\Api\Data\AttributeInterface::class);
+        $searchResultMock = $this->createMock(\Magento\Eav\Api\Data\AttributeSearchResultsInterface::class);
         $searchResultMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$attributeMock]);

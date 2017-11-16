@@ -7,7 +7,7 @@ namespace Magento\Framework\View\Test\Unit\Design\Theme;
 
 use \Magento\Framework\View\Design\Theme\FlyweightFactory;
 
-class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
+class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\Theme\ThemeProviderInterface
@@ -21,7 +21,8 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->themeProviderMock = $this->getMock(\Magento\Framework\View\Design\Theme\ThemeProviderInterface::class);
+        $this->themeProviderMock =
+            $this->createMock(\Magento\Framework\View\Design\Theme\ThemeProviderInterface::class);
         $this->factory = new FlyweightFactory($this->themeProviderMock);
     }
 
@@ -33,7 +34,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateById($path, $expectedId)
     {
-        $theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
+        $theme = $this->createMock(\Magento\Theme\Model\Theme::class);
         $theme->expects($this->exactly(2))->method('getId')->will($this->returnValue($expectedId));
 
         $theme->expects($this->once())->method('getFullPath')->will($this->returnValue(null));
@@ -69,7 +70,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $path = 'frontend/Magento/luma';
         $themeId = 7;
-        $theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
+        $theme = $this->createMock(\Magento\Theme\Model\Theme::class);
         $theme->expects($this->exactly(2))->method('getId')->will($this->returnValue($themeId));
 
         $theme->expects($this->once())->method('getFullPath')->will($this->returnValue($path));
@@ -94,7 +95,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateDummy()
     {
         $themeId = 0;
-        $theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
+        $theme = $this->createMock(\Magento\Theme\Model\Theme::class);
 
         $this->themeProviderMock->expects(
             $this->once()

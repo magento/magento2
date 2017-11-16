@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class ExportDataHandlerNotificationTest
  */
-class ExportDataHandlerNotificationTest extends \PHPUnit_Framework_TestCase
+class ExportDataHandlerNotificationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

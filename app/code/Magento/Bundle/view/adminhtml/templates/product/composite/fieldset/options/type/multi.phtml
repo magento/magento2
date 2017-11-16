@@ -12,23 +12,23 @@
 <?php $_selections = $_option->getSelections(); ?>
 <?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
 <div class="field admin__field <?php if ($_option->getRequired()) echo ' required' ?><?php if ($_option->getDecoratedIsLast()):?> last<?php endif; ?>">
-    <label class="label admin__field-label"><span><?php echo $block->escapeHtml($_option->getTitle()) ?></span></label>
+    <label class="label admin__field-label"><span><?= $block->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control admin__field-control">
         <?php if (count($_selections) == 1 && $_option->getRequired()): ?>
-            <?php /* @escapeNotVerified */ echo $block->getSelectionQtyTitlePrice($_selections[0]) ?>
-            <input type="hidden" name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
-                   value="<?php /* @escapeNotVerified */ echo $_selections[0]->getSelectionId() ?>"
-                   price="<?php /* @escapeNotVerified */ echo $block->getSelectionPrice($_selections[0]) ?>" />
+            <?= /* @escapeNotVerified */ $block->getSelectionQtyTitlePrice($_selections[0]) ?>
+            <input type="hidden" name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
+                   value="<?= /* @escapeNotVerified */ $_selections[0]->getSelectionId() ?>"
+                   price="<?= /* @escapeNotVerified */ $block->getSelectionPrice($_selections[0]) ?>" />
         <?php else: ?>
-            <select multiple="multiple" size="5" id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>"
-                    name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>][]"
-                    class="admin__control-multiselect bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?><?php if ($_option->getRequired()) echo ' required-entry' ?> multiselect change-container-classname"
+            <select multiple="multiple" size="5" id="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>"
+                    name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>][]"
+                    class="admin__control-multiselect bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?><?php if ($_option->getRequired()) echo ' required-entry' ?> multiselect change-container-classname"
                     onchange="ProductConfigure.bundleControl.changeSelection(this)">
             <?php if(!$_option->getRequired()): ?>
-                <option value=""><?php /* @escapeNotVerified */ echo __('None') ?></option>
+                <option value=""><?= /* @escapeNotVerified */ __('None') ?></option>
             <?php endif; ?>
             <?php foreach ($_selections as $_selection): ?>
-                <option value="<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"<?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) echo ' disabled="disabled"' ?> price="<?php /* @escapeNotVerified */ echo $block->getSelectionPrice($_selection) ?>"><?php /* @escapeNotVerified */ echo $block->getSelectionQtyTitlePrice($_selection, false) ?></option>
+                <option value="<?= /* @escapeNotVerified */ $_selection->getSelectionId() ?>"<?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) echo ' disabled="disabled"' ?> price="<?= /* @escapeNotVerified */ $block->getSelectionPrice($_selection) ?>"><?= /* @escapeNotVerified */ $block->getSelectionQtyTitlePrice($_selection, false) ?></option>
             <?php endforeach; ?>
             </select>
         <?php endif; ?>

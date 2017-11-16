@@ -44,7 +44,7 @@ class State1 extends AbstractState
     public function __construct(
         ObjectManager $objectManager,
         CurlTransport $curlTransport,
-        array $arguments
+        array $arguments = []
     ) {
         parent::__construct($objectManager, $arguments);
         $this->objectManager = $objectManager;

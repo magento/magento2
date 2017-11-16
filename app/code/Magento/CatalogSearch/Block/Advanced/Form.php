@@ -22,6 +22,7 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Form extends Template
 {

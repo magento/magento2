@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Composite\Fieldset
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable
 {

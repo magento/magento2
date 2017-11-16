@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class ReportValidatorTest
  */
-class ReportValidatorTest extends \PHPUnit_Framework_TestCase
+class ReportValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConnectionFactory|\PHPUnit_Framework_MockObject_MockObject

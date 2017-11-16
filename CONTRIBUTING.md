@@ -29,3 +29,8 @@ If you are a new GitHub user, we recommend that you create your own [free github
 3. Create and test your work.
 4. Fork the Magento 2 repository according to [Fork a repository instructions](http://devdocs.magento.com/guides/v2.0/contributor-guide/contributing.html#fork) and when you are ready to send us a pull request – follow [Create a pull request instructions](http://devdocs.magento.com/guides/v2.0/contributor-guide/contributing.html#pull_request).
 5. Once your contribution is received, Magento 2 development team will review the contribution and collaborate with you as needed to improve the quality of the contribution.
+
+## Code of Conduct
+
+Please note that this project is released with a Contributor Code of Conduct. We expect you to agree to its terms when participating in this project.
+The full text is available in the repository [Wiki](https://github.com/magento/magento2/wiki/Magento-Code-of-Conduct).

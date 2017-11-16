@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Type;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AbstractTypeTest extends \PHPUnit_Framework_TestCase
+class AbstractTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -41,7 +41,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->model = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product\Type\Simple::class);
 
         $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->setMethods(['getHasOptions', '__wakeup', '__sleep', 'getResource'])
+            ->setMethods(['getHasOptions', '__wakeup', '__sleep', 'getResource', 'getStatus'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)

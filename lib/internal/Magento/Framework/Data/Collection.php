@@ -515,7 +515,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
 
     /**
      * Call method or callback on each item in the collection.
-     * 
+     *
      * @param string|array|\Closure $objMethod
      * @param array $args
      * @return void
@@ -880,6 +880,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
 
     /**
      * @return string[]
+     * @since 100.0.11
      */
     public function __sleep()
     {
@@ -897,6 +898,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Init not serializable fields
      *
      * @return void
+     * @since 100.0.11
      */
     public function __wakeup()
     {

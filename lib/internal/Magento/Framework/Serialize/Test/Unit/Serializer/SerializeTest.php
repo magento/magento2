@@ -10,7 +10,7 @@ use Magento\Framework\Serialize\Signer;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Serialize\InvalidSignatureException;
 
-class SerializeTest extends \PHPUnit_Framework_TestCase
+class SerializeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Serialize

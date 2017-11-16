@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit;
 
-class GraphTest extends \PHPUnit_Framework_TestCase
+class GraphTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array $nodes

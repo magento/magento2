@@ -5,17 +5,16 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Ui\Component\Filters\Type\AbstractFilter;
-use Magento\Ui\Component\Filters\Type\Select;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\Filters\Type\Select;
 
 /**
  * Class SelectTest
  */
-class SelectTest extends \PHPUnit_Framework_TestCase
+class SelectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -48,26 +47,14 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->uiComponentFactory = $this->getMock(
+        $this->uiComponentFactory = $this->createPartialMock(
             \Magento\Framework\View\Element\UiComponentFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->filterBuilderMock = $this->getMock(
-            \Magento\Framework\Api\FilterBuilder::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->filterModifierMock = $this->getMock(
+        $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
+        $this->filterModifierMock = $this->createPartialMock(
             \Magento\Ui\Component\Filters\FilterModifier::class,
-            ['applyFilterModifier'],
-            [],
-            '',
-            false
+            ['applyFilterModifier']
         );
     }
 
@@ -140,7 +127,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             ->willReturn($dataProvider);
 
         if ($expectedCondition !== null) {
-            $filterMock = $this->getMock(\Magento\Framework\Api\Filter::class);
+            $filterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
             $this->filterBuilderMock->expects($this->any())
                 ->method('setConditionType')
                 ->with($expectedCondition)

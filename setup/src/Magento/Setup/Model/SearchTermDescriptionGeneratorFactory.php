@@ -5,8 +5,17 @@
  */
 namespace Magento\Setup\Model;
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Fixtures\FixtureConfig;
+use Magento\Setup\Model\Description\DescriptionSentenceGeneratorFactory;
+use Magento\Setup\Model\Description\DescriptionParagraphGeneratorFactory;
+use Magento\Setup\Model\Description\DescriptionGeneratorFactory;
+use Magento\Setup\Model\DictionaryFactory;
+use Magento\Setup\Model\SearchTermManagerFactory;
+
 /**
- * Search Term Description Generator Factory
+ * Search term description generator factory
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SearchTermDescriptionGeneratorFactory
@@ -22,15 +31,62 @@ class SearchTermDescriptionGeneratorFactory
     private $fixtureConfig;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Setup\Fixtures\FixtureConfig $fixtureConfig
+     * @var \Magento\Setup\Model\Description\DescriptionSentenceGeneratorFactory
+     */
+    private $sentenceGeneratorFactory;
+
+    /**
+     * @var \Magento\Setup\Model\Description\DescriptionParagraphGeneratorFactory
+     */
+    private $paragraphGeneratorFactory;
+
+    /**
+     * @var \Magento\Setup\Model\Description\DescriptionGeneratorFactory
+     */
+    private $descriptionGeneratorFactory;
+
+    /**
+     * @var \Magento\Setup\Model\DictionaryFactory
+     */
+    private $dictionaryFactory;
+
+    /**
+     * @var \Magento\Setup\Model\SearchTermManagerFactory
+     */
+    private $searchTermManagerFactory;
+
+    /**
+     * Constructor
+     *
+     * @param ObjectManagerInterface $objectManager
+     * @param FixtureConfig $fixtureConfig
+     * @param DescriptionSentenceGeneratorFactory|null $descriptionSentenceGeneratorFactory
+     * @param DescriptionParagraphGeneratorFactory|null $descriptionParagraphGeneratorFactory
+     * @param DescriptionGeneratorFactory|null $descriptionGeneratorFactory
+     * @param DictionaryFactory|null $dictionaryFactory
+     * @param SearchTermManagerFactory|null $searchTermManagerFactory
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Setup\Fixtures\FixtureConfig $fixtureConfig
+        ObjectManagerInterface $objectManager,
+        FixtureConfig $fixtureConfig,
+        DescriptionSentenceGeneratorFactory $descriptionSentenceGeneratorFactory = null,
+        DescriptionParagraphGeneratorFactory $descriptionParagraphGeneratorFactory = null,
+        DescriptionGeneratorFactory $descriptionGeneratorFactory = null,
+        DictionaryFactory $dictionaryFactory = null,
+        SearchTermManagerFactory $searchTermManagerFactory = null
     ) {
         $this->objectManager = $objectManager;
         $this->fixtureConfig = $fixtureConfig;
+        $this->sentenceGeneratorFactory = $descriptionSentenceGeneratorFactory
+            ?: $objectManager->get(DescriptionSentenceGeneratorFactory::class);
+        $this->paragraphGeneratorFactory = $descriptionParagraphGeneratorFactory
+            ?: $objectManager->get(DescriptionParagraphGeneratorFactory::class);
+        $this->descriptionGeneratorFactory = $descriptionGeneratorFactory
+            ?: $objectManager->get(DescriptionGeneratorFactory::class);
+        $this->dictionaryFactory = $dictionaryFactory
+            ?: $objectManager->get(DictionaryFactory::class);
+        $this->searchTermManagerFactory = $searchTermManagerFactory
+            ?: $objectManager->get(SearchTermManagerFactory::class);
     }
 
     /**
@@ -92,32 +148,19 @@ class SearchTermDescriptionGeneratorFactory
      */
     private function buildDescriptionGenerator(array $descriptionConfig)
     {
-        $sentenceGeneratorFactory = $this->objectManager->create(
-            \Magento\Setup\Model\Description\DescriptionSentenceGeneratorFactory::class
-        );
-        $paragraphGeneratorFactory = $this->objectManager->create(
-            \Magento\Setup\Model\Description\DescriptionParagraphGeneratorFactory::class
-        );
-        $descriptionGeneratorFactory = $this->objectManager->create(
-            \Magento\Setup\Model\Description\DescriptionGeneratorFactory::class
-        );
-        $dictionaryFactory = $this->objectManager->create(
-            \Magento\Setup\Model\DictionaryFactory::class
-        );
-
-        $sentenceGenerator = $sentenceGeneratorFactory->create([
-            'dictionary' => $dictionaryFactory->create([
+        $sentenceGenerator = $this->sentenceGeneratorFactory->create([
+            'dictionary' => $this->dictionaryFactory->create([
                 'dictionaryFilePath' => realpath(__DIR__ . '/../Fixtures/_files/dictionary.csv')
             ]),
             'sentenceConfig' => $descriptionConfig['paragraphs']['sentences']
         ]);
 
-        $paragraphGenerator = $paragraphGeneratorFactory->create([
+        $paragraphGenerator = $this->paragraphGeneratorFactory->create([
             'sentenceGenerator' => $sentenceGenerator,
             'paragraphConfig' => $descriptionConfig['paragraphs']
         ]);
 
-        $descriptionGenerator = $descriptionGeneratorFactory->create([
+        $descriptionGenerator = $this->descriptionGeneratorFactory->create([
             'paragraphGenerator' => $paragraphGenerator,
             'mixinManager' => $this->objectManager->create(\Magento\Setup\Model\Description\MixinManager::class),
             'descriptionConfig' => $descriptionConfig
@@ -135,13 +178,11 @@ class SearchTermDescriptionGeneratorFactory
      */
     private function buildSearchTermManager(array $searchTermsConfig, $totalProductsCount)
     {
-        $searchTermManagerFactory = $this->objectManager->get(
-            \Magento\Setup\Model\SearchTermManagerFactory::class
+        return $this->searchTermManagerFactory->create(
+            [
+                'searchTerms' => $searchTermsConfig,
+                'totalProductsCount' => $totalProductsCount
+            ]
         );
-
-        return $searchTermManagerFactory->create([
-            'searchTerms' => $searchTermsConfig,
-            'totalProductsCount' => $totalProductsCount
-        ]);
     }
 }

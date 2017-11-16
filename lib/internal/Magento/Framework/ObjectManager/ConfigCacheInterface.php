@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\ObjectManager;
 
+/**
+ * Interface \Magento\Framework\ObjectManager\ConfigCacheInterface
+ *
+ */
 interface ConfigCacheInterface
 {
     /**

@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReportWriterTest extends \PHPUnit_Framework_TestCase
+class ReportWriterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject

@@ -14,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * CountryProviderTest contains tests for CountryProvider class
  */
-class CountryProviderTest extends \PHPUnit_Framework_TestCase
+class CountryProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CountryProvider

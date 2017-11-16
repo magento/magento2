@@ -13,7 +13,7 @@ use Magento\Eav\Api\Data\AttributeOptionInterfaceFactory;
  * Test save of swatch attribute
  *
  */
-class AttributeCreateTest extends \PHPUnit_Framework_TestCase
+class AttributeCreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppArea adminhtml

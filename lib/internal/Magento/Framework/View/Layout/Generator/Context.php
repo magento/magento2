@@ -8,6 +8,9 @@ namespace Magento\Framework\View\Layout\Generator;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\LayoutInterface;
 
+/**
+ * @api
+ */
 class Context
 {
     /**

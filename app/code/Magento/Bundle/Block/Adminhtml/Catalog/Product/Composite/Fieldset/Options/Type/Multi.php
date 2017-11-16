@@ -10,6 +10,7 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Opti
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi
 {

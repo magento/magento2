@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Block\Product\ProductList;
 
-class ToolbarTest extends \PHPUnit_Framework_TestCase
+class ToolbarTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetPagerHtml()
     {

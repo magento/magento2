@@ -14,6 +14,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * Provider of allowed countries based on configuration settings
  *
  * @api
+ * @since 100.1.2
  */
 class AllowedCountries
 {
@@ -48,6 +49,7 @@ class AllowedCountries
      * @param string | null $scopeCode
      * @param string $scope
      * @return array
+     * @since 100.1.2
      */
     public function getAllowedCountries(
         $scope = ScopeInterface::SCOPE_WEBSITE,
@@ -105,6 +107,7 @@ class AllowedCountries
      *
      * @param array $allowedCountries
      * @return array
+     * @since 100.1.2
      */
     public function makeCountriesUnique(array $allowedCountries)
     {
@@ -117,6 +120,7 @@ class AllowedCountries
      * @param string $scope
      * @param int $scopeCode
      * @return array
+     * @since 100.1.2
      */
     public function getCountriesFromConfig($scope, $scopeCode)
     {

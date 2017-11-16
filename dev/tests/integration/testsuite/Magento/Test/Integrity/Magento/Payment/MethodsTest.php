@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MethodsTest extends \PHPUnit_Framework_TestCase
+class MethodsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $methodClass

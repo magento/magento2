@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat\System\Config;
 
-class ModeTest extends \PHPUnit_Framework_TestCase
+class ModeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Category\Flat\System\Config\Mode
@@ -34,17 +34,17 @@ class ModeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->indexerStateMock = $this->getMock(
+        $this->configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->indexerStateMock = $this->createPartialMock(
             \Magento\Indexer\Model\Indexer\State::class,
-            ['loadByIndexer', 'setStatus', 'save', '__wakeup'],
-            [],
-            '',
-            false
+            ['loadByIndexer', 'setStatus', 'save', '__wakeup']
         );
-        $this->indexerRegistry = $this->getMock(\Magento\Framework\Indexer\IndexerRegistry::class, [], [], '', false);
+        $this->indexerRegistry = $this->createPartialMock(
+            \Magento\Framework\Indexer\IndexerRegistry::class,
+            ['load', 'setScheduled', 'get']
+        );
 
-        $this->flatIndexer = $this->getMock(\Magento\Framework\Indexer\IndexerInterface::class);
+        $this->flatIndexer = $this->createMock(\Magento\Framework\Indexer\IndexerInterface::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(

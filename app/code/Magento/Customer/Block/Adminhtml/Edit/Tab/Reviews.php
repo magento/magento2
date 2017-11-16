@@ -7,6 +7,7 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Reviews extends \Magento\Review\Block\Adminhtml\Grid
 {

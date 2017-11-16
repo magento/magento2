@@ -9,6 +9,13 @@ namespace Magento\Backend\Controller\Adminhtml\Noroute;
 class Index extends \Magento\Backend\App\Action
 {
     /**
+     * Array of actions which can be processed without secret key validation
+     *
+     * @var string[]
+     */
+    protected $_publicActions = ['index'];
+
+    /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $resultPageFactory;
@@ -34,7 +41,7 @@ class Index extends \Magento\Backend\App\Action
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->setStatusHeader(404, '1.1', 'Forbidden');
+        $resultPage->setStatusHeader(404, '1.1', 'Not Found');
         $resultPage->setHeader('Status', '404 File not found');
         $resultPage->addHandle('adminhtml_noroute');
         return $resultPage;

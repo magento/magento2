@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Router;
 
-class ActionListTest extends \PHPUnit_Framework_TestCase
+class ActionListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -35,21 +35,9 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->cacheMock = $this->getMock(
-            \Magento\Framework\Config\CacheInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->readerMock = $this->getMock(
-            \Magento\Framework\Module\Dir\Reader::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->readerMock = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     public function testConstructActionsCached()

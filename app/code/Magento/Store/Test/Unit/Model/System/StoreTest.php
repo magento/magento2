@@ -6,7 +6,7 @@
 
 namespace Magento\Store\Test\Unit\Model\System;
 
-class StoreTest extends \PHPUnit_Framework_TestCase
+class StoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\System\Store

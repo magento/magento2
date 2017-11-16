@@ -10,7 +10,7 @@ use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Setup\SerializedDataConverter;
 
-class SerializedDataConverterTest extends \PHPUnit_Framework_TestCase
+class SerializedDataConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Serialize|\PHPUnit_Framework_MockObject_MockObject
@@ -30,8 +30,8 @@ class SerializedDataConverterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->serializeMock = $this->getMock(Serialize::class, [], [], '', false);
-        $this->jsonMock = $this->getMock(Json::class, [], [], '', false);
+        $this->serializeMock = $this->createMock(Serialize::class);
+        $this->jsonMock = $this->createMock(Json::class);
         $this->serializedDataConverter = $objectManager->getObject(
             SerializedDataConverter::class,
             [

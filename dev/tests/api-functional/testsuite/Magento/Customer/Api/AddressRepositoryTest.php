@@ -116,7 +116,7 @@ class AddressRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertTrue($response, 'Expected response should be true.');
 
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\NoSuchEntityException::class,
             'No such entity with addressId = 1'
         );

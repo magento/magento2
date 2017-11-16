@@ -9,10 +9,6 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Sales\Api\Data\InvoiceCommentInterface;
 use Magento\Sales\Model\AbstractModel;
 
-/**
- * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment getResource()
- */
 class Comment extends AbstractModel implements InvoiceCommentInterface
 {
     /**

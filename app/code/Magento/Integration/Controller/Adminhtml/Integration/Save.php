@@ -28,7 +28,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * Get security cookie
      *
      * @return SecurityCookie
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getSecurityCookie()
     {

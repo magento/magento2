@@ -18,7 +18,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class FileRecorderTest
  */
-class FileRecorderTest extends \PHPUnit_Framework_TestCase
+class FileRecorderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FileInfoManager|\PHPUnit_Framework_MockObject_MockObject

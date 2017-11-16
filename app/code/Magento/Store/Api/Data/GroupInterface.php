@@ -9,6 +9,7 @@ namespace Magento\Store\Api\Data;
  * Group interface
  *
  * @api
+ * @since 100.0.2
  */
 interface GroupInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -72,6 +73,7 @@ interface GroupInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Group code is a unique field.
      *
      * @return string
+     * @since 100.2.0
      */
     public function getCode();
 
@@ -80,6 +82,7 @@ interface GroupInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @param string $code
      * @return $this
+     * @since 100.2.0
      */
     public function setCode($code);
 

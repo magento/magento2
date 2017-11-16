@@ -9,10 +9,14 @@ use Magento\Customer\CustomerData\SectionSourceInterface;
 
 class CompareProducts implements SectionSourceInterface
 {
-    /** @var \Magento\Catalog\Helper\Product\Compare */
+    /**
+     * @var \Magento\Catalog\Helper\Product\Compare
+     */
     protected $helper;
 
-    /** @var \Magento\Catalog\Model\Product\Url */
+    /**
+     * @var \Magento\Catalog\Model\Product\Url
+     */
     protected $productUrl;
 
     /**

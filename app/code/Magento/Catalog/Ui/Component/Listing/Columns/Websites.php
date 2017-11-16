@@ -11,6 +11,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 {
@@ -46,7 +47,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 
     /**
      * {@inheritdoc}
-     * @deprecated
+     * @deprecated 101.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

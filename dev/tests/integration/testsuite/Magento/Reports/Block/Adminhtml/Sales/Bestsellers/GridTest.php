@@ -8,7 +8,7 @@ namespace Magento\Reports\Block\Adminhtml\Sales\Bestsellers;
 /**
  * @magentoAppArea adminhtml
  */
-class GridTest extends \PHPUnit_Framework_TestCase
+class GridTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Block\Adminhtml\Sales\Bestsellers\Grid

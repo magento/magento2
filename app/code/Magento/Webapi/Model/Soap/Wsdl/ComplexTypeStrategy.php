@@ -23,7 +23,9 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      */
     const APP_INF_NS = 'inf';
 
-    /** @var \Magento\Framework\Reflection\TypeProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     */
     protected $_typeProcessor;
 
     /**

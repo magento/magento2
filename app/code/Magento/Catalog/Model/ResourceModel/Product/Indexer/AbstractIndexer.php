@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\AbstractResource
 {
@@ -25,6 +26,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 101.0.0
      */
     protected $metadataPool;
 
@@ -196,7 +198,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
             $childIds
         );
 
-        return $connection->fetchCol($select);
+        return array_map('intval', (array) $connection->fetchCol($select));
     }
 
     /**
@@ -228,11 +230,12 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
             $result = $connection->fetchCol($select);
         }
 
-        return $result;
+        return array_map('intval', $result);
     }
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @since 101.0.0
      */
     protected function getMetadataPool()
     {

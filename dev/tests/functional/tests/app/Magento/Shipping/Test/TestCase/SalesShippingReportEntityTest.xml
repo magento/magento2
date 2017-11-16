@@ -34,7 +34,7 @@
         <variation name="SalesShippingReportEntityTestVariation3">
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/price/dataset" xsi:type="string">full_shipment</data>
-            <data name="shippingReport/report_type" xsi:type="string">First Invoice Created Date</data>
+            <data name="shippingReport/report_type" xsi:type="string">Order Created</data>
             <data name="shippingReport/period_type" xsi:type="string">Day</data>
             <data name="shippingReport/from" xsi:type="string">m/d/Y</data>
             <data name="shippingReport/to" xsi:type="string">m/d/Y</data>

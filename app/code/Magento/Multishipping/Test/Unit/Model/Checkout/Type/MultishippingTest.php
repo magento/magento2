@@ -43,7 +43,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Directory\Model\AllowedCountries;
@@ -51,7 +51,7 @@ use Magento\Directory\Model\AllowedCountries;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MultishippingTest extends PHPUnit_Framework_TestCase
+class MultishippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Multishipping
@@ -149,6 +149,10 @@ class MultishippingTest extends PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->atLeastOnce())->method('getCustomerDataObject')
             ->willReturn($this->customerMock);
         $this->totalsCollectorMock = $this->createSimpleMock(TotalsCollector::class);
+        $this->cartExtensionFactoryMock = $this->getMockBuilder(CartExtensionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $allowedCountryReaderMock = $this->getMockBuilder(AllowedCountries::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAllowedCountries'])
@@ -179,21 +183,13 @@ class MultishippingTest extends PHPUnit_Framework_TestCase
             $this->filterBuilderMock,
             $this->totalsCollectorMock,
             $data,
+            $this->cartExtensionFactoryMock,
             $allowedCountryReaderMock
         );
 
-        $this->cartExtensionFactoryMock = $this->getMockBuilder(CartExtensionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->shippingAssignmentProcessorMock = $this->createSimpleMock(ShippingAssignmentProcessor::class);
 
         $objectManager = new ObjectManager($this);
-        $objectManager->setBackwardCompatibleProperty(
-            $this->model,
-            'cartExtensionFactory',
-            $this->cartExtensionFactoryMock
-        );
         $objectManager->setBackwardCompatibleProperty(
             $this->model,
             'shippingAssignmentProcessor',

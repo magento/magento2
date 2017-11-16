@@ -7,6 +7,10 @@
  */
 namespace Magento\Backend\Model\Cache\ResourceModel\Grid;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Collection extends \Magento\Framework\Data\Collection
 {
     /**

@@ -13,19 +13,29 @@ use Magento\Quote\Model\Quote\ProductOptionFactory;
 
 class CustomOptionProcessor implements CartItemProcessorInterface
 {
-    /** @var DataObject\Factory  */
+    /**
+     * @var \Magento\Framework\DataObject\Factory
+     */
     protected $objectFactory;
 
-    /** @var \Magento\Quote\Model\Quote\ProductOptionFactory  */
+    /**
+     * @var \Magento\Quote\Model\Quote\ProductOptionFactory
+     */
     protected $productOptionFactory;
 
-    /** @var \Magento\Quote\Api\Data\ProductOptionExtensionFactory  */
+    /**
+     * @var \Magento\Quote\Api\Data\ProductOptionExtensionFactory
+     */
     protected $extensionFactory;
 
-    /** @var CustomOptionFactory  */
+    /**
+     * @var \Magento\Catalog\Model\CustomOptions\CustomOptionFactory
+     */
     protected $customOptionFactory;
 
-    /** @var \Magento\Catalog\Model\Product\Option\UrlBuilder */
+    /**
+     * @var \Magento\Catalog\Model\Product\Option\UrlBuilder
+     */
     private $urlBuilder;
 
     /**
@@ -180,7 +190,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     /**
      * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
      *
-     * @deprecated
+     * @deprecated 101.0.0
      */
     private function getUrlBuilder()
     {

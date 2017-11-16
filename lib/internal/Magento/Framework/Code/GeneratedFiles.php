@@ -48,7 +48,7 @@ class GeneratedFiles
      *
      * @return void
      *
-     * @deprecated
+     * @deprecated 100.1.0
      * @see \Magento\Framework\Code\GeneratedFiles::cleanGeneratedFiles
      */
     public function regenerate()

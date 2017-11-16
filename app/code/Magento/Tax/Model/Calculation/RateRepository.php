@@ -67,7 +67,9 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      */
     protected $joinProcessor;
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -180,7 +182,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
-     * @deprecated
+     * @deprecated 100.2.0
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
@@ -200,7 +202,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     /**
      * Translates a field name to a DB column name for use in collection queries.
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @param string $field a field name that should be translated to a DB column name.
      * @return string
      */
@@ -262,7 +264,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
             );
         }
 
-        if (!\Zend_Validate::is($taxRate->getRate(), 'NotEmpty')) {
+        if (!is_numeric($taxRate->getRate()) || $taxRate->getRate() < 0) {
             $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'percentage_rate']));
         }
 
@@ -302,7 +304,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

@@ -16,7 +16,7 @@ namespace Magento\Framework\View;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LayoutTest extends \PHPUnit_Framework_TestCase
+class LayoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Layout
@@ -67,12 +67,12 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     {
         $layoutUtility = new Utility\Layout($this);
         /** @var $layout \Magento\Framework\View\LayoutInterface */
-        $layout = $this->getMock(
-            \Magento\Framework\View\Layout::class,
-            ['getUpdate'],
-            $layoutUtility->getLayoutDependencies()
-        );
-        $merge = $this->getMock(\StdClass::class, ['asSimplexml']);
+        $layout = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
+            ->setMethods(['getUpdate'])
+            ->setConstructorArgs($layoutUtility->getLayoutDependencies())
+            ->getMock();
+
+        $merge = $this->createPartialMock(\StdClass::class, ['asSimplexml']);
         $merge->expects(
             $this->once()
         )->method(
@@ -275,7 +275,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $msg = 'Html tag "span" is forbidden for usage in containers. ' .
             'Consider to use one of the allowed: aside, dd, div, dl, fieldset, main, nav, ' .
             'header, footer, ol, p, section, table, tfoot, ul.';
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $msg);
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, $msg);
         $this->_layout->addContainer('container', 'Container', ['htmlTag' => 'span']);
     }
 

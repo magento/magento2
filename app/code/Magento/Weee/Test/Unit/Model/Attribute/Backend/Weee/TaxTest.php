@@ -13,7 +13,7 @@ namespace Magento\Weee\Test\Unit\Model\Attribute\Backend\Weee;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class TaxTest extends \PHPUnit_Framework_TestCase
+class TaxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -82,7 +82,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($taxes));
 
         // Exception caught
-        $this->setExpectedException('Exception', $expected);
+        $this->expectException('Exception', $expected);
         $modelMock->validate($productMock);
     }
 
@@ -140,7 +140,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $model->afterLoad($productMock);
+        $result = $model->afterLoad($productMock);
+        $this->assertNotNull($result);
     }
 
     /**

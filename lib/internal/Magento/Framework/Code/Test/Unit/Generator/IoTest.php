@@ -8,7 +8,7 @@ namespace Magento\Framework\Code\Test\Unit\Generator;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Phrase;
 
-class IoTest extends \PHPUnit_Framework_TestCase
+class IoTest extends \PHPUnit\Framework\TestCase
 {
     /**#@+
      * Source and result class parameters
@@ -46,7 +46,7 @@ class IoTest extends \PHPUnit_Framework_TestCase
     {
         $this->_generationDirectory = rtrim(self::GENERATION_DIRECTORY, '/') . '/';
 
-        $this->_filesystemDriverMock = $this->getMock(\Magento\Framework\Filesystem\Driver\File::class);
+        $this->_filesystemDriverMock = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
 
         $this->_object = new \Magento\Framework\Code\Generator\Io(
             $this->_filesystemDriverMock,
@@ -97,7 +97,7 @@ class IoTest extends \PHPUnit_Framework_TestCase
         } else {
             $exceptionMessage = 'Some error renaming file';
             $renameMockEvent = $this->throwException(new FileSystemException(new Phrase($exceptionMessage)));
-            $this->setExpectedException(\Magento\Framework\Exception\FileSystemException::class, $exceptionMessage);
+            $this->expectException(\Magento\Framework\Exception\FileSystemException::class, $exceptionMessage);
         }
 
         $this->_filesystemDriverMock->expects($this->once())

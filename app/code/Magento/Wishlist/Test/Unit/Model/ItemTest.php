@@ -6,12 +6,13 @@
 
 namespace Magento\Wishlist\Test\Unit\Model;
 
+use Magento\Framework\Exception\LocalizedException;
 use \Magento\Wishlist\Model\Item;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
@@ -95,7 +96,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->productTypeConfig = $this->getMockBuilder(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class)
             ->getMock();
-        $this->productRepository = $this->getMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->productRepository = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->resource = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -298,7 +299,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetProductWithException()
     {
-        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, __('Cannot specify product.'));
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class, __('Cannot specify product.'));
         $this->model->getProduct();
     }
 
@@ -310,12 +311,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->model->setData('store_id', $storeId);
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
+            ->setMethods(['setCustomOptions', 'setFinalPrice'])
             ->getMock();
         $productMock->expects($this->any())
             ->method('setFinalPrice')
             ->with(null);
         $productMock->expects($this->any())
-            ->method('setCustomOprtions')
+            ->method('setCustomOptions')
             ->with([]);
         $this->productRepository->expects($this->once())
             ->method('getById')

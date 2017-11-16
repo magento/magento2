@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\DB\Test\Unit\Helper;
 
-class AbstractHelperTest extends \PHPUnit_Framework_TestCase
+class AbstractHelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DB\Helper\AbstractHelper|\PHPUnit_Framework_MockObject_MockObject
@@ -26,9 +26,9 @@ class AbstractHelperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_adapterMock = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->_adapterMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
 
-        $this->_resourceMock = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->_resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->_resourceMock->expects($this->any())
             ->method('getConnection')
             ->with('prefix')

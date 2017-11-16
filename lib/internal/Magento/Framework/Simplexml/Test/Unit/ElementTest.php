@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Simplexml\Test\Unit;
 
-class ElementTest extends \PHPUnit_Framework_TestCase
+class ElementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider xmlDataProvider

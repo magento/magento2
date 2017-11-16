@@ -8,7 +8,7 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
 
 use Magento\Eav\Model\Entity\Attribute\Backend\JsonEncoded;
 
-class JsonEncodedTest extends \PHPUnit_Framework_TestCase
+class JsonEncodedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Backend\JsonEncoded
@@ -94,5 +94,19 @@ class JsonEncodedTest extends \PHPUnit_Framework_TestCase
         );
         $this->model->afterLoad($product);
         $this->assertEquals([1, 2, 3], $product->getData('json_encoded'));
+    }
+
+    /**
+     * Test after load handler with null attribute value
+     */
+    public function testAfterLoadWithNullAttributeValue()
+    {
+        $product = new \Magento\Framework\DataObject(
+            [
+                'json_encoded' => null
+            ]
+        );
+        $this->model->afterLoad($product);
+        $this->assertEquals([], $product->getData('json_encoded'));
     }
 }

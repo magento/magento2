@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Legacy;
 
-class ObsoleteAclTest extends \PHPUnit_Framework_TestCase
+class ObsoleteAclTest extends \PHPUnit\Framework\TestCase
 {
     public function testAclDeclarations()
     {

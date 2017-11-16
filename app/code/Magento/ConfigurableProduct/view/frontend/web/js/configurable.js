@@ -265,6 +265,7 @@ define([
             } else {
                 this._resetChildren(element);
             }
+
             this._reloadPrice();
             this._displayRegularPriceBlock(this.simpleProduct);
             this._displayTierPriceBlock(this.simpleProduct);
@@ -273,6 +274,7 @@ define([
 
         /**
          * Change displayed product image according to chosen options of configurable product
+         *
          * @private
          */
         _changeProductImage: function () {
@@ -292,18 +294,37 @@ define([
                 }
 
                 images = $.extend(true, [], images);
-
-                images.forEach(function (img) {
-                    img.type = 'image';
-                });
+                images = this._setImageIndex(images);
 
                 galleryObject.updateData(images);
+
+                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
+                    selectedOption: this.simpleProduct,
+                    dataMergeStrategy: this.options.gallerySwitchStrategy
+                });
             } else {
                 galleryObject.updateData(initialImages);
                 $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
             }
 
             galleryObject.first();
+        },
+
+        /**
+         * Set correct indexes for image set.
+         *
+         * @param {Array} images
+         * @private
+         */
+        _setImageIndex: function (images) {
+            var length = images.length,
+                i;
+
+            for (i = 0; length > i; i++) {
+                images[i].i = i + 1;
+            }
+
+            return images;
         },
 
         /**

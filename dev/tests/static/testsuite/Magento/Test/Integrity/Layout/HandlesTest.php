@@ -7,7 +7,7 @@
  */
 namespace Magento\Test\Integrity\Layout;
 
-class HandlesTest extends \PHPUnit_Framework_TestCase
+class HandlesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -78,11 +78,11 @@ class HandlesTest extends \PHPUnit_Framework_TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * Test validate that head block doesn't exist in layout
-         *
-         * @param string $layoutFile
-         */
+            /**
+             * Test validate that head block doesn't exist in layout
+             *
+             * @param string $layoutFile
+             */
             function ($layoutFile) {
                 $dom = new \DOMDocument();
                 $dom->load($layoutFile);

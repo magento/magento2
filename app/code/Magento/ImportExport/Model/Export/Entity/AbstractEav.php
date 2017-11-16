@@ -8,6 +8,7 @@ namespace Magento\ImportExport\Model\Export\Entity;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\ImportExport\Model\Export;
+use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
 
 /**
@@ -16,6 +17,7 @@ use Magento\Store\Model\Store;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEntity
 {
@@ -25,6 +27,14 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * @var array
      */
     protected $_attributeValues = [];
+
+    /**
+     * Attribute code to its types. Only attributes with options
+     *
+     * @var array
+     * @since 100.2.0
+     */
+    protected $attributeTypes = [];
 
     /**
      * Entity type id.
@@ -83,6 +93,21 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
         /** @var $attribute AbstractAttribute */
         foreach ($this->getAttributeCollection() as $attribute) {
             $this->_attributeValues[$attribute->getAttributeCode()] = $this->getAttributeOptions($attribute);
+        }
+        return $this;
+    }
+
+    /**
+     * Initializes attribute types
+     *
+     * @return $this
+     * @since 100.2.0
+     */
+    protected function _initAttributeTypes()
+    {
+        /** @var $attribute AbstractAttribute */
+        foreach ($this->getAttributeCollection() as $attribute) {
+            $this->attributeTypes[$attribute->getAttributeCode()] = $attribute->getFrontendInput();
         }
         return $this;
     }
@@ -245,19 +270,48 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
         foreach ($validAttributeCodes as $attributeCode) {
             $attributeValue = $item->getData($attributeCode);
 
-            if (isset(
-                $this->_attributeValues[$attributeCode]
-            ) && isset(
-                $this->_attributeValues[$attributeCode][$attributeValue]
-            )
-            ) {
-                $attributeValue = $this->_attributeValues[$attributeCode][$attributeValue];
-            }
-            if (null !== $attributeValue) {
-                $row[$attributeCode] = $attributeValue;
+            if ($this->isMultiselect($attributeCode)) {
+                $values = [];
+                $attributeValue = explode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $attributeValue);
+                foreach ($attributeValue as $value) {
+                    $values[] = $this->getAttributeValueById($attributeCode, $value);
+                }
+                $row[$attributeCode] = implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $values);
+            } else {
+                $row[$attributeCode] = $this->getAttributeValueById($attributeCode, $attributeValue);
             }
         }
 
         return $row;
+    }
+
+    /**
+     * Checks that attribute is multiselect type by attribute code
+     *
+     * @param string $attributeCode An attribute code
+     * @return bool Returns true if attribute is multiselect type
+     */
+    private function isMultiselect($attributeCode)
+    {
+        return isset($this->attributeTypes[$attributeCode])
+            && $this->attributeTypes[$attributeCode] === 'multiselect';
+    }
+
+    /**
+     * Returns attribute value by id
+     *
+     * @param string $attributeCode An attribute code
+     * @param int|string $valueId
+     * @return mixed
+     */
+    private function getAttributeValueById($attributeCode, $valueId)
+    {
+        if (isset($this->_attributeValues[$attributeCode])
+            && isset($this->_attributeValues[$attributeCode][$valueId])
+        ) {
+            return $this->_attributeValues[$attributeCode][$valueId];
+        }
+
+        return $valueId;
     }
 }

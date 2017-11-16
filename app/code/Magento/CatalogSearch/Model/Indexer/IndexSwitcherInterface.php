@@ -7,6 +7,8 @@ namespace Magento\CatalogSearch\Model\Indexer;
 
 /**
  * Provides a functionality to replace main index with its temporary representation
+ * @api
+ * @since 100.2.0
  */
 interface IndexSwitcherInterface
 {
@@ -17,6 +19,7 @@ interface IndexSwitcherInterface
      *
      * @param array $dimensions
      * @return void
+     * @since 100.2.0
      */
     public function switchIndex(array $dimensions);
 }
