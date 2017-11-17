@@ -194,6 +194,12 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/customers/resetPassword" method="POST">
+        <service class="Magento\Customer\Api\AccountManagementInterface" method="resetPassword"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
     <route url="/V1/customers/:customerId/confirm" method="GET">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="getConfirmationStatus"/>
         <resources>
