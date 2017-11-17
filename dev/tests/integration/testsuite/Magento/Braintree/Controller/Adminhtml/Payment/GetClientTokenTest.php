@@ -122,7 +122,7 @@ class GetClientTokenTest extends AbstractBackendController
         ];
 
         $adapter = $this->getMockBuilder(BraintreeAdapter::class)
-            ->setConstructorArgs($args)
+            ->setConstructorArgs(array_merge(['config' => null], $args))
             ->setMethods(['generate'])
             ->getMock();
         $adapter->method('generate')
