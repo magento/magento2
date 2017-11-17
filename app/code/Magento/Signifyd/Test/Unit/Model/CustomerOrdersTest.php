@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomerOrdersTest extends \PHPUnit_Framework_TestCase
+class CustomerOrdersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var int

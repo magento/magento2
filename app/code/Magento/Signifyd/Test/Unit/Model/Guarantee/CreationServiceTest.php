@@ -14,7 +14,7 @@ use Magento\Signifyd\Model\Guarantee\CreationService;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use PHPUnit_Framework_TestCase as TestCase;
+use \PHPUnit\Framework\TestCase as TestCase;
 use Psr\Log\LoggerInterface;
 
 class CreationServiceTest extends TestCase

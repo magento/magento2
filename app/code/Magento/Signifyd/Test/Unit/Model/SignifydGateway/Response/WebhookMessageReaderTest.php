@@ -14,7 +14,7 @@ use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessageFactory;
 /**
  * Class WebhookMessageReaderTest
  */
-class WebhookMessageReaderTest extends \PHPUnit_Framework_TestCase
+class WebhookMessageReaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var WebhookMessageReader

@@ -13,7 +13,7 @@ use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Json\EncoderInterface;
 use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class HttpClientFactoryTest extends \PHPUnit_Framework_TestCase
+class HttpClientFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string

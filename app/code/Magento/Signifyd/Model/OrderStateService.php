@@ -55,8 +55,7 @@ class OrderStateService
     {
         $orderId = $case->getOrderId();
 
-        switch ($case->getGuaranteeDisposition())
-        {
+        switch ($case->getGuaranteeDisposition()) {
             case CaseInterface::GUARANTEE_APPROVED:
                 $this->unHold($orderId);
                 break;

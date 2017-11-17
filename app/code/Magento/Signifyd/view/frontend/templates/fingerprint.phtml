@@ -12,7 +12,7 @@
     <script
         async
         id="sig-api"
-        data-order-session-id="<?php echo $block->escapeHtml($block->getSignifydOrderSessionId()); ?>"
+        data-order-session-id="<?= $block->escapeHtml($block->getSignifydOrderSessionId()) ?>"
         src="https://cdn-scripts.signifyd.com/api/script-tag.js">
     </script>
 <?php endif; ?>

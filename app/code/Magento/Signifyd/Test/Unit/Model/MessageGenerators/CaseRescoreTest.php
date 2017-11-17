@@ -16,7 +16,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * Class CaseRescoreTest
  */
-class CaseRescoreTest extends \PHPUnit_Framework_TestCase
+class CaseRescoreTest extends \PHPUnit\Framework\TestCase
 {
     private static $data = [
         'caseId' => 100,
@@ -59,7 +59,6 @@ class CaseRescoreTest extends \PHPUnit_Framework_TestCase
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
             'caseRepository' => $this->caseRepository
         ]);
-
     }
 
     /**

@@ -15,7 +15,7 @@
 ?>
 <section class="admin__page-section order-case-info">
     <div class="admin__page-section-title">
-        <span class="title"><?php echo $block->escapeHtml(__('Fraud Protection Information')); ?></span>
+        <span class="title"><?= $block->escapeHtml(__('Fraud Protection Information')) ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__page-section-item case-information">
@@ -23,8 +23,8 @@
                 <table class="admin__table-secondary order-case-table">
                     <tbody>
                     <tr>
-                        <th class="col-guarantee-disposition"><?php echo $block->escapeHtml(__('Signifyd Guarantee Decision')); ?></th>
-                        <td class="col-guarantee-disposition"><?php echo $block->escapeHtml($block->getCaseGuaranteeDisposition()); ?></td>
+                        <th class="col-guarantee-disposition"><?= $block->escapeHtml(__('Signifyd Guarantee Decision')) ?></th>
+                        <td class="col-guarantee-disposition"><?= $block->escapeHtml($block->getCaseGuaranteeDisposition()) ?></td>
                     </tr>
                     </tbody>
                 </table>

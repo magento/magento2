@@ -12,6 +12,7 @@ namespace Magento\Signifyd\Api;
  * Implementation should send request to Signifyd API and update existing case entity with guarantee infromation.
  *
  * @api
+ * @since 100.2.0
  */
 interface GuaranteeCreationServiceInterface
 {
@@ -20,6 +21,7 @@ interface GuaranteeCreationServiceInterface
      *
      * @param int $orderId
      * @return bool
+     * @since 100.2.0
      */
     public function createForOrder($orderId);
 }

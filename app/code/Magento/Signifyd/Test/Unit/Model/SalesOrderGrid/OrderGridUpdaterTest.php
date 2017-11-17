@@ -10,7 +10,7 @@ use Magento\Sales\Model\ResourceModel\GridInterface;
 use Magento\Signifyd\Model\SalesOrderGrid\OrderGridUpdater;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class OrderGridUpdaterTest extends \PHPUnit_Framework_TestCase
+class OrderGridUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var GridInterface|MockObject

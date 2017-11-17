@@ -19,7 +19,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * Contains tests with different negative and positive scenarios for case updating service.
  */
-class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
+class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UpdatingService

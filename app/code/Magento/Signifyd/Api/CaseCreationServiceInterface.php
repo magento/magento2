@@ -12,6 +12,7 @@ namespace Magento\Signifyd\Api;
  * Implementation should send request to Signifyd API and create new entity in Magento.
  *
  * @api
+ * @since 100.2.0
  */
 interface CaseCreationServiceInterface
 {
@@ -22,6 +23,7 @@ interface CaseCreationServiceInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NotFoundException If order does not exists
      * @throws \Magento\Framework\Exception\AlreadyExistsException If case for $orderId already exists
+     * @since 100.2.0
      */
     public function createForOrder($orderId);
 }

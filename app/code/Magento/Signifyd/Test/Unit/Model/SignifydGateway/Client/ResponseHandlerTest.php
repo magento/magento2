@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use \Zend_Http_Response as Response;
 use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class ResponseHandlerTest extends \PHPUnit_Framework_TestCase
+class ResponseHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string
@@ -70,7 +70,6 @@ class ResponseHandlerTest extends \PHPUnit_Framework_TestCase
         $this->responseHandler = $this->objectManager->getObject(ResponseHandler::class, [
             'dataDecoder' => $this->dataDecoder
         ]);
-
     }
 
     /**

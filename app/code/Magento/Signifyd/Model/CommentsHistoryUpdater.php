@@ -6,6 +6,7 @@
 namespace Magento\Signifyd\Model;
 
 use Magento\Framework\Phrase;
+use Magento\Sales\Api\OrderStatusHistoryRepositoryInterface;
 use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Signifyd\Api\Data\CaseInterface;
 
@@ -20,13 +21,22 @@ class CommentsHistoryUpdater
     private $historyFactory;
 
     /**
+     * @var OrderStatusHistoryRepositoryInterface
+     */
+    private $historyRepository;
+
+    /**
      * CommentsHistoryUpdater constructor.
      *
      * @param HistoryFactory $historyFactory
+     * @param OrderStatusHistoryRepositoryInterface $historyRepository
      */
-    public function __construct(HistoryFactory $historyFactory)
-    {
+    public function __construct(
+        HistoryFactory $historyFactory,
+        OrderStatusHistoryRepositoryInterface $historyRepository
+    ) {
         $this->historyFactory = $historyFactory;
+        $this->historyRepository = $historyRepository;
     }
 
     /**
@@ -49,7 +59,7 @@ class CommentsHistoryUpdater
         $history->setParentId($case->getOrderId())
             ->setComment($message)
             ->setEntityName('order')
-            ->setStatus($status)
-            ->save();
+            ->setStatus($status);
+        $this->historyRepository->save($history);
     }
 }

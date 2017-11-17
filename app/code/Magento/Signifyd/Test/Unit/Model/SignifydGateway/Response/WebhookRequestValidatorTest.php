@@ -13,7 +13,7 @@ use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
 /**
  * Class WebhookRequestValidatorTest
  */
-class WebhookRequestValidatorTest extends \PHPUnit_Framework_TestCase
+class WebhookRequestValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var WebhookRequestValidator

@@ -11,11 +11,12 @@ use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\CommentsHistoryUpdater;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Sales\Api\OrderStatusHistoryRepositoryInterface;
 
 /**
  * Contains tests for comments history updater class.
  */
-class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
+class CommentsHistoryUpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var int
@@ -53,6 +54,11 @@ class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
     private $historyEntity;
 
     /**
+     * @var OrderStatusHistoryRepositoryInterface|MockObject
+     */
+    private $historyRepository;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -61,8 +67,11 @@ class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
 
         $this->historyFactory = $this->getMockBuilder(HistoryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->setMethods(['create', 'save'])
             ->getMock();
+
+        $this->historyRepository = $this->getMockBuilder(OrderStatusHistoryRepositoryInterface::class)
+            ->getMockForAbstractClass();
 
         $this->caseEntity = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
@@ -72,7 +81,8 @@ class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
         $this->initCommentMock();
 
         $this->updater = $objectManager->getObject(CommentsHistoryUpdater::class, [
-            'historyFactory' => $this->historyFactory
+            'historyFactory' => $this->historyFactory,
+            'historyRepository' => $this->historyRepository
         ]);
     }
 
@@ -88,12 +98,12 @@ class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
             ->method('getOrderId')
             ->willReturn(self::$orderId);
 
-        $this->historyEntity->expects(self::any())
-            ->method('setStatus')
+        $this->historyEntity->method('setStatus')
             ->with('')
             ->willReturnSelf();
-        $this->historyEntity->expects(self::once())
+        $this->historyRepository->expects(self::once())
             ->method('save')
+            ->with($this->historyEntity)
             ->willThrowException(new \Exception('Cannot save comment message.'));
 
         $this->updater->addComment($this->caseEntity, __(self::$message));
@@ -110,12 +120,12 @@ class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
             ->method('getOrderId')
             ->willReturn(self::$orderId);
 
-        $this->historyEntity->expects(self::any())
-            ->method('setStatus')
+        $this->historyEntity->method('setStatus')
             ->with(self::$status)
             ->willReturnSelf();
-        $this->historyEntity->expects(self::once())
+        $this->historyRepository->expects(self::once())
             ->method('save')
+            ->with($this->historyEntity)
             ->willReturnSelf();
 
         $this->updater->addComment($this->caseEntity, __(self::$message), self::$status);
@@ -150,20 +160,16 @@ class CommentsHistoryUpdaterTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setParentId', 'setComment', 'setEntityName', 'save'])
             ->getMockForAbstractClass();
 
-        $this->historyFactory->expects(self::any())
-            ->method('create')
+        $this->historyFactory->method('create')
             ->willReturn($this->historyEntity);
 
-        $this->historyEntity->expects(self::any())
-            ->method('setParentId')
+        $this->historyEntity->method('setParentId')
             ->with(self::$orderId)
             ->willReturnSelf();
-        $this->historyEntity->expects(self::any())
-            ->method('setComment')
+        $this->historyEntity->method('setComment')
             ->with(self::$message)
             ->willReturnSelf();
-        $this->historyEntity->expects(self::any())
-            ->method('setEntityName')
+        $this->historyEntity->method('setEntityName')
             ->with('order')
             ->willReturnSelf();
     }

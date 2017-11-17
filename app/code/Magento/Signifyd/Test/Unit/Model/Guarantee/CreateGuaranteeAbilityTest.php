@@ -17,7 +17,7 @@ use Magento\Signifyd\Model\Guarantee\CreateGuaranteeAbility;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreateGuaranteeAbilityTest extends \PHPUnit_Framework_TestCase
+class CreateGuaranteeAbilityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DateTimeFactory

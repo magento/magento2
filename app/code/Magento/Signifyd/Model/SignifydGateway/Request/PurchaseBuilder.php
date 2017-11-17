@@ -175,7 +175,16 @@ class PurchaseBuilder
      */
     private function getPaymentGateway($gatewayCode)
     {
-        return strstr($gatewayCode, 'paypal') === false ? $gatewayCode : 'paypal_account';
+        $payPalCodeList = [
+            'paypal_express',
+            'braintree_paypal',
+            'payflowpro',
+            'payflow_express',
+            'payflow_link',
+            'payflow_advanced',
+            'hosted_pro',
+        ];
+        return in_array($gatewayCode, $payPalCodeList) ? 'paypal_account' : $gatewayCode;
     }
 
     /**
