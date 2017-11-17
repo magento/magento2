@@ -5,6 +5,7 @@
  */
 namespace Magento\Test\Integrity;
 
+use Composer\Semver\VersionParser;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Composer\MagentoComponent;
@@ -293,6 +294,23 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 if (!isset(self::$rootJson['require-dev'][$depName]) && !isset(self::$rootJson['require'][$depName])
                     && !isset(self::$rootJson['replace'][$depName])) {
                     $errors[] = "'$name' depends on '$depName'";
+                } else {
+                    if (isset(self::$rootJson['require-dev'][$depName])
+                        && $this->checkDiscrepancy($json, $depName, 'require-dev')) {
+                        $errors[] = "root composer.json has dependency '"
+                            . $depName . ":" . self::$rootJson['require-dev'][$depName] . " BUT "
+                            . "'$name' composer.json has dependency '$depName:{$json->require->$depName}'";
+                    } elseif (isset(self::$rootJson['require'][$depName])
+                        && $this->checkDiscrepancy($json, $depName, 'require')) {
+                        $errors[] = "root composer.json has dependency '"
+                            . $depName . ":" . self::$rootJson['require'][$depName] . " BUT "
+                            . "'$name' composer.json has dependency '$depName:{$json->require->$depName}'";
+                    } elseif (isset(self::$rootJson['replace'][$depName])
+                        && $this->checkDiscrepancy($json, $depName, 'replace')) {
+                        $errors[] = "root composer.json has dependency '"
+                            . $depName . ":" . self::$rootJson['replace'][$depName] . " BUT "
+                            . "'$name' composer.json has dependency '$depName:{$json->require->$depName}'";
+                    }
                 }
             }
             if (!empty($errors)) {
@@ -306,6 +324,20 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 );
             }
         }
+    }
+
+    /**
+     * @param $componentConfig
+     * @param $packageName
+     * @param $section
+     * @return bool
+     */
+    private function checkDiscrepancy($componentConfig, $packageName, $section)
+    {
+        $rootConstraint = (new VersionParser())->parseConstraints(self::$rootJson[$section][$packageName]);
+        $componentConstraint = (new VersionParser())->parseConstraints($componentConfig->require->$packageName);
+
+        return !$rootConstraint->matches($componentConstraint);
     }
 
     /**
