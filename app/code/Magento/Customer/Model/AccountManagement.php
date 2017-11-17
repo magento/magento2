@@ -533,8 +533,13 @@ class AccountManagement implements AccountManagementInterface
                 default:
                     throw new InputException(
                         __(
-                            'Invalid value of "%value" provided for the %fieldName field.',
-                            ['value' => $template, 'fieldName' => 'email type']
+                            'Invalid value of "%value" provided for the %fieldName field. Possible values are %template1 or %template2.',
+                            [
+                                'value' => $template,
+                                'fieldName' => 'template',
+                                'template1' => AccountManagement::EMAIL_REMINDER,
+                                'template2' => AccountManagement::EMAIL_RESET
+                            ]
                         )
                     );
             }
