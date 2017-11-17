@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Analytics\Test\TestCase\SetTimeToSendDataTest" summary="Time of day to send data" ticketId="MAGETWO-66464">
+        <variation name="timeOfDayToSendDataVariation1">
+            <data name="vertical" xsi:type="string">Apps and Games</data>
+            <data name="hh" xsi:type="string">11</data>
+            <data name="mm" xsi:type="string">11</data>
+            <data name="configData" xsi:type="string">change_default_timezone</data>
+            <constraint name="Magento\Analytics\Test\Constraint\AssertConfigAnalyticsSendingTimeAndZone" />
+        </variation>
+    </testCase>
+</config>
