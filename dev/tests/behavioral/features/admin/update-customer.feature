@@ -13,10 +13,6 @@ Feature: Update customer feature
     And I wait for element with xpath "//*[@id='login-form']/fieldset/div[3]/div[1]/button/span" to appear
     And I click on the element with xpath "//*[@id='login-form']/fieldset/div[3]/div[1]/button/span"
 
-    #Popup msg
-    And I wait for element with xpath "//*[@id='html-body']/div[4]/aside/div[2]/header/button" to appear
-    And I click on the element with xpath "//*[@id='html-body']/div[4]/aside/div[2]/header/button"
-
     #Customers
     And I wait for element with xpath "//*[@id='menu-magento-customer-customer']/a" to appear
     And I click on the element with xpath "//*[@id='menu-magento-customer-customer']/a"
@@ -25,12 +21,12 @@ Feature: Update customer feature
     And I click on the element with xpath "//*[@id='menu-magento-customer-customer']/div/ul/li[1]/a/span"
 
     #Edit Customers
-    And I wait for element with xpath "//*[@id='container']/div/div[5]/table/tbody/tr[4]/td[17]/a" to appear
-    And I click on the element with xpath "//*[@id='container']/div/div[5]/table/tbody/tr[4]/td[17]/a"
+    And I wait for element with xpath "//*[@id='container']/div/div[5]/table/tbody/tr[2]/td[17]/a" to appear
+    And I click on the element with xpath "//*[@id='container']/div/div[5]/table/tbody/tr[2]/td[17]/a"
 
     And I wait for element with xpath "//*[@id='tab_customer']/span[1]" to appear
     And I click on the element with xpath "//*[@id='tab_customer']/span[1]"
-
+  
     #Account Information
     And I wait for element with xpath "//*[@id='container']/div/div/div[2]/div[1]/div/div[2]/fieldset/fieldset/div/div[1]/label/span" to appear
     And I select "Retailer" from "customer[group_id]"

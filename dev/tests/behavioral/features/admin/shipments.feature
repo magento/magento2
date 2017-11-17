@@ -13,10 +13,6 @@ Feature: Shipments feature
     And I wait for element with xpath "//*[@id='login-form']/fieldset/div[3]/div[1]/button/span" to appear
     And I click on the element with xpath "//*[@id='login-form']/fieldset/div[3]/div[1]/button/span"
 
-    #Popup msg
-    And I wait for element with xpath "//*[@id='html-body']/div[4]/aside/div[2]/header/button" to appear
-    And I click on the element with xpath "//*[@id='html-body']/div[4]/aside/div[2]/header/button"
-
     #Sales
     And I wait for element with xpath "//*[@id='menu-magento-sales-sales']/a" to appear
     And I click on the element with xpath "//*[@id='menu-magento-sales-sales']/a"
