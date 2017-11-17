@@ -33,7 +33,7 @@ abstract class AbstractTransaction implements ClientInterface
     /**
      * @var BraintreeAdapter
      */
-    protected $braintree;
+    protected $adapter;
 
     /**
      * @var BraintreeAdapterFactory
