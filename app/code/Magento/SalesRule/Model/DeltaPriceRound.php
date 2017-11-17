@@ -68,7 +68,7 @@ class DeltaPriceRound
      * @param string $type
      * @return void
      */
-    public function reset(string $type)
+    public function reset($type)
     {
         if (isset($this->roundingDeltas[$type])) {
             unset($this->roundingDeltas[$type]);
