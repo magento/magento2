@@ -502,7 +502,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     $value = isset($nameAndValue[1]) ?
                         trim($nameAndValue[1]) : '';
                     //Ignoring field names' case.
-                    $fieldName  = mb_strtolower(trim($nameAndValue[0]));
+                    $fieldName  = strtolower(trim($nameAndValue[0]));
                     if ($fieldName) {
                         $fieldAndValuePairs[$fieldName] = $value;
                     }
