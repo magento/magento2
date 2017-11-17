@@ -58,7 +58,6 @@ class BraintreeAdapter
      * Initializes credentials.
      *
      * @return void
-     * @deprecated is not used anymore
      */
     protected function initCredentials()
     {
