@@ -45,25 +45,25 @@ class HandlerTest extends AbstractController
         $caseEntity = $caseRepository->getByCaseId($caseId);
         $orderEntityId = $caseEntity->getOrderId();
 
-        static::assertNotEmpty($caseEntity);
-        static::assertEquals('2017-01-06 12:47:03', $caseEntity->getCreatedAt());
-        static::assertEquals('2017-01-06 12:47:03', $caseEntity->getUpdatedAt());
-        static::assertEquals('Magento', $caseEntity->getAssociatedTeam()['teamName']);
-        static::assertEquals(true, $caseEntity->isGuaranteeEligible());
-        static::assertEquals(CaseInterface::STATUS_OPEN, $caseEntity->getStatus());
-        static::assertEquals($orderEntityId, $caseEntity->getOrderId());
+        self::assertNotEmpty($caseEntity);
+        self::assertEquals('2017-01-06 12:47:03', $caseEntity->getCreatedAt());
+        self::assertEquals('2017-01-06 12:47:03', $caseEntity->getUpdatedAt());
+        self::assertEquals('Magento', $caseEntity->getAssociatedTeam()['teamName']);
+        self::assertEquals(true, $caseEntity->isGuaranteeEligible());
+        self::assertEquals(CaseInterface::STATUS_OPEN, $caseEntity->getStatus());
+        self::assertEquals($orderEntityId, $caseEntity->getOrderId());
 
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->_objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($caseEntity->getOrderId());
         $histories = $order->getStatusHistories();
-        static::assertNotEmpty($histories);
+        self::assertNotEmpty($histories);
 
         /** @var OrderStatusHistoryInterface $caseCreationComment */
         $caseComment = array_pop($histories);
-        static::assertInstanceOf(OrderStatusHistoryInterface::class, $caseComment);
+        self::assertInstanceOf(OrderStatusHistoryInterface::class, $caseComment);
 
-        static::assertEquals(
+        self::assertEquals(
             "Case Update: New score for the order is 384. Previous score was 553.",
             $caseComment->getComment()
         );
@@ -90,7 +90,7 @@ class HandlerTest extends AbstractController
     /**
      * Returns mocked WebhookRequest
      *
-     * @return WebhookRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @return WebhookRequest|\PHPUnit\Framework\MockObject_MockObject
      */
     private function getWebhookRequest()
     {
@@ -113,7 +113,7 @@ class HandlerTest extends AbstractController
     /**
      * Returns mocked test WebhookRequest
      *
-     * @return WebhookRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @return WebhookRequest|\PHPUnit\Framework\MockObject_MockObject
      */
     private function getTestWebhookRequest()
     {

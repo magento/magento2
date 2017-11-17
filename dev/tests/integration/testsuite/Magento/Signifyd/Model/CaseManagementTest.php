@@ -5,7 +5,6 @@
  */
 namespace Magento\Signifyd\Model;
 
-use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -16,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Contains test methods for case management service
  */
-class CaseManagementTest extends \PHPUnit_Framework_TestCase
+class CaseManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CaseManagement
@@ -43,9 +42,9 @@ class CaseManagementTest extends \PHPUnit_Framework_TestCase
         $order = $this->getOrder();
         $case = $this->caseManagement->create($order->getEntityId());
 
-        static::assertNotEmpty($case->getEntityId());
-        static::assertEquals(CaseInterface::STATUS_PENDING, $case->getStatus());
-        static::assertEquals(CaseInterface::GUARANTEE_PENDING, $case->getGuaranteeDisposition());
+        self::assertNotEmpty($case->getEntityId());
+        self::assertEquals(CaseInterface::STATUS_PENDING, $case->getStatus());
+        self::assertEquals(CaseInterface::GUARANTEE_PENDING, $case->getGuaranteeDisposition());
     }
 
     /**
@@ -57,10 +56,10 @@ class CaseManagementTest extends \PHPUnit_Framework_TestCase
         $order = $this->getOrder();
         $case = $this->caseManagement->getByOrderId($order->getEntityId());
 
-        static::assertEquals(CaseInterface::STATUS_PROCESSING, $case->getStatus());
-        static::assertEquals(CaseInterface::DISPOSITION_GOOD, $case->getReviewDisposition());
-        static::assertEquals('2016-12-12 15:17:17', $case->getCreatedAt());
-        static::assertEquals('2016-12-12 19:23:16', $case->getUpdatedAt());
+        self::assertEquals(CaseInterface::STATUS_PROCESSING, $case->getStatus());
+        self::assertEquals(CaseInterface::DISPOSITION_GOOD, $case->getReviewDisposition());
+        self::assertEquals('2016-12-12 15:17:17', $case->getCreatedAt());
+        self::assertEquals('2016-12-12 19:23:16', $case->getUpdatedAt());
     }
 
     /**
@@ -69,17 +68,9 @@ class CaseManagementTest extends \PHPUnit_Framework_TestCase
      */
     private function getOrder()
     {
-        /** @var FilterBuilder $filterBuilder */
-        $filterBuilder = $this->objectManager->get(FilterBuilder::class);
-        $filters = [
-            $filterBuilder->setField(OrderInterface::INCREMENT_ID)
-                ->setValue('100000001')
-                ->create()
-        ];
-
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-        $searchCriteria = $searchCriteriaBuilder->addFilters($filters)
+        $searchCriteria = $searchCriteriaBuilder->addFilter(OrderInterface::INCREMENT_ID, '100000001')
             ->create();
 
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);

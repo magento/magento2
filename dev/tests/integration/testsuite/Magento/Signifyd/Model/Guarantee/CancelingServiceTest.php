@@ -13,13 +13,13 @@ use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\Signifyd\Model\SignifydGateway\GatewayException;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
  * Contains test cases for canceling Signifyd guarantee flow.
  */
-class CancelingServiceTest extends \PHPUnit_Framework_TestCase
+class CancelingServiceTest extends \PHPUnit\Framework\TestCase
 {
     private static $caseId = 123;
 
@@ -148,11 +148,11 @@ class CancelingServiceTest extends \PHPUnit_Framework_TestCase
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($updatedCase->getOrderId());
         $histories = $order->getStatusHistories();
-        static::assertNotEmpty($histories);
+        self::assertNotEmpty($histories);
 
         /** @var OrderStatusHistoryInterface $caseCreationComment */
         $caseCreationComment = array_pop($histories);
-        static::assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
-        static::assertEquals('Case Update: Case guarantee has been cancelled.', $caseCreationComment->getComment());
+        self::assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
+        self::assertEquals('Case Update: Case guarantee has been cancelled.', $caseCreationComment->getComment());
     }
 }

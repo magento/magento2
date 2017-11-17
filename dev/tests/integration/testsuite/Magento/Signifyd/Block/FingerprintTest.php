@@ -10,7 +10,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class FingerprintTest extends \PHPUnit_Framework_TestCase
+class FingerprintTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -35,7 +35,7 @@ class FingerprintTest extends \PHPUnit_Framework_TestCase
      */
     public function testSessionIdPresent()
     {
-        static::assertContains('data-order-session-id', $this->getBlockContents());
+        self::assertContains('data-order-session-id', $this->getBlockContents());
     }
 
     /**
@@ -45,7 +45,7 @@ class FingerprintTest extends \PHPUnit_Framework_TestCase
      */
     public function testBlockEmpty()
     {
-        static::assertEmpty($this->getBlockContents());
+        self::assertEmpty($this->getBlockContents());
     }
 
     /**

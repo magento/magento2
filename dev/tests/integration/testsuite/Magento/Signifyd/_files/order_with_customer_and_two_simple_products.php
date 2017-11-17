@@ -16,7 +16,6 @@ require __DIR__ . '/store.php';
 
 $addressData = include __DIR__ . '/../../../Magento/Sales/_files/address_data.php';
 
-
 $objectManager = Bootstrap::getObjectManager();
 
 $billingAddress = $objectManager->create(Address::class, ['data' => $addressData]);

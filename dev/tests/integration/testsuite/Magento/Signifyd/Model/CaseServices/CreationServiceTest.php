@@ -5,20 +5,20 @@
  */
 namespace Magento\Signifyd\Model\CaseServices;
 
-use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\ResourceModel\Order\Grid\Collection;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Model\SignifydGateway\ApiCallException;
 use Magento\Signifyd\Model\SignifydGateway\ApiClient;
 use Magento\Signifyd\Model\SignifydGateway\Client\RequestBuilder;
 use Magento\Signifyd\Model\SignifydGateway\Gateway;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -26,7 +26,7 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreationServiceTest extends \PHPUnit_Framework_TestCase
+class CreationServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -98,16 +98,16 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
         $order = $this->getOrder();
         $exceptionMessage = 'Response is not valid JSON: Decoding failed: Syntax error';
 
-        $this->requestBuilder->expects(static::once())
+        $this->requestBuilder->expects(self::once())
             ->method('doRequest')
             ->willThrowException(new ApiCallException($exceptionMessage));
 
-        $this->logger->expects(static::once())
+        $this->logger->expects(self::once())
             ->method('error')
             ->with($exceptionMessage);
 
         $result = $this->service->createForOrder($order->getEntityId());
-        static::assertTrue($result);
+        self::assertTrue($result);
     }
 
     /**
@@ -124,16 +124,16 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
         ];
         $exceptionMessage = 'Bad Request - The request could not be parsed. Response: ' . json_encode($responseData);
 
-        $this->requestBuilder->expects(static::once())
+        $this->requestBuilder->expects(self::once())
             ->method('doRequest')
             ->willThrowException(new ApiCallException($exceptionMessage));
 
-        $this->logger->expects(static::once())
+        $this->logger->expects(self::once())
             ->method('error')
             ->with($exceptionMessage);
 
         $result = $this->service->createForOrder($order->getEntityId());
-        static::assertTrue($result);
+        self::assertTrue($result);
     }
 
     /**
@@ -144,16 +144,16 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
     {
         $order = $this->getOrder();
 
-        $this->requestBuilder->expects(static::once())
+        $this->requestBuilder->expects(self::once())
             ->method('doRequest')
             ->willReturn([]);
 
-        $this->logger->expects(static::once())
+        $this->logger->expects(self::once())
             ->method('error')
             ->with('Expected field "investigationId" missed.');
 
         $result = $this->service->createForOrder($order->getEntityId());
-        static::assertTrue($result);
+        self::assertTrue($result);
     }
 
     /**
@@ -164,24 +164,24 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
     {
         $order = $this->getOrder();
 
-        $this->requestBuilder->expects(static::once())
+        $this->requestBuilder->expects(self::once())
             ->method('doRequest')
             ->willReturn(['investigationId' => 123123]);
 
-        $this->logger->expects(static::never())
+        $this->logger->expects(self::never())
             ->method('error');
 
         $result = $this->service->createForOrder($order->getEntityId());
-        static::assertTrue($result);
+        self::assertTrue($result);
 
         /** @var CaseRepositoryInterface $caseRepository */
         $caseRepository = $this->objectManager->get(CaseRepositoryInterface::class);
         $caseEntity = $caseRepository->getByCaseId(123123);
         $gridGuarantyStatus = $this->getOrderGridGuarantyStatus($caseEntity->getOrderId());
 
-        static::assertNotEmpty($caseEntity);
-        static::assertEquals($order->getEntityId(), $caseEntity->getOrderId());
-        static::assertEquals(
+        self::assertNotEmpty($caseEntity);
+        self::assertEquals($order->getEntityId(), $caseEntity->getOrderId());
+        self::assertEquals(
             $gridGuarantyStatus,
             $caseEntity->getGuaranteeDisposition(),
             'Signifyd guaranty status in sales_order_grid table does not match case entity guaranty status'
@@ -190,15 +190,15 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($caseEntity->getOrderId());
-        static::assertEquals(Order::STATE_HOLDED, $order->getState());
+        self::assertEquals(Order::STATE_HOLDED, $order->getState());
 
         $histories = $order->getStatusHistories();
-        static::assertNotEmpty($histories);
+        self::assertNotEmpty($histories);
 
         /** @var OrderStatusHistoryInterface $orderHoldComment */
         $orderHoldComment = array_pop($histories);
-        static::assertInstanceOf(OrderStatusHistoryInterface::class, $orderHoldComment);
-        static::assertEquals("Awaiting the Signifyd guarantee disposition.", $orderHoldComment->getComment());
+        self::assertInstanceOf(OrderStatusHistoryInterface::class, $orderHoldComment);
+        self::assertEquals("Awaiting the Signifyd guarantee disposition.", $orderHoldComment->getComment());
     }
 
     /**
@@ -209,17 +209,10 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
     private function getOrder()
     {
         if ($this->order === null) {
-            /** @var FilterBuilder $filterBuilder */
-            $filterBuilder = $this->objectManager->get(FilterBuilder::class);
-            $filters = [
-                $filterBuilder->setField(OrderInterface::INCREMENT_ID)
-                    ->setValue('100000001')
-                    ->create()
-            ];
 
             /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
             $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-            $searchCriteria = $searchCriteriaBuilder->addFilters($filters)
+            $searchCriteria = $searchCriteriaBuilder->addFilter(OrderInterface::INCREMENT_ID, '100000001')
                 ->create();
 
             $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
@@ -240,10 +233,8 @@ class CreationServiceTest extends \PHPUnit_Framework_TestCase
      */
     private function getOrderGridGuarantyStatus($orderEntityId)
     {
-        /** @var \Magento\Sales\Model\ResourceModel\Order\Grid\Collection $orderGridCollection */
-        $orderGridCollection = $this->objectManager->get(
-            \Magento\Sales\Model\ResourceModel\Order\Grid\Collection::class
-        );
+        /** @var Collection $orderGridCollection */
+        $orderGridCollection = $this->objectManager->get(Collection::class);
 
         $items = $orderGridCollection->addFilter($orderGridCollection->getIdFieldName(), $orderEntityId)
             ->getItems();

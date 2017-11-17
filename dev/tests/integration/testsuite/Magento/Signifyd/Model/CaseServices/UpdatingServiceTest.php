@@ -9,6 +9,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\ResourceModel\Order\Grid\Collection;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\MessageGenerators\GeneratorFactory;
@@ -17,7 +18,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Contains tests for case entity updating service.
  */
-class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
+class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -82,14 +83,14 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
         $orderEntityId = $caseEntity->getOrderId();
         $gridGuarantyStatus = $this->getOrderGridGuarantyStatus($orderEntityId);
 
-        static::assertNotEmpty($caseEntity);
-        static::assertEquals('2017-01-05 22:23:26', $caseEntity->getCreatedAt());
-        static::assertEquals(CaseInterface::GUARANTEE_APPROVED, $caseEntity->getGuaranteeDisposition());
-        static::assertEquals('AnyTeam', $caseEntity->getAssociatedTeam()['teamName']);
-        static::assertEquals(true, $caseEntity->isGuaranteeEligible());
-        static::assertEquals(CaseInterface::STATUS_PROCESSING, $caseEntity->getStatus());
-        static::assertEquals($orderEntityId, $caseEntity->getOrderId());
-        static::assertEquals(
+        self::assertNotEmpty($caseEntity);
+        self::assertEquals('2017-01-05 22:23:26', $caseEntity->getCreatedAt());
+        self::assertEquals(CaseInterface::GUARANTEE_APPROVED, $caseEntity->getGuaranteeDisposition());
+        self::assertEquals('AnyTeam', $caseEntity->getAssociatedTeam()['teamName']);
+        self::assertEquals(true, $caseEntity->isGuaranteeEligible());
+        self::assertEquals(CaseInterface::STATUS_PROCESSING, $caseEntity->getStatus());
+        self::assertEquals($orderEntityId, $caseEntity->getOrderId());
+        self::assertEquals(
             $gridGuarantyStatus,
             $caseEntity->getGuaranteeDisposition(),
             'Signifyd guaranty status in sales_order_grid table does not match case entity guaranty status'
@@ -98,14 +99,14 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
         /** @var OrderRepositoryInterface $orderRepository */
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($caseEntity->getOrderId());
-        static::assertEquals(Order::STATE_PROCESSING, $order->getState());
+        self::assertEquals(Order::STATE_PROCESSING, $order->getState());
         $histories = $order->getStatusHistories();
-        static::assertNotEmpty($histories);
+        self::assertNotEmpty($histories);
 
         /** @var OrderStatusHistoryInterface $caseCreationComment */
         $caseCreationComment = array_pop($histories);
-        static::assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
-        static::assertEquals("Signifyd Case $caseId has been created for order.", $caseCreationComment->getComment());
+        self::assertInstanceOf(OrderStatusHistoryInterface::class, $caseCreationComment);
+        self::assertEquals("Signifyd Case $caseId has been created for order.", $caseCreationComment->getComment());
     }
 
     /**
@@ -133,7 +134,7 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($caseEntity->getOrderId());
 
-        static::assertEquals(Order::STATE_HOLDED, $order->getState());
+        self::assertEquals(Order::STATE_HOLDED, $order->getState());
     }
 
     /**
@@ -162,7 +163,7 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $order = $orderRepository->get($caseEntity->getOrderId());
 
-        static::assertEquals(Order::STATE_PROCESSING, $order->getState());
+        self::assertEquals(Order::STATE_PROCESSING, $order->getState());
     }
 
     /**
@@ -173,10 +174,8 @@ class UpdatingServiceTest extends \PHPUnit_Framework_TestCase
      */
     private function getOrderGridGuarantyStatus($orderEntityId)
     {
-        /** @var \Magento\Sales\Model\ResourceModel\Order\Grid\Collection $orderGridCollection */
-        $orderGridCollection = $this->objectManager->get(
-            \Magento\Sales\Model\ResourceModel\Order\Grid\Collection::class
-        );
+        /** @var Collection $orderGridCollection */
+        $orderGridCollection = $this->objectManager->get(Collection::class);
 
         $items = $orderGridCollection->addFilter($orderGridCollection->getIdFieldName(), $orderEntityId)
             ->getItems();

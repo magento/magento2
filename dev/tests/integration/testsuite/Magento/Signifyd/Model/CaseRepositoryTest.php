@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Testing case repository
  */
-class CaseRepositoryTest extends \PHPUnit_Framework_TestCase
+class CaseRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -65,7 +65,7 @@ class CaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $case = array_pop($cases);
         $this->repository->delete($case);
 
-        static::assertEmpty($this->repository->getList($searchCriteria)->getItems());
+        self::assertEmpty($this->repository->getList($searchCriteria)->getItems());
     }
 
     /**
@@ -87,9 +87,9 @@ class CaseRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $found = $this->repository->getById($case->getEntityId());
 
-        static::assertNotEmpty($found->getEntityId());
-        static::assertEquals($case->getEntityId(), $found->getEntityId());
-        static::assertEquals($case->getOrderId(), $found->getOrderId());
+        self::assertNotEmpty($found->getEntityId());
+        self::assertEquals($case->getEntityId(), $found->getEntityId());
+        self::assertEquals($case->getOrderId(), $found->getOrderId());
     }
 
     /**
@@ -116,11 +116,11 @@ class CaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $items = $this->repository->getList($searchCriteria)
             ->getItems();
 
-        static::assertCount(3, $items);
+        self::assertCount(3, $items);
 
         for ($i = 1; $i < 4; $i ++) {
             $current = array_shift($items);
-            static::assertEquals($i, $current->getCaseId());
+            self::assertEquals($i, $current->getCaseId());
         }
     }
 
@@ -140,9 +140,9 @@ class CaseRepositoryTest extends \PHPUnit_Framework_TestCase
         $items = $this->repository->getList($searchCriteria)
             ->getItems();
 
-        static::assertCount(1, $items);
+        self::assertCount(1, $items);
 
         $case = array_pop($items);
-        static::assertEquals(123, $case->getCaseId());
+        self::assertEquals(123, $case->getCaseId());
     }
 }

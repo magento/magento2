@@ -5,7 +5,6 @@
  */
 namespace Magento\Signifyd\Observer;
 
-use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event;
@@ -14,10 +13,10 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Signifyd\Api\CaseCreationServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject_MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
-class PlaceOrderTest extends \PHPUnit_Framework_TestCase
+class PlaceOrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CaseCreationServiceInterface|MockObject
@@ -157,17 +156,9 @@ class PlaceOrderTest extends \PHPUnit_Framework_TestCase
      */
     private function getOrder($incrementId)
     {
-        /** @var FilterBuilder $filterBuilder */
-        $filterBuilder = $this->objectManager->get(FilterBuilder::class);
-        $filters = [
-            $filterBuilder->setField(OrderInterface::INCREMENT_ID)
-                ->setValue($incrementId)
-                ->create()
-        ];
-
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-        $searchCriteria = $searchCriteriaBuilder->addFilters($filters)
+        $searchCriteria = $searchCriteriaBuilder->addFilter(OrderInterface::INCREMENT_ID, $incrementId)
             ->create();
 
         $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);

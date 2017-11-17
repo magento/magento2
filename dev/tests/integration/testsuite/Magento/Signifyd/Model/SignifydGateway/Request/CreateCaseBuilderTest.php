@@ -20,7 +20,7 @@ use Magento\Framework\App\ProductMetadataInterface;
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
+class CreateCaseBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface
@@ -62,7 +62,7 @@ class CreateCaseBuilderTest extends \PHPUnit_Framework_TestCase
         /** @var Order $order */
         $order = $this->objectManager->create(Order::class);
         $order->loadByIncrementId('100000001');
-        
+
         $orderItems = $order->getAllItems();
         $product = $orderItems[0]->getProduct();
         $payment = $order->getPayment();
