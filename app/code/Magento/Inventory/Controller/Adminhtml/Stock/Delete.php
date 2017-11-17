@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Controller\Adminhtml\Stock;
 
 use Magento\Backend\App\Action;
@@ -46,7 +48,7 @@ class Delete extends Action
     {
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        $stockId = $this->getRequest()->getPost(StockInterface::STOCK_ID);
+        $stockId = (int) $this->getRequest()->getPost(StockInterface::STOCK_ID);
         if ($stockId === null) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
             return $resultRedirect->setPath('*/*');

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Observer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -73,7 +75,7 @@ class SourceItemsProcessor
      * @return void
      * @throws InputException
      */
-    public function process($sku, array $sourceItemsData)
+    public function process(string $sku, array $sourceItemsData)
     {
         $sourceItemsForDelete = $this->getCurrentSourceItemsMap($sku);
         $sourceItemsForSave = [];

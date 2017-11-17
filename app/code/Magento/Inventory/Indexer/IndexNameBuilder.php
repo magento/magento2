@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Indexer;
 
 /**
@@ -54,8 +56,8 @@ class IndexNameBuilder
 
     /**
      * @param IndexNameFactory $indexNameFactory
-     * @param AliasFactory $aliasFactory
-     * @param IndexNameFactory $indexNameFactory
+     * @param DimensionFactory $dimensionFactory
+     * @param AliasFactory     $aliasFactory
      */
     public function __construct(
         IndexNameFactory $indexNameFactory,
