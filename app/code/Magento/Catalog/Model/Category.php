@@ -28,6 +28,8 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @method Category setUrlPath(string $urlPath)
  * @method Category getSkipDeleteChildren()
  * @method Category setSkipDeleteChildren(boolean $value)
+ * @method Category setChangedProductIds(array $categoryIds) Set products ids that inserted or deleted for category
+ * @method array getChangedProductIds() Get products ids that inserted or deleted for category
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -780,11 +782,14 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Retrieve children ids comma separated
      *
+     * @param boolean $recursive
+     * @param boolean $isActive
+     * @param boolean $sortByPosition
      * @return string
      */
-    public function getChildren()
+    public function getChildren($recursive = false, $isActive = true, $sortByPosition = false)
     {
-        return implode(',', $this->getResource()->getChildren($this, false));
+        return implode(',', $this->getResource()->getChildren($this, $recursive, $isActive, $sortByPosition));
     }
 
     /**
@@ -1094,7 +1099,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         if ($this->flatState->isFlatEnabled()) {
             $flatIndexer = $this->indexerRegistry->get(Indexer\Category\Flat\State::INDEXER_ID);
             if (!$flatIndexer->isScheduled()) {
-                $flatIndexer->reindexRow($this->getId());
+                $idsList = [$this->getId()];
+                if ($this->dataHasChangedFor('url_key')) {
+                    $idsList = array_merge($idsList, explode(',', $this->getAllChildren()));
+                }
+                $flatIndexer->reindexList($idsList);
             }
         }
         $productIndexer = $this->indexerRegistry->get(Indexer\Category\Product::INDEXER_ID);

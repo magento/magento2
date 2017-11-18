@@ -11,7 +11,7 @@ class SettlementDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     public function testBuild()
     {
-        $this->assertEquals(
+        self::assertEquals(
             [
                 'options' => [
                     SettlementDataBuilder::SUBMIT_FOR_SETTLEMENT => true

@@ -3,6 +3,7 @@
 /.metadata
 /.project
 /.settings
+/.vscode
 atlassian*
 /nbproject
 /robots.txt

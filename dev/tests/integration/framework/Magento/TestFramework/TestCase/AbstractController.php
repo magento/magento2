@@ -26,12 +26,12 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     protected $_runOptions = [];
 
     /**
-     * @var \Magento\TestFramework\Request
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
-     * @var \Magento\TestFramework\Response
+     * @var \Magento\Framework\App\ResponseInterface
      */
     protected $_response;
 
@@ -103,7 +103,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     /**
      * Request getter
      *
-     * @return \Magento\TestFramework\Request
+     * @return \Magento\Framework\App\RequestInterface
      */
     public function getRequest()
     {
@@ -116,7 +116,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     /**
      * Response getter
      *
-     * @return \Magento\TestFramework\Response
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function getResponse()
     {
@@ -269,14 +269,21 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     {
         /** @var $cookieManager CookieManagerInterface */
         $cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
+
+        /** @var $jsonSerializer \Magento\Framework\Serialize\Serializer\Json */
+        $jsonSerializer = $this->_objectManager->get(\Magento\Framework\Serialize\Serializer\Json::class);
         try {
-            $messages = \Zend_Json::decode(
-                $cookieManager->getCookie(MessagePlugin::MESSAGES_COOKIES_NAME, \Zend_Json::encode([]))
+            $messages = $jsonSerializer->unserialize(
+                $cookieManager->getCookie(
+                    MessagePlugin::MESSAGES_COOKIES_NAME,
+                    $jsonSerializer->serialize([])
+                )
             );
+
             if (!is_array($messages)) {
                 $messages = [];
             }
-        } catch (\Zend_Json_Exception $e) {
+        } catch (\InvalidArgumentException $e) {
             $messages = [];
         }
 

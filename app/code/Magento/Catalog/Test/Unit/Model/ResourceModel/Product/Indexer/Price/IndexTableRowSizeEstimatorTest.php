@@ -38,7 +38,7 @@ class IndexTableRowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
 
     public function testEstimateRowSize()
     {
-        $expectedValue = 2400000;
+        $expectedValue = 4000000;
 
         $this->websiteManagementMock->expects($this->once())->method('getCount')->willReturn(100);
         $collectionMock = $this->createMock(\Magento\Customer\Model\ResourceModel\Group\Collection::class);

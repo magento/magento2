@@ -15,9 +15,6 @@ use Magento\Sales\Api\Data\InvoiceCommentSearchResultInterfaceFactory;
 use Magento\Sales\Api\InvoiceCommentRepositoryInterface;
 use Magento\Sales\Model\Spi\InvoiceCommentResourceInterface;
 
-/**
- * @since 2.2.0
- */
 class CommentRepository implements InvoiceCommentRepositoryInterface
 {
     /**

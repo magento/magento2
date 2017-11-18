@@ -170,7 +170,12 @@ class SystemTest extends \PHPUnit\Framework\TestCase
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn($data);
+        $this->postProcessor->expects($this->once())
+            ->method('process')
+            ->with($data)
+            ->willReturn($data);
 
+        $this->assertEquals($url, $this->configType->get($path));
         $this->assertEquals($url, $this->configType->get($path));
     }
 }

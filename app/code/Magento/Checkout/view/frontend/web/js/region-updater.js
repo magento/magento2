@@ -206,7 +206,7 @@ define([
                     regionInput.removeClass('required-entry');
                 }
 
-                regionList.removeClass('required-entry').hide();
+                regionList.removeClass('required-entry').prop('disabled', 'disabled').hide();
                 regionInput.show();
                 label.attr('for', regionInput.attr('id'));
             }

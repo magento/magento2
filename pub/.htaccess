@@ -37,7 +37,7 @@
 ############################################
 ## Adjust memory limit
 
-    php_value memory_limit 768M
+    php_value memory_limit 756M
     php_value max_execution_time 18000
 
 ############################################
@@ -60,7 +60,7 @@
 ############################################
 ## Adjust memory limit
 
-    php_value memory_limit 768M
+    php_value memory_limit 756M
     php_value max_execution_time 18000
 
 ############################################
@@ -190,8 +190,13 @@
 ## Deny access to release notes to prevent disclosure of the installed Magento version
 
     <Files RELEASE_NOTES.txt>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
 
 # For 404s and 403s that aren't handled by the application, show plain 404 response
@@ -207,8 +212,13 @@ ErrorDocument 403 /errors/404.php
 ###########################################
 ## Deny access  to cron.php
     <Files cron.php>
-        order allow,deny
-        deny from all
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
     </Files>
 
 <IfModule mod_headers.c>

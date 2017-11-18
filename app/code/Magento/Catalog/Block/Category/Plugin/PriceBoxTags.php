@@ -102,8 +102,8 @@ class PriceBoxTags
 
         if (!empty($billingAddress) || !empty($shippingAddress)) {
             $rateRequest = $this->getTaxCalculation()->getRateRequest(
-                $billingAddress,
                 $shippingAddress,
+                $billingAddress,
                 $customerTaxClassId,
                 $this->scopeResolver->getScope()->getId(),
                 $this->customerSession->getCustomerId()

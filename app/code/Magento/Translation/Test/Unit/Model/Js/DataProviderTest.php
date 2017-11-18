@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Translation\Test\Unit\Model\Js;
 
 use Magento\Framework\App\State;
@@ -147,5 +148,40 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap($translateMap);
 
         $this->assertEquals($expectedResult, $this->model->getData($themePath));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testGetDataThrowingException()
+    {
+        $themePath = 'blank';
+        $areaCode = 'adminhtml';
+
+        $patterns = ['~\$\.mage\.__\(([\'"])(.+?)\1\)~'];
+
+        $this->fileReadMock->expects($this->once())
+            ->method('readAll')
+            ->willReturn('content1$.mage.__("hello1")content1');
+
+        $this->appStateMock->expects($this->once())
+            ->method('getAreaCode')
+            ->willReturn($areaCode);
+        $this->filesUtilityMock->expects($this->any())
+            ->method('getJsFiles')
+            ->willReturn(['test']);
+        $this->filesUtilityMock->expects($this->any())
+            ->method('getStaticHtmlFiles')
+            ->willReturn(['test']);
+
+        $this->configMock->expects($this->any())
+            ->method('getPatterns')
+            ->willReturn($patterns);
+
+        $this->translateMock->expects($this->once())
+            ->method('render')
+            ->willThrowException(new \Exception('Test exception'));
+
+        $this->model->getData($themePath);
     }
 }
