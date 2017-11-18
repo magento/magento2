@@ -70,17 +70,22 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      * @param array $fileTypes
      * @param string $changedFilesBaseDir
      * @param string $baseFilesFolder
+     * @param string $whitelistFile
      * @return array
      */
-    public static function getWhitelist($fileTypes = ['php'], $changedFilesBaseDir = '', $baseFilesFolder = '')
-    {
+    public static function getWhitelist(
+        $fileTypes = ['php'],
+        $changedFilesBaseDir = '',
+        $baseFilesFolder = '',
+        $whitelistFile = '/_files/whitelist/common.txt'
+    ) {
         $changedFiles = self::getChangedFilesList($changedFilesBaseDir);
         if (empty($changedFiles)) {
             return [];
         }
 
         $globPatternsFolder = ('' !== $baseFilesFolder) ? $baseFilesFolder : self::getBaseFilesFolder();
-        $directoriesToCheck = Files::init()->readLists($globPatternsFolder . '/_files/whitelist/common.txt');
+        $directoriesToCheck = Files::init()->readLists($globPatternsFolder . $whitelistFile);
         $targetFiles = self::filterFiles($changedFiles, $fileTypes, $directoriesToCheck);
 
         return $targetFiles;
@@ -264,6 +269,24 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(
             $result,
             "PHP Copy/Paste Detector has found error(s):" . PHP_EOL . $output
+        );
+    }
+
+    public function testStrictTypes()
+    {
+        $filesMissingStrictTyping = [];
+
+        foreach (self::getWhitelist(['php'], '', '', '/_files/whitelist/strict_type.txt') as $fileName) {
+            $file = file_get_contents($fileName);
+            if (strstr($file, 'strict_types=1') === false) {
+                $filesMissingStrictTyping[] = $fileName;
+            }
+        }
+
+        $this->assertEquals(
+            0,
+            count($filesMissingStrictTyping),
+            "Following files are missing strict type declaration:" . PHP_EOL . implode(PHP_EOL, $filesMissingStrictTyping)
         );
     }
 }
