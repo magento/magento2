@@ -8,8 +8,6 @@ namespace Magento\CatalogImportExport\Model\Import;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
-use Magento\Framework\Api\SearchCriteriaBuilderFactory;
-use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
