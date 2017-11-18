@@ -200,7 +200,7 @@ class SourcesTest extends TestCase
         $this->importData($bunch);
         $afterImportData = $this->getSourceItemList($searchCriteria);
 
-        // checks is data from import not changed
+        // checks whether original source item which has not been imported stays in database
         $this->assertEquals($beforeImportData['10-SKU-1'], $afterImportData['10-SKU-1']);
 
         $this->assertArrayHasKey('20-SKU-1', $afterImportData);
