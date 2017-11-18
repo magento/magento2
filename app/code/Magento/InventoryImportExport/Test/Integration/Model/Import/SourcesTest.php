@@ -182,7 +182,7 @@ class SourcesTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
      */
-    public function testImportDataWithReplaceBehaviorNoAffectNotMatchingEntrys()
+    public function testImportDataWithReplaceBehaviorNoAffectOtherSources()
     {
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $beforeImportData = $this->getSourceItemList($searchCriteria);
