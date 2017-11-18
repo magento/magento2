@@ -1,0 +1,7 @@
+# Format: <componentType=module|library|theme|language|*> <componentName> <globPattern> or simply <globPattern>
+app/code/Magento/Inventory
+app/code/Magento/InventoryApi
+app/code/Magento/InventoryCatalog
+app/code/Magento/InventoryImportExport
+app/code/Magento/InventorySales
+app/code/Magento/InventorySalesApi
