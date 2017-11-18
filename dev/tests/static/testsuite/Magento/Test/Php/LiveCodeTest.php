@@ -272,11 +272,18 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Tests whitelisted files for strict type declarations.
+     */
     public function testStrictTypes()
     {
-        $filesMissingStrictTyping = [];
+        $toBeTestedFiles = array_diff(
+            self::getWhitelist(['php'], '', '', '/_files/whitelist/strict_type.txt'),
+            Files::init()->readLists(self::getBaseFilesFolder() . '/_files/blacklist/strict_type.txt')
+        );
 
-        foreach (self::getWhitelist(['php'], '', '', '/_files/whitelist/strict_type.txt') as $fileName) {
+        $filesMissingStrictTyping = [];
+        foreach ($toBeTestedFiles as $fileName) {
             $file = file_get_contents($fileName);
             if (strstr($file, 'strict_types=1') === false) {
                 $filesMissingStrictTyping[] = $fileName;
