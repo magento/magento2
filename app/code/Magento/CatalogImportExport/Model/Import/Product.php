@@ -6,7 +6,10 @@
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
+use Magento\Framework\Api\SearchCriteriaBuilderFactory;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
@@ -699,6 +702,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $catalogConfig;
 
     /**
+     * Source Item Importer
+     *
+     * @var
+     */
+    private $stockItemImporter;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -737,6 +747,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $data
      * @param array $dateAttrCodes
      * @param CatalogConfig $catalogConfig
+     * @param StockItemImporterInterface $stockItemImporter
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -778,6 +789,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         Product\TaxClassProcessor $taxClassProcessor,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\Url $productUrl,
+        StockItemImporterInterface $stockItemImporter,
         array $data = [],
         array $dateAttrCodes = [],
         CatalogConfig $catalogConfig = null
@@ -813,6 +825,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
         $this->catalogConfig = $catalogConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(CatalogConfig::class);
+        $this->stockItemImporter = $stockItemImporter;
 
         parent::__construct(
             $jsonHelper,
@@ -2261,6 +2274,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             // Insert rows
             if (!empty($stockData)) {
                 $this->_connection->insertOnDuplicate($entityTable, array_values($stockData));
+                $this->stockItemImporter->import($bunch);
             }
 
             $this->reindexProducts($productIdsToReindex);
