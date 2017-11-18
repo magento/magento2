@@ -91,18 +91,21 @@ class GetProductQuantityInStockTest extends TestCase
     {
         $this->indexer->reindexRow(1);
 
+        // condition before start the test
+        self::assertEquals(8.5, $this->getProductQtyInStock->execute('SKU-1', 10));
+
         $this->reservationsAppend->execute([
             // reserve 5 units
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(-5)->build(),
-            // unreserve 1.5 units
+            // unreserved 1.5 units
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(1.5)->build(),
         ]);
 
-        $qty = $this->getProductQtyInStock->execute('SKU-1', 10);
-        self::assertEquals(5, $qty);
+        // checks the expected result after reservation
+        self::assertEquals(5, $this->getProductQtyInStock->execute('SKU-1', 10));
 
         $this->reservationsAppend->execute([
-            // unreserve 3.5 units
+            // unreserved 3.5 units
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(3.5)->build(),
         ]);
     }
