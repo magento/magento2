@@ -465,7 +465,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         } elseif ($this->getWatermarkPosition() == self::POSITION_CENTER) {
             $positionX = $this->_imageSrcWidth / 2 - imagesx($watermark) / 2;
             $positionY = $this->_imageSrcHeight / 2 - imagesy($watermark) / 2;
-            $this->imagecopymergeWithAlphaFix(
+            $this->copyImageWithAlphaPercentage(
                 $this->_imageHandler,
                 $watermark,
                 $positionX,
@@ -478,7 +478,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             );
         } elseif ($this->getWatermarkPosition() == self::POSITION_TOP_RIGHT) {
             $positionX = $this->_imageSrcWidth - imagesx($watermark);
-            $this->imagecopymergeWithAlphaFix(
+            $this->copyImageWithAlphaPercentage(
                 $this->_imageHandler,
                 $watermark,
                 $positionX,
@@ -490,7 +490,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
                 $this->getWatermarkImageOpacity()
             );
         } elseif ($this->getWatermarkPosition() == self::POSITION_TOP_LEFT) {
-            $this->imagecopymergeWithAlphaFix(
+            $this->copyImageWithAlphaPercentage(
                 $this->_imageHandler,
                 $watermark,
                 $positionX,
@@ -504,7 +504,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         } elseif ($this->getWatermarkPosition() == self::POSITION_BOTTOM_RIGHT) {
             $positionX = $this->_imageSrcWidth - imagesx($watermark);
             $positionY = $this->_imageSrcHeight - imagesy($watermark);
-            $this->imagecopymergeWithAlphaFix(
+            $this->copyImageWithAlphaPercentage(
                 $this->_imageHandler,
                 $watermark,
                 $positionX,
@@ -517,7 +517,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             );
         } elseif ($this->getWatermarkPosition() == self::POSITION_BOTTOM_LEFT) {
             $positionY = $this->_imageSrcHeight - imagesy($watermark);
-            $this->imagecopymergeWithAlphaFix(
+            $this->copyImageWithAlphaPercentage(
                 $this->_imageHandler,
                 $watermark,
                 $positionX,
@@ -531,7 +531,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         }
 
         if ($tile === false && $merged === false) {
-            $this->imagecopymergeWithAlphaFix(
+            $this->copyImageWithAlphaPercentage(
                 $this->_imageHandler,
                 $watermark,
                 $positionX,
@@ -547,7 +547,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $offsetY = $positionY;
             while ($offsetY <= $this->_imageSrcHeight + imagesy($watermark)) {
                 while ($offsetX <= $this->_imageSrcWidth + imagesx($watermark)) {
-                    $this->imagecopymergeWithAlphaFix(
+                    $this->copyImageWithAlphaPercentage(
                         $this->_imageHandler,
                         $watermark,
                         $offsetX,
@@ -780,64 +780,71 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     }
 
     /**
-     * Fix an issue with the usage of imagecopymerge where the alpha channel is lost
+     * Copy source image onto destination image with given alpha percentage
      *
-     * @param resource $dst_im
-     * @param resource $src_im
-     * @param int $dst_x
-     * @param int $dst_y
-     * @param int $src_x
-     * @param int $src_y
-     * @param int $src_w
-     * @param int $src_h
-     * @param int $pct
+     * @internal The arguments and functionality is the same as imagecopymerge
+     *           but with proper handling of alpha transparency
+     *
+     * @param resource $destinationImage
+     * @param resource $sourceImage
+     * @param int $destinationX
+     * @param int $destinationY
+     * @param int $sourceX
+     * @param int $sourceY
+     * @param int $sourceWidth
+     * @param int $sourceHeight
+     * @param int $alphaPercentage
      *
      * @return bool
      */
-    private function imagecopymergeWithAlphaFix(
-        $dst_im,
-        $src_im,
-        $dst_x,
-        $dst_y,
-        $src_x,
-        $src_y,
-        $src_w,
-        $src_h,
-        $pct
+    private function copyImageWithAlphaPercentage(
+        $destinationImage,
+        $sourceImage,
+        $destinationX,
+        $destinationY,
+        $sourceX,
+        $sourceY,
+        $sourceWidth,
+        $sourceHeight,
+        $alphaPercentage
     ) {
-        if ($pct >= 100) {
-            return imagecopy($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h);
+        if (imageistruecolor($destinationImage) === false || imageistruecolor($sourceImage) === false) {
+            return imagecopymerge($destinationImage, $sourceImage, $destinationX, $destinationY, $sourceX, $sourceY, $sourceWidth, $sourceHeight, $alphaPercentage);
         }
 
-        if ($pct < 0) {
+        if ($alphaPercentage >= 100) {
+            return imagecopy($destinationImage, $sourceImage, $destinationX, $destinationY, $sourceX, $sourceY, $sourceWidth, $sourceHeight);
+        }
+
+        if ($alphaPercentage < 0) {
             return false;
         }
 
-        $sizeX = imagesx($src_im);
-        $sizeY = imagesy($src_im);
-        if (false === $sizeX || false === $sizeY) {
+        $sizeX = imagesx($sourceImage);
+        $sizeY = imagesy($sourceImage);
+        if ($sizeX === false || $sizeY === false || $sizeX === 0 || $sizeY === 0) {
             return false;
         }
 
-        $tmpImg = imagecreatetruecolor($src_w, $src_h);
-        if (false === $tmpImg) {
+        $tmpImg = imagecreatetruecolor($sourceWidth, $sourceHeight);
+        if ($tmpImg === false) {
             return false;
         }
 
-        if (false === imagealphablending($tmpImg, false)) {
+        if (imagealphablending($tmpImg, false) === false) {
             return false;
         }
 
-        if (false === imagecopy($tmpImg, $src_im, 0, 0, 0, 0, $sizeX, $sizeY)) {
+        if (imagecopy($tmpImg, $sourceImage, 0, 0, 0, 0, $sizeX, $sizeY) === false) {
             return false;
         }
 
-        $transparancy = 127 - (($pct*127)/100);
-        if (false === imagefilter($tmpImg, IMG_FILTER_COLORIZE, 0, 0, 0, $transparancy)) {
+        $transparency = 127 - (($alphaPercentage*127)/100);
+        if (imagefilter($tmpImg, IMG_FILTER_COLORIZE, 0, 0, 0, $transparency) === false) {
             return false;
         }
 
-        $result = imagecopy($dst_im, $tmpImg, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h);
+        $result = imagecopy($destinationImage, $tmpImg, $destinationX, $destinationY, $sourceX, $sourceY, $sourceWidth, $sourceHeight);
         imagedestroy($tmpImg);
 
         return $result;
