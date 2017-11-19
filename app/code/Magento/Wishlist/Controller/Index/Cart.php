@@ -147,6 +147,9 @@ class Cart extends AbstractIndex
 
         // Set qty
         $qty = $this->getRequest()->getParam('qty');
+        if (!$qty) {
+            $qty = $this->getMinimalQty($item);
+        }
         if (is_array($qty)) {
             if (isset($qty[$itemId])) {
                 $qty = $qty[$itemId];
@@ -219,5 +222,21 @@ class Cart extends AbstractIndex
 
         $resultRedirect->setUrl($redirectUrl);
         return $resultRedirect;
+    }
+
+    /**
+     * Gets minimal sales quantity
+     *
+     * @param \Magento\Wishlist\Model\Item $item
+     * @return int|null
+     */
+    public function getMinimalQty($item)
+    {
+        $stockItem = $this->_objectManager->get('\Magento\CatalogInventory\Api\StockRegistryInterface');
+        $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+        $store = $storeManager->getStore($item->getStoreId());
+        $stockItem = $stockItem->getStockItem($item->getProductId(), $store);
+        $minSaleQty = $stockItem->getMinSaleQty();
+        return $minSaleQty > 0 ? $minSaleQty : 1;
     }
 }

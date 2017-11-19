@@ -8,13 +8,12 @@ namespace Magento\Framework\HTTP\PhpEnvironment;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 use Magento\Framework\Stdlib\StringUtils;
 use Zend\Http\Header\HeaderInterface;
-use Zend\Http\PhpEnvironment\Request as Zend_Request;
 use Zend\Stdlib\Parameters;
 use Zend\Stdlib\ParametersInterface;
 use Zend\Uri\UriFactory;
 use Zend\Uri\UriInterface;
 
-class Request extends Zend_Request
+class Request extends \Zend\Http\PhpEnvironment\Request
 {
     /**#@+
      * Protocols
@@ -298,12 +297,12 @@ class Request extends Zend_Request
     {
         $key = (string) $key;
         $keyName = (null !== ($alias = $this->getAlias($key))) ? $alias : $key;
-        if (isset($this->postParams[$keyName])) {
-            return $this->postParams[$keyName];
-        } elseif (isset($this->params[$keyName])) {
+        if (isset($this->params[$keyName])) {
             return $this->params[$keyName];
         } elseif (isset($this->queryParams[$keyName])) {
             return $this->queryParams[$keyName];
+        } elseif (isset($this->postParams[$keyName])) {
+            return $this->postParams[$keyName];
         }
         return $default;
     }
@@ -428,6 +427,7 @@ class Request extends Zend_Request
     {
         // Lets read from db only one time okay.
         if ($this->sslOffloadHeader === null) {
+
             // @todo: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
             // installed MAGETWO-31756
             // Check if a proxy sent a header indicating an initial secure request
@@ -438,6 +438,7 @@ class Request extends Zend_Request
                 )
             );
         }
+
         return $this->sslOffloadHeader;
     }
 
