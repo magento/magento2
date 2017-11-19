@@ -311,14 +311,26 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
                 $offsetY = $positionY;
                 while ($offsetY <= $this->_imageSrcHeight + $watermark->getImageHeight()) {
                     while ($offsetX <= $this->_imageSrcWidth + $watermark->getImageWidth()) {
-                        $this->_imageHandler->compositeImage($watermark, \Imagick::COMPOSITE_OVER, $offsetX, $offsetY, $compositeChannels);
+                        $this->_imageHandler->compositeImage(
+                            $watermark,
+                            \Imagick::COMPOSITE_OVER,
+                            $offsetX,
+                            $offsetY,
+                            $compositeChannels
+                        );
                         $offsetX += $watermark->getImageWidth();
                     }
                     $offsetX = $positionX;
                     $offsetY += $watermark->getImageHeight();
                 }
             } else {
-                $this->_imageHandler->compositeImage($watermark, \Imagick::COMPOSITE_OVER, $positionX, $positionY, $compositeChannels);
+                $this->_imageHandler->compositeImage(
+                    $watermark,
+                    \Imagick::COMPOSITE_OVER,
+                    $positionX,
+                    $positionY,
+                    $compositeChannels
+                );
             }
         } catch (\ImagickException $e) {
             throw new \Exception('Unable to create watermark.', $e->getCode(), $e);

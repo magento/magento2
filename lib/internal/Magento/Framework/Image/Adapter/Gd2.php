@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
 {
     /**
@@ -796,6 +799,9 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param int $alphaPercentage
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function copyImageWithAlphaPercentage(
         $destinationImage,
@@ -809,11 +815,30 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         $alphaPercentage
     ) {
         if (imageistruecolor($destinationImage) === false || imageistruecolor($sourceImage) === false) {
-            return imagecopymerge($destinationImage, $sourceImage, $destinationX, $destinationY, $sourceX, $sourceY, $sourceWidth, $sourceHeight, $alphaPercentage);
+            return imagecopymerge(
+                $destinationImage,
+                $sourceImage,
+                $destinationX,
+                $destinationY,
+                $sourceX,
+                $sourceY,
+                $sourceWidth,
+                $sourceHeight,
+                $alphaPercentage
+            );
         }
 
         if ($alphaPercentage >= 100) {
-            return imagecopy($destinationImage, $sourceImage, $destinationX, $destinationY, $sourceX, $sourceY, $sourceWidth, $sourceHeight);
+            return imagecopy(
+                $destinationImage,
+                $sourceImage,
+                $destinationX,
+                $destinationY,
+                $sourceX,
+                $sourceY,
+                $sourceWidth,
+                $sourceHeight
+            );
         }
 
         if ($alphaPercentage < 0) {
@@ -844,7 +869,16 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             return false;
         }
 
-        $result = imagecopy($destinationImage, $tmpImg, $destinationX, $destinationY, $sourceX, $sourceY, $sourceWidth, $sourceHeight);
+        $result = imagecopy(
+            $destinationImage,
+            $tmpImg,
+            $destinationX,
+            $destinationY,
+            $sourceX,
+            $sourceY,
+            $sourceWidth,
+            $sourceHeight
+        );
         imagedestroy($tmpImg);
 
         return $result;
