@@ -59,7 +59,7 @@ class StockItemImporter implements StockItemImporterInterface
      * @param array $stockData
      * @return void
      */
-    public function import(array $stockData): void
+    public function import(array $stockData)
     {
         $sourceItems = [];
         foreach ($stockData as $stockDatum) {
