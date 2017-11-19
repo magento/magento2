@@ -9,6 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 
@@ -111,7 +112,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
             if (!array_key_exists('qty', $requestParams)) {
                 $requestParams['qty'] = $this->getMinimalQty($product);
             }
-            $buyRequest = new \Magento\Framework\DataObject($requestParams);
+            $buyRequest = new DataObject($requestParams);
 
             $result = $wishlist->addNewItem($product, $buyRequest);
             if (is_string($result)) {
