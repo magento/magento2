@@ -9,7 +9,6 @@ namespace Magento\CatalogImportExport\Model;
 
 /**
  * Interface StockItemImporterInterface
- * @package Magento\CatalogImportExport\Api
  *
  * @api
  */
