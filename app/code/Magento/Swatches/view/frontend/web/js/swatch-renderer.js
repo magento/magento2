@@ -616,6 +616,10 @@ define([
                 return $widget._OnClick($(this), $widget);
             });
 
+            $widget.element.on('emulateClick', '.' + options.optionClass, function () {
+                return $widget._OnClick($(this), $widget, 'emulateClick');
+            });
+
             $widget.element.on('change', '.' + options.selectClass, function () {
                 return $widget._OnChange($(this), $widget);
             });
@@ -646,9 +650,10 @@ define([
         /**
          * Load media gallery using ajax or json config.
          *
+         * @param {String|undefined} eventName
          * @private
          */
-        _loadMedia: function () {
+        _loadMedia: function (eventName) {
             var $main = this.inProductList ?
                     this.element.parents('.product-item-info') :
                     this.element.parents('.column.main'),
@@ -663,7 +668,7 @@ define([
                     images = this.options.mediaGalleryInitial;
                 }
 
-                this.updateBaseImage(images, $main, !this.inProductList);
+                this.updateBaseImage(images, $main, !this.inProductList, eventName);
             }
         },
 
@@ -672,9 +677,10 @@ define([
          *
          * @param {Object} $this
          * @param {Object} $widget
+         * @param {String|undefined} eventName
          * @private
          */
-        _OnClick: function ($this, $widget) {
+        _OnClick: function ($this, $widget, eventName) {
             var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
                 $wrapper = $this.parents('.' + $widget.options.classes.attributeOptionsWrapper),
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
@@ -713,7 +719,7 @@ define([
                 $widget._UpdatePrice();
             }
 
-            $widget._loadMedia();
+            $widget._loadMedia(eventName);
             $input.trigger('change');
         },
 
@@ -1118,15 +1124,35 @@ define([
         },
 
         /**
+         * Start update base image process based on event name
+         * @param {Array} images
+         * @param {jQuery} context
+         * @param {Boolean} isInProductView
+         * @param {String|undefined} eventName
+         */
+        updateBaseImage: function (images, context, isInProductView, eventName) {
+            var gallery = context.find(this.options.mediaGallerySelector).data('gallery');
+
+            if (eventName === undefined) {
+                this.processUpdateBaseImage(images, context, isInProductView, gallery);
+            } else {
+                context.find(this.options.mediaGallerySelector).on('gallery:loaded', function (loadedGallery) {
+                    loadedGallery = context.find(this.options.mediaGallerySelector).data('gallery');
+                    this.processUpdateBaseImage(images, context, isInProductView, loadedGallery);
+                }.bind(this));
+            }
+        },
+
+        /**
          * Update [gallery-placeholder] or [product-image-photo]
          * @param {Array} images
          * @param {jQuery} context
          * @param {Boolean} isInProductView
+         * @param {Object} gallery
          */
-        updateBaseImage: function (images, context, isInProductView) {
+        processUpdateBaseImage: function (images, context, isInProductView, gallery) {
             var justAnImage = images[0],
                 initialImages = this.options.mediaGalleryInitial,
-                gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
                 imagesToUpdate,
                 isInitial;
 
@@ -1203,13 +1229,18 @@ define([
         /**
          * Emulate mouse click or selection change on all swatches that should be selected
          * @param {Object} [selectedAttributes]
+         * @param {String} triggerClick
          * @private
          */
-        _EmulateSelectedByAttributeId: function (selectedAttributes) {
+        _EmulateSelectedByAttributeId: function (selectedAttributes, triggerClick) {
             $.each(selectedAttributes, $.proxy(function (attributeId, optionId) {
                 var elem = this.element.find('.' + this.options.classes.attributeClass +
                     '[attribute-id="' + attributeId + '"] [option-id="' + optionId + '"]'),
                     parentInput = elem.parent();
+
+                if (triggerClick === null || triggerClick === '') {
+                    triggerClick = 'click';
+                }
 
                 if (elem.hasClass('selected')) {
                     return;
@@ -1219,7 +1250,7 @@ define([
                     parentInput.val(optionId);
                     parentInput.trigger('change');
                 } else {
-                    elem.trigger('click');
+                    elem.trigger(triggerClick);
                 }
             }, this));
         },

@@ -21,7 +21,7 @@ class PhpFormatter implements FormatterInterface
     public function format($data, array $comments = [])
     {
         if (!empty($comments) && is_array($data)) {
-            return "<?php\nreturn array (\n" . $this->formatData($data, $comments, '  ') . "\n);\n";
+            return "<?php\nreturn array (\n" . $this->formatData($data, $comments) . "\n);\n";
         }
         return "<?php\nreturn " . var_export($data, true) . ";\n";
     }
@@ -29,12 +29,12 @@ class PhpFormatter implements FormatterInterface
     /**
      * Format supplied data
      *
-     * @param $data
-     * @param $comments
+     * @param string[] $data
+     * @param string[] $comments
      * @param string $prefix
      * @return string
      */
-    protected function formatData($data, $comments, $prefix = '')
+    private function formatData($data, $comments = [], $prefix = '  ')
     {
         $elements = [];
 
