@@ -3,17 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\Model;
+namespace Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
 /**
- * Class provide Before Plugin on StockRepositoryInterface::deleteByItem to prevent default stock could be deleted
+ * Prevent deleting of Default Stock
  */
-class StockRepositoryPlugin
+class DefaultStockPlugin
 {
     /**
      * @var DefaultStockProviderInterface
@@ -23,17 +24,17 @@ class StockRepositoryPlugin
     /**
      * @param DefaultStockProviderInterface $defaultStockProvider
      */
-    public function __construct(DefaultStockProviderInterface $defaultStockProvider)
-    {
+    public function __construct(
+        DefaultStockProviderInterface $defaultStockProvider
+    ) {
         $this->defaultStockProvider = $defaultStockProvider;
     }
 
     /**
-     * Prevent default source to be deleted
+     * Prevent deleting of Default Stock
      *
      * @param StockRepositoryInterface $subject
      * @param int $stockId
-     *
      * @return void
      * @throws CouldNotDeleteException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

@@ -35,11 +35,7 @@ class ReplaceSalesChannelsDataForStock implements ReplaceSalesChannelsForStockIn
     }
 
     /**
-     * Replace Sales Channels for Stock
-     *
-     * @param SalesChannelInterface[] $salesChannels
-     * @param int $stockId
-     * @return void
+     * @inheritdoc
      */
     public function execute(array $salesChannels, int $stockId)
     {

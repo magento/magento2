@@ -52,7 +52,7 @@ class SourceItemsDelete implements SourceItemsDeleteInterface
             $this->deleteMultiple->execute($sourceItems);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotDeleteException(__('Could not delete Source Item'), $e);
+            throw new CouldNotDeleteException(__('Could not delete Source Items'), $e);
         }
     }
 }

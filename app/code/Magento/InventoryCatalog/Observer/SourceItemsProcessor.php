@@ -3,16 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Observer;
+namespace Magento\InventoryCatalog\Observer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
+use Magento\Framework\Exception\InputException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 
 /**
@@ -47,24 +48,32 @@ class SourceItemsProcessor
     private $sourceItemsSave;
 
     /**
+     * @var SourceItemsDeleteInterface
+     */
+    private $sourceItemsDelete;
+
+    /**
      * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SourceItemInterfaceFactory $sourceItemFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param SourceItemsSaveInterface $sourceItemsSave
+     * @param SourceItemsDeleteInterface $sourceItemsDelete
      */
     public function __construct(
         SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
         SourceItemRepositoryInterface $sourceItemRepository,
         SourceItemInterfaceFactory $sourceItemFactory,
         DataObjectHelper $dataObjectHelper,
-        SourceItemsSaveInterface $sourceItemsSave
+        SourceItemsSaveInterface $sourceItemsSave,
+        SourceItemsDeleteInterface $sourceItemsDelete
     ) {
         $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
         $this->sourceItemRepository = $sourceItemRepository;
         $this->sourceItemFactory = $sourceItemFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->sourceItemsSave = $sourceItemsSave;
+        $this->sourceItemsDelete = $sourceItemsDelete;
     }
 
     /**
@@ -99,7 +108,7 @@ class SourceItemsProcessor
             $this->sourceItemsSave->execute($sourceItemsForSave);
         }
         if ($sourceItemsForDelete) {
-            $this->deleteSourceItems($sourceItemsForDelete);
+            $this->sourceItemsDelete->execute($sourceItemsForDelete);
         }
     }
 
@@ -113,9 +122,7 @@ class SourceItemsProcessor
     {
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $this->searchCriteriaBuilderFactory->create();
-        $searchCriteria = $searchCriteriaBuilder
-            ->addFilter(ProductInterface::SKU, $sku)
-            ->create();
+        $searchCriteria = $searchCriteriaBuilder->addFilter(ProductInterface::SKU, $sku)->create();
         $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
 
         $sourceItemMap = [];
@@ -136,17 +143,6 @@ class SourceItemsProcessor
     {
         if (!isset($sourceItemData[SourceItemInterface::SOURCE_ID])) {
             throw new InputException(__('Wrong Product to Source relation parameters given.'));
-        }
-    }
-
-    /**
-     * @param SourceItemInterface[] $sourceItems
-     * @return void
-     */
-    private function deleteSourceItems(array $sourceItems)
-    {
-        foreach ($sourceItems as $sourceItem) {
-            $this->sourceItemRepository->delete($sourceItem);
         }
     }
 }
