@@ -7,10 +7,11 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Action;
-use Magento\Framework\Data\Form\FormKey\Validator;
-use Magento\Framework\Exception\NotFoundException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -108,7 +109,10 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         try {
-            $buyRequest = new \Magento\Framework\DataObject($requestParams);
+            if (!array_key_exists('qty', $requestParams)) {
+                $requestParams['qty'] = $this->getMinimalQty($product);
+            }
+            $buyRequest = new DataObject($requestParams);
 
             $result = $wishlist->addNewItem($product, $buyRequest);
             if (is_string($result)) {
@@ -150,5 +154,19 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex
 
         $resultRedirect->setPath('*', ['wishlist_id' => $wishlist->getId()]);
         return $resultRedirect;
+    }
+
+    /**
+     * Gets minimal sales quantity
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return int|null
+     */
+    public function getMinimalQty($product)
+    {
+        $stockItem = $this->_objectManager->get('\Magento\CatalogInventory\Api\StockRegistryInterface');
+        $stockItem = $stockItem->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
+        $minSaleQty = $stockItem->getMinSaleQty();
+        return $minSaleQty > 0 ? $minSaleQty : 1;
     }
 }
