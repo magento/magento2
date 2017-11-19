@@ -7,7 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="DateTimeInterface" type="DateTime" />
-    <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\Monolog" />
+    <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\MainLogchannel" />
+    <preference for="Magento\Framework\Logger\Configuration\ChannelConfigurationParserInterface" type="Magento\Framework\Logger\Configuration\ChannelConfigurationParser" />
+    <preference for="Magento\Framework\Logger\Configuration\LogConfigurationProviderInterface" type="Magento\Framework\Logger\Configuration\LogConfigurationProvider" />
     <preference for="Magento\Framework\EntityManager\EntityMetadataInterface" type="Magento\Framework\EntityManager\EntityMetadata" />
     <preference for="Magento\Framework\EntityManager\HydratorInterface" type="Magento\Framework\EntityManager\Hydrator" />
     <preference for="Magento\Framework\View\Template\Html\MinifierInterface" type="Magento\Framework\View\Template\Html\Minifier" />
@@ -689,6 +691,7 @@
                 <item name="searchResults" xsi:type="string">\Magento\Framework\Api\Code\Generator\SearchResults</item>
                 <item name="extensionInterface" xsi:type="string">\Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator</item>
                 <item name="extension" xsi:type="string">\Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator</item>
+                <item name="logchannel" xsi:type="string">\Magento\Framework\Logger\Code\Generator\Logchannel</item>
             </argument>
         </arguments>
     </type>

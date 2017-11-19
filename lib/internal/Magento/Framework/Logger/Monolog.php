@@ -12,6 +12,8 @@ class Monolog extends Logger
 {
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Use generated LogChannel instances (e.g. \Magento\Framework\Logger\MainMagentoLogchannel)
      */
     public function __construct($name, array $handlers = [], array $processors = [])
     {

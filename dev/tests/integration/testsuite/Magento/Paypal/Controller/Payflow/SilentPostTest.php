@@ -9,7 +9,6 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Logger\Monolog;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Paypal\Model\Payflowlink;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -18,6 +17,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\TestFramework\TestCase\AbstractController;
 use PHPUnit\Framework\MockObject_MockObject as MockObject;
+use Psr\Log\LoggerInterface;
 
 class SilentPostTest extends AbstractController
 {
@@ -111,10 +111,12 @@ class SilentPostTest extends AbstractController
         $this->withRequest($orderIncrementId, $resultCode);
         $this->withGatewayResponse($orderIncrementId, $resultCode);
 
-        $logger = $this->getMockBuilder(Monolog::class)
+        $this->_objectManager->get(LoggerInterface::class);
+
+        $logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_objectManager->addSharedInstance($logger, Monolog::class);
+        $this->_objectManager->addSharedInstance($logger, 'Magento\Framework\Logger\MainLogchannel');
 
         $exception = new LocalizedException(__('Response message from PayPal gateway'));
         $logger->expects(self::once())
@@ -125,7 +127,7 @@ class SilentPostTest extends AbstractController
 
         self::assertEquals(200, $this->getResponse()->getStatusCode());
 
-        $this->_objectManager->removeSharedInstance(Monolog::class);
+        $this->_objectManager->removeSharedInstance(LoggerInterface::class);
     }
 
     /**
