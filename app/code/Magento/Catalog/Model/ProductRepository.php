@@ -651,24 +651,52 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         Collection $collection
     ) {
         $fields = [];
-        $categoryFilter = [];
+
         foreach ($filterGroup->getFilters() as $filter) {
             $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+            $isApplied = $this->applyCustomFilter($collection, $filter, $conditionType);
 
-            if ($filter->getField() == 'category_id') {
-                $categoryFilter[$conditionType][] = $filter->getValue();
-                continue;
+            if (!$isApplied) {
+                $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
             }
-            $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
-        }
-
-        if ($categoryFilter) {
-            $collection->addCategoriesFilter($categoryFilter);
         }
 
         if ($fields) {
             $collection->addFieldToFilter($fields);
         }
+    }
+
+    /**
+     * Apply custom filters to product collection.
+     *
+     * @param Collection $collection
+     * @param \Magento\Framework\Api\Filter $filter
+     * @param string $conditionType
+     * @return bool
+     */
+    private function applyCustomFilter(Collection $collection, \Magento\Framework\Api\Filter $filter, $conditionType)
+    {
+        if ($filter->getField() == 'category_id') {
+            $categoryFilter[$conditionType][] = $filter->getValue();
+            $collection->addCategoriesFilter($categoryFilter);
+            return true;
+        }
+
+        if ($filter->getField() == 'store') {
+            $collection->addStoreFilter($filter->getValue());
+            return true;
+        }
+
+        if ($filter->getField() == 'website_id') {
+            $value = $filter->getValue();
+            if (strpos($value, ',') !== false) {
+                $value = explode(',', $value);
+            }
+            $collection->addWebsiteFilter($value);
+            return true;
+        }
+
+        return false;
     }
 
     /**

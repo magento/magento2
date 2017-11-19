@@ -9,6 +9,11 @@
  */
 namespace Magento\Backend\Test\Unit\Block\Page\System\Config\Robots;
 
+/**
+ * Class ResetTest
+ * @deprecated 
+ * @package Magento\Backend\Test\Unit\Block\Page\System\Config\Robots
+ */
 class ResetTest extends \PHPUnit_Framework_TestCase
 {
     /**

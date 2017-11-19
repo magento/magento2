@@ -62,7 +62,12 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
     private $loadOptions;
 
     /**
-     * return void
+     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $jsonDataHelperMock;
+
+    /**
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -91,10 +96,21 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
         $this->conditionsHelperMock = $this->getMockBuilder(ConditionsHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->jsonDataHelperMock = $this->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->loadOptions = $this->objectManagerHelper->getObject(
             LoadOptions::class,
-            ['context' => $this->contextMock]
+            [
+                'context' => $this->contextMock,
+                'conditionsHelper' => $this->conditionsHelperMock,
+                'logger' => $loggerMock,
+                'jsonHelper' => $this->jsonDataHelperMock,
+            ]
         );
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->loadOptions,
@@ -106,27 +122,18 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function dtestExecuteWithException()
+    public function testExecuteWithException()
     {
         $jsonResult = '{"error":true,"message":"Some error"}';
         $errorMessage = 'Some error';
 
-        /** @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject $jsonDataHelperMock */
-        $jsonDataHelperMock = $this->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $jsonDataHelperMock->expects($this->once())
+        $this->jsonDataHelperMock->expects($this->once())
             ->method('jsonEncode')
             ->with(['error' => true, 'message' => $errorMessage])
             ->willReturn($jsonResult);
-
         $this->viewMock->expects($this->once())
             ->method('loadLayout')
             ->willThrowException(new LocalizedException(__($errorMessage)));
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with(\Magento\Framework\Json\Helper\Data::class)
-            ->willReturn($jsonDataHelperMock);
         $this->responseMock->expects($this->once())
             ->method('representJson')
             ->with($jsonResult)
@@ -164,11 +171,7 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        /** @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject $jsonDataHelperMock */
-        $jsonDataHelperMock = $this->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $jsonDataHelperMock->expects($this->once())
+        $this->jsonDataHelperMock->expects($this->once())
             ->method('jsonDecode')
             ->with($widgetJsonParams)
             ->willReturn($widgetArrayParams);
@@ -179,10 +182,6 @@ class LoadOptionsTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('widget')
             ->willReturn($widgetJsonParams);
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with(\Magento\Framework\Json\Helper\Data::class)
-            ->willReturn($jsonDataHelperMock);
 
         /** @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject $blockMock */
         $blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
