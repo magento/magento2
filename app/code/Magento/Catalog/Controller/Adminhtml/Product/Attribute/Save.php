@@ -192,10 +192,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                     $data['frontend_input']
                 );
             }
+            $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0, 'apply_to' => []];           
 
-            $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0];
-
-            if (is_null($model->getIsUserDefined()) || $model->getIsUserDefined() != 0) {
+            if ($model->getIsUserDefined()) {
                 $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
             }
 
