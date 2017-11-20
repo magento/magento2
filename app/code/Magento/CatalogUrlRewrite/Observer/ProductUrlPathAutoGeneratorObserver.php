@@ -10,10 +10,10 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
-class ProductUrlKeyAutogeneratorObserver implements ObserverInterface
+class ProductUrlPathAutoGeneratorObserver implements ObserverInterface
 {
     /** @var ProductUrlPathGenerator */
-    protected $productUrlPathGenerator;
+    private $productUrlPathGenerator;
 
     /**
      * @param ProductUrlPathGenerator $productUrlPathGenerator
@@ -27,10 +27,10 @@ class ProductUrlKeyAutogeneratorObserver implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         /** @var Product $product */
         $product = $observer->getEvent()->getProduct();
-        $product->setUrlKey($this->productUrlPathGenerator->getUrlKey($product));
+        $product->setUrlKey($this->productUrlPathGenerator->getUrlPathWithSuffix($product, $product->getStoreId()));
     }
 }

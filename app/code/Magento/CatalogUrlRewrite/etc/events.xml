@@ -23,6 +23,7 @@
     </event>
     <event name="catalog_product_save_before">
         <observer name="product_url_key_autogeneration" instance="Magento\CatalogUrlRewrite\Observer\ProductUrlKeyAutogeneratorObserver"/>
+        <observer name="product_url_path_autogeneration" instance="Magento\CatalogUrlRewrite\Observer\ProductUrlPathAutoGeneratorObserver"/>
     </event>
     <event name="catalog_product_save_after">
         <observer name="process_url_rewrite_saving" instance="Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver"/>
