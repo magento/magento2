@@ -68,7 +68,7 @@
             <fillField mergeKey="s63" selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" />
             <click mergeKey="s65" selector="{{AdminLoginFormSection.signIn}}" />
 
-            <amOnPage mergeKey="s67" url="{{OrdersPage}}"/>
+            <amOnPage mergeKey="s67" url="{{OrdersPage.url}}"/>
             <waitForPageLoad mergeKey="s75"/>
             <fillField mergeKey="s77" selector="{{OrdersGridSection.search}}" variable="orderNumber" />
             <waitForPageLoad mergeKey="s78"/>
