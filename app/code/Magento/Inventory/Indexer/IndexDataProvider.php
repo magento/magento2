@@ -66,7 +66,6 @@ class IndexDataProvider
         }
         $select = $this->prepareSelect($stockId, $conditions);
 
-
         return new \ArrayIterator($connection->fetchAll($select));
     }
 
