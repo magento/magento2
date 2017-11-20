@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Inventory\Indexer\Source;
 
@@ -11,7 +12,7 @@ use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkReso
 use Magento\Inventory\Model\StockSourceLink;
 
 /**
- * Returns all assigned stock ids by given sources ids
+ * Returns all assigned Stock ids by given Source ids
  */
 class GetPartialReindexData
 {
@@ -30,7 +31,7 @@ class GetPartialReindexData
     }
 
     /**
-     * Returns all assigned stock ids by given sources item ids.
+     * Returns all assigned Stock ids by given Sources ids
      *
      * @param int[] $sourceIds
      * @return int[]

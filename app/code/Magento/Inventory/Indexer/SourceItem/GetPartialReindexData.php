@@ -3,17 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\Inventory\Indexer\StockItem;
+namespace Magento\Inventory\Indexer\SourceItem;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\ResourceModel\SourceItem;
+use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
 use Magento\Inventory\Model\StockSourceLink;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * Returns all assigned stock ids by given sources ids
+ * Returns all assigned Stock ids by given Source Item ids
  */
 class GetPartialReindexData
 {
@@ -40,7 +41,7 @@ class GetPartialReindexData
     }
 
     /**
-     * Returns all assigned stock ids by given sources item ids.
+     * Returns all assigned Stock ids by given Source Item ids
      *
      * @param int[] $sourceItemIds
      * @return SkuListInStockToUpdate[] List of stock id to sku1,sku2 assignment
@@ -52,7 +53,7 @@ class GetPartialReindexData
             StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK
         );
         $sourceItemTable = $this->resourceConnection->getTableName(
-            SourceItem::TABLE_NAME_SOURCE_ITEM
+            SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM
         );
 
         $select = $connection
@@ -89,7 +90,6 @@ class GetPartialReindexData
             $skuListInStockToUpdate->setSkuList(explode(',', $item[SourceItemInterface::SKU]));
             $skuListInStockToUpdateList[] = $skuListInStockToUpdate;
         }
-
         return $skuListInStockToUpdateList;
     }
 }

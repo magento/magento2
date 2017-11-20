@@ -18,4 +18,12 @@ interface IndexTableSwitcherInterface
      * @return void
      */
     public function switch(IndexName $indexName, string $connectionName);
+
+    /**
+     * TOD: move to separate configurable interface
+     *
+     * @param string $tableName
+     * @return string
+     */
+    public function getAdditionalTableName(string $tableName): string;
 }

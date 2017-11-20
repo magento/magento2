@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\Inventory\Indexer;
+namespace Magento\Inventory\Indexer\SourceItem;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Indexer\StockItem\GetPartialReindexData;
-use Magento\Inventory\Indexer\StockItem\IndexDataProvider;
+use Magento\Inventory\Indexer\Alias;
+use Magento\Inventory\Indexer\IndexDataProvider;
+use Magento\Inventory\Indexer\IndexHandlerInterface;
+use Magento\Inventory\Indexer\IndexNameBuilder;
+use Magento\Inventory\Indexer\IndexStructureInterface;
+use Magento\Inventory\Indexer\Stock\StockIndexerInterface;
 
 /**
  * @inheritdoc
@@ -41,9 +46,9 @@ class SourceItem implements SourceItemIndexerInterface
     private $indexNameBuilder;
 
     /**
-     * @var StockItemIndexerInterface
+     * @var StockIndexerInterface
      */
-    private $stockItemIndexer;
+    private $stockIndexer;
 
     /**
      * @param GetPartialReindexData $getPartialReindexData
@@ -51,7 +56,7 @@ class SourceItem implements SourceItemIndexerInterface
      * @param IndexHandlerInterface $indexHandler
      * @param IndexDataProvider $indexDataProvider
      * @param IndexNameBuilder $indexNameBuilder
-     * @param StockItemIndexerInterface $stockItemIndexer
+     * @param StockIndexerInterface $stockIndexer
      */
     public function __construct(
         GetPartialReindexData $getPartialReindexData,
@@ -59,14 +64,14 @@ class SourceItem implements SourceItemIndexerInterface
         IndexHandlerInterface $indexHandler,
         IndexDataProvider $indexDataProvider,
         IndexNameBuilder $indexNameBuilder,
-        StockItemIndexerInterface $stockItemIndexer
+        StockIndexerInterface $stockIndexer
     ) {
         $this->getPartialReindexData = $getPartialReindexData;
         $this->indexStructure = $indexStructureHandler;
         $this->indexHandler = $indexHandler;
         $this->indexDataProvider = $indexDataProvider;
         $this->indexNameBuilder = $indexNameBuilder;
-        $this->stockItemIndexer = $stockItemIndexer;
+        $this->stockIndexer = $stockIndexer;
     }
 
     /**
@@ -74,15 +79,15 @@ class SourceItem implements SourceItemIndexerInterface
      */
     public function executeFull()
     {
-        $this->stockItemIndexer->executeFull();
+        $this->stockIndexer->executeFull();
     }
 
     /**
      * @inheritdoc
      */
-    public function executeRow($sourceItemId)
+    public function executeRow($sourceId)
     {
-        $this->executeList([$sourceItemId]);
+        $this->executeList([$sourceId]);
     }
 
     /**
@@ -97,13 +102,13 @@ class SourceItem implements SourceItemIndexerInterface
             $skuList = $skuListInStockToUpdate->getSkuList();
 
             $mainIndexName = $this->indexNameBuilder
-                ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
-                ->addDimension('stock_', $stockId)
+                ->setIndexId(self::INDEXER_ID)
+                ->addDimension('stock_', (string)$stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();
 
             if (!$this->indexStructure->isExist($mainIndexName, ResourceConnection::DEFAULT_CONNECTION)) {
-                return;
+                $this->indexStructure->create($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
             }
 
             $this->indexHandler->cleanIndex(

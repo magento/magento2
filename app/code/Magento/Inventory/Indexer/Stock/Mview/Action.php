@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Indexer\StyockItem\Mview;
+declare(strict_types=1);
+
+namespace Magento\Inventory\Indexer\Stock\Mview;
 
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Mview\ActionInterface;
-use Magento\Inventory\Indexer\StockItemIndexerInterface;
+use Magento\Inventory\Indexer\Stock\StockIndexerInterface;
 
 /**
  * Execute materialization on entity ids
@@ -39,7 +41,7 @@ class Action implements ActionInterface
      */
     public function execute($ids)
     {
-        $indexer = $this->indexerFactory->create()->load(StockItemIndexerInterface::INDEXER_ID);
+        $indexer = $this->indexerFactory->create()->load(StockIndexerInterface::INDEXER_ID);
         $indexer->reindexList($ids);
     }
 }

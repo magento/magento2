@@ -3,13 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Indexer\StockItem;
+declare(strict_types=1);
+
+namespace Magento\Inventory\Indexer;
 
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Inventory\Indexer\ActiveTableSwitcher;
-use Magento\Inventory\Indexer\Alias;
-use Magento\Inventory\Indexer\IndexName;
-use Magento\Inventory\Indexer\IndexNameResolverInterface;
 
 /**
  * @inheritdoc
@@ -22,20 +20,20 @@ class IndexNameResolver implements IndexNameResolverInterface
     private $indexScopeResolver;
 
     /**
-     * @var ActiveTableSwitcher
+     * @var IndexTableSwitcherInterface
      */
-    private $activeTableSwitcher;
+    private $indexTableSwitcher;
 
     /**
      * @param IndexScopeResolverInterface $indexScopeResolver
-     * @param ActiveTableSwitcher $activeTableSwitcher
+     * @param IndexTableSwitcherInterface $indexTableSwitcher
      */
     public function __construct(
         IndexScopeResolverInterface $indexScopeResolver,
-        ActiveTableSwitcher $activeTableSwitcher
+        IndexTableSwitcherInterface $indexTableSwitcher
     ) {
         $this->indexScopeResolver = $indexScopeResolver;
-        $this->activeTableSwitcher = $activeTableSwitcher;
+        $this->indexTableSwitcher = $indexTableSwitcher;
     }
 
     /**
@@ -46,7 +44,7 @@ class IndexNameResolver implements IndexNameResolverInterface
         $tableName = $this->indexScopeResolver->resolve($indexName->getIndexId(), $indexName->getDimensions());
 
         if ($indexName->getAlias()->getValue() === Alias::ALIAS_REPLICA) {
-            $tableName = $this->activeTableSwitcher->getAdditionalTableName($tableName);
+            $tableName = $this->indexTableSwitcher->getAdditionalTableName($tableName);
         }
         return $tableName;
     }

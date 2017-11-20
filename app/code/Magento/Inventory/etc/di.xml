@@ -77,20 +77,20 @@
     <preference for="Magento\InventoryApi\Api\AssignSourcesToStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\AssignSourcesToStock"/>
     <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
-    <!-- StockItem Indexer -->
-    <preference for="Magento\Inventory\Indexer\IndexHandlerInterface" type="Magento\Inventory\Indexer\StockItem\IndexHandler"/>
-    <preference for="Magento\Inventory\Indexer\IndexNameResolverInterface" type="Magento\Inventory\Indexer\StockItem\IndexNameResolver"/>
-    <preference for="Magento\Inventory\Indexer\IndexStructureInterface" type="Magento\Inventory\Indexer\StockItem\IndexStructure"/>
-    <preference for="Magento\Inventory\Indexer\IndexTableSwitcherInterface" type="Magento\Inventory\Indexer\StockItem\IndexTableSwitcher"/>
-    <preference for="Magento\Inventory\Indexer\StockItemIndexerInterface" type="Magento\Inventory\Indexer\StockItem"/>
-    <preference for="Magento\Inventory\Indexer\SourceItemIndexerInterface" type="Magento\Inventory\Indexer\SourceItem"/>
-    <preference for="Magento\Inventory\Indexer\SourceIndexerInterface" type="Magento\Inventory\Indexer\Source"/>
-    <type name="Magento\Inventory\Indexer\StockItem\IndexHandler">
+    <!-- Indexer -->
+    <preference for="Magento\Inventory\Indexer\IndexHandlerInterface" type="Magento\Inventory\Indexer\IndexHandler"/>
+    <preference for="Magento\Inventory\Indexer\IndexNameResolverInterface" type="Magento\Inventory\Indexer\IndexNameResolver"/>
+    <preference for="Magento\Inventory\Indexer\IndexStructureInterface" type="Magento\Inventory\Indexer\IndexStructure"/>
+    <preference for="Magento\Inventory\Indexer\IndexTableSwitcherInterface" type="Magento\Inventory\Indexer\IndexTableSwitcher"/>
+    <preference for="Magento\Inventory\Indexer\Source\SourceIndexerInterface" type="Magento\Inventory\Indexer\Source\SourceIndexer"/>
+    <preference for="Magento\Inventory\Indexer\SourceItem\SourceItemIndexerInterface" type="Magento\Inventory\Indexer\SourceItem\SourceItemIndexer"/>
+    <preference for="Magento\Inventory\Indexer\Stock\StockIndexerInterface" type="Magento\Inventory\Indexer\Stock\StockIndexer"/>
+    <type name="Magento\Inventory\Indexer\IndexHandler">
         <arguments>
             <argument name="batchSize" xsi:type="string">100</argument>
         </arguments>
     </type>
-    <type name="Magento\Inventory\Indexer\StockItem\IndexNameResolver">
+    <type name="Magento\Inventory\Indexer\IndexNameResolver">
         <arguments>
             <argument name="indexScopeResolver" xsi:type="object">Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</argument>
         </arguments>

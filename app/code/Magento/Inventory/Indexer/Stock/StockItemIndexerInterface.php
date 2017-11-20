@@ -3,19 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Indexer;
+declare(strict_types=1);
+
+namespace Magento\Inventory\Indexer\Stock;
 
 use Magento\Framework\Indexer\ActionInterface;
 
 /**
+ * Stock indexer
  * Extension point for indexation
  *
  * @api
  */
-interface SourceItemIndexerInterface extends ActionInterface
+interface StockIndexerInterface extends ActionInterface
 {
     /**
      * Indexer ID in configuration
      */
-    const INDEXER_ID = 'inventory_source_item';
+    const INDEXER_ID = 'inventory_stock';
 }

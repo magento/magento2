@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Indexer\Source\Mview;
 
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Mview\ActionInterface;
-use Magento\Inventory\Indexer\SourceIndexerInterface;
+use Magento\Inventory\Indexer\Source\SourceIndexerInterface;
 
 /**
  * Execute materialization on entity ids
