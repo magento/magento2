@@ -1208,7 +1208,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         if (!$asObject) {
             return $shippingMethod;
         } else {
-            return new ShippingMethod($shippingMethod);
+            return ShippingMethod::fromFullShippingMethodCode($shippingMethod);
         }
     }
 
