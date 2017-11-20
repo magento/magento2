@@ -1192,10 +1192,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->accountManagement->initiatePasswordReset($email, $template));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "" provided for the template field. Possible values are email_reminder or email_reset.
-     */
     public function testInitiatePasswordResetNoTemplate()
     {
         $storeId = 1;
@@ -1211,6 +1207,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareInitiatePasswordReset($email, $templateIdentifier, $sender, $storeId, $customerId, $hash);
 
+        $this->setExpectedException(
+            \Magento\Framework\Exception\InputException::class,
+            'Invalid value of "" provided for the template field. Possible values are email_reminder or email_reset.'
+        );
         $this->accountManagement->initiatePasswordReset($email, $template);
     }
 
