@@ -88,7 +88,7 @@ class ConcealInProductionConfigList implements ElementVisibilityInterface
             $section = $match['section'];
             $exemptions = array_keys($this->exemptions);
             foreach ($this->configs as $configPath => $value) {
-                if ($this->configs[$configPath] === static::HIDDEN && strpos($path, $configPath) !==false) {
+                if ($value === static::HIDDEN && strpos($path, $configPath) !==false) {
                     $result = empty(array_intersect([$section, $group, $path], $exemptions));
                 }
             }
