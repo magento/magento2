@@ -3,13 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Indexer\StockItem;
+declare(strict_types=1);
+
+namespace Magento\Inventory\Indexer;
 
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Inventory\Indexer\ActiveTableSwitcher;
-use Magento\Inventory\Indexer\Alias;
-use Magento\Inventory\Indexer\IndexName;
-use Magento\Inventory\Indexer\IndexNameResolverInterface;
 
 /**
  * @inheritdoc
@@ -17,25 +15,25 @@ use Magento\Inventory\Indexer\IndexNameResolverInterface;
 class IndexNameResolver implements IndexNameResolverInterface
 {
     /**
+     * TODO: move to separate configurable interface (https://github.com/magento-engcom/msi/issues/213)
+     * Suffix for replica index table
+     *
+     * @var string
+     */
+    private $additionalTableSuffix = '_replica';
+
+    /**
      * @var IndexScopeResolverInterface
      */
     private $indexScopeResolver;
 
     /**
-     * @var ActiveTableSwitcher
-     */
-    private $activeTableSwitcher;
-
-    /**
      * @param IndexScopeResolverInterface $indexScopeResolver
-     * @param ActiveTableSwitcher $activeTableSwitcher
      */
     public function __construct(
-        IndexScopeResolverInterface $indexScopeResolver,
-        ActiveTableSwitcher $activeTableSwitcher
+        IndexScopeResolverInterface $indexScopeResolver
     ) {
         $this->indexScopeResolver = $indexScopeResolver;
-        $this->activeTableSwitcher = $activeTableSwitcher;
     }
 
     /**
@@ -46,8 +44,18 @@ class IndexNameResolver implements IndexNameResolverInterface
         $tableName = $this->indexScopeResolver->resolve($indexName->getIndexId(), $indexName->getDimensions());
 
         if ($indexName->getAlias()->getValue() === Alias::ALIAS_REPLICA) {
-            $tableName = $this->activeTableSwitcher->getAdditionalTableName($tableName);
+            $tableName = $this->getAdditionalTableName($tableName);
         }
         return $tableName;
+    }
+
+    /**
+     * TODO: move to separate configurable interface (https://github.com/magento-engcom/msi/issues/213)
+     * @param string $tableName
+     * @return string
+     */
+    public function getAdditionalTableName(string $tableName): string
+    {
+        return $tableName . $this->additionalTableSuffix;
     }
 }

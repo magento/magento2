@@ -3,7 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Indexer\StockItem;
+declare(strict_types=1);
+
+namespace Magento\Inventory\Indexer\Stock;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
@@ -12,7 +14,7 @@ use Magento\Inventory\Model\StockSourceLink;
 /**
  * Returns all assigned stock ids
  */
-class GetFullReindexData
+class GetAllAssignedStockIds
 {
     /**
      * @var ResourceConnection
@@ -28,19 +30,22 @@ class GetFullReindexData
     }
 
     /**
-     * Returns all assigned stock ids
-     *
-     * @return int[] List of stock ids
+     * @return int[]
      */
     public function execute(): array
     {
         $connection = $this->resourceConnection->getConnection();
-        $select = $connection->select()->from(
-            $this->resourceConnection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK),
-            [StockSourceLink::STOCK_ID]
+        $sourceStockLinkTable = $this->resourceConnection->getTableName(
+            StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK
         );
 
-        $select->group(StockSourceLink::STOCK_ID);
-        return $connection->fetchCol($select);
+        $select = $connection
+            ->select()
+            ->from($sourceStockLinkTable, StockSourceLink::STOCK_ID)
+            ->group(StockSourceLink::STOCK_ID);
+
+        $stockIds = $connection->fetchCol($select);
+        $stockIds = array_map('intval', $stockIds);
+        return $stockIds;
     }
 }
