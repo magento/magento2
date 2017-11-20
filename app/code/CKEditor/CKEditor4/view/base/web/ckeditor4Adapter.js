@@ -8,7 +8,7 @@
 define([
     'jquery',
     'underscore',
-    'ckeditor',
+    'CKEditor_CKEditor4/js/ckeditor4/ckeditor',
     'mage/translate',
     'prototype'
 ], function (jQuery, _, ckeditor4) {

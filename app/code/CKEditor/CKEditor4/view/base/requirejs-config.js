@@ -5,5 +5,6 @@
 
 var config = {
     "shim": {
-        "CKEditor_CKEditor4/js/ckeditor4/ckeditor": { "exports": "CKEDITOR" }
+        "CKEditor_CKEditor4/js/ckeditor4/ckeditor": {"exports": "CKEDITOR"}
+    }
 };
