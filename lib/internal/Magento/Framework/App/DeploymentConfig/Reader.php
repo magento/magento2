@@ -19,6 +19,8 @@ use Magento\Framework\Filesystem\DriverPool;
  */
 class Reader
 {
+    const CONFIG_ENV_MODE = 'CONFIG_ENV_MODE';
+
     /**
      * @var DirectoryList
      */
@@ -40,6 +42,11 @@ class Reader
      * @var array
      */
     private $files;
+
+    /**
+     * @var string
+     */
+    private $configEnvMode;
 
     /**
      * Constructor
@@ -92,6 +99,11 @@ class Reader
      */
     public function load($fileKey = null)
     {
+        $configEnvMode = $this->getConfigEnvMode();
+        if ($configEnvMode) {
+            putenv(self::CONFIG_ENV_MODE . "=" . $configEnvMode);
+        }
+
         $path = $this->dirList->getPath(DirectoryList::CONFIG);
         $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
         $result = [];
@@ -118,6 +130,27 @@ class Reader
             }
         }
         return $result ?: [];
+    }
+
+    /**
+     * Get CONFIG_ENV_MODE from env.php file configuration
+     *
+     * @return string
+     */
+    private function getConfigEnvMode() : string
+    {
+        if (!isset($this->configEnvMode)) {
+            $configPath = $this->dirList->getPath(DirectoryList::CONFIG);
+            $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
+            $envFile = $configPath . '/' . $this->configFilePool->getPath(ConfigFilePool::APP_ENV);
+            if ($fileDriver->isExists($envFile)) {
+                $config = include $envFile;
+                $this->configEnvMode = $config[self::CONFIG_ENV_MODE] ?? "";
+            } else {
+                $this->configEnvMode = "";
+            }
+        }
+        return $this->configEnvMode;
     }
 
     /**
