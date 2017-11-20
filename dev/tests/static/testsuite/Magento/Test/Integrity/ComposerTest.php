@@ -22,6 +22,11 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private static $root;
 
     /**
+     * @var array
+     */
+    private static $mainComposerModules;
+
+    /**
      * @var \stdClass
      */
     private static $rootJson;
@@ -40,6 +45,11 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     {
         self::$root = BP;
         self::$rootJson = json_decode(file_get_contents(self::$root . '/composer.json'), true);
+        $availableSections = ['require', 'require-dev', 'replace'];
+        self::$mainComposerModules = [];
+        foreach ($availableSections as $availableSection) {
+            self::$mainComposerModules = array_merge(self::$mainComposerModules, self::$rootJson[$availableSection]);
+        }
         self::$dependencies = [];
         self::$objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
     }
@@ -175,6 +185,8 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
             default:
                 throw new \InvalidArgumentException("Unknown package type {$packageType}");
         }
+
+        $this->assertPackageVersions($json);
     }
 
     /**
@@ -291,28 +303,11 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                     // Magento Composer Installer is not needed for already existing components
                     continue;
                 }
-                if (!isset(self::$rootJson['require-dev'][$depName]) && !isset(self::$rootJson['require'][$depName])
-                    && !isset(self::$rootJson['replace'][$depName])) {
+                if (!isset(self::$mainComposerModules[$depName])) {
                     $errors[] = "'$name' depends on '$depName'";
-                } else {
-                    if (isset(self::$rootJson['require-dev'][$depName])
-                        && $this->checkDiscrepancy($json, $depName, 'require-dev')) {
-                        $errors[] = "root composer.json has dependency '"
-                            . $depName . ":" . self::$rootJson['require-dev'][$depName] . " BUT "
-                            . "'$name' composer.json has dependency '$depName:{$json->require->$depName}'";
-                    } elseif (isset(self::$rootJson['require'][$depName])
-                        && $this->checkDiscrepancy($json, $depName, 'require')) {
-                        $errors[] = "root composer.json has dependency '"
-                            . $depName . ":" . self::$rootJson['require'][$depName] . " BUT "
-                            . "'$name' composer.json has dependency '$depName:{$json->require->$depName}'";
-                    } elseif (isset(self::$rootJson['replace'][$depName])
-                        && $this->checkDiscrepancy($json, $depName, 'replace')) {
-                        $errors[] = "root composer.json has dependency '"
-                            . $depName . ":" . self::$rootJson['replace'][$depName] . " BUT "
-                            . "'$name' composer.json has dependency '$depName:{$json->require->$depName}'";
-                    }
                 }
             }
+
             if (!empty($errors)) {
                 $this->fail(
                     "The following dependencies are missing in root 'composer.json',"
@@ -327,14 +322,46 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     *
+     *
+     * @param \StdClass $json
+     */
+    private function assertPackageVersions(\StdClass $json)
+    {
+        $name = $json->name;
+        if (preg_match('/magento\/project-*/', self::$rootJson['name']) == 1) {
+            return;
+        }
+        if (isset($json->require)) {
+            $errors = [];
+            $errorTemplate = "root composer.json has dependency '%s:%s' BUT '%s' composer.json has dependency '%s:%s'";
+            foreach (array_keys((array)$json->require) as $depName) {
+                if ($this->checkDiscrepancy($json, $depName)) {
+                    $errors[] = sprintf(
+                        $errorTemplate,
+                        $depName,
+                        self::$mainComposerModules[$depName],
+                        $name,
+                        $depName,
+                        $json->require->$depName
+                    );
+                }
+            }
+
+            if (!empty($errors)) {
+                $this->fail(join("\n", $errors));
+            }
+        }
+    }
+
+    /**
      * @param $componentConfig
      * @param $packageName
-     * @param $section
      * @return bool
      */
-    private function checkDiscrepancy($componentConfig, $packageName, $section)
+    private function checkDiscrepancy($componentConfig, $packageName)
     {
-        $rootConstraint = (new VersionParser())->parseConstraints(self::$rootJson[$section][$packageName]);
+        $rootConstraint = (new VersionParser())->parseConstraints(self::$mainComposerModules[$packageName]);
         $componentConstraint = (new VersionParser())->parseConstraints($componentConfig->require->$packageName);
 
         return !$rootConstraint->matches($componentConstraint);
