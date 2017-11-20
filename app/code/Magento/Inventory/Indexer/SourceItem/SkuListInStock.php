@@ -10,7 +10,7 @@ namespace Magento\Inventory\Indexer\SourceItem;
 /**
  * Represents relation between stock and sku list
  */
-class SkuListInStockToUpdate
+class SkuListInStock
 {
     /**
      * @var int

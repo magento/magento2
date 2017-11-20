@@ -14,9 +14,9 @@ use Magento\Inventory\Model\StockSourceLink;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * Returns all assigned Stock ids by given Source Item ids
+ * Returns relations between stock and sku list
  */
-class GetPartialReindexData
+class GetSkuListInStock
 {
     /**
      * @var ResourceConnection
@@ -24,27 +24,27 @@ class GetPartialReindexData
     private $resourceConnection;
 
     /**
-     * @var SkuListInStockToUpdateFactory
+     * @var SkuListInStockFactory
      */
-    private $skuListInStockToUpdateFactory;
+    private $skuListInStockFactory;
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param SkuListInStockToUpdateFactory $skuListInStockToUpdateFactory
+     * @param SkuListInStockFactory $skuListInStockFactory
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        SkuListInStockToUpdateFactory $skuListInStockToUpdateFactory
+        SkuListInStockFactory $skuListInStockFactory
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->skuListInStockToUpdateFactory = $skuListInStockToUpdateFactory;
+        $this->skuListInStockFactory = $skuListInStockFactory;
     }
 
     /**
      * Returns all assigned Stock ids by given Source Item ids
      *
      * @param int[] $sourceItemIds
-     * @return SkuListInStockToUpdate[] List of stock id to sku1,sku2 assignment
+     * @return SkuListInStock[] List of stock id to sku1,sku2 assignment
      */
     public function execute(array $sourceItemIds): array
     {
@@ -76,20 +76,21 @@ class GetPartialReindexData
     }
 
     /**
-     * Return the assigned stock id to sku list.
+     * Return the assigned stock id to sku list
+     *
      * @param array $items
-     * @return SkuListInStockToUpdate[]
+     * @return SkuListInStock[]
      */
     private function getStockIdToSkuList(array $items): array
     {
-        $skuListInStockToUpdateList = [];
+        $skuListInStockList = [];
         foreach ($items as $item) {
-            /** @var  SkuListInStockToUpdate $skuListInStockToUpdate */
-            $skuListInStockToUpdate = $this->skuListInStockToUpdateFactory->create();
-            $skuListInStockToUpdate->setStockId($item[StockSourceLink::STOCK_ID]);
-            $skuListInStockToUpdate->setSkuList(explode(',', $item[SourceItemInterface::SKU]));
-            $skuListInStockToUpdateList[] = $skuListInStockToUpdate;
+            /** @var SkuListInStock $skuListInStock */
+            $skuListInStock = $this->skuListInStockFactory->create();
+            $skuListInStock->setStockId((int)$item[StockSourceLink::STOCK_ID]);
+            $skuListInStock->setSkuList(explode(',', $item[SourceItemInterface::SKU]));
+            $skuListInStockList[] = $skuListInStock;
         }
-        return $skuListInStockToUpdateList;
+        return $skuListInStockList;
     }
 }

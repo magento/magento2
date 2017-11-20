@@ -15,25 +15,25 @@ use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 class IndexNameResolver implements IndexNameResolverInterface
 {
     /**
+     * TODO: move to separate configurable interface
+     * Suffix for replica index table
+     *
+     * @var string
+     */
+    private $additionalTableSuffix = '_replica';
+
+    /**
      * @var IndexScopeResolverInterface
      */
     private $indexScopeResolver;
 
     /**
-     * @var IndexTableSwitcherInterface
-     */
-    private $indexTableSwitcher;
-
-    /**
      * @param IndexScopeResolverInterface $indexScopeResolver
-     * @param IndexTableSwitcherInterface $indexTableSwitcher
      */
     public function __construct(
-        IndexScopeResolverInterface $indexScopeResolver,
-        IndexTableSwitcherInterface $indexTableSwitcher
+        IndexScopeResolverInterface $indexScopeResolver
     ) {
         $this->indexScopeResolver = $indexScopeResolver;
-        $this->indexTableSwitcher = $indexTableSwitcher;
     }
 
     /**
@@ -44,8 +44,16 @@ class IndexNameResolver implements IndexNameResolverInterface
         $tableName = $this->indexScopeResolver->resolve($indexName->getIndexId(), $indexName->getDimensions());
 
         if ($indexName->getAlias()->getValue() === Alias::ALIAS_REPLICA) {
-            $tableName = $this->indexTableSwitcher->getAdditionalTableName($tableName);
+            $tableName = $this->getAdditionalTableName($tableName);
         }
         return $tableName;
+    }
+
+    /**
+     * TODO: move to separate configurable interface
+     */
+    public function getAdditionalTableName(string $tableName): string
+    {
+        return $tableName . $this->additionalTableSuffix;
     }
 }

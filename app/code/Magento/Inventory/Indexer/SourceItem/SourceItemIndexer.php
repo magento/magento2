@@ -8,22 +8,31 @@ declare(strict_types=1);
 namespace Magento\Inventory\Indexer\SourceItem;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Indexer\ActionInterface;
 use Magento\Inventory\Indexer\Alias;
 use Magento\Inventory\Indexer\IndexDataProvider;
 use Magento\Inventory\Indexer\IndexHandlerInterface;
 use Magento\Inventory\Indexer\IndexNameBuilder;
 use Magento\Inventory\Indexer\IndexStructureInterface;
-use Magento\Inventory\Indexer\Stock\StockIndexerInterface;
+use Magento\Inventory\Indexer\Stock\StockIndexer;
 
 /**
- * @inheritdoc
+ * Source Item indexer
+ * Extension point for indexation
+ *
+ * @api
  */
-class SourceItem implements SourceItemIndexerInterface
+class SourceItemIndexer implements ActionInterface
 {
     /**
-     * @var GetPartialReindexData
+     * Indexer ID in configuration
      */
-    private $getPartialReindexData;
+    const INDEXER_ID = 'inventory_source_item';
+
+    /**
+     * @var GetSkuListInStock
+     */
+    private $getSkuListInStock;
 
     /**
      * @var IndexStructureInterface
@@ -46,27 +55,29 @@ class SourceItem implements SourceItemIndexerInterface
     private $indexNameBuilder;
 
     /**
-     * @var StockIndexerInterface
+     * @var StockIndexer
      */
     private $stockIndexer;
 
     /**
-     * @param GetPartialReindexData $getPartialReindexData
+     * $indexStructure is reserved name for construct variable (in index internal mechanism)
+     *
+     * @param GetSkuListInStock $getSkuListInStockToUpdate
      * @param IndexStructureInterface $indexStructureHandler
      * @param IndexHandlerInterface $indexHandler
      * @param IndexDataProvider $indexDataProvider
      * @param IndexNameBuilder $indexNameBuilder
-     * @param StockIndexerInterface $stockIndexer
+     * @param StockIndexer $stockIndexer
      */
     public function __construct(
-        GetPartialReindexData $getPartialReindexData,
+        GetSkuListInStock $getSkuListInStockToUpdate,
         IndexStructureInterface $indexStructureHandler,
         IndexHandlerInterface $indexHandler,
         IndexDataProvider $indexDataProvider,
         IndexNameBuilder $indexNameBuilder,
-        StockIndexerInterface $stockIndexer
+        StockIndexer $stockIndexer
     ) {
-        $this->getPartialReindexData = $getPartialReindexData;
+        $this->getSkuListInStock = $getSkuListInStockToUpdate;
         $this->indexStructure = $indexStructureHandler;
         $this->indexHandler = $indexHandler;
         $this->indexDataProvider = $indexDataProvider;
@@ -95,14 +106,14 @@ class SourceItem implements SourceItemIndexerInterface
      */
     public function executeList(array $sourceItemIds)
     {
-        $skuListInStockToUpdateList = $this->getPartialReindexData->execute($sourceItemIds);
+        $skuListInStockList = $this->getSkuListInStock->execute($sourceItemIds);
 
-        foreach ($skuListInStockToUpdateList as $skuListInStockToUpdate) {
-            $stockId = $skuListInStockToUpdate->getStockId();
-            $skuList = $skuListInStockToUpdate->getSkuList();
+        foreach ($skuListInStockList as $skuListInStock) {
+            $stockId = $skuListInStock->getStockId();
+            $skuList = $skuListInStock->getSkuList();
 
             $mainIndexName = $this->indexNameBuilder
-                ->setIndexId(self::INDEXER_ID)
+                ->setIndexId('inventory_stock')
                 ->addDimension('stock_', (string)$stockId)
                 ->setAlias(Alias::ALIAS_MAIN)
                 ->build();

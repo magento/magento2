@@ -5,14 +5,11 @@
  */
 namespace Magento\Inventory\Test\Integration\Stock;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Inventory\Indexer\Alias;
-use Magento\Inventory\Indexer\IndexNameBuilder;
-use Magento\Inventory\Indexer\IndexStructureInterface;
-use Magento\Inventory\Indexer\StockItemIndexerInterface;
+use Magento\Inventory\Indexer\Stock\StockIndexer;
 use Magento\Inventory\Model\GetProductQuantityInStock;
 use Magento\Inventory\Model\ReservationCleanupInterface;
+use Magento\Inventory\Test\Integration\Indexer\RemoveIndexData;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 use Magento\InventoryApi\Api\ReservationsAppendInterface;
@@ -46,10 +43,15 @@ class GetProductQuantityInStockTest extends TestCase
      */
     private $getProductQtyInStock;
 
+    /**
+     * @var RemoveIndexData
+     */
+    private $removeIndexData;
+
     protected function setUp()
     {
         $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
-        $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
+        $this->indexer->load(StockIndexer::INDEXER_ID);
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->reservationsAppend = Bootstrap::getObjectManager()->get(ReservationsAppendInterface::class);
@@ -58,25 +60,14 @@ class GetProductQuantityInStockTest extends TestCase
         $this->getProductQtyInStock = Bootstrap::getObjectManager()->create(
             GetProductQuantityInStockInterface::class
         );
+
+        $this->removeIndexData = Bootstrap::getObjectManager()->create(RemoveIndexData::class);
+        $this->removeIndexData->execute([10, 20, 30]);
     }
 
     public function tearDown()
     {
-        /** @var IndexNameBuilder $indexNameBuilder */
-        $indexNameBuilder = Bootstrap::getObjectManager()->get(IndexNameBuilder::class);
-        /** @var IndexStructureInterface $indexStructure */
-        $indexStructure = Bootstrap::getObjectManager()->get(IndexStructureInterface::class);
-
-        foreach ([10, 20, 30] as $stockId) {
-            $indexName = $indexNameBuilder
-                ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
-                ->addDimension('stock_', $stockId)
-                ->setAlias(Alias::ALIAS_MAIN)
-                ->build();
-            $indexStructure->delete($indexName, ResourceConnection::DEFAULT_CONNECTION);
-        }
-
-        // Cleanup reservations
+        $this->removeIndexData->execute([10, 20, 30]);
         $this->reservationCleanup->execute();
     }
 
@@ -89,7 +80,7 @@ class GetProductQuantityInStockTest extends TestCase
      */
     public function testGetProductQuantity()
     {
-        $this->indexer->reindexRow(1);
+        $this->indexer->reindexRow(10);
 
         $this->reservationsAppend->execute([
             // reserve 5 units

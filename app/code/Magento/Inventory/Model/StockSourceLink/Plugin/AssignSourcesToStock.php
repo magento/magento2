@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Inventory\Model\StockSourceLink\Plugin;
 
 use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Inventory\Indexer\StockItemIndexerInterface;
+use Magento\Inventory\Indexer\Stock\StockIndexer;
 
 /**
- * @inheritdoc
+ * TODO: remove this plugin (same module)
+ * Invalidate StockIndexer
  */
 class AssignSourcesToStock
 {
@@ -32,7 +34,7 @@ class AssignSourcesToStock
      */
     public function afterExecute()
     {
-        $indexer = $this->indexerRegistry->get(StockItemIndexerInterface::INDEXER_ID);
+        $indexer = $this->indexerRegistry->get(StockIndexer::INDEXER_ID);
         if ($indexer->isValid()) {
             $indexer->invalidate();
         }

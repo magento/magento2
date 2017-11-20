@@ -10,19 +10,12 @@
         <title translate="true">Stocks</title>
         <description translate="true">Rebuild Stock index (MSI)</description>
     </indexer>
-    <indexer id="inventory_source" view_id="inventory_source" class="Magento\Inventory\Indexer\Source\SourceIndexer" hidden="true">
+    <indexer id="inventory_source" view_id="inventory_source" class="Magento\Inventory\Indexer\Source\SourceIndexer">
         <title translate="true">Sources</title>
         <description translate="true">Rebuild Source index (MSI)</description>
-        <dependencies>
-            <indexer id="inventory_stock_item" />
-        </dependencies>
     </indexer>
-    <indexer id="inventory_source_item" view_id="inventory_source_item" class="Magento\Inventory\Indexer\SourceItem\SourceItem" hidden="true">
+    <indexer id="inventory_source_item" view_id="inventory_source_item" class="Magento\Inventory\Indexer\SourceItem\SourceItemIndexer">
         <title translate="true">Source Items</title>
         <description translate="true">Rebuild Source Item index (MSI)</description>
-        <dependencies>
-            <indexer id="inventory_stock_item" />
-            <indexer id="inventory_source" />
-        </dependencies>
     </indexer>
 </config>

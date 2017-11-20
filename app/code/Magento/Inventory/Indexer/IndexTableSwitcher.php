@@ -16,6 +16,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 class IndexTableSwitcher implements IndexTableSwitcherInterface
 {
     /**
+     * TODO: move to separate configurable interface
      * Suffix for replica index table
      *
      * @var string
@@ -23,6 +24,7 @@ class IndexTableSwitcher implements IndexTableSwitcherInterface
     private $additionalTableSuffix = '_replica';
 
     /**
+     * TODO: move to separate configurable interface
      * Suffix for outdated index table
      *
      * @var string
@@ -96,13 +98,5 @@ class IndexTableSwitcher implements IndexTableSwitcherInterface
         if (!empty($toRename)) {
             $connection->renameTablesBatch($toRename);
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAdditionalTableName(string $tableName): string
-    {
-        return $tableName . $this->additionalTableSuffix;
     }
 }

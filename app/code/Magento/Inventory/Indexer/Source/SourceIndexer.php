@@ -7,33 +7,41 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Indexer\Source;
 
-use Magento\Inventory\Indexer\Stock\StockIndexerInterface;
-use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\Framework\Indexer\ActionInterface;
+use Magento\Inventory\Indexer\Stock\StockIndexer;
 
 /**
- * @inheritdoc
+ * Source indexer
+ * Extension point for indexation
+ *
+ * @api
  */
-class SourceIndexer implements SourceIndexerInterface
+class SourceIndexer implements ActionInterface
 {
     /**
-     * @var GetPartialReindexData
+     * Indexer ID in configuration
      */
-    private $getPartialReindexData;
+    const INDEXER_ID = 'inventory_source';
 
     /**
-     * @var StockIndexerInterface
+     * @var GetAssignedStockIds
+     */
+    private $getAssignedStockIds;
+
+    /**
+     * @var StockIndexer
      */
     private $stockIndexer;
 
     /**
-     * @param GetPartialReindexData $getPartialReindexData
-     * @param StockIndexerInterface $stockIndexer
+     * @param GetAssignedStockIds $getAssignedStockIds
+     * @param StockIndexer $stockIndexer
      */
     public function __construct(
-        GetPartialReindexData $getPartialReindexData,
-        StockIndexerInterface $stockIndexer
+        GetAssignedStockIds $getAssignedStockIds,
+        StockIndexer $stockIndexer
     ) {
-        $this->getPartialReindexData = $getPartialReindexData;
+        $this->getAssignedStockIds = $getAssignedStockIds;
         $this->stockIndexer = $stockIndexer;
     }
 
@@ -58,8 +66,7 @@ class SourceIndexer implements SourceIndexerInterface
      */
     public function executeList(array $sourceIds)
     {
-        $stockList = $this->getPartialReindexData->execute($sourceIds);
-        $stockIds = array_column($stockList, StockInterface::STOCK_ID);
+        $stockIds = $this->getAssignedStockIds->execute($sourceIds);
         $this->stockIndexer->executeList($stockIds);
     }
 }

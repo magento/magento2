@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Indexer\Source\Mview;
 
+use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Mview\ActionInterface;
-use Magento\Inventory\Indexer\Source\SourceIndexerInterface;
+use Magento\Inventory\Indexer\Source\SourceIndexer;
 
 /**
  * Execute materialization on entity ids
@@ -41,7 +42,9 @@ class Action implements ActionInterface
      */
     public function execute($ids)
     {
-        $indexer = $this->indexerFactory->create()->load(SourceIndexerInterface::INDEXER_ID);
+        /** @var IndexerInterface $indexer */
+        $indexer = $this->indexerFactory->create();
+        $indexer->load(SourceIndexer::INDEXER_ID);
         $indexer->reindexList($ids);
     }
 }

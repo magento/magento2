@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Indexer\Source;
+namespace Magento\Inventory\Indexer\Stock;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
 use Magento\Inventory\Model\StockSourceLink;
 
 /**
- * Returns all assigned Stock ids by given Source ids
+ * Returns all assigned stock ids
  */
-class GetPartialReindexData
+class GetAllAssignedStockIds
 {
     /**
      * @var ResourceConnection
@@ -24,19 +24,15 @@ class GetPartialReindexData
     /**
      * @param ResourceConnection $resourceConnection
      */
-    public function __construct(
-        ResourceConnection $resourceConnection
-    ) {
+    public function __construct(ResourceConnection $resourceConnection)
+    {
         $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * Returns all assigned Stock ids by given Sources ids
-     *
-     * @param int[] $sourceIds
      * @return int[]
      */
-    public function execute(array $sourceIds): array
+    public function execute(): array
     {
         $connection = $this->resourceConnection->getConnection();
         $sourceStockLinkTable = $this->resourceConnection->getTableName(
@@ -46,11 +42,10 @@ class GetPartialReindexData
         $select = $connection
             ->select()
             ->from($sourceStockLinkTable, StockSourceLink::STOCK_ID)
-            ->where(StockSourceLink::SOURCE_ID . ' IN (?)', $sourceIds)
             ->group(StockSourceLink::STOCK_ID);
 
-        $items = $connection->fetchAll($select);
-
-        return $items;
+        $stockIds = $connection->fetchCol($select);
+        $stockIds = array_map('intval', $stockIds);
+        return $stockIds;
     }
 }

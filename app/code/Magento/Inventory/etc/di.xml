@@ -82,9 +82,6 @@
     <preference for="Magento\Inventory\Indexer\IndexNameResolverInterface" type="Magento\Inventory\Indexer\IndexNameResolver"/>
     <preference for="Magento\Inventory\Indexer\IndexStructureInterface" type="Magento\Inventory\Indexer\IndexStructure"/>
     <preference for="Magento\Inventory\Indexer\IndexTableSwitcherInterface" type="Magento\Inventory\Indexer\IndexTableSwitcher"/>
-    <preference for="Magento\Inventory\Indexer\Source\SourceIndexerInterface" type="Magento\Inventory\Indexer\Source\SourceIndexer"/>
-    <preference for="Magento\Inventory\Indexer\SourceItem\SourceItemIndexerInterface" type="Magento\Inventory\Indexer\SourceItem\SourceItemIndexer"/>
-    <preference for="Magento\Inventory\Indexer\Stock\StockIndexerInterface" type="Magento\Inventory\Indexer\Stock\StockIndexer"/>
     <type name="Magento\Inventory\Indexer\IndexHandler">
         <arguments>
             <argument name="batchSize" xsi:type="string">100</argument>
