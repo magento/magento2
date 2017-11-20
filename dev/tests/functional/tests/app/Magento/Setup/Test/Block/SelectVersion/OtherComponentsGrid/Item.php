@@ -8,9 +8,14 @@ namespace Magento\Setup\Test\Block\SelectVersion\OtherComponentsGrid;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
+/**
+ * Block for each component.
+ */
 class Item extends Block
 {
     /**
+     * CSS selector for version element.
+     *
      * @var string
      */
     private $version = '[ng-change*="setComponentVersion"]';
