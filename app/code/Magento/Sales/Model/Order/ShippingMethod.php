@@ -92,5 +92,4 @@ class ShippingMethod
         $this->method = $medhod;
         return $this;
     }
-
 }

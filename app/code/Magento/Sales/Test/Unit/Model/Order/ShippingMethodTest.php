@@ -46,5 +46,4 @@ class ShippingMethodTest extends TestCase
     {
         $this->assertEquals(self::METHOD_CODE, $this->methodObject->getMethod());
     }
-
 }
