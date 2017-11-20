@@ -557,11 +557,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->once())->method('hasData')->with($configurableAttributes)->willReturn(false);
-        $product->expects($this->once())->method('getStoreId')->willReturn(0);
+        $product
+            ->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn(0);
         $product->expects($this->any())->method('getId')->willReturn(0);
         $product->expects($this->any())->method('getIdentities')->willReturn(['123']);
         $product->expects($this->once())->method('setData')->willReturnSelf();
-        $product->expects($this->exactly(2))
+        $product
+            ->expects($this->any())
             ->method('getData')
             ->willReturnMap(
                 [
@@ -571,7 +575,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             );
         $product->expects($this->once())->method('getIdentities')->willReturn([1,2,3]);
 
-        $this->entityMetadata->expects($this->once())
+        $this->entityMetadata
+            ->expects($this->any())
             ->method('getLinkField')
             ->willReturn('link');
 
@@ -591,6 +596,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 $this->isInstanceOf(
                     Collection::class
                 )
+            );
+        $this->cache
+            ->expects($this->once())
+            ->method('save')
+            ->with(
+                serialize($attributeCollection),
+                get_class($this->_model) . '1_0'
             );
 
         $this->assertEquals($expectedData, $this->_model->getConfigurableAttributes($product));

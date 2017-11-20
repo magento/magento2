@@ -5,6 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 use Magento\Framework\App\ResourceConnection;
@@ -16,19 +17,14 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
 {
     /**
-     * @var ResourceConnection
-     */
-    private $resource;
-
-    /**
      * @var LinkedProductSelectBuilderInterface
      */
     private $linkedProductSelectBuilder;
 
     /**
-     * @var CollectionFactory
+     * @var OptionsCollectionProvider
      */
-    private $collectionFactory;
+    private $optionsCollectionProvider;
 
     /**
      * Key is product id. Value is prepared product collection
@@ -41,15 +37,20 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
      * @param ResourceConnection $resourceConnection
      * @param LinkedProductSelectBuilderInterface $linkedProductSelectBuilder
      * @param CollectionFactory $collectionFactory
+     * @param OptionsCollectionProvider|null $optionsCollectionProvider
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         LinkedProductSelectBuilderInterface $linkedProductSelectBuilder,
-        CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        OptionsCollectionProvider $optionsCollectionProvider = null
     ) {
-        $this->resource = $resourceConnection;
         $this->linkedProductSelectBuilder = $linkedProductSelectBuilder;
-        $this->collectionFactory = $collectionFactory;
+
+        $this->optionsCollectionProvider = $optionsCollectionProvider ?:
+            ObjectManager::getInstance()->get(OptionsCollectionProvider::class);
     }
 
     /**
@@ -58,15 +59,13 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
     public function getProducts(ProductInterface $product)
     {
         if (!isset($this->productsMap[$product->getId()])) {
-            $productIds = $this->resource->getConnection()->fetchCol(
-                '(' . implode(') UNION (', $this->linkedProductSelectBuilder->build($product->getId())) . ')'
+            $optionsCollection = $this->optionsCollectionProvider->getCollection(
+                $this->linkedProductSelectBuilder->build($product->getId())
             );
 
-            $this->productsMap[$product->getId()] = $this->collectionFactory->create()
-                ->addAttributeToSelect(['price', 'special_price'])
-                ->addIdFilter($productIds)
-                ->getItems();
+            $this->productsMap[$product->getId()] = $optionsCollection->getItems();
         }
+
         return $this->productsMap[$product->getId()];
     }
 }
