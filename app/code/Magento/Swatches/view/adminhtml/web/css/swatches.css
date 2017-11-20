@@ -150,7 +150,7 @@
 }
 
 .swatches-visual-col.unavailable:after {
-    content: '';
+    /*content: '';*/
     position: absolute;
     width: 35px;
     height: 2px;

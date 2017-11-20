@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Swatches\Test\TestCase\UpdateConfigurableProductWithSwatchFromShoppingCartTest"
+              summary="Update Configurable Product (based on Swatch Attribute) from Shopping Cart"
+              ticketId="MAGETWO-82989">
+        <variation name="UpdateConfigurableProductWithVisualSwatchFromShoppingCartTest"
+                   summary="Update Configurable Product (based on Visual Swatch Attribute) from Shopping Cart"
+                   ticketId="MAGETWO-82989">
+            <data name="product/dataset" xsi:type="string">product_with_visual_swatch</data>
+            <data name="colors" xsi:type="array">
+                <item name="1" xsi:type="string">ff0000</item>
+                <item name="2" xsi:type="string">00ff00</item>
+                <item name="3" xsi:type="string">0000ff</item>
+            </data>
+            <data name="attributesToChange" xsi:type="array">
+                <item name="options" xsi:type="array">
+                    <item name="configurable_options" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="title" xsi:type="string">attribute_key_0</item>
+                            <item name="value" xsi:type="string">option_key_1</item>
+                        </item>
+                        <item name="1" xsi:type="array">
+                            <item name="title" xsi:type="string">attribute_key_1</item>
+                            <item name="value" xsi:type="string">option_key_2</item>
+                        </item>
+                    </item>
+                </item>
+                <item name="qty" xsi:type="string">1</item>
+                <item name="cartItem" xsi:type="array">
+                    <item name="price" xsi:type="string">66.66</item>
+                    <item name="qty" xsi:type="string">1</item>
+                    <item name="subtotal" xsi:type="string">66.66</item>
+                </item>
+            </data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart"/>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart"/>
+        </variation>
+    </testCase>
+</config>

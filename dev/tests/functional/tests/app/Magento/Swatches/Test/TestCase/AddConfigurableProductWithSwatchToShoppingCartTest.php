@@ -62,10 +62,9 @@ class AddConfigurableProductWithSwatchToShoppingCartTest extends Injectable
      * Runs add configurable product with swatches attributes test.
      *
      * @param ConfigurableProduct $product
-     * @param bool $addToCart
      * @return array
      */
-    public function test(ConfigurableProduct $product, $addToCart)
+    public function test(ConfigurableProduct $product)
     {
         $product->persist();
         $cart = $this->testStepFactory->create(
@@ -74,9 +73,6 @@ class AddConfigurableProductWithSwatchToShoppingCartTest extends Injectable
                 'product' => $product
             ]
         )->run()['cart'];
-        if ($addToCart) {
-            $this->categoryView->getMessagesBlock()->waitSuccessMessage();
-        }
 
         return ['cart' => $cart];
     }
