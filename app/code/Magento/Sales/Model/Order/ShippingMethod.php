@@ -66,4 +66,31 @@ class ShippingMethod
     {
         return $this->method;
     }
+
+    /**
+     * Changes carrier code
+     *
+     * @deprecated The value object should be immutable.
+     * @param string $code
+     * @return ShippingMethod
+     */
+    public function setCarrierCode(string $code) : ShippingMethod
+    {
+        $this->carrierCode = $code;
+        return $this;
+    }
+
+    /**
+     * Changes method code
+     *
+     * @deprecated The value object should be immutable.
+     * @param string $medhod
+     * @return ShippingMethod
+     */
+    public function setMethod(string $medhod) : ShippingMethod
+    {
+        $this->method = $medhod;
+        return $this;
+    }
+
 }
