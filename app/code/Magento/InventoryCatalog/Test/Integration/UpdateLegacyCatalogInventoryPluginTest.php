@@ -147,6 +147,5 @@ class UpdateLegacyCatalogInventoryPluginTest extends TestCase
         $quantityAfterCheck = $oldStockItem->getQty();
 
         $this->assertEquals($this->getProductQtyInStock->execute('SKU-1', 10), $quantityAfterCheck);
-
     }
 }
