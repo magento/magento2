@@ -33,7 +33,7 @@ $options = $attribute->getOptions();
 $attributeValues = [];
 $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
 $associatedProductIds = [];
-$productIds = [10010, 10020];
+$productIds = [1010, 1020];
 array_shift($options); //remove the first option which is empty
 
 $isFirstOption = true;
@@ -133,7 +133,7 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
 $product->setTypeId(Configurable::TYPE_CODE)
-    ->setId(10001)
+    ->setId(1001)
     ->setAttributeSetId($attributeSetId)
     ->setWebsiteIds([1])
     ->setName('Configurable Product')
