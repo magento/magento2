@@ -8,7 +8,7 @@
 define([
     'jquery',
     'underscore',
-    'tinymce',
+    'tinymceDeprecated',
     'mage/adminhtml/wysiwyg/tiny_mce/html5-schema',
     'mage/translate',
     'prototype',

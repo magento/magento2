@@ -31,13 +31,13 @@ use Magento\Framework\App\TemplateTypesInterface;
 <script>
 require([
     'jquery',
-    'tinymce',
+    'tinymceDeprecated',
     'Magento_Ui/js/modal/prompt',
     'Magento_Ui/js/modal/confirm',
     'mage/mage',
     'prototype'
 ], function(jQuery, wysiwyg, prompt, confirm){
-
+debugger;
 //<![CDATA[
     jQuery('#newsletter_template_edit_form').mage('form').mage('validation');
     jQuery('#newsletter_template_preview_form').mage('form').mage('validation');

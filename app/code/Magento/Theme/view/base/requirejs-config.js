@@ -25,9 +25,6 @@ var config = {
         'mage/webapi': ['jquery'],
         'jquery/ui': ['jquery'],
         'MutationObserver': ['es6-collections'],
-        'tinymce': {
-            'exports': 'tinymce'
-        },
         'moment': {
             'exports': 'moment'
         },
@@ -46,9 +43,7 @@ var config = {
         'prototype': 'legacy-build.min',
         'jquery/jquery-storageapi': 'jquery/jquery.storageapi.min',
         'text': 'mage/requirejs/text',
-        'domReady': 'requirejs/domReady',
-        'tinymce': 'tiny_mce_4/tinymce.min',
-        'wysiwygAdapter': 'mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter'
+        'domReady': 'requirejs/domReady'
     },
     'deps': [
         'jquery/jquery-migrate'

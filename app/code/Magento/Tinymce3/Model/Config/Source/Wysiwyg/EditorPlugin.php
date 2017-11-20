@@ -18,11 +18,7 @@ class EditorPlugin
      */
     public function afterToOptionArray(\Magento\Cms\Model\Config\Source\Wysiwyg\Editor $subject, $optionArray)
     {
-        foreach ($optionArray as $optionIndex => $optionData) {
-            if ($optionData['value'] === 'tinymce') {
-                $optionArray[$optionIndex]['label'] = 'TinyMCE 3';
-            }
-        }
+        $optionArray[] = ['value' => 'Magento_Tinymce3/tinymce3Adapter', 'label' => __('TinyMCE 3 (deprecated)')];
 
         return $optionArray;
     }

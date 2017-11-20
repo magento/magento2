@@ -16,7 +16,7 @@ class Editor implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         return [
-            ['value' => 'tinymce', 'label' => __('TinyMCE 4')]
+            ['value' => 'mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter', 'label' => __('TinyMCE 4')]
         ];
     }
 }

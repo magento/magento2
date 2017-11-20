@@ -62,8 +62,9 @@
       <label for="<?= $element->getHtmlId() ?>"><?= /* @escapeNotVerified */ $element->getLabel() ?>:</label>
         <script>
         require([
-            'tinymce'
+            'tinymceDeprecated'
         ], function(tinyMCE){
+            debugger;
             tinyMCE.init({
                 mode : "exact",
                 theme : "advanced",
