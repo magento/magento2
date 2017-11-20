@@ -11,7 +11,7 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Inventory\Indexer\Stock\StockIndexer;
 
 /**
- * TODO: remove this plugin (same module)
+ * TODO: remove this plugin (https://github.com/magento-engcom/msi/issues/213)
  * Invalidate StockIndexer
  */
 class AssignSourcesToStock

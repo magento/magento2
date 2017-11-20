@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Test\Integration\Stock;
 
 use Magento\Framework\Indexer\IndexerInterface;
@@ -64,7 +66,6 @@ class IsProductInStockTest extends TestCase
     public function tearDown()
     {
         $this->removeIndexData->execute([10, 20, 30]);
-        $this->reservationCleanup->execute();
     }
 
     /**
@@ -78,19 +79,7 @@ class IsProductInStockTest extends TestCase
     {
         $this->indexer->reindexRow(10);
 
-        $this->reservationsAppend->execute([
-            // reserve 5 units
-            $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(-5)->build(),
-            // unreserve 1.5 units
-            $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(1.5)->build(),
-        ]);
-
         self::assertTrue($this->isProductInStock->execute('SKU-1', 10));
-
-        $this->reservationsAppend->execute([
-            // unreserve 3.5 units
-            $this->reservationBuilder->setStockId(1)->setSku('SKU-1')->setQuantity(3.5)->build(),
-        ]);
     }
 
     /**
@@ -100,20 +89,20 @@ class IsProductInStockTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
      */
-    public function testProductIsNotInStock()
+    public function testProductIsOutOfStockIfReservationsArePresent()
     {
         $this->indexer->reindexRow(10);
 
+        // emulate order placement
         $this->reservationsAppend->execute([
-            // reserve 8.5 units
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(-8.5)->build(),
         ]);
-
         self::assertFalse($this->isProductInStock->execute('SKU-1', 10));
 
         $this->reservationsAppend->execute([
             // unreserve 8.5 units
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(8.5)->build(),
         ]);
+        $this->reservationCleanup->execute();
     }
 }
