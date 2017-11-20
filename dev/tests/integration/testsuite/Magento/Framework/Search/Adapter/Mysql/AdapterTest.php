@@ -458,7 +458,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
         $attribute = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'test_configurable');
+            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'test_configurable_searchable');
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
         $selectOptions = $this->objectManager
             ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
@@ -466,7 +466,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
         $firstOption = $selectOptions->getFirstItem();
         $firstOptionId = $firstOption->getId();
-        $this->requestBuilder->bind('test_configurable', $firstOptionId);
+        $this->requestBuilder->bind('test_configurable_searchable', $firstOptionId);
         $this->requestBuilder->setRequestName('filter_out_of_stock_child');
 
         $queryResponse = $this->executeQuery();
@@ -474,7 +474,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
         $secondOption = $selectOptions->getLastItem();
         $secondOptionId = $secondOption->getId();
-        $this->requestBuilder->bind('test_configurable', $secondOptionId);
+        $this->requestBuilder->bind('test_configurable_searchable', $secondOptionId);
         $this->requestBuilder->setRequestName('filter_out_of_stock_child');
 
         $queryResponse = $this->executeQuery();
