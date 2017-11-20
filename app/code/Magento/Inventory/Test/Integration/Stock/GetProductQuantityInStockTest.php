@@ -63,12 +63,12 @@ class GetProductQuantityInStockTest extends TestCase
         );
 
         $this->removeIndexData = Bootstrap::getObjectManager()->create(RemoveIndexData::class);
-        $this->removeIndexData->execute([10, 20, 30]);
+        $this->removeIndexData->execute([10]);
     }
 
     public function tearDown()
     {
-        $this->removeIndexData->execute([10, 20, 30]);
+        $this->removeIndexData->execute([10]);
         $this->reservationCleanup->execute();
     }
 
@@ -83,21 +83,30 @@ class GetProductQuantityInStockTest extends TestCase
     {
         $this->indexer->reindexRow(10);
 
-        // condition before start the test
         self::assertEquals(8.5, $this->getProductQtyInStock->execute('SKU-1', 10));
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     */
+    public function testGetProductQuantityIfReservationsArePresent()
+    {
+        $this->indexer->reindexRow(10);
 
         $this->reservationsAppend->execute([
-            // reserve 5 units
+            // emulate order placement reserve 5 units)
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(-5)->build(),
-            // unreserved 1.5 units
+            // emulate partial order canceling (1.5 units)
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(1.5)->build(),
         ]);
-
-        // checks the expected result after reservation
         self::assertEquals(5, $this->getProductQtyInStock->execute('SKU-1', 10));
 
         $this->reservationsAppend->execute([
-            // unreserved 3.5 units
+            // unreserved 3.5 units for cleanup
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(3.5)->build(),
         ]);
     }

@@ -60,12 +60,12 @@ class IsProductInStockTest extends TestCase
         $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
 
         $this->removeIndexData = Bootstrap::getObjectManager()->create(RemoveIndexData::class);
-        $this->removeIndexData->execute([10, 20, 30]);
+        $this->removeIndexData->execute([10]);
     }
 
     public function tearDown()
     {
-        $this->removeIndexData->execute([10, 20, 30]);
+        $this->removeIndexData->execute([10]);
     }
 
     /**
@@ -93,14 +93,14 @@ class IsProductInStockTest extends TestCase
     {
         $this->indexer->reindexRow(10);
 
-        // emulate order placement
+        // emulate order placement (reserve -8.5 units)
         $this->reservationsAppend->execute([
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(-8.5)->build(),
         ]);
         self::assertFalse($this->isProductInStock->execute('SKU-1', 10));
 
         $this->reservationsAppend->execute([
-            // unreserve 8.5 units
+            // unreserve 8.5 units for cleanup
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(8.5)->build(),
         ]);
         $this->reservationCleanup->execute();
