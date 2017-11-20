@@ -7,6 +7,8 @@
 namespace Magento\Webapi\Model\Authorization;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Oauth\Exception;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Integration\Model\Oauth\TokenFactory;
 use Magento\Integration\Api\IntegrationServiceInterface;
@@ -48,6 +50,21 @@ class TokenUserContext implements UserContextInterface
     protected $integrationService;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime
+     */
+    private $dateTime;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    private $date;
+
+    /**
+     * @var \Magento\Integration\Helper\Oauth\Data
+     */
+    private $oauthHelper;
+
+    /**
      * Initialize dependencies.
      *
      * @param Request $request
@@ -57,11 +74,23 @@ class TokenUserContext implements UserContextInterface
     public function __construct(
         Request $request,
         TokenFactory $tokenFactory,
-        IntegrationServiceInterface $integrationService
+        IntegrationServiceInterface $integrationService,
+        \Magento\Framework\Stdlib\DateTime $dateTime = null,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date = null,
+        \Magento\Integration\Helper\Oauth\Data $oauthHelper = null
     ) {
         $this->request = $request;
         $this->tokenFactory = $tokenFactory;
         $this->integrationService = $integrationService;
+        $this->dateTime = $dateTime ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Stdlib\DateTime::class
+        );
+        $this->date = $date ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Stdlib\DateTime\DateTime::class
+        );
+        $this->oauthHelper = $oauthHelper ?: ObjectManager::getInstance()->get(
+            \Magento\Integration\Helper\Oauth\Data::class
+        );
     }
 
     /**
@@ -80,6 +109,29 @@ class TokenUserContext implements UserContextInterface
     {
         $this->processRequest();
         return $this->userType;
+    }
+
+    /**
+     * Check if token is expired.
+     *
+     * @param Token $token
+     *
+     * @return bool
+     */
+    private function isTokenExpired(Token $token)
+    {
+        if ($token->getUserType() == \Magento\Authorization\Model\UserContextInterface::USER_TYPE_ADMIN) {
+            $tokenTtl = $this->oauthHelper->getAdminTokenLifetime();
+        } elseif ($token->getUserType() == \Magento\Authorization\Model\UserContextInterface::USER_TYPE_CUSTOMER) {
+            $tokenTtl = $this->oauthHelper->getCustomerTokenLifetime();
+        } else {
+            // other user-type tokens are considered always valid
+            return false;
+        }
+        if ($this->dateTime->strToTime($token->getCreatedAt()) < ($this->date->gmtTimestamp() - $tokenTtl * 3600)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -114,7 +166,7 @@ class TokenUserContext implements UserContextInterface
         $bearerToken = $headerPieces[1];
         $token = $this->tokenFactory->create()->loadByToken($bearerToken);
 
-        if (!$token->getId() || $token->getRevoked()) {
+        if (!$token->getId() || $token->getRevoked() || $this->isTokenExpired($token)) {
             $this->isRequestProcessed = true;
             return;
         }
