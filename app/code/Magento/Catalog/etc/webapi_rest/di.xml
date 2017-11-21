@@ -16,4 +16,15 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Webapi\ServiceInputProcessor">
+        <plugin name="convert_special_price" type="Magento\Catalog\Plugin\ServiceInputProcessor\ConvertSpecialPrice"/>
+    </type>
+    <type name="Magento\Catalog\Plugin\ServiceInputProcessor\ConvertSpecialPrice">
+        <arguments>
+            <argument name="mapping" xsi:type="array">
+                <item name="custom_attributes" xsi:type="string">custom_attributes</item>
+                <item name="attribute_code" xsi:type="string">attribute_code</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

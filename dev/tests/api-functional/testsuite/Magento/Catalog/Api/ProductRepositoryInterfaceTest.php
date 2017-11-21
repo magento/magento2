@@ -1408,4 +1408,41 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         }
         $this->assertEquals($expectedMultiselectValue, $multiselectValue);
     }
+
+    /**
+     * Test "special_price" will be removed from product, if set in request as empty string.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_special_price.php
+     */
+    public function testRemoveSpecialPrice()
+    {
+        $productData = [
+            ProductInterface::NAME => 'Simple Product',
+            ProductInterface::SKU => 'simple',
+        ];
+        $product = $this->getSimpleProductDataWithRemovedSpecialPrice($productData);
+        $response = $this->updateProduct($product);
+
+        $specialPrice = false;
+        foreach ($response['custom_attributes'] as $attribute) {
+            if ($attribute['attribute_code'] === 'special_price') {
+                $specialPrice = true;
+            }
+        }
+        $this->assertFalse($specialPrice);
+    }
+
+    /**
+     * Get Simple Product Data with special price as empty string.
+     *
+     * @param array $productData
+     * @return array
+     */
+    private function getSimpleProductDataWithRemovedSpecialPrice($productData = [])
+    {
+        $productData = $this->getSimpleProductData($productData);
+        $productData['custom_attributes'][] = ['attribute_code' => 'special_price', 'value' => ''];
+
+        return $productData;
+    }
 }
