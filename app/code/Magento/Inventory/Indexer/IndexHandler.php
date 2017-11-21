@@ -3,14 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\Inventory\Indexer\StockItem;
+namespace Magento\Inventory\Indexer;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\SaveHandler\Batch;
-use Magento\Inventory\Indexer\IndexHandlerInterface;
-use Magento\Inventory\Indexer\IndexName;
-use Magento\Inventory\Indexer\IndexNameResolverInterface;
 
 /**
  * Index handler is responsible for index data manipulation
@@ -76,6 +74,6 @@ class IndexHandler implements IndexHandlerInterface
     {
         $connection = $this->resourceConnection->getConnection($connectionName);
         $tableName = $this->indexNameResolver->resolveName($indexName);
-        $connection->delete($tableName, ['sku in (?)' => iterator_to_array($documents)]);
+        $connection->delete($tableName, ['sku IN (?)' => iterator_to_array($documents)]);
     }
 }
