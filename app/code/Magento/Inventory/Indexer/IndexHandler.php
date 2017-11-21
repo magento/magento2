@@ -9,6 +9,9 @@ namespace Magento\Inventory\Indexer;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\SaveHandler\Batch;
+use Magento\Framework\MultiDimensionIndex\IndexHandlerInterface;
+use Magento\Framework\MultiDimensionIndex\IndexName;
+use Magento\Framework\MultiDimensionIndex\IndexNameResolverInterface;
 
 /**
  * Index handler is responsible for index data manipulation

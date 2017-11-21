@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Indexer;
+namespace Magento\Framework\MultiDimensionIndex;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -21,7 +21,7 @@ class IndexTableSwitcher implements IndexTableSwitcherInterface
      *
      * @var string
      */
-    private $additionalTableSuffix = '_replica';
+    private $replicaTableSuffix = '_replica';
 
     /**
      * TODO: move to separate configurable interface (https://github.com/magento-engcom/msi/issues/213)
@@ -76,7 +76,7 @@ class IndexTableSwitcher implements IndexTableSwitcherInterface
         $toRename = [];
         foreach ($tableNames as $tableName) {
             $outdatedTableName = $tableName . $this->outdatedTableSuffix;
-            $replicaTableName = $tableName . $this->additionalTableSuffix;
+            $replicaTableName = $tableName . $this->replicaTableSuffix;
 
             $renameBatch = [
                 [

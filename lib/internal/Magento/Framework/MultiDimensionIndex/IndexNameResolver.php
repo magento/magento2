@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Indexer;
+namespace Magento\Framework\MultiDimensionIndex;
 
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 
