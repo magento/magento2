@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="AdminAddImageToWYSIWYGCest">
+        <annotations>
+            <features value="Add Image to WYSIWYG"/>
+            <stories value="Add Media to WYSIWYG"/>
+            <group value="addImage"/>
+            <env value="chrome"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" mergeKey="login"/>
+            <actionGroup ref="EnabledWYSIWYG" mergeKey="enableWYSIWYG"/>
+        </before>
+        <test name="AddImageToWYSIWYGEditor">
+            <annotations>
+                <title value="You should be able to add image to WYSIWYG Editor"/>
+                <description value="You should be able to add image to WYSIWYG Editor."/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-83697"/>
+            </annotations>
+            <amOnPage url="{{CmsNewPagePage.url}}" mergeKey="goToNewCMSPage" />
+            <waitForPageLoad mergeKey="wait"/>
+            <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" mergeKey="fillFieldTitle"/>
+            <click selector="{{CmsNewPagePageContentSection.header}}" mergeKey="clickExpandContent"/>
+            <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" mergeKey="waitForTinyMCE4" />
+            <click selector="{{CmsWYSIWYGSection.InsertImageIcon}}" mergeKey="clickInsertImageIcon" />
+            <waitForPageLoad mergeKey="qwdwq" />
+            <click selector="{{CmsWYSIWYGSection.Browse}}" mergeKey="clickBrowse" />
+            <waitForPageLoad mergeKey="waitForPageLoad" />
+            <waitForLoadingMaskToDisappear mergeKey="waitForLoading1" />
+            <waitForLoadingMaskToDisappear mergeKey="waitForLoading2" />
+            <!--<waitForElementVisible selector="{{CmsWYSIWYGSection.CreateFolder}}" mergeKey="waitForNewFolderBtn" />-->
+            <click selector="{{CmsWYSIWYGSection.CreateFolder}}" mergeKey="createFolder"/>
+            <fillField selector="{{CmsWYSIWYGSection.FolderName}}" userInput="{{ImageFolder.name}}" mergeKey="fillFolderName" />
+            <click selector="{{CmsWYSIWYGSection.AcceptFolderName}}" mergeKey="acceptFolderName" />
+            <waitForPageLoad mergeKey="waitForPageLoad1" />
+            <waitForLoadingMaskToDisappear mergeKey="waitForLoading3" />
+            <waitForElementVisible selector="{{CmsWYSIWYGSection.StorageRoot}}" mergeKey="waitForStorageRoot" />
+            <waitForPageLoad mergeKey="waitForPageLoad2" />
+            <waitForLoadingMaskToDisappear mergeKey="waitForLoading4" />
+            <click userInput="{{ImageFolder.name}}" mergeKey="clickOnCreatedFolder" />
+            <waitForLoadingMaskToDisappear mergeKey="waitForLoading5" />
+            <attachFile selector="{{CmsWYSIWYGSection.BrowseUploadImage}}" userInput="{{ImageUpload.file}}" mergeKey="uploadImage"/>
+            <waitForPageLoad  mergeKey="wait5"/>
+            <waitForLoadingMaskToDisappear mergeKey="waitForLoading6" />
+            <waitForElementVisible  selector="{{CmsWYSIWYGSection.image(ImageUpload.file)}}" mergeKey="waitForUploadImage" />
+            <click selector="{{CmsWYSIWYGSection.image(ImageUpload.file)}}" mergeKey="selectImage" />
+            <click selector="{{CmsWYSIWYGSection.InsertFile}}" mergeKey="clickInsertBtn" />
+            <waitForLoadingMaskToDisappear mergeKey="waitForLoading7" />
+            <waitForElementVisible selector="{{CmsWYSIWYGSection.OkBtn}}" mergeKey="waitForOkBtn" />
+            <fillField selector="{{CmsWYSIWYGSection.ImageDescription}}" userInput="{{ImageUpload.content}}" mergeKey="fillImageDescription" />
+            <fillField selector="{{CmsWYSIWYGSection.Height}}" userInput="{{ImageUpload.height}}" mergeKey="fillImageHeight" />
+            <click selector="{{CmsWYSIWYGSection.OkBtn}}" mergeKey="clickOkBtn" />
+            <waitForPageLoad mergeKey="wait3"/>
+            <click selector="{{CmsNewPagePageSeoSection.header}}" mergeKey="clickExpandSearchEngineOptimisation"/>
+            <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" mergeKey="fillFieldUrlKey"/>
+            <click selector="{{CmsNewPagePageActionsSection.savePage}}" mergeKey="clickSavePage"/>
+            <see userInput="You saved the page." mergeKey="seeSuccessMessage"/>
+            <amOnPage url="{{_defaultCmsPage.identifier}}" mergeKey="amOnPageTestPage"/>
+            <waitForPageLoad  mergeKey="wait4"/>
+            <seeElement selector="{{StorefrontCMSPageSection.mediaDescription}}" mergeKey="assertMediaDescription"/>
+        </test>
+        <after>
+            <actionGroup ref="DisabledWYSIWYG" mergeKey="disableWYSIWYG"/>
+            <amOnPage url="admin/admin/auth/logout/" mergeKey="amOnLogoutPage"/>
+        </after>
+    </cest>
+</config>
