@@ -31,6 +31,6 @@ class ProductUrlPathAutoGeneratorObserver implements ObserverInterface
     {
         /** @var Product $product */
         $product = $observer->getEvent()->getProduct();
-        $product->setUrlKey($this->productUrlPathGenerator->getUrlPathWithSuffix($product, $product->getStoreId()));
+        $product->setUrlKey($this->productUrlPathGenerator->getUrlPath($product));
     }
 }
