@@ -6,6 +6,7 @@
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source as Sources;
+use Magento\Framework\Stdlib\DateTime;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -218,7 +219,7 @@ class Address extends AbstractCustomer
     protected $_addressFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     protected $dateTime;
 
@@ -271,7 +272,7 @@ class Address extends AbstractCustomer
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressColFactory
      * @param \Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory $attributesFactory
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param DateTime $dateTime
      * @param \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator
      * @param array $data
      * @param Sources\CountryWithWebsites|null $countryWithWebsites
@@ -295,7 +296,7 @@ class Address extends AbstractCustomer
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressColFactory,
         \Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory $attributesFactory,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        DateTime $dateTime,
         \Magento\Customer\Model\Address\Validator\Postcode $postcodeValidator,
         array $data = [],
         Sources\CountryWithWebsites $countryWithWebsites = null
@@ -587,12 +588,8 @@ class Address extends AbstractCustomer
         $defaults = [];
         $newAddress = true;
         // get address id
-        if (isset(
-            $this->_addresses[$customerId]
-        ) && in_array(
-            $rowData[self::COLUMN_ADDRESS_ID],
-            $this->_addresses[$customerId]
-        )
+        if (isset($this->_addresses[$customerId])
+            && in_array($rowData[self::COLUMN_ADDRESS_ID], $this->_addresses[$customerId])
         ) {
             $newAddress = false;
             $addressId = $rowData[self::COLUMN_ADDRESS_ID];
@@ -602,7 +599,7 @@ class Address extends AbstractCustomer
         $entityRow = [
             'entity_id' => $addressId,
             'parent_id' => $customerId,
-            'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
+            'updated_at' => (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT),
         ];
         $websiteId = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
 
@@ -625,7 +622,7 @@ class Address extends AbstractCustomer
                     $value = $attributeParams['options'][strtolower($rowData[$attributeAlias])];
                 } elseif ('datetime' == $attributeParams['type']) {
                     $value = (new \DateTime())->setTimestamp(strtotime($rowData[$attributeAlias]));
-                    $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                    $value = $value->format(DateTime::DATETIME_PHP_FORMAT);
                 } elseif ('multiselect' == $attributeParams['type']) {
                     $separator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]) ?
                         $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR] :
@@ -655,22 +652,11 @@ class Address extends AbstractCustomer
         }
 
         // let's try to find region ID
-        $entityRow['region_id'] = null;
-        if (!empty($rowData[self::COLUMN_REGION])) {
-            $countryNormalized = strtolower($rowData[self::COLUMN_COUNTRY_ID]);
-            $regionNormalized = strtolower($rowData[self::COLUMN_REGION]);
-
-            if (isset($this->_countryRegions[$countryNormalized][$regionNormalized])) {
-                $regionId = $this->_countryRegions[$countryNormalized][$regionNormalized];
-                $entityRow[self::COLUMN_REGION] = $this->_regions[$regionId];
-                $entityRow['region_id'] = $regionId;
-            }
-        }
+        $entityRow = $this->fillRegionData($rowData, $entityRow);
 
         if ($newAddress) {
             $entityRowNew = $entityRow;
-            $entityRowNew['created_at'] =
-                (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+            $entityRowNew['created_at'] = (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT);
         } else {
             $entityRowUpdate = $entityRow;
         }
@@ -958,5 +944,29 @@ class Address extends AbstractCustomer
     {
         $this->_customerAttributes = $customerAttributes;
         return $this;
+    }
+
+    /**
+     * Try to get region_id and set it to $entityRow.
+     *
+     * @param array $rowData
+     * @param array $entityRow
+     * @return array
+     */
+    private function fillRegionData(array $rowData, array $entityRow)
+    {
+        $entityRow['region_id'] = null;
+        if (!empty($rowData[self::COLUMN_REGION])) {
+            $countryNormalized = strtolower($rowData[self::COLUMN_COUNTRY_ID]);
+            $regionNormalized = strtolower($rowData[self::COLUMN_REGION]);
+
+            if (isset($this->_countryRegions[$countryNormalized][$regionNormalized])) {
+                $regionId = $this->_countryRegions[$countryNormalized][$regionNormalized];
+                $entityRow[self::COLUMN_REGION] = $this->_regions[$regionId];
+                $entityRow['region_id'] = $regionId;
+            }
+        }
+
+        return $entityRow;
     }
 }
