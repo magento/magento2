@@ -17,12 +17,12 @@ use Magento\Framework\Exception\LocalizedException;
 class Alias
 {
     /**
-     * Replica index scope
+     * Replica index alias
      */
     const ALIAS_REPLICA = 'replica';
 
     /**
-     * Main index scope
+     * Main index alias
      */
     const ALIAS_MAIN = 'main';
 
