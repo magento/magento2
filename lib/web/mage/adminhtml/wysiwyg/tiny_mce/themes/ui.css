@@ -21,6 +21,7 @@ span.magento-variable-lost {
     outline: 2px solid #c0dffa;
     padding: 2px 4px;
     vertical-align: bottom;
+    height: 20px;
 }
 
 .magento-placeholder img {
