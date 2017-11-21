@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Setup\Processor;
+namespace Magento\InventoryCatalog\Setup\Operaion;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
@@ -13,7 +13,7 @@ use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 /**
  * Migrate Single Stock Item Data from CatalogInventory to Inventory Source Item with default source ID
  */
-class StockItemProcessor
+class MigrateSingleStockData
 {
     /**
      * @var ResourceConnection
@@ -42,7 +42,7 @@ class StockItemProcessor
      *
      * @return void
      */
-    public function process()
+    public function execute()
     {
         $defaultSourceId = $this->defaultSourceProvider->getId();
         $sql = "INSERT INTO inventory_source_item (source_id, sku, quantity, status) 
