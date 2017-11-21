@@ -189,7 +189,8 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
                     'plugins' => 'advlist autolink lists link image charmap media table contextmenu paste code help '
                         . 'table'
                 ],
-                'plugins' => []
+                'plugins' => [],
+                'content_style' => 'span.magento-variable {padding: 5px; margin: 0 5px; border: 1px solid blue; background: lightblue; cursor: pointer !important;}'
             ]
         );
 

@@ -43,10 +43,6 @@ define([
                 params.unshift(actionName);
                 target.apply(target, params);
             }
-        },
-
-        actionDone: function () {
-            alert("alala");
         }
     });
 });

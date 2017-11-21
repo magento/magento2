@@ -12,12 +12,11 @@
                 <item name="0" xsi:type="array">
                     <item name="text" xsi:type="string">Insert Variable</item>
                     <item name="class" xsi:type="string">action-primary</item>
-                    <item name="targetName" xsi:type="string">${ $.name }</item>
-                    <item name="actionName" xsi:type="string">actionDone</item>
+                    <item name="targetName" xsi:type="string">${ $.name }.variables</item>
+                    <item name="actionName" xsi:type="string">doInsert</item>
                 </item>
             </item>
         </item>
-
     </argument>
     <settings>
         <buttons>
@@ -48,7 +47,7 @@
         <filterSearch name="fulltext"/>
         <filters name="listing_filters"/>
     </listingToolbar>
-    <columns name="variables">
+    <columns name="variables" component="Magento_Variable/js/variables-grid">
         <column name="variable_selector" component="Magento_Ui/js/grid/columns/radioselect">
             <settings>
                 <label>Select</label>

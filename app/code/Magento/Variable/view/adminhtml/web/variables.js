@@ -10,10 +10,10 @@ define([
     'uiRegistry',
     'ko',
     'mage/apply/main',
-    'Magento_Ui/js/modal/modal',
+    'mageUtils',
     'jquery/ui',
     'prototype'
-], function (jQuery, $t, registry, ko, mageApply) {
+], function (jQuery, $t, registry, ko, mageApply, utils) {
     'use strict';
 
     window.Variables = {
@@ -61,32 +61,34 @@ define([
         },
 
         /**
-         * @param {*} variablesContent
-         */
-        openDialogWindow: function (variablesContent) {
-            var windowId = this.dialogWindowId;
-
-            jQuery('<div id="' + windowId + '">' + variablesContent + '</div>').modal({
-                title: $t('Insert Variable...'),
-                type: 'slide',
-                buttons: [],
-
-                /** @inheritdoc */
-                closed: function (e, modal) {
-                    modal.modal.remove();
-                }
-            });
-
-            jQuery('#' + windowId).modal('openModal');
-            jQuery('#' + windowId).applyBindings();
-            mageApply.apply(document.getElementById(windowId));
-        },
-
-        /**
          * Close dialog window.
          */
         closeDialogWindow: function () {
             jQuery('#' + this.dialogWindowId).modal('closeModal');
+        },
+
+        /**
+         * Init ui component grid on the form
+         *
+         * @return void
+         */
+        initUiGrid: function () {
+            mageApply.apply(document.getElementById(this.dialogWindow));
+            jQuery('#' + this.dialogWindowId).applyBindings();
+        },
+
+        /**
+         * @param {*} variablesContent
+         */
+        openDialogWindow: function (variablesContent) {
+            var html = utils.copy(variablesContent);
+            jQuery('<div id="' + this.dialogWindowId + '">' + html + '</div>').modal({
+                title: $t('Insert Variable...'),
+                type: 'slide',
+                buttons: []
+            });
+
+            jQuery('#' + this.dialogWindowId).modal('openModal');
         },
 
         /**
@@ -150,32 +152,21 @@ define([
         loadChooser: function (url, textareaId) {
             this.textareaId = textareaId;
 
-            // var modal = registry.get('variables_modal.variables_modal.insert_variables', function (modal) {
-            //     modal.openModal();
-            // });
-            if (this.variables == null) {
+            if (this.variablesContent == null) {
                 new Ajax.Request(url, {
                     parameters: {},
                     onComplete: function (transport) {
-                        //if (transport.responseText.isJSON()) {
-                            Variables.init(null, 'MagentovariablePlugin.insertVariable');
-                            this.variables = transport.responseText;
-                            this.openChooser(this.variables);
-                        //}
+                        Variables.init(null, 'MagentovariablePlugin.insertVariable');
+                        this.variablesContent = transport.responseText;
+                        Variables.openDialogWindow(this.variablesContent);
+                        Variables.initUiGrid();
                     }.bind(this)
                 });
             } else {
-                this.openChooser(this.variables);
+                Variables.openDialogWindow(this.variablesContent);
             }
 
             return;
-        },
-
-        /**
-         * @param {*} variables
-         */
-        openChooser: function (variables) {
-            Variables.openVariableChooser(variables);
         },
 
         /**

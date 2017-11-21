@@ -17,6 +17,7 @@ define([
             sortable: false,
             selectedVariableCode: null
         },
+
         initObservable: function () {
             this._super().observe(['selectedVariableCode']);
 
