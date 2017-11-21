@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Product;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product;
@@ -16,6 +17,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\Config\Element;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -270,7 +272,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
-     * @param array|string|integer|\Magento\Framework\App\Config\Element $code
+     * @param array|string|integer| Element $code
      * @return $this
      */
     public function addAttribute($code)
