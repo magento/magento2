@@ -7,16 +7,19 @@
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Pricing\Render;
 use Magento\Framework\Url\Helper\Data;
 
 /**
@@ -64,11 +67,11 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     protected $categoryRepository;
 
     /**
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
-     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
-     * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
-     * @param \Magento\Framework\Url\Helper\Data $urlHelper
+     * @param Context $context
+     * @param PostHelper $postDataHelper
+     * @param Resolver $layerResolver
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param Data $urlHelper
      * @param array $data
      */
     public function __construct(
@@ -117,7 +120,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * Get catalog layer model
      *
-     * @return \Magento\Catalog\Model\Layer
+     * @return Layer
      */
     public function getLayer()
     {
@@ -191,7 +194,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * Add toolbar block from product listing layout
      *
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param Collection $collection
      */
     private function addToolbarBlock(Collection $collection)
     {
@@ -267,7 +270,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
-     * @param array|string|integer|\Magento\Framework\App\Config\Element $code
+     * @param array|string|integer|Element $code
      * @return $this
      */
     public function addAttribute($code)
@@ -287,7 +290,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * Retrieve Catalog Config object
      *
-     * @return \Magento\Catalog\Model\Config
+     * @return Config
      */
     protected function _getConfig()
     {
@@ -297,10 +300,10 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * Prepare Sort By fields from Category Data
      *
-     * @param \Magento\Catalog\Model\Category $category
-     * @return \Magento\Catalog\Block\Product\ListProduct
+     * @param Category $category
+     * @return $this
      */
-    public function prepareSortableFieldsByCategory($category)
+    public function prepareSortableFieldsByCategory(Category $category)
     {
         if (!$this->getAvailableOrders()) {
             $this->setAvailableOrders($category->getAvailableSortByOptions());
@@ -342,38 +345,38 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     /**
      * Get post parameters
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return string
      */
-    public function getAddToCartPostParams(\Magento\Catalog\Model\Product $product)
+    public function getAddToCartPostParams(Product $product)
     {
         $url = $this->getAddToCartUrl($product);
         return [
             'action' => $url,
             'data' => [
                 'product' => $product->getEntityId(),
-                \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlHelper->getEncodedUrl($url),
+                ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlHelper->getEncodedUrl($url),
             ]
         ];
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return string
      */
-    public function getProductPrice(\Magento\Catalog\Model\Product $product)
+    public function getProductPrice(Product $product)
     {
         $priceRender = $this->getPriceRender();
 
         $price = '';
         if ($priceRender) {
             $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                FinalPrice::PRICE_CODE,
                 $product,
                 [
                     'include_container' => true,
                     'display_minimal_price' => true,
-                    'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                    'zone' => Render::ZONE_ITEM_LIST,
                     'list_category_page' => true
                 ]
             );
@@ -386,7 +389,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * Specifies that price rendering should be done for the list of products
      * i.e. rendering happens in the scope of product list, but not single product
      *
-     * @return \Magento\Framework\Pricing\Render
+     * @return Render
      */
     protected function getPriceRender()
     {
