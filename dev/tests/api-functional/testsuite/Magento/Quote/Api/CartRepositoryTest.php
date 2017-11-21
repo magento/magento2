@@ -319,6 +319,50 @@ class CartRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Saving quote without full customer information, just customer id.
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/quote.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @return void
+     */
+    public function testSaveQuoteWithMinimalCustomerInfo()
+    {
+        //for SOAP all necessary fields for customer are mandatory.
+        $this->_markTestAsRestOnly();
+        $token = $this->getToken();
+        /** @var Quote $quote */
+        $quote = $this->getCart('test01');
+        $requestData['quote'] = [
+            'id' => $quote->getId(),
+            'customer' => [
+                'id' => 1,
+            ],
+        ];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::$mineCartUrl,
+                'httpMethod'   => Request::HTTP_METHOD_PUT,
+                'token'        => $token
+            ]
+        ];
+
+        $this->_webApiCall($serviceInfo, $requestData);
+
+        // Reload target quote
+        $quote = $this->getCart('test01');
+        /** @var $repository \Magento\Customer\Api\CustomerRepositoryInterface */
+        $repository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
+        $customer = $repository->get('customer@example.com');
+        $this->assertEquals(0, $quote->getCustomerIsGuest());
+        $this->assertEquals($customer->getId(), $quote->getCustomerId());
+        $this->assertEquals($customer->getFirstname(), $quote->getCustomerFirstname());
+        $this->assertEquals($customer->getLastname(), $quote->getCustomerLastname());
+        $this->assertEquals($customer->getEmail(), $quote->getCustomerEmail());
+        $this->assertEquals($customer->getGroupId(), $quote->getCustomerGroupId());
+    }
+
+    /**
      * Request to api for the current user token.
      *
      * @return string
