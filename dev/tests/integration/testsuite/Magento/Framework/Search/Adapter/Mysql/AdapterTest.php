@@ -453,6 +453,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_disabled_child.php
      * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @return void
      */
     public function testAdvancedSearchCompositeProductWithDisabledChild()
     {
