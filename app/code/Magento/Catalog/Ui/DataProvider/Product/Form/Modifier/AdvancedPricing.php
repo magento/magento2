@@ -396,7 +396,8 @@ class AdvancedPricing extends AbstractModifier
                 'additionalForGroup' => true,
                 'provider' => false,
                 'source' => 'product_details',
-                'sortOrder' => $this->arrayManager->get($pricePath . '/arguments/data/config/sortOrder', $this->meta) + 1,
+                'sortOrder' =>
+                    $this->arrayManager->get($pricePath . '/arguments/data/config/sortOrder', $this->meta) + 1,
             ];
 
             $this->meta = $this->arrayManager->set(
@@ -433,7 +434,8 @@ class AdvancedPricing extends AbstractModifier
                         ],
                         'disabled' => false,
                         'required' => false,
-                        'sortOrder' => $this->arrayManager->get($tierPricePath . '/arguments/data/config/sortOrder', $this->meta),
+                        'sortOrder' =>
+                            $this->arrayManager->get($tierPricePath . '/arguments/data/config/sortOrder', $this->meta),
                     ],
                 ],
             ],
@@ -567,7 +569,8 @@ class AdvancedPricing extends AbstractModifier
                     'additionalClasses' => 'admin__control-grouped-date',
                     'breakLine' => false,
                     'component' => 'Magento_Ui/js/form/components/group',
-                    'scopeLabel' => $this->arrayManager->get($pathFrom . '/arguments/data/config/scopeLabel', $this->meta),
+                    'scopeLabel' =>
+                        $this->arrayManager->get($pathFrom . '/arguments/data/config/scopeLabel', $this->meta),
                 ]
             );
             $this->meta = $this->arrayManager->merge(
