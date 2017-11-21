@@ -44,16 +44,16 @@ class StockItemImporterTest extends TestCase
      */
     public function setUp()
     {
-        $this->defaultSourceProviderInterface = Bootstrap::getObjectManager()->create(
+        $this->defaultSourceProviderInterface = Bootstrap::getObjectManager()->get(
             DefaultSourceProviderInterface::class
         );
-        $this->importerInterface = Bootstrap::getObjectManager()->create(
+        $this->importerInterface = Bootstrap::getObjectManager()->get(
             StockItemImporterInterface::class
         );
-        $this->searchCriteriaBuilderFactory = Bootstrap::getObjectManager()->create(
+        $this->searchCriteriaBuilderFactory = Bootstrap::getObjectManager()->get(
             SearchCriteriaBuilderFactory::class
         );
-        $this->sourceItemRepositoryInterface = Bootstrap::getObjectManager()->create(
+        $this->sourceItemRepositoryInterface = Bootstrap::getObjectManager()->get(
             SourceItemRepositoryInterface::class
         );
     }
