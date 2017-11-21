@@ -270,7 +270,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     }
 
     /**
-     * @param array|string|integer|Element $code
+     * @param array|string|integer|\Magento\Framework\App\Config\Element $code
      * @return $this
      */
     public function addAttribute($code)
@@ -415,7 +415,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     private function initializeProductCollection()
     {
         $layer = $this->getLayer();
-        /* @var $layer \Magento\Catalog\Model\Layer */
+        /* @var $layer Layer */
         if ($this->getShowRootCategory()) {
             $this->setCategoryId($this->_storeManager->getStore()->getRootCategoryId());
         }
