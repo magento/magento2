@@ -30,7 +30,7 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
             'schema' => $schema
         ];
 
-        /* @escapeNotVerified */ echo $block->renderAmount($finalPriceModel->getAmount(), $arguments);
+        /* @noEscape */ echo $block->renderAmount($finalPriceModel->getAmount(), $arguments);
     ?>
 </span>
 
