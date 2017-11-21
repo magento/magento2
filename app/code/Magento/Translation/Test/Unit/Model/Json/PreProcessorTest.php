@@ -3,6 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Translation\Test\Unit\Model\Json;
 
 use Magento\Translation\Model\Js\Config;
@@ -36,17 +37,35 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $translateMock;
 
+    /**
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $designMock;
+
     protected function setUp()
     {
         $this->configMock = $this->getMock('Magento\Translation\Model\Js\Config', [], [], '', false);
         $this->dataProviderMock = $this->getMock('Magento\Translation\Model\Js\DataProvider', [], [], '', false);
         $this->areaListMock = $this->getMock('Magento\Framework\App\AreaList', [], [], '', false);
-        $this->translateMock = $this->getMockForAbstractClass('Magento\Framework\TranslateInterface');
+        $this->translateMock = $this->getMockBuilder(\Magento\Framework\Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->translateMock
+            ->expects($this->once())
+            ->method('setLocale')
+            ->willReturn($this->translateMock);
+
+        $this->designMock = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new PreProcessor(
             $this->configMock,
             $this->dataProviderMock,
             $this->areaListMock,
-            $this->translateMock
+            $this->translateMock,
+            $this->designMock
         );
     }
 
@@ -96,6 +115,16 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
         $chain->expects($this->once())
             ->method('setContentType')
             ->with('json');
+
+        $this->designMock
+            ->expects($this->once())
+            ->method('setDesignTheme')
+            ->with($themePath, $areaCode)
+            ->willReturn($this->translateMock);
+        $this->translateMock
+            ->expects($this->once())
+            ->method('loadData')
+            ->willReturn($this->translateMock);
 
         $this->model->process($chain);
     }
