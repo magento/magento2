@@ -23,6 +23,7 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/Paypal/_files/quote_payment.php
+     * @return void
      */
     public function testReviewAction()
     {
@@ -45,6 +46,7 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @magentoDataFixture   Magento/Paypal/_files/quote_payment_express.php
      * @magentoConfigFixture current_store paypal/general/business_account merchant_2012050718_biz@example.com
+     * @return void
      */
     public function testCancelAction()
     {
@@ -82,6 +84,7 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @return void
      */
     public function testStartActionCustomerToQuote()
     {
@@ -143,6 +146,7 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
      * @magentoDataFixture  Magento/Paypal/_files/quote_express_configurable.php
      * @magentoDbIsolation  enabled
      * @magentoAppIsolation enabled
+     * @return void
      */
     public function testReturnAction()
     {

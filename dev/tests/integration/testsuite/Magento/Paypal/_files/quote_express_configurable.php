@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/product_configurable.php';
 
-/** @var $objectManager \Magento\TestFramework\ObjectManager */
+/** @var \Magento\TestFramework\ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 
 /** @var \Magento\Catalog\Model\Product $product */
@@ -21,7 +21,7 @@ $objectManager = Bootstrap::getObjectManager();
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $product = $productRepository->get('configurable');
 
-/** @var $options Collection */
+/** @var Collection $options */
 $options = $objectManager->create(Collection::class);
 $option = $options->setAttributeFilter($attribute->getId())->getFirstItem();
 
