@@ -6,68 +6,78 @@
 
 namespace Magento\Webapi\Test\Unit\Model\Authorization;
 
+use Magento\Webapi\Model\Authorization\TokenUserContext;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Integration\Model\Oauth\TokenFactory;
+use Magento\Integration\Model\Oauth\Token;
+use Magento\Integration\Api\IntegrationServiceInterface;
+use Magento\Framework\Webapi\Request;
+use Magento\Integration\Helper\Oauth\Data as OauthHelper;
+use Magento\Framework\Stdlib\DateTime\DateTime as Date;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Integration\Model\Integration;
 
 /**
- * Tests \Magento\Webapi\Model\Authorization\TokenUserContext
+ * Tests TokenUserContext
  */
 class TokenUserContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Webapi\Model\Authorization\TokenUserContext
+     * @var TokenUserContext
      */
     protected $tokenUserContext;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\TokenFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var TokenFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $tokenFactory;
 
     /**
-     * @var \Magento\Integration\Api\IntegrationServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IntegrationServiceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $integrationService;
 
     /**
-     * @var \Magento\Framework\Webapi\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var Request|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Integration\Helper\Oauth\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var OauthHelper|\PHPUnit_Framework_MockObject_MockObject
      */
     private $oauthHelperMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var Date|\PHPUnit_Framework_MockObject_MockObject
      */
     private $dateMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|\PHPUnit_Framework_MockObject_MockObject
      */
     private $dateTimeMock;
 
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\Webapi\Request::class)
+        $this->request = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->setMethods(['getHeader'])
             ->getMock();
 
-        $this->tokenFactory = $this->getMockBuilder(\Magento\Integration\Model\Oauth\TokenFactory::class)
+        $this->tokenFactory = $this->getMockBuilder(TokenFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->integrationService = $this->getMockBuilder(\Magento\Integration\Api\IntegrationServiceInterface::class)
+        $this->integrationService = $this->getMockBuilder(IntegrationServiceInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -83,17 +93,17 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
             )
             ->getMock();
 
-        $this->oauthHelperMock = $this->getMockBuilder(\Magento\Integration\Helper\Oauth\Data::class)
+        $this->oauthHelperMock = $this->getMockBuilder(OauthHelper::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAdminTokenLifetime', 'getCustomerTokenLifetime'])
             ->getMock();
 
-        $this->dateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
+        $this->dateMock = $this->getMockBuilder(Date::class)
             ->disableOriginalConstructor()
             ->setMethods(['gmtTimestamp'])
             ->getMock();
 
-        $this->dateTimeMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime::class)
+        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->setMethods(['strToTime'])
             ->getMock();
@@ -109,7 +119,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->tokenUserContext = $this->objectManager->getObject(
-            \Magento\Webapi\Model\Authorization\TokenUserContext::class,
+            TokenUserContext::class,
             [
                 'request' => $this->request,
                 'tokenFactory' => $this->tokenFactory,
@@ -160,7 +170,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
             ->with('Authorization')
             ->will($this->returnValue("Bearer {$bearerToken}"));
 
-        $token = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
+        $token = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadByToken', 'getId', '__wakeup'])
             ->getMock();
@@ -188,7 +198,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
             ->with('Authorization')
             ->will($this->returnValue("Bearer {$bearerToken}"));
 
-        $token = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
+        $token = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadByToken', 'getId', 'getRevoked', '__wakeup'])
             ->getMock();
@@ -222,7 +232,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
             ->with('Authorization')
             ->will($this->returnValue("Bearer {$bearerToken}"));
 
-        $token = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
+        $token = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -255,7 +265,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
 
         switch ($userType) {
             case UserContextInterface::USER_TYPE_INTEGRATION:
-                $integration = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
+                $integration = $this->getMockBuilder(Integration::class)
                     ->disableOriginalConstructor()
                     ->setMethods(['getId', '__wakeup'])
                     ->getMock();
@@ -333,7 +343,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
             ->with('Authorization')
             ->will($this->returnValue("Bearer {$bearerToken}"));
 
-        $token = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
+        $token = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -378,7 +388,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
 
         switch ($tokenData['user_type']) {
             case UserContextInterface::USER_TYPE_INTEGRATION:
-                $integration = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
+                $integration = $this->getMockBuilder(Integration::class)
                     ->disableOriginalConstructor()
                     ->setMethods(['getId', '__wakeup'])
                     ->getMock();
@@ -411,7 +421,8 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Data provider for expired token test
+     * Data provider for expired token test.
+     *
      * @return array
      */
     public function getExpiredTestTokenData()
@@ -426,7 +437,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 ],
                 'tokenTtl' => 1,
                 'currentTime' => $time,
-                'expedtedUserType' => null,
+                'expectedUserType' => null,
                 'expectedUserId' => null,
             ],
             'token_vigent_admin' => [
@@ -437,7 +448,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 ],
                 'tokenTtl' => 1,
                 'currentTime' => $time,
-                'expedtedUserType' => UserContextInterface::USER_TYPE_ADMIN,
+                'expectedUserType' => UserContextInterface::USER_TYPE_ADMIN,
                 'expectedUserId' => 1234,
             ],
             'token_expired_customer' => [
@@ -448,7 +459,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 ],
                 'tokenTtl' => 1,
                 'currentTime' => $time,
-                'expedtedUserType' => null,
+                'expectedUserType' => null,
                 'expectedUserId' => null,
             ],
             'token_vigent_customer' => [
@@ -459,7 +470,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 ],
                 'tokenTtl' => 1,
                 'currentTime' => $time,
-                'expedtedUserType' => UserContextInterface::USER_TYPE_CUSTOMER,
+                'expectedUserType' => UserContextInterface::USER_TYPE_CUSTOMER,
                 'expectedUserId' => 1234,
             ],
             'token_expired_integration' => [
@@ -481,7 +492,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 ],
                 'tokenTtl' => 1,
                 'currentTime' => $time,
-                'expedtedUserType' => UserContextInterface::USER_TYPE_INTEGRATION,
+                'expectedUserType' => UserContextInterface::USER_TYPE_INTEGRATION,
                 'expectedUserId' => 1234,
             ],
             'token_expired_guest' => [
@@ -492,7 +503,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 ],
                 'tokenTtl' => 1,
                 'currentTime' => $time,
-                'expedtedUserType' => null,
+                'expectedUserType' => null,
                 'expectedUserId' => null,
             ],
             'token_vigent_guest' => [
@@ -503,7 +514,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 ],
                 'tokenTtl' => 1,
                 'currentTime' => $time,
-                'expedtedUserType' => null,
+                'expectedUserType' => null,
                 'expectedUserId' => null,
             ],
         ];

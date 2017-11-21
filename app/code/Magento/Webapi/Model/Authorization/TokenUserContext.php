@@ -8,11 +8,13 @@ namespace Magento\Webapi\Model\Authorization;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Oauth\Exception;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Integration\Model\Oauth\TokenFactory;
 use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Framework\Webapi\Request;
+use Magento\Framework\Stdlib\DateTime\DateTime as Date;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Integration\Helper\Oauth\Data as OauthHelper;
 
 /**
  * A user context determined by tokens in a HTTP request Authorization header.
@@ -50,46 +52,50 @@ class TokenUserContext implements UserContextInterface
     protected $integrationService;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     private $dateTime;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var Date
      */
     private $date;
 
     /**
-     * @var \Magento\Integration\Helper\Oauth\Data
+     * @var OauthHelper
      */
     private $oauthHelper;
 
     /**
      * Initialize dependencies.
      *
+     * TokenUserContext constructor.
      * @param Request $request
      * @param TokenFactory $tokenFactory
      * @param IntegrationServiceInterface $integrationService
+     * @param DateTime|null $dateTime
+     * @param Date|null $date
+     * @param OauthHelper|null $oauthHelper
      */
     public function __construct(
         Request $request,
         TokenFactory $tokenFactory,
         IntegrationServiceInterface $integrationService,
-        \Magento\Framework\Stdlib\DateTime $dateTime = null,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date = null,
-        \Magento\Integration\Helper\Oauth\Data $oauthHelper = null
+        DateTime $dateTime = null,
+        Date $date = null,
+        OauthHelper $oauthHelper = null
     ) {
         $this->request = $request;
         $this->tokenFactory = $tokenFactory;
         $this->integrationService = $integrationService;
         $this->dateTime = $dateTime ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Stdlib\DateTime::class
+            DateTime::class
         );
         $this->date = $date ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Stdlib\DateTime\DateTime::class
+            Date::class
         );
         $this->oauthHelper = $oauthHelper ?: ObjectManager::getInstance()->get(
-            \Magento\Integration\Helper\Oauth\Data::class
+            OauthHelper::class
         );
     }
 
@@ -115,14 +121,13 @@ class TokenUserContext implements UserContextInterface
      * Check if token is expired.
      *
      * @param Token $token
-     *
      * @return bool
      */
-    private function isTokenExpired(Token $token)
+    private function isTokenExpired(Token $token): bool
     {
-        if ($token->getUserType() == \Magento\Authorization\Model\UserContextInterface::USER_TYPE_ADMIN) {
+        if ($token->getUserType() == UserContextInterface::USER_TYPE_ADMIN) {
             $tokenTtl = $this->oauthHelper->getAdminTokenLifetime();
-        } elseif ($token->getUserType() == \Magento\Authorization\Model\UserContextInterface::USER_TYPE_CUSTOMER) {
+        } elseif ($token->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER) {
             $tokenTtl = $this->oauthHelper->getCustomerTokenLifetime();
         } else {
             // other user-type tokens are considered always valid
