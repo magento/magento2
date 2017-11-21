@@ -13,7 +13,6 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -45,10 +44,18 @@ class StockItemImporterTest extends TestCase
      */
     public function setUp()
     {
-        $this->defaultSourceProviderInterface = Bootstrap::getObjectManager()->create(DefaultSourceProviderInterface::class);
-        $this->importerInterface = Bootstrap::getObjectManager()->create(StockItemImporterInterface::class);
-        $this->searchCriteriaBuilderFactory = Bootstrap::getObjectManager()->create(SearchCriteriaBuilderFactory::class);
-        $this->sourceItemRepositoryInterface = Bootstrap::getObjectManager()->create(SourceItemRepositoryInterface::class);
+        $this->defaultSourceProviderInterface = Bootstrap::getObjectManager()->create(
+            DefaultSourceProviderInterface::class
+        );
+        $this->importerInterface = Bootstrap::getObjectManager()->create(
+            StockItemImporterInterface::class
+        );
+        $this->searchCriteriaBuilderFactory = Bootstrap::getObjectManager()->create(
+            SearchCriteriaBuilderFactory::class
+        );
+        $this->sourceItemRepositoryInterface = Bootstrap::getObjectManager()->create(
+            SourceItemRepositoryInterface::class
+        );
     }
 
     /**
@@ -87,8 +94,17 @@ class StockItemImporterTest extends TestCase
     {
         /** @var SearchCriteriaBuilder $searchCriteria */
         $searchCriteriaBuilder = $this->searchCriteriaBuilderFactory->create();
-        $searchCriteriaBuilder->addFilter(SourceItemInterface::SKU, 'SKU-1');
-        $searchCriteriaBuilder->addFilter(SourceItemInterface::SOURCE_ID, $this->defaultSourceProviderInterface->getId());
+
+        $searchCriteriaBuilder->addFilter(
+            SourceItemInterface::SKU,
+            'SKU-1'
+        );
+
+        $searchCriteriaBuilder->addFilter(
+            SourceItemInterface::SOURCE_ID,
+            $this->defaultSourceProviderInterface->getId()
+        );
+
         /** @var SearchCriteria $searchCriteria */
         $searchCriteria = $searchCriteriaBuilder->create();
         return $this->sourceItemRepositoryInterface->getList($searchCriteria);
