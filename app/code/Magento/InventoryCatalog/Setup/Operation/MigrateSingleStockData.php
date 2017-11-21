@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Setup\Operaion;
+namespace Magento\InventoryCatalog\Setup\Operation;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
