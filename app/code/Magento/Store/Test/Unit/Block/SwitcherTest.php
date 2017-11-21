@@ -28,8 +28,10 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
-        $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
-        $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
+        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')->getMock();
+        $this->context = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->context->expects($this->any())->method('getStoreManager')->will($this->returnValue($this->storeManager));
         $this->context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilder));
         $this->corePostDataHelper = $this->getMock('Magento\Framework\Data\Helper\PostHelper', [], [], '', false);
@@ -51,7 +53,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
             ->method('getCode')
             ->willReturn('new-store');
         $storeSwitchUrl = 'http://domain.com/stores/store/switch';
-        $store->expects($this->atLeastOnce())
+        $store->expects($this->once())
             ->method('getCurrentUrl')
             ->with(false)
             ->willReturn($storeSwitchUrl);
