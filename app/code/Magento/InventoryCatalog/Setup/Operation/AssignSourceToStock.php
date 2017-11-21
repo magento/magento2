@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Setup\Processor;
+namespace Magento\InventoryCatalog\Setup\Operation;
 
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
@@ -14,8 +14,7 @@ use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
 /**
  * Assign default source to stock processor
  */
-class AssignSourceToStockProcessor
-
+class AssignSourceToStock
 {
     /**
      * @var DefaultStockProviderInterface
@@ -52,7 +51,7 @@ class AssignSourceToStockProcessor
      *
      * @return void
      */
-    public function process()
+    public function execute()
     {
         $this->assignSourcesToStock->execute(
             [$this->defaultSourceProvider->getId()],

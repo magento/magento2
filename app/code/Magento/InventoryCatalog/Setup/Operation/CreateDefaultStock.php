@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Setup\Processor;
+namespace Magento\InventoryCatalog\Setup\Operation;
 
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
@@ -14,9 +14,9 @@ use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
 
 /**
- * Add default stock during install
+ * Create default stock during install
  */
-class DefaultStockProcessor
+class CreateDefaultStock
 {
     /**
      * @var DefaultStockProviderInterface
@@ -57,11 +57,11 @@ class DefaultStockProcessor
     }
 
     /**
-     * Add default stock
+     * Create default stock
      *
      * @return void
      */
-    public function process()
+    public function execute()
     {
         $data = [
             StockInterface::STOCK_ID => $this->defaultStockProvider->getId(),

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Setup\Processor;
+namespace Magento\InventoryCatalog\Setup\Operation;
 
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryCatalog\Model\DefaultSourceProvider;
@@ -14,9 +14,9 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
- * Add default source during install
+ * Create default source during install
  */
-class DefaultSourceProcessor
+class CreateDefaultSource
 {
     /**
      * @var DefaultSourceProvider
@@ -57,11 +57,11 @@ class DefaultSourceProcessor
     }
 
     /**
-     * Add default source
+     * Create default source
      *
      * @return void
      */
-    public function process()
+    public function execute()
     {
         $data = [
             SourceInterface::SOURCE_ID => $this->defaultSourceProvider->getId(),

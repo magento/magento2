@@ -7,17 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Setup;
 
-use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\InventoryCatalog\Setup\Processor\AssignSourceToStockProcessor;
-use Magento\InventoryCatalog\Setup\Processor\DefaultSourceProcessor;
-use Magento\InventoryCatalog\Setup\Processor\DefaultStockProcessor;
-use Magento\InventoryCatalog\Setup\Processor\StockItemProcessor;
-use Magento\Inventory\Indexer\Stock\StockIndexer;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalog\Setup\Operation\AssignSourceToStock;
+use Magento\InventoryCatalog\Setup\Operation\CreateDefaultSource;
+use Magento\InventoryCatalog\Setup\Operation\CreateDefaultStock;
+use Magento\InventoryCatalog\Setup\Operation\ReindexDefaultStock;
 
 /**
  * Install Default Source, Stock and link them together
@@ -25,57 +21,41 @@ use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 class InstallData implements InstallDataInterface
 {
     /**
-     * @var IndexerInterfaceFactory
+     * @var CreateDefaultSource
      */
-    private $indexerFactory;
+    private $createDefaultSource;
 
     /**
-     * @var DefaultSourceProcessor
+     * @var CreateDefaultStock
      */
-    private $defaultSourceProcessor;
+    private $createDefaultStock;
 
     /**
-     * @var DefaultStockProcessor
+     * @var AssignSourceToStock
      */
-    private $defaultStockProcessor;
+    private $assignSourceToStock;
 
     /**
-     * @var StockItemProcessor
+     * @var ReindexDefaultStock
      */
-    private $stockItemProcessor;
+    private $reindexDefaultStock;
 
     /**
-     * @var AssignSourceToStockProcessor
-     */
-    private $assignSourceToStockProcessor;
-
-    /**
-     * @var DefaultStockProviderInterface
-     */
-    private $defaultStockProvider;
-
-    /**
-     * @param DefaultSourceProcessor $defaultSourceProcessor
-     * @param DefaultStockProcessor $defaultStockProcessor
-     * @param AssignSourceToStockProcessor $assignSourceToStockProcessor
-     * @param StockItemProcessor $stockItemProcessor
-     * @param IndexerInterfaceFactory $indexerFactory
-     * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param CreateDefaultSource $createDefaultSource
+     * @param CreateDefaultStock $createDefaultStock
+     * @param AssignSourceToStock $assignSourceToStock
+     * @param ReindexDefaultStock $reindexDefaultStock
      */
     public function __construct(
-        DefaultSourceProcessor $defaultSourceProcessor,
-        DefaultStockProcessor $defaultStockProcessor,
-        AssignSourceToStockProcessor $assignSourceToStockProcessor,
-        StockItemProcessor $stockItemProcessor,
-        IndexerInterfaceFactory $indexerFactory,
-        DefaultStockProviderInterface $defaultStockProvider
+        CreateDefaultSource $createDefaultSource,
+        CreateDefaultStock $createDefaultStock,
+        AssignSourceToStock $assignSourceToStock,
+        ReindexDefaultStock $reindexDefaultStock
     ) {
-        $this->defaultSourceProcessor = $defaultSourceProcessor;
-        $this->defaultStockProcessor = $defaultStockProcessor;
-        $this->assignSourceToStockProcessor = $assignSourceToStockProcessor;
-        $this->stockItemProcessor = $stockItemProcessor;
-        $this->indexerFactory = $indexerFactory;
-        $this->defaultStockProvider = $defaultStockProvider;
+        $this->createDefaultSource = $createDefaultSource;
+        $this->createDefaultStock = $createDefaultStock;
+        $this->assignSourceToStock = $assignSourceToStock;
+        $this->reindexDefaultStock = $reindexDefaultStock;
     }
 
     /**
@@ -84,21 +64,9 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $this->defaultSourceProcessor->process();
-        $this->defaultStockProcessor->process();
-        $this->assignSourceToStockProcessor->process();
-        $this->stockItemProcessor->process();
-        $this->reindexDefaultStock();
-    }
-
-    /**
-     * @return void
-     */
-    private function reindexDefaultStock()
-    {
-        /** @var IndexerInterface $indexer */
-        $indexer = $this->indexerFactory->create();
-        $indexer->load(StockIndexer::INDEXER_ID);
-        $indexer->reindexRow($this->defaultStockProvider->getId());
+        $this->createDefaultSource->execute();
+        $this->createDefaultStock->execute();
+        $this->assignSourceToStock->execute();
+        $this->reindexDefaultStock->execute();
     }
 }
