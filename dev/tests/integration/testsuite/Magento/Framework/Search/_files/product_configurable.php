@@ -33,7 +33,7 @@ $options = $attribute->getOptions();
 $attributeValues = [];
 $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
 $associatedProductIds = [];
-$productIds = [1010, 1020];
+$productIds = [10010, 10020];
 array_shift($options); //remove the first option which is empty
 
 $isFirstOption = true;
@@ -110,11 +110,11 @@ $extensionConfigurableAttributes->setConfigurableProductLinks($associatedProduct
 $product->setExtensionAttributes($extensionConfigurableAttributes);
 
 $product->setTypeId(Configurable::TYPE_CODE)
-    ->setId(1001)
+    ->setId(10001)
     ->setAttributeSetId($attributeSetId)
     ->setWebsiteIds([1])
     ->setName('Configurable Product')
-    ->setSku('configurable')
+    ->setSku('configurable_searchable')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
     ->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => 1]);

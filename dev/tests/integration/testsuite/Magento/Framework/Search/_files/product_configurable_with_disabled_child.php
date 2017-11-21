@@ -13,6 +13,6 @@ require __DIR__ . '/product_configurable.php';
 $productRepository = Bootstrap::getObjectManager()
     ->create(ProductRepositoryInterface::class);
 
-$product = $productRepository->get('simple_1020');
+$product = $productRepository->get('simple_10020');
 $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
 $productRepository->save($product);
