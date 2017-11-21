@@ -100,11 +100,12 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
 
         $this->dateTimeMock->expects($this->any())
             ->method('strToTime')
-            ->will($this->returnCallback(
-                function ($str) {
-                    return strtotime($str);
-                }
-            )
+            ->will(
+                $this->returnCallback(
+                    function ($str) {
+                        return strtotime($str);
+                    }
+                )
             );
 
         $this->tokenUserContext = $this->objectManager->getObject(
