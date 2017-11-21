@@ -10,6 +10,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 use Magento\Framework\App\ObjectManager;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Store\Model\Store;
+use Magento\ImportExport\Model\Import;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -21,7 +22,7 @@ class Address extends AbstractCustomer
     /**#@+
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class;
 
     /**#@-*/
 
@@ -625,6 +626,15 @@ class Address extends AbstractCustomer
                 } elseif ('datetime' == $attributeParams['type']) {
                     $value = (new \DateTime())->setTimestamp(strtotime($rowData[$attributeAlias]));
                     $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                } elseif ('multiselect' == $attributeParams['type']) {
+                    $separator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]) ?
+                        $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR] :
+                        Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+                    $value = str_replace(
+                        $separator,
+                        Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+                        $rowData[$attributeAlias]
+                    );
                 } else {
                     $value = $rowData[$attributeAlias];
                 }
@@ -839,7 +849,16 @@ class Address extends AbstractCustomer
                             continue;
                         }
                         if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
-                            $this->isAttributeValid($attributeCode, $attributeParams, $rowData, $rowNumber);
+                            $multiSeparator = isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]) ?
+                                $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR] :
+                                Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+                            $this->isAttributeValid(
+                                $attributeCode,
+                                $attributeParams,
+                                $rowData,
+                                $rowNumber,
+                                $multiSeparator
+                            );
                         } elseif ($attributeParams['is_required'] && (!isset(
                             $this->_addresses[$customerId]
                         ) || !in_array(
