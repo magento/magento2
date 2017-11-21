@@ -11,6 +11,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Alias Factory
+ *
+ * @api
  */
 class AliasFactory
 {

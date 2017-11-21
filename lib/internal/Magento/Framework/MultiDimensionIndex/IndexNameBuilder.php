@@ -11,6 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Index Name builder. It is Facade for simplifying IndexName object creation
+ *
  * @api
  */
 class IndexNameBuilder

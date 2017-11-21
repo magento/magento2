@@ -9,6 +9,7 @@ namespace Magento\Framework\MultiDimensionIndex;
 
 /**
  * Index Name object
+ *
  * @api
  */
 class IndexName

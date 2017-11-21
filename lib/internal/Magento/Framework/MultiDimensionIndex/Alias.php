@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Index Alias object
+ *
  * @api
  */
 class Alias

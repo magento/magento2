@@ -65,7 +65,7 @@ class IndexTableSwitcher implements IndexTableSwitcherInterface
     }
 
     /**
-     * Switch index tables from replica to active.
+     * Switch index tables from replica to active
      *
      * @param AdapterInterface $connection
      * @param array $tableNames

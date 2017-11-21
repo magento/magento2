@@ -9,6 +9,7 @@ namespace Magento\Framework\MultiDimensionIndex;
 
 /**
  * Resolve index name by IndexName object
+ *
  * @api
  */
 interface IndexNameResolverInterface
