@@ -7,16 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Setup\Operation;
 
-use Magento\InventoryApi\Api\Data\StockInterface;
-use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Inventory\Indexer\Stock\StockIndexer;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
-use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
-use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
 
 /**
- * Create default stock during install
+ * CReindex default stock during install
  */
-class CreateDefaultStock
+class ReindexDefaultStock
 {
     /**
      * @var DefaultStockProviderInterface
@@ -24,36 +23,20 @@ class CreateDefaultStock
     private $defaultStockProvider;
 
     /**
-     * @var StockInterfaceFactory
+     * @var IndexerInterfaceFactory
      */
-    private $stockFactory;
-
-    /**
-     * @var DataObjectHelper
-     */
-    private $dataObjectHelper;
-
-    /**
-     * @var StockRepositoryInterface
-     */
-    private $stockRepository;
+    private $indexerFactory;
 
     /**
      * @param DefaultStockProviderInterface $defaultStockProvider
-     * @param StockInterfaceFactory $stockFactory
-     * @param DataObjectHelper $dataObjectHelper
-     * @param StockRepositoryInterface $stockRepository
+     * @param IndexerInterfaceFactory $indexerFactory
      */
     public function __construct(
         DefaultStockProviderInterface $defaultStockProvider,
-        StockInterfaceFactory $stockFactory,
-        DataObjectHelper $dataObjectHelper,
-        StockRepositoryInterface $stockRepository
+        IndexerInterfaceFactory $indexerFactory
     ) {
         $this->defaultStockProvider = $defaultStockProvider;
-        $this->stockFactory = $stockFactory;
-        $this->dataObjectHelper = $dataObjectHelper;
-        $this->stockRepository = $stockRepository;
+        $this->indexerFactory = $indexerFactory;
     }
 
     /**
@@ -63,12 +46,9 @@ class CreateDefaultStock
      */
     public function execute()
     {
-        $data = [
-            StockInterface::STOCK_ID => $this->defaultStockProvider->getId(),
-            StockInterface::NAME => 'Default Stock'
-        ];
-        $source = $this->stockFactory->create();
-        $this->dataObjectHelper->populateWithArray($source, $data, StockInterface::class);
-        $this->stockRepository->save($source);
+        /** @var IndexerInterface $indexer */
+        $indexer = $this->indexerFactory->create();
+        $indexer->load(StockIndexer::INDEXER_ID);
+        $indexer->reindexRow($this->defaultStockProvider->getId());
     }
 }
