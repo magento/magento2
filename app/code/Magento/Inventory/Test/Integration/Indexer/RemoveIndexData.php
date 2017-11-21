@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\Inventory\Test\Integration\Indexer;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\MultiDimensionIndex\Alias;
-use Magento\Framework\MultiDimensionIndex\IndexNameBuilder;
+use Magento\Framework\MultiDimensionalIndex\Alias;
+use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
 use Magento\Inventory\Indexer\IndexStructure;
 
 class RemoveIndexData

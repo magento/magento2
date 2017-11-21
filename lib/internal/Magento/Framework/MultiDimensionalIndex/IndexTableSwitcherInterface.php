@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\MultiDimensionIndex;
+namespace Magento\Framework\MultiDimensionalIndex;
 
 /**
  * Logic for switching active and replica index tables by IndexName object

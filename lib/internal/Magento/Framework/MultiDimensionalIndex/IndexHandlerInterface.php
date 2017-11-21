@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\MultiDimensionIndex;
+namespace Magento\Framework\MultiDimensionalIndex;
 
 /**
  * Represents manipulation with index data

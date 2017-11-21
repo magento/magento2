@@ -9,11 +9,11 @@ namespace Magento\Inventory\Indexer\Stock;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\ActionInterface;
-use Magento\Framework\MultiDimensionIndex\Alias;
-use Magento\Framework\MultiDimensionIndex\IndexHandlerInterface;
-use Magento\Framework\MultiDimensionIndex\IndexNameBuilder;
-use Magento\Framework\MultiDimensionIndex\IndexStructureInterface;
-use Magento\Framework\MultiDimensionIndex\IndexTableSwitcherInterface;
+use Magento\Framework\MultiDimensionalIndex\Alias;
+use Magento\Framework\MultiDimensionalIndex\IndexHandlerInterface;
+use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
+use Magento\Framework\MultiDimensionalIndex\IndexStructureInterface;
+use Magento\Framework\MultiDimensionalIndex\IndexTableSwitcherInterface;
 use Magento\Inventory\Indexer\IndexDataProvider;
 
 /**

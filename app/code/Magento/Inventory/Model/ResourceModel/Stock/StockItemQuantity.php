@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model\ResourceModel\Stock;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\MultiDimensionIndex\Alias;
-use Magento\Framework\MultiDimensionIndex\IndexNameBuilder;
-use Magento\Framework\MultiDimensionIndex\IndexNameResolverInterface;
+use Magento\Framework\MultiDimensionalIndex\Alias;
+use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
+use Magento\Framework\MultiDimensionalIndex\IndexNameResolverInterface;
 use Magento\Inventory\Indexer\IndexStructure;
 
 /**
