@@ -305,7 +305,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * @param Category $category
      * @return $this
      */
-    public function prepareSortableFieldsByCategory(Category $category)
+    public function prepareSortableFieldsByCategory($category)
     {
         if (!$this->getAvailableOrders()) {
             $this->setAvailableOrders($category->getAvailableSortByOptions());
