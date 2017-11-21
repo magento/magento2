@@ -6,12 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <!-- Stock delete button -->
-    <type name="Magento\InventoryCatalog\Ui\Component\Control\Stock\DeleteButton">
-        <arguments>
-            <argument name="deleteButton" xsi:type="object">Magento\Inventory\Ui\Component\Control\Stock\DeleteButton</argument>
-        </arguments>
-    </type>
     <!-- Product form configurations -->
     <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
         <arguments>
