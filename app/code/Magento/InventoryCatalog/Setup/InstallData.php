@@ -7,10 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Setup;
 
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Inventory\Indexer\StockItemIndexerInterface;
 use Magento\InventoryCatalog\Setup\Operation\AssignSourceToStock;
 use Magento\InventoryCatalog\Setup\Operation\CreateDefaultSource;
 use Magento\InventoryCatalog\Setup\Operation\CreateDefaultStock;
@@ -21,9 +22,9 @@ use Magento\InventoryCatalog\Setup\Operation\CreateDefaultStock;
 class InstallData implements InstallDataInterface
 {
     /**
-     * @var StockItemIndexerInterface
+     * @var IndexerInterfaceFactory
      */
-    private $stockItemIndexer;
+    private $indexerFactory;
 
     /**
      * @var CreateDefaultSource
@@ -44,18 +45,18 @@ class InstallData implements InstallDataInterface
      * @param CreateDefaultSource $createDefaultSource
      * @param CreateDefaultStock $createDefaultStock
      * @param AssignSourceToStock $assignSourceToStock
-     * @param StockItemIndexerInterface $stockItemIndexer
+     * @param IndexerInterfaceFactory $indexerFactory
      */
     public function __construct(
         CreateDefaultSource $createDefaultSource,
         CreateDefaultStock $createDefaultStock,
         AssignSourceToStock $assignSourceToStock,
-        StockItemIndexerInterface $stockItemIndexer
+        IndexerInterfaceFactory $indexerFactory
     ) {
         $this->createDefaultSource = $createDefaultSource;
         $this->createDefaultStock = $createDefaultStock;
         $this->assignSourceToStock = $assignSourceToStock;
-        $this->stockItemIndexer = $stockItemIndexer;
+        $this->indexerFactory = $indexerFactory;
     }
 
     /**
@@ -67,6 +68,14 @@ class InstallData implements InstallDataInterface
         $this->createDefaultSource->execute();
         $this->createDefaultStock->execute();
         $this->assignSourceToStock->execute();
-        $this->stockItemIndexer->executeFull();
+        $this->reindexDefaultStock();
+    }
+
+    private function reindexDefaultStock()
+    {
+        /** @var IndexerInterface $indexer */
+        $indexer = $this->indexerFactory->create();
+        $indexer->load(StockIndexer::INDEXER_ID);
+        $indexer->reindexRow($this->defaultStockProvider->getId());
     }
 }

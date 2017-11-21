@@ -47,7 +47,10 @@ class Replace implements CommandInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
+     * If an SKU and SOURCE_ID in the import data matches the SKU and SOURCE_ID of an existing entity,
+     * all fields are deleted and new a record is created.
      */
     public function execute(array $bunch)
     {

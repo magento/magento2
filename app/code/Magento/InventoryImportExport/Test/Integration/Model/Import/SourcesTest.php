@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Test\Integration\Model\Import;
 
+use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
@@ -87,11 +88,7 @@ class SourcesTest extends TestCase
         $bunch = [
             $this->buildRowDataArray(10, 'SKU-1', 6.88, 1)
         ];
-        $this->importDataMock->expects($this->any())
-            ->method('getNextBunch')
-            ->will($this->onConsecutiveCalls($bunch, false));
-
-        $this->importer->importData();
+        $this->importData($bunch);
     }
 
     /**
@@ -108,8 +105,7 @@ class SourcesTest extends TestCase
         ]);
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
-        $sourceItems = $this->sourceItemRepository->getList($searchCriteria);
-        $beforeImportData = $this->buildDataArray($sourceItems->getItems());
+        $beforeImportData = $this->getSourceItemList($searchCriteria);
 
         $bunch = [
             $this->buildRowDataArray(10, 'SKU-1', 6.8800, 1),
@@ -117,15 +113,10 @@ class SourcesTest extends TestCase
             $this->buildRowDataArray(50, 'SKU-2', 15, 1),
             $this->buildRowDataArray(10, 'SKU-2', 33, 1),
         ];
-        $this->importDataMock->expects($this->any())
-            ->method('getNextBunch')
-            ->will($this->onConsecutiveCalls($bunch, false));
+        $this->importData($bunch);
 
-        $this->importer->importData();
-
-        $sourceItems = $this->sourceItemRepository->getList($searchCriteria);
         $expectedData = $this->updateDataArrayByBunch($beforeImportData, $bunch);
-        $afterImportData = $this->buildDataArray($sourceItems->getItems());
+        $afterImportData = $this->getSourceItemList($searchCriteria);
 
         $this->assertEquals($expectedData, $afterImportData);
     }
@@ -149,14 +140,9 @@ class SourcesTest extends TestCase
             $this->buildRowDataArray(10, 'SKU-1', 6.88, 1),
             $this->buildRowDataArray(20, 'SKU-1', 5, 1),
         ];
-        $this->importDataMock->expects($this->any())
-            ->method('getNextBunch')
-            ->will($this->onConsecutiveCalls($bunch, false));
+        $this->importData($bunch);
 
-        $this->importer->importData();
-
-        $sourceItems = $this->sourceItemRepository->getList($searchCriteria);
-        $afterImportData = $this->buildDataArray($sourceItems->getItems());
+        $afterImportData = $this->getSourceItemList($searchCriteria);
 
         $this->assertArrayNotHasKey('10-SKU-1', $afterImportData);
         $this->assertArrayNotHasKey('20-SKU-1', $afterImportData);
@@ -180,20 +166,45 @@ class SourcesTest extends TestCase
             $this->buildRowDataArray(20, 'SKU-1', 5, 1),
             $this->buildRowDataArray(50, 'SKU-2', 15, 1),
         ];
-        $this->importDataMock->expects($this->any())
-            ->method('getNextBunch')
-            ->will($this->onConsecutiveCalls($bunch, false));
-
-        $this->importer->importData();
+        $this->importData($bunch);
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
-
-        $sourceItems = $this->sourceItemRepository->getList($searchCriteria);
-        $afterImportData = $this->buildDataArray($sourceItems->getItems());
+        $afterImportData = $this->getSourceItemList($searchCriteria);
 
         $this->assertArrayHasKey('20-SKU-1', $afterImportData);
         $this->assertArrayHasKey('50-SKU-2', $afterImportData);
-        $this->assertCount(2, $afterImportData);
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     */
+    public function testImportDataWithReplaceBehaviorNoAffectOtherSources()
+    {
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $beforeImportData = $this->getSourceItemList($searchCriteria);
+        $this->assertArrayHasKey('10-SKU-1', $beforeImportData);
+
+        /** @see \Magento\InventoryImportExport\Model\Import\Command\Replace::execute */
+        $this->importer->setParameters([
+            'behavior' => Import::BEHAVIOR_REPLACE
+        ]);
+
+        $bunch = [
+            $this->buildRowDataArray(20, 'SKU-1', 20, 1),
+            $this->buildRowDataArray(50, 'SKU-2', 15, 1),
+        ];
+        $this->importData($bunch);
+        $afterImportData = $this->getSourceItemList($searchCriteria);
+
+        // checks whether original source item which has not been imported stays in database
+        $this->assertEquals($beforeImportData['10-SKU-1'], $afterImportData['10-SKU-1']);
+
+        $this->assertArrayHasKey('20-SKU-1', $afterImportData);
+        $this->assertArrayHasKey('50-SKU-2', $afterImportData);
     }
 
     /**
@@ -249,5 +260,28 @@ class SourcesTest extends TestCase
             );
         }
         return $data;
+    }
+
+    /**
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @return array
+     */
+    private function getSourceItemList(SearchCriteria $searchCriteria)
+    {
+        $sourceItems = $this->sourceItemRepository->getList($searchCriteria);
+        return $this->buildDataArray($sourceItems->getItems());
+    }
+
+    /**
+     * @param array $bunch
+     * @return void
+     */
+    private function importData(array $bunch)
+    {
+        $this->importDataMock->expects($this->any())
+            ->method('getNextBunch')
+            ->will($this->onConsecutiveCalls($bunch, false));
+
+        $this->importer->importData();
     }
 }
