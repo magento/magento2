@@ -26,4 +26,5 @@ span.magento-variable-lost {
 .magento-placeholder img {
     vertical-align: middle;
     max-height: 20px;
+    margin-right: 5px;
 }
