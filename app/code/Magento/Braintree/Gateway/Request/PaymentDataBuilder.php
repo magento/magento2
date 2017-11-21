@@ -87,7 +87,7 @@ class PaymentDataBuilder implements BuilderInterface
             self::ORDER_ID => $order->getOrderIncrementId()
         ];
 
-        $merchantAccountId = $this->config->getMerchantAccountId();
+        $merchantAccountId = $this->config->getMerchantAccountId($order->getStoreId());
         if (!empty($merchantAccountId)) {
             $result[self::MERCHANT_ACCOUNT_ID] = $merchantAccountId;
         }
