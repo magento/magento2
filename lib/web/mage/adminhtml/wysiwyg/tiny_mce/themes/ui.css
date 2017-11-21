@@ -14,3 +14,16 @@ span.magento-variable-lost {
     padding-left: 22px !important;
     color: red;
 }
+.magento-placeholder {
+    display: inline-block;
+    margin: 0 5px;
+    background: #dff7ff;
+    outline: 2px solid #c0dffa;
+    padding: 2px 4px;
+    vertical-align: bottom;
+}
+
+.magento-placeholder img {
+    vertical-align: middle;
+    max-height: 20px;
+}

@@ -29,7 +29,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
     const WYSIWYG_STATUS_CONFIG_PATH = 'cms/wysiwyg/enabled';
 
     /**
-     * Wysiwyg status configuration path
+     * Wysiwyg editor configuration path
      */
     const WYSIWYG_EDITOR_CONFIG_PATH = 'cms/wysiwyg/editor';
 
