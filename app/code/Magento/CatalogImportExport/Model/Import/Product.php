@@ -700,9 +700,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $catalogConfig;
 
     /**
-     * Source Item Importer
+     * Stock Item Importer
      *
-     * @var
+     * @var StockItemImporterInterface $stockItemImporter
      */
     private $stockItemImporter;
 
