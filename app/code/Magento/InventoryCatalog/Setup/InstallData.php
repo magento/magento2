@@ -10,7 +10,7 @@ namespace Magento\InventoryCatalog\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\InventoryCatalog\Setup\Operaion\MigrateSingleStockData;
+use Magento\InventoryCatalog\Setup\Operation\MigrateSingleStockData;
 use Magento\InventoryCatalog\Setup\Operation\AssignSourceToStock;
 use Magento\InventoryCatalog\Setup\Operation\CreateDefaultSource;
 use Magento\InventoryCatalog\Setup\Operation\CreateDefaultStock;
