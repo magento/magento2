@@ -787,10 +787,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         Product\TaxClassProcessor $taxClassProcessor,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\Url $productUrl,
-        StockItemImporterInterface $stockItemImporter,
         array $data = [],
         array $dateAttrCodes = [],
-        CatalogConfig $catalogConfig = null
+        CatalogConfig $catalogConfig = null,
+        StockItemImporterInterface $stockItemImporter = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -823,7 +823,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->dateAttrCodes = array_merge($this->dateAttrCodes, $dateAttrCodes);
         $this->catalogConfig = $catalogConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(CatalogConfig::class);
-        $this->stockItemImporter = $stockItemImporter;
+        $this->stockItemImporter = $stockItemImporter ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(StockItemImporterInterface::class);
 
         parent::__construct(
             $jsonHelper,
