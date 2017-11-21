@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
@@ -49,6 +50,7 @@ class CategoriesUrlRewriteGenerator
             $urls[] = $this->urlRewriteFactory->create()
                 ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                 ->setEntityId($product->getId())
+                ->setRedirectType(OptionProvider::PERMANENT)
                 ->setRequestPath($this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category))
                 ->setTargetPath($this->productUrlPathGenerator->getCanonicalUrlPath($product, $category))
                 ->setStoreId($storeId)
