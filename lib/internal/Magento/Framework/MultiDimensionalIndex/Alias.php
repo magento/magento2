@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\MultiDimensionalIndex;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Index Alias object
@@ -40,7 +41,7 @@ class Alias
     public function __construct(string $value)
     {
         if ($value !== self::ALIAS_REPLICA && $value !== self::ALIAS_MAIN) {
-            throw new LocalizedException(__('Wrong value %value for alias', ['value' => $value]));
+            throw new LocalizedException(new Phrase('Wrong value %value for alias', ['value' => $value]));
         }
         $this->value = $value;
     }
