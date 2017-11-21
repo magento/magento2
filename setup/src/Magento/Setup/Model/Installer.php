@@ -843,7 +843,8 @@ class Installer
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
         foreach ($moduleNames as $moduleName) {
             $this->log->log("Module '{$moduleName}':");
-            $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
+            $module = $this->moduleList->getOne($moduleName);
+            $configVer = (isset($module[$type . '_version'])) ? $module[$type . '_version'] : $module['setup_version'];
             $currentVersion = $moduleContextList[$moduleName]->getVersion();
             // Schema/Data is installed
             if ($currentVersion !== '') {
