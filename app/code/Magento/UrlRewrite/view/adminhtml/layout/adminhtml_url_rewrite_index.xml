@@ -24,7 +24,7 @@
                                 </item>
                             </argument>
                         </arguments>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="url_rewrite_id">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.url_rewrite.grid.columnSet.url_rewrite_id" as="url_rewrite_id">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">ID</argument>
                                 <argument name="type" xsi:type="string">text</argument>
@@ -34,7 +34,7 @@
                                 <argument name="header_css_class" xsi:type="string">col-id</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="store_id">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" name="adminhtml.url_rewrite.grid.columnSet.store_id" as="store_id">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Store View</argument>
                                 <argument name="type" xsi:type="string">store</argument>
@@ -43,7 +43,7 @@
                                 <argument name="store_view" xsi:type="string">true</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="request_path">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.url_rewrite.grid.columnSet.request_path" as="request_path">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Request Path</argument>
                                 <argument name="type" xsi:type="string">text</argument>
@@ -51,7 +51,7 @@
                                 <argument name="index" xsi:type="string">request_path</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="target_path">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.url_rewrite.grid.columnSet.target_path" as="target_path">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Target Path</argument>
                                 <argument name="type" xsi:type="string">text</argument>
@@ -59,7 +59,7 @@
                                 <argument name="index" xsi:type="string">target_path</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="redirect_type">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.url_rewrite.grid.columnSet.redirect_type" as="redirect_type">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Redirect Type</argument>
                                 <argument name="type" xsi:type="string">options</argument>
@@ -68,7 +68,7 @@
                                 <argument name="options" xsi:type="options" model="Magento\UrlRewrite\Model\OptionProvider"/>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="actions">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.url_rewrite.grid.columnSet.actions" as="actions">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Action</argument>
                                 <argument name="sortable" xsi:type="string">0</argument>
