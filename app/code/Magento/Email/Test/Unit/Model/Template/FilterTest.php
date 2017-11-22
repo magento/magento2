@@ -369,7 +369,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                 '<html><head><style type="text/css">div { color: #111; }</style></head><p></p></html>',
                 'p { color: #000 }',
                 [
-                    '<head><style type="text/css">div { color: #111; }</style></head>',
+                    '<style type="text/css">div { color: #111; }</style>',
                     '<p style="color: #000;"></p>',
                 ],
             ],
