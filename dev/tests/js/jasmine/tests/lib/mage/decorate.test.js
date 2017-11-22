@@ -192,10 +192,9 @@ define([
             it('Check error message', function () {
                 var $list = $('#' + listId);
 
-                spyOn(jQuery, 'error');
+                spyOn($, 'error');
                 $list.decorate('customMethod');
-
-                expect(jQuery.error).toHaveBeenCalledWith('Method customMethod does not exist on jQuery.decorate');
+                expect($.error).toHaveBeenCalledWith('Method customMethod does not exist on jQuery.decorate');
             });
         });
     });
