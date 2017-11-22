@@ -1488,4 +1488,25 @@ class Configurable extends AbstractType
 
         return $usedSalableProducts;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function isPossibleBuyFromList($product)
+    {
+        /** @var bool $isAllCustomOptionsDisplayed */
+        $isAllCustomOptionsDisplayed = true;
+
+        foreach ($this->getConfigurableAttributes($product) as $attribute) {
+            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $eavAttribute */
+            $eavAttribute = $attribute->getProductAttribute();
+
+            $isAllCustomOptionsDisplayed = (
+                $isAllCustomOptionsDisplayed
+                && $eavAttribute->getData('used_in_product_listing')
+            );
+        }
+
+        return $isAllCustomOptionsDisplayed;
+    }
 }
