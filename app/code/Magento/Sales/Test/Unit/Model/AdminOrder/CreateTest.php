@@ -42,6 +42,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     private $adminOrderCreate;
 
     /**
+     * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $quoteRepository;
+
+    /**
      * @var SessionQuote|MockObject
      */
     private $sessionQuote;
@@ -78,11 +83,20 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->sessionQuote = $this->createMock(SessionQuote::class);
         $this->formFactory = $this->createPartialMock(FormFactory::class, ['create']);
         $this->customerFactory = $this->createPartialMock(CustomerInterfaceFactory::class, ['create']);
 
         $this->itemUpdater = $this->createMock(Updater::class);
+
+        $this->quoteRepository = $this->getMockBuilder(\Magento\Quote\Api\CartRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getForCustomer'])
+            ->getMockForAbstractClass();
+
+        $this->sessionQuote = $this->getMockBuilder(\Magento\Backend\Model\Session\Quote::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getQuote', 'getStoreId', 'getCustomerId'])
+            ->getMock();
 
         $this->customerMapper = $this->getMockBuilder(Mapper::class)
             ->setMethods(['toFlatArray'])
@@ -105,6 +119,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
                 'quoteItemUpdater' => $this->itemUpdater,
                 'customerMapper' => $this->customerMapper,
                 'dataObjectHelper' => $this->dataObjectHelper,
+                'quoteRepository' => $this->quoteRepository,
             ]
         );
     }
@@ -265,5 +280,13 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $object = $this->adminOrderCreate->applyCoupon($couponCode);
         self::assertEquals($this->adminOrderCreate, $object);
+    }
+
+    public function testGetCustomerCart()
+    {
+        $this->sessionQuote->expects($this->once())->method('getStoreId')->willReturn(2);
+        $this->sessionQuote->expects($this->once())->method('getCustomerId')->willReturn(2);
+        $this->quoteRepository->expects($this->once())->method('getForCustomer')->with(2, [2]);
+        $this->adminOrderCreate->getCustomerCart();
     }
 }
