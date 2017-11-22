@@ -16,6 +16,24 @@ $productFactory = $objectManager->get(ProductInterfaceFactory::class);
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productRepository->cleanCache();
 
+$stockData = [
+    'SKU-1' => [
+        'qty' => 8.5,
+        'is_in_stock' => true,
+        'manage_stock' => true
+    ],
+    'SKU-2' => [
+        'qty' => 5,
+        'is_in_stock' => true,
+        'manage_stock' => true
+    ],
+    'SKU-3' => [
+        'qty' => 0,
+        'is_in_stock' => false,
+        'manage_stock' => true
+    ]
+];
+
 for ($i = 1; $i <= 3; $i++) {
     $product = $productFactory->create();
     $product->setTypeId(Type::TYPE_SIMPLE)
@@ -23,6 +41,7 @@ for ($i = 1; $i <= 3; $i++) {
         ->setName('Simple Product ' . $i)
         ->setSku('SKU-' . $i)
         ->setPrice(10)
+        ->setStockData($stockData['SKU-' . $i])
         ->setStatus(Status::STATUS_ENABLED);
     $productRepository->save($product);
 }
