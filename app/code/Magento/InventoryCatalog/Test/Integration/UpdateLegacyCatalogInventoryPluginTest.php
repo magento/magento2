@@ -19,7 +19,7 @@ use Magento\CatalogInventory\Api\Data\StockItemCollectionInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\Indexer\Model\Indexer;
-use Magento\Inventory\Indexer\StockItemIndexerInterface;
+use Magento\Inventory\Indexer\SourceItem\SourceItemIndexer;
 
 class UpdateLegacyCatalogInventoryPluginTest extends TestCase
 {
@@ -66,7 +66,7 @@ class UpdateLegacyCatalogInventoryPluginTest extends TestCase
         $this->stockItemCriteriaFactory = Bootstrap::getObjectManager()->get(StockItemCriteriaInterfaceFactory::class);
 
         $this->indexer = Bootstrap::getObjectManager()->get(Indexer::class);
-        $this->indexer->load(StockItemIndexerInterface::INDEXER_ID);
+        $this->indexer->load(SourceItemIndexer::INDEXER_ID);
         $this->getProductQtyInStock = Bootstrap::getObjectManager()->get(GetProductQuantityInStockInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
     }
@@ -146,6 +146,7 @@ class UpdateLegacyCatalogInventoryPluginTest extends TestCase
         $oldStockItem = current($collectionAfterChange->getItems());
         $quantityAfterCheck = $oldStockItem->getQty();
 
+        $this->assertEquals(8.5 - 5, $this->getProductQtyInStock->execute('SKU-1', 10));
         $this->assertEquals($this->getProductQtyInStock->execute('SKU-1', 10), $quantityAfterCheck);
     }
 }

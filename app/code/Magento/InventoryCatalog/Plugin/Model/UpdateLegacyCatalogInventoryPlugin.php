@@ -32,7 +32,7 @@ class UpdateLegacyCatalogInventoryPlugin
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
-    protected $stockRegistry;
+    private $stockRegistry;
 
     /**
      * @param ResourceConnection $resourceConnection
