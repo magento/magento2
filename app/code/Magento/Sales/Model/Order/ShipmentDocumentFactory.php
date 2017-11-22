@@ -121,7 +121,7 @@ class ShipmentDocumentFactory
     {
         $shipmentItems = [];
         foreach ($items as $item) {
-            if (!$item->getIsVirtual() && !$item->getParentItem()) {
+            if (!$item->getIsVirtual() && (!$item->getParentItem() || $item->isShipSeparately())) {
                 $shipmentItems[$item->getItemId()] = $item->getQtyOrdered();
             }
         }
