@@ -197,7 +197,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                                 'required' => true
                             ],
                             [
-                                'name' => '$body',
+                                'name' => 'testModule5AllSoapAndRestV1NestedUpdatePutBody',
                                 'in' => 'body',
                                 'schema' => [
                                     'required' => [
