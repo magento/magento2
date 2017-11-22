@@ -236,7 +236,7 @@ class ProductScopeRewriteGenerator
      * Checks if URL key has been changed for provided category and returns reloaded category,
      * in other case - returns provided category.
      *
-     * @param $storeId
+     * @param int $storeId
      * @param Category $category
      * @return Category
      */
