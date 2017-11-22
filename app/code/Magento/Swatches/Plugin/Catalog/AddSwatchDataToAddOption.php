@@ -116,7 +116,7 @@ class AddSwatchDataToAddOption
      *
      * @return boolean
      */
-    protected function isSwatch($attribute)
+    private function isSwatch($attribute)
     {
         if ($this->swatchHelper->isVisualSwatch($attribute)) {
             return true;
@@ -132,7 +132,7 @@ class AddSwatchDataToAddOption
      *
      * @return null|string
      */
-    protected function getSwatchType($attribute)
+    private function getSwatchType($attribute)
     {
         if ($this->swatchHelper->isVisualSwatch($attribute)) {
             return self::SWATCH_VISUAL;
@@ -149,7 +149,7 @@ class AddSwatchDataToAddOption
      *
      * @return array
      */
-    protected function prepareAttributeDataForNewOption($attributeId, $optionKey)
+    private function prepareAttributeDataForNewOption($attributeId, $optionKey)
     {
         $options    = $this->getOptionsByAttributeIdWithSortOrder($attributeId);
         return $this->getOptionsForSwatch($options, $optionKey);
@@ -161,7 +161,7 @@ class AddSwatchDataToAddOption
      *
      * @return array
      */
-    protected function getOptionsForSwatch(array $options, $optionKey)
+    private function getOptionsForSwatch(array $options, $optionKey)
     {
         $optionsArray = [];
 
@@ -186,7 +186,7 @@ class AddSwatchDataToAddOption
      *
      * @return array
      */
-    protected function getStoreLabels($optionId)
+    private function getStoreLabels($optionId)
     {
         $optionCollectionFactory = $this->optionCollectionFactory->create();
         $connection              = $optionCollectionFactory->getConnection();
@@ -204,7 +204,7 @@ class AddSwatchDataToAddOption
      *
      * @return array
      */
-    protected function getOptionsByAttributeIdWithSortOrder($attributeId)
+    private function getOptionsByAttributeIdWithSortOrder($attributeId)
     {
         $optionCollectionFactory = $this->optionCollectionFactory->create();
         $options                 = $optionCollectionFactory
