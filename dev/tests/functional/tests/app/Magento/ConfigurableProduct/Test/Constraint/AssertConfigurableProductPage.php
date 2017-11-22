@@ -147,30 +147,6 @@ class AssertConfigurableProductPage extends AssertProductPage
     }
 
     /**
-     * Returns highest possible price of a configurable product.
-     *
-     * @return string
-     */
-    protected function getHighestConfigurablePrice()
-    {
-        $price = null;
-
-        $configurableOptions = $this->product->getConfigurableAttributesData();
-
-        foreach ($configurableOptions['matrix'] as $option) {
-            $optionPrice = $option['price'];
-
-            if (isset($option['special_price'])) {
-                $optionPrice = min($optionPrice, $option['special_price']);
-            }
-
-            $price = max($price, $optionPrice);
-        }
-
-        return $price;
-    }
-
-    /**
      * Verifies displayed product price label on a product page (front-end)
      * equals passed from the fixture.
      *
@@ -181,24 +157,15 @@ class AssertConfigurableProductPage extends AssertProductPage
         /** @var \Magento\ConfigurableProduct\Test\Block\Product\Price $priceBlock */
         $priceBlock = $this->productView->getPriceBlock($this->product);
 
-        $fixtureLowestPrice = $this->getLowestConfigurablePrice();
-        $fixtureHighestPrice = $this->getHighestConfigurablePrice();
-
-        if ($fixtureLowestPrice === $fixtureHighestPrice) {
-            if ($priceBlock->getPriceLabel()->isVisible()) {
-                return "Product price label should not be displayed.";
-            }
+        if (!$priceBlock->getPriceLabel()->isVisible()) {
+            return "Product price label should be displayed.";
         } else {
-            if (!$priceBlock->getPriceLabel()->isVisible()) {
-                return "Product price label should be displayed.";
-            } else {
-                $expectedPriceLabel = 'As low as';
-                $actualPriceLabel = $priceBlock->getPriceLabel()->getText();
+            $expectedPriceLabel = 'As low as';
+            $actualPriceLabel = $priceBlock->getPriceLabel()->getText();
 
-                if ($expectedPriceLabel !== $actualPriceLabel) {
-                    return "Displayed product price label on product page (front-end) not equals passed from fixture. "
-                        . "Actual: {$actualPriceLabel}, expected: {$expectedPriceLabel}.";
-                }
+            if ($expectedPriceLabel !== $actualPriceLabel) {
+                return "Displayed product price label on product page (front-end) not equals passed from fixture. "
+                    . "Actual: {$actualPriceLabel}, expected: {$expectedPriceLabel}.";
             }
         }
 
