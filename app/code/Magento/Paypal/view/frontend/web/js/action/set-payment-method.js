@@ -10,42 +10,12 @@ define([
     'mage/storage',
     'Magento_Checkout/js/model/error-processor',
     'Magento_Customer/js/model/customer',
-    'Magento_Checkout/js/model/full-screen-loader'
-], function ($, quote, urlBuilder, storage, errorProcessor, customer, fullScreenLoader) {
+    'Magento_Checkout/js/model/full-screen-loader',
+    'Magento_Checkout/js/action/set-payment-information'
+], function ($, quote, urlBuilder, storage, errorProcessor, customer, fullScreenLoader, setPaymentInformation) {
     'use strict';
 
     return function (messageContainer) {
-        var serviceUrl,
-            payload,
-            paymentData = quote.paymentMethod();
-
-        /**
-         * Checkout for guest and registered customer.
-         */
-        if (!customer.isLoggedIn()) {
-            serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/set-payment-information', {
-                cartId: quote.getQuoteId()
-            });
-            payload = {
-                cartId: quote.getQuoteId(),
-                email: quote.guestEmail,
-                paymentMethod: paymentData
-            };
-        } else {
-            serviceUrl = urlBuilder.createUrl('/carts/mine/set-payment-information', {});
-            payload = {
-                cartId: quote.getQuoteId(),
-                paymentMethod: paymentData
-            };
-        }
-        fullScreenLoader.startLoader();
-
-        return storage.post(
-            serviceUrl, JSON.stringify(payload)
-        ).fail(function (response) {
-            errorProcessor.process(response, messageContainer);
-        }).always(function () {
-            fullScreenLoader.stopLoader();
-        });
+        return setPaymentInformation(messageContainer, quote.paymentMethod());
     };
 });
