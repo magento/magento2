@@ -26,9 +26,13 @@ class Widget extends \Magento\Backend\Block\Widget\Form\Container
         $this->_mode = 'widget';
         $this->_headerText = __('Widget Insertion');
 
+        $saveButtonClass = 'action-primary add-widget';
         $this->removeButton('back');
-        $this->buttonList->update('save', 'label', __('Insert Widget'));
-        $this->buttonList->update('save', 'class', 'action-primary add-widget');
+        if($this->getRequest()->getParam('mode') === 'new') {
+            $this->buttonList->update('save', 'label', __('Insert Widget'));
+            $saveButtonClass .= ' disabled';
+        }
+        $this->buttonList->update('save', 'class', $saveButtonClass);
         $this->buttonList->update('save', 'id', 'insert_button');
         $this->buttonList->update('save', 'onclick', 'wWidget.insertWidget()');
         $this->buttonList->update('save', 'region', 'toolbar');
