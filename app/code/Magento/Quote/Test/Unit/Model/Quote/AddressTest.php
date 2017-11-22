@@ -9,7 +9,7 @@
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
 use Magento\Directory\Model\Currency;
-use \Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\Quote\Model\ResourceModel\Quote\Address\Rate\CollectionFactory as RateCollectionFactory;
 use Magento\Quote\Model\ResourceModel\Quote\Address\Rate\Collection as RatesCollection;
@@ -28,11 +28,13 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Quote\Model\Quote\Address\RateResult\AbstractResult;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Test class for sales quote address model
  *
  * @see \Magento\Quote\Model\Quote\Address
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddressTest extends \PHPUnit\Framework\TestCase
@@ -46,6 +48,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Quote\Model\Quote | \PHPUnit_Framework_MockObject_MockObject
      */
     private $quote;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Address\CustomAttributeListInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeList;
 
     /**
      * @var \Magento\Framework\App\Config | \PHPUnit_Framework_MockObject_MockObject
@@ -117,7 +124,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config::class);
-        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = new Json();
 
         $this->requestFactory = $this->getMockBuilder(RateRequestFactory::class)
             ->disableOriginalConstructor()
@@ -165,9 +172,13 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->attributeList = $this->createMock(\Magento\Quote\Model\Quote\Address\CustomAttributeListInterface::class);
+        $this->attributeList->method('getAttributes')->willReturn([]);
+
         $this->address = $objectManager->getObject(
             \Magento\Quote\Model\Quote\Address::class,
             [
+                'attributeList' => $this->attributeList,
                 'scopeConfig' => $this->scopeConfig,
                 'serializer' => $this->serializer,
                 'storeManager' => $this->storeManager,
@@ -273,20 +284,17 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testSetAndGetAppliedTaxes()
     {
         $data = ['data'];
-        $result = json_encode($data);
+        self::assertInstanceOf(Address::class, $this->address->setAppliedTaxes($data));
+        self::assertEquals($data, $this->address->getAppliedTaxes());
+    }
 
-        $this->serializer->expects($this->once())
-            ->method('serialize')
-            ->with($data)
-            ->willReturn($result);
-
-        $this->serializer->expects($this->once())
-            ->method('unserialize')
-            ->with($result)
-            ->willReturn($data);
-
-        $this->assertInstanceOf(\Magento\Quote\Model\Quote\Address::class, $this->address->setAppliedTaxes($data));
-        $this->assertEquals($data, $this->address->getAppliedTaxes());
+    /**
+     * Checks a case, when applied taxes are not provided.
+     */
+    public function testGetAppliedTaxesWithEmptyValue()
+    {
+        $this->address->setData('applied_taxes', null);
+        self::assertEquals([], $this->address->getAppliedTaxes());
     }
 
     /**

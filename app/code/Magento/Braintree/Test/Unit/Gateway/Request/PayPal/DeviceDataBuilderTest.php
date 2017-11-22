@@ -5,7 +5,7 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request\PayPal;
 
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Request\PayPal\DeviceDataBuilder;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Model\InfoInterface;
@@ -17,14 +17,9 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class DeviceDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var SubjectReader|MockObject
-     */
-    private $subjectReader;
-
-    /**
      * @var PaymentDataObjectInterface|MockObject
      */
-    private $paymentDataObject;
+    private $paymentDO;
 
     /**
      * @var InfoInterface|MockObject
@@ -38,16 +33,10 @@ class DeviceDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['readPayment'])
-            ->getMock();
-
-        $this->paymentDataObject = $this->createMock(PaymentDataObjectInterface::class);
-
+        $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
         $this->paymentInfo = $this->createMock(InfoInterface::class);
         
-        $this->builder = new DeviceDataBuilder($this->subjectReader);
+        $this->builder = new DeviceDataBuilder(new SubjectReader());
     }
 
     /**
@@ -59,24 +48,17 @@ class DeviceDataBuilderTest extends \PHPUnit\Framework\TestCase
     public function testBuild(array $paymentData, array $expected)
     {
         $subject = [
-            'payment' => $this->paymentDataObject
+            'payment' => $this->paymentDO
         ];
 
-        $this->subjectReader->expects(static::once())
-            ->method('readPayment')
-            ->with($subject)
-            ->willReturn($this->paymentDataObject);
-
-        $this->paymentDataObject->expects(static::once())
-            ->method('getPayment')
+        $this->paymentDO->method('getPayment')
             ->willReturn($this->paymentInfo);
 
-        $this->paymentInfo->expects(static::once())
-            ->method('getAdditionalInformation')
+        $this->paymentInfo->method('getAdditionalInformation')
             ->willReturn($paymentData);
 
         $actual = $this->builder->build($subject);
-        static::assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**

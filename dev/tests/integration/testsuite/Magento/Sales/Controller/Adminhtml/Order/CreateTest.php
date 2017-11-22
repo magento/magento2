@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Backend\Model\Session\Quote;
+use Magento\Quote\Api\CartRepositoryInterface;
+
 /**
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
@@ -158,7 +162,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      */
     public function testGetAclResource($actionName, $reordered, $expectedResult)
     {
-        $this->_objectManager->get(\Magento\Backend\Model\Session\Quote::class)->setReordered($reordered);
+        $this->_objectManager->get(Quote::class)->setReordered($reordered);
         $orderController = $this->_objectManager->get(
             \Magento\Sales\Controller\Adminhtml\Order\Stub\OrderCreateStub::class
         );
@@ -228,5 +232,58 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
 
         $this->dispatch('backend/sales/order_create/save');
         $this->assertEquals('403', $this->getResponse()->getHttpResponseCode());
+    }
+
+    /**
+     * Checks a case when shipping is the same as billing and billing address details was changed by request.
+     * Both billing and shipping addresses should be updated.
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
+     */
+    public function testSyncBetweenQuoteAddresses()
+    {
+        /** @var CustomerRepositoryInterface $customerRepository */
+        $customerRepository = $this->_objectManager->get(CustomerRepositoryInterface::class);
+        $customer = $customerRepository->get('customer@example.com');
+
+        /** @var CartRepositoryInterface $quoteRepository */
+        $quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
+        $quote = $quoteRepository->getActiveForCustomer($customer->getId());
+
+        $session = $this->_objectManager->get(Quote::class);
+        $session->setQuoteId($quote->getId());
+
+        $data = [
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'street' => ['Soborna 23'],
+            'city' => 'Kyiv',
+            'country_id' => 'UA',
+            'region' => 'Kyivska',
+            'region_id' => 1
+        ];
+        $this->getRequest()->setPostValue(
+            [
+                'order' => ['billing_address' => $data],
+                'reset_shipping' => 1,
+                'customer_id' => $customer->getId(),
+                'store_id' => 1,
+                'json' => true
+            ]
+        );
+
+        $this->dispatch('backend/sales/order_create/loadBlock/block/shipping_address');
+        self::assertEquals(200, $this->getResponse()->getHttpResponseCode());
+
+        $updatedQuote = $quoteRepository->get($quote->getId());
+
+        $billingAddress = $updatedQuote->getBillingAddress();
+        self::assertEquals($data['region_id'], $billingAddress->getRegionId());
+        self::assertEquals($data['country_id'], $billingAddress->getCountryId());
+
+        $shippingAddress = $updatedQuote->getShippingAddress();
+        self::assertEquals($data['city'], $shippingAddress->getCity());
+        self::assertEquals($data['street'], $shippingAddress->getStreet());
     }
 }
