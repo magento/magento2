@@ -17,6 +17,7 @@
         <element name="InsertWidget" type="button" selector=".scalable.action-add-widget.plugin"/>
         <element name="InsertVariable" type="button" selector=".scalable.add-variable.plugin"/>
         <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by"/>
+        <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl"/>
         <element name="Style" type="button" selector=".mce-txt" />
         <element name="Bold" type="button" selector=".mce-i-bold" />
         <element name="Italic" type="button" selector=".mce-i-italic" />

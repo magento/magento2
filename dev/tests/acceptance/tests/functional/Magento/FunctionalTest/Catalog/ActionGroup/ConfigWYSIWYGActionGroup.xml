@@ -11,20 +11,18 @@
     <actionGroup name="EnabledWYSIWYG">
         <amOnPage url="admin/admin/system_config/edit/section/cms/" mergeKey="navigateToConfigurationPage" />
         <waitForPageLoad mergeKey="wait1"/>
-        <conditionalClick mergeKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CHECK}}" visible="true" />
+        <conditionalClick mergeKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" time="10" mergeKey="waitForEnableWYSIWYGDropdown1" />
         <selectOption selector="{{ContentManagementSection.EnableWYSIWYG}}" userInput="Enabled by Default" mergeKey="selectOption1"/>
-        <wait time="2" mergeKey="wait" />
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="expandWYSIWYGOptions2" />
         <click selector="{{ContentManagementSection.Save}}" mergeKey="saveConfig" />
     </actionGroup>
     <actionGroup name="DisabledWYSIWYG">
         <amOnPage url="admin/admin/system_config/edit/section/cms/" mergeKey="navigateToConfigurationPage" />
         <waitForPageLoad mergeKey="wait3"/>
-        <conditionalClick mergeKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CHECK}}" visible="true" />
+        <conditionalClick mergeKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" time="10" mergeKey="waitForEnableWYSIWYGDropdown2" />
         <selectOption selector="{{ContentManagementSection.EnableWYSIWYG}}" userInput="Disabled Completely" mergeKey="selectOption2"/>
-        <wait time="2" mergeKey="wait" />
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="collapseWYSIWYGOptions4" />
         <click selector="{{ContentManagementSection.Save}}" mergeKey="saveConfig" />
     </actionGroup>
