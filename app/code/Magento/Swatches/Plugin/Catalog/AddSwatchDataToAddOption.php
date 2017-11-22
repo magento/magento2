@@ -108,7 +108,6 @@ class AddSwatchDataToAddOption
         }
         $attribute->addData($attributeData);
 
-
         return [$entityType, $attributeCode, $option];
     }
 
