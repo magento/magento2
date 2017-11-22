@@ -25,7 +25,7 @@ define([
                 title2 = $('<div data-role="collapsible"></div>').appendTo(accordion),
                 content2 = $('<div data-role="content"></div>').appendTo(accordion);
 
-            accordion.appendTo("body");
+            accordion.appendTo('body');
 
             accordion.accordion();
 
@@ -49,15 +49,14 @@ define([
             expect(accordion.is(':mage-accordion')).toBeFalsy();
         });
         it('check multi-collapsible element accordion', function () {
-            var accordion = $('<div/>');
-
-            $('<div data-role="collapsible"></div>').appendTo(accordion);
-
-            var content1 = $('<div data-role="content"></div>').appendTo(accordion),
+            var accordion = $('<div/>'),
+                content1 = $('<div data-role="content"></div>').appendTo(accordion),
                 title2 = $('<div data-role="collapsible"></div>').appendTo(accordion),
                 content2 = $('<div data-role="content"></div>').appendTo(accordion);
 
-            accordion.appendTo("body");
+            $('<div data-role="collapsible"></div>').appendTo(accordion);
+
+            accordion.appendTo('body');
 
             accordion.accordion({
                 multipleCollapsible: true
