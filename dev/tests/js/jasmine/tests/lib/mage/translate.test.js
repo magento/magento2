@@ -2,6 +2,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+/* eslint-disable max-nested-callbacks */
 define([
     'jquery',
     'mage/translate'
@@ -18,7 +19,10 @@ define([
             expect('Hello World!').toEqual($.mage.translate.translate('Hello World!'));
         });
         it('works with one object as parameter', function () {
-            var translation = {'Hello World!': 'Bonjour tout le monde!'};
+            var translation = {
+                'Hello World!': 'Bonjour tout le monde!'
+            };
+
             $.mage.translate.add(translation);
             expect(translation['Hello World!']).toEqual($.mage.translate.translate('Hello World!'));
 
