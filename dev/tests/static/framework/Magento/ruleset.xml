@@ -16,14 +16,23 @@
             <property name="absoluteLineLimit" value="120"/>
         </properties>
     </rule>
+    <rule ref="Magento.LanguageConstructs.LanguageConstructs.DirectOutput">
+        <exclude-pattern>*/Framework/*</exclude-pattern>
+        <exclude-pattern>*.phtml</exclude-pattern>
+    </rule>
+    <rule ref="Magento.LanguageConstructs.LanguageConstructs.ExitUsage">
+        <exclude-pattern>*/Framework/*</exclude-pattern>
+    </rule>
     <rule ref="Magento.LiteralNamespaces.LiteralNamespaces">
         <exclude-pattern>*/_files/*</exclude-pattern>
     </rule>
 
+    <rule ref="Generic.PHP.CharacterBeforePHPOpeningTag"/>
     <rule ref="Generic.Functions.CallTimePassByReference"/>
     <rule ref="Generic.PHP.DeprecatedFunctions"/>
 
     <rule ref="Squiz.Commenting.DocCommentAlignment"/>
     <rule ref="Squiz.Functions.GlobalFunction"/>
+    <rule ref="Squiz.PHP.Eval"/>
     <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
 </ruleset>
