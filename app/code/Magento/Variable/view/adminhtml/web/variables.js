@@ -80,8 +80,9 @@ define([
         /**
          * @param {*} variablesContent
          */
-        openDialogWindow: function (variablesContent) {
+        openDialogWindow: function (variablesContent, variableCode) {
             var html = utils.copy(variablesContent);
+
             jQuery('<div id="' + this.dialogWindowId + '">' + html + '</div>').modal({
                 title: $t('Insert Variable...'),
                 type: 'slide',
@@ -89,6 +90,13 @@ define([
             });
 
             jQuery('#' + this.dialogWindowId).modal('openModal');
+
+            if (typeof variableCode !== undefined) {
+                //@TODO: workaround should be replaced
+                registry.get('variables_modal.variables_modal.variables.variable_selector', function (radioSelect) {
+                    radioSelect.selectedVariableCode(variableCode);
+                });
+            }
         },
 
         /**
@@ -108,7 +116,7 @@ define([
 
             return content;
         },
-
+        
         /**
          * @param {*} value
          */
@@ -149,7 +157,7 @@ define([
          * @param {*} textareaId
          *
          */
-        loadChooser: function (url, textareaId) {
+        loadChooser: function (url, textareaId, variableCode) {
             this.textareaId = textareaId;
 
             if (this.variablesContent == null) {
@@ -158,12 +166,12 @@ define([
                     onComplete: function (transport) {
                         Variables.init(null, 'MagentovariablePlugin.insertVariable');
                         this.variablesContent = transport.responseText;
-                        Variables.openDialogWindow(this.variablesContent);
+                        Variables.openDialogWindow(this.variablesContent, variableCode);
                         Variables.initUiGrid();
                     }.bind(this)
                 });
             } else {
-                Variables.openDialogWindow(this.variablesContent);
+                Variables.openDialogWindow(this.variablesContent, variableCode);
             }
 
             return;

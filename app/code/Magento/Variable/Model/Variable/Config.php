@@ -58,6 +58,7 @@ class Config
                 'options' => [
                     'title' => __('Insert Variable...'),
                     'url' => $this->getVariablesWysiwygActionUrl(),
+                    'variablesUrl' => $this->getVariablesWysiwygDataUrl(),
                     'onclick' => $onclickParts,
                     'class' => 'add-variable plugin',
                 ],
@@ -91,5 +92,13 @@ class Config
         return $this->_url->getUrl('mui/index/render',
             ['namespace' => 'variables_modal']
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getVariablesWysiwygDataUrl()
+    {
+        return $this->_url->getUrl('adminhtml/system_variable/wysiwygPlugin');
     }
 }

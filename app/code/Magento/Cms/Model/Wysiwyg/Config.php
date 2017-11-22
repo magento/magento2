@@ -186,7 +186,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
                 'tinymce4' => [
                     'toolbar' => 'formatselect | bold italic underline | alignleft aligncenter alignright | '
                         . 'bullist numlist | link image table charmap',
-                    'plugins' => 'advlist autolink lists link image charmap media table contextmenu paste code help '
+                    'plugins' => 'advlist autolink lists link image charmap media table contextmenu paste code help magentovariable '
                         . 'table'
                 ],
                 'plugins' => [],
