@@ -27,6 +27,8 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 
     const COLUMN_STORE = '_store';
 
+    const COLUMN_ENTITY_ID = '_entity_id';
+
     /**#@-*/
 
     /**#@+
@@ -69,7 +71,12 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      *
      * @var string[]
      */
-    protected $_permanentAttributes = [self::COLUMN_EMAIL, self::COLUMN_WEBSITE, self::COLUMN_STORE];
+    protected $_permanentAttributes = [
+        self::COLUMN_EMAIL,
+        self::COLUMN_ENTITY_ID,
+        self::COLUMN_WEBSITE,
+        self::COLUMN_STORE
+    ];
 
     /**
      * Customers whose data is exported
@@ -162,7 +169,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
         $row = $this->_addAttributeValuesToRow($item);
         $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$item->getWebsiteId()];
         $row[self::COLUMN_STORE] = $this->_storeIdToCode[$item->getStoreId()];
-
+        $row[self::COLUMN_ENTITY_ID] = $item['entity_id'];
         $this->getWriter()->writeRow($row);
     }
 
