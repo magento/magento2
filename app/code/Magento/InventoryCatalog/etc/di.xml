@@ -14,6 +14,9 @@
         <plugin name="prevent_assigned_to_sales_channels_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\AssignedToSalesChannelsStockPlugin"/>
     </type>
+    <type name="Magento\InventoryApi\Api\ReservationsAppendInterface">
+        <plugin name="update_legacy_catalog_inventory_plugin" type="Magento\InventoryCatalog\Plugin\Model\UpdateLegacyCatalogInventoryPlugin"/>
+    </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
         <plugin name="migrate_single_stock_data" type="Magento\InventoryCatalog\Plugin\Model\ResourceModel\StockItemPlugin" sortOrder="1"/>
     </type>

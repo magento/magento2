@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
+use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -12,12 +14,25 @@ $objectManager = Bootstrap::getObjectManager();
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 /** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);
+/** @var StockStatusRepositoryInterface $stockStatusRepository */
+$stockStatusRepository = $objectManager->create(StockStatusRepositoryInterface::class);
+/** @var StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory */
+$stockStatusCriteriaFactory = $objectManager->create(StockStatusCriteriaInterfaceFactory::class);
 
 $currentArea = $registry->registry('isSecureArea');
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 for ($i = 1; $i <= 3; $i++) {
+    $product = $productRepository->get('SKU-' . $i);
+    /** @var \Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory **/
+    $criteria = $stockStatusCriteriaFactory->create();
+    $criteria->setProductsFilter($product->getId());
+
+    $result = $stockStatusRepository->getList($criteria);
+    $stockStatus = current($result->getItems());
+    $stockStatusRepository->delete($stockStatus);
+
     $productRepository->deleteById('SKU-' . $i);
 }
 

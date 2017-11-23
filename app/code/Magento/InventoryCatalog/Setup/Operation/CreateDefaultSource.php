@@ -14,7 +14,7 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
- * Create default source during install
+ * Create default source during installation
  */
 class CreateDefaultSource
 {
