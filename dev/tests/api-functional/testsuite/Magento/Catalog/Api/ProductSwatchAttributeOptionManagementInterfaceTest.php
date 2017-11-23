@@ -16,12 +16,12 @@ class ProductSwatchAttributeOptionManagementInterfaceTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/products/attributes';
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/swatch_attribute.php
+     * @magentoApiDataFixture Magento/Swatches/_files/swatch_attribute.php
      * @dataProvider addDataProvider
      */
     public function testAdd($optionData)
     {
-        $testAttributeCode = 'swatch_attribute';
+        $testAttributeCode = 'color_swatch';
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $testAttributeCode . '/options',
@@ -81,5 +81,25 @@ class ProductSwatchAttributeOptionManagementInterfaceTest extends WebapiAbstract
             ],
 
         ];
+    }
+
+    /**
+     * @param $testAttributeCode
+     * @return array|bool|float|int|string
+     */
+    private function getAttributeOptions($testAttributeCode)
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $testAttributeCode . '/options',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'getItems',
+            ],
+        ];
+        return $this->_webApiCall($serviceInfo, ['attributeCode' => $testAttributeCode]);
     }
 }
