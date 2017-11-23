@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 /* eslint-disable max-nested-callbacks */
+/* jscs:disable jsDoc */
 
 define([
     'jquery',
