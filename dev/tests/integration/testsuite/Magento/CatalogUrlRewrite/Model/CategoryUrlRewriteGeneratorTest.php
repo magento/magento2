@@ -48,7 +48,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $categoryFilter = [
             UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
-            UrlRewrite::ENTITY_ID => [3, 4, 5]
+            UrlRewrite::ENTITY_ID => [3, 4, 5],
         ];
         $actualResults = $this->getActualResults($categoryFilter);
         $categoryExpectedResult = [
@@ -66,7 +66,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $productFilter = [
             UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
-            UrlRewrite::ENTITY_ID => [$productForTest]
+            UrlRewrite::ENTITY_ID => [$productForTest],
         ];
         $actualResults = $this->getActualResults($productFilter);
         $productExpectedResult = [
@@ -147,7 +147,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $productFilter = [
             UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
-            UrlRewrite::ENTITY_ID => [$productForTest]
+            UrlRewrite::ENTITY_ID => [$productForTest],
         ];
         $actualResults = $this->getActualResults($productFilter);
         $productExpectedResult = [
