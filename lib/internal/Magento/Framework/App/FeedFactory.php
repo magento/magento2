@@ -45,12 +45,7 @@ class FeedFactory implements FeedFactoryInterface
     }
 
     /**
-     * Get a new \Magento\Framework\App\FeedInterface object from a custom array
-     *
-     * @throws \Magento\Framework\Exception\InputException
-     * @param  array  $data
-     * @param  string $format
-     * @return \Magento\Framework\App\FeedInterface
+     * {@inheritdoc}
      */
     public function create(
         array $data, 
@@ -63,7 +58,7 @@ class FeedFactory implements FeedFactoryInterface
             );
         }
 
-        if (!is_subclass_of($this->formats[$format], '\Magento\Framework\App\FeedInterface')) {
+        if (!is_subclass_of($this->formats[$format], \Magento\Framework\App\FeedInterface::class)) {
             throw new \Magento\Framework\Exception\InputException(
                 __('Wrong format handler type'),
                 $e

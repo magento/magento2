@@ -24,6 +24,8 @@ class Feed implements FeedInterface
 
     /**
      * Returns the formatted feed content
+     *
+     * @param string $format
      * 
      * @return string
      */
