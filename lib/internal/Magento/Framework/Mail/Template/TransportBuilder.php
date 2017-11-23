@@ -72,7 +72,7 @@ class TransportBuilder
     /**
      * Message
      *
-     * @var \Magento\Framework\Mail\Message
+     * @var \Magento\Framework\Mail\MessageInterface
      */
     protected $message;
 
@@ -242,7 +242,7 @@ class TransportBuilder
      */
     protected function reset()
     {
-        $this->message = $this->objectManager->create(\Magento\Framework\Mail\Message::class);
+        $this->message = $this->objectManager->create(MessageInterface::class);
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;
