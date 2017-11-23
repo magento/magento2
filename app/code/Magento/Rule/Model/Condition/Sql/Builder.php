@@ -6,9 +6,14 @@
 
 namespace Magento\Rule\Model\Condition\Sql;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Combine;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 
 /**
  * Class SQL Builder
@@ -44,11 +49,28 @@ class Builder
     protected $_expressionFactory;
 
     /**
-     * @param ExpressionFactory $expressionFactory
+     * @var AttributeRepositoryInterface
      */
-    public function __construct(ExpressionFactory $expressionFactory)
-    {
+    private $attributeRepository;
+
+    /**
+     * EAV collection
+     *
+     * @var AbstractCollection
+     */
+    private $eavCollection;
+
+    /**
+     * @param ExpressionFactory $expressionFactory
+     * @param AttributeRepositoryInterface|null $attributeRepository
+     */
+    public function __construct(
+        ExpressionFactory $expressionFactory,
+        AttributeRepositoryInterface $attributeRepository = null
+    ) {
         $this->_expressionFactory = $expressionFactory;
+        $this->attributeRepository = $attributeRepository ?:
+            ObjectManager::getInstance()->get(AttributeRepositoryInterface::class);
     }
 
     /**
@@ -125,9 +147,16 @@ class Builder
                 throw new \Magento\Framework\Exception\LocalizedException(__('Unknown condition operator'));
             }
 
+            $defaultValue = 0;
+            // Check if attribute has a table with default value and add it to the query
+            if ($this->canAttributeHaveDefaultValue($condition->getAttribute())) {
+                $defaultField = 'at_' . $condition->getAttribute() . '_default.value';
+                $defaultValue = $this->_connection->quoteIdentifier($defaultField);
+            }
+
             $sql = str_replace(
                 ':field',
-                $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), 0),
+                $this->_connection->getIfNullSql($this->_connection->quoteIdentifier($argument), $defaultValue),
                 $this->_conditionOperatorMap[$conditionOperator]
             );
 
@@ -177,11 +206,34 @@ class Builder
         Combine $combine
     ) {
         $this->_connection = $collection->getResource()->getConnection();
+        $this->eavCollection = $collection;
         $this->_joinTablesToCollection($collection, $combine);
         $whereExpression = (string)$this->_getMappedSqlCombination($combine);
         if (!empty($whereExpression)) {
             // Select ::where method adds braces even on empty expression
             $collection->getSelect()->where($whereExpression);
         }
+        $this->eavCollection = null;
+    }
+
+    /**
+     * Check if attribute can have default value
+     *
+     * @param string $attributeCode
+     * @return bool
+     */
+    private function canAttributeHaveDefaultValue($attributeCode)
+    {
+        try {
+            $attribute = $this->attributeRepository->get(Product::ENTITY, $attributeCode);
+        } catch (NoSuchEntityException $e) {
+            // It's not exceptional case as we want to check if we have such attribute or not
+            $attribute = null;
+        }
+        $isNotDefaultStoreUsed = $this->eavCollection !== null
+            ? (int)$this->eavCollection->getStoreId() !== (int) $this->eavCollection->getDefaultStoreId()
+            : false;
+
+        return $isNotDefaultStoreUsed && $attribute !== null && !$attribute->isScopeGlobal();
     }
 }

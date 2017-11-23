@@ -134,7 +134,6 @@ define([
          */
         _create: function () {
             $(this.element).on('gallery:loaded',  $.proxy(function () {
-                this.fotoramaItem = $(this.element).find('.fotorama-item');
                 this._initialize();
             }, this));
         },
@@ -154,6 +153,7 @@ define([
                 this.defaultVideoData = this.options.videoData = this.videoDataPlaceholder;
             }
 
+            this.fotoramaItem = $(this.element).find('.fotorama-item');
             this.clearEvents();
 
             if (this._checkForVideoExist()) {
@@ -164,6 +164,8 @@ define([
                 this._initFotoramaVideo();
                 this._attachFotoramaEvents();
             }
+
+            this.element.trigger('AddFotoramaVideoEvents:loaded');
         },
 
         /**
