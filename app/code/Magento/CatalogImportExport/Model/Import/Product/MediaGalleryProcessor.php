@@ -109,42 +109,73 @@ class MediaGalleryProcessor
     public function saveMediaGallery(array $mediaGalleryData)
     {
         $this->initMediaGalleryResources();
+        $mediaGalleryDataGlobal = $this->processMediaGallery($mediaGalleryData);
         $imageNames = [];
         $multiInsertData = [];
         $valueToProductId = [];
-        $mediaGalleryData = $this->restoreDisableImage($mediaGalleryData);
-        foreach (array_keys($mediaGalleryData) as $storeId) {
-            foreach ($mediaGalleryData[$storeId] as $productSku => $mediaGalleryRows) {
-                $productId = $this->skuProcessor->getNewSku($productSku)[$this->getProductEntityLinkField()];
+        foreach ($mediaGalleryDataGlobal as $productSku => $mediaGalleryRows) {
+            $productId = $this->skuProcessor->getNewSku($productSku)[$this->getProductEntityLinkField()];
+            $insertedGalleryImgs = [];
+            foreach ($mediaGalleryRows as $insertValue) {
+                if (!in_array($insertValue['value'], $insertedGalleryImgs)) {
+                    $valueArr = [
+                        'attribute_id' => $insertValue['attribute_id'],
+                        'value' => $insertValue['value'],
+                    ];
+                    $valueToProductId[$insertValue['value']][] = $productId;
+                    $imageNames[] = $insertValue['value'];
+                    $multiInsertData[] = $valueArr;
+                    $insertedGalleryImgs[] = $insertValue['value'];
+                }
+            }
+        }
+        $oldMediaValues = $this->connection->fetchAssoc(
+            $this->connection->select()->from($this->mediaGalleryTableName, ['value_id', 'value'])
+                ->where('value IN (?)', $imageNames)
+        );
+        if (!empty($multiInsertData)) {
+            $this->connection->insertOnDuplicate($this->mediaGalleryTableName, $multiInsertData);
+        }
+        $multiInsertData = [];
+        $newMediaSelect = $this->connection->select()->from($this->mediaGalleryTableName, ['value_id', 'value'])
+            ->where('value IN (?)', $imageNames);
+        if (array_keys($oldMediaValues)) {
+            $newMediaSelect->where('value_id NOT IN (?)', array_keys($oldMediaValues));
+        }
 
-                $insertedGalleryImgs = [];
+        $dataForSkinnyTable = [];
+        $newMediaValues = $this->connection->fetchAssoc($newMediaSelect);
+        $this->restoreDisableImage($mediaGalleryData);
+        foreach ($mediaGalleryData as $storeId => $mediaGalleryDataPerStore) {
+            foreach ($mediaGalleryDataPerStore as $productSku => $mediaGalleryRows) {
                 foreach ($mediaGalleryRows as $insertValue) {
-                    if (!in_array($insertValue['value'], $insertedGalleryImgs)) {
+                    foreach ($newMediaValues as $value_id => $values) {
+                        if ($values['value'] == $insertValue['value']) {
+                            $insertValue['value_id'] = $value_id;
+                            $insertValue[$this->getProductEntityLinkField()]
+                                = array_shift($valueToProductId[$values['value']]);
+                            unset($newMediaValues[$value_id]);
+                            break;
+                        }
+                    }
+                    if (isset($insertValue['value_id'])) {
                         $valueArr = [
-                            'attribute_id' => $insertValue['attribute_id'],
-                            'value' => $insertValue['value'],
+                            'value_id' => $insertValue['value_id'],
+                            'store_id' => $storeId,
+                            $this->getProductEntityLinkField() => $insertValue[$this->getProductEntityLinkField()],
+                            'label' => $insertValue['label'],
+                            'position' => $insertValue['position'],
+                            'disabled' => $insertValue['disabled'],
                         ];
-                        $valueToProductId[$insertValue['value']][] = $productId;
-                        $imageNames[] = $insertValue['value'];
                         $multiInsertData[] = $valueArr;
-                        $insertedGalleryImgs[] = $insertValue['value'];
+                        $dataForSkinnyTable[] = [
+                            'value_id' => $insertValue['value_id'],
+                            $this->getProductEntityLinkField() => $insertValue[$this->getProductEntityLinkField()],
+                        ];
                     }
                 }
             }
         }
-        $multiInsertData = $this->filterImageInsertData($multiInsertData, $imageNames);
-        if ($multiInsertData) {
-            $this->connection->insertOnDuplicate($this->mediaGalleryTableName, $multiInsertData);
-        }
-        $newMediaSelect = $this->connection->select()->from($this->mediaGalleryTableName, ['value_id', 'value'])
-            ->where('value IN (?)', $imageNames);
-
-        $newMediaValues = $this->connection->fetchAssoc($newMediaSelect);
-        list($multiInsertData, $dataForSkinnyTable) = $this->prepareInsertData(
-            $mediaGalleryData,
-            $newMediaValues,
-            $valueToProductId
-        );
         try {
             $this->connection->insertOnDuplicate(
                 $this->mediaGalleryValueTableName,
@@ -280,30 +311,6 @@ class MediaGalleryProcessor
     }
 
     /**
-     * Remove existed images from insert data.
-     *
-     * @param array $multiInsertData
-     * @param array $imageNames
-     * @return array
-     */
-    private function filterImageInsertData(array $multiInsertData, array $imageNames)
-    {
-        $oldMediaValues = $this->connection->fetchAssoc(
-            $this->connection->select()->from($this->mediaGalleryTableName, ['value_id', 'value', 'attribute_id'])
-                ->where('value IN (?)', $imageNames)
-        );
-        foreach ($multiInsertData as $key => $data) {
-            foreach ($oldMediaValues as $mediaValue) {
-                if ($data['value'] === $mediaValue['value'] && $data['attribute_id'] === $mediaValue['attribute_id']) {
-                    unset($multiInsertData[$key]);
-                }
-            }
-        }
-
-        return $multiInsertData;
-    }
-
-    /**
      * Set product images 'disable' = 0 for specified store.
      *
      * @param array $mediaGalleryData
@@ -337,6 +344,24 @@ class MediaGalleryProcessor
     }
 
     /**
+     * Remove store specific information for inserting images.
+     *
+     * @param array $mediaGalleryData
+     * @return array
+     */
+    private function processMediaGallery(array $mediaGalleryData)
+    {
+        $mediaGalleryDataGlobal = array_merge(...$mediaGalleryData);
+        foreach ($mediaGalleryDataGlobal as $sku => $row) {
+            if (isset($mediaGalleryDataGlobal[$sku]['all']['restore'])) {
+                unset($mediaGalleryDataGlobal[$sku]);
+            }
+        }
+
+        return $mediaGalleryDataGlobal;
+    }
+
+    /**
      * Get product entity link field.
      *
      * @return string
@@ -360,48 +385,5 @@ class MediaGalleryProcessor
         }
 
         return $this->resourceModel;
-    }
-
-    /**
-     * @param array $mediaGalleryData
-     * @param array $newMediaValues
-     * @param array $valueToProductId
-     * @return array
-     */
-    private function prepareInsertData(array $mediaGalleryData, array $newMediaValues, array $valueToProductId)
-    {
-        $dataForSkinnyTable = [];
-        $multiInsertData = [];
-        foreach (array_keys($mediaGalleryData) as $storeId) {
-            foreach ($mediaGalleryData[$storeId] as $mediaGalleryRows) {
-                foreach ($mediaGalleryRows as $insertValue) {
-                    foreach ($newMediaValues as $value_id => $values) {
-                        if ($values['value'] == $insertValue['value']) {
-                            $insertValue['value_id'] = $value_id;
-                            $insertValue[$this->getProductEntityLinkField()]
-                                = array_shift($valueToProductId[$values['value']]);
-                            break;
-                        }
-                    }
-                    if (isset($insertValue['value_id'])) {
-                        $valueArr = [
-                            'value_id' => $insertValue['value_id'],
-                            'store_id' => $storeId,
-                            $this->getProductEntityLinkField() => $insertValue[$this->getProductEntityLinkField()],
-                            'label' => $insertValue['label'],
-                            'position' => $insertValue['position'],
-                            'disabled' => $insertValue['disabled'],
-                        ];
-                        $multiInsertData[] = $valueArr;
-                        $dataForSkinnyTable[] = [
-                            'value_id' => $insertValue['value_id'],
-                            $this->getProductEntityLinkField() => $insertValue[$this->getProductEntityLinkField()],
-                        ];
-                    }
-                }
-            }
-        }
-
-        return [$multiInsertData, $dataForSkinnyTable];
     }
 }
