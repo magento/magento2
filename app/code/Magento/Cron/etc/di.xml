@@ -63,4 +63,32 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Cron\Api\Data\ScheduleInterface" type="Magento\Cron\Model\Schedule" />
+    <virtualType name="CronGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ScheduleGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Magento\Cron\Model\Resource\Schedule\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">CronGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Cron\Model\ResourceModel\Schedule\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">cron_schedule</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Cron\Model\ResourceModel\Schedule</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="adminhtml_cron_listing_data_source" xsi:type="string">Magento\Cron\Model\ResourceModel\Schedule\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
