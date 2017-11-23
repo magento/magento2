@@ -314,7 +314,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->with($customerId, [$storeId])
             ->willReturn($cartResult);
 
-        $cart = $this->adminOrderCreate->getCustomerCart();
-        $this->assertEquals($cart, $cartResult);
+        $this->assertEquals($cartResult, $this->adminOrderCreate->getCustomerCart());
     }
 }
