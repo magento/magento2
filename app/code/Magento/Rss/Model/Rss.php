@@ -104,11 +104,11 @@ class Rss
     {
         $feed = $this->feedFactory->create(
             $this->getFeeds(), 
-            FeedFactoryInterface::DEFAULT_FORMAT
+            FeedFactoryInterface::FORMAT_RSS
         );
 
         return $feed->getFormattedContentAs(
-            FeedInterface::DEFAULT_FORMAT
+            FeedInterface::FORMAT_RSS
         );
     }
 }
