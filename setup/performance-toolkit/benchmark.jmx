@@ -8011,13 +8011,14 @@ try {
 
     //Number of products for one thread
     productClusterLength = productCount / threadsNumber;
-    //Index of the current product from the cluster
-    i = productClusterLength * currentThreadNum + iterator;
 
     if (iterator &gt;= productClusterLength) {
     	vars.put("threadIterator_" + currentThreadNum.toString(), "0");
     	iterator = 0;
     }
+
+    //Index of the current product from the cluster
+    i = productClusterLength * currentThreadNum + iterator;
 
     //ids of simple and configurable products to edit
     vars.put("simple_product_id", props.get("simple_products_list").get(i).get("id"));
