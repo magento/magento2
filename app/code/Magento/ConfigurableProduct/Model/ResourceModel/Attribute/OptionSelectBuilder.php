@@ -81,6 +81,10 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
                 ]
             ),
             []
+        )->joinInner(
+            ['attribute_opt' => $this->attributeResource->getTable('eav_attribute_option')],
+            'attribute_opt.option_id = entity_value.value',
+            []
         )->joinLeft(
             ['attribute_label' => $this->attributeResource->getTable('catalog_product_super_attribute_label')],
             implode(
@@ -97,6 +101,8 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
         )->where(
             'attribute.attribute_id = ?',
             $superAttribute->getAttributeId()
+        )->order(
+            'attribute_opt.sort_order ASC'
         );
 
         if (!$superAttribute->getSourceModel()) {
