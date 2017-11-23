@@ -18,14 +18,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 class Status extends AbstractExtensibleModel implements StockStatusInterface
 {
     /**#@+
-     * Stock Status values
-     */
-    const STATUS_OUT_OF_STOCK = 0;
-
-    const STATUS_IN_STOCK = 1;
-    /**#@-*/
-
-    /**#@+
      * Field name
      */
     const KEY_PRODUCT_ID = 'product_id';

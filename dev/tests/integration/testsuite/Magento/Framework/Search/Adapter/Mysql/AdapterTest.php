@@ -64,6 +64,10 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->adapter = $this->createAdapter();
+
+        $indexer = $this->objectManager->create(\Magento\Indexer\Model\Indexer::class);
+        $indexer->load('catalogsearch_fulltext');
+        $indexer->reindexAll();
     }
 
     /**
