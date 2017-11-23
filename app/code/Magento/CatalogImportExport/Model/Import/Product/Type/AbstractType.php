@@ -533,11 +533,6 @@ abstract class AbstractType
      */
     public function clearEmptyData(array $rowData)
     {
-        foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
-            if (!$attrParams['is_static'] && !isset($rowData[$attrCode])) {
-                unset($rowData[$attrCode]);
-            }
-        }
         return $rowData;
     }
 
