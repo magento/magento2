@@ -65,6 +65,13 @@ class Config extends \Magento\Eav\Model\Config
     protected $_usedForSortBy;
 
     /**
+     * Product Attributes For Price Rules
+     *
+     * @var array
+     */
+    protected $_usedForPriceRules;
+
+    /**
      * @var int|float|string|null
      */
     protected $_storeId = null;
@@ -431,19 +438,23 @@ class Config extends \Magento\Eav\Model\Config
     public function getAttributesUsedInProductListing()
     {
         if (is_null($this->_usedInProductListing)) {
-            $this->_usedInProductListing = [];
             $entityType = \Magento\Catalog\Model\Product::ENTITY;
             $attributesData = $this->_getResource()->setStoreId($this->getStoreId())->getAttributesUsedInListing();
             $this->_eavConfig->importAttributesData($entityType, $attributesData);
-            foreach ($attributesData as $attributeData) {
-                $attributeCode = $attributeData['attribute_code'];
-                $this->_usedInProductListing[$attributeCode] = $this->_eavConfig->getAttribute(
-                    $entityType,
-                    $attributeCode
-                );
-            }
+            $this->_usedInProductListing = $this->buildUsedAttributeArray($attributesData, $entityType);
         }
         return $this->_usedInProductListing;
+    }
+
+    public function getAttributesUsedForPriceRules()
+    {
+        if (is_null($this->_usedForPriceRules)) {
+            $entityType = \Magento\Catalog\Model\Product::ENTITY;
+            $attributesData = $this->_getResource()->setStoreId($this->getStoreId())->getAttributesUsedForPriceRules();
+            $this->_eavConfig->importAttributesData($entityType, $attributesData);
+            $this->_usedForPriceRules = $this->buildUsedAttributeArray($attributesData, $entityType);
+        }
+        return $this->_usedForPriceRules;
     }
 
     /**
@@ -454,16 +465,30 @@ class Config extends \Magento\Eav\Model\Config
     public function getAttributesUsedForSortBy()
     {
         if (is_null($this->_usedForSortBy)) {
-            $this->_usedForSortBy = [];
             $entityType = \Magento\Catalog\Model\Product::ENTITY;
             $attributesData = $this->_getResource()->getAttributesUsedForSortBy();
             $this->_eavConfig->importAttributesData($entityType, $attributesData);
-            foreach ($attributesData as $attributeData) {
-                $attributeCode = $attributeData['attribute_code'];
-                $this->_usedForSortBy[$attributeCode] = $this->_eavConfig->getAttribute($entityType, $attributeCode);
-            }
+            $this->_usedForSortBy = $this->buildUsedAttributeArray($attributesData, $entityType);
         }
         return $this->_usedForSortBy;
+    }
+
+    /**
+     * Build array of attributes
+     *
+     * @return array
+     */
+    private function buildUsedAttributeArray($attributesData, $entityType)
+    {
+        $attributeArray = [];
+        foreach ($attributesData as $attributeData) {
+            $attributeCode = $attributeData['attribute_code'];
+            $attributeArray[$attributeCode] = $this->_eavConfig->getAttribute(
+                $entityType,
+                $attributeCode
+            );
+        }
+        return $attributeArray;
     }
 
     /**
