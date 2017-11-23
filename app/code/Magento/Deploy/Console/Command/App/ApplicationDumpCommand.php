@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -20,6 +21,18 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ApplicationDumpCommand extends Command
 {
+    const INPUT_CONFIG_TYPES = 'config-types';
+
+    /**
+     * @var array
+     */
+    private $configTypes = [
+        \Magento\Store\App\Config\Type\Scopes::CONFIG_TYPE,
+        \Magento\Deploy\Source\Themes::TYPE,
+        \Magento\Translation\App\Config\Type\Translation::CONFIG_TYPE,
+        \Magento\Config\App\Config\Type\System::CONFIG_TYPE,
+    ];
+
     /**
      * @var Writer
      */
@@ -60,6 +73,12 @@ class ApplicationDumpCommand extends Command
     {
         $this->setName('app:config:dump');
         $this->setDescription('Create dump of application');
+        $this->addArgument(
+            self::INPUT_CONFIG_TYPES,
+            InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
+            sprintf('Space-separated list of config types or omit to dump all [%s]',
+                implode(', ', $this->configTypes))
+        );
         parent::configure();
     }
 
@@ -74,11 +93,14 @@ class ApplicationDumpCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->groupSourcesByPool();
-
+        $dumpedTypes = [];
         foreach ($this->sources as $pool => $sources) {
             $dump = [];
             $comments = [];
             foreach ($sources as $sourceData) {
+                if ($this->skipDump($input, $sourceData)) {
+                    continue;
+                }
                 /** @var ConfigSourceInterface $source */
                 $source = $sourceData['source'];
                 $namespace = $sourceData['namespace'];
@@ -95,15 +117,21 @@ class ApplicationDumpCommand extends Command
                 null,
                 $comments
             );
+            $dumpedTypes = array_unique($dumpedTypes + array_keys($dump));
             if (!empty($comments)) {
                 $output->writeln($comments);
             }
         }
 
+        if (!$dumpedTypes) {
+            $output->writeln('<error>Nothing dumped. Check the config types specified and try again');
+            return Cli::RETURN_FAILURE;
+        }
+
         // Generate and save new hash of deployment configuration.
         $this->configHash->regenerate();
 
-        $output->writeln('<info>Done.</info>');
+        $output->writeln(sprintf('<info>Done. Config types dumped: %s</info>', implode(', ', $dumpedTypes)));
         return Cli::RETURN_SUCCESS;
     }
 
@@ -126,5 +154,21 @@ class ApplicationDumpCommand extends Command
         }
 
         $this->sources = $sources;
+    }
+
+    /**
+     * Check whether the dump source should be skipped
+     *
+     * @param InputInterface $input
+     * @param array $sourceData
+     * @return bool
+     */
+    private function skipDump(InputInterface $input, array $sourceData): bool
+    {
+        $allowedTypes = $input->getArgument(self::INPUT_CONFIG_TYPES);
+        if ($allowedTypes && !in_array($sourceData['namespace'], $allowedTypes)) {
+            return true;
+        }
+        return false;
     }
 }
