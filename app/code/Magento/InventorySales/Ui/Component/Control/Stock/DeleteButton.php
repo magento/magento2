@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Ui\Component\Control\Stock;
+namespace Magento\InventorySales\Ui\Component\Control\Stock;
 
 use Magento\Backend\Ui\Component\Control\DeleteButton as StockDeleteButton;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
