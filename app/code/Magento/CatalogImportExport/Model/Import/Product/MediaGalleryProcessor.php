@@ -109,7 +109,8 @@ class MediaGalleryProcessor
     public function saveMediaGallery(array $mediaGalleryData)
     {
         $this->initMediaGalleryResources();
-        $mediaGalleryDataGlobal = $this->processMediaGallery($mediaGalleryData);
+        $mediaGalleryData = $this->restoreDisableImage($mediaGalleryData);
+        $mediaGalleryDataGlobal = array_merge(...$mediaGalleryData);
         $imageNames = [];
         $multiInsertData = [];
         $valueToProductId = [];
@@ -136,25 +137,22 @@ class MediaGalleryProcessor
         if (!empty($multiInsertData)) {
             $this->connection->insertOnDuplicate($this->mediaGalleryTableName, $multiInsertData);
         }
-        $multiInsertData = [];
         $newMediaSelect = $this->connection->select()->from($this->mediaGalleryTableName, ['value_id', 'value'])
             ->where('value IN (?)', $imageNames);
         if (array_keys($oldMediaValues)) {
             $newMediaSelect->where('value_id NOT IN (?)', array_keys($oldMediaValues));
         }
-
-        $dataForSkinnyTable = [];
         $newMediaValues = $this->connection->fetchAssoc($newMediaSelect);
-        $this->restoreDisableImage($mediaGalleryData);
         foreach ($mediaGalleryData as $storeId => $mediaGalleryDataPerStore) {
+            $dataForSkinnyTable = [];
+            $multiInsertData = [];
             foreach ($mediaGalleryDataPerStore as $productSku => $mediaGalleryRows) {
                 foreach ($mediaGalleryRows as $insertValue) {
                     foreach ($newMediaValues as $value_id => $values) {
                         if ($values['value'] == $insertValue['value']) {
                             $insertValue['value_id'] = $value_id;
-                            $insertValue[$this->getProductEntityLinkField()]
-                                = array_shift($valueToProductId[$values['value']]);
-                            unset($newMediaValues[$value_id]);
+                            $ids = array_values($valueToProductId[$values['value']]);
+                            $insertValue[$this->getProductEntityLinkField()] = array_shift($ids);
                             break;
                         }
                     }
@@ -175,23 +173,23 @@ class MediaGalleryProcessor
                     }
                 }
             }
-        }
-        try {
-            $this->connection->insertOnDuplicate(
-                $this->mediaGalleryValueTableName,
-                $multiInsertData,
-                ['value_id', 'store_id', $this->getProductEntityLinkField(), 'label', 'position', 'disabled']
-            );
-            $this->connection->insertOnDuplicate(
-                $this->mediaGalleryEntityToValueTableName,
-                $dataForSkinnyTable,
-                ['value_id']
-            );
-        } catch (\Exception $e) {
-            $this->connection->delete(
-                $this->mediaGalleryTableName,
-                $this->connection->quoteInto('value_id IN (?)', $newMediaValues)
-            );
+            try {
+                $this->connection->insertOnDuplicate(
+                    $this->mediaGalleryValueTableName,
+                    $multiInsertData,
+                    ['value_id', 'store_id', $this->getProductEntityLinkField(), 'label', 'position', 'disabled']
+                );
+                $this->connection->insertOnDuplicate(
+                    $this->mediaGalleryEntityToValueTableName,
+                    $dataForSkinnyTable,
+                    ['value_id']
+                );
+            } catch (\Exception $e) {
+                $this->connection->delete(
+                    $this->mediaGalleryTableName,
+                    $this->connection->quoteInto('value_id IN (?)', $newMediaValues)
+                );
+            }
         }
     }
 
@@ -341,24 +339,6 @@ class MediaGalleryProcessor
         );
 
         return $mediaGalleryData;
-    }
-
-    /**
-     * Remove store specific information for inserting images.
-     *
-     * @param array $mediaGalleryData
-     * @return array
-     */
-    private function processMediaGallery(array $mediaGalleryData)
-    {
-        $mediaGalleryDataGlobal = array_merge(...$mediaGalleryData);
-        foreach ($mediaGalleryDataGlobal as $sku => $row) {
-            if (isset($mediaGalleryDataGlobal[$sku]['all']['restore'])) {
-                unset($mediaGalleryDataGlobal[$sku]);
-            }
-        }
-
-        return $mediaGalleryDataGlobal;
     }
 
     /**
