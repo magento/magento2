@@ -12,7 +12,6 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 
-
 /**
  * @magentoAppArea adminhtml
  */
@@ -122,7 +121,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $categoryFilter = [
             UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
-            UrlRewrite::ENTITY_ID => [3, 4, 5]
+            UrlRewrite::ENTITY_ID => [3, 4, 5],
         ];
         $actualResults = $this->getActualResults($categoryFilter);
         $categoryExpectedResult = [
@@ -135,7 +134,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
                 'category-1/category-1-1/category-1-1-1.html',
                 'new-url/category-1-1/category-1-1-1.html',
                 0,
-                OptionProvider::PERMANENT
+                OptionProvider::PERMANENT,
             ],
         ];
 

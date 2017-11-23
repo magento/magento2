@@ -251,6 +251,7 @@ class ProductScopeRewriteGenerator
         if (!$isUrlKeyOverridden) {
             return $category;
         }
+
         return $this->categoryRepository->get($category->getEntityId(), $storeId);
     }
 }
