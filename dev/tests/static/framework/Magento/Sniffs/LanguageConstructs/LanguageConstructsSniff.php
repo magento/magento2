@@ -9,7 +9,13 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
 
 /**
- * Detects possible usage of discouraged language constructs.
+ * Detects possible usage of discouraged language constructs. Is not applicable to *.phtml files.
+ *
+ * Examples:
+ * echo 'echo text';
+ * print('print text');
+ * $ = `back quotes`;
+ * exit(1);
  */
 class LanguageConstructsSniff implements Sniff
 {

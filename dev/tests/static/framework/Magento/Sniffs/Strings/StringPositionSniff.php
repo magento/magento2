@@ -10,6 +10,10 @@ use PHP_CodeSniffer\Files\File;
 
 /**
  * Detects misusing of IS_IDENTICAL operators.
+ *
+ * Examples:
+ * if (!strpos($haystack, $needle)) {}
+ * if (strpos($haystack, $needle) == false) {}
  */
 class StringPositionSniff implements Sniff
 {

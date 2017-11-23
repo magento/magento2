@@ -16,12 +16,8 @@
             <property name="absoluteLineLimit" value="120"/>
         </properties>
     </rule>
-    <rule ref="Magento.LanguageConstructs.LanguageConstructs.DirectOutput">
-        <exclude-pattern>*/Framework/*</exclude-pattern>
-        <exclude-pattern>*.phtml</exclude-pattern>
-    </rule>
-    <rule ref="Magento.LanguageConstructs.LanguageConstructs.ExitUsage">
-        <exclude-pattern>*/Framework/*</exclude-pattern>
+    <rule ref="Magento.LanguageConstructs.LanguageConstructs">
+        <include-pattern>*/app/code/*\.(?!phtml)</include-pattern>
     </rule>
     <rule ref="Magento.LiteralNamespaces.LiteralNamespaces">
         <exclude-pattern>*/_files/*</exclude-pattern>

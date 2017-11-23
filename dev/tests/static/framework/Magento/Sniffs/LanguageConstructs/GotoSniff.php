@@ -10,6 +10,11 @@ use PHP_CodeSniffer\Files\File;
 
 /**
  * Detects GOTO usage.
+ *
+ * Example:
+ * goto end;
+ * end:
+ * 'The End';
  */
 class GotoSniff implements Sniff
 {

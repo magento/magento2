@@ -11,6 +11,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 /**
  * Detects executable regular expressions.
+ *
+ * Example: echo preg_replace('|^(.*)$|ei', '"\1"', 'get_input');
  */
 class ExecutableRegExSniff implements Sniff
 {
