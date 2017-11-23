@@ -7,7 +7,9 @@ namespace Magento\Braintree\Test\Unit\Model\Ui;
 
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Braintree\Model\Ui\ConfigProvider;
+use Magento\Customer\Model\Session;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Braintree\Gateway\Config\PayPal\Config as PayPalConfig;
 use Magento\Framework\Locale\ResolverInterface;
@@ -34,6 +36,11 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
     private $braintreeAdapter;
 
     /**
+     * @var Session|MockObject
+     */
+    private $session;
+
+    /**
      * @var ConfigProvider
      */
     private $configProvider;
@@ -44,6 +51,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        /** @var PayPalConfig $payPalConfig */
         $payPalConfig = $this->getMockBuilder(PayPalConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -51,14 +59,30 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->braintreeAdapter = $this->getMockBuilder(BraintreeAdapter::class)
             ->disableOriginalConstructor()
             ->getMock();
+        /** @var BraintreeAdapterFactory|MockObject $adapterFactory */
+        $adapterFactory = $this->getMockBuilder(BraintreeAdapterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $adapterFactory->method('create')
+            ->willReturn($this->braintreeAdapter);
 
+        $this->session = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getStoreId'])
+            ->getMock();
+        $this->session->method('getStoreId')
+            ->willReturn(null);
+
+        /** @var ResolverInterface $localeResolver */
         $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
 
         $this->configProvider = new ConfigProvider(
             $this->config,
             $payPalConfig,
             $this->braintreeAdapter,
-            $localeResolver
+            $localeResolver,
+            $this->session,
+            $adapterFactory
         );
     }
 
@@ -71,35 +95,30 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConfig($config, $expected)
     {
-        $this->braintreeAdapter->expects(static::once())
-            ->method('generate')
+        $this->braintreeAdapter->method('generate')
             ->willReturn(self::CLIENT_TOKEN);
 
         foreach ($config as $method => $value) {
-            $this->config->expects(static::once())
-                ->method($method)
+            $this->config->method($method)
                 ->willReturn($value);
         }
 
-        static::assertEquals($expected, $this->configProvider->getConfig());
+        self::assertEquals($expected, $this->configProvider->getConfig());
     }
 
     /**
-     * @covers \Magento\Braintree\Model\Ui\ConfigProvider::getClientToken
      * @dataProvider getClientTokenDataProvider
      */
     public function testGetClientToken($merchantAccountId, $params)
     {
-        $this->config->expects(static::once())
-            ->method('getMerchantAccountId')
+        $this->config->method('getMerchantAccountId')
             ->willReturn($merchantAccountId);
 
-        $this->braintreeAdapter->expects(static::once())
-            ->method('generate')
+        $this->braintreeAdapter->method('generate')
             ->with($params)
             ->willReturn(self::CLIENT_TOKEN);
 
-        static::assertEquals(self::CLIENT_TOKEN, $this->configProvider->getClientToken());
+        self::assertEquals(self::CLIENT_TOKEN, $this->configProvider->getClientToken());
     }
 
     /**

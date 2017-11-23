@@ -21,7 +21,6 @@ use Magento\Vault\Model\VaultPaymentInterface;
  */
 class Form extends Cc
 {
-
     /**
      * @var Quote
      */
@@ -81,7 +80,7 @@ class Form extends Cc
      */
     public function useCvv()
     {
-        return $this->gatewayConfig->isCvvEnabled();
+        return $this->gatewayConfig->isCvvEnabled($this->sessionQuote->getStoreId());
     }
 
     /**
@@ -90,9 +89,8 @@ class Form extends Cc
      */
     public function isVaultEnabled()
     {
-        $storeId = $this->_storeManager->getStore()->getId();
         $vaultPayment = $this->getVaultPayment();
-        return $vaultPayment->isActive($storeId);
+        return $vaultPayment->isActive($this->sessionQuote->getStoreId());
     }
 
     /**
@@ -102,7 +100,10 @@ class Form extends Cc
     private function getConfiguredCardTypes()
     {
         $types = $this->ccType->getCcTypeLabelMap();
-        $configCardTypes = array_fill_keys($this->gatewayConfig->getAvailableCardTypes(), '');
+        $configCardTypes = array_fill_keys(
+            $this->gatewayConfig->getAvailableCardTypes($this->sessionQuote->getStoreId()),
+            ''
+        );
 
         return array_intersect_key($types, $configCardTypes);
     }
@@ -116,7 +117,11 @@ class Form extends Cc
     private function filterCardTypesForCountry(array $configCardTypes, $countryId)
     {
         $filtered = $configCardTypes;
-        $countryCardTypes = $this->gatewayConfig->getCountryAvailableCardTypes($countryId);
+        $countryCardTypes = $this->gatewayConfig->getCountryAvailableCardTypes(
+            $countryId,
+            $this->sessionQuote->getStoreId()
+        );
+
         // filter card types only if specific card types are set for country
         if (!empty($countryCardTypes)) {
             $availableTypes = array_fill_keys($countryCardTypes, '');

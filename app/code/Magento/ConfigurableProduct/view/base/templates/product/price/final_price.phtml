@@ -17,9 +17,6 @@ $priceModel = $block->getPriceType('regular_price');
 /** @var \Magento\Framework\Pricing\Price\PriceInterface $finalPriceModel */
 $finalPriceModel = $block->getPriceType('final_price');
 
-/** @var \Magento\Framework\Pricing\Price\PriceInterface $highestPriceModel */
-$highestPriceModel = $block->getPriceType('highest_price');
-
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 $schema = ($block->getZone() == 'item_view') ? true : false;
 ?>
@@ -28,17 +25,14 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
     <span class="normal-price">
         <?php
             $arguments = [
-                'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
-                'price_type'        => 'finalPrice',
+                'display_label' => __('As low as'),
+                'price_id' => $block->getPriceId('product-price-' . $idSuffix),
+                'price_type' => 'finalPrice',
                 'include_container' => true,
                 'schema' => $schema
             ];
 
-            if ($finalPriceModel->getAmount()->getValue() !== $highestPriceModel->getAmount()->getValue()) {
-                $arguments['display_label'] = __('As low as');
-            }
-
-            /* @escapeNotVerified */ echo $block->renderAmount($finalPriceModel->getAmount(), $arguments);
+            /* @noEscape */ echo $block->renderAmount($finalPriceModel->getAmount(), $arguments);
         ?>
     </span>
 
