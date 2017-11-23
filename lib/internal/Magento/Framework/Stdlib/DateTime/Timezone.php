@@ -173,16 +173,11 @@ class Timezone implements TimezoneInterface
             );
             // IntlDateFormatter does not parse correctly date formats per some locales
             // It depends on ICU lib version used by intl extension
-            // For locales like fr_FR, ar_KW parse date without time
+            // For locales like fr_FR, ar_KW parse date with hyphen as separator
             try {
                 $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
             } catch (\Exception $e) {
-                $formatter = new \IntlDateFormatter(
-                    $locale,
-                    \IntlDateFormatter::SHORT,
-                    \IntlDateFormatter::NONE,
-                    new \DateTimeZone($timezone)
-                );
+                $date = str_replace('/', '-', $date);
                 $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
             }
         }
