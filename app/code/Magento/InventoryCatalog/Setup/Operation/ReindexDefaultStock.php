@@ -13,7 +13,7 @@ use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 
 /**
- * CReindex default stock during install
+ * CReindex default stock during installation
  */
 class ReindexDefaultStock
 {
