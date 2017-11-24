@@ -36,10 +36,11 @@ class UpdateLegacyCatalogInventoryStockStatusByPlainQuery implements
      */
     public function execute(StockStatusInterface $stockStatus)
     {
-        $productId = $stockStatus->getProductId();
-        $qty = $stockStatus->getQty();
-        $sql = "UPDATE cataloginventory_stock_status SET qty = $qty WHERE product_id = $productId AND website_id = 0";
-
-        $this->resourceConnection->getConnection()->query($sql);
+        $connection = $this->resourceConnection->getConnection();
+        $connection->update(
+            $connection->getTableName('cataloginventory_stock_status'),
+            [StockStatusInterface::QTY => $stockStatus->getQty()],
+            [StockStatusInterface::PRODUCT_ID . ' = ?' => $stockStatus->getProductId(), 'website_id = ?' => 0]
+        );
     }
 }

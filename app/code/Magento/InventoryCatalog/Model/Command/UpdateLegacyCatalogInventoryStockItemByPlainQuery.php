@@ -36,10 +36,11 @@ class UpdateLegacyCatalogInventoryStockItemByPlainQuery implements
      */
     public function execute(StockItemInterface $stockItem)
     {
-        $stockItemId = $stockItem->getItemId();
-        $qty = $stockItem->getQty();
-        $sql = "UPDATE cataloginventory_stock_item SET qty = $qty WHERE item_id = $stockItemId AND website_id = 0";
-
-        $this->resourceConnection->getConnection()->query($sql);
+        $connection = $this->resourceConnection->getConnection();
+        $connection->update(
+            $connection->getTableName('cataloginventory_stock_item'),
+            [StockItemInterface::QTY => $stockItem->getQty()],
+            [StockItemInterface::ITEM_ID . ' = ?' => $stockItem->getItemId(), 'website_id = ?' => 0]
+        );
     }
 }
