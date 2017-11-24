@@ -121,7 +121,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
             ->withConsecutive(
                 [ConfigSetCommand::OPTION_SCOPE],
                 [ConfigSetCommand::OPTION_SCOPE_CODE],
-                [ConfigSetCommand::OPTION_LOCK]
+                [ConfigSetCommand::OPTION_LOCK_ENV]
             )
             ->willReturnOnConsecutiveCalls(
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
