@@ -10,11 +10,11 @@ namespace Magento\InventoryCatalog\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\InventoryCatalog\Setup\Operation\MigrateSingleStockData;
 use Magento\InventoryCatalog\Setup\Operation\AssignSourceToStock;
 use Magento\InventoryCatalog\Setup\Operation\CreateDefaultSource;
 use Magento\InventoryCatalog\Setup\Operation\CreateDefaultStock;
 use Magento\InventoryCatalog\Setup\Operation\ReindexDefaultStock;
+use Magento\InventoryCatalog\Setup\Operation\UpdateInventorySourceItem;
 
 /**
  * Install Default Source, Stock and link them together
@@ -37,9 +37,9 @@ class InstallData implements InstallDataInterface
     private $assignSourceToStock;
 
     /**
-     * @var MigrateSingleStockData
+     * @var UpdateInventorySourceItem
      */
-    private $migrateSingleStockData;
+    private $updateInventorySourceItem;
 
     /**
      * @var ReindexDefaultStock
@@ -50,20 +50,20 @@ class InstallData implements InstallDataInterface
      * @param CreateDefaultSource $createDefaultSource
      * @param CreateDefaultStock $createDefaultStock
      * @param AssignSourceToStock $assignSourceToStock
-     * @param MigrateSingleStockData $migrateSingleStockData
+     * @param UpdateInventorySourceItem $updateInventorySourceItem
      * @param ReindexDefaultStock $reindexDefaultStock
      */
     public function __construct(
         CreateDefaultSource $createDefaultSource,
         CreateDefaultStock $createDefaultStock,
         AssignSourceToStock $assignSourceToStock,
-        MigrateSingleStockData $migrateSingleStockData,
+        UpdateInventorySourceItem $updateInventorySourceItem,
         ReindexDefaultStock $reindexDefaultStock
     ) {
         $this->createDefaultSource = $createDefaultSource;
         $this->createDefaultStock = $createDefaultStock;
         $this->assignSourceToStock = $assignSourceToStock;
-        $this->migrateSingleStockData = $migrateSingleStockData;
+        $this->updateInventorySourceItem = $updateInventorySourceItem;
         $this->reindexDefaultStock = $reindexDefaultStock;
     }
 
@@ -76,7 +76,7 @@ class InstallData implements InstallDataInterface
         $this->createDefaultSource->execute();
         $this->createDefaultStock->execute();
         $this->assignSourceToStock->execute();
-        $this->migrateSingleStockData->execute();
+        $this->updateInventorySourceItem->execute($setup);
         $this->reindexDefaultStock->execute();
     }
 }

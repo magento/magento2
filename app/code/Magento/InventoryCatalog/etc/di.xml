@@ -8,6 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\InventoryCatalog\Api\DefaultStockProviderInterface" type="Magento\InventoryCatalog\Model\DefaultStockProvider"/>
     <preference for="Magento\InventoryCatalog\Api\DefaultSourceProviderInterface" type="Magento\InventoryCatalog\Model\DefaultSourceProvider"/>
+    <preference for="Magento\InventoryCatalog\Api\UpdateLegacyCatalogInventoryStockItemByPlainQueryInterface" type="Magento\InventoryCatalog\Model\Command\UpdateLegacyCatalogInventoryStockItemByPlainQuery"/>
+    <preference for="Magento\InventoryCatalog\Api\UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface" type="Magento\InventoryCatalog\Model\Command\UpdateLegacyCatalogInventoryStockStatusByPlainQuery"/>
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
         <plugin name="prevent_default_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
@@ -15,9 +17,9 @@
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\AssignedToSalesChannelsStockPlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\ReservationsAppendInterface">
-        <plugin name="update_legacy_catalog_inventory_plugin" type="Magento\InventoryCatalog\Plugin\Model\UpdateLegacyCatalogInventoryPlugin"/>
+        <plugin name="update_legacy_catalog_inventory_plugin" type="Magento\InventoryCatalog\Plugin\InventoryApi\Api\UpdateLegacyCatalogInventoryAtStockDeductionTime"/>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
-        <plugin name="migrate_single_stock_data" type="Magento\InventoryCatalog\Plugin\Model\ResourceModel\StockItemPlugin" sortOrder="1"/>
+        <plugin name="migrate_single_stock_data" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\UpdateLegacyCatalogInventoryAtStockSettingTime" sortOrder="1"/>
     </type>
 </config>
