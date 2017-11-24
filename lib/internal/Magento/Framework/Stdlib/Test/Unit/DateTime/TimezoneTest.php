@@ -56,7 +56,7 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
             'Parse date without time' => [
                 '19/05/2017', // date
                 'ar_KW', // locale
-                1495152000 // expected timestamp
+                1495170000 // expected timestamp
             ],
             'Parse date with time' => [
                 '05/19/2017 00:01 am', // date
