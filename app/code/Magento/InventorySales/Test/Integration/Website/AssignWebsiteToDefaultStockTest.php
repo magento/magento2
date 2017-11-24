@@ -87,14 +87,14 @@ class AssignWebsiteToDefaultStockTest extends TestCase
         $salesChannels = $extensionAttributes->getSalesChannels();
         self::assertContainsOnlyInstancesOf(SalesChannelInterface::class, $salesChannels);
 
-        $salesChannelsWhichBelongToCreatedWebsite = array_filter($salesChannels, function($aSalesChannel) use ($websiteCode) {
+        $salesChannelsOfCreatedWebsite = array_filter($salesChannels, function ($aSalesChannel) use ($websiteCode) {
             return $aSalesChannel->getCode() === $websiteCode;
         });
 
-        self::assertCount(1, $salesChannelsWhichBelongToCreatedWebsite);
+        self::assertCount(1, $salesChannelsOfCreatedWebsite);
 
-        $aSalesChannelWhichBelongToCreatedWebsite = reset($salesChannelsWhichBelongToCreatedWebsite);
-        self::assertEquals($website->getCode(), $aSalesChannelWhichBelongToCreatedWebsite->getCode());
-        self::assertEquals(SalesChannelInterface::TYPE_WEBSITE, $aSalesChannelWhichBelongToCreatedWebsite->getType());
+        $aSalesChannelOfCreatedWebsite = reset($salesChannelsOfCreatedWebsite);
+        self::assertEquals($website->getCode(), $aSalesChannelOfCreatedWebsite->getCode());
+        self::assertEquals(SalesChannelInterface::TYPE_WEBSITE, $aSalesChannelOfCreatedWebsite->getType());
     }
 }
