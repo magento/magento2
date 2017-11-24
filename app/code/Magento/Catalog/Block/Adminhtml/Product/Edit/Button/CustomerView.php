@@ -7,6 +7,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Button;
 
 use Magento\Catalog\Block\Adminhtml\Product\Edit\Action\UrlBuilder;
 use Magento\Framework\Registry;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Generic as CoreGeneric;
 
@@ -28,13 +29,20 @@ class CustomerView extends CoreGeneric
      */
     protected $actionUrlBuilder;
 
+    /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
     public function __construct(
         Context $context,
         Registry $registry,
+        StoreManagerInterface $storeManager,
         UrlBuilder $actionUrlBuilder
     ) {
         $this->context = $context;
         $this->registry = $registry;
+        $this->storeManager = $storeManager;
         $this->actionUrlBuilder = $actionUrlBuilder;
 
         $this->product = $this->getProduct();
@@ -66,7 +74,7 @@ class CustomerView extends CoreGeneric
     public function getCustomerViewUrl()
     {
         /* @var \Magento\Store\Model\Store\Interceptor */
-        $currentStore = $this->registry->registry('current_store');
+        $currentStore = $this->storeManager->getStore();
 
         $scope = $currentStore->getStoreId();
         $store = $currentStore->getCode();
