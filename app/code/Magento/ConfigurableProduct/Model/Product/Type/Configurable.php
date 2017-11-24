@@ -19,6 +19,7 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
  * Configurable product type implementation
@@ -29,7 +30,7 @@ use Magento\Framework\EntityManager\MetadataPool;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
+class Configurable extends AbstractType
 {
     /**
      * Product type code
@@ -183,6 +184,14 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @var SalableProcessor
      */
     private $salableProcessor;
+
+    /**
+     * Cache attributes of products without IDs here.
+     *
+     * @var ProductTypeConfigurable\Attribute\Collection[] Where keys are
+     * objects' hashes and value are attributes.
+     */
+    private $configurableAttributesLocalCache = [];
 
     /**
      *
@@ -438,9 +447,116 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * @param Product $product
+     *
+     * @return string|null Null is returned when it's impossible to generate
+     * cache ID for the product.
+     */
+    private function generateConfigurableAttributesCacheId(
+        Product $product
+    ) {
+        $metadata = $this->getMetadataPool()
+            ->getMetadata(ProductInterface::class);
+        /** @var string|null $productId */
+        $productId = $product->getData($metadata->getLinkField());
+        if (!$productId) {
+            return null;
+        }
+
+        return __CLASS__ . $productId . '_' . $product->getStoreId();
+    }
+
+    /**
+     * Retrieve configurable attributes for the product from cache.
+     *
+     * @param Product $product
+     *
+     * @return ProductTypeConfigurable\Attribute\Collection|null Null when
+     * attributes for given product cannot be found in cache.
+     */
+    private function findCachedConfigurableAttributes(
+        Product $product
+    ) {
+        //Trying to load attributes from cache.
+        $cacheId = $this->generateConfigurableAttributesCacheId($product);
+        if ($cacheId) {
+            $configurableAttributes = $this->getCache()->load($cacheId);
+            $configurableAttributes
+                = $this->hasCacheData($configurableAttributes);
+            if ($configurableAttributes) {
+                return $configurableAttributes;
+            }
+        }
+
+        //Failed, trying local cache.
+        $productHashId = spl_object_hash($product);
+        if (
+            array_key_exists(
+                $productHashId,
+                $this->configurableAttributesLocalCache
+            )
+        ) {
+            $configurableAttributes
+                = $this->configurableAttributesLocalCache[$productHashId];
+            //If product has ID then caching attributes for further use.
+            $metadata = $this->getMetadataPool()
+                ->getMetadata(ProductInterface::class);
+            /** @var string|null $productId */
+            $productId = $product->getData($metadata->getLinkField());
+            if ($productId) {
+                $this->cacheConfigurableAttributes(
+                    $product,
+                    $configurableAttributes
+                );
+            }
+
+            return $configurableAttributes;
+        }
+
+        return null;
+    }
+
+    /**
+     * Cache collection for further use.
+     *
+     * @param Product $product
+     * @param ProductTypeConfigurable\Attribute\Collection $collection
+     *
+     * @return void
+     */
+    private function cacheConfigurableAttributes(
+        Product $product,
+        ProductTypeConfigurable\Attribute\Collection $collection
+    ) {
+        $metadata = $this->getMetadataPool()
+            ->getMetadata(ProductInterface::class);
+        /** @var string|null $productId */
+        $productId = $product->getData($metadata->getLinkField());
+        /** @var string $productHashId */
+        $productHashId = spl_object_hash($product);
+
+        $cacheId = $this->generateConfigurableAttributesCacheId($product);
+        if ($productId && $cacheId) {
+            $this->getCache()
+                ->save(
+                    serialize($collection),
+                    $cacheId,
+                    array_merge(
+                        $product->getIdentities(),
+                        [self::TYPE_CODE . '_' . $productId]
+                    )
+                );
+        } else {
+            $this->configurableAttributesLocalCache[$productHashId]
+                = $collection;
+        }
+    }
+
+    /**
      * Retrieve configurable attributes data
      *
-     * @param  \Magento\Catalog\Model\Product $product
+     * @param  Product $product
+     *
      * @return \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute[]
      */
     public function getConfigurableAttributes($product)
@@ -450,24 +566,27 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if (!$product->hasData($this->_configurableAttributes)) {
-            $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
-            $productId = $product->getData($metadata->getLinkField());
-            $cacheId = __CLASS__ . $productId . '_' . $product->getStoreId();
-            $configurableAttributes = $this->getCache()->load($cacheId);
-            $configurableAttributes = $this->hasCacheData($configurableAttributes);
-            if ($configurableAttributes) {
-                $configurableAttributes->setProductFilter($product);
-            } else {
-                $configurableAttributes = $this->getConfigurableAttributeCollection($product);
-                $this->extensionAttributesJoinProcessor->process($configurableAttributes);
+            $configurableAttributes
+                    = $this->findCachedConfigurableAttributes($product);
+
+            if (!$configurableAttributes) {
+                //Couldn't find attributes in cache, loading.
+                $configurableAttributes
+                    = $this->getConfigurableAttributeCollection($product);
+                $this->extensionAttributesJoinProcessor
+                    ->process($configurableAttributes);
                 $configurableAttributes->orderByPosition()->load();
-                $this->getCache()->save(
-                    serialize($configurableAttributes),
-                    $cacheId,
-                    array_merge($product->getIdentities(), [self::TYPE_CODE . '_' . $productId])
+
+                $this->cacheConfigurableAttributes(
+                    $product,
+                    $configurableAttributes
                 );
             }
-            $product->setData($this->_configurableAttributes, $configurableAttributes);
+
+            $product->setData(
+                $this->_configurableAttributes,
+                $configurableAttributes
+            );
         }
         \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
 
@@ -475,8 +594,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * @param mixed $configurableAttributes
-     * @return bool
+     * @param string $configurableAttributes
+     *
+     * @return bool|ProductTypeConfigurable\Attribute\Collection False when
+     * cache is invalid.
      */
     protected function hasCacheData($configurableAttributes)
     {
@@ -710,7 +831,13 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $productId = $product->getData($metadata->getLinkField());
 
-        $this->getCache()->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::TYPE_CODE . '_' . $productId]);
+        if ($productId) {
+            $this->getCache()
+                ->clean(
+                    \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+                    [self::TYPE_CODE . '_' . $productId]
+                );
+        }
         parent::beforeSave($product);
 
         $product->canAffectOptions(false);
@@ -1360,5 +1487,26 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         });
 
         return $usedSalableProducts;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isPossibleBuyFromList($product)
+    {
+        /** @var bool $isAllCustomOptionsDisplayed */
+        $isAllCustomOptionsDisplayed = true;
+
+        foreach ($this->getConfigurableAttributes($product) as $attribute) {
+            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $eavAttribute */
+            $eavAttribute = $attribute->getProductAttribute();
+
+            $isAllCustomOptionsDisplayed = (
+                $isAllCustomOptionsDisplayed
+                && $eavAttribute->getData('used_in_product_listing')
+            );
+        }
+
+        return $isAllCustomOptionsDisplayed;
     }
 }

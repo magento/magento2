@@ -271,5 +271,52 @@
                 </argument>
             </field>
         </fieldset>
+        <fieldset name="search_engine_robots">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string">Search Engine Robots</item>
+                    <item name="sortOrder" xsi:type="string">120</item>
+                    <item name="collapsible" xsi:type="boolean">true</item>
+                    <item name="level" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <field name="default_robots">
+                <argument name="data" xsi:type="array">
+                    <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Design\Robots</item>
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Default Robots</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">select</item>
+                        <item name="dataScope" xsi:type="string">default_robots</item>
+                        <item name="scopeLabel" xsi:type="string">[WEBSITE]</item>
+                        <item name="notice" xsi:type="string" translate="true">This will be included before head closing tag in page HTML.</item>
+                    </item>
+                </argument>
+            </field>
+            <field name="custom_instructions">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Edit custom instruction of robots.txt File</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">textarea</item>
+                        <item name="dataScope" xsi:type="string">custom_instructions</item>
+                        <item name="scopeLabel" xsi:type="string">[WEBSITE]</item>
+                    </item>
+                </argument>
+            </field>
+            <field name="reset_to_defaults" class="Magento\Theme\Ui\Component\Design\Config\SearchRobots\ResetButton">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="title" xsi:type="string">Reset To Defaults</item>
+                        <item name="formElement" xsi:type="string">button</item>
+                        <item name="dataScope" xsi:type="string">reset_to_defaults</item>
+                        <item name="scopeLabel" xsi:type="string">[WEBSITE]</item>
+                        <item name="component" xsi:type="string">Magento_Theme/js/form/component/robots-reset-button</item>
+                        <item name="template" xsi:type="string">Magento_Theme/form/button-field</item>
+                        <item name="notice" xsi:type="string" translate="true">This action will delete your custom instructions and reset robots.txt file to system's default settings.</item>
+                    </item>
+                </argument>
+            </field>
+        </fieldset>
     </fieldset>
 </form>
