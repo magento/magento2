@@ -108,7 +108,7 @@ class Rss
         );
 
         return $feed->getFormattedContentAs(
-            FeedInterface::FORMAT_RSS
+            FeedInterface::FORMAT_XML
         );
     }
 }
