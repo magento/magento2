@@ -49,6 +49,7 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
      * @param InputInterface $input
      * @return IndexerInterface[]
      * @throws \InvalidArgumentException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getIndexers(InputInterface $input)
     {
@@ -107,6 +108,7 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
     /**
      * @deprecated
      * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getIndexerFactory()
     {

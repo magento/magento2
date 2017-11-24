@@ -24,7 +24,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
     /**
      * Http Client Factory
      *
-     * @var ZendClientFactory|null
+     * @var ZendClientFactory
      */
     protected $httpClientFactory;
 
@@ -39,6 +39,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param ZendClientFactory|null $httpClientFactory
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,

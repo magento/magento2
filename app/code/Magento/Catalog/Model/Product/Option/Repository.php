@@ -58,8 +58,9 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource
      * @param Converter $converter
-     * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\Product\OptionFactory|null $optionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory|null $collectionFactory
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -257,6 +258,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * @return \Magento\Framework\EntityManager\HydratorPool
+     * @throws \RuntimeException
      * @deprecated
      */
     private function getHydratorPool()

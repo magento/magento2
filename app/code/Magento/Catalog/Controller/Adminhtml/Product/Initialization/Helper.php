@@ -94,13 +94,13 @@ class Helper
      * @param ProductLinks $productLinks
      * @param Js $jsHelper
      * @param DateFilter $dateFilter
-     * @param LinkTypeProvider $linkTypeProvider
-     * @param CustomOptionFactory $customOptionFactory
-     * @param ProductLinkFactory $productLinkFactory
-     * @param ProductRepository $productRepository
-     * @param CustomOptionFactory $customOptionFactory
-     * @param DateTime $dateTimeFilter
-     * @param LinkResolver $linkResolver
+     * @param LinkTypeProvider|null $linkTypeProvider
+     * @param CustomOptionFactory|null $customOptionFactory
+     * @param ProductLinkFactory|null $productLinkFactory
+     * @param ProductRepository|null $productRepository
+     * @param DateTime|null $dateTimeFilter
+     * @param LinkResolver|null $linkResolver
+     * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

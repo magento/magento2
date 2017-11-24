@@ -46,6 +46,7 @@ class Builder
      * @param Registry $registry
      * @param WysiwygModel\Config $wysiwygConfig
      * @param StoreFactory|null $storeFactory
+     * @throws \RuntimeException
      */
     public function __construct(
         ProductFactory $productFactory,

@@ -142,6 +142,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param array $data
      * @param FileProcessorFactory|null $fileProcessorFactory
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

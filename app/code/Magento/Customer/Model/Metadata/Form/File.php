@@ -73,6 +73,7 @@ class File extends AbstractData
      * @param Filesystem $fileSystem
      * @param UploaderFactory $uploaderFactory
      * @param FileProcessorFactory|null $fileProcessorFactory
+     * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

@@ -83,6 +83,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
      * @param Builder $productBuilder
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param AttributeGroupInterfaceFactory|null $attributeGroupFactory
+     * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

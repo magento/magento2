@@ -57,6 +57,7 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param QuoteFactory|null $quoteFactory
+     * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

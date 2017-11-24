@@ -44,10 +44,11 @@ class Downloadable
 
     /**
      * @param RequestInterface $request
-     * @param SampleFactory $sampleFactory
+     * @param SampleFactory|null $sampleFactory
      * @param SampleBuilder|null $sampleBuilder
-     * @param LinkFactory $linkFactory
+     * @param LinkFactory|null $linkFactory
      * @param LinkBuilder|null $linkBuilder
+     * @throws \RuntimeException
      */
     public function __construct(
         RequestInterface $request,

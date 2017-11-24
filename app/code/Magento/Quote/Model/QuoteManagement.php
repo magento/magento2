@@ -158,6 +158,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param QuoteFactory $quoteFactory
      * @param QuoteIdMaskFactory|null $quoteIdMaskFactory
+     * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

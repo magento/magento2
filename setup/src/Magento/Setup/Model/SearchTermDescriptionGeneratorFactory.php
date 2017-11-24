@@ -62,6 +62,7 @@ class SearchTermDescriptionGeneratorFactory
      * @param DescriptionGeneratorFactory|null $descriptionGeneratorFactory
      * @param DictionaryFactory|null $dictionaryFactory
      * @param SearchTermManagerFactory|null $searchTermManagerFactory
+     * @throws \RuntimeException
      */
     public function __construct(
         ObjectManagerInterface $objectManager,

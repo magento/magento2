@@ -83,6 +83,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      * @param \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param QuoteCollectionFactory|null $quoteCollectionFactory
+     * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(

@@ -52,6 +52,7 @@ abstract class AbstractIndexerCommand extends Command
      * Returns all indexers
      *
      * @return IndexerInterface[]
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getAllIndexers()
     {
@@ -65,6 +66,7 @@ abstract class AbstractIndexerCommand extends Command
      * Gets initialized object manager
      *
      * @return ObjectManagerInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getObjectManager()
     {

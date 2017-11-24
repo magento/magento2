@@ -101,6 +101,7 @@ class Files
      * @param DirSearch $dirSearch
      * @param ThemePackageList $themePackageList
      * @param RegexIteratorFactory|null $regexIteratorFactory
+     * @throws \RuntimeException
      */
     public function __construct(
         ComponentRegistrar $componentRegistrar,

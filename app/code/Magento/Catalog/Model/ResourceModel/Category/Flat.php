@@ -96,8 +96,9 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param string $connectionName
-     * @param CategoryFlatCollectionFactory $categoryFlatCollectionFactory
+     * @param string|null $connectionName
+     * @param CategoryFlatCollectionFactory|null $categoryFlatCollectionFactory
+     * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
