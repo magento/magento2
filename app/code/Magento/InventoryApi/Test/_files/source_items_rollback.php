@@ -17,7 +17,10 @@ $sourceItemsDelete = Bootstrap::getObjectManager()->get(SourceItemsDeleteInterfa
 /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
 $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
 
-$searchCriteria =
-    $searchCriteriaBuilder->addFilter(SourceItemInterface::SKU, ['SKU-1', 'SKU-2', 'SKU-3'], 'in')->create();
+$searchCriteria = $searchCriteriaBuilder->addFilter(
+    SourceItemInterface::SKU,
+    ['SKU-1', 'SKU-2', 'SKU-3'],
+    'in'
+)->create();
 $sourceItems = $sourceItemRepository->getList($searchCriteria)->getItems();
 $sourceItemsDelete->execute($sourceItems);

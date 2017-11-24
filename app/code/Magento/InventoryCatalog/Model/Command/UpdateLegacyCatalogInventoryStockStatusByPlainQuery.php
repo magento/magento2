@@ -38,7 +38,7 @@ class UpdateLegacyCatalogInventoryStockStatusByPlainQuery implements
     {
         $productId = $stockStatus->getProductId();
         $qty = $stockStatus->getQty();
-        $sql = "UPDATE cataloginventory_stock_status SET qty = $qty WHERE product_id = $productId";
+        $sql = "UPDATE cataloginventory_stock_status SET qty = $qty WHERE product_id = $productId AND website_id = 0";
 
         $this->resourceConnection->getConnection()->query($sql);
     }
