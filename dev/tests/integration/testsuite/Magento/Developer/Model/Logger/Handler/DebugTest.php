@@ -131,7 +131,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
             );
         $this->outputMock->expects($this->once())
             ->method('writeln')
-            ->with('<info>Value was saved and locked.</info>');
+            ->with('<info>Value was saved in app/etc/env.php and locked.</info>');
         $this->assertFalse((bool)$this->configSetCommand->run($this->inputMock, $this->outputMock));
     }
 
