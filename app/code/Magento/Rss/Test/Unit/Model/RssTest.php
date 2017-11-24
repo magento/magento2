@@ -153,12 +153,12 @@ class RssTest extends \PHPUnit\Framework\TestCase
 
         $this->feedMock->expects($this->once())
             ->method('getFormattedContentAs')
-            ->with(\Magento\Framework\App\FeedInterface::DEFAULT_FORMAT)
+            ->with(\Magento\Framework\App\FeedInterface::FORMAT_XML)
             ->will($this->returnValue($this->feedXml));
 
         $this->feedFactoryMock->expects($this->once())
             ->method('create')
-            ->with($this->feedData, \Magento\Framework\App\FeedFactoryInterface::DEFAULT_FORMAT)
+            ->with($this->feedData, \Magento\Framework\App\FeedFactoryInterface::FORMAT_RSS)
             ->will($this->returnValue($this->feedMock));
 
         $this->rss->setDataProvider($dataProvider);
