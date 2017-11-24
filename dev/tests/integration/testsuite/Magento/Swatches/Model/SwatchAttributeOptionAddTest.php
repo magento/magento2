@@ -53,7 +53,9 @@ class SwatchAttributeOptionAddTest extends \PHPUnit\Framework\TestCase
         /** @var AttributeOptionInterface[] $options */
         $options = [];
         foreach ($data['options']['option'] as $optionData) {
-            $options[] = $this->objectManager->get(AttributeOptionInterfaceFactory::class)->create(['data' => $optionData]);
+            $options[] = $this->objectManager
+                ->get(AttributeOptionInterfaceFactory::class)
+                ->create(['data' => $optionData]);
         }
 
         /** @var ProductAttributeOptionManagementInterface $optionManagement */
