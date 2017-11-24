@@ -7,6 +7,8 @@
 namespace Magento\Braintree\Gateway\Http\Client;
 
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
@@ -34,17 +36,26 @@ abstract class AbstractTransaction implements ClientInterface
     protected $adapter;
 
     /**
-     * Constructor
-     *
+     * @var BraintreeAdapterFactory
+     */
+    protected $adapterFactory;
+
+    /**
      * @param LoggerInterface $logger
      * @param Logger $customLogger
-     * @param BraintreeAdapter $transaction
+     * @param BraintreeAdapter $adapter
+     * @param BraintreeAdapterFactory|null $adapterFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __construct(LoggerInterface $logger, Logger $customLogger, BraintreeAdapter $adapter)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        Logger $customLogger,
+        BraintreeAdapter $adapter,
+        BraintreeAdapterFactory $adapterFactory = null
+    ) {
         $this->logger = $logger;
         $this->customLogger = $customLogger;
-        $this->adapter = $adapter;
+        $this->adapterFactory = $adapterFactory ?: ObjectManager::getInstance()->get(BraintreeAdapterFactory::class);
     }
 
     /**
