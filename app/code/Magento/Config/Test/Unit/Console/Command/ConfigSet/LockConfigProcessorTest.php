@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Console\Command\ConfigSet;
 
-use Magento\Config\Console\Command\ConfigSet\ShareProcessor;
+use Magento\Config\Console\Command\ConfigSet\LockProcessor;
 use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -23,10 +23,10 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see ShareProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShareProcessorTest extends \PHPUnit\Framework\TestCase
+class LockConfigProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ShareProcessor
+     * @var LockProcessor
      */
     private $model;
 
@@ -77,11 +77,12 @@ class ShareProcessorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new ShareProcessor(
+        $this->model = new LockProcessor(
             $this->preparedValueFactory,
             $this->deploymentConfigWriterMock,
             $this->arrayManagerMock,
-            $this->configPathResolver
+            $this->configPathResolver,
+            ConfigFilePool::APP_CONFIG
         );
     }
 

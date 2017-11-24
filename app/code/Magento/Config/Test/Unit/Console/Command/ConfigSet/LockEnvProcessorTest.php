@@ -23,7 +23,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see LockProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LockProcessorTest extends \PHPUnit\Framework\TestCase
+class LockEnvProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LockProcessor
@@ -81,7 +81,8 @@ class LockProcessorTest extends \PHPUnit\Framework\TestCase
             $this->preparedValueFactory,
             $this->deploymentConfigWriterMock,
             $this->arrayManagerMock,
-            $this->configPathResolver
+            $this->configPathResolver,
+            ConfigFilePool::APP_ENV
         );
     }
 

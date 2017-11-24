@@ -11,6 +11,7 @@ use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Config\Model\Config\PathValidator;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -202,14 +203,14 @@ class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
         $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false);
     }
 
-    public function testExecuteLock()
+    public function testExecuteLockEnv()
     {
         $this->scopeValidatorMock->expects($this->once())
             ->method('isValid')
             ->willReturn(true);
         $this->configSetProcessorFactoryMock->expects($this->once())
             ->method('create')
-            ->with(ConfigSetProcessorFactory::TYPE_LOCK)
+            ->with(ConfigSetProcessorFactory::TYPE_LOCK_ENV)
             ->willReturn($this->processorMock);
         $this->processorMock->expects($this->once())
             ->method('process')
@@ -223,14 +224,14 @@ class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testExecuteShare()
+    public function testExecuteLockConfig()
     {
         $this->scopeValidatorMock->expects($this->once())
             ->method('isValid')
             ->willReturn(true);
         $this->configSetProcessorFactoryMock->expects($this->once())
             ->method('create')
-            ->with(ConfigSetProcessorFactory::TYPE_SHARE)
+            ->with(ConfigSetProcessorFactory::TYPE_LOCK_CONFIG)
             ->willReturn($this->processorMock);
         $this->processorMock->expects($this->once())
             ->method('process')
@@ -240,7 +241,7 @@ class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(
             'Value was saved in app/etc/config.php and locked.',
-            $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false, true)
+            $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, true, ConfigFilePool::APP_CONFIG)
         );
     }
 }
