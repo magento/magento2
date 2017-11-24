@@ -109,7 +109,7 @@ class MediaGalleryProcessor
     public function saveMediaGallery(array $mediaGalleryData)
     {
         $this->initMediaGalleryResources();
-        $mediaGalleryData = $this->restoreDisableImage($mediaGalleryData);
+        $mediaGalleryData = $this->restoreDisabledImage($mediaGalleryData);
         $mediaGalleryDataGlobal = array_merge(...$mediaGalleryData);
         $imageNames = [];
         $multiInsertData = [];
@@ -143,53 +143,8 @@ class MediaGalleryProcessor
             $newMediaSelect->where('value_id NOT IN (?)', array_keys($oldMediaValues));
         }
         $newMediaValues = $this->connection->fetchAssoc($newMediaSelect);
-        foreach ($mediaGalleryData as $storeId => $mediaGalleryDataPerStore) {
-            $dataForSkinnyTable = [];
-            $multiInsertData = [];
-            foreach ($mediaGalleryDataPerStore as $productSku => $mediaGalleryRows) {
-                foreach ($mediaGalleryRows as $insertValue) {
-                    foreach ($newMediaValues as $value_id => $values) {
-                        if ($values['value'] == $insertValue['value']) {
-                            $insertValue['value_id'] = $value_id;
-                            $ids = array_values($valueToProductId[$values['value']]);
-                            $insertValue[$this->getProductEntityLinkField()] = array_shift($ids);
-                            break;
-                        }
-                    }
-                    if (isset($insertValue['value_id'])) {
-                        $valueArr = [
-                            'value_id' => $insertValue['value_id'],
-                            'store_id' => $storeId,
-                            $this->getProductEntityLinkField() => $insertValue[$this->getProductEntityLinkField()],
-                            'label' => $insertValue['label'],
-                            'position' => $insertValue['position'],
-                            'disabled' => $insertValue['disabled'],
-                        ];
-                        $multiInsertData[] = $valueArr;
-                        $dataForSkinnyTable[] = [
-                            'value_id' => $insertValue['value_id'],
-                            $this->getProductEntityLinkField() => $insertValue[$this->getProductEntityLinkField()],
-                        ];
-                    }
-                }
-            }
-            try {
-                $this->connection->insertOnDuplicate(
-                    $this->mediaGalleryValueTableName,
-                    $multiInsertData,
-                    ['value_id', 'store_id', $this->getProductEntityLinkField(), 'label', 'position', 'disabled']
-                );
-                $this->connection->insertOnDuplicate(
-                    $this->mediaGalleryEntityToValueTableName,
-                    $dataForSkinnyTable,
-                    ['value_id']
-                );
-            } catch (\Exception $e) {
-                $this->connection->delete(
-                    $this->mediaGalleryTableName,
-                    $this->connection->quoteInto('value_id IN (?)', $newMediaValues)
-                );
-            }
+        foreach ($mediaGalleryData as $storeId => $storeMediaGalleryData) {
+            $this->processMediaPerStore((int)$storeId, $storeMediaGalleryData, $newMediaValues, $valueToProductId);
         }
     }
 
@@ -314,7 +269,7 @@ class MediaGalleryProcessor
      * @param array $mediaGalleryData
      * @return array
      */
-    private function restoreDisableImage(array $mediaGalleryData)
+    private function restoreDisabledImage(array $mediaGalleryData)
     {
         $restoreData = [];
         foreach (array_keys($mediaGalleryData) as $storeId) {
@@ -339,6 +294,70 @@ class MediaGalleryProcessor
         );
 
         return $mediaGalleryData;
+    }
+
+    /**
+     * Save media gallery data per store.
+     *
+     * @param $storeId
+     * @param array $mediaGalleryData
+     * @param array $newMediaValues
+     * @param array $valueToProductId
+     * @return void
+     */
+    private function processMediaPerStore(
+        int $storeId,
+        array $mediaGalleryData,
+        array $newMediaValues,
+        array $valueToProductId
+    ) {
+        $multiInsertData = [];
+        $dataForSkinnyTable = [];
+        foreach ($mediaGalleryData as $mediaGalleryRows) {
+            foreach ($mediaGalleryRows as $insertValue) {
+                foreach ($newMediaValues as $value_id => $values) {
+                    if ($values['value'] == $insertValue['value']) {
+                        $insertValue['value_id'] = $value_id;
+                        $insertValue[$this->getProductEntityLinkField()]
+                            = array_shift($valueToProductId[$values['value']]);
+                        unset($newMediaValues[$value_id]);
+                        break;
+                    }
+                }
+                if (isset($insertValue['value_id'])) {
+                    $valueArr = [
+                        'value_id' => $insertValue['value_id'],
+                        'store_id' => $storeId,
+                        $this->getProductEntityLinkField() => $insertValue[$this->getProductEntityLinkField()],
+                        'label' => $insertValue['label'],
+                        'position' => $insertValue['position'],
+                        'disabled' => $insertValue['disabled'],
+                    ];
+                    $multiInsertData[] = $valueArr;
+                    $dataForSkinnyTable[] = [
+                        'value_id' => $insertValue['value_id'],
+                        $this->getProductEntityLinkField() => $insertValue[$this->getProductEntityLinkField()],
+                    ];
+                }
+            }
+        }
+        try {
+            $this->connection->insertOnDuplicate(
+                $this->mediaGalleryValueTableName,
+                $multiInsertData,
+                ['value_id', 'store_id', $this->getProductEntityLinkField(), 'label', 'position', 'disabled']
+            );
+            $this->connection->insertOnDuplicate(
+                $this->mediaGalleryEntityToValueTableName,
+                $dataForSkinnyTable,
+                ['value_id']
+            );
+        } catch (\Exception $e) {
+            $this->connection->delete(
+                $this->mediaGalleryTableName,
+                $this->connection->quoteInto('value_id IN (?)', $newMediaValues)
+            );
+        }
     }
 
     /**
