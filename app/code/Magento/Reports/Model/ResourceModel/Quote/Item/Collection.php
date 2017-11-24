@@ -6,8 +6,6 @@
 
 namespace Magento\Reports\Model\ResourceModel\Quote\Item;
 
-use Magento\Framework\App\ResourceConnection;
-
 /**
  * Collection of Magento\Quote\Model\Quote\Item
  *
@@ -88,7 +86,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $this->_init('Magento\Quote\Model\Quote\Item', 'Magento\Quote\Model\ResourceModel\Quote\Item');
     }
-
 
     /**
      * Prepare select query for products in carts report
