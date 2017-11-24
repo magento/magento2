@@ -25,13 +25,17 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             'some/config/path2' => 'value2',
             'some/config/path2' => 'value3',
             'some2/config/path2' => 'value4',
+            'some/bad/path////' => 'value5',
         ];
         $expectedResult = [
             'some' => [
                 'config' => [
                     'path1' => 'value1',
                     'path2' => 'value3',
-                ]
+                ],
+                'bad' => [
+                    'path' => 'value5',
+                ],
             ],
             'some2' => [
                 'config' => [

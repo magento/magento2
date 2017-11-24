@@ -28,19 +28,28 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Set array value by path
      *
-     * @param array $output
+     * @param array $container
      * @param string $path
      * @param string $value
      * @return array
      */
-    protected function _setArrayValue(array $output, $path, $value)
+    protected function _setArrayValue(array $container, $path, $value)
     {
-        $parts = array_reverse(explode('/', $path));
+        $parts = explode('/', $path);
 
-        $result = $value;
-        foreach ($parts as $part) {
-            $result = [$part => $result];
+        if (count($parts) > 0) {
+            $parts = array_reverse($parts);
+
+            $result = $value;
+            foreach ($parts as $part) {
+                $part = trim($part);
+                if ($part !== '') {
+                    $result = [$part => $result];
+                }
+            }
+
+            $container = array_merge_recursive($container, $result);
         }
-        return array_merge_recursive($output, $result);
+        return $container;
     }
 }
