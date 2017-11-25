@@ -15,6 +15,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 
@@ -75,6 +76,13 @@ class InlineEdit extends Action
                         '[ID: %value] The Stock does not exist.',
                         ['value' => $itemData[StockInterface::STOCK_ID]]
                     );
+                } catch (ValidationException $e) {
+                    foreach ($e->getErrors() as $localizedError) {
+                        $errorMessages[] = __('[ID: %value] %message', [
+                            'value' => $itemData[StockInterface::STOCK_ID],
+                            'message' => $localizedError->getMessage()
+                        ]);
+                    }
                 } catch (CouldNotSaveException $e) {
                     $errorMessages[] = __('[ID: %value] %message', [
                         'value' => $itemData[StockInterface::STOCK_ID],
