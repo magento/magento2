@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration;
+declare(strict_types=1);
+
+namespace Magento\InventoryConfigurationApi\Api;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 
 /**
- * Delete SourceItem Configuration
+ * Get the source configuration for a product.
+ *
+ * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
-interface DeleteInterface
+interface DeleteSourceItemConfigurationInterface
 {
     /**
      * Delete the SourceItem Configuration data
@@ -22,5 +26,5 @@ interface DeleteInterface
      * @return void
      * @throws CouldNotDeleteException
      */
-    public function delete(SourceItemConfigurationInterface $sourceItemConfiguration);
+    public function execute(SourceItemConfigurationInterface $sourceItemConfiguration);
 }

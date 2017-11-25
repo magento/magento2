@@ -7,14 +7,14 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\InventoryConfiguration\Model\SourceItemConfiguration\DeleteInterface;
+use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface;
 
 /** @var DataObjectHelper $dataObjectHelper */
 $dataObjectHelper = Bootstrap::getObjectManager()->get(DataObjectHelper::class);
 /** @var SourceItemInterfaceFactory $sourceItemFactory */
 $configurationFactory = Bootstrap::getObjectManager()->get(SourceItemConfigurationInterfaceFactory::class);
-/** @var  SourceItemsSaveInterface $sourceItemsSave */
-$configurationDelete = Bootstrap::getObjectManager()->get(DeleteInterface::class);
+/** @var  DeleteSourceItemConfigurationInterface $configurationDelete */
+$configurationDelete = Bootstrap::getObjectManager()->get(DeleteSourceItemConfigurationInterface::class);
 
 $inventoryConfigurationData = [
     SourceItemConfigurationInterface::SOURCE_ITEM_ID => 1,
@@ -29,4 +29,4 @@ $dataObjectHelper->populateWithArray(
     SourceItemConfigurationInterface::class
 );
 
-$configurationDelete->delete($inventoryConfiguration);
+$configurationDelete->execute($inventoryConfiguration);

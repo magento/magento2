@@ -11,11 +11,12 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\DeleteSourceItemConfiguration;
 use Psr\Log\LoggerInterface;
+use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface;
 
 /**
  * @inheritdoc
  */
-class Delete implements DeleteInterface
+class Delete implements DeleteSourceItemConfigurationInterface
 {
     /**
      * @var DeleteSourceItemConfiguration
@@ -42,7 +43,7 @@ class Delete implements DeleteInterface
     /**
      * @inheritdoc
      */
-    public function delete(SourceItemConfigurationInterface $sourceItemConfiguration)
+    public function execute(SourceItemConfigurationInterface $sourceItemConfiguration)
     {
         try {
             $sourceItemId = $sourceItemConfiguration->getSourceItemId();

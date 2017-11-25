@@ -18,4 +18,10 @@
             <resource ref="Magento_InventoryApi::stock"/>
         </resources>
     </route>
+    <route url="/V1/inventory/configuration" method="DELETE">
+        <service class="Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::stock"/>
+        </resources>
+    </route>
 </routes>

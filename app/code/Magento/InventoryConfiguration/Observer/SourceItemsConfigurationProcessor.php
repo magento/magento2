@@ -12,7 +12,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface;
-use Magento\InventoryConfiguration\Model\SourceItemConfiguration\DeleteInterface;
+use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface;
 use Magento\InventoryConfiguration\Model\SourceItemConfigurationFactory;
 
 use Magento\Framework\Api\DataObjectHelper;
@@ -41,7 +41,7 @@ class SourceItemsConfigurationProcessor
     private $dataObjectHelper;
 
     /**
-     * @var DeleteInterface
+     * @var DeleteSourceItemConfigurationInterface
      */
     private $sourceItemConfigurationDelete;
 
@@ -49,14 +49,14 @@ class SourceItemsConfigurationProcessor
      * @param SourceItemConfigurationFactory $sourceItemConfigurationFactory
      * @param SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave
      * @param GetSourceItemConfigurationInterface $getSourceItemConfiguration
-     * @param DeleteInterface $sourceItemConfigurationDelete
+     * @param DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete
      * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         SourceItemConfigurationFactory $sourceItemConfigurationFactory,
         SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave,
         GetSourceItemConfigurationInterface $getSourceItemConfiguration,
-        DeleteInterface $sourceItemConfigurationDelete,
+        DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete,
         DataObjectHelper $dataObjectHelper
     ) {
         $this->getSourceItemConfiguration = $getSourceItemConfiguration;
@@ -151,7 +151,7 @@ class SourceItemsConfigurationProcessor
     private function deleteSourceItemsConfiguration(array $sourceItemsConfigurations)
     {
         foreach ($sourceItemsConfigurations as $sourceItemConfiguration) {
-            $this->sourceItemConfigurationDelete->delete($sourceItemConfiguration);
+            $this->sourceItemConfigurationDelete->execute($sourceItemConfiguration);
         }
     }
 }
