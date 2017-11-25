@@ -82,17 +82,17 @@ class ProcessSourceItemsObserver implements ObserverInterface
             $assignedSources
         );
 
-        $this->updateDefaultSourceQty($controller);
+        $productParams = $controller->getRequest()->getParam('product');
+
+        $this->updateDefaultSourceQty($productParams);
     }
 
     /**
-     * @param Save $controller
+     * @param array $productParams
      * @return void
      */
-    private function updateDefaultSourceQty($controller)
+    private function updateDefaultSourceQty($productParams)
     {
-        $productParams = $controller->getRequest()->getParam('product');
-
         $sku = $productParams['sku'];
         $qtyAndStockStatus = $productParams['quantity_and_stock_status'];
         $qty = $qtyAndStockStatus['qty'];
