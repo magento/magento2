@@ -14,4 +14,6 @@
                 type="Magento\InventoryConfiguration\Model\SourceItemConfiguration\Delete"/>
     <preference for="Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface"
                 type="Magento\InventoryConfiguration\Model\SourceItemConfiguration"/>
+    <preference for="Magento\InventoryConfiguration\Model\GetSourceItemConfigurationInterface"
+                type="Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\GetSourceItemConfiguration"/>
 </config>
