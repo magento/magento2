@@ -115,9 +115,8 @@ class Save extends Action
         $this->_eventManager->dispatch(
             'controller_action_inventory_source_save_before',
             [
-                'controller'    => $this,
-                'request_data'  => $requestData,
-                'source'        => $source,
+                'request'   => $this->getRequest(),
+                'source'    => $source,
             ]
         );
 
@@ -126,9 +125,8 @@ class Save extends Action
         $this->_eventManager->dispatch(
             'controller_action_inventory_source_save_after',
             [
-                'controller'    => $this,
-                'request_data'  => $requestData,
-                'sourceId'      => $sourceId,
+                'request'   => $this->getRequest(),
+                'source'    => $source,
             ]
         );
 

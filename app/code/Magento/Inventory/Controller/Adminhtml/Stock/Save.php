@@ -45,8 +45,9 @@ class Save extends Action
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $requestData = $this->getRequest()->getParams();
-        if (!$this->getRequest()->isPost() || empty($requestData['general'])) {
+        $request = $this->getRequest();
+        $requestData = $request->getParams();
+        if (!$request->isPost() || empty($requestData['general'])) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
             $this->processRedirectAfterFailureSave($resultRedirect);
 
@@ -57,25 +58,7 @@ class Save extends Action
                 ? (int)$requestData['general'][StockInterface::STOCK_ID]
                 : null;
 
-            $this->_eventManager->dispatch(
-                'controller_action_inventory_stock_save_before',
-                [
-                    'controller'    => $this,
-                    'request_data'  => $requestData,
-                    'stockId'        => $stockId,
-                ]
-            );
-
-            $stockId = $this->stockSaveProcessor->process($stockId, $requestData);
-
-            $this->_eventManager->dispatch(
-                'controller_action_inventory_stock_save_after',
-                [
-                    'controller'    => $this,
-                    'request_data'  => $requestData,
-                    'stockId'        => $stockId,
-                ]
-            );
+            $stockId = $this->stockSaveProcessor->process($stockId, $request);
 
             $this->messageManager->addSuccessMessage(__('The Stock has been saved.'));
             $this->processRedirectAfterSuccessSave($resultRedirect, $stockId);
