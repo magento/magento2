@@ -113,7 +113,7 @@ class Save extends Action
         $source = $this->sourceHydrator->hydrate($source, $requestData);
 
         $this->_eventManager->dispatch(
-            'save_source_controller_populate_source_with_data',
+            'controller_action_inventory_populate_source_with_data',
             [
                 'request' => $this->getRequest(),
                 'source' => $source,

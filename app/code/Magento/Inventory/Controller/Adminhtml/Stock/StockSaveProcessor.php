@@ -89,7 +89,7 @@ class StockSaveProcessor
             $requestData = $request->getParams();
             $this->dataObjectHelper->populateWithArray($stock, $requestData['general'], StockInterface::class);
             $this->eventManager->dispatch(
-                'save_stock_controller_populate_stock_with_data',
+                'controller_action_inventory_populate_stock_with_data',
                 [
                     'request' => $request,
                     'stock' => $stock,

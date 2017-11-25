@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="save_stock_controller_populate_stock_with_data">
+    <event name="controller_action_inventory_populate_stock_with_data">
         <observer name="populate_stock_with_website_sales_channels" instance="Magento\InventorySales\Observer\Stock\PopulateWithWebsiteSalesChannelsObserver"/>
     </event>
 </config>
