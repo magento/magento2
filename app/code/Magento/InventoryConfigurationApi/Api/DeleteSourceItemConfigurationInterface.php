@@ -7,9 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfigurationApi\Api;
 
-use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
-
 /**
  * Get the source configuration for a product.
  *
@@ -22,9 +19,9 @@ interface DeleteSourceItemConfigurationInterface
     /**
      * Delete the SourceItem Configuration data
      *
-     * @param SourceItemConfigurationInterface $sourceItemConfiguration
+     * @param int $sourceId
+     * @param string $sku
      * @return void
-     * @throws CouldNotDeleteException
      */
-    public function execute(SourceItemConfigurationInterface $sourceItemConfiguration);
+    public function execute(int $sourceId, string $sku);
 }

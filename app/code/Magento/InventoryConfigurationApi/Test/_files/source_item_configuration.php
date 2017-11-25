@@ -17,7 +17,8 @@ $configurationFactory = Bootstrap::getObjectManager()->get(SourceItemConfigurati
 $configurationSave = Bootstrap::getObjectManager()->get(SourceItemConfigurationsSaveInterface::class);
 
 $inventoryConfigurationData = [
-    SourceItemConfigurationInterface::SOURCE_ITEM_ID => 1,
+    SourceItemConfigurationInterface::SOURCE_ID => 10,
+    SourceItemConfigurationInterface::SKU => 'SKU-1',
     SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 2.000
 ];
 

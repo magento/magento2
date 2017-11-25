@@ -25,11 +25,13 @@ class SourceItemConfigurationsSaveTest extends WebapiAbstract
     {
         $sourceItemsConfiguration = [
             [
-                SourceItemConfigurationInterface::SOURCE_ITEM_ID => 1,
+                SourceItemConfigurationInterface::SOURCE_ID => 10,
+                SourceItemConfigurationInterface::SKU => 'SKU-1',
                 SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 2,
             ],
             [
-                SourceItemConfigurationInterface::SOURCE_ITEM_ID => 2,
+                SourceItemConfigurationInterface::SOURCE_ID => 20,
+                SourceItemConfigurationInterface::SKU => 'SKU-1',
                 SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 1,
             ]
         ];

@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\DeleteSourceItemConfiguration;
 use Psr\Log\LoggerInterface;
 use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface;
@@ -43,11 +42,10 @@ class Delete implements DeleteSourceItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function execute(SourceItemConfigurationInterface $sourceItemConfiguration)
+    public function execute(int $sourceId, string $sku)
     {
         try {
-            $sourceItemId = $sourceItemConfiguration->getSourceItemId();
-            $this->deleteSourceItemConfiguration->execute($sourceItemId);
+            $this->deleteSourceItemConfiguration->execute($sourceId, $sku);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotDeleteException(__('Could not delete SourceItem Configuration.'), $e);

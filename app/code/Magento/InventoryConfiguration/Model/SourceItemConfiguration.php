@@ -18,18 +18,18 @@ class SourceItemConfiguration extends AbstractExtensibleModel implements SourceI
     /**
      * @inheritdoc
      */
-    public function getSourceItemId()
+    public function getSourceId()
     {
-        return $this->getData(self::SOURCE_ITEM_ID);
+        return $this->getData(self::SOURCE_ID);
     }
 
     /**
      * @inheritdoc
      */
-    public function setSourceItemId(int $sourceItemId)
+    public function setSourceId(int $sourceItemId)
     {
-        if (!$this->getSourceItemId()) {
-            $this->setData(self::SOURCE_ITEM_ID, $sourceItemId);
+        if (!$this->getSourceId()) {
+            $this->setData(self::SOURCE_ID, $sourceItemId);
         }
     }
 
@@ -47,6 +47,22 @@ class SourceItemConfiguration extends AbstractExtensibleModel implements SourceI
     public function setNotifyStockQty($quantity)
     {
         $this->setData(self::INVENTORY_NOTIFY_QTY, $quantity);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSku()
+    {
+        return $this->getData(self::SKU);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setSku(string $sku)
+    {
+        $this->setData(self::SKU, $sku);
     }
 
     /**

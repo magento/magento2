@@ -54,15 +54,9 @@ class GetSourceItemConfiguration
 
         $mainTable = $this->resourceConnection
             ->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
-        $joinTable = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
         $select = $connection->select()->from(
-            ['mt' => $mainTable],
-            [SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]
-        )->joinRight(
-            ['sit' => $joinTable],
-            'mt.source_item_id=sit.source_item_id',
-            ['source_item_id', 'source_id']
+            ['mt' => $mainTable]
         )->where(
             'source_id=:source_id AND sku=:sku'
         );

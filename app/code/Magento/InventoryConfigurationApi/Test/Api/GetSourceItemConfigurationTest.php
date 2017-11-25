@@ -32,7 +32,7 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'Get',
+                'operation' => self::SERVICE_NAME . 'execute',
             ],
         ];
 
@@ -42,7 +42,7 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
             $response =$this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'sku' => $sku]);
         }
 
-        $this->assertTrue($response[SourceItemConfigurationInterface::SOURCE_ITEM_ID] == 1 &&
+        $this->assertTrue($response[SourceItemConfigurationInterface::SOURCE_ID] == 10 &&
                           $response[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY] == 2);
     }
 }

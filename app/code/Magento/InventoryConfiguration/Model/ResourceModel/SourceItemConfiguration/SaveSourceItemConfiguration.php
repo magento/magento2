@@ -23,7 +23,6 @@ class SaveSourceItemConfiguration
      */
     private $resourceConnection;
 
-
     /**
      * @param ResourceConnection $resourceConnection
      */
@@ -49,7 +48,8 @@ class SaveSourceItemConfiguration
             ->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
 
         $columnsSql = $this->buildColumnsSqlPart([
-            SourceItemConfigurationInterface::SOURCE_ITEM_ID,
+            SourceItemConfigurationInterface::SOURCE_ID,
+            SourceItemConfigurationInterface::SKU,
             SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY
         ]);
 
@@ -82,26 +82,28 @@ class SaveSourceItemConfiguration
     }
 
     /**
-     * @param SourceItemInterface[] $sourceItems
+     * @param SourceItemInterface[] $sourceItemsConfigurations
      * @return string
      */
-    private function buildValuesSqlPart(array $sourceItems): string
+    private function buildValuesSqlPart(array $sourceItemsConfigurations): string
     {
-        $sql = rtrim(str_repeat('(?, ?), ', count($sourceItems)), ', ');
+        $sql = rtrim(str_repeat('(?, ?, ?), ', count($sourceItemsConfigurations)), ', ');
         return $sql;
     }
 
     /**
-     * @param SourceItemInterface[] $sourceItems
+     * @param SourceItemInterface[] $sourceItemsConfiguration
      * @return array
      */
-    private function getSqlBindData(array $sourceItems): array
+    private function getSqlBindData(array $sourceItemsConfiguration): array
     {
         $bind = [];
-        foreach ($sourceItems as $sourceItem) {
+        /** @var SourceItemConfigurationInterface $sourceItemConfiguration */
+        foreach ($sourceItemsConfiguration as $sourceItemConfiguration) {
             $bind = array_merge($bind, [
-                $sourceItem->getSourceItemId(),
-                $sourceItem->getNotifyStockQty()
+                $sourceItemConfiguration->getSourceId(),
+                $sourceItemConfiguration->getSku(),
+                $sourceItemConfiguration->getNotifyStockQty()
             ]);
         }
         return $bind;

@@ -5,17 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Test\Integration\Model\ResourceModel\SourceItemConfiguration;
+namespace Magento\InventoryConfigurationApi\Test\Api;
 
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
-use PHPUnit\Framework\TestCase;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
-use Magento\InventoryConfiguration\Model\SourceItemConfiguration\DeleteInterface as InventoryItemConfigurationDelete;
 use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
+use Magento\Framework\Webapi\Rest\Request;
 
-class DeleteSourceItemConfigurationTest extends TestCase
+class DeleteSourceItemConfigurationTest extends WebapiAbstract
 {
+    const RESOURCE_PATH = '/V1/inventory/configuration';
+    const SERVICE_NAME = 'inventoryConfigurationApiDeleteSourceItemConfigurationV1';
+
     /**
      * @var GetSourceItemConfigurationInterface
      */
@@ -26,17 +29,11 @@ class DeleteSourceItemConfigurationTest extends TestCase
      */
     private $sourceItemConfigurationFactory;
 
-    /**
-     * @var InventoryItemConfigurationDelete
-     */
-    private $inventoryItemConfigurationDelete;
 
     protected function setUp()
     {
         $this->sourceItemConfigurationFactory = Bootstrap::getObjectManager()
             ->create(SourceItemConfigurationInterfaceFactory::class);
-        $this->inventoryItemConfigurationDelete = Bootstrap::getObjectManager()
-            ->create(InventoryItemConfigurationDelete::class);
         $this->getSourceItemConfiguration = Bootstrap::getObjectManager()
             ->create(GetSourceItemConfigurationInterface::class);
     }
@@ -48,20 +45,35 @@ class DeleteSourceItemConfigurationTest extends TestCase
      */
     public function testDeleteSourceItemConfiguration()
     {
-        $sourceItemId = 1;
         $sourceId = 10;
         $notifyStockQty = 2;
         $sku = 'SKU-1';
 
         /** @var SourceItemConfigurationInterface  $sourceItemConfiguration */
         $sourceItemConfiguration = $this->sourceItemConfigurationFactory->create();
-        $sourceItemConfiguration->setSourceItemId($sourceItemId);
+        $sourceItemConfiguration->setSourceId($sourceId);
         $sourceItemConfiguration->setNotifyStockQty($notifyStockQty);
 
         $itemConfigurationFromDb = $this->getItemConfiguration($sourceId, $sku);
         $this->assertEquals(2, $itemConfigurationFromDb->getNotifyStockQty());
 
-        $this->inventoryItemConfigurationDelete->delete($sourceItemConfiguration);
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?'
+                    . http_build_query(['sourceId' => $sourceId, 'sku' => $sku]),
+                'httpMethod' => Request::HTTP_METHOD_DELETE,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'Execute',
+            ],
+        ];
+
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+            $response = $this->_webApiCall($serviceInfo);
+        } else {
+            $response =$this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'sku' => $sku]);
+        }
 
         $itemConfigurationFromDb = $this->getItemConfiguration($sourceId, $sku);
 
