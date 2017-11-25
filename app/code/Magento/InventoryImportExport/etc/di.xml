@@ -28,6 +28,9 @@
         </arguments>
     </type>
 
+    <!-- Source Item Import -->
+    <preference for="\Magento\CatalogImportExport\Model\StockItemImporterInterface" type="\Magento\InventoryImportExport\Model\StockItemImporter" />
+
     <!-- Export -->
     <preference for="Magento\InventoryImportExport\Model\Export\SourceItemCollectionFactoryInterface" type="Magento\InventoryImportExport\Model\Export\SourceItemCollectionFactory"/>
     <preference for="Magento\InventoryImportExport\Model\Export\ColumnProviderInterface" type="\Magento\InventoryImportExport\Model\Export\ColumnProvider"/>
