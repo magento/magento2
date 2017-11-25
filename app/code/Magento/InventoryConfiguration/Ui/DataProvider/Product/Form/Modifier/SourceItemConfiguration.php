@@ -16,9 +16,9 @@ use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 
 
 /**
- * Product form modifier. Add to form source data
+ * Product form modifier. Add to form source item configuration data
  */
-class Configuration extends AbstractModifier
+class SourceItemConfiguration extends AbstractModifier
 {
     /**
      * @var LocatorInterface
