@@ -69,6 +69,7 @@ class Delete extends Action
                 '_current' => true,
             ]);
         }
+
         return $resultRedirect;
     }
 }

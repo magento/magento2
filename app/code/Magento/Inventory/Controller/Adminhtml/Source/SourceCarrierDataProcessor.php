@@ -36,7 +36,9 @@ class SourceCarrierDataProcessor
 
     /**
      * @param array $data
+     *
      * @return array
+     *
      * @throws InputException
      */
     public function process(array $data): array
@@ -53,11 +55,13 @@ class SourceCarrierDataProcessor
             $data[SourceInterface::CARRIER_LINKS] = [];
         }
         unset($data['carrier_codes']);
+
         return $data;
     }
 
     /**
      * @param array $carrierCodes
+     *
      * @return array
      */
     private function getCarrierLinksData(array $carrierCodes): array

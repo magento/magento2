@@ -68,6 +68,7 @@ class Edit extends Action
             );
             $result->setPath('*/*');
         }
+
         return $result;
     }
 }

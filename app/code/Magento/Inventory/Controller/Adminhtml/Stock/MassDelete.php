@@ -56,6 +56,7 @@ class MassDelete extends Action
     {
         if ($this->getRequest()->isPost() !== true) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
+
             return $this->resultRedirectFactory->create()->setPath('*/*');
         }
 

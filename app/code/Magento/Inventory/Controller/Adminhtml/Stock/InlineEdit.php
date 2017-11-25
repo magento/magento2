@@ -91,6 +91,7 @@ class InlineEdit extends Action
             'messages' => $errorMessages,
             'error' => count($errorMessages),
         ]);
+
         return $resultJson;
     }
 }

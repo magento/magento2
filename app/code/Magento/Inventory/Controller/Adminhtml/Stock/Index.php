@@ -31,6 +31,7 @@ class Index extends Action
         $resultPage->setActiveMenu('Magento_Inventory::stock')
             ->addBreadcrumb(__('Sources'), __('List'));
         $resultPage->getConfig()->getTitle()->prepend(__('Manage Stock'));
+
         return $resultPage;
     }
 }

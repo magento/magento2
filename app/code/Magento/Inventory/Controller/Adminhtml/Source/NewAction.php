@@ -31,6 +31,7 @@ class NewAction extends Action
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         $resultPage->setActiveMenu('Magento_Inventory::source');
         $resultPage->getConfig()->getTitle()->prepend(__('New Source'));
+
         return $resultPage;
     }
 }
