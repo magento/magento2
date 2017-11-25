@@ -91,7 +91,7 @@ class ProcessSourceItemsObserver implements ObserverInterface
      * @param array $productParams
      * @return void
      */
-    private function updateDefaultSourceQty($productParams)
+    private function updateDefaultSourceQty(array $productParams)
     {
         $sku = $productParams['sku'];
         $qtyAndStockStatus = $productParams['quantity_and_stock_status'];
