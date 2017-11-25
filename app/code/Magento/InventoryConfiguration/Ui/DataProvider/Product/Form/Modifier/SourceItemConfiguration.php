@@ -14,11 +14,10 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 
-
 /**
- * Product form modifier. Add to form source data
+ * Product form modifier. Add to form source item configuration data
  */
-class Configuration extends AbstractModifier
+class SourceItemConfiguration extends AbstractModifier
 {
     /**
      * @var LocatorInterface
@@ -50,7 +49,10 @@ class Configuration extends AbstractModifier
         $product = $this->locator->getProduct();
         $assignedSources = $data[$product->getId()]['sources']['assigned_sources'];
 
-        $data[$product->getId()]['sources']['assigned_sources'] = $this->getSourceItemsConfigurationData($assignedSources, $product);
+        $data[$product->getId()]['sources']['assigned_sources'] = $this->getSourceItemsConfigurationData(
+            $assignedSources,
+            $product
+        );
         return $data;
     }
 
@@ -67,7 +69,8 @@ class Configuration extends AbstractModifier
                 $product->getSku()
             );
 
-            $source[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY] = $sourceConfiguration[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY];
+            $source[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY] =
+                $sourceConfiguration[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY];
         }
         return $assignedSources;
     }

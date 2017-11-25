@@ -35,10 +35,10 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
     /**
      * Set source id
      *
-     * @param int $sourceItemId
+     * @param int $sourceId
      * @return void
      */
-    public function setSourceId(int $sourceItemId);
+    public function setSourceId(int $sourceId);
 
     /**
      * Get notify stock qty
