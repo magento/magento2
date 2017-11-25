@@ -84,7 +84,8 @@ class CreateSourceItemTable
             Table::TYPE_SMALLINT,
             null,
             [
-                Table::OPTION_NULLABLE => true,
+                Table::OPTION_NULLABLE => false,
+                Table::OPTION_DEFAULT => SourceItemInterface::STATUS_OUT_OF_STOCK,
                 Table::OPTION_UNSIGNED => true,
             ],
             'Status'
