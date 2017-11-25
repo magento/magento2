@@ -7,23 +7,44 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration;
 
-use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
-use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\GetSourceItemConfiguration as ResourceGetSourceItemConfiguration;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\GetSourceItemConfiguration as ResourceGetSourceItemConfiguration;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
+use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Implementation of SourceItem Quantity notification save multiple operation for specific db layer
- * Save Multiple used here for performance efficient purposes over single save operation
+ * Class GetSourceItemConfiguration
  */
 class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
 {
     /**
+     * Default Notify Stock Qty config path
+     */
+    const XML_PATH_NOTIFY_STOCK_QTY = 'inventory/inventory_configuration/notify_stock_qty_default';
+
+    /**
      * @var ResourceGetSourceItemConfiguration
      */
     private $getConfiguration;
+
+    /**
+     * @var SourceItemConfigurationInterfaceFactory
+     */
+    private $sourceItemConfigurationFactory;
+
+    /**
+     * @var DataObjectHelper
+     */
+    private $dataObjectHelper;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @var LoggerInterface
@@ -34,13 +55,21 @@ class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
      * ResourceGetSourceItemConfiguration constructor.
      *
      * @param ResourceGetSourceItemConfiguration $getConfiguration
+     * @param SourceItemConfigurationInterface $sourceItemConfigurationFactory
+     * @param DataObjectHelper $dataObjectHelper
      * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceGetSourceItemConfiguration $getConfiguration,
+        SourceItemConfigurationInterface $sourceItemConfigurationFactory,
+        DataObjectHelper $dataObjectHelper,
+        ScopeConfigInterface $scopeConfig,
         LoggerInterface $logger
     ) {
         $this->getConfiguration = $getConfiguration;
+        $this->sourceItemConfigurationFactory = $sourceItemConfigurationFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
+        $this->scopeConfig = $scopeConfig;
         $this->logger = $logger;
     }
 
@@ -52,11 +81,40 @@ class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
         if (empty($sourceId) || empty($sku)) {
             throw new InputException(__('SourceId oder Sku missing'));
         }
-        try {
-            return $this->getConfiguration->execute($sourceId, $sku);
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-            throw new LocalizedException(__('Could not load Source Item Configuration.'), $e);
+
+        $sourceItemConfigurationData = $this->getConfiguration->execute($sourceId, $sku);
+
+        if ($sourceItemConfigurationData === null) {
+            $sourceItemConfigurationData = $this->getDefaultValues($sourceId, $sku);
         }
+
+        /** @var SourceItemConfigurationInterface $sourceItem */
+        $sourceItemConfiguration = $this->sourceItemConfigurationFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $sourceItemConfiguration,
+            $sourceItemConfigurationData,
+            SourceItemConfigurationInterface::class
+        );
+        return $sourceItemConfiguration;
+    }
+
+    /**
+     * Get default configuration in case of non-existent specific configuration for a source item
+     *
+     * @param int $sourceId
+     * @param string $sku
+     * @return array
+     */
+    private function getDefaultValues(int $sourceId, string $sku) : array
+    {
+        $inventoryNotifyQty = (float)$this->scopeConfig->getValue(self::XML_PATH_NOTIFY_STOCK_QTY);
+
+        $defaultConfiguration = [
+            SourceItemConfigurationInterface::SOURCE_ID => $sourceId,
+            SourceItemConfigurationInterface::SKU => $sku,
+            SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => $inventoryNotifyQty,
+        ];
+
+        return $defaultConfiguration;
     }
 }
