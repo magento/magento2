@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Observer\Stock;
 
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\InventoryApi\Api\Data\StockInterface;
@@ -44,7 +45,9 @@ class PopulateWithWebsiteSalesChannelsObserver implements ObserverInterface
     {
         /** @var StockInterface $stock */
         $stock = $observer->getEvent()->getStock();
-        $requestData = $observer->getEvent()->getRequestData();
+        /** @var RequestInterface $request */
+        $request = $observer->getEvent()->getRequest();
+        $requestData = $request->getParams();
 
         $extensionAttributes = $stock->getExtensionAttributes();
         $assignedSalesChannels = $extensionAttributes->getSalesChannels();

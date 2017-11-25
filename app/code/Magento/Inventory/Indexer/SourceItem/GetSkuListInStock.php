@@ -29,15 +29,25 @@ class GetSkuListInStock
     private $skuListInStockFactory;
 
     /**
+     * @var int
+     */
+    private $groupConcatMaxLen;
+
+    /**
+     * GetSkuListInStock constructor.
+     *
      * @param ResourceConnection $resourceConnection
      * @param SkuListInStockFactory $skuListInStockFactory
+     * @param int $groupConcatMaxLen
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        SkuListInStockFactory $skuListInStockFactory
+        SkuListInStockFactory $skuListInStockFactory,
+        int $groupConcatMaxLen
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->skuListInStockFactory = $skuListInStockFactory;
+        $this->groupConcatMaxLen = $groupConcatMaxLen;
     }
 
     /**
@@ -71,6 +81,7 @@ class GetSkuListInStock
             )->where('source_item.source_item_id IN (?)', $sourceItemIds)
             ->group(['stock_source_link.' . StockSourceLink::STOCK_ID]);
 
+        $connection->query('SET group_concat_max_len = ' . $this->groupConcatMaxLen);
         $items = $connection->fetchAll($select);
         return $this->getStockIdToSkuList($items);
     }

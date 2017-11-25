@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Controller\Adminhtml\Stock;
 
 use Magento\Backend\App\Action;
@@ -10,10 +12,12 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\StockRepositoryInterface;
 
 /**
  * InlineEdit Controller
@@ -53,7 +57,7 @@ class InlineEdit extends Action
     /**
      * @inheritdoc
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         $errorMessages = [];
         $request = $this->getRequest();
@@ -72,6 +76,13 @@ class InlineEdit extends Action
                         '[ID: %value] The Stock does not exist.',
                         ['value' => $itemData[StockInterface::STOCK_ID]]
                     );
+                } catch (ValidationException $e) {
+                    foreach ($e->getErrors() as $localizedError) {
+                        $errorMessages[] = __('[ID: %value] %message', [
+                            'value' => $itemData[StockInterface::STOCK_ID],
+                            'message' => $localizedError->getMessage()
+                        ]);
+                    }
                 } catch (CouldNotSaveException $e) {
                     $errorMessages[] = __('[ID: %value] %message', [
                         'value' => $itemData[StockInterface::STOCK_ID],
@@ -89,6 +100,7 @@ class InlineEdit extends Action
             'messages' => $errorMessages,
             'error' => count($errorMessages),
         ]);
+
         return $resultJson;
     }
 }

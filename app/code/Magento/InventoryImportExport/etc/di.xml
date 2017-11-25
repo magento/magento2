@@ -44,4 +44,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\ImportExport\Model\Import\SampleFileProvider">
+        <arguments>
+            <argument name="samples" xsi:type="array">
+                <item name="stock_sources" xsi:type="string">Magento_InventoryImportExport</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
