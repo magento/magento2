@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Controller\Adminhtml\Stock;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Inventory\Ui\Component\MassAction\Filter;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Inventory\Ui\Component\MassAction\Filter;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
 
 /**
@@ -49,7 +52,7 @@ class MassDelete extends Action
     /**
      * @inheritdoc
      */
-    public function execute()
+    public function execute(): Redirect
     {
         if ($this->getRequest()->isPost() !== true) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));

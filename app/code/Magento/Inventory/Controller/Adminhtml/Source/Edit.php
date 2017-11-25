@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Controller\Adminhtml\Source;
 
 use Magento\Backend\App\Action;
@@ -10,9 +12,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
  * Edit Controller
@@ -44,7 +47,7 @@ class Edit extends Action
     /**
      * @inheritdoc
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         $sourceId = $this->getRequest()->getParam(SourceInterface::SOURCE_ID);
         try {

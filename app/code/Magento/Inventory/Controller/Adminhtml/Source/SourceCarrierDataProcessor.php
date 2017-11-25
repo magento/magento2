@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Controller\Adminhtml\Source;
 
 use Magento\Framework\Exception\InputException;
@@ -37,7 +39,7 @@ class SourceCarrierDataProcessor
      * @return array
      * @throws InputException
      */
-    public function process(array $data)
+    public function process(array $data): array
     {
         $useDefaultCarrierConfig = isset($data[SourceInterface::USE_DEFAULT_CARRIER_CONFIG])
             && true === (bool)$data[SourceInterface::USE_DEFAULT_CARRIER_CONFIG];
@@ -58,7 +60,7 @@ class SourceCarrierDataProcessor
      * @param array $carrierCodes
      * @return array
      */
-    private function getCarrierLinksData(array $carrierCodes)
+    private function getCarrierLinksData(array $carrierCodes): array
     {
         $carrierLinks = [];
         foreach ($carrierCodes as $carrierCode) {
