@@ -9,7 +9,7 @@ namespace Magento\Inventory\Controller\Adminhtml\Stock;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\StockInterface;
@@ -45,7 +45,7 @@ class Delete extends Action
     /**
      * @inheritdoc
      */
-    public function execute(): Redirect
+    public function execute(): ResultInterface
     {
         $resultRedirect = $this->resultRedirectFactory->create();
 

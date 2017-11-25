@@ -38,7 +38,6 @@ class SourceCarrierDataProcessor
      * @param array $data
      *
      * @return array
-     *
      * @throws InputException
      */
     public function process(array $data): array

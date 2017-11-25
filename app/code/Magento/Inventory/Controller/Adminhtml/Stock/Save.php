@@ -10,6 +10,7 @@ namespace Magento\Inventory\Controller\Adminhtml\Stock;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
@@ -44,7 +45,7 @@ class Save extends Action
     /**
      * @inheritdoc
      */
-    public function execute(): Redirect
+    public function execute(): ResultInterface
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $requestData = $this->getRequest()->getParams();
@@ -77,6 +78,7 @@ class Save extends Action
     /**
      * @param Redirect $resultRedirect
      * @param int $stockId
+     *
      * @return void
      */
     private function processRedirectAfterSuccessSave(Redirect $resultRedirect, int $stockId)
@@ -98,6 +100,7 @@ class Save extends Action
     /**
      * @param Redirect $resultRedirect
      * @param int|null $stockId
+     *
      * @return void
      */
     private function processRedirectAfterFailureSave(Redirect $resultRedirect, int $stockId = null)

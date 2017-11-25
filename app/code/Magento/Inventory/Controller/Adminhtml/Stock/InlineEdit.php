@@ -12,10 +12,11 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\StockRepositoryInterface;
 
 /**
  * InlineEdit Controller
@@ -55,7 +56,7 @@ class InlineEdit extends Action
     /**
      * @inheritdoc
      */
-    public function execute(): Json
+    public function execute(): ResultInterface
     {
         $errorMessages = [];
         $request = $this->getRequest();
