@@ -46,7 +46,12 @@ class DeleteSourceItemConfigurationTest extends WebapiAbstract
         $sourceItemConfiguration = $this->getSourceItemConfiguration($sourceId, $sku);
 
         self::assertNotEmpty($sourceItemConfiguration);
-        self::assertEquals(null, $sourceItemConfiguration[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]);
+        // TODO: need to move to fixture
+        $defaultNotifyQtyValue = 1;
+        self::assertEquals(
+            $defaultNotifyQtyValue,
+            $sourceItemConfiguration[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]
+        );
     }
 
     /**
