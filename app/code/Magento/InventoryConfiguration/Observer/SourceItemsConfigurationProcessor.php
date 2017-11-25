@@ -10,10 +10,10 @@ namespace Magento\InventoryConfiguration\Observer;
 use Magento\Framework\Exception\InputException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
-use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface;
 use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface;
 use Magento\InventoryConfiguration\Model\SourceItemConfigurationFactory;
+use Magento\InventoryConfiguration\Model\GetSourceItemConfigurationInterface;
 
 use Magento\Framework\Api\DataObjectHelper;
 
@@ -120,7 +120,11 @@ class SourceItemsConfigurationProcessor
         /** @var \Magento\Inventory\Model\SourceItem $sourceItem */
         foreach ($sourceItemsData as $sourceItem) {
             $sourceId = $sourceItem[SourceItemInterface::SOURCE_ID];
-            $sourceItems[] = $this->getSourceItemConfiguration->get((int)$sourceId, $sku);
+            $sourceItemConfig = $this->getSourceItemConfiguration->execute((int)$sourceId, $sku);
+
+            if (null != $sourceItemConfig) {
+                $sourceItems[] = $sourceItemConfig;
+            }
         }
 
         $sourceItemMap = [];
