@@ -76,8 +76,7 @@ class ApplicationDumpCommand extends Command
         $this->addArgument(
             self::INPUT_CONFIG_TYPES,
             InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
-            sprintf('Space-separated list of config types or omit to dump all [%s]',
-                implode(', ', $this->configTypes))
+            sprintf('Space-separated list of config types or omit to dump all [%s]', implode(', ', $this->configTypes))
         );
         parent::configure();
     }
