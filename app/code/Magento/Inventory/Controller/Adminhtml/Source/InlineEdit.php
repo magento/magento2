@@ -12,8 +12,9 @@ use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 /**
  * InlineEdit Controller
@@ -72,6 +73,13 @@ class InlineEdit extends Action
                         '[ID: %value] The Source does not exist.',
                         ['value' => $itemData[SourceInterface::SOURCE_ID]]
                     );
+                } catch (ValidationException $e) {
+                    foreach ($e->getErrors() as $localizedError) {
+                        $errorMessages[] = __('[ID: %value] %message', [
+                            'value' => $itemData[SourceInterface::SOURCE_ID],
+                            'message' => $localizedError->getMessage()
+                        ]);
+                    }
                 } catch (CouldNotSaveException $e) {
                     $errorMessages[] = __(
                         '[ID: %value] %message',
