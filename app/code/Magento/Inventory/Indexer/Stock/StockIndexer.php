@@ -10,7 +10,6 @@ namespace Magento\Inventory\Indexer\Stock;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Inventory\Indexer\Alias;
-use Magento\Inventory\Indexer\IndexDataProvider;
 use Magento\Inventory\Indexer\IndexHandlerInterface;
 use Magento\Inventory\Indexer\IndexNameBuilder;
 use Magento\Inventory\Indexer\IndexStructureInterface;
