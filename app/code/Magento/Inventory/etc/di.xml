@@ -92,6 +92,16 @@
             <argument name="indexScopeResolver" xsi:type="object">Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</argument>
         </arguments>
     </type>
+    <type name="\Magento\Inventory\Indexer\SourceItem\GetSkuListInStock">
+        <arguments>
+            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
+        </arguments>
+    </type>
+    <type name="\Magento\Inventory\Model\ResourceModel\Reservation\ReservationCleanup">
+        <arguments>
+            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
+        </arguments>
+    </type>
     <!-- Reservation -->
     <preference for="Magento\InventoryApi\Api\GetProductQuantityInStockInterface" type="Magento\Inventory\Model\GetProductQuantityInStock"/>
     <preference for="Magento\InventoryApi\Api\IsProductInStockInterface" type="Magento\Inventory\Model\IsProductInStock"/>
