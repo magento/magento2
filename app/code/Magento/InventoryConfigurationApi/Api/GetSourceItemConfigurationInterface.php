@@ -10,7 +10,7 @@ namespace Magento\InventoryConfigurationApi\Api;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 
 /**
- * Get the source configuration for a product.
+ * Get the source item configuration
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *

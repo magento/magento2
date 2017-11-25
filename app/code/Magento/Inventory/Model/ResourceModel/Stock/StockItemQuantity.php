@@ -68,7 +68,7 @@ class StockItemQuantity
         $connection = $this->resource->getConnection();
         $select = $connection->select()
             ->from($stockItemTableName, [IndexStructure::QUANTITY])
-            ->where(IndexStructure::SKU . '=?', $sku);
+            ->where(IndexStructure::SKU . ' = ?', $sku);
 
         $stockItemQty = $connection->fetchOne($select);
         if (false === $stockItemQty) {
