@@ -45,11 +45,11 @@ class UpdateTest extends WebapiAbstract
             SourceInterface::USE_DEFAULT_CARRIER_CONFIG => 0,
             SourceInterface::CARRIER_LINKS => [
                 [
-                    SourceCarrierLinkInterface::CARRIER_CODE => 'ups-updated',
+                    SourceCarrierLinkInterface::CARRIER_CODE => 'dhl',
                     SourceCarrierLinkInterface::POSITION => 2000,
                 ],
                 [
-                    SourceCarrierLinkInterface::CARRIER_CODE => 'usps-updated',
+                    SourceCarrierLinkInterface::CARRIER_CODE => 'fedex',
                     SourceCarrierLinkInterface::POSITION => 3000,
                 ],
             ],
