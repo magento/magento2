@@ -55,13 +55,14 @@ class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
      * ResourceGetSourceItemConfiguration constructor.
      *
      * @param ResourceGetSourceItemConfiguration $getConfiguration
-     * @param SourceItemConfigurationInterface $sourceItemConfigurationFactory
+     * @param SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory
      * @param DataObjectHelper $dataObjectHelper
+     * @param ScopeConfigInterface $scopeConfig
      * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceGetSourceItemConfiguration $getConfiguration,
-        SourceItemConfigurationInterface $sourceItemConfigurationFactory,
+        SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory,
         DataObjectHelper $dataObjectHelper,
         ScopeConfigInterface $scopeConfig,
         LoggerInterface $logger
