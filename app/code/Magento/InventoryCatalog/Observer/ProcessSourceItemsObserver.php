@@ -101,11 +101,12 @@ class ProcessSourceItemsObserver implements ObserverInterface
 
         /** @var  $sourceItem SourceItemInterface */
         $sourceItem = $this->sourceItemInterfaceFactory->create([
-            SourceItemInterface::SKU => $sku,
-            SourceItemInterface::QUANTITY => $qty,
-            SourceItemInterface::STATUS => $stockStatus,
-            SourceItemInterface::SOURCE_ID => $defaultSourceId
-        ]);
+            'data' => [
+                SourceItemInterface::SKU => $sku,
+                SourceItemInterface::QUANTITY => $qty,
+                SourceItemInterface::STATUS => $stockStatus,
+                SourceItemInterface::SOURCE_ID => $defaultSourceId
+            ]]);
 
         $this->sourceItemsSave->execute([$sourceItem]);
     }
