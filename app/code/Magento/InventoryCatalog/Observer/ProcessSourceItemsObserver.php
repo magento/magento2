@@ -83,7 +83,6 @@ class ProcessSourceItemsObserver implements ObserverInterface
         );
 
         $productParams = $controller->getRequest()->getParam('product');
-
         $this->updateDefaultSourceQty($productParams);
     }
 
@@ -106,7 +105,8 @@ class ProcessSourceItemsObserver implements ObserverInterface
                 SourceItemInterface::QUANTITY => $qty,
                 SourceItemInterface::STATUS => $stockStatus,
                 SourceItemInterface::SOURCE_ID => $defaultSourceId
-            ]]);
+            ]
+        ]);
 
         $this->sourceItemsSave->execute([$sourceItem]);
     }
