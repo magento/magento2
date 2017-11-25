@@ -27,19 +27,19 @@ class ProcessSourceItemsObserver implements ObserverInterface
     /**
      * @var SourceItemsProcessor
      */
-    protected $sourceItemsProcessor;
+    private $sourceItemsProcessor;
     /**
      * @var DefaultSourceProviderInterface
      */
-    protected $defaultSourceProvider;
+    private $defaultSourceProvider;
     /**
      * @var SourceItemInterfaceFactory
      */
-    protected $sourceItemInterfaceFactory;
+    private $sourceItemInterfaceFactory;
     /**
      * @var SourceItemsSaveInterface
      */
-    protected $sourceItemsSave;
+    private $sourceItemsSave;
 
     /**
      * @param SourceItemsProcessor $sourceItemsProcessor
@@ -87,22 +87,25 @@ class ProcessSourceItemsObserver implements ObserverInterface
 
     /**
      * @param $controller Save
+     * @return void
      */
-    public function updateDefaultSourceQty($controller)
+    private function updateDefaultSourceQty($controller)
     {
-        /** @var  $sourceItem SourceItemInterface */
-        $sourceItem = $this->sourceItemInterfaceFactory->create();
         $productParams = $controller->getRequest()->getParam('product');
 
         $sku = $productParams['sku'];
-        $sourceItem->setSku($sku);
         $qtyAndStockStatus = $productParams['quantity_and_stock_status'];
         $qty = $qtyAndStockStatus['qty'];
-        $sourceItem->setQuantity($qty);
         $stockStatus = $qtyAndStockStatus['is_in_stock'];
-        $sourceItem->setStatus($stockStatus);
         $defaultSourceId = $this->defaultSourceProvider->getId();
-        $sourceItem->setSourceId($defaultSourceId);
+
+        /** @var  $sourceItem SourceItemInterface */
+        $sourceItem = $this->sourceItemInterfaceFactory->create([
+            SourceItemInterface::SKU => $sku,
+            SourceItemInterface::QUANTITY => $qty,
+            SourceItemInterface::STATUS => $stockStatus,
+            SourceItemInterface::SOURCE_ID => $defaultSourceId
+        ]);
 
         $this->sourceItemsSave->execute([$sourceItem]);
     }
