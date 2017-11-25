@@ -48,8 +48,9 @@ class Save extends Action
     public function execute(): ResultInterface
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $requestData = $this->getRequest()->getParams();
-        if (!$this->getRequest()->isPost() || empty($requestData['general'])) {
+        $request = $this->getRequest();
+        $requestData = $request->getParams();
+        if (!$request->isPost() || empty($requestData['general'])) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
             $this->processRedirectAfterFailureSave($resultRedirect);
 
@@ -59,7 +60,9 @@ class Save extends Action
             $stockId = isset($requestData['general'][StockInterface::STOCK_ID])
                 ? (int)$requestData['general'][StockInterface::STOCK_ID]
                 : null;
-            $stockId = $this->stockSaveProcessor->process($stockId, $requestData);
+
+            $stockId = $this->stockSaveProcessor->process($stockId, $request);
+
             $this->messageManager->addSuccessMessage(__('The Stock has been saved.'));
             $this->processRedirectAfterSuccessSave($resultRedirect, $stockId);
         } catch (ValidationException $e) {
