@@ -86,7 +86,7 @@ class ProcessSourceItemsObserver implements ObserverInterface
     }
 
     /**
-     * @param $controller Save
+     * @param Save $controller
      * @return void
      */
     private function updateDefaultSourceQty($controller)
