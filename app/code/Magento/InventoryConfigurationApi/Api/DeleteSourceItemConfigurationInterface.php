@@ -8,17 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventoryConfigurationApi\Api;
 
 /**
- * Get the source configuration for a product.
- *
- * Used fully qualified namespaces in annotations for proper work of WebApi request parser
+ * Delete the source item configuration
  *
  * @api
  */
 interface DeleteSourceItemConfigurationInterface
 {
     /**
-     * Delete the SourceItem Configuration data
-     *
      * @param int $sourceId
      * @param string $sku
      * @return void

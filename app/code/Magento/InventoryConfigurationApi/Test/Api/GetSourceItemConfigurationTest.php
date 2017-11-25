@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\InventoryConfigurationApi\Test\Api;
 
@@ -12,7 +13,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class GetSourceItemConfigurationTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/inventory/configuration';
+    const RESOURCE_PATH = '/V1/inventory/source-item-configuration';
     const SERVICE_NAME = 'inventoryConfigurationApiGetSourceItemConfigurationV1';
 
     /**
@@ -36,13 +37,11 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
             ],
         ];
 
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
-            $response = $this->_webApiCall($serviceInfo);
-        } else {
-            $response =$this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'sku' => $sku]);
-        }
+        $response = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
+            ? $this->_webApiCall($serviceInfo)
+            : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'sku' => $sku]);
 
-        $this->assertTrue($response[SourceItemConfigurationInterface::SOURCE_ID] == 10 &&
-                          $response[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY] == 2);
+        self::assertEquals(10, $response[SourceItemConfigurationInterface::SOURCE_ID]);
+        self::assertEquals(2, $response[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]);
     }
 }
