@@ -47,13 +47,13 @@ class SourceItemConfigurationsSave implements SourceItemConfigurationsSaveInterf
     /**
      * @inheritdoc
      */
-    public function execute(array $configuration)
+    public function execute(array $sourceItemConfigurations)
     {
-        if (empty($configuration)) {
+        if (empty($sourceItemConfigurations)) {
             throw new InputException(__('Input data is empty'));
         }
         try {
-            $this->saveConfiguration->execute($configuration);
+            $this->saveConfiguration->execute($sourceItemConfigurations);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not save Source Item Configuration'), $e);
