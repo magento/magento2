@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Controller\Adminhtml\Source;
 
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Validation\ValidationException;
@@ -62,7 +65,7 @@ class Save extends Action
     /**
      * @inheritdoc
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $requestData = $this->getRequest()->getParams();
@@ -94,12 +97,14 @@ class Save extends Action
             $this->messageManager->addErrorMessage(__('Wrong request.'));
             $this->processRedirectAfterFailureSave($resultRedirect);
         }
+
         return $resultRedirect;
     }
 
     /**
      * @param array $requestData
      * @param int|null $sourceId
+     *
      * @return int
      */
     private function processSave(array $requestData, int $sourceId = null): int
@@ -136,6 +141,7 @@ class Save extends Action
     /**
      * @param Redirect $resultRedirect
      * @param int $sourceId
+     *
      * @return void
      */
     private function processRedirectAfterSuccessSave(Redirect $resultRedirect, int $sourceId)
@@ -157,6 +163,7 @@ class Save extends Action
     /**
      * @param Redirect $resultRedirect
      * @param int|null $sourceId
+     *
      * @return void
      */
     private function processRedirectAfterFailureSave(Redirect $resultRedirect, int $sourceId = null)
