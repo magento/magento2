@@ -53,12 +53,12 @@ class ConfigStatusCommand extends Command
     {
         if ($this->changeDetector->hasChanges()) {
             $output->writeln(
-                '<info>The configuration file has changed. ' .
+                '<info>Config files have changed. ' .
                 'Run app:config:import or setup:upgrade command to synchronize configuration.</info>'
             );
             return self::EXIT_CODE_CONFIG_IMPORT_REQUIRED;
         }
-        $output->writeln('<info>Configuration files are up to date.</info>');
+        $output->writeln('<info>Config files are up to date.</info>');
         return Cli::RETURN_SUCCESS;
     }
 }

@@ -62,12 +62,12 @@ class ConfigStatusCommandTest extends \PHPUnit\Framework\TestCase
         return [
             'Config is up to date' => [
                 false,
-                'Configuration files are up to date.' . PHP_EOL,
+                'Config files are up to date.' . PHP_EOL,
                 Cli::RETURN_SUCCESS
             ],
             'Config needs update' => [
                 true,
-                'The configuration file has changed. ' .
+                'Config files have changed. ' .
                 'Run app:config:import or setup:upgrade command to synchronize configuration.' . PHP_EOL,
                 ConfigStatusCommand::EXIT_CODE_CONFIG_IMPORT_REQUIRED,
             ],
