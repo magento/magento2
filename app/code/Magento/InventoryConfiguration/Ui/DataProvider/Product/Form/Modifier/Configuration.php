@@ -63,7 +63,7 @@ class Configuration extends AbstractModifier
     {
         foreach ($assignedSources as &$source) {
             $sourceConfiguration = $this->getSourceItemConfiguration->get(
-                $source[SourceInterface::SOURCE_ID],
+                (int)$source[SourceInterface::SOURCE_ID],
                 $product->getSku()
             );
 

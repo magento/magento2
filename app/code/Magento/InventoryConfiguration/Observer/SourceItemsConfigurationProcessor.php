@@ -120,13 +120,13 @@ class SourceItemsConfigurationProcessor
         /** @var \Magento\Inventory\Model\SourceItem $sourceItem */
         foreach ($sourceItemsData as $sourceItem) {
             $sourceId = $sourceItem[SourceItemInterface::SOURCE_ID];
-            $sourceItems[] = $this->getSourceItemConfiguration->get($sourceId, $sku);
+            $sourceItems[] = $this->getSourceItemConfiguration->get((int)$sourceId, $sku);
         }
 
         $sourceItemMap = [];
         if ($sourceItems) {
             foreach ($sourceItems as $sourceItem) {
-                $sourceItemMap[$sourceItem[SourceItemInterface::SOURCE_ID]] = $sourceItem;
+                $sourceItemMap[(int)$sourceItem[SourceItemInterface::SOURCE_ID]] = $sourceItem;
             }
         }
         return $sourceItemMap;
@@ -150,8 +150,12 @@ class SourceItemsConfigurationProcessor
      */
     private function deleteSourceItemsConfiguration(array $sourceItemsConfigurations)
     {
+        /** @var SourceItemInterface $sourceItemConfiguration */
         foreach ($sourceItemsConfigurations as $sourceItemConfiguration) {
-            $this->sourceItemConfigurationDelete->execute($sourceItemConfiguration);
+            $this->sourceItemConfigurationDelete->execute(
+                $sourceItemConfiguration->getSourceId(),
+                $sourceItemConfiguration->getSku()
+            );
         }
     }
 }
