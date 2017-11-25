@@ -14,8 +14,4 @@
                 type="Magento\InventoryConfiguration\Model\SourceItemConfiguration\Delete"/>
     <preference for="Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface"
                 type="Magento\InventoryConfiguration\Model\SourceItemConfiguration"/>
-
-    <type name="Magento\Catalog\Model\ResourceModel\Product">
-        <plugin name="handle_notification_on_save" type="Magento\InventoryConfiguration\Plugin\Model\ResourceModel\Product" sortOrder="1" />
-    </type>
 </config>
