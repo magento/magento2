@@ -91,16 +91,16 @@ class StockSaveProcessor
             $this->eventManager->dispatch(
                 'save_stock_controller_populate_stock_with_data',
                 [
-                    'request'   => $request,
-                    'stock'     => $stock,
+                    'request' => $request,
+                    'stock' => $stock,
                 ]
             );
             $stockId = $this->stockRepository->save($stock);
             $this->eventManager->dispatch(
                 'save_stock_controller_processor_after_save',
                 [
-                    'request'   => $request,
-                    'stock'     => $stock,
+                    'request' => $request,
+                    'stock' => $stock,
                 ]
             );
 
