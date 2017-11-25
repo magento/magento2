@@ -11,7 +11,7 @@ use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
- * Implementation of basic operations for Source Item Notification entity for specific db layer
+ * @inheritdoc
  */
 class SourceItemConfiguration extends AbstractExtensibleModel implements SourceItemConfigurationInterface
 {
@@ -26,11 +26,9 @@ class SourceItemConfiguration extends AbstractExtensibleModel implements SourceI
     /**
      * @inheritdoc
      */
-    public function setSourceId(int $sourceItemId)
+    public function setSourceId(int $sourceId)
     {
-        if (!$this->getSourceId()) {
-            $this->setData(self::SOURCE_ID, $sourceItemId);
-        }
+        $this->setData(self::SOURCE_ID, $sourceId);
     }
 
     /**
