@@ -41,7 +41,9 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'sku' => $sku]);
 
-        self::assertEquals(10, $response[SourceItemConfigurationInterface::SOURCE_ID]);
+        self::assertNotEmpty($response);
+        self::assertEquals($sourceId, $response[SourceItemConfigurationInterface::SOURCE_ID]);
+        self::assertEquals($sku, $response[SourceItemConfigurationInterface::SKU]);
         self::assertEquals(2, $response[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]);
     }
 }
