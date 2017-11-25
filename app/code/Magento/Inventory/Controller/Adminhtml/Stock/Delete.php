@@ -56,9 +56,6 @@ class Delete extends Action
             $this->stockRepository->deleteById($stockId);
             $this->messageManager->addSuccessMessage(__('The Stock has been deleted.'));
             $resultRedirect->setPath('*/*');
-        } catch (NoSuchEntityException $e) {
-            $this->messageManager->addErrorMessage(__('Stock with id "%1" does not exist.', $stockId));
-            $resultRedirect->setPath('*/*');
         } catch (CouldNotDeleteException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
             $resultRedirect->setPath('*/*/edit', [
