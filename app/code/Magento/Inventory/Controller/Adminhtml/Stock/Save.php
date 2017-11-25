@@ -56,7 +56,27 @@ class Save extends Action
             $stockId = isset($requestData['general'][StockInterface::STOCK_ID])
                 ? (int)$requestData['general'][StockInterface::STOCK_ID]
                 : null;
+
+            $this->_eventManager->dispatch(
+                'controller_action_inventory_stock_save_before',
+                [
+                    'controller'    => $this,
+                    'request_data'  => $requestData,
+                    'stockId'        => $stockId,
+                ]
+            );
+
             $stockId = $this->stockSaveProcessor->process($stockId, $requestData);
+
+            $this->_eventManager->dispatch(
+                'controller_action_inventory_stock_save_after',
+                [
+                    'controller'    => $this,
+                    'request_data'  => $requestData,
+                    'stockId'        => $stockId,
+                ]
+            );
+
             $this->messageManager->addSuccessMessage(__('The Stock has been saved.'));
             $this->processRedirectAfterSuccessSave($resultRedirect, $stockId);
         } catch (ValidationException $e) {

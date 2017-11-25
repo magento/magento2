@@ -112,7 +112,26 @@ class Save extends Action
         }
         $source = $this->sourceHydrator->hydrate($source, $requestData);
 
+        $this->_eventManager->dispatch(
+            'controller_action_inventory_source_save_before',
+            [
+                'controller'    => $this,
+                'request_data'  => $requestData,
+                'source'        => $source,
+            ]
+        );
+
         $sourceId = $this->sourceRepository->save($source);
+
+        $this->_eventManager->dispatch(
+            'controller_action_inventory_source_save_after',
+            [
+                'controller'    => $this,
+                'request_data'  => $requestData,
+                'sourceId'      => $sourceId,
+            ]
+        );
+
         return $sourceId;
     }
 
