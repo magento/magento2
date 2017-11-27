@@ -104,7 +104,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
                 // if the product is associated with any category
                 if ($categories->count()) {
                     // show products from this category
-                    $this->setCategoryId(current($categories->getIterator()));
+                    $this->setCategoryId(current($categories->getIterator())->getId());
                 }
             }
 
