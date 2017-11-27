@@ -90,7 +90,7 @@ class PrintLabelTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Model\Order\Shipment::class,
             ['getIncrementId', 'getShippingLabel', '__wakeup']
         );
-        $this->messageManagerMock = $this->createPartialMock(\Magento\Framework\Message\Manager::class, ['addError']);
+        $this->messageManagerMock = $this->createPartialMock(\Magento\Framework\Message\Manager::class, ['addErrorMessage']);
         $this->requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParam']);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->sessionMock = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
@@ -276,11 +276,11 @@ class PrintLabelTest extends \PHPUnit\Framework\TestCase
             ->with($labelContent)
             ->will($this->returnValue(false));
         $this->messageManagerMock->expects($this->at(0))
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(sprintf('We don\'t recognize or support the file extension in this shipment: %s.', $incrementId))
             ->will($this->throwException(new \Exception()));
         $this->messageManagerMock->expects($this->at(1))
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('An error occurred while creating shipping label.')
             ->will($this->returnSelf());
         $this->objectManagerMock->expects($this->once())
@@ -306,7 +306,7 @@ class PrintLabelTest extends \PHPUnit\Framework\TestCase
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
-        $this->messageManagerMock->expects($this->once())->method('addError')->will($this->returnSelf());
+        $this->messageManagerMock->expects($this->once())->method('addErrorMessage')->will($this->returnSelf());
         $this->redirectSection();
 
         $this->assertNull($this->controller->execute());

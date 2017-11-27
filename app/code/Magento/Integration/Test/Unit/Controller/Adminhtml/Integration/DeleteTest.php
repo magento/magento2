@@ -57,7 +57,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
         $this->_translateModelMock = null;
         // verify success message
         $this->_messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('The integration \'%1\' has been deleted.', $intData[Info::DATA_NAME]));
 
         $this->_escaper->expects($this->once())
@@ -90,7 +90,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
         $this->_translateModelMock = null;
         // verify success message
         $this->_messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('The integration \'%1\' has been deleted.', $intData[Info::DATA_NAME]));
 
         $this->_escaper->expects($this->once())
@@ -117,13 +117,13 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->willReturn(true);
         // verify error message
         $this->_messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('Uninstall the extension to remove integration \'%1\'.', $intData[Info::DATA_NAME]));
         $this->_integrationSvcMock->expects($this->never())->method('delete');
         // Use real translate model
         $this->_translateModelMock = null;
         // verify success message
-        $this->_messageManager->expects($this->never())->method('addSuccess');
+        $this->_messageManager->expects($this->never())->method('addSuccessMessage');
 
         $this->_escaper->expects($this->once())
             ->method('escapeHtml')
@@ -140,7 +140,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
         $this->_translateModelMock = null;
         // verify error message
         $this->_messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('Integration ID is not specified or is invalid.'));
 
         $this->integrationController->execute();
@@ -163,7 +163,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
         $this->_integrationSvcMock->expects($this->once())
             ->method('delete')
             ->willThrowException($invalidIdException);
-        $this->_messageManager->expects($this->once())->method('addError');
+        $this->_messageManager->expects($this->once())->method('addErrorMessage');
 
         $this->integrationController->execute();
     }
@@ -185,7 +185,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
         $this->_integrationSvcMock->expects($this->once())
             ->method('delete')
             ->willThrowException($invalidIdException);
-        $this->_messageManager->expects($this->never())->method('addError');
+        $this->_messageManager->expects($this->never())->method('addErrorMessage');
 
         $this->integrationController->execute();
     }

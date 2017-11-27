@@ -228,7 +228,7 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn($productTwoName);
 
         $this->managerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('%1 product(s) have been added to shopping cart: %2.', 1, '"' . $productTwoName . '"'), null)
             ->willReturnSelf();
 
@@ -431,12 +431,12 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn($productTwoName);
 
         $this->managerMock->expects($this->at(0))
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('%1 for "%2".', 'Localized Exception', $productTwoName), null)
             ->willReturnSelf();
 
         $this->managerMock->expects($this->at(1))
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(
                 __(
                     'We couldn\'t add the following product(s) to the shopping cart: %1.',
@@ -580,7 +580,7 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->with($exception, []);
 
         $this->managerMock->expects($this->at(0))
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('We can\'t add this item to your shopping cart right now.'), null)
             ->willReturnSelf();
 
@@ -603,7 +603,7 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Exception());
 
         $this->managerMock->expects($this->at(1))
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('We can\'t update the Wish List right now.'), null)
             ->willReturnSelf();
 
@@ -615,7 +615,7 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->willReturn($productTwoName);
 
         $this->managerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('%1 product(s) have been added to shopping cart: %2.', 1, '"' . $productOneName . '"'), null)
             ->willReturnSelf();
 

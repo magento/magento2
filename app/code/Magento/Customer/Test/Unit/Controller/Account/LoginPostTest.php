@@ -221,7 +221,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('A login and a password are required.'))
             ->willReturnSelf();
 
@@ -550,7 +550,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
                     $url
                 );
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with($message)
                     ->willReturnSelf();
 
@@ -562,7 +562,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
 
             case \Magento\Framework\Exception\AuthenticationException::class:
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with(__('You did not sign in correctly or your account is temporarily disabled.'))
                     ->willReturnSelf();
 
@@ -574,7 +574,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
 
             case '\Exception':
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with(__('An unspecified error occurred. Please contact us for assistance.'))
                     ->willReturnSelf();
                 break;
@@ -584,7 +584,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
                     'You did not sign in correctly or your account is temporarily disabled.'
                 );
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with($message)
                     ->willReturnSelf();
                 $this->session->expects($this->once())

@@ -193,19 +193,19 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
                 'currentUserPassword' => '123123q',
                 'userId'              => 1,
                 'currentUserId'       => 2,
-                'resultMethod'        => 'addSuccess',
+                'resultMethod'        => 'addSuccessMessage',
             ],
             [
                 'currentUserPassword' => '123123q',
                 'userId'              => 0,
                 'currentUserId'       => 2,
-                'resultMethod'        => 'addError',
+                'resultMethod'        => 'addErrorMessage',
             ],
             [
                 'currentUserPassword' => '123123q',
                 'userId'              => 1,
                 'currentUserId'       => 1,
-                'resultMethod'        => 'addError',
+                'resultMethod'        => 'addErrorMessage',
             ],
         ];
     }
