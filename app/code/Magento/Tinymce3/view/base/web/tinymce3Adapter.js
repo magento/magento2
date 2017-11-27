@@ -54,7 +54,7 @@ define([
          */
         setup: function (mode) {
             if (this.config['widget_plugin_src']) {
-                tinyMCE3.PluginManager.load('magentowidget', this.config['widget_plugin_src']);
+                tinyMCE3.PluginManager.load('magentowidget', 'plugins/magentowidget/editor_plugin.js');
             }
 
             if (this.config.plugins) {
@@ -75,7 +75,7 @@ define([
          * @return {Object}
          */
         getSettings: function (mode) {
-            var plugins = 'inlinepopups,safari,pagebreak,style,layer,table,advhr,advimage,emotions,iespell,media,searchreplace,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras', //eslint-disable-line
+            var plugins = 'inlinepopups,safari,pagebreak,style,layer,table,advhr,advimage,emotions,iespell,media,searchreplace,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,noneditable', //eslint-disable-line
                 self = this,
                 magentoPluginsOptions, magentoPlugins, settings;
 
@@ -119,6 +119,7 @@ define([
                 'content_css': this.config['content_css'],
                 'custom_popup_css': this.config['popup_css'],
                 'magentowidget_url': this.config['widget_window_url'],
+                'noneditable_leave_contenteditable' : true,
                 magentoPluginsOptions: magentoPluginsOptions,
                 doctype: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">', //eslint-disable-line max-len
 
@@ -451,18 +452,35 @@ define([
         encodeWidgets: function (content) {
             return content.gsub(/\{\{widget(.*?)\}\}/i, function (match) {
                 var attributes = this.parseAttributesString(match[1]),
-                    imageSrc, imageHtml;
+                    imageSrc,
+                    imageHtml = '';
 
                 if (attributes.type) {
                     attributes.type = attributes.type.replace(/\\\\/g, '\\');
                     imageSrc = this.config['widget_placeholders'][attributes.type];
-                    imageHtml = '<img';
+
+                    if (this.config['widget_types'].indexOf(attributes.type_name) > -1 ) {
+                        imageHtml += '<div class="magento-placeholder magento-widget mceNonEditable">';
+                    }
+                    else {
+                        var msg = jQuery.mage.__('The widget ' + attributes.type_name +
+                            'is no longer available. Select a new widget or delete it from the editor.' );
+                        alert(msg);
+                        imageHtml += '<span class="magento-placeholder-error magento-widget mceNonEditable">';
+                    }
+                    imageHtml += '<img';
                     imageHtml += ' id="' + Base64.idEncode(match[0]) + '"';
                     imageHtml += ' src="' + imageSrc + '"';
                     imageHtml += ' title="' +
                         match[0].replace(/\{\{/g, '{').replace(/\}\}/g, '}').replace(/\"/g, '&quot;') + '"';
                     imageHtml += '>';
 
+                    if (attributes.type_name) {
+                        imageHtml += attributes.type_name;
+                    }
+
+                    imageHtml += '</div>';
+                    imageHtml += '<div class="magento-placeholder mceNonEditable">suck it</div>';
                     return imageHtml;
                 }
             }.bind(this));
@@ -487,8 +505,8 @@ define([
          * @return {*}
          */
         decodeWidgets: function (content) {
-            return content.gsub(/<img([^>]+id=\"[^>]+)>/i, function (match) {
-                var attributes = this.parseAttributesString(match[1]),
+            return content.gsub(/(<div class="magento-placeholder magento-widget mceNonEditable">)?<img([^>]+id="[^>]+)>(([^>]*)<\/div>)?/i, function (match) {
+                var attributes = this.parseAttributesString(match[2]),
                     widgetCode;
 
                 if (attributes.id) {
@@ -497,8 +515,6 @@ define([
                     if (widgetCode.indexOf('{{widget') !== -1) {
                         return widgetCode;
                     }
-
-                    return match[0];
                 }
 
                 return match[0];
@@ -510,7 +526,11 @@ define([
          * @return {Object}
          */
         parseAttributesString: function (attributes) {
+
             var result = {};
+
+            // Decode &quot; entity, as regex below does not support encoded quote
+            attributes = attributes.replace(/&quot;/g, '"');
 
             attributes.gsub(
                 /(\w+)(?:\s*=\s*(?:(?:"((?:\\.|[^"])*)")|(?:'((?:\\.|[^'])*)')|([^>\s]+)))?/,

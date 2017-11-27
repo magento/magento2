@@ -11,6 +11,8 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
+use function Sodium\crypto_aead_aes256gcm_is_available;
+
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

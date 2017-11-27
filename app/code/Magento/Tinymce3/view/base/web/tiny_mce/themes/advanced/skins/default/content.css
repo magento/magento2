@@ -48,3 +48,36 @@ font[face=mceinline] {font-family:inherit !important}
 .mceItemEmbeddedAudio {background-image:url(../../img/video.gif)}
 .mceItemIframe {background-image:url(../../img/iframe.gif)}
 .mcePageBreak {display:block;border:0;width:100%;height:12px;border-top:1px dotted #ccc;margin-top:15px;background:#fff url(../../img/pagebreak.gif) no-repeat center top;}
+
+.magento-placeholder {
+    display: inline-block;
+    margin: 0 5px;
+    background: #dff7ff;
+    outline: 2px solid #c0dffa;
+    padding: 2px 4px;
+    vertical-align: bottom;
+    height: 20px;
+}
+
+.magento-placeholder img {
+    vertical-align: middle;
+    max-height: 20px;
+    margin-right: 5px;
+}
+
+.magento-placeholder-error {
+    display: inline-block;
+    margin: 0 5px;
+    background: #ffc0cb;
+    outline: 2px solid #FF0000;
+    padding: 2px 4px;
+    vertical-align: bottom;
+    height: 20px;
+}
+
+.magento-placeholder img {
+    vertical-align: middle;
+    max-height: 20px;
+    margin-right: 5px;
+}
+

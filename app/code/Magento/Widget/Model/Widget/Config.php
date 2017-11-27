@@ -41,6 +41,11 @@ class Config
     protected $urlEncoder;
 
     /**
+     * @var \Magento\Framework\Registry
+     */
+    protected $registry;
+
+    /**
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
@@ -52,13 +57,15 @@ class Config
         \Magento\Framework\Url\DecoderInterface $urlDecoder,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Widget\Model\WidgetFactory $widgetFactory,
-        \Magento\Framework\Url\EncoderInterface $urlEncoder
+        \Magento\Framework\Url\EncoderInterface $urlEncoder,
+        \Magento\Framework\Registry $registry
     ) {
         $this->_backendUrl = $backendUrl;
         $this->urlDecoder = $urlDecoder;
         $this->_assetRepo = $assetRepo;
         $this->_widgetFactory = $widgetFactory;
         $this->urlEncoder = $urlEncoder;
+        $this->registry = $registry;
     }
 
     /**
@@ -73,9 +80,10 @@ class Config
             'mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js'
         );
         $settings = [
-            'widget_plugin_src' => $url,
+            'widget_plugin_src' => true,
             'widget_placeholders' => $this->_widgetFactory->create()->getPlaceholderImageUrls(),
             'widget_window_url' => $this->getWidgetWindowUrl($config),
+            'widget_types' => $this->getAvailableWidgets($config)
         ];
 
         return $settings;
@@ -131,5 +139,36 @@ class Config
     {
         $param = $this->urlDecoder->decode($queryParam);
         return preg_split('/\s*\,\s*/', $param, 0, PREG_SPLIT_NO_EMPTY);
+    }
+
+    /**
+     * @param \Magento\Framework\DataObject $config Editor element config
+     * @return array
+     */
+    private function getAvailableWidgets($config)
+    {
+        if (!$config->hasData('widget_types')) {
+            $result = [];
+            $allWidgets = $this->_widgetFactory->create()->getWidgetsArray();
+            $skipped = $this->_getSkippedWidgets();
+            foreach ($allWidgets as $widget) {
+                if (is_array($skipped) && in_array($widget['type'], $skipped)) {
+                    continue;
+                }
+                $result[] = $widget['name']->getText();
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Return array of widgets disabled for selection
+     *
+     * @return string[]
+     */
+    protected function _getSkippedWidgets()
+    {
+        return $this->registry->registry('skip_widgets');
     }
 }

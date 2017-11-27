@@ -29,3 +29,19 @@ span.magento-variable-lost {
     max-height: 20px;
     margin-right: 5px;
 }
+
+.magento-placeholder-error {
+    display: inline-block;
+    margin: 0 5px;
+    background: #ffc0cb;
+    outline: 2px solid #FF0000;
+    padding: 2px 4px;
+    vertical-align: bottom;
+    height: 20px;
+}
+
+.magento-placeholder img {
+    vertical-align: middle;
+    max-height: 20px;
+    margin-right: 5px;
+}
