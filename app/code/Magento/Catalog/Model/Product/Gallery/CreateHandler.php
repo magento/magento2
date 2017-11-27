@@ -167,8 +167,11 @@ class CreateHandler implements ExtensionInterface
             if (empty($attrData) && empty($clearImages) && empty($newImages) && empty($existImages)) {
                 continue;
             }
+            $resetLabel = false;
             if (in_array($attrData, $clearImages)) {
                 $product->setData($mediaAttrCode, 'no_selection');
+                $product->setData($mediaAttrCode . '_label', null);
+                $resetLabel = true;
             }
 
             if (in_array($attrData, array_keys($newImages))) {
@@ -179,10 +182,28 @@ class CreateHandler implements ExtensionInterface
             if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
                 $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
             }
+
+            if ($attrData === 'no_selection' && !empty($product->getData($mediaAttrCode . '_label'))) {
+                $product->setData($mediaAttrCode . '_label', null);
+                $resetLabel = true;
+            }
             if (!empty($product->getData($mediaAttrCode))) {
                 $product->addAttributeUpdate(
                     $mediaAttrCode,
                     $product->getData($mediaAttrCode),
+                    $product->getStoreId()
+                );
+            }
+            if (
+                in_array($mediaAttrCode, ['image', 'small_image', 'thumbnail'])
+                && (
+                    !empty($product->getData($mediaAttrCode . '_label'))
+                    || $resetLabel === true
+                )
+            ) {
+                $product->addAttributeUpdate(
+                    $mediaAttrCode  . '_label',
+                    $product->getData($mediaAttrCode . '_label'),
                     $product->getStoreId()
                 );
             }
