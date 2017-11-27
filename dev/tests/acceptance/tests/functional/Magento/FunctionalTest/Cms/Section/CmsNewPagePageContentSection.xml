@@ -52,4 +52,60 @@
         <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
         <element name="StorageRoot" type="button" selector="#root > .jstree-icon" />
     </section>
+    <section name="InsertVariableWYSIWYGSection">
+        <element name="ShowHideBtn" type="button" selector="#togglecms_page_form_content"/>
+        <element name="InsertVariable" type="button" selector=".scalable.add-variable.plugin"/>
+        <element name="ListOfVariable" type="text" selector="//ul[@class='insert-variable']/li"/>
+        <element name="Variable" type="text" selector="//a[text()='City']"/>
+        <element name="InsertedVariable" type="button" selector="#variable"/>
+        <element name="InsertedVariable2" type="button" selector="#variable2"/>
+        <element name="position1" type="button" selector="#//p[2]"/>
+        <element name="position2" type="button" selector="#//p[1]"/>
+        <element name="VariableAfterDrag" type="text" selector="//p[1]/img[@src='http://magento2.vagrant42/pub/static/version1507588980/adminhtml/Magento/backend/en_US/Magento_Variable/placeholder.gif']" />
+        <element name="SecondVariable" type="button" selector="//a[text()='Country']"/>
+    </section>
+    <section name="WidgetSection">
+        <element name="ShowHideBtn" type="button" selector="#togglecms_page_form_content"/>
+        <element name="InsertWidget" type="button" selector=".action-add-widget"/>
+        <element name="InsertWidgetBtn" type="button" selector="#insert_button"/>
+        <element name="InsertWidgetBtnEnabled" type="button" selector="#insert_button:enabled"/>
+        <element name="InsertWidgetBtnDisabled" type="button" selector="#insert_button:disabled"/>
+        <element name="Cancel" type="button" selector="#cancel:enabled"/>
+        <element name="Close" type="button" selector="#close"/>
+        <element name="WidgetType" type="button" selector="#select_widget_type"/>
+        <element name="WidgetTemplate" type="button" selector="select[name='parameters[template]']"/>
+        <element name="BtnChooser" type="button" selector=".btn-chooser"/>
+
+        <element name="CMSPage" type="text" selector="//td[contains(text(),'Home page')]"/>
+
+        <element name="BlockPage" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true"/>
+
+        <!--<element name="PreCreateCategory" type="text" selector="//span[text()='{{var1}}']" parameterized="true"/>-->
+        <element name="PreCreateCategory" type="text" selector=" //span[contains(text(),'{{var1}}')]" parameterized="true"/>
+
+        <element name="PreCreateProduct" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true"/>
+
+        <element name="NoOfProductToDisplay" type="input" selector="input[data-ui-id='wysiwyg-widget-options-fieldset-element-text-parameters-products-count']"/>
+
+        <element name="AddParam" type="button" selector=".rule-param-add"/>
+        <element name="ConditionsDropdown" type="select" selector="#conditions__1__new_child"/>
+        <element name="RuleParam" type="button" selector="//a[text()='...']"/>
+        <element name="Chooser" type="button" selector="//img[@title='Open Chooser']"/>
+
+        <element name="PageSize" type="input" selector="input[name='parameters[page_size]']"/>
+        <element name="ProductAttribute" type="multiselect" selector="select[name='parameters[show_attributes][]']" />
+        <element name="ButtonToShow" type="multiselect" selector="select[name='parameters[show_buttons][]']"/>
+
+
+        <!--Widget on Storefront-->
+        <element name="CategoryWidget" type="text" selector="//a[@href='http://magento2.vagrant42/{{var1}}.html?___store=default']" parameterized="true"/>
+        <element name="CMSPageWidget" type="text" selector="//a[@href='http://magento2.vagrant42/home']"/>
+
+        <!--Compare on Storefront-->
+        <element name="ProductName" type="text" selector=".product.name.product-item-name" />
+        <element name="CompareBtn" type="button" selector=".action.tocompare"/>
+        <element name="ClearCompare" type="button" selector="#compare-clear-all"/>
+        <element name="AcceptClear" type="button" selector=".action-primary.action-accept" />
+
+    </section>
 </config>

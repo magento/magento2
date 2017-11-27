@@ -13,6 +13,7 @@
         <data key="content_heading">Test Content Heading</data>
         <data key="content">Sample page content. Yada yada yada.</data>
         <data key="identifier" unique="suffix">test-page-</data>
+        <data key="active">true</data>
     </entity>
     <entity name="simpleCmsPage" type="cms_page">
         <data key="title">Test CMS Page</data>
