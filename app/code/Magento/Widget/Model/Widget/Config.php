@@ -80,7 +80,7 @@ class Config
             'mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js'
         );
         $settings = [
-            'widget_plugin_src' => true,
+            'widget_plugin_src' => $url,
             'widget_placeholders' => $this->_widgetFactory->create()->getPlaceholderImageUrls(),
             'widget_window_url' => $this->getWidgetWindowUrl($config),
             'widget_types' => $this->getAvailableWidgets($config)
