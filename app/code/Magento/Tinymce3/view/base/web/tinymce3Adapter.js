@@ -452,35 +452,18 @@ define([
         encodeWidgets: function (content) {
             return content.gsub(/\{\{widget(.*?)\}\}/i, function (match) {
                 var attributes = this.parseAttributesString(match[1]),
-                    imageSrc,
-                    imageHtml = '';
+                    imageSrc, imageHtml;
 
                 if (attributes.type) {
                     attributes.type = attributes.type.replace(/\\\\/g, '\\');
                     imageSrc = this.config['widget_placeholders'][attributes.type];
-
-                    if (this.config['widget_types'].indexOf(attributes.type_name) > -1 ) {
-                        imageHtml += '<div class="magento-placeholder magento-widget mceNonEditable">';
-                    }
-                    else {
-                        var msg = jQuery.mage.__('The widget ' + attributes.type_name +
-                            'is no longer available. Select a new widget or delete it from the editor.' );
-                        alert(msg);
-                        imageHtml += '<span class="magento-placeholder-error magento-widget mceNonEditable">';
-                    }
-                    imageHtml += '<img';
+                    imageHtml = '<img';
                     imageHtml += ' id="' + Base64.idEncode(match[0]) + '"';
-                    imageHtml += ' src="' + imageSrc + '"';
+                    imageHtml += ' src="' + imageSrc.replace(new RegExp('\.png|\.gif'), '_tinymce3.png') + '"';
                     imageHtml += ' title="' +
                         match[0].replace(/\{\{/g, '{').replace(/\}\}/g, '}').replace(/\"/g, '&quot;') + '"';
                     imageHtml += '>';
 
-                    if (attributes.type_name) {
-                        imageHtml += attributes.type_name;
-                    }
-
-                    imageHtml += '</div>';
-                    imageHtml += '<div class="magento-placeholder mceNonEditable">suck it</div>';
                     return imageHtml;
                 }
             }.bind(this));
@@ -505,9 +488,13 @@ define([
          * @return {*}
          */
         decodeWidgets: function (content) {
-            return content.gsub(/(<div class="magento-placeholder magento-widget mceNonEditable">)?<img([^>]+id="[^>]+)>(([^>]*)<\/div>)?/i, function (match) {
-                var attributes = this.parseAttributesString(match[2]),
+            return content.gsub(/<img([^>]+id=\"[^>]+)>/i, function (match) {
+                var attributes = this.parseAttributesString(match[1]),
                     widgetCode;
+
+                if (attributes.src.indexOf('_tinymce3.png') === -1) {
+                    attributes.src = attributes.src.replace(new RegExp('\.png|\.gif'), '_tinymce3.png');
+                }
 
                 if (attributes.id) {
                     widgetCode = Base64.idDecode(attributes.id);
@@ -515,6 +502,8 @@ define([
                     if (widgetCode.indexOf('{{widget') !== -1) {
                         return widgetCode;
                     }
+
+                    return match[0];
                 }
 
                 return match[0];
@@ -526,11 +515,7 @@ define([
          * @return {Object}
          */
         parseAttributesString: function (attributes) {
-
             var result = {};
-
-            // Decode &quot; entity, as regex below does not support encoded quote
-            attributes = attributes.replace(/&quot;/g, '"');
 
             attributes.gsub(
                 /(\w+)(?:\s*=\s*(?:(?:"((?:\\.|[^"])*)")|(?:'((?:\\.|[^'])*)')|([^>\s]+)))?/,
