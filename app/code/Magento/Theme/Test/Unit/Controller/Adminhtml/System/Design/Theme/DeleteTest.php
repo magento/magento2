@@ -141,7 +141,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->method('isVirtual')
             ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->willReturnSelf();
         $this->resultFactory->expects($this->once())
             ->method('create')
@@ -215,7 +215,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->with($path)
             ->willReturnSelf();
         $this->messageManager->expects($this->once())
-            ->method('addException');
+            ->method('addExceptionMessage');
         $this->objectManager->expects($this->once())
             ->method('get')
             ->with(\Psr\Log\LoggerInterface::class)
@@ -258,7 +258,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->with($path)
             ->willReturnSelf();
         $this->messageManager->expects($this->once())
-            ->method('addError');
+            ->method('addErrorMessage');
 
         $this->assertInstanceOf(\Magento\Framework\Controller\Result\Redirect::class, $this->controller->execute());
     }

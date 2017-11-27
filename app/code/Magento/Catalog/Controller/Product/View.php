@@ -83,7 +83,7 @@ class View extends \Magento\Catalog\Controller\Product
             }
             if ($specifyOptions) {
                 $notice = $product->getTypeInstance()->getSpecifyOptionMessage();
-                $this->messageManager->addNotice($notice);
+                $this->messageManager->addNoticeMessage($notice);
             }
             if ($this->getRequest()->isAjax()) {
                 $this->getResponse()->representJson(

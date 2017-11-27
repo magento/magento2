@@ -143,7 +143,7 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
             ->with($requestData)
             ->willReturn(['some_data', 'some_data_2']);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
         $this->responseMock->expects($this->once())
             ->method('representJson')
             ->with();

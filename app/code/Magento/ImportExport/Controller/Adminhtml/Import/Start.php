@@ -68,7 +68,7 @@ class Start extends ImportResultController
                 $resultMessageBlock = $resultLayout->getLayout()->getBlock('messages');
                 $message = $this->exceptionMessageFactory->createMessage($e);
                 $html = $resultMessageBlock->addMessage($message)->toHtml();
-                $errorAggregator->addError(
+                $errorAggregator->addErrorMessage(
                     \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
                     \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError::ERROR_LEVEL_CRITICAL,
                     null,

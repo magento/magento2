@@ -280,7 +280,7 @@ class EditPostTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the account information.'))
             ->willReturnSelf();
 
@@ -358,7 +358,7 @@ class EditPostTest extends \PHPUnit\Framework\TestCase
             ->willThrowException($exception);
 
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($errorMessage)
             ->willReturnSelf();
 
@@ -495,7 +495,7 @@ class EditPostTest extends \PHPUnit\Framework\TestCase
                 ->willReturnSelf();
 
             $this->messageManager->expects($this->once())
-                ->method('addSuccess')
+                ->method('addSuccessMessage')
                 ->with(__('You saved the account information.'))
                 ->willReturnSelf();
 
@@ -770,7 +770,7 @@ class EditPostTest extends \PHPUnit\Framework\TestCase
                 ->willThrowException($exception);
 
             $this->messageManager->expects($this->any())
-                ->method('addException')
+                ->method('addExceptionMessage')
                 ->with($exception, __('We can\'t save the customer.'))
                 ->willReturnSelf();
         }
@@ -781,7 +781,7 @@ class EditPostTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->messageManager->expects($this->any())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($errors['message'])
             ->willReturnSelf();
 

@@ -80,7 +80,7 @@ class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\PdfDocuments
     {
         $invoicesCollection = $this->collectionFactory->create()->setOrderFilter(['in' => $collection->getAllIds()]);
         if (!$invoicesCollection->getSize()) {
-            $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
+            $this->messageManager->addErrorMessage(__('There are no printable documents related to selected orders.'));
             return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
         return $this->fileFactory->create(

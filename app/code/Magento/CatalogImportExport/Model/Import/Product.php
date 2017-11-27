@@ -1893,7 +1893,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $this->getMultipleValueSeparator()
             );
             foreach ($this->categoryProcessor->getFailedCategories() as $error) {
-                $this->errorAggregator->addError(
+                $this->errorAggregator->addErrorMessage(
                     AbstractEntity::ERROR_CODE_CATEGORY_NOT_VALID,
                     ProcessingError::ERROR_LEVEL_NOT_CRITICAL,
                     $rowData['rowNum'],
