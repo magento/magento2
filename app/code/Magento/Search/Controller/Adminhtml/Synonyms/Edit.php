@@ -66,7 +66,7 @@ class Edit extends \Magento\Backend\App\Action
 
         // 2. Initial checking
         if ($groupId && (!$synGroup->getGroupId())) {
-                $this->messageManager->addError(__('This synonyms group no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This synonyms group no longer exists.'));
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
                 return $resultRedirect->setPath('*/*/');

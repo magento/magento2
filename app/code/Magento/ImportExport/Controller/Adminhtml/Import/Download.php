@@ -76,7 +76,7 @@ class Download extends ImportController
 
         if (!$directoryRead->isFile($filePath)) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-            $this->messageManager->addError(__('There is no sample file for this entity.'));
+            $this->messageManager->addErrorMessage(__('There is no sample file for this entity.'));
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('*/import');
             return $resultRedirect;

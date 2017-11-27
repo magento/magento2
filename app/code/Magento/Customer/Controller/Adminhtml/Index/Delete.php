@@ -20,7 +20,7 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Index
         $formKeyIsValid = $this->_formKeyValidator->validate($this->getRequest());
         $isPost = $this->getRequest()->isPost();
         if (!$formKeyIsValid || !$isPost) {
-            $this->messageManager->addError(__('Customer could not be deleted.'));
+            $this->messageManager->addErrorMessage(__('Customer could not be deleted.'));
             return $resultRedirect->setPath('customer/index');
         }
 
@@ -28,9 +28,9 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Index
         if (!empty($customerId)) {
             try {
                 $this->_customerRepository->deleteById($customerId);
-                $this->messageManager->addSuccess(__('You deleted the customer.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the customer.'));
             } catch (\Exception $exception) {
-                $this->messageManager->addError($exception->getMessage());
+                $this->messageManager->addErrorMessage($exception->getMessage());
             }
         }
 

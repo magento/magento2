@@ -562,7 +562,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             $adapter = $this->_getEntityAdapter()->setSource($source);
             $adapter->validateData();
         } catch (\Exception $e) {
-            $errorAggregator->addError(
+            $errorAggregator->addErrorMessage(
                 \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
                 ProcessingError::ERROR_LEVEL_CRITICAL,
                 null,

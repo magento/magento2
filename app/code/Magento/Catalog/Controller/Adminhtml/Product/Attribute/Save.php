@@ -114,13 +114,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                         ->setName($name)
                         ->getAttributeSet();
                 } catch (AlreadyExistsException $alreadyExists) {
-                    $this->messageManager->addError(__('An attribute set named \'%1\' already exists.', $name));
+                    $this->messageManager->addErrorMessage(__('An attribute set named \'%1\' already exists.', $name));
                     $this->_session->setAttributeData($data);
                     return $this->returnResult('catalog/*/edit', ['_current' => true], ['error' => true]);
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                    $this->messageManager->addError($e->getMessage());
+                    $this->messageManager->addErrorMessage($e->getMessage());
                 } catch (\Exception $e) {
-                    $this->messageManager->addException($e, __('Something went wrong while saving the attribute.'));
+                    $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the attribute.'));
                 }
             }
 
@@ -130,7 +130,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             if (strlen($attributeCode) > 0) {
                 $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z\x{600}-\x{6FF}][a-z\x{600}-\x{6FF}_0-9]{0,30}$/u']);
                 if (!$validatorAttrCode->isValid($attributeCode)) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         __(
                             'Attribute code "%1" is invalid. Please use only letters (a-z), ' .
                             'numbers (0-9) or underscore(_) in this field, first character should be a letter.',
@@ -152,7 +152,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                 $inputType = $this->validatorFactory->create();
                 if (!$inputType->isValid($data['frontend_input'])) {
                     foreach ($inputType->getMessages() as $message) {
-                        $this->messageManager->addError($message);
+                        $this->messageManager->addErrorMessage($message);
                     }
                     return $this->returnResult(
                         'catalog/*/edit',
@@ -168,12 +168,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             if ($attributeId) {
                 $model->load($attributeId);
                 if (!$model->getId()) {
-                    $this->messageManager->addError(__('This attribute no longer exists.'));
+                    $this->messageManager->addErrorMessage(__('This attribute no longer exists.'));
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
                 }
                 // entity type check
                 if ($model->getEntityTypeId() != $this->_entityTypeId) {
-                    $this->messageManager->addError(__('We can\'t update the attribute.'));
+                    $this->messageManager->addErrorMessage(__('We can\'t update the attribute.'));
                     $this->_session->setAttributeData($data);
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
                 }
@@ -241,7 +241,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
             try {
                 $model->save();
-                $this->messageManager->addSuccess(__('You saved the product attribute.'));
+                $this->messageManager->addSuccessMessage(__('You saved the product attribute.'));
 
                 $this->_attributeLabelCache->clean();
                 $this->_session->setAttributeData(false);
@@ -265,7 +265,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                 }
                 return $this->returnResult('catalog/*/', [], ['error' => false]);
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_session->setAttributeData($data);
                 return $this->returnResult(
                     'catalog/*/edit',

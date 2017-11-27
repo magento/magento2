@@ -64,13 +64,13 @@ class Stock extends UnsubscribeController
             if ($model->getId()) {
                 $model->delete();
             }
-            $this->messageManager->addSuccess(__('You will no longer receive stock alerts for this product.'));
+            $this->messageManager->addSuccessMessage(__('You will no longer receive stock alerts for this product.'));
         } catch (NoSuchEntityException $noEntityException) {
-            $this->messageManager->addError(__('The product was not found.'));
+            $this->messageManager->addErrorMessage(__('The product was not found.'));
             $resultRedirect->setPath('customer/account/');
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t update the alert subscription right now.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t update the alert subscription right now.'));
         }
         $resultRedirect->setUrl($product->getProductUrl());
         return $resultRedirect;
