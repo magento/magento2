@@ -2876,6 +2876,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 if (($key == 'in' || $key == 'nin') && is_string($value)) {
                     $value = explode(',', $value);
                 }
+                /*
+                if ($key == 'like' && strpos($value, '\\') !== false) {
+                    $value = str_replace('\\\\', '\\', $value);
+                    $value = str_replace('\\', '\\\\', $value);
+                }
+                */
                 $query = $this->_prepareQuotedSqlCondition($conditionKeyMap[$key], $value, $fieldName);
             } else {
                 $queries = [];
