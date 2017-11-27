@@ -18,7 +18,7 @@ class UrlBuilder
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    protected $frontendUrlBuilder;
+    private $frontendUrlBuilder;
 
     /**
      * @param \Magento\Framework\UrlInterface $frontendUrlBuilder
@@ -37,10 +37,10 @@ class UrlBuilder
      * @param string $store
      * @return string
      */
-    public function getUrl($routePath, $product, $scope, $store)
+    public function getUrl($routePath, \Magento\Catalog\Api\Data\ProductInterface $product, $scope, $store)
     {
         $this->frontendUrlBuilder->setScope($scope);
-        $href = $this->frontendUrlBuilder->getUrl(
+        return $this->frontendUrlBuilder->getUrl(
             $routePath,
             [
                 'id' => $product->getId(),
@@ -49,7 +49,5 @@ class UrlBuilder
                 '_query' => [StoreResolverInterface::PARAM_NAME => $store]
             ]
         );
-
-        return $href;
     }
 }

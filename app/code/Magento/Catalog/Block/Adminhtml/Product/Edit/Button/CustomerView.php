@@ -19,20 +19,17 @@ use Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Generic as CoreGeneric;
 class CustomerView extends CoreGeneric
 {
     /** @var \Magento\Catalog\Model\Product */
-    protected $product;
-
-    /** @var \Magento\Framework\Url */
-    protected $urlHelper;
+    private $product;
 
     /**
      * @var UrlBuilder
      */
-    protected $actionUrlBuilder;
+    private $actionUrlBuilder;
 
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     public function __construct(
         Context $context,
@@ -71,7 +68,7 @@ class CustomerView extends CoreGeneric
     /**
      * @return string
      */
-    public function getCustomerViewUrl()
+    private function getCustomerViewUrl()
     {
         /* @var \Magento\Store\Model\Store\Interceptor */
         $currentStore = $this->storeManager->getStore();
