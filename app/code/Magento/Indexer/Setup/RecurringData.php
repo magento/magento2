@@ -28,8 +28,6 @@ class RecurringData implements InstallDataInterface
     private $configInterface;
 
     /**
-     * RecurringData constructor.
-     *
      * @param IndexerFactory $indexerFactory
      * @param ConfigInterface $configInterface
      */
@@ -43,6 +41,7 @@ class RecurringData implements InstallDataInterface
 
     /**
      * {@inheritdoc}
+     * @throws \Exception
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
