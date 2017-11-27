@@ -43,6 +43,14 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($dirReadMock, $this->_filesystem->getDirectoryRead(DirectoryList::ROOT));
     }
 
+    public function testGetDirectoryReadByPath()
+    {
+        /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $dirReadMock */
+        $dirReadMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $this->_dirReadFactoryMock->expects($this->once())->method('create')->will($this->returnValue($dirReadMock));
+        $this->assertEquals($dirReadMock, $this->_filesystem->getDirectoryReadByPath('path/to/some/file'));
+    }
+
     public function testGetDirectoryWrite()
     {
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $dirWriteMock */
