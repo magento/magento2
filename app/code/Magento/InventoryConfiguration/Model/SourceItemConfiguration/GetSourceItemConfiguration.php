@@ -9,7 +9,8 @@ namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration;
 
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\GetSourceItemConfiguration as ResourceGetSourceItemConfiguration;
+use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\GetSourceItemConfiguration
+    as ResourceGetSourceItemConfiguration;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;

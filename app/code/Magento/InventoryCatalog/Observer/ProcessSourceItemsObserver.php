@@ -83,7 +83,9 @@ class ProcessSourceItemsObserver implements ObserverInterface
         );
 
         $productParams = $controller->getRequest()->getParam('product');
-        $this->updateDefaultSourceQty($productParams);
+        if (is_array($productParams)) {
+            $this->updateDefaultSourceQty($productParams);
+        }
     }
 
     /**
