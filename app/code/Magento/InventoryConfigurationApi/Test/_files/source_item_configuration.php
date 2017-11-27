@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
@@ -11,26 +13,22 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var DataObjectHelper $dataObjectHelper */
 $dataObjectHelper = Bootstrap::getObjectManager()->get(DataObjectHelper::class);
-/** @var SourceItemInterfaceFactory $sourceItemFactory */
-$configurationFactory = Bootstrap::getObjectManager()->get(SourceItemConfigurationInterfaceFactory::class);
-/** @var  SourceItemsSaveInterface $sourceItemsSave */
-$configurationSave = Bootstrap::getObjectManager()->get(SourceItemConfigurationsSaveInterface::class);
+/** @var SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory */
+$sourceItemConfigurationFactory = Bootstrap::getObjectManager()->get(SourceItemConfigurationInterfaceFactory::class);
+/** @var SourceItemConfigurationsSaveInterface $sourceItemConfigurationsSave */
+$sourceItemConfigurationsSave = Bootstrap::getObjectManager()->get(SourceItemConfigurationsSaveInterface::class);
 
 $inventoryConfigurationData = [
     SourceItemConfigurationInterface::SOURCE_ID => 10,
     SourceItemConfigurationInterface::SKU => 'SKU-1',
-    SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 2.000
+    SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 2.000,
 ];
 
-$inventoryConfigurationItems = [];
-
-/** @var SourceItemConfigurationInterface $inventoryConfiguration */
-$inventoryConfiguration = $configurationFactory->create();
+/** @var SourceItemConfigurationInterface $sourceItemConfiguration */
+$sourceItemConfiguration = $sourceItemConfigurationFactory->create();
 $dataObjectHelper->populateWithArray(
-    $inventoryConfiguration,
+    $sourceItemConfiguration,
     $inventoryConfigurationData,
     SourceItemConfigurationInterface::class
 );
-
-$inventoryConfigurationItems[] = $inventoryConfiguration;
-$configurationSave->execute($inventoryConfigurationItems);
+$sourceItemConfigurationsSave->execute([$sourceItemConfiguration]);

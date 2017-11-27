@@ -3,17 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\InventoryConfigurationApi\Test\Api;
 
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
-use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class SourceItemConfigurationsSaveTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/inventory/configuration';
+    const RESOURCE_PATH = '/V1/inventory/source-item-configuration';
     const SERVICE_NAME_GET = 'inventoryConfigurationApiGetSourceItemConfigurationV1';
     const SERVICE_NAME_SAVE = 'inventoryConfigurationApiSourceItemConfigurationsSaveV1';
 
@@ -23,7 +23,7 @@ class SourceItemConfigurationsSaveTest extends WebapiAbstract
      */
     public function testSaveSourceItemConfiguration()
     {
-        $sourceItemsConfiguration = [
+        $sourceItemConfigurations = [
             [
                 SourceItemConfigurationInterface::SOURCE_ID => 10,
                 SourceItemConfigurationInterface::SKU => 'SKU-1',
@@ -47,17 +47,24 @@ class SourceItemConfigurationsSaveTest extends WebapiAbstract
             ],
         ];
 
-        $this->_webApiCall($serviceInfo, ['configuration' => $sourceItemsConfiguration]);
-        $itemConfiguration = $this->getSourceItemConfiguration();
+        $this->_webApiCall($serviceInfo, ['sourceItemConfigurations' => $sourceItemConfigurations]);
 
-        $this->assertEquals($sourceItemsConfiguration[0], $itemConfiguration);
+        $sourceItemConfiguration = $this->getSourceItemConfiguration(10, 'SKU-1');
+        self::assertNotEmpty($sourceItemConfiguration);
+        self::assertEquals($sourceItemConfigurations[0], $sourceItemConfiguration);
+
+        $sourceItemConfiguration = $this->getSourceItemConfiguration(20, 'SKU-1');
+        self::assertNotEmpty($sourceItemConfiguration);
+        self::assertEquals($sourceItemConfigurations[1], $sourceItemConfiguration);
     }
 
-    protected function getSourceItemConfiguration()
+    /**
+     * @param int $sourceId
+     * @param string $sku
+     * @return array|bool|float|int|string
+     */
+    private function getSourceItemConfiguration(int $sourceId, string $sku)
     {
-        $sourceId = 10;
-        $sku = 'SKU-1';
-
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId . '/' . $sku,

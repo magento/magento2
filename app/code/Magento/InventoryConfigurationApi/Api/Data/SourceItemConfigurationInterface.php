@@ -10,7 +10,7 @@ namespace Magento\InventoryConfigurationApi\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Represents a configuration object.
+ * Represents a configuration object
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
@@ -19,36 +19,36 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 interface SourceItemConfigurationInterface extends ExtensibleDataInterface
 {
     /**
-     * Constant for fields in data array.
+     * Constant for fields in data array
      */
     const SOURCE_ID = 'source_id';
     const SKU = 'sku';
     const INVENTORY_NOTIFY_QTY = 'notify_stock_qty';
 
     /**
-     * Get source item id.
+     * Get source id
      *
      * @return int|null
      */
     public function getSourceId();
 
     /**
-     * Set source item id.
+     * Set source id
      *
-     * @param int $sourceItemId
+     * @param int $sourceId
      * @return void
      */
-    public function setSourceId(int $sourceItemId);
+    public function setSourceId(int $sourceId);
 
     /**
-     * Get the configuration for source items.
+     * Get notify stock qty
      *
-     * @return float
+     * @return float|null
      */
     public function getNotifyStockQty();
 
     /**
-     * Set the notify quantity.
+     * Set notify stock qty
      *
      * @param float $quantity
      * @return void
@@ -56,14 +56,14 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
     public function setNotifyStockQty($quantity);
 
     /**
-     * Get item SKU
+     * Get SKU
      *
      * @return string|null
      */
     public function getSku();
 
     /**
-     * Set inventory configuration item SKU
+     * Set SKU
      *
      * @param string $sku
      * @return void

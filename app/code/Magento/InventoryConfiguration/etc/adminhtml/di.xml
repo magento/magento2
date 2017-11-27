@@ -10,7 +10,7 @@
         <arguments>
             <argument name="modifiers" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\InventoryConfiguration\Ui\DataProvider\Product\Form\Modifier\Configuration</item>
+                    <item name="class" xsi:type="string">Magento\InventoryConfiguration\Ui\DataProvider\Product\Form\Modifier\SourceItemConfiguration</item>
                     <item name="sortOrder" xsi:type="number">300</item>
                 </item>
             </argument>

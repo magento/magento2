@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryConfigurationApi\Api;
 
 /**
- * Save the sources configurations for a the product.
+ * Save the source item configuration
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
@@ -17,10 +17,8 @@ namespace Magento\InventoryConfigurationApi\Api;
 interface SourceItemConfigurationsSaveInterface
 {
     /**
-     * Save the configuration of source Items.
-     *
-     * @param \Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface[] $configuration
+     * @param \Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface[] $sourceItemConfigurations
      * @return void
      */
-    public function execute(array $configuration);
+    public function execute(array $sourceItemConfigurations);
 }

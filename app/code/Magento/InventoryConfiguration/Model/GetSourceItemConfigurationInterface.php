@@ -5,19 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfigurationApi\Api;
+namespace Magento\InventoryConfiguration\Model;
 
 /**
- * Delete the source item configuration
- *
- * @api
+ * Interface GetSourceItemConfigurationInterface
  */
-interface DeleteSourceItemConfigurationInterface
+interface GetSourceItemConfigurationInterface
 {
     /**
+     * Get the source item configuration.
+     *
      * @param int $sourceId
      * @param string $sku
-     * @return void
+     *
+     * @return array|null
      */
     public function execute(int $sourceId, string $sku);
 }

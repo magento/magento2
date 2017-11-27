@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Controller\Adminhtml\Stock;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
@@ -42,11 +45,12 @@ class Save extends Action
     /**
      * @inheritdoc
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $requestData = $this->getRequest()->getParams();
-        if (!$this->getRequest()->isPost() || empty($requestData['general'])) {
+        $request = $this->getRequest();
+        $requestData = $request->getParams();
+        if (!$request->isPost() || empty($requestData['general'])) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
             $this->processRedirectAfterFailureSave($resultRedirect);
 
@@ -56,7 +60,9 @@ class Save extends Action
             $stockId = isset($requestData['general'][StockInterface::STOCK_ID])
                 ? (int)$requestData['general'][StockInterface::STOCK_ID]
                 : null;
-            $stockId = $this->stockSaveProcessor->process($stockId, $requestData);
+
+            $stockId = $this->stockSaveProcessor->process($stockId, $request);
+
             $this->messageManager->addSuccessMessage(__('The Stock has been saved.'));
             $this->processRedirectAfterSuccessSave($resultRedirect, $stockId);
         } catch (ValidationException $e) {
@@ -75,6 +81,7 @@ class Save extends Action
     /**
      * @param Redirect $resultRedirect
      * @param int $stockId
+     *
      * @return void
      */
     private function processRedirectAfterSuccessSave(Redirect $resultRedirect, int $stockId)
@@ -96,6 +103,7 @@ class Save extends Action
     /**
      * @param Redirect $resultRedirect
      * @param int|null $stockId
+     *
      * @return void
      */
     private function processRedirectAfterFailureSave(Redirect $resultRedirect, int $stockId = null)
