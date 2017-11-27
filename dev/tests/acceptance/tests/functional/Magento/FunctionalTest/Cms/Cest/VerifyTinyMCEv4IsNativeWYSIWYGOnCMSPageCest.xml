@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="VerifyTinyMCEv4IsNativeWYSIWYGOnCMSPageCest">
+        <annotations>
+            <features value="TinyMCEv4"/>
+            <stories value="Apply new WYSIWYG on CMS Page"/>
+            <group value="cmsWYSIWYG"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+            <env value="phantomjs"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" mergeKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYG" mergeKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" mergeKey="switchToTinyMCE4" />
+        </before>
+        <test name="DefaultTinyMCEv4onCMSPage">
+            <annotations>
+                <title value="Admin see TinyMCEv4.6 is native WYSIWYG on CMS Page"/>
+                <description value="Admin see TinyMCEv4.6 is native WYSIWYG on CMS Page"/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-42046"/>
+            </annotations>
+            <amOnPage url="{{CmsPagesPage.url}}" mergeKey="amOnPagePagesGrid"/>
+            <waitForPageLoad mergeKey="waitForPageLoad1"/>
+            <click selector="{{CmsPagesPageActionsSection.addNewPage}}" mergeKey="clickAddNewPage"/>
+            <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" mergeKey="fillFieldTitle"/>
+            <click selector="{{CmsNewPagePageContentSection.header}}" mergeKey="clickExpandContent"/>
+            <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{_defaultCmsPage.content_heading}}" mergeKey="fillFieldContentHeading"/>
+            <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" mergeKey="waitForTinyMCE" />
+            <seeElement selector="{{CmsWYSIWYGSection.TinyMCE4}}" mergeKey="seeTinyMCE4" />
+            <seeElement selector="{{CmsWYSIWYGSection.Style}}" mergeKey="assertInfo2"/>
+            <seeElement selector="{{CmsWYSIWYGSection.Bold}}" mergeKey="assertInfo3"/>
+            <seeElement selector="{{CmsWYSIWYGSection.Italic}}" mergeKey="assertInfo4"/>
+            <seeElement selector="{{CmsWYSIWYGSection.Underline}}" mergeKey="assertInfo5"/>
+            <seeElement selector="{{CmsWYSIWYGSection.AlignLeft}}" mergeKey="assertInfo6"/>
+            <seeElement selector="{{CmsWYSIWYGSection.AlignCenter}}" mergeKey="assertInfo7"/>
+            <seeElement selector="{{CmsWYSIWYGSection.AlignRight}}" mergeKey="assertInfo8"/>
+            <seeElement selector="{{CmsWYSIWYGSection.Numlist}}" mergeKey="assertInfo9"/>
+            <seeElement selector="{{CmsWYSIWYGSection.Bullet}}" mergeKey="assertInfo10"/>
+            <seeElement selector="{{CmsWYSIWYGSection.InsertLink}}" mergeKey="assertInfo11"/>
+            <seeElement selector="{{CmsWYSIWYGSection.InsertImageIcon}}" mergeKey="assertInf12"/>
+            <seeElement selector="{{CmsWYSIWYGSection.InsertTable}}" mergeKey="assertInfo13"/>
+            <seeElement selector="{{CmsWYSIWYGSection.SpecialCharacter}}" mergeKey="assertInfo14"/>
+            <!--<seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" mergeKey="assertInfo15"/>-->
+            <!--<seeElement selector="{{CmsWYSIWYGSection.InsertVariableIcon}}" mergeKey="assertInfo16"/>-->
+            <executeJS function="tinyMCE.get('cms_page_form_content').setContent('Hello World!');" mergeKey="executeJSFillContent"/>
+            <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" mergeKey="clickShowHideBtn" />
+            <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" mergeKey="waitForInsertWidget" />
+            <see selector="{{CmsWYSIWYGSection.InsertImageBtn}}" userInput="Insert Image..." mergeKey="assertInf17"/>
+            <see selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" userInput="Insert Widget..." mergeKey="assertInfo18"/>
+            <see selector="{{CmsWYSIWYGSection.InsertVariableBtn}}" userInput="Insert Variable..." mergeKey="assertInfo19"/>
+            <click selector="{{CmsNewPagePageSeoSection.header}}" mergeKey="clickExpandSearchEngineOptimisation"/>
+            <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" mergeKey="fillFieldUrlKey"/>
+            <click selector="{{CmsNewPagePageActionsSection.savePage}}" mergeKey="clickSavePage"/>
+            <see userInput="You saved the page." mergeKey="seeSuccessMessage"/>
+            <amOnPage url="{{_defaultCmsPage.identifier}}" mergeKey="amOnPageTestPage"/>
+            <waitForPageLoad mergeKey="waitForPageLoad2"/>
+            <see userInput="{{_defaultCmsPage.content_heading}}" mergeKey="seeContentHeading"/>
+            <see userInput="Hello World!" mergeKey="seeContent" />
+        </test>
+        <after>
+            <actionGroup ref="DisabledWYSIWYG" mergeKey="disabledWYSIWYG"/>
+            <amOnPage url="admin/admin/auth/logout/" mergeKey="amOnLogoutPage"/>
+        </after>
+    </cest>
+</config>

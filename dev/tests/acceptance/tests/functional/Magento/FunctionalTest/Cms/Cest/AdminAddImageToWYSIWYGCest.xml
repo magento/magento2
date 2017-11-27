@@ -18,6 +18,7 @@
         <before>
             <actionGroup ref="LoginActionGroup" mergeKey="login"/>
             <actionGroup ref="EnabledWYSIWYG" mergeKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" mergeKey="switchToTinyMCE4" />
         </before>
         <test name="AddImageToWYSIWYGEditor">
             <annotations>
@@ -37,7 +38,9 @@
             <waitForPageLoad mergeKey="waitForPageLoad" />
             <waitForLoadingMaskToDisappear mergeKey="waitForLoading1" />
             <waitForLoadingMaskToDisappear mergeKey="waitForLoading2" />
-            <!--<waitForElementVisible selector="{{CmsWYSIWYGSection.CreateFolder}}" mergeKey="waitForNewFolderBtn" />-->
+            <see selector="{{CmsWYSIWYGSection.CancelBtn}}" userInput="Cancel" mergeKey="seeCancelBtn" />
+            <see selector="{{CmsWYSIWYGSection.CreateFolder}}" userInput="Create Folder" mergeKey="seeCreateFolderBtn" />
+            <see selector="{{CmsWYSIWYGSection.InsertFile}}" userInput="Add Selected" mergeKey="seeAddSelectedBtn" />
             <click selector="{{CmsWYSIWYGSection.CreateFolder}}" mergeKey="createFolder"/>
             <fillField selector="{{CmsWYSIWYGSection.FolderName}}" userInput="{{ImageFolder.name}}" mergeKey="fillFolderName" />
             <click selector="{{CmsWYSIWYGSection.AcceptFolderName}}" mergeKey="acceptFolderName" />
@@ -53,6 +56,7 @@
             <waitForLoadingMaskToDisappear mergeKey="waitForLoading6" />
             <waitForElementVisible  selector="{{CmsWYSIWYGSection.image(ImageUpload.file)}}" mergeKey="waitForUploadImage" />
             <click selector="{{CmsWYSIWYGSection.image(ImageUpload.file)}}" mergeKey="selectImage" />
+            <see selector="{{CmsWYSIWYGSection.DeleteSelectedBtn}}" userInput="Delete Selected" mergeKey="seeDeleteBtn"/>
             <click selector="{{CmsWYSIWYGSection.InsertFile}}" mergeKey="clickInsertBtn" />
             <waitForLoadingMaskToDisappear mergeKey="waitForLoading7" />
             <waitForElementVisible selector="{{CmsWYSIWYGSection.OkBtn}}" mergeKey="waitForOkBtn" />

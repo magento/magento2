@@ -14,9 +14,13 @@
         <element name="content" type="input" selector="#cms_page_form_content"/>
     </section>
     <section name="CmsWYSIWYGSection">
-        <element name="InsertWidget" type="button" selector=".scalable.action-add-widget.plugin"/>
-        <element name="InsertVariable" type="button" selector=".scalable.add-variable.plugin"/>
+        <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by" />
+        <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl"/>
         <element name="ShowHideBtn" type="button" selector="#togglecms_page_form_content"/>
+        <element name="InsertWidgetBtn" type="button" selector=".scalable.action-add-widget.plugin"/>
+        <element name="InsertWidgetIcon" type="button" selector="#icon"/>
+        <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
+        <element name="InsertVariableIcon" type="button" selector="#icon"/>
         <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
         <element name="InsertImageIcon" type="button" selector=".mce-i-image"/>
         <element name="Browse" type="button" selector=".mce-i-browse"/>
@@ -28,7 +32,9 @@
         <element name="UploadImage" type="file" selector=".fileupload" />
         <element name="OkBtn" type="button" selector="//span[text()='Ok']"/>
         <element name="InsertFile" type="text" selector="#insert_files"/>
-        <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by"/>
+        <element name="CreateFolder" type="button" selector="#new_folder" />
+        <element name="DeleteSelectedBtn" type="text" selector="#delete_files"/>
+        <element name="CancelBtn" type="button" selector="#cancel" />
         <element name="Style" type="button" selector=".mce-txt" />
         <element name="Bold" type="button" selector=".mce-i-bold" />
         <element name="Italic" type="button" selector=".mce-i-italic" />
@@ -42,7 +48,6 @@
         <element name="InsertImage" type="button" selector=".mce-i-image" />
         <element name="InsertTable" type="button" selector=".mce-i-table" />
         <element name="SpecialCharacter" type="button" selector=".mce-i-charmap" />
-        <element name="CreateFolder" type="button" selector="#new_folder" />
         <element name="FolderName" type="button" selector="input[data-role='promptField']" />
         <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
         <element name="StorageRoot" type="button" selector="#root > .jstree-icon" />

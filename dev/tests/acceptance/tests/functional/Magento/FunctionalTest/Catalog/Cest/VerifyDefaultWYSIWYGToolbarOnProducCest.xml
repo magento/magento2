@@ -20,6 +20,7 @@
         <before>
             <actionGroup ref="LoginActionGroup" mergeKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYG" mergeKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" mergeKey="switchToTinyMCE4" />
         </before>
         <test name="Verifydefaultcontrolsonproductdescription">
             <annotations>
@@ -31,8 +32,8 @@
             <amOnPage url="{{AdminProductEditPage(simple)}}" mergeKey="navigateToProduct"/>
             <waitForPageLoad mergeKey="wait"/>
             <click selector="{{AdminProductFormSection.contentTab}}" mergeKey="clickContentTab" />
-            <waitForElementVisible selector="{{ProductWYSIWYGSection.TinymceDescription4}}" time="500" mergeKey="waitforTinyMCE4Visible1"/>
-            <seeElement selector="{{ProductWYSIWYGSection.TinymceDescription4}}" mergeKey="TinyMCE4Description" />
+            <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" mergeKey="waitforTinyMCE4Visible1"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" mergeKey="TinyMCE4Description" />
             <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Style}}" mergeKey="assertInfo2"/>
             <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Bold}}" mergeKey="assertInfo3"/>
             <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Italic}}" mergeKey="assertInfo4"/>
@@ -43,7 +44,7 @@
             <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Numlist}}" mergeKey="assertInfo9"/>
             <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Bullet}}" mergeKey="assertInfo10"/>
             <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertLink}}" mergeKey="assertInfo11"/>
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertImage}}" mergeKey="assertInf12"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" mergeKey="assertInf12"/>
             <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertTable}}" mergeKey="assertInfo13"/>
             <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" mergeKey="assertInfo14"/>
         </test>
@@ -57,8 +58,8 @@
             <amOnPage url="{{AdminProductEditPage(simple)}}" mergeKey="navigateToProduct"/>
             <waitForPageLoad mergeKey="wait"/>
             <click selector="{{AdminProductFormSection.contentTab}}" mergeKey="clickContentTab" />
-            <waitForElementVisible selector="{{ProductWYSIWYGSection.TinymceShortDescription4}}" time="500" mergeKey="waitforTinyMCE4Visible2"/>
-            <seeElement selector="{{ProductWYSIWYGSection.TinymceShortDescription4}}" mergeKey="TinyMCE4ShortDescription" />
+            <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" mergeKey="waitforTinyMCE4Visible2"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" mergeKey="TinyMCE4ShortDescription" />
             <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Style}}" mergeKey="assertInfo16"/>
             <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Bold}}" mergeKey="assertInfo17"/>
             <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Italic}}" mergeKey="assertInfo18"/>
@@ -69,7 +70,7 @@
             <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Numlist}}" mergeKey="assertInfo23"/>
             <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Bullet}}" mergeKey="assertInfo324"/>
             <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertLink}}" mergeKey="assertInfo25"/>
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImage}}" mergeKey="assertInfo26"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" mergeKey="assertInfo26"/>
             <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertTable}}" mergeKey="assertInfo27"/>
             <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" mergeKey="assertInfo27"/>
         </test>

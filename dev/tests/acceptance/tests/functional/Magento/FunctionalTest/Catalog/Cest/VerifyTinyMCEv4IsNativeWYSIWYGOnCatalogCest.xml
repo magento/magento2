@@ -20,6 +20,7 @@
         <before>
             <actionGroup ref="LoginActionGroup" mergeKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYG" mergeKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" mergeKey="switchToTinyMCE4" />
         </before>
         <test name="DefaultTinyMCEv4onCatalogPage">
             <annotations>
@@ -54,8 +55,8 @@
             <click selector="{{CatalogWYSIWYGSection.ShowHideBtn}}" mergeKey="clickShowHideBtn" />
             <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertImageBtn}}" mergeKey="waitForInsertImage" />
             <seeElement selector="{{CmsWYSIWYGSection.InsertImageBtn}}" mergeKey="insertImage"/>
-            <dontSee selector="{{CmsWYSIWYGSection.InsertWidget}}" mergeKey="insertWidget" />
-            <dontSee selector="{{CmsWYSIWYGSection.InsertVariable}}" mergeKey="insertVariable" />
+            <dontSee selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" mergeKey="insertWidget" />
+            <dontSee selector="{{CmsWYSIWYGSection.InsertVariableBtn}}" mergeKey="insertVariable" />
             <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" mergeKey="saveCatalog"/>
             <!-- Go to storefront product page, assert product content -->
             <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" mergeKey="goToCategoryFrontPage"/>
