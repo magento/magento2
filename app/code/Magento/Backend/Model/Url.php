@@ -158,15 +158,34 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
 
     /**
      * Retrieve is secure mode for ULR logic
+     * If secure mode is not set up, use default magento behavior
      *
      * @return bool
      */
     protected function _isSecure()
     {
-        if ($this->hasData('secure_is_forced')) {
-            return $this->getData('secure');
+        if ($this->_request->isSecure()) {
+            if ($this->getRouteParamsResolver()->hasData('secure')) {
+                return (bool) $this->getRouteParamsResolver()->getData('secure');
+            }
+            return true;
         }
-        return $this->_scopeConfig->isSetFlag('web/secure/use_in_adminhtml');
+
+        if ($this->getRouteParamsResolver()->hasData('secure_is_forced')) {
+            return (bool) $this->getRouteParamsResolver()->getData('secure');
+        }
+
+        if ($this->_scopeConfig->isSetFlag('web/secure/use_in_adminhtml')) {
+            if ($this->getRouteParamsResolver()->hasData('secure')) {
+                // we still respect options provided programatically as for secure request in parent class
+                return (bool) $this->getRouteParamsResolver()->getData('secure');
+            }
+            return true;
+        } else {
+            // if web/secure/use_in_adminhtml == 0 that means we do not care but not that HTTP should be used
+        }
+
+        return false;
     }
 
     /**
