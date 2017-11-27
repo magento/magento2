@@ -14,7 +14,7 @@
 <script>
     require.config({
         paths: {
-            wysiwygAdapter: __('<?php echo $block->getWysiwygAdapterPath(); ?>')
+            wysiwygAdapter: '<?php /* @noEscape */ echo $block->getWysiwygAdapterPath(); ?>'
         }
     });
 </script>

@@ -9,6 +9,11 @@ use \Magento\Framework\View\Element\Template\Context;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
 use \Magento\Cms\Model;
 
+/**
+ * ActiveEditor block
+ *
+ * @api
+ */
 class ActiveEditor extends \Magento\Framework\View\Element\Template
 {
     private $scopeConfig;

@@ -8,7 +8,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="after.body.start">
-            <!-- @api -->
             <block class="Magento\Ui\Block\Wysiwyg\ActiveEditor" template="Magento_Ui::wysiwyg/active_editor.phtml" name="wysiwyg.activeEditor"/>
         </referenceContainer>
     </body>
