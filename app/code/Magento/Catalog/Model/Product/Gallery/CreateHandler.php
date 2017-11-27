@@ -194,9 +194,8 @@ class CreateHandler implements ExtensionInterface
                     $product->getStoreId()
                 );
             }
-            if (
-                in_array($mediaAttrCode, ['image', 'small_image', 'thumbnail'])
-                && (
+            if (in_array($mediaAttrCode, ['image', 'small_image', 'thumbnail']) &&
+                (
                     !empty($product->getData($mediaAttrCode . '_label'))
                     || $resetLabel === true
                 )
