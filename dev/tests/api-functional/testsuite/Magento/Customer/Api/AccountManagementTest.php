@@ -579,8 +579,8 @@ class AccountManagementTest extends WebapiAbstract
         $validationResponse = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertFalse($validationResponse['valid']);
 
-        $this->assertEquals('The value of attribute "firstname" must be set', $validationResponse['messages'][0]);
-        $this->assertEquals('The value of attribute "lastname" must be set', $validationResponse['messages'][1]);
+        $this->assertEquals('The value of attribute "First Name" must be set', $validationResponse['messages'][0]);
+        $this->assertEquals('The value of attribute "Last Name" must be set', $validationResponse['messages'][1]);
     }
 
     public function testIsReadonly()

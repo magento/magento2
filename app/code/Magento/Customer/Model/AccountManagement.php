@@ -12,16 +12,17 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\ValidationResultsInterfaceFactory;
-use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
+use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Eav\Model\Validator\Attribute\Backend;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Event\ManagerInterface;
@@ -30,23 +31,22 @@ use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Exception\State\UserLockedException;
-use Magento\Framework\Registry;
-use Magento\Store\Model\ScopeInterface;
-use Psr\Log\LoggerInterface as PsrLogger;
-use Magento\Framework\Exception\MailException;
+use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils as StringHelper;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Customer\Model\Customer\CredentialsValidator;
+use Psr\Log\LoggerInterface as PsrLogger;
 
 /**
  * Handle various customer account actions
@@ -294,6 +294,11 @@ class AccountManagement implements AccountManagementInterface
     private $credentialsValidator;
 
     /**
+     * @var DateTimeFactory
+     */
+    private $dateTimeFactory;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -318,6 +323,7 @@ class AccountManagement implements AccountManagementInterface
      * @param ObjectFactory $objectFactory
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param CredentialsValidator|null $credentialsValidator
+     * @param DateTimeFactory $dateTimeFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -344,7 +350,8 @@ class AccountManagement implements AccountManagementInterface
         CustomerModel $customerModel,
         ObjectFactory $objectFactory,
         ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        CredentialsValidator $credentialsValidator = null
+        CredentialsValidator $credentialsValidator = null,
+        DateTimeFactory $dateTimeFactory = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -369,8 +376,9 @@ class AccountManagement implements AccountManagementInterface
         $this->customerModel = $customerModel;
         $this->objectFactory = $objectFactory;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
-        $this->credentialsValidator = $credentialsValidator ?: ObjectManager::getInstance()
-            ->get(CredentialsValidator::class);
+        $this->credentialsValidator =
+            $credentialsValidator ?: ObjectManager::getInstance()->get(CredentialsValidator::class);
+        $this->dateTimeFactory = $dateTimeFactory ?: ObjectManager::getInstance()->get(DateTimeFactory::class);
     }
 
     /**
@@ -380,7 +388,6 @@ class AccountManagement implements AccountManagementInterface
      */
     private function getAuthentication()
     {
-
         if (!($this->authentication instanceof AuthenticationInterface)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Customer\Model\AuthenticationInterface::class
@@ -524,12 +531,8 @@ class AccountManagement implements AccountManagementInterface
                     $this->getEmailNotification()->passwordResetConfirmation($customer);
                     break;
                 default:
-                    throw new InputException(
-                        __(
-                            'Invalid value of "%value" provided for the %fieldName field.',
-                            ['value' => $template, 'fieldName' => 'email type']
-                        )
-                    );
+                    $this->handleUnknownTemplate($template);
+                    break;
             }
             return true;
         } catch (MailException $e) {
@@ -537,6 +540,25 @@ class AccountManagement implements AccountManagementInterface
             $this->logger->critical($e);
         }
         return false;
+    }
+
+    /**
+     * Handle not supported template
+     *
+     * @param string $template
+     * @throws InputException
+     */
+    private function handleUnknownTemplate($template)
+    {
+        throw new InputException(__(
+            'Invalid value of "%value" provided for the %fieldName field. Possible values: %template1 or %template2.',
+            [
+                'value' => $template,
+                'fieldName' => 'template',
+                'template1' => AccountManagement::EMAIL_REMINDER,
+                'template2' => AccountManagement::EMAIL_RESET
+            ]
+        ));
     }
 
     /**
@@ -613,16 +635,16 @@ class AccountManagement implements AccountManagementInterface
         $return = 0;
 
         if (preg_match('/[0-9]+/', $password)) {
-            $counter ++;
+            $counter++;
         }
         if (preg_match('/[A-Z]+/', $password)) {
-            $counter ++;
+            $counter++;
         }
         if (preg_match('/[a-z]+/', $password)) {
-            $counter ++;
+            $counter++;
         }
         if (preg_match('/[^a-zA-Z0-9]+/', $password)) {
-            $counter ++;
+            $counter++;
         }
 
         if ($counter < $requiredNumber) {
@@ -890,16 +912,14 @@ class AccountManagement implements AccountManagementInterface
 
         $result = $this->getEavValidator()->isValid($customerModel);
         if ($result === false && is_array($this->getEavValidator()->getMessages())) {
-            return $validationResults->setIsValid(false)
-                ->setMessages(
-                    call_user_func_array(
-                        'array_merge',
-                        $this->getEavValidator()->getMessages()
-                    )
-                );
+            return $validationResults->setIsValid(false)->setMessages(
+                call_user_func_array(
+                    'array_merge',
+                    $this->getEavValidator()->getMessages()
+                )
+            );
         }
-        return $validationResults->setIsValid(true)
-            ->setMessages([]);
+        return $validationResults->setIsValid(true)->setMessages([]);
     }
 
     /**
@@ -949,10 +969,12 @@ class AccountManagement implements AccountManagementInterface
     private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
         if (empty($customerId) || $customerId < 0) {
-            throw new InputException(__(
-                'Invalid value of "%value" provided for the %fieldName field.',
-                ['value' => $customerId, 'fieldName' => 'customerId']
-            ));
+            throw new InputException(
+                __(
+                    'Invalid value of "%value" provided for the %fieldName field.',
+                    ['value' => $customerId, 'fieldName' => 'customerId']
+                )
+            );
         }
         if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
@@ -1076,10 +1098,10 @@ class AccountManagement implements AccountManagementInterface
          * self::NEW_ACCOUNT_EMAIL_CONFIRMATION             email with confirmation link
          */
         $types = [
-            self::NEW_ACCOUNT_EMAIL_REGISTERED => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,
+            self::NEW_ACCOUNT_EMAIL_REGISTERED             => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,
             self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD => self::XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE,
-            self::NEW_ACCOUNT_EMAIL_CONFIRMED => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
-            self::NEW_ACCOUNT_EMAIL_CONFIRMATION => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
+            self::NEW_ACCOUNT_EMAIL_CONFIRMED              => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
+            self::NEW_ACCOUNT_EMAIL_CONFIRMATION           => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
         ];
         return $types;
     }
@@ -1109,12 +1131,11 @@ class AccountManagement implements AccountManagementInterface
             $email = $customer->getEmail();
         }
 
-        $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
-            ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
-            ->setTemplateVars($templateParams)
-            ->setFrom($this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId))
-            ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
-            ->getTransport();
+        $transport = $this->transportBuilder->setTemplateIdentifier($templateId)->setTemplateOptions(
+            ['area' => Area::AREA_FRONTEND, 'store' => $storeId]
+        )->setTemplateVars($templateParams)->setFrom(
+            $this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId)
+        )->addTo($email, $this->customerViewHelper->getCustomerName($customer))->getTransport();
 
         $transport->sendMessage();
 
@@ -1178,8 +1199,8 @@ class AccountManagement implements AccountManagementInterface
 
         $expirationPeriod = $this->customerModel->getResetPasswordLinkExpirationPeriod();
 
-        $currentTimestamp = (new \DateTime())->getTimestamp();
-        $tokenTimestamp = (new \DateTime($rpTokenCreatedAt))->getTimestamp();
+        $currentTimestamp = $this->dateTimeFactory->create()->getTimestamp();
+        $tokenTimestamp = $this->dateTimeFactory->create($rpTokenCreatedAt)->getTimestamp();
         if ($tokenTimestamp > $currentTimestamp) {
             return true;
         }
@@ -1215,7 +1236,9 @@ class AccountManagement implements AccountManagementInterface
         if (is_string($passwordLinkToken) && !empty($passwordLinkToken)) {
             $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
             $customerSecure->setRpToken($passwordLinkToken);
-            $customerSecure->setRpTokenCreatedAt((new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT));
+            $customerSecure->setRpTokenCreatedAt(
+                $this->dateTimeFactory->create()->format(DateTime::DATETIME_PHP_FORMAT)
+            );
             $this->customerRepository->save($customer);
         }
         return true;
@@ -1304,8 +1327,8 @@ class AccountManagement implements AccountManagementInterface
         // No need to flatten the custom attributes or nested objects since the only usage is for email templates and
         // object passed for events
         $mergedCustomerData = $this->customerRegistry->retrieveSecureData($customer->getId());
-        $customerData = $this->dataProcessor
-            ->buildOutputDataArray($customer, \Magento\Customer\Api\Data\CustomerInterface::class);
+        $customerData =
+            $this->dataProcessor->buildOutputDataArray($customer, \Magento\Customer\Api\Data\CustomerInterface::class);
         $mergedCustomerData->addData($customerData);
         $mergedCustomerData->setData('name', $this->customerViewHelper->getCustomerName($customer));
         return $mergedCustomerData;

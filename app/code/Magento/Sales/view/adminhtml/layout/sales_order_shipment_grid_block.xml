@@ -30,7 +30,7 @@
                             </item>
                         </argument>
                     </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="real_shipment_id">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales.order_shipment.grid.columnSet.real_shipment_id" as="real_shipment_id">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Shipment</argument>
                             <argument name="type" xsi:type="string">text</argument>
@@ -40,7 +40,7 @@
                             <argument name="column_css_class" xsi:type="string">col-memo</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="shipping_name">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales.order_shipment.grid.columnSet.shipping_name" as="shipping_name">
                         <arguments>
                             <argument name="id" xsi:type="string">shipping_name</argument>
                             <argument name="header" xsi:type="string" translate="true">Ship-to Name</argument>
@@ -49,7 +49,7 @@
                             <argument name="column_css_class" xsi:type="string">col-name</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="created_at">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales.order_shipment.grid.columnSet.created_at" as="created_at">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Ship Date</argument>
                             <argument name="type" xsi:type="string">datetime</argument>
@@ -59,7 +59,7 @@
                             <argument name="column_css_class" xsi:type="string">col-period</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="total_qty">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="sales.order_shipment.grid.columnSet.total_qty" as="total_qty">
                         <arguments>
                             <argument name="id" xsi:type="string">total_qty</argument>
                             <argument name="header" xsi:type="string" translate="true">Total Quantity</argument>
