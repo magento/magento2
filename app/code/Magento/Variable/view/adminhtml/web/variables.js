@@ -84,7 +84,7 @@ define([
             var html = utils.copy(variablesContent);
 
             jQuery('<div id="' + this.dialogWindowId + '">' + html + '</div>').modal({
-                title: $t('Insert Variable...'),
+                title: variableCode === undefined ? $t('Insert Variable...') : $t('Edit variable...'),
                 type: 'slide',
                 buttons: []
             });
