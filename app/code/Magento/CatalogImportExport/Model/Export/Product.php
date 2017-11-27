@@ -905,7 +905,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         $dataRow = array_merge($dataRow, $stockItemRows[$productId]);
                     }
                     $this->appendMultirowData($dataRow, $multirawData);
-                    if ($dataRow && !$this->skipRow($dataRow)) {
+                    if ($dataRow) {
                         $exportData[] = $dataRow;
                     }
                 }
@@ -1169,14 +1169,17 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $productLinkId = $dataRow['product_link_id'];
         $storeId = $dataRow['store_id'];
         $sku = $dataRow[self::COL_SKU];
+        $type = $dataRow[self::COL_TYPE];
+        $attributeSet = $dataRow[self::COL_ATTR_SET];
 
         unset($dataRow['product_id']);
         unset($dataRow['product_link_id']);
         unset($dataRow['store_id']);
         unset($dataRow[self::COL_SKU]);
-
+        unset($dataRow[self::COL_STORE]);
+        unset($dataRow[self::COL_ATTR_SET]);
+        unset($dataRow[self::COL_TYPE]);
         if (Store::DEFAULT_STORE_ID == $storeId) {
-            unset($dataRow[self::COL_STORE]);
             $this->updateDataWithCategoryColumns($dataRow, $multiRawData['rowCategories'], $productId);
             if (!empty($multiRawData['rowWebsites'][$productId])) {
                 $websiteCodes = [];
@@ -1274,6 +1277,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $dataRow[self::COL_STORE] = $this->_storeIdToCode[$storeId];
         }
         $dataRow[self::COL_SKU] = $sku;
+        $dataRow[self::COL_ATTR_SET] = $attributeSet;
+        $dataRow[self::COL_TYPE] = $type;
+
         return $dataRow;
     }
 
@@ -1511,26 +1517,5 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 ->getLinkField();
         }
         return $this->productEntityLinkField;
-    }
-
-    /**
-     * Check if row has valuable information to export.
-     *
-     * @param array $dataRow
-     * @return bool
-     */
-    private function skipRow(array $dataRow)
-    {
-        $baseInfo = [
-            self::COL_STORE,
-            self::COL_ATTR_SET,
-            self::COL_TYPE,
-            self::COL_SKU,
-            'store_id',
-            'product_id',
-            'product_link_id',
-        ];
-
-        return empty(array_diff(array_keys($dataRow), $baseInfo));
     }
 }
