@@ -8,9 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <inventory>
-            <inventory_configuration>
-                <notify_stock_qty_default>1</notify_stock_qty_default>
-            </inventory_configuration>
+            <source_item_configuration>
+                <notify_stock_qty>1</notify_stock_qty>
+            </source_item_configuration>
         </inventory>
     </default>
 </config>
