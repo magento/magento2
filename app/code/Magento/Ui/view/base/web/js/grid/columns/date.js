@@ -37,8 +37,14 @@ define([
          * @returns {String} Formatted date.
          */
         getLabel: function (value, format) {
-            var date = moment(this._super());
+            var superValue = this._super(),
+                date;
 
+            if (superValue === undefined) {
+                return '';
+            }
+
+            date = moment(superValue);
             date = date.isValid() && value[this.index] ?
                 date.format(format || this.dateFormat) :
                 '';
