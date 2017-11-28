@@ -110,7 +110,7 @@ class MediaGalleryProcessor
     {
         $this->initMediaGalleryResources();
         $mediaGalleryData = $this->restoreDisabledImage($mediaGalleryData);
-        $mediaGalleryDataGlobal = array_merge(...$mediaGalleryData);
+        $mediaGalleryDataGlobal = array_replace_recursive(...$mediaGalleryData);
         $imageNames = [];
         $multiInsertData = [];
         $valueToProductId = [];
