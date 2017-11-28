@@ -592,15 +592,13 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
                 break;
         }
 
-        if ($customerTaxClass === null || $customerTaxClass === false) {
-            if ($customerId) {
-                $customerData = $this->customerRepository->getById($customerId);
-                $customerTaxClass = $this->customerGroupRepository
-                    ->getById($customerData->getGroupId())
-                    ->getTaxClassId();
-            } else {
-                $customerTaxClass = $this->customerGroupManagement->getNotLoggedInGroup()->getTaxClassId();
-            }
+        if ($customerId) {
+            $customerData = $this->customerRepository->getById($customerId);
+            $customerTaxClass = $this->customerGroupRepository
+                ->getById($customerData->getGroupId())
+                ->getTaxClassId();
+        } else {
+            $customerTaxClass = $this->_customerSession->getCustomer()->getTaxClassId();
         }
 
         $request = new \Magento\Framework\DataObject();
