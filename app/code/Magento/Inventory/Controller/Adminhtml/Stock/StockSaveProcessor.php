@@ -8,14 +8,16 @@ declare(strict_types=1);
 namespace Magento\Inventory\Controller\Adminhtml\Stock;
 
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\EntityManager\EventManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
-use Magento\Framework\EntityManager\EventManager;
 
 /**
  * Save stock processor for save stock controller
@@ -72,12 +74,12 @@ class StockSaveProcessor
      * Save stock process action
      *
      * @param int|null $stockId
-     * @param array $requestData
+     * @param RequestInterface $request
      *
      * @return int
      * @throws LocalizedException
      */
-    public function process($stockId, array $requestData): int
+    public function process($stockId, RequestInterface $request): int
     {
         try {
             if (null === $stockId) {
@@ -85,15 +87,23 @@ class StockSaveProcessor
             } else {
                 $stock = $this->stockRepository->get($stockId);
             }
+            $requestData = $request->getParams();
             $this->dataObjectHelper->populateWithArray($stock, $requestData['general'], StockInterface::class);
             $this->eventManager->dispatch(
-                'save_stock_controller_populate_stock_with_data',
+                'controller_action_inventory_populate_stock_with_data',
                 [
-                    'request_data' => $requestData,
+                    'request' => $request,
                     'stock' => $stock,
                 ]
             );
             $stockId = $this->stockRepository->save($stock);
+            $this->eventManager->dispatch(
+                'save_stock_controller_processor_after_save',
+                [
+                    'request' => $request,
+                    'stock' => $stock,
+                ]
+            );
 
             $assignedSources =
                 isset($requestData['sources']['assigned_sources'])
@@ -105,6 +115,8 @@ class StockSaveProcessor
             return $stockId;
         } catch (NoSuchEntityException $e) {
             throw new LocalizedException(__('The Stock does not exist.'));
+        } catch (ValidationException $e) {
+            throw $e;
         } catch (CouldNotSaveException $e) {
             throw new LocalizedException(__($e->getMessage()));
         } catch (InputException $e) {

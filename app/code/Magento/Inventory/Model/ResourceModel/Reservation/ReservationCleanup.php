@@ -23,12 +23,22 @@ class ReservationCleanup implements ReservationCleanupInterface
     private $resource;
 
     /**
+     * @var int
+     */
+    private $groupConcatMaxLen;
+
+    /**
+     * ReservationCleanup constructor.
+     *
      * @param ResourceConnection $resource
+     * @param int $groupConcatMaxLen
      */
     public function __construct(
-        ResourceConnection $resource
+        ResourceConnection $resource,
+        int $groupConcatMaxLen
     ) {
         $this->resource = $resource;
+        $this->groupConcatMaxLen = $groupConcatMaxLen;
     }
 
     /**
@@ -46,6 +56,7 @@ class ReservationCleanup implements ReservationCleanupInterface
             )
             ->group([ReservationInterface::STOCK_ID, ReservationInterface::SKU])
             ->having('SUM(' . ReservationInterface::QUANTITY . ') = 0');
+            $connection->query('SET group_concat_max_len = ' . $this->groupConcatMaxLen);
         $groupedReservationIds = implode(',', $connection->fetchCol($select));
 
         $condition = [ReservationInterface::RESERVATION_ID . ' IN (?)' => explode(',', $groupedReservationIds)];
