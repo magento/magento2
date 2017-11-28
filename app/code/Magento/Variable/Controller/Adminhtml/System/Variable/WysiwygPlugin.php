@@ -93,13 +93,6 @@ class WysiwygPlugin extends \Magento\Backend\App\Action
             $this->getCustomVariables(),
             $this->getDefaultVariables()
         );
-//        $customVariables = $this->_objectManager->create(\Magento\Variable\Model\Variable::class)
-//            ->getVariablesOptionArray(true);
-//        $storeContactVariabls = $this->_objectManager->create(
-//            \Magento\Email\Model\Source\Variables::class
-//        )->toOptionArray(
-//            true
-//        );
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData($variablesData);
