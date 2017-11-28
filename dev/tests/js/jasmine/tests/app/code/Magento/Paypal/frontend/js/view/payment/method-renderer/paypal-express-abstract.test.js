@@ -1,14 +1,3 @@
-
-
-continueToPayPal ->
-Magento_Checkout/js/model/payment/additional-validators::validate -> true
-selectPaymentMethod
-setPaymentMethodAction -> called
-
-
-
-
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
