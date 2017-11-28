@@ -20,6 +20,13 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
     protected $repositoryMock;
 
     /**
+     * Invoice Cancel
+     *
+     * @var \Magento\Sales\Api\InvoiceCancelInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $invoiceCancelMock;
+
+    /**
      * Repository
      *
      * @var \Magento\Sales\Api\InvoiceCommentRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -53,6 +60,11 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
     protected $invoiceService;
 
     /**
+     * @var \Magento\Sales\Model\Order\Invoice
+     */
+    protected $invoiceMock;
+
+    /**
      * SetUp
      */
     protected function setUp()
@@ -83,6 +95,16 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Model\Order\InvoiceNotifier::class,
             ['notify']
         );
+
+        $this->invoiceCancelMock = new \Magento\Sales\Model\Order\InvoiceCancel(
+            $this->repositoryMock
+        );
+
+        $this->invoiceMock = $this->getMockBuilder(
+            \Magento\Sales\Model\Order\Invoice::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->invoiceService = $objectManager->getObject(
             \Magento\Sales\Model\Service\InvoiceService::class,
@@ -203,5 +225,41 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($returnValue));
 
         $this->assertTrue($this->invoiceService->setVoid($id));
+    }
+
+    /**
+     * Run test for Invoice::cancel()
+     */
+    public function testCancel()
+    {
+        $this->repositoryMock->expects($this->once())
+            ->method('get')
+            ->with(123)
+            ->willReturn($this->invoiceMock);
+        $this->invoiceMock->expects($this->once())
+            ->method('cancel')
+            ->willReturn($this->invoiceMock);
+        $this->invoiceMock->expects($this->once())
+            ->method('canCancel')
+            ->willReturn(true);
+        $this->assertTrue($this->invoiceCancelMock->cancel(123));
+    }
+
+    /**
+     * test for Invoice::cancel() fail case
+     */
+    public function testCancelFailed()
+    {
+        $this->repositoryMock->expects($this->once())
+            ->method('get')
+            ->with(123)
+            ->willReturn($this->invoiceMock);
+        $this->invoiceMock->expects($this->never())
+            ->method('cancel')
+            ->willReturn($this->invoiceMock);
+        $this->invoiceMock->expects($this->once())
+            ->method('canCancel')
+            ->willReturn(false);
+        $this->assertFalse($this->invoiceCancelMock->cancel(123));
     }
 }
