@@ -39,8 +39,9 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected $_customerData = [
         'id' => 1,
         'website_id' => 1,
-        'store_id' => 1,
+        'entity_id' => 1,
         'email' => '@email@domain.com',
+        'customer_id' => '1',
         self::ATTRIBUTE_CODE => 1,
         'default_billing' => 1,
         'default_shipping' => 1,
@@ -278,6 +279,9 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
         $emailColumn = \Magento\CustomerImportExport\Model\Export\Address::COLUMN_EMAIL;
         $this->assertEquals($this->_customerData['email'], $row[$emailColumn]);
+
+        $customerIdColumn = \Magento\CustomerImportExport\Model\Export\Address::COLUMN_CUSTOMER_ID;
+        $this->assertEquals($this->_customerData['entity_id'], $row[$customerIdColumn]);
 
         $websiteColumn = \Magento\CustomerImportExport\Model\Export\Address::COLUMN_WEBSITE;
         $this->assertEquals($this->_websites[$this->_customerData['website_id']], $row[$websiteColumn]);

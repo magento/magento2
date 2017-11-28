@@ -27,6 +27,8 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 
     const COLUMN_ADDRESS_ID = '_entity_id';
 
+    const COLUMN_CUSTOMER_ID = '_customer_id';
+
     /**#@-*/
 
     /**
@@ -63,7 +65,12 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     /**#@-*/
 
     /**#@-*/
-    protected $_permanentAttributes = [self::COLUMN_WEBSITE, self::COLUMN_EMAIL, self::COLUMN_ADDRESS_ID];
+    protected $_permanentAttributes = [
+        self::COLUMN_WEBSITE,
+        self::COLUMN_EMAIL,
+        self::COLUMN_CUSTOMER_ID,
+        self::COLUMN_ADDRESS_ID
+    ];
 
     /**
      * Attributes with index (not label) value
@@ -260,6 +267,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
         // Unique key
         $row[self::COLUMN_ADDRESS_ID] = $item['entity_id'];
         $row[self::COLUMN_EMAIL] = $customer['email'];
+        $row[self::COLUMN_CUSTOMER_ID] = $customer['entity_id'];
         $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$customer['website_id']];
         $row[self::COLUMN_REGION_ID] = $item->getRegionId();
 
