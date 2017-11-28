@@ -6,7 +6,6 @@
 
 namespace Magento\Cron\Setup;
 
-
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
@@ -29,7 +28,6 @@ class Recurring implements InstallSchemaInterface
     public function __construct(
         \Magento\Cron\Model\ResourceModel\Schedule $schedule
     ) {
-
         $this->schedule = $schedule;
     }
 
@@ -38,7 +36,6 @@ class Recurring implements InstallSchemaInterface
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-
         $connection = $this->schedule->getConnection();
         $connection->update(
             $this->schedule->getMainTable(),
