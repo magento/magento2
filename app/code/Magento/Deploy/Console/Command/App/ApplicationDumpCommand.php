@@ -24,16 +24,6 @@ class ApplicationDumpCommand extends Command
     const INPUT_CONFIG_TYPES = 'config-types';
 
     /**
-     * @var array
-     */
-    private $configTypes = [
-        \Magento\Store\App\Config\Type\Scopes::CONFIG_TYPE,
-        \Magento\Deploy\Source\Themes::TYPE,
-        \Magento\Translation\App\Config\Type\Translation::CONFIG_TYPE,
-        \Magento\Config\App\Config\Type\System::CONFIG_TYPE,
-    ];
-
-    /**
      * @var Writer
      */
     private $writer;
@@ -60,10 +50,10 @@ class ApplicationDumpCommand extends Command
         array $sources,
         Hash $configHash = null
     ) {
-        parent::__construct();
         $this->writer = $writer;
         $this->sources = $sources;
         $this->configHash = $configHash ?: ObjectManager::getInstance()->get(Hash::class);
+        parent::__construct();
     }
 
     /**
@@ -73,10 +63,12 @@ class ApplicationDumpCommand extends Command
     {
         $this->setName('app:config:dump');
         $this->setDescription('Create dump of application');
+
+        $configTypes = array_unique(array_column($this->sources, 'namespace'));
         $this->addArgument(
             self::INPUT_CONFIG_TYPES,
             InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
-            sprintf('Space-separated list of config types or omit to dump all [%s]', implode(', ', $this->configTypes))
+            sprintf('Space-separated list of config types or omit to dump all [%s]', implode(', ', $configTypes))
         );
         parent::configure();
     }
