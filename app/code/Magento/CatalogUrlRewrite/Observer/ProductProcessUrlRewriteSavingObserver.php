@@ -44,21 +44,41 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     {
         /** @var Product $product */
         $product = $observer->getEvent()->getProduct();
-
+        
         if ($product->dataHasChangedFor('url_key')
             || $product->getIsChangedCategories()
             || $product->getIsChangedWebsites()
             || $product->dataHasChangedFor('visibility')
         ) {
-            $this->urlPersist->deleteByData([
+            $params = [            
                 UrlRewrite::ENTITY_ID => $product->getId(),
                 UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
-                UrlRewrite::REDIRECT_TYPE => 0,
-                UrlRewrite::STORE_ID => $product->getStoreId()
-            ]);
-
-            if ($product->isVisibleInSiteVisibility()) {
-                $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
+                UrlRewrite::REDIRECT_TYPE => 0
+            ];
+            // category and websites are global - but we can change it from store view
+            // @todo getIsChangedCategories() works wrong. [works only after add category, after remove returns false]
+            if ($product->getIsChangedCategories() || 
+                $product->getIsChangedWebsites()) {
+                $store = 0;   
+            } else {
+                if ($store = $product->getStoreId()) {
+                    $params[UrlRewrite::STORE_ID] = $store;  // we are in specific store
+                }
+            }
+            $this->urlPersist->deleteByData($params);
+            if (!$store) {
+                $stores = $product->getStoreIds();  // after global change, we should rebuild url for all visible stores              
+            } else {
+                $stores = [$store];
+            }
+            $productResource = $product->getResource();
+            $siteVisibilities = $product->getVisibleInSiteVisibilities();
+            $productId = $product->getId();
+            foreach ($stores as $storeId) {     
+                $visible = $productResource->getAttributeRawValue($productId,'visibility',$storeId);
+                if (in_array($visible,$siteVisibilities)) {
+                    $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product,null,$storeId));
+                }
             }
         }
     }
