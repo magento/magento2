@@ -161,7 +161,7 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
     {
         $transportValue = 'something';
 
-        $extensionAttributeMock = $this->getMockForAbstractClass(
+        $extensionAttribute = $this->getMockForAbstractClass(
             \Magento\Quote\Api\Data\PaymentExtensionInterface::class,
             [],
             '',
@@ -175,7 +175,7 @@ class ExpressTest extends \PHPUnit\Framework\TestCase
                     Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT => $transportValue,
                     Express\Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID => $transportValue,
                     Express\Checkout::PAYMENT_INFO_TRANSPORT_TOKEN => $transportValue,
-                    \Magento\Framework\Api\ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributeMock
+                    \Magento\Framework\Api\ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttribute
                 ]
             ]
         );
