@@ -14,13 +14,10 @@ use Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Generic as CoreGeneric;
 /**
  * Class CustomerView
  *
- * @author      Marcin Dykas <mdykas@divante.pl>
+ * @package Magento\Catalog\Block\Adminhtml\Product\Edit\Button
  */
 class CustomerView extends CoreGeneric
 {
-    /** @var \Magento\Catalog\Model\Product */
-    private $product;
-
     /**
      * @var UrlBuilder
      */
@@ -31,18 +28,22 @@ class CustomerView extends CoreGeneric
      */
     private $storeManager;
 
+    /**
+     * CustomerView constructor.
+     *
+     * @param Context $context
+     * @param Registry $registry
+     * @param StoreManagerInterface $storeManager
+     * @param UrlBuilder $actionUrlBuilder
+     */
     public function __construct(
         Context $context,
         Registry $registry,
         StoreManagerInterface $storeManager,
         UrlBuilder $actionUrlBuilder
     ) {
-        $this->context = $context;
-        $this->registry = $registry;
         $this->storeManager = $storeManager;
         $this->actionUrlBuilder = $actionUrlBuilder;
-
-        $this->product = $this->getProduct();
 
         parent::__construct($context, $registry);
     }
@@ -58,7 +59,8 @@ class CustomerView extends CoreGeneric
             'class' => 'action-secondary',
         ];
 
-        if (!$this->product->isSalable() || !$this->product->getId()) {
+        $product = $this->getProduct();
+        if (!$product->isSalable() || !$product->getId()) {
             $buttonData['disabled'] = 'disabled';
         }
 
@@ -73,14 +75,11 @@ class CustomerView extends CoreGeneric
         /* @var \Magento\Store\Model\Store\Interceptor */
         $currentStore = $this->storeManager->getStore();
 
-        $scope = $currentStore->getStoreId();
-        $store = $currentStore->getCode();
-
         return $this->actionUrlBuilder->getUrl(
             'catalog/product/view',
-            $this->product,
-            $scope,
-            $store
+            $this->getProduct(),
+            $currentStore->getStoreId(),
+            $currentStore->getCode()
         );
     }
 }
