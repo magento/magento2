@@ -190,7 +190,7 @@ define([
                 Variables.insertVariable(value);
             } else {
                 Variables.closeDialogWindow();
-                this.editor.execCommand('mceInsertContent', false, value);
+                Variables.insertVariable(value);
             }
 
             return;
