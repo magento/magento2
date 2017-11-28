@@ -38,12 +38,14 @@ tinyMCE.addI18n({
             ed.onNodeChange.add(function (edi, cm, n) {
                 var widgetCode;
 
+                widgetTools.setEditMode(false);
                 cm.setActive('magentowidget', false);
 
                 if (n.id && n.nodeName == 'IMG') { //eslint-disable-line eqeqeq
                     widgetCode = Base64.idDecode(n.id);
 
                     if (widgetCode.indexOf('{{widget') !== -1) {
+                        widgetTools.setEditMode(true);
                         cm.setActive('magentowidget', true);
                     }
                 }
@@ -58,6 +60,7 @@ tinyMCE.addI18n({
                     widgetCode = Base64.idDecode(n.id);
 
                     if (widgetCode.indexOf('{{widget') !== -1) {
+                        widgetTools.setEditMode(true);
                         edi.execCommand('mceMagentowidget');
                     }
                 }
