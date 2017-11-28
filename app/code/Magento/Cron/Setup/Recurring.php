@@ -11,8 +11,7 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
- * @codeCoverageIgnore
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Cron recurring setup
  */
 class Recurring implements InstallSchemaInterface
 {

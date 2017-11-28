@@ -76,7 +76,7 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->where('current.schedule_id = ?', $scheduleId)
             ->where('current.status = ?', $currentStatus)
             ->where('existing.schedule_id IS NULL')
-            ->where('existing.executed_at IS NULL'); //hotfix
+            ->where('existing.executed_at IS NULL');
 
         $update = $connection->updateFromSelect($selectIfUnlocked, ['current' => $this->getTable('cron_schedule')]);
         $result = $connection->query($update)->rowCount();
