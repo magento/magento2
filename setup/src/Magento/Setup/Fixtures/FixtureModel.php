@@ -65,6 +65,14 @@ class FixtureModel
      */
     private $config;
 
+    private $configurationFixtureInstanceClassName = 'Magento\Setup\Fixtures\ConfigsApplyFixture';
+
+    private $configurationFixture;
+
+    private $indexerFixtureInstanceClassName = 'Magento\Setup\Fixtures\IndexersStatesApplyFixture';
+
+    private $indexerFixture;
+
     /**
      * Constructor
      *
@@ -109,6 +117,17 @@ class FixtureModel
                     'fixtureModel' => $this,
                 ]
             );
+
+            if ($fixture instanceof $this->configurationFixtureInstanceClassName) {
+                $this->configurationFixture = $fixture;
+                continue;
+            }
+
+            if ($fixture instanceof $this->indexerFixtureInstanceClassName) {
+                $this->indexerFixture = $fixture;
+                continue;
+            }
+
             if (isset($this->fixtures[$fixture->getPriority()])) {
                 throw new \InvalidArgumentException(
                     sprintf('Duplicate priority %d in fixture %s', $fixture->getPriority(), $type)
@@ -140,6 +159,16 @@ class FixtureModel
     public function getFixtures()
     {
         return $this->fixtures;
+    }
+
+    public function getConfigurationFixture()
+    {
+        return $this->configurationFixture;
+    }
+
+    public function getIndexerFixture()
+    {
+        return $this->indexerFixture;
     }
 
     /**

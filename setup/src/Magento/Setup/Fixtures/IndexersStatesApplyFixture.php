@@ -25,10 +25,18 @@ class IndexersStatesApplyFixture extends Fixture
         if (!isset($indexers["indexer"]) || empty($indexers["indexer"])) {
             return;
         }
+
         $this->fixtureModel->resetObjectManager();
-        foreach ($indexers["indexer"] as $indexer) {
-            $this->fixtureModel->indexersStates[$indexer['id']] = ($indexer['set_scheduled'] == "true");
+
+        /** @var $indexerRegistry \Magento\Framework\Indexer\IndexerRegistry */
+        $indexerRegistry = $this->fixtureModel->getObjectManager()
+            ->create(\Magento\Framework\Indexer\IndexerRegistry::class);
+
+        foreach ($indexers["indexer"] as $indexerConfig) {
+            $indexer = $indexerRegistry->get($indexerConfig['id']);
+            $indexer->setScheduled($indexerConfig['set_scheduled'] == "true");
         }
+
         $this->fixtureModel->getObjectManager()->get(\Magento\Framework\App\CacheInterface::class)
             ->clean([\Magento\Framework\App\Config::CACHE_TAG]);
     }
