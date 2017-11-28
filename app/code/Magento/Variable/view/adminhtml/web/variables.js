@@ -7,13 +7,14 @@
 define([
     'jquery',
     'mage/translate',
+    'wysiwygAdapter',
     'uiRegistry',
     'ko',
     'mage/apply/main',
     'mageUtils',
     'jquery/ui',
     'prototype'
-], function (jQuery, $t, registry, ko, mageApply, utils) {
+], function (jQuery, $t, wysiwyg, registry, ko, mageApply, utils) {
     'use strict';
 
     window.Variables = {
@@ -127,7 +128,10 @@ define([
             jQuery('#' + windowId).modal('closeModal');
             textareaElm = $(this.textareaElementId);
 
-            if (textareaElm) {
+            if (typeof wysiwyg != 'undefined' && wysiwyg.activeEditor()) {
+                wysiwyg.activeEditor().execCommand('mceInsertContent', false,
+                    value);
+            } else if (textareaElm) {
                 scrollPos = textareaElm.scrollTop;
                 updateElementAtCursor(textareaElm, value);
                 textareaElm.focus();
