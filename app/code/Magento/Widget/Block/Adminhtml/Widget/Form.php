@@ -49,7 +49,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $form = $this->_formFactory->create();
 
         // Add messages container to fieldset
-        $fieldset = $form->addFieldset('base_fieldset', ['legend' => '<div data-role="messages"></div>']);
+        $fieldset = $form->addFieldset('base_fieldset', ['legend' => '<div data-role="messages"></div>',
+            'comment' => 'Inserting a widget does not create a widget instance.']);
 
         $fieldset->addField(
             'select_widget_type',
