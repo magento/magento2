@@ -77,7 +77,6 @@ define([
             mageApply.apply(document.getElementById(this.dialogWindow));
             jQuery('#' + this.dialogWindowId).applyBindings();
         },
-
         /**
          * @param {*} variablesContent
          */
@@ -85,7 +84,7 @@ define([
             var html = utils.copy(variablesContent);
 
             jQuery('<div id="' + this.dialogWindowId + '">' + html + '</div>').modal({
-                title: variableCode === undefined ? $t('Insert Variable...') : $t('Edit variable...'),
+                title: typeof variableCode === 'undefined' ? $t('Insert Variable...') : $t('Edit variable...'),
                 type: 'slide',
                 buttons: []
             });
@@ -129,6 +128,7 @@ define([
             textareaElm = $(this.textareaElementId);
 
             if (typeof wysiwyg != 'undefined' && wysiwyg.activeEditor()) {
+                wysiwyg.activeEditor().focus();
                 wysiwyg.activeEditor().execCommand('mceInsertContent', false,
                     value);
             } else if (textareaElm) {

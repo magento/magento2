@@ -7,8 +7,9 @@
 define([
     'Magento_Ui/js/grid/listing',
     'underscore',
-    'Magento_Variable/js/config-directive-generator'
-], function (Listing, _, configGenerator) {
+    'Magento_Variable/js/config-directive-generator',
+    'jquery'
+], function (Listing, _, configGenerator, $) {
     'use strict';
 
     return Listing.extend({
@@ -30,10 +31,22 @@ define([
             code, directive;
 
             code = radioSelect[0].selectedVariableCode();
-            radioSelect[0].selectedVariableCode(null);
-            directive = configGenerator.processConfig(code);
+            if (typeof code != 'undefined') {
+                radioSelect[0].selectedVariableCode(null);
+                directive = configGenerator.processConfig(code);
 
-            return MagentovariablePlugin.insertVariable(directive);
+                return MagentovariablePlugin.insertVariable(directive);
+            }
+            return;
+        },
+
+        /**
+         * Close dialog window.
+         */
+        closeModalWindow: function () {
+
+            var dialogWindowId = 'variables-chooser';
+            $('#' + dialogWindowId).modal('closeModal')
         }
     });
 });

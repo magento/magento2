@@ -13,7 +13,13 @@
     <div data-bind="if: hasButtons()" class="page-main-actions">
         <div class="page-actions">
             <!-- ko foreach: { data: buttons, as: 'button' } -->
-            <button data-bind="attr: {class: button.class}, text: button.text, click: $parent.triggerAction.bind(button)"/>
+            <button data-bind="
+            attr: {
+                class: button.class
+               },
+            text: button.text,
+            click: $parent.triggerAction.bind(button)
+        " />
             <!-- /ko -->
         </div>
     </div>
