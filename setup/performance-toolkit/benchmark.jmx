@@ -214,6 +214,11 @@
             <stringProp name="Argument.value">${__P(admin_browse_product_filter_text,Product)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="apiBasePercentage" elementType="Argument">
+            <stringProp name="Argument.name">apiBasePercentage</stringProp>
+            <stringProp name="Argument.value">${__P(apiBasePercentage,0)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="apiOrderInvoiceShipmentSync" elementType="Argument">
             <stringProp name="Argument.name">apiOrderInvoiceShipmentSync</stringProp>
             <stringProp name="Argument.value">${__P(apiOrderInvoiceShipmentSync,0)}</stringProp>
@@ -28825,6 +28830,37 @@ catch (java.lang.Exception e) {
             <stringProp name="ThreadGroup.delay"/>
         <stringProp name="TestPlan.comments">mpaf/tool/fragments/_system/thread_group.jmx</stringProp></ThreadGroup>
         <hashTree>
+    <ThroughputController guiclass="ThroughputControllerGui" testclass="ThroughputController" testname="API" enabled="true">
+      <intProp name="ThroughputController.style">1</intProp>
+      <boolProp name="ThroughputController.perThread">false</boolProp>
+      <intProp name="ThroughputController.maxThroughput">1</intProp>
+      <stringProp name="ThroughputController.percentThroughput">${apiBasePercentage}</stringProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/_system/scenario_controller_tmpl.jmx</stringProp></ThroughputController>
+    <hashTree>
+        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Set Test Label" enabled="true">
+            <stringProp name="script">
+var testLabel = "${testLabel}" ? " (${testLabel})" : "";
+if (testLabel
+    &amp;&amp; sampler.getClass().getName() == 'org.apache.jmeter.protocol.http.sampler.HTTPSamplerProxy'
+) {
+    if (sampler.getName().indexOf(testLabel) == -1) {
+       sampler.setName(sampler.getName() + testLabel);
+    }
+} else if (sampler.getName().indexOf("SetUp - ") == -1) {
+    sampler.setName("SetUp - " + sampler.getName());
+}
+            </stringProp>
+            <stringProp name="scriptLanguage">javascript</stringProp>
+        <stringProp name="TestPlan.comments">mpaf/tool/fragments/_system/setup_label.jmx</stringProp></JSR223PreProcessor>
+        <hashTree/>
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Set Label" enabled="true">
+            <stringProp name="BeanShellSampler.query">
+                vars.put("testLabel", "API");
+            </stringProp>
+            <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
+        </BeanShellSampler>
+        <hashTree/>
+    
     <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
       <collectionProp name="HeaderManager.headers">
         <elementProp name="" elementType="Header">
@@ -30686,6 +30722,8 @@ vars.put("product_sku", product.get("sku"));
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
+  </hashTree>
+
   </hashTree>
 
   </hashTree>
