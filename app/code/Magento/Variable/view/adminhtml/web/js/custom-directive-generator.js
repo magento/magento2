@@ -9,8 +9,8 @@ define([
     'use strict';
 
     return _.extend({
-        directiveTemplate: '{{config path="%s"}}',
-
+        directiveTemplate: '{{customVar code=%s}}',
+        
         processConfig: function (path) {
             return this.directiveTemplate.replace("%s", path);
         }

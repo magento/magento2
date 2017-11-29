@@ -8,8 +8,9 @@ define([
     'Magento_Ui/js/grid/listing',
     'underscore',
     'Magento_Variable/js/config-directive-generator',
+    'Magento_Variable/js/custom-directive-generator',
     'jquery'
-], function (Listing, _, configGenerator, $) {
+], function (Listing, _, configGenerator, customGenerator, $) {
     'use strict';
 
     return Listing.extend({
@@ -33,7 +34,12 @@ define([
             code = radioSelect[0].selectedVariableCode();
             if (typeof code != 'undefined') {
                 radioSelect[0].selectedVariableCode(null);
-                directive = configGenerator.processConfig(code);
+                // processing switch here as content must contain only path/code without type
+                if (code.match('^default:')) {
+                    directive = configGenerator.processConfig(code.replace('default:', ''));
+                } else if (code.match('^custom:')) {
+                    directive = customGenerator.processConfig(code.replace('custom:', ''));
+                }
 
                 return MagentovariablePlugin.insertVariable(directive);
             }

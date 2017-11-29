@@ -15,7 +15,8 @@ define([
             bodyTmpl: 'ui/grid/cells/radioselect',
             draggable: false,
             sortable: false,
-            selectedVariableCode: null
+            selectedVariableCode: null,
+            selectedVariableType: null
         },
 
         initObservable: function () {

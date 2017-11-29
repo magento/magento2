@@ -5,5 +5,5 @@
  */
 -->
 
-<input type="radio" class="admin__control-radio" name="radio-select" data-bind="value: $row()['code'], checked: selectedVariableCode"/>
+<input type="radio" class="admin__control-radio" name="radio-select" data-bind="value: $row()['variable_type'] + ':' + $row()['code'], checked: selectedVariableCode"/>
 <label class="admin__field-label" />
