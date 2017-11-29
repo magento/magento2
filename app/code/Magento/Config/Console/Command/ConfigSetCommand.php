@@ -75,8 +75,7 @@ class ConfigSetCommand extends Command
         ChangeDetector $changeDetector,
         ProcessorFacadeFactory $processorFacadeFactory,
         DeploymentConfig $deploymentConfig
-    )
-    {
+    ) {
         $this->emulatedAreaProcessor = $emulatedAreaProcessor;
         $this->changeDetector = $changeDetector;
         $this->processorFacadeFactory = $processorFacadeFactory;
