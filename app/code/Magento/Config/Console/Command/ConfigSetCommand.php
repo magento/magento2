@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\Console\Command;
 
 use Magento\Config\App\Config\Type\System;
@@ -74,7 +75,8 @@ class ConfigSetCommand extends Command
         ChangeDetector $changeDetector,
         ProcessorFacadeFactory $processorFacadeFactory,
         DeploymentConfig $deploymentConfig
-    ) {
+    )
+    {
         $this->emulatedAreaProcessor = $emulatedAreaProcessor;
         $this->changeDetector = $changeDetector;
         $this->processorFacadeFactory = $processorFacadeFactory;
@@ -121,7 +123,8 @@ class ConfigSetCommand extends Command
                     static::OPTION_LOCK_CONFIG,
                     'lc',
                     InputOption::VALUE_NONE,
-                    'Lock and share value with other installations, prevents modification in the Admin (will be saved in app/etc/config.php)'
+                    'Lock and share value with other installations, prevents modification in the Admin '
+                    . '(will be saved in app/etc/config.php)'
                 ),
                 new InputOption(
                     static::OPTION_LOCK,

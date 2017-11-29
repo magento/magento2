@@ -241,7 +241,14 @@ class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(
             'Value was saved in app/etc/config.php and locked.',
-            $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, true, ConfigFilePool::APP_CONFIG)
+            $this->model->process(
+                'test/test/test',
+                'test',
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                null,
+                true,
+                ConfigFilePool::APP_CONFIG
+            )
         );
     }
 }
