@@ -112,22 +112,24 @@ class DebugTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
+        $this->inputMock->expects($this->exactly(4))
+            ->method('getOption')
+            ->withConsecutive(
+                [ConfigSetCommand::OPTION_LOCK_ENV],
+                [ConfigSetCommand::OPTION_LOCK_CONFIG],
+                [ConfigSetCommand::OPTION_SCOPE],
+                [ConfigSetCommand::OPTION_SCOPE_CODE]
+            )
+            ->willReturnOnConsecutiveCalls(
+                true,
+                false,
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                null
+            );
         $this->inputMock->expects($this->exactly(2))
             ->method('getArgument')
             ->withConsecutive([ConfigSetCommand::ARG_PATH], [ConfigSetCommand::ARG_VALUE])
             ->willReturnOnConsecutiveCalls('dev/debug/debug_logging', 1);
-        $this->inputMock->expects($this->exactly(3))
-            ->method('getOption')
-            ->withConsecutive(
-                [ConfigSetCommand::OPTION_SCOPE],
-                [ConfigSetCommand::OPTION_SCOPE_CODE],
-                [ConfigSetCommand::OPTION_LOCK_ENV]
-            )
-            ->willReturnOnConsecutiveCalls(
-                ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-                null,
-                true
-            );
         $this->outputMock->expects($this->once())
             ->method('writeln')
             ->with('<info>Value was saved in app/etc/env.php and locked.</info>');
