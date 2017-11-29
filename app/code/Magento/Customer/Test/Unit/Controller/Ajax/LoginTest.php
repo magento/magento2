@@ -120,14 +120,13 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->customerAccountManagementMock =
-            $this->getMock(
-                '\Magento\Customer\Model\AccountManagement',
-                ['authenticate'],
-                [],
-                '',
-                false
-            );
+        $this->customerAccountManagementMock = $this->getMock(
+            '\Magento\Customer\Model\AccountManagement',
+            ['authenticate'],
+            [],
+            '',
+            false
+        );
 
         $this->jsonHelperMock = $this->getMock(
             '\Magento\Framework\Json\Helper\Data',

@@ -98,8 +98,10 @@ class Login extends \Magento\Framework\App\Action\Action
         $this->customerAccountManagement = $customerAccountManagement;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultRawFactory = $resultRawFactory;
-        $this->cookieManager = $cookieManager ?: ObjectManager::getInstance()->get(CookieManagerInterface::class);
-        $this->cookieMetadataFactory = $cookieMetadataFactory ?: ObjectManager::getInstance()->get(CookieMetadataFactory::class);
+        $this->cookieManager = $cookieManager ?:
+            ObjectManager::getInstance()->get(CookieManagerInterface::class);
+        $this->cookieMetadataFactory = $cookieMetadataFactory ?:
+            ObjectManager::getInstance()->get(CookieMetadataFactory::class);
     }
 
     /**
