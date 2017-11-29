@@ -64,13 +64,6 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     protected $_curPage = 1;
 
     /**
-     * Limit pagination to only those which would return content
-     *
-     * @var  bool
-     */
-    protected $_isPageLimited = true;
-
-    /**
      * Pager page size
      *
      * if page size is false, then we works with all items
@@ -245,36 +238,13 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function getCurPage($displacement = 0)
     {
-        if ($this->_isPageLimited) {
-            if ($this->_curPage + $displacement < 1) {
-                return 1;
-            } elseif ($this->_curPage + $displacement > $this->getLastPageNumber()) {
-                return $this->getLastPageNumber();
-            }
+        if ($this->_curPage + $displacement < 1) {
+            return 1;
+        } elseif ($this->_curPage + $displacement > $this->getLastPageNumber()) {
+            return $this->getLastPageNumber();
+        } else {
+            return $this->_curPage + $displacement;
         }
-        return $this->_curPage + $displacement;
-    }
-
-    /**
-     * Set whether pagination should return only populated pages
-     * 
-     * @param  bool $enabled
-     * @return $this
-     */
-    public function setIsPageLimited(bool $enabled = true)
-    {
-        $this->_isPageLimited = $enabled;
-        return $this;
-    }
-
-    /**
-     * Retrieve whether pages are limited
-     *
-     * @return bool
-     */
-    public function getIsPageLimited()
-    {
-        return $this->_isPageLimited;
     }
 
     /**

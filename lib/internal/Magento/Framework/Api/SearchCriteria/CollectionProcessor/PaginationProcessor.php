@@ -20,7 +20,6 @@ class PaginationProcessor implements CollectionProcessorInterface
      */
     public function process(SearchCriteriaInterface $searchCriteria, AbstractDb $collection)
     {
-        $collection->setIsPageLimited(false);
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
     }
