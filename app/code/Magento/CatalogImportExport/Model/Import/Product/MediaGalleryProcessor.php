@@ -109,7 +109,6 @@ class MediaGalleryProcessor
     public function saveMediaGallery(array $mediaGalleryData)
     {
         $this->initMediaGalleryResources();
-        $mediaGalleryData = $this->restoreDisabledImage($mediaGalleryData);
         $mediaGalleryDataGlobal = array_replace_recursive(...$mediaGalleryData);
         $imageNames = [];
         $multiInsertData = [];
@@ -134,9 +133,7 @@ class MediaGalleryProcessor
             $this->connection->select()->from($this->mediaGalleryTableName, ['value_id', 'value'])
                 ->where('value IN (?)', $imageNames)
         );
-        if (!empty($multiInsertData)) {
-            $this->connection->insertOnDuplicate($this->mediaGalleryTableName, $multiInsertData);
-        }
+        $this->connection->insertOnDuplicate($this->mediaGalleryTableName, $multiInsertData);
         $newMediaSelect = $this->connection->select()->from($this->mediaGalleryTableName, ['value_id', 'value'])
             ->where('value IN (?)', $imageNames);
         if (array_keys($oldMediaValues)) {
@@ -261,39 +258,6 @@ class MediaGalleryProcessor
                 'catalog_product_entity_media_gallery_value_to_entity'
             );
         }
-    }
-
-    /**
-     * Set product images 'disable' = 0 for specified store.
-     *
-     * @param array $mediaGalleryData
-     * @return array
-     */
-    private function restoreDisabledImage(array $mediaGalleryData)
-    {
-        $restoreData = [];
-        foreach (array_keys($mediaGalleryData) as $storeId) {
-            foreach ($mediaGalleryData[$storeId] as $productSku => $mediaGalleryRows) {
-                $productId = $this->skuProcessor->getNewSku($productSku)[$this->getProductEntityLinkField()];
-                $restoreData[] = sprintf(
-                    'store_id = %s and %s = %s',
-                    $storeId,
-                    $this->getProductEntityLinkField(),
-                    $productId
-                );
-                if (isset($mediaGalleryRows['all']['restore'])) {
-                    unset($mediaGalleryData[$storeId][$productSku]);
-                }
-            }
-        }
-
-        $this->connection->update(
-            $this->mediaGalleryValueTableName,
-            ['disabled' => 0],
-            new \Zend_Db_Expr(implode(' or ', $restoreData))
-        );
-
-        return $mediaGalleryData;
     }
 
     /**

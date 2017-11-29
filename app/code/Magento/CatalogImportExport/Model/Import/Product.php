@@ -1670,17 +1670,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $disabledImages = array_flip(
                         explode($this->getMultipleValueSeparator(), $rowData['_media_is_disabled'])
                     );
-                    foreach ($disabledImages as $disabledImage => $position) {
-                        $uploadedFile = $this->uploadMediaFiles($disabledImage, true);
-                        $uploadedFile = $uploadedFile ?: $this->getSystemFile($disabledImage);
-                        $mediaGallery[$storeId][$rowSku][$uploadedFile] = [
-                            'attribute_id' => $this->getMediaGalleryAttributeId(),
-                            'label' => $rowLabels[self::COL_MEDIA_IMAGE][$position] ?? '',
-                            'position' => $position,
-                            'disabled' => 1,
-                            'value' => $disabledImage,
-                            'store_id' => $storeId,
-                        ];
+                    if (empty($rowImages)) {
+                        foreach (array_keys($disabledImages) as $disabledImage) {
+                            $rowImages[self::COL_MEDIA_IMAGE][] = $disabledImage;
+                        }
                     }
                 }
                 $rowData[self::COL_MEDIA_IMAGE] = [];
@@ -1740,10 +1733,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     }
                 }
 
-                //Add images to restore "hide from product page" value for specified store and product.
-                if (empty($mediaGallery[$storeId][$rowSku])) {
-                    $mediaGallery[$storeId][$rowSku]['all'] = ['restore' => true];
-                }
                 // 6. Attributes phase
                 $rowStore = (self::SCOPE_STORE == $rowScope)
                     ? $this->storeResolver->getStoreCodeToId($rowData[self::COL_STORE])

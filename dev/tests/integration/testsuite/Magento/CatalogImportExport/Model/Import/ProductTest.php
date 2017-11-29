@@ -1983,7 +1983,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $product = $this->getProductBySku('simple_with_images');
         $mediaGallery = $product->getData('media_gallery');
         foreach ($mediaGallery['images'] as $image) {
-            $image['file'] === 'magento_image.jpg'
+            $image['file'] === '/m/a/magento_image.jpg'
                 ? self::assertSame('1', $image['disabled'])
                 : self::assertSame('0', $image['disabled']);
         }
