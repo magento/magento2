@@ -103,10 +103,9 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      * @param string $jobCode
      * @param string $status
      * @param int $timeOffset
-     * @param int $executionTimeOffset
      * @return Schedule
      */
-    private function createSchedule($jobCode, $status, $timeOffset = 0, $executionTimeOffset = 0)
+    private function createSchedule($jobCode, $status, $timeOffset = 0)
     {
         $schedule = $this->scheduleFactory->create()
             ->setCronExpr("* * * * *")
