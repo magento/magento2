@@ -99,9 +99,6 @@ define([
             }
             paramData[paramName] = paramValue;
 
-            if (paramValue == defaultValue) { //eslint-disable-line eqeqeq
-                delete paramData[paramName];
-            }
             paramData = $.param(paramData);
 
             location.href = baseUrl + (paramData.length ? '?' + paramData : '');
