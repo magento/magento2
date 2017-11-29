@@ -24,12 +24,6 @@ span.magento-variable-lost {
     height: 20px;
 }
 
-.magento-placeholder img {
-    vertical-align: middle;
-    max-height: 20px;
-    margin-right: 5px;
-}
-
 .magento-placeholder-error {
     display: inline-block;
     margin: 0 5px;
@@ -40,6 +34,7 @@ span.magento-variable-lost {
     height: 20px;
 }
 
+.magento-placeholder-error img,
 .magento-placeholder-error img {
     vertical-align: middle;
     max-height: 20px;
