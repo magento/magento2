@@ -25,12 +25,14 @@ define([
         overlayShowEffectOptions: null,
         overlayHideEffectOptions: null,
         insertFunction: 'Variables.insertVariable',
+        selectedPlaceholder: null,
 
         /**
          * @param {*} textareaElementId
          * @param {Function} insertFunction
+         * @param {Object} selectedPlaceholder
          */
-        init: function (textareaElementId, insertFunction) {
+        init: function (textareaElementId, insertFunction, selectedPlaceholder) {
             if ($(textareaElementId)) {
                 this.textareaElementId = textareaElementId;
             }
@@ -38,6 +40,11 @@ define([
             if (insertFunction) {
                 this.insertFunction = insertFunction;
             }
+
+            if (selectedPlaceholder) {
+                this.selectedPlaceholder = selectedPlaceholder;
+            }
+
         },
 
         /**
