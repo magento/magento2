@@ -102,7 +102,7 @@ require([
 var config = $config,
     editor;
 
-editor = new tinyMceWysiwygSetup(
+editor = new wysiwygSetup(
     '{$this->getHtmlId()}',
     config
 );

@@ -38,7 +38,7 @@ class Widget extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update('save', 'region', 'toolbar');
         $this->buttonList->update('save', 'data_attribute', []);
         $this->buttonList->update('reset', 'label', __('Cancel'));
-        $this->buttonList->update('reset', 'onclick', 'wWidget.closeDialog()');
+        $this->buttonList->update('reset', 'onclick', 'wWidget.closeModal()');
 
         $this->_formScripts[] = 'require(["mage/adminhtml/wysiwyg/widget"],'
             . ' function(){wWidget = new WysiwygWidget.Widget('

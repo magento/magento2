@@ -164,7 +164,7 @@ class Editor extends Textarea
                 ')})(jQuery);' .
                 "\n" .
                 $jsSetupObject .
-                ' = new tinyMceWysiwygSetup("' .
+                ' = new wysiwygSetup("' .
                 $this->getHtmlId() .
                 '", ' .
                 $this->getJsonConfig() .

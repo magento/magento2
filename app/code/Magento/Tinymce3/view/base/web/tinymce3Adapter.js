@@ -322,7 +322,7 @@ define([
 
         /**
          * @param {*} mode
-         * @return {tinyMceWysiwygSetup}
+         * @return {wysiwygSetup}
          */
         turnOn: function (mode) {
             this.closePopups();
@@ -339,7 +339,7 @@ define([
         },
 
         /**
-         * @return {tinyMceWysiwygSetup}
+         * @return {wysiwygSetup}
          */
         turnOff: function () {
             this.closePopups();
@@ -569,7 +569,7 @@ define([
             var result = content;
 
             if (this.config['add_widgets']) {
-                result = this.encodeWidgets(result);
+                result = this.encodeWidgets(this.decodeWidgets(result));
                 result = this.encodeDirectives(result);
             } else if (this.config['add_directives']) {
                 result = this.encodeDirectives(result);
