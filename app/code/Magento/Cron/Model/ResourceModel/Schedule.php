@@ -66,7 +66,14 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
 
-        $match = $connection->quoteInto('existing.job_code = current.job_code AND existing.status = ?', $newStatus);
+        // this condition added to avoid cron jobs locking after incorrect termination of running job
+        $match = $connection->quoteInto(
+            'existing.job_code = current.job_code ' .
+            'AND (existing.executed_at > UTC_TIMESTAMP() - INTERVAL 1 DAY OR existing.executed_at IS NULL) ' .
+            'AND existing.status = ?',
+            $newStatus
+        );
+
         $selectIfUnlocked = $connection->select()
             ->joinLeft(
                 ['existing' => $this->getTable('cron_schedule')],
@@ -75,8 +82,7 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             )
             ->where('current.schedule_id = ?', $scheduleId)
             ->where('current.status = ?', $currentStatus)
-            ->where('existing.schedule_id IS NULL')
-            ->where('existing.executed_at IS NULL');
+            ->where('existing.schedule_id IS NULL');
 
         $update = $connection->updateFromSelect($selectIfUnlocked, ['current' => $this->getTable('cron_schedule')]);
         $result = $connection->query($update)->rowCount();
