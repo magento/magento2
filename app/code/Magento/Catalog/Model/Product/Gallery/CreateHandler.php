@@ -171,9 +171,17 @@ class CreateHandler implements ExtensionInterface
                 $product,
                 $mediaAttrCode,
                 $clearImages,
-                $newImages,
-                $existImages
+                $newImages
             );
+            if (in_array($mediaAttrCode, ['image', 'small_image', 'thumbnail'])) {
+                $this->processMediaAttributeLabel(
+                    $product,
+                    $mediaAttrCode,
+                    $clearImages,
+                    $newImages,
+                    $existImages
+                );
+            }
         }
 
         $product->setData($attrCode, $value);
@@ -439,12 +447,32 @@ class CreateHandler implements ExtensionInterface
 
     /**
      * @param \Magento\Catalog\Model\Product $product
-     * @param $attrData
-     * @param array $clearImages
      * @param $mediaAttrCode
+     * @param array $clearImages
      * @param array $newImages
-     * @param array $existImages
      */
+    private function processMediaAttribute(
+        \Magento\Catalog\Model\Product $product,
+        $mediaAttrCode,
+        array $clearImages,
+        array $newImages
+    ) {
+        $attrData = $product->getData($mediaAttrCode);
+        if (in_array($attrData, $clearImages)) {
+            $product->setData($mediaAttrCode, 'no_selection');
+        }
+
+        if (in_array($attrData, array_keys($newImages))) {
+            $product->setData($mediaAttrCode, $newImages[$attrData]['new_file']);
+        }
+        if (!empty($product->getData($mediaAttrCode))) {
+            $product->addAttributeUpdate(
+                $mediaAttrCode,
+                $product->getData($mediaAttrCode),
+                $product->getStoreId()
+            );
+        }
+    }
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @param $mediaAttrCode
@@ -452,7 +480,7 @@ class CreateHandler implements ExtensionInterface
      * @param array $newImages
      * @param array $existImages
      */
-    private function processMediaAttribute(
+    private function processMediaAttributeLabel(
         \Magento\Catalog\Model\Product $product,
         $mediaAttrCode,
         array $clearImages,
@@ -462,13 +490,11 @@ class CreateHandler implements ExtensionInterface
         $resetLabel = false;
         $attrData = $product->getData($mediaAttrCode);
         if (in_array($attrData, $clearImages)) {
-            $product->setData($mediaAttrCode, 'no_selection');
             $product->setData($mediaAttrCode . '_label', null);
             $resetLabel = true;
         }
 
         if (in_array($attrData, array_keys($newImages))) {
-            $product->setData($mediaAttrCode, $newImages[$attrData]['new_file']);
             $product->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
         }
 
@@ -480,22 +506,12 @@ class CreateHandler implements ExtensionInterface
             $product->setData($mediaAttrCode . '_label', null);
             $resetLabel = true;
         }
-        if (in_array($mediaAttrCode, ['image', 'small_image', 'thumbnail']) &&
-            (
-                !empty($product->getData($mediaAttrCode . '_label'))
-                || $resetLabel === true
-            )
+        if (!empty($product->getData($mediaAttrCode . '_label'))
+            || $resetLabel === true
         ) {
             $product->addAttributeUpdate(
                 $mediaAttrCode . '_label',
                 $product->getData($mediaAttrCode . '_label'),
-                $product->getStoreId()
-            );
-        }
-        if (!empty($product->getData($mediaAttrCode))) {
-            $product->addAttributeUpdate(
-                $mediaAttrCode,
-                $product->getData($mediaAttrCode),
                 $product->getStoreId()
             );
         }
