@@ -21,8 +21,8 @@ class RoboFile extends \Robo\Tasks
     function cloneFiles()
     {
         $this->_exec('cp -vn .env.example .env');
-        $this->_exec('cp -vn codeception.dist.yml codeception.yml');
-        $this->_exec('cp -vn tests/functional.suite.dist.yml tests/functional.suite.yml');
+        $this->_exec('cp -vf codeception.dist.yml codeception.yml');
+        $this->_exec('cp -vf tests/functional.suite.dist.yml tests/functional.suite.yml');
     }
 
     /**
