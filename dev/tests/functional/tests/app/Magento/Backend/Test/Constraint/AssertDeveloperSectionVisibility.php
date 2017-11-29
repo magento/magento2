@@ -38,6 +38,7 @@ class AssertDeveloperSectionVisibility extends AbstractConstraint
      */
     public function processAssert(SystemConfigEdit $configEdit)
     {
+        $configEdit->open();
         if ($_ENV['mage_mode'] === 'production') {
             foreach ($this->groups as $group) {
                 \PHPUnit_Framework_Assert::assertFalse(
