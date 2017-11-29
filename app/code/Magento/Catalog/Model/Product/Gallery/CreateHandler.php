@@ -473,6 +473,7 @@ class CreateHandler implements ExtensionInterface
             );
         }
     }
+
     /**
      * @param \Magento\Catalog\Model\Product $product
      * @param $mediaAttrCode
