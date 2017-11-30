@@ -76,7 +76,8 @@ class PhpFormatter implements FormatterInterface
      * @param integer $depth
      * @return string
      */
-    private function varExportShort($var, $depth=0) {
+    private function varExportShort($var, $depth = 0)
+    {
         if (gettype($var) === 'array') {
             $indexed = array_keys($var) === range(0, count($var) - 1);
             $r = [];
@@ -88,6 +89,6 @@ class PhpFormatter implements FormatterInterface
             return sprintf("[\n%s\n%s]", implode(",\n", $r), str_repeat(self::INDENT, $depth - 1));
         }
 
-        return var_export($var, TRUE);
+        return var_export($var, true);
     }
 }
