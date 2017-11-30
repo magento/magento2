@@ -199,8 +199,6 @@ class ProcessCronQueueObserver implements ObserverInterface
         $phpPath = $this->phpExecutableFinder->find() ?: 'php';
 
         foreach ($jobGroupsRoot as $groupId => $jobsRoot) {
-            $this->_cleanup($groupId);
-            $this->_generate($groupId);
             if ($this->_request->getParam('group') !== null
                 && $this->_request->getParam('group') !== '\'' . ($groupId) . '\''
                 && $this->_request->getParam('group') !== $groupId
@@ -233,6 +231,9 @@ class ProcessCronQueueObserver implements ObserverInterface
                 );
                 continue;
             }
+
+            $this->_cleanup($groupId);
+            $this->_generate($groupId);
 
             /** @var \Magento\Cron\Model\Schedule $schedule */
             foreach ($pendingJobs as $schedule) {
