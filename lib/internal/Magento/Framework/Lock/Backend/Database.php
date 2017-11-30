@@ -4,15 +4,18 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
 namespace Magento\Framework\lock\Backend;
+
+use Magento\Framework\App\ResourceConnection;
 
 class Database implements \Magento\Framework\Lock\LockManagerInterface
 {
-    /** @var \Magento\Framework\App\ResourceConnection */
+    /** @var ResourceConnection */
     private $resource;
 
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $resource
+        ResourceConnection $resource
     )
     {
         $this->resource = $resource;
@@ -22,9 +25,10 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * Sets a lock for name
      *
      * @param string $name lock name
+     * @param int $timeout How long to wait lock acquisition in seconds, negative value means infinite timeout
      * @return bool
      */
-    public function setLock($name, $timeout = -1)
+    public function setLock(string $name, int $timeout = -1): bool
     {
         return (bool)$this->resource->getConnection()->query("SELECT GET_LOCK(?, ?);", array((string)$name, (int)$timeout))
             ->fetchColumn();
@@ -36,7 +40,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @param string $name lock name
      * @return bool
      */
-    public function releaseLock($name)
+    public function releaseLock(string $name): bool
     {
         return (bool)$this->resource->getConnection()->query("SELECT RELEASE_LOCK(?);", array((string)$name))->fetchColumn();
     }
@@ -47,7 +51,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @param string $name lock name
      * @return bool
      */
-    public function isLocked($name)
+    public function isLocked(string $name): bool
     {
         return (bool)$this->resource->getConnection()->query("SELECT IS_USED_LOCK(?);", array((string)$name))->fetchColumn();
     }

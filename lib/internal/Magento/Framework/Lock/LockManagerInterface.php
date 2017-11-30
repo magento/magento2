@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
 namespace Magento\Framework\Lock;
 
 /**
@@ -13,29 +15,30 @@ namespace Magento\Framework\Lock;
 interface LockManagerInterface
 {
     /**
-     * Sets a lock for name
+     * Sets a lock
      *
      * @param string $name lock name
-     * @param int $timeout Timeout in seconds, negative value means infinite timeout
+     * @param int $timeout How long to wait lock acquisition in seconds, negative value means infinite timeout
      * @return bool
+     * @api
      */
-    public function setLock($name, $timeout = -1);
+    public function setLock(string $name, int $timeout = -1): bool;
 
     /**
-     * Releases a lock for name
+     * Releases a lock
      *
      * @param string $name lock name
      * @return bool
      * @api
      */
-    public function releaseLock($name);
+    public function releaseLock(string $name): bool;
 
     /**
-     * Tests of lock is set for name
+     * Tests if lock is set
      *
      * @param string $name lock name
      * @return bool
      * @api
      */
-    public function isLocked($name);
+    public function isLocked(string $name): bool;
 }
