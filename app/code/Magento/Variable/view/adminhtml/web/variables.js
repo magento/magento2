@@ -87,14 +87,15 @@ define([
         /**
          * @param {*} variablesContent
          */
-        openDialogWindow: function (variablesContent, variableCode) {
+        openDialogWindow: function (variablesContent, variableCode, selectedElement) {
             var html = utils.copy(variablesContent);
 
             jQuery('<div id="' + this.dialogWindowId + '">' + html + '</div>').modal({
-                title: typeof variableCode === 'undefined' ? $t('Insert Variable...') : $t('Edit variable...'),
+                title: selectedElement ? $t('Edit variable...') : $t('Insert Variable...') ,
                 type: 'slide',
                 buttons: []
             });
+            this.selectedPlaceholder = selectedElement;
 
             jQuery('#' + this.dialogWindowId).modal('openModal');
 
@@ -138,6 +139,10 @@ define([
                 wysiwyg.activeEditor().focus();
                 wysiwyg.activeEditor().execCommand('mceInsertContent', false,
                     value);
+                if (this.selectedPlaceholder) {
+                    this.selectedPlaceholder.remove();
+                }
+
             } else if (textareaElm) {
                 scrollPos = textareaElm.scrollTop;
                 updateElementAtCursor(textareaElm, value);
@@ -168,7 +173,7 @@ define([
          * @param {*} textareaId
          *
          */
-        loadChooser: function (url, textareaId, variableCode) {
+        loadChooser: function (url, textareaId, variableCode, selectedElement) {
             this.textareaId = textareaId;
 
             if (this.variablesContent == null) {
@@ -177,12 +182,12 @@ define([
                     onComplete: function (transport) {
                         Variables.init(null, 'MagentovariablePlugin.insertVariable');
                         this.variablesContent = transport.responseText;
-                        Variables.openDialogWindow(this.variablesContent, variableCode);
+                        Variables.openDialogWindow(this.variablesContent, variableCode, selectedElement);
                         Variables.initUiGrid();
                     }.bind(this)
                 });
             } else {
-                Variables.openDialogWindow(this.variablesContent, variableCode);
+                Variables.openDialogWindow(this.variablesContent, variableCode, selectedElement);
             }
 
             return;
