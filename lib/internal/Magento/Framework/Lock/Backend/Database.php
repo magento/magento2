@@ -16,8 +16,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
 
     public function __construct(
         ResourceConnection $resource
-    )
-    {
+    ) {
         $this->resource = $resource;
     }
 
