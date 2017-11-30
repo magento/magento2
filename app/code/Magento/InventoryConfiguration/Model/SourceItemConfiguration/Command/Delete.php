@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration;
+namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration\Command;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\DeleteSourceItemConfiguration;
+use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\Delete as DeleteResourceModel;
 use Psr\Log\LoggerInterface;
 use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface;
 
@@ -18,9 +18,9 @@ use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface
 class Delete implements DeleteSourceItemConfigurationInterface
 {
     /**
-     * @var DeleteSourceItemConfiguration
+     * @var DeleteResourceModel
      */
-    private $deleteSourceItemConfiguration;
+    private $deleteResourceModel;
 
     /**
      * @var LoggerInterface
@@ -28,14 +28,14 @@ class Delete implements DeleteSourceItemConfigurationInterface
     private $logger;
 
     /**
-     * @param DeleteSourceItemConfiguration $deleteSourceItemConfiguration
+     * @param DeleteResourceModel $deleteResourceModel
      * @param LoggerInterface $logger
      */
     public function __construct(
-        DeleteSourceItemConfiguration $deleteSourceItemConfiguration,
+        DeleteResourceModel $deleteResourceModel,
         LoggerInterface $logger
     ) {
-        $this->deleteSourceItemConfiguration = $deleteSourceItemConfiguration;
+        $this->deleteResourceModel = $deleteResourceModel;
         $this->logger = $logger;
     }
 
@@ -45,7 +45,7 @@ class Delete implements DeleteSourceItemConfigurationInterface
     public function execute(int $sourceId, string $sku)
     {
         try {
-            $this->deleteSourceItemConfiguration->execute($sourceId, $sku);
+            $this->deleteResourceModel->execute($sourceId, $sku);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotDeleteException(__('Could not delete SourceItem Configuration.'), $e);

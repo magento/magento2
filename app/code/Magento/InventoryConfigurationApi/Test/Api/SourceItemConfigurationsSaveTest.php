@@ -50,18 +50,16 @@ class SourceItemConfigurationsSaveTest extends WebapiAbstract
         $this->_webApiCall($serviceInfo, ['sourceItemConfigurations' => $sourceItemConfigurations]);
 
         $sourceItemConfiguration = $this->getSourceItemConfiguration(10, 'SKU-1');
-        self::assertNotEmpty($sourceItemConfiguration);
         self::assertEquals($sourceItemConfigurations[0], $sourceItemConfiguration);
 
         $sourceItemConfiguration = $this->getSourceItemConfiguration(20, 'SKU-1');
-        self::assertNotEmpty($sourceItemConfiguration);
         self::assertEquals($sourceItemConfigurations[1], $sourceItemConfiguration);
     }
 
     /**
      * @param int $sourceId
      * @param string $sku
-     * @return array|bool|float|int|string
+     * @return array
      */
     private function getSourceItemConfiguration(int $sourceId, string $sku)
     {
@@ -72,12 +70,16 @@ class SourceItemConfigurationsSaveTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME_GET,
-                'operation' => self::SERVICE_NAME_GET . 'get',
+                'operation' => self::SERVICE_NAME_GET . 'Execute',
             ],
         ];
-
-        return (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
+        $sourceItemConfiguration = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'sku' => $sku]);
+
+        self::assertInternalType('array', $sourceItemConfiguration);
+        self::assertNotEmpty($sourceItemConfiguration);
+
+        return $sourceItemConfiguration;
     }
 }

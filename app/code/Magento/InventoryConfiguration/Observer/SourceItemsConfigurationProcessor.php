@@ -13,7 +13,6 @@ use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface;
 use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface;
 use Magento\InventoryConfiguration\Model\SourceItemConfigurationFactory;
-use Magento\InventoryConfiguration\Model\GetSourceItemConfigurationInterface;
 
 use Magento\Framework\Api\DataObjectHelper;
 
@@ -23,18 +22,15 @@ use Magento\Framework\Api\DataObjectHelper;
 class SourceItemsConfigurationProcessor
 {
     /**
-     * @var GetSourceItemConfigurationInterface
-     */
-    private $getSourceItemConfiguration;
-
-    /**
      * @var SourceItemConfigurationFactory
      */
     private $sourceItemConfigurationFactory;
+
     /**
      * @var SourceItemConfigurationsSaveInterface
      */
     private $sourceItemConfigurationSave;
+
     /**
      * @var DataObjectHelper
      */
@@ -48,18 +44,15 @@ class SourceItemsConfigurationProcessor
     /**
      * @param SourceItemConfigurationFactory $sourceItemConfigurationFactory
      * @param SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave
-     * @param GetSourceItemConfigurationInterface $getSourceItemConfiguration
      * @param DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete
      * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         SourceItemConfigurationFactory $sourceItemConfigurationFactory,
         SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave,
-        GetSourceItemConfigurationInterface $getSourceItemConfiguration,
         DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete,
         DataObjectHelper $dataObjectHelper
     ) {
-        $this->getSourceItemConfiguration = $getSourceItemConfiguration;
         $this->sourceItemConfigurationSave = $sourceItemConfigurationSave;
         $this->sourceItemConfigurationFactory = $sourceItemConfigurationFactory;
         $this->dataObjectHelper = $dataObjectHelper;
@@ -122,7 +115,7 @@ class SourceItemsConfigurationProcessor
             $sourceId = $sourceItem[SourceItemInterface::SOURCE_ID];
             $sourceItemConfig = $this->getSourceItemConfiguration->execute((int)$sourceId, $sku);
 
-            if (null != $sourceItemConfig) {
+            if (null !== $sourceItemConfig) {
                 $sourceItems[] = $sourceItemConfig;
             }
         }

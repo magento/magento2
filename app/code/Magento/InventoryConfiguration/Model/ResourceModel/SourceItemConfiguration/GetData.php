@@ -8,15 +8,13 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
-use Magento\InventoryConfiguration\Model\GetSourceItemConfigurationInterface;
 use Magento\InventoryConfiguration\Setup\Operation\CreateSourceConfigurationTable;
-use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 
 /**
- * Class GetSourceItemConfiguration
+ * Get configuration data for specific source item
  */
-class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
+class GetData
 {
     /**
      * @var ResourceConnection
@@ -24,8 +22,6 @@ class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
     private $resourceConnection;
 
     /**
-     * GetSourceItemConfiguration constructor.
-     *
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(ResourceConnection $resourceConnection)
@@ -34,28 +30,22 @@ class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
     }
 
     /**
-     * @inheritdoc
+     * @param int $sourceId
+     * @param string $sku
+     * @return array|null
      */
     public function execute(int $sourceId, string $sku)
     {
         $connection = $this->resourceConnection->getConnection();
-
-        $mainTable = $this->resourceConnection
+        $sourceItemConfigurationTable = $this->resourceConnection
             ->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
 
-        $select = $connection->select()->from(
-            ['mt' => $mainTable]
-        )->where(
-            'source_id=:source_id AND sku=:sku'
-        );
+        $select = $connection->select()
+            ->from($sourceItemConfigurationTable)
+            ->where(SourceItemConfigurationInterface::SOURCE_ID . ' = ?', $sourceId)
+            ->where(SourceItemConfigurationInterface::SKU . ' = ?', $sku);
 
-        $bind = [
-            'source_id' => $sourceId,
-            'sku' => $sku
-        ];
-
-        $row = $connection->fetchRow($select, $bind);
-
+        $row = $connection->fetchRow($select);
         return $row ? $row : null;
     }
 }

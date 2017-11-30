@@ -64,7 +64,7 @@ class SourceItemConfiguration extends AbstractModifier
     private function getSourceItemsConfigurationData(array $assignedSources, ProductInterface $product): array
     {
         foreach ($assignedSources as &$source) {
-            $sourceConfiguration = $this->getSourceItemConfiguration->get(
+            $sourceConfiguration = $this->getSourceItemConfiguration->execute(
                 (int)$source[SourceInterface::SOURCE_ID],
                 $product->getSku()
             );

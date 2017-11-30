@@ -5,42 +5,39 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration;
+namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration\Command;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\SaveSourceItemConfiguration
-    as SaveSourceItemConfigurationModel;
+use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\SaveMultiple
+    as SaveMultipleResourceModel;
 use Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Implementation of SourceItem Quantity notification save multiple operation for specific db layer
- * Save Multiple used here for performance efficient purposes over single save operation
+ * @inheritdoc
  */
-class SourceItemConfigurationsSave implements SourceItemConfigurationsSaveInterface
+class SaveMultiple implements SourceItemConfigurationsSaveInterface
 {
     /**
-     * @var SaveSourceItemConfigurationModel
+     * @var SaveMultipleResourceModel
      */
-    protected $saveConfiguration;
+    private $saveMultipleResourceModel;
 
     /**
      * @var LoggerInterface
      */
-    protected $logger;
+    private $logger;
 
     /**
-     * SaveSourceItemConfiguration constructor.
-     *
-     * @param SaveSourceItemConfigurationModel $saveConfiguration
+     * @param SaveMultipleResourceModel $saveMultipleResourceModel
      * @param LoggerInterface $logger
      */
     public function __construct(
-        SaveSourceItemConfigurationModel $saveConfiguration,
+        SaveMultipleResourceModel $saveMultipleResourceModel,
         LoggerInterface $logger
     ) {
-        $this->saveConfiguration = $saveConfiguration;
+        $this->saveMultipleResourceModel = $saveMultipleResourceModel;
         $this->logger = $logger;
     }
 
@@ -53,7 +50,7 @@ class SourceItemConfigurationsSave implements SourceItemConfigurationsSaveInterf
             throw new InputException(__('Input data is empty'));
         }
         try {
-            $this->saveConfiguration->execute($sourceItemConfigurations);
+            $this->saveMultipleResourceModel->execute($sourceItemConfigurations);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not save Source Item Configuration'), $e);

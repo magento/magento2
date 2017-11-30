@@ -14,7 +14,7 @@ use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 /**
  * Implementation of SourceItem Configuration delete operation for specific db layer
  */
-class DeleteSourceItemConfiguration
+class Delete
 {
     /**
      * @var ResourceConnection
@@ -31,20 +31,19 @@ class DeleteSourceItemConfiguration
     }
 
     /**
-     * Delete the source item configuration.
-     *
      * @param int $sourceId
      * @param string $sku
+     * @return void
      */
     public function execute(int $sourceId, string $sku)
     {
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection
+        $sourceItemConfigurationTable = $this->resourceConnection
             ->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
 
-        $connection->delete($tableName, [
+        $connection->delete($sourceItemConfigurationTable, [
             SourceItemConfigurationInterface::SOURCE_ID . ' = ?' => $sourceId,
-            SourceItemConfigurationInterface::SKU . ' = ?' => $sku
+            SourceItemConfigurationInterface::SKU . ' = ?' => $sku,
         ]);
     }
 }
