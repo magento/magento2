@@ -6,9 +6,10 @@
 
 namespace Magento\Theme\Console\Command;
 
-use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache;
+use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Console\MaintenanceModeEnabler;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
@@ -38,11 +39,6 @@ class ThemeUninstallCommand extends Command
     const INPUT_KEY_BACKUP_CODE = 'backup-code';
     const INPUT_KEY_THEMES = 'theme';
     const INPUT_KEY_CLEAR_STATIC_CONTENT = 'clear-static-content';
-
-    /**
-     * @var MaintenanceModeEnabler
-     */
-    private $maintenanceMode;
 
     /**
      * Composer general dependency checker
@@ -115,12 +111,17 @@ class ThemeUninstallCommand extends Command
     private $themeDependencyChecker;
 
     /**
+     * @var MaintenanceModeEnabler
+     */
+    private $maintenanceModeEnabler;
+
+    /**
      * Constructor
      *
      * @param Cache $cache
      * @param CleanupFiles $cleanupFiles
      * @param ComposerInformation $composer
-     * @param MaintenanceModeEnabler $maintenanceMode
+     * @param MaintenanceMode $maintenanceMode deprecated, use $maintenanceModeEnabler instead
      * @param DependencyChecker $dependencyChecker
      * @param Collection $themeCollection
      * @param BackupRollbackFactory $backupRollbackFactory
@@ -128,24 +129,27 @@ class ThemeUninstallCommand extends Command
      * @param ThemePackageInfo $themePackageInfo
      * @param ThemeUninstaller $themeUninstaller
      * @param ThemeDependencyChecker $themeDependencyChecker
+     * @param MaintenanceModeEnabler $maintenanceModeEnabler
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Cache $cache,
         CleanupFiles $cleanupFiles,
         ComposerInformation $composer,
-        MaintenanceModeEnabler $maintenanceMode,
+        MaintenanceMode $maintenanceMode,
         DependencyChecker $dependencyChecker,
         Collection $themeCollection,
         BackupRollbackFactory $backupRollbackFactory,
         ThemeValidator $themeValidator,
         ThemePackageInfo $themePackageInfo,
         ThemeUninstaller $themeUninstaller,
-        ThemeDependencyChecker $themeDependencyChecker
+        ThemeDependencyChecker $themeDependencyChecker,
+        MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
         $this->cache = $cache;
         $this->cleanupFiles = $cleanupFiles;
         $this->composer = $composer;
-        $this->maintenanceMode = $maintenanceMode;
         $this->dependencyChecker = $dependencyChecker;
         $this->themeCollection = $themeCollection;
         $this->backupRollbackFactory = $backupRollbackFactory;
@@ -153,6 +157,8 @@ class ThemeUninstallCommand extends Command
         $this->themePackageInfo = $themePackageInfo;
         $this->themeUninstaller = $themeUninstaller;
         $this->themeDependencyChecker = $themeDependencyChecker;
+        $this->maintenanceModeEnabler =
+            $maintenanceModeEnabler ?: ObjectManager::getInstance()->get(MaintenanceModeEnabler::class);
         parent::__construct();
     }
 
@@ -212,25 +218,32 @@ class ThemeUninstallCommand extends Command
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
-        try {
-            $this->maintenanceMode->enableMaintenanceMode($output);
-            if ($input->getOption(self::INPUT_KEY_BACKUP_CODE)) {
-                $time = time();
-                $codeBackup = $this->backupRollbackFactory->create($output);
-                $codeBackup->codeBackup($time);
-            }
+        $result = $this->maintenanceModeEnabler->executeInMaintenanceMode(
+            function () use ($input, $output, $themePaths) {
+                try {
+                    if ($input->getOption(self::INPUT_KEY_BACKUP_CODE)) {
+                        $time = time();
+                        $codeBackup = $this->backupRollbackFactory->create($output);
+                        $codeBackup->codeBackup($time);
+                    }
 
-            $this->themeUninstaller->uninstallRegistry($output, $themePaths);
-            $this->themeUninstaller->uninstallCode($output, $themePaths);
+                    $this->themeUninstaller->uninstallRegistry($output, $themePaths);
+                    $this->themeUninstaller->uninstallCode($output, $themePaths);
 
-            $this->cleanup($input, $output);
-            $this->maintenanceMode->disableMaintenanceMode($output);
-        } catch (\Exception $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-            $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
-            // we must have an exit code higher than zero to indicate something was wrong
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
-        }
+                    $this->cleanup($input, $output);
+                    return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+                } catch (\Exception $e) {
+                    $output->writeln('<error>' . $e->getMessage() . '</error>');
+                    $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
+                    // we must have an exit code higher than zero to indicate something was wrong
+                    return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+                }
+            },
+            $output,
+            true
+        );
+
+        return $result;
     }
 
     /**

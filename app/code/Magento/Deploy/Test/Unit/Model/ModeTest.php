@@ -15,6 +15,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State;
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
@@ -54,7 +55,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
     private $writerMock;
 
     /**
-     * @var MaintenanceModeEnabler|Mock
+     * @var MaintenanceMode|Mock
      */
     private $maintenanceMock;
 
@@ -95,7 +96,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
         $this->readerMock = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->maintenanceMock = $this->getMockBuilder(MaintenanceModeEnabler::class)
+        $this->maintenanceMock = $this->getMockBuilder(MaintenanceMode::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
@@ -124,7 +125,8 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             $this->filesystemMock,
             $this->configProvider,
             $this->processorFacadeFactory,
-            $this->emulatedAreaProcessor
+            $this->emulatedAreaProcessor,
+            new MaintenanceModeEnabler($this->maintenanceMock)
         );
     }
 

@@ -12,6 +12,7 @@ use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Symfony\Component\Console\Input\InputInterface;
@@ -50,11 +51,6 @@ class Mode
     private $reader;
 
     /**
-     * @var MaintenanceModeEnabler
-     */
-    private $maintenanceMode;
-
-    /**
      * @var Filesystem
      */
     private $filesystem;
@@ -79,32 +75,40 @@ class Mode
     private $emulatedAreaProcessor;
 
     /**
+     * @var MaintenanceModeEnabler
+     */
+    private $maintenanceModeEnabler;
+
+    /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @param Writer $writer
      * @param Reader $reader
-     * @param MaintenanceModeEnabler $maintenanceMode
+     * @param MaintenanceMode $maintenanceMode deprecated, use $maintenanceModeEnabler instead
      * @param Filesystem $filesystem
      * @param ConfigProvider $configProvider
      * @param ProcessorFacadeFactory $processorFacadeFactory
      * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor
+     * @param MaintenanceModeEnabler $maintenanceModeEnabler
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         InputInterface $input,
         OutputInterface $output,
         Writer $writer,
         Reader $reader,
-        MaintenanceModeEnabler $maintenanceMode,
+        MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
         ConfigProvider $configProvider = null,
         ProcessorFacadeFactory $processorFacadeFactory = null,
-        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null
+        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null,
+        MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
         $this->input = $input;
         $this->output = $output;
         $this->writer = $writer;
         $this->reader = $reader;
-        $this->maintenanceMode = $maintenanceMode;
         $this->filesystem = $filesystem;
 
         $this->configProvider =
@@ -113,6 +117,8 @@ class Mode
             $processorFacadeFactory ?: ObjectManager::getInstance()->get(ProcessorFacadeFactory::class);
         $this->emulatedAreaProcessor =
             $emulatedAreaProcessor ?: ObjectManager::getInstance()->get(EmulatedAdminhtmlAreaProcessor::class);
+        $this->maintenanceModeEnabler =
+            $maintenanceModeEnabler ?: ObjectManager::getInstance()->get(MaintenanceModeEnabler::class);
     }
 
     /**
@@ -123,19 +129,23 @@ class Mode
      */
     public function enableProductionMode()
     {
-        $this->maintenanceMode->enableMaintenanceMode($this->output);
-        $previousMode = $this->getMode();
-        try {
-            // We have to turn on production mode before generation.
-            // We need this to enable generation of the "min" files.
-            $this->setStoreMode(State::MODE_PRODUCTION);
-            $this->filesystem->regenerateStatic($this->output);
-        } catch (LocalizedException $e) {
-            // We have to return store mode to previous state in case of error.
-            $this->setStoreMode($previousMode);
-            throw $e;
-        }
-        $this->maintenanceMode->disableMaintenanceMode($this->output);
+        $this->maintenanceModeEnabler->executeInMaintenanceMode(
+            function () {
+                $previousMode = $this->getMode();
+                try {
+                    // We have to turn on production mode before generation.
+                    // We need this to enable generation of the "min" files.
+                    $this->setStoreMode(State::MODE_PRODUCTION);
+                    $this->filesystem->regenerateStatic($this->output);
+                } catch (LocalizedException $e) {
+                    // We have to return store mode to previous state in case of error.
+                    $this->setStoreMode($previousMode);
+                    throw $e;
+                }
+            },
+            $this->output,
+            false
+        );
     }
 
     /**

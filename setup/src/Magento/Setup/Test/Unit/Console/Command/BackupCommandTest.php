@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Setup\Console\Command\BackupCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -35,14 +36,9 @@ class BackupCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $deploymentConfig;
 
-    /**
-     * @var \Magento\Framework\App\Console\MaintenanceModeEnabler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $maintenanceMode;
-
     public function setUp()
     {
-        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\Console\MaintenanceModeEnabler::class);
+        $maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $this->objectManager = $this->getMockForAbstractClass(
             \Magento\Framework\ObjectManagerInterface::class,
@@ -77,8 +73,9 @@ class BackupCommandTest extends \PHPUnit\Framework\TestCase
             );
         $command = new BackupCommand(
             $objectManagerProvider,
-            $this->maintenanceMode,
-            $this->deploymentConfig
+            $maintenanceMode,
+            $this->deploymentConfig,
+            new MaintenanceModeEnabler($maintenanceMode)
         );
         $this->tester = new CommandTester($command);
     }
@@ -133,10 +130,10 @@ class BackupCommandTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
             ->will($this->returnValue(false));
-        $this->maintenanceMode->expects($this->once())->method('enableMaintenanceMode');
-        $this->maintenanceMode->expects($this->once())->method('disableMaintenanceMode');
         $this->tester->execute([]);
-        $expected = 'Not enough information provided to take backup.' . PHP_EOL;
+        $expected = 'Enabling maintenance mode' . PHP_EOL
+            . 'Not enough information provided to take backup.' . PHP_EOL
+            . 'Disabling maintenance mode' . PHP_EOL;
         $this->assertSame($expected, $this->tester->getDisplay());
     }
 }

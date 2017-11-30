@@ -5,9 +5,13 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Setup\Console\Command\RollbackCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RollbackCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -50,15 +54,10 @@ class RollbackCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    /**
-     * @var \Magento\Framework\App\Console\MaintenanceModeEnabler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $maintenanceMode;
-
     public function setUp()
     {
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
-        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\Console\MaintenanceModeEnabler::class);
+        $maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
         $this->objectManager = $this->getMockForAbstractClass(
             \Magento\Framework\ObjectManagerInterface::class,
             [],
@@ -100,8 +99,9 @@ class RollbackCommandTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->question));
         $this->command = new RollbackCommand(
             $objectManagerProvider,
-            $this->maintenanceMode,
-            $this->deploymentConfig
+            $maintenanceMode,
+            $this->deploymentConfig,
+            new MaintenanceModeEnabler($maintenanceMode)
         );
         $this->command->setHelperSet($this->helperSet);
         $this->tester = new CommandTester($this->command);
@@ -157,10 +157,10 @@ class RollbackCommandTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
             ->will($this->returnValue(true));
-        $this->maintenanceMode->expects($this->once())->method('enableMaintenanceMode');
-        $this->maintenanceMode->expects($this->once())->method('disableMaintenanceMode');
         $this->tester->execute([]);
-        $expected = 'Not enough information provided to roll back.' . PHP_EOL;
+        $expected = 'Enabling maintenance mode' . PHP_EOL
+            . 'Not enough information provided to roll back.' . PHP_EOL
+            . 'Disabling maintenance mode' . PHP_EOL;
         $this->assertSame($expected, $this->tester->getDisplay());
     }
 

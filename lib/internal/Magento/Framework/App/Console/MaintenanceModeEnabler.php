@@ -38,7 +38,7 @@ class MaintenanceModeEnabler
      * @param OutputInterface $output
      * @return void
      */
-    public function enableMaintenanceMode(OutputInterface $output)
+    private function enableMaintenanceMode(OutputInterface $output)
     {
         if ($this->maintenanceMode->isOn()) {
             $this->skipDisableMaintenanceMode = true;
@@ -57,7 +57,7 @@ class MaintenanceModeEnabler
      * @param OutputInterface $output
      * @return void
      */
-    public function disableMaintenanceMode(OutputInterface $output)
+    private function disableMaintenanceMode(OutputInterface $output)
     {
         if ($this->skipDisableMaintenanceMode) {
             $output->writeln('<info>Skipped disabling maintenance mode</info>');
@@ -66,5 +66,31 @@ class MaintenanceModeEnabler
 
         $this->maintenanceMode->set(false);
         $output->writeln('<info>Disabling maintenance mode</info>');
+    }
+
+    /**
+     * Run task in maintenance mode
+     *
+     * @param callable $task
+     * @param OutputInterface $output
+     * @param bool $holdMaintenanceOnFailure
+     * @return mixed
+     * @throws \Throwable if error occurred
+     */
+    public function executeInMaintenanceMode(callable $task, OutputInterface $output, bool $holdMaintenanceOnFailure)
+    {
+        $this->enableMaintenanceMode($output);
+
+        try {
+            $result = call_user_func($task);
+        } catch (\Throwable $e) {
+            if (!$holdMaintenanceOnFailure) {
+                $this->disableMaintenanceMode($output);
+            }
+            throw $e;
+        }
+
+        $this->disableMaintenanceMode($output);
+        return $result;
     }
 }
