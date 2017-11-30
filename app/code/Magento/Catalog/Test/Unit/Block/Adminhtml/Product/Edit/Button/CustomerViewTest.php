@@ -49,6 +49,11 @@ class CustomerViewTests extends \PHPUnit\Framework\TestCase
                                        ->disableOriginalConstructor()
                                        ->getMock();
 
+        $this->storeMock = $this->getMockBuilder(Interceptor::class)
+                                ->disableOriginalConstructor()
+                                ->setMethods(['getStoreId', 'getCode'])
+                                ->getMock();
+
         $this->actionUrlBuilderMock = $this->getMockBuilder(UrlBuilder::class)
                                            ->disableOriginalConstructor()
                                            ->setMethods(['getUrl'])
@@ -74,7 +79,23 @@ class CustomerViewTests extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock->expects($this->once())
                                ->method('getStore')
                                ->with('')
-                               ->willReturn(true);
+                               ->willReturn($this->storeMock);
+
+        $this->storeMock->expects($this->any())
+                        ->method('getStoreId')
+                        ->willReturn('1');
+
+        $this->storeMock->expects($this->any())
+                        ->method('getCode')
+                        ->willReturn('default');
+
+        $this->productMock->expects($this->any())
+                        ->method('isSalable')
+                        ->willReturn(true);
+
+        $this->productMock->expects($this->any())
+                          ->method('getId')
+                          ->willReturn(1);
 
         $this->actionUrlBuilderMock->expects($this->once())
                                    ->method('getUrl')
