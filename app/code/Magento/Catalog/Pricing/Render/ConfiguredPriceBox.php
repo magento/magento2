@@ -8,6 +8,9 @@ namespace Magento\Catalog\Pricing\Render;
 
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
+use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\Pricing\Price\RegularPrice;
 
 /**
  * Class for configured_price rendering
@@ -59,7 +62,7 @@ class ConfiguredPriceBox extends FinalPriceBox
         $configuredPrice = $this->getPrice();
         if (empty($configuredPrice->getSelectionPriceList())) {
             // If there was no selection we must show minimal regular price
-            return $this->getSaleableItem()->getPriceInfo()->getPrice('final_price');
+            return $this->getSaleableItem()->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE);
         }
 
         return $configuredPrice;
@@ -71,10 +74,10 @@ class ConfiguredPriceBox extends FinalPriceBox
     public function getConfiguredRegularPrice()
     {
         /** @var \Magento\Bundle\Pricing\Price\ConfiguredPrice $configuredPrice */
-        $configuredPrice = $this->getPriceType('configured_regular_price');
+        $configuredPrice = $this->getPriceType(ConfiguredPriceInterface::CONFIGURED_REGULAR_PRICE_CODE);
         if (empty($configuredPrice->getSelectionPriceList())) {
             // If there was no selection we must show minimal regular price
-            return $this->getSaleableItem()->getPriceInfo()->getPrice('regular_price');
+            return $this->getSaleableItem()->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE);
         }
 
         return $configuredPrice;
@@ -87,7 +90,7 @@ class ConfiguredPriceBox extends FinalPriceBox
      */
     public function hasSpecialPrice()
     {
-        if ($this->price->getPriceCode() == 'configured_price') {
+        if ($this->price->getPriceCode() == ConfiguredPriceInterface::CONFIGURED_PRICE_CODE) {
             $displayRegularPrice = $this->getConfiguredRegularPrice()->getAmount()->getValue();
             $displayFinalPrice = $this->getConfiguredPrice()->getAmount()->getValue();
             return $displayFinalPrice < $displayRegularPrice;

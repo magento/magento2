@@ -19,15 +19,27 @@ class ConfigurableProduct extends FinalPrice implements ConfiguredPriceInterface
     /**
      * Get Configured Price Amount object by price type
      *
-     * @param bool $useRegularPrice
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
-    public function getConfiguredAmount($useRegularPrice = false)
+    public function getConfiguredAmount()
     {
         /** @var \Magento\Wishlist\Model\Item\Option $customOption */
         $customOption = $this->getProduct()->getCustomOption('simple_product');
         $product = $customOption ? $customOption->getProduct() : $this->getProduct();
-        return $product->getPriceInfo()->getPrice($useRegularPrice ? 'regular_price' : self::PRICE_CODE)->getAmount();
+        return $product->getPriceInfo()->getPrice(self::CONFIGURED_PRICE_CODE)->getAmount();
+    }
+
+    /**
+     * Get Configured Regular Price Amount object by price type
+     *
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     */
+    public function getConfiguredRegularAmount()
+    {
+        /** @var \Magento\Wishlist\Model\Item\Option $customOption */
+        $customOption = $this->getProduct()->getCustomOption('simple_product');
+        $product = $customOption ? $customOption->getProduct() : $this->getProduct();
+        return $product->getPriceInfo()->getPrice(self::CONFIGURED_REGULAR_PRICE_CODE)->getAmount();
     }
 
     /**
