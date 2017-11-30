@@ -175,7 +175,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 
                 $categoryAttributesData = [];
                 if (isset($attributesData[$linkId]) && is_array($attributesData[$linkId])) {
-                    $categoryAttributesData = $attributesData[$categoryId];
+                    $categoryAttributesData = $attributesData[$linkId];
                 }
                 $categoryIndexData = $this->buildCategoryIndexData(
                     $store,
