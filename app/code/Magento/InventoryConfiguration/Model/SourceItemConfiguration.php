@@ -11,32 +11,30 @@ use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
- * Implementation of basic operations for Source Item Notification entity for specific db layer
+ * @inheritdoc
  */
 class SourceItemConfiguration extends AbstractExtensibleModel implements SourceItemConfigurationInterface
 {
     /**
      * @inheritdoc
      */
-    public function getSourceItemId()
+    public function getSourceId()
     {
-        return $this->getData(self::SOURCE_ITEM_ID);
+        return $this->getData(self::SOURCE_ID);
     }
 
     /**
      * @inheritdoc
      */
-    public function setSourceItemId(string $sourceItemId)
+    public function setSourceId(int $sourceId)
     {
-        if (!$this->getSourceItemId()) {
-            $this->setData(self::SOURCE_ITEM_ID, $sourceItemId);
-        }
+        $this->setData(self::SOURCE_ID, $sourceId);
     }
 
     /**
      * @inheritdoc
      */
-    public function getNotifyQuantity()
+    public function getNotifyStockQty()
     {
         return $this->getData(self::INVENTORY_NOTIFY_QTY);
     }
@@ -44,9 +42,25 @@ class SourceItemConfiguration extends AbstractExtensibleModel implements SourceI
     /**
      * @inheritdoc
      */
-    public function setNotifyQuantity($quantity)
+    public function setNotifyStockQty($quantity)
     {
         $this->setData(self::INVENTORY_NOTIFY_QTY, $quantity);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSku()
+    {
+        return $this->getData(self::SKU);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setSku(string $sku)
+    {
+        $this->setData(self::SKU, $sku);
     }
 
     /**

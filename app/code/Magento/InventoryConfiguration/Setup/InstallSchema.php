@@ -14,15 +14,12 @@ use Magento\InventoryConfiguration\Setup\Operation\CreateSourceConfigurationTabl
 
 class InstallSchema implements InstallSchemaInterface
 {
-
     /**
      * @var CreateSourceConfigurationTable
      */
-    protected $createSourceNotificationTable;
+    private $createSourceNotificationTable;
 
     /**
-     * InstallSchema constructor.
-     *
      * @param CreateSourceConfigurationTable $createSourceNotificationTable
      */
     public function __construct(
@@ -33,6 +30,7 @@ class InstallSchema implements InstallSchemaInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

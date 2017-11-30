@@ -8,8 +8,9 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryConfiguration\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 
 /**
  * Implementation of SourceItem Quantity notification save multiple operation for specific db layer
@@ -22,14 +23,12 @@ class SaveSourceItemConfiguration
      */
     private $resourceConnection;
 
-
     /**
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         ResourceConnection $resourceConnection
-    )
-    {
+    ) {
         $this->resourceConnection = $resourceConnection;
     }
 
@@ -45,10 +44,12 @@ class SaveSourceItemConfiguration
             return;
         }
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName(SourceItemConfiguration::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
+        $tableName = $this->resourceConnection
+            ->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
 
         $columnsSql = $this->buildColumnsSqlPart([
-            SourceItemConfigurationInterface::SOURCE_ITEM_ID,
+            SourceItemConfigurationInterface::SOURCE_ID,
+            SourceItemConfigurationInterface::SKU,
             SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY
         ]);
 
@@ -81,26 +82,28 @@ class SaveSourceItemConfiguration
     }
 
     /**
-     * @param SourceItemInterface[] $sourceItems
+     * @param SourceItemInterface[] $sourceItemsConfigurations
      * @return string
      */
-    private function buildValuesSqlPart(array $sourceItems): string
+    private function buildValuesSqlPart(array $sourceItemsConfigurations): string
     {
-        $sql = rtrim(str_repeat('(?, ?), ', count($sourceItems)), ', ');
+        $sql = rtrim(str_repeat('(?, ?, ?), ', count($sourceItemsConfigurations)), ', ');
         return $sql;
     }
 
     /**
-     * @param SourceItemInterface[] $sourceItems
+     * @param SourceItemInterface[] $sourceItemsConfiguration
      * @return array
      */
-    private function getSqlBindData(array $sourceItems): array
+    private function getSqlBindData(array $sourceItemsConfiguration): array
     {
         $bind = [];
-        foreach ($sourceItems as $sourceItem) {
+        /** @var SourceItemConfigurationInterface $sourceItemConfiguration */
+        foreach ($sourceItemsConfiguration as $sourceItemConfiguration) {
             $bind = array_merge($bind, [
-                $sourceItem->getSourceItemId(),
-                $sourceItem->getNotifyQuantity()
+                $sourceItemConfiguration->getSourceId(),
+                $sourceItemConfiguration->getSku(),
+                $sourceItemConfiguration->getNotifyStockQty()
             ]);
         }
         return $bind;

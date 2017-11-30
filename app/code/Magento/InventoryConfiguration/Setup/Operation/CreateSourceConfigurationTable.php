@@ -12,50 +12,60 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 
 class CreateSourceConfigurationTable
 {
-    /**C
+    /**
+     * Source item configuration table name
+     */
+    const TABLE_NAME_SOURCE_ITEM_CONFIGURATION = 'inventory_source_item_configuration';
+
+    /**
      * @param SchemaSetupInterface $setup
      * @return void
      */
     public function execute(SchemaSetupInterface $setup)
     {
-        $notifyQtyTable = $setup->getConnection()->newTable(
-            $setup->getTable(SourceItemConfiguration::TABLE_NAME_SOURCE_ITEM_CONFIGURATION)
+        $sourceItemConfigurationTable = $setup->getConnection()->newTable(
+            $setup->getTable(self::TABLE_NAME_SOURCE_ITEM_CONFIGURATION)
         )->setComment(
-            'Inventory Notification Table'
+            'Inventory source Item Configuration Table'
         );
 
-        $sourceItemTable = $setup->getTable(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
+        $sourceItemConfigurationTable = $this->addBaseFields($sourceItemConfigurationTable);
+        $sourceItemConfigurationTable = $this->addForeignKey($sourceItemConfigurationTable, $setup);
 
-        $notifyQtyTable = $this->addBaseFields($notifyQtyTable);
-        $notifyQtyTable = $this->addForeignKey($notifyQtyTable, $sourceItemTable, $setup);
-
-        $setup->getConnection()->createTable($notifyQtyTable);
+        $setup->getConnection()->createTable($sourceItemConfigurationTable);
     }
 
     /**
-     * Add columns to table.
+     * Add columns to table
      *
-     * @param Table $notifyQtyTable
+     * @param Table $sourceItemConfigurationTable
      * @return Table
      */
-    private function addBaseFields(Table $notifyQtyTable): Table
+    private function addBaseFields(Table $sourceItemConfigurationTable): Table
     {
-        return $notifyQtyTable->addColumn(
-            SourceItemConfigurationInterface::SOURCE_ITEM_ID,
+        return $sourceItemConfigurationTable->addColumn(
+            SourceItemConfigurationInterface::SOURCE_ID,
             Table::TYPE_INTEGER,
             null,
             [
-                Table::OPTION_IDENTITY => true,
                 Table::OPTION_UNSIGNED => true,
                 Table::OPTION_NULLABLE => false,
-                Table::OPTION_PRIMARY => true,
             ],
-            'Source Item ID'
+            'Source ID'
+        )->addColumn(
+            SourceItemInterface::SKU,
+            Table::TYPE_TEXT,
+            64,
+            [
+                Table::OPTION_NULLABLE => false,
+            ],
+            'Sku'
         )->addColumn(
             SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY,
             Table::TYPE_DECIMAL,
@@ -68,29 +78,36 @@ class CreateSourceConfigurationTable
                 Table::OPTION_SCALE => 4,
             ],
             'Notify Quantity'
+        )->addIndex(
+            'idx_primary',
+            [SourceItemConfigurationInterface::SOURCE_ID, SourceItemInterface::SKU],
+            ['type' => AdapterInterface::INDEX_TYPE_PRIMARY]
         );
     }
 
     /**
-     * Add foreign key to table.
+     * Add foreign key to table
      *
-     * @param Table $notifyQtyTable
-     * @param string $sourceItemTable
+     * @param Table $sourceItemConfigurationTable
      * @param SchemaSetupInterface $setup
      * @return Table
      */
-    private function addForeignKey(Table $notifyQtyTable, string $sourceItemTable, SchemaSetupInterface $setup): Table
-    {
-        return $notifyQtyTable->addForeignKey(
+    private function addForeignKey(
+        Table $sourceItemConfigurationTable,
+        SchemaSetupInterface $setup
+    ): Table {
+        $sourceItemTable = $setup->getTable(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
+
+        return $sourceItemConfigurationTable->addForeignKey(
             $setup->getFkName(
-                $notifyQtyTable->getName(),
-                SourceItemConfigurationInterface::SOURCE_ITEM_ID,
+                $sourceItemConfigurationTable->getName(),
+                SourceItemConfigurationInterface::SOURCE_ID,
                 $sourceItemTable,
-                SourceItem::ID_FIELD_NAME
+                SourceInterface::SOURCE_ID
             ),
-            SourceItemConfigurationInterface::SOURCE_ITEM_ID,
+            SourceItemConfigurationInterface::SOURCE_ID,
             $sourceItemTable,
-            SourceItem::ID_FIELD_NAME,
+            SourceInterface::SOURCE_ID,
             AdapterInterface::FK_ACTION_CASCADE
         );
     }

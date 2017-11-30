@@ -10,10 +10,10 @@ namespace Magento\InventoryConfiguration\Observer;
 use Magento\Framework\Exception\InputException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
-use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface;
-use Magento\InventoryConfiguration\Model\SourceItemConfiguration\DeleteInterface;
+use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface;
 use Magento\InventoryConfiguration\Model\SourceItemConfigurationFactory;
+use Magento\InventoryConfiguration\Model\GetSourceItemConfigurationInterface;
 
 use Magento\Framework\Api\DataObjectHelper;
 
@@ -41,7 +41,7 @@ class SourceItemsConfigurationProcessor
     private $dataObjectHelper;
 
     /**
-     * @var DeleteInterface
+     * @var DeleteSourceItemConfigurationInterface
      */
     private $sourceItemConfigurationDelete;
 
@@ -49,14 +49,14 @@ class SourceItemsConfigurationProcessor
      * @param SourceItemConfigurationFactory $sourceItemConfigurationFactory
      * @param SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave
      * @param GetSourceItemConfigurationInterface $getSourceItemConfiguration
-     * @param DeleteInterface $sourceItemConfigurationDelete
+     * @param DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete
      * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         SourceItemConfigurationFactory $sourceItemConfigurationFactory,
         SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave,
         GetSourceItemConfigurationInterface $getSourceItemConfiguration,
-        DeleteInterface $sourceItemConfigurationDelete,
+        DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete,
         DataObjectHelper $dataObjectHelper
     ) {
         $this->getSourceItemConfiguration = $getSourceItemConfiguration;
@@ -89,7 +89,11 @@ class SourceItemsConfigurationProcessor
             }
 
             $sourceItemData[SourceItemInterface::SKU] = $sku;
-            $this->dataObjectHelper->populateWithArray($sourceItem, $sourceItemData, SourceItemConfigurationInterface::class);
+            $this->dataObjectHelper->populateWithArray(
+                $sourceItem,
+                $sourceItemData,
+                SourceItemConfigurationInterface::class
+            );
 
             $sourceItemsForSave[] = $sourceItem;
             unset($sourceItemsForDelete[$sourceId]);
@@ -114,15 +118,19 @@ class SourceItemsConfigurationProcessor
         $sourceItems = [];
 
         /** @var \Magento\Inventory\Model\SourceItem $sourceItem */
-        foreach($sourceItemsData as $sourceItem) {
+        foreach ($sourceItemsData as $sourceItem) {
             $sourceId = $sourceItem[SourceItemInterface::SOURCE_ID];
-            $sourceItems[] = $this->getSourceItemConfiguration->get($sourceId, $sku);
+            $sourceItemConfig = $this->getSourceItemConfiguration->execute((int)$sourceId, $sku);
+
+            if (null != $sourceItemConfig) {
+                $sourceItems[] = $sourceItemConfig;
+            }
         }
 
         $sourceItemMap = [];
         if ($sourceItems) {
             foreach ($sourceItems as $sourceItem) {
-                $sourceItemMap[$sourceItem[SourceItemInterface::SOURCE_ID]] = $sourceItem;
+                $sourceItemMap[(int)$sourceItem[SourceItemInterface::SOURCE_ID]] = $sourceItem;
             }
         }
         return $sourceItemMap;
@@ -146,8 +154,12 @@ class SourceItemsConfigurationProcessor
      */
     private function deleteSourceItemsConfiguration(array $sourceItemsConfigurations)
     {
+        /** @var SourceItemInterface $sourceItemConfiguration */
         foreach ($sourceItemsConfigurations as $sourceItemConfiguration) {
-            $this->sourceItemConfigurationDelete->delete($sourceItemConfiguration);
+            $this->sourceItemConfigurationDelete->execute(
+                $sourceItemConfiguration->getSourceId(),
+                $sourceItemConfiguration->getSku()
+            );
         }
     }
 }

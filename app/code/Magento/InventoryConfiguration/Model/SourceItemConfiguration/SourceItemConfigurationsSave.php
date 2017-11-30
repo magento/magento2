@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration;
 
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\SaveSourceItemConfiguration as SaveSourceItemConfigurationModel;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
+use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\SaveSourceItemConfiguration
+    as SaveSourceItemConfigurationModel;
 use Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface;
 use Psr\Log\LoggerInterface;
-
 
 /**
  * Implementation of SourceItem Quantity notification save multiple operation for specific db layer
@@ -20,7 +20,6 @@ use Psr\Log\LoggerInterface;
  */
 class SourceItemConfigurationsSave implements SourceItemConfigurationsSaveInterface
 {
-
     /**
      * @var SaveSourceItemConfigurationModel
      */
@@ -40,8 +39,7 @@ class SourceItemConfigurationsSave implements SourceItemConfigurationsSaveInterf
     public function __construct(
         SaveSourceItemConfigurationModel $saveConfiguration,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->saveConfiguration = $saveConfiguration;
         $this->logger = $logger;
     }
@@ -49,13 +47,13 @@ class SourceItemConfigurationsSave implements SourceItemConfigurationsSaveInterf
     /**
      * @inheritdoc
      */
-    public function execute(array $configuration)
+    public function execute(array $sourceItemConfigurations)
     {
-        if (empty($configuration)) {
+        if (empty($sourceItemConfigurations)) {
             throw new InputException(__('Input data is empty'));
         }
         try {
-            $this->saveConfiguration->execute($configuration);
+            $this->saveConfiguration->execute($sourceItemConfigurations);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not save Source Item Configuration'), $e);

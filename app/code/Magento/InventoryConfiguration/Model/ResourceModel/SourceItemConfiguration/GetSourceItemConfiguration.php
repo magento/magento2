@@ -8,16 +8,15 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
-use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
+use Magento\InventoryConfiguration\Model\GetSourceItemConfigurationInterface;
+use Magento\InventoryConfiguration\Setup\Operation\CreateSourceConfigurationTable;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
 
 /**
- * Implementation of SourceItem Quantity notification save multiple operation for specific db layer
- * Save Multiple used here for performance efficient purposes over single save operation
+ * Class GetSourceItemConfiguration
  */
-class GetSourceItemConfiguration
+class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
 {
     /**
      * @var ResourceConnection
@@ -25,44 +24,27 @@ class GetSourceItemConfiguration
     private $resourceConnection;
 
     /**
-     * @var SourceItemConfigurationInterfaceFactory
-     */
-    private $sourceItemConfigurationFactory;
-
-    /**
+     * GetSourceItemConfiguration constructor.
+     *
      * @param ResourceConnection $resourceConnection
-     * @param SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory
      */
-    public function __construct(
-        ResourceConnection $resourceConnection,
-        SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory
-    )
+    public function __construct(ResourceConnection $resourceConnection)
     {
         $this->resourceConnection = $resourceConnection;
-        $this->sourceItemConfigurationFactory = $sourceItemConfigurationFactory;
     }
 
     /**
-     * Get the source item configuration.
-     *
-     * @param string $sourceId
-     * @param string $sku
-     * @return SourceItemConfigurationInterface
+     * @inheritdoc
      */
-    public function execute(string $sourceId, string $sku)
+    public function execute(int $sourceId, string $sku)
     {
         $connection = $this->resourceConnection->getConnection();
 
-        $mainTable = $this->resourceConnection->getTableName(SourceItemConfiguration::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
-        $joinTable = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
+        $mainTable = $this->resourceConnection
+            ->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
 
         $select = $connection->select()->from(
-            ['mt' => $mainTable],
-            [SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]
-        )->joinRight(
-            ['sit' => $joinTable],
-            'mt.source_item_id=sit.source_item_id',
-            ['source_item_id', 'source_id']
+            ['mt' => $mainTable]
         )->where(
             'source_id=:source_id AND sku=:sku'
         );
@@ -73,17 +55,7 @@ class GetSourceItemConfiguration
         ];
 
         $row = $connection->fetchRow($select, $bind);
-        $object = $this->sourceItemConfigurationFactory->create();
 
-        if ($row && count($row) > 0) {
-            foreach ($row as $key => $column) {
-                if ($column === null) {
-                    unset($row[$key]);
-                }
-            }
-            $object = $this->sourceItemConfigurationFactory->create()->setData($row);
-        }
-
-        return $object;
+        return $row ? $row : null;
     }
 }

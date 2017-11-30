@@ -31,8 +31,7 @@ class ProcessSourceItemsConfigurationObserver implements ObserverInterface
      */
     public function __construct(
         SourceItemsConfigurationProcessor $processSourceItemsConfigurationObserver
-    )
-    {
+    ) {
         $this->sourceItemsConfigurationProcessor = $processSourceItemsConfigurationObserver;
     }
 

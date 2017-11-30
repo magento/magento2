@@ -9,11 +9,11 @@ namespace Magento\InventoryConfiguration\Model\SourceItemConfiguration;
 
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\GetSourceItemConfiguration as ResourceGetSourceItemConfiguration;
+use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration\GetSourceItemConfiguration
+    as ResourceGetSourceItemConfiguration;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
-
 
 /**
  * Implementation of SourceItem Quantity notification save multiple operation for specific db layer
@@ -21,7 +21,6 @@ use Psr\Log\LoggerInterface;
  */
 class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
 {
-
     /**
      * @var ResourceGetSourceItemConfiguration
      */
@@ -41,8 +40,7 @@ class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
     public function __construct(
         ResourceGetSourceItemConfiguration $getConfiguration,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->getConfiguration = $getConfiguration;
         $this->logger = $logger;
     }
@@ -50,7 +48,7 @@ class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function get(string $sourceId, string $sku): SourceItemConfigurationInterface
+    public function get(int $sourceId, string $sku): SourceItemConfigurationInterface
     {
         if (empty($sourceId) || empty($sku)) {
             throw new InputException(__('SourceId oder Sku missing'));
