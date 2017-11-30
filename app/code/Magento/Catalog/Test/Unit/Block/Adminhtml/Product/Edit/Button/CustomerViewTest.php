@@ -19,75 +19,56 @@ use Magento\Store\Model\Store\Interceptor;
  */
 class CustomerViewTests extends \PHPUnit\Framework\TestCase
 {
-
-    protected $storeManagerMock;
-
-    protected $actionUrlBuilderMock;
-
-    protected function setUp()
-    {
-        $this->objectManager = new ObjectManager($this);
-
-        $this->contextMock = $this->getMockBuilder(Context::class)
-                                  ->disableOriginalConstructor()
-                                  ->getMock();
-
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-                                   ->disableOriginalConstructor()
-                                   ->getMock();
-
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
-                                  ->setMethods(['isSalable', 'getId'])
-                                  ->getMockForAbstractClass();
-
-        $this->registryMock->expects($this->any())
-                           ->method('registry')
-                           ->with('current_product')
-                           ->willReturn($this->productMock);
-
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-                                       ->disableOriginalConstructor()
-                                       ->getMock();
-
-        $this->actionUrlBuilderMock = $this->getMockBuilder(UrlBuilder::class)
-                                           ->disableOriginalConstructor()
-                                           ->setMethods(['getUrl'])
-                                           ->getMock();
-    }
-
-    /**
-     * @param string $class
-     * @return Generic
-     */
-    protected function getModel($class = CustomerView::class)
-    {
-        return $this->objectManager->getObject($class, [
-            'context' => $this->contextMock,
-            'registry' => $this->registryMock,
-            'storeManager' => $this->storeManagerMock,
-            'actionUrlBuilder' => $this->actionUrlBuilderMock,
-        ]);
-    }
-
     public function testGetButtonData()
     {
-        $this->storeManagerMock->expects($this->once())
-                               ->method('getStore')
-                               ->with('')
-                               ->willReturn(true);
-
-        $this->actionUrlBuilderMock->expects($this->once())
-                                   ->method('getUrl')
-                                   ->with('catalog/product/view', $this->productMock, 1, 'default')
-                                   ->willReturn('test_url');
-
+        $contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $registryMock = $this->getMockBuilder(Registry::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $actionUrlBuilderMock = $this->getMockBuilder(UrlBuilder::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getUrl'])
+            ->getMock();
+        $customerView = new CustomerView(
+            $contextMock,
+            $registryMock,
+            $storeManagerMock,
+            $actionUrlBuilderMock
+        );
+        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn($storeMock);
+        $productMock = $this->getMockBuilder(ProductInterface::class)
+            ->setMethods(['getId', 'isSalable'])
+            ->getMockForAbstractClass();
+        $productMock->expects($this->once())
+            ->method('isSalable')
+            ->willReturn(true);
+        $productMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(12);
+        $registryMock->expects($this->any())
+            ->method('registry')
+            ->with('current_product')
+            ->willReturn($productMock);
+        $actionUrlBuilderMock->expects($this->once())
+            ->method('getUrl')
+            ->willReturn('test_url');
         $this->assertEquals(
             [
                 'label' => __('Customer View'),
                 'on_click' => sprintf("window.open('%s', '_blank');", 'test_url'),
                 'class' => 'action-secondary',
             ],
-            $this->getModel()->getButtonData()
+            $customerView->getButtonData()
         );
     }
 }
