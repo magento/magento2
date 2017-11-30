@@ -8,14 +8,14 @@ namespace Magento\Framework\lock\Backend;
 
 class Database implements \Magento\Framework\Lock\LockManagerInterface
 {
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface */
-    private $adapter;
+    /** @var \Magento\Framework\App\ResourceConnection */
+    private $resource;
 
     public function __construct(
-        \Magento\Framework\DB\Adapter\AdapterInterface $adapter
+        \Magento\Framework\App\ResourceConnection $resource
     )
     {
-        $this->adapter = $adapter;
+        $this->resource = $resource;
     }
 
     /**
@@ -26,7 +26,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function setLock($name, $timeout = -1)
     {
-        return (bool) $this->adapter->query("SELECT GET_LOCK(?, ?);", array((string)$name, (int)$timeout))
+        return (bool)$this->resource->getConnection()->query("SELECT GET_LOCK(?, ?);", array((string)$name, (int)$timeout))
             ->fetchColumn();
     }
 
@@ -38,7 +38,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function releaseLock($name)
     {
-        return (bool) $this->adapter->query("SELECT RELEASE_LOCK(?);", array((string)$name))->fetchColumn();
+        return (bool)$this->resource->getConnection()->query("SELECT RELEASE_LOCK(?);", array((string)$name))->fetchColumn();
     }
 
     /**
@@ -49,6 +49,6 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function isLocked($name)
     {
-        return (bool) $this->adapter->query("SELECT IS_USED_LOCK(?);", array((string)$name))->fetchColumn();
+        return (bool)$this->resource->getConnection()->query("SELECT IS_USED_LOCK(?);", array((string)$name))->fetchColumn();
     }
 }

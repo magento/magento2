@@ -57,6 +57,11 @@ class ProcessCronQueueObserver implements ObserverInterface
     const SECONDS_IN_MINUTE = 60;
 
     /**
+     * How long to wait for cron group to become unlocked
+     */
+    const LOCK_TIMEOUT = 5;
+
+    /**
      * @var \Magento\Cron\Model\ResourceModel\Schedule\Collection
      */
     protected $_pendingSchedules;
@@ -117,6 +122,11 @@ class ProcessCronQueueObserver implements ObserverInterface
     private $state;
 
     /**
+     * @var \Magento\Framework\Lock\LockManagerInterface
+     */
+    private $lockManager;
+
+    /**
      * @var array
      */
     private $invalid = [];
@@ -138,6 +148,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param \Magento\Framework\Process\PhpExecutableFinderFactory $phpExecutableFinderFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\State $state
+     * @param \Magento\Framework\Lock\LockManagerInterface $lockManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -151,7 +162,8 @@ class ProcessCronQueueObserver implements ObserverInterface
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Framework\Process\PhpExecutableFinderFactory $phpExecutableFinderFactory,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\App\State $state
+        \Magento\Framework\App\State $state,
+        \Magento\Framework\Lock\LockManagerInterface $lockManager
     ) {
         $this->_objectManager = $objectManager;
         $this->_scheduleFactory = $scheduleFactory;
@@ -164,6 +176,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $this->phpExecutableFinder = $phpExecutableFinderFactory->create();
         $this->logger = $logger;
         $this->state = $state;
+        $this->lockManager = $lockManager;
     }
 
     /**
@@ -211,6 +224,16 @@ class ProcessCronQueueObserver implements ObserverInterface
                 continue;
             }
 
+            if (!$this->lockManager->setLock($groupId, self::LOCK_TIMEOUT)) {
+                $this->logger->warning(
+                    sprintf(
+                        "Could not acquire lock for cron group: %s, skipping run",
+                        $groupId
+                    )
+                );
+                continue;
+            }
+
             /** @var \Magento\Cron\Model\Schedule $schedule */
             foreach ($pendingJobs as $schedule) {
                 $jobConfig = isset($jobsRoot[$schedule->getJobCode()]) ? $jobsRoot[$schedule->getJobCode()] : null;
@@ -247,6 +270,8 @@ class ProcessCronQueueObserver implements ObserverInterface
                 }
                 $schedule->save();
             }
+
+            $this->lockManager->releaseLock($groupId);
         }
     }
 
