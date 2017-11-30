@@ -141,6 +141,7 @@ QUERY;
      * For undefined attributes and for attributes with no backendModel mapping available
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testUnDefinedAttributeType()
     {
@@ -177,17 +178,16 @@ QUERY;
         $expectedAttributeCodes = ['media_gallery', 'undefine_attribute', 'special_price'];
         $entityTypes = ['catalog_product', 'catalog_category', 'customer'];
         $attributeTypes = ['AnyType'];
-        $attributeMetaData = array_map(null,$response['customAttributeMetadata']['items'], $entityTypes );
-        foreach($attributeMetaData as $itemsIndex =>$itemArray)
-        {
-        $this->assertResponseFields(
-              $attributeMetaData[$itemsIndex][0],
-              [
+        $attributeMetaData = array_map(null, $response['customAttributeMetadata']['items'], $entityTypes);
+        foreach ($attributeMetaData as $itemsIndex => $itemArray) {
+            $this->assertResponseFields(
+                $attributeMetaData[$itemsIndex][0],
+                [
                   "attribute_code" => $expectedAttributeCodes[$itemsIndex],
                   "attribute_type" =>$attributeTypes[0],
                   "entity_type" => $entityTypes[$itemsIndex]
-              ]
-          );
+                ]
+            );
         }
     }
 
