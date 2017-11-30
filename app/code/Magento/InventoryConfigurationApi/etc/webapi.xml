@@ -7,7 +7,7 @@
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
     <route url="/V1/inventory/source-item-configuration/:sourceId/:sku" method="GET">
-        <service class="Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface" method="get"/>
+        <service class="Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface" method="execute"/>
         <resources>
             <resource ref="Magento_InventoryApi::source"/>
         </resources>

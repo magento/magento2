@@ -33,7 +33,7 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'execute',
+                'operation' => self::SERVICE_NAME . 'Execute',
             ],
         ];
 

@@ -70,7 +70,7 @@ class SourceItemConfigurationsSaveTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME_GET,
-                'operation' => self::SERVICE_NAME_GET . 'get',
+                'operation' => self::SERVICE_NAME_GET . 'Execute',
             ],
         ];
         $sourceItemConfiguration = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)

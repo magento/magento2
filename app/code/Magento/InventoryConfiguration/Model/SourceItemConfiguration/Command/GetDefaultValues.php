@@ -18,7 +18,7 @@ class GetDefaultValues
     /**
      * Default Notify Stock Qty config path
      */
-    const XML_PATH_NOTIFY_STOCK_QTY = 'inventory/inventory_configuration/notify_stock_qty_default';
+    const XML_PATH_NOTIFY_STOCK_QTY = 'inventory/source_item_configuration/notify_stock_qty';
 
     /**
      * @var ScopeConfigInterface
