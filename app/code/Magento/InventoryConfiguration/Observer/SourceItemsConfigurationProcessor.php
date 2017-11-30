@@ -13,7 +13,7 @@ use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface;
 use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface;
 use Magento\InventoryConfiguration\Model\SourceItemConfigurationFactory;
-use Magento\InventoryConfiguration\Model\GetSourceItemConfigurationInterface;
+use Magento\InventoryConfiguration\Model\GetSourceItemConfigurationDataInterface;
 
 use Magento\Framework\Api\DataObjectHelper;
 
@@ -23,7 +23,7 @@ use Magento\Framework\Api\DataObjectHelper;
 class SourceItemsConfigurationProcessor
 {
     /**
-     * @var GetSourceItemConfigurationInterface
+     * @var GetSourceItemConfigurationDataInterface
      */
     private $getSourceItemConfiguration;
 
@@ -31,10 +31,12 @@ class SourceItemsConfigurationProcessor
      * @var SourceItemConfigurationFactory
      */
     private $sourceItemConfigurationFactory;
+
     /**
      * @var SourceItemConfigurationsSaveInterface
      */
     private $sourceItemConfigurationSave;
+
     /**
      * @var DataObjectHelper
      */
@@ -48,14 +50,14 @@ class SourceItemsConfigurationProcessor
     /**
      * @param SourceItemConfigurationFactory $sourceItemConfigurationFactory
      * @param SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave
-     * @param GetSourceItemConfigurationInterface $getSourceItemConfiguration
+     * @param GetSourceItemConfigurationDataInterface $getSourceItemConfiguration
      * @param DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete
      * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         SourceItemConfigurationFactory $sourceItemConfigurationFactory,
         SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave,
-        GetSourceItemConfigurationInterface $getSourceItemConfiguration,
+        GetSourceItemConfigurationDataInterface $getSourceItemConfiguration,
         DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete,
         DataObjectHelper $dataObjectHelper
     ) {
@@ -122,7 +124,7 @@ class SourceItemsConfigurationProcessor
             $sourceId = $sourceItem[SourceItemInterface::SOURCE_ID];
             $sourceItemConfig = $this->getSourceItemConfiguration->execute((int)$sourceId, $sku);
 
-            if (null != $sourceItemConfig) {
+            if (null !== $sourceItemConfig) {
                 $sourceItems[] = $sourceItemConfig;
             }
         }

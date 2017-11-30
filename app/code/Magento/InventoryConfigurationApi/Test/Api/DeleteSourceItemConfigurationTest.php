@@ -44,8 +44,6 @@ class DeleteSourceItemConfigurationTest extends WebapiAbstract
             : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'sku' => $sku]);
 
         $sourceItemConfiguration = $this->getSourceItemConfiguration($sourceId, $sku);
-
-        self::assertNotEmpty($sourceItemConfiguration);
         $defaultNotifyQtyValue = 1;
         self::assertEquals(
             $defaultNotifyQtyValue,
@@ -56,7 +54,7 @@ class DeleteSourceItemConfigurationTest extends WebapiAbstract
     /**
      * @param int $sourceId
      * @param string $sku
-     * @return array|bool|float|int|string
+     * @return array
      */
     private function getSourceItemConfiguration(int $sourceId, string $sku)
     {
@@ -70,9 +68,13 @@ class DeleteSourceItemConfigurationTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME_GET . 'get',
             ],
         ];
-
-        return (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
+        $sourceItemConfiguration = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'sku' => $sku]);
+
+        self::assertInternalType('array', $sourceItemConfiguration);
+        self::assertNotEmpty($sourceItemConfiguration);
+
+        return $sourceItemConfiguration;
     }
 }

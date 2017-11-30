@@ -8,15 +8,14 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryConfiguration\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 
 /**
- * Implementation of SourceItem Quantity notification save multiple operation for specific db layer
+ * Implementation of Source Item Configuration save multiple operation for specific db layer
  * Save Multiple used here for performance efficient purposes over single save operation
  */
-class SaveSourceItemConfiguration
+class SaveMultiple
 {
     /**
      * @var ResourceConnection
@@ -33,14 +32,12 @@ class SaveSourceItemConfiguration
     }
 
     /**
-     * Save the source Item configuration.
-     *
-     * @param SourceItemConfigurationInterface[] $configuration
+     * @param SourceItemConfigurationInterface[] $sourceItemConfigurations
      * @return void
      */
-    public function execute(array $configuration)
+    public function execute(array $sourceItemConfigurations)
     {
-        if (!count($configuration)) {
+        if (!count($sourceItemConfigurations)) {
             return;
         }
         $connection = $this->resourceConnection->getConnection();
@@ -53,11 +50,11 @@ class SaveSourceItemConfiguration
             SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY
         ]);
 
-        $valuesSql = $this->buildValuesSqlPart($configuration);
+        $valuesSql = $this->buildValuesSqlPart($sourceItemConfigurations);
         $onDuplicateSql = $this->buildOnDuplicateSqlPart([
             SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY
         ]);
-        $bind = $this->getSqlBindData($configuration);
+        $bind = $this->getSqlBindData($sourceItemConfigurations);
 
         $insertSql = sprintf(
             'INSERT INTO %s (%s) VALUES %s %s',
@@ -82,24 +79,23 @@ class SaveSourceItemConfiguration
     }
 
     /**
-     * @param SourceItemInterface[] $sourceItemsConfigurations
+     * @param SourceItemConfigurationInterface[] $sourceItemConfigurations
      * @return string
      */
-    private function buildValuesSqlPart(array $sourceItemsConfigurations): string
+    private function buildValuesSqlPart(array $sourceItemConfigurations): string
     {
-        $sql = rtrim(str_repeat('(?, ?, ?), ', count($sourceItemsConfigurations)), ', ');
+        $sql = rtrim(str_repeat('(?, ?, ?), ', count($sourceItemConfigurations)), ', ');
         return $sql;
     }
 
     /**
-     * @param SourceItemInterface[] $sourceItemsConfiguration
+     * @param SourceItemConfigurationInterface[] $sourceItemConfigurations
      * @return array
      */
-    private function getSqlBindData(array $sourceItemsConfiguration): array
+    private function getSqlBindData(array $sourceItemConfigurations): array
     {
         $bind = [];
-        /** @var SourceItemConfigurationInterface $sourceItemConfiguration */
-        foreach ($sourceItemsConfiguration as $sourceItemConfiguration) {
+        foreach ($sourceItemConfigurations as $sourceItemConfiguration) {
             $bind = array_merge($bind, [
                 $sourceItemConfiguration->getSourceId(),
                 $sourceItemConfiguration->getSku(),

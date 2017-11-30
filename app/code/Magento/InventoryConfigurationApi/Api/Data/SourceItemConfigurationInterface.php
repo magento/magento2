@@ -69,4 +69,6 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
      * @return void
      */
     public function setSku(string $sku);
+
+    // TODO: ext attr
 }

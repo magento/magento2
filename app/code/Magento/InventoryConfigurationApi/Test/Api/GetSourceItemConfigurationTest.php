@@ -37,13 +37,15 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
             ],
         ];
 
-        $response = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
+        $sourceItemConfiguration = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'sku' => $sku]);
 
-        self::assertNotEmpty($response);
-        self::assertEquals($sourceId, $response[SourceItemConfigurationInterface::SOURCE_ID]);
-        self::assertEquals($sku, $response[SourceItemConfigurationInterface::SKU]);
-        self::assertEquals(2, $response[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]);
+        self::assertInternalType('array', $sourceItemConfiguration);
+        self::assertNotEmpty($sourceItemConfiguration);
+
+        self::assertEquals($sourceId, $sourceItemConfiguration[SourceItemConfigurationInterface::SOURCE_ID]);
+        self::assertEquals($sku, $sourceItemConfiguration[SourceItemConfigurationInterface::SKU]);
+        self::assertEquals(2, $sourceItemConfiguration[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]);
     }
 }
