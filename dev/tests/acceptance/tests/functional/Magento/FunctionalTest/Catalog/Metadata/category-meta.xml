@@ -32,7 +32,6 @@
 
     <operation name="UpdateCategory" dataType="category" type="update" auth="adminOauth" url="/V1/categories/{id}" method="PUT">
         <contentType>application/json</contentType>
-        <param key="id" type="path">{id}</param>
         <object key="category" dataType="category">
             <field key="id">integer</field>
             <field key="parent_id">integer</field>
@@ -57,6 +56,5 @@
 
     <operation name="DeleteCategory" dataType="category" type="delete" auth="adminOauth" url="/V1/categories/{id}" method="DELETE">
         <contentType>application/json</contentType>
-        <param key="id" type="path">{id}</param>
     </operation>
 </config>
