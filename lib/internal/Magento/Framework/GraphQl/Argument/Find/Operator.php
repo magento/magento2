@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GraphQl\Model\GraphQl;
+namespace Magento\Framework\GraphQl\Argument\Find;
+
+use Magento\Framework\Phrase;
 
 /**
- * Class Operator
+ * Operator is the part in the find argument that does logic branching.
+ *
+ * Example: {"and": { "or": {} } }
  */
 class Operator
 {
@@ -32,7 +36,7 @@ class Operator
 
     /**
      * @param string $value
-     * @throws \GraphQL\Error\Error
+     * @throws \Magento\Framework\GraphQl\Exception\GraphQlInputException
      */
     public function __construct($value = self::AND)
     {
@@ -41,21 +45,27 @@ class Operator
         }
         $type = new \ReflectionClass($this);
         if (!in_array($value, $type->getConstants())) {
-            throw new \GraphQL\Error\Error(sprintf('%s operator not supported', $value));
+            throw new \Magento\Framework\GraphQl\Exception\GraphQlInputException(
+                new Phrase('%1 operator not supported', $value)
+            );
         }
         $this->value = $value;
     }
 
     /**
+     * Get the operators defined by this class as constants
+     *
      * @return array
      */
     public static function getOperators()
     {
-        $type = new \ReflectionClass(\Magento\GraphQl\Model\GraphQl\Operator::class);
+        $type = new \ReflectionClass(Operator::class);
         return $type->getConstants();
     }
 
-    /**
+    /*
+     * Convert operator to string
+     *
      * @return string
      */
     public function __toString()

@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GraphQl\Model\GraphQl;
+namespace Magento\Framework\GraphQl\Argument\Find;
 
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class ConnectiveFactory
+ * Factory for Connective Class
  */
 class ConnectiveFactory
 {

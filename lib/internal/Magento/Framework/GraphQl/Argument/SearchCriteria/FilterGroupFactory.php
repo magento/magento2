@@ -4,14 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Resolver\Products;
+namespace Magento\Framework\GraphQl\Argument\SearchCriteria;
 
-use GraphQL\Type\Definition\ResolveInfo;
-use Magento\GraphQl\Model\GraphQl\Clause;
-use Magento\GraphQl\Model\GraphQl\Connective;
-use Magento\GraphQl\Model\GraphQl\Operator;
+use Magento\Framework\GraphQl\Argument\Find\Clause;
+use Magento\Framework\GraphQl\Argument\Find\Connective;
+use Magento\Framework\GraphQl\Argument\Find\Operator;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
+use Magento\Framework\GraphQl\Argument\Find\FindArgumentValueInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Phrase;
 
 /**
  * Class FilterGroupFactory
@@ -24,44 +26,29 @@ class FilterGroupFactory
     /** @var FilterGroupBuilder */
     private $filterGroupBuilder;
 
-    /** @var ProductFilterResolver */
-    private $filterResolver;
-
     /**
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder
-     * @param \Magento\GraphQl\Model\Resolver\Products\ProductFilterResolver $filterResolver
      */
     public function __construct(
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
-        \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder,
-        \Magento\GraphQl\Model\Resolver\Products\ProductFilterResolver $filterResolver
+        \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder
     ) {
         $this->filterBuilder = $filterBuilder;
         $this->filterGroupBuilder = $filterGroupBuilder;
-        $this->filterResolver = $filterResolver;
     }
 
     /**
      * Create a filter groups from an AST
      *
-     * @param ResolveInfo $info
+     * @param FindArgumentValueInterface $arguments
      * @return \Magento\Framework\Api\Search\FilterGroup[]
-     * @throws \GraphQL\Error\Error
+     * @throws GraphQlInputException
      */
-    public function create(ResolveInfo $info)
+    public function create($arguments)
     {
-        if (count($info->fieldNodes) !== 1) {
-            // TODO: support multiple endpoints at the same time
-            throw new \GraphQL\Error\Error('Multiple nodes at top level are not supported');
-        }
-
-        /** @var \GraphQL\Language\AST\FieldNode $fieldNode */
-        $fieldNode = current($info->fieldNodes);
-
         /** @var Connective $filters */
-        $filters = $this->filterResolver->getFilterFromAst('product', $fieldNode);
-
+        $filters = $arguments->getClauseList();
         /** @var \Magento\Framework\Api\Search\FilterGroup[] $searchCriteriaFilterGroups */
         $searchCriteriaFilterGroups = [];
 
@@ -69,12 +56,12 @@ class FilterGroupFactory
         $filters = current($filters->getConditions());
 
         if (!$filters instanceof Connective) {
-            throw new \GraphQL\Error\Error('Top level has to have condition operator');
+            throw new GraphQlInputException(new Phrase('Top level has to have condition operator'));
         }
 
         foreach ($filters->getConditions() as $node) {
             if ($node instanceof Operator) {
-                throw new \GraphQL\Error\Error('Can\'t support nested operators');
+                throw new GraphQlInputException(new Phrase('Can\'t support nested operators'));
             }
 
             if ($node instanceof Clause) {
@@ -82,7 +69,7 @@ class FilterGroupFactory
             } elseif ($node instanceof Connective) {
                 $searchCriteriaFilterGroups[] = $this->processConnective($node);
             } else {
-                throw new \GraphQL\Error\Error('Nesting "OR" node type not supported');
+                throw new GraphQlInputException(new Phrase('Nesting "OR" node type not supported'));
             }
         }
 
@@ -94,11 +81,10 @@ class FilterGroupFactory
      *
      * @param Connective $connective
      * @return \Magento\Framework\Api\Search\FilterGroup
-     * @throws \GraphQL\Error\Error
+     * @throws GraphQlInputException
      */
     private function processConnective(Connective $connective)
     {
-        //process sub condition
         foreach ($connective->getConditions() as $subNode) {
             if ($subNode instanceof Clause) {
                 $subFilter = $this->filterBuilder
@@ -109,7 +95,7 @@ class FilterGroupFactory
 
                 $this->filterGroupBuilder->addFilter($subFilter);
             } else {
-                throw new \GraphQL\Error\Error('Sub nesting nodes not supported');
+                throw new GraphQlInputException(new Phrase('Sub nesting nodes not supported'));
             }
         }
         return $this->filterGroupBuilder->create();

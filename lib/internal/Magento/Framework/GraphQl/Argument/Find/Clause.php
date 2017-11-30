@@ -3,10 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GraphQl\Model\GraphQl;
+namespace Magento\Framework\GraphQl\Argument\Find;
 
-use Magento\GraphQl\Model\GraphQl\Clause\ReferenceType;
+use Magento\Framework\GraphQl\Argument\Find\Clause\ReferenceType;
 
+/**
+ * Class Clause refers to a clause in find argument.
+ *
+ * Example: {sku: {eq: "product"}}
+ */
 class Clause
 {
     /**

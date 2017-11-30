@@ -6,7 +6,7 @@
 
 namespace Magento\GraphQl\Model\Type;
 
-use GraphQL\Type\Definition\Type;
+use Magento\Framework\GraphQl\Type\Definition\Type;
 
 /**
  * Define a method for generating or retrieving a type for GraphQL

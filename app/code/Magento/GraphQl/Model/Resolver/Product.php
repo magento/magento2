@@ -10,9 +10,8 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
-use GraphQL\Type\Definition\ResolveInfo;
 use Magento\GraphQl\Model\ResolverInterface;
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Product field resolver, used for GraphQL request processing.
@@ -60,15 +59,15 @@ class Product implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolve(array $args, ResolveInfo $info)
+    public function resolve(array $args)
     {
         if (isset($args['sku'])) {
-            return $this->getProduct($args['sku']);
+            return $this->getProduct($args['sku']->getValue());
         } elseif (isset($args['id'])) {
-            return $this->getProductById($args['id']);
+            return $this->getProductById($args['id']->getValue());
         }
 
-        throw new InputException(__('Missing arguments for correct type resolution.'));
+        throw new GraphQlInputException(__('Missing arguments for correct type resolution.'));
     }
 
     /**

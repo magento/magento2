@@ -3,13 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GraphQl\Model\GraphQl;
+namespace Magento\Framework\GraphQl\Argument\Find;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\GraphQl\Model\GraphQl\Clause\ReferenceType;
+use Magento\Framework\GraphQl\Argument\Find\Clause\ReferenceType;
 
 /**
- * Class ClauseFactory
+ * Factory for Clause Class
  */
 class ClauseFactory
 {
@@ -28,7 +28,7 @@ class ClauseFactory
     }
 
     /**
-     * Create a clause
+     * Create a clause class
      *
      * @param ReferenceType $referenceType
      * @param string $fieldName

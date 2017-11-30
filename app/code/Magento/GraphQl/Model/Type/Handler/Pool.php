@@ -6,8 +6,8 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Definition\Type;
+use Magento\Framework\GraphQl\Type\Definition\ObjectType;
+use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use Magento\GraphQl\Model\Type\HandlerFactory;
 
 /**
@@ -21,7 +21,7 @@ class Pool
     private $typeHandlerFactory;
 
     /**
-     * @var Type[]
+     * @var TypeInterface[]
      */
     private $typeRegistry = [];
 
@@ -53,7 +53,7 @@ class Pool
      * Retrieve type's configuration based off name
      *
      * @param string $typeName
-     * @return Type|null
+     * @return TypeInterface|null
      * @throws \LogicException Type Handler could not be found, and type does not exist in registry
      */
     public function getComplexType(string $typeName)
@@ -75,10 +75,10 @@ class Pool
     /**
      * Register type to Pool's type registry.
      *
-     * @param Type $type
+     * @param TypeInterface $type
      * @throws \LogicException
      */
-    public function registerType(Type $type)
+    public function registerType(TypeInterface $type)
     {
         if (isset($this->typeRegistry[$type->name])) {
             throw new \LogicException('Type name already exists in registry');
@@ -101,7 +101,7 @@ class Pool
      * Map type name to scalar GraphQL type, otherwise return null
      *
      * @param string $typeName
-     * @return Type|null
+     * @return TypeInterface|null
      */
     private function mapScalarType($typeName)
     {
@@ -117,7 +117,6 @@ class Pool
      */
     private function getInternalTypes()
     {
-        // TODO: Fix this when creating new wrappers for webonyx. This is only a temporary workaround for static tests.
         $object = new ObjectType(['name' => 'fake', 'fields' => 'fake']);
         return $object->getInternalTypes();
     }

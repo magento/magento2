@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GraphQl\Model\GraphQl\Clause;
+namespace Magento\Framework\GraphQl\Argument\Find\Clause;
 
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class ReferenceTypeFactory
+ * Factory for ReferenceType
  */
 class ReferenceTypeFactory
 {
@@ -27,7 +27,7 @@ class ReferenceTypeFactory
     }
 
     /**
-     * Create ReferenceType
+     * Create ReferenceType class
      *
      * @param string $entityType
      * @param string|null $linkField

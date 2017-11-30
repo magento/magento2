@@ -3,23 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GraphQl\Model\Resolver\Products;
+namespace Magento\GraphQl\Model\Resolver\Products\FindArgument;
 
-use GraphQL\Language\AST\ListValueNode;
-use GraphQL\Language\AST\SelectionNode;
-use GraphQL\Language\AST\NodeList;
 use Magento\Eav\Api\AttributeManagementInterface;
-use Magento\GraphQl\Model\GraphQl\Clause\ReferenceTypeFactory;
-use Magento\GraphQl\Model\GraphQl\Clause\ReferenceType;
-use Magento\GraphQl\Model\GraphQl\ClauseFactory;
-use Magento\GraphQl\Model\GraphQl\ConnectiveFactory;
-use Magento\GraphQl\Model\GraphQl\Connective;
+use Magento\Framework\GraphQl\Argument\Find\Clause\ReferenceTypeFactory;
+use Magento\Framework\GraphQl\Argument\Find\Clause\ReferenceType;
+use Magento\Framework\GraphQl\Argument\Find\ClauseFactory;
+use Magento\Framework\GraphQl\Argument\Find\ConnectiveFactory;
+use Magento\Framework\GraphQl\Argument\Find\Connective;
 use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
 
 /**
- * Product field resolver, used for GraphQL request processing
+ * Converts the input value for "find" to a Clause|Connective format
  */
-class ProductFilterResolver
+class ClauseConverter
 {
     /**
      * @var ClauseFactory
@@ -71,37 +68,37 @@ class ProductFilterResolver
      * Get a clause from an AST
      *
      * @param ReferenceType $referenceType
-     * @param NodeList $nodeList
+     * @param array $arguments
      * @return array
      */
-    private function getClausesFromAst(ReferenceType $referenceType, NodeList $nodeList)
+    private function getClausesFromAst(ReferenceType $referenceType, array $arguments)
     {
         $entityInfo = ['attributes' => $this->getCatalogProductFields()];
         $attributes = array_keys($entityInfo['attributes']);
         $conditions = [];
-        foreach ($nodeList as $field) {
-            if (in_array($field->name->value, $attributes)) {
-                foreach ($field->value->fields as $clauseInfo) {
-                    if ($clauseInfo->value instanceof ListValueNode) {
+        foreach ($arguments as $argumentName => $argument) {
+            if (in_array($argumentName, $attributes)) {
+                foreach ($argument as $clauseType => $clause) {
+                    if (is_array($clause)) {
                         $value = [];
-                        foreach ($clauseInfo->value->values as $item) {
-                            $value[] = $item->value;
+                        foreach ($clause as $item) {
+                            $value[] = $item;
                         }
                     } else {
-                        $value = $clauseInfo->value->value;
+                        $value = $clause;
                     }
                     $conditions[] = $this->clauseFactory->create(
                         $referenceType,
-                        $field->name->value,
-                        $clauseInfo->name->value,
+                        $argumentName,
+                        $clauseType,
                         $value
                     );
                 }
             } else {
                 $conditions[] =
                     $this->connectiveFactory->create(
-                        $this->getClausesFromAst($referenceType, $field->value->fields),
-                        $field->name->value
+                        $this->getClausesFromAst($referenceType, $argument),
+                        $argumentName
                     );
             }
         }
@@ -138,20 +135,15 @@ class ProductFilterResolver
      * Get a connective filter from an AST
      *
      * @param string $entityType
-     * @param SelectionNode $node
+     * @param array $arguments
      * @return Connective
      */
-    public function getFilterFromAst(string $entityType, SelectionNode $node)
+    public function getFilterFromAst(string $entityType, $arguments)
     {
-        $filters = [];
-        foreach ($node->arguments as $argument) {
-            if ($argument->name->value == 'find') {
-                $filters =  $this->getClausesFromAst(
-                    $this->referenceTypeFactory->create($entityType),
-                    $argument->value->fields
-                );
-            }
-        }
+        $filters =  $this->getClausesFromAst(
+            $this->referenceTypeFactory->create($entityType),
+            $arguments
+        );
         return $this->connectiveFactory->create($filters);
     }
 }

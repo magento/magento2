@@ -6,9 +6,9 @@
 
 namespace Magento\GraphQl\Model\Type;
 
-use GraphQL\Type\Definition\ListOfType;
-use GraphQL\Type\Definition\NonNull;
-use GraphQL\Type\Definition\Type;
+use Magento\Framework\GraphQl\Type\Definition\ListOfType;
+use Magento\Framework\GraphQl\Type\Definition\NonNull;
+use Magento\Framework\GraphQl\Type\Definition\Type;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\GraphQl\Model\Type\Handler\Pool;
 

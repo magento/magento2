@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GraphQl\Model\GraphQl;
+namespace Magento\Framework\GraphQl\Argument\Find;
 
 /**
- * Class Represents logical connective
+ * Class Represents logical connective whenever a condition will nest/branch.
+ *
+ * A clause can be branched by "and" or "or" Operator and has a list of conditions as sub clauses.
  */
 class Connective
 {

@@ -6,11 +6,11 @@
 
 namespace Magento\GraphQl\Model;
 
-use GraphQL\Type\Definition\ResolveInfo;
-use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Schema;
+use GraphQl\Type\Definition\ResolveInfo;
+use Magento\Framework\GraphQl\Type\Definition\ObjectType;
+use Magento\Framework\GraphQl\Type\Schema;
 use Magento\GraphQl\Model\Type\Generator;
-use Magento\GraphQl\Model\ResolverFactory;
+use Magento\Framework\GraphQl\ArgumentFactory;
 
 /**
  * Generate a query field and concrete types for GraphQL schema
@@ -28,13 +28,31 @@ class SchemaGenerator implements SchemaGeneratorInterface
     private $resolverFactory;
 
     /**
+     * @var ArgumentFactory
+     */
+    private $argumentFactory;
+
+    /**
+     * @var FieldConfig
+     */
+    private $fieldConfig;
+
+    /**
      * @param Generator $typeGenerator
      * @param ResolverFactory $resolverFactory
+     * @param ArgumentFactory $argumentFactory
+     * @param FieldConfig $fieldConfig
      */
-    public function __construct(Generator $typeGenerator, ResolverFactory $resolverFactory)
-    {
+    public function __construct(
+        Generator $typeGenerator,
+        ResolverFactory $resolverFactory,
+        ArgumentFactory $argumentFactory,
+        FieldConfig $fieldConfig
+    ) {
         $this->typeGenerator = $typeGenerator;
         $this->resolverFactory = $resolverFactory;
+        $this->argumentFactory = $argumentFactory;
+        $this->fieldConfig = $fieldConfig;
     }
 
     /**
@@ -48,8 +66,26 @@ class SchemaGenerator implements SchemaGeneratorInterface
             'name' => 'Query',
             'fields' => $schemaConfig['fields'],
             'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
-                $resolver = $this->resolverFactory->create(ucfirst($info->fieldName));
-                return $resolver->resolve($args, $info);
+                $fieldName = $info->fieldName;
+                $resolver = $this->resolverFactory->create($fieldName);
+
+                $fieldArguments = [];
+                $declaredArguments = $this->fieldConfig->getFieldConfig($fieldName, $args);
+
+                foreach ($declaredArguments as $argumentName => $declaredArgument) {
+                    $argumentValue = isset($args[$argumentName])
+                        ? $args[$argumentName]
+                        : $declaredArgument->getDefaultValue();
+                    if ($declaredArgument->getValueParser()) {
+                        $argumentValue = $declaredArgument->getValueParser()->parse($argumentValue);
+                    }
+                    $fieldArguments[$argumentName] = $this->argumentFactory->create(
+                        $argumentName,
+                        $argumentValue
+                    );
+                }
+
+                return $resolver->resolve($fieldArguments);
             }
         ]);
         $schema = new Schema(['query' => $config, 'types' => $schemaConfig['types']]);
