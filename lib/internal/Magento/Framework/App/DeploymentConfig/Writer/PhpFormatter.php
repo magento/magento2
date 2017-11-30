@@ -23,7 +23,7 @@ class PhpFormatter implements FormatterInterface
     public function format($data, array $comments = [])
     {
         if (!empty($comments) && is_array($data)) {
-            return "<?php\nreturn array (\n" . $this->formatData($data, $comments) . "\n);\n";
+            return "<?php\nreturn [\n" . $this->formatData($data, $comments) . "\n];\n";
         }
         return "<?php\nreturn " . $this->varExportShort($data, true) . ";\n";
     }
@@ -53,13 +53,13 @@ class PhpFormatter implements FormatterInterface
                     $elements[] = $prefix . " */";
                 }
 
-                $elements[] = $prefix . var_export($key, true) . ' => ' .
-                    (!is_array($value) ? var_export($value, true) . ',' : '');
+                $elements[] = $prefix . $this->varExportShort($key) . ' => ' .
+                    (!is_array($value) ? $this->varExportShort($value) . ',' : '');
 
                 if (is_array($value)) {
-                    $elements[] = $prefix . 'array (';
+                    $elements[] = $prefix . '[';
                     $elements[] = $this->formatData($value, [], '  ' . $prefix);
-                    $elements[] = $prefix . '),';
+                    $elements[] = $prefix . '],';
                 }
             }
             return implode("\n", $elements);
