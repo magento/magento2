@@ -80,4 +80,3 @@ class GetBlockByIdentifierTest extends \PHPUnit\Framework\TestCase
         $this->getBlockByIdentifierCommand->execute($identifier, $storeId);
     }
 }
-

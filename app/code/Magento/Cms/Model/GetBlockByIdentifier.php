@@ -58,4 +58,3 @@ class GetBlockByIdentifier implements GetBlockByIdentifierInterface
         return $block;
     }
 }
-

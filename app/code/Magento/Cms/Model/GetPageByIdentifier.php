@@ -58,4 +58,3 @@ class GetPageByIdentifier implements GetPageByIdentifierInterface
         return $page;
     }
 }
-
