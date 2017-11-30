@@ -52,7 +52,6 @@
             <waitForPageLoad mergeKey="wait3" />
             <!--see widget on Storefront-->
             <see userInput="Hello TinyMCE4!" mergeKey="seeContent1"/>
-
             <amOnPage url="{{ConfigurationStoresPage.url}}" mergeKey="navigateToWYSIWYGConfigPage2"/>
             <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="expandWYSIWYGOptions2" />
             <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" mergeKey="waitForCheckbox2" />

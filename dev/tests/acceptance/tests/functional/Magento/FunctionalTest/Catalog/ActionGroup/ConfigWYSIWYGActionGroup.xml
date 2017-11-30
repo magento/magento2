@@ -11,21 +11,21 @@
     <actionGroup name="EnabledWYSIWYG">
         <amOnPage url="admin/admin/system_config/edit/section/cms/" mergeKey="navigateToConfigurationPage" />
         <waitForPageLoad mergeKey="wait1"/>
-        <conditionalClick mergeKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
+        <conditionalClick mergeKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" mergeKey="waitForEnableWYSIWYGDropdown1" />
         <uncheckOption selector="{{ContentManagementSection.EnableSystemValue}}" mergeKey="uncheckUseSystemValue"/>
         <selectOption selector="{{ContentManagementSection.EnableWYSIWYG}}" userInput="Enabled by Default" mergeKey="selectOption1"/>
-        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="expandWYSIWYGOptions2" />
+        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="collapseWYSIWYGOptions" />
         <click selector="{{ContentManagementSection.Save}}" mergeKey="saveConfig" />
     </actionGroup>
     <actionGroup name="DisabledWYSIWYG">
         <amOnPage url="admin/admin/system_config/edit/section/cms/" mergeKey="navigateToConfigurationPage" />
         <waitForPageLoad mergeKey="wait3"/>
-        <conditionalClick mergeKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
+        <conditionalClick mergeKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" mergeKey="waitForEnableWYSIWYGDropdown2" />
         <uncheckOption selector="{{ContentManagementSection.EnableSystemValue}}" mergeKey="uncheckUseSystemValue"/>
         <selectOption selector="{{ContentManagementSection.EnableWYSIWYG}}" userInput="Disabled Completely" mergeKey="selectOption2"/>
-        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="collapseWYSIWYGOptions4" />
+        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" mergeKey="collapseWYSIWYGOptions" />
         <click selector="{{ContentManagementSection.Save}}" mergeKey="saveConfig" />
     </actionGroup>
 </config>

@@ -75,32 +75,21 @@
         <element name="WidgetType" type="button" selector="#select_widget_type"/>
         <element name="WidgetTemplate" type="button" selector="select[name='parameters[template]']"/>
         <element name="BtnChooser" type="button" selector=".btn-chooser"/>
-
         <element name="CMSPage" type="text" selector="//td[contains(text(),'Home page')]"/>
-
         <element name="BlockPage" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true"/>
-
-        <!--<element name="PreCreateCategory" type="text" selector="//span[text()='{{var1}}']" parameterized="true"/>-->
         <element name="PreCreateCategory" type="text" selector=" //span[contains(text(),'{{var1}}')]" parameterized="true"/>
-
         <element name="PreCreateProduct" type="text" selector="//td[contains(text(),'{{var1}}')]" parameterized="true"/>
-
         <element name="NoOfProductToDisplay" type="input" selector="input[data-ui-id='wysiwyg-widget-options-fieldset-element-text-parameters-products-count']"/>
-
         <element name="AddParam" type="button" selector=".rule-param-add"/>
         <element name="ConditionsDropdown" type="select" selector="#conditions__1__new_child"/>
         <element name="RuleParam" type="button" selector="//a[text()='...']"/>
         <element name="Chooser" type="button" selector="//img[@title='Open Chooser']"/>
-
         <element name="PageSize" type="input" selector="input[name='parameters[page_size]']"/>
         <element name="ProductAttribute" type="multiselect" selector="select[name='parameters[show_attributes][]']" />
         <element name="ButtonToShow" type="multiselect" selector="select[name='parameters[show_buttons][]']"/>
-
-
         <!--Widget on Storefront-->
         <element name="CategoryWidget" type="text" selector="//a[@href='http://magento2.vagrant42/{{var1}}.html?___store=default']" parameterized="true"/>
         <element name="CMSPageWidget" type="text" selector="//a[@href='http://magento2.vagrant42/home']"/>
-
         <!--Compare on Storefront-->
         <element name="ProductName" type="text" selector=".product.name.product-item-name" />
         <element name="CompareBtn" type="button" selector=".action.tocompare"/>

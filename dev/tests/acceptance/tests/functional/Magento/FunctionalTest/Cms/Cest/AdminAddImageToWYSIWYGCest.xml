@@ -33,21 +33,22 @@
             <click selector="{{CmsNewPagePageContentSection.header}}" mergeKey="clickExpandContent"/>
             <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" mergeKey="waitForTinyMCE4" />
             <click selector="{{CmsWYSIWYGSection.InsertImageIcon}}" mergeKey="clickInsertImageIcon" />
-            <waitForPageLoad mergeKey="qwdwq" />
-            <click selector="{{CmsWYSIWYGSection.Browse}}" mergeKey="clickBrowse" />
             <waitForPageLoad mergeKey="waitForPageLoad" />
+            <click selector="{{CmsWYSIWYGSection.Browse}}" mergeKey="clickBrowse" />
+            <waitForPageLoad mergeKey="waitForPageLoad1" />
             <waitForLoadingMaskToDisappear mergeKey="waitForLoading1" />
             <waitForLoadingMaskToDisappear mergeKey="waitForLoading2" />
             <see selector="{{CmsWYSIWYGSection.CancelBtn}}" userInput="Cancel" mergeKey="seeCancelBtn" />
             <see selector="{{CmsWYSIWYGSection.CreateFolder}}" userInput="Create Folder" mergeKey="seeCreateFolderBtn" />
             <see selector="{{CmsWYSIWYGSection.InsertFile}}" userInput="Add Selected" mergeKey="seeAddSelectedBtn" />
             <click selector="{{CmsWYSIWYGSection.CreateFolder}}" mergeKey="createFolder"/>
+            <waitForElementVisible selector="{{CmsWYSIWYGSection.FolderName}}" mergeKey="sasa" />
             <fillField selector="{{CmsWYSIWYGSection.FolderName}}" userInput="{{ImageFolder.name}}" mergeKey="fillFolderName" />
             <click selector="{{CmsWYSIWYGSection.AcceptFolderName}}" mergeKey="acceptFolderName" />
-            <waitForPageLoad mergeKey="waitForPageLoad1" />
+            <waitForPageLoad mergeKey="waitForPageLoad2" />
             <waitForLoadingMaskToDisappear mergeKey="waitForLoading3" />
             <waitForElementVisible selector="{{CmsWYSIWYGSection.StorageRoot}}" mergeKey="waitForStorageRoot" />
-            <waitForPageLoad mergeKey="waitForPageLoad2" />
+            <waitForPageLoad mergeKey="waitForPageLoad3" />
             <waitForLoadingMaskToDisappear mergeKey="waitForLoading4" />
             <click userInput="{{ImageFolder.name}}" mergeKey="clickOnCreatedFolder" />
             <waitForLoadingMaskToDisappear mergeKey="waitForLoading5" />

@@ -10,7 +10,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <actionGroup name="SwitchToVersion4ActionGroup">
         <amOnPage url="{{ConfigurationStoresPage.url}}" mergeKey="navigateToWYSIWYGConfigPage1"/>
-        <conditionalClick mergeKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
+        <conditionalClick mergeKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" mergeKey="waitForCheckbox" />
         <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" mergeKey="uncheckUseSystemValue"/>
         <waitForElementVisible selector="{{ContentManagementSection.Switcher}}" mergeKey="waitForSwitcherDropdown" />
