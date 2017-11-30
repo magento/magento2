@@ -62,6 +62,11 @@ class ProcessCronQueueObserver implements ObserverInterface
     protected $_pendingSchedules;
 
     /**
+     * @var \Magento\Cron\Model\ResourceModel\Schedule\Collection
+     */
+    private $runningSchedules;
+
+    /**
      * @var \Magento\Cron\Model\ConfigInterface
      */
     protected $_config;
@@ -214,7 +219,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             /** @var \Magento\Cron\Model\Schedule $schedule */
             foreach ($pendingJobs as $schedule) {
                 $jobConfig = isset($jobsRoot[$schedule->getJobCode()]) ? $jobsRoot[$schedule->getJobCode()] : null;
-                if (!$jobConfig) {
+                if (!$jobConfig || $this->isJobRunning($schedule->getJobCode())) {
                     continue;
                 }
 
@@ -248,6 +253,25 @@ class ProcessCronQueueObserver implements ObserverInterface
                 $schedule->save();
             }
         }
+    }
+
+    /**
+     * @param $jobCode
+     *
+     * @return bool
+     */
+    private function isJobRunning($jobCode)
+    {
+        $runningJobs = $this->getRunningSchedules();
+
+        /** @var \Magento\Cron\Model\Schedule $schedule */
+        foreach ($runningJobs as $schedule) {
+            if ($schedule->getData('job_code') == $jobCode) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -315,6 +339,22 @@ class ProcessCronQueueObserver implements ObserverInterface
             )->load();
         }
         return $this->_pendingSchedules;
+    }
+
+    /**
+     * Return job collection from data base with status 'running'
+     *
+     * @return \Magento\Cron\Model\ResourceModel\Schedule\Collection
+     */
+    private function getRunningSchedules()
+    {
+        if (!$this->runningSchedules) {
+            $this->runningSchedules = $this->_scheduleFactory->create()->getCollection()->addFieldToFilter(
+                'status',
+                Schedule::STATUS_RUNNING
+            )->load();
+        }
+        return $this->runningSchedules;
     }
 
     /**
