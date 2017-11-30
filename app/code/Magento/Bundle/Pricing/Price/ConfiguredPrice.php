@@ -84,13 +84,12 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
         $bundleOptions = [];
         /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
         $typeInstance = $bundleProduct->getTypeInstance();
-
-        // get bundle options
-        $optionsQuoteItemOption = $this->item->getOptionByCode('bundle_option_ids');
-        $bundleOptionsIds = $optionsQuoteItemOption
-            ? $this->serializer->unserialize($optionsQuoteItemOption->getValue())
-            : [];
-
+        $bundleOptionsIds = [];
+        if ($this->item) {
+            // get bundle options
+            $optionsQuoteItemOption = $this->item->getOptionByCode('bundle_option_ids');
+            $bundleOptionsIds = $this->serializer->unserialize($optionsQuoteItemOption->getValue());
+        }
         if ($bundleOptionsIds) {
             /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
             $optionsCollection = $typeInstance->getOptionsByIds($bundleOptionsIds, $bundleProduct);
@@ -106,6 +105,22 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     }
 
     /**
+     * Get Selection pricing list
+     * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
+     */
+    public function getSelectionPriceList()
+    {
+        $selectionPriceList = [];
+        foreach ($this->getOptions() as $option) {
+            $selectionPriceList = array_merge(
+                $selectionPriceList,
+                $this->createSelectionPriceList($option)
+            );
+        }
+        return $selectionPriceList;
+    }
+
+    /**
      * Option amount calculation for bundle product
      *
      * @param float $baseValue
@@ -113,13 +128,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      */
     public function getConfiguredAmount($baseValue = 0.)
     {
-        $selectionPriceList = [];
-        foreach ($this->getOptions() as $option) {
-            $selectionPriceList = array_merge(
-                $selectionPriceList,
-                $this->calculator->createSelectionPriceList($option, $this->product)
-            );
-        }
+        $selectionPriceList = $this->getSelectionPriceList();
         return $this->calculator->calculateBundleAmount(
             $baseValue,
             $this->product,
@@ -153,5 +162,16 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     public function getAmount()
     {
         return $this->item ? $this->getConfiguredAmount($this->getBasePrice()->getValue()) : parent::getAmount();
+    }
+
+    /**
+     * Create Selection Price List
+     *
+     * @param \Magento\Bundle\Model\Option $option
+     * @return BundleSelectionPrice[]
+     */
+    protected function createSelectionPriceList($option)
+    {
+        return $this->calculator->createSelectionPriceList($option, $this->product);
     }
 }

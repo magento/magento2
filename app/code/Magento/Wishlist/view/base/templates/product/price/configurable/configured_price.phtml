@@ -8,12 +8,11 @@
 /** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
 $schema = ($block->getZone() == 'item_view') ? true : false;
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
-/** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $configuredPrice */
+/** @var \Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct $configuredPrice */
 $configuredPrice = $block->getPrice();
-/** @var \Magento\Catalog\Pricing\Price\RegularPrice $regularPrice */
-$regularPrice = $block->getPriceType('regular_price');
 ?>
-<?php if ($configuredPrice->getAmount()->getValue() < $regularPrice->getAmount()->getValue()) : ?>
+<?php if ($block->hasSpecialPrice()
+    && $configuredPrice->getAmount()->getValue() !== $configuredPrice->getConfiguredAmount(true)->getValue()) : ?>
     <p class="price-as-configured">
         <span class="special-price">
             <?= /* @noEscape */ $block->renderAmount(
@@ -29,7 +28,7 @@ $regularPrice = $block->getPriceType('regular_price');
         </span>
         <span class="old-price">
             <?= /* @noEscape */ $block->renderAmount(
-                $regularPrice->getAmount(),
+                $configuredPrice->getConfiguredAmount(true),
                 [
                     'display_label'     => $block->escapeHtml(__('Regular Price')),
                     'price_id'          => $block->escapeHtml($block->getPriceId('old-price-' . $idSuffix)),

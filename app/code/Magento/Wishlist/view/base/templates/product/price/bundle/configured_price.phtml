@@ -5,19 +5,15 @@
  */
 ?>
 <?php
-/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
+/** @var \Magento\Catalog\Pricing\Render\ConfiguredPriceBox $block */
 $schema = ($block->getZone() == 'item_view') ? true : false;
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
-/** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $configuredPrice */
-$configuredPrice = $block->getPrice();
-/** @var \Magento\Catalog\Pricing\Price\RegularPrice $regularPrice */
-$regularPrice = $block->getPriceType('regular_price');
 ?>
-<?php if ($configuredPrice->getAmount()->getValue() < $regularPrice->getAmount()->getValue()) : ?>
+<?php if ($block->hasSpecialPrice()) : ?>
     <p class="price-as-configured">
         <span class="special-price">
             <?= /* @noEscape */ $block->renderAmount(
-                $configuredPrice->getAmount(),
+                $block->getConfiguredPrice()->getAmount(),
                 [
                     'display_label'     => $block->escapeHtml(__('Special Price')),
                     'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
@@ -29,7 +25,7 @@ $regularPrice = $block->getPriceType('regular_price');
         </span>
         <span class="old-price">
             <?= /* @noEscape */ $block->renderAmount(
-                $regularPrice->getAmount(),
+                $block->getConfiguredRegularPrice()->getAmount(),
                 [
                     'display_label'     => $block->escapeHtml(__('Regular Price')),
                     'price_id'          => $block->escapeHtml($block->getPriceId('old-price-' . $idSuffix)),
@@ -48,7 +44,7 @@ $regularPrice = $block->getPriceType('regular_price');
     ?>
     <p class="price-as-configured">
         <?= /* @noEscape */ $block->renderAmount(
-            $configuredPrice->getAmount(),
+            $this->getConfiguredPrice()->getAmount(),
             [
                 'display_label'     => $block->escapeHtml($priceLabel),
                 'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
