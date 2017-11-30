@@ -44,6 +44,7 @@ class FieldConfig
      * @param string $fieldName
      * @param array $arguments
      * @return ArgumentConfig[]
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getFieldConfig(string $fieldName, array $arguments)
     {
