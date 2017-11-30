@@ -42,7 +42,7 @@ class DateTime extends Date
     public function filter($value)
     {
         try {
-            $dateTime = $this->_localeDate->date($value, null, false);
+            $dateTime = $this->_localeDate->date($value, null, false, false);
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
             throw new \Exception("Invalid input datetime format of value '$value'", $e->getCode(), $e);
