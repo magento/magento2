@@ -44,7 +44,7 @@ class Products implements HandlerInterface
     }
 
     /**
-     * Retrieve Result fields
+     * Retrieve the result fields
      *
      * @return Type[]
      */

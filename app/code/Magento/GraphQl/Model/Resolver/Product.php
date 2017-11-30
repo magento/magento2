@@ -71,7 +71,7 @@ class Product implements ResolverInterface
     }
 
     /**
-     * Resolve product by Sku
+     * Get product data by Sku
      *
      * @param string $sku
      * @return array|null
@@ -88,7 +88,7 @@ class Product implements ResolverInterface
     }
 
     /**
-     * Resolve product by Id
+     * Get product data by Id
      *
      * @param int $productId
      * @return array|null
@@ -105,7 +105,7 @@ class Product implements ResolverInterface
     }
 
     /**
-     * Retrieve single product data in array format
+     * Transform single product data from object to in array format
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $productObject
      * @return array|null

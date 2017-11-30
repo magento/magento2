@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\Response;
 use Magento\GraphQl\Model\SchemaGeneratorInterface;
-use Magento\Framework\GraphQl\Executor;
+use Magento\Framework\GraphQl\RequestProcessor;
 use Magento\Framework\GraphQl\ExceptionFormatter;
 
 /**
@@ -37,9 +37,9 @@ class GraphQl implements FrontControllerInterface
     private $jsonSerializer;
 
     /**
-     * @var Executor
+     * @var RequestProcessor
      */
-    private $graphQlExecutor;
+    private $requestProcessor;
 
     /** @var ExceptionFormatter */
     private $graphQlError;
@@ -48,20 +48,20 @@ class GraphQl implements FrontControllerInterface
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
-     * @param Executor $graphQlExecutor
+     * @param RequestProcessor $requestProcessor
      * @param ExceptionFormatter $graphQlError
      */
     public function __construct(
         Response $response,
         SchemaGeneratorInterface $schemaGenerator,
         SerializerInterface $jsonSerializer,
-        Executor $graphQlExecutor,
+        RequestProcessor $requestProcessor,
         ExceptionFormatter $graphQlError
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
         $this->jsonSerializer = $jsonSerializer;
-        $this->graphQlExecutor = $graphQlExecutor;
+        $this->requestProcessor = $requestProcessor;
         $this->graphQlError = $graphQlError;
     }
 
@@ -83,7 +83,7 @@ class GraphQl implements FrontControllerInterface
                 throw new LocalizedException(__('Request content type must be application/json'));
             }
             $schema = $this->schemaGenerator->generate();
-            $result = $this->graphQlExecutor->execute(
+            $result = $this->requestProcessor->process(
                 $schema,
                 isset($data['query']) ? $data['query'] : '',
                 null,

@@ -10,7 +10,7 @@ use Magento\Framework\GraphQl\Type\Definition\ObjectType;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 
 /**
- * Define SimpleProduct's GraphQL type
+ * Define SimpleProduct GraphQL type
  */
 class SimpleProduct implements HandlerInterface
 {

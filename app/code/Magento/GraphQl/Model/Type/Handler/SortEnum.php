@@ -11,7 +11,7 @@ use Magento\GraphQl\Model\Type\Generator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 
 /**
- * Define SortEnum's GraphQL Type
+ * Define SortEnum GraphQL Type
  */
 class SortEnum implements HandlerInterface
 {

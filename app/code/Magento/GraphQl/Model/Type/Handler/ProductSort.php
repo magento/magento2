@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Type\Definition\InputObjectType;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 
 /**
- * Define ProductSort's GraphQL type
+ * Define ProductSort GraphQL type
  */
 class ProductSort implements HandlerInterface
 {

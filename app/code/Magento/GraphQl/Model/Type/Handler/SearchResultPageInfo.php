@@ -12,7 +12,7 @@ use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 
 /**
- * Define SearchResultPageInfo's GraphQL type
+ * Define SearchResultPageInfo GraphQL type
  */
 class SearchResultPageInfo implements HandlerInterface
 {

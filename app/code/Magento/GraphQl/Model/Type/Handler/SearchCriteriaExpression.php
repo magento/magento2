@@ -12,7 +12,7 @@ use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 
 /**
- * Define SearchCriteriaExpression's GraphQL type
+ * Define SearchCriteriaExpression GraphQL type
  */
 class SearchCriteriaExpression implements HandlerInterface
 {

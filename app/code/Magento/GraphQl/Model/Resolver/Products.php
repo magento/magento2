@@ -20,7 +20,9 @@ class Products implements ResolverInterface
      */
     private $productRepository;
 
-    /** @var Builder */
+    /**
+     * @var Builder
+     */
     private $searchCriteriaBuilder;
 
     /**

@@ -21,8 +21,6 @@ class CustomAttributeMetadata implements HandlerInterface
     private $typePool;
 
     /**
-     * Initialize dependencies.
-     *
      * @param Pool $typePool
      */
     public function __construct(Pool $typePool)

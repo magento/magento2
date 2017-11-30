@@ -132,7 +132,7 @@ class ClauseConverter
     }
 
     /**
-     * Get a connective filter from an AST
+     * Get a connective filter from an AST input
      *
      * @param string $entityType
      * @param array $arguments

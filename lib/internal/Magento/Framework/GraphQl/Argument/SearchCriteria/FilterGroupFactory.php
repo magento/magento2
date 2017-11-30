@@ -48,7 +48,7 @@ class FilterGroupFactory
     public function create($arguments)
     {
         /** @var Connective $filters */
-        $filters = $arguments->getClauseList();
+        $filters = $arguments->getClause();
         /** @var \Magento\Framework\Api\Search\FilterGroup[] $searchCriteriaFilterGroups */
         $searchCriteriaFilterGroups = [];
 

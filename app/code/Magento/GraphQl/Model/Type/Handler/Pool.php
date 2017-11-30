@@ -34,7 +34,8 @@ class Pool
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $typeName
+     * @return TypeInterface
      */
     public function getType(string $typeName)
     {

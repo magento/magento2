@@ -7,28 +7,28 @@
 namespace Magento\Framework\GraphQl\Argument\Find;
 
 /**
- * Class that holds the find structure are Clauses or Connectives for easy parsing
+ * Class that holds the find structure are Clause or Connective for easy parsing
  */
 class FindArgumentValue implements FindArgumentValueInterface
 {
     /**
-     * @var Clause[]|Connective[]
+     * @var Clause|Connective
      */
-    private $clauseList;
+    private $clause;
 
     /**
-     * @param Clause[]|Connective[] $clauseList
+     * @param Clause|Connective $clause
      */
-    public function __construct($clauseList)
+    public function __construct($clause)
     {
-        $this->clauseList = $clauseList;
+        $this->clause = $clause;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getClauseList()
+    public function getClause()
     {
-        return $this->clauseList;
+        return $this->clause;
     }
 }

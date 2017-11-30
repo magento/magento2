@@ -15,7 +15,7 @@ interface FindArgumentValueInterface extends ArgumentValueInterface
     /**
      * Return a structure as Connective or Clause that defines a find argument used for filtering
      *
-     * @return Clause[]|Connective[]
+     * @return Clause|Connective
      */
-    public function getClauseList();
+    public function getClause();
 }

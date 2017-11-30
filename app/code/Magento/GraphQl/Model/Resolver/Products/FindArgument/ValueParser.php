@@ -8,6 +8,9 @@ namespace Magento\GraphQl\Model\Resolver\Products\FindArgument;
 use Magento\Framework\GraphQl\Argument\Find\FindArgumentValueFactory;
 use Magento\Framework\GraphQl\Argument\ValueParserInterface;
 
+/**
+ * Parses a mixed value to a FindArgumentValue
+ */
 class ValueParser implements ValueParserInterface
 {
     /** @var ClauseConverter */

@@ -53,6 +53,8 @@ class Clause
     }
 
     /**
+     * Get the referenced type of the entity for the field
+     *
      * @return ReferenceType
      */
     public function getReferencedType()
@@ -61,6 +63,8 @@ class Clause
     }
 
     /**
+     * Get the field name
+     *
      * @return string
      */
     public function getFieldName()
@@ -69,6 +73,8 @@ class Clause
     }
 
     /**
+     * Get the clause type
+     *
      * @return string
      */
     public function getClauseType()
@@ -77,6 +83,8 @@ class Clause
     }
 
     /**
+     * Get the Clause value
+     *
      * @return string|array
      */
     public function getClauseValue()

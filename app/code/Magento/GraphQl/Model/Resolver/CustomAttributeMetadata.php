@@ -30,8 +30,6 @@ class CustomAttributeMetadata implements ResolverInterface
     private $typeProcessor;
 
     /**
-     * Initialize dependencies.
-     *
      * @param TypeLocatorInterface $typeLocator
      * @param TypeProcessor $typeProcessor
      */
