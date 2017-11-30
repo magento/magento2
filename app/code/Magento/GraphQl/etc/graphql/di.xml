@@ -17,6 +17,7 @@
                     <item name="SimpleProduct" xsi:type="object">Magento\GraphQl\Model\Type\Handler\SimpleProduct</item>
                     <item name="ConfigurableProduct" xsi:type="object">Magento\GraphQl\Model\Type\Handler\ConfigurableProduct</item>
                     <item name="Products" xsi:type="object">Magento\GraphQl\Model\Type\Handler\Products</item>
+                    <item name="CustomAttributeMetadata" xsi:type="object">Magento\GraphQl\Model\Type\Handler\CustomAttributeMetadata</item>
                 </item>
                 <item name="Query" xsi:type="array">
                     <item name="fields" xsi:type="array">
@@ -33,6 +34,12 @@
                                 <item name="pageSize" xsi:type="string">Int</item>
                                 <item name="currentPage" xsi:type="string">Int</item>
                                 <item name="sort" xsi:type="string">ProductSort</item>
+                            </item>
+                        </item>
+                        <item name="customAttributeMetadata" xsi:type="array">
+                            <item name="type" xsi:type="string">CustomAttributeMetadata</item>
+                            <item name="args" xsi:type="array">
+                                <item name="attribute[]!" xsi:type="string">AttributeInput</item>
                             </item>
                         </item>
                     </item>

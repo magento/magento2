@@ -16,6 +16,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Webapi\CustomAttribute\TypeLocatorInterface;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Zend\Code\Reflection\ClassReflection;
 
@@ -45,7 +46,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     protected $attributeValueFactory;
 
     /**
-     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface
+     * @var \Magento\Framework\Webapi\CustomAttribute\TypeLocatorInterface
      */
     protected $customAttributeTypeLocator;
 
@@ -60,26 +61,34 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $nameFinder;
 
     /**
+     * @var array
+     */
+    private $dataInterfaceToEntityTypeMap;
+
+    /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
      * @param ObjectManagerInterface $objectManager
      * @param AttributeValueFactory $attributeValueFactory
-     * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
+     * @param TypeLocatorInterface $customAttributeTypeLocator
      * @param MethodsMap $methodsMap
+     * @param array $dataInterfaceToEntityTypeMap
      */
     public function __construct(
         TypeProcessor $typeProcessor,
         ObjectManagerInterface $objectManager,
         AttributeValueFactory $attributeValueFactory,
-        CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
-        MethodsMap $methodsMap
+        TypeLocatorInterface $customAttributeTypeLocator,
+        MethodsMap $methodsMap,
+        array $dataInterfaceToEntityTypeMap = []
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectManager = $objectManager;
         $this->attributeValueFactory = $attributeValueFactory;
         $this->customAttributeTypeLocator = $customAttributeTypeLocator;
         $this->methodsMap = $methodsMap;
+        $this->dataInterfaceToEntityTypeMap = $dataInterfaceToEntityTypeMap;
     }
 
     /**
@@ -222,7 +231,14 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
 
             list($customAttributeCode, $customAttributeValue) = $this->processCustomAttribute($customAttribute);
 
-            $type = $this->customAttributeTypeLocator->getType($customAttributeCode, $dataObjectClassName);
+            if (isset($this->dataInterfaceToEntityTypeMap[$dataObjectClassName])) {
+                $type = $this->customAttributeTypeLocator->getType(
+                    $customAttributeCode,
+                    $this->dataInterfaceToEntityTypeMap[$dataObjectClassName]
+                );
+            } else {
+                $type = TypeProcessor::ANY_TYPE;
+            }
 
             if ($this->typeProcessor->isTypeAny($type) || $this->typeProcessor->isTypeSimple($type)
                 || !is_array($customAttributeValue)

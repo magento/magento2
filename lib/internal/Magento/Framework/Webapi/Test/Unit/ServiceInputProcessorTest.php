@@ -66,7 +66,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         $cache->expects($this->any())->method('load')->willReturn(false);
 
         $this->customAttributeTypeLocator = $this->getMockBuilder(
-            \Magento\Eav\Model\EavCustomAttributeTypeLocator::class
+            \Magento\Eav\Model\TypeLocator::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -115,7 +115,11 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
                 'objectManager' => $this->objectManagerMock,
                 'customAttributeTypeLocator' => $this->customAttributeTypeLocator,
                 'attributeValueFactory' => $this->attributeValueFactoryMock,
-                'methodsMap' => $this->methodsMap
+                'methodsMap' => $this->methodsMap,
+                'dataInterfaceToEntityTypeMap' => [
+                    \Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes::class
+                    => 'TestType'
+                ]
             ]
         );
 
