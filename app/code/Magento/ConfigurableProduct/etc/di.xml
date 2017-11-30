@@ -14,6 +14,8 @@
     <preference for="Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface" type="Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue" />
     <preference for="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProvider" />
     <preference for="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface" type="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider" />
+    <preference for="Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface" type="Magento\ConfigurableProduct\Model\AttributeOptionProvider" />
+    <preference for="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface" type="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilder" />
 
     <type name="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct" sortOrder="50" />
@@ -93,7 +95,6 @@
             <argument name="prices" xsi:type="array">
                 <item name="regular_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\ConfigurableRegularPrice</item>
                 <item name="final_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\FinalPrice</item>
-                <item name="highest_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\HighestPrice</item>
             </argument>
             <argument name="target" xsi:type="object">Magento\Catalog\Pricing\Price\Pool</argument>
         </arguments>
@@ -137,11 +138,6 @@
             <argument name="priceResolver" xsi:type="object">ConfigurableFinalPriceResolver</argument>
         </arguments>
     </type>
-    <type name="Magento\ConfigurableProduct\Pricing\Price\HighestPrice">
-        <arguments>
-            <argument name="priceResolver" xsi:type="object">Magento\ConfigurableProduct\Pricing\Price\HighestPriceResolver</argument>
-        </arguments>
-    </type>
     <virtualType name="ConfigurableRegularPriceResolver" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver">
         <arguments>
             <argument name="priceResolver" xsi:type="object">Magento\ConfigurableProduct\Pricing\Price\RegularPriceResolver</argument>
@@ -161,6 +157,11 @@
     <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable">
+        <arguments>
+            <argument name="attributeOptionProvider" xsi:type="object">Magento\ConfigurableProduct\Model\AttributeOptionProvider\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\ConfigurableProduct\Observer\HideUnsupportedAttributeTypes">
