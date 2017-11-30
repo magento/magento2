@@ -88,7 +88,9 @@ $stores = $block->getStoresSortedBySortOrder();
     $values = [];
     foreach($block->getOptionValues() as $value) {
         $value = $value->getData();
-        $values[] = is_array($value) ? array_map("htmlspecialchars_decode", $value) : $value;
+        $values[] = is_array($value) ? array_map(function($str) {
+            return htmlspecialchars_decode($str, ENT_QUOTES);
+        }, $value) : $value;
     }
     ?>
     <script type="text/x-magento-init">
