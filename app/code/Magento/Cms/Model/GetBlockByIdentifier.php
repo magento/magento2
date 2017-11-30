@@ -25,7 +25,6 @@ class GetBlockByIdentifier implements GetBlockByIdentifierInterface
     private $blockResource;
 
     /**
-     * BlockManagement constructor.
      * @param BlockFactory $blockFactory
      * @param ResourceModel\Block $blockResource
      */
@@ -38,12 +37,7 @@ class GetBlockByIdentifier implements GetBlockByIdentifierInterface
     }
 
     /**
-     * Load block data by given block identifier.
-     *
-     * @param string $identifier
-     * @param int $storeId
-     * @return BlockInterface
-     * @throws NoSuchEntityException
+     * @inheritdoc
      */
     public function execute(string $identifier, int $storeId) : BlockInterface
     {

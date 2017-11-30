@@ -25,7 +25,6 @@ class GetPageByIdentifier implements GetPageByIdentifierInterface
     private $pageResource;
 
     /**
-     * PageManagement constructor.
      * @param PageFactory $pageFactory
      * @param ResourceModel\Page $pageResource
      */
@@ -38,12 +37,7 @@ class GetPageByIdentifier implements GetPageByIdentifierInterface
     }
 
     /**
-     * Load page data by given page identifier.
-     *
-     * @param string $identifier
-     * @param int $storeId
-     * @return PageInterface
-     * @throws NoSuchEntityException
+     * @inheritdoc
      */
     public function execute(string $identifier, int $storeId) : PageInterface
     {

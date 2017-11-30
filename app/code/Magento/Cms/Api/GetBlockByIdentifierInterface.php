@@ -16,6 +16,7 @@ interface GetBlockByIdentifierInterface
      *
      * @param string $identifier
      * @param int $storeId
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return \Magento\Cms\Api\Data\BlockInterface
      */
     public function execute(string $identifier, int $storeId) : \Magento\Cms\Api\Data\BlockInterface;
