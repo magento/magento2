@@ -41,30 +41,31 @@ class AttributeSetRepository
      * @param AttributeSetInterface $attributeSet
      * @return bool
      * @throws CouldNotDeleteException
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function aroundDelete(
         \Magento\Eav\Model\AttributeSetRepository $subject,
         callable $proceed,
         AttributeSetInterface $attributeSet
     ) {
-        if (!isset($subject) || !$attributeSet->getAttributeSetId()) {
-            return false;
-        }
+        $attributeSetId = $attributeSet->getAttributeSetId();
 
         // Get the product ids
-        $ids = $this->productCollection->addFieldToFilter('attribute_set_id', $attributeSet->getAttributeSetId())
-                                       ->getAllIds();
+        $entityIDs = $attributeSetId
+            ? $this->productCollection->addFieldToFilter('attribute_set_id', $attributeSetId)->getAllIds()
+            : [];
 
         // Delete the attribute set
         $result = $proceed($attributeSet);
 
         // Delete the old product url rewrites
-        try {
-            $this->urlPersist->deleteByData(['entity_id' => $ids, 'entity_type' => 'product']);
-        } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__('Could not delete the url rewrite(s): %1', $exception->getMessage()));
+        if (!empty($entityIDs)) {
+            try {
+                $this->urlPersist->deleteByData(['entity_id' => $entityIDs, 'entity_type' => 'product']);
+            } catch (\Exception $exception) {
+                throw new CouldNotDeleteException(__('Could not delete the url rewrite(s): %1', $exception->getMessage()));
+            }
         }
-
         return $result;
     }
 }
