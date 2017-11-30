@@ -17,7 +17,8 @@ use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetSourceItemConfiguration
+ * Implementation of SourceItem Quantity notification save multiple operation for specific db layer
+ * Save Multiple used here for performance efficient purposes over single save operation
  */
 class GetSourceItemConfiguration implements GetSourceItemConfigurationInterface
 {
