@@ -32,6 +32,7 @@ class ArgumentApplierFactory
      *
      * @param string $argumentName
      * @return ArgumentApplierInterface
+     * @throws \LogicException
      */
     public function create(string $argumentName)
     {
@@ -41,6 +42,10 @@ class ArgumentApplierFactory
             'currentPage' => ArgumentApplier\CurrentPage::class,
             'sort' => ArgumentApplier\Sort::class
         ];
-        return $this->objectManager->create($appliers[$argumentName]);
+        if (isset($appliers[$argumentName])) {
+            return $this->objectManager->create($appliers[$argumentName]);
+        } else {
+            throw new \LogicException(sprintf('Applier %s not found', $argumentName));
+        }
     }
 }

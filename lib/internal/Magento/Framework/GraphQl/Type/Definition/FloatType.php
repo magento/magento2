@@ -7,9 +7,9 @@
 namespace Magento\Framework\GraphQl\Type\Definition;
 
 /**
- * Marker interface for GraphQl Type
+ * Wrapper for GraphQl FloatType
  */
-interface TypeInterface
+class FloatType extends \GraphQL\Type\Definition\FloatType implements ScalarTypeInterface
 {
 
 }

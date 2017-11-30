@@ -7,9 +7,9 @@
 namespace Magento\Framework\GraphQl\Type\Definition;
 
 /**
- * Marker interface for GraphQl Type
+ * Wrapper for GraphQl IntType
  */
-interface TypeInterface
+class IntType extends \GraphQL\Type\Definition\IntType implements ScalarTypeInterface
 {
 
 }
