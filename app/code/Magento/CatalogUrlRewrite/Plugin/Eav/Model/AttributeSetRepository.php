@@ -1,15 +1,13 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: patrikpihlstrom
- * Date: 11/10/17
- * Time: 22:12
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogUrlRewrite\Plugin\Eav\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Eav\Api\Data\AttributeSetInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 
 class AttributeSetRepository
@@ -42,6 +40,7 @@ class AttributeSetRepository
      * @param callable $proceed
      * @param AttributeSetInterface $attributeSet
      * @return bool
+     * @throws CouldNotDeleteException
      */
     public function aroundDelete(
         \Magento\Eav\Model\AttributeSetRepository $subject,
