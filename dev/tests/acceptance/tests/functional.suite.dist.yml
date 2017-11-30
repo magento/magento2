@@ -31,3 +31,8 @@ modules:
             username: "%MAGENTO_ADMIN_USERNAME%"
             password: "%MAGENTO_ADMIN_PASSWORD%"
             pageload_timeout: 30
+            host: %SELENIUM_HOST%
+            port: %SELENIUM_PORT%
+            protocol: %SELENIUM_PROTOCOL%
+            path: %SELENIUM_PATH%
+
