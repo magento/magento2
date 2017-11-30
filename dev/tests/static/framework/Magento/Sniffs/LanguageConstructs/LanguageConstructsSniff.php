@@ -14,8 +14,7 @@ use PHP_CodeSniffer\Files\File;
  * Examples:
  * echo 'echo text';
  * print('print text');
- * $ = `back quotes`;
- * exit(1);
+ * $string = `back quotes`;
  */
 class LanguageConstructsSniff implements Sniff
 {
@@ -42,13 +41,6 @@ class LanguageConstructsSniff implements Sniff
     protected $backtickCode = 'WrongBackQuotesUsage';
 
     /**
-     * Exit usage code.
-     *
-     * @var string
-     */
-    protected $exitUsage = 'ExitUsage';
-
-    /**
      * Direct output code.
      *
      * @var string
@@ -61,7 +53,6 @@ class LanguageConstructsSniff implements Sniff
     public function register()
     {
         return [
-            T_EXIT,
             T_ECHO,
             T_PRINT,
             T_BACKTICK,
@@ -81,11 +72,6 @@ class LanguageConstructsSniff implements Sniff
             $phpcsFile->addError($this->errorMessageBacktick, $stackPtr, $this->backtickCode);
             return;
         }
-        if ($tokens[$stackPtr]['code'] === T_EXIT) {
-            $code = $this->exitUsage;
-        } else {
-            $code = $this->directOutput;
-        }
-        $phpcsFile->addError($this->errorMessage, $stackPtr, $code, [$tokens[$stackPtr]['content']]);
+        $phpcsFile->addError($this->errorMessage, $stackPtr, $this->directOutput, [$tokens[$stackPtr]['content']]);
     }
 }

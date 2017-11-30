@@ -29,6 +29,5 @@
 
     <rule ref="Squiz.Commenting.DocCommentAlignment"/>
     <rule ref="Squiz.Functions.GlobalFunction"/>
-    <rule ref="Squiz.PHP.Eval"/>
     <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
 </ruleset>
