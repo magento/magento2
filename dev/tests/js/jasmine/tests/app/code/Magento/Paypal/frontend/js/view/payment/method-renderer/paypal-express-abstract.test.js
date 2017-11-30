@@ -108,8 +108,6 @@ define([
             }));
             expect(setPaymentMock).toHaveBeenCalled();
             expect(setPaymentMock.calls.mostRecent()).toEqual(jasmine.objectContaining({
-                object: mocks['Magento_Checkout/js/action/set-payment-information'],
-                args: [],
                 returnValue: successPromise
             }));
             expect(successPromise.done).toHaveBeenCalledWith(jasmine.any(Function));
