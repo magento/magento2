@@ -41,13 +41,7 @@ class CssInliner
      */
     public function setCss($css)
     {
-        /**
-         * Adds space to CSS string before passing to Emogrifier to fix known parsing issue with library.
-         * https://github.com/jjriv/emogrifier/issues/370
-         */
-        $cssWithAddedSpaces = preg_replace('#([\{\}>])#i', ' $1 ', $css);
-
-        $this->emogrifier->setCss($cssWithAddedSpaces);
+        $this->emogrifier->setCss($css);
     }
 
     /**
