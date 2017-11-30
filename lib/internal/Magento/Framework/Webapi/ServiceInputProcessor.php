@@ -79,8 +79,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         TypeProcessor $typeProcessor,
         ObjectManagerInterface $objectManager,
         AttributeValueFactory $attributeValueFactory,
-        TypeLocatorInterface $customAttributeTypeLocator,
         MethodsMap $methodsMap,
+        TypeLocatorInterface $customAttributeTypeLocator = null,
         array $dataInterfaceToEntityTypeMap = []
     ) {
         $this->typeProcessor = $typeProcessor;
@@ -88,6 +88,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $this->attributeValueFactory = $attributeValueFactory;
         $this->customAttributeTypeLocator = $customAttributeTypeLocator;
         $this->methodsMap = $methodsMap;
+        $this->customAttributeTypeLocator = $customAttributeTypeLocator
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(TypeLocatorInterface::class);
         $this->dataInterfaceToEntityTypeMap = $dataInterfaceToEntityTypeMap;
     }
 
