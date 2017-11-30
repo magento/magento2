@@ -53,7 +53,6 @@ class SourceItemsConfigurationProcessor
         DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete,
         DataObjectHelper $dataObjectHelper
     ) {
-        $this->getSourceItemConfiguration = $getSourceItemConfiguration;
         $this->sourceItemConfigurationSave = $sourceItemConfigurationSave;
         $this->sourceItemConfigurationFactory = $sourceItemConfigurationFactory;
         $this->dataObjectHelper = $dataObjectHelper;
