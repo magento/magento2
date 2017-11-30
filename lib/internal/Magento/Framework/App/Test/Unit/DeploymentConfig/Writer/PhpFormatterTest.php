@@ -130,12 +130,36 @@ return array (
 );
 
 TEXT;
+
+        $expectedResult3 = <<<TEXT
+<?php
+return [
+  'ns1' => [
+    's1' => [
+      's11',
+      's12'
+    ],
+    's2' => [
+      's21',
+      's22'
+    ]
+  ],
+  'ns2' => [
+    's1' => [
+      's11'
+    ]
+  ],
+  'ns3' => 'just text',
+  'ns4' => 'just text'
+];
+
+TEXT;
         return [
             ['string', [], "<?php\nreturn 'string';\n"],
             ['string', ['comment'], "<?php\nreturn 'string';\n"],
-            [$array, [], "<?php\nreturn " . var_export($array, true) . ";\n"],
             [$array, $comments1, $expectedResult1],
             [$array, $comments2, $expectedResult2],
+            [$array, [], $expectedResult3],
         ];
     }
 }

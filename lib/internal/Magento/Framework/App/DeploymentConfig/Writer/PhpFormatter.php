@@ -11,6 +11,8 @@ namespace Magento\Framework\App\DeploymentConfig\Writer;
  */
 class PhpFormatter implements FormatterInterface
 {
+    const INDENT = '  ';
+
     /**
      * Format deployment configuration.
      * If $comments is present, each item will be added
@@ -23,7 +25,7 @@ class PhpFormatter implements FormatterInterface
         if (!empty($comments) && is_array($data)) {
             return "<?php\nreturn array (\n" . $this->formatData($data, $comments) . "\n);\n";
         }
-        return "<?php\nreturn " . var_export($data, true) . ";\n";
+        return "<?php\nreturn " . $this->varExportShort($data, true) . ";\n";
     }
 
     /**
@@ -64,5 +66,28 @@ class PhpFormatter implements FormatterInterface
         }
 
         return var_export($data, true);
+    }
+
+    /**
+     * If variable to export is an array, format with the php >= 5.4 short array syntax. Otherwise use
+     * default var_export functionality.
+     *
+     * @param mixed   $var
+     * @param integer $depth
+     * @return string
+     */
+    private function varExportShort($var, $depth=0) {
+        if (gettype($var) === 'array') {
+            $indexed = array_keys($var) === range(0, count($var) - 1);
+            $r = [];
+            foreach ($var as $key => $value) {
+                $r[] = str_repeat(self::INDENT, $depth)
+                    . ($indexed ? '' : $this->varExportShort($key) . ' => ')
+                    . $this->varExportShort($value, $depth + 1);
+            }
+            return sprintf("[\n%s\n%s]", implode(",\n", $r), str_repeat(self::INDENT, $depth - 1));
+        }
+
+        return var_export($var, TRUE);
     }
 }
