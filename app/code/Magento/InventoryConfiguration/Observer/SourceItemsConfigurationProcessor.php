@@ -13,7 +13,6 @@ use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface;
 use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface;
 use Magento\InventoryConfiguration\Model\SourceItemConfigurationFactory;
-use Magento\InventoryConfiguration\Model\GetSourceItemConfigurationDataInterface;
 
 use Magento\Framework\Api\DataObjectHelper;
 
@@ -22,11 +21,6 @@ use Magento\Framework\Api\DataObjectHelper;
  */
 class SourceItemsConfigurationProcessor
 {
-    /**
-     * @var GetSourceItemConfigurationDataInterface
-     */
-    private $getSourceItemConfiguration;
-
     /**
      * @var SourceItemConfigurationFactory
      */
@@ -50,14 +44,12 @@ class SourceItemsConfigurationProcessor
     /**
      * @param SourceItemConfigurationFactory $sourceItemConfigurationFactory
      * @param SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave
-     * @param GetSourceItemConfigurationDataInterface $getSourceItemConfiguration
      * @param DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete
      * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         SourceItemConfigurationFactory $sourceItemConfigurationFactory,
         SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave,
-        GetSourceItemConfigurationDataInterface $getSourceItemConfiguration,
         DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete,
         DataObjectHelper $dataObjectHelper
     ) {
