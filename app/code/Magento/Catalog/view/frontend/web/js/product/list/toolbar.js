@@ -78,6 +78,7 @@ define([
             );
         },
 
+        /*eslint-disable no-unused-vars*/
         /**
          * @param {String} paramName
          * @param {*} paramValue
@@ -104,6 +105,8 @@ define([
             location.href = baseUrl + (paramData.length ? '?' + paramData : '');
         }
     });
+
+    /*eslint-enable no-unused-vars*/
 
     return $.mage.productListToolbarForm;
 });
