@@ -7,7 +7,9 @@ namespace Magento\Bundle\Pricing\Price;
 
 class BundleOptions
 {
-    /** @var  \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface */
+    /**
+     * @var \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface
+     */
     private $calculator;
 
     /**
@@ -47,6 +49,7 @@ class BundleOptions
         /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionCollection */
         $optionCollection = $typeInstance->getOptionsCollection($bundleProduct);
 
+        /** @var \Magento\Bundle\Model\ResourceModel\Selection\Collection $selectionCollection */
         $selectionCollection = $typeInstance->getSelectionsCollection(
             $typeInstance->getOptionsIds($bundleProduct),
             $bundleProduct
@@ -65,7 +68,7 @@ class BundleOptions
      */
     public function calculateOptions(
         \Magento\Framework\Pricing\SaleableInterface $bundleProduct,
-        $searchMin = true
+        bool $searchMin = true
     ) {
         $priceList = [];
         /* @var $option \Magento\Bundle\Model\Option */
@@ -73,6 +76,7 @@ class BundleOptions
             if ($searchMin && !$option->getRequired()) {
                 continue;
             }
+            /** @var \Magento\Bundle\Pricing\Price\BundleSelectionPrice $selectionPriceList */
             $selectionPriceList = $this->calculator->createSelectionPriceList($option, $bundleProduct);
             $selectionPriceList = $this->calculator->processOptions($option, $selectionPriceList, $searchMin);
             $priceList = array_merge($priceList, $selectionPriceList);
@@ -90,9 +94,9 @@ class BundleOptions
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function getOptionSelectionAmount(
-        $bundleProduct,
-        $selection,
-        $useRegularPrice = false
+        \Magento\Framework\Pricing\SaleableInterface $bundleProduct,
+        \Magento\Bundle\Model\Selection $selection,
+        bool $useRegularPrice = false
     ) {
         $cacheKey = implode(
             '_',

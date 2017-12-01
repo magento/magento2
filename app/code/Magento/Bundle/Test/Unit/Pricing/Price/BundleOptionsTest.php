@@ -94,7 +94,7 @@ class BundleOptionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getOptionsDataProvider
      */
-    public function testGetOptions($selectionCollection)
+    public function testGetOptions(array $selectionCollection)
     {
         $this->prepareOptionMocks($selectionCollection);
         $this->bundleOptions->getOptions($this->saleableItemMock);
@@ -181,7 +181,7 @@ class BundleOptionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function selectionAmountDataProvider()
+    public function selectionAmountDataProvider(): array
     {
         return [
             [1., 50.5, false],
@@ -200,7 +200,7 @@ class BundleOptionsTest extends \PHPUnit\Framework\TestCase
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\Amount\Base $amount */
         $amount = $this->createMock(\Magento\Framework\Pricing\Amount\Base::class);
         $amount->expects($this->any())->method('getAdjustmentAmounts')->will(
-            $this->returnValue(isset($amountData['adjustmentAmounts']) ? $amountData['adjustmentAmounts'] : [])
+            $this->returnValue($amountData['adjustmentAmounts'] ?? [])
         );
         $amount->expects($this->any())->method('getValue')->will($this->returnValue($amountData['amount']));
         return $amount;
@@ -264,7 +264,7 @@ class BundleOptionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getTestDataForCalculation
      */
-    public function testCalculation($optionList, $expected)
+    public function testCalculation(array $optionList, array $expected)
     {
         $storeId = 1;
         $this->saleableItemMock->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));

@@ -23,7 +23,7 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
     /**
      * @var null|ItemInterface
      */
-    protected $item;
+    private $item;
 
     /**
      * @param Product $saleableItem

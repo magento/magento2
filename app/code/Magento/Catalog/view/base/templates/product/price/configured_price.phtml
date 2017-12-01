@@ -12,7 +12,7 @@ $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 $configuredPrice = $block->getPrice();
 /** @var \Magento\Catalog\Pricing\Price\ConfiguredRegularPrice $configuredRegularPrice */
 $configuredRegularPrice = $block->getPriceType(
-        \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_REGULAR_PRICE_CODE
+    \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_REGULAR_PRICE_CODE
 );
 ?>
 <?php if ($configuredPrice->getAmount()->getValue() < $configuredRegularPrice->getAmount()->getValue()) : ?>

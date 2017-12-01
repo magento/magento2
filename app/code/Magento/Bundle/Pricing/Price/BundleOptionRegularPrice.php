@@ -34,7 +34,6 @@ class BundleOptionRegularPrice extends AbstractPrice implements BundleOptionPric
      * @param float $quantity
      * @param BundleCalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param BundleSelectionFactory $bundleSelectionFactory
      * @param BundleOptions $bundleOptions
      */
     public function __construct(
@@ -42,10 +41,8 @@ class BundleOptionRegularPrice extends AbstractPrice implements BundleOptionPric
         $quantity,
         BundleCalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        BundleSelectionFactory $bundleSelectionFactory,
         BundleOptions $bundleOptions
     ) {
-        $this->selectionFactory = $bundleSelectionFactory;
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->product->setQty($this->quantity);
         $this->bundleOptions = $bundleOptions;

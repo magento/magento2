@@ -31,10 +31,13 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
     private $bundleCalculatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Pricing\Price\BundleOptions|\PHPUnit_Framework_MockObject_MockObject
      */
     private $bundleOptionsMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->bundleOptionsMock = $this->createMock(\Magento\Bundle\Pricing\Price\BundleOptions::class);
@@ -53,16 +56,25 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test method \Magento\Bundle\Pricing\Price\BundleOptionPrice::getOptions
+     *
+     * @return void
+     */
     public function testGetOptions()
     {
         $collection = $this->createMock(\Magento\Bundle\Model\ResourceModel\Option\Collection::class);
         $this->bundleOptionsMock->expects($this->any())
             ->method('getOptions')
             ->will($this->returnValue($collection));
-        $selection = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->assertEquals($collection, $this->bundleOptionPrice->getOptions($selection));
+        $this->assertEquals($collection, $this->bundleOptionPrice->getOptions());
     }
 
+    /**
+     * Test method \Magento\Bundle\Pricing\Price\BundleOptionPrice::getOptionSelectionAmount
+     *
+     * @return void
+     */
     public function testGetOptionSelectionAmount()
     {
         $selectionAmount = $this->createMock(\Magento\Framework\Pricing\Amount\AmountInterface::class);
@@ -75,6 +87,11 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($selectionAmount, $this->bundleOptionPrice->getOptionSelectionAmount($selection));
     }
 
+    /**
+     * Test method \Magento\Bundle\Pricing\Price\BundleOptionPrice::getAmount
+     *
+     * @return void
+     */
     public function testGetAmount()
     {
         $amountMock = $this->createMock(\Magento\Framework\Pricing\Amount\AmountInterface::class);
@@ -85,6 +102,11 @@ class BundleOptionPriceTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($amountMock, $this->bundleOptionPrice->getAmount());
     }
 
+    /**
+     * Test method \Magento\Bundle\Pricing\Price\BundleOptionPrice::getValue
+     *
+     * @return void
+     */
     public function testGetValue()
     {
         $value = 1;

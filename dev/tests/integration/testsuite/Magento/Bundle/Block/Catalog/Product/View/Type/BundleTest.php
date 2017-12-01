@@ -31,6 +31,9 @@ class BundleTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -48,6 +51,11 @@ class BundleTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test for method \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle::getJsonConfig
+     *
+     * @return void
+     */
     public function testGetJsonConfig()
     {
         $option = $this->productRepository->get('simple');

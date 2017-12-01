@@ -21,7 +21,7 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
     /**
      * @var null|ItemInterface
      */
-    protected $item;
+    private $item;
 
     /**
      * @param ItemInterface $item
@@ -58,7 +58,7 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
             $finalPrice = $product->getPriceInfo()
                 ->getPrice(RegularPrice::PRICE_CODE)
                 ->getValue();
-            $value += $finalPrice * ($customOption->getValue() ? $customOption->getValue() : 1);
+            $value += $finalPrice * ($customOption->getValue() ?: 1);
         }
         return $value;
     }

@@ -6,8 +6,8 @@
 ?>
 <?php
 /** @var \Magento\Catalog\Pricing\Render\ConfiguredPriceBox $block */
-$schema = ($block->getZone() == 'item_view') ? true : false;
-$idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
+$schema = ($block->getZone() == 'item_view');
+$idSuffix = $block->getIdSuffix() ?: '';
 ?>
 <?php if ($block->hasSpecialPrice()) : ?>
     <p class="price-as-configured">
@@ -44,7 +44,7 @@ $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
     ?>
     <p class="price-as-configured">
         <?= /* @noEscape */ $block->renderAmount(
-            $this->getConfiguredPrice()->getAmount(),
+            $block->getConfiguredPrice()->getAmount(),
             [
                 'display_label'     => $block->escapeHtml($priceLabel),
                 'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),

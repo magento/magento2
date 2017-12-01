@@ -23,7 +23,7 @@ class ConfiguredRegularPrice extends ConfiguredPrice
      * @param \Magento\Bundle\Model\Option $option
      * @return BundleSelectionPrice[]
      */
-    protected function createSelectionPriceList($option)
+    protected function createSelectionPriceList(\Magento\Bundle\Model\Option $option)
     {
         return $this->calculator->createSelectionPriceList($option, $this->product, true);
     }

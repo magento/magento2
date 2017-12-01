@@ -6,14 +6,15 @@
 ?>
 <?php
 /** @var \Magento\Wishlist\Pricing\Render\ConfiguredPriceBox $block */
-$schema = ($block->getZone() == 'item_view') ? true : false;
-$idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
+$schema = ($block->getZone() == 'item_view');
+$idSuffix = $block->getIdSuffix() ?: '';
 /** @var \Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct $configuredPrice */
 $configuredPrice = $block->getPrice();
+$configuredRegularAmountValue = $configuredPrice->getConfiguredRegularAmount()->getValue();
 ?>
 <?php if ($block->hasSpecialPrice()
-    && $configuredPrice->getConfiguredAmount()->getValue() !== $configuredPrice->getConfiguredRegularAmount()->getValue()
-    && $configuredPrice->getConfiguredRegularAmount()->getValue()) : ?>
+    && $configuredRegularAmountValue
+    && $configuredPrice->getConfiguredAmount()->getValue() !== $configuredRegularAmountValue) : ?>
     <p class="price-as-configured">
         <span class="special-price">
             <?= /* @noEscape */ $block->renderAmount(

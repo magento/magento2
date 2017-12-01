@@ -106,6 +106,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
 
     /**
      * Get Selection pricing list
+     *
      * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
      */
     public function getSelectionPriceList()
@@ -126,7 +127,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * @param float $baseValue
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
-    public function getConfiguredAmount($baseValue = 0.)
+    public function getConfiguredAmount(float $baseValue = 0.)
     {
         $selectionPriceList = $this->getSelectionPriceList();
         return $this->calculator->calculateBundleAmount(
@@ -170,7 +171,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * @param \Magento\Bundle\Model\Option $option
      * @return BundleSelectionPrice[]
      */
-    protected function createSelectionPriceList($option)
+    protected function createSelectionPriceList(\Magento\Bundle\Model\Option $option)
     {
         return $this->calculator->createSelectionPriceList($option, $this->product);
     }
