@@ -258,23 +258,6 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->will($this->returnValue($categoryId));
 
-        /**
-         * @var \Magento\Framework\View\Element\Template
-         * |\PHPUnit_Framework_MockObject_MockObject $blockMock
-         */
-        $blockMock = $this->createPartialMock(\Magento\Framework\View\Element\Template::class, ['setStoreId']);
-        $blockMock->expects($this->once())
-            ->method('setStoreId')
-            ->with($storeId);
-
-        $this->resultPageMock->expects($this->once())
-            ->method('getLayout')
-            ->will($this->returnSelf());
-
-        $this->resultPageMock->expects($this->once())
-            ->method('getBlock')
-            ->willReturn($blockMock);
-
         $this->edit->execute();
     }
 
