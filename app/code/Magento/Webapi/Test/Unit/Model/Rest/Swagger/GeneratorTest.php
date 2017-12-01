@@ -30,7 +30,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     protected $typeProcessorMock;
 
     /**
-     * @var \Magento\Framework\Webapi\CustomAttribute\TypeLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customAttributeTypeLocatorMock;
 
@@ -74,7 +74,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(self::OPERATION_NAME));
 
         $this->customAttributeTypeLocatorMock = $this->getMockBuilder(
-            \Magento\Framework\Webapi\CustomAttribute\TypeLocatorInterface::class
+            \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface::class
         )->disableOriginalConstructor()
             ->getMock();
         $this->customAttributeTypeLocatorMock->expects($this->any())

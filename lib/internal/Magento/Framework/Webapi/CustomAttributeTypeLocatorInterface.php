@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Webapi\CustomAttribute;
+namespace Magento\Framework\Webapi;
 
 /**
  * Interface to locate types for custom attributes
  */
-interface TypeLocatorInterface
+interface CustomAttributeTypeLocatorInterface
 {
     /**
      * Get Data Interface type for a given custom attribute code

@@ -9,12 +9,12 @@ namespace Magento\Eav\Model\TypeLocator;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Eav\Api\AttributeRepositoryInterface;
-use Magento\Framework\Webapi\CustomAttribute\TypeLocatorInterface;
+use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
 
 /**
  * Class to locate simple types for Eav custom attributes
  */
-class SimpleType implements TypeLocatorInterface
+class SimpleType implements CustomAttributeTypeLocatorInterface
 {
     /**
      * @var AttributeRepositoryInterface

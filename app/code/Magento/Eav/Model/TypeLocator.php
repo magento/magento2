@@ -7,22 +7,22 @@
 namespace Magento\Eav\Model;
 
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\Webapi\CustomAttribute\TypeLocatorInterface;
+use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
 
 /**
  * Class to locate types for Eav custom attributes
  */
-class TypeLocator implements TypeLocatorInterface
+class TypeLocator implements CustomAttributeTypeLocatorInterface
 {
     /**
-     * @var \Magento\Framework\Webapi\CustomAttribute\TypeLocatorInterface[]
+     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface[]
      */
     private $typeLocators;
 
     /**
-     * Initialize CustomAttributeTypeLocator
+     * Initialize TypeLocator
      *
-     * @param \Magento\Framework\Webapi\CustomAttribute\TypeLocatorInterface[] $typeLocators
+     * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface[] $typeLocators
      */
     public function __construct(
         array $typeLocators = []

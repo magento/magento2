@@ -24,7 +24,7 @@
     <preference for="Magento\Eav\Api\Data\AttributeSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Eav\Api\Data\AttributeSetSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Framework\Webapi\CustomAttribute\TypeLocatorInterface" type="Magento\Eav\Model\TypeLocator" />
+    <preference for="Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface" type="Magento\Eav\Model\TypeLocator" />
 
     <type name="Magento\Eav\Model\Entity\Attribute\Config">
         <arguments>

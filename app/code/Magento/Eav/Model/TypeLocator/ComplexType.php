@@ -9,14 +9,14 @@ namespace Magento\Eav\Model\TypeLocator;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\Webapi\CustomAttribute\TypeLocatorInterface;
+use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
 use Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class to locate complex types for EAV custom attributes
  */
-class ComplexType implements ServiceTypeListInterface, TypeLocatorInterface
+class ComplexType implements ServiceTypeListInterface, CustomAttributeTypeLocatorInterface
 {
     /**
      * @var StringUtils

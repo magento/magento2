@@ -13,9 +13,9 @@ use Magento\Eav\Model\TypeLocator\ComplexType as ComplexTypeLocator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Unit test class for \Magento\Eav\Model\CustomAttributeTypeLocator
+ * Unit test class for \Magento\Eav\Model\TypeLocator
  */
-class CustomAttributeTypeLocatorTest extends \PHPUnit\Framework\TestCase
+class TypeLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TypeLocator

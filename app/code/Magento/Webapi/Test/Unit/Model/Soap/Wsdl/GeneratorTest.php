@@ -17,7 +17,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     protected $_wsdlGenerator;
 
     /**
-     * @var \Magento\Framework\Webapi\CustomAttribute\TypeLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customAttributeTypeLocator = null;
 

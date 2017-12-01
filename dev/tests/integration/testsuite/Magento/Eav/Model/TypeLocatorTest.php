@@ -8,7 +8,7 @@ namespace Magento\Eav\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class CustomAttributeTypeLocatorTest extends \PHPUnit\Framework\TestCase
+class TypeLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TypeLocator

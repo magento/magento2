@@ -8,7 +8,7 @@ namespace Magento\GraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\Webapi\CustomAttribute\TypeLocatorInterface;
+use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\ArgumentInterface;
 use Magento\GraphQl\Model\ResolverInterface;
@@ -20,7 +20,7 @@ use Magento\Framework\Exception\InputException;
 class CustomAttributeMetadata implements ResolverInterface
 {
     /**
-     * @var TypeLocatorInterface
+     * @var CustomAttributeTypeLocatorInterface
      */
     private $typeLocator;
 
@@ -30,11 +30,11 @@ class CustomAttributeMetadata implements ResolverInterface
     private $typeProcessor;
 
     /**
-     * @param TypeLocatorInterface $typeLocator
+     * @param CustomAttributeTypeLocatorInterface $typeLocator
      * @param TypeProcessor $typeProcessor
      */
     public function __construct(
-        TypeLocatorInterface $typeLocator,
+        CustomAttributeTypeLocatorInterface $typeLocator,
         TypeProcessor $typeProcessor
     ) {
         $this->typeLocator = $typeLocator;
