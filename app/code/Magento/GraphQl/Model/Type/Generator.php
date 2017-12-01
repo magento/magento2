@@ -6,10 +6,8 @@
 
 namespace Magento\GraphQl\Model\Type;
 
-use Magento\Framework\GraphQl\Type\Definition\ListOfType;
-use Magento\Framework\GraphQl\Type\Definition\NonNull;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Type\Definition\Type;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\GraphQl\Model\Type\Handler\Pool;
 use Magento\Framework\GraphQl\Type\TypeFactory;
 
@@ -52,7 +50,7 @@ class Generator implements GeneratorInterface
     {
         $types = [];
         if (!isset($this->typeMap[$typeName])) {
-            throw new LocalizedException(__('Invalid GraphQL query name.'));
+            throw new GraphQlInputException(__('Invalid GraphQL query name.'));
         }
         /** @var HandlerInterface $handler */
         foreach ($this->typeMap['types'] as $handler) {

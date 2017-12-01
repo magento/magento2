@@ -42,7 +42,7 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
         $this->customAttributeTypeLocator = $this->objectManger->getObject(
             TypeLocator::class,
             [
-                'complexTypeLocator' => $this->complexType
+                'typeLocators' => [$this->complexType]
             ]
         );
     }
@@ -109,7 +109,7 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
                 'attributeCode' => null,
                 'serviceClass' => $serviceInterface,
                 'serviceEntityTypeMapData' => [$serviceInterface => $eavEntityType],
-                'expected' => 'mixed'
+                'expected' => 'anyType'
             ],
         ];
     }
