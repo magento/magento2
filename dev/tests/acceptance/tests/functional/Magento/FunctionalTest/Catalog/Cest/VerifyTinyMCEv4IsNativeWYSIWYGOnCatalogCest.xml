@@ -11,7 +11,7 @@
     <cest name="VerifyTinyMCEv4IsNativeWYSIWYGOnCatalogCest">
         <annotations>
             <features value="TinyMCEv4"/>
-            <stories value="Apply new WYSIWYG on Categories Page"/>
+            <stories value="Apply new WYSIWYG on Categories Page-MAGETWO-72137"/>
             <group value="WYSIWYG"/>
             <env value="chrome"/>
             <env value="firefox"/>

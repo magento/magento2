@@ -42,7 +42,7 @@
             <see selector="{{CmsWYSIWYGSection.CreateFolder}}" userInput="Create Folder" mergeKey="seeCreateFolderBtn" />
             <see selector="{{CmsWYSIWYGSection.InsertFile}}" userInput="Add Selected" mergeKey="seeAddSelectedBtn" />
             <click selector="{{CmsWYSIWYGSection.CreateFolder}}" mergeKey="createFolder"/>
-            <waitForElementVisible selector="{{CmsWYSIWYGSection.FolderName}}" mergeKey="sasa" />
+            <waitForElementVisible selector="{{CmsWYSIWYGSection.FolderName}}" mergeKey="waitForPopUp" />
             <fillField selector="{{CmsWYSIWYGSection.FolderName}}" userInput="{{ImageFolder.name}}" mergeKey="fillFolderName" />
             <click selector="{{CmsWYSIWYGSection.AcceptFolderName}}" mergeKey="acceptFolderName" />
             <waitForPageLoad mergeKey="waitForPageLoad2" />

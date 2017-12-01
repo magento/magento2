@@ -11,7 +11,7 @@
     <cest name="VerifyTinyMCEv4IsNativeWYSIWYGOnBlockCest">
         <annotations>
             <features value="TinyMCEv4"/>
-            <stories value="Apply new WYSIWYG on Block Page"/>
+            <stories value="Apply new WYSIWYG on Block Page-MAGETWO-42046"/>
             <group value="blockWYSIWYG"/>
             <env value="chrome"/>
             <env value="firefox"/>
@@ -28,7 +28,7 @@
                 <title value="Admin see TinyMCEv4.6 is native WYSIWYG on Block"/>
                 <description value="Admin see TinyMCEv4.6 is native WYSIWYG on Block"/>
                 <severity value="CRITICAL"/>
-                <testCaseId value="MAGETWO-42046"/>
+                <testCaseId value="MAGETWO-84184 "/>
             </annotations>
             <amOnPage url="{{BlocksPage.url}}" mergeKey="amOnNewBlockPage"/>
             <waitForPageLoad mergeKey="waitForPageLoad1"/>

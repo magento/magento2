@@ -11,7 +11,7 @@
     <cest name="VerifyTinyMCEv4IsNativeWYSIWYGOnCMSPageCest">
         <annotations>
             <features value="TinyMCEv4"/>
-            <stories value="Apply new WYSIWYG on CMS Page"/>
+            <stories value="Apply new WYSIWYG on CMS Page-MAGETWO-42046"/>
             <group value="cmsWYSIWYG"/>
             <env value="chrome"/>
             <env value="firefox"/>
@@ -27,7 +27,7 @@
                 <title value="Admin see TinyMCEv4.6 is native WYSIWYG on CMS Page"/>
                 <description value="Admin see TinyMCEv4.6 is native WYSIWYG on CMS Page"/>
                 <severity value="CRITICAL"/>
-                <testCaseId value="MAGETWO-42046"/>
+                <testCaseId value="MAGETWO-84182 "/>
             </annotations>
             <amOnPage url="{{CmsPagesPage.url}}" mergeKey="amOnPagePagesGrid"/>
             <waitForPageLoad mergeKey="waitForPageLoad1"/>

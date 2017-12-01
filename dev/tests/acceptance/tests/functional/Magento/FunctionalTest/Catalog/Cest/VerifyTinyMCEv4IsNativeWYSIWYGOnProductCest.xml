@@ -11,7 +11,7 @@
     <cest name="VerifyTinyMCEv4IsNativeWYSIWYGOnProductCest">
         <annotations>
             <features value="TinyMCEv4"/>
-            <stories value="TinyMCE v3 WYSIWYG extension"/>
+            <stories value="TinyMCE v4.6 as a native WYSIWYG editor extension-MAGETWO-72114"/>
             <group value="WYSIWYG"/>
             <env value="chrome"/>
             <env value="firefox"/>

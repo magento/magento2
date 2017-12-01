@@ -11,7 +11,7 @@
     <cest name="VerifyDefaultWYSIWYGToolbarOnProducCest">
         <annotations>
             <features value="Default WYSIWYG toolbar configuration in Magento"/>
-            <stories value="Default toolbar configuration in Magento"/>
+            <stories value="Default toolbar configuration in Magento-MAGETWO-70412"/>
             <group value="WYSIWYG"/>
             <env value="chrome"/>
             <env value="firefox"/>
