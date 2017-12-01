@@ -19,7 +19,8 @@ The Performance Toolkit enables you to test the performance of your Magento inst
 
 ## Quick Start
 
-Before running the JMeter tests for the first time, you will need to first use the `php bin/magento setup:performance:generate-fixtures {profile path}` command to generate the test data. You can find the configuration files of available profiles in the folders `setup/performance-toolkit/profiles/ce` and `setup/performance-toolkit/profiles/ee`.
+Before running the JMeter tests for the first time, you will need to first use the `php bin/magento setup:performance:generate-fixtures {profile path}` command to generate the test data.
+You can find the configuration files of available B2C profiles in the folders `setup/performance-toolkit/profiles/ce` and `setup/performance-toolkit/profiles/ee`.
 
 It can take a significant amount of time to generate a profile. For example, generating the large profile can take up to 4 hours. So we recommend using the `-s` option to skip indexation. Then you can start indexation manually.
 
@@ -55,9 +56,9 @@ The following parameters can be passed to the `benchmark.jmx` scenario:
 
 | Parameter Name                                | Default Value       | Description                                                                              |
 | --------------------------------------------- | ------------------- | ---------------------------------------------------------------------------------------- |
-| host                                          |                     | URL component 'host' of application being tested (URL or IP).                            |
-| base_path                                     |                     | Base path for tested site.                                                               |
-| admin_path                                    | backend             | Admin backend path.                                                                      |
+| host                                          |  localhost          | URL component 'host' of application being tested (URL or IP).                            |
+| base_path                                     |       /             | Base path for tested site.                                                               |
+| admin_path                                    | admin               | Admin backend path.                                                                      |
 | admin_user                                    | admin               | Admin backend user.                                                                      |
 | admin_password                                | 123123q             | Admin backend password.                                                                  |
 | customer_password                             | 123123q             | Storefront customer password.                                                            |
@@ -67,39 +68,37 @@ The following parameters can be passed to the `benchmark.jmx` scenario:
 | frontendPoolUsers                             | 1                   | Total number of Frontend threads.                                                        |
 | adminPoolUsers                                | 1                   | Total number of Admin threads.                                                           |
 | browseCatalogByGuestPercentage                | 30                  | Percentage of threads in Frontend Pool that emulate catalog browsing activities.         |
-| searchQuickPercentage                         | 18                  | Percentage of threads in Frontend Pool that emulate catalog search activities.           |
-| searchQuickFilterPercentage                   | 9                   | Percentage of threads in Frontend Pool that emulate catalog search activities.           |
-| searchAdvancedPercentage                      | 3                   | Percentage of threads in Frontend Pool that emulate catalog search activities.           |
+| browseCatalogByCustomerPercentage             | 0                   | Percentage of threads in Frontend Pool that emulate catalog browsing activities.         |
+| siteSearchPercentage                          | 30                  | Percentage of threads in Frontend Pool that emulate catalog search activities.           |
+| searchQuickPercentage                         | 60                  | Percentage of threads in Frontend Pool that emulate catalog search activities.           |
+| searchQuickFilterPercentage                   | 30                  | Percentage of threads in Frontend Pool that emulate catalog search activities.           |
+| searchAdvancedPercentage                      | 10                  | Percentage of threads in Frontend Pool that emulate catalog search activities.           |
 | checkoutByGuestPercentage                     | 4                   | Percentage of threads in Frontend Pool that emulate checkout by guest.                   |
 | checkoutByCustomerPercentage                  | 4                   | Percentage of threads in Frontend Pool that emulate checkout by customer.                |
-| addToCartPercentage                           | 28                  | Percentage of threads in Frontend Pool that emulate abandoned cart activities.           |
+| addToCartByGuestPercentage                    | 28                  | Percentage of threads in Frontend Pool that emulate abandoned cart activities.           |
 | addToWishlistPercentage                       | 2                   | Percentage of threads in Frontend Pool that emulate adding products to Wishlist.         |
 | compareProductsPercentage                     | 2                   | Percentage of threads in Frontend Pool that emulate products comparison.                 |
 | productCompareDelay                           | 0                   | Delay (s) between iterations of product comparison.                                      |
 | promotionRulesPercentage                      | 10                  | Percentage of threads in Admin Pool that emulate creation of promotion rules.            |
 | adminPromotionsManagementDelay                | 0                   | Delay (s) between creation of promotion rules.                                           |
-| adminCategoryManagementPercentage             | 5                   | Percentage of threads in Merchandising Pool that emulate category management activities. |
-| adminProductEditingPercentage                 | 27                  | Percentage of threads in Merchandising Pool that emulate product editing.                |
-| adminProductCreationPercentage                | 18                  | Percentage of threads in Merchandising Pool that emulate creation of products.           |
-| adminPromotionRulesPercentage                 | 10                  | Percentage of threads in Admin Pool that emulate admin rules creating activities.        |
+| adminCategoryManagementPercentage             | 10                   | Percentage of threads in Merchandising Pool that emulate category management activities. |
+| adminProductEditingPercentage                 | 35                  | Percentage of threads in Merchandising Pool that emulate product editing.                |
+| adminProductCreationPercentage                | 25                  | Percentage of threads in Merchandising Pool that emulate creation of products.           |
+| adminPromotionRulesPercentage                 | 15                  | Percentage of threads in Admin Pool that emulate admin rules creating activities.        |
 | adminCategoryManagementDelay                  | 0                   | Delay (s) between iterations of category management activities.                          |
-| apiProcessOrdersPercentage                    | 30                  | Percentage of threads in Admin Pool that emulate orders processing activities.           |
 | apiProcessOrders                              | 5                   | Number of orders for process in Admin API - Process Orders.                              |
-| adminEditOrderPercentage                      | 10                  | Percentage of threads in Admin Pool that emulate order edit.                             |
-| csrPoolUsers                                  | 0                   | Users of CSR Pool.                                                                       |
-| csrBrowseCustomersOddPercentage               | 2                   | Percentage of threads in CSR Pool that emulate customers browsing activities.            |
-| csrBrowseCustomersEvenPercentage              | 2                   | Percentage of threads in CSR Pool that emulate customers browsing activities.            |
-| csrBrowseCustomersFilteringPercentage         | 2                   | Percentage of threads in CSR Pool that emulate customers browsing activities.            |
-| csrBrowseCustomersSortingPercentage           | 2                   | Percentage of threads in CSR Pool that emulate customers browsing activities.            |
-| csrBrowseCustomersFilteringSortingPercentage  | 2                   | Percentage of threads in CSR Pool that emulate customers browsing activities.            |
-| csrCreateOrderPercentage                      | 70                  | Percentage of threads in CSR Pool that emulate creation of orders.                       |
-| csrCreateProcessReturnsPercentage             | 20                  | Percentage of threads in CSR Pool that emulate creation/processing of returns.           |
-| csrCreateProcessReturnsDelay                  | 0                   | Delay (s) between creation of returns.                                                   |
+| adminEditOrderPercentage                      | 15                  | Percentage of threads in Admin Pool that emulate order edit.                             |
+| csrPoolUsers                                  | 0                   | Users of Customer Support Request (CSR) Pool.                                            |
+| othersPoolUsers                               | 0                   | Users of Others Pool.                                                                    |
+| browseCustomerGridPercentage                  | 10                  | Percentage of threads in CSR Pool that emulate customers browsing activities.            |
+| adminCreateOrderPercentage                    | 70                  | Percentage of threads in CSR Pool that emulate creation of orders.                       |
+| adminReturnsManagementPercentage              | 20                  | Percentage of threads in CSR Pool that emulate creation/processing of returns.           |
+| adminCreateProcessReturnsDelay                | 0                   | Delay (s) between creation of returns.                                                   |
 | wishlistDelay                                 | 0                   | Delay (s) between adding products to Wishlist.                                           |
-| categories_count                              | 200                 | Total number of categories that are be used in scenario.                                 |
+| categories_count                              | 100                 | Total number of categories that are be used in scenario.                                 |
 | simple_products_count                         | 30                  | Total number of simple products that are be used in scenario.                            |
 
-Parameters must be passed to command line with the `J` prefix:
+Parameters must be passed to the command line with the `J` prefix:
 
 `-J{parameter_name}={parameter_value}`
 
@@ -114,12 +113,12 @@ There are some options that you should pass to JMeter in the console mode:
 
 To get more details about available JMeter options, read [Non-GUI Mode](http://jmeter.apache.org/usermanual/get-started.html#non_gui).
 
-For example, you can run a scenario via console with 100 threads for 5 minutes as follows:
+For example, you can run the B2C scenario via console with 90 threads for the Frontend Pool and 10 threads for the Admin Pool:
 
     cd {JMeter path}/bin/
-    jmeter -n -t {path to peformance toolkit}/benchmark.jmx -j ./jmeter.log -l ./jmeter-results.jtl -Jhost=magento2.dev -Jbase_path=/ -Jadmin_path=admin -Jfiles_folder = /opt/mpaf/tool/fragments/files/
+    jmeter -n -t {path to peformance toolkit}/benchmark.jmx -j ./jmeter.log -l ./jmeter-results.jtl -Jhost=magento2.dev -Jbase_path=/ -Jadmin_path=admin -JfrontendPoolUsers=90 -JadminPoolUsers=10
 
-As a result, you will get `jmeter.log` and `jmeter-results.jtl`. The`jmeter.log` contains information about the test run and can be helpful in determining the cause of an error.  The JTL file is a text file containing the results of a test run. It can be opened in GUI mode to perform analysis of the results (see the *Output* section below).
+As a result, you will get `jmeter.log` and `jmeter-results.jtl`. The`jmeter.log` contains information about the test run and can be helpful in determining the cause of an error.  The JTL file is a text file containing the results of a test run. It can be opened in the GUI mode to perform analysis of the results (see the *Output* section below).
 
 
 The following parameters can be passed to the `benchmark_2015.jmx` scenario:
@@ -145,7 +144,7 @@ The following parameters can be passed to the `benchmark_2015.jmx` scenario:
 
 ### Run JMeter scenario via GUI
 
-**Note:** Use the GUI mode only for scenario debugging and viewing reports. Use the console mode for real-life load testing, because it requires significantly fewer resources.
+**Note:** Use the GUI mode only for scenario debugging and viewing reports. Use console mode for real-life load testing, because it requires significantly fewer resources.
 
 - Change directories to `{JMeter path}/bin/` and run `jmeter.bat`.
 - Click *File -> Open (Ctrl+O)* and select `benchmark.jmx` file or drag and drop the `benchmark.jmx` file in the opened GUI.
@@ -189,87 +188,53 @@ For more details, read [Summary Report](http://jmeter.apache.org/usermanual/comp
 
 ## Additional Information
 
-### Threads
+### Scenarios
 
-`benchmark.jmx` scenario has the following thread groups and default percentage breakdown:
+`benchmark.jmx` scenario has the following pools and default percentage breakdown for each scenario:
 
-- **Frontend Pool** (frontendPoolUsers)
+**Frontend Pool** (frontendPoolUsers)
 
-| Thread Group Name         | Label Suffix                                           | % of Pool |
-| ------------------------- | ------------------------------------------------------ | --------- |
-| Catalog Browsing By Guest | Catalog Browsing By Guest                              | 30        |
-| Site Search               | SearchQuick, SearchQuickWithFilter and SearchAdvanced  | 30        |
-| Add To Cart (Guest)       | Add To Cart By Guest                                   | 28        |
-| Add to Wishlist           | WishList                                               | 2         |
-| Compare Products          | Product Compare By Guest                               | 2         |
-| Checkout By Guest         | Checkout By Guest                                      | 4         |
-| Checkout By Customer      | Checkout By Customer                                   | 4         |
+| Scenario Name             | % of Pool |
+| ------------------------- | --------- |
+| Catalog Browsing By Guest |     30    |
+| Site Search               |     30    |
+| Add To Cart By Guest      |     28    |
+| Add to Wishlist           |     2     |
+| Compare Products          |     2     |
+| Checkout By Guest         |     4     |
+| Checkout By Customer      |     4     |
 
 Site Search thread group contains 3 variations:
 - Quick Search (60%)
-- Quick Search With Filtering (30%)
+- Quick Search With Filtration (30%)
 - Advanced Search (10%)
 
-- **Admin Pool** (adminPoolUsers)
+**Admin Pool** (adminPoolUsers)
 
-| Thread Group Name                         | Label Suffix | % of Pool |
-| ----------------------------------------- | ------------ | --------- |
-| Admin Promotion Rules                     | -            | 10        |
-| Admin API - Process Orders                | -            | 30        |
-| Admin Edit Order                          | -            | 10        |
-| Admin Category Management (Merchandising) | -            | 5         |
-| Admin Edit Product (Merchandising)        | -            | 27        |
-| Admin Create Product (Merchandising)      | -            | 18        |
+| Scenario Name               |% of Pool  |
+| ----------------------------| --------- |
+| Admin Promotion Rules       | 15        |
+| Admin Edit Order            | 15        |
+| Admin Category Management   | 10        |
+| Admin Edit Product          | 35        |
+| Admin Create Product        | 25        |
 
-- **CSR Pool** (csrPoolUsers)
+**CSR Pool** (csrPoolUsers)
 
-| Thread Group Name          | Label Suffix | % of Pool |
-| -------------------------- | ------------ | --------- |
-| CSR Browse Customers       | -            | 10        |
-| CSR Create Order           | -            | 70        |
-| CSR Create/Process Returns | -            | 20        |
-
-CSR Browse Customers thread group contains 5 variations:
-- View Odd Grid Pages (20%)
-- View Even Grid pages (20%)
-- Filtering (20%)
-- Sorting (20%)
-- Filtering and Sorting (20%)
+| Scenario Name              | % of Pool |
+| -------------------------- | --------- |
+| Browse Customer Grid       | 10        |
+| Admin Create Order         | 70        |
+| Admin Returns Management   | 20        |
 
 **Legacy Threads**
 
 The `benchmark_2015.jmx` script consists of five thread groups: the setup thread and four user threads.
-By default, the percentage ratio between thread groups is as follows:
+By default, the percentage ratio between the thread groups is as follows:
 - Browsing, adding items to the cart and abandon cart (BrowsAddToCart suffix in reports) - 62%
 - Just browsing (CatProdBrows suffix in reports) - 30%
 - Browsing, adding items to cart and checkout as guest (GuestChkt suffix in reports) -  4%
 - Browsing, adding items to cart and checkout as registered customer (CustomerChkt suffix in reports) - 4%
-
-### Results Interpretation
-
-In order to build an aggregate report from the results of the `benchmark.kmx` scenario run, use the script `generate-b2c.php` in the folder `setup/performance-toolkit/aggregate-report`.
-
-The script parses the JTL file and generates an aggregate report in CSV format. The report consists of the 4 sections separated by two empty lines:
-
-1. Summary information: Checkouts Per Hour, Page Views Per Hour and Test Duration (in seconds)
-2. Aggregated information about all requests within each thread group (median time, average time, min/max, amount of hits per hour, etc.)
-3. Aggregated information about common requests (open home page, category page, product page, login, etc.) across the entire scenario
-4. List of the requests that weren't executed during the scenario run
-
-Also, the aggregate report can include information about the memory usage for each request type. This requires additional configuration. You should add the following code at the end of `pub/index.php`:
-
-    if (strpos($_SERVER['REQUEST_URI'], '/banner/ajax/load/') === false) {
-        if (!file_exists('../var/log/memory_usage.log')) {
-            file_put_contents('../var/log/memory_usage.log', str_pad('Usage', 12, ' ', STR_PAD_LEFT) . ' ' . str_pad('Real Usage', 12, ' ', STR_PAD_LEFT) . '  URI' . "\n", FILE_APPEND | LOCK_EX);
-        }
-        $result = str_pad(memory_get_peak_usage(), 12, ' ', STR_PAD_LEFT) . ' ' . str_pad(memory_get_peak_usage(true), 12, ' ', STR_PAD_LEFT) . '  ' . $_SERVER['REQUEST_URI'];
-        file_put_contents('../var/log/memory_usage.log', $result . "\n", FILE_APPEND | LOCK_EX);
-    }
-After that, the information about memory usage for each request will be logged in the file `var/log/memory_usage.log`.
-
-To generate the aggregate report, run the following command from the Magento root directory:
-
-    php setup/performance-toolkit/aggregate-report/generate-b2c.php -j {path to folder with JTL file}/jmeter_report.jtl -m var/log/memory_usage.log -o aggregate_report.csv
 
 **Legacy Scenario**
 
@@ -296,4 +261,4 @@ Find all rows with the label *Simple Product # View* and calculate the summary t
 
 If you need information about the summary throughput of the *Checkout* actions, find the rows with labels *Checkout success* and make the same calculation.
 
-For the total number of page views, sum up all actions, minus the setup thread.
+For the total number of page views, you will want to sum up all actions minus the setup thread.

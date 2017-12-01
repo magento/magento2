@@ -8,7 +8,7 @@ namespace Magento\Braintree\Test\Unit\Gateway\Response;
 use Braintree\Transaction;
 use Braintree\Transaction\CreditCardDetails;
 use Magento\Braintree\Gateway\Config\Config;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Response\VaultDetailsHandler;
 use Magento\Framework\DataObject;
 use Magento\Payment\Gateway\Data\PaymentDataObject;

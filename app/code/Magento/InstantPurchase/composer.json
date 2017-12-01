@@ -13,6 +13,7 @@
     "magento/module-catalog": "102.0.*",
     "magento/module-customer": "101.0.*",
     "magento/module-sales": "101.0.*",
+    "magento/module-shipping": "100.2.*",
     "magento/module-quote": "101.0.*",
     "magento/module-vault": "101.0.*",
     "magento/framework": "100.2.*"
