@@ -263,25 +263,32 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             throw new \RuntimeException('Illegal state');
         }
 
-        $this->getSearchCriteriaBuilder();
-        $this->getFilterBuilder();
         if (!is_array($condition) || !in_array(key($condition), ['from', 'to'])) {
-            $this->filterBuilder->setField($field);
-            $this->filterBuilder->setValue($condition);
-            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+            $this->addFilterToSearchCriteria($field, $condition);
         } else {
+            if ('price' === $field) {
+                $coef = $this->_storeManager->getStore()->getCurrentCurrencyRate() ? : 1;
+            }
+
             if (!empty($condition['from'])) {
-                $this->filterBuilder->setField("{$field}.from");
-                $this->filterBuilder->setValue($condition['from']);
-                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+                $this->addFilterToSearchCriteria("{$field}.from", $condition['from'] / $coef);
             }
             if (!empty($condition['to'])) {
-                $this->filterBuilder->setField("{$field}.to");
-                $this->filterBuilder->setValue($condition['to']);
-                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
+                $this->addFilterToSearchCriteria("{$field}.to", $condition['to'] / $coef);
             }
         }
         return $this;
+    }
+
+    /**
+     * @param string $field
+     * @param mixed $value
+     */
+    private function addFilterToSearchCriteria($field, $value)
+    {
+        $this->getFilterBuilder()->setField($field);
+        $this->getFilterBuilder()->setValue($value);
+        $this->getSearchCriteriaBuilder()->addFilter($this->filterBuilder->create());
     }
 
     /**
@@ -349,7 +356,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         if ($this->order && 'relevance' === $this->order['field']) {
             $this->getSelect()->order('search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->order['dir']);
         }
-        return parent::_renderFiltersBefore();
+
+        parent::_renderFiltersBefore();
     }
 
     /**

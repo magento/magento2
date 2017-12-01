@@ -92,9 +92,15 @@ class DataProvider implements DataProviderInterface
             if (!$store instanceof \Magento\Store\Model\Store) {
                 throw new \RuntimeException('Illegal scope resolved');
             }
+
+            $currencyRate = $store->getCurrentCurrencyRate() ? : 1;
             $table = $this->resource->getTableName('catalog_product_index_price');
+            $columns = [
+                BucketInterface::FIELD_VALUE => 'main_table.min_price',
+                'currency_rate' => new \Zend_Db_Expr($currencyRate),
+            ];
             $select->from(['main_table' => $table], null)
-                ->columns([BucketInterface::FIELD_VALUE => 'main_table.min_price'])
+                ->columns($columns)
                 ->where('main_table.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
                 ->where('main_table.website_id = ?', $store->getWebsiteId());
         } else {

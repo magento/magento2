@@ -262,8 +262,8 @@ class Price extends AbstractFilter
             $to = $this->getTo($to);
         }
         $label = $this->_renderRangeLabel(
-            empty($from) ? 0 : $from * $this->getCurrencyRate(),
-            empty($to) ? $to : $to * $this->getCurrencyRate()
+            empty($from) ? 0 : $from,
+            empty($to) ? $to : $to
         );
         $value = $from . '-' . $to . $this->dataProvider->getAdditionalRequestData();
 
