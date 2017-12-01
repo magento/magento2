@@ -160,22 +160,6 @@ interface CarrierInterface
     public function getTotalNumOfBoxes($weight);
 
     /**
-     * Is state province required
-     *
-     * @return bool
-     * @api
-     */
-    public function isStateProvinceRequired();
-
-    /**
-     * Check if city option required
-     *
-     * @return bool
-     * @api
-     */
-    public function isCityRequired();
-
-    /**
      * Determine whether zip-code is required for the country of destination
      *
      * @param string|null $countryId
@@ -183,15 +167,6 @@ interface CarrierInterface
      * @api
      */
     public function isZipCodeRequired($countryId = null);
-
-    /**
-     * Used to call debug method from not Payment Method context
-     *
-     * @param mixed $debugData
-     * @return void
-     * @api
-     */
-    public function debugData($debugData);
 
     /**
      * Getter for carrier code

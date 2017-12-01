@@ -5,7 +5,7 @@
  */
 namespace Magento\Shipping\Model;
 
-use Magento\Shipping\Model\Carrier\CarrierInterface;
+use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
 
 /**
  * Interface CarrierFactoryInterface
@@ -16,7 +16,7 @@ interface CarrierFactoryInterface
      * Get carrier instance
      *
      * @param string $carrierCode
-     * @return bool|CarrierInterface
+     * @return bool|AbstractCarrierInterface
      * @api
      */
     public function get($carrierCode);
@@ -26,7 +26,7 @@ interface CarrierFactoryInterface
      *
      * @param string $carrierCode
      * @param int|null $storeId
-     * @return bool|CarrierInterface
+     * @return bool|AbstractCarrierInterface
      * @api
      */
     public function create($carrierCode, $storeId = null);
@@ -35,7 +35,7 @@ interface CarrierFactoryInterface
      * Get carrier by its code if it is active
      *
      * @param string $carrierCode
-     * @return bool|CarrierInterface
+     * @return bool|AbstractCarrierInterface
      * @api
      */
     public function getIfActive($carrierCode);
@@ -45,7 +45,7 @@ interface CarrierFactoryInterface
      *
      * @param string $carrierCode
      * @param null|int $storeId
-     * @return bool|CarrierInterface
+     * @return bool|AbstractCarrierInterface
      * @api
      */
     public function createIfActive($carrierCode, $storeId = null);

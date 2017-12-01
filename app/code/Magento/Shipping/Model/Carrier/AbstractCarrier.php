@@ -17,7 +17,7 @@ use Magento\Shipping\Model\Shipment\Request;
  * @api
  * @since 100.0.2
  */
-abstract class AbstractCarrier extends \Magento\Framework\DataObject
+abstract class AbstractCarrier extends \Magento\Framework\DataObject implements AbstractCarrierInterface
 {
     const DEBUG_KEYS_MASK = '****';
 

@@ -11,6 +11,27 @@ namespace Magento\Shipping\Model\Carrier;
  * @deprecated
  * @see CarrierInterface
  */
-interface AbstractCarrierInterface
+interface AbstractCarrierInterface extends CarrierInterface
 {
+    /**
+     * Is state province required
+     *
+     * @return bool
+     */
+    public function isStateProvinceRequired();
+
+    /**
+     * Check if city option required
+     *
+     * @return bool
+     */
+    public function isCityRequired();
+
+    /**
+     * Used to call debug method from not Payment Method context
+     *
+     * @param mixed $debugData
+     * @return void
+     */
+    public function debugData($debugData);
 }
