@@ -10,6 +10,7 @@ use Magento\Framework\GraphQl\Type\Definition\InputObjectType;
 use Magento\Framework\GraphQl\Type\Definition\Type;
 use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
+use Magento\Framework\GraphQl\Type\TypeFactory;
 
 /**
  * Define SearchCriteriaExpression GraphQL type
@@ -22,11 +23,18 @@ class SearchCriteriaExpression implements HandlerInterface
     private $typeGenerator;
 
     /**
-     * @param TypeGenerator $typeGenerator
+     * @var TypeFactory
      */
-    public function __construct(TypeGenerator $typeGenerator)
+    private $typeFactory;
+
+    /**
+     * @param TypeGenerator $typeGenerator
+     * @param TypeFactory $typeFactory
+     */
+    public function __construct(TypeGenerator $typeGenerator, TypeFactory $typeFactory)
     {
         $this->typeGenerator = $typeGenerator;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
@@ -35,7 +43,7 @@ class SearchCriteriaExpression implements HandlerInterface
     public function getType()
     {
         $reflector = new \ReflectionClass($this);
-        return new InputObjectType(
+        return $this->typeFactory->createInputObject(
             [
                 'name' => $reflector->getShortName(),
                 'fields' => $this->getFields()
