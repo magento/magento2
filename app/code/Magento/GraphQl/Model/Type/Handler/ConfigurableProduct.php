@@ -9,6 +9,7 @@ namespace Magento\GraphQl\Model\Type\Handler;
 use Magento\Framework\GraphQl\Type\Definition\ListOfType;
 use Magento\Framework\GraphQl\Type\Definition\ObjectType;
 use Magento\GraphQl\Model\Type\HandlerInterface;
+use Magento\Framework\GraphQl\Type\TypeFactory;
 
 /**
  * Define ConfigurableProduct's GraphQL type
@@ -21,11 +22,18 @@ class ConfigurableProduct implements HandlerInterface
     private $typePool;
 
     /**
-     * @param Pool $typePool
+     * @var TypeFactory
      */
-    public function __construct(Pool $typePool)
+    private $typeFactory;
+
+    /**
+     * @param Pool $typePool
+     * @param TypeFactory $typeFactory
+     */
+    public function __construct(Pool $typePool, TypeFactory $typeFactory)
     {
         $this->typePool = $typePool;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
@@ -37,8 +45,11 @@ class ConfigurableProduct implements HandlerInterface
         $fields = [];
         $interface = $this->typePool->getType('Product');
         $fields = array_merge($fields, $interface->config['fields']);
-        $fields['configurable_product_links'] = new ListOfType($this->typePool->getComplexType('SimpleProduct'));
-        return new ObjectType(
+        $fields['configurable_product_links'] =  $this->typeFactory->createList(
+            $this->typePool->getComplexType('SimpleProduct')
+        );
+
+        return $this->typeFactory->createObject(
             [
                 'name' => $reflector->getShortName(),
                 'fields' => $fields,

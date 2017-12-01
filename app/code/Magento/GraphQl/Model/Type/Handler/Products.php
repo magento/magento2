@@ -10,6 +10,7 @@ use Magento\Framework\GraphQl\Type\Definition\ListOfType;
 use Magento\Framework\GraphQl\Type\Definition\Type;
 use Magento\Framework\GraphQl\Type\Definition\ObjectType;
 use Magento\GraphQl\Model\Type\HandlerInterface;
+use Magento\Framework\GraphQl\Type\TypeFactory;
 
 /**
  * Define GraphQL type for search result of Products
@@ -22,11 +23,18 @@ class Products implements HandlerInterface
     private $typePool;
 
     /**
-     * @param Pool $typePool
+     * @var TypeFactory
      */
-    public function __construct(Pool $typePool)
+    private $typeFactory;
+
+    /**
+     * @param Pool $typePool
+     * @param TypeFactory $typeFactory
+     */
+    public function __construct(Pool $typePool, TypeFactory $typeFactory)
     {
         $this->typePool = $typePool;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
@@ -35,7 +43,7 @@ class Products implements HandlerInterface
     public function getType()
     {
         $reflector = new \ReflectionClass($this);
-        return new ObjectType(
+        return $this->typeFactory->createObject(
             [
                 'name' => $reflector->getShortName(),
                 'fields' => $this->getFields(),
@@ -51,7 +59,7 @@ class Products implements HandlerInterface
     private function getFields()
     {
         $fields = [
-            'items' => new ListOfType($this->typePool->getType('Product')),
+            'items' => $this->typeFactory->createList($this->typePool->getType('Product')),
             'page_info' => $this->typePool->getType('SearchResultPageInfo'),
             'total_count' => $this->typePool->getType('Int')
         ];

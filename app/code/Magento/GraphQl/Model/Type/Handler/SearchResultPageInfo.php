@@ -10,6 +10,7 @@ use Magento\Framework\GraphQl\Type\Definition\ObjectType;
 use Magento\Framework\GraphQl\Type\Definition\Type;
 use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
+use Magento\Framework\GraphQl\Type\TypeFactory;
 
 /**
  * Define SearchResultPageInfo GraphQL type
@@ -22,11 +23,18 @@ class SearchResultPageInfo implements HandlerInterface
     private $typeGenerator;
 
     /**
-     * @param TypeGenerator $typeGenerator
+     * @var TypeFactory
      */
-    public function __construct(TypeGenerator $typeGenerator)
+    private $typeFactory;
+
+    /**
+     * @param TypeGenerator $typeGenerator
+     * @param TypeFactory $typeFactory
+     */
+    public function __construct(TypeGenerator $typeGenerator, TypeFactory $typeFactory)
     {
         $this->typeGenerator = $typeGenerator;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
@@ -35,7 +43,7 @@ class SearchResultPageInfo implements HandlerInterface
     public function getType()
     {
         $reflector = new \ReflectionClass($this);
-        return new ObjectType(
+        return $this->typeFactory->createObject(
             [
                 'name' => $reflector->getShortName(),
                 'fields' => $this->getFields()

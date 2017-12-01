@@ -11,6 +11,7 @@ use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator as Generator;
 use Magento\Framework\GraphQl\Type\Definition\InputObjectType;
 use Magento\GraphQl\Model\Type\HandlerInterface;
+use Magento\Framework\GraphQl\Type\TypeFactory;
 
 /**
  * Define ProductSort GraphQL type
@@ -33,15 +34,26 @@ class ProductSort implements HandlerInterface
     private $management;
 
     /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
      * @param Pool $typePool
      * @param Generator $typeGenerator
      * @param AttributeManagementInterface $management
+     * @param TypeFactory $typeFactory
      */
-    public function __construct(Pool $typePool, Generator $typeGenerator, AttributeManagementInterface $management)
-    {
+    public function __construct(
+        Pool $typePool,
+        Generator $typeGenerator,
+        AttributeManagementInterface $management,
+        TypeFactory $typeFactory
+    ) {
         $this->typePool = $typePool;
         $this->typeGenerator = $typeGenerator;
         $this->management = $management;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
@@ -50,7 +62,7 @@ class ProductSort implements HandlerInterface
     public function getType()
     {
         $reflector = new \ReflectionClass($this);
-        return new InputObjectType(
+        return $this->typeFactory->createInputObject(
             [
                 'name' => $reflector->getShortName(),
                 'fields' => $this->getFields(),

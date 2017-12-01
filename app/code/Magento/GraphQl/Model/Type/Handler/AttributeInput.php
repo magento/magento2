@@ -8,6 +8,7 @@ namespace Magento\GraphQl\Model\Type\Handler;
 
 use Magento\Framework\GraphQl\Type\Definition\InputObjectType;
 use Magento\GraphQl\Model\Type\HandlerInterface;
+use Magento\Framework\GraphQl\Type\TypeFactory;
 
 /**
  * Defines input type for attributes in ['attribute_code' => 'value', 'entity_type' => 'value'] format
@@ -20,11 +21,18 @@ class AttributeInput implements HandlerInterface
     private $typePool;
 
     /**
-     * @param Pool $typePool
+     * @var TypeFactory
      */
-    public function __construct(Pool $typePool)
+    private $typeFactory;
+
+    /**
+     * @param Pool $typePool
+     * @param TypeFactory $typeFactory
+     */
+    public function __construct(Pool $typePool, TypeFactory $typeFactory)
     {
         $this->typePool = $typePool;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
@@ -34,7 +42,7 @@ class AttributeInput implements HandlerInterface
     {
         $reflector = new \ReflectionClass($this);
 
-        return new InputObjectType(
+        return $this->typeFactory->createInputObject(
             [
                 'name' => $reflector->getShortName(),
                 'fields' => [

@@ -8,17 +8,28 @@ namespace Magento\GraphQl\Model\Type\Handler;
 
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use Magento\GraphQl\Model\Type\HandlerFactory;
-use Magento\Framework\GraphQl\Type\Definition\ScalarTypeFactory;
+use Magento\Framework\GraphQl\Type\TypeFactory;
 
 /**
  * Retrieve type's registered in pool, or generate types yet to be instantiated and register them
  */
 class Pool
 {
+    const STRING = 'String';
+    const INT = 'Int';
+    const BOOLEAN = 'Boolean';
+    const FLOAT = 'Float';
+    const ID = 'ID';
+
     /**
      * @var HandlerFactory
      */
     private $typeHandlerFactory;
+
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
 
     /**
      * @var TypeInterface[]
@@ -27,19 +38,21 @@ class Pool
 
     /**
      * @param HandlerFactory $typeHandlerFactory
-     * @param ScalarTypeFactory $scalarTypeFactory
+     * @param TypeFactory $typeFactory
      */
     public function __construct(
         HandlerFactory $typeHandlerFactory,
-        ScalarTypeFactory $scalarTypeFactory
+        TypeFactory $typeFactory
     ) {
         $this->typeHandlerFactory = $typeHandlerFactory;
-        $this->scalarTypeFactory = $scalarTypeFactory;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
+     * Get a Type
+     *
      * @param string $typeName
-     * @return TypeInterface|\GraphQL\Type\Definition\Type
+     * @return TypeInterface
      * @throws \LogicException
      */
     public function getType(string $typeName)
@@ -48,8 +61,8 @@ class Pool
             return $this->typeRegistry[$typeName];
         }
 
-        if ($this->scalarTypeFactory->typeExists($typeName)) {
-            $this->typeRegistry[$typeName] = $this->scalarTypeFactory->create($typeName);
+        if ($this->isScalar($typeName)) {
+            $this->typeRegistry[$typeName] = $this->typeFactory->createScalar($typeName);
             return $this->typeRegistry[$typeName];
         } else {
             return $this->getComplexType($typeName);
@@ -82,7 +95,7 @@ class Pool
     /**
      * Register type to Pool's type registry.
      *
-     * @param TypeInterface $type
+     * @param TypeInterface|\GraphQL\Type\Definition\Type $type
      * @throws \LogicException
      */
     public function registerType(TypeInterface $type)
@@ -102,5 +115,22 @@ class Pool
     public function isTypeRegistered(string $typeName)
     {
         return isset($this->typeRegistry[$typeName]);
+    }
+
+    /**
+     * If type is a scalar type
+     *
+     * @param string $typeName
+     * @return bool
+     */
+    private function isScalar(string $typeName)
+    {
+        $type = new \ReflectionClass(self::class);
+        $constants =  $type->getConstants();
+        if (in_array($typeName, $constants)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
