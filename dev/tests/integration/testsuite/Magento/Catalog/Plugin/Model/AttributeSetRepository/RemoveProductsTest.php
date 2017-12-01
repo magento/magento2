@@ -7,6 +7,8 @@
 namespace Magento\CatalogUrlRewrite\Plugin\Eav\AttributeSetRepository;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Model\Entity\Attribute\Set;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -15,25 +17,25 @@ use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Provide tests for RemoveProductUrlRewrite plugin.
+ * Provide tests for RemoveProducts plugin.
  * @magentoAppArea adminhtml
  */
-class RemoveProductUrlRewriteTest extends TestCase
+class RemoveProductsTest extends TestCase
 {
     /**
      * @return void
      */
-    public function testRemoveProductUrlRewriteIsRegistered()
+    public function testRemoveProductsIsRegistered()
     {
         $pluginInfo = Bootstrap::getObjectManager()->get(PluginList::class)
             ->get(AttributeSetRepositoryInterface::class, []);
-        self::assertSame(RemoveProductUrlRewrite::class, $pluginInfo['attribute_set_delete_plugin']['instance']);
+        self::assertSame(RemoveProducts::class, $pluginInfo['remove_products']['instance']);
     }
 
     /**
-     * Test url rewrite will be removed for product with given attribute set, if one will be deleted.
+     * Test related to given attribute set products will be removed, if attribute set will be deleted.
      *
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/attribute_set_with_product.php
+     * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_product.php
      * @magentoDbIsolation enabled
      */
     public function testAroundDelete()
@@ -44,19 +46,25 @@ class RemoveProductUrlRewriteTest extends TestCase
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get('simple');
 
+        $productCollection = Bootstrap::getObjectManager()->get(CollectionFactory::class)->create();
+        $productCollection->addIdFilter($product->getId());
         $urlRewriteCollection = Bootstrap::getObjectManager()->get(UrlRewriteCollectionFactory::class)->create();
         $urlRewriteCollection->addFieldToFilter('entity_type', 'product');
         $urlRewriteCollection->addFieldToFilter('entity_id', $product->getId());
 
         self::assertSame(1, $urlRewriteCollection->getSize());
+        self::assertSame(1, $productCollection->getSize());
 
         $attributeSetRepository = Bootstrap::getObjectManager()->get(AttributeSetRepositoryInterface::class);
         $attributeSetRepository->deleteById($attributeSet->getAttributeSetId());
 
+        $productCollection = Bootstrap::getObjectManager()->get(CollectionFactory::class)->create();
+        $productCollection->addIdFilter($product->getId());
         $urlRewriteCollection = Bootstrap::getObjectManager()->get(UrlRewriteCollectionFactory::class)->create();
         $urlRewriteCollection->addFieldToFilter('entity_type', 'product');
         $urlRewriteCollection->addFieldToFilter('entity_id', $product->getId());
 
         self::assertSame(0, $urlRewriteCollection->getSize());
+        self::assertSame(0, $productCollection->getSize());
     }
 }
