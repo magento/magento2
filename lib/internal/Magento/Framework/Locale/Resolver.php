@@ -48,6 +48,11 @@ class Resolver implements ResolverInterface
     protected $emulatedLocales = [];
 
     /**
+     * @var string
+     */
+    private $defaultLocalePath;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param string $defaultLocalePath
      * @param string $scopeType
