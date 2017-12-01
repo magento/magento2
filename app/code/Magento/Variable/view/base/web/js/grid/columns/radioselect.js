@@ -6,13 +6,13 @@
 define([
     'underscore',
     'mage/translate',
-    './column'
+    'Magento_Ui/js/grid/columns/column'
 ], function (_, $t, Column) {
     'use strict';
 
     return Column.extend({
         defaults: {
-            bodyTmpl: 'ui/grid/cells/radioselect',
+            bodyTmpl: 'Magento_Variable/grid/cells/radioselect',
             draggable: false,
             sortable: false,
             selectedVariableCode: null,
