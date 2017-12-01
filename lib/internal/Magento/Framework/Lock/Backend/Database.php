@@ -28,6 +28,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @param string $name lock name
      * @param int $timeout How long to wait lock acquisition in seconds, negative value means infinite timeout
      * @return bool
+     * @throws InputException
      */
     public function setLock(string $name, int $timeout = -1): bool
     {
@@ -42,6 +43,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      *
      * @param string $name lock name
      * @return bool
+     * @throws InputException
      */
     public function releaseLock(string $name): bool
     {
@@ -55,6 +57,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      *
      * @param string $name lock name
      * @return bool
+     * @throws InputException
      */
     public function isLocked(string $name): bool
     {
