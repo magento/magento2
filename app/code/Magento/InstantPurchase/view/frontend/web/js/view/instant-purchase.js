@@ -34,7 +34,7 @@ define([
                 shippingAddressTitle: $t('Shipping Address'),
                 billingAddressTitle: $t('Billing Address'),
                 paymentMethodTitle: $t('Payment Method'),
-                shippingMethodTitle: $t('Shipping Address')
+                shippingMethodTitle: $t('Shipping Method')
             }
         },
 
