@@ -95,7 +95,7 @@ class BundleOptions
      */
     public function getOptionSelectionAmount(
         \Magento\Framework\Pricing\SaleableInterface $bundleProduct,
-        \Magento\Bundle\Model\Selection $selection,
+        $selection,
         bool $useRegularPrice = false
     ) {
         $cacheKey = implode(
