@@ -45,7 +45,7 @@ class Options
     {
         return $this->prepareNamePrefixSuffixOptions(
             $this->addressHelper->getConfig('prefix_options', $store),
-            $this->addressHelper->getConfig('prefix_show', $store) == 'opt'
+            $this->addressHelper->getConfig('prefix_show', $store) == NooptreqSource::VALUE_OPTIONAL
         );
     }
 
@@ -59,7 +59,7 @@ class Options
     {
         return $this->prepareNamePrefixSuffixOptions(
             $this->addressHelper->getConfig('suffix_options', $store),
-            $this->addressHelper->getConfig('suffix_show', $store) == 'opt'
+            $this->addressHelper->getConfig('suffix_show', $store) == NooptreqSource::VALUE_OPTIONAL
         );
     }
 
