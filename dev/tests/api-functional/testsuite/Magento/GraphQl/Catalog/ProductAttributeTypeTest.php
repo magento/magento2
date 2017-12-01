@@ -40,6 +40,10 @@ class ProductAttributeTypeTest extends GraphQlAbstract
       attribute_code:"disable_auto_group_change",
       entity_type:"customer"
     }
+    {
+      attribute_code:"special_price",
+      entity_type:"Magento\\\\Catalog\\\\Api\\\\Data\\\\ProductInterface"
+    }
   ]
   )
   {
@@ -53,9 +57,21 @@ class ProductAttributeTypeTest extends GraphQlAbstract
  }
 QUERY;
         $response = $this->graphQlQuery($query);
-        $expectedAttributeCodes = ['description', 'status', 'special_price', 'disable_auto_group_change'];
-        $entityType = ['catalog_product', 'catalog_product', 'catalog_product', 'customer'];
-        $attributeTypes = ['String', 'Int', 'Double','Boolean'];
+        $expectedAttributeCodes = [
+            'description',
+            'status',
+            'special_price',
+            'disable_auto_group_change',
+            'special_price'
+        ];
+        $entityType = [
+            'catalog_product',
+            'catalog_product',
+            'catalog_product',
+            'customer',
+            \Magento\Catalog\Api\Data\ProductInterface::class
+        ];
+        $attributeTypes = ['String', 'Int', 'Double','Boolean', 'Double'];
         $this->assertAttributeType($attributeTypes, $expectedAttributeCodes, $entityType, $response);
     }
 
