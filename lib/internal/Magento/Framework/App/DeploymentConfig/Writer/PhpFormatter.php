@@ -75,8 +75,8 @@ class PhpFormatter implements FormatterInterface
      * If variable to export is an array, format with the php >= 5.4 short array syntax. Otherwise use
      * default var_export functionality.
      *
-     * @param mixed   $var
-     * @param integer $depth
+     * @param mixed $var
+     * @param int $depth
      * @return string
      */
     private function varExportShort($var, int $depth = 0): string
