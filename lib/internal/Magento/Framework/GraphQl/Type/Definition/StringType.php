@@ -7,9 +7,9 @@
 namespace Magento\Framework\GraphQl\Type\Definition;
 
 /**
- * Marker interface for GraphQl Type
+ * Wrapper for GraphQl StringType
  */
-interface TypeInterface
+class StringType extends \GraphQL\Type\Definition\StringType implements TypeInterface
 {
 
 }

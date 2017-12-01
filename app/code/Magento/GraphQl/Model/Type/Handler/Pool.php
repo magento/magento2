@@ -6,9 +6,9 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use Magento\Framework\GraphQl\Type\Definition\ObjectType;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use Magento\GraphQl\Model\Type\HandlerFactory;
+use Magento\Framework\GraphQl\Type\Definition\ScalarTypeFactory;
 
 /**
  * Retrieve type's registered in pool, or generate types yet to be instantiated and register them
@@ -27,27 +27,33 @@ class Pool
 
     /**
      * @param HandlerFactory $typeHandlerFactory
+     * @param ScalarTypeFactory $scalarTypeFactory
      */
-    public function __construct(\Magento\GraphQl\Model\Type\HandlerFactory $typeHandlerFactory)
-    {
+    public function __construct(
+        HandlerFactory $typeHandlerFactory,
+        ScalarTypeFactory $scalarTypeFactory
+    ) {
         $this->typeHandlerFactory = $typeHandlerFactory;
+        $this->scalarTypeFactory = $scalarTypeFactory;
     }
 
     /**
      * @param string $typeName
-     * @return TypeInterface
+     * @return TypeInterface|\GraphQL\Type\Definition\Type
+     * @throws \LogicException
      */
     public function getType(string $typeName)
     {
-        if ($type = $this->mapScalarType($typeName)) {
-            return $type;
+        if (isset($this->typeRegistry[$typeName])) {
+            return $this->typeRegistry[$typeName];
         }
 
-        if ($type = $this->getComplexType($typeName)) {
-            return $type;
+        if ($this->scalarTypeFactory->typeExists($typeName)) {
+            $this->typeRegistry[$typeName] = $this->scalarTypeFactory->create($typeName);
+            return $this->typeRegistry[$typeName];
+        } else {
+            return $this->getComplexType($typeName);
         }
-
-        throw new \LogicException(sprintf('%s type could not be resolved or generated.', $typeName));
     }
 
     /**
@@ -96,29 +102,5 @@ class Pool
     public function isTypeRegistered(string $typeName)
     {
         return isset($this->typeRegistry[$typeName]);
-    }
-
-    /**
-     * Map type name to scalar GraphQL type, otherwise return null
-     *
-     * @param string $typeName
-     * @return TypeInterface|null
-     */
-    private function mapScalarType($typeName)
-    {
-        $scalarTypes = $this->getInternalTypes();
-
-        return isset($scalarTypes[$typeName]) ? $scalarTypes[$typeName] : null;
-    }
-
-    /**
-     * Get all internal scalar types
-     *
-     * @return array
-     */
-    private function getInternalTypes()
-    {
-        $object = new ObjectType(['name' => 'fake', 'fields' => 'fake']);
-        return $object->getInternalTypes();
     }
 }
