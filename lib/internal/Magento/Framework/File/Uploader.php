@@ -610,6 +610,18 @@ class Uploader
      *
      * @param string $fileName
      * @return string
+     * @deprecated
+     */
+    public static function getDispretionPath($fileName)
+    {
+        return self::getDispersionPath($fileName);
+    }
+
+    /**
+     * Get dispertion path
+     *
+     * @param string $fileName
+     * @return string
      */
     public static function getDispersionPath($fileName)
     {
