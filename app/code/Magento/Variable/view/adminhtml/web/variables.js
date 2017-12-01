@@ -162,7 +162,7 @@ define([
                 },
                 {
                     text: isEditMode ? $t('Save'): $t('Insert Variable'),
-                    'class': 'action-primary',
+                    'class': 'action-primary ' + (isEditMode ? '': 'disabled'),
                     'attr': {'id': 'insert_variable'},
 
                     /** Insert Variable */

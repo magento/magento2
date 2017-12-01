@@ -6,8 +6,9 @@
 define([
     'underscore',
     'mage/translate',
-    'Magento_Ui/js/grid/columns/column'
-], function (_, $t, Column) {
+    'Magento_Ui/js/grid/columns/column',
+    'jquery'
+], function (_, $t, Column, jQuery) {
     'use strict';
 
     return Column.extend({
@@ -23,6 +24,14 @@ define([
             this._super().observe(['selectedVariableCode']);
 
             return this;
+        },
+
+        selectVariable: function () {
+            if(jQuery('#insert_variable').hasClass('disabled')) {
+                jQuery('#insert_variable').removeClass('disabled');
+            }
+
+            return true;
         }
     });
 });
