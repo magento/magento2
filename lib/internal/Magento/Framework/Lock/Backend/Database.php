@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Framework\lock\Backend;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Phrase;
 
 class Database implements \Magento\Framework\Lock\LockManagerInterface
 {
@@ -29,6 +31,8 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function setLock(string $name, int $timeout = -1): bool
     {
+        $this->checkLength($name);
+
         return (bool)$this->resource->getConnection()->query("SELECT GET_LOCK(?, ?);", array((string)$name, (int)$timeout))
             ->fetchColumn();
     }
@@ -41,6 +45,8 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function releaseLock(string $name): bool
     {
+        $this->checkLength($name);
+
         return (bool)$this->resource->getConnection()->query("SELECT RELEASE_LOCK(?);", array((string)$name))->fetchColumn();
     }
 
@@ -52,6 +58,15 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function isLocked(string $name): bool
     {
+        $this->checkLength($name);
+
         return (bool)$this->resource->getConnection()->query("SELECT IS_USED_LOCK(?);", array((string)$name))->fetchColumn();
+    }
+
+    private function checkLength(string $name)
+    {
+        if (strlen($name) > 64) {
+            throw new InputException(new Phrase('Lock name too long'));
+        }
     }
 }
