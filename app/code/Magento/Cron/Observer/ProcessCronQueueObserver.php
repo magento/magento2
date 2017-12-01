@@ -227,6 +227,8 @@ class ProcessCronQueueObserver implements ObserverInterface
                 continue;
             }
 
+            // Note: we acquire the lock here instead of above, as it should be taken by standalone (child) process,
+            // not by the parent process.
             if (!$this->lockManager->setLock(self::LOCK_PREFIX . $groupId, self::LOCK_TIMEOUT)) {
                 $this->logger->warning(
                     sprintf(
@@ -277,7 +279,7 @@ class ProcessCronQueueObserver implements ObserverInterface
                 $schedule->save();
             }
 
-            $this->lockManager->releaseLock($groupId);
+            $this->lockManager->releaseLock(self::LOCK_PREFIX . $groupId);
         }
     }
 
