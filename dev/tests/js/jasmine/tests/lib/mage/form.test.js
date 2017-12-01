@@ -22,7 +22,7 @@ define([
                 elementId = '#' + id;
 
             beforeEach(function () {
-                var element = jQuery('<form id="' + id + '" action="action/url" method="GET" target="_self" ></form>');
+                var element = $('<form id="' + id + '" action="action/url" method="GET" target="_self" ></form>');
 
                 element.appendTo('body');
             });
