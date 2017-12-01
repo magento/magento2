@@ -143,6 +143,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $this->lockManagerMock = $this->getMockBuilder(\Magento\Framework\Lock\LockManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->lockManagerMock->method('acquireLock')->willReturn(true);
+        $this->lockManagerMock->method('releaseLock')->willReturn(true);
 
         $this->observer = $this->createMock(\Magento\Framework\Event\Observer::class);
 
@@ -823,22 +825,22 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $this->_config->expects($this->exactly(2))->method('getJobs')->will($this->returnValue($jobConfig));
 
         $this->_scopeConfig->expects($this->at(0))->method('getValue')
+            ->with($this->equalTo('system/cron/test_group/use_separate_process'))
+            ->will($this->returnValue(0));
+        $this->_scopeConfig->expects($this->at(1))->method('getValue')
             ->with($this->equalTo('system/cron/test_group/history_cleanup_every'))
             ->will($this->returnValue(10));
-        $this->_scopeConfig->expects($this->at(1))->method('getValue')
+        $this->_scopeConfig->expects($this->at(2))->method('getValue')
             ->with($this->equalTo('system/cron/test_group/schedule_lifetime'))
             ->will($this->returnValue(2*24*60));
-        $this->_scopeConfig->expects($this->at(2))->method('getValue')
+        $this->_scopeConfig->expects($this->at(3))->method('getValue')
             ->with($this->equalTo('system/cron/test_group/history_success_lifetime'))
             ->will($this->returnValue(0));
-        $this->_scopeConfig->expects($this->at(3))->method('getValue')
+        $this->_scopeConfig->expects($this->at(4))->method('getValue')
             ->with($this->equalTo('system/cron/test_group/history_failure_lifetime'))
             ->will($this->returnValue(0));
-        $this->_scopeConfig->expects($this->at(4))->method('getValue')
-            ->with($this->equalTo('system/cron/test_group/schedule_generate_every'))
-            ->will($this->returnValue(0));
         $this->_scopeConfig->expects($this->at(5))->method('getValue')
-            ->with($this->equalTo('system/cron/test_group/use_separate_process'))
+            ->with($this->equalTo('system/cron/test_group/schedule_generate_every'))
             ->will($this->returnValue(0));
 
         $this->_collection->expects($this->any())->method('addFieldToFilter')->will($this->returnSelf());
