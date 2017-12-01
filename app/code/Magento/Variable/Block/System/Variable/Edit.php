@@ -90,9 +90,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getFormHtml()
     {
-        $formHtml = parent::getFormHtml();
-
-        return $formHtml;
+        return parent::getFormHtml();
     }
 
     /**
