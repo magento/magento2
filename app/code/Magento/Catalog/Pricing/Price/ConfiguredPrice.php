@@ -58,7 +58,7 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
      *
      * @return float
      */
-    private function getOptionsValue(): float 
+    protected function getOptionsValue(): float
     {
         $product = $this->item->getProduct();
         $value = 0.;
