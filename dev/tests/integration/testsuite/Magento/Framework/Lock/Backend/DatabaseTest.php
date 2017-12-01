@@ -14,14 +14,14 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\Lock\Backend\Database
      */
-    protected $model;
+    private $model;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(\Magento\Framework\Lock\Backend\Database::class);

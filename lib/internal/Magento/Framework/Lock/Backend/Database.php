@@ -5,7 +5,7 @@
  */
 
 declare(strict_types=1);
-namespace Magento\Framework\lock\Backend;
+namespace Magento\Framework\Lock\Backend;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\InputException;
@@ -33,7 +33,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     {
         $this->checkLength($name);
 
-        return (bool)$this->resource->getConnection()->query("SELECT GET_LOCK(?, ?);", array((string)$name, (int)$timeout))
+        return (bool)$this->resource->getConnection()->query("SELECT GET_LOCK(?, ?);", [(string)$name, (int)$timeout])
             ->fetchColumn();
     }
 
@@ -47,7 +47,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     {
         $this->checkLength($name);
 
-        return (bool)$this->resource->getConnection()->query("SELECT RELEASE_LOCK(?);", array((string)$name))->fetchColumn();
+        return (bool)$this->resource->getConnection()->query("SELECT RELEASE_LOCK(?);", [(string)$name])->fetchColumn();
     }
 
     /**
@@ -60,9 +60,17 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     {
         $this->checkLength($name);
 
-        return (bool)$this->resource->getConnection()->query("SELECT IS_USED_LOCK(?);", array((string)$name))->fetchColumn();
+        return (bool)$this->resource->getConnection()->query("SELECT IS_USED_LOCK(?);", [(string)$name])->fetchColumn();
     }
 
+    /**
+     * Checks for max length of lock name
+     *
+     * Limited to 64 characters in MySQL.
+     *
+     * @param string $name
+     * @throws InputException
+     */
     private function checkLength(string $name)
     {
         if (strlen($name) > 64) {
