@@ -145,9 +145,9 @@
     </type>
     <preference for="Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface"
                 type="Magento\Customer\CustomerData\JsLayoutDataProviderPool"/>
-    <type name="Magento\Framework\Webapi\ServiceInputProcessor">
+    <type name="Magento\Eav\Model\TypeLocator\ServiceTypeToEntityTypeMap">
         <arguments>
-            <argument name="dataInterfaceToEntityTypeMap" xsi:type="array">
+            <argument name="serviceTypeToEntityTypeMap" xsi:type="array">
                 <item name="Magento\Customer\Api\Data\CustomerInterface" xsi:type="const">Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER</item>
                 <item name="Magento\Customer\Api\Data\AddressInterface" xsi:type="const">Magento\Customer\Api\AddressMetadataInterface::ENTITY_TYPE_ADDRESS</item>
             </argument>

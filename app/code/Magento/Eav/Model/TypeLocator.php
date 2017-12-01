@@ -7,6 +7,7 @@
 namespace Magento\Eav\Model;
 
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface;
 use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
 
 /**
@@ -20,14 +21,21 @@ class TypeLocator implements CustomAttributeTypeLocatorInterface
     private $typeLocators;
 
     /**
+     * @var ServiceTypeListInterface
+     */
+    private $serviceTypeList;
+
+    /**
      * Initialize TypeLocator
      *
      * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface[] $typeLocators
      */
     public function __construct(
+        ServiceTypeListInterface $serviceTypeList,
         array $typeLocators = []
     ) {
         $this->typeLocators = $typeLocators;
+        $this->serviceTypeList = $serviceTypeList;
     }
 
     /**
@@ -43,5 +51,13 @@ class TypeLocator implements CustomAttributeTypeLocatorInterface
         }
 
         return TypeProcessor::NORMALIZED_ANY_TYPE;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAllServiceDataInterfaces()
+    {
+        return $this->serviceTypeList->getDataTypes();
     }
 }

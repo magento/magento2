@@ -46,9 +46,9 @@
     <type name="Magento\Eav\Model\ResourceModel\Entity\Attribute">
         <plugin name="storeLabelCaching" type="Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute" />
     </type>
-    <type name="Magento\Framework\Webapi\ServiceInputProcessor">
+    <type name="Magento\Eav\Model\TypeLocator\ServiceTypeToEntityTypeMap">
         <arguments>
-            <argument name="dataInterfaceToEntityTypeMap" xsi:type="array" />
+            <argument name="serviceTypeToEntityTypeMap" xsi:type="array" />
         </arguments>
     </type>
     <type name="Magento\Eav\Model\TypeLocator">
@@ -56,6 +56,7 @@
             <argument name="typeLocators" xsi:type="array">
                 <item name="simpleType" sortOrder="50" xsi:type="object">Magento\Eav\Model\TypeLocator\SimpleType</item>
                 <item name="complexType" sortOrder="10" xsi:type="object">Magento\Eav\Model\TypeLocator\ComplexType</item>
+                <item name="serviceClassType" sortOrder="0" xsi:type="object">Magento\Eav\Model\TypeLocator\ServiceClassLocator</item>
             </argument>
         </arguments>
     </type>
