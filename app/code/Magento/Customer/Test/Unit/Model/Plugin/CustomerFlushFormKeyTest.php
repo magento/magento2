@@ -9,14 +9,13 @@ use Magento\Customer\Model\Plugin\CustomerFlushFormKey;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\PageCache\FormKey as CookieFormKey;
 use Magento\Framework\Data\Form\FormKey as DataFormKey;
+use Magento\Framework\Event\Observer;
 use Magento\PageCache\Observer\FlushFormKey;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class CustomerFlushFormKeyTest extends TestCase
 {
-    const CLOSURE_VALUE = 'CLOSURE';
-
     /**
      * @var CookieFormKey | MockObject
      */
@@ -31,11 +30,6 @@ class CustomerFlushFormKeyTest extends TestCase
      * @var DataFormKey | MockObject
      */
     private $dataFormKey;
-
-    /**
-     * @var \Closure
-     */
-    private $closure;
 
     protected function setUp()
     {
@@ -55,10 +49,6 @@ class CustomerFlushFormKeyTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getBeforeRequestParams', 'setBeforeRequestParams'])
             ->getMock();
-
-        $this->closure = function () {
-            return static::CLOSURE_VALUE;
-        };
     }
 
     /**
@@ -74,6 +64,7 @@ class CustomerFlushFormKeyTest extends TestCase
         $getFormKeyTimes,
         $setBeforeParamsTimes
     ) {
+        $observerDto = new Observer();
         $observer = new FlushFormKey($this->cookieFormKey, $this->dataFormKey);
         $plugin = new CustomerFlushFormKey($this->customerSession, $this->dataFormKey);
 
@@ -91,7 +82,11 @@ class CustomerFlushFormKeyTest extends TestCase
             ->method('setBeforeRequestParams')
             ->with($beforeParams);
 
-        $plugin->aroundExecute($observer, $this->closure, $observer);
+        $proceed = function ($observerDto) use ($observer) {
+            return $observer->execute($observerDto);
+        };
+
+        $plugin->aroundExecute($observer, $proceed, $observerDto);
     }
 
     /**
