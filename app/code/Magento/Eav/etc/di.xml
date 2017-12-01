@@ -46,7 +46,7 @@
     <type name="Magento\Eav\Model\ResourceModel\Entity\Attribute">
         <plugin name="storeLabelCaching" type="Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute" />
     </type>
-    <type name="Magento\Eav\Model\TypeLocator\ServiceTypeToEntityTypeMap">
+    <type name="Magento\Framework\Webapi\ServiceTypeToEntityTypeMap">
         <arguments>
             <argument name="serviceTypeToEntityTypeMap" xsi:type="array" />
         </arguments>

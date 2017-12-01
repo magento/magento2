@@ -38,7 +38,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Eav\Model\TypeLocator\ServiceTypeToEntityTypeMap">
+    <type name="Magento\Framework\Webapi\ServiceTypeToEntityTypeMap">
         <arguments>
             <argument name="serviceTypeToEntityTypeMap" xsi:type="array">
                 <item name="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" xsi:type="string">1</item>

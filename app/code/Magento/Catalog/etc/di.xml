@@ -672,7 +672,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Eav\Model\TypeLocator\ServiceTypeToEntityTypeMap">
+    <type name="Magento\Framework\Webapi\ServiceTypeToEntityTypeMap">
         <arguments>
             <argument name="serviceTypeToEntityTypeMap" xsi:type="array">
                 <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="const">Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE</item>

@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Webapi;
 
-use Magento\Eav\Model\TypeLocator\ServiceTypeToEntityTypeMap;
+use Magento\Framework\Webapi\ServiceTypeToEntityTypeMap;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\SimpleDataObjectConverter;
@@ -232,11 +232,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
 
             list($customAttributeCode, $customAttributeValue) = $this->processCustomAttribute($customAttribute);
 
-            $map = $this->serviceTypeToEntityTypeMap->getMap();
-            if (isset($map[$dataObjectClassName])) {
+            $entityType = $this->serviceTypeToEntityTypeMap->getEntityType($dataObjectClassName);
+            if ($entityType) {
                 $type = $this->customAttributeTypeLocator->getType(
                     $customAttributeCode,
-                    $map[$dataObjectClassName]
+                    $entityType
                 );
             } else {
                 $type = TypeProcessor::ANY_TYPE;
