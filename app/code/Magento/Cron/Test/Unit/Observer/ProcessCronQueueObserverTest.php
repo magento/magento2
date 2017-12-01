@@ -85,6 +85,12 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     protected $appStateMock;
 
     /**
+     * @var \Magento\Framework\Lock\LockManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $lockManagerMock;
+
+
+    /**
      * @var \Magento\Cron\Model\ResourceModel\Schedule|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $scheduleResource;
@@ -135,6 +141,10 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->lockManagerMock = $this->getMockBuilder(\Magento\Framework\Lock\LockManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->observer = $this->createMock(\Magento\Framework\Event\Observer::class);
 
         $this->dateTimeMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
@@ -170,7 +180,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             $this->dateTimeMock,
             $phpExecutableFinderFactory,
             $this->loggerMock,
-            $this->appStateMock
+            $this->appStateMock,
+            $this->lockManagerMock
         );
     }
 
