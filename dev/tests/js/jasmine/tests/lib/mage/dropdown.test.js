@@ -270,9 +270,12 @@ define([
             jasmine.clock().uninstall();
         });
 
-        // Backend jquery-ui version has a diferent behavior on create that will add ui-dialog-titlebar anyway.
-        // This test is only valid with frontend's version
-        // @TODO: Re-design Jasmine settings to match a selective architecture for testing in order to split them.
+        /*
+         * jQuery ui version 1.9.2 belongs to the adminhtml.
+         *
+         * This test will fail on backend since backend's jquery.ui will
+         * add ui-dialog-titlebar class anyway on create.
+         */
         if ($.ui.version !== '1.9.2') {
             it('check if the title bar is prevented from being created', function () {
                 var dialog = $('<div/>'),
