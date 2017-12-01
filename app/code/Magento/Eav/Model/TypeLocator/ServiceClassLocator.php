@@ -62,13 +62,13 @@ class ServiceClassLocator implements CustomAttributeTypeLocatorInterface
     public function getType($attributeCode, $entityType)
     {
         $entityCode = $this->serviceTypeMap->getEntityType($entityType);
-        if (!$entityType) {
+        if (!$entityCode) {
             return TypeProcessor::NORMALIZED_ANY_TYPE;
         }
 
-        $type = $this->complexTypeLocator->getType($attributeCode, $map[$entityType]);
+        $type = $this->complexTypeLocator->getType($attributeCode, $entityCode);
         if ($type === TypeProcessor::NORMALIZED_ANY_TYPE) {
-            $type = $this->simpleTypeLocator->getType($attributeCode, $map[$entityType]);
+            $type = $this->simpleTypeLocator->getType($attributeCode, $entityCode);
         }
 
         return $type;
@@ -79,6 +79,6 @@ class ServiceClassLocator implements CustomAttributeTypeLocatorInterface
      */
     public function getAllServiceDataInterfaces()
     {
-        $this->complexTypeLocator->getDataTypes();
+        return $this->complexTypeLocator->getDataTypes();
     }
 }
