@@ -14,10 +14,10 @@
             <stories value="Create a Sales Rule By API"/>
         </annotations>
         <before>
-            <createData mergeKey="saleRule" entity="SimpleSalesRule" />
+            <createData stepKey="saleRule" entity="SimpleSalesRule" />
         </before>
         <test name="CreateSalesRuleByApiTest">
-            <!--see mergeKey="test" userInput="$$saleRule.store_labels[0][store_id]$$" selector="test"/-->
+            <!--see stepKey="test" userInput="$$saleRule.store_labels[0][store_id]$$" selector="test"/-->
         </test>
     </cest>
 </config>
