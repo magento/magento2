@@ -215,17 +215,17 @@ class Mode
     private function saveAppConfigs($mode)
     {
         $configs = $this->configProvider->getConfigs($this->getMode(), $mode);
-        foreach ($configs as $path => $value) {
-            $this->emulatedAreaProcessor->process(function () use ($path, $value) {
+        foreach ($configs as $path => $item) {
+            $this->emulatedAreaProcessor->process(function () use ($path, $item) {
                 $this->processorFacadeFactory->create()->process(
                     $path,
-                    $value,
+                    $item['value'],
                     ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                     null,
-                    true
+                    $item['lock']
                 );
             });
-            $this->output->writeln('Config "' . $path . ' = ' . $value . '" has been saved.');
+            $this->output->writeln('Config "' . $path . ' = ' . $item['value'] . '" has been saved.');
         }
     }
 }
