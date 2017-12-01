@@ -22,7 +22,7 @@ class RoboFile extends \Robo\Tasks
     {
         $this->_exec('cp -vn .env.example .env');
         $this->_exec('cp -vf codeception.dist.yml codeception.yml');
-        $this->_exec('cp -vf tests/functional.suite.dist.yml tests/functional.suite.yml');
+        $this->_exec('cp -vf tests'. DIRECTORY_SEPARATOR .'functional.suite.dist.yml tests'. DIRECTORY_SEPARATOR .'functional.suite.yml');
     }
 
     /**
@@ -34,7 +34,7 @@ class RoboFile extends \Robo\Tasks
     function buildProject()
     {
         $this->cloneFiles();
-        $this->_exec('./vendor/bin/codecept build');
+        $this->_exec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept build');
     }
 
     /**
@@ -78,7 +78,7 @@ class RoboFile extends \Robo\Tasks
      */
     function chrome()
     {
-        $this->_exec('./vendor/bin/codecept run functional --env chrome --skip-group skip');
+        $this->_exec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept run functional --env chrome --skip-group skip');
     }
 
     /**
@@ -88,7 +88,7 @@ class RoboFile extends \Robo\Tasks
      */
     function firefox()
     {
-        $this->_exec('./vendor/bin/codecept run functional --env firefox --skip-group skip');
+        $this->_exec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept run functional --env firefox --skip-group skip');
     }
 
     /**
@@ -98,7 +98,7 @@ class RoboFile extends \Robo\Tasks
      */
     function phantomjs()
     {
-        $this->_exec('./vendor/bin/codecept run functional --env phantomjs --skip-group skip');
+        $this->_exec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept run functional --env phantomjs --skip-group skip');
     }
 
     /**
@@ -108,7 +108,7 @@ class RoboFile extends \Robo\Tasks
      */
     function headless()
     {
-        $this->_exec('./vendor/bin/codecept run functional --env headless --skip-group skip');
+        $this->_exec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept run functional --env headless --skip-group skip');
     }
 
     /**
@@ -119,7 +119,7 @@ class RoboFile extends \Robo\Tasks
      */
     function group($args = '')
     {
-        $this->taskExec('./vendor/bin/codecept run functional --verbose --steps --env chrome --skip-group skip --group')->args($args)->run();
+        $this->taskExec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept run functional --verbose --steps --env chrome --skip-group skip --group')->args($args)->run();
     }
 
     /**
@@ -130,7 +130,7 @@ class RoboFile extends \Robo\Tasks
      */
     function folder($args = '')
     {
-        $this->taskExec('./vendor/bin/codecept run functional --env chrome')->args($args)->run();
+        $this->taskExec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept run functional --env chrome')->args($args)->run();
     }
 
     /**
@@ -140,7 +140,7 @@ class RoboFile extends \Robo\Tasks
      */
     function example()
     {
-        $this->_exec('./vendor/bin/codecept run --env chrome --group example --skip-group skip');
+        $this->_exec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept run --env chrome --group example --skip-group skip');
     }
 
     /**
@@ -150,7 +150,7 @@ class RoboFile extends \Robo\Tasks
      */
     function allure1Generate()
     {
-        return $this->_exec('allure generate tests/_output/allure-results/ -o tests/_output/allure-report/');
+        return $this->_exec('allure generate tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-results'. DIRECTORY_SEPARATOR .' -o tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
     }
 
     /**
@@ -160,7 +160,7 @@ class RoboFile extends \Robo\Tasks
      */
     function allure2Generate()
     {
-        return $this->_exec('allure generate tests/_output/allure-results/ --output tests/_output/allure-report/ --clean');
+        return $this->_exec('allure generate tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-results'. DIRECTORY_SEPARATOR .' --output tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .' --clean');
     }
 
     /**
@@ -170,7 +170,7 @@ class RoboFile extends \Robo\Tasks
      */
     function allure1Open()
     {
-        $this->_exec('allure report open --report-dir tests/_output/allure-report/');
+        $this->_exec('allure report open --report-dir tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
     }
 
     /**
@@ -180,7 +180,7 @@ class RoboFile extends \Robo\Tasks
      */
     function allure2Open()
     {
-        $this->_exec('allure open --port 0 tests/_output/allure-report/');
+        $this->_exec('allure open --port 0 tests'. DIRECTORY_SEPARATOR .'_output'. DIRECTORY_SEPARATOR .'allure-report'. DIRECTORY_SEPARATOR .'');
     }
 
     /**
