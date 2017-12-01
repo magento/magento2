@@ -1,20 +1,36 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\NewRelicReporting\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-
 use Magento\NewRelicReporting\Model\Apm\DeploymentsFactory;
 use Magento\NewRelicReporting\Model\ServiceShellUser;
 
 class DeployMarker extends Command
 {
+    /**
+     * @var DeploymentsFactory
+     */
     protected $deploymentsFactory;
+
+    /**
+     * @var ServiceShellUser
+     */
     protected $serviceShellUser;
 
+    /**
+     * Initialize dependencies.
+     *
+     * @param DeploymentsFactory $deploymentsFactory
+     * @param ServiceShellUser $serviceShellUser
+     * @param null $name
+     */
     public function __construct(
         DeploymentsFactory $deploymentsFactory,
         ServiceShellUser $serviceShellUser,
@@ -25,6 +41,9 @@ class DeployMarker extends Command
         parent::__construct($name);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this->setName("newrelic:create:deploy-marker");
@@ -47,6 +66,9 @@ class DeployMarker extends Command
         parent::configure();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->deploymentsFactory->create()->setDeployment(
