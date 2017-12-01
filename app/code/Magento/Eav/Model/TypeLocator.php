@@ -28,6 +28,7 @@ class TypeLocator implements CustomAttributeTypeLocatorInterface
     /**
      * Initialize TypeLocator
      *
+     * @param ServiceTypeListInterface $serviceTypeList
      * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface[] $typeLocators
      */
     public function __construct(

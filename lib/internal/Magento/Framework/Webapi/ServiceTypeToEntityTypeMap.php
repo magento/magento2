@@ -37,7 +37,7 @@ class ServiceTypeToEntityTypeMap
     public function getEntityType(string $serviceType)
     {
         if (isset($this->serviceTypeToEntityTypeMap[$serviceType])) {
-            return $this->serviceTypeToEntityTypeMap;
+            return $this->serviceTypeToEntityTypeMap[$serviceType];
         }
 
         return false;
