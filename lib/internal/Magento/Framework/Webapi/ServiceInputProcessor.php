@@ -73,7 +73,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param AttributeValueFactory $attributeValueFactory
      * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param MethodsMap $methodsMap
-     * @param array $serviceTypeToEntityTypeMap
+     * @param ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap
      */
     public function __construct(
         TypeProcessor $typeProcessor,
