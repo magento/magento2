@@ -61,6 +61,9 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     const LOCK_TIMEOUT = 5;
 
+    /**
+     * Static lock prefix for cron group locking
+     */
     const LOCK_PREFIX = 'CRON_GROUP_';
 
     /**
