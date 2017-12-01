@@ -11,6 +11,9 @@ namespace Magento\Framework\App\DeploymentConfig\Writer;
  */
 class PhpFormatter implements FormatterInterface
 {
+    /**
+     * 2 space indentation for array formatting
+     */
     const INDENT = '  ';
 
     /**
@@ -76,19 +79,20 @@ class PhpFormatter implements FormatterInterface
      * @param integer $depth
      * @return string
      */
-    private function varExportShort($var, $depth = 0)
+    private function varExportShort($var, int $depth = 0): string
     {
-        if (gettype($var) === 'array') {
-            $indexed = array_keys($var) === range(0, count($var) - 1);
-            $r = [];
-            foreach ($var as $key => $value) {
-                $r[] = str_repeat(self::INDENT, $depth)
-                    . ($indexed ? '' : $this->varExportShort($key) . ' => ')
-                    . $this->varExportShort($value, $depth + 1);
-            }
-            return sprintf("[\n%s\n%s]", implode(",\n", $r), str_repeat(self::INDENT, $depth - 1));
+        if (!is_array($var)) {
+            return var_export($var, true);
         }
 
-        return var_export($var, true);
+        $indexed = array_keys($var) === range(0, count($var) - 1);
+        $expanded = [];
+        foreach ($var as $key => $value) {
+            $expanded[] = str_repeat(self::INDENT, $depth)
+                . ($indexed ? '' : $this->varExportShort($key) . ' => ')
+                . $this->varExportShort($value, $depth + 1);
+        }
+
+        return sprintf("[\n%s\n%s]", implode(",\n", $expanded), str_repeat(self::INDENT, $depth - 1));
     }
 }
