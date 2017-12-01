@@ -7,7 +7,7 @@
 namespace Magento\Framework\GraphQl\Argument\Find;
 
 /**
- * Class that holds the find structure are Clause or Connective for easy parsing
+ * Class that holds the find structure are clause or connective for easy parsing
  */
 class FindArgumentValue implements FindArgumentValueInterface
 {

@@ -8,7 +8,6 @@ namespace Magento\GraphQl\Model;
 
 use GraphQl\Type\Definition\ResolveInfo;
 use Magento\Framework\GraphQl\Type\SchemaFactory;
-use Magento\Framework\GraphQl\Type\Schema;
 use Magento\GraphQl\Model\Type\Generator;
 use Magento\Framework\GraphQl\ArgumentFactory;
 use Magento\Framework\GraphQl\Type\TypeFactory;

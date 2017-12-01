@@ -92,7 +92,6 @@ class GraphQl implements FrontControllerInterface
             );
         } catch (\Exception $error) {
             $result['extensions']['exception'] = $this->graphQlError->create($error);
-            $this->response->setStatusCode(500);
         }
         $this->response->setBody($this->jsonSerializer->serialize($result))->setHeader(
             'Content-Type',

@@ -6,7 +6,7 @@
 namespace Magento\Framework\GraphQl\Type;
 
 /**
- * Factory for Schema
+ * Factory for @see Schema
  */
 class SchemaFactory
 {

@@ -102,7 +102,7 @@ class FilterGroupFactory
     }
 
     /**
-     * Process an AST Clause
+     * Process an AST clause
      *
      * @param Clause $clause
      * @return \Magento\Framework\Api\Search\FilterGroup

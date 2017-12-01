@@ -7,7 +7,7 @@
 namespace Magento\Framework\GraphQl\Argument\Find\Clause;
 
 /**
- * Class that hold relation between Entities through fields
+ * Class that hold relation between entities through fields
  */
 class ReferenceType
 {
@@ -42,6 +42,8 @@ class ReferenceType
     }
 
     /**
+     * Get the reference type
+     *
      * @return ReferenceType
      */
     public function getReferenceType()
@@ -50,6 +52,8 @@ class ReferenceType
     }
 
     /**
+     * Get the linked field as string
+     *
      * @return string
      */
     public function getLinkField()
@@ -58,6 +62,8 @@ class ReferenceType
     }
 
     /**
+     * Get the entity type
+     *
      * @return string
      */
     public function getEntityType()

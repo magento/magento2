@@ -6,7 +6,6 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use Magento\Framework\GraphQl\Type\Definition\EnumType;
 use Magento\GraphQl\Model\Type\Generator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;

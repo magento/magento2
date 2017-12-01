@@ -49,10 +49,10 @@ class Pool
     }
 
     /**
-     * Get a Type
+     * Get a type of @see TypeInterface or scalar native GraphQL
      *
      * @param string $typeName
-     * @return TypeInterface
+     * @return TypeInterface|\GraphQL\Type\Definition\Type
      * @throws \LogicException
      */
     public function getType(string $typeName)
@@ -73,7 +73,7 @@ class Pool
      * Retrieve type's configuration based off name
      *
      * @param string $typeName
-     * @return TypeInterface|null
+     * @return TypeInterface
      * @throws \LogicException Type Handler could not be found, and type does not exist in registry
      */
     public function getComplexType(string $typeName)

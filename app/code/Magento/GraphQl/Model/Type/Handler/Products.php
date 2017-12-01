@@ -6,9 +6,6 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use Magento\Framework\GraphQl\Type\Definition\ListOfType;
-use Magento\Framework\GraphQl\Type\Definition\Type;
-use Magento\Framework\GraphQl\Type\Definition\ObjectType;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
 
@@ -54,7 +51,7 @@ class Products implements HandlerInterface
     /**
      * Retrieve the result fields
      *
-     * @return Type[]
+     * @return array
      */
     private function getFields()
     {

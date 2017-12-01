@@ -9,7 +9,7 @@ namespace Magento\Framework\GraphQl\Argument\SearchCriteria;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory class for the creation of argument appliers classes used in search criteria
+ * Factory class for the creation of @see ArgumentApplierInterface classes used in search criteria
  */
 class ArgumentApplierFactory
 {

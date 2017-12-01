@@ -8,7 +8,7 @@ namespace Magento\Framework\GraphQl\Argument\Find\Clause;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory for ReferenceType
+ * Factory for @see ReferenceType
  */
 class ReferenceTypeFactory
 {

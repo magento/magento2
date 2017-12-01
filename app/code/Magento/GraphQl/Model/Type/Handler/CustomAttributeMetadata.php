@@ -6,10 +6,9 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use Magento\Framework\GraphQl\Type\Definition\ListOfType;
-use Magento\Framework\GraphQl\Type\Definition\ObjectType;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 
 /**
  * Defines type information for custom attribute metadata
@@ -54,7 +53,7 @@ class CustomAttributeMetadata implements HandlerInterface
     /**
      * Get and register array of fields for CustomAttributeMetadata type
      *
-     * @return array
+     * @return TypeInterface[]
      */
     private function getFields(): array
     {

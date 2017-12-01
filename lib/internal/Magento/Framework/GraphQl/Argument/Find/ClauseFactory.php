@@ -9,7 +9,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\GraphQl\Argument\Find\Clause\ReferenceType;
 
 /**
- * Factory for Clause Class
+ * Factory for the @see Clause class
  */
 class ClauseFactory
 {
