@@ -61,6 +61,8 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     const LOCK_TIMEOUT = 5;
 
+    const LOCK_PREFIX = 'CRON_GROUP_';
+
     /**
      * @var \Magento\Cron\Model\ResourceModel\Schedule\Collection
      */
@@ -222,7 +224,7 @@ class ProcessCronQueueObserver implements ObserverInterface
                 continue;
             }
 
-            if (!$this->lockManager->setLock($groupId, self::LOCK_TIMEOUT)) {
+            if (!$this->lockManager->setLock(self::LOCK_PREFIX . $groupId, self::LOCK_TIMEOUT)) {
                 $this->logger->warning(
                     sprintf(
                         "Could not acquire lock for cron group: %s, skipping run",
