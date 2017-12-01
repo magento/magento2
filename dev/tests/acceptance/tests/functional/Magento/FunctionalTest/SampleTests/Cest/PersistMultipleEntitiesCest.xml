@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="PersistMultipleEntitiesCest">
+        <before>
+            <createData entity="simplesubcategory" mergeKey="simplecategory"/>
+            <createData entity="simpleproduct" mergeKey="simpleproduct1">
+                <required-entity createDataKey="simplecategory"/>
+            </createData>
+            <createData entity="simpleproduct" mergeKey="simpleproduct2">
+                <required-entity createDataKey="categoryLink"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleproduct1" mergeKey="deleteProduct1"/>
+            <deleteData createDataKey="simpleproduct2" mergeKey="deleteProduct2"/>
+            <deleteData createDataKey="simplecategory" mergeKey="deleteCategory"/>
+        </after>
+        <test name="PersistMultipleEntitiesTest">
+            <annotations>
+                <group value="skip"/>
+            </annotations>
+            <amOnPage mergeKey="s11" url="/$$simplecategory.name$$.html" />
+            <waitForPageLoad mergeKey="s33"/>
+            <see mergeKey="s35" selector="{{StorefrontCategoryMainSection.productCount}}" userInput="2"/>
+        </test>
+    </cest>
+</config>
