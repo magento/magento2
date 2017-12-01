@@ -24,14 +24,34 @@ class Config
     protected $_url;
 
     /**
-     * Constructor
+     * @var \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
+     * @var \Magento\Variable\Model\Source\Variables
+     */
+    private $storesVariables;
+
+    /**
+     * Config constructor.
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Backend\Model\UrlInterface $url
+     * @param \Magento\Variable\Model\Variable $variable
+     * @param \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory
+     * @param \Magento\Variable\Model\Source\Variables $storesVariables
+     * @param \Magento\Framework\Serialize\Serializer\Json $encoder
      */
     public function __construct(
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Backend\Model\UrlInterface $url
+        \Magento\Backend\Model\UrlInterface $url,
+        \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory,
+        \Magento\Variable\Model\Source\Variables $storesVariables,
+        \Magento\Framework\Serialize\Serializer\Json $encoder
     ) {
+        $this->collectionFactory = $collectionFactory;
+        $this->storesVariables = $storesVariables;
+        $this->encoder = $encoder;
         $this->_assetRepo = $assetRepo;
         $this->_url = $url;
     }
@@ -58,7 +78,7 @@ class Config
                 'options' => [
                     'title' => __('Insert Variable...'),
                     'url' => $this->getVariablesWysiwygActionUrl(),
-                    'variablesUrl' => $this->getVariablesWysiwygDataUrl(),
+                    'variable_placeholders' => $this->getVariablesWysiwygDataUrl(),
                     'onclick' => $onclickParts,
                     'class' => 'add-variable plugin',
                 ],
@@ -94,11 +114,55 @@ class Config
         );
     }
 
+
+    /**
+     * Prepare default variables
+     *
+     * @return array
+     */
+    private function getDefaultVariables()
+    {
+        $variables = [];
+        foreach ($this->storesVariables->getData() as $variable) {
+            $variables[$variable['value']] = [
+                'code' => $variable['value'],
+                'variable_name' => $variable['label'],
+                'variable_type' => \Magento\Variable\Model\Source\Variables::DEFAULT_VARIABLE_TYPE
+            ];
+        }
+
+        return $variables;
+    }
+
+    /**
+     * Prepare custom variables
+     *
+     * @return array
+     */
+    private function getCustomVariables()
+    {
+        $customVariables = $this->collectionFactory->create();
+
+        $variables = [];
+        foreach ($customVariables->getData() as $variable) {
+            $variables[$variable['code']] = [
+                'code' => $variable['code'],
+                'variable_name' => $variable['name'],
+                'variable_type' => 'custom'
+            ];
+        }
+
+        return $variables;
+    }
     /**
      * @return string
      */
-    public function getVariablesWysiwygDataUrl()
+    private function getVariablesWysiwygDataUrl()
     {
-        return $this->_url->getUrl('adminhtml/system_variable/wysiwygPlugin');
+        $variablesData = array_merge(
+            $this->getCustomVariables(),
+            $this->getDefaultVariables()
+        );
+        return $this->encoder->serialize($variablesData);
     }
 }
