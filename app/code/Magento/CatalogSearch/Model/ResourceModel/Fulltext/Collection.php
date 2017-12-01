@@ -281,8 +281,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Create and add new filter to search criteria
+     *
      * @param string $field
      * @param mixed $value
+     * @return void
      */
     private function addFilterToSearchCriteria($field, $value)
     {
