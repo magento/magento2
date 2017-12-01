@@ -30,7 +30,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      * @return bool
      * @throws InputException
      */
-    public function setLock(string $name, int $timeout = -1): bool
+    public function acquireLock(string $name, int $timeout = -1): bool
     {
         $this->checkLength($name);
 

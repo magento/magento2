@@ -33,7 +33,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
         $this->assertFalse($this->model->isLocked($name));
 
-        $this->assertTrue($this->model->setLock($name));
+        $this->assertTrue($this->model->acquireLock($name));
         $this->assertTrue($this->model->isLocked($name));
 
         $this->assertTrue($this->model->releaseLock($name));

@@ -3,6 +3,6 @@
 Lock library provides mechanism to acquire Magento system-wide lock. Default implementation is based on MySQL locks, where any locks are automatically released on connection close.
 
 The library provides interface *LockManagerInterface* which provides following methods:
-* *setLock* - Sets a named lock
+* *acquireLock* - Acquires a named lock
 * *releaseLock* - Releases a named lock
 * *isLocked* - Tests if a named lock exists

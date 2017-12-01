@@ -22,7 +22,7 @@ interface LockManagerInterface
      * @return bool
      * @api
      */
-    public function setLock(string $name, int $timeout = -1): bool;
+    public function acquireLock(string $name, int $timeout = -1): bool;
 
     /**
      * Releases a lock
