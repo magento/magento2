@@ -97,6 +97,14 @@ class ComplexType implements ServiceTypeListInterface, CustomAttributeTypeLocato
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getAllServiceDataInterfaces()
+    {
+        return $this->getDataTypes();
+    }
+
+    /**
      * @return array [['backend model' => 'simple or complex type'], ..]
      */
     private function getAttributeBackendModelToTypeMapping()
