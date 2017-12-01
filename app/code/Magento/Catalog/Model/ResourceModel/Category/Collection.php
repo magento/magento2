@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Category resource collection
@@ -57,6 +58,58 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @var boolean
      */
     protected $_loadWithProductCount = false;
+
+    /**
+     * Core store config
+     *
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+    /**
+     * Constructor
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     */
+    public function __construct(
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\App\ResourceConnection $resource,
+        \Magento\Eav\Model\EntityFactory $eavEntityFactory,
+        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
+        \Magento\Framework\Validator\UniversalFactory $universalFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+    ) {
+        parent::__construct(
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager,
+            $eavConfig,
+            $resource,
+            $eavEntityFactory,
+            $resourceHelper,
+            $universalFactory,
+            $storeManager,
+            $connection
+        );
+        $this->_scopeConfig = $scopeConfig;
+    }
 
     /**
      * Init collection and determine table names
@@ -401,6 +454,23 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     {
         $this->addFieldToFilter('path', ['neq' => '1']);
         $this->addLevelFilter(1);
+        return $this;
+    }
+
+    /**
+     * Add root category filter
+     *
+     * @return $this
+     */
+    public function addNavigationMaxDepthFilter()
+    {
+        $navigationMaxDepth = (int)$this->_scopeConfig->getValue(
+            'catalog/navigation/max_depth',
+            ScopeInterface::SCOPE_STORE
+        );
+        if ($navigationMaxDepth > 0) {
+            $this->addLevelFilter($navigationMaxDepth);
+        }
         return $this;
     }
 
