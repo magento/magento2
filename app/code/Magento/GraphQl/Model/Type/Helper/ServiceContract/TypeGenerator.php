@@ -6,14 +6,13 @@
 
 namespace Magento\GraphQl\Model\Type\Helper\ServiceContract;
 
-use Magento\Framework\GraphQl\Type\Definition\ListOfType;
-use Magento\Framework\GraphQl\Type\Definition\Type;
-use Magento\Framework\GraphQl\Type\Definition\ObjectType;
+use Magento\Framework\GraphQl\Type\Definition\InterfaceType;
 use Magento\GraphQl\Model\Type\Handler\Pool;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Webapi\Model\ServiceMetadata;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 
 /**
  * Translate web API service contract layer from array-style schema to GraphQL types
@@ -79,7 +78,7 @@ class TypeGenerator
      *
      * @param string $typeName
      * @param array $schema
-     * @return Type
+     * @return TypeInterface|\GraphQL\Type\Definition\Type
      */
     public function generate(
         string $typeName,
@@ -145,7 +144,7 @@ class TypeGenerator
      * @param array $schema
      * @param bool $skipField
      * @param string|null $parentField
-     * @return ObjectType|Type|mixed|null
+     * @return InterfaceType|\GraphQL\Type\Definition\Type|mixed|null
      */
     private function generateNestedTypes(
         string $typeName,

@@ -6,10 +6,8 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use Magento\Framework\GraphQl\Type\Definition\Type;
 use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator as Generator;
-use Magento\Framework\GraphQl\Type\Definition\InputObjectType;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
 
@@ -73,7 +71,7 @@ class ProductSort implements HandlerInterface
     /**
      * Retrieve fields
      *
-     * @return Type[]
+     * @return array
      */
     private function getFields()
     {

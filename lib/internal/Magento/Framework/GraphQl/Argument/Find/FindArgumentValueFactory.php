@@ -8,7 +8,7 @@ namespace Magento\Framework\GraphQl\Argument\Find;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory for FindArgumentValue class
+ * Factory for @see FindArgumentValue class
  */
 class FindArgumentValueFactory
 {

@@ -8,7 +8,7 @@ namespace Magento\Framework\GraphQl\Argument\Find;
 use Magento\Framework\GraphQl\Argument\Find\Clause\ReferenceType;
 
 /**
- * Class Clause refers to a clause in find argument.
+ * Class clause refers to a closure in find argument.
  *
  * Example: {sku: {eq: "product"}}
  */
@@ -83,7 +83,7 @@ class Clause
     }
 
     /**
-     * Get the Clause value
+     * Get the clause value
      *
      * @return string|array
      */

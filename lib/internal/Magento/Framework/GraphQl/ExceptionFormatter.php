@@ -17,7 +17,6 @@ class ExceptionFormatter
      * This method only exposes exception message when exception implements ClientAware interface
      * (or when debug flags are passed).
      *
-     * @api
      * @param \Throwable $exception
      * @param bool|int $debug
      * @param string $internalErrorMessage

@@ -8,7 +8,7 @@ namespace Magento\Framework\GraphQl\Argument\Find;
 /**
  * Class Represents logical connective whenever a condition will nest/branch.
  *
- * A clause can be branched by "and" or "or" Operator and has a list of conditions as sub clauses.
+ * A clause can be branched by "and" or "or" operator and has a list of conditions as sub clauses.
  */
 class Connective
 {
@@ -35,6 +35,8 @@ class Connective
     }
 
     /**
+     * Get operator
+     *
      * @return Operator
      */
     public function getOperator()
@@ -43,6 +45,8 @@ class Connective
     }
 
     /**
+     * Get condition
+     *
      * @return Connective[]|Clause[]
      */
     public function getConditions()

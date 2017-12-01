@@ -8,7 +8,7 @@ namespace Magento\Framework\GraphQl\Argument\Find;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory for Connective Class
+ * Factory for @see Connective class
  */
 class ConnectiveFactory
 {

@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Argument\ArgumentValueInterface;
 interface FindArgumentValueInterface extends ArgumentValueInterface
 {
     /**
-     * Return a structure as Connective or Clause that defines a find argument used for filtering
+     * Return a structure as connective or clause that defines a find argument used for filtering
      *
      * @return Clause|Connective
      */

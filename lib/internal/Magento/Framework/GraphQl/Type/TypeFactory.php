@@ -9,6 +9,9 @@ namespace Magento\Framework\GraphQl\Type;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use GraphQL\Type\Definition\Type;
 
+/**
+ * Factory for @see TypeInterface implementations
+ */
 class TypeFactory
 {
     /**
@@ -58,7 +61,7 @@ class TypeFactory
     }
 
     /**
-     * @param Type $definedType
+     * @param TypeInterface|Type $definedType
      * @return TypeInterface
      */
     public function createList(Type $definedType)
@@ -67,7 +70,7 @@ class TypeFactory
     }
 
     /**
-     * @param Type $definedType
+     * @param TypeInterface|Type $definedType
      * @return TypeInterface
      */
     public function createNonNull(Type $definedType)

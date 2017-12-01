@@ -6,8 +6,6 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use Magento\Framework\GraphQl\Type\Definition\InterfaceType;
-use Magento\Framework\GraphQl\Type\Definition\Type;
 use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
@@ -15,7 +13,7 @@ use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
 
 /**
- * Define Product's GraphQL type
+ * Define product's GraphQL type
  */
 class Product implements HandlerInterface
 {
@@ -92,7 +90,7 @@ class Product implements HandlerInterface
      * Retrieve Product base fields
      *
      * @param string $typeName
-     * @return Type[]
+     * @return array
      * @throws \LogicException Schema failed to generate from service contract type name
      */
     private function getFields(string $typeName)
