@@ -80,6 +80,9 @@ class SourceItemsConfigurationProcessor
                 /** @var SourceItemInterface $sourceItem */
                 $sourceItem = $this->sourceItemConfigurationFactory->create();
             }
+			if($sourceItemData['notify_stock_qty_use_default'] == 1) {
+				unset($sourceItemData['notify_stock_qty']);
+			}
 
             $sourceItemData[SourceItemInterface::SKU] = $sku;
             $this->dataObjectHelper->populateWithArray(

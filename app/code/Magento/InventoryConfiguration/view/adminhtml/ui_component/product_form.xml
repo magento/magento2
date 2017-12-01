@@ -12,6 +12,7 @@
                 <item name="config" xsi:type="array">
                     <item name="map" xsi:type="array">
                         <item name="notify_stock_qty" xsi:type="string">notify_stock_qty</item>
+                        <item name="notify_stock_qty_use_default" xsi:type="string">notify_stock_qty_use_default_value</item>
                     </item>
                     <item name="identificationDRProperty" xsi:type="string">source_id</item>
                 </item>
@@ -22,6 +23,16 @@
                         <dataType>text</dataType>
                         <dataScope>notify_stock_qty</dataScope>
                         <label translate="true">Notify Quantity</label>
+                        <imports>
+                            <link name="disabled">${$.parentName}.notify_stock_qty_use_default:checked</link>
+                        </imports>
+                    </settings>
+                </field>
+                <field name="notify_stock_qty_use_default" formElement="checkbox" sortOrder="46">
+                    <settings>
+                        <dataType>boolean</dataType>
+                        <dataScope>notify_stock_qty_use_default</dataScope>
+                        <label translate="true">Notify Quantity Use default</label>
                     </settings>
                 </field>
             </container>
