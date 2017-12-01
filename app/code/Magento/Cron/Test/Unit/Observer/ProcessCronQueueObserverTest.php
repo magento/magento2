@@ -89,7 +89,6 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
      */
     private $lockManagerMock;
 
-
     /**
      * @var \Magento\Cron\Model\ResourceModel\Schedule|\PHPUnit_Framework_MockObject_MockObject
      */
