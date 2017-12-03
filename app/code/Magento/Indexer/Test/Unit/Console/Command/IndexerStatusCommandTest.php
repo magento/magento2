@@ -108,9 +108,12 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
 
         $linesOutput = array_filter(explode(PHP_EOL, $commandTester->getDisplay()));
 
+        $spacer = '+----------------+------------------+-----------+-------------------------+---------------------+';
+
         $this->assertCount(8, $linesOutput, 'There should be 8 lines output. 3 Spacers, 1 header, 4 content.');
-        $this->assertEquals($linesOutput[0], $linesOutput[2], "Lines 0, 2, 7 should be spacer lines");
-        $this->assertEquals($linesOutput[2], $linesOutput[7], "Lines 0, 2, 6 should be spacer lines");
+        $this->assertEquals($linesOutput[0], $spacer, "Lines 0, 2, 7 should be spacer lines");
+        $this->assertEquals($linesOutput[2], $spacer, "Lines 0, 2, 7 should be spacer lines");
+        $this->assertEquals($linesOutput[7], $spacer, "Lines 0, 2, 7 should be spacer lines");
 
         $headerValues = array_values(array_filter(explode('|', $linesOutput[1])));
         $this->assertEquals('Title', trim($headerValues[0]));
