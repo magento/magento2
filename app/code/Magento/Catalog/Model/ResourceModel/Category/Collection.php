@@ -13,6 +13,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
@@ -80,6 +81,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
