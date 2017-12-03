@@ -88,8 +88,8 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
             }
 
             $indexerMocks[] = $indexerMock;
-
         }
+
         $this->initIndexerCollectionByItems($indexerMocks);
         $this->command = new IndexerStatusCommand($this->objectManagerFactory);
 
@@ -101,8 +101,7 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
                 ['helpers' => [$objectManager->getObject(TableHelper::class)]]
             )
         );
-
-
+        
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
 
