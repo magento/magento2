@@ -8,7 +8,7 @@ namespace Magento\Framework\Mview\View;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Phrase;
 
-class Changelog implements ChangelogInterface
+class Changelog implements ChangelogInterface, ChangelogCounterInterface
 {
     /**
      * Suffix for changelog table
@@ -132,7 +132,7 @@ class Changelog implements ChangelogInterface
      * @return \Magento\Framework\DB\Select
      * @throws ChangelogTableNotExistsException
      */
-    protected function getListSelect($fromVersionId, $toVersionId)
+    private function getListSelect($fromVersionId, $toVersionId)
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
         if (!$this->connection->isTableExists($changelogTableName)) {
