@@ -70,7 +70,7 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
      * @param Indexer\IndexerInterface $indexer
      * @return string
      */
-    protected function getStatus(Indexer\IndexerInterface $indexer)
+    private function getStatus(Indexer\IndexerInterface $indexer)
     {
         $status = 'unknown';
         switch ($indexer->getStatus()) {
@@ -91,7 +91,7 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
      * @param Mview\ViewInterface $view
      * @return string
      */
-    protected function getPendingCount(Mview\ViewInterface $view)
+    private function getPendingCount(Mview\ViewInterface $view)
     {
         $changelog = $view->getChangelog();
 
