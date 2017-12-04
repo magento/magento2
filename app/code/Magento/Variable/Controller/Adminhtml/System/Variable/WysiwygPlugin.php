@@ -7,6 +7,10 @@
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Variable\Model\ResourceModel\Variable\CollectionFactory;
+use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Ui\Component\VariablesDataProvider;
 
 /**
@@ -18,7 +22,7 @@ use Magento\Variable\Ui\Component\VariablesDataProvider;
 class WysiwygPlugin extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory
+     * @var CollectionFactory
      */
     private $collectionFactory;
     /**
@@ -26,10 +30,18 @@ class WysiwygPlugin extends \Magento\Backend\App\Action
      */
     private $storesVariables;
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     private $resultJsonFactory;
 
+    /**
+     * WysiwygPlugin constructor.
+     *
+     * @param Action\Context $context
+     * @param CollectionFactory|null $collectionFactory
+     * @param Variables|null $storesVariables
+     * @param JsonFactory|null $resultJsonFactory
+     */
     public function __construct(
         Action\Context $context,
         \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory,
@@ -37,9 +49,9 @@ class WysiwygPlugin extends \Magento\Backend\App\Action
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context);
-        $this->collectionFactory = $collectionFactory;
-        $this->storesVariables = $storesVariables;
-        $this->resultJsonFactory = $resultJsonFactory;
+        $this->collectionFactory = $collectionFactory ?: ObjectManager::getInstance()->get(CollectionFactory::class);
+        $this->storesVariables = $storesVariables ?: ObjectManager::getInstance()->get(Variables::class);
+        $this->resultJsonFactory = $resultJsonFactory ?: ObjectManager::getInstance()->get(JsonFactory::class);
     }
 
     /**
@@ -54,7 +66,7 @@ class WysiwygPlugin extends \Magento\Backend\App\Action
             $variables[$variable['value']] = [
                 'code' => $variable['value'],
                 'variable_name' => $variable['label'],
-                'variable_type' => \Magento\Email\Model\Source\Variables::DEFAULT_VARIABLE_TYPE
+                'variable_type' => \Magento\Variable\Model\Source\Variables::DEFAULT_VARIABLE_TYPE
             ];
         }
 
