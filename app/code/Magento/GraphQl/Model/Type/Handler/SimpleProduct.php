@@ -6,11 +6,11 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use GraphQL\Type\Definition\ObjectType;
 use Magento\GraphQl\Model\Type\HandlerInterface;
+use Magento\Framework\GraphQl\Type\TypeFactory;
 
 /**
- * Define SimpleProduct's GraphQL type
+ * Define SimpleProduct GraphQL type
  */
 class SimpleProduct implements HandlerInterface
 {
@@ -20,11 +20,18 @@ class SimpleProduct implements HandlerInterface
     private $typePool;
 
     /**
-     * @param Pool $typePool
+     * @var TypeFactory
      */
-    public function __construct(Pool $typePool)
+    private $typeFactory;
+
+    /**
+     * @param Pool $typePool
+     * @param TypeFactory $typeFactory
+     */
+    public function __construct(Pool $typePool, TypeFactory $typeFactory)
     {
         $this->typePool = $typePool;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
@@ -36,7 +43,7 @@ class SimpleProduct implements HandlerInterface
         $fields = [];
         $interface = $this->typePool->getType('Product');
         $fields = array_merge($fields, $interface->config['fields']);
-        return new ObjectType(
+        return $this->typeFactory->createObject(
             [
                 'name' => $reflector->getShortName(),
                 'fields' => $fields,
