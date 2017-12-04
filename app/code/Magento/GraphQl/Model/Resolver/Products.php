@@ -7,6 +7,7 @@
 namespace Magento\GraphQl\Model\Resolver;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\GraphQl\Model\Resolver\Products\Product;
 use Magento\GraphQl\Model\ResolverInterface;
 use Magento\Framework\GraphQl\Argument\SearchCriteria\Builder;
 
@@ -26,15 +27,23 @@ class Products implements ResolverInterface
     private $searchCriteriaBuilder;
 
     /**
+     * @var Product
+     */
+    private $productResolver;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param Builder $searchCriteriaBuilder
+     * @param Product $productResolver
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        Builder $searchCriteriaBuilder
+        Builder $searchCriteriaBuilder,
+        Product $productResolver
     ) {
         $this->productRepository = $productRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->productResolver = $productResolver;
     }
 
     /**
@@ -42,15 +51,24 @@ class Products implements ResolverInterface
      */
     public function resolve(array $args)
     {
+        if (isset($args['sku']) && !empty($args['sku']->getValue())) {
+            $product = $this->productResolver->getProduct($args['sku']->getValue());
+            return [
+                'total_count' => 1,
+                'items' => [$product],
+                'page_info' => ['page_size' => 1, 'current_page' => 1]
+            ];
+        } else {
+            unset($args['sku']);
+        }
         $searchCriteria = $this->searchCriteriaBuilder->build($args);
         $itemsResults = $this->productRepository->getList($searchCriteria);
 
         $items = $itemsResults->getItems();
 
+        $products = [];
         foreach ($items as $item) {
-            foreach ($item->getCustomAttributes() as $attribute) {
-                $item->setData($attribute->getAttributeCode(), $attribute->getValue());
-            }
+            $products[] = $this->productResolver->getProduct($item->getSku());
         }
 
         $maxPages = ceil($itemsResults->getTotalCount() / $searchCriteria->getPageSize());
@@ -66,7 +84,7 @@ class Products implements ResolverInterface
 
         return [
             'total_count' => $itemsResults->getTotalCount(),
-            'items' => $items,
+            'items' => $products,
             'page_info' => [
                 'page_size' => $searchCriteria->getPageSize(),
                 'current_page' => $searchCriteria->getCurrentPage()

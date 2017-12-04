@@ -22,12 +22,6 @@
                 </item>
                 <item name="Query" xsi:type="array">
                     <item name="fields" xsi:type="array">
-                        <item name="product" xsi:type="array">
-                            <item name="type" xsi:type="string">Product</item>
-                            <item name="args" xsi:type="array">
-                                <item name="sku!" xsi:type="string">String</item>
-                            </item>
-                        </item>
                         <item name="products" xsi:type="array">
                             <item name="type" xsi:type="string">Products</item>
                             <item name="args" xsi:type="array">
@@ -35,6 +29,7 @@
                                 <item name="pageSize" xsi:type="string">Int</item>
                                 <item name="currentPage" xsi:type="string">Int</item>
                                 <item name="sort" xsi:type="string">ProductSort</item>
+                                <item name="sku" xsi:type="string">String</item>
                             </item>
                         </item>
                         <item name="customAttributeMetadata" xsi:type="array">
@@ -60,6 +55,9 @@
                     </item>
                     <item name="currentPage" xsi:type="array">
                         <item name="defaultValue" xsi:type="string">1</item>
+                    </item>
+                    <item name="sku" xsi:type="array">
+                        <item name="defaultValue" xsi:type="string" />
                     </item>
                 </item>
             </argument>

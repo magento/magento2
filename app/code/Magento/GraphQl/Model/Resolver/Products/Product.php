@@ -4,19 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Resolver;
+namespace Magento\GraphQl\Model\Resolver\Products;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
-use Magento\GraphQl\Model\ResolverInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Product field resolver, used for GraphQL request processing.
  */
-class Product implements ResolverInterface
+class Product
 {
     /**
      * @var ProductRepositoryInterface
@@ -57,15 +56,14 @@ class Product implements ResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Resolve single product's data with sku
+     *
+     * @param string $sku
+     * @return array|null
      */
-    public function resolve(array $args)
+    public function resolve(string $sku)
     {
-        if (isset($args['sku'])) {
-            return $this->getProduct($args['sku']->getValue());
-        } elseif (isset($args['id'])) {
-            return $this->getProductById($args['id']->getValue());
-        }
+        return $this->getProduct($sku);
 
         throw new GraphQlInputException(__('Missing arguments for correct type resolution.'));
     }
@@ -79,7 +77,7 @@ class Product implements ResolverInterface
     public function getProduct(string $sku)
     {
         try {
-            $productObject = $this->productRepository->get($sku);
+            $productObject = $this->productRepository->get($sku, false, null, true);
         } catch (NoSuchEntityException $e) {
             // No error should be thrown, null result should be returned
             return null;
@@ -145,8 +143,8 @@ class Product implements ResolverInterface
         }
         $product = array_merge($product, $customAttributes);
         $product = array_merge($product, $product['product_links']);
-        $product['media_gallery_entries'] = $this
-            ->mediaGalleryResolver->getMediaGalleryEntries($productObject->getSku());
+        $product['media_gallery_entries']
+            = $this->mediaGalleryResolver->getMediaGalleryEntries($productObject->getSku());
 
         if (isset($product['configurable_product_links'])) {
             $product['configurable_product_links'] = $this
