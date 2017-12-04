@@ -6,13 +6,13 @@
 
 namespace Magento\GraphQl\Model\Type\Helper\ServiceContract;
 
-use GraphQL\Type\Definition\ListOfType;
-use GraphQL\Type\Definition\Type;
-use GraphQL\Type\Definition\ObjectType;
+use Magento\Framework\GraphQl\Type\Definition\InterfaceType;
 use Magento\GraphQl\Model\Type\Handler\Pool;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Webapi\Model\ServiceMetadata;
 use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 
 /**
  * Translate web API service contract layer from array-style schema to GraphQL types
@@ -40,22 +40,30 @@ class TypeGenerator
     private $simpleDataConverter;
 
     /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
      * @param Pool $typePool
      * @param TypeProcessor $typeProcessor
      * @param ServiceMetadata $metadata
      * @param SimpleDataObjectConverter $simpleDataConverter
+     * @param TypeFactory $typeFactory
      */
     public function __construct(
         Pool $typePool,
         TypeProcessor $typeProcessor,
         ServiceMetadata $metadata,
-        SimpleDataObjectConverter $simpleDataConverter
+        SimpleDataObjectConverter $simpleDataConverter,
+        TypeFactory $typeFactory
     ) {
         $this->typePool = $typePool;
         $this->typeProcessor = $typeProcessor;
         $metadata->getServicesConfig();
         $this->metadata = $metadata;
         $this->simpleDataConverter = $simpleDataConverter;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
@@ -70,7 +78,7 @@ class TypeGenerator
      *
      * @param string $typeName
      * @param array $schema
-     * @return Type
+     * @return TypeInterface|\GraphQL\Type\Definition\Type
      */
     public function generate(
         string $typeName,
@@ -136,7 +144,7 @@ class TypeGenerator
      * @param array $schema
      * @param bool $skipField
      * @param string|null $parentField
-     * @return ObjectType|Type|mixed|null
+     * @return InterfaceType|\GraphQL\Type\Definition\Type|mixed|null
      */
     private function generateNestedTypes(
         string $typeName,
@@ -170,7 +178,7 @@ class TypeGenerator
                         !$isAssociativeArray,
                         $field
                     );
-                    $generatedFields[$field] = ['type' => new ListOfType($convertedField)];
+                    $generatedFields[$field] = ['type' => $this->typeFactory->createList($convertedField)];
                 }
             } else {
                 if (strpos($typeName, $type) !== false) {
@@ -186,7 +194,7 @@ class TypeGenerator
         }
         $generatedType['fields'] = $this->processGeneratedFields($generatedFields, $callableFields);
 
-        return new ObjectType($generatedType);
+        return $this->typeFactory->createObject($generatedType);
     }
 
     /**
