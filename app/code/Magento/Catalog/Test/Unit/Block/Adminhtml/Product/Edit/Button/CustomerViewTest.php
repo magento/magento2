@@ -18,7 +18,7 @@ use Magento\Store\Model\Store\Interceptor;
 /**
  * Class CustomerViewTest
  */
-class CustomerViewTests extends \PHPUnit\Framework\TestCase
+class CustomerViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager
@@ -114,7 +114,7 @@ class CustomerViewTests extends \PHPUnit\Framework\TestCase
     /**
      * @param string $class
      *
-     * @return Generic
+     * @return CustomerView
      */
     protected function getModel($class = CustomerView::class)
     {
