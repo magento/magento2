@@ -33,11 +33,10 @@ class Config
      */
     private $storesVariables;
 
-    /**
+     /**
      * Config constructor.
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Backend\Model\UrlInterface $url
-     * @param \Magento\Variable\Model\Variable $variable
      * @param \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory
      * @param \Magento\Variable\Model\Source\Variables $storesVariables
      * @param \Magento\Framework\Serialize\Serializer\Json $encoder
@@ -78,7 +77,7 @@ class Config
                 'options' => [
                     'title' => __('Insert Variable...'),
                     'url' => $this->getVariablesWysiwygActionUrl(),
-                    'variable_placeholders' => $this->getVariablesWysiwygDataUrl(),
+                    'variable_placeholders' => $this->getVariablesWysiwygData(),
                     'onclick' => $onclickParts,
                     'class' => 'add-variable plugin',
                 ],
@@ -154,10 +153,13 @@ class Config
 
         return $variables;
     }
+
     /**
-     * @return string
+     * Return variable related wysiwyg data
+     *
+     * @return bool|string
      */
-    private function getVariablesWysiwygDataUrl()
+    private function getVariablesWysiwygData()
     {
         $variablesData = array_merge(
             $this->getCustomVariables(),
