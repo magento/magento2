@@ -96,8 +96,7 @@ class DataProvider implements DataProviderInterface
             $currencyRate = $store->getCurrentCurrencyRate() ? : 1;
             $valueExpr = new \Zend_Db_Expr('main_table.min_price * ' . $currencyRate);
             $table = $this->resource->getTableName('catalog_product_index_price');
-            $select->from(['main_table' => $table], null)
-                ->columns([BucketInterface::FIELD_VALUE => $valueExpr])
+            $select->from(['main_table' => $table], [BucketInterface::FIELD_VALUE => $valueExpr])
                 ->where('main_table.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
                 ->where('main_table.website_id = ?', $store->getWebsiteId());
         } else {
@@ -118,7 +117,7 @@ class DataProvider implements DataProviderInterface
                 ->where('stock_index.stock_status = ?', Stock::STOCK_IN_STOCK)
                 ->group(['main_table.entity_id', 'main_table.value']);
             $parentSelect = $this->getSelect();
-            $parentSelect->from(['main_table' => $subSelect], ['main_table.value']);
+            $parentSelect->from(['main_table' => $subSelect], [BucketInterface::FIELD_VALUE => 'main_table.value']);
             $select = $parentSelect;
         }
 

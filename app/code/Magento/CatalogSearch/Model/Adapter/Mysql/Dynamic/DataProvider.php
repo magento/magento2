@@ -133,7 +133,7 @@ class DataProvider implements DataProviderInterface
     ) {
         $select = $this->dataProvider->getDataSet($bucket, $dimensions, $entityStorage->getSource());
         $columns = array_column($select->getPart(Select::COLUMNS), 1, 2);
-        $valueColumn = (string) $columns['value'];
+        $valueColumn = (string) $columns[BucketInterface::FIELD_VALUE];
         $select->reset(Select::COLUMNS);
         $rangeExpr = new \Zend_Db_Expr(
             $this->connection->getIfNullSql(

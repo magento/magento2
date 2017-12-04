@@ -129,6 +129,18 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->method('escapeHtml')
             ->will($this->returnArgument(0));
 
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+            ->setMethods(['getCurrentCurrencyRate'])
+            ->getMockForAbstractClass();
+        $storeMock->expects($this->any())
+            ->method('getCurrentCurrencyRate')
+            ->willReturn(1);
+        $storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+            ->getMockForAbstractClass();
+        $storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn($storeMock);
+
         $this->attribute = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute')
             ->disableOriginalConstructor()
             ->setMethods(['getAttributeCode', 'getFrontend', 'getIsFilterable'])
@@ -142,6 +154,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
                 'itemDataBuilder' => $this->itemDataBuilder,
                 'filterItemFactory' => $this->filterItemFactory,
                 'escaper' => $escaper,
+                'storeManager' => $storeManagerMock,
             ]
         );
     }
