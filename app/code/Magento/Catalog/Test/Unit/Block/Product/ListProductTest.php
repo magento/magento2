@@ -179,7 +179,7 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($currentCategory));
 
         $this->assertEquals(
-            [$productTag, $categoryTag ],
+            [$categoryTag, $productTag],
             $this->block->getIdentities()
         );
     }
