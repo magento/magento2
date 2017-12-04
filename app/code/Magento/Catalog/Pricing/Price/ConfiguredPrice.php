@@ -9,6 +9,7 @@ namespace Magento\Catalog\Pricing\Price;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Configured price model
@@ -64,12 +65,30 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
     /**
      * Get value of configured options
      *
+     * @deprecated ConfiguredOptions::getItemOptionsValue is used instead
      * @return float
      */
     protected function getOptionsValue(): float
     {
+        $product = $this->item->getProduct();
+        $value = 0.;
         $basePrice = parent::getValue();
-        return $this->configuredOptions->getItemOptionsValue($basePrice, $this->item);
+        $optionIds = $this->item->getOptionByCode('option_ids');
+        if ($optionIds) {
+            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+                $option = $product->getOptionById($optionId);
+                if ($option) {
+                    $itemOption = $this->item->getOptionByCode('option_' . $option->getId());
+                    /** @var $group \Magento\Catalog\Model\Product\Option\Type\DefaultType */
+                    $group = $option->groupFactory($option->getType())
+                        ->setOption($option)
+                        ->setConfigurationItem($this->item)
+                        ->setConfigurationItemOption($itemOption);
+                    $value += $group->getOptionPrice($itemOption->getValue(), $basePrice);
+                }
+            }
+        }
+        return $value;
     }
 
     /**
@@ -79,6 +98,9 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
      */
     public function getValue()
     {
-        return $this->item ? parent::getValue() + $this->getOptionsValue() : parent::getValue();
+        $basePrice = parent::getValue();
+        return $this->item
+            ? $basePrice + $this->configuredOptions->getItemOptionsValue($basePrice, $this->item)
+            : $basePrice;
     }
 }
