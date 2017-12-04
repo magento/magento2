@@ -94,7 +94,7 @@ class BundleOptionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider getOptionsDataProvider
      */
-    public function testGetOptions(array $selectionCollection)
+    public function testGetOptions(string $selectionCollection)
     {
         $this->prepareOptionMocks($selectionCollection);
         $this->bundleOptions->getOptions($this->saleableItemMock);
