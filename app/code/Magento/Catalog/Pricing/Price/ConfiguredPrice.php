@@ -26,20 +26,28 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
     protected $item;
 
     /**
+     * @var ConfiguredOptions
+     */
+    private $configuredOptions;
+
+    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param ItemInterface $item
+     * @param ItemInterface|null $item
+     * @param ConfiguredOptions|null $configuredOptions
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        ItemInterface $item = null
+        ItemInterface $item = null,
+        ConfiguredOptions $configuredOptions = null
     ) {
         $this->item = $item;
+        $this->configuredOptions = $configuredOptions ?: ObjectManager::getInstance()->get(ConfiguredOptions::class);
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
     }
 
@@ -60,25 +68,8 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
      */
     protected function getOptionsValue(): float
     {
-        $product = $this->item->getProduct();
-        $value = 0.;
         $basePrice = parent::getValue();
-        $optionIds = $this->item->getOptionByCode('option_ids');
-        if ($optionIds) {
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
-                $option = $product->getOptionById($optionId);
-                if ($option) {
-                    $itemOption = $this->item->getOptionByCode('option_' . $option->getId());
-                    /** @var $group \Magento\Catalog\Model\Product\Option\Type\DefaultType */
-                    $group = $option->groupFactory($option->getType())
-                        ->setOption($option)
-                        ->setConfigurationItem($this->item)
-                        ->setConfigurationItemOption($itemOption);
-                    $value += $group->getOptionPrice($itemOption->getValue(), $basePrice);
-                }
-            }
-        }
-        return $value;
+        return $this->configuredOptions->getItemOptionsValue($basePrice, $this->item);
     }
 
     /**
