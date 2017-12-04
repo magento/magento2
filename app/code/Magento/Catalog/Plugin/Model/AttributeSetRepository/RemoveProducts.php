@@ -37,21 +37,20 @@ class RemoveProducts
      * Delete related to specific attribute set products, if attribute set was removed successfully.
      *
      * @param AttributeSetRepositoryInterface $subject
-     * @param \Closure $proceed
+     * @param bool $result
      * @param AttributeSetInterface $attributeSet
      * @return bool
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDelete(
+    public function afterDelete(
         AttributeSetRepositoryInterface $subject,
-        \Closure $proceed,
+        bool $result,
         AttributeSetInterface $attributeSet
     ) {
         /** @var Collection $productCollection */
         $productCollection = $this->collectionFactory->create();
         $productCollection->addFieldToFilter('attribute_set_id', ['eq' => $attributeSet->getId()]);
-        $result = $proceed($attributeSet);
         $productCollection->delete();
 
         return $result;

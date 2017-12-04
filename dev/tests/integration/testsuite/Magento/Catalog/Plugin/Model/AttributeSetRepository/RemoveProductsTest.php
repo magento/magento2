@@ -36,7 +36,7 @@ class RemoveProductsTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_product.php
      */
-    public function testAroundDelete()
+    public function testAfterDelete()
     {
         $attributeSet = Bootstrap::getObjectManager()->get(Set::class);
         $attributeSet->load('empty_attribute_set', 'attribute_set_name');

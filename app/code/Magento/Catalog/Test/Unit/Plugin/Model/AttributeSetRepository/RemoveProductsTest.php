@@ -50,7 +50,7 @@ class RemoveProductsTest extends TestCase
     /**
      * Test plugin will delete all related products for given attribute set.
      */
-    public function testAroundDelete()
+    public function testAfterDelete()
     {
         $attributeSetId = '1';
 
@@ -73,10 +73,6 @@ class RemoveProductsTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $proceed = function () {
-            return true;
-        };
-
         /** @var AttributeSetInterface|\PHPUnit_Framework_MockObject_MockObject $attributeSet */
         $attributeSet = $this->getMockBuilder(AttributeSetInterface::class)
             ->setMethods(['getId'])
@@ -86,6 +82,6 @@ class RemoveProductsTest extends TestCase
             ->method('getId')
             ->willReturn($attributeSetId);
 
-        $this->testSubject->aroundDelete($attributeSetRepository, $proceed, $attributeSet);
+        self::assertTrue($this->testSubject->afterDelete($attributeSetRepository, true, $attributeSet));
     }
 }
