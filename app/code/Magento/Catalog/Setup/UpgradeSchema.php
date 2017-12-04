@@ -714,11 +714,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function removeAttributeSetRelation(SchemaSetupInterface $setup)
     {
-        $productTable = $setup->getTable('catalog_product_entity');
-        $attributeSetTable = $setup->getTable('eav_attribute_set');
         $setup->getConnection()->dropForeignKey(
-            $productTable,
-            $setup->getFkName($productTable, 'attribute_set_id', $attributeSetTable, 'attribute_set_id')
+            $setup->getTable('catalog_product_entity'),
+            $setup->getFkName('catalog_product_entity', 'attribute_set_id', 'eav_attribute_set', 'attribute_set_id')
         );
     }
 }

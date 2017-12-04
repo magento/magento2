@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogUrlRewrite\Plugin\Eav\AttributeSetRepository;
+namespace Magento\Catalog\Plugin\Model\AttributeSetRepository;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Model\Entity\Attribute\Set;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -36,7 +35,6 @@ class RemoveProductsTest extends TestCase
      * Test related to given attribute set products will be removed, if attribute set will be deleted.
      *
      * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_product.php
-     * @magentoDbIsolation enabled
      */
     public function testAroundDelete()
     {
