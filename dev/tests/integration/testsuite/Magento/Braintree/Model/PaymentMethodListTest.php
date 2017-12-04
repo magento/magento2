@@ -64,8 +64,9 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
         $vaultPayments = $this->paymentMethodList->getActiveList($this->storeId);
 
         static::assertNotEmpty($vaultPayments);
-        static::assertCount(1, $vaultPayments);
-        $payment = array_pop($vaultPayments);
-        static::assertEquals(PayPalConfigProvider::PAYPAL_VAULT_CODE, $payment->getCode());
+        $paymentCodes = array_map(function ($payment) {
+            return $payment->getCode();
+        }, $vaultPayments);
+        static::assertContains(PayPalConfigProvider::PAYPAL_VAULT_CODE, $paymentCodes);
     }
 }
