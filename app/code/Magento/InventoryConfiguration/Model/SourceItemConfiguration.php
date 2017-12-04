@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Model;
 
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationExtensionInterface;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
@@ -79,7 +80,7 @@ class SourceItemConfiguration extends AbstractExtensibleModel implements SourceI
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(SourceItemExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(SourceItemConfigurationExtensionInterface $extensionAttributes)
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }

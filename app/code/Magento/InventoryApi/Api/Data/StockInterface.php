@@ -6,7 +6,6 @@
 namespace Magento\InventoryApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\InventoryApi\Api\Data\StockExtensionInterface;
 
 /**
  * Represents product aggregation among some different physical storages (in technical words, it is an index)
