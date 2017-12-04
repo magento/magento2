@@ -24,4 +24,6 @@ $searchCriteria = $searchCriteriaBuilder->addFilter(
     'in'
 )->create();
 $sourceItems = $sourceItemRepository->getList($searchCriteria)->getItems();
-$sourceItemsDelete->execute($sourceItems);
+if (!empty($sourceItems)) {
+    $sourceItemsDelete->execute($sourceItems);
+}

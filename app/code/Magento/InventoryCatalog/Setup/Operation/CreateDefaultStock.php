@@ -14,7 +14,7 @@ use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
 
 /**
- * Create default stock during install
+ * Create default stock during installation
  */
 class CreateDefaultStock
 {
