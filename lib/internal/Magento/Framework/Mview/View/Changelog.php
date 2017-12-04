@@ -127,12 +127,14 @@ class Changelog implements ChangelogInterface
     }
 
     /**
+     * Retrieve entity ids by range [$fromVersionId..$toVersionId]
+     *
      * @param int $fromVersionId
      * @param int $toVersionId
-     * @return \Magento\Framework\DB\Select
+     * @return int[]
      * @throws ChangelogTableNotExistsException
      */
-    private function getListSelect($fromVersionId, $toVersionId)
+    public function getList($fromVersionId, $toVersionId)
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
         if (!$this->connection->isTableExists($changelogTableName)) {
@@ -152,20 +154,6 @@ class Changelog implements ChangelogInterface
             (int)$toVersionId
         );
 
-        return $select;
-    }
-
-    /**
-     * Retrieve entity ids by range [$fromVersionId..$toVersionId]
-     *
-     * @param int $fromVersionId
-     * @param int $toVersionId
-     * @return int[]
-     * @throws ChangelogTableNotExistsException
-     */
-    public function getList($fromVersionId, $toVersionId)
-    {
-        $select = $this->getListSelect($fromVersionId, $toVersionId);
         return $this->connection->fetchCol($select);
     }
 
