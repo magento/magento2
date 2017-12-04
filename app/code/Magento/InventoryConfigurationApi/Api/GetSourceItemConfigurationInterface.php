@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventoryConfigurationApi\Api;
 
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 
 /**
- * Get the source configuration for a product.
+ * Get the source item configuration
+ * Firstly try to load Source Item configuration if configuration isn't exist then load global configuration value
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
@@ -17,11 +20,12 @@ use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 interface GetSourceItemConfigurationInterface
 {
     /**
-     * Get the source item configuration.
+     * Get the source item configuration
      *
-     * @param string $sourceId
+     * @param int $sourceId
      * @param string $sku
      * @return \Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function get(string $sourceId, string $sku): SourceItemConfigurationInterface;
+    public function execute(int $sourceId, string $sku): SourceItemConfigurationInterface;
 }

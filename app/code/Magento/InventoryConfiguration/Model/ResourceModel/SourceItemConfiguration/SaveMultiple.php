@@ -8,55 +8,53 @@ declare(strict_types=1);
 namespace Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\InventoryConfiguration\Setup\Operation\CreateSourceConfigurationTable;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
-use Magento\InventoryConfiguration\Model\ResourceModel\SourceItemConfiguration;
 
 /**
- * Implementation of SourceItem Quantity notification save multiple operation for specific db layer
+ * Implementation of Source Item Configuration save multiple operation for specific db layer
  * Save Multiple used here for performance efficient purposes over single save operation
  */
-class SaveSourceItemConfiguration
+class SaveMultiple
 {
     /**
      * @var ResourceConnection
      */
     private $resourceConnection;
 
-
     /**
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         ResourceConnection $resourceConnection
-    )
-    {
+    ) {
         $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * Save the source Item configuration.
-     *
-     * @param SourceItemConfigurationInterface[] $configuration
+     * @param SourceItemConfigurationInterface[] $sourceItemConfigurations
      * @return void
      */
-    public function execute(array $configuration)
+    public function execute(array $sourceItemConfigurations)
     {
-        if (!count($configuration)) {
+        if (!count($sourceItemConfigurations)) {
             return;
         }
         $connection = $this->resourceConnection->getConnection();
-        $tableName = $this->resourceConnection->getTableName(SourceItemConfiguration::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
+        $tableName = $this->resourceConnection
+            ->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
 
         $columnsSql = $this->buildColumnsSqlPart([
-            SourceItemConfigurationInterface::SOURCE_ITEM_ID,
+            SourceItemConfigurationInterface::SOURCE_ID,
+            SourceItemConfigurationInterface::SKU,
             SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY
         ]);
 
-        $valuesSql = $this->buildValuesSqlPart($configuration);
+        $valuesSql = $this->buildValuesSqlPart($sourceItemConfigurations);
         $onDuplicateSql = $this->buildOnDuplicateSqlPart([
             SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY
         ]);
-        $bind = $this->getSqlBindData($configuration);
+        $bind = $this->getSqlBindData($sourceItemConfigurations);
 
         $insertSql = sprintf(
             'INSERT INTO %s (%s) VALUES %s %s',
@@ -81,26 +79,27 @@ class SaveSourceItemConfiguration
     }
 
     /**
-     * @param SourceItemInterface[] $sourceItems
+     * @param SourceItemConfigurationInterface[] $sourceItemConfigurations
      * @return string
      */
-    private function buildValuesSqlPart(array $sourceItems): string
+    private function buildValuesSqlPart(array $sourceItemConfigurations): string
     {
-        $sql = rtrim(str_repeat('(?, ?), ', count($sourceItems)), ', ');
+        $sql = rtrim(str_repeat('(?, ?, ?), ', count($sourceItemConfigurations)), ', ');
         return $sql;
     }
 
     /**
-     * @param SourceItemInterface[] $sourceItems
+     * @param SourceItemConfigurationInterface[] $sourceItemConfigurations
      * @return array
      */
-    private function getSqlBindData(array $sourceItems): array
+    private function getSqlBindData(array $sourceItemConfigurations): array
     {
         $bind = [];
-        foreach ($sourceItems as $sourceItem) {
+        foreach ($sourceItemConfigurations as $sourceItemConfiguration) {
             $bind = array_merge($bind, [
-                $sourceItem->getSourceItemId(),
-                $sourceItem->getNotifyQuantity()
+                $sourceItemConfiguration->getSourceId(),
+                $sourceItemConfiguration->getSku(),
+                $sourceItemConfiguration->getNotifyStockQty()
             ]);
         }
         return $bind;

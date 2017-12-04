@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventoryConfigurationApi\Api;
 
-use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
-
 /**
- * Save the sources configurations for a the product.
+ * Save the source item configuration
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
@@ -17,10 +17,8 @@ use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 interface SourceItemConfigurationsSaveInterface
 {
     /**
-     * Save the configuration of source Items.
-     *
-     * @param \Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface[] $configuration
+     * @param \Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface[] $sourceItemConfigurations
      * @return void
      */
-    public function execute(array $configuration);
+    public function execute(array $sourceItemConfigurations);
 }
