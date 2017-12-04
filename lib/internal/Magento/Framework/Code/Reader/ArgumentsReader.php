@@ -105,7 +105,7 @@ class ArgumentsReader
             return null;
         }
 
-        if (strpos($type, '[]')) {
+        if (strpos($type, '[]') !== false) {
             return 'array';
         }
 

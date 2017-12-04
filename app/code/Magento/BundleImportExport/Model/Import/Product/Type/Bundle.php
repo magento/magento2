@@ -217,7 +217,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $option = [];
         foreach ($values as $keyValue) {
             $keyValue = trim($keyValue);
-            if ($pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR)) {
+            $pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR);
+            if ($pos !== false) {
                 $key = substr($keyValue, 0, $pos);
                 $value = substr($keyValue, $pos + 1);
                 if ($key == 'type') {
