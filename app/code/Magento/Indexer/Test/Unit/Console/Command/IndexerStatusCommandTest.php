@@ -27,14 +27,14 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
      */
     private function attachViewToIndexerMock($indexerMock, array $data)
     {
-         /** @var \Magento\Framework\Mview\View\Changelog|\PHPUnit_Framework_MockObject_MockObject $stub */
+         /** @var \Magento\Framework\Mview\View\Changelog|\PHPUnit_Framework_MockObject_MockObject $changelog */
         $changelog = $this->getMockBuilder(\Magento\Framework\Mview\View\Changelog::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $changelog->expects($this->any())
-            ->method('getListSize')
-            ->willReturn($data['view']['changelog']['list_size']);
+            ->method('getList')
+            ->willReturn(range(0, $data['view']['changelog']['list_size']-1));
 
         /** @var \Magento\Indexer\Model\Mview\View\State|\PHPUnit_Framework_MockObject_MockObject $stateMock */
         $stateMock = $this->getMockBuilder(\Magento\Indexer\Model\Mview\View\State::class)

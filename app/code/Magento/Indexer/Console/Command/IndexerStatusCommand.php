@@ -103,7 +103,7 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
 
         $state = $view->getState();
 
-        $pendingCount = $changelog->getListSize($state->getVersionId(), $currentVersionId);
+        $pendingCount = count($changelog->getList($state->getVersionId(), $currentVersionId));
 
         $pendingString = "<error>$pendingCount</error>";
         if ($pendingCount <= 0) {
