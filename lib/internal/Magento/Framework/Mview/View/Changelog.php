@@ -8,7 +8,7 @@ namespace Magento\Framework\Mview\View;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Phrase;
 
-class Changelog implements ChangelogInterface, ChangelogCounterInterface
+class Changelog implements ChangelogInterface
 {
     /**
      * Suffix for changelog table
@@ -167,22 +167,6 @@ class Changelog implements ChangelogInterface, ChangelogCounterInterface
     {
         $select = $this->getListSelect($fromVersionId, $toVersionId);
         return $this->connection->fetchCol($select);
-    }
-
-    /**
-     * Retrieve the count of entity ids in the range [$fromVersionId..$toVersionId]
-     *
-     * @param int $fromVersionId
-     * @param int $toVersionId
-     * @return int[]
-     * @throws ChangelogTableNotExistsException
-     */
-    public function getListSize($fromVersionId, $toVersionId)
-    {
-        $countSelect = $this->getListSelect($fromVersionId, $toVersionId);
-        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
-        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT " . $this->getColumnName() . ")")));
-        return $this->connection->fetchOne($countSelect);
     }
 
     /**
