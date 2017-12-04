@@ -9,11 +9,11 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
 
 /**
- * Detects misusing of IS_IDENTICAL operators.
+ * Detects misusing of IS_IDENTICAL operators when `strpos` and `stripos` functions are used in a condition.
  *
  * Examples:
  * if (!strpos($haystack, $needle)) {}
- * if (strpos($haystack, $needle) == false) {}
+ * if (stripos($haystack, $needle) == false) {}
  */
 class StringPositionSniff implements Sniff
 {
