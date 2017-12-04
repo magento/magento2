@@ -286,7 +286,7 @@ class Editor extends Textarea
                     'title' => $this->translate('Insert Widget...'),
                     'onclick' => "widgetTools.openDialog('"
                         . $this->getConfig('widget_window_url')
-                        . "widget_target_id/" . $this->getHtmlId() . "')",
+                        . "widget_target_id/" . $this->getHtmlId() . "/')",
                     'class' => 'action-add-widget plugin',
                     'style' => $visible ? '' : 'display:none',
                 ]
