@@ -94,13 +94,10 @@ class DataProvider implements DataProviderInterface
             }
 
             $currencyRate = $store->getCurrentCurrencyRate() ? : 1;
+            $valueExpr = new \Zend_Db_Expr('main_table.min_price * ' . $currencyRate);
             $table = $this->resource->getTableName('catalog_product_index_price');
-            $columns = [
-                BucketInterface::FIELD_VALUE => 'main_table.min_price',
-                'currency_rate' => new \Zend_Db_Expr($currencyRate),
-            ];
             $select->from(['main_table' => $table], null)
-                ->columns($columns)
+                ->columns([BucketInterface::FIELD_VALUE => $valueExpr])
                 ->where('main_table.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
                 ->where('main_table.website_id = ?', $store->getWebsiteId());
         } else {

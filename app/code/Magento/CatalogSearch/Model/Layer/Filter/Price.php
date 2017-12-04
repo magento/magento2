@@ -135,10 +135,12 @@ class Price extends AbstractFilter
 
         list($from, $to) = $filter;
 
-        $this->getLayer()->getProductCollection()->addFieldToFilter(
-            'price',
-            ['from' => $from, 'to' =>  empty($to) || $from == $to ? $to : $to - self::PRICE_DELTA]
-        );
+        $currencyRate = $this->getCurrencyRate();
+        $condition = [
+            'from' => $from / $currencyRate,
+            'to' =>  (empty($to) || $from == $to ? $to : $to - self::PRICE_DELTA) / $currencyRate
+        ];
+        $this->getLayer()->getProductCollection()->addFieldToFilter('price', $condition);
 
         $this->getLayer()->getState()->addFilter(
             $this->_createItem($this->_renderRangeLabel(empty($from) ? 0 : $from, $to), $filter)

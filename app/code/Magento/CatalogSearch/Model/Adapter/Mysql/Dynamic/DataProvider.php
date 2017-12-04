@@ -132,17 +132,15 @@ class DataProvider implements DataProviderInterface
         \Magento\Framework\Search\Dynamic\EntityStorage $entityStorage
     ) {
         $select = $this->dataProvider->getDataSet($bucket, $dimensions, $entityStorage->getSource());
-        $columns = $select->getPart(Select::COLUMNS);
-        $valueColumn = $columns[0][1];
-        $coefColumn = (isset($columns[1]) ? (string) $columns[1][1] : null);
+        $columns = array_column($select->getPart(Select::COLUMNS), 1, 2);
+        $valueColumn = (string) $columns['value'];
         $select->reset(Select::COLUMNS);
-        $rangeExpr = new \Zend_Db_Expr($this->connection->getIfNullSql(
-            $this->connection->quoteInto(
-                'FLOOR(' . $valueColumn . ($coefColumn ? ' * ' . $coefColumn : '') . ' / ? ) + 1',
-                $range
-            ),
-            1
-        ));
+        $rangeExpr = new \Zend_Db_Expr(
+            $this->connection->getIfNullSql(
+                $this->connection->quoteInto('FLOOR(' . $valueColumn . ' / ? ) + 1', $range),
+                1
+            )
+        );
 
         $select
             ->columns(['range' => $rangeExpr])

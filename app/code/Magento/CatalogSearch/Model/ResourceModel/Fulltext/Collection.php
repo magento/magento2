@@ -263,35 +263,25 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             throw new \RuntimeException('Illegal state');
         }
 
+        $this->getSearchCriteriaBuilder();
+        $this->getFilterBuilder();
         if (!is_array($condition) || !in_array(key($condition), ['from', 'to'])) {
-            $this->addFilterToSearchCriteria($field, $condition);
+            $this->filterBuilder->setField($field);
+            $this->filterBuilder->setValue($condition);
+            $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
         } else {
-            if ('price' === $field) {
-                $coef = $this->_storeManager->getStore()->getCurrentCurrencyRate() ? : 1;
-            }
-
             if (!empty($condition['from'])) {
-                $this->addFilterToSearchCriteria("{$field}.from", $condition['from'] / $coef);
+                $this->filterBuilder->setField("{$field}.from");
+                $this->filterBuilder->setValue($condition['from']);
+                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
             }
             if (!empty($condition['to'])) {
-                $this->addFilterToSearchCriteria("{$field}.to", $condition['to'] / $coef);
+                $this->filterBuilder->setField("{$field}.to");
+                $this->filterBuilder->setValue($condition['to']);
+                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
             }
         }
         return $this;
-    }
-
-    /**
-     * Create and add new filter to search criteria
-     *
-     * @param string $field
-     * @param mixed $value
-     * @return void
-     */
-    private function addFilterToSearchCriteria($field, $value)
-    {
-        $this->getFilterBuilder()->setField($field);
-        $this->getFilterBuilder()->setValue($value);
-        $this->getSearchCriteriaBuilder()->addFilter($this->filterBuilder->create());
     }
 
     /**
@@ -359,8 +349,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         if ($this->order && 'relevance' === $this->order['field']) {
             $this->getSelect()->order('search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->order['dir']);
         }
-
-        parent::_renderFiltersBefore();
+        return parent::_renderFiltersBefore();
     }
 
     /**
