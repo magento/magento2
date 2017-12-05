@@ -24,6 +24,11 @@ $searchCriteria = $searchCriteriaBuilder->addFilter(
     'in'
 )->create();
 $sourceItems = $sourceItemRepository->getList($searchCriteria)->getItems();
+
+/**
+ * Tests which are wrapped with MySQL transaction clear all data by transaction rollback.
+ * In that case there is "if" which checks that SKU1, SKU2 and SKU3 still exists in database.
+ */
 if (!empty($sourceItems)) {
     $sourceItemsDelete->execute($sourceItems);
 }

@@ -17,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- *
+ * @magentoAppArea adminhtml
  */
 class SourceItemIndexerTest extends TestCase
 {

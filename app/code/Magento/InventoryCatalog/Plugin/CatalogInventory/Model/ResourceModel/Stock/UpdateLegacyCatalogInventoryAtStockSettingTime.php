@@ -14,7 +14,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Model\DefaultSourceProvider;
-use Magento\Framework\Exception\AlreadyExistsException;
 
 /**
  * Class provides around Plugin on Magento\CatalogInventory\Model\ResourceModel\Stock\Item::save
@@ -75,12 +74,11 @@ class UpdateLegacyCatalogInventoryAtStockSettingTime
      *
      * @return void
      * @throws \Exception
-     * @throws AlreadyExistsException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSave(ResourceItem $subject, callable $proceed, Item $stockItem)
     {
-        $connection = $this->resourceConnection->getConnection('write');
+        $connection = $this->resourceConnection->getConnection();
         $connection->beginTransaction();
         try {
             $proceed($stockItem);
