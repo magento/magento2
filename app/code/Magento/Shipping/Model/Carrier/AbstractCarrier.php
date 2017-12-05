@@ -368,6 +368,17 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     }
 
     /**
+     * Get allowed shipping methods
+     *
+     * @return array
+     * @api
+     */
+    public function getAllowedMethods()
+    {
+       return [];
+    }
+
+    /**
      * Check if carrier has shipping label option available
      *
      * @return bool
