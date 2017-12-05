@@ -14,11 +14,12 @@
         <element name="content" type="input" selector="#cms_page_form_content"/>
     </section>
     <section name="CmsWYSIWYGSection">
+        <element name="CheckIfTabExpand" type="button" selector="//div[@data-state-collapsible='closed']//span[text()='Content']"/>
         <element name="TinyMCE4" type="text" selector=".mce-branding-powered-by" />
         <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl"/>
         <element name="ShowHideBtn" type="button" selector="#togglecms_page_form_content"/>
-        <element name="InsertWidgetBtn" type="button" selector=".scalable.action-add-widget.plugin"/>
-        <element name="InsertWidgetIcon" type="button" selector="#icon"/>
+        <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
+        <element name="InsertWidgetIcon" type="button" selector=".mce-ico.mce-i-none"/>
         <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
         <element name="InsertVariableIcon" type="button" selector="#icon"/>
         <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
@@ -65,12 +66,15 @@
         <element name="SecondVariable" type="button" selector="//a[text()='Country']"/>
     </section>
     <section name="WidgetSection">
-        <element name="ShowHideBtn" type="button" selector="#togglecms_page_form_content"/>
-        <element name="InsertWidget" type="button" selector=".action-add-widget"/>
-        <element name="InsertWidgetBtn" type="button" selector="#insert_button"/>
-        <element name="InsertWidgetBtnEnabled" type="button" selector="#insert_button:enabled"/>
-        <element name="InsertWidgetBtnDisabled" type="button" selector="#insert_button:disabled"/>
-        <element name="Cancel" type="button" selector="#cancel:enabled"/>
+        <element name="InsertWidgetTitle" type="text" selector="//h1[contains(text(),'Insert Widget')]"/>
+        <element name="SelectCategoryTitle" type="text" selector="//h1[contains(text(),'Select Category')]"/>
+        <element name="SelectProductTitle" type="text" selector="//h1[contains(text(),'Select Product')]"/>
+        <element name="SelectPageTitle" type="text" selector="//h1[contains(text(),'Select Page')]"/>
+        <element name="SelectBlockTitle" type="text" selector="//h1[contains(text(),'Select Block')]"/>
+        <element name="InsertWidget" type="button" selector="#insert_button"/>
+        <element name="InsertWidgetBtnDisabled" type="button" selector="//button[@id='insert_button' and contains(@class,'disabled')]"/>
+        <element name="InsertWidgetBtnEnabled" type="button" selector="//button[@id='insert_button' and not(contains(@class,'disabled'))]"/>
+        <element name="CancelBtnEnabled" type="button" selector="//button[@id='reset' and not(contains(@class,'disabled'))]"/>
         <element name="Close" type="button" selector="#close"/>
         <element name="WidgetType" type="button" selector="#select_widget_type"/>
         <element name="WidgetTemplate" type="button" selector="select[name='parameters[template]']"/>

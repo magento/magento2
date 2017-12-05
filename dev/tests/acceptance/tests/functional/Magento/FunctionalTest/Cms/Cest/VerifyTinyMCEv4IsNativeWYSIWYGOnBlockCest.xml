@@ -50,7 +50,7 @@
             <seeElement selector="{{BlockWYSIWYGSection.InsertImageIcon}}" mergeKey="assertInf12"/>
             <seeElement selector="{{BlockWYSIWYGSection.InsertTable}}" mergeKey="assertInfo13"/>
             <seeElement selector="{{BlockWYSIWYGSection.SpecialCharacter}}" mergeKey="assertInfo14"/>
-            <!--<seeElement selector="{{BlockWYSIWYGSection.InsertWidgetIcon}}" mergeKey="assertInfo15"/>-->
+            <seeElement selector="{{BlockWYSIWYGSection.InsertWidgetIcon}}" mergeKey="assertInfo15"/>
             <!--<seeElement selector="{{BlockWYSIWYGSection.InsertVariableIcon}}" mergeKey="assertInfo16"/>-->
             <executeJS function="tinyMCE.get('cms_block_form_content').setContent('Hello Block Page!');" mergeKey="executeJSFillContent"/>
             <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" mergeKey="clickShowHideBtn1" />
@@ -75,15 +75,12 @@
             <waitForPageLoad mergeKey="wait2"/>
             <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static" mergeKey="selectCMSStaticBlock" />
             <waitForLoadingMaskToDisappear mergeKey="waitForLoadingMaskDisappear" />
-            <!--Select type of Template-->
             <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" mergeKey="selectTemplate" />
-            <!--Click "Select Block..."-->
             <click selector="{{WidgetSection.BtnChooser}}" mergeKey="clickSelectPageBtn" />
             <waitForElementVisible selector="{{WidgetSection.BlockPage(_defaultBlock.title)}}" mergeKey="waitForBlockTitle" />
             <click selector="{{WidgetSection.BlockPage(_defaultBlock.title)}}" mergeKey="selectPreCreateBlock" />
             <wait time="3" mergeKey="wait1" />
-            <!--click Insert Widget button-->
-            <click selector="{{WidgetSection.InsertWidgetBtn}}" mergeKey="clickInsertWidgetBtn" />
+            <click selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" mergeKey="clickInsertWidgetBtn" />
             <waitForLoadingMaskToDisappear mergeKey="waitForLoading" />
             <waitForPageLoad mergeKey="waitForPageLoad4" />
             <click selector="{{CmsNewPagePageActionsSection.savePage}}" mergeKey="clickSavePage"/>

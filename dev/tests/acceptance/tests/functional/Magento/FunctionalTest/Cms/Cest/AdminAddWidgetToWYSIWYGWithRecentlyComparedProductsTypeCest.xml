@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="AdminAddWidgetToWYSIWYGWithRecentlyComparedProductsTypeCest">
+        <annotations>
+            <features value="Add Widget to WYSIWYG"/>
+            <stories value="Widgets in WYSIWYG"/>
+            <group value="recentlyCompared"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" mergeKey="createPreReqCategory"/>
+            <createData entity="_defaultProduct" mergeKey="createPreReqProduct">
+                <required-entity createDataKey="createPreReqCategory"/>
+            </createData>
+            <actionGroup ref="LoginActionGroup" mergeKey="login"/>
+            <actionGroup ref="EnabledWYSIWYG" mergeKey="enableWYSIWYG"/>
+        </before>
+        <test name="AddWidgetToWYSIWYGWithTypeOfRecentlyComparedProducts">
+            <annotations>
+                <title value="Create CMS Page With Widget Type: Recently Compared Products"/>
+                <description value="Create CMS Page With Widget Type: Recently Compared Products"/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-83792"/>
+            </annotations>
+            <!--Main test-->
+            <amOnPage url="{{CmsNewPagePage.url}}" mergeKey="navigateToPage"/>
+            <waitForPageLoad mergeKey="wait1"/>
+            <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" mergeKey="fillFieldTitle"/>
+            <click selector="{{CmsNewPagePageContentSection.header}}" mergeKey="clickContentTab" />
+            <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" mergeKey="waitForTinyMCE4"/>
+            <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" mergeKey="executeJSFillContent"/>
+            <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" mergeKey="seeWidgetIcon" />
+            <click selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" mergeKey="clickInsertWidgetIcon" />
+            <waitForPageLoad mergeKey="waitForPageLoad" />
+            <see userInput="Inserting a widget does not create a widget instance." mergeKey="seeMessage" />
+            <waitForPageLoad mergeKey="wait2"/>
+            <!--see Insert Widget button disabled-->
+            <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" mergeKey="seeInsertWidgetDisabled" />
+            <!--see Cancel button enabed-->
+            <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" mergeKey="seeCancelBtnEnabled" />
+            <!--Select "Widget Type"-->
+            <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Recently Compared Products" mergeKey="selectRecentlyComparedProducts" />
+            <waitForLoadingMaskToDisappear mergeKey="waitForLoadingMaskDisappear" />
+            <!--see Insert Widget button enabled-->
+            <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" mergeKey="seeInsertWidgetEnabled" />
+            <fillField selector="{{WidgetSection.PageSize}}" userInput="5" mergeKey="fillNoOfProductDisplay" />
+            <selectOption selector="{{WidgetSection.ProductAttribute}}" userInput="Name" mergeKey="selectProductAttributes" />
+            <selectOption selector="{{WidgetSection.ButtonToShow}}" userInput="Add to Cart" mergeKey="selectBtnToShow" />
+            <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="Compared Products Grid Template" mergeKey="selectTemplate" />
+            <click selector="{{WidgetSection.InsertWidget}}" mergeKey="clickInsertWidget" />
+            <waitForLoadingMaskToDisappear mergeKey="waitForLoading" />
+            <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" mergeKey="scrollToSearchEngineTab" />
+            <click selector="{{CmsNewPagePageSeoSection.header}}" mergeKey="clickExpandSearchEngineOptimisation"/>
+            <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" mergeKey="fillFieldUrlKey"/>
+            <click selector="{{CmsNewPagePageActionsSection.savePage}}" mergeKey="clickSavePage"/>
+            <see userInput="You saved the page." mergeKey="seeSuccessMessage"/>
+            <amOnPage url="$$createPreReqProduct.name$$.html" mergeKey="amOnProductPage" />
+            <waitForPageLoad mergeKey="waitForPage" />
+            <click selector="{{WidgetSection.CompareBtn}}" mergeKey="clickCompareBtn" />
+            <amOnPage url="$$createPreReqCategory.name$$.html" mergeKey="amOnCatalogPage" />
+            <waitForPageLoad mergeKey="waitForPage" />
+            <waitForPageLoad mergeKey="waitForPage1" />
+            <waitForElementVisible selector="{{WidgetSection.ClearCompare}}" mergeKey="waitForClearBtn" />
+            <click selector="{{WidgetSection.ClearCompare}}" mergeKey="clickClearCompareBtn" />
+            <waitForElementVisible selector="{{WidgetSection.AcceptClear}}" mergeKey=""/>
+            <click selector="{{WidgetSection.AcceptClear}}" mergeKey="acceptClearCompare" />
+            <waitForPageLoad mergeKey="waitForPage2" />
+            <amOnPage url="{{_defaultCmsPage.identifier}}" mergeKey="amOnPageTestPage"/>
+            <waitForPageLoad mergeKey="wait5" />
+            <!--see widget on Storefront-->
+            <see userInput="Hello CMS Page!" mergeKey="seeContent"/>
+            <waitForPageLoad mergeKey="wait6" />
+            <waitForText userInput="$$createPreReqProduct.name$$" mergeKey="waiForProductVisible" />
+            <see userInput="$$createPreReqProduct.name$$" mergeKey="seeProductName" />
+        </test>
+        <after>
+            <actionGroup ref="DisabledWYSIWYG" mergeKey="disableWYSIWYG"/>
+            <amOnPage url="admin/admin/auth/logout/" mergeKey="amOnLogoutPage"/>
+        </after>
+    </cest>
+</config>

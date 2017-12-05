@@ -50,7 +50,7 @@
             <seeElement selector="{{CmsWYSIWYGSection.InsertImageIcon}}" mergeKey="assertInf12"/>
             <seeElement selector="{{CmsWYSIWYGSection.InsertTable}}" mergeKey="assertInfo13"/>
             <seeElement selector="{{CmsWYSIWYGSection.SpecialCharacter}}" mergeKey="assertInfo14"/>
-            <!--<seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" mergeKey="assertInfo15"/>-->
+            <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" mergeKey="assertInfo15"/>
             <!--<seeElement selector="{{CmsWYSIWYGSection.InsertVariableIcon}}" mergeKey="assertInfo16"/>-->
             <executeJS function="tinyMCE.get('cms_page_form_content').setContent('Hello World!');" mergeKey="executeJSFillContent"/>
             <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" mergeKey="clickShowHideBtn" />

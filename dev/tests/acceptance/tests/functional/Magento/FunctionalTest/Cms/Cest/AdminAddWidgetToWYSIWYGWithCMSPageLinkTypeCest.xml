@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="AdminAddWidgetToWYSIWYGWithCMSPageLinkTypeCest">
+        <annotations>
+            <features value="Add Widget to WYSIWYG"/>
+            <stories value="Widgets in WYSIWYG"/>
+            <group value="CMSPageLink"/>
+            <env value="chrome"/>
+            <env value="firefox"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" mergeKey="login"/>
+            <actionGroup ref="EnabledWYSIWYG" mergeKey="enableWYSIWYG"/>
+        </before>
+        <test name="AddWidgetToWYSIWYGWithTypeOfCMSPageLink">
+            <annotations>
+                <title value="Create CMS Page With Widget Type:CMS page link"/>
+                <description value="Create CMS Page With Widget Type:CMS page link"/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-83781"/>
+            </annotations>
+            <!--Main test-->
+            <amOnPage url="{{CmsNewPagePage.url}}" mergeKey="navigateToPage"/>
+            <waitForPageLoad mergeKey="wait1"/>
+            <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" mergeKey="fillFieldTitle"/>
+            <click selector="{{CmsNewPagePageContentSection.header}}" mergeKey="clickContentTab" />
+            <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" mergeKey="waitForTinyMCE4"/>
+            <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" mergeKey="executeJSFillContent"/>
+            <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" mergeKey="seeWidgetIcon" />
+            <click selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" mergeKey="clickInsertWidgetIcon" />
+            <waitForPageLoad mergeKey="wait2"/>
+            <see userInput="Inserting a widget does not create a widget instance." mergeKey="seeMessage" />
+            <!--see Insert Widget button disabled-->
+            <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" mergeKey="seeInsertWidgetDisabled" />
+            <!--see Cancel button enabed-->
+            <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" mergeKey="seeCancelBtnEnabled" />
+            <!--Select "Widget Type"-->
+            <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Page Link" mergeKey="selectCMSPageLink" />
+            <waitForLoadingMaskToDisappear mergeKey="waitForLoadingMaskDisappear" />
+            <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" mergeKey="seeInsertWidgetEnabled" />
+            <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Page Link Block Template" mergeKey="selectTemplate" />
+            <click selector="{{WidgetSection.BtnChooser}}" mergeKey="clickSelectPageBtn" />
+            <!--<waitForLoadingMaskToDisappear mergeKey="wait3"/>-->
+            <waitForElementVisible selector="{{WidgetSection.CMSPage}}" mergeKey="waitForPageVisible" />
+            <click selector="{{WidgetSection.CMSPage}}" mergeKey="selectPreCreateCMS" />
+            <waitForElementNotVisible selector="{{WidgetSection.SelectPageTitle}}" mergeKey="waitForSlideOutCloses" />
+            <click selector="{{WidgetSection.InsertWidget}}" mergeKey="clickInsertWidget" />
+            <waitForLoadingMaskToDisappear mergeKey="waitForLoading" />
+            <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" mergeKey="scrollToSearchEngineTab" />
+            <click selector="{{CmsNewPagePageSeoSection.header}}" mergeKey="clickExpandSearchEngineOptimisation"/>
+            <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" mergeKey="fillFieldUrlKey"/>
+            <click selector="{{CmsNewPagePageActionsSection.savePage}}" mergeKey="clickSavePage"/>
+            <see userInput="You saved the page." mergeKey="seeSuccessMessage"/>
+            <amOnPage url="{{_defaultCmsPage.identifier}}" mergeKey="amOnPageTestPage"/>
+            <waitForPageLoad mergeKey="wait5" />
+            <see userInput="Hello CMS Page!" mergeKey="seeContent"/>
+            <!--see widget on Storefront-->
+            <see userInput="Home page" mergeKey="seeHomepageWidget" />
+        </test>
+        <after>
+            <actionGroup ref="DisabledWYSIWYG" mergeKey="disableWYSIWYG"/>
+            <amOnPage url="admin/admin/auth/logout/" mergeKey="amOnLogoutPage"/>
+        </after>
+    </cest>
+</config>
+
