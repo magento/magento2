@@ -6,6 +6,7 @@
 namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\AccountManagement;
+use Magento\Customer\Model\AccountConfirmation;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Framework\App\Area;
@@ -121,6 +122,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     private $dateTimeFactory;
 
     /**
+     * @var AccountConfirmation|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $accountConfirmation;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -170,6 +176,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->dateTimeFactory = $this->createMock(DateTimeFactory::class);
+        $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->accountManagement = $this->objectManagerHelper->getObject(
@@ -199,6 +206,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
                 'objectFactory' => $this->objectFactory,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverter,
                 'dateTimeFactory' => $this->dateTimeFactory,
+                'accountConfirmation' => $this->accountConfirmation
             ]
         );
         $reflection = new \ReflectionClass(get_class($this->accountManagement));
@@ -1467,14 +1475,12 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string|null $skipConfirmationIfEmail
      * @param int $isConfirmationRequired
      * @param string|null $confirmation
      * @param string $expected
      * @dataProvider dataProviderGetConfirmationStatus
      */
     public function testGetConfirmationStatus(
-        $skipConfirmationIfEmail,
         $isConfirmationRequired,
         $confirmation,
         $expected
@@ -1492,21 +1498,16 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $customerMock->expects($this->any())
             ->method('getConfirmation')
             ->willReturn($confirmation);
-        $customerMock->expects($this->any())
+        $customerMock->expects($this->once())
             ->method('getEmail')
             ->willReturn($customerEmail);
-        $customerMock->expects($this->any())
+        $customerMock->expects($this->once())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
 
-        $this->registry->expects($this->once())
-            ->method('registry')
-            ->with('skip_confirmation_if_email')
-            ->willReturn($skipConfirmationIfEmail);
-
-        $this->scopeConfig->expects($this->any())
-            ->method('getValue')
-            ->with(AccountManagement::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_WEBSITES, $websiteId)
+        $this->accountConfirmation->expects($this->once())
+            ->method('isConfirmationRequired')
+            ->with($websiteId, $customerId, $customerEmail)
             ->willReturn($isConfirmationRequired);
 
         $this->customerRepository->expects($this->once())
@@ -1523,11 +1524,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     public function dataProviderGetConfirmationStatus()
     {
         return [
-            [null, 0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
-            ['test1@example.com', 0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
-            ['test2@example.com', 0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
-            ['test2@example.com', 1, null, AccountManagement::ACCOUNT_CONFIRMED],
-            ['test2@example.com', 1, 'test', AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED],
+            [0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
+            [0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
+            [0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
+            [1, null, AccountManagement::ACCOUNT_CONFIRMED],
+            [1, 'test', AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED],
         ];
     }
 

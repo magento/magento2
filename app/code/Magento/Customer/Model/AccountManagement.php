@@ -89,6 +89,10 @@ class AccountManagement implements AccountManagementInterface
      */
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
 
+    /**
+     * @deprecated
+     * @see AccountConfirmation::XML_PATH_IS_CONFIRM
+     */
     const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
     /**
@@ -299,6 +303,11 @@ class AccountManagement implements AccountManagementInterface
     private $dateTimeFactory;
 
     /**
+     * @var AccountConfirmation
+     */
+    private $accountConfirmation;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -323,7 +332,8 @@ class AccountManagement implements AccountManagementInterface
      * @param ObjectFactory $objectFactory
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param CredentialsValidator|null $credentialsValidator
-     * @param DateTimeFactory $dateTimeFactory
+     * @param DateTimeFactory|null $dateTimeFactory
+     * @param AccountConfirmation|null $accountConfirmation
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -351,7 +361,8 @@ class AccountManagement implements AccountManagementInterface
         ObjectFactory $objectFactory,
         ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         CredentialsValidator $credentialsValidator = null,
-        DateTimeFactory $dateTimeFactory = null
+        DateTimeFactory $dateTimeFactory = null,
+        AccountConfirmation $accountConfirmation = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -379,6 +390,8 @@ class AccountManagement implements AccountManagementInterface
         $this->credentialsValidator =
             $credentialsValidator ?: ObjectManager::getInstance()->get(CredentialsValidator::class);
         $this->dateTimeFactory = $dateTimeFactory ?: ObjectManager::getInstance()->get(DateTimeFactory::class);
+        $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
+            ->get(AccountConfirmation::class);
     }
 
     /**
@@ -1147,17 +1160,15 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return bool
+     * @deprecated
+     * @see AccountConfirmation::isConfirmationRequired
      */
-    public function isConfirmationRequired($customer)
+    protected function isConfirmationRequired($customer)
     {
-        if ($this->canSkipConfirmation($customer)) {
-            return false;
-        }
-
-        return (bool)$this->scopeConfig->getValue(
-            self::XML_PATH_IS_CONFIRM,
-            ScopeInterface::SCOPE_WEBSITES,
-            $customer->getWebsiteId()
+        return $this->accountConfirmation->isConfirmationRequired(
+            $customer->getWebsiteId(),
+            $customer->getId(),
+            $customer->getEmail()
         );
     }
 
@@ -1166,6 +1177,8 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return bool
+     * @deprecated
+     * @see AccountConfirmation::isConfirmationRequired
      */
     protected function canSkipConfirmation($customer)
     {
