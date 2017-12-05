@@ -41,7 +41,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Provided argument must be a product');
-        $this->model->getTags(new \StdClass());
+        $this->model->getTags(new \stdClass());
     }
 
     public function testGetTagsWithVariation()

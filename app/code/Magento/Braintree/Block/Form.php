@@ -9,7 +9,6 @@ use Magento\Backend\Model\Session\Quote;
 use Magento\Braintree\Gateway\Config\Config as GatewayConfig;
 use Magento\Braintree\Model\Adminhtml\Source\CcType;
 use Magento\Braintree\Model\Ui\ConfigProvider;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Block\Form\Cc;
 use Magento\Payment\Helper\Data;
@@ -21,7 +20,6 @@ use Magento\Vault\Model\VaultPaymentInterface;
  */
 class Form extends Cc
 {
-
     /**
      * @var Quote
      */
@@ -48,6 +46,7 @@ class Form extends Cc
      * @param Quote $sessionQuote
      * @param GatewayConfig $gatewayConfig
      * @param CcType $ccType
+     * @param Data $paymentDataHelper
      * @param array $data
      */
     public function __construct(
@@ -56,12 +55,14 @@ class Form extends Cc
         Quote $sessionQuote,
         GatewayConfig $gatewayConfig,
         CcType $ccType,
+        Data $paymentDataHelper,
         array $data = []
     ) {
         parent::__construct($context, $paymentConfig, $data);
         $this->sessionQuote = $sessionQuote;
         $this->gatewayConfig = $gatewayConfig;
         $this->ccType = $ccType;
+        $this->paymentDataHelper = $paymentDataHelper;
     }
 
     /**
@@ -81,7 +82,7 @@ class Form extends Cc
      */
     public function useCvv()
     {
-        return $this->gatewayConfig->isCvvEnabled();
+        return $this->gatewayConfig->isCvvEnabled($this->sessionQuote->getStoreId());
     }
 
     /**
@@ -90,9 +91,8 @@ class Form extends Cc
      */
     public function isVaultEnabled()
     {
-        $storeId = $this->_storeManager->getStore()->getId();
         $vaultPayment = $this->getVaultPayment();
-        return $vaultPayment->isActive($storeId);
+        return $vaultPayment->isActive($this->sessionQuote->getStoreId());
     }
 
     /**
@@ -102,7 +102,10 @@ class Form extends Cc
     private function getConfiguredCardTypes()
     {
         $types = $this->ccType->getCcTypeLabelMap();
-        $configCardTypes = array_fill_keys($this->gatewayConfig->getAvailableCardTypes(), '');
+        $configCardTypes = array_fill_keys(
+            $this->gatewayConfig->getAvailableCardTypes($this->sessionQuote->getStoreId()),
+            ''
+        );
 
         return array_intersect_key($types, $configCardTypes);
     }
@@ -116,7 +119,11 @@ class Form extends Cc
     private function filterCardTypesForCountry(array $configCardTypes, $countryId)
     {
         $filtered = $configCardTypes;
-        $countryCardTypes = $this->gatewayConfig->getCountryAvailableCardTypes($countryId);
+        $countryCardTypes = $this->gatewayConfig->getCountryAvailableCardTypes(
+            $countryId,
+            $this->sessionQuote->getStoreId()
+        );
+
         // filter card types only if specific card types are set for country
         if (!empty($countryCardTypes)) {
             $availableTypes = array_fill_keys($countryCardTypes, '');
@@ -131,19 +138,6 @@ class Form extends Cc
      */
     private function getVaultPayment()
     {
-        return $this->getPaymentDataHelper()->getMethodInstance(ConfigProvider::CC_VAULT_CODE);
-    }
-
-    /**
-     * Get payment data helper instance
-     * @return Data
-     * @deprecated 100.1.0
-     */
-    private function getPaymentDataHelper()
-    {
-        if ($this->paymentDataHelper === null) {
-            $this->paymentDataHelper = ObjectManager::getInstance()->get(Data::class);
-        }
-        return $this->paymentDataHelper;
+        return $this->paymentDataHelper->getMethodInstance(ConfigProvider::CC_VAULT_CODE);
     }
 }

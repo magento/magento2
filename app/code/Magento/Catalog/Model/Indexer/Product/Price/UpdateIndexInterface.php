@@ -11,6 +11,7 @@ use Magento\Customer\Api\Data\GroupInterface;
  * Defines strategy for updating price index
  *
  * @api
+ * @since 101.1.0
  */
 interface UpdateIndexInterface
 {
@@ -20,6 +21,7 @@ interface UpdateIndexInterface
      * @param GroupInterface $group
      * @param bool $isGroupNew
      * @return void
+     * @since 101.1.0
      */
     public function update(GroupInterface $group, $isGroupNew);
 }

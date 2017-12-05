@@ -15,9 +15,6 @@ use Magento\Sales\Api\Data\CreditmemoItemInterfaceFactory;
 use Magento\Sales\Api\Data\CreditmemoItemSearchResultInterfaceFactory;
 use Magento\Sales\Model\Spi\CreditmemoItemResourceInterface;
 
-/**
- * @since 2.2.0
- */
 class ItemRepository implements CreditmemoItemRepositoryInterface
 {
     /**

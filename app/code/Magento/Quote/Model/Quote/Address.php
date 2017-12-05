@@ -1170,7 +1170,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function getAppliedTaxes()
     {
-        return $this->serializer->unserialize($this->getData('applied_taxes'));
+        $taxes = $this->getData('applied_taxes');
+        return $taxes ? $this->serializer->unserialize($taxes) : [];
     }
 
     /**

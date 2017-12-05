@@ -60,6 +60,10 @@ class Grid extends DataGrid
             'selector' => '[name="attribute_set_id"]',
             'input' => 'select',
         ],
+        'store_id' => [
+            'selector' => '[name="store_id"]',
+            'input' => 'select',
+        ],
     ];
 
     /**

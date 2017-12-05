@@ -114,7 +114,7 @@ class DataProvider implements DataProviderInterface
                     }
                 } catch (\Exception $e) {
                     throw new LocalizedException(
-                        sprintf(__('Error while translating phrase "%s" in file %s.'), $phrase, $filePath[0])
+                        __('Error while translating phrase "%s" in file %s.', $phrase, $filePath[0])
                     );
                 }
             }
@@ -134,18 +134,19 @@ class DataProvider implements DataProviderInterface
     {
         $phrases = [];
         foreach ($this->config->getPatterns() as $pattern) {
-            $result = preg_match_all($pattern, $content, $matches);
+            $concatenatedContent = preg_replace('~(["\'])\s*?\+\s*?\1~', '', $content);
+            $result = preg_match_all($pattern, $concatenatedContent, $matches);
 
             if ($result) {
                 if (isset($matches[2])) {
                     foreach ($matches[2] as $match) {
-                        $phrases[] = str_replace('\\\'', '\'', $match);
+                        $phrases[] = str_replace(["\'", '\"'], ["'", '"'], $match);
                     }
                 }
             }
             if (false === $result) {
                 throw new LocalizedException(
-                    sprintf(__('Error while generating js translation dictionary: "%s"'), error_get_last())
+                    __('Error while generating js translation dictionary: "%s"', error_get_last())
                 );
             }
         }
