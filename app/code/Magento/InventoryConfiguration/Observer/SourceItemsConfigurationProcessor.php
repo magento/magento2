@@ -7,20 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\InventoryConfiguration\Observer;
 
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Exception\InputException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
-use Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface;
-use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface;
 use Magento\InventoryConfiguration\Model\SourceItemConfigurationFactory;
-
-use Magento\Framework\Api\DataObjectHelper;
+use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
+use Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface;
 
 /**
  * Process source item configuration.
  */
 class SourceItemsConfigurationProcessor
 {
+    /**
+     * @var GetSourceItemConfigurationInterface
+     */
+    private $getSourceItemConfiguration;
+
     /**
      * @var SourceItemConfigurationFactory
      */
@@ -45,18 +50,21 @@ class SourceItemsConfigurationProcessor
      * @param SourceItemConfigurationFactory $sourceItemConfigurationFactory
      * @param SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave
      * @param DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete
+     * @param GetSourceItemConfigurationInterface $getSourceItemConfiguration
      * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         SourceItemConfigurationFactory $sourceItemConfigurationFactory,
         SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave,
         DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete,
+        GetSourceItemConfigurationInterface $getSourceItemConfiguration,
         DataObjectHelper $dataObjectHelper
     ) {
         $this->sourceItemConfigurationSave = $sourceItemConfigurationSave;
         $this->sourceItemConfigurationFactory = $sourceItemConfigurationFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->sourceItemConfigurationDelete = $sourceItemConfigurationDelete;
+        $this->getSourceItemConfiguration = $getSourceItemConfiguration;
     }
 
     /**
@@ -67,22 +75,23 @@ class SourceItemsConfigurationProcessor
      */
     public function process($sku, array $sourceItemsData)
     {
-        $sourceItemsForDelete = $this->getCurrentSourceItemsMap($sku, $sourceItemsData);
-        $sourceItemsForSave = [];
+        $sourceItemsConfigsForDelete = $this->getCurrentSourceItemsMap($sku, $sourceItemsData);
+        $sourceItemsConfigsForSave = [];
 
         foreach ($sourceItemsData as $sourceItemData) {
             $this->validateSourceItemData($sourceItemData);
 
             $sourceId = $sourceItemData[SourceItemInterface::SOURCE_ID];
-            if (isset($sourceItemsForDelete[$sourceId])) {
-                $sourceItem = $sourceItemsForDelete[$sourceId];
+            if (isset($sourceItemsConfigsForDelete[$sourceId])) {
+                $sourceItem = $sourceItemsConfigsForDelete[$sourceId];
             } else {
                 /** @var SourceItemInterface $sourceItem */
                 $sourceItem = $this->sourceItemConfigurationFactory->create();
             }
-			if($sourceItemData['notify_stock_qty_use_default'] == 1) {
-				unset($sourceItemData['notify_stock_qty']);
-			}
+
+            if ($sourceItemData['notify_stock_qty_use_default'] == 1) {
+                unset($sourceItemData['notify_stock_qty']);
+            }
 
             $sourceItemData[SourceItemInterface::SKU] = $sku;
             $this->dataObjectHelper->populateWithArray(
@@ -91,14 +100,14 @@ class SourceItemsConfigurationProcessor
                 SourceItemConfigurationInterface::class
             );
 
-            $sourceItemsForSave[] = $sourceItem;
-            unset($sourceItemsForDelete[$sourceId]);
+            $sourceItemsConfigsForSave[] = $sourceItem;
+            unset($sourceItemsConfigsForDelete[$sourceId]);
         }
-        if ($sourceItemsForSave) {
-            $this->sourceItemConfigurationSave->execute($sourceItemsForSave);
+        if ($sourceItemsConfigsForSave) {
+            $this->sourceItemConfigurationSave->execute($sourceItemsConfigsForSave);
         }
-        if ($sourceItemsForDelete) {
-            $this->deleteSourceItemsConfiguration($sourceItemsForDelete);
+        if ($sourceItemsConfigsForDelete) {
+            $this->deleteSourceItemsConfiguration($sourceItemsConfigsForDelete);
         }
     }
 
@@ -111,7 +120,7 @@ class SourceItemsConfigurationProcessor
      */
     private function getCurrentSourceItemsMap(string $sku, array $sourceItemsData): array
     {
-        $sourceItems = [];
+        $sourceItemsConfigs = [];
 
         /** @var \Magento\Inventory\Model\SourceItem $sourceItem */
         foreach ($sourceItemsData as $sourceItem) {
@@ -119,17 +128,20 @@ class SourceItemsConfigurationProcessor
             $sourceItemConfig = $this->getSourceItemConfiguration->execute((int)$sourceId, $sku);
 
             if (null !== $sourceItemConfig) {
-                $sourceItems[] = $sourceItemConfig;
+                $sourceItemsConfigs[] = $sourceItemConfig;
             }
         }
 
-        $sourceItemMap = [];
-        if ($sourceItems) {
-            foreach ($sourceItems as $sourceItem) {
-                $sourceItemMap[(int)$sourceItem[SourceItemInterface::SOURCE_ID]] = $sourceItem;
+        $sourceItemsConfigsMap = [];
+        if ($sourceItemsConfigs) {
+            /** @var SourceItemConfigurationInterface $sourceItemConfig */
+            foreach ($sourceItemsConfigs as $sourceItemConfig) {
+                $sourceId = $sourceItemConfig->getSourceId();
+                $sourceItemsConfigsMap[$sourceId] = $sourceItemConfig;
             }
         }
-        return $sourceItemMap;
+
+        return $sourceItemsConfigsMap;
     }
 
     /**
