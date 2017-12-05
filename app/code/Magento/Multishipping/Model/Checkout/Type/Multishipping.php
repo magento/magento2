@@ -158,6 +158,11 @@ class Multishipping extends \Magento\Framework\DataObject
     private $shippingAssignmentProcessor;
 
     /**
+     * @var Multishipping\PlaceOrderFactory
+     */
+    private $placeOrderFactory;
+
+    /**
      * Constructor
      *
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -184,6 +189,7 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param array $data
      * @param \Magento\Quote\Api\Data\CartExtensionFactory|null $cartExtensionFactory
      * @param AllowedCountries|null $allowedCountryReader
+     * @param Multishipping\PlaceOrderFactory $placeOrderFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -210,7 +216,8 @@ class Multishipping extends \Magento\Framework\DataObject
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         array $data = [],
         \Magento\Quote\Api\Data\CartExtensionFactory $cartExtensionFactory = null,
-        AllowedCountries $allowedCountryReader = null
+        AllowedCountries $allowedCountryReader = null,
+        Multishipping\PlaceOrderFactory $placeOrderFactory = null
     ) {
         $this->_eventManager = $eventManager;
         $this->_scopeConfig = $scopeConfig;
@@ -237,6 +244,8 @@ class Multishipping extends \Magento\Framework\DataObject
             ->get(\Magento\Quote\Api\Data\CartExtensionFactory::class);
         $this->allowedCountryReader = $allowedCountryReader ?: ObjectManager::getInstance()
             ->get(AllowedCountries::class);
+        $this->placeOrderFactory = $placeOrderFactory ?: ObjectManager::getInstance()
+            ->get(Multishipping\PlaceOrderFactory::class);
         parent::__construct($data);
         $this->_init();
     }
@@ -760,13 +769,23 @@ class Multishipping extends \Magento\Framework\DataObject
                 );
             }
 
+            $paymentProviderCode = $this->getQuote()->getPayment()->getMethod();
+            $placeOrderService = $this->placeOrderFactory->create($paymentProviderCode);
+            $errorList = $placeOrderService->place($orders);
             foreach ($orders as $order) {
-                $order->place();
-                $order->save();
-                if ($order->getCanSendNewEmailFlag()) {
-                    $this->orderSender->send($order);
+                $incrementId = $order->getIncrementId();
+                if (!isset($errorList[$incrementId])) {
+                    if ($order->getCanSendNewEmailFlag()) {
+                        $this->orderSender->send($order);
+                    }
+                    $orderIds[$order->getId()] = $order->getIncrementId();
                 }
-                $orderIds[$order->getId()] = $order->getIncrementId();
+            }
+
+            if (!empty($errorList)) {
+                throw new LocalizedException(
+                    __('An error occurred on the server. Please try to place the order again.')
+                );
             }
 
             $this->_session->setOrderIds($orderIds);
