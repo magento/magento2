@@ -14,6 +14,7 @@ class Interval implements IntervalInterface
      * Minimal possible value
      */
     const DELTA = 0.005;
+
     /**
      * @var Select
      */
@@ -60,12 +61,12 @@ class Interval implements IntervalInterface
         $valueFiled = $this->getValueFiled();
         $valueAlias = $this->getValueAlias();
         if ($lower !== null) {
-            $select->where("${valueFiled} >= ?", $lower - self::DELTA);
+            $select->where($valueFiled . ' >= ?', $lower - self::DELTA);
         }
         if ($upper !== null) {
-            $select->where("${valueFiled} < ?", $upper - self::DELTA);
+            $select->where($valueFiled . ' < ?', $upper - self::DELTA);
         }
-        $select->order("${valueAlias} ASC")
+        $select->order($valueAlias . ' ASC')
             ->limit($limit, $offset);
 
         return $this->arrayValuesToFloat(
@@ -82,9 +83,9 @@ class Interval implements IntervalInterface
         $select = clone $this->select;
         $valueFiled = $this->getValueFiled();
         $select->columns(['count' => 'COUNT(*)'])
-            ->where("${valueFiled} <  ?", $data - self::DELTA);
+            ->where($valueFiled . ' <  ?', $data - self::DELTA);
         if ($lower !== null) {
-            $select->where("${valueFiled} >= ?", $lower - self::DELTA);
+            $select->where($valueFiled . ' >= ?', $lower - self::DELTA);
         }
         $offset = $this->select->getConnection()
             ->fetchRow($select)['count'];
@@ -104,10 +105,10 @@ class Interval implements IntervalInterface
         $valueFiled = $this->getValueFiled();
         $valueAlias = $this->getValueAlias();
         $select->columns(['count' => 'COUNT(*)'])
-            ->where("${valueFiled} > ?", $data + self::DELTA);
+            ->where($valueFiled . ' > ?', $data + self::DELTA);
 
         if ($upper !== null) {
-            $select->where("${valueFiled} < ? ", $data - self::DELTA);
+            $select->where($valueFiled . ' < ?', $data - self::DELTA);
         }
 
         $offset = $this->select->getConnection()
@@ -118,11 +119,11 @@ class Interval implements IntervalInterface
         }
 
         $select = clone $this->select;
-        $select->where("${valueFiled} >= ?", $data - self::DELTA);
+        $select->where($valueFiled . ' >= ?', $data - self::DELTA);
         if ($upper !== null) {
-            $select->where("${valueFiled} < ? ", $data - self::DELTA);
+            $select->where($valueFiled . ' < ?', $data - self::DELTA);
         }
-        $select->order("${valueAlias} DESC")
+        $select->order($valueAlias . ' DESC')
             ->limit($rightIndex - $offset + 1, $offset - 1);
 
         return $this->arrayValuesToFloat(
