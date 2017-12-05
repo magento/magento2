@@ -219,9 +219,9 @@ define([
             jQuery('#' + windowId).modal('closeModal');
             textareaElm = $(this.textareaElementId);
 
-            if (typeof wysiwyg != 'undefined' && wysiwyg.activeEditor()) {
-                wysiwyg.activeEditor().focus();
-                wysiwyg.activeEditor().execCommand('mceInsertContent', false,
+            if (typeof wysiwyg != 'undefined' && wysiwyg.get(this.textareaElementId)) {
+                wysiwyg.get(this.textareaElementId).focus();
+                wysiwyg.get(this.textareaElementId).execCommand('mceInsertContent', false,
                     value);
                 if (this.selectedPlaceholder) {
                     this.selectedPlaceholder.remove();
