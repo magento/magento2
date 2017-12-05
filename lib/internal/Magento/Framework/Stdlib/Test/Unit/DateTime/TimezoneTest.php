@@ -61,7 +61,7 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
             'Parse date with time' => [
                 '05/19/2017 00:01 am', // date
                 'en_US', // locale
-                1495170060 // expected timestamp
+                1495177200 // expected timestamp
             ]
         ];
     }
