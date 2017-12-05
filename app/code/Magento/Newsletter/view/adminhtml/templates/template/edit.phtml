@@ -31,7 +31,7 @@ use Magento\Framework\App\TemplateTypesInterface;
 <script>
 require([
     'jquery',
-    'tinymceDeprecated',
+    'wysiwygAdapter',
     'Magento_Ui/js/modal/prompt',
     'Magento_Ui/js/modal/confirm',
     'mage/mage',
@@ -110,7 +110,7 @@ require([
             $('convert_button').show();
             $('convert_button_back').hide();
             $(this.id).value =  this.unconvertedText;
-            if(this.isEditor()) {
+            if (wysiwyg.activeEditor()) {
                 this.getEditor().turnOn();
                 this.getEditor().getToggleButton().show();
             }
@@ -123,9 +123,7 @@ require([
             if (this.typeChange) {
                 $('change_flag_element').value = '1';
             }
-            if(this.isEditor()) {
-                wysiwyg.triggerSave();
-            }
+
             // Temporary solution will be replaced after refactoring of newsletter functionality
             jQuery('#newsletter_template_edit_form').triggerHandler('save');
             return false;
@@ -180,19 +178,20 @@ require([
             } else {
                 $('preview_type').value = <?= $block->escapeJs($block->getTemplateType()) ?>;
             }
-            if (this.isEditor() && wysiwyg.get(this.id)) {
-                wysiwyg.triggerSave();
-                $('preview_text').value = wysiwyg.get(this.id).getContent();
-                wysiwyg.triggerSave();
+            if (wysiwyg.activeEditor() && wysiwyg.get(this.id)) {
+                $('preview_text').value = wysiwyg.activeEditor().getContent();
             } else {
                 $('preview_text').value = $(this.id).value;
             }
+
             if ($('template_styles') != undefined) {
                 $('preview_styles').value = $('template_styles').value;
             }
+
             if ($('id') != undefined) {
                 $('preview_id').value = $('id').value;
             }
+
             // Temporary solution will be replaced after refactoring of newsletter functionality
             jQuery('#newsletter_template_preview_form').triggerHandler('save');
             return false;
