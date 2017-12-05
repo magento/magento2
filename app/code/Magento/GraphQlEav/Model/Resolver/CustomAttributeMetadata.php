@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Resolver;
+namespace Magento\GraphQlEav\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Reflection\TypeProcessor;

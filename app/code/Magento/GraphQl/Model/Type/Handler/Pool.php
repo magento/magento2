@@ -9,6 +9,7 @@ namespace Magento\GraphQl\Model\Type\Handler;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use Magento\GraphQl\Model\Type\HandlerFactory;
 use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\GraphQl\Model\Type\Config;
 
 /**
  * Retrieve type's registered in pool, or generate types yet to be instantiated and register them
@@ -32,6 +33,11 @@ class Pool
     private $typeFactory;
 
     /**
+     * @var Config
+     */
+    private $typeConfig;
+
+    /**
      * @var TypeInterface[]
      */
     private $typeRegistry = [];
@@ -39,13 +45,16 @@ class Pool
     /**
      * @param HandlerFactory $typeHandlerFactory
      * @param TypeFactory $typeFactory
+     * @param Config $typeConfig
      */
     public function __construct(
         HandlerFactory $typeHandlerFactory,
-        TypeFactory $typeFactory
+        TypeFactory $typeFactory,
+        Config $typeConfig
     ) {
         $this->typeHandlerFactory = $typeHandlerFactory;
         $this->typeFactory = $typeFactory;
+        $this->typeConfig = $typeConfig;
     }
 
     /**
@@ -57,7 +66,7 @@ class Pool
      */
     public function getType(string $typeName)
     {
-        if (isset($this->typeRegistry[$typeName])) {
+        if ($this->isTypeRegistered($typeName)) {
             return $this->typeRegistry[$typeName];
         }
 
@@ -78,13 +87,10 @@ class Pool
      */
     public function getComplexType(string $typeName)
     {
-        if (isset($this->typeRegistry[$typeName])) {
+        if ($this->isTypeRegistered($typeName)) {
             return $this->typeRegistry[$typeName];
         }
-        $typeHandlerName = __NAMESPACE__ . '\\'. $typeName;
-        if (!class_exists($typeHandlerName)) {
-            throw new \LogicException(sprintf('Type handler not implemented for %s', $typeHandlerName));
-        }
+        $typeHandlerName = $this->typeConfig->getHandlerNameForType($typeName);
 
         $typeHandler = $this->typeHandlerFactory->create($typeHandlerName);
 

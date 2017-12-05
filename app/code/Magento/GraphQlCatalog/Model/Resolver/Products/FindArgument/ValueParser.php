@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GraphQl\Model\Resolver\Products\FindArgument;
+namespace Magento\GraphQlCatalog\Model\Resolver\Products\FindArgument;
 
 use Magento\Framework\GraphQl\Argument\Find\FindArgumentValueFactory;
 use Magento\Framework\GraphQl\Argument\ValueParserInterface;
+use Magento\GraphQlCatalog\Model\Resolver\Products\FindArgument\ClauseConverter;
 
 /**
  * Parses a mixed value to a FindArgumentValue

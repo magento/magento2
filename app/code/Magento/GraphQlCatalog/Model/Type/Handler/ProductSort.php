@@ -4,12 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Type\Handler;
+namespace Magento\GraphQlCatalog\Model\Type\Handler;
 
 use Magento\Eav\Api\AttributeManagementInterface;
-use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator as Generator;
+use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator as Generator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\GraphQl\Model\Type\Handler\Pool;
+use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 
 /**
  * Define ProductSort GraphQL type
@@ -79,7 +81,7 @@ class ProductSort implements HandlerInterface
         $attributes = $this->management->getAttributes('catalog_product', 4);
         foreach ($attributes as $attribute) {
             if ((!$attribute->getIsUserDefined()) && !is_array($attribute)) {
-                $result[$attribute->getAttributeCode()] = 'SortEnum';
+                $result[$attribute->getAttributeCode()] = $this->typePool->getType('SortEnum');
             }
         }
 
@@ -88,16 +90,12 @@ class ProductSort implements HandlerInterface
             if (is_array($attribute)) {
                 unset($staticAttributes[$attributeKey]);
             } else {
-                $staticAttributes[$attributeKey] = 'SortEnum';
+                $staticAttributes[$attributeKey] = $this->typePool->getType('SortEnum');
             }
         }
 
         $result = array_merge($result, $staticAttributes);
 
-        $reflector = new \ReflectionClass($this);
-        $resolvedTypes = $this->typeGenerator->generate($reflector->getShortName(), $result);
-        $fields = $resolvedTypes->config['fields'];
-
-        return $fields;
+        return $result;
     }
 }

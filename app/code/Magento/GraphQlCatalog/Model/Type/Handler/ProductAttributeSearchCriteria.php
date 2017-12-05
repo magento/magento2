@@ -4,12 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Type\Handler;
+namespace Magento\GraphQlCatalog\Model\Type\Handler;
 
 use Magento\Eav\Api\AttributeManagementInterface;
-use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
+use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\GraphQl\Model\Type\Handler\Pool;
 
 /**
  * Define ProductAttributeSearchCriteria's GraphQL type
@@ -19,7 +20,7 @@ class ProductAttributeSearchCriteria implements HandlerInterface
     /**
      * @var TypeGenerator
      */
-    private $typeGenerator;
+    private $pool;
 
     /**
      * @var AttributeManagementInterface
@@ -32,16 +33,16 @@ class ProductAttributeSearchCriteria implements HandlerInterface
     private $typeFactory;
 
     /**
-     * @param TypeGenerator $typeGenerator
+     * @param Pool $pool
      * @param AttributeManagementInterface $management
      * @param TypeFactory $typeFactory
      */
     public function __construct(
-        TypeGenerator $typeGenerator,
+        Pool $pool,
         AttributeManagementInterface $management,
         TypeFactory $typeFactory
     ) {
-        $this->typeGenerator = $typeGenerator;
+        $this->pool = $pool;
         $this->management = $management;
         $this->typeFactory = $typeFactory;
     }
@@ -72,15 +73,14 @@ class ProductAttributeSearchCriteria implements HandlerInterface
         $schema = [];
         $attributes = $this->management->getAttributes('catalog_product', 4);
         foreach ($attributes as $attribute) {
-            $schema[$attribute->getAttributeCode()] = 'SearchCriteriaExpression';
+            $schema[$attribute->getAttributeCode()] = $this->pool->getType('SearchCriteriaExpression');
         }
 
-        $schema = array_merge(
-            $schema,
-            ['or' => $className]
-        );
-        $resolvedTypes = $this->typeGenerator->generate($className, $schema);
-        $fields = $resolvedTypes->config['fields'];
+        $fields = function () use ($schema, $className) {
+            array_merge($schema, ['or' => $this->pool->getType($className)]);
+
+            return $schema;
+        };
 
         return $fields;
     }

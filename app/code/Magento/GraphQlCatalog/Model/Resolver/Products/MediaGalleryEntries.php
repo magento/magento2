@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Resolver\Products;
+namespace Magento\GraphQlCatalog\Model\Resolver\Products;
 
 use Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;

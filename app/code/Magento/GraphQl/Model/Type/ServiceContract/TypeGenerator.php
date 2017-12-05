@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Type\Helper\ServiceContract;
+namespace Magento\GraphQl\Model\Type\ServiceContract;
 
 use Magento\Framework\GraphQl\Type\Definition\InterfaceType;
 use Magento\GraphQl\Model\Type\Handler\Pool;

@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GraphQl\Model\Resolver\Products\FindArgument;
+namespace Magento\GraphQlCatalog\Model\Resolver\Products\FindArgument;
 
 use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\Framework\GraphQl\Argument\Find\Clause\ReferenceTypeFactory;
@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Argument\Find\Clause\ReferenceType;
 use Magento\Framework\GraphQl\Argument\Find\ClauseFactory;
 use Magento\Framework\GraphQl\Argument\Find\ConnectiveFactory;
 use Magento\Framework\GraphQl\Argument\Find\Connective;
-use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
+use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 
 /**
  * Converts the input value for "find" to a Clause|Connective format
@@ -34,7 +34,7 @@ class ClauseConverter
     private $referenceTypeFactory;
 
     /**
-     * @var TypeGenerator
+     * @var \Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator
      */
     private $typeGenerator;
 
@@ -47,7 +47,7 @@ class ClauseConverter
      * @param ClauseFactory $clauseFactory
      * @param ConnectiveFactory $connectiveFactory
      * @param ReferenceTypeFactory $referenceTypeFactory
-     * @param TypeGenerator $typeGenerator
+     * @param \Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator $typeGenerator
      * @param AttributeManagementInterface $management
      */
     public function __construct(

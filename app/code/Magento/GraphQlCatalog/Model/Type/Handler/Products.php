@@ -4,15 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Type\Handler;
+namespace Magento\GraphQlCatalog\Model\Type\Handler;
 
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\GraphQl\Model\Type\Handler\Pool;
 
 /**
- * Defines input type for attributes in ['attribute_code' => 'value', 'entity_type' => 'value'] format
+ * Define GraphQL type for search result of Products
  */
-class AttributeInput implements HandlerInterface
+class Products implements HandlerInterface
 {
     /**
      * @var Pool
@@ -35,20 +36,31 @@ class AttributeInput implements HandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getType()
     {
         $reflector = new \ReflectionClass($this);
-
-        return $this->typeFactory->createInputObject(
+        return $this->typeFactory->createObject(
             [
                 'name' => $reflector->getShortName(),
-                'fields' => [
-                    'attribute_code' => $this->typePool->getType('String'),
-                    'entity_type' => $this->typePool->getType('String')
-                ],
+                'fields' => $this->getFields(),
             ]
         );
+    }
+
+    /**
+     * Retrieve the result fields
+     *
+     * @return array
+     */
+    private function getFields()
+    {
+        $fields = [
+            'items' => $this->typeFactory->createList($this->typePool->getType('Product')),
+            'page_info' => $this->typePool->getType('SearchResultPageInfo'),
+            'total_count' => $this->typePool->getType('Int')
+        ];
+        return $fields;
     }
 }

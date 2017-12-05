@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Type\Handler;
+namespace Magento\GraphQlCatalog\Model\Type\Handler;
 
-use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\GraphQl\Model\Type\Handler\Pool;
 
 /**
- * Define SearchResultPageInfo GraphQL type
+ * Define ProductGroupSearchCriteria's GraphQL type
  */
-class SearchResultPageInfo implements HandlerInterface
+class ProductGroupSearchCriteria implements HandlerInterface
 {
     /**
      * @var Pool
@@ -41,27 +41,11 @@ class SearchResultPageInfo implements HandlerInterface
     public function getType()
     {
         $reflector = new \ReflectionClass($this);
-        return $this->typeFactory->createObject(
+        return $this->typeFactory->createInputObject(
             [
                 'name' => $reflector->getShortName(),
-                'fields' => $this->getFields()
+                'fields' => ['and' => $this->pool->getType('ProductAttributeSearchCriteria')]
             ]
         );
-    }
-
-    /**
-     * Retrieve fields
-     *
-     * @return array
-     */
-    private function getFields()
-    {
-        $intType = $this->pool->getType('Int');
-        $result = [
-            'page_size' => $intType,
-            'current_page' => $intType
-        ];
-
-        return $result;
     }
 }

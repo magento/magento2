@@ -4,13 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Type\Handler;
+namespace Magento\GraphQlCatalog\Model\Type\Handler;
 
 use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\Framework\Exception\InputException;
-use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
+use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\GraphQl\Model\Type\Handler\Pool;
 
 /**
  * Define product's GraphQL type

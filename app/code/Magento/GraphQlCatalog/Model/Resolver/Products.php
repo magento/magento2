@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Resolver;
+namespace Magento\GraphQlCatalog\Model\Resolver;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\GraphQl\Model\Resolver\Products\Product;
+use Magento\GraphQlCatalog\Model\Resolver\Products\Product;
 use Magento\GraphQl\Model\ResolverInterface;
 use Magento\Framework\GraphQl\Argument\SearchCriteria\Builder;
 
@@ -34,7 +34,7 @@ class Products implements ResolverInterface
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param Builder $searchCriteriaBuilder
-     * @param Product $productResolver
+     * @param \Magento\GraphQlCatalog\Model\Resolver\Products\Product $productResolver
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,

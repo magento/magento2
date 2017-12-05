@@ -4,15 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Type\Handler;
+namespace Magento\GraphQlConfigurableProduct\Model\Type\Handler;
 
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\GraphQl\Model\Type\Handler\Pool;
 
 /**
- * Define GraphQL type for search result of Products
+ * Define ConfigurableProduct's GraphQL type
  */
-class Products implements HandlerInterface
+class ConfigurableProduct implements HandlerInterface
 {
     /**
      * @var Pool
@@ -35,31 +36,24 @@ class Products implements HandlerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getType()
     {
         $reflector = new \ReflectionClass($this);
+        $fields = [];
+        $interface = $this->typePool->getType('Product');
+        $fields = array_merge($fields, $interface->config['fields']);
+        $fields['configurable_product_links'] =  $this->typeFactory->createList(
+            $this->typePool->getComplexType('Product')
+        );
+
         return $this->typeFactory->createObject(
             [
                 'name' => $reflector->getShortName(),
-                'fields' => $this->getFields(),
+                'fields' => $fields,
+                'interfaces' => [$interface]
             ]
         );
-    }
-
-    /**
-     * Retrieve the result fields
-     *
-     * @return array
-     */
-    private function getFields()
-    {
-        $fields = [
-            'items' => $this->typeFactory->createList($this->typePool->getType('Product')),
-            'page_info' => $this->typePool->getType('SearchResultPageInfo'),
-            'total_count' => $this->typePool->getType('Int')
-        ];
-        return $fields;
     }
 }

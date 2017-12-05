@@ -4,15 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Type\Handler;
+namespace Magento\GraphQlEav\Model\Type\Handler;
 
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\GraphQl\Model\Type\Handler\Pool;
 
 /**
- * Define ConfigurableProduct's GraphQL type
+ * Defines input type for attributes in ['attribute_code' => 'value', 'entity_type' => 'value'] format
  */
-class ConfigurableProduct implements HandlerInterface
+class AttributeInput implements HandlerInterface
 {
     /**
      * @var Pool
@@ -40,18 +41,14 @@ class ConfigurableProduct implements HandlerInterface
     public function getType()
     {
         $reflector = new \ReflectionClass($this);
-        $fields = [];
-        $interface = $this->typePool->getType('Product');
-        $fields = array_merge($fields, $interface->config['fields']);
-        $fields['configurable_product_links'] =  $this->typeFactory->createList(
-            $this->typePool->getComplexType('SimpleProduct')
-        );
 
-        return $this->typeFactory->createObject(
+        return $this->typeFactory->createInputObject(
             [
                 'name' => $reflector->getShortName(),
-                'fields' => $fields,
-                'interfaces' => [$interface]
+                'fields' => [
+                    'attribute_code' => $this->typePool->getType('String'),
+                    'entity_type' => $this->typePool->getType('String')
+                ],
             ]
         );
     }

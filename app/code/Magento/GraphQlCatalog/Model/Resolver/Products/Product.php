@@ -4,13 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Resolver\Products;
+namespace Magento\GraphQlCatalog\Model\Resolver\Products;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Product field resolver, used for GraphQL request processing.
@@ -64,8 +63,6 @@ class Product
     public function resolve(string $sku)
     {
         return $this->getProduct($sku);
-
-        throw new GraphQlInputException(__('Missing arguments for correct type resolution.'));
     }
 
     /**
