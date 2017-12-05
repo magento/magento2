@@ -15,7 +15,7 @@ define(
         return {
             getAddressItems: function() {
                 var items = [];
-                if (isLoggedIn) {
+                if (isLoggedIn()) {
                     var customerData = window.customerData;
                     if (Object.keys(customerData).length) {
                         $.each(customerData.addresses, function (key, item) {
