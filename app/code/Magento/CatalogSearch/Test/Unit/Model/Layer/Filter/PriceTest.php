@@ -11,16 +11,13 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Layer\Filter\Price
- * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
-    private $itemDataBuilder;
-
     /**
-     * @var \Magento\Catalog\Model\Price|MockObject
+     * @var \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder|MockObject
      */
-    private $price;
+    private $itemDataBuilder;
 
     /**
      * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection|MockObject
@@ -54,63 +51,49 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->request = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
             ->getMockForAbstractClass();
 
         $dataProviderFactory = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Filter\DataProvider\PriceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-
         $this->dataProvider = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Filter\DataProvider\Price')
             ->disableOriginalConstructor()
             ->setMethods(['setPriceId', 'getPrice'])
             ->getMock();
-
         $dataProviderFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->dataProvider));
 
         $this->layer = $this->getMockBuilder('\Magento\Catalog\Model\Layer')
             ->disableOriginalConstructor()
-            ->setMethods(['getState', 'getProductCollection'])
             ->getMock();
 
         $this->state = $this->getMockBuilder('\Magento\Catalog\Model\Layer\State')
             ->disableOriginalConstructor()
-            ->setMethods(['addFilter'])
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getState')
             ->will($this->returnValue($this->state));
 
-        $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
+        $this->fulltextCollection = $this->getMockBuilder(
             '\Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection'
-        )
-            ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter', 'getFacetedData'])
+        )->disableOriginalConstructor()
             ->getMock();
-
         $this->layer->expects($this->any())
             ->method('getProductCollection')
             ->will($this->returnValue($this->fulltextCollection));
 
         $this->itemDataBuilder = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Filter\Item\DataBuilder')
             ->disableOriginalConstructor()
-            ->setMethods(['addItemData', 'build'])
             ->getMock();
 
-        $this->filterItemFactory = $this->getMockBuilder(
-            '\Magento\Catalog\Model\Layer\Filter\ItemFactory'
-        )
+        $this->filterItemFactory = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Filter\ItemFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $filterItem = $this->getMockBuilder(
-            '\Magento\Catalog\Model\Layer\Filter\Item'
-        )
+        $filterItem = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Filter\Item')
             ->disableOriginalConstructor()
             ->setMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
             ->getMock();
@@ -123,7 +106,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
         $escaper = $this->getMockBuilder('\Magento\Framework\Escaper')
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml'])
             ->getMock();
         $escaper->expects($this->any())
             ->method('escapeHtml')
@@ -162,7 +144,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $requestValue
      * @param $idValue
-     * @param $isIdUsed
      * @dataProvider applyWithEmptyRequestDataProvider
      */
     public function testApplyWithEmptyRequest($requestValue, $idValue)
