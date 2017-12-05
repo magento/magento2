@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model;
 
 use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Catalog\Api\Data\CategoryProductLinkInterface;
+
 /**
  * @codeCoverageIgnore
  */
