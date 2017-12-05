@@ -10,7 +10,9 @@ use Magento\CatalogRule\Api\IndexerTableSwapperInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface as Adapter;
 use Magento\Framework\App\ResourceConnection;
 
-
+/**
+ * @inheritDoc
+ */
 class IndexerTableSwapper implements IndexerTableSwapperInterface
 {
     /**
@@ -59,7 +61,7 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
      */
     private function generateRandomSuffix(): string
     {
-        return md5(random_bytes(64));
+        return hash_hmac('md5', random_bytes(64), 'doNotCare');
     }
 
     /**
