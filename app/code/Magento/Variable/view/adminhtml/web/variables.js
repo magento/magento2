@@ -9,7 +9,6 @@ define([
     'mage/translate',
     'wysiwygAdapter',
     'uiRegistry',
-    'ko',
     'mage/apply/main',
     'mageUtils',
     'Magento_Variable/js/config-directive-generator',
@@ -17,7 +16,7 @@ define([
     'Magento_Ui/js/lib/spinner',
     'jquery/ui',
     'prototype'
-], function (jQuery, $t, wysiwyg, registry, ko, mageApply, utils, configGenerator, customGenerator, loader) {
+], function (jQuery, $t, wysiwyg, registry, mageApply, utils, configGenerator, customGenerator, loader) {
     'use strict';
 
     window.Variables = {
@@ -29,14 +28,16 @@ define([
         overlayHideEffectOptions: null,
         insertFunction: 'Variables.insertVariable',
         selectedPlaceholder: null,
-        isEditMode: ko.observable(),
+        isEditMode: null,
+        editor: null,
 
         /**
          * @param {*} textareaElementId
          * @param {Function} insertFunction
+         * @param {Object} editor
          * @param {Object} selectedPlaceholder
          */
-        init: function (textareaElementId, insertFunction, selectedPlaceholder) {
+        init: function (textareaElementId, insertFunction, editor, selectedPlaceholder) {
             if ($(textareaElementId)) {
                 this.textareaElementId = textareaElementId;
             }
@@ -49,6 +50,9 @@ define([
                 this.selectedPlaceholder = selectedPlaceholder;
             }
 
+            if (editor) {
+                this.editor = editor;
+            }
         },
 
         /**
@@ -95,9 +99,9 @@ define([
             self = this;
 
             jQuery('<div id="' + this.dialogWindowId + '">' + html + '</div>').modal({
-                title: self.isEditMode() ? $t('Edit variable...') : $t('Insert Variable...') ,
+                title: self.isEditMode ? $t('Edit variable...') : $t('Insert Variable...') ,
                 type: 'slide',
-                buttons: self.getButtonsConfig(self.isEditMode()),
+                buttons: self.getButtonsConfig(self.isEditMode),
 
                 closed: function (e, modal) {
                     modal.modal.remove();
@@ -195,6 +199,7 @@ define([
          * @param {String} varValue
          * @param {*} varLabel
          * @return {String}
+         * @deprecated This method isn't relevant after ui changes
          */
         prepareVariableRow: function (varValue, varLabel) {
             var value = varValue.replace(/"/g, '&quot;').replace(/'/g, '\\&#39;'),
@@ -211,17 +216,19 @@ define([
 
         /**
          * @param {*} value
+         * @return {Object}
          */
         insertVariable: function (value) {
             var windowId = this.dialogWindowId,
-                textareaElm, scrollPos;
+                textareaElm, scrollPos, wysiwygAdapter;
 
             jQuery('#' + windowId).modal('closeModal');
             textareaElm = $(this.textareaElementId);
 
-            if (typeof wysiwyg != 'undefined' && wysiwyg.get(this.textareaElementId)) {
-                wysiwyg.get(this.textareaElementId).focus();
-                wysiwyg.get(this.textareaElementId).execCommand('mceInsertContent', false,
+            //to support switching between wysiwyg editors
+            wysiwygAdapter = wysiwyg && wysiwyg.get(this.textareaElementId) ? wysiwyg.get(this.textareaElementId) : this.editor
+            if (wysiwygAdapter) {
+                wysiwygAdapter.execCommand('mceInsertContent', false,
                     value);
                 if (this.selectedPlaceholder) {
                     this.selectedPlaceholder.remove();
@@ -236,22 +243,26 @@ define([
                 textareaElm = null;
             }
 
-            return;
+            return this;
         },
 
+        /**
+         * Remove variable from wysywig editor
+         * @return {Object}
+         */
         removeVariable: function () {
             var windowId = this.dialogWindowId;
 
             jQuery('#' + windowId).modal('closeModal');
 
-            if (typeof wysiwyg != 'undefined' && wysiwyg.activeEditor()) {
-                wysiwyg.activeEditor().focus();
-                wysiwyg.activeEditor().execCommand('mceRemoveNode', false);
+            if (typeof wysiwyg != 'undefined' && wysiwyg.get(this.textareaElementId)) {
+                wysiwyg.get(this.textareaElementId).focus();
+                wysiwyg.get(this.textareaElementId).execCommand('mceRemoveNode', false);
                 if (this.selectedPlaceholder) {
                     this.selectedPlaceholder.remove();
                 }
             }
-            return;
+            return this;
         }
     };
 
@@ -277,8 +288,8 @@ define([
                 new Ajax.Request(url, {
                     parameters: {},
                     onComplete: function (transport) {
-                        Variables.init(this.textareaId, 'MagentovariablePlugin.insertVariable');
-                        Variables.isEditMode(variableCode);
+                        Variables.init(this.textareaId, 'MagentovariablePlugin.insertVariable', this.editor);
+                        Variables.isEditMode = variableCode;
                         this.variablesContent = transport.responseText;
                         Variables.openDialogWindow(this.variablesContent, variableCode, selectedElement);
                         Variables.initUiGrid();
@@ -286,6 +297,14 @@ define([
                 });
 
             return;
+        },
+
+        /**
+         * @param {*} variables
+         * @deprecated This method isn't relevant after ui changes
+         */
+        openChooser: function (variables) {
+            Variables.openVariableChooser(variables);
         },
 
         /**
