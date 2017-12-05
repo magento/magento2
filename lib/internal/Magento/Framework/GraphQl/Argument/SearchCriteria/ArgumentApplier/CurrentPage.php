@@ -25,7 +25,7 @@ class CurrentPage implements ArgumentApplierInterface
             $searchCriteria->setCurrentPage($argument->getValue());
         } else {
             throw new \Magento\Framework\Exception\RuntimeException(
-                new Phrase('Argument %1 not of type Int', $argument->getName())
+                new Phrase('Argument %1 not of type Int', [$argument->getName()])
             );
         }
     }

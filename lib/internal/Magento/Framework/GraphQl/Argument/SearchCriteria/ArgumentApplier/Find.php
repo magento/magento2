@@ -43,7 +43,7 @@ class Find implements ArgumentApplierInterface
             $searchCriteria->setFilterGroups($this->filterGroupFactory->create($filter));
         } else {
             throw new \Magento\Framework\Exception\RuntimeException(
-                new Phrase('Argument %1 not of type %2', $argument->getName(), FindArgumentValueInterface::class)
+                new Phrase('Argument %1 not of type %2', [$argument->getName(), FindArgumentValueInterface::class])
             );
         }
     }

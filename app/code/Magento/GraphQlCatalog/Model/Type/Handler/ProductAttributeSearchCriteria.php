@@ -77,7 +77,7 @@ class ProductAttributeSearchCriteria implements HandlerInterface
         }
 
         $fields = function () use ($schema, $className) {
-            array_merge($schema, ['or' => $this->pool->getType($className)]);
+            $schema = array_merge($schema, ['or' => $this->pool->getType($className)]);
 
             return $schema;
         };

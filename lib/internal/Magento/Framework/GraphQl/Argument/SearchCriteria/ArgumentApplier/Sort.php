@@ -47,7 +47,7 @@ class Sort implements ArgumentApplierInterface
             $searchCriteria->setSortOrders($sortOrders);
         } elseif (!empty($argument->getValue())) {
             throw new \Magento\Framework\Exception\RuntimeException(
-                new Phrase('Argument %1 not of type array or null', $argument->getName())
+                new Phrase('Argument %1 not of type array or null', [$argument->getName()])
             );
         }
     }

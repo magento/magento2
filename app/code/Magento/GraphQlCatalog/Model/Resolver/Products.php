@@ -51,16 +51,6 @@ class Products implements ResolverInterface
      */
     public function resolve(array $args)
     {
-        if (isset($args['sku']) && !empty($args['sku']->getValue())) {
-            $product = $this->productResolver->getProduct($args['sku']->getValue());
-            return [
-                'total_count' => 1,
-                'items' => [$product],
-                'page_info' => ['page_size' => 1, 'current_page' => 1]
-            ];
-        } else {
-            unset($args['sku']);
-        }
         $searchCriteria = $this->searchCriteriaBuilder->build($args);
         $itemsResults = $this->productRepository->getList($searchCriteria);
 
