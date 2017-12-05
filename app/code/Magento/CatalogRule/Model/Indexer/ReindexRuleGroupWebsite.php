@@ -35,6 +35,14 @@ class ReindexRuleGroupWebsite
      */
     private $tableSwapper;
 
+    /**
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ActiveTableSwitcher $activeTableSwitcher
+     * @param TableSwapper|null $tableSwapper
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Framework\App\ResourceConnection $resource,
