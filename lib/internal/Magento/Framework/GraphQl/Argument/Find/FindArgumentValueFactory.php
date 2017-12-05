@@ -29,15 +29,15 @@ class FindArgumentValueFactory
     /**
      * Create a FindArgumentValue class
      *
-     * @param Clause|Connective $clause
+     * @param Connective $connective
      * @return FindArgumentValue
      */
-    public function create($clause)
+    public function create(Connective $connective)
     {
         return $this->objectManager->create(
             FindArgumentValue::class,
             [
-                'clause' => $clause,
+                'value' => $connective,
             ]
         );
     }

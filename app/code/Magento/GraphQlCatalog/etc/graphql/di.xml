@@ -12,7 +12,6 @@
                 <item name="Product" xsi:type="string">Magento\GraphQlCatalog\Model\Type\Handler\Product</item>
                 <item name="SimpleProduct" xsi:type="string">Magento\GraphQlCatalog\Model\Type\Handler\SimpleProduct</item>
                 <item name="Products" xsi:type="string">Magento\GraphQlCatalog\Model\Type\Handler\Products</item>
-                <item name="ProductGroupSearchCriteria" xsi:type="string">Magento\GraphQlCatalog\Model\Type\Handler\ProductGroupSearchCriteria</item>
                 <item name="ProductAttributeSearchCriteria" xsi:type="string">Magento\GraphQlCatalog\Model\Type\Handler\ProductAttributeSearchCriteria</item>
                 <item name="ProductSort" xsi:type="string">Magento\GraphQlCatalog\Model\Type\Handler\ProductSort</item>
             </argument>
@@ -25,7 +24,7 @@
                     <item name="type" xsi:type="string">Products</item>
                     <item name="resolver" xsi:type="object">Magento\GraphQlCatalog\Model\Resolver\Products</item>
                     <item name="args" xsi:type="array">
-                        <item name="find!" xsi:type="string">ProductGroupSearchCriteria</item>
+                        <item name="find!" xsi:type="string">ProductAttributeSearchCriteria</item>
                         <item name="pageSize" xsi:type="string">Int</item>
                         <item name="currentPage" xsi:type="string">Int</item>
                         <item name="sort" xsi:type="string">ProductSort</item>
