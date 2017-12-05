@@ -6,6 +6,7 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -199,13 +200,18 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
     {
         $this->indexer->reindexAll();
 
-        $products = $this->search('Configurable');
+        $visibilityFilter = [
+            Visibility::VISIBILITY_IN_SEARCH,
+            Visibility::VISIBILITY_IN_CATALOG,
+            Visibility::VISIBILITY_BOTH
+        ];
+        $products = $this->search('Configurable', $visibilityFilter);
         $this->assertCount(1, $products);
 
         $childProduct = $this->getProductBySku('configurable_option_single_child');
         $childProduct->setStatus(Product\Attribute\Source\Status::STATUS_DISABLED)->save();
 
-        $products = $this->search('Configurable');
+        $products = $this->search('Configurable', $visibilityFilter);
         $this->assertCount(0, $products);
     }
 
@@ -213,9 +219,10 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      * Search the text and return result collection
      *
      * @param string $text
+     * @param null|array $visibilityFilter
      * @return Product[]
      */
-    protected function search($text)
+    protected function search($text, $visibilityFilter = null)
     {
         $this->resourceFulltext->resetSearchResults();
         $query = $this->queryFactory->get();
@@ -230,6 +237,10 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $collection->addSearchFilter($text);
+        if (null !== $visibilityFilter) {
+            $collection->setVisibility($visibilityFilter);
+        }
+
         foreach ($collection as $product) {
             $products[] = $product;
         }
