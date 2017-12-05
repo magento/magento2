@@ -533,7 +533,8 @@ define([
          * Init header elements
          */
         initHeader: function () {
-            var data;
+            var labels = [],
+                data;
 
             if (!this.labels().length) {
                 _.each(this.childTemplate.children, function (cell) {
@@ -547,8 +548,9 @@ define([
                         sortOrder: cell.config.sortOrder
                     });
 
-                    this.labels.push(data);
+                    labels.push(data);
                 }, this);
+                this.labels(_.sortBy(labels, 'sortOrder'));
             }
         },
 

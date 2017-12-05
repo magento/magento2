@@ -47,7 +47,7 @@ define([
 
             steps.sort(this.sortItems).forEach(function (element) {
                 if (element.code == hashString || element.alias == hashString) { //eslint-disable-line eqeqeq
-                    element.navigate();
+                    element.navigate(element);
                 } else {
                     element.isVisible(false);
                 }
