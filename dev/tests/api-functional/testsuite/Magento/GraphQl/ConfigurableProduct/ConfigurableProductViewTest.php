@@ -23,58 +23,60 @@ class ConfigurableProductViewTest extends GraphQlAbstract
         $query
             = <<<QUERY
 {
-    product(sku: "{$productSku}")
+    products(find: {and: {sku: {eq: "{$productSku}"}}})
     {
-        id
-        attribute_set_id
-        created_at
-        name
-        sku
-        status
-        type_id
-        updated_at
-        visibility
-        weight
-        category_ids                
-        ... on ConfigurableProduct {
-            configurable_product_links {
-                id
-                category_ids
-                name
-                sku
-                attribute_set_id
-                visibility
-                weight
-                created_at
-                updated_at
-                category_links {
-                position
-                category_id
-                }
-                media_gallery_entries{
-                disabled
-                file
-                id
-                label
-                media_type
-                position
-                types
-                content
-                {
-                    base64_encoded_data
-                    type
+        items{
+            id
+            attribute_set_id
+            created_at
+            name
+            sku
+            status
+            type_id
+            updated_at
+            visibility
+            weight
+            category_ids                
+            ... on ConfigurableProduct {
+                configurable_product_links {
+                    id
+                    category_ids
                     name
-                }
-                video_content
-                {
+                    sku
+                    attribute_set_id
+                    visibility
+                    weight
+                    created_at
+                    updated_at
+                    category_links {
+                    position
+                    category_id
+                    }
+                    media_gallery_entries{
+                    disabled
+                    file
+                    id
+                    label
                     media_type
-                    video_description
-                    video_metadata
-                    video_provider
-                    video_title
-                    video_url
-                }            
-              }
+                    position
+                    types
+                    content
+                    {
+                        base64_encoded_data
+                        type
+                        name
+                    }
+                    video_content
+                    {
+                        media_type
+                        video_description
+                        video_metadata
+                        video_provider
+                        video_title
+                        video_url
+                    }            
+                  }
+                }
             }
         }
     }
@@ -90,9 +92,12 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
 
-        $this->assertArrayHasKey('product', $response);
-        $this->assertBaseFields($product, $response['product']);
-        $this->assertConfigurableProductLinks($response['product']);
+        $this->assertArrayHasKey('products', $response);
+        $this->assertArrayHasKey('items', $response['products']);
+        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertArrayHasKey(0, $response['products']['items']);
+        $this->assertBaseFields($product, $response['products']['items'][0]);
+        $this->assertConfigurableProductLinks($response['products']['items'][0]);
     }
 
     /**
