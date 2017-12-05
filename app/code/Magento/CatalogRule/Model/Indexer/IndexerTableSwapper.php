@@ -61,7 +61,7 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
      */
     private function generateRandomSuffix(): string
     {
-        return hash_hmac('md5', random_bytes(64), 'doNotCare');
+        return bin2hex(random_bytes(4));
     }
 
     /**
@@ -101,7 +101,7 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
                 'newName' => $tableName
             ];
             $toDrop[] = $temporaryOriginalName;
-            $temporaryTablesRenamed[] = $temporaryTableName;
+            $temporaryTablesRenamed[] = $tableName;
         }
 
         //Swapping tables.
