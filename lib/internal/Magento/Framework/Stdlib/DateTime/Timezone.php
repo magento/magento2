@@ -168,18 +168,9 @@ class Timezone implements TimezoneInterface
             $formatter = new \IntlDateFormatter(
                 $locale,
                 \IntlDateFormatter::SHORT,
-                \IntlDateFormatter::SHORT,
-                new \DateTimeZone($timezone)
+                \IntlDateFormatter::NONE
             );
-            try {
-                $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
-            } catch (\Exception $e) {
-                // IntlDateFormatter does not parse correctly date formats per some locales
-                // It depends on ICU lib version used by intl extension
-                // For locales like fr_FR, ar_KW transform date to m/d/Y format
-                $date = \DateTime::createFromFormat('d/m/Y', $date)->format('m/d/Y');
-                $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
-            }
+            $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
         }
         return (new \DateTime(null, new \DateTimeZone($timezone)))->setTimestamp($date);
     }
