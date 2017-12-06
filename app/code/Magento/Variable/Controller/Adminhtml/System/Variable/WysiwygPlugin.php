@@ -22,6 +22,13 @@ use Magento\Variable\Ui\Component\VariablesDataProvider;
 class WysiwygPlugin extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Variable::variable';
+
+    /**
      * @var CollectionFactory
      */
     private $collectionFactory;

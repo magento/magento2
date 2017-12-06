@@ -33,7 +33,7 @@ class Config
      */
     private $storesVariables;
 
-     /**
+    /**
      * Config constructor.
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Backend\Model\UrlInterface $url
@@ -77,7 +77,6 @@ class Config
                 'options' => [
                     'title' => __('Insert Variable...'),
                     'url' => $this->getVariablesWysiwygActionUrl(),
-                    'variable_placeholders' => $this->getVariablesWysiwygData(),
                     'onclick' => $onclickParts,
                     'class' => 'add-variable plugin',
                 ],
@@ -85,6 +84,7 @@ class Config
         ];
         $configPlugins = $config->getData('plugins');
         $variableConfig['plugins'] = array_merge($configPlugins, $variableWysiwyg);
+        $variableConfig['variable_placeholders'] = $this->getVariablesWysiwygData();
         return $variableConfig;
     }
 
@@ -108,11 +108,8 @@ class Config
      */
     public function getVariablesWysiwygActionUrl()
     {
-        return $this->_url->getUrl('mui/index/render',
-            ['namespace' => 'variables_modal']
-        );
+        return $this->_url->getUrl('mui/index/render', ['namespace' => 'variables_modal']);
     }
-
 
     /**
      * Prepare default variables
