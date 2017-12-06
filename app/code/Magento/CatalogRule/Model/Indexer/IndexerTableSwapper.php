@@ -42,13 +42,14 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
      */
     private function createTemporaryTable(string $originalTableName): string
     {
-        $temporaryTableName = $originalTableName . '__temp'
-            . $this->generateRandomSuffix();
+        $temporaryTableName = $this->adapter->getTableName(
+            $originalTableName . '__temp' . $this->generateRandomSuffix()
+        );
 
         $this->adapter->query(
             sprintf(
                 'create table %s like %s',
-                $this->adapter->getTableName($temporaryTableName),
+                $temporaryTableName,
                 $this->adapter->getTableName($originalTableName)
             )
         );
@@ -71,6 +72,7 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
      */
     public function getWorkingTableNameFor(string $originalTable): string
     {
+        $originalTable = $this->adapter->getTableName($originalTable);
         if (!array_key_exists($originalTable, $this->temporaryTables)) {
             $this->temporaryTables[$originalTable]
                 = $this->createTemporaryTable($originalTable);
@@ -92,7 +94,10 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
         //Renaming temporary tables to original tables' names, dropping old
         //tables.
         foreach ($originalTablesNames as $tableName) {
-            $temporaryOriginalName = $tableName . $this->generateRandomSuffix();
+            $tableName = $this->adapter->getTableName($tableName);
+            $temporaryOriginalName = $this->adapter->getTableName(
+                $tableName . $this->generateRandomSuffix()
+            );
             $temporaryTableName = $this->getWorkingTableNameFor($tableName);
             $toRename[] = [
                 'oldName' => $tableName,
