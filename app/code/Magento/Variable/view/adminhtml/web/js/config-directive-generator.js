@@ -11,8 +11,15 @@ define([
     return _.extend({
         directiveTemplate: '{{config path="%s"}}',
 
+        /**
+         * @param path
+         * @return {string}
+         */
         processConfig: function (path) {
-            return this.directiveTemplate.replace("%s", path);
+            return this.directiveTemplate.replace('%s', path);
+
         }
+
     });
+
 });

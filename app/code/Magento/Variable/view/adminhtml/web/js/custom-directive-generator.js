@@ -10,9 +10,15 @@ define([
 
     return _.extend({
         directiveTemplate: '{{customVar code=%s}}',
-        
+
+        /**
+         * @param {string} path
+         * @return {string}
+         */
         processConfig: function (path) {
-            return this.directiveTemplate.replace("%s", path);
+            return this.directiveTemplate.replace('%s', path);
         }
+
     });
+
 });
