@@ -7,7 +7,6 @@
 namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\CatalogRule\Api\IndexerTableSwapperInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface as Adapter;
 use Magento\Framework\App\ResourceConnection;
 
 /**
@@ -23,13 +22,13 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
     private $temporaryTables = [];
 
     /**
-     * @var Adapter
+     * @var ResourceConnection
      */
-    private $adapter;
+    private $resourceConnection;
 
     public function __construct(ResourceConnection $resource)
     {
-        $this->adapter = $resource->getConnection();
+        $this->resourceConnection = $resource;
     }
 
     /**
@@ -42,15 +41,15 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
      */
     private function createTemporaryTable(string $originalTableName): string
     {
-        $temporaryTableName = $this->adapter->getTableName(
+        $temporaryTableName = $this->resourceConnection->getTableName(
             $originalTableName . '__temp' . $this->generateRandomSuffix()
         );
 
-        $this->adapter->query(
+        $this->resourceConnection->getConnection()->query(
             sprintf(
                 'create table %s like %s',
                 $temporaryTableName,
-                $this->adapter->getTableName($originalTableName)
+                $this->resourceConnection->getTableName($originalTableName)
             )
         );
 
@@ -72,7 +71,7 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
      */
     public function getWorkingTableNameFor(string $originalTable): string
     {
-        $originalTable = $this->adapter->getTableName($originalTable);
+        $originalTable = $this->resourceConnection->getTableName($originalTable);
         if (!array_key_exists($originalTable, $this->temporaryTables)) {
             $this->temporaryTables[$originalTable]
                 = $this->createTemporaryTable($originalTable);
@@ -94,8 +93,8 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
         //Renaming temporary tables to original tables' names, dropping old
         //tables.
         foreach ($originalTablesNames as $tableName) {
-            $tableName = $this->adapter->getTableName($tableName);
-            $temporaryOriginalName = $this->adapter->getTableName(
+            $tableName = $this->resourceConnection->getTableName($tableName);
+            $temporaryOriginalName = $this->resourceConnection->getTableName(
                 $tableName . $this->generateRandomSuffix()
             );
             $temporaryTableName = $this->getWorkingTableNameFor($tableName);
@@ -112,14 +111,14 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
         }
 
         //Swapping tables.
-        $this->adapter->renameTablesBatch($toRename);
+        $this->resourceConnection->getConnection()->renameTablesBatch($toRename);
         //Cleaning up.
         foreach ($temporaryTablesRenamed as $tableName) {
             unset($this->temporaryTables[$tableName]);
         }
         //Removing old ones.
         foreach ($toDrop as $tableName) {
-            $this->adapter->dropTable($tableName);
+            $this->resourceConnection->getConnection()->dropTable($tableName);
         }
     }
 }
