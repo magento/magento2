@@ -318,7 +318,6 @@ class Full
             )
             ->distinct(true)
             ->where('child_id IN (?)', $entityIds)
-            ->where('parent_id NOT IN (?)', $entityIds)
             ->join(
                 ['cpe' => $this->getTable('catalog_product_entity')],
                 'relation.parent_id = cpe.' . $linkField,
