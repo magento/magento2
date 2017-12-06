@@ -13,7 +13,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Assert that product is present in wishlist.
+ * Assert that product is present in default wishlist.
  */
 class AssertProductRegularPriceOnStorefront extends AbstractConstraint
 {
