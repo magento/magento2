@@ -13,6 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/CatalogSearch/_files/indexer_fulltext.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FulltextTest extends \PHPUnit\Framework\TestCase
 {
