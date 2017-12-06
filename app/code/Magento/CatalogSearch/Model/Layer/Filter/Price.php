@@ -135,12 +135,10 @@ class Price extends AbstractFilter
 
         list($from, $to) = $filter;
 
-        $currencyRate = $this->getCurrencyRate();
-        $condition = [
-            'from' => $from / $currencyRate,
-            'to' =>  (empty($to) || $from == $to ? $to : $to - self::PRICE_DELTA) / $currencyRate
-        ];
-        $this->getLayer()->getProductCollection()->addFieldToFilter('price', $condition);
+        $this->getLayer()->getProductCollection()->addFieldToFilter(
+            'price',
+            ['from' => $from, 'to' =>  empty($to) || $from == $to ? $to : $to - self::PRICE_DELTA]
+        );
 
         $this->getLayer()->getState()->addFilter(
             $this->_createItem($this->_renderRangeLabel(empty($from) ? 0 : $from, $to), $filter)
@@ -158,7 +156,8 @@ class Price extends AbstractFilter
     {
         $rate = $this->_getData('currency_rate');
         if ($rate === null) {
-            $rate = $this->_storeManager->getStore()->getCurrentCurrencyRate();
+            $rate = $this->_storeManager->getStore($this->getStoreId())
+                ->getCurrentCurrencyRate();
         }
         if (!$rate) {
             $rate = 1;
@@ -176,6 +175,11 @@ class Price extends AbstractFilter
      */
     protected function _renderRangeLabel($fromPrice, $toPrice)
     {
+        $fromPrice *=  $this->getCurrencyRate();
+        if ($toPrice) {
+            $toPrice *= $this->getCurrencyRate();
+        }
+
         $formattedFromPrice = $this->priceCurrency->format($fromPrice);
         if ($toPrice === '') {
             return __('%1 and above', $formattedFromPrice);

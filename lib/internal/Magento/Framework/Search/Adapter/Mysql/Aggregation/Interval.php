@@ -14,7 +14,6 @@ class Interval implements IntervalInterface
      * Minimal possible value
      */
     const DELTA = 0.005;
-
     /**
      * @var Select
      */
@@ -37,36 +36,24 @@ class Interval implements IntervalInterface
     {
         $field = $this->select->getPart(Select::COLUMNS)[0];
 
-        return (string) $field[1];
-    }
-
-    /**
-     * Get value alias
-     *
-     * @return string
-     */
-    private function getValueAlias()
-    {
-        $field = $this->select->getPart(Select::COLUMNS)[0];
-
-        return $field[2];
+        return $field[1];
     }
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function load($limit, $offset = null, $lower = null, $upper = null)
     {
         $select = clone $this->select;
-        $valueFiled = $this->getValueFiled();
-        $valueAlias = $this->getValueAlias();
+        $value = $this->getValueFiled();
         if ($lower !== null) {
-            $select->where($valueFiled . ' >= ?', $lower - self::DELTA);
+            $select->where("${value} >= ?", $lower - self::DELTA);
         }
         if ($upper !== null) {
-            $select->where($valueFiled . ' < ?', $upper - self::DELTA);
+            $select->where("${value} < ?", $upper - self::DELTA);
         }
-        $select->order($valueAlias . ' ASC')
+        $select->order("value ASC")
             ->limit($limit, $offset);
 
         return $this->arrayValuesToFloat(
@@ -77,15 +64,16 @@ class Interval implements IntervalInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function loadPrevious($data, $index, $lower = null)
     {
         $select = clone $this->select;
-        $valueFiled = $this->getValueFiled();
+        $value = $this->getValueFiled();
         $select->columns(['count' => 'COUNT(*)'])
-            ->where($valueFiled . ' <  ?', $data - self::DELTA);
+            ->where("${value} <  ?", $data - self::DELTA);
         if ($lower !== null) {
-            $select->where($valueFiled . ' >= ?', $lower - self::DELTA);
+            $select->where("${value} >= ?", $lower - self::DELTA);
         }
         $offset = $this->select->getConnection()
             ->fetchRow($select)['count'];
@@ -98,17 +86,17 @@ class Interval implements IntervalInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function loadNext($data, $rightIndex, $upper = null)
     {
         $select = clone $this->select;
-        $valueFiled = $this->getValueFiled();
-        $valueAlias = $this->getValueAlias();
+        $value = $this->getValueFiled();
         $select->columns(['count' => 'COUNT(*)'])
-            ->where($valueFiled . ' > ?', $data + self::DELTA);
+            ->where("${value} > ?", $data + self::DELTA);
 
         if ($upper !== null) {
-            $select->where($valueFiled . ' < ?', $data - self::DELTA);
+            $select->where("${value} < ? ", $data - self::DELTA);
         }
 
         $offset = $this->select->getConnection()
@@ -119,11 +107,11 @@ class Interval implements IntervalInterface
         }
 
         $select = clone $this->select;
-        $select->where($valueFiled . ' >= ?', $data - self::DELTA);
+        $select->where("${value} >= ?", $data - self::DELTA);
         if ($upper !== null) {
-            $select->where($valueFiled . ' < ?', $data - self::DELTA);
+            $select->where("${value} < ? ", $data - self::DELTA);
         }
-        $select->order($valueAlias . ' DESC')
+        $select->order("${value} DESC")
             ->limit($rightIndex - $offset + 1, $offset - 1);
 
         return $this->arrayValuesToFloat(
