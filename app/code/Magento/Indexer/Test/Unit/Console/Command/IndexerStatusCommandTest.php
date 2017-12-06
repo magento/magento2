@@ -13,6 +13,9 @@ use Symfony\Component\Console\Helper\TableHelper;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Indexer\Model\Indexer\Collection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
 {
     /**
