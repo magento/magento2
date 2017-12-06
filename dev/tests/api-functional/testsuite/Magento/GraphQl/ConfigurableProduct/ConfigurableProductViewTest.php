@@ -23,7 +23,7 @@ class ConfigurableProductViewTest extends GraphQlAbstract
         $query
             = <<<QUERY
 {
-    products(find: {and: {sku: {eq: "{$productSku}"}}})
+    products(find: {sku: {eq: "{$productSku}"}})
     {
         items{
             id

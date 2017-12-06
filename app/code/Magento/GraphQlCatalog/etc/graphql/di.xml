@@ -28,7 +28,6 @@
                         <item name="pageSize" xsi:type="string">Int</item>
                         <item name="currentPage" xsi:type="string">Int</item>
                         <item name="sort" xsi:type="string">ProductSort</item>
-                        <item name="sku" xsi:type="string">String</item>
                     </item>
                 </item>
             </argument>
