@@ -75,8 +75,8 @@ class IndexerStatusMviewCommand extends Command
                 ];
             }
 
-            usort($rows, function ($a, $b) {
-                return strcmp($a[0], $b[0]);
+            usort($rows, function($a, $b) {
+                return $a[0] <=> $b[0];
             });
 
             $table->addRows($rows);
