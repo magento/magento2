@@ -36,8 +36,7 @@ class AssertProductRegularPriceOnStorefront extends AbstractConstraint
         CustomerAccountIndex $customerAccountIndex,
         WishlistIndex $wishlistIndex,
         InjectableFixture $product
-    )
-    {
+    ) {
         $cmsIndex->getLinksBlock()->openLink('My Account');
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Wish List');
 
@@ -52,7 +51,6 @@ class AssertProductRegularPriceOnStorefront extends AbstractConstraint
                 $productRegularPrice += $qty * $price;
             }
         } elseif ($product instanceof \Magento\Bundle\Test\Fixture\BundleProduct) {
-
             $bundleSelection = (array)$product->getBundleSelections();
             foreach ($bundleSelection['products'] as $bundleOption) {
                 $regularBundleProductPrice = 0;
