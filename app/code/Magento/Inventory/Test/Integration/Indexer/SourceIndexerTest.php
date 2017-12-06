@@ -13,6 +13,9 @@ use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class SourceIndexerTest extends TestCase
 {
     /**
@@ -30,6 +33,9 @@ class SourceIndexerTest extends TestCase
      */
     private $removeIndexData;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
@@ -42,6 +48,9 @@ class SourceIndexerTest extends TestCase
         $this->removeIndexData->execute([10, 20, 30]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function tearDown()
     {
         $this->removeIndexData->execute([10, 20, 30]);

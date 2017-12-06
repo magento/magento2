@@ -21,6 +21,9 @@ use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\Indexer\Model\Indexer;
 use Magento\Inventory\Indexer\SourceItem\SourceItemIndexer;
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class UpdateLegacyCatalogInventoryPluginTest extends TestCase
 {
     /**
@@ -58,6 +61,9 @@ class UpdateLegacyCatalogInventoryPluginTest extends TestCase
      */
     private $productRepository;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
