@@ -255,9 +255,9 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
             ->setMethods(array_merge($methods, ['getId', 'getTitle']))
             ->getMockForAbstractClass();
         $indexer->method('getId')
-            ->willReturn($data['indexer_id'] ?? '');
+            ->willReturn(isset($data['indexer_id']) ? $data['indexer_id'] : '');
         $indexer->method('getTitle')
-            ->willReturn($data['title'] ?? '');
+            ->willReturn(isset($data['title']) ? $data['title'] : '');
         return $indexer;
     }
 
