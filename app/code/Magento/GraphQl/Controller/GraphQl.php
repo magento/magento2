@@ -15,6 +15,7 @@ use Magento\Framework\Webapi\Response;
 use Magento\GraphQl\Model\SchemaGeneratorInterface;
 use Magento\Framework\GraphQl\RequestProcessor;
 use Magento\Framework\GraphQl\ExceptionFormatter;
+use Magento\GraphQl\Model\Context;
 
 /**
  * Front controller for web API GraphQL area.
@@ -44,25 +45,31 @@ class GraphQl implements FrontControllerInterface
     /** @var ExceptionFormatter */
     private $graphQlError;
 
+    /** @var Context */
+    private $context;
+
     /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
      * @param RequestProcessor $requestProcessor
      * @param ExceptionFormatter $graphQlError
+     * @param Context $context
      */
     public function __construct(
         Response $response,
         SchemaGeneratorInterface $schemaGenerator,
         SerializerInterface $jsonSerializer,
         RequestProcessor $requestProcessor,
-        ExceptionFormatter $graphQlError
+        ExceptionFormatter $graphQlError,
+        Context $context
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
         $this->jsonSerializer = $jsonSerializer;
         $this->requestProcessor = $requestProcessor;
         $this->graphQlError = $graphQlError;
+        $this->context = $context;
     }
 
     /**
@@ -87,7 +94,7 @@ class GraphQl implements FrontControllerInterface
                 $schema,
                 isset($data['query']) ? $data['query'] : '',
                 null,
-                null,
+                $this->context,
                 isset($data['variables']) ? $data['variables'] : []
             );
         } catch (\Exception $error) {

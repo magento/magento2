@@ -102,7 +102,7 @@ class SchemaGenerator implements SchemaGeneratorInterface
                     );
                 }
 
-                return $resolver->resolve($fieldArguments);
+                return $resolver->resolve($fieldArguments, $context);
             }
         ]);
         $schema = $this->schemaFactory->create(['query' => $config, 'types' => $schemaConfig['types']]);
