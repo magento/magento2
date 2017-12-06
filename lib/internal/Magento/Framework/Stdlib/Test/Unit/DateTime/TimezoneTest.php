@@ -32,34 +32,34 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test date parsing with different includeTime options
+     * Test date parsing with different date format
      *
      * @param string $date
      * @param string $locale
      * @param int $expectedTimestamp
-     * @dataProvider dateIncludeTimeDataProvider
+     * @dataProvider dateDataProvider
      */
-    public function testDateIncludeTime($date, $locale, $expectedTimestamp)
+    public function testDate($date, $locale, $expectedTimestamp)
     {
         $this->scopeConfigMock->method('getValue')->willReturn('America/Chicago');
         /** @var Timezone $timezone */
         $timezone = $this->objectManager->getObject(Timezone::class, ['scopeConfig' => $this->scopeConfigMock]);
 
         /** @var \DateTime $dateTime */
-        $dateTime = $timezone->date($date, $locale, true);
-        $this->assertEquals($expectedTimestamp, $dateTime->getTimestamp());
+        $date = $timezone->date($date, $locale, true);
+        $this->assertEquals($expectedTimestamp, $date->getTimestamp());
     }
 
-    public function dateIncludeTimeDataProvider()
+    public function dateDataProvider()
     {
         return [
-            'Parse date without time' => [
+            'Parse date with dd/mm/yyyy format' => [
                 '19/05/2017', // date
                 'ar_KW', // locale
                 1495177200 // expected timestamp
             ],
-            'Parse date with time' => [
-                '05/19/2017 00:01 am', // date
+            'Parse date with mm/dd/yyyy format' => [
+                '05/19/2017', // date
                 'en_US', // locale
                 1495177200 // expected timestamp
             ]
