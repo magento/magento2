@@ -47,8 +47,9 @@
         </column>
         <column name="variable_name">
             <settings>
+                <filter>text</filter>
                 <label translate="true">Variable Name</label>
-                <sortable>false</sortable>
+                <sorting>asc</sorting>
             </settings>
         </column>
         <column name="variable_type">

@@ -11,7 +11,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Variable\Model\ResourceModel\Variable\CollectionFactory;
 use Magento\Variable\Model\Source\Variables;
-use Magento\Variable\Ui\Component\VariablesDataProvider;
 
 /**
  * Retrieve variables list for WYSIWYG
