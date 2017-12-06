@@ -45,16 +45,11 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
         $temporaryTableName = $originalTableName . '__temp'
             . $this->generateRandomSuffix();
 
-        /*$newTable = $this->adapter->createTableByDdl(
-            $originalTableName,
-            $temporaryTableName
-        );
-        $this->adapter->createTable($newTable);*/
         $this->adapter->query(
             sprintf(
                 'create table %s like %s',
-                $temporaryTableName,
-                $originalTableName
+                $this->adapter->getTableName($temporaryTableName),
+                $this->adapter->getTableName($originalTableName)
             )
         );
 
