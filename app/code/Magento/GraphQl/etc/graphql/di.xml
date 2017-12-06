@@ -7,6 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\GraphQl\Controller\GraphQl" />
+    <preference for="Magento\GraphQl\Model\ContextInterface" type="Magento\GraphQl\Model\Context" />
     <type name="Magento\GraphQl\Model\Type\Config">
         <arguments>
             <argument name="config" xsi:type="array">

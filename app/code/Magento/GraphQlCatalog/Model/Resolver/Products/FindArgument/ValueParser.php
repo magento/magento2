@@ -7,7 +7,6 @@ namespace Magento\GraphQlCatalog\Model\Resolver\Products\FindArgument;
 
 use Magento\Framework\GraphQl\Argument\Find\FindArgumentValueFactory;
 use Magento\Framework\GraphQl\Argument\ValueParserInterface;
-use Magento\GraphQlCatalog\Model\Resolver\Products\FindArgument\ClauseConverter;
 
 /**
  * Parses a mixed value to a FindArgumentValue

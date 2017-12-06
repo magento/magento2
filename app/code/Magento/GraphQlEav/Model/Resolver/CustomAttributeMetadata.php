@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\ArgumentInterface;
 use Magento\GraphQl\Model\ResolverInterface;
 use Magento\Framework\Exception\InputException;
+use \Magento\GraphQl\Model\ContextInterface;
 
 /**
  * Resolve data for custom attribute metadata requests
@@ -44,7 +45,7 @@ class CustomAttributeMetadata implements ResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolve(array $args)
+    public function resolve(array $args, ContextInterface $context)
     {
         if (!isset($args['attributes']) || empty($args['attributes'])) {
             throw new InputException(__('Missing arguments for correct type resolution.'));
