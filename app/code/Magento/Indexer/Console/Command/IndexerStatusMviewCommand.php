@@ -78,8 +78,8 @@ class IndexerStatusMviewCommand extends Command
                 ];
             }
 
-            usort($rows, function ($comp1, $comp2) {
-                return strcmp($comp1[0], $comp2[0]);
+            usort($rows, function ($a, $b) {
+                return strcmp($a[0], $b[0]);
             });
 
             $table->addRows($rows);
