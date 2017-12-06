@@ -391,8 +391,9 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      * @dataProvider optionNegativeUpdateDataProvider
      * @param array $optionData
      * @param string $message
+     * @param int $exceptionCode
      */
-    public function testUpdateNegative($optionData, $message)
+    public function testUpdateNegative($optionData, $message, $exceptionCode)
     {
         $this->_markTestAsRestOnly();
         $productSku = 'simple';
@@ -411,7 +412,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
 
         $this->expectException('Exception');
         $this->expectExceptionMessage($message);
-        $this->expectExceptionCode(400);
+        $this->expectExceptionCode($exceptionCode);
         $this->_webApiCall($serviceInfo, ['option' => $optionData]);
     }
 

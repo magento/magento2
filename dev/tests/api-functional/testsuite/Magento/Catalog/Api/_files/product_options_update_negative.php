@@ -16,6 +16,7 @@ return [
             'max_characters' => 10,
         ],
         'ProductSku should be specified',
+        400
     ],
     'invalid_product_sku' => [
         [
@@ -25,9 +26,10 @@ return [
             'is_require'     => 1,
             'price'          => 10.0,
             'price_type'     => 'fixed',
-            'sku'            => 'sku1',
+            'product_sku'            => 'sku1',
             'max_characters' => 10,
         ],
         'Requested product doesn\'t exist',
+        404
     ],
 ];
