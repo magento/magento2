@@ -12,7 +12,6 @@ use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\TableHelper;
 use Magento\Store\Model\Website;
 use Magento\Framework\Console\Cli;
-use Magento\Framework\Mview\View\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -46,15 +45,9 @@ class IndexerStatusMviewCommandTest extends \PHPUnit_Framework_TestCase
         $isLoadedProperty->setAccessible(true);
         $isLoadedProperty->setValue($this->collection, true);
 
-        $collectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionFactory->method('create')
-            ->willReturn($this->collection);
-
         $this->command = $this->objectManager->getObject(
             IndexerStatusMviewCommand::class,
-            ['collectionFactory' => $collectionFactory]
+            ['collection' => $this->collection]
         );
 
         /** @var HelperSet $helperSet */
@@ -73,8 +66,6 @@ class IndexerStatusMviewCommandTest extends \PHPUnit_Framework_TestCase
             [
                 'view' => [
                     'view_id' => 'catalog_category_product',
-                ],
-                'state' => [
                     'mode' => 'enabled',
                     'status' => 'idle',
                     'updated' => '2017-01-01 11:11:11',
@@ -87,8 +78,6 @@ class IndexerStatusMviewCommandTest extends \PHPUnit_Framework_TestCase
             [
                 'view' => [
                     'view_id' => 'catalog_product_category',
-                ],
-                'state' => [
                     'mode' => 'disabled',
                     'status' => 'idle',
                     'updated' => '2017-01-01 11:11:11',
@@ -101,8 +90,6 @@ class IndexerStatusMviewCommandTest extends \PHPUnit_Framework_TestCase
             [
                 'view' => [
                     'view_id' => 'catalog_product_attribute',
-                ],
-                'state' => [
                     'mode' => 'enabled',
                     'status' => 'idle',
                     'updated' => '2017-01-01 11:11:11',
@@ -115,7 +102,7 @@ class IndexerStatusMviewCommandTest extends \PHPUnit_Framework_TestCase
         ];
 
         foreach ($mviews as $data) {
-            $this->collection->addItem($this->generateMviewStub($data['view'], $data['changelog'], $data['state']));
+            $this->collection->addItem($this->generateMviewStub($data['view'], $data['changelog']));
         }
         $this->collection->addItem($this->getNeverEnabledMviewIndexerWithNoTable());
 
@@ -166,10 +153,9 @@ class IndexerStatusMviewCommandTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $viewData
      * @param array $changelogData
-     * @param array $stateData
      * @return Mview\View|Mview\View\Changelog|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function generateMviewStub(array $viewData, array $changelogData, array $stateData)
+    protected function generateMviewStub(array $viewData, array $changelogData)
     {
         /** @var Mview\View\Changelog|\PHPUnit_Framework_MockObject_MockObject $stub */
         $changelog = $this->getMockBuilder(\Magento\Framework\Mview\View\Changelog::class)
@@ -177,8 +163,8 @@ class IndexerStatusMviewCommandTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $list = [];
-        if ($changelogData['version_id'] !== $stateData['version_id']) {
-            $list = range($stateData['version_id']+1, $changelogData['version_id']);
+        if ($changelogData['version_id'] !== $viewData['version_id']) {
+            $list = range($viewData['version_id']+1, $changelogData['version_id']);
         }
 
         $changelog->expects($this->any())
@@ -188,14 +174,6 @@ class IndexerStatusMviewCommandTest extends \PHPUnit_Framework_TestCase
         $changelog->expects($this->any())
             ->method('getVersion')
             ->willReturn($changelogData['version_id']);
-
-        /** @var \Magento\Indexer\Model\Mview\View\State|\PHPUnit_Framework_MockObject_MockObject $stub */
-        $state = $this->getMockBuilder(\Magento\Indexer\Model\Mview\View\State::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['loadByView'])
-            ->getMock();
-
-        $state->setData($stateData);
 
         /** @var Mview\View|\PHPUnit_Framework_MockObject_MockObject $stub */
         $stub = $this->getMockBuilder(\Magento\Framework\Mview\View::class)
@@ -209,7 +187,7 @@ class IndexerStatusMviewCommandTest extends \PHPUnit_Framework_TestCase
 
         $stub->expects($this->any())
             ->method('getState')
-            ->willReturn($state);
+            ->willReturnSelf();
 
         $stub->setData($viewData);
 
