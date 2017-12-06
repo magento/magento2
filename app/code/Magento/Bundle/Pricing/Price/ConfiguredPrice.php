@@ -127,7 +127,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * @param float $baseValue
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
-    public function getConfiguredAmount(float $baseValue = 0.)
+    public function getConfiguredAmount($baseValue = 0.)
     {
         $selectionPriceList = $this->getSelectionPriceList();
         return $this->calculator->calculateBundleAmount(
