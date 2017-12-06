@@ -22,6 +22,12 @@ use Magento\Framework\EntityManager\MetadataPool;
 abstract class AbstractType
 {
     /**
+     * When you want to import product with empty value you need
+     * to change its value to value of this constant.
+     */
+    const EMPTY_VALUE = '__EMPTY__VALUE__';
+
+    /**
      * Common attributes cache
      *
      * @var array
@@ -536,6 +542,10 @@ abstract class AbstractType
         foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
             if (!$attrParams['is_static'] && empty($rowData[$attrCode])) {
                 unset($rowData[$attrCode]);
+            }
+
+            if (isset($rowData[$attrCode]) && $rowData[$attrCode] === self::EMPTY_VALUE) {
+                $rowData[$attrCode] = null;
             }
         }
         return $rowData;

@@ -6,6 +6,7 @@
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
 
 class Weight extends AbstractImportValidator implements RowValidatorInterface
 {
@@ -15,7 +16,9 @@ class Weight extends AbstractImportValidator implements RowValidatorInterface
     public function isValid($value)
     {
         $this->_clearMessages();
-        if (!empty($value['weight']) && (!is_numeric($value['weight']) || $value['weight'] < 0)) {
+        if (!empty($value['weight']) && (!is_numeric($value['weight']) || $value['weight'] < 0)
+            && $value['weight'] !== AbstractType::EMPTY_VALUE
+        ) {
             $this->_addMessages(
                 [
                     sprintf(

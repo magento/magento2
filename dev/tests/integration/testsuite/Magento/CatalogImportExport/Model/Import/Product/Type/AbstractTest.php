@@ -178,7 +178,56 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
                     'product_type' => '',
                     'name' => 'Simple 01 German'
                 ]
-            ]
+            ],
+            [
+                [
+                    'product_type' => 'simple',
+                    'name' => 'Simple 01',
+                    'price' => 10,
+                    'test_attribute' => '0',
+                ],
+            ],
+            [
+                [
+                    'sku' => null,
+                    'store_view_code' => '',
+                    '_attribute_set' => 'Default',
+                    'product_type' => 'simple',
+                    'name' => 'Simple 01',
+                    'price' => 10,
+                    'test_attribute' => null,
+                ],
+                [
+                    'sku' => null,
+                    'store_view_code' => '',
+                    '_attribute_set' => 'Default',
+                    'product_type' => 'simple',
+                    'name' => 'Simple 01',
+                    'price' => 10,
+                ],
+            ],
+            [
+                [
+                    'sku' => '',
+                    'store_view_code' => 'German',
+                    '_attribute_set' => 'Default',
+                    'product_type' => '',
+                    'name' => 'Simple 01 German',
+                    'price' => AbstractType::EMPTY_VALUE,
+                    'description' => AbstractType::EMPTY_VALUE,
+                    'weight' => AbstractType::EMPTY_VALUE,
+                ],
+                [
+                    'sku' => '',
+                    'store_view_code' => 'German',
+                    '_attribute_set' => 'Default',
+                    'product_type' => '',
+                    'name' => 'Simple 01 German',
+                    'price' => null,
+                    'description' => null,
+                    'weight' => null
+                ],
+            ],
         ];
     }
 }
