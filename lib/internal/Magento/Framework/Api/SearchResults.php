@@ -23,10 +23,13 @@ class SearchResults extends AbstractSimpleObject implements SearchResultsInterfa
     public function getItems()
     {
         $searchCriteria = $this->getSearchCriteria();
-        $firstIndex     = ($searchCriteria->getCurrentPage() - 1) * $searchCriteria->getPageSize();
-        $totalCount     = max($this->getTotalCount(), 1);
+        $currentPage    = max($searchCriteria->getCurrentPage(), 1);
+        $lastPage       = ($searchCriteria->getPageSize() > 0)
+            ? ceil($this->getTotalCount() /$searchCriteria->getPageSize())
+            : 1;
+        $searchCriteria->setCurrentPage($currentPage);
 
-        if (($this->_get(self::KEY_ITEMS) === null) || ($firstIndex < 0) || ($firstIndex >= $totalCount)) {
+        if (($this->_get(self::KEY_ITEMS) === null) || ($currentPage < 1) || ($currentPage > $lastPage)) {
             return [];
         }
 
