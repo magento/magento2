@@ -16,6 +16,7 @@ return [
             'max_characters' => 10,
         ],
         'The ProductSku is empty. Set the ProductSku and try again.',
+        400
     ],
     'invalid_product_sku' => [
         [
@@ -25,9 +26,10 @@ return [
             'is_require'     => 1,
             'price'          => 10.0,
             'price_type'     => 'fixed',
-            'sku'            => 'sku1',
+            'product_sku'            => 'sku1',
             'max_characters' => 10,
         ],
         "The product that was requested doesn't exist. Verify the product and try again.",
+        404
     ],
 ];
