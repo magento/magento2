@@ -407,7 +407,7 @@ class Generator extends AbstractSchemaGenerator
             if ($simpleType = $this->getSimpleType($trimedTypeName)) {
                 $result['items'] = ['type' => $simpleType];
             } else {
-                if (strpos($typeName, '[]')) {
+                if (strpos($typeName, '[]') !== false) {
                     $result['items'] = ['$ref' => $this->getDefinitionReference($trimedTypeName)];
                 } else {
                     $result = ['$ref' => $this->getDefinitionReference($trimedTypeName)];
