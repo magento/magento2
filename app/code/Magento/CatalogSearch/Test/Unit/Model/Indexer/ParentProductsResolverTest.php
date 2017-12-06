@@ -107,10 +107,9 @@ class ParentProductsResolverTest extends \PHPUnit_Framework_TestCase
         $this->select->expects(self::once())->method('distinct')
             ->with(true)
             ->willReturnSelf();
-        $this->select->expects(self::exactly(2))->method('where')
+        $this->select->expects(self::once())->method('where')
             ->withConsecutive(
-                [$this->equalTo('child_id IN (?)'), $this->equalTo($childProductIds)],
-                [$this->equalTo('parent_id NOT IN (?)'), $this->equalTo($childProductIds)]
+                [$this->equalTo('child_id IN (?)'), $this->equalTo($childProductIds)]
             )
             ->willReturnSelf();
         $this->select->expects(self::once())->method('join')

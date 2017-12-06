@@ -114,7 +114,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             ->from(['relation' => $this->getTable('catalog_product_relation')], [])
             ->distinct(true)
             ->where('child_id IN (?)', $childProductIds)
-            ->where('parent_id NOT IN (?)', $childProductIds)
             ->join(
                 ['cpe' => $this->getTable('catalog_product_entity')],
                 'relation.parent_id = cpe.' . $fieldForParent,
