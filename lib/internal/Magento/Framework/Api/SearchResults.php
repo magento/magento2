@@ -24,8 +24,9 @@ class SearchResults extends AbstractSimpleObject implements SearchResultsInterfa
     {
         $searchCriteria = $this->getSearchCriteria();
         $firstIndex     = ($searchCriteria->getCurrentPage() - 1) * $searchCriteria->getPageSize();
+        $totalCount     = max($this->getTotalCount(), 1);
 
-        if (($this->_get(self::KEY_ITEMS) === null) || ($firstIndex < 0) || ($firstIndex >= $this->getTotalCount())) {
+        if (($this->_get(self::KEY_ITEMS) === null) || ($firstIndex < 0) || ($firstIndex >= $totalCount)) {
             return [];
         }
 
