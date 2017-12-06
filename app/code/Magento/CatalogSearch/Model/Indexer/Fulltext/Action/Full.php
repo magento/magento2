@@ -307,7 +307,6 @@ class Full
             ->from(['relation' => $this->getTable('catalog_product_relation')], [])
             ->distinct(true)
             ->where('child_id IN (?)', $entityIds)
-            ->where('parent_id NOT IN (?)', $entityIds)
             ->join(
                 ['cpe' => $this->getTable('catalog_product_entity')],
                 'relation.parent_id = cpe.' . $fieldForParent,
