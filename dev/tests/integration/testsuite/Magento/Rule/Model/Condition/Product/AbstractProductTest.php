@@ -69,27 +69,15 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Rule/_files/dropdown_attribute_with_html.php
      */
-    public function test()
+    public function testGetValueSelectOptions()
     {
-        $expectedOptions = [
-            [
-                'label' => ' ',
-                'value' => '',
-            ],
-            [
-                'value' => '4',
-                'label' => 'Option 1',
-            ],
-            [
-                'value' => '5',
-                'label' => 'Option 2',
-            ],
-            [
-                'value' => '6',
-                'label' => 'Option 3',
-            ],
-        ];
+        $expectedLabels = [' ', 'Option 1', 'Option 2', 'Option 3'];
         $this->model->setAttribute('dropdown_attribute_with_html');
-        self::assertSame($expectedOptions, $this->model->getValueSelectOptions());
+        $options = $this->model->getValueSelectOptions();
+        $labels = [];
+        foreach ($options as $option) {
+            $labels[] = $option['label'];
+        }
+        self::assertSame($expectedLabels, $labels);
     }
 }
