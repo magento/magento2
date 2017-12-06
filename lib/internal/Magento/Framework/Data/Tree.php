@@ -189,7 +189,7 @@ class Tree
     /**
      * Enter description here...
      *
-     * @param Node $nodeId
+     * @param string|int $nodeId
      * @return Node
      */
     public function getNodeById($nodeId)
