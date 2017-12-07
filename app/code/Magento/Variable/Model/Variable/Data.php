@@ -59,7 +59,7 @@ class Data
      */
     public function getCustomVariables()
     {
-        /** @var  $customVariables */
+        /** @var \Magento\Variable\Model\ResourceModel\Variable\Collection $customVariables */
         $customVariables = $this->collectionFactory->create();
 
         $variables = [];
