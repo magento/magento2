@@ -507,7 +507,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             foreach ($existingMediaGallery as $key => &$existingEntry) {
                 if (isset($entriesById[$existingEntry['value_id']])) {
                     $updatedEntry = $entriesById[$existingEntry['value_id']];
-                    if ($updatedEntry['file'] === null) {
+                    if (isset($updatedEntry['file']) && $updatedEntry['file'] === null) {
                         unset($updatedEntry['file']);
                     }
                     $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
@@ -546,6 +546,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
             $finalGallery = $product->getData('media_gallery');
             $newEntryId = key(array_diff_key($product->getData('media_gallery')['images'], $entriesById));
+            if (isset($newEntry['extension_attributes'])) {
+                $this->processExtensionAttributes($newEntry, $newEntry['extension_attributes']);
+            }
             $newEntry = array_replace_recursive($newEntry, $finalGallery['images'][$newEntryId]);
             $entriesById[$newEntryId] = $newEntry;
             $finalGallery['images'][$newEntryId] = $newEntry;
@@ -787,5 +790,24 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             );
         }
         return $this->collectionProcessor;
+    }
+
+    /**
+     * Convert extension attribute for product media gallery.
+     *
+     * @param array $newEntry
+     * @param array $extensionAttributes
+     * @return void
+     */
+    private function processExtensionAttributes(array &$newEntry, array $extensionAttributes)
+    {
+        foreach ($extensionAttributes as $code => $value) {
+            if (is_array($value)) {
+                $this->processExtensionAttributes($newEntry, $value);
+            } else {
+                $newEntry[$code] = $value;
+            }
+        }
+        unset($newEntry['extension_attributes']);
     }
 }
