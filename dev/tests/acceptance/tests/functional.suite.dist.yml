@@ -35,4 +35,7 @@ modules:
             port: %SELENIUM_PORT%
             protocol: %SELENIUM_PROTOCOL%
             path: %SELENIUM_PATH%
+            capabilities:
+              chromeOptions:
+                args: ["--start-maximized", "--disable-extensions", "--enable-automation"]
 
