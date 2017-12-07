@@ -11,11 +11,7 @@
         <annotations>
             <features value="Update simple product by api test."/>
             <stories value="Update simple product by api test."/>
-            <group value="example"/>
-            <env value="chrome"/>
-            <env value="firefox"/>
-            <env value="phantomjs"/>
-            <env value="headless"/>
+            <group value="skip"/>
         </annotations>
         <before>
             <createData stepKey="categoryHandle" entity="SimpleSubCategory"/>

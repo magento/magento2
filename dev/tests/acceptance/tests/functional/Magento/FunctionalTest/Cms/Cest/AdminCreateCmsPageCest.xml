@@ -23,7 +23,6 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-25580"/>
                 <group value="cms"/>
-                <group value="skip"/>
                 <env value="chrome"/>
                 <env value="firefox"/>
                 <env value="headless"/>
