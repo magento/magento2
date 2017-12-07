@@ -14,7 +14,7 @@
             <stories value="Create a Category via the Admin"/>
         </annotations>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" mergeKey="amOnLogoutPage"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
         <test name="CreateCategoryViaAdmin">
             <annotations>
@@ -26,24 +26,24 @@
                 <env value="chrome"/>
                 <env value="headless"/>
             </annotations>
-            <amOnPage url="{{AdminLoginPage.url}}" mergeKey="amOnAdminLoginPage"/>
-            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
-            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" mergeKey="fillPassword"/>
-            <click selector="{{AdminLoginFormSection.signIn}}" mergeKey="clickOnSignIn"/>
-            <amOnPage url="{{AdminCategoryPage.url}}" mergeKey="navigateToCategoryPage"/>
-            <waitForPageLoad mergeKey="waitForPageLoad1"/>
-            <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" mergeKey="clickOnAddSubCategory"/>
-            <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" mergeKey="enterCategoryName"/>
-            <click selector="{{AdminCategorySEOSection.SectionHeader}}" mergeKey="openSEO"/>
-            <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{SimpleSubCategory.name_lwr}}" mergeKey="enterURLKey"/>
-            <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" mergeKey="saveCategory"/>
-            <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" mergeKey="assertSuccess"/>
+            <amOnPage url="{{AdminLoginPage.url}}" stepKey="amOnAdminLoginPage"/>
+            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="fillUsername"/>
+            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
+            <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickOnSignIn"/>
+            <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad1"/>
+            <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
+            <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
+            <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="openSEO"/>
+            <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="enterURLKey"/>
+            <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
+            <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccess"/>
 
             <!-- Literal URL below, need to refactor line + StorefrontCategoryPage when support for variable URL is implemented-->
-            <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" mergeKey="goToCategoryFrontPage"/>
-            <waitForPageLoad mergeKey="waitForPageLoad2"/>
-            <seeInTitle userInput="{{SimpleSubCategory.name}}" mergeKey="assertTitle"/>
-            <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{SimpleSubCategory.name_lwr}}" mergeKey="assertInfo1"/>
+            <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad2"/>
+            <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertTitle"/>
+            <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="assertInfo1"/>
         </test>
     </cest>
 </config>

@@ -18,14 +18,14 @@
             <env value="headless"/>
         </annotations>
         <before>
-            <createData mergeKey="categoryHandle" entity="SimpleSubCategory"/>
-            <createData mergeKey="productHandle" entity="SimpleProduct" >
+            <createData stepKey="categoryHandle" entity="SimpleSubCategory"/>
+            <createData stepKey="productHandle" entity="SimpleProduct" >
                 <required-entity createDataKey="categoryHandle"/>
             </createData>
-            <updateData mergeKey="updateProduct" entity="NewSimpleProduct" createDataKey="productHandle"/>
+            <updateData stepKey="updateProduct" entity="NewSimpleProduct" createDataKey="productHandle"/>
         </before>
         <after>
-            <deleteData mergeKey="delete" createDataKey="updateProduct"/>
+            <deleteData stepKey="delete" createDataKey="updateProduct"/>
         </after>
         <test name="UpdateSimpleProductByApiTest">
         </test>
