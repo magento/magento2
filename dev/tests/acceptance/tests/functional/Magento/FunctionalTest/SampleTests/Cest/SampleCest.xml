@@ -44,7 +44,6 @@
             <click selector="#button" userInput="Context" stepKey="click1"/>
             <click selectorArray="['link' => 'Login']" stepKey="click2"/>
             <click selectorArray="['link' => 'Login']" userInput="stuff" stepKey="click3"/>
-            <click userInput="Click" stepKey="click4"/>
             <clickWithLeftButton selector="#clickHere" stepKey="clickWithLeftButton1" x="23" y="324"/>
             <clickWithLeftButton selectorArray="['css' => '.checkout']" stepKey="clickWithLeftButton2" x="23" y="324"/>
             <clickWithLeftButton stepKey="clickWithLeftButton3" x="23" y="324"/>
