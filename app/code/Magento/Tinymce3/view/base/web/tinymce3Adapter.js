@@ -467,13 +467,24 @@ define([
         },
 
         /**
+         * Search by widget plugin and retrieve it
+         * @return {Object}
+         */
+        getWidgetPluginData: function () {
+            return _.filter(this.config.plugins, function (plugin) {
+                return plugin.name === 'magentowidget';
+            })[0];
+        },
+
+        /**
          * @param {Object} content
          * @return {*}
          */
         encodeWidgets: function (content) {
             return content.gsub(/\{\{widget(.*?)\}\}/i, function (match) {
                 var attributes = this.parseAttributesString(match[1]),
-                    imageSrc, imageHtml;
+                    imageSrc,
+                    imageHtml;
 
                 if (attributes.type) {
                     attributes.type = attributes.type.replace(/\\\\/g, '\\');

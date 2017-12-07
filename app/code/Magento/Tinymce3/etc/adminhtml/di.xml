@@ -22,6 +22,16 @@
             <argument name="pool" xsi:type="object">UiModifierPool</argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="wysiwyg-tmce3" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Tinymce3\Ui\DataProvider\Product\Form\Modifier\WysiwygConfigModifier</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Cms\Model\Wysiwyg\Config">
         <plugin name="add_tmce3_css" type="Magento\Tinymce3\Model\Plugin\Wysiwyg\Config" sortOrder="10" />
     </type>
@@ -30,5 +40,8 @@
     </type>
     <type name="Magento\Variable\Model\Variable\Config">
         <plugin name="change_variable_plugin" type="Magento\Tinymce3\Model\Plugin\Variable\Config" />
+    </type>
+    <type name="Magento\Widget\Model\Widget\Config">
+        <plugin name="change_widget_plugin" type="Magento\Tinymce3\Model\Plugin\Widget\Config" />
     </type>
 </config>
