@@ -6,7 +6,7 @@
 
 namespace Magento\GraphQl\Model\Type;
 
-use GraphQL\Type\Definition\Type;
+use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 
 /**
  * Define a method for generating or retrieving a type for GraphQL
@@ -16,7 +16,7 @@ interface HandlerInterface
     /**
      * Return GraphQL configuration of type.
      *
-     * @return Type
+     * @return TypeInterface
      * @throws \InvalidArgumentException No implementation found or type not implemented for interface with resolve type
      */
     public function getType();

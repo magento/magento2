@@ -6,19 +6,17 @@
 
 namespace Magento\GraphQl\Model;
 
-use GraphQL\Type\Definition\ResolveInfo;
-
 /**
- * Retrieve resolve function for GraphQL type
+ * Data retriever for field with arguments used in a GraphQL resolver when a query is processed
  */
 interface ResolverInterface
 {
     /**
-     * Parse arguments and resolve to data array
+     * Parse arguments of a field and convert them to an array structure
      *
-     * @param array $args
-     * @param ResolveInfo $info
+     * @param \Magento\Framework\GraphQl\ArgumentInterface[] $args
      * @return array|null
+     * @throws \Magento\Framework\GraphQl\Exception\GraphQlInputException|\Exception
      */
-    public function resolve(array $args, ResolveInfo $info);
+    public function resolve(array $args);
 }

@@ -7,9 +7,8 @@
 namespace Magento\GraphQl\Model\Resolver;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use GraphQL\Type\Definition\ResolveInfo;
 use Magento\GraphQl\Model\ResolverInterface;
-use Magento\GraphQl\Model\Resolver\Products\SearchCriteriaFactory;
+use Magento\Framework\GraphQl\Argument\SearchCriteria\Builder;
 
 /**
  * Products field resolver, used for GraphQL request processing.
@@ -21,29 +20,29 @@ class Products implements ResolverInterface
      */
     private $productRepository;
 
-    /** @var SearchCriteriaFactory */
-    private $searchCriteriaFactory;
+    /**
+     * @var Builder
+     */
+    private $searchCriteriaBuilder;
 
     /**
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\GraphQl\Model\Resolver\Products\SearchCriteriaFactory
+     * @param Builder $searchCriteriaBuilder
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        \Magento\GraphQl\Model\Resolver\Products\SearchCriteriaFactory $searchCriteriaFactory
+        Builder $searchCriteriaBuilder
     ) {
         $this->productRepository = $productRepository;
-        $this->searchCriteriaFactory = $searchCriteriaFactory;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
      * {@inheritdoc}
-     * @throws \GraphQL\Error\Error
      */
-    public function resolve(array $args, ResolveInfo $info)
+    public function resolve(array $args)
     {
-        $searchCriteria = $this->searchCriteriaFactory->create($info);
-
+        $searchCriteria = $this->searchCriteriaBuilder->build($args);
         $itemsResults = $this->productRepository->getList($searchCriteria);
 
         $items = $itemsResults->getItems();
@@ -56,10 +55,10 @@ class Products implements ResolverInterface
 
         $maxPages = ceil($itemsResults->getTotalCount() / $searchCriteria->getPageSize());
         if ($searchCriteria->getCurrentPage() > $maxPages && $itemsResults->getTotalCount() > 0) {
-            throw new \GraphQL\Error\Error(
-                sprintf(
+            throw new \Magento\Framework\GraphQl\Exception\GraphQlInputException(
+                __(
                     'The value specified in the currentPage attribute is greater than the number'
-                    . ' of pages available (%s).',
+                    . ' of pages available (%1).',
                     $maxPages
                 )
             );
