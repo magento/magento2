@@ -488,8 +488,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @return $this
      * @throws InputException
      * @throws StateException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function processMediaGallery(ProductInterface $product, array $mediaGalleryEntries)
     {
@@ -531,29 +531,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 }
             }
         }
+        $this->processEntries($product, $newEntries, $entriesById);
 
-        foreach ($newEntries as $newEntry) {
-            if (!isset($newEntry['content'])) {
-                throw new InputException(__('The image content is not valid.'));
-            }
-            /** @var ImageContentInterface $contentDataObject */
-            $contentDataObject = $this->contentFactory->create()
-                ->setName($newEntry['content'][ImageContentInterface::NAME])
-                ->setBase64EncodedData($newEntry['content'][ImageContentInterface::BASE64_ENCODED_DATA])
-                ->setType($newEntry['content'][ImageContentInterface::TYPE]);
-            $newEntry['content'] = $contentDataObject;
-            $this->processNewMediaGalleryEntry($product, $newEntry);
-
-            $finalGallery = $product->getData('media_gallery');
-            $newEntryId = key(array_diff_key($product->getData('media_gallery')['images'], $entriesById));
-            if (isset($newEntry['extension_attributes'])) {
-                $this->processExtensionAttributes($newEntry, $newEntry['extension_attributes']);
-            }
-            $newEntry = array_replace_recursive($newEntry, $finalGallery['images'][$newEntryId]);
-            $entriesById[$newEntryId] = $newEntry;
-            $finalGallery['images'][$newEntryId] = $newEntry;
-            $product->setData('media_gallery', $finalGallery);
-        }
         return $this;
     }
 
@@ -809,5 +788,42 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
         }
         unset($newEntry['extension_attributes']);
+    }
+
+    /**
+     * Convert entries into product media gallery data and set to product.
+     *
+     * @param ProductInterface $product
+     * @param array $newEntries
+     * @param array $entriesById
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws StateException
+     * @return void
+     */
+    private function processEntries(ProductInterface $product, array $newEntries, array $entriesById)
+    {
+        foreach ($newEntries as $newEntry) {
+            if (!isset($newEntry['content'])) {
+                throw new InputException(__('The image content is not valid.'));
+            }
+            /** @var ImageContentInterface $contentDataObject */
+            $contentDataObject = $this->contentFactory->create()
+                ->setName($newEntry['content'][ImageContentInterface::NAME])
+                ->setBase64EncodedData($newEntry['content'][ImageContentInterface::BASE64_ENCODED_DATA])
+                ->setType($newEntry['content'][ImageContentInterface::TYPE]);
+            $newEntry['content'] = $contentDataObject;
+            $this->processNewMediaGalleryEntry($product, $newEntry);
+
+            $finalGallery = $product->getData('media_gallery');
+            $newEntryId = key(array_diff_key($product->getData('media_gallery')['images'], $entriesById));
+            if (isset($newEntry['extension_attributes'])) {
+                $this->processExtensionAttributes($newEntry, $newEntry['extension_attributes']);
+            }
+            $newEntry = array_replace_recursive($newEntry, $finalGallery['images'][$newEntryId]);
+            $entriesById[$newEntryId] = $newEntry;
+            $finalGallery['images'][$newEntryId] = $newEntry;
+            $product->setData('media_gallery', $finalGallery);
+        }
     }
 }
