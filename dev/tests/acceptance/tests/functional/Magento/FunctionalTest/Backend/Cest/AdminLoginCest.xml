@@ -23,7 +23,6 @@
                 <group value="login"/>
                 <env value="chrome"/>
                 <env value="firefox"/>
-                <env value="phantomjs"/>
                 <env value="headless"/>
             </annotations>
             <amOnPage url="{{AdminLoginPage.url}}" stepKey="amOnAdminLoginPage"/>

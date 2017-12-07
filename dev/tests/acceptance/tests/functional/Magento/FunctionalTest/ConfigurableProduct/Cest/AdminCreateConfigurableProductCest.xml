@@ -25,13 +25,10 @@
                 <description value="You should be able to create a Configurable Product via the Admin."/>
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-26041"/>
-                <group value="configurable"/>
-                <group value="product"/>
-                <env value="chrome"/>
+                <group value="skip"/>
             </annotations>
-
             <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnCategoryGridPage"/>
-            <waitForPageLoad stepKey="waitForPageLoad1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
             <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
             <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="enterCategoryName"/>
@@ -41,7 +38,7 @@
             <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/>
 
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-            <waitForPageLoad stepKey="waitForPageLoad2"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
             <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
             <click selector="{{AdminProductGridActionSection.addConfigurableProduct}}" stepKey="clickOnAddConfigurableProduct"/>
             <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
@@ -110,15 +107,15 @@
             <see selector="{{AdminProductFormConfigurationsSection.currentVariationsQuantityCells}}" userInput="{{colorProductAttribute.attribute_quantity}}" stepKey="seeQuantityInField"/>
 
             <amOnPage url="/" stepKey="amOnStorefront"/>
-            <waitForPageLoad stepKey="waitForPageLoad3"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
 
             <click userInput="{{_defaultCategory.name}}" stepKey="clickOnCategoryName"/>
-            <waitForPageLoad stepKey="waitForPageLoad4"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
 
             <see userInput="{{_defaultProduct.name}}" stepKey="assertProductPresent"/>
             <see userInput="{{colorProductAttribute1.price}}" stepKey="assertProductPricePresent"/>
             <click userInput="{{_defaultProduct.name}}" stepKey="clickOnProductName"/>
-            <waitForPageLoad stepKey="waitForPageLoad5"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
 
             <seeInTitle userInput="{{_defaultProduct.name}}" stepKey="assertProductNameTitle"/>
             <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
