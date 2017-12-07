@@ -92,6 +92,7 @@ class ProductsCountInLayeredNavigationTest extends Injectable
         // Disable configurable options
         if ($disableFromProductsGreed) {
             $this->catalogProductIndex->open();
+            $this->catalogProductIndex->getProductGrid()->sortByColumn('ID');
             $this->catalogProductIndex->getProductGrid()->massaction(
                 array_map(
                     function ($assignedProduct) {
