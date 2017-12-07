@@ -181,33 +181,6 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 [
-                    'product_type' => 'simple',
-                    'name' => 'Simple 01',
-                    'price' => 10,
-                    'test_attribute' => '0',
-                ],
-            ],
-            [
-                [
-                    'sku' => null,
-                    'store_view_code' => '',
-                    '_attribute_set' => 'Default',
-                    'product_type' => 'simple',
-                    'name' => 'Simple 01',
-                    'price' => 10,
-                    'test_attribute' => null,
-                ],
-                [
-                    'sku' => null,
-                    'store_view_code' => '',
-                    '_attribute_set' => 'Default',
-                    'product_type' => 'simple',
-                    'name' => 'Simple 01',
-                    'price' => 10,
-                ],
-            ],
-            [
-                [
                     'sku' => '',
                     'store_view_code' => 'German',
                     '_attribute_set' => 'Default',
