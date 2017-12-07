@@ -92,16 +92,6 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Functional tests using the PhantomJS environment.
-     *
-     * @return void
-     */
-    function phantomjs()
-    {
-        $this->_exec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept run functional --env phantomjs --skip-group skip');
-    }
-
-    /**
      * Run all Functional tests using the Chrome Headless environment.
      *
      * @return void
