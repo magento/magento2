@@ -318,7 +318,7 @@ define([
                     parameters: {},
                     onComplete: function (transport) {
                         Variables.init(this.textareaId, 'MagentovariablePlugin.insertVariable', this.editor);
-                        Variables.isEditMode = !!selectedElement;
+                        Variables.isEditMode = !!this.getElementVariablePath(selectedElement);
                         this.variablesContent = transport.responseText;
                         Variables.openDialogWindow(this.variablesContent, selectedElement);
                         Variables.initUiGrid();
