@@ -31,4 +31,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\AttributeSetRepository">
+        <plugin name="attribute_set_plugin" type="\Magento\CatalogUrlRewrite\Plugin\Eav\Model\AttributeSetRepository" />
+    </type>
 </config>
