@@ -6,10 +6,8 @@
 -->
 <div class="field" data-bind="visible: visible, attr: {'name': element.dataScope}, css: additionalClasses">
 
-    <label class="label" data-bind="attr: { for: element.uid }">
-        <!-- ko if: element.label -->
+    <label if="element.label" class="label" data-bind="attr: { for: element.uid }">
         <span translate="element.label"></span>
-        <!-- /ko -->
     </label>
 
     <div class="control" data-bind="css: {'_with-tooltip': element.tooltip}">
