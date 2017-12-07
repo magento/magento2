@@ -92,16 +92,12 @@ class ProductsCountInLayeredNavigationTest extends Injectable
         // Disable configurable options
         if ($disableFromProductsGreed) {
             $this->catalogProductIndex->open();
-            $this->catalogProductIndex->getProductGrid()->sortByColumn('ID');
-            $this->catalogProductIndex->getProductGrid()->massaction(
-                array_map(
-                    function ($assignedProduct) {
-                        return ['sku' => $assignedProduct['sku']];
-                    },
-                    $configurableOptions
-                ),
-                ['Change status' => 'Disable']
-            );
+            foreach ($configurableOptions as $configurableOption) {
+                $filter = ['sku' => $configurableOption['sku']];
+                $this->catalogProductIndex->getProductGrid()->search($filter);
+                $this->catalogProductIndex->getProductGrid()->selectItems([$filter]);
+                $this->catalogProductIndex->getProductGrid()->selectAction(['Change status' => 'Disable']);
+            }
         } else {
             $productToDisable = $this->fixtureFactory->createByCode(
                 'catalogProductSimple',
