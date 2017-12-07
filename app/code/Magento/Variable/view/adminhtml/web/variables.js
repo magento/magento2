@@ -99,7 +99,7 @@ define([
          * Open slideout dialog window.
          *
          * @param {*} variablesContent
-         * @param selectedElement
+         * @param {Object} selectedElement
          */
         openDialogWindow: function (variablesContent, selectedElement) {
             var html = utils.copy(variablesContent),
@@ -306,6 +306,8 @@ define([
          * @param {String} url
          * @param {*} textareaId
          * @param {Object} selectedElement
+         *
+         * @return {Object}
          */
         loadChooser: function (url, textareaId, selectedElement) {
             this.textareaId = textareaId;
@@ -336,6 +338,8 @@ define([
          * Insert variable.
          *
          * @param {*} value
+         *
+         * @return {Object}
          */
         insertVariable: function (value) {
             if (this.textareaId) {
