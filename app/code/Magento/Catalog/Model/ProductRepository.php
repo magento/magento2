@@ -489,16 +489,17 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @throws InputException
      * @throws StateException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws LocalizedException
      */
-    protected function processMediaGallery(ProductInterface $product, $mediaGalleryEntries)
+    protected function processMediaGallery(ProductInterface $product, array $mediaGalleryEntries)
     {
         $existingMediaGallery = $product->getMediaGallery('images');
         $newEntries = [];
         $entriesById = [];
         if (!empty($existingMediaGallery)) {
             foreach ($mediaGalleryEntries as $entry) {
-                if (isset($entry['value_id'])) {
-                    $entriesById[$entry['value_id']] = $entry;
+                if (isset($entry['id'])) {
+                    $entriesById[$entry['id']] = $entry;
                 } else {
                     $newEntries[] = $entry;
                 }
@@ -515,6 +516,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                     $existingEntry['removed'] = true;
                 }
             }
+            unset($existingEntry);
             $product->setData('media_gallery', ["images" => $existingMediaGallery]);
         } else {
             $newEntries = $mediaGalleryEntries;
@@ -536,9 +538,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
             /** @var ImageContentInterface $contentDataObject */
             $contentDataObject = $this->contentFactory->create()
-                ->setName($newEntry['content']['data'][ImageContentInterface::NAME])
-                ->setBase64EncodedData($newEntry['content']['data'][ImageContentInterface::BASE64_ENCODED_DATA])
-                ->setType($newEntry['content']['data'][ImageContentInterface::TYPE]);
+                ->setName($newEntry['content'][ImageContentInterface::NAME])
+                ->setBase64EncodedData($newEntry['content'][ImageContentInterface::BASE64_ENCODED_DATA])
+                ->setType($newEntry['content'][ImageContentInterface::TYPE]);
             $newEntry['content'] = $contentDataObject;
             $this->processNewMediaGalleryEntry($product, $newEntry);
 
@@ -587,8 +589,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $product = $this->initializeProductData($productDataArray, empty($existingProduct));
 
         $this->processLinks($product, $productLinks);
-        if (isset($productDataArray['media_gallery'])) {
-            $this->processMediaGallery($product, $productDataArray['media_gallery']['images']);
+        if (isset($productDataArray['media_gallery_entries'])) {
+            $this->processMediaGallery($product, $productDataArray['media_gallery_entries']);
         }
 
         if (!$product->getOptionsReadonly()) {
