@@ -20,7 +20,8 @@ class CodingStandardsIgnoreAnnotationUsageTest extends TestCase
                 if (strpos($fileText, '@codingStandardsIgnoreFile') !== false) {
                     $this->fail(
                         '@codingStandardsIgnoreFile annotation must be avoided. '
-                        . 'Use codingStandardsIgnoreStart/codingStandardsIgnoreEnd to suppress code fragment. '
+                        . 'Use codingStandardsIgnoreStart/codingStandardsIgnoreEnd to suppress code fragment '
+                        . 'or use codingStandardsIgnoreLine to suppress line. '
                         . $filename
                     );
                 }
