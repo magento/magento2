@@ -269,7 +269,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
         $handle = $this->_getHandle();
         $this->_session->writeClose();
         while (true == ($buffer = $handle->read(1024))) {
-            echo $buffer;
+            echo $buffer; //@codingStandardsIgnoreLine
         }
     }
 
