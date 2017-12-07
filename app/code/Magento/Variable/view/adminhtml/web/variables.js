@@ -32,6 +32,8 @@ define([
         editor: null,
 
         /**
+         * Initialize Variables handler.
+         *
          * @param {*} textareaElementId
          * @param {Function} insertFunction
          * @param {Object} editor
@@ -56,7 +58,7 @@ define([
         },
 
         /**
-         * reset data.
+         * Reset data.
          */
         resetData: function () {
             this.variablesContent = null;
@@ -64,6 +66,8 @@ define([
         },
 
         /**
+         * Open variables chooser slideout.
+         *
          * @param {Object} variables
          */
         openVariableChooser: function (variables) {
@@ -73,7 +77,7 @@ define([
         },
 
         /**
-         * Close dialog window.
+         * Close variables chooser slideout dialog window.
          */
         closeDialogWindow: function () {
             jQuery('#' + this.dialogWindowId).modal('closeModal');
@@ -92,9 +96,12 @@ define([
 
 
         /**
+         * Open slideout dialog window.
+         *
          * @param {*} variablesContent
+         * @param selectedElement
          */
-        openDialogWindow: function (variablesContent, variableCode, selectedElement) {
+        openDialogWindow: function (variablesContent, selectedElement) {
             var html = utils.copy(variablesContent),
             self = this;
 
@@ -105,29 +112,31 @@ define([
 
                 closed: function (e, modal) {
                     modal.modal.remove();
-
-                    //remove selected value from registry
-                    registry.get('variables_modal.variables_modal.variables.variable_selector', function (radioSelect) {
-                        radioSelect.selectedVariableCode('');
-                    });
+                    registry.get(
+                        'variables_modal.variables_modal.variables.variable_selector',
+                        function (radioSelect) {
+                            radioSelect.selectedVariableCode('');
+                        }
+                    );
                 }
             });
+
             this.selectedPlaceholder = selectedElement;
 
             jQuery('#' + this.dialogWindowId).modal('openModal');
 
-            if (typeof variableCode != 'undefined') {
-                //@TODO: workaround should be replaced
-                registry.get('variables_modal.variables_modal.variables.variable_selector', function (radioSelect) {
-                    radioSelect.selectedVariableCode(variableCode);
-                });
+            if (typeof selectedElement !== 'undefined') {
+                registry.get(
+                    'variables_modal.variables_modal.variables.variable_selector',
+                    function (radioSelect) {
+                        radioSelect.selectedVariableCode(MagentovariablePlugin.getElementVariablePath(selectedElement));
+                    }
+                );
             }
-
-
         },
 
         /**
-         * Get selected variable code
+         * Get selected variable directive.
          *
          * @returns {*}
          */
@@ -137,7 +146,7 @@ define([
                 directive = code;
 
             // processing switch here as content must contain only path/code without type
-            if (typeof code != 'undefined') {
+            if (typeof code !== 'undefined') {
                 if (code.match('^default:')) {
                     directive = configGenerator.processConfig(code.replace('default:', ''));
                 } else if (code.match('^custom:')) {
@@ -147,11 +156,16 @@ define([
             }
         },
 
-
+        /**
+         * Get buttons configuration for slideout dialog.
+         *
+         * @param {Boolean} isEditMode
+         *
+         * @returns {Array|[*,*]}
+         */
         getButtonsConfig: function (isEditMode) {
 
             var self = this,  buttonsData;
-
             buttonsData = [
                 {
                     text: $t('Cancel'),
@@ -196,25 +210,27 @@ define([
         },
 
         /**
+         * Prepare variables row.
+         *
          * @param {String} varValue
          * @param {*} varLabel
          * @return {String}
          * @deprecated This method isn't relevant after ui changes
          */
         prepareVariableRow: function (varValue, varLabel) {
-            var value = varValue.replace(/"/g, '&quot;').replace(/'/g, '\\&#39;'),
-                content = '<a href="#" onclick="' +
+            var value = varValue.replace(/"/g, '&quot;').replace(/'/g, '\\&#39;');
+                return '<a href="#" onclick="' +
                     this.insertFunction +
                     '(\'' +
                     value +
                     '\');return false;">' +
                     varLabel +
                     '</a>';
-
-            return content;
         },
 
         /**
+         * Insert variable into WYSIWYG editor.
+         *
          * @param {*} value
          * @return {Object}
          */
@@ -226,7 +242,10 @@ define([
             textareaElm = $(this.textareaElementId);
 
             //to support switching between wysiwyg editors
-            wysiwygAdapter = wysiwyg && wysiwyg.get(this.textareaElementId) ? wysiwyg.get(this.textareaElementId) : this.editor
+            wysiwygAdapter = wysiwyg && wysiwyg.get(this.textareaElementId)
+                ? wysiwyg.get(this.textareaElementId)
+                : this.editor;
+
             if (wysiwygAdapter) {
                 wysiwygAdapter.execCommand('mceInsertContent', false,
                     value);
@@ -247,7 +266,8 @@ define([
         },
 
         /**
-         * Remove variable from wysywig editor
+         * Remove variable from wysywig editor.
+         *
          * @return {Object}
          */
         removeVariable: function () {
@@ -255,7 +275,7 @@ define([
 
             jQuery('#' + windowId).modal('closeModal');
 
-            if (typeof wysiwyg != 'undefined' && wysiwyg.get(this.textareaElementId)) {
+            if (typeof wysiwyg !== 'undefined' && wysiwyg.get(this.textareaElementId)) {
                 wysiwyg.get(this.textareaElementId).focus();
                 wysiwyg.get(this.textareaElementId).execCommand('mceRemoveNode', false);
                 if (this.selectedPlaceholder) {
@@ -272,6 +292,8 @@ define([
         textareaId: null,
 
         /**
+         * Bind editor.
+         *
          * @param {*} editor
          */
         setEditor: function (editor) {
@@ -279,27 +301,30 @@ define([
         },
 
         /**
+         * Load variables chooser.
+         *
          * @param {String} url
          * @param {*} textareaId
-         *
+         * @param {Object} selectedElement
          */
-        loadChooser: function (url, textareaId, variableCode, selectedElement) {
+        loadChooser: function (url, textareaId, selectedElement) {
             this.textareaId = textareaId;
                 new Ajax.Request(url, {
                     parameters: {},
                     onComplete: function (transport) {
                         Variables.init(this.textareaId, 'MagentovariablePlugin.insertVariable', this.editor);
-                        Variables.isEditMode = variableCode;
+                        Variables.isEditMode = !!selectedElement;
                         this.variablesContent = transport.responseText;
-                        Variables.openDialogWindow(this.variablesContent, variableCode, selectedElement);
+                        Variables.openDialogWindow(this.variablesContent, selectedElement);
                         Variables.initUiGrid();
                     }.bind(this)
                 });
-
-            return;
+            return this;
         },
 
         /**
+         * Open variables chooser window.
+         *
          * @param {*} variables
          * @deprecated This method isn't relevant after ui changes
          */
@@ -308,6 +333,8 @@ define([
         },
 
         /**
+         * Insert variable.
+         *
          * @param {*} value
          */
         insertVariable: function (value) {
@@ -318,8 +345,19 @@ define([
                 Variables.closeDialogWindow();
                 Variables.insertVariable(value);
             }
+            return this;
+        },
 
-            return;
+        /**
+         * Get element variable path.
+         *
+         * @param {Object} element
+         * @returns {string}
+         */
+        getElementVariablePath: function (element) {
+            var type = jQuery(element).hasClass('magento-custom-var') ? 'custom' : 'default';
+            var code = Base64.idDecode(element.getAttribute('id'));
+            return type + ':' + code;
         }
     };
 });
