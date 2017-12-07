@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-/* global Variables, updateElementAtCursor */
+/* global Variables, updateElementAtCursor, MagentovariablePlugin, Base64 */
 define([
     'jquery',
     'mage/translate',
@@ -153,7 +153,7 @@ define([
                     directive = customGenerator.processConfig(code.replace('custom:', ''));
                 }
 
-                return directive
+                return directive;
             }
         },
 
@@ -204,10 +204,10 @@ define([
                             self.removeVariable(event);
                         }
                     }
-                )
+                );
             }
 
-            return buttonsData
+            return buttonsData;
         },
 
         /**
@@ -220,6 +220,7 @@ define([
          */
         prepareVariableRow: function (varValue, varLabel) {
             var value = varValue.replace(/"/g, '&quot;').replace(/'/g, '\\&#39;');
+
             return '<a href="#" onclick="' +
                 this.insertFunction +
                 '(\'' +
@@ -363,11 +364,13 @@ define([
          * @returns {string}
          */
         getElementVariablePath: function (element) {
+            var type, code;
+
             if (!element || !jQuery(element).hasClass('magento-variable')) {
                 return '';
             }
-            var type = jQuery(element).hasClass('magento-custom-var') ? 'custom' : 'default';
-            var code = Base64.idDecode(element.getAttribute('id'));
+            type = jQuery(element).hasClass('magento-custom-var') ? 'custom' : 'default';
+            code = Base64.idDecode(element.getAttribute('id'));
 
             return type + ':' + code;
         }
