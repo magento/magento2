@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
@@ -21,9 +22,6 @@
                 <title value="Minimum Test"/>
                 <description value="Minimum Test"/>
                 <group value="example"/>
-                <env value="chrome"/>
-                <env value="firefox"/>
-                <env value="headless"/>
             </annotations>
             <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
             <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="fillUsername"/>

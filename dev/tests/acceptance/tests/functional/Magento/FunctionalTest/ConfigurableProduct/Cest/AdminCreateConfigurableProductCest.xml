@@ -25,7 +25,8 @@
                 <description value="You should be able to create a Configurable Product via the Admin."/>
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-26041"/>
-                <group value="skip"/>
+                <group value="configurable"/>
+                <group value="product"/>
             </annotations>
             <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnCategoryGridPage"/>
             <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>

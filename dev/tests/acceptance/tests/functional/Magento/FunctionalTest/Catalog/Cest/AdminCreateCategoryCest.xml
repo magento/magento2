@@ -23,8 +23,6 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-72102"/>
                 <group value="category"/>
-                <env value="chrome"/>
-                <env value="headless"/>
             </annotations>
             <loginAsAdmin stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>

@@ -27,8 +27,6 @@
                 <severity value="NORMAL"/>
                 <testCaseId value="MAGETWO-72096"/>
                 <group value="sales"/>
-                <env value="chrome"/>
-                <env value="headless"/>
             </annotations>
 
             <!-- todo: Create an order via the api instead of driving the browser  -->
@@ -50,6 +48,7 @@
             <fillField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
             <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
             <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
             <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
             <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
             <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
@@ -64,23 +63,23 @@
             <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
 
             <amOnPage url="{{OrdersPage.url}}" stepKey="onOrdersPage"/>
-            <waitForElementNotVisible selector="{{OrdersGridSection.spinner}}" time="10" stepKey="waitSpinner1"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
             <fillField selector="{{OrdersGridSection.search}}" variable="orderNumber" stepKey="searchOrderNum"/>
             <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
-            <waitForElementNotVisible selector="{{OrdersGridSection.spinner}}" time="10" stepKey="waitSpinner2"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
 
             <click selector="{{OrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
             <click selector="{{OrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
             <click selector="{{InvoiceNewSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
             <see selector="{{OrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
             <click selector="{{OrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
-            <waitForElementNotVisible selector="{{OrderDetailsInvoicesSection.spinner}}" time="10" stepKey="waitSpinner3"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask5" />
             <see selector="{{OrderDetailsInvoicesSection.content}}" variable="orderNumber" stepKey="seeInvoice1"/>
             <see selector="{{OrderDetailsInvoicesSection.content}}" userInput="John Doe" stepKey="seeInvoice2"/>
             <click selector="{{OrderDetailsOrderViewSection.information}}" stepKey="clickInformation"/>
             <see selector="{{OrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus"/>
             <amOnPage url="{{InvoicesPage.url}}" stepKey="goToInvoices"/>
-            <waitForElementNotVisible selector="{{InvoicesGridSection.spinner}}" time="10" stepKey="waitSpinner4"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask6" />
             <click selector="{{InvoicesGridSection.filter}}" stepKey="clickFilters"/>
             <fillField selector="{{InvoicesFiltersSection.orderNum}}" variable="orderNumber" stepKey="searchOrderNum2"/>
             <click selector="{{InvoicesGridSection.firstRow}}" stepKey="clickInvoice2"/>

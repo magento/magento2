@@ -30,8 +30,6 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-72094"/>
                 <group value="checkout"/>
-                <env value="chrome"/>
-                <env value="headless"/>
             </annotations>
             <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
             <waitForPageLoad stepKey="waitForPageLoad1"/>
@@ -56,6 +54,7 @@
             <waitForElement selector="{{GuestCheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
             <click selector="{{GuestCheckoutShippingSection.next}}" stepKey="clickNext"/>
             <waitForElement selector="{{GuestCheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+            <conditionalClick selector="{{GuestCheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{GuestCheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="exposeMiniCart"/>
             <see selector="{{GuestCheckoutPaymentSection.cartItems}}" userInput="{{_defaultProduct.name}}" stepKey="seeProductInCart"/>
             <see selector="{{GuestCheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAddress"/>
             <click selector="{{GuestCheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
@@ -67,10 +66,10 @@
             <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
             <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
             <amOnPage url="{{OrdersPage.url}}" stepKey="onOrdersPage"/>
-            <waitForElementNotVisible selector="{{OrdersGridSection.spinner}}" time="30" stepKey="waitForOrdersPage"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnOrdersPage"/>
             <fillField selector="{{OrdersGridSection.search}}" variable="orderNumber" stepKey="fillOrderNum"/>
             <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearchOrderNum"/>
-            <waitForElementNotVisible selector="{{OrdersGridSection.spinner}}" time="30" stepKey="waitForOrdersPage2"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnSearch"/>
             <click selector="{{OrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
             <see selector="{{OrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeAdminOrderStatus"/>
             <see selector="{{OrderDetailsInformationSection.accountInformation}}" userInput="Guest" stepKey="seeAdminOrderGuest"/>
