@@ -311,7 +311,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         array $fixtureFields = [],
         $argument = null
     ) {
-        $this->expectException('UnexpectedValueException', $expectedException);
+        $this->expectException('UnexpectedValueException');
+        $this->expectExceptionMessage($expectedException);
         $dataStorage = $this->createPartialMock(\Magento\Email\Model\Template\Config\Data::class, ['get']);
         $dataStorage->expects(
             $this->atLeastOnce()
