@@ -59,6 +59,10 @@
         </arguments>
     </virtualType>
 
+    <type name="Magento\Customer\Model\Authorization\CustomerSessionUserContext">
+        <plugin name="webApiCustomerSessionUserContext" type="Magento\Webapi\Model\Plugin\Authorization\CustomerSessionUserContext" />
+    </type>
+
     <type name="Magento\Framework\Webapi\ServiceOutputProcessor">
         <arguments>
             <argument name="dataObjectProcessor" xsi:type="object">Magento\Framework\Reflection\DataObjectProcessorPermissionChecked</argument>

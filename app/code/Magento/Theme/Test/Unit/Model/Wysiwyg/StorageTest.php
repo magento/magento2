@@ -115,7 +115,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     {
         $uploader = $this->_prepareUploader();
 
-        $uploader->expects($this->once())->method('save')->will($this->returnValue(['not_empty']));
+        $uploader->expects($this->once())->method('save')->will($this->returnValue(['not_empty', 'path' => 'absPath']));
 
         $this->_helperStorage->expects(
             $this->any()

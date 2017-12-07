@@ -12,19 +12,11 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout via the Admin"/>
-            <group value="checkout"/>
-            <env value="chrome"/>
-            <env value="firefox"/>
-            <env value="phantomjs"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" mergeKey="simplecategory"/>
-            <entity name="categoryLink" type="custom_attribute" mergeKey="categoryLink">
-                <data key="attribute_code">category_ids</data>
-                <data key="value">$$simplecategory.id$$</data>
-            </entity>
             <createData entity="SimpleProduct" mergeKey="simpleproduct1">
-                <required-entity name="categoryLink"/>
+                <required-entity createDataKey="simplecategory"/>
             </createData>
             <createData entity="Simple_US_Customer" mergeKey="simpleuscustomer"/>
         </before>
@@ -39,6 +31,9 @@
                 <description value="Should be able to place an order as a customer."/>
                 <severity value="CRITICAL"/>
                 <testCaseId value="#"/>
+                <group value="checkout"/>
+                <env value="chrome"/>
+                <env value="headless"/>
             </annotations>
 
             <amOnPage mergeKey="s1"  url="customer/account/login/"/>
@@ -68,12 +63,12 @@
             <grabTextFrom mergeKey="s53" selector="{{CheckoutSuccessMainSection.orderNumber22}}" returnVariable="orderNumber" />
             <see mergeKey="s55" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" />
 
-            <amOnPage mergeKey="s59" url="{{AdminLoginPage}}" />
+            <amOnPage mergeKey="s59" url="{{AdminLoginPage.url}}" />
             <fillField mergeKey="s61" selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" />
             <fillField mergeKey="s63" selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" />
             <click mergeKey="s65" selector="{{AdminLoginFormSection.signIn}}" />
 
-            <amOnPage mergeKey="s67" url="{{OrdersPage}}"/>
+            <amOnPage mergeKey="s67" url="{{OrdersPage.url}}"/>
             <waitForPageLoad mergeKey="s75"/>
             <fillField mergeKey="s77" selector="{{OrdersGridSection.search}}" variable="orderNumber" />
             <waitForPageLoad mergeKey="s78"/>

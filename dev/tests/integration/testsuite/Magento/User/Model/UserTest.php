@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\User\Model;
+
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
@@ -202,6 +203,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoAdminConfigFixture admin/captcha/enable 0
      * @magentoAdminConfigFixture admin/security/use_case_sensitive_login 1
      */
     public function testAuthenticate()
@@ -217,6 +219,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoAdminConfigFixture admin/captcha/enable 0
      * @magentoConfigFixture current_store admin/security/use_case_sensitive_login 0
      */
     public function testAuthenticateCaseInsensitive()
@@ -262,6 +265,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
+     * @magentoAdminConfigFixture admin/captcha/enable 0
      */
     public function testLoginsAreLogged()
     {

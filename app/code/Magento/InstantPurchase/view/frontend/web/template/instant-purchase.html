@@ -1,0 +1,29 @@
+<!-- ko if: showButton -->
+<button type="button"
+        class="action primary instant-purchase"
+        data-bind="click: instantPurchase, attr:{title: buttonText}">
+    <span data-bind="text: buttonText"></span>
+</button>
+<!-- ko if: paymentToken -->
+<input type="hidden"
+       name="instant_purchase_payment_token"
+       data-bind="value: paymentToken().publicHash">
+<!-- /ko -->
+<!-- ko if: shippingAddress -->
+<input type="hidden"
+       name="instant_purchase_shipping_address"
+       data-bind="value: shippingAddress().id">
+<!-- /ko -->
+<!-- ko if: billingAddress -->
+<input type="hidden"
+       name="instant_purchase_billing_address"
+       data-bind="value: billingAddress().id">
+<!-- ko if: shippingMethod -->
+<input type="hidden"
+       name="instant_purchase_carrier"
+       data-bind="value: shippingMethod().carrier">
+<input type="hidden"
+       name="instant_purchase_shipping"
+       data-bind="value: shippingMethod().method">
+<!-- /ko -->
+<!-- /ko -->

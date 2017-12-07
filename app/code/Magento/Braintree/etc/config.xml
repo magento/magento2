@@ -71,11 +71,21 @@
             <braintree_cc_vault>
                 <model>BraintreeCreditCardVaultFacade</model>
                 <title>Stored Cards (Braintree)</title>
+                <instant_purchase>
+                    <available>Magento\Braintree\Model\InstantPurchase\CreditCard\AvailabilityChecker</available>
+                    <tokenFormat>Magento\Braintree\Model\InstantPurchase\CreditCard\TokenFormatter</tokenFormat>
+                    <additionalInformation>Magento\Braintree\Model\InstantPurchase\PaymentAdditionalInformationProvider</additionalInformation>
+                </instant_purchase>
             </braintree_cc_vault>
             <braintree_paypal_vault>
                 <model>BraintreePayPalVaultFacade</model>
                 <title>Stored Accounts (Braintree PayPal)</title>
                 <can_use_internal>1</can_use_internal>
+                <instant_purchase>
+                    <available>Magento\Braintree\Model\InstantPurchase\CreditCard\AvailabilityChecker</available>
+                    <tokenFormat>Magento\Braintree\Model\InstantPurchase\CreditCard\TokenFormatter</tokenFormat>
+                    <additionalInformation>Magento\Braintree\Model\InstantPurchase\PaymentAdditionalInformationProvider</additionalInformation>
+                </instant_purchase>
             </braintree_paypal_vault>
         </payment>
     </default>

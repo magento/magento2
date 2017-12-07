@@ -57,7 +57,11 @@ Tax,Tax
 "Cannot set shipping method. %1","Cannot set shipping method. %1"
 "Shipping method is not applicable for empty cart","Shipping method is not applicable for empty cart"
 "Cart contains virtual product(s) only. Shipping method is not applicable.","Cart contains virtual product(s) only. Shipping method is not applicable."
+"Carrier with such method not found: %1, %2","Carrier with such method not found: %1, %2"
+"Cannot set shipping method. %1","Cannot set shipping method. %1"
 "Minimum Order Amount Exceeded.","Minimum Order Amount Exceeded."
+error123,error123
 error345,error345
 Carts,Carts
 "Manage carts","Manage carts"
+"Invalid state change requested","Invalid state change requested"

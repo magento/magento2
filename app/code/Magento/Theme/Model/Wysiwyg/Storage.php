@@ -119,6 +119,7 @@ class Storage
         $uploader->setAllowRenameFiles(true);
         $uploader->setFilesDispersion(false);
         $result = $uploader->save($targetPath);
+        unset($result['path']);
 
         if (!$result) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t upload the file right now.'));

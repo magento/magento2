@@ -9,6 +9,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerDashboardAccountInformationSection">
-        <element name="ContactInformation" type="textarea" locator=".box.box-information .box-content"/>
+        <element name="ContactInformation" type="textarea" selector=".box.box-information .box-content"/>
     </section>
 </config>

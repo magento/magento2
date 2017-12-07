@@ -23,7 +23,6 @@ class BatchSizeCalculator
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\CompositeProductBatchSizeAdjusterInterface[]
-     * @since 2.2.0
      */
     private $batchSizeAdjusters;
 
@@ -32,7 +31,6 @@ class BatchSizeCalculator
      * @param array $batchRowsCount
      * @param array $estimators
      * @param array $batchSizeAdjusters
-     * @since 2.2.0
      */
     public function __construct(array $batchRowsCount, array $estimators, array $batchSizeAdjusters)
     {

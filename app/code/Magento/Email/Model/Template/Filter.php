@@ -150,7 +150,7 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * @var \Pelago\Emogrifier
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $emogrifier;
 

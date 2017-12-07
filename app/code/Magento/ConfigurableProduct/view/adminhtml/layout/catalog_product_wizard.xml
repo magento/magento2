@@ -7,7 +7,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
     <container name="root">
-        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix" template="Magento_ConfigurableProduct::catalog/product/edit/super/wizard-ajax.phtml" as="wizard">
+        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix" template="Magento_ConfigurableProduct::catalog/product/edit/super/wizard-ajax.phtml" name="root.wizard" as="wizard">
             <arguments>
                 <argument name="config" xsi:type="array">
                     <item name="collapsible" xsi:type="boolean">false</item>

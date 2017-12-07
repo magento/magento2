@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
+use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
 use Magento\ImportExport\Model\Import;
 use \Magento\Store\Model\Store;
 use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
@@ -161,7 +162,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Header columns for export file
      *
      * @var array
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $_headerColumns = [];
 
@@ -438,11 +439,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             if ($pathSize > 1) {
                 $path = [];
                 for ($i = 1; $i < $pathSize; $i++) {
-                    $path[] = $collection->getItemById($structure[$i])->getName();
+                    $name = $collection->getItemById($structure[$i])->getName();
+                    $path[] = $this->quoteCategoryDelimiter($name);
                 }
                 $this->_rootCategories[$category->getId()] = array_shift($path);
                 if ($pathSize > 2) {
-                    $this->_categories[$category->getId()] = implode('/', $path);
+                    $this->_categories[$category->getId()] = implode(CategoryProcessor::DELIMITER_CATEGORY, $path);
                 }
             }
         }
@@ -699,7 +701,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param array $customOptionsData
      * @param array $stockItemRows
      * @return void
-     * @deprecated Logic will be moved to _getHeaderColumns in future release
+     * @deprecated 100.2.0 Logic will be moved to _getHeaderColumns in future release
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -1469,5 +1471,20 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 ->getLinkField();
         }
         return $this->productEntityLinkField;
+    }
+
+    /**
+     * Quoting category delimiter character in string.
+     *
+     * @param string $string
+     * @return string
+     */
+    private function quoteCategoryDelimiter($string)
+    {
+        return str_replace(
+            CategoryProcessor::DELIMITER_CATEGORY,
+            '\\' . CategoryProcessor::DELIMITER_CATEGORY,
+            $string
+        );
     }
 }

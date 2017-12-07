@@ -7,6 +7,9 @@
             "url" : "https://repo.magento.com/"
         }
     ],
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~7.0",
         "codeception/codeception": "2.2|2.3",

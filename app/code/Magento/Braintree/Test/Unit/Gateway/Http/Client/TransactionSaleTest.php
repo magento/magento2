@@ -90,8 +90,7 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
         $this->adapter->expects($this->once())
             ->method('sale')
             ->with($this->getTransferData())
-            ->willReturn($response)
-        ;
+            ->willReturn($response);
 
         $this->loggerMock->expects($this->once())
             ->method('debug')

@@ -19,6 +19,7 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
      */
     protected function _setActivationInProcessMsg($isReauthorize, $integrationName)
     {
+        $integrationName = $this->escaper->escapeHtml($integrationName);
         $msg = $isReauthorize ? __(
             "Integration '%1' has been sent for re-authorization.",
             $integrationName

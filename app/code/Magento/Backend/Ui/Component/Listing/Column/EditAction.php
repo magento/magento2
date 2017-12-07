@@ -11,6 +11,8 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
+ * Represents Edit link in grid for entity by its identifier field
+ *
  * @api
  */
 class EditAction extends Column

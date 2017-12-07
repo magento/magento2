@@ -271,7 +271,6 @@ define(
                 billingCountryId = billingAddress.countryId;
 
                 if (billingCountryId && validator.getCountrySpecificCardTypes(billingCountryId)) {
-
                     return validator.collectTypes(
                         availableTypes, validator.getCountrySpecificCardTypes(billingCountryId)
                     );

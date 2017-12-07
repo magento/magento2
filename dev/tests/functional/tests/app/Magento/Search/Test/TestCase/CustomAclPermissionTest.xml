@@ -8,6 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\User\Test\TestCase\CustomAclPermissionTest" summary="Custom ACL Permission" ticketId="MAGETWO-58541">
         <variation name="CustomSynonymAclPermissionTestVariation2" summary="Global synonyms grid access control" ticketId="MAGETWO-47568">
+            <data name="tag" xsi:type="string">to_maintain:yes</data>
+            <data name="issue" xsi:type="string">MAGETWO-68854: CustomAclPermissionTest Fails on Jenkins, marked as unstable</data>
             <data name="user/dataset" xsi:type="string">custom_admin_with_role_without_synonym</data>
             <data name="menuItem" xsi:type="string">Marketing > Search Synonyms</data>
             <constraint name="Magento\Backend\Test\Constraint\AssertMenuItemNotVisible" />
