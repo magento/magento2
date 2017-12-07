@@ -205,7 +205,7 @@ class Builder
         $this->_connection = $collection->getResource()->getConnection();
         $this->_joinTablesToCollection($collection, $combine);
         $isDefaultStoreUsed = $this->checkIsDefaultStoreUsed($collection);
-        $whereExpression = (string) $this->_getMappedSqlCombination($combine, '', $isDefaultStoreUsed);
+        $whereExpression = (string)$this->_getMappedSqlCombination($combine, '', $isDefaultStoreUsed);
         if (!empty($whereExpression)) {
             // Select ::where method adds braces even on empty expression
             $collection->getSelect()->where($whereExpression);
@@ -220,7 +220,7 @@ class Builder
      */
     private function checkIsDefaultStoreUsed(AbstractCollection $collection): bool
     {
-        return (int) $collection->getStoreId() === (int) $collection->getDefaultStoreId();
+        return (int)$collection->getStoreId() === (int)$collection->getDefaultStoreId();
     }
 
     /**
