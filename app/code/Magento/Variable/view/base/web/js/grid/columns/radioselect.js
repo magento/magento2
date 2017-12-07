@@ -34,7 +34,7 @@ define([
         /**
          * Remove disable class from Insert Variable button after Variable has been chosen.
          *
-         * @return {boolean}
+         * @return {Boolean}
          */
         selectVariable: function () {
             if (jQuery('#insert_variable').hasClass('disabled')) {

@@ -103,10 +103,10 @@ define([
          */
         openDialogWindow: function (variablesContent, selectedElement) {
             var html = utils.copy(variablesContent),
-            self = this;
+                self = this;
 
             jQuery('<div id="' + this.dialogWindowId + '">' + html + '</div>').modal({
-                title: self.isEditMode ? $t('Edit variable...') : $t('Insert Variable...') ,
+                title: self.isEditMode ? $t('Edit variable...') : $t('Insert Variable...'),
                 type: 'slide',
                 buttons: self.getButtonsConfig(self.isEditMode),
 
@@ -142,7 +142,7 @@ define([
          */
         getVariableCode: function () {
             var code = registry.get('variables_modal.variables_modal.variables.variable_selector')
-                .selectedVariableCode(),
+                    .selectedVariableCode(),
                 directive = code;
 
             // processing switch here as content must contain only path/code without type
@@ -152,6 +152,7 @@ define([
                 } else if (code.match('^custom:')) {
                     directive = customGenerator.processConfig(code.replace('custom:', ''));
                 }
+
                 return directive
             }
         },
@@ -165,7 +166,7 @@ define([
          */
         getButtonsConfig: function (isEditMode) {
 
-            var self = this,  buttonsData;
+            var self = this, buttonsData;
             buttonsData = [
                 {
                     text: $t('Cancel'),
@@ -219,13 +220,13 @@ define([
          */
         prepareVariableRow: function (varValue, varLabel) {
             var value = varValue.replace(/"/g, '&quot;').replace(/'/g, '\\&#39;');
-                return '<a href="#" onclick="' +
-                    this.insertFunction +
-                    '(\'' +
-                    value +
-                    '\');return false;">' +
-                    varLabel +
-                    '</a>';
+            return '<a href="#" onclick="' +
+                this.insertFunction +
+                '(\'' +
+                value +
+                '\');return false;">' +
+                varLabel +
+                '</a>';
         },
 
         /**
@@ -242,9 +243,9 @@ define([
             textareaElm = $(this.textareaElementId);
 
             //to support switching between wysiwyg editors
-            wysiwygAdapter = wysiwyg && wysiwyg.get(this.textareaElementId)
-                ? wysiwyg.get(this.textareaElementId)
-                : this.editor;
+            wysiwygAdapter = wysiwyg && wysiwyg.get(this.textareaElementId) ?
+                wysiwyg.get(this.textareaElementId) :
+                this.editor;
 
             if (wysiwygAdapter) {
                 wysiwygAdapter.execCommand('mceInsertContent', false,
@@ -282,6 +283,7 @@ define([
                     this.selectedPlaceholder.remove();
                 }
             }
+
             return this;
         }
     };
@@ -321,6 +323,7 @@ define([
                         Variables.initUiGrid();
                     }.bind(this)
                 });
+
             return this;
         },
 
@@ -349,6 +352,7 @@ define([
                 Variables.closeDialogWindow();
                 Variables.insertVariable(value);
             }
+
             return this;
         },
 
@@ -364,6 +368,7 @@ define([
             }
             var type = jQuery(element).hasClass('magento-custom-var') ? 'custom' : 'default';
             var code = Base64.idDecode(element.getAttribute('id'));
+
             return type + ':' + code;
         }
     };
