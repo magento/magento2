@@ -7,7 +7,7 @@ namespace Magento\Ui\Block\Wysiwyg;
 
 use \Magento\Framework\View\Element\Template\Context;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
-use \Magento\Cms\Model;
+use \Magento\Ui\Model;
 
 /**
  * ActiveEditor block
@@ -26,7 +26,7 @@ class ActiveEditor extends \Magento\Framework\View\Element\Template
 
     public function getWysiwygAdapterPath()
     {
-        $adapterPath = $this->scopeConfig->getValue(Model\Wysiwyg\Config::WYSIWYG_EDITOR_CONFIG_PATH);
-        return $adapterPath;
+        $adapterPath = $this->scopeConfig->getValue(Model\Config::WYSIWYG_EDITOR_CONFIG_PATH);
+        return $this->escapeHtml($adapterPath);
     }
 }
