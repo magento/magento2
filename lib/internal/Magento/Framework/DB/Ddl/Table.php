@@ -78,20 +78,6 @@ class Table
 
     const ACTION_SET_DEFAULT = 'SET DEFAULT';
 
-    /**#@+
-     * Option keys for column options
-     */
-    const OPTION_IDENTITY = 'identity';
-    const OPTION_UNSIGNED = 'unsigned';
-    const OPTION_NULLABLE = 'nullable';
-    const OPTION_PRIMARY = 'primary';
-    const OPTION_DEFAULT = 'default';
-    const OPTION_TYPE = 'type';
-    const OPTION_LENGTH = 'length';
-    const OPTION_SCALE = 'scale';
-    const OPTION_PRECISION = 'precision';
-    /**#@-*/
-
     /**
      * Column option 'default'
      *
