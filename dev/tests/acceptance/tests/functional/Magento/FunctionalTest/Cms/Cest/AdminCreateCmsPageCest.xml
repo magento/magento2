@@ -23,7 +23,6 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-25580"/>
                 <group value="cms"/>
-                <group value="skip"/>
             </annotations>
             <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
             <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="fillUsername"/>
