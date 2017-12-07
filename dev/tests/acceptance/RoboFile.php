@@ -72,65 +72,45 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run all Functional tests using the Chrome environment.
+     * Run all Functional tests.
      *
      * @return void
      */
-    function chrome()
+    function functional()
     {
-        $this->_exec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept run functional --env chrome --skip-group skip');
+        $this->_exec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run functional --skip-group skip');
     }
 
     /**
-     * Run all Functional tests using the FireFox environment.
-     *
-     * @return void
-     */
-    function firefox()
-    {
-        $this->_exec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept run functional --env firefox --skip-group skip');
-    }
-
-    /**
-     * Run all Functional tests using the Chrome Headless environment.
-     *
-     * @return void
-     */
-    function headless()
-    {
-        $this->_exec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept run functional --env headless --skip-group skip');
-    }
-
-    /**
-     * Run all Tests with the specified @group tag, excluding @group 'skip', using the Chrome environment.
+     * Run all Tests with the specified @group tag, excluding @group 'skip'.
      *
      * @param string $args
      * @return void
      */
     function group($args = '')
     {
-        $this->taskExec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept run functional --verbose --steps --env chrome --skip-group skip --group')->args($args)->run();
+        $this->taskExec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run functional --verbose --steps --skip-group skip --group')->args($args)->run();
     }
 
     /**
-     * Run all Functional tests located under the Directory Path provided using the Chrome environment.
+     * Run all Functional tests located under the Directory Path provided.
      *
      * @param string $args
      * @return void
      */
     function folder($args = '')
     {
-        $this->taskExec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept run functional --env chrome')->args($args)->run();
+        $this->taskExec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run functional')->args($args)->run();
     }
 
     /**
-     * Run all Tests marked with the @group tag 'example', using the Chrome environment.
+     * Run all Tests marked with the @group tag 'example'.
      *
      * @return void
      */
     function example()
     {
-        $this->_exec('vendor'. DIRECTORY_SEPARATOR .'bin'. DIRECTORY_SEPARATOR .'codecept run --env chrome --group example --skip-group skip');
+        $this->_exec('.' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'codecept run --group example --skip-group skip');
     }
 
     /**
