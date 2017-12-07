@@ -28,19 +28,19 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
     /**
      * @var Collection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $indexerCollectionMock;
+    protected $indexerCollection;
 
     public function setUp()
     {
         parent::setUp();
 
-        $this->indexerCollectionMock = $this->getMockBuilder(Collection::class)
+        $this->indexerCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->collectionFactory
             ->method('create')
-            ->willReturn($this->indexerCollectionMock);
+            ->willReturn($this->indexerCollection);
     }
 
     /**
@@ -272,7 +272,7 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
      */
     protected function initIndexerCollectionByItems(array $items)
     {
-        $this->indexerCollectionMock
+        $this->indexerCollection
             ->method('getItems')
             ->with()
             ->willReturn($items);
