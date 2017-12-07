@@ -355,6 +355,9 @@ define([
          * @returns {string}
          */
         getElementVariablePath: function (element) {
+            if (!element || !jQuery(element).hasClass('magento-variable')) {
+                return '';
+            }
             var type = jQuery(element).hasClass('magento-custom-var') ? 'custom' : 'default';
             var code = Base64.idDecode(element.getAttribute('id'));
             return type + ':' + code;
