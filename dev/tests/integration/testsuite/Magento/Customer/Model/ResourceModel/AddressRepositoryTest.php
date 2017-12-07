@@ -327,11 +327,8 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $pageSize = 1;
-        $expectedPageCount = ceil(count($expectedResult) / $pageSize);
-
-        $searchBuilder->setPageSize($pageSize);
-        $searchBuilder->setCurrentPage($expectedPageCount);
+        $searchBuilder->setPageSize(1);
+        $searchBuilder->setCurrentPage(count($expectedResult));
 
         $searchCriteria = $searchBuilder->create();
         $searchResults = $this->repository->getList($searchCriteria);
