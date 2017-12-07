@@ -15,4 +15,3 @@ default:
                      "version": ""
     filters:
         tags: "~@skip"
-
