@@ -12,7 +12,7 @@ namespace Magento\Variable\Model\Variable;
 class Data
 {
     /**
-     * @var \Magento\Variable\Model\VariableFactory
+     * @var \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory
      */
     private $collectionFactory;
 
@@ -22,11 +22,11 @@ class Data
     private $storesVariables;
 
     /**
-     * @param \Magento\Variable\Model\VariableFactory $collectionFactory
+     * @param \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory
      * @param \Magento\Variable\Model\Source\Variables $storesVariables
      */
     public function __construct(
-        \Magento\Variable\Model\VariableFactory $collectionFactory,
+        \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory,
         \Magento\Variable\Model\Source\Variables $storesVariables
     ) {
         $this->collectionFactory = $collectionFactory;
@@ -59,6 +59,7 @@ class Data
      */
     public function getCustomVariables()
     {
+        /** @var  $customVariables */
         $customVariables = $this->collectionFactory->create();
 
         $variables = [];
