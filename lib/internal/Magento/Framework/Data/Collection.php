@@ -240,11 +240,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     {
         if ($this->_curPage + $displacement < 1) {
             return 1;
-        } elseif ($this->_curPage + $displacement > $this->getLastPageNumber()) {
-            return $this->getLastPageNumber();
-        } else {
-            return $this->_curPage + $displacement;
         }
+        return $this->_curPage + $displacement;
     }
 
     /**

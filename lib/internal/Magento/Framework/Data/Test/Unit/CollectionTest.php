@@ -100,6 +100,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testGetCurPage()
     {
         $this->_model->setCurPage(10);
+        $this->assertEquals(10, $this->_model->getCurPage());
+
+        $this->_model->setCurPage(-10);
+        $this->assertEquals(1, $this->_model->getCurPage());
+
+        $this->_model->setCurPage(1);
         $this->assertEquals(1, $this->_model->getCurPage());
     }
 
