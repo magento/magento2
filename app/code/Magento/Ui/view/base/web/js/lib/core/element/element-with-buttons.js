@@ -16,16 +16,16 @@ define([
         },
 
         /**
-         * Return whether we have buttons or not
-         * 
-         * @return {boolean}
+         * Return whether we have buttons or not.
+         *
+         * @return {Boolean}
          */
         hasButtons: function () {
             return this.buttons.length > 0;
         },
 
         /**
-         * Triggers some method in every modal child elem, if this method is defined
+         * Triggers some method in every modal child elem, if this method is defined.
          *
          * @param {Object} action - action configuration,
          * must contain actionName and targetName and

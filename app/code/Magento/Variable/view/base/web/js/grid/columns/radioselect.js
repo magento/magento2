@@ -20,14 +20,24 @@ define([
             selectedVariableType: null
         },
 
+        /**
+         * Calls 'initObservable' of parent
+         *
+         * @returns {Object} Chainable.
+         */
         initObservable: function () {
             this._super().observe(['selectedVariableCode']);
 
             return this;
         },
 
+        /**
+         * Remove disable class from Insert Variable button after Variable has been chosen.
+         *
+         * @return {boolean}
+         */
         selectVariable: function () {
-            if(jQuery('#insert_variable').hasClass('disabled')) {
+            if (jQuery('#insert_variable').hasClass('disabled')) {
                 jQuery('#insert_variable').removeClass('disabled');
             }
 
