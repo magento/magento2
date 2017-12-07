@@ -77,21 +77,48 @@ class Config
      */
     public function getPluginSettings($config)
     {
-        $url = $this->_assetRepo->getUrl(
-            'mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js'
-        );
-
-        $errorImageUrl = $this->_assetRepo->getUrl('Magento_Widget::error.png');
-
-        $settings = [
-            'widget_plugin_src' => $url,
-            'widget_placeholders' => $this->_widgetFactory->create()->getPlaceholderImageUrls(),
-            'widget_window_url' => $this->getWidgetWindowUrl($config),
-            'widget_types' => $this->getAvailableWidgets($config),
-            'widget_error_image_url' => $errorImageUrl
+        $widgetWysiwyg = [
+            [
+                'name' => 'magentowidget',
+                'src' => $this->getWysiwygJsPluginSrc(),
+                'options' => [
+                    'window_url' => $this->getWidgetWindowUrl($config),
+                    'types' => $this->getAvailableWidgets($config),
+                    'error_image_url' => $this->getErrorImageUrl()
+                ],
+            ]
         ];
 
-        return $settings;
+        $configPlugins = $config->getData('plugins');
+
+        $widgetConfig = [
+            'plugins' => array_merge($configPlugins, $widgetWysiwyg),
+            'widget_placeholders' => $this->_widgetFactory->create()->getPlaceholderImageUrls(),
+        ];
+
+        return $widgetConfig;
+    }
+
+    /**
+     * Return url to error image
+     *
+     * @return string
+     * @codeCoverageIgnore
+     */
+    public function getErrorImageUrl()
+    {
+        return $this->_assetRepo->getUrl('Magento_Widget::error.png');
+    }
+
+    /**
+     * Return url to wysiwyg plugin
+     *
+     * @return string
+     * @codeCoverageIgnore
+     */
+    public function getWysiwygJsPluginSrc()
+    {
+        return $this->_assetRepo->getUrl('mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js');
     }
 
     /**
