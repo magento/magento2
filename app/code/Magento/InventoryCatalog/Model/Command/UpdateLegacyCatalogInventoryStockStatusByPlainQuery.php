@@ -9,7 +9,6 @@ namespace Magento\InventoryCatalog\Model\Command;
 
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryCatalog\Api\UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface;
 
 /**
  * Legacy update cataloginventory_stock_status by plain MySql query.

@@ -9,7 +9,6 @@ namespace Magento\InventoryCatalog\Model\Command;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryCatalog\Api\UpdateLegacyCatalogInventoryStockItemByPlainQueryInterface;
 
 /**
  * Legacy update cataloginventory_stock_item by plain MySql query.

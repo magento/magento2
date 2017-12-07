@@ -12,8 +12,8 @@ use Magento\InventoryApi\Api\Data\ReservationInterface;
 use Magento\InventoryApi\Api\ReservationsAppendInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\InventoryCatalog\Api\UpdateLegacyCatalogInventoryStockItemByPlainQueryInterface;
-use Magento\InventoryCatalog\Api\UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface;
+use Magento\InventoryCatalog\Model\Command\UpdateLegacyCatalogInventoryStockItemByPlainQueryInterface;
+use Magento\InventoryCatalog\Model\Command\UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface;
 
 /**
  * Plugin help to fill the legacy catalog inventory tables cataloginventory_stock_status and

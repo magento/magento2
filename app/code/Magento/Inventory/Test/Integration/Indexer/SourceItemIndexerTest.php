@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
  */
 class SourceItemIndexerTest extends TestCase
 {

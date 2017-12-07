@@ -19,7 +19,7 @@ use Magento\InventoryCatalog\Model\DefaultSourceProvider;
  * Class provides around Plugin on Magento\CatalogInventory\Model\ResourceModel\Stock\Item::save
  * to update data in Inventory source item
  */
-class UpdateLegacyCatalogInventoryAtStockSettingTime
+class UpdateSourceItemAtLegacyCatalogInventoryStockSettingTime
 {
     /**
      * @var SourceItemInterfaceFactory

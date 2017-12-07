@@ -5,14 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Api;
+namespace Magento\InventoryCatalog\Model\Command;
 
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 
 /**
  * Update Legacy catalocinventory_stock_status database data
- *
- * @api
  */
 interface UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface
 {

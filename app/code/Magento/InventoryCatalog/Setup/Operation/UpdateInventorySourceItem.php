@@ -52,15 +52,18 @@ class UpdateInventorySourceItem
         $sourceItemTable = $setup->getTable(SourceItem::TABLE_NAME_SOURCE_ITEM);
         $stockItemTable = $setup->getTable('cataloginventory_stock_item');
         $productTable = $setup->getTable('catalog_product_entity');
-        $sql = "INSERT INTO $sourceItemTable (source_id, sku, quantity, status) 
-                  SELECT 
-                  $defaultSourceId AS source_id,
-                  $productTable.sku,
-                  $stockItemTable.qty,
-                  $stockItemTable.is_in_stock
-                  FROM $stockItemTable
-                  JOIN $productTable ON $productTable.entity_id = $stockItemTable.product_id 
-                  WHERE $stockItemTable.website_id = 0";
+
+        $selectForInsert = $this->resourceConnection->getConnection()->select()->from(
+            $stockItemTable,
+            ['source_id' => new \Zend_Db_Expr($defaultSourceId), 'qty', 'is_in_stock']
+        )->join($productTable, 'entity_id = product_id', 'sku')->where('website_id = ?', 0);
+
+        $sql = $this->resourceConnection->getConnection()->insertFromSelect(
+            $selectForInsert,
+            $sourceItemTable,
+            ['source_id', 'quantity', 'status', 'sku']
+        );
+
         $this->resourceConnection->getConnection()->query($sql);
     }
 }
