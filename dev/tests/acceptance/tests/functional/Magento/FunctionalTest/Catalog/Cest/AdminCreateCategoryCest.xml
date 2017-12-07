@@ -26,12 +26,9 @@
                 <env value="chrome"/>
                 <env value="headless"/>
             </annotations>
-            <amOnPage url="{{AdminLoginPage.url}}" stepKey="amOnAdminLoginPage"/>
-            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="fillUsername"/>
-            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
-            <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickOnSignIn"/>
+            <loginAsAdmin stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
-            <waitForPageLoad stepKey="waitForPageLoad1"/>
+            <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
             <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
             <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
             <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="openSEO"/>
@@ -41,7 +38,6 @@
 
             <!-- Literal URL below, need to refactor line + StorefrontCategoryPage when support for variable URL is implemented-->
             <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
-            <waitForPageLoad stepKey="waitForPageLoad2"/>
             <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertTitle"/>
             <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="assertInfo1"/>
         </test>
