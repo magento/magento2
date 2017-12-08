@@ -45,9 +45,9 @@ class SourceItemIndexer implements ActionInterface
     private $indexHandler;
 
     /**
-     * @var IndexDataProvider
+     * @var IndexDataBySkuListProvider
      */
-    private $indexDataProvider;
+    private $indexDataBySkuListProvider;
 
     /**
      * @var IndexNameBuilder
@@ -65,7 +65,7 @@ class SourceItemIndexer implements ActionInterface
      * @param GetSkuListInStock $getSkuListInStockToUpdate
      * @param IndexStructureInterface $indexStructureHandler
      * @param IndexHandlerInterface $indexHandler
-     * @param IndexDataProvider $indexDataProvider
+     * @param IndexDataBySkuListProvider $indexDataBySkuListProvider
      * @param IndexNameBuilder $indexNameBuilder
      * @param StockIndexer $stockIndexer
      */
@@ -73,14 +73,14 @@ class SourceItemIndexer implements ActionInterface
         GetSkuListInStock $getSkuListInStockToUpdate,
         IndexStructureInterface $indexStructureHandler,
         IndexHandlerInterface $indexHandler,
-        IndexDataProvider $indexDataProvider,
+        IndexDataBySkuListProvider $indexDataBySkuListProvider,
         IndexNameBuilder $indexNameBuilder,
         StockIndexer $stockIndexer
     ) {
         $this->getSkuListInStock = $getSkuListInStockToUpdate;
         $this->indexStructure = $indexStructureHandler;
         $this->indexHandler = $indexHandler;
-        $this->indexDataProvider = $indexDataProvider;
+        $this->indexDataBySkuListProvider = $indexDataBySkuListProvider;
         $this->indexNameBuilder = $indexNameBuilder;
         $this->stockIndexer = $stockIndexer;
     }
@@ -130,7 +130,7 @@ class SourceItemIndexer implements ActionInterface
 
             $this->indexHandler->saveIndex(
                 $mainIndexName,
-                $this->indexDataProvider->getDataBySkuList($stockId, $skuList),
+                $this->indexDataBySkuListProvider->execute($stockId, $skuList),
                 ResourceConnection::DEFAULT_CONNECTION
             );
         }

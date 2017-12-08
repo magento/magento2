@@ -14,7 +14,6 @@ use Magento\Framework\MultiDimensionalIndex\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndex\IndexStructureInterface;
 use Magento\Framework\MultiDimensionalIndex\IndexTableSwitcherInterface;
-use Magento\Inventory\Indexer\IndexDataProvider;
 
 /**
  * Stock indexer
@@ -50,9 +49,9 @@ class StockIndexer implements ActionInterface
     private $indexNameBuilder;
 
     /**
-     * @var IndexDataProvider
+     * @var IndexDataProviderByStockId
      */
-    private $indexDataProvider;
+    private $indexDataProviderByStockId;
 
     /**
      * @var IndexTableSwitcherInterface
@@ -66,7 +65,7 @@ class StockIndexer implements ActionInterface
      * @param IndexStructureInterface $indexStructureHandler
      * @param IndexHandlerInterface $indexHandler
      * @param IndexNameBuilder $indexNameBuilder
-     * @param IndexDataProvider $indexDataProvider
+     * @param IndexDataProviderByStockId $indexDataProviderByStockId
      * @param IndexTableSwitcherInterface $indexTableSwitcher
      */
     public function __construct(
@@ -74,14 +73,14 @@ class StockIndexer implements ActionInterface
         IndexStructureInterface $indexStructureHandler,
         IndexHandlerInterface $indexHandler,
         IndexNameBuilder $indexNameBuilder,
-        IndexDataProvider $indexDataProvider,
+        IndexDataProviderByStockId $indexDataProviderByStockId,
         IndexTableSwitcherInterface $indexTableSwitcher
     ) {
         $this->getAllAssignedStockIds = $getAllAssignedStockIds;
         $this->indexStructure = $indexStructureHandler;
         $this->indexHandler = $indexHandler;
         $this->indexNameBuilder = $indexNameBuilder;
-        $this->indexDataProvider = $indexDataProvider;
+        $this->indexDataProviderByStockId = $indexDataProviderByStockId;
         $this->indexTableSwitcher = $indexTableSwitcher;
     }
 
@@ -129,7 +128,7 @@ class StockIndexer implements ActionInterface
 
             $this->indexHandler->saveIndex(
                 $replicaIndexName,
-                $this->indexDataProvider->getData((int)$stockId),
+                $this->indexDataProviderByStockId->execute((int)$stockId),
                 ResourceConnection::DEFAULT_CONNECTION
             );
             $this->indexTableSwitcher->switch($mainIndexName, ResourceConnection::DEFAULT_CONNECTION);
