@@ -53,6 +53,7 @@ class SourceItemIndexerTest extends TestCase
             ->get(GetProductQuantityInStockInterface::class);
 
         $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
+        $this->resourceConnection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
         $this->removeIndexData->execute([10, 20, 30]);
     }
 

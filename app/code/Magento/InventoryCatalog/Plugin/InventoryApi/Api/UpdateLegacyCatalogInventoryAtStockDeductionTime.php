@@ -7,11 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Plugin\InventoryApi\Api;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 use Magento\InventoryApi\Api\ReservationsAppendInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\InventoryCatalog\Model\Command\UpdateLegacyCatalogInventoryStockItemByPlainQueryInterface;
 use Magento\InventoryCatalog\Model\Command\UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface;
 
@@ -21,22 +18,6 @@ use Magento\InventoryCatalog\Model\Command\UpdateLegacyCatalogInventoryStockStat
  */
 class UpdateLegacyCatalogInventoryAtStockDeductionTime
 {
-
-    /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * @var StockRegistryInterface
-     */
-    private $stockRegistry;
-
     /**
      * @var UpdateLegacyCatalogInventoryStockItemByPlainQueryInterface
      */
@@ -48,22 +29,13 @@ class UpdateLegacyCatalogInventoryAtStockDeductionTime
     private $updateLegacyStockStatus;
 
     /**
-     * @param ResourceConnection $resourceConnection
-     * @param ProductRepositoryInterface $productRepository
-     * @param StockRegistryInterface $stockRegistry
      * @param UpdateLegacyCatalogInventoryStockItemByPlainQueryInterface $updateLegacyStockItem
      * @param UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface $updateLegacyStockStatus
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
-        ProductRepositoryInterface $productRepository,
-        StockRegistryInterface $stockRegistry,
         UpdateLegacyCatalogInventoryStockItemByPlainQueryInterface $updateLegacyStockItem,
         UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface $updateLegacyStockStatus
     ) {
-        $this->resourceConnection = $resourceConnection;
-        $this->productRepository = $productRepository;
-        $this->stockRegistry = $stockRegistry;
         $this->updateLegacyStockItem = $updateLegacyStockItem;
         $this->updateLegacyStockStatus = $updateLegacyStockStatus;
     }
@@ -96,14 +68,8 @@ class UpdateLegacyCatalogInventoryAtStockDeductionTime
     private function updateStockItemAndStatusTable(array $reservations)
     {
         foreach ($reservations as $reservation) {
-            $sku = $reservation->getSku();
-            $stockItem = $this->stockRegistry->getStockItemBySku($sku);
-            $stockItem->setQty($stockItem->getQty() + $reservation->getQuantity());
-            $stockStatus = $this->stockRegistry->getStockStatus($stockItem->getProductId());
-            $stockStatus->setQty($stockStatus->getQty() + $reservation->getQuantity());
-
-            $this->updateLegacyStockItem->execute($stockItem);
-            $this->updateLegacyStockStatus->execute($stockStatus);
+            $this->updateLegacyStockItem->execute($reservation);
+            $this->updateLegacyStockStatus->execute($reservation);
         }
     }
 }

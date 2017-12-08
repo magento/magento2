@@ -13,6 +13,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 
 /**
  * Class provides around Plugin on Magento\CatalogInventory\Model\ResourceModel::correctItemsQty
@@ -36,6 +37,11 @@ class UpdateSourceItemAtLegacyCatalogInventoryQtyCounter
     private $sourceItemsSave;
 
     /**
+     * @var DefaultSourceProviderInterface
+     */
+    private $defaultSourceProvider;
+
+    /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
@@ -49,6 +55,7 @@ class UpdateSourceItemAtLegacyCatalogInventoryQtyCounter
      * @param ProductRepositoryInterface $productRepository
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SourceItemsSaveInterface $sourceItemsSave
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ResourceConnection $resourceConnection
      */
@@ -56,12 +63,14 @@ class UpdateSourceItemAtLegacyCatalogInventoryQtyCounter
         ProductRepositoryInterface $productRepository,
         SourceItemRepositoryInterface $sourceItemRepository,
         SourceItemsSaveInterface $sourceItemsSave,
+        DefaultSourceProviderInterface $defaultSourceProvider,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ResourceConnection $resourceConnection
     ) {
         $this->productRepository = $productRepository;
         $this->sourceItemRepository = $sourceItemRepository;
         $this->sourceItemsSave = $sourceItemsSave;
+        $this->defaultSourceProvider = $defaultSourceProvider;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->resourceConnection = $resourceConnection;
     }
@@ -93,13 +102,16 @@ class UpdateSourceItemAtLegacyCatalogInventoryQtyCounter
 
             $searchCriteria =
                 $this->searchCriteriaBuilder->addFilter(SourceItemInterface::SKU, array_keys($productsData), 'in')
-                                            ->addFilter(SourceItemInterface::SOURCE_ID, 1)
+                                            ->addFilter(
+                                                SourceItemInterface::SOURCE_ID,
+                                                $this->defaultSourceProvider->getId()
+                                            )
                                             ->create();
 
             $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
             $sourceItems = array_map(
                 function (SourceItemInterface $item) use ($productsData, $operator) {
-                    $item->setQuantity($item->getQuantity() + (int)($operator.$productsData[$item->getSku()]));
+                    $item->setQuantity($item->getQuantity() + (int)($operator . $productsData[$item->getSku()]));
 
                     return $item;
                 },

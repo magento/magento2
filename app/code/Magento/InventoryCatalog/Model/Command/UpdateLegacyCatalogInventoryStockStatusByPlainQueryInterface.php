@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model\Command;
 
-use Magento\CatalogInventory\Api\Data\StockStatusInterface;
+use Magento\InventoryApi\Api\Data\ReservationInterface;
 
 /**
  * Update Legacy catalocinventory_stock_status database data
@@ -17,9 +17,9 @@ interface UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface
     /**
      * Execute Plain MySql query on catalaginventory_stock_status
      *
-     * @param StockStatusInterface $stockStatus
+     * @param ReservationInterface $reservation
      *
      * @return void
      */
-    public function execute(StockStatusInterface $stockStatus);
+    public function execute(ReservationInterface $reservation);
 }
