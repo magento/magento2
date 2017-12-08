@@ -1,6 +1,12 @@
 {
     "name": "magento/magento2-functional-test-module-grouped-import-export",
     "description": "Magento 2 Functional Test Module Grouped Import Export",
+    "type": "magento2-test-module",
+    "version": "100.0.0-dev",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "config": {
         "sort-packages": true
     },
@@ -9,21 +15,15 @@
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0"
     },
     "suggest": {
-        "magento/magento2-functional-test-module-catalog": "1.0.0-dev",
-        "magento/magento2-functional-test-module-catalog-import-export": "1.0.0-dev",
-        "magento/magento2-functional-test-module-eav": "1.0.0-dev",
-        "magento/magento2-functional-test-module-grouped-product": "1.0.0-dev",
-        "magento/magento2-functional-test-module-import-export": "1.0.0-dev"
+        "magento/magento2-functional-test-module-catalog": "100.0.0-dev",
+        "magento/magento2-functional-test-module-catalog-import-export": "100.0.0-dev",
+        "magento/magento2-functional-test-module-eav": "100.0.0-dev",
+        "magento/magento2-functional-test-module-grouped-product": "100.0.0-dev",
+        "magento/magento2-functional-test-module-import-export": "100.0.0-dev"
     },
-    "type": "magento2-test-module",
-    "version": "1.0.0-dev",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "psr-4": {
-            "Magento\\GroupedImportExport\\": ""
+            "Magento\\FunctionalTest\\GroupedImportExport\\": ""
         }
     },
     "extra": {

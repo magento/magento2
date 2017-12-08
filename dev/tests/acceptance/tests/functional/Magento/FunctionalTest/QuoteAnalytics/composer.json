@@ -1,11 +1,11 @@
 {
     "name": "magento/magento2-functional-test-module-quote-analytics",
     "description": "Magento 2 Acceptance Test Module Quote Analytics",
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://repo.magento.com/"
-        }
+    "type": "magento2-test-module",
+    "version": "100.0.0-dev",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
     ],
     "config": {
         "sort-packages": true
@@ -15,17 +15,11 @@
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0"
     },
     "suggest": {
-        "magento/magento2-functional-test-module-quote": "1.0.0-dev"
+        "magento/magento2-functional-test-module-quote": "100.0.0-dev"
     },
-    "type": "magento2-test-module",
-    "version": "1.0.0-dev",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "psr-4": {
-            "Magento\\QuoteAnalytics\\": ""
+            "Magento\\FunctionalTest\\QuoteAnalytics\\": ""
         }
     },
     "extra": {
