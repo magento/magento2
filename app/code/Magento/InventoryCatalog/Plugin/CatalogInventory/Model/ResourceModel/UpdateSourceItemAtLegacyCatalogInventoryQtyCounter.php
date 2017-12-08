@@ -88,37 +88,34 @@ class UpdateSourceItemAtLegacyCatalogInventoryQtyCounter
      */
     public function aroundCorrectItemsQty($subject, callable $proceed, array $items, $websiteId, $operator)
     {
-        $proceed($items, $websiteId, $operator);
-
-        if ($websiteId !== 0) {
-            return;
-        }
-
         $connection = $this->resourceConnection->getConnection();
         $connection->beginTransaction();
 
         try {
+            $proceed($items, $websiteId, $operator);
+
             $productsData = $this->getProductData($items);
 
-            $searchCriteria =
-                $this->searchCriteriaBuilder->addFilter(SourceItemInterface::SKU, array_keys($productsData), 'in')
-                                            ->addFilter(
-                                                SourceItemInterface::SOURCE_ID,
-                                                $this->defaultSourceProvider->getId()
-                                            )
-                                            ->create();
+            $searchCriteria = $this->searchCriteriaBuilder->addFilter(
+                SourceItemInterface::SKU,
+                array_keys($productsData),
+                'in'
+            )->addFilter(
+                SourceItemInterface::SOURCE_ID,
+                $this->defaultSourceProvider->getId()
+            )->create();
 
             $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
-            $sourceItems = array_map(
+            $sourceItemsToSave = array_map(
                 function (SourceItemInterface $item) use ($productsData, $operator) {
-                    $item->setQuantity($item->getQuantity() + (int)($operator . $productsData[$item->getSku()]));
+                    $item->setQuantity($item->getQuantity() + (float)($operator . $productsData[$item->getSku()]));
 
                     return $item;
                 },
                 $sourceItems
             );
 
-            $this->sourceItemsSave->execute($sourceItems);
+            $this->sourceItemsSave->execute($sourceItemsToSave);
 
             $connection->commit();
         } catch (\Exception $e) {

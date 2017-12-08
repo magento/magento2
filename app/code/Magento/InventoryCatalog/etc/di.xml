@@ -20,9 +20,9 @@
         <plugin name="update_legacy_catalog_inventory_plugin" type="Magento\InventoryCatalog\Plugin\InventoryApi\Api\UpdateLegacyCatalogInventoryAtStockDeductionTime"/>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
-        <plugin name="migrate_single_stock_data" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\UpdateSourceItemAtLegacyCatalogInventoryStockSettingTime" sortOrder="1"/>
+        <plugin name="migrate_single_stock_data" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\UpdateSourceItemAtLegacyCatalogInventoryStockSettingTime"/>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface">
-        <plugin name="migrate_single_stock_data_at_qty_counter" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\UpdateSourceItemAtLegacyCatalogInventoryQtyCounter" sortOrder="1"/>
+        <plugin name="migrate_single_stock_data_at_qty_counter" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\UpdateSourceItemAtLegacyCatalogInventoryQtyCounter"/>
     </type>
 </config>
