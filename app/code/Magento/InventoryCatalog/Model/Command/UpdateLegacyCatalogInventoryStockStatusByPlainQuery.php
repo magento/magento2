@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
+use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 
 /**
  * Legacy update cataloginventory_stock_status by plain MySql query.
@@ -30,13 +31,23 @@ class UpdateLegacyCatalogInventoryStockStatusByPlainQuery implements
     private $productRepository;
 
     /**
+     * @var DefaultSourceProviderInterface
+     */
+    private $defaultSourceProvider;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param ProductRepositoryInterface $productRepository
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
      */
-    public function __construct(ResourceConnection $resourceConnection, ProductRepositoryInterface $productRepository)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        ProductRepositoryInterface $productRepository,
+        DefaultSourceProviderInterface $defaultSourceProvider
+    ) {
         $this->resourceConnection = $resourceConnection;
         $this->productRepository = $productRepository;
+        $this->defaultSourceProvider = $defaultSourceProvider;
     }
 
     /**
@@ -54,7 +65,7 @@ class UpdateLegacyCatalogInventoryStockStatusByPlainQuery implements
                 )
             ],
             [
-                StockStatusInterface::STOCK_ID . ' = ?' => $reservation->getStockId(),
+                StockStatusInterface::STOCK_ID . ' = ?' => $this->defaultSourceProvider->getId(),
                 StockStatusInterface::PRODUCT_ID . ' = ?' => $product->getId(),
                 'website_id = ?' => 0
             ]
