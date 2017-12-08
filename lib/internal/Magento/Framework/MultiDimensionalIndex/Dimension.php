@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Indexer;
+declare(strict_types=1);
+
+namespace Magento\Framework\MultiDimensionalIndex;
 
 use Magento\Framework\Search\AbstractKeyValuePair;
 
 /**
  * Index Dimension object
+ *
  * @api
  */
 class Dimension extends AbstractKeyValuePair
