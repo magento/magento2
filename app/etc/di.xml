@@ -172,6 +172,8 @@
     <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
     <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
     <preference for="Magento\Framework\Indexer\Config\DependencyInfoProviderInterface" type="Magento\Framework\Indexer\Config\DependencyInfoProvider" />
+    <preference for="Magento\Framework\MultiDimensionalIndex\IndexTableSwitcherInterface" type="Magento\Framework\MultiDimensionalIndex\IndexTableSwitcher" />
+    <preference for="Magento\Framework\MultiDimensionalIndex\IndexNameResolverInterface" type="Magento\Framework\MultiDimensionalIndex\IndexNameResolver" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -1342,6 +1344,11 @@
             <argument name="ignoredUpdateColumns" xsi:type="array">
                 <item name="updated_at" xsi:type="string">updated_at</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\MultiDimensionalIndex\IndexNameResolver">
+        <arguments>
+            <argument name="indexScopeResolver" xsi:type="object">Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</argument>
         </arguments>
     </type>
 </config>

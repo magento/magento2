@@ -3,8 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\Inventory\Indexer;
+namespace Magento\Framework\MultiDimensionalIndex;
 
 /**
  * Represents manipulation with index data
@@ -24,8 +25,7 @@ interface IndexHandlerInterface
     public function saveIndex(IndexName $indexName, \Traversable $documents, string $connectionName);
 
     /**
-     * Remove given documents from Index. For StockItem index we provide list of SKUs, aggregated Quantity
-     * for which should be re-calculated
+     * Remove given documents from Index
      *
      * @param IndexName $indexName
      * @param \Traversable $documents
