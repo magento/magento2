@@ -57,12 +57,6 @@ Label| Description
 **bugfix**| The issue or pull request relates to bug fixing.
 **enhancement**| The issue or pull request that raises the MFTF to a higher degree (for example new features, optimization, refactoring, etc).
 
-## Reporting security issues
-
-To report security vulnerabilities in Magento software or web sites, please e-mail <a href="mailto:security@magento.com">security@magento.com</a>. Please do not report security issues using GitHub. Be sure to encrypt your e-mail with our <a href="https://info2.magento.com/rs/magentoenterprise/images/security_at_magento.asc">encryption key</a> if it includes sensitive information. Learn more about reporting security issues <a href="https://magento.com/security/reporting-magento-security-issue">here</a>.
-
-Stay up-to-date on the latest security news and patches for Magento by signing up for <a href="https://magento.com/security/sign-up">Security Alert Notifications</a>.
-
 ## License
 
 Each Magento source file included in this distribution is licensed under APL 3.0
