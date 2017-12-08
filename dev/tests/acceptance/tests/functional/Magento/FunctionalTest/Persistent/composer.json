@@ -1,6 +1,12 @@
 {
     "name": "magento/magento2-functional-test-module-persistent",
     "description": "Magento 2 Functional Test Module Persistent",
+    "type": "magento2-test-module",
+    "version": "100.0.0-dev",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "config": {
         "sort-packages": true
     },
@@ -9,22 +15,16 @@
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0"
     },
     "suggest": {
-        "magento/magento2-functional-test-module-checkout": "1.0.0-dev",
-        "magento/magento2-functional-test-module-cron": "1.0.0-dev",
-        "magento/magento2-functional-test-module-customer": "1.0.0-dev",
-        "magento/magento2-functional-test-module-page-cache": "1.0.0-dev",
-        "magento/magento2-functional-test-module-quote": "1.0.0-dev",
-        "magento/magento2-functional-test-module-store": "1.0.0-dev"
+        "magento/magento2-functional-test-module-checkout": "100.0.0-dev",
+        "magento/magento2-functional-test-module-cron": "100.0.0-dev",
+        "magento/magento2-functional-test-module-customer": "100.0.0-dev",
+        "magento/magento2-functional-test-module-page-cache": "100.0.0-dev",
+        "magento/magento2-functional-test-module-quote": "100.0.0-dev",
+        "magento/magento2-functional-test-module-store": "100.0.0-dev"
     },
-    "type": "magento2-test-module",
-    "version": "1.0.0-dev",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "psr-4": {
-            "Magento\\Persistent\\": ""
+            "Magento\\FunctionalTest\\Persistent\\": ""
         }
     },
     "extra": {
