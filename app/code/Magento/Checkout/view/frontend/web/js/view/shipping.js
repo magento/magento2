@@ -87,6 +87,7 @@ define([
                     stepNavigator.steps().some(function (element) {
                         if (element.isVisible()) {
                             self.visible(false);
+
                             return true;
                         }
                     });
