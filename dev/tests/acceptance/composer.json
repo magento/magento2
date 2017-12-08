@@ -10,6 +10,12 @@
     "config": {
         "sort-packages": true
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git@github.com:magento/magento2-functional-testing-framework.git"
+        }
+    ],
     "require": {
         "allure-framework/allure-codeception": "dev-master#af40af5ae2b717618a42fe3e137d75878508c75d",
         "codeception/codeception": "~2.3.4",
