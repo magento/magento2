@@ -11,8 +11,6 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
-use function Sodium\crypto_aead_aes256gcm_is_available;
-
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -50,7 +48,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         // Add messages container to fieldset
         $fieldset = $form->addFieldset('base_fieldset', ['legend' => '<div data-role="messages"></div>',
-            'comment' => 'Inserting a widget does not create a widget instance.']);
+            'comment' => __('Inserting a widget does not create a widget instance.')]);
 
         $fieldset->addField(
             'select_widget_type',

@@ -43,7 +43,7 @@ class Config
     /**
      * @var \Magento\Framework\Registry
      */
-    protected $registry;
+    private $registry;
 
     /**
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
@@ -51,6 +51,7 @@ class Config
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Widget\Model\WidgetFactory $widgetFactory
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
+     * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
         \Magento\Backend\Model\UrlInterface $backendUrl,

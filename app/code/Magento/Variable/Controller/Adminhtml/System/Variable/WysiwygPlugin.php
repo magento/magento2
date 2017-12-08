@@ -6,19 +6,13 @@
  */
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
-use Magento\Backend\App\Action;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Variable\Model\ResourceModel\Variable\CollectionFactory;
-use Magento\Variable\Model\Source\Variables;
-
 /**
  * Retrieve variables list for WYSIWYG
  *
  * @api
  * @since 100.0.2
  */
-class WysiwygPlugin extends \Magento\Backend\App\Action
+class WysiwygPlugin extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {
     /**
      * Authorization level of a basic admin session
@@ -107,12 +101,15 @@ class WysiwygPlugin extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $variablesData = array_merge(
-            $this->getCustomVariables(),
-            $this->getDefaultVariables()
+        $customVariables = $this->_objectManager->create(\Magento\Variable\Model\Variable::class)
+            ->getVariablesOptionArray(true);
+        $storeContactVariabls = $this->_objectManager->create(
+            \Magento\Variable\Model\Source\Variables::class
+        )->toOptionArray(
+            true
         );
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
-        return $resultJson->setData($variablesData);
+        return $resultJson->setData([$storeContactVariabls, $customVariables]);
     }
 }

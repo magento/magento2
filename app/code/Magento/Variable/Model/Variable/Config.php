@@ -5,6 +5,8 @@
  */
 namespace Magento\Variable\Model\Variable;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Variable Wysiwyg Plugin Config
  *
@@ -34,25 +36,33 @@ class Config
     private $storesVariables;
 
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $encoder;
+
+    /**
      * Config constructor.
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Backend\Model\UrlInterface $url
-     * @param \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory
-     * @param \Magento\Variable\Model\Source\Variables $storesVariables
-     * @param \Magento\Framework\Serialize\Serializer\Json $encoder
+     * @param \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory|null $collectionFactory
+     * @param \Magento\Variable\Model\Source\Variables|null $storesVariables
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $encoder
      */
     public function __construct(
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Backend\Model\UrlInterface $url,
-        \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory,
-        \Magento\Variable\Model\Source\Variables $storesVariables,
-        \Magento\Framework\Serialize\Serializer\Json $encoder
+        \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory = null,
+        \Magento\Variable\Model\Source\Variables $storesVariables = null,
+        \Magento\Framework\Serialize\Serializer\Json $encoder = null
     ) {
-        $this->collectionFactory = $collectionFactory;
-        $this->storesVariables = $storesVariables;
-        $this->encoder = $encoder;
-        $this->_assetRepo = $assetRepo;
+        $this->collectionFactory = $collectionFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Variable\Model\ResourceModel\Variable\CollectionFactory::class);
+        $this->storesVariables = $storesVariables ?: ObjectManager::getInstance()
+            ->get(\Magento\Variable\Model\Source\Variables::class);
+        $this->encoder = $encoder ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->_url = $url;
+        $this->_assetRepo = $assetRepo;
     }
 
     /**
