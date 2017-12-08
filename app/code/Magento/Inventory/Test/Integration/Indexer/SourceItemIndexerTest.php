@@ -46,15 +46,13 @@ class SourceItemIndexerTest extends TestCase
      */
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
+        $this->indexer = Bootstrap::getObjectManager()->get(IndexerInterface::class);
         $this->indexer->load(SourceItemIndexer::INDEXER_ID);
 
-        $this->getProductQuantityInStock =
-            Bootstrap::getObjectManager()->create(GetProductQuantityInStockInterface::class);
+        $this->getProductQuantityInStock = Bootstrap::getObjectManager()
+            ->get(GetProductQuantityInStockInterface::class);
 
-        $this->resourceConnection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
-
-        $this->removeIndexData = Bootstrap::getObjectManager()->create(RemoveIndexData::class);
+        $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
         $this->removeIndexData->execute([10, 20, 30]);
     }
 

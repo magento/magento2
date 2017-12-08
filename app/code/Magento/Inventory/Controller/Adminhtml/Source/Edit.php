@@ -51,7 +51,7 @@ class Edit extends Action
     {
         $sourceId = $this->getRequest()->getParam(SourceInterface::SOURCE_ID);
         try {
-            $source = $this->sourceRepository->get($sourceId);
+            $source = $this->sourceRepository->get((int)$sourceId);
 
             /** @var Page $result */
             $result = $this->resultFactory->create(ResultFactory::TYPE_PAGE);

@@ -3,10 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Indexer;
+declare(strict_types=1);
+
+namespace Magento\Framework\MultiDimensionalIndex;
+
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Index Name builder. It is Facade for simplifying IndexName object creation
+ *
  * @api
  */
 class IndexNameBuilder
@@ -33,9 +38,9 @@ class IndexNameBuilder
     private static $alias = 'alias';
 
     /**
-     * @var IndexNameFactory
+     * @var ObjectManagerInterface
      */
-    private $indexNameFactory;
+    private $objectManager;
 
     /**
      * @var DimensionFactory
@@ -53,16 +58,16 @@ class IndexNameBuilder
     private $data = [];
 
     /**
-     * @param IndexNameFactory $indexNameFactory
+     * @param ObjectManagerInterface $objectManager
+     * @param DimensionFactory $dimensionFactory
      * @param AliasFactory $aliasFactory
-     * @param IndexNameFactory $indexNameFactory
      */
     public function __construct(
-        IndexNameFactory $indexNameFactory,
+        ObjectManagerInterface $objectManager,
         DimensionFactory $dimensionFactory,
         AliasFactory $aliasFactory
     ) {
-        $this->indexNameFactory = $indexNameFactory;
+        $this->objectManager = $objectManager;
         $this->dimensionFactory = $dimensionFactory;
         $this->aliasFactory = $aliasFactory;
     }
@@ -80,7 +85,7 @@ class IndexNameBuilder
     /**
      * @param string $name
      * @param string $value
-     * @return IndexNameBuilder
+     * @return self
      */
     public function addDimension(string $name, string $value): self
     {
@@ -104,9 +109,9 @@ class IndexNameBuilder
     /**
      * @return IndexName
      */
-    public function build()
+    public function build(): IndexName
     {
-        $indexName = $this->indexNameFactory->create($this->data);
+        $indexName = $this->objectManager->create(IndexName::class, $this->data);
         $this->data = [];
         return $indexName;
     }
