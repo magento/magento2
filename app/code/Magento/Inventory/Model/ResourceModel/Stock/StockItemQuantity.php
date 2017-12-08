@@ -8,11 +8,10 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model\ResourceModel\Stock;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Indexer\Alias;
-use Magento\Inventory\Indexer\IndexNameBuilder;
-use Magento\Inventory\Indexer\IndexNameResolverInterface;
-use Magento\Inventory\Indexer\StockItem\IndexStructure as StockItemIndex;
-use Magento\Inventory\Indexer\StockItemIndexerInterface;
+use Magento\Framework\MultiDimensionalIndex\Alias;
+use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
+use Magento\Framework\MultiDimensionalIndex\IndexNameResolverInterface;
+use Magento\Inventory\Indexer\IndexStructure;
 
 /**
  * The resource model responsible for retrieving StockItem Quantity.
@@ -60,16 +59,16 @@ class StockItemQuantity
     public function execute(string $sku, int $stockId): float
     {
         $indexName = $this->indexNameBuilder
-            ->setIndexId(StockItemIndexerInterface::INDEXER_ID)
-            ->addDimension('stock_', (string) $stockId)
+            ->setIndexId('inventory_stock')
+            ->addDimension('stock_', (string)$stockId)
             ->setAlias(Alias::ALIAS_MAIN)
             ->build();
         $stockItemTableName = $this->indexNameResolver->resolveName($indexName);
 
         $connection = $this->resource->getConnection();
         $select = $connection->select()
-            ->from($stockItemTableName, [StockItemIndex::QUANTITY])
-            ->where(StockItemIndex::SKU . '=?', $sku);
+            ->from($stockItemTableName, [IndexStructure::QUANTITY])
+            ->where(IndexStructure::SKU . ' = ?', $sku);
 
         $stockItemQty = $connection->fetchOne($select);
         if (false === $stockItemQty) {

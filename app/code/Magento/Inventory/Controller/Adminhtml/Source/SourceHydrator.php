@@ -42,12 +42,14 @@ class SourceHydrator
     /**
      * @param SourceInterface $source
      * @param array $data
+     *
      * @return SourceInterface
      */
-    public function hydrate(SourceInterface $source, array $data)
+    public function hydrate(SourceInterface $source, array $data): SourceInterface
     {
         $data['general'] = $this->sourceCarrierDataProcessor->process($data['general']);
         $this->dataObjectHelper->populateWithArray($source, $data['general'], SourceInterface::class);
+
         return $source;
     }
 }

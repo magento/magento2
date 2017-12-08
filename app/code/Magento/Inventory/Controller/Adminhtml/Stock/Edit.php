@@ -12,9 +12,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\InventoryApi\Api\StockRepositoryInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryApi\Api\StockRepositoryInterface;
 
 /**
  * Edit Controller
@@ -46,11 +47,11 @@ class Edit extends Action
     /**
      * @inheritdoc
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         $stockId = (int) $this->getRequest()->getParam(StockInterface::STOCK_ID);
         try {
-            $stock = $this->stockRepository->get($stockId);
+            $stock = $this->stockRepository->get((int)$stockId);
 
             /** @var Page $result */
             $result = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
@@ -67,6 +68,7 @@ class Edit extends Action
             );
             $result->setPath('*/*');
         }
+
         return $result;
     }
 }

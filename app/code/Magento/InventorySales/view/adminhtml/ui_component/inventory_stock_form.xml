@@ -8,7 +8,7 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <settings>
         <buttons>
-            <button name="delete" class="Magento\InventoryCatalog\Ui\Component\Control\Stock\DeleteButton"/>
+            <button name="delete" class="Magento\InventorySales\Ui\Component\Control\Stock\DeleteButton"/>
         </buttons>
     </settings>
     <fieldset name="sales_channels" sortOrder="30">
@@ -18,13 +18,12 @@
             <opened>true</opened>
             <dataScope>sales_channels</dataScope>
         </settings>
-        <field name="websites" formElement="multiselect" sortOrder="20">
+        <field name="website" formElement="multiselect" sortOrder="20">
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">Websites</label>
-                <validation>
-                    <rule name="required-entry" xsi:type="boolean">true</rule>
-                </validation>
+                <dataScope>website</dataScope>
+                <notice>Use Ctrl+Click for check several values or uncheck value</notice>
             </settings>
             <formElements>
                 <multiselect>

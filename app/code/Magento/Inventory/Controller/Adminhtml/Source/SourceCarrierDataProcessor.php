@@ -36,10 +36,11 @@ class SourceCarrierDataProcessor
 
     /**
      * @param array $data
+     *
      * @return array
      * @throws InputException
      */
-    public function process(array $data)
+    public function process(array $data): array
     {
         $useDefaultCarrierConfig = isset($data[SourceInterface::USE_DEFAULT_CARRIER_CONFIG])
             && true === (bool)$data[SourceInterface::USE_DEFAULT_CARRIER_CONFIG];
@@ -53,14 +54,16 @@ class SourceCarrierDataProcessor
             $data[SourceInterface::CARRIER_LINKS] = [];
         }
         unset($data['carrier_codes']);
+
         return $data;
     }
 
     /**
      * @param array $carrierCodes
+     *
      * @return array
      */
-    private function getCarrierLinksData(array $carrierCodes)
+    private function getCarrierLinksData(array $carrierCodes): array
     {
         $carrierLinks = [];
         foreach ($carrierCodes as $carrierCode) {

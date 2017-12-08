@@ -28,6 +28,9 @@
         </arguments>
     </type>
 
+    <!-- Source Item Import -->
+    <preference for="\Magento\CatalogImportExport\Model\StockItemImporterInterface" type="\Magento\InventoryImportExport\Model\StockItemImporter" />
+
     <!-- Export -->
     <preference for="Magento\InventoryImportExport\Model\Export\SourceItemCollectionFactoryInterface" type="Magento\InventoryImportExport\Model\Export\SourceItemCollectionFactory"/>
     <preference for="Magento\InventoryImportExport\Model\Export\ColumnProviderInterface" type="\Magento\InventoryImportExport\Model\Export\ColumnProvider"/>
@@ -38,6 +41,13 @@
                 <!-- IntFilter is also used for 'decimal' type -->
                 <item name="decimal" xsi:type="object">Magento\InventoryImportExport\Model\Export\Filter\IntFilter</item>
                 <item name="varchar" xsi:type="object">Magento\InventoryImportExport\Model\Export\Filter\VarcharFilter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Model\Import\SampleFileProvider">
+        <arguments>
+            <argument name="samples" xsi:type="array">
+                <item name="stock_sources" xsi:type="string">Magento_InventoryImportExport</item>
             </argument>
         </arguments>
     </type>

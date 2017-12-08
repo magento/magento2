@@ -36,8 +36,22 @@
     <preference for="Magento\InventoryApi\Api\SourceItemsDeleteInterface" type="Magento\Inventory\Model\SourceItem\Command\SourceItemsDelete"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceItemInterface" type="Magento\Inventory\Model\SourceItem"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface" type="Magento\Inventory\Model\SourceItemSearchResults"/>
-    <preference for="Magento\Inventory\Model\SourceItem\Command\DeleteInterface" type="Magento\Inventory\Model\SourceItem\Command\Delete"/>
     <preference for="Magento\Inventory\Model\SourceItem\Command\GetListInterface" type="Magento\Inventory\Model\SourceItem\Command\GetList"/>
+    <type name="Magento\Inventory\Model\SourceItem\Validator\ValidatorChain">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="sku" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\SkuValidator</item>
+                <item name="sourceId" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\SourceIdValidator</item>
+                <item name="quantity" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\QuantityValidator</item>
+                <item name="status" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\StatusValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Inventory\Model\SourceItem\Validator\SourceItemsValidator">
+        <arguments>
+            <argument name="sourceItemValidator" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\ValidatorChain</argument>
+        </arguments>
+    </type>
     <!-- Stock -->
     <preference for="Magento\InventoryApi\Api\StockRepositoryInterface" type="Magento\Inventory\Model\StockRepository"/>
     <preference for="Magento\InventoryApi\Api\Data\StockInterface" type="Magento\Inventory\Model\Stock"/>
@@ -63,20 +77,34 @@
     <preference for="Magento\InventoryApi\Api\AssignSourcesToStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\AssignSourcesToStock"/>
     <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>
-    <!-- StockItem Indexer -->
-    <preference for="Magento\Inventory\Indexer\IndexHandlerInterface" type="Magento\Inventory\Indexer\StockItem\IndexHandler"/>
-    <preference for="Magento\Inventory\Indexer\IndexNameResolverInterface" type="Magento\Inventory\Indexer\StockItem\IndexNameResolver"/>
-    <preference for="Magento\Inventory\Indexer\IndexStructureInterface" type="Magento\Inventory\Indexer\StockItem\IndexStructure"/>
-    <preference for="Magento\Inventory\Indexer\IndexTableSwitcherInterface" type="Magento\Inventory\Indexer\StockItem\IndexTableSwitcher"/>
-    <preference for="Magento\Inventory\Indexer\StockItemIndexerInterface" type="Magento\Inventory\Indexer\StockItem\StockItem"/>
-    <type name="Magento\Inventory\Indexer\StockItem\IndexHandler">
+    <!-- Indexer -->
+    <preference for="Magento\Inventory\Indexer\IndexHandlerInterface" type="Magento\Inventory\Indexer\IndexHandler"/>
+    <preference for="Magento\Inventory\Indexer\IndexStructureInterface" type="Magento\Inventory\Indexer\IndexStructure"/>
+    <type name="Magento\Inventory\Indexer\IndexHandler">
         <arguments>
             <argument name="batchSize" xsi:type="string">100</argument>
         </arguments>
     </type>
-    <type name="Magento\Inventory\Indexer\StockItem\IndexNameResolver">
+    <type name="Magento\Inventory\Indexer\SourceItem\SourceItemIndexer">
         <arguments>
-            <argument name="indexScopeResolver" xsi:type="object">Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver</argument>
+            <argument name="indexStructureHandler" xsi:type="object">Magento\Inventory\Indexer\IndexStructure</argument>
+            <argument name="indexHandler" xsi:type="object">Magento\Inventory\Indexer\IndexHandler</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Inventory\Indexer\Stock\StockIndexer">
+        <arguments>
+            <argument name="indexStructureHandler" xsi:type="object">Magento\Inventory\Indexer\IndexStructure</argument>
+            <argument name="indexHandler" xsi:type="object">Magento\Inventory\Indexer\IndexHandler</argument>
+        </arguments>
+    </type>
+    <type name="\Magento\Inventory\Indexer\SourceItem\GetSkuListInStock">
+        <arguments>
+            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
+        </arguments>
+    </type>
+    <type name="\Magento\Inventory\Model\ResourceModel\Reservation\ReservationCleanup">
+        <arguments>
+            <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
         </arguments>
     </type>
     <!-- Reservation -->
@@ -86,4 +114,10 @@
     <preference for="Magento\InventoryApi\Api\ReservationBuilderInterface" type="Magento\Inventory\Model\Reservation\ReservationBuilder"/>
     <preference for="Magento\InventoryApi\Api\Data\ReservationInterface" type="Magento\Inventory\Model\Reservation"/>
     <preference for="Magento\Inventory\Model\ReservationCleanupInterface" type="Magento\Inventory\Model\ResourceModel\Reservation\ReservationCleanup"/>
+    <type name="Magento\InventoryApi\Api\AssignSourcesToStockInterface">
+        <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Model\StockSourceLink\Plugin\AssignSourcesToStock" />
+    </type>
+    <type name="Magento\InventoryApi\Api\UnassignSourceFromStockInterface">
+        <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Model\StockSourceLink\Plugin\UnassignSourcesFromStock" />
+    </type>
 </config>
