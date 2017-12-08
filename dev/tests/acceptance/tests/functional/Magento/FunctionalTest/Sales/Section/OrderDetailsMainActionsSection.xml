@@ -9,13 +9,13 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="OrderDetailsMainActionsSection">
-        <element name="back" type="button" locator="#back"/>
-        <element name="cancel" type="button" locator="#order-view-cancel-button"/>
-        <element name="sendEmail" type="button" locator="#send_notification"/>
-        <element name="hold" type="button" locator="#order-view-hold-button"/>
-        <element name="invoice" type="button" locator="#order_invoice"/>
-        <element name="ship" type="button" locator="#order_ship"/>
-        <element name="reorder" type="button" locator="#order_reorder"/>
-        <element name="edit" type="button" locator="#order_edit"/>
+        <element name="back" type="button" selector="#back"/>
+        <element name="cancel" type="button" selector="#order-view-cancel-button"/>
+        <element name="sendEmail" type="button" selector="#send_notification"/>
+        <element name="hold" type="button" selector="#order-view-hold-button"/>
+        <element name="invoice" type="button" selector="#order_invoice"/>
+        <element name="ship" type="button" selector="#order_ship"/>
+        <element name="reorder" type="button" selector="#order_reorder"/>
+        <element name="edit" type="button" selector="#order_edit"/>
     </section>
 </config>

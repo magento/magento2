@@ -9,6 +9,9 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Ui\Component\Control\Container;
 
 /**
+ * Represents split-button with pre-configured options
+ * Provide an ability to show drop-down list with options clicking on the "Save" button
+ *
  * @api
  */
 class SaveSplitButton implements ButtonProviderInterface
@@ -16,14 +19,14 @@ class SaveSplitButton implements ButtonProviderInterface
     /**
      * @var string
      */
-    private $saveTarget;
+    private $targetName;
 
     /**
-     * @param string $saveTarget
+     * @param string $targetName
      */
-    public function __construct($saveTarget)
+    public function __construct(string $targetName)
     {
-        $this->saveTarget = $saveTarget;
+        $this->targetName = $targetName;
     }
 
     /**
@@ -39,7 +42,7 @@ class SaveSplitButton implements ButtonProviderInterface
                     'buttonAdapter' => [
                         'actions' => [
                             [
-                                'targetName' => $this->saveTarget,
+                                'targetName' => $this->targetName,
                                 'actionName' => 'save',
                                 'params' => [
                                     // first param is redirect flag
@@ -59,7 +62,7 @@ class SaveSplitButton implements ButtonProviderInterface
     /**
      * @return array
      */
-    private function getOptions()
+    private function getOptions(): array
     {
         $options = [
             [
@@ -69,7 +72,7 @@ class SaveSplitButton implements ButtonProviderInterface
                         'buttonAdapter' => [
                             'actions' => [
                                 [
-                                    'targetName' => $this->saveTarget,
+                                    'targetName' => $this->targetName,
                                     'actionName' => 'save',
                                     'params' => [
                                         // first param is redirect flag
@@ -89,7 +92,7 @@ class SaveSplitButton implements ButtonProviderInterface
                         'buttonAdapter' => [
                             'actions' => [
                                 [
-                                    'targetName' => $this->saveTarget,
+                                    'targetName' => $this->targetName,
                                     'actionName' => 'save',
                                     'params' => [
                                         // first param is redirect flag, second is data that will be added to post

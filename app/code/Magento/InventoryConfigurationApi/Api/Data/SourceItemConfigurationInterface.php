@@ -70,5 +70,20 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
      */
     public function setSku(string $sku);
 
-    // TODO: ext attr
+    /**
+     * Retrieve existing extension attributes object
+     *
+     * Null for return is specified for proper work SOAP requests parser
+     *
+     * @return \Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object
+     *
+     * @param \Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationExtensionInterface $extensionAttributes
+     * @return void
+     */
+    public function setExtensionAttributes(SourceItemConfigurationExtensionInterface $extensionAttributes);
 }

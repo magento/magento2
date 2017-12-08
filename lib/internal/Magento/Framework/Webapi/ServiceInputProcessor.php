@@ -7,6 +7,7 @@
  */
 namespace Magento\Framework\Webapi;
 
+use Magento\Framework\Webapi\ServiceTypeToEntityTypeMap;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\SimpleDataObjectConverter;
@@ -60,6 +61,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $nameFinder;
 
     /**
+     * @var array
+     */
+    private $serviceTypeToEntityTypeMap;
+
+    /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
@@ -67,19 +73,23 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param AttributeValueFactory $attributeValueFactory
      * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param MethodsMap $methodsMap
+     * @param ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap
      */
     public function __construct(
         TypeProcessor $typeProcessor,
         ObjectManagerInterface $objectManager,
         AttributeValueFactory $attributeValueFactory,
         CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
-        MethodsMap $methodsMap
+        MethodsMap $methodsMap,
+        ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectManager = $objectManager;
         $this->attributeValueFactory = $attributeValueFactory;
         $this->customAttributeTypeLocator = $customAttributeTypeLocator;
         $this->methodsMap = $methodsMap;
+        $this->serviceTypeToEntityTypeMap = $serviceTypeToEntityTypeMap
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(ServiceTypeToEntityTypeMap::class);
     }
 
     /**
@@ -222,7 +232,15 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
 
             list($customAttributeCode, $customAttributeValue) = $this->processCustomAttribute($customAttribute);
 
-            $type = $this->customAttributeTypeLocator->getType($customAttributeCode, $dataObjectClassName);
+            $entityType = $this->serviceTypeToEntityTypeMap->getEntityType($dataObjectClassName);
+            if ($entityType) {
+                $type = $this->customAttributeTypeLocator->getType(
+                    $customAttributeCode,
+                    $entityType
+                );
+            } else {
+                $type = TypeProcessor::ANY_TYPE;
+            }
 
             if ($this->typeProcessor->isTypeAny($type) || $this->typeProcessor->isTypeSimple($type)
                 || !is_array($customAttributeValue)

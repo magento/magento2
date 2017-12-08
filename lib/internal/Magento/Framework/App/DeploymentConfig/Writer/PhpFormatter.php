@@ -21,21 +21,48 @@ class PhpFormatter implements FormatterInterface
     public function format($data, array $comments = [])
     {
         if (!empty($comments) && is_array($data)) {
-            $elements = [];
-            foreach ($data as $key => $value) {
-                $comment = '  ';
-                if (!empty($comments[$key])) {
-                    $section = " * For the section: " . $key . "\n";
-                    $exportedComment = is_string($comments[$key])
-                        ? $comments[$key]
-                        : var_export($comments[$key], true);
-                    $comment = "  /**\n" . $section . " * " . str_replace("\n", "\n * ", $exportedComment) . "\n */\n";
-                }
-                $space = is_array($value) ? " \n" : ' ';
-                $elements[] = $comment . var_export($key, true) . ' =>' . $space . var_export($value, true);
-            }
-            return "<?php\nreturn array (\n" . implode(",\n", str_replace("\n", "\n  ", $elements)) . "\n);\n";
+            return "<?php\nreturn array (\n" . $this->formatData($data, $comments) . "\n);\n";
         }
         return "<?php\nreturn " . var_export($data, true) . ";\n";
+    }
+
+    /**
+     * Format supplied data
+     *
+     * @param string[] $data
+     * @param string[] $comments
+     * @param string $prefix
+     * @return string
+     */
+    private function formatData($data, $comments = [], $prefix = '  ')
+    {
+        $elements = [];
+
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
+                if (!empty($comments[$key])) {
+                    $elements[] = $prefix . '/**';
+                    $elements[] = $prefix . ' * For the section: ' . $key;
+
+                    foreach (explode("\n", $comments[$key]) as $commentLine) {
+                        $elements[] = $prefix . ' * ' . $commentLine;
+                    }
+
+                    $elements[] = $prefix . " */";
+                }
+
+                $elements[] = $prefix . var_export($key, true) . ' => ' .
+                    (!is_array($value) ? var_export($value, true) . ',' : '');
+
+                if (is_array($value)) {
+                    $elements[] = $prefix . 'array (';
+                    $elements[] = $this->formatData($value, [], '  ' . $prefix);
+                    $elements[] = $prefix . '),';
+                }
+            }
+            return implode("\n", $elements);
+        }
+
+        return var_export($data, true);
     }
 }

@@ -328,7 +328,7 @@ class CreateHandler implements ExtensionInterface
      */
     protected function moveImageFromTmp($file)
     {
-        $file = $this->getFilenameFromTmp($file);
+        $file = $this->getFilenameFromTmp($this->getSafeFilename($file));
         $destinationFile = $this->getUniqueFileName($file);
 
         if ($this->fileStorageDb->checkDbUsage()) {
@@ -347,6 +347,19 @@ class CreateHandler implements ExtensionInterface
         }
 
         return str_replace('\\', '/', $destinationFile);
+    }
+
+    /**
+     * Returns safe filename for posted image
+     *
+     * @param string $file
+     * @return string
+     */
+    private function getSafeFilename($file)
+    {
+        $file = DIRECTORY_SEPARATOR . ltrim($file, DIRECTORY_SEPARATOR);
+
+        return $this->mediaDirectory->getDriver()->getRealPathSafety($file);
     }
 
     /**

@@ -67,7 +67,7 @@ class IndexStructure implements IndexStructureInterface
         $tableName = $this->indexNameResolver->resolveName($indexName);
 
         if ($connection->isTableExists($tableName)) {
-            throw new StateException(__('Table %s already exits', $tableName));
+            throw new StateException(__('Table %table already exits', ['table' => $tableName]));
         }
 
         $this->createTable($connection, $tableName);

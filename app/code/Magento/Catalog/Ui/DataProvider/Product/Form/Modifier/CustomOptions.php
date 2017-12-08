@@ -1050,6 +1050,9 @@ class CustomOptions extends AbstractModifier
                         'dataScope' => static::FIELD_FILE_EXTENSION_NAME,
                         'dataType' => Text::NAME,
                         'sortOrder' => $sortOrder,
+                        'validation' => [
+                            'required-entry' => true,
+                        ],
                     ],
                 ],
             ],

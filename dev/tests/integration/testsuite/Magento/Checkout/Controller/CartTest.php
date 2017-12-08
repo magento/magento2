@@ -9,7 +9,18 @@
  */
 namespace Magento\Checkout\Controller;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Checkout\Model\Session;
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
+use Magento\Framework\Data\Form\FormKey;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Request;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
+use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OrderItemCollection;
+
 /**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoDbIsolation enabled
  */
 class CartTest extends \Magento\TestFramework\TestCase\AbstractController
@@ -24,8 +35,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var $session \Magento\Checkout\Model\Session  */
         $session = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
 
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->_objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('simple');
 
@@ -59,8 +70,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var $session \Magento\Checkout\Model\Session  */
         $session = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
 
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->_objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('simple');
 
@@ -103,8 +114,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var $session \Magento\Checkout\Model\Session  */
         $session = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
 
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->_objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('bundle-product');
 
@@ -138,8 +149,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var $session \Magento\Checkout\Model\Session  */
         $session = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
 
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->_objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('downloadable-product');
 
@@ -179,8 +190,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testUpdatePostAction()
     {
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->_objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('simple');
 
@@ -193,8 +204,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $checkoutSession = $this->_objectManager->create(\Magento\Checkout\Model\Session::class);
         $quoteItem = $this->_getQuoteItemIdByProductId($checkoutSession->getQuote(), $productId);
 
-        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
-        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+        /** @var FormKey $formKey */
+        $formKey = $this->_objectManager->get(FormKey::class);
         $postData = [
             'cart' => [$quoteItem->getId() => ['qty' => $updatedQuantity]],
             'update_cart_action' => 'update_qty',
@@ -253,7 +264,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testAddToCartSimpleProduct($area, $expectedPrice)
     {
-        $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+        $formKey = $this->_objectManager->get(FormKey::class);
         $postData = [
             'qty' => '1',
             'product' => '1',
@@ -287,5 +298,101 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'frontend' => ['frontend', 'expected_price' => 10],
             'adminhtml' => ['adminhtml', 'expected_price' => 1]
         ];
+    }
+
+    /**
+     * @covers \Magento\Checkout\Controller\Cart\Addgroup::execute()
+     *
+     * Test customer can add items to cart only if they belong to him.
+     *
+     * @param bool $loggedIn
+     * @param string $request
+     * @magentoAppArea frontend
+     * @magentoDataFixture Magento/Checkout/_files/order_items.php
+     * @dataProvider reorderItemsDataProvider
+     * @return void
+     */
+    public function testReorderItems(bool $loggedIn, string $request)
+    {
+        // Make sure test starts without logged in customer.
+        $customerSession = $this->_objectManager->get(CustomerSession::class);
+        $customerSession->logout();
+
+        $checkoutSession = Bootstrap::getObjectManager()->get(Session::class);
+        $expected = [];
+        if ($loggedIn && $request == Request::METHOD_POST) {
+            $customer = $this->_objectManager->create(CustomerRepository::class)->get('customer2@example.com');
+            $customerSession->setCustomerDataObject($customer);
+            $orderCollection = $this->_objectManager->create(OrderCollection::class);
+            $orderCollection->addFieldToFilter('customer_id', $customer->getId());
+            $orderItemCollection = $this->_objectManager->create(OrderItemCollection::class);
+            $orderItemCollection->addFieldToFilter('order_id', ['in' => $orderCollection->getAllIds()]);
+            $expected = $orderItemCollection->getColumnValues('product_id');
+        }
+        $this->prepareRequest($request);
+        $this->dispatch('checkout/cart/addGroup');
+
+        $this->assertEquals(
+            $expected,
+            $checkoutSession->getQuote()->getItemsCollection()->getColumnValues('product_id')
+        );
+
+        // Make sure test doesn't left logged in customer after execution.
+        $customerSession->logout();
+    }
+
+    /**
+     * Data provider for testReorderItems.
+     *
+     * @return array
+     */
+    public function reorderItemsDataProvider()
+    {
+        return [
+            [
+                'logged_in' => false,
+                'request_type' => Request::METHOD_POST,
+            ],
+            [
+                'logged_in' => false,
+                'request_type' => Request::METHOD_GET,
+            ],
+            [
+                'logged_in' => true,
+                'request_type' => Request::METHOD_POST,
+            ],
+            [
+                'logged_in' => true,
+                'request_type' => Request::METHOD_GET,
+            ],
+        ];
+    }
+
+    /**
+     * Prepare request for testReorderItems.
+     *
+     * @param string $method
+     * @return void
+     */
+    private function prepareRequest(string $method)
+    {
+        /** @var OrderItemCollection $orderItems */
+        $orderItems = $this->_objectManager->create(OrderItemCollection::class);
+        /** @var FormKey $key */
+        $key = $this->_objectManager->get(FormKey::class);
+        $data = [
+            'form_key' => $key->getFormKey(),
+            'order_items' => $orderItems->getAllIds(),
+        ];
+        $this->getRequest()->setMethod($method);
+        switch ($method) {
+            case Request::METHOD_POST:
+                $this->getRequest()->setPostValue($data);
+                break;
+            case Request::METHOD_GET:
+            default:
+                $this->getRequest()->setParams($data);
+                break;
+        }
     }
 }

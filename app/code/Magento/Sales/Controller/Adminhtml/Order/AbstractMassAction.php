@@ -20,6 +20,11 @@ use Magento\Ui\Component\MassAction\Filter;
 abstract class AbstractMassAction extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
+
+    /**
      * @var string
      */
     protected $redirectUrl = '*/*/';

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\InventorySalesApi\Api\Data;
 
@@ -74,5 +75,5 @@ interface SalesChannelInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySalesApi\Api\Data\SalesChannelExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes($extensionAttributes);
+    public function setExtensionAttributes(SalesChannelExtensionInterface $extensionAttributes);
 }

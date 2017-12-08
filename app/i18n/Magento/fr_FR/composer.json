@@ -6,6 +6,9 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "magento/framework": "100.3.*"
     },

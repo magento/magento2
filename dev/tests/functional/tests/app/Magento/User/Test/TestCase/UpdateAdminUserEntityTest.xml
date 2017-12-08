@@ -15,8 +15,19 @@
             <data name="loginAsDefaultAdmin" xsi:type="string">0</data>
             <data name="restrictedAccess" xsi:type="array">
                 <item name="0" xsi:type="string">sales</item>
+                <item name="1" xsi:type="string">system</item>
             </data>
             <data name="denyUrl" xsi:type="string">admin/user</data>
+            <data name="configData" xsi:type="string">captcha_admin_disable</data>
+            <data name="config/dataset" xsi:type="string">captcha_admin_disable</data>
+            <data name="config/data" xsi:type="array">
+                <item name="admin/captcha/enable" xsi:type="array">
+                    <item name="scope" xsi:type="string">admin</item>
+                    <item name="scope_id" xsi:type="number">1</item>
+                    <item name="label" xsi:type="string">No</item>
+                    <item name="value" xsi:type="number">0</item>
+                </item>
+            </data>
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage" />
             <constraint name="Magento\User\Test\Constraint\AssertUserInGrid" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut" />

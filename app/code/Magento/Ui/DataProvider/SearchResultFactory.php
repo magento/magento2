@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\DataProvider;
 
+use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\DocumentFactory;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -13,7 +14,8 @@ use Magento\Framework\Api\Search\SearchResultFactory as BaseSearchResultFactory;
 use Magento\Framework\EntityManager\HydratorInterface;
 
 /**
- * Class SearchResultFactory
+ * Allows to use Repositories (instead of Collections) in UI Components Data providers
+ *
  * @api
  */
 class SearchResultFactory
@@ -63,8 +65,12 @@ class SearchResultFactory
      * @param string $idFieldName
      * @return SearchResultInterface
      */
-    public function create(array $items, $totalCount, SearchCriteriaInterface $searchCriteria, $idFieldName)
-    {
+    public function create(
+        array $items,
+        $totalCount,
+        SearchCriteriaInterface $searchCriteria,
+        $idFieldName
+    ): SearchResultInterface {
         $documents = [];
         foreach ($items as $item) {
             $itemData = $this->hydrator->extract($item);
@@ -87,16 +93,16 @@ class SearchResultFactory
     /**
      * @param string $idFieldName
      * @param array $itemData
-     * @return array
+     * @return AttributeValue[]
      */
-    private function createAttributes($idFieldName, $itemData)
+    private function createAttributes(string $idFieldName, array $itemData): array
     {
         $attributes = [];
 
         $idFieldNameAttribute = $this->attributeValueFactory->create();
         $idFieldNameAttribute->setAttributeCode('id_field_name');
         $idFieldNameAttribute->setValue($idFieldName);
-        $attributes[] = $idFieldNameAttribute;
+        $attributes['id_field_name'] = $idFieldNameAttribute;
 
         foreach ($itemData as $key => $value) {
             $attribute = $this->attributeValueFactory->create();
@@ -106,7 +112,7 @@ class SearchResultFactory
                 $value = (string)(int)$value;
             }
             $attribute->setValue($value);
-            $attributes[] = $attribute;
+            $attributes[$key] = $attribute;
         }
         return $attributes;
     }
