@@ -119,7 +119,7 @@ define([
                 'content_css': this.config['content_css'],
                 'custom_popup_css': this.config['popup_css'],
                 'magentowidget_url': this.config['widget_window_url'],
-                'noneditable_leave_contenteditable' : true,
+                'noneditable_leave_contenteditable': true,
                 magentoPluginsOptions: magentoPluginsOptions,
                 doctype: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">', //eslint-disable-line max-len
 
@@ -458,7 +458,7 @@ define([
                     attributes.type = attributes.type.replace(/\\\\/g, '\\');
                     imageSrc = this.config['widget_placeholders'][attributes.type];
 
-                    if(imageSrc !== undefined) {
+                    if (imageSrc !== undefined) {
                         imageSrc = imageSrc.replace(new RegExp('\.png|\.gif'), '_tinymce3.png');
                     }
 

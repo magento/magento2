@@ -251,7 +251,7 @@ define([
             if (wysiwygAdapter) {
                 wysiwygAdapter.execCommand('mceInsertContent', false,
                     value);
-                if (this.selectedPlaceholder) {
+                if (this.selectedPlaceholder && jQuery(this.selectedPlaceholder).hasClass('magento-variable')) {
                     this.selectedPlaceholder.remove();
                 }
 
