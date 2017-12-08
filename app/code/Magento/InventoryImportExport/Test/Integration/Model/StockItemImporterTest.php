@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Test\Integration\Model;
+namespace Magento\InventoryImportExport\Test\Integration\Model;
 
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\Framework\Api\SearchCriteria;

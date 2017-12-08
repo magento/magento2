@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Test\Integration\Model\Export;
+namespace Magento\InventoryImportExport\Test\Integration\Model\Export;
 
 use Magento\ImportExport\Model\Export;
 use Magento\ImportExport\Model\Export\Adapter\Csv;

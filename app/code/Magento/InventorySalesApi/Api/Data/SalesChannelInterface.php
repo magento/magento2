@@ -74,5 +74,5 @@ interface SalesChannelInterface extends ExtensibleDataInterface
      * @param \Magento\InventorySalesApi\Api\Data\SalesChannelExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes($extensionAttributes);
+    public function setExtensionAttributes(SalesChannelExtensionInterface $extensionAttributes);
 }
