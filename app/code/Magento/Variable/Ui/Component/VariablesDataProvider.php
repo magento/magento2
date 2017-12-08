@@ -170,16 +170,15 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
             );
         }
 
-        // filter array by variable_name and search value
-        $filterGroups = $searchCriteria->getFilterGroups();
-        if (!empty($filterGroups)) {
-            $filters = $filterGroups[0]->getFilters();
-            if (!empty($filters)) {
-                $value = str_replace('%', '', $filters[0]->getValue());
-                $items = array_values(array_filter($items, function ($item) use ($value) {
-                    return strpos(strtolower($item['variable_name']), strtolower($value)) !== false;
+        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
+            foreach ($filterGroup->getFilters() as $filter) {
+                $value = str_replace('%', '', $filter->getValue());
+                $filterField = $filter->getField();
+                $items = array_values(array_filter($items, function ($item) use ($value, $filterField) {
+                    return strpos(strtolower($item[$filterField]), strtolower($value)) !== false;
                 }));
             }
+
         }
 
         return [
