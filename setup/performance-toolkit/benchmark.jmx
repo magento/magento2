@@ -306,7 +306,7 @@
           </elementProp>
           <elementProp name="customers_page_size" elementType="Argument">
             <stringProp name="Argument.name">customers_page_size</stringProp>
-            <stringProp name="Argument.value">${__P(customers_page_size,20)}</stringProp>
+            <stringProp name="Argument.value">${__P(customers_page_size,50)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="dashboard_enabled" elementType="Argument">
@@ -356,7 +356,7 @@
           </elementProp>
           <elementProp name="orders_page_size" elementType="Argument">
             <stringProp name="Argument.name">orders_page_size</stringProp>
-            <stringProp name="Argument.value">${__P(orders_page_size,20)}</stringProp>
+            <stringProp name="Argument.value">${__P(orders_page_size,50)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="othersPoolUsers" elementType="Argument">
@@ -376,7 +376,7 @@
           </elementProp>
           <elementProp name="products_page_size" elementType="Argument">
             <stringProp name="Argument.name">products_page_size</stringProp>
-            <stringProp name="Argument.value">${__P(products_page_size,20)}</stringProp>
+            <stringProp name="Argument.value">${__P(products_page_size,50)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="ramp_period" elementType="Argument">
