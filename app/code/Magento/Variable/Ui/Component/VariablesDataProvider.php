@@ -113,31 +113,17 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
     }
 
     /**
-     * Sort variables array by name.
+     * Sort variables array by field.
      *
      * @param array $items
+     * @param string $field
      * @param string $direction
      * @return array
      */
-    private function sortByName($items, $direction)
+    private function sortBy($items, $field, $direction)
     {
-        usort($items, function ($item1, $item2) use ($direction) {
-            return $this->variablesCompare($item1, $item2, 'variable_name', $direction);
-        });
-        return $items;
-    }
-
-    /**
-     * Sort variables array by type.
-     *
-     * @param array $items
-     * @param string $direction
-     * @return array
-     */
-    private function sortByType($items, $direction)
-    {
-        usort($items, function ($item1, $item2) use ($direction) {
-            return $this->variablesCompare($item1, $item2, 'variable_type', $direction);
+        usort($items, function ($item1, $item2) use ($field, $direction) {
+            return $this->variablesCompare($item1, $item2, $field, $direction);
         });
         return $items;
     }
