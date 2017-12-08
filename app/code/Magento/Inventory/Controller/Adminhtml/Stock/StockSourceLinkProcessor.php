@@ -68,7 +68,7 @@ class StockSourceLinkProcessor
     }
 
     /**
-     * @param integer $stockId
+     * @param int $stockId
      * @param array $stockSourceLinksData
      * @return void
      * @throws InputException
