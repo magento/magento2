@@ -20,6 +20,7 @@
         "allure-framework/allure-codeception": "dev-master#af40af5ae2b717618a42fe3e137d75878508c75d",
         "codeception/codeception": "~2.3.4",
         "consolidation/robo": "^1.0.0",
+        "symfony/process": ">=2.7 <3.4",
         "henrikbjorn/lurker": "^1.2",
         "magento/magento2-functional-testing-framework": "1.0.0",
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
