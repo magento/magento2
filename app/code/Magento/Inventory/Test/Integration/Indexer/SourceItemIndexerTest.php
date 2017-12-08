@@ -129,7 +129,7 @@ class SourceItemIndexerTest extends TestCase
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()->from(
-            $connection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM),
+            $this->resourceConnection->getTableName(SourceItem::TABLE_NAME_SOURCE_ITEM),
             [SourceItem::ID_FIELD_NAME]
         )->where(SourceItemInterface::SKU . ' = ?', $sku)->where(
             SourceItemInterface::SOURCE_ID . ' = ?',

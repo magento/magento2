@@ -58,7 +58,7 @@ class UpdateLegacyCatalogInventoryStockStatusByPlainQuery implements
         $product = $this->productRepository->get($reservation->getSku());
         $connection = $this->resourceConnection->getConnection();
         $connection->update(
-            $connection->getTableName('cataloginventory_stock_status'),
+            $this->resourceConnection->getTableName('cataloginventory_stock_status'),
             [
                 StockStatusInterface::QTY => new \Zend_Db_Expr(
                     sprintf('%s%s', StockStatusInterface::QTY, $reservation->getQuantity())
