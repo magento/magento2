@@ -93,7 +93,7 @@ class StockDataProvider extends DataProvider
             // It is need for support of several fieldsets.
             // For details see \Magento\Ui\Component\Form::getDataSourceData
             if ($data['totalRecords'] > 0) {
-                $stockId = (int) $data['items'][0][StockInterface::STOCK_ID];
+                $stockId = (int)$data['items'][0][StockInterface::STOCK_ID];
                 $stockGeneralData = $data['items'][0];
                 $dataForSingle[$stockId] = [
                     'general' => $stockGeneralData,

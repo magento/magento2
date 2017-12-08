@@ -49,13 +49,14 @@ class Delete extends Action
     {
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        $stockId = (int) $this->getRequest()->getPost(StockInterface::STOCK_ID);
+        $stockId = $this->getRequest()->getPost(StockInterface::STOCK_ID);
         if ($stockId === null) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
             return $resultRedirect->setPath('*/*');
         }
 
         try {
+            $stockId = (int)$stockId;
             $this->stockRepository->deleteById($stockId);
             $this->messageManager->addSuccessMessage(__('The Stock has been deleted.'));
             $resultRedirect->setPath('*/*');

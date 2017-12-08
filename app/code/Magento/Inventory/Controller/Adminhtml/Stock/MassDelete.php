@@ -63,7 +63,8 @@ class MassDelete extends Action
         $deletedItemsCount = 0;
         foreach ($this->massActionFilter->getIds() as $id) {
             try {
-                $this->stockRepository->deleteById((int) $id);
+                $id = (int)$id;
+                $this->stockRepository->deleteById($id);
                 $deletedItemsCount++;
             } catch (CouldNotDeleteException $e) {
                 $errorMessage = __('[ID: %1] ', $id) . $e->getMessage();

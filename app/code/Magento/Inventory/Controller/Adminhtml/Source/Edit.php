@@ -49,9 +49,9 @@ class Edit extends Action
      */
     public function execute(): ResultInterface
     {
-        $sourceId = $this->getRequest()->getParam(SourceInterface::SOURCE_ID);
+        $sourceId = (int)$this->getRequest()->getParam(SourceInterface::SOURCE_ID);
         try {
-            $source = $this->sourceRepository->get((int)$sourceId);
+            $source = $this->sourceRepository->get($sourceId);
 
             /** @var Page $result */
             $result = $this->resultFactory->create(ResultFactory::TYPE_PAGE);

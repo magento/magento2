@@ -113,7 +113,7 @@ class Save extends Action
             /** @var SourceInterface $source */
             $source = $this->sourceFactory->create();
         } else {
-            $source = $this->sourceRepository->get((int)$sourceId);
+            $source = $this->sourceRepository->get($sourceId);
         }
         $source = $this->sourceHydrator->hydrate($source, $requestData);
 

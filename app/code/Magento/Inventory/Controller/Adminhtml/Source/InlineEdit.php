@@ -66,20 +66,19 @@ class InlineEdit extends Action
         if ($request->isXmlHttpRequest() && $request->isPost() && $requestData) {
             foreach ($requestData as $itemData) {
                 try {
-                    $source = $this->sourceRepository->get(
-                        (int)$itemData[SourceInterface::SOURCE_ID]
-                    );
+                    $sourceId = (int)$itemData[SourceInterface::SOURCE_ID];
+                    $source = $this->sourceRepository->get($sourceId);
                     $this->dataObjectHelper->populateWithArray($source, $itemData, SourceInterface::class);
                     $this->sourceRepository->save($source);
                 } catch (NoSuchEntityException $e) {
                     $errorMessages[] = __(
                         '[ID: %value] The Source does not exist.',
-                        ['value' => $itemData[SourceInterface::SOURCE_ID]]
+                        ['value' => $sourceId]
                     );
                 } catch (ValidationException $e) {
                     foreach ($e->getErrors() as $localizedError) {
                         $errorMessages[] = __('[ID: %value] %message', [
-                            'value' => $itemData[SourceInterface::SOURCE_ID],
+                            'value' => $sourceId,
                             'message' => $localizedError->getMessage()
                         ]);
                     }
@@ -87,7 +86,7 @@ class InlineEdit extends Action
                     $errorMessages[] = __(
                         '[ID: %value] %message',
                         [
-                            'value' => $itemData[SourceInterface::SOURCE_ID],
+                            'value' => $sourceId,
                             'message' => $e->getMessage()
                         ]
                     );
