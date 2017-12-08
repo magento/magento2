@@ -197,6 +197,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         if (!$this->useSecretKey()) {
             return $result;
         }
+
         $this->_setRoutePath($routePath);
         $routeName = $this->_getRouteName('*');
         $controllerName = $this->_getControllerName(self::DEFAULT_CONTROLLER_NAME);
@@ -216,6 +217,8 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         if (is_array($this->_getRouteParams())) {
             $routeParams = array_merge($this->_getRouteParams(), $routeParams);
         }
+        $routeParams['_escape_params'] = false;
+
         return parent::getUrl("{$routeName}/{$controllerName}/{$actionName}", $routeParams);
     }
 

@@ -190,7 +190,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     public function addExportType($url, $label)
     {
         $this->_exportTypes[] = new \Magento\Framework\DataObject(
-            ['url' => $this->getUrl($url, ['_current' => true, '_escape_params' => false]), 'label' => $label]
+            ['url' => $this->getUrl($url, ['_current' => true]), 'label' => $label]
         );
         return $this;
     }
