@@ -61,7 +61,7 @@ class Save implements SaveInterface
 
         try {
             $this->stockResource->save($stock);
-            return $stock->getStockId();
+            return (int)$stock->getStockId();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not save Stock'), $e);
