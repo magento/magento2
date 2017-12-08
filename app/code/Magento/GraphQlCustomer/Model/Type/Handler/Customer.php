@@ -88,6 +88,16 @@ class Customer implements HandlerInterface
         $staticAttributes = $this->typeGenerator->getTypeData('CustomerDataCustomerInterface');
         $result = array_merge($result, $staticAttributes);
 
+        //customer secure filtering according to @see \Magento\Customer\Model\Data\CustomerSecure
+        unset($result['rp_token']);
+        unset($result['rp_token_created_at']);
+        unset($result['password_hash']);
+        unset($result['deleteable']);
+
+        //additional filtering that we don't need in the schema
+        unset($result['first_failure']);
+        unset($result['lock_expires']);
+        unset($result['failures_num']);
         unset($result['extension_attribute']);
 
         $resolvedTypes = $this->typeGenerator->generate($typeName, $result);
