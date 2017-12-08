@@ -42,34 +42,19 @@ class UpdateLegacyCatalogInventoryAtStockDeductionTime
 
     /**
      * Plugin method to fill the legacy tables.
+     * Updates cataloginventory_stock_item and cataloginventory_stock_status qty with reservation information.
      *
      * @param ReservationsAppendInterface $subject
      * @param void $result
      * @param ReservationInterface[] $reservations
-     *
-     * @see ReservationsAppendInterface::execute
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(ReservationsAppendInterface $subject, $result, array $reservations)
     {
-        $this->updateStockItemAndStatusTable($reservations);
-
-        return $result;
-    }
-
-    /**
-     * Updates cataloginventory_stock_item and cataloginventory_stock_status qty with reservation information.
-     *
-     * @param ReservationInterface[] $reservations
-     *
-     * @return void
-     */
-    private function updateStockItemAndStatusTable(array $reservations)
-    {
         foreach ($reservations as $reservation) {
-            $this->updateLegacyStockItem->execute($reservation);
-            $this->updateLegacyStockStatus->execute($reservation);
+            $this->updateLegacyStockItem->execute($reservation->getSku(), (float)$reservation->getQuantity());
+            $this->updateLegacyStockStatus->execute($reservation->getSku(), (float)$reservation->getQuantity());
         }
     }
 }

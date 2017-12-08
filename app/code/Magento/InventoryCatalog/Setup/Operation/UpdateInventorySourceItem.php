@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalog\Setup\Operation;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
@@ -43,27 +44,34 @@ class UpdateInventorySourceItem
      * Insert Stock Item to Inventory Source Item by raw MySQL query
      *
      * @param ModuleDataSetupInterface $setup
-     *
      * @return void
      */
     public function execute(ModuleDataSetupInterface $setup)
     {
         $defaultSourceId = $this->defaultSourceProvider->getId();
         $sourceItemTable = $setup->getTable(SourceItem::TABLE_NAME_SOURCE_ITEM);
-        $stockItemTable = $setup->getTable('cataloginventory_stock_item');
+        $legacyStockItemTable = $setup->getTable('cataloginventory_stock_item');
         $productTable = $setup->getTable('catalog_product_entity');
 
-        $selectForInsert = $this->resourceConnection->getConnection()->select()->from(
-            $stockItemTable,
-            ['source_id' => new \Zend_Db_Expr($defaultSourceId), 'qty', 'is_in_stock']
-        )->join($productTable, 'entity_id = product_id', 'sku')->where('website_id = ?', 0);
+        $selectForInsert = $this->resourceConnection->getConnection()
+            ->select()
+            ->from(
+                $legacyStockItemTable,
+                [$defaultSourceId, 'qty', 'is_in_stock']
+            )
+            ->join($productTable, 'entity_id = product_id', 'sku')
+            ->where('website_id = ?', 0);
 
         $sql = $this->resourceConnection->getConnection()->insertFromSelect(
             $selectForInsert,
             $sourceItemTable,
-            ['source_id', 'quantity', 'status', 'sku']
+            [
+                SourceItemInterface::SOURCE_ID,
+                SourceItemInterface::QUANTITY,
+                SourceItemInterface::STATUS,
+                SourceItemInterface::SKU,
+            ]
         );
-
         $this->resourceConnection->getConnection()->query($sql);
     }
 }

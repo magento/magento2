@@ -10,7 +10,6 @@ namespace Magento\InventoryCatalog\Model\Command;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryApi\Api\Data\ReservationInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 
 /**
@@ -36,7 +35,7 @@ class UpdateLegacyCatalogInventoryStockItemByPlainQuery implements
     private $defaultSourceProvider;
 
     /**
-     * @param \Magento\Framework\App\ResourceConnection $resourceConnection
+     * @param ResourceConnection $resourceConnection
      * @param ProductRepositoryInterface $productRepository
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      */
@@ -53,21 +52,19 @@ class UpdateLegacyCatalogInventoryStockItemByPlainQuery implements
     /**
      * {@inheritdoc}
      */
-    public function execute(ReservationInterface $reservation)
+    public function execute(string $sku, float $quantity)
     {
-        $product = $this->productRepository->get($reservation->getSku());
+        $product = $this->productRepository->get($sku);
         $connection = $this->resourceConnection->getConnection();
         $connection->update(
             $this->resourceConnection->getTableName('cataloginventory_stock_item'),
             [
-                StockItemInterface::QTY => new \Zend_Db_Expr(
-                    sprintf('%s%s', StockItemInterface::QTY, $reservation->getQuantity())
-                )
+                StockItemInterface::QTY => sprintf('%s + %s', StockItemInterface::QTY, $quantity),
             ],
             [
                 StockItemInterface::STOCK_ID . ' = ?' => $this->defaultSourceProvider->getId(),
                 StockItemInterface::PRODUCT_ID . ' = ?' => $product->getId(),
-                'website_id = ?' => 0
+                'website_id = ?' => 0,
             ]
         );
     }
