@@ -49,9 +49,9 @@ class Edit extends Action
      */
     public function execute(): ResultInterface
     {
-        $stockId = $this->getRequest()->getParam(StockInterface::STOCK_ID);
+        $stockId = (int)$this->getRequest()->getParam(StockInterface::STOCK_ID);
         try {
-            $stock = $this->stockRepository->get((int)$stockId);
+            $stock = $this->stockRepository->get($stockId);
 
             /** @var Page $result */
             $result = $this->resultFactory->create(ResultFactory::TYPE_PAGE);

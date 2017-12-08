@@ -133,6 +133,9 @@ class ReservationBuilder implements ReservationBuilderInterface
         return $reservation;
     }
 
+    /**
+     * @return ValidationResult
+     */
     private function validate()
     {
         $errors = [];
@@ -153,7 +156,8 @@ class ReservationBuilder implements ReservationBuilderInterface
     }
 
     /**
-     * Used to clean state after object creation.
+     * Used to clean state after object creation
+     * @return void
      */
     private function reset()
     {
@@ -170,7 +174,7 @@ class ReservationBuilder implements ReservationBuilderInterface
      * @param array $array
      * @return array
      */
-    private function convertArrayKeysFromSnakeToCamelCase(array $array)
+    private function convertArrayKeysFromSnakeToCamelCase(array $array): array
     {
         $convertedArrayKeys = $this->snakeToCamelCaseConverter->convert(array_keys($array));
         return array_combine($convertedArrayKeys, array_values($array));

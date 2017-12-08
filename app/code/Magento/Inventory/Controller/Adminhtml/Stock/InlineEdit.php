@@ -66,26 +66,25 @@ class InlineEdit extends Action
         if ($request->isXmlHttpRequest() && $request->isPost() && $requestData) {
             foreach ($requestData as $itemData) {
                 try {
-                    $stock = $this->stockRepository->get(
-                        $itemData[StockInterface::STOCK_ID]
-                    );
+                    $stockId = (int)$itemData[StockInterface::STOCK_ID];
+                    $stock = $this->stockRepository->get($stockId);
                     $this->dataObjectHelper->populateWithArray($stock, $itemData, StockInterface::class);
                     $this->stockRepository->save($stock);
                 } catch (NoSuchEntityException $e) {
                     $errorMessages[] = __(
                         '[ID: %value] The Stock does not exist.',
-                        ['value' => $itemData[StockInterface::STOCK_ID]]
+                        ['value' => $stockId]
                     );
                 } catch (ValidationException $e) {
                     foreach ($e->getErrors() as $localizedError) {
                         $errorMessages[] = __('[ID: %value] %message', [
-                            'value' => $itemData[StockInterface::STOCK_ID],
+                            'value' => $stockId,
                             'message' => $localizedError->getMessage()
                         ]);
                     }
                 } catch (CouldNotSaveException $e) {
                     $errorMessages[] = __('[ID: %value] %message', [
-                        'value' => $itemData[StockInterface::STOCK_ID],
+                        'value' => $stockId,
                         'message' => $e->getMessage()
                     ]);
                 }
