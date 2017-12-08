@@ -10,6 +10,12 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 
+/**
+ * Concrete implementation for @see ResolverContextInterface
+ *
+ * The purpose for this that GraphQL specification wants to make use of such object where multiple modules can
+ * participate with data through extension attributes.
+ */
 class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel implements ResolverContextInterface
 {
     /**#@+
