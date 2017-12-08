@@ -109,6 +109,11 @@ define([
                 title: self.isEditMode ? $t('Edit variable...') : $t('Insert Variable...'),
                 type: 'slide',
                 buttons: self.getButtonsConfig(self.isEditMode),
+
+                /**
+                 * @param {jQuery.Event} e
+                 * @param {Object} modal
+                 */
                 closed: function (e, modal) {
                     modal.modal.remove();
                     registry.get(
@@ -182,8 +187,10 @@ define([
                 {
 
                     text: isEditMode ? $t('Save'): $t('Insert Variable'),
-                    'class': 'action-primary ' + (isEditMode ? '': 'disabled'),
-                    'attr': {'id': 'insert_variable'},
+                    class: 'action-primary ' + (isEditMode ? '': 'disabled'),
+                    attr: {
+                        'id': 'insert_variable'
+                    },
 
                     /**
                      * Insert Variable
@@ -284,16 +291,17 @@ define([
          */
         loadChooser: function (url, textareaId, selectedElement) {
             this.textareaId = textareaId;
-                new Ajax.Request(url, {
-                    parameters: {},
-                    onComplete: function (transport) {
-                        Variables.init(this.textareaId, 'MagentovariablePlugin.insertVariable', this.editor);
-                        Variables.isEditMode = !!this.getElementVariablePath(selectedElement);
-                        this.variablesContent = transport.responseText;
-                        Variables.openDialogWindow(this.variablesContent, selectedElement);
-                        Variables.initUiGrid();
-                    }.bind(this)
-                });
+
+            new Ajax.Request(url, {
+                parameters: {},
+                onComplete: function (transport) {
+                    Variables.init(this.textareaId, 'MagentovariablePlugin.insertVariable', this.editor);
+                    Variables.isEditMode = !!this.getElementVariablePath(selectedElement);
+                    this.variablesContent = transport.responseText;
+                    Variables.openDialogWindow(this.variablesContent, selectedElement);
+                    Variables.initUiGrid();
+                }.bind(this)
+            });
 
             return this;
         },
