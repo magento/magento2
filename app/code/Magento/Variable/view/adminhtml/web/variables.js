@@ -244,9 +244,11 @@ define([
             textareaElm = $(this.textareaElementId);
 
             //to support switching between wysiwyg editors
-            wysiwygAdapter = wysiwyg && wysiwyg.get(this.textareaElementId) ?
-                wysiwyg.get(this.textareaElementId) :
-                this.editor;
+            if (wysiwyg && wysiwyg.activeEditor()) {
+                wysiwygAdapter = wysiwyg.get(this.textareaElementId) ?
+                    wysiwyg.get(this.textareaElementId) :
+                    this.editor;
+            }
 
             if (wysiwygAdapter) {
                 wysiwygAdapter.execCommand('mceInsertContent', false,
