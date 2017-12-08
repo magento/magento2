@@ -161,7 +161,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
 
         //prepare unique id value
         if ($fieldName == 'unique_id' && $data['value'] == '') {
-            $data['value'] = md5(microtime(1));
+            $data['value'] = hash('sha256', microtime(1));
         }
 
         if (is_array($data['value'])) {
