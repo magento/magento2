@@ -205,7 +205,7 @@ define([
                 if (options.dataMergeStrategy === 'prepend') {
                     this.options.videoData = [].concat(
                         this.options.optionsVideoData[options.selectedOption],
-                        this.options.videoData
+                        this.defaultVideoData
                     );
                 } else {
                     this.options.videoData = this.options.optionsVideoData[options.selectedOption];
