@@ -189,23 +189,8 @@ define([
                         self.insertVariable(self.getVariableCode());
                     }
                 }
-                ];
-            if (isEditMode) {
+            ];
 
-                buttonsData.push(
-                    {
-                        text: $t('Delete'),
-                        'class': 'action-scalable confirm',
-
-                        /**
-                         * @param {jQuery.Event} event
-                         */
-                        click: function (event) {
-                            self.removeVariable(event);
-                        }
-                    }
-                );
-            }
 
             return buttonsData;
         },
@@ -267,28 +252,8 @@ define([
             }
 
             return this;
-        },
-
-        /**
-         * Remove variable from wysywig editor.
-         *
-         * @return {Object}
-         */
-        removeVariable: function () {
-            var windowId = this.dialogWindowId;
-
-            jQuery('#' + windowId).modal('closeModal');
-
-            if (typeof wysiwyg !== 'undefined' && wysiwyg.get(this.textareaElementId)) {
-                wysiwyg.get(this.textareaElementId).focus();
-                wysiwyg.get(this.textareaElementId).execCommand('mceRemoveNode', false);
-                if (this.selectedPlaceholder) {
-                    this.selectedPlaceholder.remove();
-                }
-            }
-
-            return this;
         }
+
     };
 
     window.MagentovariablePlugin = {
