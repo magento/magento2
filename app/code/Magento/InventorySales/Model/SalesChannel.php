@@ -66,7 +66,7 @@ class SalesChannel extends AbstractExtensibleModel implements SalesChannelInterf
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes($extensionAttributes)
+    public function setExtensionAttributes(SalesChannelExtensionInterface $extensionAttributes)
     {
         $this->_setExtensionAttributes($extensionAttributes);
     }
