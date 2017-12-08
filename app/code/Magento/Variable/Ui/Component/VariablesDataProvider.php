@@ -154,10 +154,9 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
      */
     private function variablesCompare($variable1, $variable2, $partIndex, $direction)
     {
-        $itemNames = [$variable1[$partIndex], $variable2[$partIndex]];
-        sort($itemNames, SORT_STRING);
-        $expectedIndex = $direction == SortOrder::SORT_ASC ? 0 : 1;
-        return $variable1[$partIndex] === $itemNames[$expectedIndex] ? -1 : 1;
+        $values = [$variable1[$partIndex], $variable2[$partIndex]];
+        sort($values, SORT_STRING);
+        return $variable1[$partIndex] === $values[$direction == SortOrder::SORT_ASC ? 0 : 1] ? -1 : 1;
     }
 
     /**
