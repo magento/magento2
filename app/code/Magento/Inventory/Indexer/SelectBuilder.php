@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Inventory\Indexer;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
@@ -16,9 +17,9 @@ use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * Index data provider
+ * Select builder data provider
  */
-class IndexDataProvider
+class SelectBuilder
 {
     /**
      * @var ResourceConnection
@@ -34,49 +35,12 @@ class IndexDataProvider
     }
 
     /**
-     * Returns all data for the index.
-     *
-     * @param int $stockId
-     * @return \ArrayIterator
-     */
-    public function getData(int $stockId): \ArrayIterator
-    {
-        $connection = $this->resourceConnection->getConnection();
-        $select = $this->prepareSelect($stockId);
-
-        return new \ArrayIterator($connection->fetchAll($select));
-    }
-
-    /**
-     * Returns all data for the index by SKU List condition.
-     *
-     * @param int $stockId
-     * @param array $skuList
-     * @return \ArrayIterator
-     */
-    public function getDataBySkuList(int $stockId, array $skuList): \ArrayIterator
-    {
-        $connection = $this->resourceConnection->getConnection();
-        $conditions = [];
-        if (count($skuList)) {
-            $conditions[] = [
-                'condition' => 'source_item.' . SourceItemInterface::SKU . ' IN (?)',
-                'value' => $skuList
-            ];
-        }
-        $select = $this->prepareSelect($stockId, $conditions);
-
-        return new \ArrayIterator($connection->fetchAll($select));
-    }
-
-    /**
      * Prepare select.
      *
      * @param int $stockId
-     * @param array $conditions
-     * @return \ArrayIterator|\Magento\Framework\DB\Select
+     * @return Select
      */
-    private function prepareSelect($stockId, array $conditions = [])
+    public function execute($stockId): Select
     {
         $connection = $this->resourceConnection->getConnection();
         $sourceTable = $this->resourceConnection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE);
@@ -92,7 +56,7 @@ class IndexDataProvider
         $sourceIds = $connection->fetchCol($select);
 
         if (0 === count($sourceIds)) {
-            return new \ArrayIterator([]);
+            return $select;
         }
 
         $select = $connection
@@ -111,16 +75,8 @@ class IndexDataProvider
             )
             ->where('source_item.' . SourceItemInterface::STATUS . ' = ?', SourceItemInterface::STATUS_IN_STOCK)
             ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
-            ->where('stock_source_link.' . StockSourceLink::SOURCE_ID . ' IN (?)', $sourceIds);
-
-        if (!empty($conditions)) {
-            foreach ($conditions as $condition) {
-                $select->where($condition['condition'], $condition['value']);
-            }
-        }
-
-        $select->group([SourceItemInterface::SKU]);
-
+            ->where('stock_source_link.' . StockSourceLink::SOURCE_ID . ' IN (?)', $sourceIds)
+            ->group([SourceItemInterface::SKU]);
         return $select;
     }
 }
