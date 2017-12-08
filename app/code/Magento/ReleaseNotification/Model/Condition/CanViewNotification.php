@@ -9,6 +9,7 @@ use Magento\ReleaseNotification\Model\ResourceModel\Viewer\Logger;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
+use Magento\Framework\App\CacheInterface;
 
 /**
  * Class CanViewNotification
@@ -20,8 +21,17 @@ class CanViewNotification implements VisibilityConditionInterface
 {
     /**
      * Unique condition name.
+     *
+     * @var string
      */
-    const NAME = 'can_view_notification';
+    private static $conditionName = 'can_view_notification';
+
+    /**
+     * Prefix for cache
+     *
+     * @var string
+     */
+    private static $cachePrefix = 'release-notification-popup-';
 
     /**
      * @var Logger
@@ -39,20 +49,28 @@ class CanViewNotification implements VisibilityConditionInterface
     private $productMetadata;
 
     /**
+     * @var CacheInterface
+     */
+    private $cacheStorage;
+
+    /**
      * CanViewNotification constructor.
      *
      * @param Logger $viewerLogger
      * @param Session $session
      * @param ProductMetadataInterface $productMetadata
+     * @param CacheInterface $cacheStorage
      */
     public function __construct(
         Logger $viewerLogger,
         Session $session,
-        ProductMetadataInterface $productMetadata
+        ProductMetadataInterface $productMetadata,
+        CacheInterface $cacheStorage
     ) {
         $this->viewerLogger = $viewerLogger;
         $this->session = $session;
         $this->productMetadata = $productMetadata;
+        $this->cacheStorage = $cacheStorage;
     }
 
     /**
@@ -63,17 +81,17 @@ class CanViewNotification implements VisibilityConditionInterface
     public function isVisible(array $arguments)
     {
         $userId = $this->session->getUser()->getId();
-        $viewerLog = $this->viewerLogger->get($userId);
-        $version = $this->productMetadata->getVersion();
-        if ($viewerLog == null
-            || $viewerLog->getLastViewVersion() == null
-            || version_compare($viewerLog->getLastViewVersion(), $version, '<')
-        ) {
-            $this->viewerLogger->log($userId, $version);
-            return true;
-        } else {
-            return false;
+        $cacheKey = self::$cachePrefix . $userId;
+        $value = $this->cacheStorage->load($cacheKey);
+        if ($value === false) {
+            $value = version_compare(
+                $this->viewerLogger->get($userId)->getLastViewVersion(),
+                $this->productMetadata->getVersion(),
+                '<'
+            );
+            $this->cacheStorage->save(false, $cacheKey);
         }
+        return (bool)$value;
     }
 
     /**
@@ -83,6 +101,6 @@ class CanViewNotification implements VisibilityConditionInterface
      */
     public function getName()
     {
-        return self::NAME;
+        return self::$conditionName;
     }
 }
