@@ -113,6 +113,54 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
     }
 
     /**
+     * Sort variables array by name.
+     *
+     * @param array $items
+     * @param string $direction
+     * @return array
+     */
+    private function sortByName($items, $direction)
+    {
+        usort($items, function ($item1, $item2) use ($direction) {
+            return $this->variablesCompare($item1, $item2, 'variable_name', $direction);
+        });
+        return $items;
+    }
+
+    /**
+     * Sort variables array by type.
+     *
+     * @param array $items
+     * @param string $direction
+     * @return array
+     */
+    private function sortByType($items, $direction)
+    {
+        usort($items, function ($item1, $item2) use ($direction) {
+            return $this->variablesCompare($item1, $item2, 'variable_type', $direction);
+        });
+        return $items;
+    }
+
+    /**
+     * Compare variables array's elements on index.
+     *
+     * @param array $variable1
+     * @param array $variable2
+     * @param string $partIndex
+     * @param string $direction
+     *
+     * @return int
+     */
+    private function variablesCompare($variable1, $variable2, $partIndex, $direction)
+    {
+        $itemNames = [$variable1[$partIndex], $variable2[$partIndex]];
+        sort($itemNames, SORT_STRING);
+        $expectedIndex = $direction == SortOrder::SORT_ASC ? 0 : 1;
+        return $variable1[$partIndex] === $itemNames[$expectedIndex] ? -1 : 1;
+    }
+
+    /**
      * Merge variables from different sources:
      * custom variables and default (stores configuration variables)
      *
@@ -121,6 +169,7 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
     public function getData()
     {
         $searchCriteria = $this->getSearchCriteria();
+        $sortOrders = $searchCriteria->getSortOrders();
 
         // sort items by variable_type
         $sortOrder = $searchCriteria->getSortOrders();
