@@ -8,6 +8,7 @@
         "magento/module-catalog": "100.3.*",
         "magento/module-catalog-import-export": "100.3.*",
         "magento/module-directory": "100.3.*",
+        "magento/module-eav": "100.3.*",
         "magento/module-import-export": "100.0.*",
         "magento/module-inventory-api": "100.0.*",
         "magento/module-inventory": "100.0.*",

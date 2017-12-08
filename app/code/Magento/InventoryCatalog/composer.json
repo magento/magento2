@@ -8,8 +8,9 @@
         "magento/module-catalog": "100.3.*",
         "magento/module-catalog-inventory": "100.3.*",
         "magento/module-directory": "100.3.*",
-        "magento/module-inventory-api": "100.0.*",
         "magento/module-inventory": "100.0.*",
+        "magento/module-inventory-api": "100.0.*",
+        "magento/module-inventory-sales": "100.0.*",
         "magento/module-sales": "100.3.*",
         "magento/module-shipping": "100.3.*",
         "magento/module-ui": "100.3.*"

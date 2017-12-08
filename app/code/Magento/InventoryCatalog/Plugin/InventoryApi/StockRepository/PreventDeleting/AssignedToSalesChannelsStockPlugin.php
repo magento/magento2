@@ -25,6 +25,7 @@ class AssignedToSalesChannelsStockPlugin
      * @param GetAssignedSalesChannelsForStockInterface $assignedSalesChannelsForStock
      */
     public function __construct(
+        // TODO: move to api
         GetAssignedSalesChannelsForStockInterface $assignedSalesChannelsForStock
     ) {
         $this->assignedSalesChannelsForStock = $assignedSalesChannelsForStock;
