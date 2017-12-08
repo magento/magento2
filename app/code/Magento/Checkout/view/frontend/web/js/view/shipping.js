@@ -83,12 +83,14 @@ define([
 
             if (!quote.isVirtual()) {
                 //If some step is active this step will become inactive.
-                stepNavigator.steps().some(function (element) {
-                    if (element.isVisible()) {
-                        self.visible(false);
-                        return true;
-                    }
-                });
+                if (stepNavigator.steps()) {
+                    stepNavigator.steps().some(function (element) {
+                        if (element.isVisible()) {
+                            self.visible(false);
+                            return true;
+                        }
+                    });
+                }
 
                 stepNavigator.registerStep(
                     'shipping',
