@@ -83,6 +83,7 @@ class Copier
                 $duplicate->save();
                 $isDuplicateSaved = true;
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+            } catch (\Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException $e) {
             }
         } while (!$isDuplicateSaved);
         $this->getOptionRepository()->duplicate($product, $duplicate);
