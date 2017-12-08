@@ -38,10 +38,9 @@ class SelectBuilder
      * Prepare select.
      *
      * @param int $stockId
-     * @param array $conditions
      * @return Select
      */
-    public function execute($stockId, array $conditions = []): Select
+    public function execute($stockId): Select
     {
         $connection = $this->resourceConnection->getConnection();
         $sourceTable = $this->resourceConnection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE);
@@ -76,16 +75,8 @@ class SelectBuilder
             )
             ->where('source_item.' . SourceItemInterface::STATUS . ' = ?', SourceItemInterface::STATUS_IN_STOCK)
             ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
-            ->where('stock_source_link.' . StockSourceLink::SOURCE_ID . ' IN (?)', $sourceIds);
-
-        if (!empty($conditions)) {
-            foreach ($conditions as $condition) {
-                $select->where($condition['condition'], $condition['value']);
-            }
-        }
-
-        $select->group([SourceItemInterface::SKU]);
-
+            ->where('stock_source_link.' . StockSourceLink::SOURCE_ID . ' IN (?)', $sourceIds)
+            ->group([SourceItemInterface::SKU]);
         return $select;
     }
 }

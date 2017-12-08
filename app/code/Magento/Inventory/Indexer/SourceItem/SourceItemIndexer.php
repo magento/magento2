@@ -130,7 +130,7 @@ class SourceItemIndexer implements ActionInterface
 
             $this->indexHandler->saveIndex(
                 $mainIndexName,
-                $this->indexDataBySkuListProvider->getDataBySkuList($stockId, $skuList),
+                $this->indexDataBySkuListProvider->execute($stockId, $skuList),
                 ResourceConnection::DEFAULT_CONNECTION
             );
         }

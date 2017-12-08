@@ -12,14 +12,19 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Indexer\SelectBuilder;
 
 /**
- * Index data provider
+ * Returns all data for the index
  */
-class IndexDataProvider
+class IndexDataProviderByStockId
 {
     /**
      * @var ResourceConnection
      */
     private $resourceConnection;
+
+    /**
+     * @var SelectBuilder
+     */
+    private $selectBuilder;
 
     /**
      * @param ResourceConnection $resourceConnection
@@ -28,22 +33,20 @@ class IndexDataProvider
     public function __construct(
         ResourceConnection $resourceConnection,
         SelectBuilder $selectBuilder
-    ){
+    ) {
         $this->resourceConnection = $resourceConnection;
         $this->selectBuilder = $selectBuilder;
     }
 
     /**
-     * Returns all data for the index.
-     *
      * @param int $stockId
      * @return ArrayIterator
      */
-    public function getData(int $stockId): ArrayIterator
+    public function execute(int $stockId): ArrayIterator
     {
-        $connection = $this->resourceConnection->getConnection();
         $select = $this->selectBuilder->execute($stockId);
 
+        $connection = $this->resourceConnection->getConnection();
         return new ArrayIterator($connection->fetchAll($select));
     }
 }

@@ -13,7 +13,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\Inventory\Indexer\SelectBuilder;
 
 /**
- * Index by sku list data provider
+ * Returns all data for the index by SKU List condition
  */
 class IndexDataBySkuListProvider
 {
@@ -23,36 +23,36 @@ class IndexDataBySkuListProvider
     private $resourceConnection;
 
     /**
+     * @var SelectBuilder
+     */
+    private $selectBuilder;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param SelectBuilder $selectBuilder
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         SelectBuilder $selectBuilder
-    ){
+    ) {
         $this->resourceConnection = $resourceConnection;
         $this->selectBuilder = $selectBuilder;
     }
 
     /**
-     * Returns all data for the index by SKU List condition.
-     *
      * @param int $stockId
      * @param array $skuList
      * @return ArrayIterator
      */
-    public function getDataBySkuList(int $stockId, array $skuList): ArrayIterator
+    public function execute(int $stockId, array $skuList): ArrayIterator
     {
-        $connection = $this->resourceConnection->getConnection();
-        $conditions = [];
-        if (count($skuList)) {
-            $conditions[] = [
-                'condition' => 'source_item.' . SourceItemInterface::SKU . ' IN (?)',
-                'value' => $skuList
-            ];
-        }
-        $select = $this->selectBuilder->execute($stockId, $conditions);
+        $select = $this->selectBuilder->execute($stockId);
 
+        if (count($skuList)) {
+            $select->where('source_item.' . SourceItemInterface::SKU . ' IN (?)', $skuList);
+        }
+
+        $connection = $this->resourceConnection->getConnection();
         return new ArrayIterator($connection->fetchAll($select));
     }
 }
