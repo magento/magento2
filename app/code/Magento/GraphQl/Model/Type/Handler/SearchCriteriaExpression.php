@@ -14,6 +14,8 @@ use Magento\Framework\GraphQl\Type\TypeFactory;
  */
 class SearchCriteriaExpression implements HandlerInterface
 {
+    const SEARCH_CRITERIA_EXPRESSION_TYPE_NAME = 'SearchCriteriaExpression';
+
     /**
      * @var Pool
      */
@@ -39,10 +41,9 @@ class SearchCriteriaExpression implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = new \ReflectionClass($this);
         return $this->typeFactory->createInputObject(
             [
-                'name' => $reflector->getShortName(),
+                'name' => self::SEARCH_CRITERIA_EXPRESSION_TYPE_NAME,
                 'fields' => $this->getFields()
             ]
         );

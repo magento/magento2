@@ -6,7 +6,7 @@
 
 namespace Magento\GraphQlCatalog\Model\Type\Handler;
 
-use Magento\Eav\Api\AttributeManagementInterface;
+use Magento\GraphQl\Model\EntityAttributeList;
 use Magento\Framework\Exception\InputException;
 use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
@@ -18,6 +18,8 @@ use Magento\GraphQl\Model\Type\Handler\Pool;
  */
 class Product implements HandlerInterface
 {
+    const PRODUCT_TYPE_NAME = 'Product';
+
     /**
      * @var Pool
      */
@@ -29,9 +31,9 @@ class Product implements HandlerInterface
     private $typeGenerator;
 
     /**
-     * @var AttributeManagementInterface
+     * @var EntityAttributeList
      */
-    private $management;
+    private $entityAttributeList;
 
     /**
      * @var TypeFactory
@@ -41,18 +43,18 @@ class Product implements HandlerInterface
     /**
      * @param Pool $typePool
      * @param TypeGenerator $typeGenerator
-     * @param AttributeManagementInterface $management
+     * @param EntityAttributeList $entityAttributeList
      * @param TypeFactory $typeFactory
      */
     public function __construct(
         Pool $typePool,
         TypeGenerator $typeGenerator,
-        AttributeManagementInterface $management,
+        EntityAttributeList $entityAttributeList,
         TypeFactory $typeFactory
     ) {
         $this->typePool = $typePool;
         $this->typeGenerator = $typeGenerator;
-        $this->management = $management;
+        $this->entityAttributeList = $entityAttributeList;
         $this->typeFactory = $typeFactory;
     }
 
@@ -70,14 +72,14 @@ class Product implements HandlerInterface
                     $typeId = $value['type_id'];
                     if (!in_array($typeId, ['simple', 'configurable'])) {
                         throw new InputException(
-                            __('Type %1 does not implement Product interface', $typeId)
+                            __('Type %1 does not implement %2 interface', $typeId, self::PRODUCT_TYPE_NAME)
                         );
                     }
-                    $resolvedType = $this->typePool->getComplexType(ucfirst($value['type_id']) . 'Product');
+                    $resolvedType = $this->typePool->getComplexType(ucfirst($typeId) . self::PRODUCT_TYPE_NAME);
 
                     if (!$resolvedType) {
                         throw new InputException(
-                            __('Type %1 not implemented', $value['type_id'])
+                            __('Type %1 not implemented', $typeId)
                         );
                     }
 
@@ -97,7 +99,7 @@ class Product implements HandlerInterface
     private function getFields(string $typeName)
     {
         $result = [];
-        $attributes = $this->management->getAttributes(\Magento\Catalog\Model\Product::ENTITY, 4);
+        $attributes = $this->entityAttributeList->getDefaultEntityAttributes(\Magento\Catalog\Model\Product::ENTITY);
         foreach ($attributes as $attribute) {
             $result[$attribute->getAttributeCode()] = 'string';
         }

@@ -15,6 +15,8 @@ use Magento\GraphQl\Model\Type\Handler\Pool;
  */
 class SimpleProduct implements HandlerInterface
 {
+    const SIMPLE_PRODUCT_TYPE_NAME = 'SimpleProduct';
+
     /**
      * @var Pool
      */
@@ -40,13 +42,12 @@ class SimpleProduct implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = new \ReflectionClass($this);
         $fields = [];
-        $interface = $this->typePool->getType('Product');
+        $interface = $this->typePool->getType(Product::PRODUCT_TYPE_NAME);
         $fields = array_merge($fields, $interface->config['fields']);
         return $this->typeFactory->createObject(
             [
-                'name' => $reflector->getShortName(),
+                'name' => self::SIMPLE_PRODUCT_TYPE_NAME,
                 'fields' => $fields,
                 'interfaces' => [$interface]
             ]

@@ -14,6 +14,17 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class ProductViewTest extends GraphQlAbstract
 {
     /**
+     * @var \Magento\TestFramework\ObjectManager
+     */
+    private $objectManager;
+
+    protected function setUp()
+    {
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_all_fields.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -23,7 +34,7 @@ class ProductViewTest extends GraphQlAbstract
 
         $query = <<<QUERY
 {
-    products(find: {and: {sku: {eq: "{$prductSku}"}}})
+    products(find: {sku: {eq: "{$prductSku}"}})
     {
         items {
             attribute_set_id
@@ -162,6 +173,14 @@ class ProductViewTest extends GraphQlAbstract
 }
 QUERY;
 
+        // get customer ID token
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
+        );
+        $customerToken = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        $this->setToken($customerToken);
         $response = $this->graphQlQuery($query);
 
         /**

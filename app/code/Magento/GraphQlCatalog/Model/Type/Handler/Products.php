@@ -9,12 +9,15 @@ namespace Magento\GraphQlCatalog\Model\Type\Handler;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
 use Magento\GraphQl\Model\Type\Handler\Pool;
+use Magento\GraphQl\Model\Type\Handler\SearchResultPageInfo;
 
 /**
  * Define GraphQL type for search result of Products
  */
 class Products implements HandlerInterface
 {
+    const PRODUCTS_TYPE_NAME = 'Products';
+
     /**
      * @var Pool
      */
@@ -40,10 +43,9 @@ class Products implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = new \ReflectionClass($this);
         return $this->typeFactory->createObject(
             [
-                'name' => $reflector->getShortName(),
+                'name' => self::PRODUCTS_TYPE_NAME,
                 'fields' => $this->getFields(),
             ]
         );
@@ -57,8 +59,8 @@ class Products implements HandlerInterface
     private function getFields()
     {
         $fields = [
-            'items' => $this->typeFactory->createList($this->typePool->getType('Product')),
-            'page_info' => $this->typePool->getType('SearchResultPageInfo'),
+            'items' => $this->typeFactory->createList($this->typePool->getType(Product::PRODUCT_TYPE_NAME)),
+            'page_info' => $this->typePool->getType(SearchResultPageInfo::SEARCH_RESULT_PAGE_INFO_TYPE_NAME),
             'total_count' => $this->typePool->getType('Int')
         ];
         return $fields;

@@ -6,18 +6,19 @@
 
 namespace Magento\GraphQlCustomer\Model\Type\Handler;
 
-use Magento\Eav\Api\AttributeManagementInterface;
+use Magento\GraphQl\Model\EntityAttributeList;
 use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
 use Magento\GraphQl\Model\Type\Handler\Pool;
-use Magento\Eav\Setup\EavSetupFactory;
 
 /**
  * Define Customer GraphQL type
  */
 class Customer implements HandlerInterface
 {
+    const CUSTOMER_TYPE_NAME = 'Customer';
+
     /**
      * @var Pool
      */
@@ -29,9 +30,9 @@ class Customer implements HandlerInterface
     private $typeGenerator;
 
     /**
-     * @var AttributeManagementInterface
+     * @var EntityAttributeList
      */
-    private $management;
+    private $entityAttributeList;
 
     /**
      * @var TypeFactory
@@ -39,31 +40,21 @@ class Customer implements HandlerInterface
     private $typeFactory;
 
     /**
-     * EAV setup factory
-     *
-     * @var EavSetupFactory
-     */
-    private $eavSetupFactory;
-
-    /**
      * @param Pool $typePool
      * @param TypeGenerator $typeGenerator
-     * @param AttributeManagementInterface $management
+     * @param EntityAttributeList $entityAttributeList
      * @param TypeFactory $typeFactory
-     * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
         Pool $typePool,
         TypeGenerator $typeGenerator,
-        AttributeManagementInterface $management,
-        TypeFactory $typeFactory,
-        EavSetupFactory $eavSetupFactory
+        EntityAttributeList $entityAttributeList,
+        TypeFactory $typeFactory
     ) {
         $this->typePool = $typePool;
         $this->typeGenerator = $typeGenerator;
-        $this->management = $management;
+        $this->entityAttributeList = $entityAttributeList;
         $this->typeFactory = $typeFactory;
-        $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
@@ -71,11 +62,10 @@ class Customer implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = new \ReflectionClass($this);
         return $this->typeFactory->createObject(
             [
-                'name' => $reflector->getShortName(),
-                'fields' => $this->getFields($reflector->getShortName()),
+                'name' => self::CUSTOMER_TYPE_NAME,
+                'fields' => $this->getFields(self::CUSTOMER_TYPE_NAME),
             ]
         );
     }
@@ -89,12 +79,8 @@ class Customer implements HandlerInterface
      */
     private function getFields(string $typeName)
     {
-        $eavSetup = $this->eavSetupFactory->create();
-        $customerEntityCode = \Magento\Customer\Model\Customer::ENTITY;
-        $defaultAttributeSetId = $eavSetup->getDefaultAttributeSetId($customerEntityCode);
-
         $result = [];
-        $attributes = $this->management->getAttributes($customerEntityCode, $defaultAttributeSetId);
+        $attributes = $this->entityAttributeList->getDefaultEntityAttributes(\Magento\Customer\Model\Customer::ENTITY);
         foreach ($attributes as $attribute) {
             $result[$attribute->getAttributeCode()] = 'string';
         }
