@@ -536,7 +536,7 @@ class SessionManager implements SessionManagerInterface
     {
         foreach (array_keys($this->_getHosts()) as $host) {
             // Delete cookies with the same name for parent domains
-            if (strpos($this->sessionConfig->getCookieDomain(), $host) > 0) {
+            if ($this->sessionConfig->getCookieDomain() !== $host) {
                 $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
                 $metadata->setPath($this->sessionConfig->getCookiePath());
                 $metadata->setDomain($host);

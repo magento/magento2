@@ -10,9 +10,8 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
-use GraphQL\Type\Definition\ResolveInfo;
 use Magento\GraphQl\Model\ResolverInterface;
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Product field resolver, used for GraphQL request processing.
@@ -60,19 +59,19 @@ class Product implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolve(array $args, ResolveInfo $info)
+    public function resolve(array $args)
     {
         if (isset($args['sku'])) {
-            return $this->getProduct($args['sku']);
+            return $this->getProduct($args['sku']->getValue());
         } elseif (isset($args['id'])) {
-            return $this->getProductById($args['id']);
+            return $this->getProductById($args['id']->getValue());
         }
 
-        throw new InputException(__('Missing arguments for correct type resolution.'));
+        throw new GraphQlInputException(__('Missing arguments for correct type resolution.'));
     }
 
     /**
-     * Resolve product by Sku
+     * Get product data by Sku
      *
      * @param string $sku
      * @return array|null
@@ -89,7 +88,7 @@ class Product implements ResolverInterface
     }
 
     /**
-     * Resolve product by Id
+     * Get product data by Id
      *
      * @param int $productId
      * @return array|null
@@ -106,7 +105,7 @@ class Product implements ResolverInterface
     }
 
     /**
-     * Retrieve single product data in array format
+     * Transform single product data from object to in array format
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $productObject
      * @return array|null
