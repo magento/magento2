@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Argument\Find\Connective;
 use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 
 /**
- * Converts the input value for "find" to a Clause|Connective format
+ * Converts the input value for "find" to a @see Connective format
  */
 class ClauseConverter
 {
@@ -113,7 +113,7 @@ class ClauseConverter
     private function getCatalogProductFields()
     {
         $result = [];
-        $attributes = $this->management->getAttributes('catalog_product', 4);
+        $attributes = $this->management->getAttributes(\Magento\Catalog\Model\Product::ENTITY, 4);
         foreach ($attributes as $attribute) {
             if ((!$attribute->getIsUserDefined()) && !is_array($attribute)) {
                 $result[$attribute->getAttributeCode()] = 'String';

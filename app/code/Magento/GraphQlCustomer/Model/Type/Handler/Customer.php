@@ -4,19 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQlCatalog\Model\Type\Handler;
+namespace Magento\GraphQlCustomer\Model\Type\Handler;
 
 use Magento\Eav\Api\AttributeManagementInterface;
-use Magento\Framework\Exception\InputException;
 use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
 use Magento\GraphQl\Model\Type\Handler\Pool;
+use Magento\Eav\Setup\EavSetupFactory;
 
 /**
- * Define product's GraphQL type
+ * Define Customer GraphQL type
  */
-class Product implements HandlerInterface
+class Customer implements HandlerInterface
 {
     /**
      * @var Pool
@@ -39,50 +39,43 @@ class Product implements HandlerInterface
     private $typeFactory;
 
     /**
+     * EAV setup factory
+     *
+     * @var EavSetupFactory
+     */
+    private $eavSetupFactory;
+
+    /**
      * @param Pool $typePool
      * @param TypeGenerator $typeGenerator
      * @param AttributeManagementInterface $management
      * @param TypeFactory $typeFactory
+     * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
         Pool $typePool,
         TypeGenerator $typeGenerator,
         AttributeManagementInterface $management,
-        TypeFactory $typeFactory
+        TypeFactory $typeFactory,
+        EavSetupFactory $eavSetupFactory
     ) {
         $this->typePool = $typePool;
         $this->typeGenerator = $typeGenerator;
         $this->management = $management;
         $this->typeFactory = $typeFactory;
+        $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getType()
     {
         $reflector = new \ReflectionClass($this);
-        return  $this->typeFactory->createInterface(
+        return $this->typeFactory->createObject(
             [
                 'name' => $reflector->getShortName(),
                 'fields' => $this->getFields($reflector->getShortName()),
-                'resolveType' => function ($value) {
-                    $typeId = $value['type_id'];
-                    if (!in_array($typeId, ['simple', 'configurable'])) {
-                        throw new InputException(
-                            __('Type %1 does not implement Product interface', $typeId)
-                        );
-                    }
-                    $resolvedType = $this->typePool->getComplexType(ucfirst($value['type_id']) . 'Product');
-
-                    if (!$resolvedType) {
-                        throw new InputException(
-                            __('Type %1 not implemented', $value['type_id'])
-                        );
-                    }
-
-                    return $resolvedType;
-                }
             ]
         );
     }
@@ -96,27 +89,20 @@ class Product implements HandlerInterface
      */
     private function getFields(string $typeName)
     {
+        $eavSetup = $this->eavSetupFactory->create();
+        $customerEntityCode = \Magento\Customer\Model\Customer::ENTITY;
+        $defaultAttributeSetId = $eavSetup->getDefaultAttributeSetId($customerEntityCode);
+
         $result = [];
-        $attributes = $this->management->getAttributes(\Magento\Catalog\Model\Product::ENTITY, 4);
+        $attributes = $this->management->getAttributes($customerEntityCode, $defaultAttributeSetId);
         foreach ($attributes as $attribute) {
             $result[$attribute->getAttributeCode()] = 'string';
         }
 
-        $staticAttributes = $this->typeGenerator->getTypeData('CatalogDataProductInterface');
+        $staticAttributes = $this->typeGenerator->getTypeData('CustomerDataCustomerInterface');
         $result = array_merge($result, $staticAttributes);
 
-        unset($result['stock_item']);
-        unset($result['bundle_product_options']);
-        unset($result['downloadable_product_links']);
-        unset($result['downloadable_product_samples']);
-        unset($result['configurable_product_links']);
-        unset($result['quantity_and_stock_status']);
-        unset($result['sku_type']);
-
-        $videoContent = $result['media_gallery_entries'][0]['video_content'][0];
-        $content = $result['media_gallery_entries'][0]['content'][0];
-        $result['media_gallery_entries'][0]['video_content'] = $videoContent;
-        $result['media_gallery_entries'][0]['content'] = $content;
+        unset($result['extension_attribute']);
 
         $resolvedTypes = $this->typeGenerator->generate($typeName, $result);
         $fields = $resolvedTypes->config['fields'];

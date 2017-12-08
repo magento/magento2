@@ -10,7 +10,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 
-class Context extends \Magento\Framework\Model\AbstractExtensibleModel implements ContextInterface
+class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel implements ResolverContextInterface
 {
     /**#@+
      * Constants defined for type of context

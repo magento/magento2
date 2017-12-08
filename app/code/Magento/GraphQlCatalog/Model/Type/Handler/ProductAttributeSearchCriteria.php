@@ -11,6 +11,7 @@ use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
 use Magento\GraphQl\Model\Type\Handler\Pool;
+use Magento\Eav\Setup\EavSetupFactory;
 
 /**
  * Define ProductAttributeSearchCriteria's GraphQL type
@@ -33,18 +34,28 @@ class ProductAttributeSearchCriteria implements HandlerInterface
     private $typeFactory;
 
     /**
+     * EAV setup factory
+     *
+     * @var EavSetupFactory
+     */
+    private $eavSetupFactory;
+
+    /**
      * @param Pool $pool
      * @param AttributeManagementInterface $management
      * @param TypeFactory $typeFactory
+     * @param EavSetupFactory $eavSetupFactory
      */
     public function __construct(
         Pool $pool,
         AttributeManagementInterface $management,
-        TypeFactory $typeFactory
+        TypeFactory $typeFactory,
+        EavSetupFactory $eavSetupFactory
     ) {
         $this->pool = $pool;
         $this->management = $management;
         $this->typeFactory = $typeFactory;
+        $this->eavSetupFactory = $eavSetupFactory;
     }
 
     /**
@@ -70,8 +81,11 @@ class ProductAttributeSearchCriteria implements HandlerInterface
     {
         $reflector = new \ReflectionClass($this);
         $className = $reflector->getShortName();
+        $eavSetup = $this->eavSetupFactory->create();
+        $productEntityCode = \Magento\Catalog\Model\Product::ENTITY;
         $schema = [];
-        $attributes = $this->management->getAttributes('catalog_product', 4);
+        $defaultAttributeSetId = $eavSetup->getDefaultAttributeSetId($productEntityCode);
+        $attributes = $this->management->getAttributes($productEntityCode, $defaultAttributeSetId);
         foreach ($attributes as $attribute) {
             $schema[$attribute->getAttributeCode()] = $this->pool->getType('SearchCriteriaExpression');
         }

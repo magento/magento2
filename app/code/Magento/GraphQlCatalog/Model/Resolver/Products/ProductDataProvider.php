@@ -12,9 +12,9 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 
 /**
- * Product field resolver, used for GraphQL request processing.
+ * Product field data provider, used for GraphQL resolver processing.
  */
-class Product
+class ProductDataProvider
 {
     /**
      * @var ProductRepositoryInterface
@@ -27,7 +27,7 @@ class Product
     private $serviceOutputProcessor;
 
     /**
-     * @var MediaGalleryEntries
+     * @var MediaGalleryEntriesDataProvider
      */
     private $mediaGalleryResolver;
 
@@ -39,30 +39,19 @@ class Product
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param ServiceOutputProcessor $serviceOutputProcessor
-     * @param MediaGalleryEntries $mediaGalleryResolver
+     * @param MediaGalleryEntriesDataProvider $mediaGalleryResolver
      * @param SerializerInterface $jsonSerializer
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         ServiceOutputProcessor $serviceOutputProcessor,
-        MediaGalleryEntries $mediaGalleryResolver,
+        MediaGalleryEntriesDataProvider $mediaGalleryResolver,
         SerializerInterface $jsonSerializer
     ) {
         $this->productRepository = $productRepository;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->mediaGalleryResolver = $mediaGalleryResolver;
         $this->jsonSerializer = $jsonSerializer;
-    }
-
-    /**
-     * Resolve single product's data with sku
-     *
-     * @param string $sku
-     * @return array|null
-     */
-    public function resolve(string $sku)
-    {
-        return $this->getProduct($sku);
     }
 
     /**

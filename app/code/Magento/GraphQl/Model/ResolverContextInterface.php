@@ -9,9 +9,9 @@ namespace Magento\GraphQl\Model;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Context interface.
+ * Resolver Context interface.
  */
-interface ContextInterface extends ExtensibleDataInterface
+interface ResolverContextInterface extends ExtensibleDataInterface
 {
     /**
      * Get type of a customer

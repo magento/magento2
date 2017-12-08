@@ -81,6 +81,11 @@ class FieldConfig
                 ]);
             }
         }
-        return $this->instances[$fieldName];
+        //not all fields have arguments
+        if (isset($this->instances[$fieldName])) {
+            return $this->instances[$fieldName];
+        } else {
+            return [];
+        }
     }
 }
