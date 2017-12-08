@@ -94,7 +94,6 @@ define([
             loader.get('variables_modal.variables_modal.variables').hide();
         },
 
-
         /**
          * Open slideout dialog window.
          *
@@ -102,6 +101,7 @@ define([
          * @param {Object} selectedElement
          */
         openDialogWindow: function (variablesContent, selectedElement) {
+
             var html = utils.copy(variablesContent),
                 self = this;
 
@@ -109,7 +109,6 @@ define([
                 title: self.isEditMode ? $t('Edit variable...') : $t('Insert Variable...'),
                 type: 'slide',
                 buttons: self.getButtonsConfig(self.isEditMode),
-
                 closed: function (e, modal) {
                     modal.modal.remove();
                     registry.get(
@@ -162,13 +161,14 @@ define([
          *
          * @param {Boolean} isEditMode
          *
-         * @returns {Array|[*,*]}
+         * @returns {Array}
          */
         getButtonsConfig: function (isEditMode) {
 
             var self = this, buttonsData;
             buttonsData = [
                 {
+
                     text: $t('Cancel'),
                     'class': 'action-scalable cancel',
 
@@ -180,11 +180,14 @@ define([
                     }
                 },
                 {
+
                     text: isEditMode ? $t('Save'): $t('Insert Variable'),
                     'class': 'action-primary ' + (isEditMode ? '': 'disabled'),
                     'attr': {'id': 'insert_variable'},
 
-                    /** Insert Variable */
+                    /**
+                     * Insert Variable
+                     */
                     click: function () {
                         self.insertVariable(self.getVariableCode());
                     }
@@ -236,8 +239,8 @@ define([
             }
 
             if (wysiwygAdapter) {
-                wysiwygAdapter.execCommand('mceInsertContent', false,
-                    value);
+                wysiwygAdapter.execCommand('mceInsertContent', false, value);
+
                 if (this.selectedPlaceholder && jQuery(this.selectedPlaceholder).hasClass('magento-variable')) {
                     this.selectedPlaceholder.remove();
                 }
@@ -328,7 +331,7 @@ define([
          * Get element variable path.
          *
          * @param {Object} element
-         * @returns {string}
+         * @returns {String}
          */
         getElementVariablePath: function (element) {
             var type, code;
