@@ -5,32 +5,27 @@
         "sort-packages": true
     },
     "require": {
-        "allure-framework/allure-codeception": "dev-master#af40af5ae2b717618a42fe3e137d75878508c75d",
-        "codeception/codeception": "~2.3.4",
-        "consolidation/robo": "^1.0.0",
-        "henrikbjorn/lurker": "^1.2",
         "magento/magento2-functional-testing-framework": "1.0.0",
-        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
-        "vlucas/phpdotenv": "~2.4"
+        "php": "7.0.2|7.0.4|~7.0.6|~7.1.0"
     },
     "suggest": {
-        "magento/magento2-functional-test-module-backend": "1.0.0",
-        "magento/magento2-functional-test-module-catalog": "1.0.0",
-        "magento/magento2-functional-test-module-customer": "1.0.0",
-        "magento/magento2-functional-test-module-eav": "1.0.0",
-        "magento/magento2-functional-test-module-rule": "1.0.0",
-        "magento/magento2-functional-test-module-store": "1.0.0",
-        "magento/magento2-functional-test-module-ui": "1.0.0"
+        "magento/magento2-functional-test-module-backend": "1.0.0-dev",
+        "magento/magento2-functional-test-module-catalog": "1.0.0-dev",
+        "magento/magento2-functional-test-module-customer": "1.0.0-dev",
+        "magento/magento2-functional-test-module-eav": "1.0.0-dev",
+        "magento/magento2-functional-test-module-rule": "1.0.0-dev",
+        "magento/magento2-functional-test-module-store": "1.0.0-dev",
+        "magento/magento2-functional-test-module-ui": "1.0.0-dev"
     },
     "type": "magento2-test-module",
-    "version": "1.0.0",
+    "version": "1.0.0-dev",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "autoload": {
         "psr-4": {
-            "Magento\\": ["tests/functional/Magento", "generated/Magento"]
+            "Magento\\CatalogRule\\": ""
         }
     },
     "extra": {
