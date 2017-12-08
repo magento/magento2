@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Model\ResourceModel\StockSourceLink;
 
 use Magento\Framework\App\ResourceConnection;
@@ -34,7 +36,7 @@ class SaveMultiple
      * @param int $stockId
      * @return void
      */
-    public function execute(array $sourceIds, $stockId)
+    public function execute(array $sourceIds, int $stockId)
     {
         if (!count($sourceIds)) {
             return;

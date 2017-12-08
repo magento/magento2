@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Ui\Component\MassAction;
 
 use Magento\Ui\Component\MassAction\Filter as BaseFilter;
@@ -34,7 +36,7 @@ class Filter
      *
      * @return array
      */
-    public function getIds()
+    public function getIds(): array
     {
         $this->filter->applySelectionOnTargetProvider();
         $component = $this->filter->getComponent();
