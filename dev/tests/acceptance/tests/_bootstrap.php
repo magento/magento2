@@ -24,7 +24,7 @@ if (file_exists(PROJECT_ROOT . '/.env')) {
 defined('FW_BP') || define('FW_BP', PROJECT_ROOT . $RELATIVE_FW_PATH);
 
 // add the debug flag here
-$debug_mode = (bool)$_ENV['MFTF_DEBUG'] ?? false;
-if (!$debug_mode && extension_loaded('xdebug')) {
+$debug_mode = $_ENV['MFTF_DEBUG'] ?? false;
+if (!(bool)$debug_mode && extension_loaded('xdebug')) {
     xdebug_disable();
 }
