@@ -49,6 +49,7 @@
             <settings>
                 <filter>text</filter>
                 <label translate="true">Variable Name</label>
+                <sortable>true</sortable>
                 <sorting>asc</sorting>
             </settings>
         </column>
@@ -56,6 +57,7 @@
             <settings>
                 <filter>text</filter>
                 <label translate="true">Type</label>
+                <sortable>true</sortable>
                 <sorting>asc</sorting>
             </settings>
         </column>
