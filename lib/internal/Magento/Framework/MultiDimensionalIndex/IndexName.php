@@ -3,10 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Inventory\Indexer;
+declare(strict_types=1);
+
+namespace Magento\Framework\MultiDimensionalIndex;
 
 /**
  * Index Name object
+ *
  * @api
  */
 class IndexName
