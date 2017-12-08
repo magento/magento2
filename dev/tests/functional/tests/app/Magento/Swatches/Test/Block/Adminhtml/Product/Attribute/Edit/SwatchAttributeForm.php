@@ -18,9 +18,9 @@ class SwatchAttributeForm extends AttributeForm
      * Locator to open Color Picker for specified Option Row.
      *
      * @var string
-     * @SuppressWarnings(PHPMD)
      */
-    protected $colorPickerOpenLocator = '//tr[%s]/td[@class="swatches-visual-col col-default unavailable"]/*[@class="swatch_window"]';
+    protected $colorPickerOpenLocator = '//tr[%s]/td[@class="swatches-visual-col col-default unavailable"]'
+    . '/*[@class="swatch_window"]';
 
     /**
      * Locator to select "Choose a color" option in opened Color Picker Menu.
@@ -59,7 +59,7 @@ class SwatchAttributeForm extends AttributeForm
      * @param int $optionKey
      * @param string $color
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function applyOptionColor($optionKey, $color)
     {
