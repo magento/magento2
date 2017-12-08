@@ -177,7 +177,7 @@ class UpdateConfigurableProductWithSwatchFromShoppingCartTest extends Injectable
      */
     private function updateSwatchAttributes($productBeforeUpdate, $attributeIndex, $attribute, $colors)
     {
-        foreach ($productBeforeUpdate->getConfigurableAttributesData()['attributes_data'] as $key => $attributeData) {
+        foreach ($productBeforeUpdate->getConfigurableAttributesData()['attributes_data'] as $attributeData) {
             $attributeIndex->open();
             $filter = ['attribute_code' => $attributeData['attribute_code']];
             $attributeIndex->getGrid()->searchAndOpen($filter);
