@@ -57,7 +57,7 @@ class UpdateInventorySourceItem
             ->select()
             ->from(
                 $legacyStockItemTable,
-                [$defaultSourceId, 'qty', 'is_in_stock']
+                ['source_id' => $defaultSourceId, 'qty', 'is_in_stock']
             )
             ->join($productTable, 'entity_id = product_id', 'sku')
             ->where('website_id = ?', 0);
