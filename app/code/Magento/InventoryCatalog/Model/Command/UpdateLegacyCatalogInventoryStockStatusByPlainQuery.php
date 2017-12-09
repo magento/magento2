@@ -10,7 +10,6 @@ namespace Magento\InventoryCatalog\Model\Command;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryApi\Api\Data\ReservationInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 
 /**
@@ -60,9 +59,7 @@ class UpdateLegacyCatalogInventoryStockStatusByPlainQuery implements
         $connection->update(
             $this->resourceConnection->getTableName('cataloginventory_stock_status'),
             [
-                StockStatusInterface::QTY => new \Zend_Db_Expr(
-                    sprintf('%s%s', StockStatusInterface::QTY, $quantity)
-                )
+                StockStatusInterface::QTY => sprintf('%s + %s', StockStatusInterface::QTY, $quantity)
             ],
             [
                 StockStatusInterface::STOCK_ID . ' = ?' => $this->defaultSourceProvider->getId(),
