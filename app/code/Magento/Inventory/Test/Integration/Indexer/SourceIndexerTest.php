@@ -13,9 +13,6 @@ use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @magentoAppArea adminhtml
- */
 class SourceIndexerTest extends TestCase
 {
     /**

@@ -17,9 +17,6 @@ use Magento\InventoryApi\Api\ReservationsAppendInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @magentoAppArea adminhtml
- */
 class IsProductInStockTest extends TestCase
 {
     /**
