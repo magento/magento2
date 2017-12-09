@@ -23,10 +23,6 @@ $stockStatusRepository = $objectManager->create(StockStatusRepositoryInterface::
 /** @var StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory */
 $stockStatusCriteriaFactory = $objectManager->create(StockStatusCriteriaInterfaceFactory::class);
 
-$currentArea = $registry->registry('isSecureArea');
-$registry->unregister('isSecureArea');
-$registry->register('isSecureArea', true);
-
 /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
 $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
 $searchCriteria = $searchCriteriaBuilder->addFilter(
@@ -41,6 +37,10 @@ $products = $productRepository->getList($searchCriteria)->getItems();
  * In that case there is "if" which checks that SKU1, SKU2 and SKU3 still exists in database.
  */
 if (!empty($products)) {
+    $currentArea = $registry->registry('isSecureArea');
+    $registry->unregister('isSecureArea');
+    $registry->register('isSecureArea', true);
+
     foreach ($products as $product) {
         /** @var \Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory */
         $criteria = $stockStatusCriteriaFactory->create();
@@ -52,6 +52,7 @@ if (!empty($products)) {
 
         $productRepository->delete($product);
     }
+
+    $registry->unregister('isSecureArea');
+    $registry->register('isSecureArea', $currentArea);
 }
-$registry->unregister('isSecureArea');
-$registry->register('isSecureArea', $currentArea);
