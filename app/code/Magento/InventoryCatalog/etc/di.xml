@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\InventoryCatalog\Api\DefaultStockProviderInterface" type="Magento\InventoryCatalog\Model\DefaultStockProvider"/>
     <preference for="Magento\InventoryCatalog\Api\DefaultSourceProviderInterface" type="Magento\InventoryCatalog\Model\DefaultSourceProvider"/>
-    <preference for="Magento\InventoryCatalog\Model\Command\UpdateLegacyCatalogInventoryStockItemByPlainQueryInterface" type="Magento\InventoryCatalog\Model\Command\UpdateLegacyCatalogInventoryStockItemByPlainQuery"/>
-    <preference for="Magento\InventoryCatalog\Model\Command\UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface" type="Magento\InventoryCatalog\Model\Command\UpdateLegacyCatalogInventoryStockStatusByPlainQuery"/>
+    <preference for="Magento\InventoryCatalog\Model\UpdateLegacyStockItemByPlainQueryInterface" type="Magento\InventoryCatalog\Model\UpdateLegacyStockItemByPlainQuery"/>
+    <preference for="Magento\InventoryCatalog\Model\UpdateLegacyStockStatusByPlainQueryInterface" type="Magento\InventoryCatalog\Model\UpdateLegacyStockStatusByPlainQuery"/>
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
         <plugin name="prevent_default_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
@@ -17,12 +17,15 @@
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\AssignedToSalesChannelsStockPlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\ReservationsAppendInterface">
-        <plugin name="update_legacy_catalog_inventory_plugin" type="Magento\InventoryCatalog\Plugin\InventoryApi\Api\UpdateLegacyCatalogInventoryAtStockDeductionTime"/>
+        <plugin name="update_legacy_catalog_inventory_at_stock_deduction"
+                type="Magento\InventoryCatalog\Plugin\InventoryApi\UpdateLegacyCatalogInventoryAtStockDeductionPlugin"/>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
-        <plugin name="migrate_single_stock_data" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\UpdateSourceItemAtLegacyCatalogInventoryStockSettingTime"/>
+        <plugin name="update_source_item_at_legacy_catalog_inventory_stock_setting"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyCatalogInventoryStockSettingPlugin"/>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface">
-        <plugin name="migrate_single_stock_data_at_qty_counter" type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\UpdateSourceItemAtLegacyCatalogInventoryQtyCounter"/>
+        <plugin name="update_source_item_at_legacy_catalog_inventory_qty_counter"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyCatalogInventoryQtyCounterPlugin"/>
     </type>
 </config>

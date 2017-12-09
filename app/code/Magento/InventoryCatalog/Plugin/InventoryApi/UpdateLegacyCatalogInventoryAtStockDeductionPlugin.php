@@ -5,36 +5,36 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\InventoryApi\Api;
+namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 use Magento\InventoryApi\Api\ReservationsAppendInterface;
-use Magento\InventoryCatalog\Model\Command\UpdateLegacyCatalogInventoryStockItemByPlainQueryInterface;
-use Magento\InventoryCatalog\Model\Command\UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface;
+use Magento\InventoryCatalog\Model\UpdateLegacyStockItemByPlainQueryInterface;
+use Magento\InventoryCatalog\Model\UpdateLegacyStockStatusByPlainQueryInterface;
 
 /**
  * Plugin help to fill the legacy catalog inventory tables cataloginventory_stock_status and
  * cataloginventory_stock_item to don't break the backward compatible.
  */
-class UpdateLegacyCatalogInventoryAtStockDeductionTime
+class UpdateLegacyCatalogInventoryAtStockDeductionPlugin
 {
     /**
-     * @var UpdateLegacyCatalogInventoryStockItemByPlainQueryInterface
+     * @var UpdateLegacyStockItemByPlainQueryInterface
      */
     private $updateLegacyStockItem;
 
     /**
-     * @var UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface
+     * @var UpdateLegacyStockStatusByPlainQueryInterface
      */
     private $updateLegacyStockStatus;
 
     /**
-     * @param UpdateLegacyCatalogInventoryStockItemByPlainQueryInterface $updateLegacyStockItem
-     * @param UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface $updateLegacyStockStatus
+     * @param UpdateLegacyStockItemByPlainQueryInterface $updateLegacyStockItem
+     * @param UpdateLegacyStockStatusByPlainQueryInterface $updateLegacyStockStatus
      */
     public function __construct(
-        UpdateLegacyCatalogInventoryStockItemByPlainQueryInterface $updateLegacyStockItem,
-        UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface $updateLegacyStockStatus
+        UpdateLegacyStockItemByPlainQueryInterface $updateLegacyStockItem,
+        UpdateLegacyStockStatusByPlainQueryInterface $updateLegacyStockStatus
     ) {
         $this->updateLegacyStockItem = $updateLegacyStockItem;
         $this->updateLegacyStockStatus = $updateLegacyStockStatus;

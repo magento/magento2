@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\Command;
+namespace Magento\InventoryCatalog\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
@@ -13,11 +13,9 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 
 /**
- * Legacy update cataloginventory_stock_status by plain MySql query.
- * Use for skip save by \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::save
+ * @inheritdoc
  */
-class UpdateLegacyCatalogInventoryStockStatusByPlainQuery implements
-    UpdateLegacyCatalogInventoryStockStatusByPlainQueryInterface
+class UpdateLegacyStockStatusByPlainQuery implements UpdateLegacyStockStatusByPlainQueryInterface
 {
     /**
      * @var ResourceConnection
@@ -50,7 +48,7 @@ class UpdateLegacyCatalogInventoryStockStatusByPlainQuery implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute(string $sku, float $quantity)
     {

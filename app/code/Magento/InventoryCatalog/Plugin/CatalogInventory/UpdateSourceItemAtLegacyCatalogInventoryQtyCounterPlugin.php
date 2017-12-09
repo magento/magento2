@@ -5,22 +5,22 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel;
+namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\CatalogInventory\Model\ResourceModel\Stock;
 
 /**
  * Class provides around Plugin on Magento\CatalogInventory\Model\ResourceModel::correctItemsQty
  * to update data in Inventory source item
  */
-class UpdateSourceItemAtLegacyCatalogInventoryQtyCounter
+class UpdateSourceItemAtLegacyCatalogInventoryQtyCounterPlugin
 {
     /**
      * @var ProductRepositoryInterface
@@ -77,18 +77,22 @@ class UpdateSourceItemAtLegacyCatalogInventoryQtyCounter
     }
 
     /**
-     * @param Stock $subject
+     * @param QtyCounterInterface $subject
      * @param callable $proceed
      * @param int[] $items
      * @param int $websiteId
      * @param string $operator +/-
-     *
      * @return void
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundCorrectItemsQty(Stock $subject, callable $proceed, array $items, $websiteId, $operator)
-    {
+    public function aroundCorrectItemsQty(
+        QtyCounterInterface $subject,
+        callable $proceed,
+        array $items,
+        $websiteId,
+        $operator
+    ) {
         if (empty($items)) {
             return;
         }
@@ -98,29 +102,7 @@ class UpdateSourceItemAtLegacyCatalogInventoryQtyCounter
 
         try {
             $proceed($items, $websiteId, $operator);
-
-            $productsData = $this->getProductData($items);
-
-            $searchCriteria = $this->searchCriteriaBuilder->addFilter(
-                SourceItemInterface::SKU,
-                array_keys($productsData),
-                'in'
-            )->addFilter(
-                SourceItemInterface::SOURCE_ID,
-                $this->defaultSourceProvider->getId()
-            )->create();
-
-            $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
-            $sourceItemsToSave = array_map(
-                function (SourceItemInterface $item) use ($productsData, $operator) {
-                    $item->setQuantity($item->getQuantity() + (float)($operator . $productsData[$item->getSku()]));
-
-                    return $item;
-                },
-                $sourceItems
-            );
-
-            $this->sourceItemsSave->execute($sourceItemsToSave);
+            $this->updateSourceItemAtLegacyCatalogInventoryQtyCounter($items, $operator);
 
             $connection->commit();
         } catch (\Exception $e) {
@@ -130,20 +112,49 @@ class UpdateSourceItemAtLegacyCatalogInventoryQtyCounter
     }
 
     /**
-     * @param int[] $items
-     *
+     * @param int[] $productQuantitiesByProductId
+     * @param string $operator
+     * @return void
+     */
+    private function updateSourceItemAtLegacyCatalogInventoryQtyCounter(
+        array $productQuantitiesByProductId,
+        $operator
+    ) {
+        $productQuantitiesBySku = $this->getProductQuantitiesBySku($productQuantitiesByProductId);
+
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter(
+            SourceItemInterface::SKU,
+            array_keys($productQuantitiesBySku),
+            'in'
+        )->addFilter(
+            SourceItemInterface::SOURCE_ID,
+            $this->defaultSourceProvider->getId()
+        )->create();
+
+        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
+        foreach ($sourceItems as $sourceItem) {
+            $sourceItem->setQuantity(
+                $sourceItem->getQuantity() + (float)($operator . $productQuantitiesBySku[$sourceItem->getSku()])
+            );
+        }
+        $this->sourceItemsSave->execute($sourceItems);
+    }
+
+    /**
+     * @param int[] $productQuantitiesByProductId
      * @return array
      */
-    private function getProductData(array $items)
+    private function getProductQuantitiesBySku(array $productQuantitiesByProductId): array
     {
-        $productData = [];
-
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter('entity_id', array_keys($items), 'in')->create();
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('entity_id', array_keys($productQuantitiesByProductId), 'in')
+            ->create();
         $products = $this->productRepository->getList($searchCriteria)->getItems();
-        foreach ($products as $product) {
-            $productData[$product->getSku()] = $items[$product->getId()];
-        }
 
-        return $productData;
+        $productQuantitiesBySku = [];
+        foreach ($products as $product) {
+            $productQuantitiesBySku[$product->getSku()] = $productQuantitiesByProductId[$product->getId()];
+        }
+        return $productQuantitiesBySku;
     }
 }

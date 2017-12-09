@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\Command;
+namespace Magento\InventoryCatalog\Model;
 
 /**
- * Update Legacy catalocinventory_stock_item database data
+ * Update Legacy catalocinventory_stock_status database data
  */
-interface UpdateLegacyCatalogInventoryStockItemByPlainQueryInterface
+interface UpdateLegacyStockStatusByPlainQueryInterface
 {
     /**
-     * Execute Plain MySql query on catalaginventory_stock_item
+     * Execute Plain MySql query on catalaginventory_stock_status
      *
      * @param string $sku
      * @param float $quantity
