@@ -59,7 +59,7 @@ class UpdateLegacyCatalogInventoryStockItemByPlainQuery implements
         $connection->update(
             $this->resourceConnection->getTableName('cataloginventory_stock_item'),
             [
-                StockItemInterface::QTY => sprintf('%s + %s', StockItemInterface::QTY, $quantity),
+                StockItemInterface::QTY => new \Zend_Db_Expr(sprintf('%s + %s', StockItemInterface::QTY, $quantity)),
             ],
             [
                 StockItemInterface::STOCK_ID . ' = ?' => $this->defaultSourceProvider->getId(),
