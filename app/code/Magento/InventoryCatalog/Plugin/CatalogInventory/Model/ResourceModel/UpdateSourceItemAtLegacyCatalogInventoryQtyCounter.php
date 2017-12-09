@@ -14,6 +14,7 @@ use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock;
 
 /**
  * Class provides around Plugin on Magento\CatalogInventory\Model\ResourceModel::correctItemsQty
@@ -76,7 +77,7 @@ class UpdateSourceItemAtLegacyCatalogInventoryQtyCounter
     }
 
     /**
-     * @param $subject
+     * @param Stock $subject
      * @param callable $proceed
      * @param int[] $items
      * @param int $websiteId
@@ -86,8 +87,12 @@ class UpdateSourceItemAtLegacyCatalogInventoryQtyCounter
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundCorrectItemsQty($subject, callable $proceed, array $items, $websiteId, $operator)
+    public function aroundCorrectItemsQty(Stock $subject, callable $proceed, array $items, $websiteId, $operator)
     {
+        if (empty($items)) {
+            return;
+        }
+
         $connection = $this->resourceConnection->getConnection();
         $connection->beginTransaction();
 
