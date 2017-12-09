@@ -17,15 +17,12 @@
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\AssignedToSalesChannelsStockPlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\ReservationsAppendInterface">
-        <plugin name="update_legacy_catalog_inventory_at_stock_deduction"
-                type="Magento\InventoryCatalog\Plugin\InventoryApi\UpdateLegacyCatalogInventoryAtStockDeductionPlugin"/>
-    </type>
-    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
-        <plugin name="update_source_item_at_legacy_catalog_inventory_stock_setting"
-                type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyCatalogInventoryStockSettingPlugin"/>
+        <plugin name="update_legacy_catalog_inventory_at_stock_deduction" type="Magento\InventoryCatalog\Plugin\InventoryApi\UpdateLegacyCatalogInventoryAtStockDeductionPlugin"/>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface">
-        <plugin name="update_source_item_at_legacy_catalog_inventory_qty_counter"
-                type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyCatalogInventoryQtyCounterPlugin"/>
+        <plugin name="update_source_item_at_legacy_qty_counter" type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyQtyCounterPlugin"/>
+    </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
+        <plugin name="update_source_item_at_legacy_stock_setting" type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyStockSettingPlugin"/>
     </type>
 </config>

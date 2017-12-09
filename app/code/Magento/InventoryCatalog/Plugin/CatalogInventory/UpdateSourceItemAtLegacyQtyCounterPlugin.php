@@ -20,7 +20,7 @@ use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
  * Class provides around Plugin on Magento\CatalogInventory\Model\ResourceModel::correctItemsQty
  * to update data in Inventory source item
  */
-class UpdateSourceItemAtLegacyCatalogInventoryQtyCounterPlugin
+class UpdateSourceItemAtLegacyQtyCounterPlugin
 {
     /**
      * @var ProductRepositoryInterface
