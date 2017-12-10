@@ -7,6 +7,12 @@ use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Module\Manager;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
@@ -44,4 +50,27 @@ for ($i = 1; $i <= 3; $i++) {
         ->setStockData($stockData['SKU-' . $i])
         ->setStatus(Status::STATUS_ENABLED);
     $productRepository->save($product);
+}
+
+/** @var Manager $moduleManager */
+$moduleManager = Bootstrap::getObjectManager()->get(Manager::class);
+// soft dependency in tests because we don't have possibility replace fixture from different modules
+if ($moduleManager->isEnabled('Magento_InventoryCatalog')) {
+    /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+    $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+    /** @var DefaultStockProviderInterface $defaultStockProvider */
+    $defaultStockProvider = $objectManager->get(DefaultStockProviderInterface::class);
+    /** @var SourceItemRepositoryInterface $sourceItemRepository */
+    $sourceItemRepository = $objectManager->get(SourceItemRepositoryInterface::class);
+    /** @var SourceItemsDeleteInterface $sourceItemsDelete */
+    $sourceItemsDelete = $objectManager->get(SourceItemsDeleteInterface::class);
+
+    $searchCriteria = $searchCriteriaBuilder
+        ->addFilter(SourceItemInterface::SKU, ['SKU-1', 'SKU-2', 'SKU-3'], 'in')
+        ->addFilter(SourceItemInterface::SOURCE_ID, $defaultStockProvider->getId())
+        ->create();
+    $sourceItems = $sourceItemRepository->getList($searchCriteria)->getItems();
+    if (count($sourceItems)) {
+        $sourceItemsDelete->execute($sourceItems);
+    }
 }
