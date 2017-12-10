@@ -55,6 +55,7 @@ class SourcesTest extends TestCase
      */
     public function testExportWithoutAnyFiltering()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/274');
         $this->exporter->setParameters([]);
         $this->exporter->export();
 
