@@ -9,7 +9,6 @@ namespace Magento\Inventory\Controller\Adminhtml\Stock;
 
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\EntityManager\EventManager;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
@@ -71,9 +70,7 @@ class StockSaveProcessor
      *
      * @param int|null $stockId
      * @param RequestInterface $request
-     *
      * @return int
-     * @throws LocalizedException
      */
     public function process($stockId, RequestInterface $request): int
     {
