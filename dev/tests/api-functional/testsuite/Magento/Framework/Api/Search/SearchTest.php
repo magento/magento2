@@ -37,7 +37,7 @@ class SearchTest extends WebapiAbstract
                             ],
                             [
                                 'field' => 'visibility',
-                                'value' => [3, 4],
+                                'value' => 4,
                                 'condition_type' => 'eq'
                             ]
                         ]
