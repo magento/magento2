@@ -42,7 +42,7 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
             'Magento_Checkout/js/action/select-shipping-method': jasmine.createSpy(),
             'Magento_Checkout/js/model/shipping-rate-registry': jasmine.createSpy(),
             'Magento_Checkout/js/action/set-shipping-information': jasmine.createSpy(),
-            'Magento_Checkout/js/model/step-navigator': jasmine.createSpyObj('navigator', ['registerStep', 'steps']),
+            'Magento_Checkout/js/model/step-navigator': jasmine.createSpyObj('navigator', ['registerStep']),
             'Magento_Ui/js/modal/modal': jasmine.createSpy('modal').and.returnValue(modalStub),
             'Magento_Checkout/js/model/checkout-data-resolver': jasmine.createSpyObj(
                 'dataResolver',
