@@ -248,7 +248,7 @@ abstract class AbstractAction
             }
         }
         
-        $this->cacheContext->registerEntities(Product::CACHE_TAG, $productIds);
+        $this->cacheContext->registerEntities(Product::CACHE_TAG, $processIds);
         $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
         
         return $this;
