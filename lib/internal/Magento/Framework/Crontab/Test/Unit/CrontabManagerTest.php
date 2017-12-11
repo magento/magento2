@@ -343,10 +343,10 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
                 ],
                 'content' => '* * * * * /bin/php /var/www/cron.php',
                 'contentToSave' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_START . PHP_EOL
+                    . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . md5(BP) . PHP_EOL
                     . '* * * * * ' . PHP_BINARY . ' /var/www/magento2/run.php'
                     . ' %% cron:run | grep -v \"Ran \'jobs\' by schedule\"' . PHP_EOL
-                    . CrontabManagerInterface::TASKS_BLOCK_END . PHP_EOL,
+                    . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . md5(BP) . PHP_EOL,
                 ],
         ];
     }
