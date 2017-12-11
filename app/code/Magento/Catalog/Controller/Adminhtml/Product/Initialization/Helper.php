@@ -438,7 +438,7 @@ class Helper
                     }
                 );
             }
-            $customOption = $this->customOptionFactory()->create(
+            $customOption = $this->customOptionFactory->create(
                 ['data' => $customOptionData]
             );
             $customOption->setProductSku($product->getSku());
