@@ -47,6 +47,7 @@ define([
         /** @inheritdoc */
         initialize: function () {
             var self = this;
+
             this._super();
             checkoutDataResolver.resolvePaymentMethod();
 
