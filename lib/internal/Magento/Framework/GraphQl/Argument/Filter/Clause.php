@@ -3,9 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\GraphQl\Argument\Find;
+namespace Magento\Framework\GraphQl\Argument\Filter;
 
-use Magento\Framework\GraphQl\Argument\Find\Clause\ReferenceType;
+use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceType;
 
 /**
  * Class clause refers to a closure in find argument.

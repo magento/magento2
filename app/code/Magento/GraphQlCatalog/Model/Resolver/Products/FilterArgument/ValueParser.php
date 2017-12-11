@@ -3,9 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GraphQlCatalog\Model\Resolver\Products\FindArgument;
+namespace Magento\GraphQlCatalog\Model\Resolver\Products\FilterArgument;
 
-use Magento\Framework\GraphQl\Argument\Find\FindArgumentValueFactory;
+use Magento\Framework\GraphQl\Argument\Filter\FilterArgumentValueFactory;
 use Magento\Framework\GraphQl\Argument\ValueParserInterface;
 
 /**
@@ -16,19 +16,19 @@ class ValueParser implements ValueParserInterface
     /** @var AstConverter */
     private $clauseConverter;
 
-    /** @var FindArgumentValueFactory */
-    private $findArgumentValueFactory;
+    /** @var FilterArgumentValueFactory */
+    private $filterArgumentValueFactory;
 
     /**
      * @param AstConverter $clauseConverter
-     * @param FindArgumentValueFactory $findArgumentValueFactory
+     * @param FilterArgumentValueFactory $filterArgumentValueFactory
      */
     public function __construct(
         AstConverter $clauseConverter,
-        FindArgumentValueFactory $findArgumentValueFactory
+        FilterArgumentValueFactory $filterArgumentValueFactory
     ) {
         $this->clauseConverter = $clauseConverter;
-        $this->findArgumentValueFactory = $findArgumentValueFactory;
+        $this->filterArgumentValueFactory = $filterArgumentValueFactory;
     }
 
     /**
@@ -37,6 +37,6 @@ class ValueParser implements ValueParserInterface
     public function parse($value)
     {
         $filters = $this->clauseConverter->getFilterFromAst(\Magento\Catalog\Model\Product::ENTITY, $value);
-        return $this->findArgumentValueFactory->create($filters);
+        return $this->filterArgumentValueFactory->create($filters);
     }
 }

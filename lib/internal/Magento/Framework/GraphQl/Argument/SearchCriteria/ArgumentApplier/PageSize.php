@@ -7,7 +7,7 @@
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria\ArgumentApplier;
 
 use Magento\Framework\GraphQl\ArgumentInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\GraphQl\Argument\SearchCriteria\ArgumentApplierInterface;
 use Magento\Framework\Phrase;
 

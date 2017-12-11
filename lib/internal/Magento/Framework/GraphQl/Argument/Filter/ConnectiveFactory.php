@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\GraphQl\Argument\Find;
+namespace Magento\Framework\GraphQl\Argument\Filter;
 
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory for @see FindArgumentValue class
+ * Factory for @see Connective class
  */
-class FindArgumentValueFactory
+class ConnectiveFactory
 {
     /**
      * @var ObjectManagerInterface
@@ -25,19 +25,22 @@ class FindArgumentValueFactory
     ) {
         $this->objectManager = $objectManager;
     }
-
     /**
-     * Create a FindArgumentValue class
+     * Create a connective class
      *
-     * @param Connective $connective
-     * @return FindArgumentValue
+     * @param array $conditions
+     * @param string|null $operator
+     * @return Connective
      */
-    public function create(Connective $connective)
-    {
+    public function create(
+        array $conditions,
+        string $operator = null
+    ) {
         return $this->objectManager->create(
-            FindArgumentValue::class,
+            Connective::class,
             [
-                'value' => $connective,
+                'conditions' => $conditions,
+                'operator' => new Operator($operator)
             ]
         );
     }

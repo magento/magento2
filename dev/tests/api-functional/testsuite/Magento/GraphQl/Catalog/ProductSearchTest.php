@@ -24,7 +24,7 @@ class ProductSearchTest extends GraphQlAbstract
             = <<<QUERY
 {
     products(
-        find:
+        filter:
         {
             price:{gt: "5", lt: "50"}
             or:
@@ -91,7 +91,7 @@ QUERY;
             = <<<QUERY
 {
     products(
-        find:
+        filter:
         {
             price:{gt: "5", lt: "50"}
             or:
@@ -163,7 +163,7 @@ QUERY;
             = <<<QUERY
 {
     products(
-        find:
+        filter:
         {
             price:{gt: "5", lt: "50"}
             or:
@@ -228,7 +228,7 @@ QUERY;
             = <<<QUERY
 {
   products(
-        find:
+        filter:
         {
             price:{gt: "5", lt: "60"}
             or:
@@ -302,7 +302,7 @@ QUERY;
             = <<<QUERY
 {
 products(
-    find:
+    filter:
     {
         special_price:{lt:"15"}
         price:{lt:"50"}
@@ -358,7 +358,7 @@ QUERY;
             = <<<QUERY
 {
     products(
-        find:
+        filter:
         {
             price:{eq:"10"}
         }

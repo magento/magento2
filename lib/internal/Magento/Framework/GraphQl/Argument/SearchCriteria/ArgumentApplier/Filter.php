@@ -7,17 +7,17 @@
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria\ArgumentApplier;
 
 use Magento\Framework\GraphQl\ArgumentInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\GraphQl\Argument\Find\FindArgumentValueInterface;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\GraphQl\Argument\Filter\FilterArgumentValueInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Argument\SearchCriteria\ArgumentApplierInterface;
 use Magento\Framework\GraphQl\Argument\SearchCriteria\FilterGroupFactory;
 use Magento\Framework\Phrase;
 
 /**
- * Class for Find Argument
+ * Class for Filter Argument
  */
-class Find implements ArgumentApplierInterface
+class Filter implements ArgumentApplierInterface
 {
     /**
      * @var FilterGroupFactory
@@ -39,11 +39,11 @@ class Find implements ArgumentApplierInterface
     public function applyArgument(SearchCriteriaInterface $searchCriteria, ArgumentInterface $argument)
     {
         $filter = $argument->getValue();
-        if ($filter instanceof FindArgumentValueInterface) {
+        if ($filter instanceof FilterArgumentValueInterface) {
             $searchCriteria->setFilterGroups($this->filterGroupFactory->create($filter));
         } else {
             throw new \Magento\Framework\Exception\RuntimeException(
-                new Phrase('Argument %1 not of type %2', [$argument->getName(), FindArgumentValueInterface::class])
+                new Phrase('Argument %1 not of type %2', [$argument->getName(), FilterArgumentValueInterface::class])
             );
         }
     }

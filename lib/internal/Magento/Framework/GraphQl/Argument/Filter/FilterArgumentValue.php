@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\GraphQl\Argument\Find;
+namespace Magento\Framework\GraphQl\Argument\Filter;
 
 /**
  * Class that holds the find structure are value or connective for easy parsing
  */
-class FindArgumentValue implements FindArgumentValueInterface
+class FilterArgumentValue implements FilterArgumentValueInterface
 {
     /**
      * @var Connective

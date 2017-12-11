@@ -6,12 +6,12 @@
 
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria;
 
-use Magento\Framework\GraphQl\Argument\Find\Clause;
-use Magento\Framework\GraphQl\Argument\Find\Connective;
-use Magento\Framework\GraphQl\Argument\Find\Operator;
+use Magento\Framework\GraphQl\Argument\Filter\Clause;
+use Magento\Framework\GraphQl\Argument\Filter\Connective;
+use Magento\Framework\GraphQl\Argument\Filter\Operator;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
-use Magento\Framework\GraphQl\Argument\Find\FindArgumentValueInterface;
+use Magento\Framework\GraphQl\Argument\Filter\FilterArgumentValueInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Phrase;
 
@@ -41,7 +41,7 @@ class FilterGroupFactory
     /**
      * Create a filter groups from an AST
      *
-     * @param FindArgumentValueInterface $arguments
+     * @param FilterArgumentValueInterface $arguments
      * @return \Magento\Framework\Api\Search\FilterGroup[]
      * @throws GraphQlInputException
      */

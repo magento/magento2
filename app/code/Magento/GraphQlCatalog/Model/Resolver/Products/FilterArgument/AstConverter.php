@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GraphQlCatalog\Model\Resolver\Products\FindArgument;
+namespace Magento\GraphQlCatalog\Model\Resolver\Products\FilterArgument;
 
 use Magento\GraphQl\Model\EntityAttributeList;
-use Magento\Framework\GraphQl\Argument\Find\Clause\ReferenceTypeFactory;
-use Magento\Framework\GraphQl\Argument\Find\Clause\ReferenceType;
-use Magento\Framework\GraphQl\Argument\Find\ClauseFactory;
-use Magento\Framework\GraphQl\Argument\Find\ConnectiveFactory;
-use Magento\Framework\GraphQl\Argument\Find\Connective;
+use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceTypeFactory;
+use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceType;
+use Magento\Framework\GraphQl\Argument\Filter\ClauseFactory;
+use Magento\Framework\GraphQl\Argument\Filter\ConnectiveFactory;
+use Magento\Framework\GraphQl\Argument\Filter\Connective;
 use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 
 /**

@@ -24,7 +24,8 @@
                     <item name="type" xsi:type="string">Products</item>
                     <item name="resolver" xsi:type="object">Magento\GraphQlCatalog\Model\Resolver\Products</item>
                     <item name="args" xsi:type="array">
-                        <item name="find!" xsi:type="string">ProductAttributeSearchCriteria</item>
+                        <item name="search" xsi:type="string">String</item>
+                        <item name="filter" xsi:type="string">ProductAttributeSearchCriteria</item>
                         <item name="pageSize" xsi:type="string">Int</item>
                         <item name="currentPage" xsi:type="string">Int</item>
                         <item name="sort" xsi:type="string">ProductSort</item>
@@ -37,8 +38,8 @@
         <arguments>
             <argument name="config" xsi:type="array">
                 <item name="products" xsi:type="array">
-                    <item name="find" xsi:type="array">
-                        <item name="valueParser" xsi:type="object">Magento\GraphQlCatalog\Model\Resolver\Products\FindArgument\ValueParser</item>
+                    <item name="filter" xsi:type="array">
+                        <item name="valueParser" xsi:type="object">Magento\GraphQlCatalog\Model\Resolver\Products\FilterArgument\ValueParser</item>
                     </item>
                     <item name="pageSize" xsi:type="array">
                         <item name="defaultValue" xsi:type="string">20</item>

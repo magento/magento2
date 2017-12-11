@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\GraphQl\Argument\Find\Clause;
+namespace Magento\Framework\GraphQl\Argument\Filter\Clause;
 
 /**
  * Class that hold relation between entities through fields

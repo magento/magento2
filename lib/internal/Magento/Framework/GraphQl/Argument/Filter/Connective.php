@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\GraphQl\Argument\Find;
+namespace Magento\Framework\GraphQl\Argument\Filter;
 
 /**
  * Class Represents logical connective whenever a condition will nest/branch.

@@ -1,0 +1,67 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\GraphQlCatalog\Model\Resolver\Products;
+
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\GraphQlCatalog\Model\Resolver\Products\SearchResultFactory;
+
+/**
+ * Retrieve filtered product data based off given search criteria in a format that GraphQL can interpret.
+ */
+class FilterDataProvider
+{
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var SearchResultFactory
+     */
+    private $searchResultFactory;
+
+    /**
+     * @var ProductDataProvider
+     */
+    private $productDataProvider;
+
+    /**
+     * @param ProductRepositoryInterface $productRepository
+     * @param \Magento\GraphQlCatalog\Model\Resolver\Products\SearchResultFactory $searchResultFactory
+     * @param ProductDataProvider $productDataProvider
+     */
+    public function __construct(
+        ProductRepositoryInterface $productRepository,
+        SearchResultFactory $searchResultFactory,
+        ProductDataProvider $productDataProvider
+    ) {
+        $this->productRepository = $productRepository;
+        $this->searchResultFactory = $searchResultFactory;
+        $this->productDataProvider = $productDataProvider;
+    }
+
+    /**
+     * Filter catalog product data based off given search criteria
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return SearchResult
+     */
+    public function getResult(SearchCriteriaInterface $searchCriteria)
+    {
+        $products = $this->productRepository->getList($searchCriteria);
+        $productArray = [];
+        /** @var ProductInterface $product */
+        foreach ($products->getItems() as $product) {
+            $productArray[] = $this->productDataProvider->getProduct($product->getSku());
+        }
+        return $this->searchResultFactory->create(
+            ['productSearchResult' => $products, 'productSearchArray' => $productArray]
+        );
+    }
+}

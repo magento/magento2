@@ -93,13 +93,16 @@ class SchemaGenerator implements SchemaGeneratorInterface
                     $argumentValue = isset($args[$argumentName])
                         ? $args[$argumentName]
                         : $declaredArgument->getDefaultValue();
-                    if ($declaredArgument->getValueParser()) {
+                    if ($declaredArgument->getValueParser() && $argumentValue !== null) {
                         $argumentValue = $declaredArgument->getValueParser()->parse($argumentValue);
                     }
-                    $fieldArguments[$argumentName] = $this->argumentFactory->create(
-                        $argumentName,
-                        $argumentValue
-                    );
+
+                    if ($argumentValue !== null) {
+                        $fieldArguments[$argumentName] = $this->argumentFactory->create(
+                            $argumentName,
+                            $argumentValue
+                        );
+                    }
                 }
 
                 return $resolver->resolve($fieldArguments, $context);

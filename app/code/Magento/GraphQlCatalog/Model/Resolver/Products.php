@@ -6,12 +6,14 @@
 
 namespace Magento\GraphQlCatalog\Model\Resolver;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\GraphQlCatalog\Model\Resolver\Products\ProductDataProvider;
+use Magento\Framework\Api\Search\SearchCriteriaInterfaceFactory;
+use Magento\GraphQl\Model\ResolverContextInterface;
 use Magento\GraphQl\Model\ResolverInterface;
 use Magento\Framework\GraphQl\Argument\SearchCriteria\Builder;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\GraphQl\Model\ResolverContextInterface;
+use Magento\GraphQl\Model\ContextInterface;
+use Magento\GraphQlCatalog\Model\Resolver\Products\FilterDataProvider;
+use Magento\GraphQlCatalog\Model\Resolver\Products\SearchDataProvider;
 
 /**
  * Products field resolver, used for GraphQL request processing.
@@ -19,33 +21,32 @@ use Magento\GraphQl\Model\ResolverContextInterface;
 class Products implements ResolverInterface
 {
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @var Builder
      */
     private $searchCriteriaBuilder;
 
     /**
-     * @var ProductDataProvider
+     * @var SearchDataProvider
      */
-    private $productDataProvider;
+    private $searchDataProvider;
 
     /**
-     * @param ProductRepositoryInterface $productRepository
+     * @var FilterDataProvider
+     */
+    private $filterDataProvider;
+
+    /**
      * @param Builder $searchCriteriaBuilder
-     * @param ProductDataProvider $productDataProvider
+     * @param SearchDataProvider $searchDataProvider
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
         Builder $searchCriteriaBuilder,
-        ProductDataProvider $productDataProvider
+        SearchDataProvider $searchDataProvider,
+        FilterDataProvider $filterDataProvider
     ) {
-        $this->productRepository = $productRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->productDataProvider = $productDataProvider;
+        $this->searchDataProvider = $searchDataProvider;
+        $this->filterDataProvider = $filterDataProvider;
     }
 
     /**
@@ -54,28 +55,28 @@ class Products implements ResolverInterface
     public function resolve(array $args, ResolverContextInterface $context)
     {
         $searchCriteria = $this->searchCriteriaBuilder->build($args);
-        $itemsResults = $this->productRepository->getList($searchCriteria);
 
-        $items = $itemsResults->getItems();
-
-        $products = [];
-        foreach ($items as $item) {
-            $products[] = $this->productDataProvider->getProduct($item->getSku());
+        if (isset($args['search'])) {
+            $searchResult = $this->searchDataProvider->getResult($searchCriteria);
+        } else {
+            $searchResult = $this->filterDataProvider->getResult($searchCriteria);
         }
+        $itemsResult = $searchResult->getObject();
+        $products = $searchResult->getArray();
 
-        $maxPages = ceil($itemsResults->getTotalCount() / $searchCriteria->getPageSize());
-        if ($searchCriteria->getCurrentPage() > $maxPages && $itemsResults->getTotalCount() > 0) {
+        $maxPages = ceil($itemsResult->getTotalCount() / $searchCriteria->getPageSize());
+        if ($searchCriteria->getCurrentPage() > $maxPages && $itemsResult->getTotalCount() > 0) {
             throw new GraphQlInputException(
                 __(
                     'The value specified in the currentPage attribute is greater than the number'
                     . ' of pages available (%1).',
-                    $maxPages
+                    [$maxPages]
                 )
             );
         }
 
         return [
-            'total_count' => $itemsResults->getTotalCount(),
+            'total_count' => $itemsResult->getTotalCount(),
             'items' => $products,
             'page_info' => [
                 'page_size' => $searchCriteria->getPageSize(),

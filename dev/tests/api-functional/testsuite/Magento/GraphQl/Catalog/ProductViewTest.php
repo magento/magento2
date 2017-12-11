@@ -34,7 +34,7 @@ class ProductViewTest extends GraphQlAbstract
 
         $query = <<<QUERY
 {
-    products(find: {sku: {eq: "{$prductSku}"}})
+    products(filter: {sku: {eq: "{$prductSku}"}})
     {
         items {
             attribute_set_id
@@ -211,7 +211,7 @@ QUERY;
 
         $query = <<<QUERY
 {
-    products(find: {sku: {eq: "{$prductSku}"}})
+    products(filter: {sku: {eq: "{$prductSku}"}})
     {
         items{
             attribute_set_id

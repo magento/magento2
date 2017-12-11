@@ -3,10 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\GraphQl\Argument\Find;
+namespace Magento\Framework\GraphQl\Argument\Filter;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\GraphQl\Argument\Find\Clause\ReferenceType;
+use Magento\Framework\GraphQl\Argument\Filter\Clause\ReferenceType;
 
 /**
  * Factory for the @see Clause class
