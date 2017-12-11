@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Model\Product;
 
-
 use Magento\Catalog\Model\ProductRepository;
 
 class CopierTest extends \PHPUnit\Framework\TestCase
