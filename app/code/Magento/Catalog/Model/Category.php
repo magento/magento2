@@ -782,11 +782,14 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Retrieve children ids comma separated
      *
+     * @param boolean $recursive
+     * @param boolean $isActive
+     * @param boolean $sortByPosition
      * @return string
      */
-    public function getChildren()
+    public function getChildren($recursive = false, $isActive = true, $sortByPosition = false)
     {
-        return implode(',', $this->getResource()->getChildren($this, false));
+        return implode(',', $this->getResource()->getChildren($this, $recursive, $isActive, $sortByPosition));
     }
 
     /**
@@ -940,8 +943,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getProductCount()
     {
-        $count = $this->_getResource()->getProductCount($this);
-        $this->setData(self::KEY_PRODUCT_COUNT, $count);
+        if (!$this->hasData(self::KEY_PRODUCT_COUNT)) {
+            $count = $this->_getResource()->getProductCount($this);
+            $this->setData(self::KEY_PRODUCT_COUNT, $count);
+        }
+
         return $this->getData(self::KEY_PRODUCT_COUNT);
     }
 

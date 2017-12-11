@@ -141,7 +141,7 @@
     <fieldset name="search_engine_optimisation" sortOrder="20">
         <settings>
             <collapsible>true</collapsible>
-            <label translate="true">Search Engine Optimisation</label>
+            <label translate="true">Search Engine Optimization</label>
         </settings>
         <field name="identifier" formElement="input">
             <argument name="data" xsi:type="array">
