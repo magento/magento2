@@ -17,7 +17,7 @@
     </type>
     <type name="Magento\Security\Model\Plugin\AccountManagement">
         <arguments>
-            <argument name="passwordRequestEvent" xsi:type="const">Magento\Security\Model\PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST</argument>
+            <argument name="passwordRequestEvent" xsi:type="const">Magento\Security\Model\PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST</argument>
         </arguments>
     </type>
     <type name="Magento\Security\Model\SecurityManager">
