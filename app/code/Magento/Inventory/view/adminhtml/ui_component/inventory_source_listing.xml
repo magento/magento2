@@ -31,6 +31,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_InventoryApi::source</aclResource>
         <dataProvider class="Magento\Inventory\Ui\DataProvider\SourceDataProvider" name="inventory_source_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
