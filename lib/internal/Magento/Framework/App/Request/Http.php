@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\App\Request;
 
+use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\App\RequestContentInterface;
 use Magento\Framework\App\RequestSafetyInterface;
 use Magento\Framework\App\Route\ConfigInterface\Proxy as ConfigInterface;
@@ -16,7 +17,7 @@ use Magento\Framework\Stdlib\StringUtils;
 /**
  * Http request
  */
-class Http extends Request implements RequestContentInterface, RequestSafetyInterface
+class Http extends Request implements RequestContentInterface, RequestSafetyInterface, HttpRequestInterface
 {
     /**#@+
      * HTTP Ports
