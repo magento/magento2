@@ -115,8 +115,9 @@ class Product implements HandlerInterface
         unset($result['quantity_and_stock_status']);
         unset($result['sku_type']);
 
-        $videoContent = $result['media_gallery_entries'][0]['video_content'][0];
-        $content = $result['media_gallery_entries'][0]['content'][0];
+        $mediaGalleryEntries = current($result['media_gallery_entries']);
+        $videoContent = $mediaGalleryEntries['video_content'];
+        $content = $mediaGalleryEntries['content'];
         $result['media_gallery_entries'][0]['video_content'] = $videoContent;
         $result['media_gallery_entries'][0]['content'] = $content;
 

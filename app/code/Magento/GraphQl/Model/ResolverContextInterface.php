@@ -11,8 +11,8 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Resolver Context is used as a shared data extensible object in all resolvers that implement @see ResolverInterface.
  *
- * The purpose for this that GraphQL specification is passing the same instance of this interface in each resolver
- * for a field, so these resolvers could have shared access to the same data for ease of implementation purposes.
+ * GraphQL will pass the same instance of this interface in each field resolver for, so these resolvers could have
+ * shared access to the same data for ease of implementation purposes.
  */
 interface ResolverContextInterface extends ExtensibleDataInterface
 {
