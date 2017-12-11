@@ -7939,8 +7939,13 @@ if (testLabel
                   <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/admin_edit_product/admin_edit_product_updated.jmx</stringProp>
                   <stringProp name="BeanShellSampler.query">import java.util.ArrayList;
     import java.util.HashMap;
+    import java.util.Random;
 
-try {
+    try {
+    Random random = new Random();
+    if (${seedForRandom} > 0) {
+      random.setSeed(${seedForRandom} + ${__threadNum});
+    }
     simpleCount = props.get("simple_products_list").size();
     configCount = props.get("configurable_products_list").size();
     productCount = 0;
@@ -7983,7 +7988,7 @@ try {
 
     //id of related product
     do {
-    	relatedIndex = (int)(0.555 * props.get("simple_products_list").size());
+    	relatedIndex = random.nextInt(props.get("simple_products_list").size());
     } while(i == relatedIndex);
     vars.put("related_product_id", props.get("simple_products_list").get(relatedIndex).get("id"));
     } catch (Exception ex) {
