@@ -78,6 +78,74 @@ QUERY;
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
     }
 
+
+    /**
+     * Requesting for items that has a special price and price < $60, that are visible in Catalog, Search or Both which either has a sku like “simple”
+     * or name like “configurable”sorted by price in DESC
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testFilterVisibleProductsWithMatchingSkuOrNameWithSpecialPrice()
+    {
+        $query
+            = <<<QUERY
+{
+    products(
+        find:
+        {
+          special_price:{neq:"null"}
+          price:{lt:"60"}
+          or:
+          {
+           sku:{like:"%simple%"}
+           name:{like:"%configurable%"}
+          }
+           visibility:{in:["2", "3","4"]}
+           weight:{eq:"1"} 
+        }
+        pageSize:6
+        currentPage:1
+        sort:
+       {
+        price:DESC
+       } 
+    )    
+    {
+        items
+         {
+           sku
+           price
+           name
+           weight
+           status
+           type_id
+           visibility
+           attribute_set_id
+         }    
+        total_count
+        page_info
+        {
+          page_size
+          current_page
+        }
+    }
+}
+QUERY;
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product1 = $productRepository->get('simple1');
+        $product2 = $productRepository->get('simple2');
+        $filteredProducts = [$product2, $product1];
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayHasKey('total_count', $response['products']);
+        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertProductItems($filteredProducts, $response);
+    }
+
     /**
      * Requesting for items that match a specific SKU or NAME within a certain price range sorted by Price in ASC order
      *
@@ -86,7 +154,6 @@ QUERY;
      */
     public function testQueryProductsInCurrentPageSortedByPriceASC()
     {
-        $this->markTestSkipped("Test includes nesting functionality that should be added later");
         $query
             = <<<QUERY
 {
@@ -96,13 +163,9 @@ QUERY;
             price:{gt: "5", lt: "50"}
             or:
             {
-                sku:{like:"simple%"}
-                sku:{like:"complex%"}
-                
-                
-                
-                name:{like:"simple%"}              
-            }
+              sku:{like:"simple%"}
+              name:{like:"simple%"}              
+             }    
         }
          pageSize:4
          currentPage:1
@@ -223,7 +286,6 @@ QUERY;
      */
     public function testQuerySortByVisibilityAndPriceDESCWithDefaultPageSize()
     {
-        $this->markTestSkipped("Includes 'or' nesting functonality that should be added in future.");
         $query
             = <<<QUERY
 {
@@ -235,11 +297,7 @@ QUERY;
             {
               sku:{like:"%simple%"}
               name:{like:"%Configurable%"}
-            }
-            or:
-            {
-                visibility:{in:["2", "3","4"]}
-                weight:{eq:"1"}              
+              visibility:{in:["2", "3","4"]}
             }
         }
          sort:
