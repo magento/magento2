@@ -6,11 +6,14 @@
 
 namespace Magento\Wishlist\Controller;
 
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Helper\View;
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\Wishlist;
 use Psr\Log\LoggerInterface;
 use Zend\Http\Request;
 
@@ -18,7 +21,7 @@ use Zend\Http\Request;
  * Tests updating wishlist item comment.
  *
  * @magentoAppIsolation enabled
- * @magentoDbIsolation disabled
+ * @magentoDbIsolation enabled
  * @magentoAppArea frontend
  */
 class UpdateTest extends \Magento\TestFramework\TestCase\AbstractController
@@ -50,14 +53,22 @@ class UpdateTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
      * @dataProvider commentDataProvider
+     * @param string|null $postDescription
+     * @param string $expectedResult
+     * @param boolean $presetComment
      */
-    public function testUpdateComment($postDescription, $postQty, $expectedResult, $presetComment)
+    public function testUpdateComment($postDescription, $expectedResult, $presetComment)
     {
-        $itemId = 1;
-        $wishlistId = 1;
+        /** @var Customer $customer */
+        $customer = $this->customerSession->getCustomer();
+        /** @var Wishlist $wishlist */
+        $wishlist = $this->_objectManager
+            ->get(Wishlist::class)
+            ->loadByCustomerId($customer->getId(), true);
+        /** @var Item $item */
+        $item = $wishlist->getItemCollection()->getFirstItem();
 
         if ($presetComment) {
-            $item = $this->_objectManager->create(Item::class)->load($itemId);
             $item->setDescription($this->description);
             $item->save();
         }
@@ -65,16 +76,16 @@ class UpdateTest extends \Magento\TestFramework\TestCase\AbstractController
         $formKey = $this->_objectManager->get(FormKey::class);
         $this->getRequest()->setPostValue(
             [
-                'description' => $postDescription,
-                'qty' => $postQty,
+                'description' => isset($postDescription) ? [$item->getId() => $postDescription] : [],
+                'qty' => isset($postDescription) ? [$item->getId() => 1] : [],
                 'do' => '',
                 'form_key' => $formKey->getFormKey()
             ]
         )->setMethod(Request::METHOD_POST);
-        $this->dispatch('wishlist/index/update/wishlist_id/' . $wishlistId);
+        $this->dispatch('wishlist/index/update/wishlist_id/' . $wishlist->getId());
 
-        $item = $this->_objectManager->create(Item::class)->load($itemId);
-
+        // Reload item
+        $item = $this->_objectManager->get(Item::class)->load($item->getId());
         self::assertEquals(
             $expectedResult,
             $item->getDescription()
@@ -88,22 +99,20 @@ class UpdateTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function commentDataProvider()
     {
+
         return [
             'test adding comment' => [
-                'postDescription' => [1 => $this->description],
-                'postQty' => [1 => '1'],
+                'postDescription' => $this->description,
                 'expectedResult' => $this->description,
                 'presetComment' => false
             ],
             'test removing comment' => [
-                'postDescription' => [1 => ''],
-                'postQty' => [1 => '1'],
+                'postDescription' => '',
                 'expectedResult' => '',
                 'presetComment' => true
             ],
             'test not changing comment' => [
-                'postDescription' => [],
-                'postQty' => [1 => '1'],
+                'postDescription' => null,
                 'expectedResult' => $this->description,
                 'presetComment' => true
             ],
@@ -118,9 +127,9 @@ class UpdateTest extends \Magento\TestFramework\TestCase\AbstractController
             Session::class,
             [$logger]
         );
-        /** @var \Magento\Customer\Api\AccountManagementInterface $service */
+        /** @var AccountManagementInterface $service */
         $service = $this->_objectManager->create(
-            \Magento\Customer\Api\AccountManagementInterface::class
+            AccountManagementInterface::class
         );
         $customer = $service->authenticate('customer@example.com', 'password');
         $this->customerSession->setCustomerDataAsLoggedIn($customer);
