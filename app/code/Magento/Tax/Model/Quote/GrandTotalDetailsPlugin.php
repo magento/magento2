@@ -5,9 +5,8 @@
  */
 namespace Magento\Tax\Model\Quote;
 
-use Magento\Quote\Api\Data\TotalSegmentExtensionFactory;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Api\Data\TotalSegmentExtensionFactory;
 
 class GrandTotalDetailsPlugin
 {
@@ -73,9 +72,11 @@ class GrandTotalDetailsPlugin
     {
         $taxRates = [];
         foreach ($rates as $rate) {
+            /** @var \Magento\Tax\Api\Data\GrandTotalRatesInterface $taxRate */
             $taxRate = $this->ratesFactory->create([]);
             $taxRate->setPercent($rate['percent']);
             $taxRate->setTitle($rate['title']);
+            $taxRate->setAmount($rate['amount']);
             $taxRates[] = $taxRate;
         }
         return $taxRates;
@@ -94,7 +95,6 @@ class GrandTotalDetailsPlugin
         array $totalSegments,
         array $addressTotals = []
     ) {
-
         if (!array_key_exists($this->code, $addressTotals)) {
             return $totalSegments;
         }

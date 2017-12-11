@@ -8,21 +8,19 @@
 
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
-use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
+use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory as CustomerAddressRegionFactory;
-use Magento\Framework\DataObject;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Store\Model\Store;
+use Magento\Tax\Api\Data\QuoteDetailsInterface;
 use Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory;
-use Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Api\Data\TaxDetailsInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
-use Magento\Tax\Api\Data\QuoteDetailsInterface;
-use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 
 /**
  * Tax totals calculation model
@@ -531,7 +529,7 @@ class CommonTaxCollector extends AbstractTotal
         $total->setSubtotalInclTax($subtotalInclTax);
         $total->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
         $total->setBaseSubtotalInclTax($baseSubtotalInclTax);
-        $shippingAssignment->getShipping()->getAddress()->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);;
+        $shippingAssignment->getShipping()->getAddress()->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
 
         return $this;
     }
@@ -546,7 +544,7 @@ class CommonTaxCollector extends AbstractTotal
     protected function processAppliedTaxes(
         QuoteAddress\Total $total,
         ShippingAssignmentInterface $shippingAssignment,
-        Array $itemsByType
+        array $itemsByType
     ) {
         $total->setAppliedTaxes([]);
         $allAppliedTaxesArray = [];
@@ -717,6 +715,7 @@ class CommonTaxCollector extends AbstractTotal
                 $rates[] = [
                     'percent' => $rateDataObject->getPercent(),
                     'code' => $rateDataObject->getCode(),
+                    'amount' => $rateDataObject->getAmount(),
                     'title' => $rateDataObject->getTitle(),
                 ];
             }
@@ -769,11 +768,15 @@ class CommonTaxCollector extends AbstractTotal
                 $row['amount'] = 0;
                 $row['base_amount'] = 0;
                 $previouslyAppliedTaxes[$row['id']] = $row;
+
+                foreach ($previouslyAppliedTaxes[$row['id']]['rates'] as $previousRateKey => $previousRate) {
+                    $previouslyAppliedTaxes[$row['id']]['rates'][$previousRateKey]['amount'] = 0;
+                }
             }
 
             if (!is_null($row['percent'])) {
-                $row['percent'] = $row['percent'] ? $row['percent'] : 1;
-                $rate = $rate ? $rate : 1;
+                $row['percent'] = $row['percent'] ?: 1;
+                $rate = $rate ?: 1;
 
                 $appliedAmount = $amount / $rate * $row['percent'];
                 $baseAppliedAmount = $baseAmount / $rate * $row['percent'];
@@ -783,6 +786,15 @@ class CommonTaxCollector extends AbstractTotal
                 foreach ($row['rates'] as $rate) {
                     $appliedAmount += $rate['amount'];
                     $baseAppliedAmount += $rate['base_amount'];
+                }
+            }
+
+            foreach ($row['rates'] as $appliedRate) {
+                foreach ($previouslyAppliedTaxes[$row['id']]['rates'] as $previousRateKey => $previousRate) {
+                    if ($previousRate['code'] == $appliedRate['code']) {
+                        $previouslyAppliedTaxes[$row['id']]['rates'][$previousRateKey]['amount'] +=
+                            $appliedRate['amount'];
+                    }
                 }
             }
 

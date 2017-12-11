@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Tax\Api\Data;
 
 /**
@@ -21,19 +20,33 @@ interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function getCode();
 
     /**
+     * Get Title
+     *
+     * @return string|null
+     */
+    public function getTitle();
+
+    /**
+     * Get Tax Percent
+     *
+     * @return float|null
+     */
+    public function getPercent();
+
+    /**
+     * Get tax amount value
+     *
+     * @return float|string
+     */
+    public function getAmount();
+
+    /**
      * Set code
      *
      * @param string $code
      * @return $this
      */
     public function setCode($code);
-
-    /**
-     * Get Title
-     *
-     * @return string|null
-     */
-    public function getTitle();
 
     /**
      * Set Title
@@ -44,19 +57,18 @@ interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function setTitle($title);
 
     /**
-     * Get Tax Percent
-     *
-     * @return float|null
-     */
-    public function getPercent();
-
-    /**
      * Set Tax Percent
      *
      * @param float $percent
      * @return $this
      */
     public function setPercent($percent);
+
+    /**
+     * @param string|float $amount
+     * @return $this
+     */
+    public function setAmount($amount);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

@@ -6,19 +6,18 @@
 
 namespace Magento\Tax\Model;
 
-use Magento\Tax\Api\TaxCalculationInterface;
-use Magento\Tax\Api\TaxClassManagementInterface;
-use Magento\Tax\Api\Data\TaxDetailsItemInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 use Magento\Tax\Api\Data\TaxDetailsInterfaceFactory;
+use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory;
+use Magento\Tax\Api\TaxCalculationInterface;
+use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\Calculation\AbstractCalculator;
 use Magento\Tax\Model\Calculation\CalculatorFactory;
-use Magento\Tax\Model\Config;
 use Magento\Tax\Model\TaxDetails\AppliedTax;
 use Magento\Tax\Model\TaxDetails\AppliedTaxRate;
 use Magento\Tax\Model\TaxDetails\TaxDetails;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -352,6 +351,7 @@ class TaxCalculation implements TaxCalculationInterface
                         AppliedTaxRate::KEY_CODE => $rateDataObject->getCode(),
                         AppliedTaxRate::KEY_TITLE => $rateDataObject->getTitle(),
                         AppliedTaxRate::KEY_PERCENT => $rateDataObject->getPercent(),
+                        AppliedTaxRate::KEY_AMOUNT => $rateDataObject->getAmount(),
                     ];
                 }
                 $appliedTaxes[$taxId] = [
@@ -362,6 +362,12 @@ class TaxCalculation implements TaxCalculationInterface
                 ];
             } else {
                 $appliedTaxes[$taxId][AppliedTax::KEY_AMOUNT] += $itemAppliedTax->getAmount();
+
+                $rateDataObjects = $itemAppliedTax->getRates();
+                foreach ($rateDataObjects as $rateDataObject) {
+                    $appliedTaxes[$taxId][AppliedTax::KEY_RATES][$rateDataObject->getCode()][AppliedTax::KEY_AMOUNT] +=
+                        $rateDataObject->getAmount();
+                }
             }
         }
 

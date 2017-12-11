@@ -6,7 +6,9 @@
 namespace Magento\Tax\Model\Calculation;
 
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
+use Magento\Tax\Api\Data\AppliedTaxInterface;
 use Magento\Tax\Api\Data\AppliedTaxInterfaceFactory;
+use Magento\Tax\Api\Data\AppliedTaxRateInterface;
 use Magento\Tax\Api\Data\AppliedTaxRateInterfaceFactory;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
@@ -443,5 +445,36 @@ abstract class AbstractCalculator
             $customerPriceInclTax = $this->calculationTool->round($customerPriceInclTax);
         }
         return $customerPriceInclTax;
+    }
+
+    /**
+     * Calculate applied taxes rates amounts
+     *
+     * @param array $appliedTaxes
+     * @return array
+     */
+    protected function calculateAppliedTaxesRateAmounts($appliedTaxes)
+    {
+        /** @var AppliedTaxInterface $appliedTax */
+        foreach ($appliedTaxes as $appliedTax) {
+            if ($appliedTax->getRates()) {
+                $totalNominalPercent = 0;
+                /** @var AppliedTaxRateInterface $rateObject */
+                foreach ($appliedTax->getRates() as $rateObject) {
+                    $totalNominalPercent += $rateObject->getPercent();
+                }
+
+                foreach ($appliedTax->getRates() as $rateObject) {
+                    $amount = $this->calculationTool->round(
+                        $appliedTax->getAmount() * (
+                            $rateObject->getPercent() / $totalNominalPercent
+                        )
+                    );
+                    $rateObject->setAmount($amount);
+                }
+            }
+        }
+
+        return $appliedTaxes;
     }
 }

@@ -19,6 +19,7 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
     const KEY_CODE    = 'code';
     const KEY_TITLE   = 'title';
     const KEY_PERCENT = 'percent';
+    const KEY_AMOUNT  = 'amount';
     /**#@-*/
 
     /**
@@ -46,10 +47,15 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
     }
 
     /**
-     * Set code
-     *
-     * @param string $code
-     * @return $this
+     * {@inheritdoc}
+     */
+    public function getAmount()
+    {
+        return $this->getData(self::KEY_AMOUNT);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function setCode($code)
     {
@@ -57,10 +63,7 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
     }
 
     /**
-     * Set Title
-     *
-     * @param string $title
-     * @return $this
+     * {@inheritdoc}
      */
     public function setTitle($title)
     {
@@ -68,10 +71,7 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
     }
 
     /**
-     * Set Tax Percent
-     *
-     * @param float $percent
-     * @return $this
+     * {@inheritdoc}
      */
     public function setPercent($percent)
     {
@@ -80,8 +80,14 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
 
     /**
      * {@inheritdoc}
-     *
-     * @return \Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface|null
+     */
+    public function setAmount($amount)
+    {
+        return $this->setData(self::KEY_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getExtensionAttributes()
     {
@@ -90,9 +96,6 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
 
     /**
      * {@inheritdoc}
-     *
-     * @param \Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface $extensionAttributes
-     * @return $this
      */
     public function setExtensionAttributes(\Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface $extensionAttributes)
     {
