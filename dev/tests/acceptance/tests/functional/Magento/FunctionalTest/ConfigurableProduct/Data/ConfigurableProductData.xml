@@ -23,6 +23,6 @@
     </entity>
     <entity name="ConfigurableProductAddChild" type="ConfigurableProductAddChild">
         <var key="sku" entityKey="sku" entityType="product" />
-        <var key="childSku" entityKey="sku" entityType="product"/>
+        <var key="childSku" entityKey="sku" entityType="product2"/>
     </entity>
 </config>
