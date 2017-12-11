@@ -187,9 +187,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     protected function getBatchIteratorCallback(
         \PHPUnit_Framework_MockObject_MockObject $selectMock,
         int $batchCount
-    ): \Closure
-    {
-        $getBatchIteratorCallback = function () use ($batchCount, $selectMock): array {
+    ): \Closure {
+        $iteratorCallback = function () use ($batchCount, $selectMock): array {
             $result = [];
             $count = $batchCount;
             while ($count) {
@@ -200,7 +199,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             return $result;
         };
 
-        return $getBatchIteratorCallback;
+        return $iteratorCallback;
     }
 
     /**
