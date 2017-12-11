@@ -630,6 +630,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
+        $collection->addOptionsToResult();
+        $collection->addMediaGalleryData();
         $collection->load();
 
         $searchResult = $this->searchResultsFactory->create();
