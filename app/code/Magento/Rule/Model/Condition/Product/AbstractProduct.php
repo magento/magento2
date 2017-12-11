@@ -743,7 +743,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param array $selectOptions
      * @return array
      */
-    private function removeTagsFromLabel($selectOptions)
+    private function removeTagsFromLabel(array $selectOptions)
     {
         foreach ($selectOptions as &$option) {
             if (isset($option['label'])) {
