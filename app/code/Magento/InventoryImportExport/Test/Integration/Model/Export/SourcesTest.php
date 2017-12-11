@@ -13,9 +13,6 @@ use Magento\InventoryImportExport\Model\Export\Sources;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-/**
- * TODO: fixture via composer
- */
 class SourcesTest extends TestCase
 {
     /**
@@ -58,6 +55,7 @@ class SourcesTest extends TestCase
      */
     public function testExportWithoutAnyFiltering()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/274');
         $this->exporter->setParameters([]);
         $this->exporter->export();
 

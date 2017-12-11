@@ -28,6 +28,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadWithFilterNoFilters($filters, $expectedCount)
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/272');
         // addFieldsToFilter will load filters,
         //   then loadWithFilter will trigger _renderFiltersBefore code in Advanced/Collection
         $this->advancedCollection->addFieldsToFilter([$filters])->loadWithFilter();

@@ -30,6 +30,14 @@ class SourceItemIndexerTest extends TestCase
      */
     private $removeIndexData;
 
+    /**
+     * @var GetSourceItemId
+     */
+    private $getSourceItemId;
+
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->indexer = Bootstrap::getObjectManager()->get(IndexerInterface::class);
@@ -40,8 +48,13 @@ class SourceItemIndexerTest extends TestCase
 
         $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
         $this->removeIndexData->execute([10, 20, 30]);
+
+        $this->getSourceItemId = Bootstrap::getObjectManager()->get(GetSourceItemId::class);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function tearDown()
     {
         $this->removeIndexData->execute([10, 20, 30]);
@@ -56,7 +69,7 @@ class SourceItemIndexerTest extends TestCase
      */
     public function testReindexRow()
     {
-        $this->indexer->reindexRow(1);
+        $this->indexer->reindexRow($this->getSourceItemId->execute('SKU-1', 10));
 
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 10));
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 30));
@@ -71,7 +84,10 @@ class SourceItemIndexerTest extends TestCase
      */
     public function testReindexList()
     {
-        $this->indexer->reindexList([1, 5]);
+        $this->indexer->reindexList([
+            $this->getSourceItemId->execute('SKU-1', 10),
+            $this->getSourceItemId->execute('SKU-2', 50),
+        ]);
 
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 10));
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 30));

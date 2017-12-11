@@ -17,9 +17,6 @@ use Magento\InventoryImportExport\Model\Import\Sources;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-/**
- * TODO: fixture via composer
- */
 class SourcesTest extends TestCase
 {
     /**

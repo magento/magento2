@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class ValidatorChainTest extends TestCase
 {
-
     /**
      * @var ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
