@@ -598,6 +598,15 @@ define([
         },
 
         /**
+         * Return the content stored in the WYSIWYG field
+         * @param {String} id
+         * @return {String}
+         */
+        getContent: function (id) {
+            return id ? this.get(id).getContent() : this.activeEditor().getContent();
+        },
+
+        /**
          * @returns {Object}
          */
         getAdapterPrototype: function () {
