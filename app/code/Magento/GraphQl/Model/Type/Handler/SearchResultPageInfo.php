@@ -15,6 +15,8 @@ use Magento\Framework\GraphQl\Type\TypeFactory;
  */
 class SearchResultPageInfo implements HandlerInterface
 {
+    const SEARCH_RESULT_PAGE_INFO_TYPE_NAME = 'SearchResultPageInfo';
+
     /**
      * @var Pool
      */
@@ -40,10 +42,9 @@ class SearchResultPageInfo implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = new \ReflectionClass($this);
         return $this->typeFactory->createObject(
             [
-                'name' => $reflector->getShortName(),
+                'name' => self::SEARCH_RESULT_PAGE_INFO_TYPE_NAME,
                 'fields' => $this->getFields()
             ]
         );

@@ -15,6 +15,8 @@ use Magento\GraphQl\Model\Type\Handler\Pool;
  */
 class ConfigurableProduct implements HandlerInterface
 {
+    const CONFIGURABLE_PRODUCT_TYPE_NAME = 'ConfigurableProduct';
+
     /**
      * @var Pool
      */
@@ -40,7 +42,6 @@ class ConfigurableProduct implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = new \ReflectionClass($this);
         $fields = [];
         $interface = $this->typePool->getType('Product');
         $fields = array_merge($fields, $interface->config['fields']);
@@ -50,7 +51,7 @@ class ConfigurableProduct implements HandlerInterface
 
         return $this->typeFactory->createObject(
             [
-                'name' => $reflector->getShortName(),
+                'name' => self::CONFIGURABLE_PRODUCT_TYPE_NAME,
                 'fields' => $fields,
                 'interfaces' => [$interface]
             ]

@@ -13,18 +13,18 @@ use Magento\Framework\GraphQl\Argument\ValueParserInterface;
  */
 class ValueParser implements ValueParserInterface
 {
-    /** @var ClauseConverter */
+    /** @var AstConverter */
     private $clauseConverter;
 
     /** @var FindArgumentValueFactory */
     private $findArgumentValueFactory;
 
     /**
-     * @param ClauseConverter $clauseConverter
+     * @param AstConverter $clauseConverter
      * @param FindArgumentValueFactory $findArgumentValueFactory
      */
     public function __construct(
-        ClauseConverter $clauseConverter,
+        AstConverter $clauseConverter,
         FindArgumentValueFactory $findArgumentValueFactory
     ) {
         $this->clauseConverter = $clauseConverter;
@@ -36,7 +36,7 @@ class ValueParser implements ValueParserInterface
      */
     public function parse($value)
     {
-        $filters = $this->clauseConverter->getFilterFromAst('product', $value);
+        $filters = $this->clauseConverter->getFilterFromAst(\Magento\Catalog\Model\Product::ENTITY, $value);
         return $this->findArgumentValueFactory->create($filters);
     }
 }

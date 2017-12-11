@@ -6,26 +6,29 @@
 
 namespace Magento\GraphQlCatalog\Model\Type\Handler;
 
-use Magento\Eav\Api\AttributeManagementInterface;
+use Magento\GraphQl\Model\EntityAttributeList;
 use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
 use Magento\GraphQl\Model\Type\Handler\Pool;
+use Magento\GraphQl\Model\Type\Handler\SearchCriteriaExpression;
 
 /**
  * Define ProductAttributeSearchCriteria's GraphQL type
  */
 class ProductAttributeSearchCriteria implements HandlerInterface
 {
+    const PRODUCT_ATTRIBUTE_SEARCH_CRITERIA_TYPE_NAME = 'ProductAttributeSearchCriteria';
+
     /**
      * @var TypeGenerator
      */
     private $pool;
 
     /**
-     * @var AttributeManagementInterface
+     * @var EntityAttributeList
      */
-    private $management;
+    private $entityAttributeList;
 
     /**
      * @var TypeFactory
@@ -34,16 +37,16 @@ class ProductAttributeSearchCriteria implements HandlerInterface
 
     /**
      * @param Pool $pool
-     * @param AttributeManagementInterface $management
+     * @param EntityAttributeList $entityAttributeList
      * @param TypeFactory $typeFactory
      */
     public function __construct(
         Pool $pool,
-        AttributeManagementInterface $management,
+        EntityAttributeList $entityAttributeList,
         TypeFactory $typeFactory
     ) {
         $this->pool = $pool;
-        $this->management = $management;
+        $this->entityAttributeList = $entityAttributeList;
         $this->typeFactory = $typeFactory;
     }
 
@@ -68,16 +71,17 @@ class ProductAttributeSearchCriteria implements HandlerInterface
      */
     private function getFields()
     {
-        $reflector = new \ReflectionClass($this);
-        $className = $reflector->getShortName();
+        $productAttributeSearchCriteriaClassName = self::PRODUCT_ATTRIBUTE_SEARCH_CRITERIA_TYPE_NAME;
+        $attributes = $this->entityAttributeList->getDefaultEntityAttributes(\Magento\Catalog\Model\Product::ENTITY);
         $schema = [];
-        $attributes = $this->management->getAttributes('catalog_product', 4);
         foreach ($attributes as $attribute) {
-            $schema[$attribute->getAttributeCode()] = $this->pool->getType('SearchCriteriaExpression');
+            $schema[$attribute->getAttributeCode()] = $this->pool->getType(
+                SearchCriteriaExpression::SEARCH_CRITERIA_EXPRESSION_TYPE_NAME
+            );
         }
 
-        $fields = function () use ($schema, $className) {
-            $schema = array_merge($schema, ['or' => $this->pool->getType($className)]);
+        $fields = function () use ($schema, $productAttributeSearchCriteriaClassName) {
+            $schema = array_merge($schema, ['or' => $this->pool->getType($productAttributeSearchCriteriaClassName)]);
 
             return $schema;
         };

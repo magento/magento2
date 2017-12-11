@@ -7,11 +7,11 @@
 namespace Magento\GraphQlCatalog\Model\Resolver;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\GraphQlCatalog\Model\Resolver\Products\Product;
+use Magento\GraphQlCatalog\Model\Resolver\Products\ProductDataProvider;
 use Magento\GraphQl\Model\ResolverInterface;
 use Magento\Framework\GraphQl\Argument\SearchCriteria\Builder;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\GraphQl\Model\ContextInterface;
+use Magento\GraphQl\Model\ResolverContextInterface;
 
 /**
  * Products field resolver, used for GraphQL request processing.
@@ -29,29 +29,29 @@ class Products implements ResolverInterface
     private $searchCriteriaBuilder;
 
     /**
-     * @var Product
+     * @var ProductDataProvider
      */
-    private $productResolver;
+    private $productDataProvider;
 
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param Builder $searchCriteriaBuilder
-     * @param \Magento\GraphQlCatalog\Model\Resolver\Products\Product $productResolver
+     * @param ProductDataProvider $productDataProvider
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         Builder $searchCriteriaBuilder,
-        Product $productResolver
+        ProductDataProvider $productDataProvider
     ) {
         $this->productRepository = $productRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->productResolver = $productResolver;
+        $this->productDataProvider = $productDataProvider;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function resolve(array $args, ContextInterface $context)
+    public function resolve(array $args, ResolverContextInterface $context)
     {
         $searchCriteria = $this->searchCriteriaBuilder->build($args);
         $itemsResults = $this->productRepository->getList($searchCriteria);
@@ -60,7 +60,7 @@ class Products implements ResolverInterface
 
         $products = [];
         foreach ($items as $item) {
-            $products[] = $this->productResolver->getProduct($item->getSku());
+            $products[] = $this->productDataProvider->getProduct($item->getSku());
         }
 
         $maxPages = ceil($itemsResults->getTotalCount() / $searchCriteria->getPageSize());

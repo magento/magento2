@@ -6,18 +6,20 @@
 
 namespace Magento\GraphQlCatalog\Model\Type\Handler;
 
-use Magento\Eav\Api\AttributeManagementInterface;
+use Magento\GraphQl\Model\EntityAttributeList;
 use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator as Generator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\Type\TypeFactory;
 use Magento\GraphQl\Model\Type\Handler\Pool;
-use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
+use Magento\GraphQl\Model\Type\Handler\SortEnum;
 
 /**
  * Define ProductSort GraphQL type
  */
 class ProductSort implements HandlerInterface
 {
+    const PRODUCTS_SORT_TYPE_NAME = 'ProductSort';
+
     /**
      * @var Pool
      */
@@ -29,9 +31,9 @@ class ProductSort implements HandlerInterface
     private $typeGenerator;
 
     /**
-     * @var AttributeManagementInterface
+     * @var EntityAttributeList
      */
-    private $management;
+    private $entityAttributeList;
 
     /**
      * @var TypeFactory
@@ -41,18 +43,18 @@ class ProductSort implements HandlerInterface
     /**
      * @param Pool $typePool
      * @param Generator $typeGenerator
-     * @param AttributeManagementInterface $management
+     * @param EntityAttributeList $entityAttributeList
      * @param TypeFactory $typeFactory
      */
     public function __construct(
         Pool $typePool,
         Generator $typeGenerator,
-        AttributeManagementInterface $management,
+        EntityAttributeList $entityAttributeList,
         TypeFactory $typeFactory
     ) {
         $this->typePool = $typePool;
         $this->typeGenerator = $typeGenerator;
-        $this->management = $management;
+        $this->entityAttributeList = $entityAttributeList;
         $this->typeFactory = $typeFactory;
     }
 
@@ -61,10 +63,9 @@ class ProductSort implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = new \ReflectionClass($this);
         return $this->typeFactory->createInputObject(
             [
-                'name' => $reflector->getShortName(),
+                'name' => self::PRODUCTS_SORT_TYPE_NAME,
                 'fields' => $this->getFields(),
             ]
         );
@@ -77,11 +78,11 @@ class ProductSort implements HandlerInterface
      */
     private function getFields()
     {
+        $attributes = $this->entityAttributeList->getDefaultEntityAttributes(\Magento\Catalog\Model\Product::ENTITY);
         $result = [];
-        $attributes = $this->management->getAttributes('catalog_product', 4);
         foreach ($attributes as $attribute) {
             if ((!$attribute->getIsUserDefined()) && !is_array($attribute)) {
-                $result[$attribute->getAttributeCode()] = $this->typePool->getType('SortEnum');
+                $result[$attribute->getAttributeCode()] = $this->typePool->getType(SortEnum::SORT_ENUM_TYPE_NAME);
             }
         }
 
@@ -90,7 +91,7 @@ class ProductSort implements HandlerInterface
             if (is_array($attribute)) {
                 unset($staticAttributes[$attributeKey]);
             } else {
-                $staticAttributes[$attributeKey] = $this->typePool->getType('SortEnum');
+                $staticAttributes[$attributeKey] = $this->typePool->getType(SortEnum::SORT_ENUM_TYPE_NAME);
             }
         }
 

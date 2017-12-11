@@ -16,6 +16,10 @@ use Magento\GraphQl\Model\Type\Handler\Pool;
  */
 class CustomAttributeMetadata implements HandlerInterface
 {
+    const CUSTOM_ATTRIBUTE_METADATA_TYPE_NAME = 'CustomAttributeMetadata';
+
+    const ATTRIBUTE_TYPE_NAME = 'Attribute';
+
     /**
      * @var Pool
      */
@@ -41,11 +45,9 @@ class CustomAttributeMetadata implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = new \ReflectionClass($this);
-
         return $this->typeFactory->createObject(
             [
-                'name' => $reflector->getShortName(),
+                'name' => self::CUSTOM_ATTRIBUTE_METADATA_TYPE_NAME,
                 'fields' => $this->getFields()
             ]
         );
@@ -58,9 +60,9 @@ class CustomAttributeMetadata implements HandlerInterface
      */
     private function getFields(): array
     {
-        if (!$this->typePool->isTypeRegistered('Attribute')) {
+        if (!$this->typePool->isTypeRegistered(self::ATTRIBUTE_TYPE_NAME)) {
             $attributeType = $this->typeFactory->createObject([
-                'name' => 'Attribute',
+                'name' => self::ATTRIBUTE_TYPE_NAME,
                 'fields' => [
                     'attribute_code' => $this->typePool->getType('String'),
                     'entity_type' => $this->typePool->getType('String'),
@@ -70,6 +72,6 @@ class CustomAttributeMetadata implements HandlerInterface
             $this->typePool->registerType($attributeType);
         }
 
-        return ['items' => $this->typeFactory->createList($this->typePool->getType('Attribute'))];
+        return ['items' => $this->typeFactory->createList($this->typePool->getType(self::ATTRIBUTE_TYPE_NAME))];
     }
 }

@@ -9,6 +9,7 @@
     <preference for="Magento\GraphQl\Model\SchemaGeneratorInterface" type="Magento\GraphQl\Model\SchemaGenerator" />
     <preference for="Magento\GraphQl\Model\Type\GeneratorInterface" type="Magento\GraphQl\Model\Type\Generator" />
     <preference for="Magento\Framework\GraphQl\ArgumentInterface" type="Magento\Framework\GraphQl\Argument" />
+    <preference for="Magento\GraphQl\Model\ResolverContextInterface" type="Magento\GraphQl\Model\ResolverContext" />
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">

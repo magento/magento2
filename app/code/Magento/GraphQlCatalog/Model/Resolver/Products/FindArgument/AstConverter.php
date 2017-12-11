@@ -5,7 +5,7 @@
  */
 namespace Magento\GraphQlCatalog\Model\Resolver\Products\FindArgument;
 
-use Magento\Eav\Api\AttributeManagementInterface;
+use Magento\GraphQl\Model\EntityAttributeList;
 use Magento\Framework\GraphQl\Argument\Find\Clause\ReferenceTypeFactory;
 use Magento\Framework\GraphQl\Argument\Find\Clause\ReferenceType;
 use Magento\Framework\GraphQl\Argument\Find\ClauseFactory;
@@ -14,9 +14,9 @@ use Magento\Framework\GraphQl\Argument\Find\Connective;
 use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 
 /**
- * Converts the input value for "find" to a Clause|Connective format
+ * Converts the input value for "find" to a @see Connective format
  */
-class ClauseConverter
+class AstConverter
 {
     /**
      * @var ClauseFactory
@@ -39,29 +39,29 @@ class ClauseConverter
     private $typeGenerator;
 
     /**
-     * @var AttributeManagementInterface
+     * @var EntityAttributeList
      */
-    private $management;
+    private $entityAttributeList;
 
     /**
      * @param ClauseFactory $clauseFactory
      * @param ConnectiveFactory $connectiveFactory
      * @param ReferenceTypeFactory $referenceTypeFactory
      * @param \Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator $typeGenerator
-     * @param AttributeManagementInterface $management
+     * @param EntityAttributeList $entityAttributeList
      */
     public function __construct(
         ClauseFactory $clauseFactory,
         ConnectiveFactory $connectiveFactory,
         ReferenceTypeFactory $referenceTypeFactory,
         TypeGenerator $typeGenerator,
-        AttributeManagementInterface $management
+        EntityAttributeList $entityAttributeList
     ) {
         $this->clauseFactory = $clauseFactory;
         $this->connectiveFactory = $connectiveFactory;
         $this->referenceTypeFactory = $referenceTypeFactory;
         $this->typeGenerator = $typeGenerator;
-        $this->management = $management;
+        $this->entityAttributeList = $entityAttributeList;
     }
 
     /**
@@ -113,7 +113,7 @@ class ClauseConverter
     private function getCatalogProductFields()
     {
         $result = [];
-        $attributes = $this->management->getAttributes('catalog_product', 4);
+        $attributes = $this->entityAttributeList->getDefaultEntityAttributes(\Magento\Catalog\Model\Product::ENTITY);
         foreach ($attributes as $attribute) {
             if ((!$attribute->getIsUserDefined()) && !is_array($attribute)) {
                 $result[$attribute->getAttributeCode()] = 'String';

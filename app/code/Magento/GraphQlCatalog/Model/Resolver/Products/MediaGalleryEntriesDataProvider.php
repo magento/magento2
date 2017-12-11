@@ -14,7 +14,7 @@ use Magento\Framework\Webapi\ServiceOutputProcessor;
 /**
  * Media gallery field resolver, used for GraphQL request processing.
  */
-class MediaGalleryEntries
+class MediaGalleryEntriesDataProvider
 {
     /**
      * @var ProductAttributeMediaGalleryManagementInterface

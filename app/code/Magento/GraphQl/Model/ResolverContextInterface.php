@@ -9,9 +9,12 @@ namespace Magento\GraphQl\Model;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Context interface.
+ * Resolver Context is used as a shared data extensible object in all resolvers that implement @see ResolverInterface.
+ *
+ * GraphQL will pass the same instance of this interface in each field resolver for, so these resolvers could have
+ * shared access to the same data for ease of implementation purposes.
  */
-interface ContextInterface extends ExtensibleDataInterface
+interface ResolverContextInterface extends ExtensibleDataInterface
 {
     /**
      * Get type of a customer

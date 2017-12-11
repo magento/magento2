@@ -129,7 +129,7 @@ class TypeGenerator
                         $extensionAttributes = $this->getTypeData($parameter['type']);
                         $result = array_merge($result, $extensionAttributes);
                     } else {
-                        $result[$snakeAttributeCode][] = $this->getTypeData($parameter['type']);
+                        $result[$snakeAttributeCode] = $this->getTypeData($parameter['type']);
                     }
                 }
             }

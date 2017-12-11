@@ -15,6 +15,8 @@ use Magento\GraphQl\Model\Type\Handler\Pool;
  */
 class AttributeInput implements HandlerInterface
 {
+    const ATTRIBUTE_INPUT_TYPE_NAME = 'AttributeInput';
+
     /**
      * @var Pool
      */
@@ -40,11 +42,9 @@ class AttributeInput implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = new \ReflectionClass($this);
-
         return $this->typeFactory->createInputObject(
             [
-                'name' => $reflector->getShortName(),
+                'name' => self::ATTRIBUTE_INPUT_TYPE_NAME,
                 'fields' => [
                     'attribute_code' => $this->typePool->getType('String'),
                     'entity_type' => $this->typePool->getType('String')
