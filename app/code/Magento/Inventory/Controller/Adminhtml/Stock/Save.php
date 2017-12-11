@@ -7,11 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Controller\Adminhtml\Stock;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 
@@ -65,13 +68,22 @@ class Save extends Action
 
             $this->messageManager->addSuccessMessage(__('The Stock has been saved.'));
             $this->processRedirectAfterSuccessSave($resultRedirect, $stockId);
+        } catch (NoSuchEntityException $e) {
+            $this->messageManager->addErrorMessage(__('The Stock does not exist.'));
+            $this->processRedirectAfterFailureSave($resultRedirect);
         } catch (ValidationException $e) {
             foreach ($e->getErrors() as $localizedError) {
                 $this->messageManager->addErrorMessage($localizedError->getMessage());
             }
             $this->processRedirectAfterFailureSave($resultRedirect, $stockId);
-        } catch (LocalizedException $e) {
+        } catch (CouldNotSaveException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
+            $this->processRedirectAfterFailureSave($resultRedirect, $stockId);
+        } catch (InputException $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->processRedirectAfterFailureSave($resultRedirect, $stockId);
+        } catch (Exception $e) {
+            $this->messageManager->addErrorMessage(__('Could not save Stock.'));
             $this->processRedirectAfterFailureSave($resultRedirect, $stockId ?? null);
         }
 

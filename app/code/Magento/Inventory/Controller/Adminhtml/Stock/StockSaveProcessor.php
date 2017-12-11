@@ -10,11 +10,7 @@ namespace Magento\Inventory\Controller\Adminhtml\Stock;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\EntityManager\EventManager;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Validation\ValidationException;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\Data\StockInterfaceFactory;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
@@ -81,48 +77,36 @@ class StockSaveProcessor
      */
     public function process($stockId, RequestInterface $request): int
     {
-        try {
-            if (null === $stockId) {
-                $stock = $this->stockFactory->create();
-            } else {
-                $stock = $this->stockRepository->get($stockId);
-            }
-            $requestData = $request->getParams();
-            $this->dataObjectHelper->populateWithArray($stock, $requestData['general'], StockInterface::class);
-            $this->eventManager->dispatch(
-                'controller_action_inventory_populate_stock_with_data',
-                [
-                    'request' => $request,
-                    'stock' => $stock,
-                ]
-            );
-            $stockId = $this->stockRepository->save($stock);
-            $this->eventManager->dispatch(
-                'save_stock_controller_processor_after_save',
-                [
-                    'request' => $request,
-                    'stock' => $stock,
-                ]
-            );
-
-            $assignedSources =
-                isset($requestData['sources']['assigned_sources'])
-                    && is_array($requestData['sources']['assigned_sources'])
-                    ? $requestData['sources']['assigned_sources']
-                    : [];
-            $this->stockSourceLinkProcessor->process($stockId, $assignedSources);
-
-            return $stockId;
-        } catch (NoSuchEntityException $e) {
-            throw new LocalizedException(__('The Stock does not exist.'));
-        } catch (ValidationException $e) {
-            throw $e;
-        } catch (CouldNotSaveException $e) {
-            throw new LocalizedException(__($e->getMessage()));
-        } catch (InputException $e) {
-            throw new LocalizedException(__($e->getMessage()));
-        } catch (\Exception $e) {
-            throw new LocalizedException(__('Could not save stock.'));
+        if (null === $stockId) {
+            $stock = $this->stockFactory->create();
+        } else {
+            $stock = $this->stockRepository->get($stockId);
         }
+        $requestData = $request->getParams();
+        $this->dataObjectHelper->populateWithArray($stock, $requestData['general'], StockInterface::class);
+        $this->eventManager->dispatch(
+            'controller_action_inventory_populate_stock_with_data',
+            [
+                'request' => $request,
+                'stock' => $stock,
+            ]
+        );
+        $stockId = $this->stockRepository->save($stock);
+        $this->eventManager->dispatch(
+            'save_stock_controller_processor_after_save',
+            [
+                'request' => $request,
+                'stock' => $stock,
+            ]
+        );
+
+        $assignedSources =
+            isset($requestData['sources']['assigned_sources'])
+            && is_array($requestData['sources']['assigned_sources'])
+                ? $requestData['sources']['assigned_sources']
+                : [];
+        $this->stockSourceLinkProcessor->process($stockId, $assignedSources);
+
+        return $stockId;
     }
 }
