@@ -689,7 +689,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             'limit' => ToolbarModel::LIMIT_PARAM_NAME,
             'modeDefault' => $defaultMode,
             'directionDefault' => $this->_direction ?: ProductList::DEFAULT_SORT_DIRECTION,
-            'orderDefault' => $this->_productListHelper->getDefaultSortField(),
+            'orderDefault' => $this->getOrderField(),
             'limitDefault' => $this->_productListHelper->getDefaultLimitPerPageValue($defaultMode),
             'url' => $this->getPagerUrl(),
         ];
