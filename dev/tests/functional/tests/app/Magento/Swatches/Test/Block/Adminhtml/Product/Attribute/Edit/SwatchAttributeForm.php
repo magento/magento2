@@ -71,8 +71,6 @@ class SwatchAttributeForm extends AttributeForm
         $this->waitForElementVisible($chooseColorButtonLocator, Locator::SELECTOR_XPATH);
         $this->browser->find($chooseColorButtonLocator, Locator::SELECTOR_XPATH)->click();
 
-//        $this->specifyHex($optionKey, $color);
-
         $this->waitForElementVisible($this->submitColorLocator);
         $this->browser->find($this->submitColorLocator)->click();
     }
