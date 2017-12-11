@@ -86,8 +86,12 @@ class FilterGroupFactory
                     ->create();
 
                 $this->filterGroupBuilder->addFilter($subFilter);
-            } else {
-                throw new GraphQlInputException(new Phrase('Sub nesting nodes not supported'));
+            } elseif ($subNode instanceof Connective) {
+                if (((string)$subNode->getOperator()) == 'OR') {
+                    return $this->processConnective($subNode);
+                } else {
+                    throw new GraphQlInputException(new Phrase('Sub nesting AND not supported'));
+                }
             }
         }
         return $this->filterGroupBuilder->create();

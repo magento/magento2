@@ -100,6 +100,14 @@ class Customer implements HandlerInterface
         unset($result['failures_num']);
         unset($result['extension_attribute']);
 
+        unset($result['confirmation']);
+        unset($result['website_id']);
+        unset($result['store_id']);
+        unset($result['created_in']);
+        unset($result['disable_auto_group_change']);
+        unset($result['updated_at']);
+        unset($result['gender']);
+        
         $resolvedTypes = $this->typeGenerator->generate($typeName, $result);
         $fields = $resolvedTypes->config['fields'];
 
