@@ -81,17 +81,15 @@ class Attributes extends \Magento\Framework\View\Element\Template
         $attributes = $product->getAttributes();
         foreach ($attributes as $attribute) {
             if ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
-                if (is_array($value = $attribute->getFrontend()->getValue($product))) {
-                    continue;
-                }
-                if (!$product->hasData($attribute->getAttributeCode())) {
-                    $value = __('N/A');
-                } elseif ((string)$value == '') {
-                    $value = __('No');
+                $value = $attribute->getFrontend()->getValue($product);
+
+                if ($value instanceof Phrase) {
+                    $value = (string)$value;
                 } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
                     $value = $this->priceCurrency->convertAndFormat($value);
                 }
-                if ($value instanceof Phrase || (is_string($value) && strlen($value))) {
+
+                if (is_string($value) && strlen($value)) {
                     $data[$attribute->getAttributeCode()] = [
                         'label' => __($attribute->getStoreLabel()),
                         'value' => $value,
