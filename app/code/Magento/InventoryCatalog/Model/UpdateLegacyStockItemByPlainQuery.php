@@ -13,9 +13,9 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 
 /**
- * @inheritdoc
+ * Update Legacy catalocinventory_stock_item database data
  */
-class UpdateLegacyStockItemByPlainQuery implements UpdateLegacyStockItemByPlainQueryInterface
+class UpdateLegacyStockItemByPlainQuery
 {
     /**
      * @var ResourceConnection
@@ -48,7 +48,11 @@ class UpdateLegacyStockItemByPlainQuery implements UpdateLegacyStockItemByPlainQ
     }
 
     /**
-     * @inheritdoc
+     * Execute Plain MySql query on catalaginventory_stock_item
+     *
+     * @param string $sku
+     * @param float $quantity
+     * @return void
      */
     public function execute(string $sku, float $quantity)
     {

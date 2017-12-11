@@ -9,8 +9,8 @@ namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 use Magento\InventoryApi\Api\ReservationsAppendInterface;
-use Magento\InventoryCatalog\Model\UpdateLegacyStockItemByPlainQueryInterface;
-use Magento\InventoryCatalog\Model\UpdateLegacyStockStatusByPlainQueryInterface;
+use Magento\InventoryCatalog\Model\UpdateLegacyStockItemByPlainQuery;
+use Magento\InventoryCatalog\Model\UpdateLegacyStockStatusByPlainQuery;
 
 /**
  * Plugin help to fill the legacy catalog inventory tables cataloginventory_stock_status and
@@ -19,22 +19,22 @@ use Magento\InventoryCatalog\Model\UpdateLegacyStockStatusByPlainQueryInterface;
 class UpdateLegacyCatalogInventoryAtStockDeductionPlugin
 {
     /**
-     * @var UpdateLegacyStockItemByPlainQueryInterface
+     * @var UpdateLegacyStockItemByPlainQuery
      */
     private $updateLegacyStockItem;
 
     /**
-     * @var UpdateLegacyStockStatusByPlainQueryInterface
+     * @var UpdateLegacyStockStatusByPlainQuery
      */
     private $updateLegacyStockStatus;
 
     /**
-     * @param UpdateLegacyStockItemByPlainQueryInterface $updateLegacyStockItem
-     * @param UpdateLegacyStockStatusByPlainQueryInterface $updateLegacyStockStatus
+     * @param UpdateLegacyStockItemByPlainQuery $updateLegacyStockItem
+     * @param UpdateLegacyStockStatusByPlainQuery $updateLegacyStockStatus
      */
     public function __construct(
-        UpdateLegacyStockItemByPlainQueryInterface $updateLegacyStockItem,
-        UpdateLegacyStockStatusByPlainQueryInterface $updateLegacyStockStatus
+        UpdateLegacyStockItemByPlainQuery $updateLegacyStockItem,
+        UpdateLegacyStockStatusByPlainQuery $updateLegacyStockStatus
     ) {
         $this->updateLegacyStockItem = $updateLegacyStockItem;
         $this->updateLegacyStockStatus = $updateLegacyStockStatus;
