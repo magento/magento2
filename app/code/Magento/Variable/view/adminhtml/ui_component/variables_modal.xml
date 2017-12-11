@@ -26,7 +26,7 @@
 
             <updateUrl path="mui/index/render"/>
         </settings>
-        <aclResource>Magento_Catalog::products</aclResource>
+        <aclResource>Magento_Variable::variable</aclResource>
         <dataProvider class="Magento\Variable\Ui\Component\VariablesDataProvider"
                       name="variables_data_source">
             <settings>
