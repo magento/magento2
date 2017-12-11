@@ -719,9 +719,24 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     private function getOptionsData()
     {
         $optionsData = [
-            'option1' => ['is_delete' => true, 'name' => 'name1', 'price' => 'price1', 'option_id' => ''],
-            'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '13'],
-            'option3' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1', 'option_id' => '14'],
+            'option1' => [
+                'is_delete' => true,
+                'name'      => 'name1',
+                'price'     => 'price1',
+                'option_id' => '',
+            ],
+            'option2' => [
+                'is_delete' => false,
+                'name'      => 'name2',
+                'price'     => 'price1',
+                'option_id' => '13',
+            ],
+            'option3' => [
+                'is_delete' => false,
+                'name'      => 'name1',
+                'price'     => 'price1',
+                'option_id' => '14',
+            ],
         ];
 
         return $optionsData;
