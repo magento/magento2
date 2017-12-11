@@ -62,6 +62,8 @@ require([
                 $('convert_button_back').hide();
             }
 
+            wysiwyg.id = this.id;
+
             this.bindEvents();
         },
 
@@ -167,10 +169,6 @@ require([
         _saveAs: function () {
             $('save_as_flag').value = '1';
 
-            if (wysiwyg.activeEditor()) {
-                wysiwyg.updateTextArea();
-            }
-
             // Temporary solution will be replaced after refactoring of newsletter functionality
             jQuery('#newsletter_template_edit_form').triggerHandler('save');
             return false;
@@ -184,7 +182,6 @@ require([
             }
 
             if (wysiwyg.activeEditor()) {
-                wysiwyg.updateTextArea();
                 $('preview_text').value = wysiwyg.getContent();
             } else {
                 $('preview_text').value = $(this.id).value;
