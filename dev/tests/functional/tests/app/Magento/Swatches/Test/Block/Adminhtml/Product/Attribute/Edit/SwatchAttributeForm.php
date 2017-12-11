@@ -55,7 +55,8 @@ class SwatchAttributeForm extends AttributeForm
 
     /**
      * Apply specified Color for specified Option Row.
-     * Merchant selects #000000 suggested by default if no exact Color is specified (workaround until MAGETWO-85304 is fixed & backported).
+     * Merchant selects #000000 suggested by default if no exact Color is specified (workaround until MAGETWO-85304
+     * is fixed & backported).
      *
      * @param int $optionKey
      * @param string $color
