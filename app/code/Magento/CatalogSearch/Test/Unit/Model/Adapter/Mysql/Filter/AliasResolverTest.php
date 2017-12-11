@@ -63,7 +63,11 @@ class AliasResolverTest extends \PHPUnit_Framework_TestCase
             ],
             'category_ids' => [
                 'field' => 'category_ids',
-                'alias' => 'category_ids_index',
+                'alias' => 'category_products_index',
+            ],
+            'visibility' => [
+                'field' => 'visibility',
+                'alias' => 'category_products_index',
             ],
         ];
     }

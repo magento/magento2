@@ -34,6 +34,11 @@ class SearchTest extends WebapiAbstract
                                 'field' => 'price_dynamic_algorithm',
                                 'value' => 'auto',
                                 'condition_type' => 'eq'
+                            ],
+                            [
+                                'field' => 'visibility',
+                                'value' => [3, 4],
+                                'condition_type' => 'eq'
                             ]
                         ]
                     ]

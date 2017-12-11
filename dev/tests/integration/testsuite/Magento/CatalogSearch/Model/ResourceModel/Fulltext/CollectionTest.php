@@ -40,6 +40,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ['catalog_view_container', ['category_ids' => 100001], 0],
             ['catalog_view_container', ['category_ids' => []], 0],
             ['catalog_view_container', [], 0],
+            ['catalog_view_container', ['visibility' => [2, 4]], 5],
         ];
     }
 }
