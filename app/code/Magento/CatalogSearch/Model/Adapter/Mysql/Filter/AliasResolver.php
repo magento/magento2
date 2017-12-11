@@ -35,7 +35,8 @@ class AliasResolver
                 $alias = 'price_index';
                 break;
             case 'category_ids':
-                $alias = 'category_ids_index';
+            case 'visibility':
+                $alias = 'category_products_index';
                 break;
             default:
                 $alias = $field . RequestGenerator::FILTER_SUFFIX;

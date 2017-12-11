@@ -270,6 +270,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $this->filterBuilder->setValue($condition);
             $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
         } else {
+            if (empty($condition['from']) && empty($condition['to'])) {
+                $this->filterBuilder->setField($field);
+                $this->filterBuilder->setValue($condition);
+                $this->filterBuilder->setConditionType('in');
+                $this->searchCriteriaBuilder->addFilter(
+                    $this->filterBuilder->create()
+                );
+            }
             if (!empty($condition['from'])) {
                 $this->filterBuilder->setField("{$field}.from");
                 $this->filterBuilder->setValue($condition['from']);
