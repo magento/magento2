@@ -211,7 +211,7 @@ QUERY;
 
         $query = <<<QUERY
 {
-    products(find: {and: {sku: {eq: "{$prductSku}"}}})
+    products(find: {sku: {eq: "{$prductSku}"}})
     {
         items{
             attribute_set_id
