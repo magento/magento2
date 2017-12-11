@@ -58,10 +58,33 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
+        parent::setUp();
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->copier = $this->objectManager->get(Copier::class);
         $this->productRepository = $this->objectManager->get(ProductRepository::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $skus = [
+            'simple-1',
+            'simple-2'
+        ];
+        foreach ($skus as $sku) {
+            try {
+                $product = $this->productRepository->get($sku, false, null, true);
+                $this->productRepository->delete($product);
+            } catch (NoSuchEntityException $e) {
+            }
+        }
+        parent::tearDown();
     }
 }
