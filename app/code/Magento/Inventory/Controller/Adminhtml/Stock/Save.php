@@ -10,6 +10,7 @@ namespace Magento\Inventory\Controller\Adminhtml\Stock;
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -56,9 +57,22 @@ class Save extends Action
         if (!$request->isPost() || empty($requestData['general'])) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
             $this->processRedirectAfterFailureSave($resultRedirect);
-
             return $resultRedirect;
         }
+        return $this->processSave($requestData, $request, $resultRedirect);
+    }
+
+    /**
+     * @param array $requestData
+     * @param RequestInterface $request
+     * @param Redirect $resultRedirect
+     * @return ResultInterface
+     */
+    private function processSave(
+        array $requestData,
+        RequestInterface $request,
+        Redirect $resultRedirect
+    ): ResultInterface {
         try {
             $stockId = isset($requestData['general'][StockInterface::STOCK_ID])
                 ? (int)$requestData['general'][StockInterface::STOCK_ID]
@@ -86,7 +100,6 @@ class Save extends Action
             $this->messageManager->addErrorMessage(__('Could not save Stock.'));
             $this->processRedirectAfterFailureSave($resultRedirect, $stockId ?? null);
         }
-
         return $resultRedirect;
     }
 
