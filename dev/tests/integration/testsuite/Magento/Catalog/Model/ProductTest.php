@@ -549,4 +549,36 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             }
         }
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
+     */
+    public function testSaveWithDifferentQty()
+    {
+        //if save (out of stock product with qty 0) with new qty > 0 it should become in stock.
+        //if set out of stock for product with qty > 0 it should become out of stock
+        $product = $this->productRepository->get('simple-out-of-stock');
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->assertEquals(false, $stockItem->getIsInStock());
+        $stockData = [
+            'qty'                       => 5,
+            'is_in_stock'               => 0,
+        ];
+        $product->setStockData($stockData);
+        $product->save();
+
+        $product = $this->productRepository->get('simple-out-of-stock');
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->assertEquals(true, $stockItem->getIsInStock());
+        $stockData = [
+            'qty'                       => 3,
+            'is_in_stock'               => 0,
+        ];
+        $product->setStockData($stockData);
+        $product->save();
+
+        $product = $this->productRepository->get('simple-out-of-stock');
+        $stockItem = $product->getExtensionAttributes()->getStockItem();
+        $this->assertEquals(false, $stockItem->getIsInStock());
+    }
 }
