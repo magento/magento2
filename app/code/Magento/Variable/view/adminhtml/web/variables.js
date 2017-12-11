@@ -6,6 +6,7 @@
 /* global Variables, updateElementAtCursor, MagentovariablePlugin, Base64 */
 define([
     'jquery',
+    'Magento_Ui/js/modal/alert',
     'mage/translate',
     'wysiwygAdapter',
     'uiRegistry',
@@ -16,7 +17,7 @@ define([
     'Magento_Ui/js/lib/spinner',
     'jquery/ui',
     'prototype'
-], function (jQuery, $t, wysiwyg, registry, mageApply, utils, configGenerator, customGenerator, loader) {
+], function (jQuery, alert, $t, wysiwyg, registry, mageApply, utils, configGenerator, customGenerator, loader) {
     'use strict';
 
     window.Variables = {
@@ -130,6 +131,7 @@ define([
             jQuery('#' + this.dialogWindowId).modal('openModal');
 
             if (typeof selectedElement !== 'undefined') {
+                var variablePath = MagentovariablePlugin.getElementVariablePath(selectedElement);
                 registry.get(
                     'variables_modal.variables_modal.variables.variable_selector',
                     function (radioSelect) {
@@ -270,6 +272,41 @@ define([
         editor: null,
         variables: null,
         textareaId: null,
+        lostVariables: [],
+
+        /**
+         * Reset lost variables array.
+         */
+        resetLostVariables: function () {
+            this.lostVariables = [];
+        },
+
+        /**
+         * Register new variable as lost.
+         *
+         * @param {String} variableCode
+         */
+        registerLostVariable: function (variableCode) {
+            this.lostVariables.push(variableCode);
+        },
+
+        /**
+         * Show information message on lost variables.
+         */
+        informLostVariables: function () {
+            var msg = $t(
+                'This page contains {0} unexistent variable(s): {1}. Please remove them or replace with valid ones.'
+            );
+
+            msg = msg.replace(/\{(\d+)\}/g, function(match, index) {
+                var params = [this.lostVariables.length, this.lostVariables.join(', ')];
+                return (typeof (params[index]) !== 'undefined') ? params[index] : match;
+            }.bind(this));
+
+            alert({
+                content: msg
+            });
+        },
 
         /**
          * Bind editor.
