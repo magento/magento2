@@ -138,7 +138,12 @@ class CrontabManager implements CrontabManagerInterface
     private function generateSection($content, $tasks = [])
     {
         if ($tasks) {
-            $content .= PHP_EOL . $this->getTasksBlockStart() . PHP_EOL;
+            // Add EOL symbol to previous line if not exist.
+            if (substr($content, -strlen(PHP_EOL)) !== PHP_EOL) {
+                $content .= PHP_EOL;
+            }
+
+            $content .= $this->getTasksBlockStart() . PHP_EOL;
             foreach ($tasks as $task) {
                 $content .= $task['expression'] . ' ' . PHP_BINARY . ' ' . $task['command'] . PHP_EOL;
             }
