@@ -23,7 +23,7 @@ class ConfigProvider implements ConfigProviderInterface
     /**
      * @var UrlInterface
      */
-    protected $urlBuilder;
+    protected $customerUrl;
 
     /**
      * @var ScopeConfigInterface
@@ -31,16 +31,16 @@ class ConfigProvider implements ConfigProviderInterface
     protected $scopeConfig;
 
     /**
-     * @param UrlInterface $urlBuilder
+     * @param Url $customerUrl
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        UrlInterface $urlBuilder,
+        Url $customerUrl,
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig
     ) {
-        $this->urlBuilder = $urlBuilder;
+        $this->customerUrl = $customerUrl;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
     }
@@ -78,7 +78,7 @@ class ConfigProvider implements ConfigProviderInterface
      */
     protected function getLoginUrl()
     {
-        return $this->urlBuilder->getUrl(Url::ROUTE_ACCOUNT_LOGIN);
+        return $this->customerUrl->getLoginUrl();
     }
 
     /**
