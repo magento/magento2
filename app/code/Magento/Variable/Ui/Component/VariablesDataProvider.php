@@ -178,7 +178,6 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
                     return strpos(strtolower($item[$filterField]), strtolower($value)) !== false;
                 }));
             }
-
         }
 
         return [
