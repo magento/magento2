@@ -7943,7 +7943,7 @@ if (testLabel
 
     try {
     Random random = new Random();
-    if (${seedForRandom} > 0) {
+    if (${seedForRandom} &gt; 0) {
       random.setSeed(${seedForRandom} + ${__threadNum});
     }
     simpleCount = props.get("simple_products_list").size();
