@@ -107,7 +107,7 @@ class BatchRangeIterator implements BatchIteratorInterface
     public function current()
     {
         if (null === $this->currentSelect) {
-            $this->isValid = ($this->currentOffset + $this->batchSize) <= $this->totalItemCount;
+            $this->isValid = $this->currentOffset < $this->totalItemCount;
             $this->currentSelect = $this->initSelectObject();
         }
         return $this->currentSelect;
@@ -138,7 +138,7 @@ class BatchRangeIterator implements BatchIteratorInterface
         if (null === $this->currentSelect) {
             $this->current();
         }
-        $this->isValid = ($this->batchSize + $this->currentOffset) <= $this->totalItemCount;
+        $this->isValid = $this->currentOffset < $this->totalItemCount;
         $select = $this->initSelectObject();
         if ($this->isValid) {
             $this->iteration++;
