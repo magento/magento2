@@ -17,12 +17,12 @@ class DeployMarker extends Command
     /**
      * @var DeploymentsFactory
      */
-    protected $deploymentsFactory;
+    private $deploymentsFactory;
 
     /**
      * @var ServiceShellUser
      */
-    protected $serviceShellUser;
+    private $serviceShellUser;
 
     /**
      * Initialize dependencies.
