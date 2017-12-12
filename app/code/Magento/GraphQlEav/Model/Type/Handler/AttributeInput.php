@@ -7,7 +7,7 @@
 namespace Magento\GraphQlEav\Model\Type\Handler;
 
 use Magento\GraphQl\Model\Type\HandlerInterface;
-use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\Framework\GraphQl\TypeFactory;
 use Magento\GraphQl\Model\Type\Handler\Pool;
 
 /**

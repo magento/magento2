@@ -78,10 +78,11 @@ QUERY;
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
     }
 
-
     /**
-     * Requesting for items that has a special price and price < $60, that are visible in Catalog, Search or Both which either has a sku like “simple”
-     * or name like “configurable”sorted by price in DESC
+     * Test a visible product with matching sku or name with special price
+     *
+     * Requesting for items that has a special price and price < $60, that are visible in Catalog, Search or Both which
+     * either has a sku like “simple” or name like “configurable”sorted by price in DESC
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -92,7 +93,7 @@ QUERY;
             = <<<QUERY
 {
     products(
-        find:
+        filter:
         {
           special_price:{neq:"null"}
           price:{lt:"60"}
