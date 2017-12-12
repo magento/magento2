@@ -71,23 +71,19 @@ class UpdateCatalogInventoryStockItemByDefaultSourceItem implements
         $productIds = $this->productIdLocator->retrieveProductIdsBySkus([$sourceItem->getSku()]);
         $productId = isset($productIds[$sourceItem->getSku()]) ? key($productIds[$sourceItem->getSku()]) : false;
 
-        if (!$productId) {
-            throw new NoSuchEntityException(
-                __('Product with SKU "%1" does not exist', $sourceItem->getSku())
+        if ($productId) {
+            $connection = $this->resourceConnection->getConnection();
+            $connection->update(
+                $connection->getTableName('cataloginventory_stock_item'),
+                [
+                    StockItemInterface::QTY => $sourceItem->getQuantity(),
+                ],
+                [
+                    StockItemInterface::STOCK_ID . ' = ?' => $this->defaultStockProvider->getId(),
+                    StockItemInterface::PRODUCT_ID . ' = ?' => $productId,
+                    'website_id = ?' => 0
+                ]
             );
         }
-
-        $connection = $this->resourceConnection->getConnection();
-        $connection->update(
-            $connection->getTableName('cataloginventory_stock_item'),
-            [
-                StockItemInterface::QTY => $sourceItem->getQuantity(),
-            ],
-            [
-                StockItemInterface::STOCK_ID . ' = ?' => $this->defaultStockProvider->getId(),
-                StockItemInterface::PRODUCT_ID . ' = ?' => $productId,
-                'website_id = ?' => 0
-            ]
-        );
     }
 }
