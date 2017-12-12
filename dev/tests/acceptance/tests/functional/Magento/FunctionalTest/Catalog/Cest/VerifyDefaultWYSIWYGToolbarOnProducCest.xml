@@ -18,9 +18,9 @@
             <env value="phantomjs"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" mergeKey="loginGetFromGeneralFile"/>
-            <actionGroup ref="EnabledWYSIWYG" mergeKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" mergeKey="switchToTinyMCE4" />
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
         <test name="Verifydefaultcontrolsonproductdescription">
             <annotations>
@@ -29,24 +29,24 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-80505"/>
             </annotations>
-            <amOnPage url="{{AdminProductEditPage(simple)}}" mergeKey="navigateToProduct"/>
-            <waitForPageLoad mergeKey="wait"/>
-            <click selector="{{AdminProductFormSection.contentTab}}" mergeKey="clickContentTab" />
-            <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" mergeKey="waitforTinyMCE4Visible1"/>
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" mergeKey="TinyMCE4Description" />
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Style}}" mergeKey="assertInfo2"/>
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Bold}}" mergeKey="assertInfo3"/>
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Italic}}" mergeKey="assertInfo4"/>
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Underline}}" mergeKey="assertInfo5"/>
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.AlignLeft}}" mergeKey="assertInfo6"/>
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.AlignCenter}}" mergeKey="assertInfo7"/>
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.AlignRight}}" mergeKey="assertInfo8"/>
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Numlist}}" mergeKey="assertInfo9"/>
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Bullet}}" mergeKey="assertInfo10"/>
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertLink}}" mergeKey="assertInfo11"/>
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" mergeKey="assertInf12"/>
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertTable}}" mergeKey="assertInfo13"/>
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" mergeKey="assertInfo14"/>
+            <amOnPage url="{{AdminProductEditPage(simple)}}" stepKey="navigateToProduct"/>
+            <waitForPageLoad stepKey="wait"/>
+            <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
+            <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitforTinyMCE4Visible1"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4Description" />
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Style}}" stepKey="assertInfo2"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Bold}}" stepKey="assertInfo3"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Italic}}" stepKey="assertInfo4"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Underline}}" stepKey="assertInfo5"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.AlignLeft}}" stepKey="assertInfo6"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.AlignCenter}}" stepKey="assertInfo7"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.AlignRight}}" stepKey="assertInfo8"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Numlist}}" stepKey="assertInfo9"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.Bullet}}" stepKey="assertInfo10"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertLink}}" stepKey="assertInfo11"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" stepKey="assertInf12"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertTable}}" stepKey="assertInfo13"/>
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" stepKey="assertInfo14"/>
         </test>
         <test name="Verifydefaultcontrolsonproductshortdescription">
             <annotations>
@@ -55,28 +55,28 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-80505"/>
             </annotations>
-            <amOnPage url="{{AdminProductEditPage(simple)}}" mergeKey="navigateToProduct"/>
-            <waitForPageLoad mergeKey="wait"/>
-            <click selector="{{AdminProductFormSection.contentTab}}" mergeKey="clickContentTab" />
-            <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" mergeKey="waitforTinyMCE4Visible2"/>
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" mergeKey="TinyMCE4ShortDescription" />
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Style}}" mergeKey="assertInfo16"/>
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Bold}}" mergeKey="assertInfo17"/>
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Italic}}" mergeKey="assertInfo18"/>
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Underline}}" mergeKey="assertInfo19"/>
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.AlignLeft}}" mergeKey="assertInfo20"/>
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.AlignCenter}}" mergeKey="assertInfo21"/>
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.AlignRight}}" mergeKey="assertInfo22"/>
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Numlist}}" mergeKey="assertInfo23"/>
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Bullet}}" mergeKey="assertInfo324"/>
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertLink}}" mergeKey="assertInfo25"/>
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" mergeKey="assertInfo26"/>
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertTable}}" mergeKey="assertInfo27"/>
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" mergeKey="assertInfo27"/>
+            <amOnPage url="{{AdminProductEditPage(simple)}}" stepKey="navigateToProduct"/>
+            <waitForPageLoad stepKey="wait"/>
+            <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
+            <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitforTinyMCE4Visible2"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4ShortDescription" />
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Style}}" stepKey="assertInfo16"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Bold}}" stepKey="assertInfo17"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Italic}}" stepKey="assertInfo18"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Underline}}" stepKey="assertInfo19"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.AlignLeft}}" stepKey="assertInfo20"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.AlignCenter}}" stepKey="assertInfo21"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.AlignRight}}" stepKey="assertInfo22"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Numlist}}" stepKey="assertInfo23"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Bullet}}" stepKey="assertInfo324"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertLink}}" stepKey="assertInfo25"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" stepKey="assertInfo26"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertTable}}" stepKey="assertInfo27"/>
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" stepKey="assertInfo27"/>
         </test>
         <after>
-            <actionGroup ref="DisabledWYSIWYG" mergeKey="disabledWYSIWYG"/>
-            <amOnPage url="admin/admin/auth/logout/" mergeKey="amOnLogoutPage"/>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disabledWYSIWYG"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
     </cest>
 </config>

@@ -18,9 +18,9 @@
             <env value="phantomjs"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" mergeKey="loginGetFromGeneralFile"/>
-            <actionGroup ref="EnabledWYSIWYG" mergeKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" mergeKey="switchToTinyMCE4" />
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
         <test name="DefaultTinyMCEv4onProductPage">
             <annotations>
@@ -29,39 +29,39 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-81819"/>
             </annotations>
-            <amOnPage url="{{AdminProductEditPage.url}}" mergeKey="navigateToNewProduct"/>
-            <waitForPageLoad mergeKey="wait1"/>
-            <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" mergeKey="fillName"/>
-            <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" mergeKey="fillPrice"/>
-            <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" mergeKey="fillSKU"/>
-            <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" mergeKey="fillQuantity"/>
-            <click selector="{{AdminProductFormSection.contentTab}}" mergeKey="clickContentTab" />
-            <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" mergeKey="waitForDescription" />
-            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" mergeKey="TinyMCE4Description" />
-            <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" mergeKey="waitForShortDescription" />
-            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}"  mergeKey="TinyMCE4ShortDescription" />
-            <executeJS function="tinyMCE.get('product_form_description').setContent('Hello World!');" mergeKey="executeJSFillContent1"/>
-            <executeJS function="tinyMCE.get('product_form_short_description').setContent('Hello World! Short Content');" mergeKey="executeJSFillContent2"/>
-            <click selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" mergeKey="clickShowHideBtn1" />
-            <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertImageBtn}}" mergeKey="waitForInsertImage1" />
-            <see selector="{{CmsWYSIWYGSection.InsertImageBtn}}" userInput="Insert Image..." mergeKey="seeInsertImage1"/>
-            <dontSee selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" mergeKey="insertWidget1" />
-            <dontSee selector="{{CmsWYSIWYGSection.InsertVariableBtn}}" mergeKey="insertVariable1" />
-            <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.showHideBtn}}" mergeKey="clickShowHideBtn2" />
-            <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" mergeKey="waitForInsertImage2" />
-            <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" userInput="Insert Image..." mergeKey="seeInsertImage2"/>
-            <dontSee selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" mergeKey="insertWidget2" />
-            <dontSee selector="{{CmsWYSIWYGSection.InsertVariableBtn}}" mergeKey="insertVariable2" />
-            <click selector="{{AdminProductFormActionSection.saveButton}}" mergeKey="saveProduct"/>
+            <amOnPage url="{{AdminProductEditPage.url}}" stepKey="navigateToNewProduct"/>
+            <waitForPageLoad stepKey="wait1"/>
+            <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+            <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+            <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+            <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+            <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
+            <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitForDescription" />
+            <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4Description" />
+            <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitForShortDescription" />
+            <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}"  stepKey="TinyMCE4ShortDescription" />
+            <executeJS function="tinyMCE.get('product_form_description').setContent('Hello World!');" stepKey="executeJSFillContent1"/>
+            <executeJS function="tinyMCE.get('product_form_short_description').setContent('Hello World! Short Content');" stepKey="executeJSFillContent2"/>
+            <click selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="clickShowHideBtn1" />
+            <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="waitForInsertImage1" />
+            <see selector="{{CmsWYSIWYGSection.InsertImageBtn}}" userInput="Insert Image..." stepKey="seeInsertImage1"/>
+            <dontSee selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="insertWidget1" />
+            <dontSee selector="{{CmsWYSIWYGSection.InsertVariableBtn}}" stepKey="insertVariable1" />
+            <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="clickShowHideBtn2" />
+            <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" stepKey="waitForInsertImage2" />
+            <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" userInput="Insert Image..." stepKey="seeInsertImage2"/>
+            <dontSee selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="insertWidget2" />
+            <dontSee selector="{{CmsWYSIWYGSection.InsertVariableBtn}}" stepKey="insertVariable2" />
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
             <!-- Go to storefront product page, assert product content -->
-            <amOnPage url="{{_defaultProduct.name}}.html" mergeKey="navigateToProductPage"/>
-            <waitForPageLoad mergeKey="waitForPageLoad2"/>
-            <see userInput="Hello World!" selector="{{StorefrontProductInfoMainSection.productDescription}}" mergeKey="assertProductDescription"/>
-            <see userInput="Hello World! Short Content" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" mergeKey="assertProductShortDescription"/>
+            <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad2"/>
+            <see userInput="Hello World!" selector="{{StorefrontProductInfoMainSection.productDescription}}" stepKey="assertProductDescription"/>
+            <see userInput="Hello World! Short Content" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
         </test>
         <after>
-            <actionGroup ref="DisabledWYSIWYG" mergeKey="disabledWYSIWYG"/>
-            <amOnPage url="admin/admin/auth/logout/" mergeKey="amOnLogoutPage"/>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disabledWYSIWYG"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
     </cest>
 </config>

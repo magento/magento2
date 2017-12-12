@@ -19,9 +19,9 @@
         <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl"/>
         <element name="ShowHideBtn" type="button" selector="#togglecms_page_form_content"/>
         <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
-        <element name="InsertWidgetIcon" type="button" selector=".mce-ico.mce-i-none"/>
+        <element name="InsertWidgetIcon" type="button" selector="div[aria-label='Insert Widget']"/>
         <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
-        <element name="InsertVariableIcon" type="button" selector="#icon"/>
+        <element name="InsertVariableIcon" type="button" selector="div[aria-label='Insert configuration value Variable or custom Variable']"/>
         <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
         <element name="InsertImageIcon" type="button" selector=".mce-i-image"/>
         <element name="Browse" type="button" selector=".mce-i-browse"/>
@@ -53,17 +53,27 @@
         <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
         <element name="StorageRoot" type="button" selector="#root > .jstree-icon" />
     </section>
-    <section name="InsertVariableWYSIWYGSection">
-        <element name="ShowHideBtn" type="button" selector="#togglecms_page_form_content"/>
-        <element name="InsertVariable" type="button" selector=".scalable.add-variable.plugin"/>
+    <section name="VariableSection">
+        <element name="InsertWidget" type="button" selector="#insert_variable"/>
+        <element name="InsertVariableBtnEnabled" type="button" selector="//button[@id='insert_variable' and not(contains(@class,'disabled'))]"/>
+        <element name="InsertVariableBtnDisabled" type="button" selector="//button[@id='insert_variable' and contains(@class,'disabled')]"/>
+        <element name="CancelBtnEnabled" type="button" selector="//button[@class='action-scalable cancel' and not(contains(@class,'disabled'))]"/>
+        <element name="Close" type="button" selector="#close"/>
+        <element name="SearchTxtbox" type="input" selector="input[placeholder='Search by keyword']"/>
+        <element name="ColName" type="text" selector="//table[@class='data-grid data-grid-draggable']/thead/tr/th/span[text()='{{var1}}']" parameterized="true"/>
+        <element name="Radio" type="input" selector="//input[@type='radio' and contains(@value, '{{var1}}')]" parameterized="true"/>
+        <element name="VariableName" type="input" selector="//div[text()='{{var1}}']" parameterized="true"/>
+        <element name="VariableInAscSort" type="input" selector="#variable"/>
+        <element name="VariableInDescSort" type="input" selector="#variable"/>
+        <element name="Type" type="input" selector="#value"/>
+        <element name="Code" type="input" selector="#code"/>
+        <element name="searchResult" type="text" selector="//table/tbody/tr//td/div[text()='{{var1}}']" parameterized="true" />
+
         <element name="ListOfVariable" type="text" selector="//ul[@class='insert-variable']/li"/>
-        <element name="Variable" type="text" selector="//a[text()='City']"/>
         <element name="InsertedVariable" type="button" selector="#variable"/>
         <element name="InsertedVariable2" type="button" selector="#variable2"/>
         <element name="position1" type="button" selector="#//p[2]"/>
         <element name="position2" type="button" selector="#//p[1]"/>
-        <element name="VariableAfterDrag" type="text" selector="//p[1]/img[@src='http://magento2.vagrant42/pub/static/version1507588980/adminhtml/Magento/backend/en_US/Magento_Variable/placeholder.gif']" />
-        <element name="SecondVariable" type="button" selector="//a[text()='Country']"/>
     </section>
     <section name="WidgetSection">
         <element name="InsertWidgetTitle" type="text" selector="//h1[contains(text(),'Insert Widget')]"/>
