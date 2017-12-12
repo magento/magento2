@@ -35,7 +35,7 @@ class Customer implements HandlerInterface
     private $entityAttributeList;
 
     /**
-     * @var TypeFactory
+     * @var \Magento\Framework\GraphQl\TypeFactory
      */
     private $typeFactory;
 
@@ -43,7 +43,7 @@ class Customer implements HandlerInterface
      * @param Pool $typePool
      * @param TypeGenerator $typeGenerator
      * @param EntityAttributeList $entityAttributeList
-     * @param TypeFactory $typeFactory
+     * @param \Magento\Framework\GraphQl\TypeFactory $typeFactory
      */
     public function __construct(
         Pool $typePool,

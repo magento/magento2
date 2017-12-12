@@ -10,7 +10,7 @@ use Magento\GraphQl\Model\EntityAttributeList;
 use Magento\Framework\Exception\InputException;
 use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
-use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\Framework\GraphQl\TypeFactory;
 use Magento\GraphQl\Model\Type\Handler\Pool;
 
 /**
@@ -75,7 +75,7 @@ class Product implements HandlerInterface
                             __('Type %1 does not implement %2 interface', $typeId, self::PRODUCT_TYPE_NAME)
                         );
                     }
-                    $resolvedType = $this->typePool->getComplexType(ucfirst($typeId) . self::PRODUCT_TYPE_NAME);
+                    $resolvedType = $this->typePool->getType(ucfirst($typeId) . self::PRODUCT_TYPE_NAME);
 
                     if (!$resolvedType) {
                         throw new InputException(

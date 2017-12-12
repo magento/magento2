@@ -8,10 +8,9 @@ namespace Magento\GraphQl\Model\Type;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Model\Type\Handler\Pool;
-use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\Framework\GraphQl\TypeFactory;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
-use Magento\GraphQl\Model\Type\Config as TypeConfig;
-use Magento\GraphQl\Model\Query\Config as QueryConfig;
+use Magento\GraphQl\Model\QueryConfig;
 
 /**
  * {@inheritdoc}
@@ -24,7 +23,7 @@ class Generator implements GeneratorInterface
     private $typePool;
 
     /**
-     * @var TypeConfig
+     * @var HandlerConfig
      */
     private $typeConfig;
 
@@ -45,14 +44,14 @@ class Generator implements GeneratorInterface
 
     /**
      * @param Pool $typePool
-     * @param TypeConfig $typeConfig
+     * @param HandlerConfig $typeConfig
      * @param QueryConfig $queryConfig
      * @param TypeFactory $typeFactory
      * @param HandlerFactory $handlerFactory
      */
     public function __construct(
         Pool $typePool,
-        TypeConfig $typeConfig,
+        HandlerConfig $typeConfig,
         QueryConfig $queryConfig,
         TypeFactory $typeFactory,
         HandlerFactory $handlerFactory
@@ -106,6 +105,7 @@ class Generator implements GeneratorInterface
      * @param string $argumentName
      * @param string $argumentType
      * @return TypeInterface|\GraphQL\Type\Definition\Type
+     * @throws GraphQlInputException
      */
     private function decorateType(string $argumentName, string $argumentType)
     {

@@ -6,17 +6,17 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\GraphQl\Model\Type\Config">
+    <type name="Magento\GraphQl\Model\Type\HandlerConfig">
         <arguments>
-            <argument name="config" xsi:type="array">
+            <argument name="handlers" xsi:type="array">
                 <item name="CustomAttributeMetadata" xsi:type="string">Magento\GraphQlEav\Model\Type\Handler\CustomAttributeMetadata</item>
                 <item name="AttributeInput" xsi:type="string">Magento\GraphQlEav\Model\Type\Handler\AttributeInput</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQl\Model\Query\Config">
+    <type name="Magento\GraphQl\Model\QueryConfig">
         <arguments>
-            <argument name="config" xsi:type="array">
+            <argument name="queryStructure" xsi:type="array">
                 <item name="customAttributeMetadata" xsi:type="array">
                     <item name="type" xsi:type="string">CustomAttributeMetadata</item>
                     <item name="resolver" xsi:type="object">Magento\GraphQlEav\Model\Resolver\CustomAttributeMetadata</item>

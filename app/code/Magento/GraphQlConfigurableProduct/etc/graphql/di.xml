@@ -6,9 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\GraphQl\Model\Type\Config">
+    <type name="Magento\GraphQl\Model\Type\HandlerConfig">
         <arguments>
-            <argument name="config" xsi:type="array">
+            <argument name="handlers" xsi:type="array">
                 <item name="ConfigurableProduct" xsi:type="string">Magento\GraphQlConfigurableProduct\Model\Type\Handler\ConfigurableProduct</item>
             </argument>
         </arguments>

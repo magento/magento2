@@ -6,12 +6,13 @@
 
 namespace Magento\GraphQl\Model\Type\ServiceContract;
 
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Type\Definition\InterfaceType;
 use Magento\GraphQl\Model\Type\Handler\Pool;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Webapi\Model\ServiceMetadata;
 use Magento\Framework\Api\SimpleDataObjectConverter;
-use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\Framework\GraphQl\TypeFactory;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 
 /**
@@ -40,7 +41,7 @@ class TypeGenerator
     private $simpleDataConverter;
 
     /**
-     * @var TypeFactory
+     * @var \Magento\Framework\GraphQl\TypeFactory
      */
     private $typeFactory;
 
@@ -85,7 +86,7 @@ class TypeGenerator
         array $schema
     ) {
         if ($this->typePool->isTypeRegistered($typeName)) {
-            return $this->typePool->getComplexType($typeName);
+            return $this->typePool->getType($typeName);
         }
 
         return $this->generateNestedTypes($typeName, $schema);
@@ -145,6 +146,7 @@ class TypeGenerator
      * @param bool $skipField
      * @param string|null $parentField
      * @return InterfaceType|\GraphQL\Type\Definition\Type|mixed|null
+     * @throws GraphQlInputException
      */
     private function generateNestedTypes(
         string $typeName,
@@ -166,7 +168,7 @@ class TypeGenerator
                     $subTypeName = $parentField ?: ucfirst($this->underscoreToCamelCase($field));
                     $generatedTypeName = $typeName . $subTypeName;
                     if ($this->typePool->isTypeRegistered($generatedTypeName)) {
-                        return $this->typePool->getComplexType($generatedTypeName);
+                        return $this->typePool->getType($generatedTypeName);
                     }
                     $generated = $this->generateNestedTypes($generatedTypeName, $type);
                     $this->typePool->registerType($generated);

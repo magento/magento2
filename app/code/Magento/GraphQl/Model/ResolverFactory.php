@@ -6,11 +6,11 @@
 
 namespace Magento\GraphQl\Model;
 
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\GraphQl\Model\Query\Config;
 
 /**
- * Create resolver class to generate resolve function for GraphQL type
+ * Create configured resolver class to resolve requested field data.
  */
 class ResolverFactory
 {
@@ -20,14 +20,15 @@ class ResolverFactory
     private $objectManager;
 
     /**
-     * @var Config
+     * @var QueryConfig
      */
     private $config;
 
     /**
      * @param ObjectManagerInterface $objectManager
+     * @param QueryConfig $config
      */
-    public function __construct(ObjectManagerInterface $objectManager, Config $config)
+    public function __construct(ObjectManagerInterface $objectManager, QueryConfig $config)
     {
         $this->objectManager = $objectManager;
         $this->config = $config;
@@ -38,6 +39,7 @@ class ResolverFactory
      *
      * @param string $resolverName
      * @return ResolverInterface
+     * @throws GraphQlInputException
      */
     public function create($resolverName)
     {

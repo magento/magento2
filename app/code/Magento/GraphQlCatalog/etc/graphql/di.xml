@@ -6,9 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\GraphQl\Model\Type\Config">
+    <type name="Magento\GraphQl\Model\Type\HandlerConfig">
         <arguments>
-            <argument name="config" xsi:type="array">
+            <argument name="handlers" xsi:type="array">
                 <item name="Product" xsi:type="string">Magento\GraphQlCatalog\Model\Type\Handler\Product</item>
                 <item name="SimpleProduct" xsi:type="string">Magento\GraphQlCatalog\Model\Type\Handler\SimpleProduct</item>
                 <item name="Products" xsi:type="string">Magento\GraphQlCatalog\Model\Type\Handler\Products</item>
@@ -17,9 +17,9 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQl\Model\Query\Config">
+    <type name="Magento\GraphQl\Model\QueryConfig">
         <arguments>
-            <argument name="config" xsi:type="array">
+            <argument name="queryStructure" xsi:type="array">
                 <item name="products" xsi:type="array">
                     <item name="type" xsi:type="string">Products</item>
                     <item name="resolver" xsi:type="object">Magento\GraphQlCatalog\Model\Resolver\Products</item>

@@ -8,7 +8,7 @@ namespace Magento\GraphQl\Model\Type\Handler;
 
 use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
-use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\Framework\GraphQl\TypeFactory;
 
 /**
  * Define SearchResultPageInfo GraphQL type

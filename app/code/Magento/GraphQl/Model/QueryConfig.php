@@ -4,29 +4,37 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Query;
+namespace Magento\GraphQl\Model;
 
 use Magento\GraphQl\Model\ResolverInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
-class Config
+/**
+ * Contains high level structure for the composition of GraphQL query endpoints, and their arguments and resolvers.
+ */
+class QueryConfig
 {
     /**
      * @var array
      */
-    private $config;
+    private $queryStructure;
 
     /**
-     * @param array $config
+     * @param array $queryStructure
      */
-    public function __construct(array $config = [])
+    public function __construct(array $queryStructure = [])
     {
-        $this->config = $config;
+        $this->queryStructure = $queryStructure;
     }
 
+    /**
+     * Retrieve field structure definitions for GraphQL queries
+     *
+     * @return array
+     */
     public function getQueryFields()
     {
-        return $this->config;
+        return $this->queryStructure;
     }
 
     /**
@@ -38,10 +46,10 @@ class Config
      */
     public function getResolverClass($type)
     {
-        if (!isset($this->config[$type]) || !isset($this->config[$type]['resolver'])) {
+        if (!isset($this->queryStructure[$type]) || !isset($this->queryStructure[$type]['resolver'])) {
             throw new GraphQlInputException(__('A resolver is not defined for the type %1', $type));
         }
 
-        return $this->config[$type]['resolver'];
+        return $this->queryStructure[$type]['resolver'];
     }
 }

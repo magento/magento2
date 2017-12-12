@@ -10,7 +10,7 @@ use GraphQl\Type\Definition\ResolveInfo;
 use Magento\Framework\GraphQl\Type\SchemaFactory;
 use Magento\GraphQl\Model\Type\Generator;
 use Magento\Framework\GraphQl\ArgumentFactory;
-use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\Framework\GraphQl\TypeFactory;
 
 /**
  * Generate a query field and concrete types for GraphQL schema

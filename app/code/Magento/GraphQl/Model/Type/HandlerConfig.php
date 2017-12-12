@@ -6,43 +6,49 @@
 
 namespace Magento\GraphQl\Model\Type;
 
-
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
-class Config
+/**
+ * Holds handler names for configured GraphQL types
+ */
+class HandlerConfig
 {
     /**
-     * @var HandlerInterface[]
+     * @var string[]
      */
-    private $config;
+    private $handlers;
 
     /**
-     * @param string[] $config
+     * @param string[] $handlers
      */
-    public function __construct(array $config = [])
+    public function __construct(array $handlers = [])
     {
-        $this->config = $config;
+        $this->handlers = $handlers;
     }
 
     /**
+     * Return all configured [type name => handler name] pairs.
+     *
      * @return string[]
      */
     public function getTypes()
     {
-        return $this->config;
+        return $this->handlers;
     }
 
     /**
+     * Return specific handler name for configured type name
+     *
      * @param string $typeName
      * @return string
      * @throws GraphQlInputException
      */
     public function getHandlerNameForType(string $typeName)
     {
-        if (!isset($this->config[$typeName])) {
+        if (!isset($this->handlers[$typeName])) {
             throw new GraphQlInputException(__('The %1 type has not been defined or configured', $typeName));
         }
 
-        return $this->config[$typeName];
+        return $this->handlers[$typeName];
     }
 }

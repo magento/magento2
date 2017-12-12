@@ -7,7 +7,7 @@
 namespace Magento\Framework\GraphQl\Argument\Filter;
 
 /**
- * Class that holds the find structure are value or connective for easy parsing
+ * Class that holds the find structure is value of connective for easy parsing
  */
 class FilterArgumentValue implements FilterArgumentValueInterface
 {

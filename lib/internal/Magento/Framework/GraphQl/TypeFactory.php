@@ -4,8 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\GraphQl\Type;
+namespace Magento\Framework\GraphQl;
 
+use Magento\Framework\GraphQl\Type\Definition;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use GraphQL\Type\Definition\Type;
 

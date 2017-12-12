@@ -7,7 +7,7 @@
 namespace Magento\GraphQl\Model\Type\Handler;
 
 use Magento\GraphQl\Model\Type\HandlerInterface;
-use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\Framework\GraphQl\TypeFactory;
 
 /**
  * Define SearchCriteriaExpression GraphQL type
@@ -28,7 +28,7 @@ class SearchCriteriaExpression implements HandlerInterface
 
     /**
      * @param Pool $pool
-     * @param TypeFactory $typeFactory
+     * @param \Magento\Framework\GraphQl\TypeFactory $typeFactory
      */
     public function __construct(Pool $pool, TypeFactory $typeFactory)
     {
