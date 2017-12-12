@@ -71,20 +71,10 @@ class RendererFactory
         if (!is_array($acceptTypes)) {
             $acceptTypes = [$acceptTypes];
         }
-        // If Accept type = '*/*' then return default renderer.
-        $defaultRenderer = isset($this->_renders['default']) ? $this->_renders['default'] : null; 
         foreach ($acceptTypes as $acceptType) {
-            if ($acceptType == '*/*' && $defaultRenderer) {
-                return $defaultRenderer['model'];
-            }
-            foreach ($this->_renders as $rendererConfig) {
-                $rendererType = $rendererConfig['type'];
-                if ($acceptType == $rendererType || $acceptType == current(
-                    explode('/', $rendererType)
-                ) . '/*' || $acceptType == '*/*'
-                ) {
-                    return $rendererConfig['model'];
-                }
+            $renderer = $this->getRendererConfig($acceptType);
+            if ($renderer !== null) {
+                return $renderer['model'];
             }
         }
         /** If server does not have renderer for any of the accepted types it SHOULD send 406 (not acceptable). */
@@ -97,5 +87,31 @@ class RendererFactory
             0,
             \Magento\Framework\Webapi\Exception::HTTP_NOT_ACCEPTABLE
         );
+    }
+
+    /**
+     * Get renderer config by accept type.
+     *
+     * @param string $acceptType
+     * @return array|null
+     */
+    private function getRendererConfig($acceptType)
+    {
+        // If Accept type = '*/*' then return default renderer.
+        if ($acceptType == '*/*' && isset($this->_renders['default'])) {
+            return $this->_renders['default'];
+        }
+        
+        foreach ($this->_renders as $rendererConfig) {
+            $rendererType = $rendererConfig['type'];
+            if ($acceptType == $rendererType
+                || $acceptType == current(explode('/', $rendererType)) . '/*'
+                || $acceptType == '*/*'
+            ) {
+                return $rendererConfig;
+            }
+        }
+
+        return null;
     }
 }

@@ -35,7 +35,7 @@ class RendererFactoryTest extends \PHPUnit\Framework\TestCase
                 'model' => \Magento\Framework\Webapi\Rest\Response\Renderer\Json::class,
             ],
             'default' => [
-                'type' => '*/*', 
+                'type' => '*/*',
                 'model' => \Magento\Framework\Webapi\Rest\Response\Renderer\Json::class
             ],
         ];
