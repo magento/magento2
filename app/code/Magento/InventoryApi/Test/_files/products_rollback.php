@@ -27,7 +27,7 @@ $stockStatusCriteriaFactory = $objectManager->create(StockStatusCriteriaInterfac
 $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
 $searchCriteria = $searchCriteriaBuilder->addFilter(
     ProductInterface::SKU,
-    ['SKU-1', 'SKU-2', 'SKU-3'],
+    ['SKU-1', 'SKU-2', 'SKU-3', 'SKU-4'],
     'in'
 )->create();
 $products = $productRepository->getList($searchCriteria)->getItems();
@@ -47,8 +47,10 @@ if (!empty($products)) {
         $criteria->setProductsFilter($product->getId());
 
         $result = $stockStatusRepository->getList($criteria);
-        $stockStatus = current($result->getItems());
-        $stockStatusRepository->delete($stockStatus);
+        if ($result->getTotalCount()) {
+            $stockStatus = current($result->getItems());
+            $stockStatusRepository->delete($stockStatus);
+        }
 
         $productRepository->delete($product);
     }

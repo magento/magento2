@@ -117,6 +117,7 @@ class UpdateLegacyCatalogInventoryDuringReservationPlacingTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoConfigFixture current_store cataloginventory/options/can_subtract 1
      */
     public function testThatReservationPlacedUpdatesBothOldAndNewStocks()
     {
@@ -152,5 +153,49 @@ class UpdateLegacyCatalogInventoryDuringReservationPlacingTest extends TestCase
 
         $this->assertEquals(8.5 - 5, $this->getProductQtyInStock->execute('SKU-1', 10));
         $this->assertEquals($this->getProductQtyInStock->execute('SKU-1', 10), $quantityAfterCheck);
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     * @magentoConfigFixture current_store cataloginventory/options/can_subtract 0
+     */
+    public function testThatReservationPlacedDefersUpdatingLegacyStockWhenCanSubtractOff()
+    {
+        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+        $reservationQuantity = -5;
+
+        $this->indexer->reindexAll();
+        $this->assertEquals(8.5, $this->getProductQtyInStock->execute('SKU-1', 10));
+
+        /** @var Product $product */
+        $product = $this->productRepository->get('SKU-1');
+
+        /** @var StockItemCriteriaInterface  $criteria */
+        $criteria = $this->stockItemCriteriaFactory->create();
+        $criteria->setProductsFilter([$product->getId()]);
+
+        /** @var StockItemCollectionInterface $collectionBeforeChange */
+        $collectionBeforeChange = $this->oldStockItemRepository->getList($criteria);
+
+        /** @var StockItemInterface $oldStockItem */
+        $oldStockItem = current($collectionBeforeChange->getItems());
+        $initialQuantity = $oldStockItem->getQty();
+        $this->assertEquals(8.5, $initialQuantity);
+
+        $this->reservationsAppend->execute([
+            $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity($reservationQuantity)->build()
+        ]);
+
+        /** @var StockItemCollectionInterface $collectionAfterChange */
+        $collectionAfterChange = $this->oldStockItemRepository->getList($criteria);
+        $oldStockItem = current($collectionAfterChange->getItems());
+        $quantityAfterReservationIsAppended = $oldStockItem->getQty();
+
+        $this->assertEquals(8.5 - 5, $this->getProductQtyInStock->execute('SKU-1', 10));
+        $this->assertEquals($initialQuantity, $quantityAfterReservationIsAppended);
     }
 }

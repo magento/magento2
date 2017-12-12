@@ -8,11 +8,18 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\InventoryCatalog\Api\DefaultStockProviderInterface" type="Magento\InventoryCatalog\Model\DefaultStockProvider"/>
     <preference for="Magento\InventoryCatalog\Api\DefaultSourceProviderInterface" type="Magento\InventoryCatalog\Model\DefaultSourceProvider"/>
+    <preference for="Magento\InventoryCatalog\Model\Command\UpdateCatalogInventoryStockItemByDefaultSourceItemInterface" type="Magento\InventoryCatalog\Model\Command\UpdateCatalogInventoryStockItemByDefaultSourceItem"/>
+    <preference for="Magento\InventoryCatalog\Model\Command\UpdateCatalogInventoryStockStatusByDefaultSourceItemInterface" type="Magento\InventoryCatalog\Model\Command\UpdateCatalogInventoryStockStatusByDefaultSourceItem"/>
+    <preference for="Magento\InventoryCatalog\Model\Command\DeleteCatalogInventoryStockItemByDefaultSourceItemInterface" type="Magento\InventoryCatalog\Model\Command\DeleteCatalogInventoryStockItemByDefaultSourceItem"/>
+    <preference for="Magento\InventoryCatalog\Model\Command\DeleteCatalogInventoryStockStatusByDefaultSourceItemInterface" type="Magento\InventoryCatalog\Model\Command\DeleteCatalogInventoryStockStatusByDefaultSourceItem"/>
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
         <plugin name="prevent_default_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
         <plugin name="prevent_assigned_to_sales_channels_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\AssignedToSalesChannelsStockPlugin"/>
+    </type>
+    <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
+        <plugin name="update_legacy_catalog_inventory_at_source_items_save" type="Magento\InventoryCatalog\Plugin\InventoryApi\SaveStockItemsOnSourceItemsSavePlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\ReservationsAppendInterface">
         <plugin name="update_legacy_catalog_inventory_at_stock_deduction" type="Magento\InventoryCatalog\Plugin\InventoryApi\UpdateLegacyCatalogInventoryAtStockDeductionPlugin"/>
@@ -21,6 +28,12 @@
         <plugin name="update_source_item_at_legacy_qty_counter" type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyQtyCounterPlugin"/>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
-        <plugin name="update_source_item_at_legacy_stock_setting" type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyStockSettingPlugin"/>
+        <plugin name="update_source_item_at_legacy_stock_setting"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\UpdateSourceItemAtLegacyStockSettingPlugin"/>
+        <plugin name="delete_source_items_when_legacy_stock_item_deleted"
+                type="Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock\DeleteSourceItemsAtLegacyStockItemDelete"/>
+    </type>
+    <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
+        <plugin name="delete_legacy_catalog_inventory_plugin" type="Magento\InventoryCatalog\Plugin\InventoryApi\DeleteLegacyCatalogInventoryPlugin"/>
     </type>
 </config>

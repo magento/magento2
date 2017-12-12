@@ -39,10 +39,15 @@ $stockData = [
         'qty' => 0,
         'is_in_stock' => false,
         'manage_stock' => true
+    ],
+    'SKU-4' => [
+        'qty' => 10,
+        'is_in_stock' => true,
+        'manage_stock' => true
     ]
 ];
 
-for ($i = 1; $i <= 3; $i++) {
+for ($i = 1; $i <= 4; $i++) {
     $product = $productFactory->create();
     $product->setTypeId(Type::TYPE_SIMPLE)
         ->setAttributeSetId(4)
@@ -52,27 +57,4 @@ for ($i = 1; $i <= 3; $i++) {
         ->setStockData($stockData['SKU-' . $i])
         ->setStatus(Status::STATUS_ENABLED);
     $productRepository->save($product);
-}
-
-/** @var Manager $moduleManager */
-$moduleManager = Bootstrap::getObjectManager()->get(Manager::class);
-// soft dependency in tests because we don't have possibility replace fixture from different modules
-if ($moduleManager->isEnabled('Magento_InventoryCatalog')) {
-    /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-    $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
-    /** @var DefaultStockProviderInterface $defaultStockProvider */
-    $defaultStockProvider = $objectManager->get(DefaultStockProviderInterface::class);
-    /** @var SourceItemRepositoryInterface $sourceItemRepository */
-    $sourceItemRepository = $objectManager->get(SourceItemRepositoryInterface::class);
-    /** @var SourceItemsDeleteInterface $sourceItemsDelete */
-    $sourceItemsDelete = $objectManager->get(SourceItemsDeleteInterface::class);
-
-    $searchCriteria = $searchCriteriaBuilder
-        ->addFilter(SourceItemInterface::SKU, ['SKU-1', 'SKU-2', 'SKU-3'], 'in')
-        ->addFilter(SourceItemInterface::SOURCE_ID, $defaultStockProvider->getId())
-        ->create();
-    $sourceItems = $sourceItemRepository->getList($searchCriteria)->getItems();
-    if (count($sourceItems)) {
-        $sourceItemsDelete->execute($sourceItems);
-    }
 }

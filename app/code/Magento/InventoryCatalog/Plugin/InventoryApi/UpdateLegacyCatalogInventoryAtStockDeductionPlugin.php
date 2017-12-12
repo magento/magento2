@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 use Magento\InventoryApi\Api\ReservationsAppendInterface;
 use Magento\InventoryCatalog\Model\UpdateLegacyStockItemByPlainQuery;
@@ -29,15 +30,23 @@ class UpdateLegacyCatalogInventoryAtStockDeductionPlugin
     private $updateLegacyStockStatus;
 
     /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfiguration;
+
+    /**
      * @param UpdateLegacyStockItemByPlainQuery $updateLegacyStockItem
      * @param UpdateLegacyStockStatusByPlainQuery $updateLegacyStockStatus
+     * @param StockConfigurationInterface $stockConfiguration
      */
     public function __construct(
         UpdateLegacyStockItemByPlainQuery $updateLegacyStockItem,
-        UpdateLegacyStockStatusByPlainQuery $updateLegacyStockStatus
+        UpdateLegacyStockStatusByPlainQuery $updateLegacyStockStatus,
+        StockConfigurationInterface $stockConfiguration
     ) {
         $this->updateLegacyStockItem = $updateLegacyStockItem;
         $this->updateLegacyStockStatus = $updateLegacyStockStatus;
+        $this->stockConfiguration = $stockConfiguration;
     }
 
     /**
@@ -52,9 +61,11 @@ class UpdateLegacyCatalogInventoryAtStockDeductionPlugin
      */
     public function afterExecute(ReservationsAppendInterface $subject, $result, array $reservations)
     {
-        foreach ($reservations as $reservation) {
-            $this->updateLegacyStockItem->execute($reservation->getSku(), (float)$reservation->getQuantity());
-            $this->updateLegacyStockStatus->execute($reservation->getSku(), (float)$reservation->getQuantity());
+        if ($this->stockConfiguration->canSubtractQty()) {
+            foreach ($reservations as $reservation) {
+                $this->updateLegacyStockItem->execute($reservation->getSku(), (float)$reservation->getQuantity());
+                $this->updateLegacyStockStatus->execute($reservation->getSku(), (float)$reservation->getQuantity());
+            }
         }
     }
 }
