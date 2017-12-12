@@ -104,106 +104,139 @@ class Collection extends \Magento\Framework\Data\Collection
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
      * @deprecated 100.2.0 Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \BadMethodCallException
      */
     public function getColumnValues($colName)
     {
-        return [];
+        throw new \BadMethodCallException(
+            __METHOD__ . ' should not be used in the current implementation'
+        );
     }
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
      * @deprecated 100.2.0 Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \BadMethodCallException
      */
     public function getItemsByColumnValue($column, $value)
     {
-        return [];
+        throw new \BadMethodCallException(
+            __METHOD__ . ' should not be used in the current implementation'
+        );
     }
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
      * @deprecated 100.2.0 Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \BadMethodCallException
      */
     public function getItemByColumnValue($column, $value)
     {
-        return null;
+        throw new \BadMethodCallException(
+            __METHOD__ . ' should not be used in the current implementation'
+        );
     }
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
      * @deprecated 100.2.0 Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \BadMethodCallException
      */
     public function setDataToAll($key, $value = null)
     {
-        return $this;
+        throw new \BadMethodCallException(
+            __METHOD__ . ' should not be used in the current implementation'
+        );
     }
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
      * @deprecated 100.2.0 Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \BadMethodCallException
      */
     public function setItemObjectClass($className)
     {
-        return $this;
+        throw new \BadMethodCallException(
+            __METHOD__ . ' should not be used in the current implementation'
+        );
     }
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
      * @deprecated 100.2.0 Should not be used in the current implementation.
+     * @throws \BadMethodCallException
      */
     public function toXml()
     {
-        return '';
+        throw new \BadMethodCallException(
+            __METHOD__ . ' should not be used in the current implementation'
+        );
     }
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
      * @deprecated 100.2.0 Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \BadMethodCallException
      */
     public function toArray($arrRequiredFields = [])
     {
-        return [];
+        throw new \BadMethodCallException(
+            __METHOD__ . ' should not be used in the current implementation'
+        );
     }
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
      * @deprecated 100.2.0 Should not be used in the current implementation.
+     * @throws \BadMethodCallException
      */
     public function toOptionArray()
     {
-        return [];
+        throw new \BadMethodCallException(
+            __METHOD__ . ' should not be used in the current implementation'
+        );
     }
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
      * @deprecated 100.2.0 Should not be used in the current implementation.
+     * @throws \BadMethodCallException
      */
     public function toOptionHash()
     {
-        return [];
+        throw new \BadMethodCallException(
+            __METHOD__ . ' should not be used in the current implementation'
+        );
     }
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
      * @deprecated 100.2.0 Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \BadMethodCallException
      */
     protected function _toOptionArray($valueField = 'id', $labelField = 'name', $additional = [])
     {
-        return [];
+        throw new \BadMethodCallException(
+            __METHOD__ . ' should not be used in the current implementation'
+        );
     }
 
     /**
      * {@inheritdoc} Prevents handle collection items as DataObject class instances.
      * @deprecated 100.2.0  Should not be used in the current implementation.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \BadMethodCallException
      */
     protected function _toOptionHash($valueField = 'id', $labelField = 'name')
     {
-        return [];
+        throw new \BadMethodCallException(
+            __METHOD__ . ' should not be used in the current implementation'
+        );
     }
 }
