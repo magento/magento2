@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Model\AdminOrder;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -100,8 +98,14 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $copyMock = $this->createMock(\Magento\Framework\DataObject\Copy::class);
         $messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
-        $this->formFactoryMock = $this->createPartialMock(\Magento\Customer\Model\Metadata\FormFactory::class, ['create']);
-        $this->customerFactoryMock = $this->createPartialMock(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class, ['create']);
+        $this->formFactoryMock = $this->createPartialMock(
+            \Magento\Customer\Model\Metadata\FormFactory::class,
+            ['create']
+        );
+        $this->customerFactoryMock = $this->createPartialMock(
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
+            ['create']
+        );
 
         $this->itemUpdater = $this->createMock(\Magento\Quote\Model\Quote\Item\Updater::class);
 
@@ -114,7 +118,9 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Model\Customer\Mapper::class
         )->setMethods(['toFlatArray'])->disableOriginalConstructor()->getMock();
 
-        $this->quoteInitializerMock = $this->createMock(\Magento\Sales\Model\AdminOrder\Product\Quote\Initializer::class);
+        $this->quoteInitializerMock = $this->createMock(
+            \Magento\Sales\Model\AdminOrder\Product\Quote\Initializer::class
+        );
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
             \Magento\Customer\Api\CustomerRepositoryInterface::class,
             [],
@@ -227,16 +233,17 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $quoteMock->expects($this->once())
             ->method('addData')
             ->with(
-            [
-                'customer_group_id' => $attributes[1][1],
-                'customer_tax_class_id' => $taxClassId
-            ]
-        );
+                [
+                    'customer_group_id' => $attributes[1][1],
+                    'customer_tax_class_id' => $taxClassId
+                ]
+            );
         $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
             ->with(
                 $customerMock,
-                ['group_id' => 1], \Magento\Customer\Api\Data\CustomerInterface::class
+                ['group_id' => 1],
+                \Magento\Customer\Api\Data\CustomerInterface::class
             );
 
         $this->formFactoryMock->expects($this->any())->method('create')->will($this->returnValue($customerFormMock));
@@ -321,10 +328,16 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     public function testApplyCoupon()
     {
         $couponCode = '';
-        $quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getShippingAddress', 'setCouponCode']);
+        $quoteMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote::class,
+            ['getShippingAddress', 'setCouponCode']
+        );
         $this->sessionQuoteMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
 
-        $addressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['setCollectShippingRates', 'setFreeShipping']);
+        $addressMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['setCollectShippingRates', 'setFreeShipping']
+        );
         $quoteMock->expects($this->exactly(2))->method('getShippingAddress')->willReturn($addressMock);
         $quoteMock->expects($this->once())->method('setCouponCode')->with($couponCode)->willReturnSelf();
 

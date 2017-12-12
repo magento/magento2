@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Downloadable\Block\Sales\Order\Email\Items;
 
 use Magento\Downloadable\Model\Link;

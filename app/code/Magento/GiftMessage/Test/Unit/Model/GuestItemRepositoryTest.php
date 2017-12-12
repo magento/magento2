@@ -6,8 +6,6 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
 
-// @codingStandardsIgnoreFile
-
 use Magento\GiftMessage\Model\ItemRepository;
 
 /**
@@ -73,20 +71,29 @@ class GuestItemRepositoryTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
-        $this->messageFactoryMock = $this->createPartialMock(\Magento\GiftMessage\Model\MessageFactory::class, [
+        $this->messageFactoryMock = $this->createPartialMock(
+            \Magento\GiftMessage\Model\MessageFactory::class,
+            [
                 'create',
                 '__wakeup'
-            ]);
+            ]
+        );
         $this->messageMock = $this->createMock(\Magento\GiftMessage\Model\Message::class);
-        $this->quoteItemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, [
+        $this->quoteItemMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Item::class,
+            [
                 'getGiftMessageId',
                 '__wakeup'
-            ]);
-        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, [
+            ]
+        );
+        $this->quoteMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote::class,
+            [
                 'getGiftMessageId',
                 'getItemById',
                 '__wakeup',
-            ]);
+            ]
+        );
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->giftMessageManagerMock =
             $this->createMock(\Magento\GiftMessage\Model\GiftMessageManager::class);

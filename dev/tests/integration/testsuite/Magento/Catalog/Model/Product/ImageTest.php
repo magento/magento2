@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\Product;
 
 /**
@@ -25,7 +23,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         );
         /** @var \Magento\Catalog\Model\View\Asset\Placeholder $defualtPlaceholder */
         $defualtPlaceholder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Catalog\Model\View\Asset\Placeholder::class,
+            ->create(
+                \Magento\Catalog\Model\View\Asset\Placeholder::class,
                 ['type' => 'image']
             );
 
@@ -73,9 +72,23 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         /** @var $model \Magento\Catalog\Model\Product\Image */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Catalog\Model\Product\Image::class, ['viewFileSystem' => $viewFileSystem]);
-        $processor = $this->createPartialMock(\Magento\Framework\Image::class, ['save', 'keepAspectRatio', 'keepFrame', 'keepTransparency', 'constrainOnly', 'backgroundColor', 'quality',
-                'setWatermarkPosition', 'setWatermarkImageOpacity', 'setWatermarkWidth', 'setWatermarkHeight',
-                'watermark']);
+        $processor = $this->createPartialMock(
+            \Magento\Framework\Image::class,
+            [
+                'save',
+                'keepAspectRatio',
+                'keepFrame',
+                'keepTransparency',
+                'constrainOnly',
+                'backgroundColor',
+                'quality',
+                'setWatermarkPosition',
+                'setWatermarkImageOpacity',
+                'setWatermarkWidth',
+                'setWatermarkHeight',
+                'watermark'
+            ]
+        );
         $processor->expects($this->once())
             ->method('watermark')
             ->with($expectedFile);
