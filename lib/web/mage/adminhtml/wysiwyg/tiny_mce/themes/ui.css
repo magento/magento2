@@ -2,18 +2,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-span.magento-variable {padding: 5px;
-    margin: 0 5px;
-    border: 1px solid blue;
-    background: lightblue;
-    cursor: pointer !important;
-}
-
 span.magento-variable-lost {
     background: #FFB6C1 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABWUlEQVR42qVTS07DMBD1pggqcQAQEofINbrNvh977Au04gJtxZYiVZwLJJasAhJJ3LBrI4Xwxm3SKErCz9Koqec9e/xmnhBYdjK5tlo/R8ZsI63XIdGFqK1QSg+5MNY6scbMXobDU5eIpbyKiaZIpLExOX4/cdg6IOoXZP6OlbpDPjtgUks0y4l6An8esbl1iUPghgyA5ZPvnzAo0XphC/IRkyZKKVEnl8GVEK04+LsRY8yb4HJbAVpnLprJmVVqIcLx+DIieqiX2Bl8ITQB93wv0mDQb3pnGxkXLqsiu8WCufd2H5KBfM/Yepv/d0Du+2c/fQJjIilvyyfwhLEgvxHR7itZORFjHs82clcbuRNazwXm/uOvg4RKAoFSbkofVMjJN6MMzG5DNBI5XAVDTeG0XaE0a9JpJviADejM5LrgeT1UMsJmAOC8nLCqnbG3QQ6Y13ciWbTyC+DUOUqNY1A2AAAAAElFTkSuQmCC) no-repeat left center;
     padding-left: 22px !important;
     color: red;
 }
+
 .magento-placeholder {
     display: inline-block;
     margin: 0 5px;
@@ -22,6 +16,7 @@ span.magento-variable-lost {
     padding: 2px 4px;
     vertical-align: bottom;
     height: 20px;
+    cursor: pointer !important;
 }
 
 .magento-placeholder-error {
