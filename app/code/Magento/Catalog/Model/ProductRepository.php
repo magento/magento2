@@ -491,7 +491,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function processMediaGallery(ProductInterface $product, array $mediaGalleryEntries)
+    protected function processMediaGallery(ProductInterface $product, $mediaGalleryEntries)
     {
         $existingMediaGallery = $product->getMediaGallery('images');
         $newEntries = [];
