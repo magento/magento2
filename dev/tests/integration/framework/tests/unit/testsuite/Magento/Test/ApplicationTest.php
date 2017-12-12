@@ -85,37 +85,22 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test \Magento\TestFramework\Application will correctly load specified areas.
-     *
-     * @dataProvider loadAreaDataProvider
-     * @param string $areaCode
      */
-    public function testLoadArea(string $areaCode)
+    public function testBackEndLoadArea()
     {
-        $configScope = $this->getMockBuilder(Scope::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configScope->expects($this->once())
-            ->method('setCurrentScope')
-            ->with($this->identicalTo($areaCode));
+        $configScope = $this->getMockBuilder(Scope::class)->disableOriginalConstructor()->getMock();
+        $configScope->expects($this->once())->method('setCurrentScope')->with($this->identicalTo(Area::AREA_ADMINHTML));
 
-        $configLoader = $this->getMockBuilder(ConfigLoader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $configLoader = $this->getMockBuilder(ConfigLoader::class)->disableOriginalConstructor()->getMock();
         $configLoader->expects($this->once())
             ->method('load')
-            ->with($this->identicalTo($areaCode))
+            ->with($this->identicalTo(Area::AREA_ADMINHTML))
             ->willReturn([]);
-        $areaList = $this->getMockBuilder(AreaList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $areaList = $this->getMockBuilder(AreaList::class)->disableOriginalConstructor()->getMock();
 
         /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
-        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $objectManager->expects($this->once())
-            ->method('configure')
-            ->with($this->identicalTo([]));
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)->disableOriginalConstructor()->getMock();
+        $objectManager->expects($this->once())->method('configure')->with($this->identicalTo([]));
         $objectManager->expects($this->exactly(3))
             ->method('get')
             ->willReturnOnConsecutiveCalls(
@@ -125,20 +110,44 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
             );
 
         \Magento\TestFramework\Helper\Bootstrap::setObjectManager($objectManager);
-        try {
-            \Magento\TestFramework\Helper\Bootstrap::getInstance();
-        } catch (LocalizedException $e) {
-            /** @var \Magento\TestFramework\Helper\Bootstrap|\PHPUnit_Framework_MockObject_MockObject $bootstrap */
-            $bootstrap = $this->getMockBuilder(\Magento\TestFramework\Helper\Bootstrap::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-            $bootstrap->expects($this->once())
-                ->method('loadArea')
-                ->with($this->identicalTo($areaCode));
-            \Magento\TestFramework\Helper\Bootstrap::setInstance($bootstrap);
-        }
 
-        $this->subject->loadArea($areaCode);
+        $bootstrap = $this->getMockBuilder(\Magento\TestFramework\Helper\Bootstrap::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $bootstrap->expects($this->once())->method('loadArea')->with($this->identicalTo(Area::AREA_ADMINHTML));
+        \Magento\TestFramework\Helper\Bootstrap::setInstance($bootstrap);
+
+        $this->subject->loadArea(Area::AREA_ADMINHTML);
+    }
+
+    /**
+     * Test \Magento\TestFramework\Application will correctly load specified areas.
+     */
+    public function testFrontEndLoadArea()
+    {
+        $configScope = $this->getMockBuilder(Scope::class)->disableOriginalConstructor()->getMock();
+        $configScope->expects($this->once())->method('setCurrentScope')->with($this->identicalTo(Area::AREA_FRONTEND));
+
+        $configLoader = $this->getMockBuilder(ConfigLoader::class)->disableOriginalConstructor()->getMock();
+        $configLoader->expects($this->once())
+            ->method('load')
+            ->with($this->identicalTo(Area::AREA_FRONTEND))
+            ->willReturn([]);
+        $areaList = $this->getMockBuilder(AreaList::class)->disableOriginalConstructor()->getMock();
+
+        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)->disableOriginalConstructor()->getMock();
+        $objectManager->expects($this->once())->method('configure')->with($this->identicalTo([]));
+        $objectManager->expects($this->exactly(3))
+            ->method('get')
+            ->willReturnOnConsecutiveCalls(
+                $configScope,
+                $configLoader,
+                $areaList
+            );
+
+        \Magento\TestFramework\Helper\Bootstrap::setObjectManager($objectManager);
+        $this->subject->loadArea(Area::AREA_FRONTEND);
     }
 
     /**
@@ -218,23 +227,6 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'area_code' => Area::AREA_CRONTAB,
-            ],
-        ];
-    }
-
-    /**
-     * Provide test data for testLoadArea().
-     *
-     * @return array
-     */
-    public function loadAreaDataProvider()
-    {
-        return [
-            [
-                'area_code' => Area::AREA_ADMINHTML,
-            ],
-            [
-                'area_code' => Area::AREA_FRONTEND,
             ],
         ];
     }
