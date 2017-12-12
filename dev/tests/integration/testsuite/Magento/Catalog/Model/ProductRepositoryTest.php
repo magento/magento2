@@ -34,7 +34,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
      * Test Product Repository can change(update) "sku" for given product.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDbIsolation enabled
      * @magentoAppArea adminhtml
      */
     public function testUpdateProductSku()
@@ -49,8 +48,5 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $updatedProduct = Bootstrap::getObjectManager()->create(Product::class);
         $updatedProduct->load($productId);
         self::assertSame($newSku, $updatedProduct->getSku());
-
-        //clean up.
-        $this->productRepository->delete($updatedProduct);
     }
 }
