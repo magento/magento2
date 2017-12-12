@@ -9,9 +9,6 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class Copier
 {
     /**
@@ -56,8 +53,6 @@ class Copier
     {
         $product->getWebsiteIds();
         $product->getCategoryIds();
-
-        /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
 
         /** @var \Magento\Catalog\Model\Product $duplicate */
