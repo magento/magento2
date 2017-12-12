@@ -197,11 +197,6 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->productFactory = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterfaceFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->salableProcessor = $this->createMock(SalableProcessor::class);
 
         $this->model = $this->objectHelper->getObject(
