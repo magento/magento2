@@ -574,7 +574,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $fullExpression = str_replace('{{' . $attributeItem . '}}', $attrField, $fullExpression);
         }
 
-        $this->getSelect()->columns([$alias => $fullExpression]);
+        $this->getSelect()->columns([$alias => new \Zend_Db_Expr($fullExpression)]);
 
         $this->_joinFields[$alias] = ['table' => false, 'field' => $fullExpression];
 
