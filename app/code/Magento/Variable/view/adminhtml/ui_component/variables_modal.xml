@@ -36,8 +36,7 @@
         </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top">
-        <filterSearch name="fulltext"/>
-        <filters name="listing_filters"/>
+        <filterSearch name="variable_name"/>
     </listingToolbar>
     <columns name="variables">
         <column name="variable_selector" component="Magento_Variable/js/grid/columns/radioselect">
@@ -55,7 +54,6 @@
         </column>
         <column name="variable_type">
             <settings>
-                <filter>text</filter>
                 <label translate="true">Type</label>
                 <sortable>true</sortable>
                 <sorting>asc</sorting>
