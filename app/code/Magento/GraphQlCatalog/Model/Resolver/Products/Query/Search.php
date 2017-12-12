@@ -7,7 +7,6 @@
 namespace Magento\GraphQlCatalog\Model\Resolver\Products\Query;
 
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
-use Magento\GraphQlCatalog\Model\Resolver\Products\Query\Filter;
 use Magento\GraphQlCatalog\Model\Resolver\Products\SearchCriteria\Helper\Filter as FilterHelper;
 use Magento\GraphQlCatalog\Model\Resolver\Products\SearchResult;
 use Magento\GraphQlCatalog\Model\Resolver\Products\SearchResultFactory;
@@ -31,7 +30,7 @@ class Search
     /**
      * @var Filter
      */
-    private $filterDataProvider;
+    private $filterQuery;
 
     /**
      * @var SearchResultFactory
@@ -41,18 +40,18 @@ class Search
     /**
      * @param SearchInterface $search
      * @param FilterHelper $filterHelper
-     * @param Filter $filterDataProvider
+     * @param Filter $filterQuery
      * @param SearchResultFactory $searchResultFactory
      */
     public function __construct(
         SearchInterface $search,
         FilterHelper $filterHelper,
-        Filter $filterDataProvider,
+        Filter $filterQuery,
         SearchResultFactory $searchResultFactory
     ) {
         $this->search = $search;
         $this->filterHelper = $filterHelper;
-        $this->filterDataProvider = $filterDataProvider;
+        $this->filterQuery = $filterQuery;
         $this->searchResultFactory = $searchResultFactory;
     }
 
@@ -77,7 +76,7 @@ class Search
         $searchCriteria->setCurrentPage($searchCriteria->getCurrentPage() + 1);
         $searchCriteria = $this->filterHelper->remove($searchCriteria, 'search_term');
         $searchCriteria = $this->filterHelper->add($searchCriteria, $filter);
-        $searchResult = $this->filterDataProvider->getResult($searchCriteria);
+        $searchResult = $this->filterQuery->getResult($searchCriteria);
         foreach ($searchResult->getProductsSearchResult() as $product) {
             $ids[$product['id']] = $product;
         }
