@@ -42,6 +42,7 @@ class Search implements ArgumentApplierInterface
         $searchTerm = $argument->getValue();
         $searchTermFilter = $this->filterBuilder->setField('search_term')->setValue($searchTerm)->create();
         $this->filterGroupBuilder->addFilter($searchTermFilter);
+        $filterGroups = $searchCriteria->getFilterGroups();
         $filterGroups[] = $this->filterGroupBuilder->create();
         $searchCriteria->setFilterGroups($filterGroups);
         $searchCriteria->setRequestName('quick_search_container');
