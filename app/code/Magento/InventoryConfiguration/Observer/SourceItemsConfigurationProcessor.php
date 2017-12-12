@@ -75,19 +75,10 @@ class SourceItemsConfigurationProcessor
      */
     public function process($sku, array $sourceItemsData)
     {
-        $sourceItemsConfigsForDelete = $this->getCurrentSourceItemsMap($sku, $sourceItemsData);
-        $sourceItemsConfigsForSave = [];
-
+        $sourceItemsConfigs = [];
         foreach ($sourceItemsData as $sourceItemData) {
             $this->validateSourceItemData($sourceItemData);
-
-            $sourceId = $sourceItemData[SourceItemInterface::SOURCE_ID];
-            if (isset($sourceItemsConfigsForDelete[$sourceId])) {
-                $sourceItem = $sourceItemsConfigsForDelete[$sourceId];
-            } else {
-                /** @var SourceItemInterface $sourceItem */
-                $sourceItem = $this->sourceItemConfigurationFactory->create();
-            }
+            $sourceItemConfigurationData = $this->sourceItemConfigurationFactory->create();
 
             if ($sourceItemData['notify_stock_qty_use_default'] == 1) {
                 unset($sourceItemData['notify_stock_qty']);
@@ -95,53 +86,16 @@ class SourceItemsConfigurationProcessor
 
             $sourceItemData[SourceItemInterface::SKU] = $sku;
             $this->dataObjectHelper->populateWithArray(
-                $sourceItem,
+                $sourceItemConfigurationData,
                 $sourceItemData,
                 SourceItemConfigurationInterface::class
             );
 
-            $sourceItemsConfigsForSave[] = $sourceItem;
-            unset($sourceItemsConfigsForDelete[$sourceId]);
-        }
-        if ($sourceItemsConfigsForSave) {
-            $this->sourceItemConfigurationSave->execute($sourceItemsConfigsForSave);
-        }
-        if ($sourceItemsConfigsForDelete) {
-            $this->deleteSourceItemsConfiguration($sourceItemsConfigsForDelete);
-        }
-    }
-
-    /**
-     * Key is source id, value is Source Item Configuration
-     *
-     * @param string $sku
-     * @param array $sourceItemsData
-     * @return array
-     */
-    private function getCurrentSourceItemsMap(string $sku, array $sourceItemsData): array
-    {
-        $sourceItemsConfigs = [];
-
-        /** @var \Magento\Inventory\Model\SourceItem $sourceItem */
-        foreach ($sourceItemsData as $sourceItem) {
-            $sourceId = $sourceItem[SourceItemInterface::SOURCE_ID];
-            $sourceItemConfig = $this->getSourceItemConfiguration->execute((int)$sourceId, $sku);
-
-            if (null !== $sourceItemConfig) {
-                $sourceItemsConfigs[] = $sourceItemConfig;
-            }
+            $sourceItemsConfigs[] = $sourceItemConfigurationData;
         }
 
-        $sourceItemsConfigsMap = [];
-        if ($sourceItemsConfigs) {
-            /** @var SourceItemConfigurationInterface $sourceItemConfig */
-            foreach ($sourceItemsConfigs as $sourceItemConfig) {
-                $sourceId = $sourceItemConfig->getSourceId();
-                $sourceItemsConfigsMap[$sourceId] = $sourceItemConfig;
-            }
-        }
-
-        return $sourceItemsConfigsMap;
+        $this->deleteSourceItemsConfiguration($sourceItemsConfigs);
+        $this->sourceItemConfigurationSave->execute($sourceItemsConfigs);
     }
 
     /**
