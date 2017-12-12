@@ -333,8 +333,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsiteId()]);
             }
         } else {
-            unset($this->instances[$productData['sku']]);
-            $product = $this->get($productData['sku']);
+            if (!empty($productData['id'])) {
+                unset($this->instancesById[$productData['id']]);
+                $product = $this->getById($productData['id']);
+            } else {
+                unset($this->instances[$productData['sku']]);
+                $product = $this->get($productData['sku']);
+            }
         }
 
         foreach ($productData as $key => $value) {
@@ -546,7 +551,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $tierPrices = $product->getData('tier_price');
 
         try {
-            $existingProduct = $this->get($product->getSku());
+            $existingProduct = $product->getId() ? $this->getById($product->getId()) : $this->get($product->getSku());
 
             $product->setData(
                 $this->resourceModel->getLinkField(),
