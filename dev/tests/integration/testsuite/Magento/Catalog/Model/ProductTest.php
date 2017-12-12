@@ -557,7 +557,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         //if save (out of stock product with qty 0) with new qty > 0 it should become in stock.
         //if set out of stock for product with qty > 0 it should become out of stock
-        $product = $this->productRepository->get('simple-out-of-stock');
+        $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
         $stockItem = $product->getExtensionAttributes()->getStockItem();
         $this->assertEquals(false, $stockItem->getIsInStock());
         $stockData = [
@@ -567,7 +567,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product->setStockData($stockData);
         $product->save();
 
-        $product = $this->productRepository->get('simple-out-of-stock');
+        /** @var \Magento\CatalogInventory\Model\StockRegistryStorage $stockRegistryStorage */
+        $stockRegistryStorage = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
+        $stockRegistryStorage->removeStockItem($product->getId());
+        $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
         $stockItem = $product->getExtensionAttributes()->getStockItem();
         $this->assertEquals(true, $stockItem->getIsInStock());
         $stockData = [
@@ -577,7 +581,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product->setStockData($stockData);
         $product->save();
 
-        $product = $this->productRepository->get('simple-out-of-stock');
+        $stockRegistryStorage->removeStockItem($product->getId());
+        $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
         $stockItem = $product->getExtensionAttributes()->getStockItem();
         $this->assertEquals(false, $stockItem->getIsInStock());
     }
