@@ -184,6 +184,9 @@
             <argument name="scopeOverriddenValue" xsi:type="object">Magento\Catalog\Model\Attribute\ScopeOverriddenValue</argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Api\AttributeSetRepositoryInterface">
+        <plugin name="remove_products" type="Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts"/>
+    </type>
     <virtualType name="UiModifierPool" type="Magento\Ui\DataProvider\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">
@@ -198,8 +201,5 @@
         <arguments>
             <argument name="pool" xsi:type="object">UiModifierPool</argument>
         </arguments>
-    </type>
-    <type name="Magento\Eav\Api\AttributeSetRepositoryInterface">
-        <plugin name="remove_products" type="Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts"/>
     </type>
 </config>

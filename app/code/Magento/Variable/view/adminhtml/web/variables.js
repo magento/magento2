@@ -170,7 +170,9 @@ define([
          */
         getButtonsConfig: function (isEditMode) {
 
-            var self = this, buttonsData;
+            var self = this,
+                buttonsData;
+
             buttonsData = [
                 {
 
@@ -186,8 +188,8 @@ define([
                 },
                 {
 
-                    text: isEditMode ? $t('Save'): $t('Insert Variable'),
-                    class: 'action-primary ' + (isEditMode ? '': 'disabled'),
+                    text: isEditMode ? $t('Save') : $t('Insert Variable'),
+                    class: 'action-primary ' + (isEditMode ? '' : 'disabled'),
                     attr: {
                         'id': 'insert_variable'
                     },
@@ -200,7 +202,6 @@ define([
                     }
                 }
             ];
-
 
             return buttonsData;
         },

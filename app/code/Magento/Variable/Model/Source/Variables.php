@@ -10,7 +10,11 @@ namespace Magento\Variable\Model\Source;
  */
 class Variables implements \Magento\Framework\Option\ArrayInterface
 {
+    /**
+     * Variable types
+     */
     const DEFAULT_VARIABLE_TYPE = "default";
+    const CUSTOM_VARIABLE_TYPE = "custom";
 
     /**
      * Assoc array of configuration variables.
@@ -108,6 +112,7 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
         $result = [];
         foreach ($this->configVariables as $configVariableGroup) {
             foreach ($configVariableGroup['elements'] as $element) {
+                $element['group_label'] = $configVariableGroup['label'];
                 $result[] = $element;
             }
         }

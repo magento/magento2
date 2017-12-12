@@ -8,30 +8,20 @@ namespace Magento\Variable\Ui\Component;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\AuthorizationInterface;
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
-use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
-use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
- * Class VariablesDataProvider
- * @package Magento\Variable\Ui\Component
+ * Data provider for variables_modal listing
  */
 class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
     /**
-     * @var \Magento\Variable\Model\VariableFactory
+     * @var \Magento\Variable\Model\Variable\Data
      */
-    private $collectionFactory;
-    /**
-     * @var \Magento\Email\Model\Source\Variables
-     */
-    private $storesVariables;
+    private $variableDataProvider;
 
     /**
-     * VariablesDataProvider constructor.
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -39,10 +29,10 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
-     * @param \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory
-     * @param \Magento\Email\Model\Source\Variables $storesVariables
+     * @param \Magento\Variable\Model\Variable\Data $variableDataProvider
      * @param array $meta
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
@@ -52,8 +42,7 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
         SearchCriteriaBuilder $searchCriteriaBuilder,
         RequestInterface $request,
         FilterBuilder $filterBuilder,
-        \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory,
-        \Magento\Email\Model\Source\Variables $storesVariables,
+        \Magento\Variable\Model\Variable\Data $variableDataProvider,
         array $meta = [],
         array $data = []
     ) {
@@ -68,48 +57,7 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
             $meta,
             $data
         );
-        $this->storesVariables = $storesVariables;
-        $this->collectionFactory = $collectionFactory;
-    }
-
-    /**
-     * Prepare default variables
-     *
-     * @return array
-     */
-    private function getDefaultVariables()
-    {
-        $variables = [];
-        foreach ($this->storesVariables->getData() as $variable) {
-            $variables[] = [
-                'code' => $variable['value'],
-                'variable_name' => $variable['label'],
-                'variable_type' => \Magento\Email\Model\Source\Variables::DEFAULT_VARIABLE_TYPE
-            ];
-        }
-
-        return $variables;
-    }
-
-    /**
-     * Prepare custom variables
-     *
-     * @return array
-     */
-    private function getCustomVariables()
-    {
-        $customVariables = $this->collectionFactory->create();
-
-        $variables = [];
-        foreach ($customVariables->getData() as $variable) {
-            $variables[] = [
-                'code' => $variable['code'],
-                'variable_name' => $variable['name'],
-                'variable_type' => 'custom'
-            ];
-        }
-
-        return $variables;
+        $this->variableDataProvider = $variableDataProvider;
     }
 
     /**
@@ -156,18 +104,16 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
         $searchCriteria = $this->getSearchCriteria();
         $sortOrders = $searchCriteria->getSortOrders();
 
-        // sort items by variable_type
-        $sortOrder = $searchCriteria->getSortOrders();
-        if (!empty($sortOrder) && $sortOrder[0]->getDirection() == 'DESC') {
-            $items = array_merge(
-                $this->getCustomVariables(),
-                $this->getDefaultVariables()
-            );
-        } else {
-            $items = array_merge(
-                $this->getDefaultVariables(),
-                $this->getCustomVariables()
-            );
+        $items = array_merge(
+            $this->variableDataProvider->getDefaultVariables(),
+            $this->variableDataProvider->getCustomVariables()
+        );
+
+        /** @var \Magento\Framework\Api\SortOrder $sortOrder */
+        foreach ($sortOrders as $sortOrder) {
+            if ($sortOrder->getField() && $sortOrder->getDirection()) {
+                $items = $this->sortBy($items, $sortOrder->getField(), $sortOrder->getDirection());
+            }
         }
 
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {

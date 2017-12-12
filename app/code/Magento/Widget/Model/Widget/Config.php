@@ -80,9 +80,9 @@ class Config
         $url = $this->_assetRepo->getUrl(
             'mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js'
         );
-        $errorImageUrl = $this->_assetRepo->getUrl(
-            'Magento_Widget::error.png'
-        );
+
+        $errorImageUrl = $this->_assetRepo->getUrl('Magento_Widget::error.png');
+
         $settings = [
             'widget_plugin_src' => $url,
             'widget_placeholders' => $this->_widgetFactory->create()->getPlaceholderImageUrls(),

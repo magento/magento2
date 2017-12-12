@@ -181,9 +181,26 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
                 'tinymce4' => [
                     'toolbar' => 'formatselect | bold italic underline | alignleft aligncenter alignright | '
                         . 'bullist numlist | link image table charmap',
-                    'plugins' => 'advlist autolink lists link image charmap media table contextmenu paste code help magentovariable '
-                        . 'table',
-                    'content_css' => $this->_assetRepo->getUrl('mage/adminhtml/wysiwyg/tiny_mce/themes/ui.css'),
+                    'plugins' => implode(
+                        ' ',
+                        [
+                            'advlist',
+                            'autolink',
+                            'lists',
+                            'link',
+                            'image',
+                            'charmap',
+                            'media',
+                            'noneditable',
+                            'table',
+                            'contextmenu',
+                            'paste',
+                            'code',
+                            'help',
+                            'table'
+                        ]
+                    ),
+                    'content_css' => $this->_assetRepo->getUrl('mage/adminhtml/wysiwyg/tiny_mce/themes/ui.css')
                 ],
                 'plugins' => [],
             ]

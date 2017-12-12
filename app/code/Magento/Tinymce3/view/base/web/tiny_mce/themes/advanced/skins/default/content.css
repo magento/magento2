@@ -70,7 +70,7 @@ font[face=mceinline] {font-family:inherit !important}
 }
 
 .magento-placeholder-error img,
-.magento-placeholder-error img {
+.magento-placeholder img {
     vertical-align: middle;
     max-height: 20px;
     margin-right: 5px;
