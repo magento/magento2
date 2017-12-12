@@ -106,7 +106,7 @@ define([
                 self = this;
 
             jQuery('<div id="' + this.dialogWindowId + '">' + html + '</div>').modal({
-                title: self.isEditMode ? $t('Edit variable...') : $t('Insert Variable...'),
+                title: self.isEditMode ? $t('Edit Variable') : $t('Insert Variable'),
                 type: 'slide',
                 buttons: self.getButtonsConfig(self.isEditMode),
 
