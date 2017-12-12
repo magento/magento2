@@ -28,25 +28,26 @@ class Products implements ResolverInterface
     /**
      * @var Search
      */
-    private $searchDataProvider;
+    private $searchQuery;
 
     /**
-     * @var \Magento\GraphQlCatalog\Model\Resolver\Products\Query\Filter
+     * @var Filter
      */
-    private $filterDataProvider;
+    private $filterQuery;
 
     /**
      * @param Builder $searchCriteriaBuilder
-     * @param \Magento\GraphQlCatalog\Model\Resolver\Products\Query\Search $searchDataProvider
+     * @param Search $searchQuery
+     * @param Filter $filterQuery
      */
     public function __construct(
         Builder $searchCriteriaBuilder,
-        Search $searchDataProvider,
-        Filter $filterDataProvider
+        Search $searchQuery,
+        Filter $filterQuery
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->searchDataProvider = $searchDataProvider;
-        $this->filterDataProvider = $filterDataProvider;
+        $this->searchQuery = $searchQuery;
+        $this->filterQuery = $filterQuery;
     }
 
     /**
@@ -57,9 +58,9 @@ class Products implements ResolverInterface
         $searchCriteria = $this->searchCriteriaBuilder->build($args);
 
         if (isset($args['search'])) {
-            $searchResult = $this->searchDataProvider->getResult($searchCriteria);
+            $searchResult = $this->searchQuery->getResult($searchCriteria);
         } else {
-            $searchResult = $this->filterDataProvider->getResult($searchCriteria);
+            $searchResult = $this->filterQuery->getResult($searchCriteria);
         }
 
         $maxPages = ceil($searchResult->getTotalCount() / $searchCriteria->getPageSize());
