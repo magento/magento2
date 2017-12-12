@@ -15,6 +15,9 @@ use Magento\GraphQl\Model\ResolverContextInterface;
  */
 class Customer implements ResolverInterface
 {
+    /**
+     * @var Customer\CustomerDataProvider
+     */
     private $customerResolver;
 
     /**
@@ -31,12 +34,12 @@ class Customer implements ResolverInterface
      */
     public function resolve(array $args, ResolverContextInterface $context)
     {
-        if (!$context->getCustomerId()) {
+        if ((!$context->getUserId()) || $context->getUserType() == 4) {
             throw new GraphQlInputException(
                 __('Current customer does not have access to the resource "%1"', 'customer')
             );
         }
 
-        return $this->customerResolver->getCustomerById($context->getCustomerId());
+        return $this->customerResolver->getCustomerById($context->getUserId());
     }
 }
