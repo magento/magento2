@@ -10,8 +10,8 @@ namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryCatalog\Model\Command\DeleteCatalogInventoryStockItemByDefaultSourceItemInterface;
-use Magento\InventoryCatalog\Model\Command\DeleteCatalogInventoryStockStatusByDefaultSourceItemInterface;
+use Magento\InventoryCatalog\Model\DeleteLegacyStockItemByDefaultSourceItem;
+use Magento\InventoryCatalog\Model\DeleteLegacyStockStatusByDefaultSourceItem;
 
 /**
  * Plugin help to delete related entries from the legacy catalog inventory tables cataloginventory_stock_status and
@@ -25,24 +25,24 @@ class DeleteLegacyCatalogInventoryPlugin
     private $defaultSourceProvider;
 
     /**
-     * @var DeleteCatalogInventoryStockItemByDefaultSourceItemInterface
+     * @var DeleteLegacyStockItemByDefaultSourceItem
      */
     private $deleteStockItemBySourceItem;
 
     /**
-     * @var DeleteCatalogInventoryStockStatusByDefaultSourceItemInterface
+     * @var DeleteLegacyStockStatusByDefaultSourceItem
      */
     private $deleteStockStatusBySourceItem;
 
     /**
      * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param DeleteCatalogInventoryStockItemByDefaultSourceItemInterface $deleteStockItemBySourceItem
-     * @param DeleteCatalogInventoryStockStatusByDefaultSourceItemInterface $deleteStockStatusBySourceItem
+     * @param DeleteLegacyStockItemByDefaultSourceItem $deleteStockItemBySourceItem
+     * @param DeleteLegacyStockStatusByDefaultSourceItem $deleteStockStatusBySourceItem
      */
     public function __construct(
         DefaultSourceProviderInterface $defaultSourceProvider,
-        DeleteCatalogInventoryStockItemByDefaultSourceItemInterface $deleteStockItemBySourceItem,
-        DeleteCatalogInventoryStockStatusByDefaultSourceItemInterface $deleteStockStatusBySourceItem
+        DeleteLegacyStockItemByDefaultSourceItem $deleteStockItemBySourceItem,
+        DeleteLegacyStockStatusByDefaultSourceItem $deleteStockStatusBySourceItem
     ) {
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->deleteStockItemBySourceItem = $deleteStockItemBySourceItem;
@@ -62,18 +62,6 @@ class DeleteLegacyCatalogInventoryPlugin
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function afterExecute(SourceItemsDeleteInterface $subject, $result, array $sourceItems)
-    {
-        $this->deleteStockItemAndStatusTableEntries($sourceItems);
-    }
-
-    /**
-     * Delete cataloginventory_stock_item and cataloginventory_stock_status if default source item is deleted
-     *
-     * @param SourceItemInterface[] $sourceItems
-     * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    private function deleteStockItemAndStatusTableEntries(array $sourceItems)
     {
         $defaultSourceId = $this->defaultSourceProvider->getId();
 

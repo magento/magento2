@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\Command;
+namespace Magento\InventoryCatalog\Model;
 
 use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
@@ -19,8 +19,7 @@ use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
  * Legacy update cataloginventory_stock_status by plain MySql query.
  * Use for skip save by \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::save
  */
-class UpdateCatalogInventoryStockStatusByDefaultSourceItem implements
-    UpdateCatalogInventoryStockStatusByDefaultSourceItemInterface
+class UpdateLegacyStockStatusByDefaultSourceItem
 {
     /**
      * @var ResourceConnection

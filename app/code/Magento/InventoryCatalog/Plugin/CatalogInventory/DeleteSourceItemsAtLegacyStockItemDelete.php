@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Plugin\CatalogInventory\Model\ResourceModel\Stock;
+namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ResourceItem;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Model\AbstractModel;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
@@ -79,15 +79,15 @@ class DeleteSourceItemsAtLegacyStockItemDelete
     }
 
     /**
-     * @param ResourceItem $subject
+     * @param StockItemRepository $subject
      * @param callable $proceed
-     * @param AbstractModel $stockItem
+     * @param StockItemInterface $stockItem
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function aroundDelete(ResourceItem $subject, callable $proceed, AbstractModel $stockItem)
+    public function aroundDelete(StockItemRepository $subject, callable $proceed, StockItemInterface $stockItem)
     {
         $connection = $this->resourceConnection->getConnection();
         $connection->beginTransaction();

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model\Command;
+namespace Magento\InventoryCatalog\Model;
 
 use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
@@ -18,8 +18,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
  * Delete Legacy cataloginventory_stock_item by plain MySql query
  * Use for skip delete by \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::delete
  */
-class DeleteCatalogInventoryStockItemByDefaultSourceItem implements
-    DeleteCatalogInventoryStockItemByDefaultSourceItemInterface
+class DeleteLegacyStockItemByDefaultSourceItem
 {
     /**
      * @var ResourceConnection
