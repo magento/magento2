@@ -12,10 +12,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeInterface as AppScopeInterface;
-use Magento\Framework\Filesystem;
 use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
@@ -27,7 +27,6 @@ use Magento\Store\Api\Data\StoreInterface;
  * @method int getSortOrder()
  * @method int getStoreId()
  * @method Store setSortOrder($value)
- * @method Store setIsActive($value)
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -464,7 +463,7 @@ class Store extends AbstractExtensibleModel implements
         $storeLabelRule->setMessage(__('Name is required'), \Zend_Validate_NotEmpty::IS_EMPTY);
         $validator->addRule($storeLabelRule, 'name');
 
-        $storeCodeRule = new \Zend_Validate_Regex('/^[a-z]+[a-z0-9_]*$/');
+        $storeCodeRule = new \Zend_Validate_Regex('/^[a-z]+[a-z0-9_]*$/i');
         $storeCodeRule->setMessage(
             __(
                 'The store code may contain only letters (a-z), numbers (0-9) or underscore (_),'
@@ -1086,6 +1085,22 @@ class Store extends AbstractExtensibleModel implements
     public function setStoreGroupId($storeGroupId)
     {
         return $this->setGroupId($storeGroupId);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIsActive()
+    {
+        return $this->_getData('is_active');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsActive($isActive)
+    {
+        return $this->setData('is_active', $isActive);
     }
 
     /**

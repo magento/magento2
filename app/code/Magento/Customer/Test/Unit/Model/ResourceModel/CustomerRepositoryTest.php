@@ -230,6 +230,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
                 'save',
             ]);
 
+        $origCustomer = $this->customer;
+
         $this->customer->expects($this->atLeastOnce())
             ->method('__toArray')
             ->willReturn(['default_billing', 'default_shipping']);
@@ -406,7 +408,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('dispatch')
             ->with(
                 'customer_save_after_data_object',
-                ['customer_data_object' => $this->customer, 'orig_customer_data_object' => $customerAttributesMetaData]
+                ['customer_data_object' => $this->customer, 'orig_customer_data_object' => $origCustomer]
             );
 
         $this->model->save($this->customer);
@@ -463,6 +465,8 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getId'
             ]
         );
+
+        $origCustomer = $this->customer;
 
         $this->customer->expects($this->atLeastOnce())
             ->method('__toArray')
@@ -631,7 +635,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('dispatch')
             ->with(
                 'customer_save_after_data_object',
-                ['customer_data_object' => $this->customer, 'orig_customer_data_object' => $customerAttributesMetaData]
+                ['customer_data_object' => $this->customer, 'orig_customer_data_object' => $origCustomer]
             );
 
         $this->model->save($this->customer, $passwordHash);

@@ -6,6 +6,7 @@
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Console\Cli;
 use Magento\Setup\Console\Command\UpgradeCommand;
 use Magento\Setup\Model\Installer;
@@ -30,10 +31,14 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
     private $installerMock;
 
     /**
+     * @var AppState|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $appStateMock;
+
+    /**
      * @var UpgradeCommand
      */
     private $upgradeCommand;
-
     /**
      * @var CommandTester
      */
@@ -56,16 +61,24 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
         $this->installerFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->installerMock);
+        $this->appStateMock = $this->getMockBuilder(AppState::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->upgradeCommand = new UpgradeCommand($this->installerFactoryMock, $this->deploymentConfigMock);
+        $this->upgradeCommand = new UpgradeCommand(
+            $this->installerFactoryMock,
+            $this->deploymentConfigMock,
+            $this->appStateMock
+        );
         $this->commandTester = new CommandTester($this->upgradeCommand);
     }
 
     /**
      * @dataProvider executeDataProvider
      */
-    public function testExecute($options, $expectedString = '')
+    public function testExecute($options, $deployMode, $expectedString = '')
     {
+        $this->appStateMock->method('getMode')->willReturn($deployMode);
         $this->installerMock->expects($this->at(0))
             ->method('updateModulesSequence');
         $this->installerMock->expects($this->at(1))
@@ -85,11 +98,23 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'options' => [],
+                'deployMode' => \Magento\Framework\App\State::MODE_PRODUCTION,
                 'expectedString' => 'Please re-run Magento compile command. Use the command "setup:di:compile"'
                     . PHP_EOL
             ],
             [
                 'options' => ['--keep-generated' => true],
+                'deployMode' => \Magento\Framework\App\State::MODE_PRODUCTION,
+                'expectedString' => ''
+            ],
+            [
+                'options' => [],
+                'deployMode' => \Magento\Framework\App\State::MODE_DEVELOPER,
+                'expectedString' => ''
+            ],
+            [
+                'options' => [],
+                'deployMode' => \Magento\Framework\App\State::MODE_DEFAULT,
                 'expectedString' => ''
             ],
         ];

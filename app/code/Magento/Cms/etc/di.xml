@@ -10,6 +10,8 @@
                 type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Cms\Api\Data\BlockSearchResultsInterface"
                 type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Cms\Api\GetBlockByIdentifierInterface" type="Magento\Cms\Model\GetBlockByIdentifier" />
+    <preference for="Magento\Cms\Api\GetPageByIdentifierInterface" type="Magento\Cms\Model\GetPageByIdentifier" />
     <preference for="Magento\Cms\Api\Data\PageInterface" type="Magento\Cms\Model\Page" />
     <preference for="Magento\Cms\Api\Data\BlockInterface" type="Magento\Cms\Model\Block" />
     <preference for="Magento\Cms\Api\BlockRepositoryInterface" type="Magento\Cms\Model\BlockRepository" />
