@@ -286,11 +286,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getAdditionalWysiwygConfig()
     {
-       return [
-           'widget_filers' => [
-               'is_email_compatible' => 1
-           ]
-       ];
+        return [
+            'widget_filers' => [
+                'is_email_compatible' => 1
+            ]
+        ];
     }
 
     /**
