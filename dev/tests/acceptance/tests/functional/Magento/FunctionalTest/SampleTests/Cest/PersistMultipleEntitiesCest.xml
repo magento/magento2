@@ -10,26 +10,26 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <cest name="PersistMultipleEntitiesCest">
         <before>
-            <createData entity="simplesubcategory" mergeKey="simplecategory"/>
-            <createData entity="simpleproduct" mergeKey="simpleproduct1">
+            <createData entity="simplesubcategory" stepKey="simplecategory"/>
+            <createData entity="simpleproduct" stepKey="simpleproduct1">
                 <required-entity createDataKey="simplecategory"/>
             </createData>
-            <createData entity="simpleproduct" mergeKey="simpleproduct2">
+            <createData entity="simpleproduct" stepKey="simpleproduct2">
                 <required-entity createDataKey="categoryLink"/>
             </createData>
         </before>
         <after>
-            <deleteData createDataKey="simpleproduct1" mergeKey="deleteProduct1"/>
-            <deleteData createDataKey="simpleproduct2" mergeKey="deleteProduct2"/>
-            <deleteData createDataKey="simplecategory" mergeKey="deleteCategory"/>
+            <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simpleproduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
         </after>
         <test name="PersistMultipleEntitiesTest">
             <annotations>
                 <group value="skip"/>
             </annotations>
-            <amOnPage mergeKey="s11" url="/$$simplecategory.name$$.html" />
-            <waitForPageLoad mergeKey="s33"/>
-            <see mergeKey="s35" selector="{{StorefrontCategoryMainSection.productCount}}" userInput="2"/>
+            <amOnPage stepKey="s11" url="/$$simplecategory.name$$.html" />
+            <waitForPageLoad stepKey="s33"/>
+            <see stepKey="s35" selector="{{StorefrontCategoryMainSection.productCount}}" userInput="2"/>
         </test>
     </cest>
 </config>

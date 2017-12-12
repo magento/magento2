@@ -306,7 +306,7 @@
           </elementProp>
           <elementProp name="customers_page_size" elementType="Argument">
             <stringProp name="Argument.name">customers_page_size</stringProp>
-            <stringProp name="Argument.value">${__P(customers_page_size,20)}</stringProp>
+            <stringProp name="Argument.value">${__P(customers_page_size,50)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="dashboard_enabled" elementType="Argument">
@@ -356,7 +356,7 @@
           </elementProp>
           <elementProp name="orders_page_size" elementType="Argument">
             <stringProp name="Argument.name">orders_page_size</stringProp>
-            <stringProp name="Argument.value">${__P(orders_page_size,20)}</stringProp>
+            <stringProp name="Argument.value">${__P(orders_page_size,50)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="othersPoolUsers" elementType="Argument">
@@ -376,7 +376,7 @@
           </elementProp>
           <elementProp name="products_page_size" elementType="Argument">
             <stringProp name="Argument.name">products_page_size</stringProp>
-            <stringProp name="Argument.value">${__P(products_page_size,20)}</stringProp>
+            <stringProp name="Argument.value">${__P(products_page_size,50)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="ramp_period" elementType="Argument">
@@ -2867,7 +2867,7 @@ if (testLabel
       <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="Extract filter link from layered navigation" enabled="true">
         <stringProp name="XPathExtractor.default"/>
         <stringProp name="XPathExtractor.refname">attribute_1_filter_url</stringProp>
-        <stringProp name="XPathExtractor.xpathQuery">((//div[@class="filter-options-content"])[1]//li[@class="item"]//a)[${__javaScript(Math.floor(Math.random()*${attribute_1_options_count})+1)}]/@href</stringProp>
+        <stringProp name="XPathExtractor.xpathQuery">((//div[@class="filter-options-content"])[1]//li[@class="item"]//a)[1]/@href</stringProp>
         <boolProp name="XPathExtractor.validate">false</boolProp>
         <boolProp name="XPathExtractor.tolerant">true</boolProp>
         <boolProp name="XPathExtractor.namespace">false</boolProp>
@@ -2938,7 +2938,7 @@ if (testLabel
         <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="Extract filter link from layered navigation" enabled="true">
           <stringProp name="XPathExtractor.default"/>
           <stringProp name="XPathExtractor.refname">attribute_2_filter_url</stringProp>
-          <stringProp name="XPathExtractor.xpathQuery">((//div[@class="filter-options-content"])[2]//li[@class="item"]//a)[${__javaScript(Math.floor(Math.random()*${attribute_2_options_count})+1)}]/@href</stringProp>
+          <stringProp name="XPathExtractor.xpathQuery">((//div[@class="filter-options-content"])[2]//li[@class="item"]//a)[1]/@href</stringProp>
           <boolProp name="XPathExtractor.validate">false</boolProp>
           <boolProp name="XPathExtractor.tolerant">true</boolProp>
           <boolProp name="XPathExtractor.namespace">false</boolProp>
@@ -3228,7 +3228,7 @@ if (testLabel
       <XPathExtractor guiclass="XPathExtractorGui" testclass="XPathExtractor" testname="Extract attribute value" enabled="true">
         <stringProp name="XPathExtractor.default"/>
         <stringProp name="XPathExtractor.refname">attribute_value</stringProp>
-        <stringProp name="XPathExtractor.xpathQuery">((//select[@class="multiselect"])[last()]/option)[${__javaScript(Math.floor(Math.random()*${attribute_options_count})+1)}]/@value</stringProp>
+        <stringProp name="XPathExtractor.xpathQuery">((//select[@class="multiselect"])[last()]/option)[1]/@value</stringProp>
         <boolProp name="XPathExtractor.validate">false</boolProp>
         <boolProp name="XPathExtractor.tolerant">true</boolProp>
         <boolProp name="XPathExtractor.namespace">false</boolProp>
@@ -4262,37 +4262,18 @@ vars.putObject("randomIntGenerator", random);
     
     <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Get Customer Email" enabled="true">
       <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/get_customer_email.jmx</stringProp>
-      <stringProp name="BeanShellSampler.query">import org.apache.jmeter.samplers.SampleResult;
-
-String siterator = vars.get("customer_emails_index");
-int iterator;
-if(siterator == null){
-    iterator = 0;
-    vars.put("customer_emails_index", "0");
-} else {
-    iterator = Integer.parseInt(siterator);
-    iterator ++;
-    vars.put("customer_emails_index", iterator.toString());
+      <stringProp name="BeanShellSampler.query">
+customerUserList = props.get("customer_emails_list");
+customerUser = customerUserList.poll();
+if (customerUser == null) {
+  SampleResult.setResponseMessage("customernUser list is empty");
+  SampleResult.setResponseData("customerUser list is empty","UTF-8");
+  IsSuccess=false;
+  SampleResult.setSuccessful(false);
+  SampleResult.setStopThread(true);
 }
-
-emails_list = props.get("customer_emails_list");
-
-threadsNumber = ctx.getThreadGroup().getNumThreads();
-emailsCount = emails_list.size();
-if (threadsNumber &gt; emailsCount) {
-    log.error(" There are not enough customers for this scenario.");
-} else {
-    clusterLength = Math.round(emailsCount / threadsNumber);
-    threadNum = ctx.getThreadNum();
-    emails_index = clusterLength * threadNum + iterator;
-    maxLimit = clusterLength * (threadNum + 1);
-    if (emails_index &gt;= maxLimit) {
-        iterator = 0;
-        emails_index = clusterLength * threadNum + iterator;
-        vars.put("customer_emails_index", iterator.toString());
-    }
-}
-vars.put("customer_email", emails_list.get(emails_index));</stringProp>
+vars.put("customer_email", customerUser);
+      </stringProp>
       <stringProp name="BeanShellSampler.filename"/>
       <stringProp name="BeanShellSampler.parameters"/>
       <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
@@ -4488,7 +4469,7 @@ vars.put("product_sku", product.get("sku"));
     <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/product_browsing_and_adding_items_to_the_cart/simple_products_setup.jmx</stringProp></BeanShellSampler>
     <hashTree/>
   
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product View" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product ${_counter} View" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
             </elementProp>
@@ -4519,7 +4500,7 @@ vars.put("product_sku", product.get("sku"));
             <hashTree/>
         </hashTree>
     
-      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product Add To Wishlist" enabled="true">
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Product ${_counter} Add To Wishlist" enabled="true">
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
           <collectionProp name="Arguments.arguments">
             <elementProp name="form_key" elementType="HTTPArgument">
@@ -4582,7 +4563,7 @@ vars.put("product_sku", product.get("sku"));
         <hashTree/>
       </hashTree>
   
-      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Load Wishlist Section" enabled="true">
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Load Wishlist Section ${_counter}" enabled="true">
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
           <collectionProp name="Arguments.arguments">
             <elementProp name="sections" elementType="HTTPArgument">
@@ -4656,7 +4637,7 @@ vars.put("product_sku", product.get("sku"));
         <boolProp name="CounterConfig.reset_on_tg_iteration">true</boolProp>
       </CounterConfig>
       <hashTree/>
-      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Clear Wishlist" enabled="true">
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Clear Wishlist ${counter}" enabled="true">
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
           <collectionProp name="Arguments.arguments">
             <elementProp name="form_key" elementType="HTTPArgument">
@@ -6524,37 +6505,18 @@ vars.put("category_name", props.get("category_names_list").get(number));
     
     <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Get Customer Email" enabled="true">
       <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/get_customer_email.jmx</stringProp>
-      <stringProp name="BeanShellSampler.query">import org.apache.jmeter.samplers.SampleResult;
-
-String siterator = vars.get("customer_emails_index");
-int iterator;
-if(siterator == null){
-    iterator = 0;
-    vars.put("customer_emails_index", "0");
-} else {
-    iterator = Integer.parseInt(siterator);
-    iterator ++;
-    vars.put("customer_emails_index", iterator.toString());
+      <stringProp name="BeanShellSampler.query">
+customerUserList = props.get("customer_emails_list");
+customerUser = customerUserList.poll();
+if (customerUser == null) {
+  SampleResult.setResponseMessage("customernUser list is empty");
+  SampleResult.setResponseData("customerUser list is empty","UTF-8");
+  IsSuccess=false;
+  SampleResult.setSuccessful(false);
+  SampleResult.setStopThread(true);
 }
-
-emails_list = props.get("customer_emails_list");
-
-threadsNumber = ctx.getThreadGroup().getNumThreads();
-emailsCount = emails_list.size();
-if (threadsNumber &gt; emailsCount) {
-    log.error(" There are not enough customers for this scenario.");
-} else {
-    clusterLength = Math.round(emailsCount / threadsNumber);
-    threadNum = ctx.getThreadNum();
-    emails_index = clusterLength * threadNum + iterator;
-    maxLimit = clusterLength * (threadNum + 1);
-    if (emails_index &gt;= maxLimit) {
-        iterator = 0;
-        emails_index = clusterLength * threadNum + iterator;
-        vars.put("customer_emails_index", iterator.toString());
-    }
-}
-vars.put("customer_email", emails_list.get(emails_index));</stringProp>
+vars.put("customer_email", customerUser);
+      </stringProp>
       <stringProp name="BeanShellSampler.filename"/>
       <stringProp name="BeanShellSampler.parameters"/>
       <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
@@ -7977,8 +7939,13 @@ if (testLabel
                   <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/admin_edit_product/admin_edit_product_updated.jmx</stringProp>
                   <stringProp name="BeanShellSampler.query">import java.util.ArrayList;
     import java.util.HashMap;
+    import java.util.Random;
 
-try {
+    try {
+    Random random = new Random();
+    if (${seedForRandom} &gt; 0) {
+      random.setSeed(${seedForRandom} + ${__threadNum});
+    }
     simpleCount = props.get("simple_products_list").size();
     configCount = props.get("configurable_products_list").size();
     productCount = 0;
@@ -8021,7 +7988,7 @@ try {
 
     //id of related product
     do {
-    	relatedIndex = (int)(Math.random() * props.get("simple_products_list").size());
+    	relatedIndex = random.nextInt(props.get("simple_products_list").size());
     } while(i == relatedIndex);
     vars.put("related_product_id", props.get("simple_products_list").get(relatedIndex).get("id"));
     } catch (Exception ex) {
@@ -20125,9 +20092,9 @@ if (testLabel
     <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/http_cookie_manager_without_clear_each_iteration.jmx</stringProp></CookieManager>
     <hashTree/>
   
-    <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Once Only Controller" enabled="true">
-  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/once_only_controller.jmx</stringProp>
-</OnceOnlyController>
+    <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Simple Controller" enabled="true">
+  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/simple_controller.jmx</stringProp>
+</GenericController>
     <hashTree>
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - Login" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
@@ -20754,180 +20721,94 @@ if (testLabel
     <hashTree/>
   </hashTree>
 
-    <RandomController guiclass="RandomControlGui" testclass="RandomController" testname="Random Controller" enabled="true">
-        <intProp name="InterleaveControl.style">1</intProp>
-    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/admin_create_process_returns/credit_memo_submit.jmx</stringProp></RandomController>
-        <hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Credit Memo Submit - Full Refund" enabled="true">
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-                <collectionProp name="Arguments.arguments">
-                  <elementProp name="form_key" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">${admin_form_key}</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">form_key</stringProp>
-                    <stringProp name="Argument.desc">false</stringProp>
-                  </elementProp>
-                  <elementProp name="creditmemo[items][${item_ids_1}][qty]" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">1</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">creditmemo[items][${item_ids_1}][qty]</stringProp>
-                  </elementProp>
-                  <elementProp name="creditmemo[items][${item_ids_2}][qty]" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">1</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">creditmemo[items][${item_ids_2}][qty]</stringProp>
-                  </elementProp>
-                  <elementProp name="creditmemo[do_offline]" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">1</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">creditmemo[do_offline]</stringProp>
-                  </elementProp>
-                  <elementProp name="creditmemo[comment_text]" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">Credit Memo added</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">creditmemo[comment_text]</stringProp>
-                  </elementProp>
-                  <elementProp name="creditmemo[shipping_amount]" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">10</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">creditmemo[shipping_amount]</stringProp>
-                  </elementProp>
-                  <elementProp name="creditmemo[adjustment_positive]" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">0</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">creditmemo[adjustment_positive]</stringProp>
-                  </elementProp>
-                  <elementProp name="creditmemo[adjustment_negative]" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">0</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">creditmemo[adjustment_negative]</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain"/>
-              <stringProp name="HTTPSampler.port"/>
-              <stringProp name="HTTPSampler.connect_timeout"/>
-              <stringProp name="HTTPSampler.response_timeout"/>
-              <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
-              <stringProp name="HTTPSampler.contentEncoding"/>
-              <stringProp name="HTTPSampler.path">${base_path}${admin_path}/sales/order_creditmemo/save/order_id/${order_id}/</stringProp>
-              <stringProp name="HTTPSampler.method">POST</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <boolProp name="HTTPSampler.monitor">false</boolProp>
-              <stringProp name="HTTPSampler.embedded_url_re"/>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                  <stringProp name="-515117447">You created the credit memo</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">2</intProp>
-              </ResponseAssertion>
-              <hashTree/>
-            </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Credit Memo Submit - Partial Refund" enabled="true">
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-                <collectionProp name="Arguments.arguments">
-                  <elementProp name="form_key" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">${admin_form_key}</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">form_key</stringProp>
-                    <stringProp name="Argument.desc">false</stringProp>
-                  </elementProp>
-                  <elementProp name="creditmemo[items][${item_ids_1}][qty]" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">1</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">creditmemo[items][${item_ids_1}][qty]</stringProp>
-                  </elementProp>
-                  <elementProp name="creditmemo[do_offline]" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">1</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">creditmemo[do_offline]</stringProp>
-                  </elementProp>
-                  <elementProp name="creditmemo[comment_text]" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">Credit Memo added</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">creditmemo[comment_text]</stringProp>
-                  </elementProp>
-                  <elementProp name="creditmemo[shipping_amount]" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">10</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">creditmemo[shipping_amount]</stringProp>
-                  </elementProp>
-                  <elementProp name="creditmemo[adjustment_positive]" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">0</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">creditmemo[adjustment_positive]</stringProp>
-                  </elementProp>
-                  <elementProp name="creditmemo[adjustment_negative]" elementType="HTTPArgument">
-                    <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                    <stringProp name="Argument.value">0</stringProp>
-                    <stringProp name="Argument.metadata">=</stringProp>
-                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                    <stringProp name="Argument.name">creditmemo[adjustment_negative]</stringProp>
-                  </elementProp>
-                </collectionProp>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain"/>
-              <stringProp name="HTTPSampler.port"/>
-              <stringProp name="HTTPSampler.connect_timeout"/>
-              <stringProp name="HTTPSampler.response_timeout"/>
-              <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
-              <stringProp name="HTTPSampler.contentEncoding"/>
-              <stringProp name="HTTPSampler.path">${base_path}${admin_path}/sales/order_creditmemo/save/order_id/${order_id}/</stringProp>
-              <stringProp name="HTTPSampler.method">POST</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <boolProp name="HTTPSampler.monitor">false</boolProp>
-              <stringProp name="HTTPSampler.embedded_url_re"/>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-                <collectionProp name="Asserion.test_strings">
-                  <stringProp name="-515117447">You created the credit memo</stringProp>
-                </collectionProp>
-                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-                <boolProp name="Assertion.assume_success">false</boolProp>
-                <intProp name="Assertion.test_type">2</intProp>
-              </ResponseAssertion>
-              <hashTree/>
-            </hashTree>
-          </hashTree>
+  <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Credit Memo Submit - Full Refund" enabled="true">
+    <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+      <collectionProp name="Arguments.arguments">
+        <elementProp name="form_key" elementType="HTTPArgument">
+          <boolProp name="HTTPArgument.always_encode">true</boolProp>
+          <stringProp name="Argument.value">${admin_form_key}</stringProp>
+          <stringProp name="Argument.metadata">=</stringProp>
+          <boolProp name="HTTPArgument.use_equals">true</boolProp>
+          <stringProp name="Argument.name">form_key</stringProp>
+          <stringProp name="Argument.desc">false</stringProp>
+        </elementProp>
+        <elementProp name="creditmemo[items][${item_ids_1}][qty]" elementType="HTTPArgument">
+          <boolProp name="HTTPArgument.always_encode">true</boolProp>
+          <stringProp name="Argument.value">1</stringProp>
+          <stringProp name="Argument.metadata">=</stringProp>
+          <boolProp name="HTTPArgument.use_equals">true</boolProp>
+          <stringProp name="Argument.name">creditmemo[items][${item_ids_1}][qty]</stringProp>
+        </elementProp>
+        <elementProp name="creditmemo[items][${item_ids_2}][qty]" elementType="HTTPArgument">
+          <boolProp name="HTTPArgument.always_encode">true</boolProp>
+          <stringProp name="Argument.value">1</stringProp>
+          <stringProp name="Argument.metadata">=</stringProp>
+          <boolProp name="HTTPArgument.use_equals">true</boolProp>
+          <stringProp name="Argument.name">creditmemo[items][${item_ids_2}][qty]</stringProp>
+        </elementProp>
+        <elementProp name="creditmemo[do_offline]" elementType="HTTPArgument">
+          <boolProp name="HTTPArgument.always_encode">true</boolProp>
+          <stringProp name="Argument.value">1</stringProp>
+          <stringProp name="Argument.metadata">=</stringProp>
+          <boolProp name="HTTPArgument.use_equals">true</boolProp>
+          <stringProp name="Argument.name">creditmemo[do_offline]</stringProp>
+        </elementProp>
+        <elementProp name="creditmemo[comment_text]" elementType="HTTPArgument">
+          <boolProp name="HTTPArgument.always_encode">true</boolProp>
+          <stringProp name="Argument.value">Credit Memo added</stringProp>
+          <stringProp name="Argument.metadata">=</stringProp>
+          <boolProp name="HTTPArgument.use_equals">true</boolProp>
+          <stringProp name="Argument.name">creditmemo[comment_text]</stringProp>
+        </elementProp>
+        <elementProp name="creditmemo[shipping_amount]" elementType="HTTPArgument">
+          <boolProp name="HTTPArgument.always_encode">true</boolProp>
+          <stringProp name="Argument.value">10</stringProp>
+          <stringProp name="Argument.metadata">=</stringProp>
+          <boolProp name="HTTPArgument.use_equals">true</boolProp>
+          <stringProp name="Argument.name">creditmemo[shipping_amount]</stringProp>
+        </elementProp>
+        <elementProp name="creditmemo[adjustment_positive]" elementType="HTTPArgument">
+          <boolProp name="HTTPArgument.always_encode">true</boolProp>
+          <stringProp name="Argument.value">0</stringProp>
+          <stringProp name="Argument.metadata">=</stringProp>
+          <boolProp name="HTTPArgument.use_equals">true</boolProp>
+          <stringProp name="Argument.name">creditmemo[adjustment_positive]</stringProp>
+        </elementProp>
+        <elementProp name="creditmemo[adjustment_negative]" elementType="HTTPArgument">
+          <boolProp name="HTTPArgument.always_encode">true</boolProp>
+          <stringProp name="Argument.value">0</stringProp>
+          <stringProp name="Argument.metadata">=</stringProp>
+          <boolProp name="HTTPArgument.use_equals">true</boolProp>
+          <stringProp name="Argument.name">creditmemo[adjustment_negative]</stringProp>
+        </elementProp>
+      </collectionProp>
+    </elementProp>
+    <stringProp name="HTTPSampler.domain"/>
+    <stringProp name="HTTPSampler.port"/>
+    <stringProp name="HTTPSampler.connect_timeout"/>
+    <stringProp name="HTTPSampler.response_timeout"/>
+    <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+    <stringProp name="HTTPSampler.contentEncoding"/>
+    <stringProp name="HTTPSampler.path">${base_path}${admin_path}/sales/order_creditmemo/save/order_id/${order_id}/</stringProp>
+    <stringProp name="HTTPSampler.method">POST</stringProp>
+    <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+    <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+    <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+    <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+    <boolProp name="HTTPSampler.monitor">false</boolProp>
+    <stringProp name="HTTPSampler.embedded_url_re"/>
+  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/admin_create_process_returns/credit_memo_full_refund.jmx</stringProp></HTTPSamplerProxy>
+  <hashTree>
+    <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="-515117447">You created the credit memo</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+    <hashTree/>
+  </hashTree>
 
     <TestAction guiclass="TestActionGui" testclass="TestAction" testname="Create/Process Returns - Pause" enabled="true">
       <intProp name="ActionProcessor.action">1</intProp>
@@ -25406,37 +25287,18 @@ vars.putObject("randomIntGenerator", random);
     
     <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Get Customer Email" enabled="true">
       <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/get_customer_email.jmx</stringProp>
-      <stringProp name="BeanShellSampler.query">import org.apache.jmeter.samplers.SampleResult;
-
-String siterator = vars.get("customer_emails_index");
-int iterator;
-if(siterator == null){
-    iterator = 0;
-    vars.put("customer_emails_index", "0");
-} else {
-    iterator = Integer.parseInt(siterator);
-    iterator ++;
-    vars.put("customer_emails_index", iterator.toString());
+      <stringProp name="BeanShellSampler.query">
+customerUserList = props.get("customer_emails_list");
+customerUser = customerUserList.poll();
+if (customerUser == null) {
+  SampleResult.setResponseMessage("customernUser list is empty");
+  SampleResult.setResponseData("customerUser list is empty","UTF-8");
+  IsSuccess=false;
+  SampleResult.setSuccessful(false);
+  SampleResult.setStopThread(true);
 }
-
-emails_list = props.get("customer_emails_list");
-
-threadsNumber = ctx.getThreadGroup().getNumThreads();
-emailsCount = emails_list.size();
-if (threadsNumber &gt; emailsCount) {
-    log.error(" There are not enough customers for this scenario.");
-} else {
-    clusterLength = Math.round(emailsCount / threadsNumber);
-    threadNum = ctx.getThreadNum();
-    emails_index = clusterLength * threadNum + iterator;
-    maxLimit = clusterLength * (threadNum + 1);
-    if (emails_index &gt;= maxLimit) {
-        iterator = 0;
-        emails_index = clusterLength * threadNum + iterator;
-        vars.put("customer_emails_index", iterator.toString());
-    }
-}
-vars.put("customer_email", emails_list.get(emails_index));</stringProp>
+vars.put("customer_email", customerUser);
+      </stringProp>
       <stringProp name="BeanShellSampler.filename"/>
       <stringProp name="BeanShellSampler.parameters"/>
       <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
@@ -28015,7 +27877,7 @@ var productsPageSize = Integer.parseInt(vars.get("products_page_size"));
 var totalNumberOfPages = Integer.parseInt(vars.get("pages_count_product"));
 
 // Randomly select a page.
-var randomProductsPage = Math.floor((Math.random() * totalNumberOfPages) + 1);
+var randomProductsPage = Math.floor((0.555 * totalNumberOfPages) + 1);
 
 // Get the first and last product id on that page.
 var lastProductIdOnPage = randomProductsPage * productsPageSize;
@@ -28030,8 +27892,8 @@ vars.put("productId1", String.valueOf(randomProductId1));
 vars.put("productId2", String.valueOf(randomProductId2));
 vars.put("productId3", String.valueOf(randomProductId3));
 
-var randomQuantity = Math.floor(Math.random() * 1000) + 1;
-var randomPrice = Math.floor(Math.random() * 500) + 10;
+var randomQuantity = Math.floor(0.555 * 1000) + 1;
+var randomPrice = Math.floor(0.555 * 500) + 10;
 var randomVisibility = Math.floor(random.nextInt(4)) + 1;
 
 vars.put("quantity", String.valueOf(randomQuantity));
@@ -28498,37 +28360,18 @@ if (testLabel
   
     <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Get Customer Email" enabled="true">
       <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/get_customer_email.jmx</stringProp>
-      <stringProp name="BeanShellSampler.query">import org.apache.jmeter.samplers.SampleResult;
-
-String siterator = vars.get("customer_emails_index");
-int iterator;
-if(siterator == null){
-    iterator = 0;
-    vars.put("customer_emails_index", "0");
-} else {
-    iterator = Integer.parseInt(siterator);
-    iterator ++;
-    vars.put("customer_emails_index", iterator.toString());
+      <stringProp name="BeanShellSampler.query">
+customerUserList = props.get("customer_emails_list");
+customerUser = customerUserList.poll();
+if (customerUser == null) {
+  SampleResult.setResponseMessage("customernUser list is empty");
+  SampleResult.setResponseData("customerUser list is empty","UTF-8");
+  IsSuccess=false;
+  SampleResult.setSuccessful(false);
+  SampleResult.setStopThread(true);
 }
-
-emails_list = props.get("customer_emails_list");
-
-threadsNumber = ctx.getThreadGroup().getNumThreads();
-emailsCount = emails_list.size();
-if (threadsNumber &gt; emailsCount) {
-    log.error(" There are not enough customers for this scenario.");
-} else {
-    clusterLength = Math.round(emailsCount / threadsNumber);
-    threadNum = ctx.getThreadNum();
-    emails_index = clusterLength * threadNum + iterator;
-    maxLimit = clusterLength * (threadNum + 1);
-    if (emails_index &gt;= maxLimit) {
-        iterator = 0;
-        emails_index = clusterLength * threadNum + iterator;
-        vars.put("customer_emails_index", iterator.toString());
-    }
-}
-vars.put("customer_email", emails_list.get(emails_index));</stringProp>
+vars.put("customer_email", customerUser);
+      </stringProp>
       <stringProp name="BeanShellSampler.filename"/>
       <stringProp name="BeanShellSampler.parameters"/>
       <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
@@ -29257,37 +29100,18 @@ vars.put("category_name", props.get("category_names_list").get(number));
     
     <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Get Customer Email" enabled="true">
       <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/get_customer_email.jmx</stringProp>
-      <stringProp name="BeanShellSampler.query">import org.apache.jmeter.samplers.SampleResult;
-
-String siterator = vars.get("customer_emails_index");
-int iterator;
-if(siterator == null){
-    iterator = 0;
-    vars.put("customer_emails_index", "0");
-} else {
-    iterator = Integer.parseInt(siterator);
-    iterator ++;
-    vars.put("customer_emails_index", iterator.toString());
+      <stringProp name="BeanShellSampler.query">
+customerUserList = props.get("customer_emails_list");
+customerUser = customerUserList.poll();
+if (customerUser == null) {
+  SampleResult.setResponseMessage("customernUser list is empty");
+  SampleResult.setResponseData("customerUser list is empty","UTF-8");
+  IsSuccess=false;
+  SampleResult.setSuccessful(false);
+  SampleResult.setStopThread(true);
 }
-
-emails_list = props.get("customer_emails_list");
-
-threadsNumber = ctx.getThreadGroup().getNumThreads();
-emailsCount = emails_list.size();
-if (threadsNumber &gt; emailsCount) {
-    log.error(" There are not enough customers for this scenario.");
-} else {
-    clusterLength = Math.round(emailsCount / threadsNumber);
-    threadNum = ctx.getThreadNum();
-    emails_index = clusterLength * threadNum + iterator;
-    maxLimit = clusterLength * (threadNum + 1);
-    if (emails_index &gt;= maxLimit) {
-        iterator = 0;
-        emails_index = clusterLength * threadNum + iterator;
-        vars.put("customer_emails_index", iterator.toString());
-    }
-}
-vars.put("customer_email", emails_list.get(emails_index));</stringProp>
+vars.put("customer_email", customerUser);
+      </stringProp>
       <stringProp name="BeanShellSampler.filename"/>
       <stringProp name="BeanShellSampler.parameters"/>
       <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
@@ -29769,44 +29593,31 @@ vars.put("category_name", props.get("category_names_list").get(number));
       <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/common/extract_category_setup.jmx</stringProp></BeanShellSampler>
       <hashTree/>
     
+    <CriticalSectionController guiclass="CriticalSectionControllerGui" testclass="CriticalSectionController" testname="Get Customer Email" enabled="true">
+        <stringProp name="CriticalSectionController.lockName">get-email</stringProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/lock_controller.jmx</stringProp></CriticalSectionController>
+    <hashTree>
+    
     <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Get Customer Email" enabled="true">
       <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/get_customer_email.jmx</stringProp>
-      <stringProp name="BeanShellSampler.query">import org.apache.jmeter.samplers.SampleResult;
-
-String siterator = vars.get("customer_emails_index");
-int iterator;
-if(siterator == null){
-    iterator = 0;
-    vars.put("customer_emails_index", "0");
-} else {
-    iterator = Integer.parseInt(siterator);
-    iterator ++;
-    vars.put("customer_emails_index", iterator.toString());
+      <stringProp name="BeanShellSampler.query">
+customerUserList = props.get("customer_emails_list");
+customerUser = customerUserList.poll();
+if (customerUser == null) {
+  SampleResult.setResponseMessage("customernUser list is empty");
+  SampleResult.setResponseData("customerUser list is empty","UTF-8");
+  IsSuccess=false;
+  SampleResult.setSuccessful(false);
+  SampleResult.setStopThread(true);
 }
-
-emails_list = props.get("customer_emails_list");
-
-threadsNumber = ctx.getThreadGroup().getNumThreads();
-emailsCount = emails_list.size();
-if (threadsNumber &gt; emailsCount) {
-    log.error(" There are not enough customers for this scenario.");
-} else {
-    clusterLength = Math.round(emailsCount / threadsNumber);
-    threadNum = ctx.getThreadNum();
-    emails_index = clusterLength * threadNum + iterator;
-    maxLimit = clusterLength * (threadNum + 1);
-    if (emails_index &gt;= maxLimit) {
-        iterator = 0;
-        emails_index = clusterLength * threadNum + iterator;
-        vars.put("customer_emails_index", iterator.toString());
-    }
-}
-vars.put("customer_email", emails_list.get(emails_index));</stringProp>
+vars.put("customer_email", customerUser);
+      </stringProp>
       <stringProp name="BeanShellSampler.filename"/>
       <stringProp name="BeanShellSampler.parameters"/>
       <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
     </BeanShellSampler>
     <hashTree/>
+  </hashTree>
   
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Login Page" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
@@ -30043,6 +29854,175 @@ vars.put("customer_email", emails_list.get(emails_index));</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
+  
+    <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Make Cart Empty" enabled="true">
+  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/simple_controller.jmx</stringProp>
+</GenericController>
+    <hashTree>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Open Cart" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+          <collectionProp name="Arguments.arguments"/>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain"/>
+        <stringProp name="HTTPSampler.port"/>
+        <stringProp name="HTTPSampler.connect_timeout"/>
+        <stringProp name="HTTPSampler.response_timeout"/>
+        <stringProp name="HTTPSampler.protocol"/>
+        <stringProp name="HTTPSampler.contentEncoding"/>
+        <stringProp name="HTTPSampler.path">${base_path}checkout/cart/</stringProp>
+        <stringProp name="HTTPSampler.method">GET</stringProp>
+        <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+        <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+        <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+        <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+        <boolProp name="HTTPSampler.monitor">false</boolProp>
+        <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/product_browsing_and_adding_items_to_the_cart/open_cart.jmx</stringProp></HTTPSamplerProxy>
+      <hashTree>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert Cart Opened" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="-179817969">&lt;title&gt;Shopping Cart&lt;/title&gt;</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">2</intProp>
+        </ResponseAssertion>
+        <hashTree/>
+        <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract cart qty inputs" enabled="true">
+          <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+          <stringProp name="RegexExtractor.refname">cart_items_qty_inputs</stringProp>
+          <stringProp name="RegexExtractor.regex">name="cart\[([^\[\]]+)\]\[qty\]"</stringProp>
+          <stringProp name="RegexExtractor.template">$1$</stringProp>
+          <stringProp name="RegexExtractor.default"/>
+          <stringProp name="RegexExtractor.match_number">-1</stringProp>
+        </RegexExtractor>
+        <hashTree/>
+      </hashTree>
+    
+    <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Remove Items From Cart" enabled="true">
+      <boolProp name="LoopController.continue_forever">true</boolProp>
+      <stringProp name="LoopController.loops">${cart_items_qty_inputs_matchNr}</stringProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/loop_controller.jmx</stringProp></LoopController>
+    <hashTree>
+      <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="true">
+        <stringProp name="CounterConfig.start">1</stringProp>
+        <stringProp name="CounterConfig.end"/>
+        <stringProp name="CounterConfig.incr">1</stringProp>
+        <stringProp name="CounterConfig.name">_counter</stringProp>
+        <stringProp name="CounterConfig.format"/>
+        <boolProp name="CounterConfig.per_user">true</boolProp>
+        <boolProp name="CounterConfig.reset_on_tg_iteration">true</boolProp>
+      </CounterConfig>
+      <hashTree/>
+    
+    <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - Prepare Product Data for Removing from Cart" enabled="true">
+      <stringProp name="BeanShellSampler.query">
+id = vars.get("_counter");
+vars.put("uenc", vars.get("cart_items_uencs_" + id));
+vars.put("item_id", vars.get("cart_items_qty_inputs_" + id));
+      </stringProp>
+      <stringProp name="BeanShellSampler.filename"/>
+      <stringProp name="BeanShellSampler.parameters"/>
+      <boolProp name="BeanShellSampler.resetInterpreter">true</boolProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/product_browsing_and_adding_items_to_the_cart/remove_item_from_cart_setup.jmx</stringProp></BeanShellSampler>
+    <hashTree/>
+  
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Remove item" enabled="true">
+           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+             <collectionProp name="Arguments.arguments">
+               <elementProp name="form_key" elementType="HTTPArgument">
+                 <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                 <stringProp name="Argument.value">${form_key}</stringProp>
+                 <stringProp name="Argument.metadata">=</stringProp>
+                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                 <stringProp name="Argument.name">form_key</stringProp>
+               </elementProp>
+               <elementProp name="uenc" elementType="HTTPArgument">
+                 <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                 <stringProp name="Argument.value">${uenc}</stringProp>
+                 <stringProp name="Argument.metadata">=</stringProp>
+                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                 <stringProp name="Argument.name">uenc</stringProp>
+               </elementProp>
+               <elementProp name="id" elementType="HTTPArgument">
+                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                 <stringProp name="Argument.value">${item_id}</stringProp>
+                 <stringProp name="Argument.metadata">=</stringProp>
+                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                 <stringProp name="Argument.name">id</stringProp>
+               </elementProp>
+             </collectionProp>
+           </elementProp>
+           <stringProp name="HTTPSampler.domain"/>
+           <stringProp name="HTTPSampler.port"/>
+           <stringProp name="HTTPSampler.connect_timeout"/>
+           <stringProp name="HTTPSampler.response_timeout"/>
+           <stringProp name="HTTPSampler.protocol"/>
+           <stringProp name="HTTPSampler.contentEncoding"/>
+           <stringProp name="HTTPSampler.path">${base_path}checkout/cart/delete/</stringProp>
+           <stringProp name="HTTPSampler.method">POST</stringProp>
+           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+           <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+           <boolProp name="HTTPSampler.monitor">false</boolProp>
+           <stringProp name="HTTPSampler.embedded_url_re"/>
+         <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/product_browsing_and_adding_items_to_the_cart/remove_item_from_cart.jmx</stringProp></HTTPSamplerProxy>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Check Cart is Empty" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="sections" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">true</boolProp>
+            <stringProp name="Argument.value">cart</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">sections</stringProp>
+          </elementProp>
+          <elementProp name="update_section_id" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">true</boolProp>
+            <stringProp name="Argument.value">true</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">update_section_id</stringProp>
+          </elementProp>
+          <elementProp name="_" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">true</boolProp>
+            <stringProp name="Argument.value">${__time()}${__Random(1,1000000)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <boolProp name="HTTPArgument.use_equals">true</boolProp>
+            <stringProp name="Argument.name">_</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
+      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/product_browsing_and_adding_items_to_the_cart/check_cart_is_empty.jmx</stringProp></HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="-350323027">\"summary_count\":0</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
   
     <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Add Simple Products to Cart" enabled="true">
       <boolProp name="LoopController.continue_forever">true</boolProp>
@@ -30631,6 +30611,48 @@ vars.put("totalProductsAdded", String.valueOf(productsAdded));
     <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/common/http_header_manager_ajax.jmx</stringProp></HeaderManager>
     <hashTree/>
   </hashTree>
+  </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Logout" enabled="true">
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}customer/account/logout/</stringProp>
+      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/common/logout.jmx</stringProp></HTTPSamplerProxy>
+    <hashTree>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert success" enabled="true">
+        <collectionProp name="Asserion.test_strings">
+          <stringProp name="1723813687">You are signed out.</stringProp>
+        </collectionProp>
+        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+        <boolProp name="Assertion.assume_success">false</boolProp>
+        <intProp name="Assertion.test_type">2</intProp>
+      </ResponseAssertion>
+      <hashTree/>
+    
+    <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="Return Customer to Pool" enabled="true">
+        <boolProp name="resetInterpreter">false</boolProp>
+        <stringProp name="parameters"/>
+        <stringProp name="filename"/>
+        <stringProp name="script">
+adminUserList = props.get("customer_emails_list");
+adminUserList.add(vars.get("customer_email"));
+        </stringProp>
+    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/common/return_email_to_pool.jmx</stringProp></BeanShellPostProcessor>
+    <hashTree/>
   </hashTree>
   </hashTree>
 
