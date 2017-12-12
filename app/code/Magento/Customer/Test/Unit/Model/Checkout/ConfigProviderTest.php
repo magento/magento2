@@ -50,7 +50,10 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->customerUrl = $this->createMock(\Magento\Customer\Model\Url::class);
+        $this->customerUrl = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
+        ->disableOriginalConstructor()
+        ->setMethods(['getLoginUrl'])
+        ->getMock();
 
         $this->scopeConfig = $this->getMockForAbstractClass(
             \Magento\Framework\App\Config\ScopeConfigInterface::class,
