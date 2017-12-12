@@ -298,14 +298,16 @@ define([
                 'This page contains {0} unexistent variable(s): {1}. Please remove them or replace with valid ones.'
             );
 
-            msg = msg.replace(/\{(\d+)\}/g, function(match, index) {
+            msg = msg.replace(/\{(\d+)\}/g, function (match, index) {
                 var params = [this.lostVariables.length, this.lostVariables.join(', ')];
                 return (typeof (params[index]) !== 'undefined') ? params[index] : match;
             }.bind(this));
 
-            alert({
-                content: msg
-            });
+            if (this.lostVariables.length > 0) {
+                alert({
+                    content: msg
+                });
+            }
         },
 
         /**
