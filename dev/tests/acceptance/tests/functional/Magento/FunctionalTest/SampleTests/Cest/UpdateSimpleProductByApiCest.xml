@@ -11,21 +11,17 @@
         <annotations>
             <features value="Update simple product by api test."/>
             <stories value="Update simple product by api test."/>
-            <group value="example"/>
-            <env value="chrome"/>
-            <env value="firefox"/>
-            <env value="phantomjs"/>
-            <env value="headless"/>
+            <group value="skip"/>
         </annotations>
         <before>
-            <createData mergeKey="categoryHandle" entity="SimpleSubCategory"/>
-            <createData mergeKey="productHandle" entity="SimpleProduct" >
+            <createData stepKey="categoryHandle" entity="SimpleSubCategory"/>
+            <createData stepKey="productHandle" entity="SimpleProduct" >
                 <required-entity createDataKey="categoryHandle"/>
             </createData>
-            <updateData mergeKey="updateProduct" entity="NewSimpleProduct" createDataKey="productHandle"/>
+            <updateData stepKey="updateProduct" entity="NewSimpleProduct" createDataKey="productHandle"/>
         </before>
         <after>
-            <deleteData mergeKey="delete" createDataKey="updateProduct"/>
+            <deleteData stepKey="delete" createDataKey="updateProduct"/>
         </after>
         <test name="UpdateSimpleProductByApiTest">
         </test>
