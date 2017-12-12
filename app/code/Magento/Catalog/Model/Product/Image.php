@@ -894,7 +894,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
             $imageProperties = getimagesize($image);
 
             return $imageProperties;
-
         } finally {
             if (empty($imageProperties)) {
                 throw new NotLoadInfoImageException(__($errorMessage . $image));
