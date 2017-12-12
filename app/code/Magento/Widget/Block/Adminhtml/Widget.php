@@ -28,7 +28,7 @@ class Widget extends \Magento\Backend\Block\Widget\Form\Container
 
         $saveButtonClass = 'action-primary add-widget';
         $this->removeButton('back');
-        if($this->getRequest()->getParam('mode') === 'new') {
+        if ($this->getRequest()->getParam('mode') === 'new') {
             $this->buttonList->update('save', 'label', __('Insert Widget'));
             $saveButtonClass .= ' disabled';
         }
