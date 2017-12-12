@@ -74,7 +74,7 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
             return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         }
 
-        $exceptionMessage = '';
+        $errorMessage = '';
         try {
             foreach ($productIds as $productId) {
                 try {
@@ -88,8 +88,8 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
                     /** @var \Magento\Catalog\Model\Product\Image\Cache $imageCache */
                     $imageCache = $this->imageCacheFactory->create();
                     $imageCache->generate($product);
-                } catch (\Exception $e) {
-                    $exceptionMessage = $e->getMessage();
+                } catch (\Magento\Framework\Exception\RuntimeException $e) {
+                    $errorMessage = $e->getMessage();
                 }
 
                 $output->write(".");
@@ -103,8 +103,8 @@ class ImagesResizeCommand extends \Symfony\Component\Console\Command\Command
         $output->write("\n");
         $output->writeln("<info>Product images resized successfully.</info>");
 
-        if ($exceptionMessage) {
-            $output->writeln("<comment>{$exceptionMessage}</comment>");
+        if ($errorMessage !== '') {
+            $output->writeln("<comment>{$errorMessage}</comment>");
         }
 
         return 0;
