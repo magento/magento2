@@ -16,6 +16,8 @@ use Magento\Framework\Phrase;
  */
 class PageSize implements ArgumentApplierInterface
 {
+    const ARGUMENT_NAME = 'pageSize';
+
     /**
      * {@inheritdoc}
      */

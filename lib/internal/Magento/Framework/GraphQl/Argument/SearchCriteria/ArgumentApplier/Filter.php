@@ -19,6 +19,8 @@ use Magento\Framework\Phrase;
  */
 class Filter implements ArgumentApplierInterface
 {
+    const ARGUMENT_NAME = 'filter';
+
     /**
      * @var FilterGroupFactory
      */

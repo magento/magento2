@@ -17,31 +17,31 @@ class SearchResult
     /**
      * @var SearchResultsInterface
      */
-    private $productSearchResult;
+    private $totalCount;
 
     /**
      * @var array
      */
-    private $productSearchArray;
+    private $productsSearchResult;
 
     /**
-     * @param SearchResultsInterface $productSearchResult
-     * @param array $productSearchArray
+     * @param int $totalCount
+     * @param array $productsSearchResult
      */
-    public function __construct(SearchResultsInterface $productSearchResult, array $productSearchArray)
+    public function __construct(int $totalCount, array $productsSearchResult)
     {
-        $this->productSearchResult = $productSearchResult;
-        $this->productSearchArray = $productSearchArray;
+        $this->totalCount = $totalCount;
+        $this->productsSearchResult = $productsSearchResult;
     }
 
     /**
-     * Return the Search Results Interface containing metadata about the search, including total count.
+     * Return total count of search and filtered result
      *
-     * @return SearchResultsInterface
+     * @return int
      */
-    public function getObject()
+    public function getTotalCount()
     {
-        return $this->productSearchResult;
+        return $this->totalCount;
     }
 
     /**
@@ -49,8 +49,8 @@ class SearchResult
      *
      * @return array
      */
-    public function getArray()
+    public function getProductsSearchResult()
     {
-        return $this->productSearchArray;
+        return $this->productsSearchResult;
     }
 }

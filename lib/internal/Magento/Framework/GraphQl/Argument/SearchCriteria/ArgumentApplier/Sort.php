@@ -19,6 +19,8 @@ use Magento\Framework\Phrase;
  */
 class Sort implements ArgumentApplierInterface
 {
+    const ARGUMENT_NAME = 'sort';
+
     /** @var SortOrderBuilder */
     private $sortOrderBuilder;
 

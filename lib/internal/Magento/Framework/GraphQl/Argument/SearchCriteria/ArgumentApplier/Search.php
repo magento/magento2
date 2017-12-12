@@ -14,6 +14,8 @@ use Magento\Framework\GraphQl\ArgumentInterface;
 
 class Search implements ArgumentApplierInterface
 {
+    const ARGUMENT_NAME = 'search';
+
     /**
      * @var FilterBuilder
      */

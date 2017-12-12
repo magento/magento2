@@ -33,7 +33,7 @@ class FilterDataProvider
 
     /**
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\GraphQlCatalog\Model\Resolver\Products\SearchResultFactory $searchResultFactory
+     * @param SearchResultFactory $searchResultFactory
      * @param ProductDataProvider $productDataProvider
      */
     public function __construct(
@@ -60,8 +60,6 @@ class FilterDataProvider
         foreach ($products->getItems() as $product) {
             $productArray[] = $this->productDataProvider->getProduct($product->getSku());
         }
-        return $this->searchResultFactory->create(
-            ['productSearchResult' => $products, 'productSearchArray' => $productArray]
-        );
+        return $this->searchResultFactory->create($products->getTotalCount(), $productArray);
     }
 }

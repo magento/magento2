@@ -16,6 +16,8 @@ use Magento\Framework\Phrase;
  */
 class CurrentPage implements ArgumentApplierInterface
 {
+    const ARGUMENT_NAME = 'currentPage';
+
     /**
      * {@inheritdoc}
      */

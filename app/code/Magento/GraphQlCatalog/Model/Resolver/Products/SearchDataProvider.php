@@ -61,6 +61,7 @@ class SearchDataProvider
      */
     public function getResult(SearchCriteriaInterface $searchCriteria)
     {
+        // Search starts pages from 0, whereas filtering starts at 1. GraphQL's query starts at 1, so it must be altered
         $searchCriteria->setCurrentPage($searchCriteria->getCurrentPage() - 1);
         $itemsResults = $this->search->search($searchCriteria);
         $ids = [];
@@ -74,13 +75,11 @@ class SearchDataProvider
         $searchCriteria = $this->filterHelper->remove($searchCriteria, 'search_term');
         $searchCriteria = $this->filterHelper->add($searchCriteria, $filter);
         $searchResult = $this->filterDataProvider->getResult($searchCriteria);
-        foreach ($searchResult->getArray() as $product) {
+        foreach ($searchResult->getProductsSearchResult() as $product) {
             $ids[$product['id']] = $product;
         }
         $products = array_filter($ids);
 
-        return $this->searchResultFactory->create(
-            ['productSearchResult' => $searchResult->getObject(), 'productSearchArray' => $products]
-        );
+        return $this->searchResultFactory->create($searchResult->getTotalCount(), $products);
     }
 }
