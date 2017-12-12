@@ -50,7 +50,7 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
 
         $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseCost', 'setDoTransaction'])
+            ->setMethods(['getBaseCost', 'setDoTransaction', 'getPaymentRefundDisallowed'])
             ->getMockForAbstractClass();
 
         $this->paymentMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
