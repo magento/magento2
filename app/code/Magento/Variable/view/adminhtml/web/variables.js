@@ -234,21 +234,19 @@ define([
          */
         insertVariable: function (value) {
             var windowId = this.dialogWindowId,
-                textareaElm, scrollPos, wysiwygAdapter;
+                textareaElm, scrollPos, wysiwygEditorFocused;
 
             jQuery('#' + windowId).modal('closeModal');
             textareaElm = $(this.textareaElementId);
 
             //to support switching between wysiwyg editors
             if (wysiwyg && wysiwyg.activeEditor()) {
-                wysiwygAdapter = wysiwyg.get(this.textareaElementId) ?
-                    wysiwyg.get(this.textareaElementId) :
-                    this.editor;
+                wysiwygEditorFocused = !!wysiwyg.get(this.textareaElementId);
             }
 
-            if (wysiwygAdapter) {
-                wysiwyg.activeEditor().selection.setCursorLocation(this.selectedPlaceholder, 1);
-                wysiwyg.activeEditor().execCommand('mceInsertContent', false, value);
+            if (wysiwygEditorFocused) {
+                wysiwyg.setCursorLocation(this.selectedPlaceholder, 1);
+                wysiwyg.insertContent(value, false);
 
                 if (this.selectedPlaceholder && jQuery(this.selectedPlaceholder).hasClass('magento-variable')) {
                     this.selectedPlaceholder.remove();
