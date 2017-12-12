@@ -600,7 +600,9 @@ define([
                         'currencyFormat': this.options.spConfig.currencyFormat,
                         'priceUtils': priceUtils
                     });
-                    $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
+                    if (options.tierPrices.length) {
+                        $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
+                    }
                 }
             } else {
                 $(this.options.tierPriceBlockSelector).hide();
