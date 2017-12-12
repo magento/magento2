@@ -17,34 +17,38 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 interface ResolverContextInterface extends ExtensibleDataInterface
 {
     /**
-     * Get type of a customer
+     * Get the type of a user
+     *
+     * @see \Magento\Authorization\Model\UserContextInterface for corespondent values
      *
      * @return int
      */
-    public function getCustomerType();
+    public function getUserType();
 
     /**
-     * Set type of a customer
+     * Set type of a user
+     *
+     * @see \Magento\Authorization\Model\UserContextInterface for corespondent values
      *
      * @param int $typeId
      * @return $this
      */
-    public function setCustomerType(int $typeId);
+    public function setUserType(int $typeId);
 
     /**
-     * Get id of a customer
+     * Get id of the user
      *
      * @return int
      */
-    public function getCustomerId();
+    public function getUserId();
 
     /**
-     * Set id of a customer
+     * Set id of a user
      *
-     * @param int $customerId
+     * @param int $userId
      * @return $this
      */
-    public function setCustomerId(int $customerId);
+    public function setUserId(int $userId);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

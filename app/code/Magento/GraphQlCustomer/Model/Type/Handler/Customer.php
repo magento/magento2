@@ -71,7 +71,7 @@ class Customer implements HandlerInterface
     }
 
     /**
-     * Retrieve Product base fields
+     * Retrieve the customer base fields
      *
      * @param string $typeName
      * @return array

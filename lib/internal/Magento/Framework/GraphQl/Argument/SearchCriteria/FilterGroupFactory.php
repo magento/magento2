@@ -94,7 +94,9 @@ class FilterGroupFactory
                 if (((string)$subNode->getOperator()) == 'OR') {
                     return $this->processConnective($subNode);
                 } else {
-                    throw new GraphQlInputException(new Phrase('Sub nesting AND not supported'));
+                    throw new GraphQlInputException(
+                        new Phrase('Sub nesting of %1 is not supported', [$subNode->getOperator()])
+                    );
                 }
             }
         }
