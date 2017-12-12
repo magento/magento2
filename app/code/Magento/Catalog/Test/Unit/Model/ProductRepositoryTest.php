@@ -527,6 +527,25 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->productMock, $this->model->get($productSku));
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testGetBySkuWithCamelCaseException()
+    {
+        $productId = 22;
+        $fakeProductSku = 'testproduct';
+        $realProductSku = 'testProduct';
+        $this->productFactoryMock->expects($this->once())->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->resourceModelMock->expects($this->once())->method('getIdBySku')
+            ->with($fakeProductSku)->willReturn($productId);
+        $this->productMock->expects($this->once())->method('load')->with($productId);
+        $this->productMock->expects($this->atLeastOnce())->method('getId')->willReturn($productId);
+        $this->productMock->expects($this->once())->method('getSku')->willReturn($realProductSku);
+
+        $this->assertEquals($this->productMock, $this->model->get($fakeProductSku));
+    }
+
     public function testSaveExisting()
     {
         $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);

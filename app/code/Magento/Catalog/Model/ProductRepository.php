@@ -251,6 +251,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if (!isset($this->instances[$sku])) {
             $sku = trim($sku);
         }
+
+        if (!isset($this->instances[$sku])) {
+            throw new NoSuchEntityException(__('Requested product doesn\'t exist'));
+        }
+
         return $this->instances[$sku][$cacheKey];
     }
 
