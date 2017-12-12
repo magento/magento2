@@ -13,7 +13,6 @@ use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State;
 use Magento\Framework\Autoload\ClassLoaderWrapper;
 use Magento\Framework\Config\Scope;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Shell;
 use Magento\TestFramework\Application;
@@ -81,73 +80,6 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
             $initParams[State::PARAM_MODE],
             'Wrong application mode configured'
         );
-    }
-
-    /**
-     * Test \Magento\TestFramework\Application will correctly load specified areas.
-     */
-    public function testBackEndLoadArea()
-    {
-        $configScope = $this->getMockBuilder(Scope::class)->disableOriginalConstructor()->getMock();
-        $configScope->expects($this->once())->method('setCurrentScope')->with($this->identicalTo(Area::AREA_ADMINHTML));
-
-        $configLoader = $this->getMockBuilder(ConfigLoader::class)->disableOriginalConstructor()->getMock();
-        $configLoader->expects($this->once())
-            ->method('load')
-            ->with($this->identicalTo(Area::AREA_ADMINHTML))
-            ->willReturn([]);
-        $areaList = $this->getMockBuilder(AreaList::class)->disableOriginalConstructor()->getMock();
-
-        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
-        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)->disableOriginalConstructor()->getMock();
-        $objectManager->expects($this->once())->method('configure')->with($this->identicalTo([]));
-        $objectManager->expects($this->exactly(3))
-            ->method('get')
-            ->willReturnOnConsecutiveCalls(
-                $configScope,
-                $configLoader,
-                $areaList
-            );
-
-        \Magento\TestFramework\Helper\Bootstrap::setObjectManager($objectManager);
-
-        $bootstrap = $this->getMockBuilder(\Magento\TestFramework\Helper\Bootstrap::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $bootstrap->expects($this->once())->method('loadArea')->with($this->identicalTo(Area::AREA_ADMINHTML));
-        \Magento\TestFramework\Helper\Bootstrap::setInstance($bootstrap);
-
-        $this->subject->loadArea(Area::AREA_ADMINHTML);
-    }
-
-    /**
-     * Test \Magento\TestFramework\Application will correctly load specified areas.
-     */
-    public function testFrontEndLoadArea()
-    {
-        $configScope = $this->getMockBuilder(Scope::class)->disableOriginalConstructor()->getMock();
-        $configScope->expects($this->once())->method('setCurrentScope')->with($this->identicalTo(Area::AREA_FRONTEND));
-
-        $configLoader = $this->getMockBuilder(ConfigLoader::class)->disableOriginalConstructor()->getMock();
-        $configLoader->expects($this->once())
-            ->method('load')
-            ->with($this->identicalTo(Area::AREA_FRONTEND))
-            ->willReturn([]);
-        $areaList = $this->getMockBuilder(AreaList::class)->disableOriginalConstructor()->getMock();
-
-        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
-        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)->disableOriginalConstructor()->getMock();
-        $objectManager->expects($this->once())->method('configure')->with($this->identicalTo([]));
-        $objectManager->expects($this->exactly(3))
-            ->method('get')
-            ->willReturnOnConsecutiveCalls(
-                $configScope,
-                $configLoader,
-                $areaList
-            );
-
-        \Magento\TestFramework\Helper\Bootstrap::setObjectManager($objectManager);
-        $this->subject->loadArea(Area::AREA_FRONTEND);
     }
 
     /**
