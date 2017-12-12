@@ -87,6 +87,10 @@ class FilterGroupFactory
 
                 $this->filterGroupBuilder->addFilter($subFilter);
             } elseif ($subNode instanceof Connective) {
+                // This recursive OR processing can be done because AND is not yet supported
+                // we should not be doing this for OR if both AND and OR will be nestedly supported
+                // because it's mathematically incorrect to reduce OR in a boolean operation
+                // you can only do it when you have only OR operation.
                 if (((string)$subNode->getOperator()) == 'OR') {
                     return $this->processConnective($subNode);
                 } else {
