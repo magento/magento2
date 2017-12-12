@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQlCatalog\Model\Resolver\Products;
+namespace Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider;
 
 use Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
@@ -14,7 +14,7 @@ use Magento\Framework\Webapi\ServiceOutputProcessor;
 /**
  * Media gallery field resolver, used for GraphQL request processing.
  */
-class MediaGalleryEntriesDataProvider
+class MediaGalleryEntries
 {
     /**
      * @var ProductAttributeMediaGalleryManagementInterface

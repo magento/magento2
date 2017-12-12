@@ -4,17 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQlCatalog\Model\Resolver\Products;
+namespace Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
+use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\MediaGalleryEntries;
 
 /**
  * Product field data provider, used for GraphQL resolver processing.
  */
-class ProductDataProvider
+class Product
 {
     /**
      * @var ProductRepositoryInterface
@@ -27,7 +28,7 @@ class ProductDataProvider
     private $serviceOutputProcessor;
 
     /**
-     * @var MediaGalleryEntriesDataProvider
+     * @var MediaGalleryEntries
      */
     private $mediaGalleryResolver;
 
@@ -39,13 +40,13 @@ class ProductDataProvider
     /**
      * @param ProductRepositoryInterface $productRepository
      * @param ServiceOutputProcessor $serviceOutputProcessor
-     * @param MediaGalleryEntriesDataProvider $mediaGalleryResolver
+     * @param MediaGalleryEntries $mediaGalleryResolver
      * @param SerializerInterface $jsonSerializer
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         ServiceOutputProcessor $serviceOutputProcessor,
-        MediaGalleryEntriesDataProvider $mediaGalleryResolver,
+        MediaGalleryEntries $mediaGalleryResolver,
         SerializerInterface $jsonSerializer
     ) {
         $this->productRepository = $productRepository;

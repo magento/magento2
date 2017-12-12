@@ -4,16 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQlCatalog\Model\Resolver\Products;
+namespace Magento\GraphQlCatalog\Model\Resolver\Products\Query;
 
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
-use Magento\GraphQlCatalog\Model\Resolver\Products\SearchCriteria\Helper\Filter;
+use Magento\GraphQlCatalog\Model\Resolver\Products\Query\Filter;
+use Magento\GraphQlCatalog\Model\Resolver\Products\SearchCriteria\Helper\Filter as FilterHelper;
+use Magento\GraphQlCatalog\Model\Resolver\Products\SearchResult;
+use Magento\GraphQlCatalog\Model\Resolver\Products\SearchResultFactory;
 use Magento\Search\Api\SearchInterface;
 
 /**
  * Full text search for catalog using given search criteria.
  */
-class SearchDataProvider
+class Search
 {
     /**
      * @var SearchInterface
@@ -21,12 +24,12 @@ class SearchDataProvider
     private $search;
 
     /**
-     * @var Filter
+     * @var FilterHelper
      */
     private $filterHelper;
 
     /**
-     * @var FilterDataProvider
+     * @var Filter
      */
     private $filterDataProvider;
 
@@ -37,14 +40,14 @@ class SearchDataProvider
 
     /**
      * @param SearchInterface $search
-     * @param Filter $filterHelper
-     * @param FilterDataProvider $filterDataProvider
+     * @param FilterHelper $filterHelper
+     * @param Filter $filterDataProvider
      * @param SearchResultFactory $searchResultFactory
      */
     public function __construct(
         SearchInterface $search,
-        Filter $filterHelper,
-        FilterDataProvider $filterDataProvider,
+        FilterHelper $filterHelper,
+        Filter $filterDataProvider,
         SearchResultFactory $searchResultFactory
     ) {
         $this->search = $search;

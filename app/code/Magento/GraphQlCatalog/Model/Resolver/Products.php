@@ -12,8 +12,8 @@ use Magento\GraphQl\Model\ResolverInterface;
 use Magento\Framework\GraphQl\Argument\SearchCriteria\Builder;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Model\ContextInterface;
-use Magento\GraphQlCatalog\Model\Resolver\Products\FilterDataProvider;
-use Magento\GraphQlCatalog\Model\Resolver\Products\SearchDataProvider;
+use Magento\GraphQlCatalog\Model\Resolver\Products\Query\Filter;
+use Magento\GraphQlCatalog\Model\Resolver\Products\Query\Search;
 
 /**
  * Products field resolver, used for GraphQL request processing.
@@ -26,23 +26,23 @@ class Products implements ResolverInterface
     private $searchCriteriaBuilder;
 
     /**
-     * @var SearchDataProvider
+     * @var Search
      */
     private $searchDataProvider;
 
     /**
-     * @var FilterDataProvider
+     * @var \Magento\GraphQlCatalog\Model\Resolver\Products\Query\Filter
      */
     private $filterDataProvider;
 
     /**
      * @param Builder $searchCriteriaBuilder
-     * @param SearchDataProvider $searchDataProvider
+     * @param \Magento\GraphQlCatalog\Model\Resolver\Products\Query\Search $searchDataProvider
      */
     public function __construct(
         Builder $searchCriteriaBuilder,
-        SearchDataProvider $searchDataProvider,
-        FilterDataProvider $filterDataProvider
+        Search $searchDataProvider,
+        Filter $filterDataProvider
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchDataProvider = $searchDataProvider;
