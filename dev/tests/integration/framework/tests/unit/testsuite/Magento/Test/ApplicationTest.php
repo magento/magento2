@@ -13,6 +13,7 @@ use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State;
 use Magento\Framework\Autoload\ClassLoaderWrapper;
 use Magento\Framework\Config\Scope;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Shell;
 use Magento\TestFramework\Application;
@@ -83,26 +84,20 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test \Magento\TestFramework\Application will correctly load different areas.
+     * Test \Magento\TestFramework\Application will correctly load specified areas.
      *
      * @dataProvider loadAreaDataProvider
-     *
      * @param string $areaCode
-     * @param bool $partialLoad
      */
-    public function testLoadArea(string $areaCode, bool $partialLoad)
+    public function testLoadArea(string $areaCode)
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManagerMock */
-        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $configScope = $this->getMockBuilder(Scope::class)
             ->disableOriginalConstructor()
             ->getMock();
         $configScope->expects($this->once())
             ->method('setCurrentScope')
             ->with($this->identicalTo($areaCode));
+
         $configLoader = $this->getMockBuilder(ConfigLoader::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -113,55 +108,118 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         $areaList = $this->getMockBuilder(AreaList::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectManager->expects($this->once())
+            ->method('configure')
+            ->with($this->identicalTo([]));
+        $objectManager->expects($this->exactly(3))
+            ->method('get')
+            ->willReturnOnConsecutiveCalls(
+                $configScope,
+                $configLoader,
+                $areaList
+            );
+
+        \Magento\TestFramework\Helper\Bootstrap::setObjectManager($objectManager);
+        try {
+            \Magento\TestFramework\Helper\Bootstrap::getInstance();
+        } catch (LocalizedException $e) {
+            /** @var \Magento\TestFramework\Helper\Bootstrap|\PHPUnit_Framework_MockObject_MockObject $bootstrap */
+            $bootstrap = $this->getMockBuilder(\Magento\TestFramework\Helper\Bootstrap::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+            $bootstrap->expects($this->once())
+                ->method('loadArea')
+                ->with($this->identicalTo($areaCode));
+            \Magento\TestFramework\Helper\Bootstrap::setInstance($bootstrap);
+        }
+
+        $this->subject->loadArea($areaCode);
+    }
+
+    /**
+     * Test \Magento\TestFramework\Application will correctly load specified areas.
+     *
+     * @dataProvider partialLoadAreaDataProvider
+     * @param string $areaCode
+     */
+    public function testPartialLoadArea(string $areaCode)
+    {
+        $configScope = $this->getMockBuilder(Scope::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $configScope->expects($this->once())
+            ->method('setCurrentScope')
+            ->with($this->identicalTo($areaCode));
+
+        $configLoader = $this->getMockBuilder(ConfigLoader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $configLoader->expects($this->once())
+            ->method('load')
+            ->with($this->identicalTo($areaCode))
+            ->willReturn([]);
+
         $area = $this->getMockBuilder(Area::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $appState = $this->getMockBuilder(State::class)
+        $area->expects($this->once())
+            ->method('load')
+            ->with($this->identicalTo(Area::PART_CONFIG));
+
+        $areaList = $this->getMockBuilder(AreaList::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManagerMock->expects($this->once())
+        $areaList->expects($this->once())
+            ->method('getArea')
+            ->with($this->identicalTo($areaCode))
+            ->willReturn($area);
+
+        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectManager->expects($this->once())
             ->method('configure')
             ->with($this->identicalTo([]));
-        if ($partialLoad) {
-            $objectManagerMock->expects($this->exactly(3))
-                ->method('get')
-                ->willReturnOnConsecutiveCalls(
-                    $configScope,
-                    $configLoader,
-                    $areaList
-                );
-            $areaList->expects($this->once())
-                ->method('getArea')
-                ->with($this->identicalTo($areaCode))
-                ->willReturn($area);
-            $area->expects($this->once())
-                ->method('load')
-                ->with($this->identicalTo(Area::PART_CONFIG));
-        } else {
-            $area->expects($this->once())
-                ->method('load');
-            $appState->expects($this->once())
-                ->method('setAreaCode')
-                ->with($this->identicalTo($areaCode));
-            $areaList->expects($this->once())
-                ->method('getArea')
-                ->with($this->identicalTo($areaCode))
-                ->willReturn($area);
-            $objectManagerMock->expects($this->exactly(5))
-                ->method('get')
-                ->willReturnOnConsecutiveCalls(
-                    $configScope,
-                    $configLoader,
-                    $areaList,
-                    $appState,
-                    $areaList
-                );
-        }
-        \Magento\TestFramework\Helper\Bootstrap::setObjectManager($objectManagerMock);
-        $this->subject->loadArea($areaCode);
+        $objectManager->expects($this->exactly(3))
+            ->method('get')
+            ->willReturnOnConsecutiveCalls(
+                $configScope,
+                $configLoader,
+                $areaList
+            );
 
-        //restore Object Manager to successfully finish the test.
         \Magento\TestFramework\Helper\Bootstrap::setObjectManager($objectManager);
+
+        $this->subject->loadArea($areaCode);
+    }
+
+    /**
+     * Provide test data for testPartialLoadArea().
+     *
+     * @return array
+     */
+    public function partialLoadAreaDataProvider()
+    {
+        return [
+            [
+                'area_code' => Area::AREA_GLOBAL,
+            ],
+            [
+                'area_code' => Area::AREA_WEBAPI_REST,
+            ],
+            [
+                'area_code' => Area::AREA_WEBAPI_SOAP,
+            ],
+            [
+                'area_code' => Area::AREA_CRONTAB,
+            ],
+        ];
     }
 
     /**
@@ -173,28 +231,10 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'area_code' => Area::AREA_GLOBAL,
-                'partial_load' => true,
-            ],
-            [
                 'area_code' => Area::AREA_ADMINHTML,
-                'partial_load' => false,
             ],
             [
                 'area_code' => Area::AREA_FRONTEND,
-                'partial_load' => false,
-            ],
-            [
-                'area_code' => Area::AREA_WEBAPI_REST,
-                'partial_load' => true,
-            ],
-            [
-                'area_code' => Area::AREA_WEBAPI_SOAP,
-                'partial_load' => true,
-            ],
-            [
-                'area_code' => Area::AREA_CRONTAB,
-                'partial_load' => true,
             ],
         ];
     }
