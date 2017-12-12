@@ -1066,7 +1066,7 @@ class Multishipping extends \Magento\Framework\DataObject
 
         $baseTotal = 0;
         foreach ($addresses as $address) {
-            $taxes = ($taxInclude) ? $address->getBaseTaxAmount() : 0;
+            $taxes = $taxInclude ? $address->getBaseTaxAmount() : 0;
             $baseTotal += $address->getBaseSubtotalWithDiscount() + $taxes;
         }
 
