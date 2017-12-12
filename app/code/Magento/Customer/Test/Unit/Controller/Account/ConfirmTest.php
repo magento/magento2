@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
 use Magento\Customer\Controller\Account\Confirm;
@@ -103,7 +101,10 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
     {
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->responseMock = $this->createPartialMock(\Magento\Framework\App\Response\Http::class, ['setRedirect', '__wakeup']);
+        $this->responseMock = $this->createPartialMock(
+            \Magento\Framework\App\Response\Http::class,
+            ['setRedirect', '__wakeup']
+        );
         $viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
         $this->redirectMock = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
 
