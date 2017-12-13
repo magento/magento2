@@ -53,7 +53,7 @@ class ReplaceSalesChannelsDataForStock implements ReplaceSalesChannelsForStockIn
                     CreateSalesChannelTable::STOCK_ID => $stockId,
                 ];
             }
-            $connection->insertMultiple($tableName, $salesChannelsToInsert);
+            $connection->insertOnDuplicate($tableName, $salesChannelsToInsert);
         }
     }
 }
