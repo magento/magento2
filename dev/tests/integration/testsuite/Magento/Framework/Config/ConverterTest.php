@@ -49,6 +49,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      */
     public function parseVarElementDataProvider()
     {
+        // @codingStandardsIgnoreStart
         $sourceString = <<<'XML'
 <?xml version="1.0"?>
 <view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
@@ -61,6 +62,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     </vars>
  </view>
 XML;
+        // @codingStandardsIgnoreEnd
         $expectedResult = [
             'vars' => [
                 'Magento_Test' => [
