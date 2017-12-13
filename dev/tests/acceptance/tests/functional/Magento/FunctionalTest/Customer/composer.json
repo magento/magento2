@@ -44,7 +44,7 @@
         "map": [
             [
                 "*",
-                "dev/tests/acceptance/tests/functional/Magento/FunctionalTest/Customer"
+                "tests/functional/Magento/FunctionalTest/Customer"
             ]
         ]
     }

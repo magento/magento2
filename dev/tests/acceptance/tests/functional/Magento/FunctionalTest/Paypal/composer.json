@@ -41,7 +41,7 @@
         "map": [
             [
                 "*",
-                "dev/tests/acceptance/tests/functional/Magento/FunctionalTest/Paypal"
+                "tests/functional/Magento/FunctionalTest/Paypal"
             ]
         ]
     }
