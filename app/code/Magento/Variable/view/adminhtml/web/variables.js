@@ -283,7 +283,7 @@ define([
             //to support switching between wysiwyg editors
             wysiwygEditorFocused = wysiwyg && wysiwyg.activeEditor();
 
-            if (wysiwygEditorFocused) {
+            if (wysiwygEditorFocused && wysiwyg.get(this.textareaElementId)) {
                 if (jQuery(this.selectedPlaceholder).hasClass('magento-placeholder')) {
                     wysiwyg.setCaretOnElement(this.selectedPlaceholder, 1);
                 }
