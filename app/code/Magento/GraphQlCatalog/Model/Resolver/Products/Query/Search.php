@@ -63,17 +63,24 @@ class Search
      */
     public function getResult(SearchCriteriaInterface $searchCriteria)
     {
+        $realPageSize = $searchCriteria->getPageSize();
+        $realCurrentPage = $searchCriteria->getCurrentPage();
+        $searchCriteria->setPageSize(PHP_INT_MAX);
         // Search starts pages from 0, whereas filtering starts at 1. GraphQL's query starts at 1, so it must be altered
-        $searchCriteria->setCurrentPage($searchCriteria->getCurrentPage() - 1);
+        $searchCriteria->setCurrentPage($realCurrentPage - 1);
         $itemsResults = $this->search->search($searchCriteria);
+
         $ids = [];
         $searchIds = [];
         foreach ($itemsResults->getItems() as $item) {
             $ids[$item->getId()] = null;
             $searchIds[] = $item->getId();
         }
-        $filter = $this->filterHelper->generate('entity_id', 'in', $searchIds);
-        $searchCriteria->setCurrentPage($searchCriteria->getCurrentPage() + 1);
+        $searchCriteria->setPageSize($realPageSize);
+        $paginatedIds = $this->paginateIdList($searchIds, $searchCriteria);
+        $filter = $this->filterHelper->generate('entity_id', 'in', $paginatedIds);
+
+        $searchCriteria->setCurrentPage($realCurrentPage);
         $searchCriteria = $this->filterHelper->remove($searchCriteria, 'search_term');
         $searchCriteria = $this->filterHelper->add($searchCriteria, $filter);
         $searchResult = $this->filterQuery->getResult($searchCriteria);
@@ -82,6 +89,22 @@ class Search
         }
         $products = array_filter($ids);
 
-        return $this->searchResultFactory->create($searchResult->getTotalCount(), $products);
+        return $this->searchResultFactory->create($itemsResults->getTotalCount(), $products);
+    }
+
+    /**
+     * Paginates array of Ids pulled back in search based off search criteria and total count.
+     *
+     * This function and its usages should be removed after MAGETWO-85611 is resolved.
+     *
+     * @param int[] $ids
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return int[]
+     */
+    private function paginateIdList(array $ids, SearchCriteriaInterface $searchCriteria)
+    {
+        $length = $searchCriteria->getPageSize();
+        $offset = $length * $searchCriteria->getCurrentPage();
+        return array_slice($ids, $offset, $length);
     }
 }
