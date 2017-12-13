@@ -44,7 +44,16 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth
             }
             return $this->getRedirect($this->_backendUrl->getStartupPageUrl());
         }
-
+        
+        return $this->resultPageFactory->create();
+        
+        /** 
+         * No need to check further here as this will never pass because
+         * 1) Magento\Backend\App\Action\Plugin\Authentication::_processNotLoggedInUser is redirecting user to adminhtml/auth/login and here we cant compare this with adminhtml/index/index
+         * 2) refreshed ACL URL key will always change
+         */
+        
+        /*
         $requestUrl = $this->getRequest()->getUri();
         $backendUrl = $this->getUrl('*');
         // redirect according to rewrite rule
@@ -53,6 +62,7 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth
         } else {
             return $this->resultPageFactory->create();
         }
+        */
     }
 
     /**
