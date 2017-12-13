@@ -21,8 +21,8 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
     /**#@+
      * Constants defined for type of context
      */
-    const CUSTOMER_TYPE_ID   = 'user_type';
-    const CUSTOMER_ID = 'user_id';
+    const USER_TYPE_ID   = 'user_type';
+    const USER_ID = 'user_id';
     /**#@-*/
 
     /**
@@ -87,10 +87,10 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
      */
     public function getUserId()
     {
-        if (!$this->getData(self::CUSTOMER_ID)) {
+        if (!$this->getData(self::USER_ID)) {
             $this->setUserId((int) $this->userContext->getUserId());
         }
-        return (int) $this->getData(self::CUSTOMER_ID);
+        return (int) $this->getData(self::USER_ID);
     }
 
     /**
@@ -98,7 +98,7 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
      */
     public function setUserId(int $userId)
     {
-        return $this->setData(self::CUSTOMER_ID, $userId);
+        return $this->setData(self::USER_ID, $userId);
     }
 
     /**
@@ -106,10 +106,10 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
      */
     public function getUserType()
     {
-        if (!$this->getData(self::CUSTOMER_TYPE_ID)) {
+        if (!$this->getData(self::USER_TYPE_ID)) {
             $this->setUserType($this->userContext->getUserType());
         }
-        return (int) $this->getData(self::CUSTOMER_TYPE_ID);
+        return (int) $this->getData(self::USER_TYPE_ID);
     }
 
     /**
@@ -117,6 +117,6 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
      */
     public function setUserType(int $typeId)
     {
-        return $this->setData(self::CUSTOMER_ID, $typeId);
+        return $this->setData(self::USER_TYPE_ID, $typeId);
     }
 }
