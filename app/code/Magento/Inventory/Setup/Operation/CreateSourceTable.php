@@ -59,6 +59,14 @@ class CreateSourceTable
             ],
             'Source ID'
         )->addColumn(
+            SourceInterface::CODE,
+            Table::TYPE_TEXT,
+            255,
+            [
+                Table::OPTION_NULLABLE => false,
+            ],
+            'Source Code'
+        )->addColumn(
             SourceInterface::NAME,
             Table::TYPE_TEXT,
             255,
