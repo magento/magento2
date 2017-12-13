@@ -41,6 +41,11 @@ class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInt
     private $resourceConnection;
 
     /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @param ProductFactory $productFactory
      * @param array $fixture
      * @param OptionFactory $optionFactory
@@ -50,12 +55,14 @@ class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInt
         ProductFactory $productFactory,
         array $fixture,
         OptionFactory $optionFactory,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
     ) {
         $this->fixture = $fixture;
         $this->productFactory = $productFactory;
         $this->optionFactory = $optionFactory;
         $this->resourceConnection = $resourceConnection;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -65,7 +72,7 @@ class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInt
     {
         $attributeSet = $this->fixture['attribute_set_id'];
         $product = $this->getProductTemplate($attributeSet);
-
+        //$this->productRepository->save($product);
         $product->save();
 
         return $product;
@@ -79,6 +86,7 @@ class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInt
      */
     private function getProductTemplate($attributeSet)
     {
+        mt_srand(mt_rand() + (100000000 * (float)microtime()) % PHP_INT_MAX);
         $productRandomizerNumber = crc32(mt_rand(1, PHP_INT_MAX));
         $product = $this->productFactory->create([
             'data' => [
@@ -86,7 +94,7 @@ class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInt
                 'type_id' => Configurable::TYPE_CODE,
                 'name' => 'template name' . $productRandomizerNumber,
                 'url_key' => 'template-url' . $productRandomizerNumber,
-                'sku' => 'template_sku' . $productRandomizerNumber,
+                'sku' => 'template_sku_configurable' . $productRandomizerNumber,
                 'meta_description' => 'Configurable Product',
                 'meta_keyword' => $productRandomizerNumber,
                 'meta_title' => $productRandomizerNumber,
