@@ -81,4 +81,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\Entity\Attribute\OptionManagement">
+        <plugin name="addSwatchDataToAddOption" type="Magento\Swatches\Plugin\Catalog\AddSwatchDataToAddOption" />
+    </type>
 </config>
