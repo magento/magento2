@@ -53,7 +53,9 @@ class QueryBuilderTest extends \PHPUnit\Framework\TestCase
         $this->adapterMock = $this->createMock(AdapterInterface::class);
         $this->inventoryConfigMock = $this->createMock(CatalogInventoryConfiguration::class);
 
-        $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
+        $this->resourceConnectionMock->expects($this->atLeastOnce())
+            ->method('getConnection')
+            ->willReturn($this->adapterMock);
 
         $this->model = new QueryBuilder(
             $this->resourceConnectionMock,
