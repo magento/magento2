@@ -154,9 +154,11 @@ define([
                 $wrapper,
                 lostVariableClass = 'magento-variable-lost';
 
-            if (this.isEditMode
-                && typeof selectedElement !== 'undefined'
-                && jQuery(selectedElement).hasClass(lostVariableClass)) {
+            if (
+                this.isEditMode &&
+                typeof selectedElement !== 'undefined' &&
+                jQuery(selectedElement).hasClass(lostVariableClass)
+            ) {
 
                 variablePath = MagentovariablePlugin.getElementVariablePath(selectedElement);
                 name = variablePath.split(':');
