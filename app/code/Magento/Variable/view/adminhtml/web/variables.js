@@ -243,12 +243,12 @@ define([
             wysiwygEditorFocused = wysiwyg && wysiwyg.activeEditor();
 
             if (wysiwygEditorFocused) {
-                if (jQuery(this.selectedPlaceholder).hasClass('magento-variable')) {
+                if (jQuery(this.selectedPlaceholder).hasClass('magento-placeholder')) {
                     wysiwyg.setCaretOnElement(this.selectedPlaceholder, 1);
                 }
                 wysiwyg.insertContent(value, false);
 
-                if (this.selectedPlaceholder && jQuery(this.selectedPlaceholder).hasClass('magento-variable')) {
+                if (this.selectedPlaceholder && jQuery(this.selectedPlaceholder).hasClass('magento-placeholder')) {
                     this.selectedPlaceholder.remove();
                 }
 
