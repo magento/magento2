@@ -272,7 +272,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     }
 
     /**
-     * Process attribute data depends on attribute frontend input type.
+     * Process attribute data based on attribute frontend input type.
      *
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
      * @return void
