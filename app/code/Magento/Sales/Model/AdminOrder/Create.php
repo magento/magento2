@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Model\AdminOrder;
 
 use Magento\Customer\Api\AddressMetadataInterface;
@@ -669,7 +667,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function getCustomerWishlist($cacheReload = false)
     {
-        if (!is_null($this->_wishlist) && !$cacheReload) {
+        if ($this->_wishlist !== null && !$cacheReload) {
             return $this->_wishlist;
         }
 
@@ -696,7 +694,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function getCustomerCart()
     {
-        if (!is_null($this->_cart)) {
+        if ($this->_cart !== null) {
             return $this->_cart;
         }
 
@@ -724,13 +722,14 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function getCustomerCompareList()
     {
-        if (!is_null($this->_compareList)) {
+        if ($this->_compareList !== null) {
             return $this->_compareList;
         }
         $customerId = (int)$this->getSession()->getCustomerId();
         if ($customerId) {
             $this->_compareList = $this->_objectManager->create(
-                \Magento\Catalog\Model\Product\Compare\ListCompare::class);
+                \Magento\Catalog\Model\Product\Compare\ListCompare::class
+            );
         } else {
             $this->_compareList = false;
         }
@@ -795,7 +794,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                     break;
                 case 'cart':
                     $cart = $this->getCustomerCart();
-                    if ($cart && is_null($item->getOptionByCode('additional_options'))) {
+                    if ($cart && $item->getOptionByCode('additional_options') === null) {
                         //options and info buy request
                         $product = $this->_objectManager->create(
                             \Magento\Catalog\Model\Product::class
@@ -842,7 +841,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         );
                     } else {
                         $wishlist = $this->_objectManager->create(
-                            \Magento\Wishlist\Model\Wishlist::class)->load($moveTo[1]);
+                            \Magento\Wishlist\Model\Wishlist::class
+                        )->load($moveTo[1]);
                         if (!$wishlist->getId() || $wishlist->getCustomerId() != $this->getSession()->getCustomerId()
                         ) {
                             $wishlist = null;
@@ -980,7 +980,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 break;
             case 'compared':
                 $this->_objectManager->create(
-                    \Magento\Catalog\Model\Product\Compare\Item::class)->load($itemId)->delete();
+                    \Magento\Catalog\Model\Product\Compare\Item::class
+                )->load($itemId)->delete();
                 break;
         }
 
@@ -1135,11 +1136,15 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             if (strlen(trim($_additionalOption))) {
                 try {
                     if (strpos($_additionalOption, ':') === false) {
-                        throw new \Magento\Framework\Exception\LocalizedException(__('There is an error in one of the option rows.'));
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            __('There is an error in one of the option rows.')
+                        );
                     }
                     list($label, $value) = explode(':', $_additionalOption, 2);
                 } catch (\Exception $e) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('There is an error in one of the option rows.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('There is an error in one of the option rows.')
+                    );
                 }
                 $label = trim($label);
                 $value = trim($value);
@@ -1598,7 +1603,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $customer = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customer,
-            $data, \Magento\Customer\Api\Data\CustomerInterface::class
+            $data,
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $this->getQuote()->updateCustomerData($customer);
         $data = [];
@@ -1711,14 +1717,15 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         }
         $data = $form->restoreData($data);
         foreach ($data as $key => $value) {
-            if (!is_null($value)) {
+            if ($value !== null) {
                 unset($data[$key]);
             }
         }
 
         $this->dataObjectHelper->populateWithArray(
             $customer,
-            $data, \Magento\Customer\Api\Data\CustomerInterface::class
+            $data,
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         return $customer;
     }
@@ -1834,12 +1841,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         switch ($addressType) {
             case \Magento\Quote\Model\Quote\Address::ADDRESS_TYPE_BILLING:
-                if (is_null($customer->getDefaultBilling())) {
+                if ($customer->getDefaultBilling() === null) {
                     $customerAddress->setIsDefaultBilling(true);
                 }
                 break;
             case \Magento\Quote\Model\Quote\Address::ADDRESS_TYPE_SHIPPING:
-                if (is_null($customer->getDefaultShipping())) {
+                if ($customer->getDefaultShipping() === null) {
                     $customerAddress->setIsDefaultShipping(true);
                 }
                 break;
@@ -1931,7 +1938,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     protected function _validate()
     {
         $customerId = $this->getSession()->getCustomerId();
-        if (is_null($customerId)) {
+        if ($customerId === null) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Please select a customer'));
         }
 

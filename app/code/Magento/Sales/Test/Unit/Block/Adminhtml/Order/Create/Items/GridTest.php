@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create\Items;
 
 /**
@@ -62,8 +60,8 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $orderCreateMock = $this->createPartialMock(\Magento\Sales\Model\AdminOrder\Create::class, ['__wakeup']);
         $taxData = $this->getMockBuilder(\Magento\Tax\Helper\Data::class)->disableOriginalConstructor()->getMock();
         $this->priceCurrency = $this->getMockBuilder(
-            \Magento\Framework\Pricing\PriceCurrencyInterface::class)->getMock(
-            );
+            \Magento\Framework\Pricing\PriceCurrencyInterface::class
+        )->getMock();
         $sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session\Quote::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQuote', '__wakeup'])
@@ -100,9 +98,15 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getStockItem', '__wakeup'])
             ->getMock();
 
-        $this->stockItemMock = $this->createPartialMock(\Magento\CatalogInventory\Model\Stock\Item::class, ['getIsInStock', '__wakeup']);
+        $this->stockItemMock = $this->createPartialMock(
+            \Magento\CatalogInventory\Model\Stock\Item::class,
+            ['getIsInStock', '__wakeup']
+        );
 
-        $this->stockState = $this->createPartialMock(\Magento\CatalogInventory\Model\StockState::class, ['checkQuoteItemQty', '__wakeup']);
+        $this->stockState = $this->createPartialMock(
+            \Magento\CatalogInventory\Model\StockState::class,
+            ['checkQuoteItemQty', '__wakeup']
+        );
 
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
@@ -218,8 +222,14 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $blockMock = $this->createPartialMock(\Magento\Framework\View\Element\AbstractBlock::class, ['getItems']);
 
-        $itemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getProduct', 'setHasError', 'setQty', 'getQty', '__sleep', '__wakeup', 'getChildren']);
-        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getStockItem', 'getID', '__sleep', '__wakeup', 'getStatus']);
+        $itemMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Item::class,
+            ['getProduct', 'setHasError', 'setQty', 'getQty', '__sleep', '__wakeup', 'getChildren']
+        );
+        $productMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['getStockItem', 'getID', '__sleep', '__wakeup', 'getStatus']
+        );
 
         $checkMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getMessage', 'getHasError']);
 
@@ -266,8 +276,8 @@ class GridTest extends \PHPUnit\Framework\TestCase
             [
                 'context' => $this->objectManager->getObject(
                     \Magento\Backend\Block\Template\Context::class,
-                        ['layout' => $this->layoutMock]
-                    )
+                    ['layout' => $this->layoutMock]
+                )
             ]
         );
 
@@ -348,8 +358,14 @@ class GridTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSubtotalWithDiscount($orderData, $displayTotalsIncludeTax, $expected)
     {
-        $quoteAddressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getSubtotal', 'getTaxAmount','getDiscountTaxCompensationAmount','getDiscountAmount']);
-        $gridMock = $this->createPartialMock(\Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid::class, ['getQuoteAddress','displayTotalsIncludeTax']);
+        $quoteAddressMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['getSubtotal', 'getTaxAmount','getDiscountTaxCompensationAmount','getDiscountAmount']
+        );
+        $gridMock = $this->createPartialMock(
+            \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid::class,
+            ['getQuoteAddress','displayTotalsIncludeTax']
+        );
 
         $gridMock->expects($this->any())->method('getQuoteAddress')
             ->will($this->returnValue($quoteAddressMock));
