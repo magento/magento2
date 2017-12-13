@@ -11,6 +11,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * Tests Sales Order PDF abstract model.
  *
  * @see \Magento\Sales\Model\Order\Pdf\AbstarctPdf
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractPdfTest extends \PHPUnit\Framework\TestCase
 {
