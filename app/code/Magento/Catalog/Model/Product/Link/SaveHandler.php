@@ -47,8 +47,7 @@ class SaveHandler
         Link $linkResource,
         ProductLinkRepositoryInterface $productLinkRepo,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
-    )
-    {
+    ) {
         $this->metadataPool = $metadataPool;
         $this->linkResource = $linkResource;
         $this->productLinkRepo = $productLinkRepo;
