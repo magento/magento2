@@ -65,11 +65,11 @@ class FixtureModel
      */
     private $config;
 
-    private $configurationFixtureInstanceClassName = 'Magento\Setup\Fixtures\ConfigsApplyFixture';
+    private $configurationFixtureInstanceClassName = \Magento\Setup\Fixtures\ConfigsApplyFixture::class;
 
     private $configurationFixture;
 
-    private $indexerFixtureInstanceClassName = 'Magento\Setup\Fixtures\IndexersStatesApplyFixture';
+    private $indexerFixtureInstanceClassName = \Magento\Setup\Fixtures\IndexersStatesApplyFixture::class;
 
     private $indexerFixture;
 
