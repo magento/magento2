@@ -65,9 +65,10 @@ class Search
     {
         $realPageSize = $searchCriteria->getPageSize();
         $realCurrentPage = $searchCriteria->getCurrentPage();
+        // Current page must be set to 0 and page size to max for search to grab all ID's as temporary workaround
+        // for MAGETWO-85611
         $searchCriteria->setPageSize(PHP_INT_MAX);
-        // Search starts pages from 0, whereas filtering starts at 1. GraphQL's query starts at 1, so it must be altered
-        $searchCriteria->setCurrentPage($realCurrentPage - 1);
+        $searchCriteria->setCurrentPage(0);
         $itemsResults = $this->search->search($searchCriteria);
 
         $ids = [];

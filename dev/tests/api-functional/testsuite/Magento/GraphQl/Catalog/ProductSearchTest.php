@@ -151,7 +151,9 @@ QUERY;
      * pageSize = total_count and current page = 2
      * expected - error is thrown
      * Actual - empty array
-     *  @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      */
 
     public function testSearchWithFilterWithPageSizeEqualTotalCount()
@@ -208,8 +210,10 @@ QUERY;
     }
 
     /**
-    the query returns a total_count of 2 records; setting the pageSize = 1 and currentPage2
+     * The query returns a total_count of 2 records; setting the pageSize = 1 and currentPage2
      * Expected result is to get the second product from the list on the second page
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      */
     public function testSearchWithFilterPageSizeLessThanCurrentPage()
     {
@@ -262,7 +266,7 @@ QUERY;
          * @var ProductRepositoryInterface $productRepository
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get('simple1');
+        $product = $productRepository->get('simple2');
         $filteredProducts = [$product];
 
         $response = $this->graphQlQuery($query);
