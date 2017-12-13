@@ -10,9 +10,12 @@ namespace Magento\Sales\Model\AdminOrder;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Model\Metadata\Form as CustomerForm;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Sales\Api\Data\OrderAddressInterface;
+use Magento\Sales\Model\Order;
 
 /**
  * Order create model
@@ -236,6 +239,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private $serializer;
 
     /**
+     * @var ExtensibleDataObjectConverter
+     */
+    private $dataObjectConverter;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -265,6 +273,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param ExtensibleDataObjectConverter|null $dataObjectConverter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -296,7 +305,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Sales\Api\OrderManagementInterface $orderManagement,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ExtensibleDataObjectConverter $dataObjectConverter = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -328,6 +338,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($data);
+        $this->dataObjectConverter = $dataObjectConverter ?: ObjectManager::getInstance()
+            ->get(ExtensibleDataObjectConverter::class);
     }
 
     /**
@@ -514,9 +526,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $shippingAddress = $order->getShippingAddress();
         if ($shippingAddress) {
-            $addressDiff = array_diff_assoc($shippingAddress->getData(), $order->getBillingAddress()->getData());
-            unset($addressDiff['address_type'], $addressDiff['entity_id']);
-            $shippingAddress->setSameAsBilling(empty($addressDiff));
+            $shippingAddress->setSameAsBilling($this->isAddressesAreEqual($order));
         }
 
         $this->_initBillingAddressFromOrder($order);
@@ -2009,5 +2019,27 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         }
 
         return $email;
+    }
+
+    /**
+     * Checks id shipping and billing addresses are equal.
+     *
+     * @param Order $order
+     * @return bool
+     */
+    private function isAddressesAreEqual(Order $order)
+    {
+        $shippingAddress = $order->getShippingAddress();
+        $billingAddress = $order->getBillingAddress();
+        $shippingData = $this->dataObjectConverter->toFlatArray($shippingAddress, [], OrderAddressInterface::class);
+        $billingData = $this->dataObjectConverter->toFlatArray($billingAddress, [], OrderAddressInterface::class);
+        unset(
+            $shippingData['address_type'],
+            $shippingData['entity_id'],
+            $billingData['address_type'],
+            $billingData['entity_id']
+        );
+
+        return $shippingData == $billingData;
     }
 }
