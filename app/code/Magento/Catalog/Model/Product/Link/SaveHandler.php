@@ -78,7 +78,7 @@ class SaveHandler
         }
 
         // Do check
-        $hasPositionLinkType = $this->isPositionsSet($linksByType);
+        $hasPositionLinkType = $this->isPositionSet($linksByType);
 
         // Set array position as a fallback position if necessary
         foreach ($hasPositionLinkType as $linkType => $hasPosition) {
@@ -107,7 +107,7 @@ class SaveHandler
      * @param $linksByType
      * @return array
      */
-    private function isPositionsSet($linksByType)
+    private function isPositionSet($linksByType)
     {
         $linkTypes = $this->linkTypeProvider->getLinkTypes();
 
