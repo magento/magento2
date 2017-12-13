@@ -24,7 +24,7 @@ tinyMCE.addI18n({
                 var pluginSettings = ed.settings.magentoPluginsOptions.get('magentovariable');
 
                 MagentovariablePlugin.setEditor(ed);
-                MagentovariablePlugin.loadChooser(pluginSettings.url, null);
+                MagentovariablePlugin.loadChooser(pluginSettings.url, ed.settings.elements);
             });
 
             // Register Widget plugin button

@@ -6,7 +6,7 @@
 /* global Variables, updateElementAtCursor, MagentovariablePlugin, Base64 */
 define([
     'jquery',
-    'Magento_Ui/js/modal/alert',
+    'mage/backend/notification',
     'mage/translate',
     'wysiwygAdapter',
     'uiRegistry',
@@ -17,7 +17,7 @@ define([
     'Magento_Ui/js/lib/spinner',
     'jquery/ui',
     'prototype'
-], function (jQuery, alert, $t, wysiwyg, registry, mageApply, utils, configGenerator, customGenerator, loader) {
+], function (jQuery, notification, $t, wysiwyg, registry, mageApply, utils, configGenerator, customGenerator, loader) {
     'use strict';
 
     window.Variables = {
@@ -128,16 +128,55 @@ define([
 
             this.selectedPlaceholder = selectedElement;
 
+            this.addNotAvailableMessage(selectedElement);
+
             jQuery('#' + this.dialogWindowId).modal('openModal');
 
             if (typeof selectedElement !== 'undefined') {
-                var variablePath = MagentovariablePlugin.getElementVariablePath(selectedElement);
                 registry.get(
                     'variables_modal.variables_modal.variables.variable_selector',
                     function (radioSelect) {
                         radioSelect.selectedVariableCode(MagentovariablePlugin.getElementVariablePath(selectedElement));
                     }
                 );
+            }
+        },
+
+        /**
+         * Add message to slide out that variable is no longer available
+         *
+         * @param {Object} selectedElement
+         */
+        addNotAvailableMessage: function (selectedElement) {
+            var name,
+                msg,
+                variablePath,
+                $wrapper,
+                lostVariableClass = 'magento-variable-lost';
+
+            if (this.isEditMode
+                && typeof selectedElement !== 'undefined'
+                && jQuery(selectedElement).hasClass(lostVariableClass)) {
+
+                variablePath = MagentovariablePlugin.getElementVariablePath(selectedElement);
+                name = variablePath.split(':');
+                msg = $t('The variable %1 is no longer available. Select a different variable.')
+                    .replace('%1', name[1]);
+
+                jQuery('body').notification('clear')
+                    .notification('add', {
+                        error: true,
+                        message: msg,
+
+                        /**
+                         * @param {String} message
+                         */
+                        insertMethod: function (message) {
+                            $wrapper = jQuery('<div/>').html(message);
+
+                            jQuery('.modal-header .page-main-actions').after($wrapper);
+                        }
+                    });
             }
         },
 
@@ -242,15 +281,15 @@ define([
             textareaElm = $(this.textareaElementId);
 
             //to support switching between wysiwyg editors
-            if (wysiwyg && wysiwyg.activeEditor()) {
-                wysiwygEditorFocused = !!wysiwyg.get(this.textareaElementId);
-            }
+            wysiwygEditorFocused = wysiwyg && wysiwyg.activeEditor();
 
-            if (wysiwygEditorFocused) {
-                wysiwyg.setCursorLocation(this.selectedPlaceholder, 1);
+            if (wysiwygEditorFocused && wysiwyg.get(this.textareaElementId)) {
+                if (jQuery(this.selectedPlaceholder).hasClass('magento-placeholder')) {
+                    wysiwyg.setCaretOnElement(this.selectedPlaceholder, 1);
+                }
                 wysiwyg.insertContent(value, false);
 
-                if (this.selectedPlaceholder && jQuery(this.selectedPlaceholder).hasClass('magento-variable')) {
+                if (this.selectedPlaceholder && jQuery(this.selectedPlaceholder).hasClass('magento-placeholder')) {
                     this.selectedPlaceholder.remove();
                 }
 
@@ -272,43 +311,6 @@ define([
         editor: null,
         variables: null,
         textareaId: null,
-        lostVariables: [],
-
-        /**
-         * Reset lost variables array.
-         */
-        resetLostVariables: function () {
-            this.lostVariables = [];
-        },
-
-        /**
-         * Register new variable as lost.
-         *
-         * @param {String} variableCode
-         */
-        registerLostVariable: function (variableCode) {
-            this.lostVariables.push(variableCode);
-        },
-
-        /**
-         * Show information message on lost variables.
-         */
-        informLostVariables: function () {
-            var msg = $t(
-                'This page contains {0} unexistent variable(s): {1}. Please remove them or replace with valid ones.'
-            );
-
-            msg = msg.replace(/\{(\d+)\}/g, function (match, index) {
-                var params = [this.lostVariables.length, this.lostVariables.join(', ')];
-                return (typeof (params[index]) !== 'undefined') ? params[index] : match;
-            }.bind(this));
-
-            if (this.lostVariables.length > 0) {
-                alert({
-                    content: msg
-                });
-            }
-        },
 
         /**
          * Bind editor.

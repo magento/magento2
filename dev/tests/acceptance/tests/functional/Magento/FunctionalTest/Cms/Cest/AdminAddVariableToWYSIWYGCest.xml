@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="AdminAddVariableToWYSIWYGCest">
+        <annotations>
+            <features value="Add Variable to WYSIWYG"/>
+            <stories value="Add Variable to WYSIWYG MAGETWO-42158"/>
+            <group value="addVariable"/>
+            <env value="chrome"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+        </before>
+        <test name="InsertDefaultMagentoVariableIntoWYSIWYGOnPages">
+            <annotations>
+                <title value="Insert default Magento variable into content of WYSIWYG on Pages"/>
+                <description value="Insert default Magento variable into content of WYSIWYG on Pages"/>
+                <severity value="CRITICAL"/>
+                <testCaseId value="MAGETWO-83504"/>
+            </annotations>
+            <!--Create Custom Variable-->
+            <actionGroup ref="CreateCustomVariableActionGroup" stepKey="createCustomVariable" />
+
+            <!--Setup Store information-->
+            <waitForPageLoad stepKey="wait" />
+            <amOnPage url="/admin/admin/system_config/" stepKey="goToConfigStoreInformation" />
+            <waitForPageLoad stepKey="waitForPageLoad1" />
+            <conditionalClick selector="{{StoreConfigSection.StoreInformation}}" dependentSelector="{{StoreConfigSection.CheckIfTabExpand}}" stepKey="checkIfTabOpen" visible="true"/>
+            <fillField selector="{{StoreConfigSection.City}}" userInput="{{_defaultVariable.city}}" stepKey="fillCity" />
+            <click selector="{{StoreConfigSection.Save}}" stepKey="saveConfig"/>
+            <!--Main test-->
+            <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad2"/>
+            <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
+            <!--<conditionalClick selector="{{CmsNewPagePageContentSection.header}}"  dependentSelector="{{CmsWYSIWYGSection.CheckIfTabExpand}}" stepKey="clickContentTab"  visible="true"/>-->
+            <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
+            <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+            <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
+            <seeElement selector="{{CmsWYSIWYGSection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
+            <click selector="{{CmsWYSIWYGSection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon1" />
+            <waitForPageLoad stepKey="waitForPageLoad3"/>
+            <!--see Insert Variable button disabled-->
+            <see selector="{{VariableSection.InsertVariableBtnDisabled}}" userInput="Insert Variable" stepKey="seeInsertWidgetDisabled" />
+            <!--see Cancel button enabed-->
+            <see selector="{{VariableSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
+
+            <!--<click selector="{{VariableSection.ShowHideBtn}}" stepKey="clickShow/HideBtn"/>-->
+            <!--<waitForElementVisible selector="{{VariableSection.InsertVariable}}"  stepKey="waitForInsertVariableBtn" />-->
+            <!--<seeElement selector="{{VariableSection.InsertVariable}}"  stepKey="variableBtn" />-->
+            <!--<click selector="{{VariableSection.InsertVariable}}" stepKey="clickInsertVariable1"/>-->
+            <!--<waitForPageLoad stepKey="wait3"/>-->
+            <!--<waitForLoadingMaskToDisappear stepKey="wait4" />-->
+            <!--<waitForLoadingMaskToDisappear stepKey="wait5" />-->
+            <!--see Insert Variable button disabled-->
+            <!--<see selector="{{VariableSection.InsertVariableBtnDisabled}}" userInput="Insert Variable" stepKey="insertVariable" />-->
+            <!--see Cancel button enabed-->
+            <!--<see selector="{{VariableSection.Cancel}}" userInput="Cancel" stepKey="cancelBtn" />-->
+            <!--see 4 colums-->
+            <see selector="{{VariableSection.ColName('Select')}}" userInput="Select" stepKey="selectCol" />
+            <see selector="{{VariableSection.ColName('Variable Name')}}" userInput="Variable Name" stepKey="variableCol" />
+            <see selector="{{VariableSection.ColName('Type')}}" userInput="Type" stepKey="typeCol" />
+            <see selector="{{VariableSection.ColName('Code')}}" userInput="Code" stepKey="codeCol" />
+
+            <!--see custom variable-->
+            <see userInput="{{customVariable.code}}"  stepKey="seeCustomVariable"/>
+            <!--&lt;!&ndash;click column header of Name&ndash;&gt;-->
+            <!--<click selector="{{VariableSection.ColName('Variable Name')}}" stepKey="clickHeaderOfVariableName"/>-->
+            <!--&lt;!&ndash;see sortby Name ASC&ndash;&gt;-->
+            <!--<see selector="{{VariableSection.VariableInAscSort}}" stepKey="seeVariableNameAscSort"/>-->
+            <!--&lt;!&ndash;click column header of Name&ndash;&gt;-->
+            <!--<click selector="{{VariableSection.ColName('Variable Name')}}" stepKey="clickHeaderOfVariableName"/>-->
+            <!--&lt;!&ndash;see sortby Name DESC&ndash;&gt;-->
+            <!--<see selector="{{VariableSection.VariableInDescSort}}" stepKey="seeVariableNameDescSort"/>-->
+            <!--&lt;!&ndash;click column header of Type&ndash;&gt;-->
+            <!--<click selector="{{VariableSection.ColName('Type')}}" stepKey="clickHeaderOfType"/>-->
+            <!--<waitForLoadingMaskToDisappear stepKey="wait6" />-->
+            <!--&lt;!&ndash;see sortby Type&ndash;&gt;-->
+
+            <!--select default variable-->
+            <click selector="{{VariableSection.Radio('city')}}" stepKey="selectDefaultVariable"/>
+            <see selector="{{VariableSection.InsertVariableBtnEnabled}}" userInput="Insert Variable" stepKey="seeInsertVarialeEnabled" />
+            <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save1" />
+
+            <click selector="{{CmsWYSIWYGSection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon2" />
+            <waitForPageLoad stepKey="waitForPageLoad4"/>
+            <!--see Search textbox-->
+            <seeElement selector="{{VariableSection.SearchTxtbox}}"  stepKey="searchBox"/>
+            <!--input keyword to search-->
+            <fillField selector="{{VariableSection.SearchTxtbox}}" userInput="{{customVariable.name}}" stepKey="fillKeyword" />
+            <wait time="2" stepKey="werwer" />
+            <!--press Enter-->
+            <pressKey selector="{{VariableSection.SearchTxtbox}}" parameterArray="['Test Variable',\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="pressKeyEnter"/>
+            <!--<pressKey selector="{{VariableSection.SearchTxtbox}}" userInput="enter" stepKey="pressKeyEnter"/>-->
+            <waitForPageLoad stepKey="waitdhewu" />
+            <!--see result-->
+            <see selector="{{VariableSection.searchResult(customVariable.name)}}" userInput="{{customVariable.name}}" stepKey="seeResult" />
+            <!--Insert custom variable-->
+            <click selector="{{VariableSection.Radio(customVariable.name)}}" stepKey="selectCustomVariable1"/>
+            <waitForPageLoad stepKey="wait5"/>
+
+            <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save2" />
+
+            <!--<click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="clickInsertVariable2"/>-->
+
+            <!--<pauseExecution stepKey="pause1"/>-->
+            <!--<seeElement selector="{{VariableSection.InsertedVariable}}" stepKey="variableInsertAfterCursor1"/>-->
+            <!--<dragAndDrop selector1="{{VariableSection.position1}}" selector2="{{VariableSection.position2}}" stepKey="dragAndDrop"/>-->
+            <!--<seeElement selector="{{VariableSection.VariableAfterDrag}}" stepKey="variableAfterDrag"/>-->
+            <!--<click selector="{{VariableSection.InsertedVariable}}" stepKey="clickVariable"/>-->
+            <!--<seeOptionIsSelected selector="{{VariableSection.InsertedVariable}}" userInput="ABC" stepKey="variableIsSelected1"/>-->
+            <!--<doubleClick selector="{{VariableSection.InsertedVariable}}" stepKey="doubleClickVariable"/>-->
+            <!--<seeElement selector="{{VariableSection.ListOfVariable}}"  stepKey="listOfVariable2"/>-->
+            <!--<seeOptionIsSelected selector="{{VariableSection.Variable}}" userInput="City" stepKey="variableIsSelected2"/>-->
+            <!--<click selector="{{VariableSection.SecondVariable}}" stepKey="selectVariable2"/>-->
+            <!--<dontSee selector="{{VariableSection.InsertedVariable}}" stepKey="variableInsertAfterCursor2"/>-->
+            <!--<seeElement selector="{{VariableSection.InsertedVariable2}}" stepKey="variableInsertAfterCursor3"/>-->
+            <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
+            <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
+            <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
+            <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+            <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+            <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
+            <see userInput="{{_defaultCmsPage.content}}" stepKey="seeContent"/>
+            <!--see Defaut Variable on Storefront-->
+            <see userInput="{{_defaultVariable.city}}" stepKey="seeDefaultVariable" />
+            <!--see Custom Variable on Storefront-->
+            <see userInput="{{customVariable.html}}" stepKey="seeCustomVariable2" />
+            <!--Delete Custom Variable-->
+            <actionGroup ref="DeleteCustomVariableActionGroup" stepKey="deleteCustomVariable" />
+
+            <!--Refresh Storefront-->
+            <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
+            <!--see custom variable blank-->
+            <see userInput="{{customVariable.name}}" stepKey="seeCustomVariableName" />
+
+        </test>
+        <after>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+    </cest>
+</config>

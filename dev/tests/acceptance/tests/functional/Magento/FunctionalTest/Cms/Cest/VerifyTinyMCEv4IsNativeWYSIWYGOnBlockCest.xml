@@ -18,10 +18,10 @@
             <env value="phantomjs"/>
         </annotations>
         <before>
-            <createData entity="_defaultCmsPage" mergeKey="createCMSPage" />
-            <actionGroup ref="LoginActionGroup" mergeKey="loginGetFromGeneralFile"/>
-            <actionGroup ref="EnabledWYSIWYG" mergeKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" mergeKey="switchToTinyMCE4" />
+            <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
+            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
         <test name="DefaultTinyMCEv4onBlockPage">
             <annotations>
@@ -30,69 +30,69 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-84184 "/>
             </annotations>
-            <amOnPage url="{{BlocksPage.url}}" mergeKey="amOnNewBlockPage"/>
-            <waitForPageLoad mergeKey="waitForPageLoad1"/>
-            <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" mergeKey="fillFieldTitle"/>
-            <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" mergeKey="fillFieldIdentifier"/>
-            <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" mergeKey="selectAllStoreView" />
-            <waitForElementVisible selector="{{BlockWYSIWYGSection.TinyMCE4}}" mergeKey="waitForTinyMCE" />
-            <seeElement selector="{{BlockWYSIWYGSection.TinyMCE4}}" mergeKey="seeTinyMCE4" />
-            <seeElement selector="{{BlockWYSIWYGSection.Style}}" mergeKey="assertInfo2"/>
-            <seeElement selector="{{BlockWYSIWYGSection.Bold}}" mergeKey="assertInfo3"/>
-            <seeElement selector="{{BlockWYSIWYGSection.Italic}}" mergeKey="assertInfo4"/>
-            <seeElement selector="{{BlockWYSIWYGSection.Underline}}" mergeKey="assertInfo5"/>
-            <seeElement selector="{{BlockWYSIWYGSection.AlignLeft}}" mergeKey="assertInfo6"/>
-            <seeElement selector="{{BlockWYSIWYGSection.AlignCenter}}" mergeKey="assertInfo7"/>
-            <seeElement selector="{{BlockWYSIWYGSection.AlignRight}}" mergeKey="assertInfo8"/>
-            <seeElement selector="{{BlockWYSIWYGSection.Numlist}}" mergeKey="assertInfo9"/>
-            <seeElement selector="{{BlockWYSIWYGSection.Bullet}}" mergeKey="assertInfo10"/>
-            <seeElement selector="{{BlockWYSIWYGSection.InsertLink}}" mergeKey="assertInfo11"/>
-            <seeElement selector="{{BlockWYSIWYGSection.InsertImageIcon}}" mergeKey="assertInf12"/>
-            <seeElement selector="{{BlockWYSIWYGSection.InsertTable}}" mergeKey="assertInfo13"/>
-            <seeElement selector="{{BlockWYSIWYGSection.SpecialCharacter}}" mergeKey="assertInfo14"/>
-            <seeElement selector="{{BlockWYSIWYGSection.InsertWidgetIcon}}" mergeKey="assertInfo15"/>
-            <!--<seeElement selector="{{BlockWYSIWYGSection.InsertVariableIcon}}" mergeKey="assertInfo16"/>-->
-            <executeJS function="tinyMCE.get('cms_block_form_content').setContent('Hello Block Page!');" mergeKey="executeJSFillContent"/>
-            <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" mergeKey="clickShowHideBtn1" />
-            <waitForElementVisible selector="{{BlockWYSIWYGSection.InsertWidgetBtn}}" mergeKey="waitForInsertWidget" />
-            <see selector="{{BlockWYSIWYGSection.InsertImageBtn}}" userInput="Insert Image..." mergeKey="assertInf17"/>
-            <see selector="{{BlockWYSIWYGSection.InsertWidgetBtn}}" userInput="Insert Widget..." mergeKey="assertInfo18"/>
-            <see selector="{{BlockWYSIWYGSection.InsertVariableBtn}}" userInput="Insert Variable..." mergeKey="assertInfo19"/>
-            <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" mergeKey="clickSaveBlock"/>
-            <amOnPage url="{{CmsPagesPage.url}}" mergeKey="amOnEditPage"/>
-            <waitForPageLoad mergeKey="waitForPageLoad2"/>
-            <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" mergeKey="waitForCMSPageGrid" />
-            <click selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" mergeKey="clickSelect" />
-            <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" mergeKey="waitForEditLink" />
-            <click selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" mergeKey="clickEdit" />
-            <waitForPageLoad mergeKey="waitForPageLoad3" />
-            <click selector="{{CmsNewPagePageContentSection.header}}" mergeKey="clickContentTab" />
-            <waitForElementVisible selector="{{CmsWYSIWYGSection.ShowHideBtn}}" mergeKey="waitforShowHideBtn" />
-            <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" mergeKey="clickShowHideBtn2"/>
-            <waitForElementVisible selector="{{WidgetSection.InsertWidget}}"  mergeKey="waitForInsertInsertWidgetBtn" />
-            <seeElement selector="{{WidgetSection.InsertWidget}}"  mergeKey="widgetBtn" />
-            <click selector="{{WidgetSection.InsertWidget}}" mergeKey="clickInsertWidget"/>
-            <waitForPageLoad mergeKey="wait2"/>
-            <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static" mergeKey="selectCMSStaticBlock" />
-            <waitForLoadingMaskToDisappear mergeKey="waitForLoadingMaskDisappear" />
-            <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" mergeKey="selectTemplate" />
-            <click selector="{{WidgetSection.BtnChooser}}" mergeKey="clickSelectPageBtn" />
-            <waitForElementVisible selector="{{WidgetSection.BlockPage(_defaultBlock.title)}}" mergeKey="waitForBlockTitle" />
-            <click selector="{{WidgetSection.BlockPage(_defaultBlock.title)}}" mergeKey="selectPreCreateBlock" />
-            <wait time="3" mergeKey="wait1" />
-            <click selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" mergeKey="clickInsertWidgetBtn" />
-            <waitForLoadingMaskToDisappear mergeKey="waitForLoading" />
-            <waitForPageLoad mergeKey="waitForPageLoad4" />
-            <click selector="{{CmsNewPagePageActionsSection.savePage}}" mergeKey="clickSavePage"/>
-            <see userInput="You saved the page." mergeKey="seeSuccessMessage"/>
-            <amOnPage url="$$createCMSPage.identifier$$" mergeKey="amOnPageTestPage"/>
-            <waitForPageLoad mergeKey="wait2" />
+            <amOnPage url="{{BlocksPage.url}}" stepKey="amOnNewBlockPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad1"/>
+            <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle"/>
+            <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
+            <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
+            <waitForElementVisible selector="{{BlockWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+            <seeElement selector="{{BlockWYSIWYGSection.TinyMCE4}}" stepKey="seeTinyMCE4" />
+            <seeElement selector="{{BlockWYSIWYGSection.Style}}" stepKey="assertInfo2"/>
+            <seeElement selector="{{BlockWYSIWYGSection.Bold}}" stepKey="assertInfo3"/>
+            <seeElement selector="{{BlockWYSIWYGSection.Italic}}" stepKey="assertInfo4"/>
+            <seeElement selector="{{BlockWYSIWYGSection.Underline}}" stepKey="assertInfo5"/>
+            <seeElement selector="{{BlockWYSIWYGSection.AlignLeft}}" stepKey="assertInfo6"/>
+            <seeElement selector="{{BlockWYSIWYGSection.AlignCenter}}" stepKey="assertInfo7"/>
+            <seeElement selector="{{BlockWYSIWYGSection.AlignRight}}" stepKey="assertInfo8"/>
+            <seeElement selector="{{BlockWYSIWYGSection.Numlist}}" stepKey="assertInfo9"/>
+            <seeElement selector="{{BlockWYSIWYGSection.Bullet}}" stepKey="assertInfo10"/>
+            <seeElement selector="{{BlockWYSIWYGSection.InsertLink}}" stepKey="assertInfo11"/>
+            <seeElement selector="{{BlockWYSIWYGSection.InsertImageIcon}}" stepKey="assertInf12"/>
+            <seeElement selector="{{BlockWYSIWYGSection.InsertTable}}" stepKey="assertInfo13"/>
+            <seeElement selector="{{BlockWYSIWYGSection.SpecialCharacter}}" stepKey="assertInfo14"/>
+            <seeElement selector="{{BlockWYSIWYGSection.InsertWidgetIcon}}" stepKey="assertInfo15"/>
+            <!--<seeElement selector="{{BlockWYSIWYGSection.InsertVariableIcon}}" stepKey="assertInfo16"/>-->
+            <executeJS function="tinyMCE.get('cms_block_form_content').setContent('Hello Block Page!');" stepKey="executeJSFillContent"/>
+            <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn1" />
+            <waitForElementVisible selector="{{BlockWYSIWYGSection.InsertWidgetBtn}}" stepKey="waitForInsertWidget" />
+            <see selector="{{BlockWYSIWYGSection.InsertImageBtn}}" userInput="Insert Image..." stepKey="assertInf17"/>
+            <see selector="{{BlockWYSIWYGSection.InsertWidgetBtn}}" userInput="Insert Widget..." stepKey="assertInfo18"/>
+            <see selector="{{BlockWYSIWYGSection.InsertVariableBtn}}" userInput="Insert Variable..." stepKey="assertInfo19"/>
+            <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
+            <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad2"/>
+            <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="waitForCMSPageGrid" />
+            <click selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="clickSelect" />
+            <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="waitForEditLink" />
+            <click selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="clickEdit" />
+            <waitForPageLoad stepKey="waitForPageLoad3" />
+            <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
+            <waitForElementVisible selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="waitforShowHideBtn" />
+            <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn2"/>
+            <waitForElementVisible selector="{{WidgetSection.InsertWidget}}"  stepKey="waitForInsertInsertWidgetBtn" />
+            <seeElement selector="{{WidgetSection.InsertWidget}}"  stepKey="widgetBtn" />
+            <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget"/>
+            <waitForPageLoad stepKey="wait2"/>
+            <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static" stepKey="selectCMSStaticBlock" />
+            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
+            <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate" />
+            <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
+            <waitForElementVisible selector="{{WidgetSection.BlockPage(_defaultBlock.title)}}" stepKey="waitForBlockTitle" />
+            <click selector="{{WidgetSection.BlockPage(_defaultBlock.title)}}" stepKey="selectPreCreateBlock" />
+            <wait time="3" stepKey="wait1" />
+            <click selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="clickInsertWidgetBtn" />
+            <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
+            <waitForPageLoad stepKey="waitForPageLoad4" />
+            <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+            <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+            <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage"/>
+            <waitForPageLoad stepKey="wait2" />
             <!--see widget on Storefront-->
-            <see userInput="Hello Block Page!" mergeKey="seeContent"/>
+            <see userInput="Hello Block Page!" stepKey="seeContent"/>
         </test>
         <after>
-            <actionGroup ref="DisabledWYSIWYG" mergeKey="disabledWYSIWYG"/>
-            <amOnPage url="admin/admin/auth/logout/" mergeKey="amOnLogoutPage"/>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disabledWYSIWYG"/>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
     </cest>
 </config>
