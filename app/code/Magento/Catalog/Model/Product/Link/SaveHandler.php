@@ -66,8 +66,8 @@ class SaveHandler
         $link = $entity->getData($this->metadataPool->getMetadata($entityType)->getLinkField());
         if ($this->linkResource->hasProductLinks($link)) {
             /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
-            foreach ($this->productLinkRepository->getList($entity) as $link) {
-                $this->productLinkRepository->delete($link);
+            foreach ($this->productLinkRepo->getList($entity) as $link) {
+                $this->productLinkRepo->delete($link);
             }
         }
         $productLinks = $entity->getProductLinks();
@@ -97,7 +97,7 @@ class SaveHandler
 
         if (count($productLinks) > 0) {
             foreach ($entity->getProductLinks() as $link) {
-                $this->productLinkRepository->save($link);
+                $this->productLinkRepo->save($link);
             }
         }
         return $entity;
