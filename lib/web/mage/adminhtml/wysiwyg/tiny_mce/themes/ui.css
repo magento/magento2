@@ -24,6 +24,10 @@ span.magento-variable-lost:before {
     vertical-align: bottom;
     height: 20px;
     cursor: pointer !important;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 14px;
+    color: #000;
 }
 
 .magento-placeholder-error {
