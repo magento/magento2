@@ -253,6 +253,26 @@ define([
         },
 
         /**
+         * Insert content to active editor.
+         *
+         * @param {String} content
+         * @param {Boolean} ui
+         */
+        insertContent: function (content, ui) {
+            this.activeEditor().execCommand('mceInsertContent', typeof ui !== 'undefined' ? ui : false, content);
+        },
+
+        /**
+         * Set caret location in WYSIWYG editor.
+         *
+         * @param {Object} targetElement
+         */
+        setCaretOnElement: function (targetElement) {
+            this.activeEditor().selection.select(targetElement);
+            this.activeEditor().selection.collapse();
+        },
+
+        /**
          * @param {Object} o
          */
         openFileBrowser: function (o) {
