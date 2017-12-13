@@ -65,7 +65,7 @@ class IndexSwitcherProxy implements IndexSwitcherInterface
      * {@inheritDoc}
      *
      * As index switcher is an optional part of the search SPI, it may be not defined by a search engine.
-     * It is especially reasonable for search engines with pre-defined indexes declaration (like old SOLR and Sphinx)
+     * It is especially reasonable for search engines with pre-defined indexes declaration (like Sphinx)
      * which cannot create temporary indexes on the fly.
      * That's the reason why this method do nothing for the case
      * when switcher is not defined for a specific search engine.
