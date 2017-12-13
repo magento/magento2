@@ -30,26 +30,29 @@ class Plugin
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface
+     * @var \Magento\Framework\Message\ManagerInterface $messageManager
      */
-    protected $redirector;
+    protected $messageManager;
 
     /**
      * @param CustomerSession $customerSession
      * @param \Magento\Wishlist\Model\AuthenticationStateInterface $authenticationState
      * @param ScopeConfigInterface $config
      * @param RedirectInterface $redirector
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
         CustomerSession $customerSession,
         \Magento\Wishlist\Model\AuthenticationStateInterface $authenticationState,
         ScopeConfigInterface $config,
-        RedirectInterface $redirector
+        RedirectInterface $redirector,
+        \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->customerSession = $customerSession;
         $this->authenticationState = $authenticationState;
         $this->config = $config;
         $this->redirector = $redirector;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -72,6 +75,10 @@ class Plugin
             $this->customerSession->setBeforeModuleName('wishlist');
             $this->customerSession->setBeforeControllerName('index');
             $this->customerSession->setBeforeAction('add');
+
+            if ($request->getActionName() == 'add') {
+                $this->messageManager->addErrorMessage(__('You must login or register to add items to your wishlist.'));
+            }
         }
         if (!$this->config->isSetFlag('wishlist/general/active')) {
             throw new NotFoundException(__('Page not found.'));
