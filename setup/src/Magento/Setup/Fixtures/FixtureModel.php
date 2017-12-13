@@ -161,11 +161,19 @@ class FixtureModel
         return $this->fixtures;
     }
 
+    /**
+     * Returns configuration fixture
+     * @return \Magento\Setup\Fixtures\ConfigsApplyFixture
+     */
     public function getConfigurationFixture()
     {
         return $this->configurationFixture;
     }
 
+    /**
+     * Returns indexer fixture
+     * @return \Magento\Setup\Fixtures\IndexersStatesApplyFixture
+     */
     public function getIndexerFixture()
     {
         return $this->indexerFixture;
