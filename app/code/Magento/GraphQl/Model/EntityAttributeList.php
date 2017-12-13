@@ -18,15 +18,11 @@ class EntityAttributeList
     private $management;
 
     /**
-     * EAV setup factory
-     *
      * @var EavSetupFactory
      */
     private $eavSetupFactory;
 
     /**
-     * EAV setup instance
-     *
      * @var EavSetup
      */
     private $eavSetup;
