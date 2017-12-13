@@ -24,12 +24,22 @@ class ShippingMethodTest extends TestCase
     {
         $this->methodObject = new ShippingMethod(self::CARRIER_CODE, self::METHOD_CODE);
     }
+
     public function testCanBeInstantiatedFromFullMethodCode()
     {
         $this->assertEquals(
             new ShippingMethod(self::CARRIER_CODE, self::METHOD_CODE),
             ShippingMethod::fromFullShippingMethodCode(self::FULL_CODE)
         );
+    }
+
+    public function testFailsToInstantiateFromIncompleteMethodCode()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Invalid shipping method code "nounderscores". It should be carrier and method, separated by underscore'
+        );
+        ShippingMethod::fromFullShippingMethodCode('nounderscores');
     }
 
     public function testCanBeUsedAsString()

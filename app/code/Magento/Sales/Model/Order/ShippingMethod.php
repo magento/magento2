@@ -30,10 +30,17 @@ class ShippingMethod extends \Magento\Framework\DataObject
      *
      * @param string $fullShippingMethod
      * @return ShippingMethod
+     * @throws \InvalidArgumentException
      */
     public static function fromFullShippingMethodCode(string $fullShippingMethod) : ShippingMethod
     {
-        list($carrierCode, $method) = explode('_', $fullShippingMethod, 2);
+        list($carrierCode, $method) = explode('_', $fullShippingMethod, 2) + ['', ''];
+        if (empty($carrierCode) || empty($method)) {
+            throw new \InvalidArgumentException(
+                'Invalid shipping method code "' . $fullShippingMethod .
+                '". It should be carrier and method, separated by underscore'
+            );
+        }
         return new self($carrierCode, $method);
     }
 
@@ -322,6 +329,4 @@ class ShippingMethod extends \Magento\Framework\DataObject
     {
         return parent::offsetGet($offset);
     }
-
-
 }
