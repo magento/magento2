@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b2a7a1f00046717fc0c35237383e0a1",
+    "content-hash": "67903290f1ec8b4b0228d88b8e0d5abd",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -543,11 +543,13 @@
                     "Magento\\Composer\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0",
                 "AFL-3.0"
             ],
-            "description": "Magento composer library helps to instantiate Composer application and run composer commands."
+            "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
+            "time": "2016-03-08T20:50:51+00:00"
         },
         {
             "name": "magento/magento-composer-installer",
