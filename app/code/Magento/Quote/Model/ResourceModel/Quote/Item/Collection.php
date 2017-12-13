@@ -101,7 +101,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      */
     public function getStoreId()
     {
-        return (int)$this->_quote->getStoreId();
+        return (int)$this->_productCollectionFactory->create()->getStoreId();
     }
 
     /**
@@ -145,6 +145,21 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             $this->getSelect()->where('qi.product_id = ?', (int)$productId);
         }
         return $this;
+    }
+
+    /**
+     * Join product entities to select existing products items only
+     *
+     * @return void
+     */
+    protected function _beforeLoad()
+    {
+        parent::_beforeLoad();
+        $this->join(
+            ['cpe' => $this->getResource()->getTable('catalog_product_entity')],
+            "cpe.entity_id = main_table.product_id",
+            []
+        );
     }
 
     /**

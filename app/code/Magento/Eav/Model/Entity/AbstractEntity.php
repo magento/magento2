@@ -908,7 +908,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 'value' => trim($value),
             ];
 
-            $entityIdField = $attributeBackend->getEntityIdField();
+            $entityIdField = $object->getResource()->getLinkField();
             $select->from(
                 $attributeBackend->getTable(),
                 $entityIdField
@@ -1656,7 +1656,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             $this->_processAttributeValues();
             $connection->commit();
         } catch (\Exception $e) {
-            $connection->rollback();
+            $connection->rollBack();
             throw $e;
         }
 
