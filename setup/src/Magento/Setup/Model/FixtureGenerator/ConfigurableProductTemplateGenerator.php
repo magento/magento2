@@ -41,11 +41,6 @@ class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInt
     private $resourceConnection;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @param ProductFactory $productFactory
      * @param array $fixture
      * @param OptionFactory $optionFactory
@@ -55,14 +50,12 @@ class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInt
         ProductFactory $productFactory,
         array $fixture,
         OptionFactory $optionFactory,
-        ResourceConnection $resourceConnection,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        ResourceConnection $resourceConnection
     ) {
         $this->fixture = $fixture;
         $this->productFactory = $productFactory;
         $this->optionFactory = $optionFactory;
         $this->resourceConnection = $resourceConnection;
-        $this->productRepository = $productRepository;
     }
 
     /**
@@ -72,7 +65,6 @@ class ConfigurableProductTemplateGenerator implements TemplateEntityGeneratorInt
     {
         $attributeSet = $this->fixture['attribute_set_id'];
         $product = $this->getProductTemplate($attributeSet);
-        //$this->productRepository->save($product);
         $product->save();
 
         return $product;
