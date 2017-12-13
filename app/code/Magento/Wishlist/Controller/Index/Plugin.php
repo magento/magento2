@@ -30,7 +30,7 @@ class Plugin
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface
+     * @var \Magento\Framework\Message\ManagerInterface $messageManager
      */
     protected $redirector;
 
