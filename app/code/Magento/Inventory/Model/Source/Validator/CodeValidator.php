@@ -39,7 +39,7 @@ class CodeValidator implements SourceValidatorInterface
         if ('' === trim($value)) {
             $errors[] = __('"%field" can not be empty.', ['field' => SourceInterface::CODE]);
         }
-        if (preg_match('/\s/', $value)) {
+        elseif (preg_match('/\s/', $value)) {
             $errors[] = __('"%field" can not contain whitespaces.', ['field' => SourceInterface::CODE]);
         } else {
             $errors = [];
