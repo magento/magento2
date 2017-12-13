@@ -2,10 +2,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-span.magento-variable-lost {
-    background: #FFB6C1 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABWUlEQVR42qVTS07DMBD1pggqcQAQEofINbrNvh977Au04gJtxZYiVZwLJJasAhJJ3LBrI4Xwxm3SKErCz9Koqec9e/xmnhBYdjK5tlo/R8ZsI63XIdGFqK1QSg+5MNY6scbMXobDU5eIpbyKiaZIpLExOX4/cdg6IOoXZP6OlbpDPjtgUks0y4l6An8esbl1iUPghgyA5ZPvnzAo0XphC/IRkyZKKVEnl8GVEK04+LsRY8yb4HJbAVpnLprJmVVqIcLx+DIieqiX2Bl8ITQB93wv0mDQb3pnGxkXLqsiu8WCufd2H5KBfM/Yepv/d0Du+2c/fQJjIilvyyfwhLEgvxHR7itZORFjHs82clcbuRNazwXm/uOvg4RKAoFSbkofVMjJN6MMzG5DNBI5XAVDTeG0XaE0a9JpJviADejM5LrgeT1UMsJmAOC8nLCqnbG3QQ6Y13ciWbTyC+DUOUqNY1A2AAAAAElFTkSuQmCC) no-repeat left center;
-    padding-left: 22px !important;
-    color: red;
+span.magento-variable-lost:before {
+    content: '';
+    display: inline-block;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABWUlEQVR42qVTS07DMBD1pggqcQAQEofINbrNvh977Au04gJtxZYiVZwLJJasAhJJ3LBrI4Xwxm3SKErCz9Koqec9e/xmnhBYdjK5tlo/R8ZsI63XIdGFqK1QSg+5MNY6scbMXobDU5eIpbyKiaZIpLExOX4/cdg6IOoXZP6OlbpDPjtgUks0y4l6An8esbl1iUPghgyA5ZPvnzAo0XphC/IRkyZKKVEnl8GVEK04+LsRY8yb4HJbAVpnLprJmVVqIcLx+DIieqiX2Bl8ITQB93wv0mDQb3pnGxkXLqsiu8WCufd2H5KBfM/Yepv/d0Du+2c/fQJjIilvyyfwhLEgvxHR7itZORFjHs82clcbuRNazwXm/uOvg4RKAoFSbkofVMjJN6MMzG5DNBI5XAVDTeG0XaE0a9JpJviADejM5LrgeT1UMsJmAOC8nLCqnbG3QQ6Y13ciWbTyC+DUOUqNY1A2AAAAAElFTkSuQmCC);
+    background-repeat: no-repeat;
+    background-position-x: 1px;
+    background-position-y: 1px;
+    width: 20px;
+    height: inherit;
+    margin-right: 4px;
+    vertical-align: middle;
 }
 
 .magento-placeholder {
@@ -23,7 +30,7 @@ span.magento-variable-lost {
     display: inline-block;
     margin: 0 5px;
     background: #ffc0cb;
-    outline: 2px solid #FF0000;
+    outline: 2px solid #FF0000 !important;
     padding: 2px 4px;
     vertical-align: bottom;
     height: 20px;
