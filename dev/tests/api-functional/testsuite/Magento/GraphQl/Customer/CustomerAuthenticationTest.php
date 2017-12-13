@@ -187,10 +187,6 @@ QUERY;
             ];
             $this->assertResponseFields($actualResponse['customer']['addresses'][$addressKey], $assertionMap);
         }
-
-       // $addressId = $actualResponse['customer']['addresses']['id'][0];
-      //  $addressRepository = ObjectManager::getInstance()->get(\Magento\Customer\Api\AddressRepositoryInterface::class);
-      //  $customerAddress = $addressRepository->getById(1);
     }
 
 

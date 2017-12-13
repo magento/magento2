@@ -148,6 +148,129 @@ QUERY;
     }
 
     /**
+     * pageSize = total_count and current page = 2
+     * expected - error is thrown
+     * Actual - empty array
+     *  @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+
+    public function testSearchWithFilterWithPageSizeEqualTotalCount()
+    {
+        $query
+            = <<<QUERY
+{
+    products(
+     search : "simple"
+        filter:
+        {
+          special_price:{neq:"null"}
+          price:{lt:"60"}
+          or:
+          {
+           sku:{like:"%simple%"}
+           name:{like:"%configurable%"}
+          }
+           visibility:{in:["2", "3","4"]}
+           weight:{eq:"1"} 
+        }
+        pageSize:2
+        currentPage:2
+        sort:
+       {
+        price:DESC
+       } 
+    )    
+    {
+        items
+         {
+           sku
+           price
+           name
+           weight
+           status
+           type_id
+           visibility
+           attribute_set_id
+         }    
+        total_count
+        page_info
+        {
+          page_size
+          current_page
+        }
+    }
+}
+QUERY;
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: The value' . ' ' .
+            'specified in the currentPage attribute is greater than the number of pages available (1).');
+        $this->graphQlQuery($query);
+    }
+
+    /**
+    the query returns a total_count of 2 records; setting the pageSize = 1 and currentPage2
+     * Expected result is to get the second product from the list on the second page
+     */
+    public function testSearchWithFilterPageSizeLessThanCurrentPage()
+    {
+        $query
+            = <<<QUERY
+{
+    products(
+     search : "simple"
+        filter:
+        {
+          special_price:{neq:"null"}
+          price:{lt:"60"}
+          or:
+          {
+           sku:{like:"%simple%"}
+           name:{like:"%configurable%"}
+          }
+           visibility:{in:["2", "3","4"]}
+           weight:{eq:"1"} 
+        }
+        pageSize:1
+        currentPage:2
+        sort:
+       {
+        price:DESC
+       } 
+    )    
+    {
+        items
+         {
+           sku
+           price
+           name
+           weight
+           status
+           type_id
+           visibility
+           attribute_set_id
+         }    
+        total_count
+        page_info
+        {
+          page_size
+          current_page
+        }
+    }
+}
+QUERY;
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple1');
+        $filteredProducts = [$product];
+
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertProductItems($filteredProducts, $response);
+    }
+
+    /**
      * Requesting for items that match a specific SKU or NAME within a certain price range sorted by Price in ASC order
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
