@@ -53,6 +53,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     private $imageUploader;
 
     /**
+     * @var string
+     */
+    private $additionalData = '_additional_data_';
+
+    /**
      * Image constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
@@ -80,9 +85,9 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $attributeName = $this->getAttribute()->getName();
         $value = $object->getData($attributeName);
-        $imageName = $this->getUploadedImageName($value);
 
-        if ($imageName) {
+        if ($imageName = $this->getUploadedImageName($value)) {
+            $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
         } else if (!is_string($value)) {
             $object->setData($attributeName, '');
@@ -125,15 +130,27 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * Save uploaded file and set its name to category.
+     * Check if temporary file is available for new image upload.
+     *
+     * @param array $value
+     * @return bool
+     */
+    private function isTmpFileAvailable($value)
+    {
+        return is_array($value) && isset($value[0]['tmp_name']);
+    }
+
+    /**
+     * Save uploaded file and set its name to category
      *
      * @param \Magento\Framework\DataObject $object
      * @return \Magento\Catalog\Model\Category\Attribute\Backend\Image
      */
     public function afterSave($object)
     {
-        $imageName = $object->getData($this->getAttribute()->getName(), null);
-        if ($imageName) {
+        $value = $object->getData($this->additionalData . $this->getAttribute()->getName());
+
+        if ($this->isTmpFileAvailable($value) && $imageName = $this->getUploadedImageName($value)) {
             try {
                 $this->getImageUploader()->moveFileFromTmp($imageName);
             } catch (\Exception $e) {
