@@ -18,7 +18,7 @@ class SaveHandler
     /**
      * @var ProductLinkRepositoryInterface
      */
-    protected $productLinkRepo;
+    protected $productLinkRepository;
 
     /**
      * @var MetadataPool
@@ -39,18 +39,18 @@ class SaveHandler
      * SaveHandler constructor.
      * @param MetadataPool $metadataPool
      * @param Link $linkResource
-     * @param ProductLinkRepositoryInterface $productLinkRepo
+     * @param ProductLinkRepositoryInterface $productLinkRepository
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      */
     public function __construct(
         MetadataPool $metadataPool,
         Link $linkResource,
-        ProductLinkRepositoryInterface $productLinkRepo,
+        ProductLinkRepositoryInterface $productLinkRepository,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
     ) {
         $this->metadataPool = $metadataPool;
         $this->linkResource = $linkResource;
-        $this->productLinkRepo = $productLinkRepo;
+        $this->productLinkRepository = $productLinkRepository;
         $this->linkTypeProvider = $linkTypeProvider;
     }
 
@@ -65,8 +65,8 @@ class SaveHandler
         $link = $entity->getData($this->metadataPool->getMetadata($entityType)->getLinkField());
         if ($this->linkResource->hasProductLinks($link)) {
             /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
-            foreach ($this->productLinkRepo->getList($entity) as $link) {
-                $this->productLinkRepo->delete($link);
+            foreach ($this->productLinkRepository->getList($entity) as $link) {
+                $this->productLinkRepository->delete($link);
             }
         }
         $productLinks = $entity->getProductLinks();
@@ -94,7 +94,7 @@ class SaveHandler
 
         if (count($productLinks) > 0) {
             foreach ($entity->getProductLinks() as $link) {
-                $this->productLinkRepo->save($link);
+                $this->productLinkRepository->save($link);
             }
         }
         return $entity;
