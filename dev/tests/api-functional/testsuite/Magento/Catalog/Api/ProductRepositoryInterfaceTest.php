@@ -304,6 +304,32 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test that Product Repository can correctly create simple product, if product type not specified in request.
+     *
+     * @return void
+     */
+    public function testCreateWithoutSpecifiedType()
+    {
+        $price = 3.62;
+        $weight = 12.2;
+        $sku = 'simple_product_without_specified_type';
+        $product = [
+            'sku' => '' . $sku . '',
+            'name' => 'Simple Product Without Specified Type',
+            'price' => $price,
+            'weight' => $weight,
+            'attribute_set_id' => 4,
+        ];
+        $response = $this->saveProduct($product);
+        $this->assertSame($sku, $response[ProductInterface::SKU]);
+        $this->assertSame(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, $response[ProductInterface::TYPE_ID]);
+        $this->assertSame($price, $response[ProductInterface::PRICE]);
+        $this->assertSame($weight, $response[ProductInterface::WEIGHT]);
+        //Clean up.
+        $this->deleteProduct($product[ProductInterface::SKU]);
+    }
+
+    /**
      * @param array $fixtureProduct
      *
      * @dataProvider productCreationProvider
