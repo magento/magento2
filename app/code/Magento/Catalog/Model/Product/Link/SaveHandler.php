@@ -47,8 +47,7 @@ class SaveHandler
         Link $linkResource,
         ProductLinkRepositoryInterface $productLinkRepo,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
-    )
-    {
+    ) {
         $this->metadataPool = $metadataPool;
         $this->linkResource = $linkResource;
         $this->productLinkRepo = $productLinkRepo;
@@ -81,8 +80,7 @@ class SaveHandler
         // Do check
         $hasPositionLinkType = $this->isPositionsSet($linksByType);
 
-        // Bug fix for API if the Position was not set to force set Position attribute in "catalog_product_link_attribute_int"
-        // set Positions attribute values
+        // Set array position as a fallback position if necessary
         foreach ($hasPositionLinkType as $linkType => $hasPosition) {
             if (!$hasPosition) {
                 array_walk($linksByType[$linkType], function ($productLink, $position) {
