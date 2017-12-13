@@ -41,10 +41,10 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $this->addCountry($setup, $this->getCroatianData());
+            $this->addCountryRegions($setup, $this->getDataForCroatia());
         }
         if (version_compare($context->getVersion(), '2.0.2', '<')) {
-            $this->addCountry($setup, $this->getIndianData());
+            $this->addCountryRegions($setup, $this->getDataForIndia());
         }
     }
 
@@ -53,7 +53,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @return array
      */
-    private function getCroatianData()
+    private function getDataForCroatia()
     {
         return [
             ['HR', 'HR-01', 'Zagrebačka županija'],
@@ -85,7 +85,7 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @return array
      */
-    private function getIndianData()
+    private function getDataForIndia()
     {
         return [
             ['IN', 'AN', 'Andaman and Nicobar Islands'],
@@ -128,13 +128,13 @@ class UpgradeData implements UpgradeDataInterface
     }
 
     /**
-     * Add country data to appropriate tables.
+     * Add country regions data to appropriate tables.
      *
      * @param ModuleDataSetupInterface $setup
      * @param array $data
      * @return void
      */
-    private function addCountry(ModuleDataSetupInterface $setup, array $data)
+    private function addCountryRegions(ModuleDataSetupInterface $setup, array $data)
     {
         /**
          * Fill table directory/country_region
