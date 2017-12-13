@@ -23,7 +23,7 @@ class CodeValidatorTest extends TestCase
     private $codeValidator;
 
     /**
-     * @var SourceInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var SourceInterface |\PHPUnit_Framework_MockObject_MockObject
      */
     private $source;
 
