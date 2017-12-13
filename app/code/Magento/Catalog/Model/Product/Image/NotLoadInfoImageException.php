@@ -5,12 +5,6 @@
  */
 namespace Magento\Catalog\Model\Product\Image;
 
-use Magento\Framework\Exception\LocalizedException;
-
-/**
- * @api
- * @since 102.0.0
- */
-class NotLoadInfoImageException extends LocalizedException
+class NotLoadInfoImageException extends \Exception
 {
 }

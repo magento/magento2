@@ -895,7 +895,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
             return $imageProperties;
         } finally {
             if (empty($imageProperties)) {
-                throw new NotLoadInfoImageException(__('Can\'t get information about the picture: ' . $image));
+                throw new NotLoadInfoImageException(__('Can\'t get information about the picture: %1', $image));
             }
         }
     }
