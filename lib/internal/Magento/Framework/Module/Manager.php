@@ -17,7 +17,7 @@ namespace Magento\Framework\Module;
  *  $manager->isEnabled('Vendor_Module');
  * ```
  */
-class Manager
+class Manager implements ModuleManagerInterface
 {
     /**
      * @var Output\ConfigInterface
