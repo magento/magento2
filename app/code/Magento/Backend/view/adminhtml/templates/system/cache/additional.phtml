@@ -6,10 +6,10 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var \Magento\Backend\Block\Cache\Permissions $permissions */
+/** @var \Magento\Backend\Block\Cache\Permissions|null $permissions */
 $permissions = $block->getData('permissions');
 ?>
-<?php if ($block->hasAccessToAdditionalActions()): ?>
+<?php if ($permissions && $permissions->hasAccessToAdditionalActions()): ?>
     <div class="additional-cache-management">
         <?php if ($permissions->hasAccessToFlushCatalogImages()): ?>
             <h2>

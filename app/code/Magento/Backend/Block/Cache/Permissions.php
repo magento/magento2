@@ -7,11 +7,12 @@
 namespace Magento\Backend\Block\Cache;
 
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
  * Class Permissions
  */
-class Permissions
+class Permissions implements ArgumentInterface
 {
     /**
      * @var AuthorizationInterface

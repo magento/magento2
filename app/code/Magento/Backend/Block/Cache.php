@@ -45,7 +45,6 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
                 ]
             );
         }
-
     }
 
     /**
