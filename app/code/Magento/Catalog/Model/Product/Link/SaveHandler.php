@@ -81,7 +81,6 @@ class SaveHandler
         // Do check
         $hasPositionLinkType = $this->isPositionsSet($linksByType);
 
-
         // Bug fix for API if the Position was not set to force set Position attribute in "catalog_product_link_attribute_int"
         // set Positions attribute values
         foreach ($hasPositionLinkType as $linkType => $hasPosition) {
@@ -121,7 +120,6 @@ class SaveHandler
                 $isPositionSet[$typeName] = count($linksByType[$typeName]) > 0;
             }
         }
-
 
         // Check if at least on link without position exists per Link type
         foreach ($linksByType as $type => $links) {
