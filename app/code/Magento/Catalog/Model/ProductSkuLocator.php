@@ -46,16 +46,16 @@ class ProductSkuLocator implements \Magento\Catalog\Model\ProductSkuLocatorInter
      * SkuLocator constructor.
      *
      * @param Product             $productResource
-     * @param                     $idsLimit
+     * @param                     $skusLimit
      * @param LocatorService|null $locatorService
      */
     public function __construct(
         Product $productResource,
-        $idsLimit,
+        $skusLimit,
         LocatorService $locatorService = null
     ) {
         $this->productResource = $productResource;
-        $this->skusLimit = (int)$idsLimit;
+        $this->skusLimit = (int)$skusLimit;
         $this->locatorService = $locatorService
             ?: ObjectManager::getInstance()->get(LocatorService::class);;
     }
@@ -63,7 +63,7 @@ class ProductSkuLocator implements \Magento\Catalog\Model\ProductSkuLocatorInter
     /**
      * {@inheritdoc}
      */
-    public function retrieveSkusByProductIds(array $productIds) : array
+    public function retrieveSkusByProductIds(array $productIds): array
     {
         $resultProductIds = [];
         $neededIds = [];
@@ -82,20 +82,19 @@ class ProductSkuLocator implements \Magento\Catalog\Model\ProductSkuLocatorInter
             );
 
             $this->updateSkusCache($items);
-            $resultProductIds = array_merge($resultProductIds, $items);
+            $resultProductIds += $items;
         }
 
         return $this->locatorService->truncateToLimit($resultProductIds, $this->skusLimit);
     }
 
     /**
-     * @param $additionalItems
-     *
-     * @return $this
+     * @param array $additionalItems
+     * @return ProductSkuLocator
      */
-    private function updateSkusCache(array $additionalItems) : array
+    private function updateSkusCache(array $additionalItems): ProductSkuLocator
     {
-        $this->skuByIds = array_merge($this->skuByIds, $additionalItems);
+        $this->skuByIds += $additionalItems;
 
         return $this;
     }
