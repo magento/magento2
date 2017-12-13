@@ -12,7 +12,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  *
  * @see \Magento\Sales\Model\Order\Pdf\AbstarctPdf
  */
-class AbstractTest extends \PHPUnit\Framework\TestCase
+class AbstractPdfTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests Draw lines method.
@@ -62,7 +62,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
 
         /** Generate multiline block, that cover more than one page */
         $lines = [];
-        for ($lineNumber = 1; $lineNumber <= 100; $lineNumber++ ) {
+        for($lineNumber = 1; $lineNumber <= 100; $lineNumber++) {
             $lines[] = [[
                 'feed' => 0,
                 'font_size' => 10,
