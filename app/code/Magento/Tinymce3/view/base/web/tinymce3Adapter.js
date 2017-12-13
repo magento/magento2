@@ -12,8 +12,7 @@ define([
     'mage/adminhtml/wysiwyg/tiny_mce/html5-schema',
     'mage/translate',
     'prototype',
-    'mage/adminhtml/events',
-    'mage/adminhtml/browser'
+    'mage/adminhtml/events'
 ], function (jQuery, _, tinyMCE3, html5Schema) {
 
     var tinyMce3Wysiwyg = Class.create();
@@ -293,14 +292,16 @@ define([
             frameDialog.hide();
             jQuery('#mceModalBlocker').hide();
 
-            MediabrowserUtility.openDialog(wUrl, false, false, typeTitle, {
-                /**
-                 * Closed.
-                 */
-                closed: function () {
-                    frameDialog.show();
-                    jQuery('#mceModalBlocker').show();
-                }
+            require(['mage/adminhtml/browser'], function () {
+                MediabrowserUtility.openDialog(wUrl, false, false, typeTitle, {
+                    /**
+                     * Closed.
+                     */
+                    closed: function () {
+                        frameDialog.show();
+                        jQuery('#mceModalBlocker').show();
+                    }
+                });
             });
         },
 
