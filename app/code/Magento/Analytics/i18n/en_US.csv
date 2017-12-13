@@ -5,7 +5,7 @@
 "Time value has an unsupported format","Time value has an unsupported format"
 "Cron settings can't be saved","Cron settings can't be saved"
 "There was an error save new configuration value.","There was an error save new configuration value."
-"Please select a vertical.","Please select a vertical."
+"Please select an industry.","Please select an industry."
 "--Please Select--","--Please Select--"
 "Command was not found.","Command was not found."
 "Input data must be string or convertible into string.","Input data must be string or convertible into string."

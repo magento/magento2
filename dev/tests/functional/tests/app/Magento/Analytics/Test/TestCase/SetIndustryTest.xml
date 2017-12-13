@@ -14,7 +14,7 @@
         </variation>
         <variation name="SetIndustryEmpty" summary="Navigate to Advanced Reporting admin menu and try to save empty industry" ticketId="MAGETWO-63981">
             <data name="industry" xsi:type="string">--Please Select--</data>
-            <data name="errorMessage" xsi:type="string">Please select a vertical.</data>
+            <data name="errorMessage" xsi:type="string">Please select an industry.</data>
             <constraint name="Magento\Analytics\Test\Constraint\AssertEmptyIndustryCanNotBeSaved" />
         </variation>
     </testCase>
