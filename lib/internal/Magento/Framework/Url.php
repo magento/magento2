@@ -844,6 +844,9 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             return $routePath;
         }
 
+        // Remove empty parameters.
+        $routeParams = array_filter($routeParams);
+
         $routeParams = $this->routeParamsPreprocessor
             ->execute($this->_scopeResolver->getAreaCode(), $routePath, $routeParams);
 
