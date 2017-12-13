@@ -12,7 +12,7 @@ use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
- * Check that name is valid
+ * Check that code is valid
  */
 class CodeValidator implements SourceValidatorInterface
 {
@@ -41,7 +41,6 @@ class CodeValidator implements SourceValidatorInterface
         }
         if (preg_match('/\s/', $value)) {
             $errors[] = __('"%field" can not contain whitespaces.', ['field' => SourceInterface::CODE]);
-
         } else {
             $errors = [];
         }
