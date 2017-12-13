@@ -417,6 +417,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         }
 
         if ($this->_needCollect) {
+            $this->getQuote()->getShippingAddress()->unsCachedItemsAll();
+            $this->getQuote()->setTotalsCollectedFlag(false);
             $this->getQuote()->collectTotals();
         }
 
@@ -1413,11 +1415,14 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $tmpAddress->unsAddressId()->unsAddressType();
             $data = $tmpAddress->getData();
             $data['save_in_address_book'] = 0;
+            // Don't lose the shipping method
+            unset($data['shipping_method']);
             // Do not duplicate address (billing address will do saving too)
             $this->getShippingAddress()->addData($data);
         }
         $this->getShippingAddress()->setSameAsBilling($flag);
-        $this->setRecollect(true);
+        // Recalculate the address shipping amounts
+        $this->collectShippingRates();
         return $this;
     }
 
