@@ -18,10 +18,12 @@
         <before>
             <amOnUrl url="http://127.0.0.1:32772/admin/" mergeKey="amOnPage"/>
             <createData entity="CustomerEntity1" mergeKey="createData1"/>
+            <createData entity="AssertThis" mergeKey="createData2"/>
         </before>
         <after>
             <amOnUrl url="http://127.0.0.1:32772/admin/admin/auth/logout" mergeKey="amOnPage"/>
             <deleteData createDataKey="createData1" mergeKey="deleteData1"/>
+            <deleteData createDataKey="createData2" mergeKey="deleteData2"/>
         </after>
         <test name="AllCodeceptionMethodsTest">
             <annotations>
@@ -258,6 +260,7 @@
             </annotations>
 
             <createData entity="CustomerEntity1" mergeKey="testScopeData"/>
+            <createData entity="AssertThis" mergeKey="testScopeData2"/>
 
             <!-- parameterized url that uses literal params -->
             <amOnPage url="{{SamplePage.url('success','success2')}}" mergeKey="a0"/>

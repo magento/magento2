@@ -6,15 +6,14 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use GraphQL\Type\Definition\InterfaceType;
-use GraphQL\Type\Definition\Type;
 use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
+use Magento\Framework\GraphQl\Type\TypeFactory;
 
 /**
- * Define Product's GraphQL type
+ * Define product's GraphQL type
  */
 class Product implements HandlerInterface
 {
@@ -34,15 +33,26 @@ class Product implements HandlerInterface
     private $management;
 
     /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
      * @param Pool $typePool
      * @param TypeGenerator $typeGenerator
      * @param AttributeManagementInterface $management
+     * @param TypeFactory $typeFactory
      */
-    public function __construct(Pool $typePool, TypeGenerator $typeGenerator, AttributeManagementInterface $management)
-    {
+    public function __construct(
+        Pool $typePool,
+        TypeGenerator $typeGenerator,
+        AttributeManagementInterface $management,
+        TypeFactory $typeFactory
+    ) {
         $this->typePool = $typePool;
         $this->typeGenerator = $typeGenerator;
         $this->management = $management;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
@@ -51,7 +61,7 @@ class Product implements HandlerInterface
     public function getType()
     {
         $reflector = new \ReflectionClass($this);
-        return new InterfaceType(
+        return  $this->typeFactory->createInterface(
             [
                 'name' => $reflector->getShortName(),
                 'fields' => $this->getFields($reflector->getShortName()),
@@ -80,7 +90,7 @@ class Product implements HandlerInterface
      * Retrieve Product base fields
      *
      * @param string $typeName
-     * @return Type[]
+     * @return array
      * @throws \LogicException Schema failed to generate from service contract type name
      */
     private function getFields(string $typeName)

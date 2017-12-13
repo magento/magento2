@@ -6,11 +6,10 @@
 
 namespace Magento\GraphQl\Model\Type;
 
-use GraphQL\Type\Definition\ListOfType;
-use GraphQL\Type\Definition\NonNull;
-use GraphQL\Type\Definition\Type;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Model\Type\Handler\Pool;
+use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 
 /**
  * {@inheritdoc}
@@ -28,13 +27,20 @@ class Generator implements GeneratorInterface
     private $typeMap;
 
     /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
      * @param Pool $typePool
      * @param array $typeMap
+     * @param TypeFactory $typeFactory
      */
-    public function __construct(Pool $typePool, array $typeMap)
+    public function __construct(Pool $typePool, array $typeMap, TypeFactory $typeFactory)
     {
         $this->typePool = $typePool;
         $this->typeMap = $typeMap;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
@@ -44,7 +50,7 @@ class Generator implements GeneratorInterface
     {
         $types = [];
         if (!isset($this->typeMap[$typeName])) {
-            throw new LocalizedException(__('Invalid GraphQL query name.'));
+            throw new GraphQlInputException(__('Invalid GraphQL query name.'));
         }
         /** @var HandlerInterface $handler */
         foreach ($this->typeMap['types'] as $handler) {
@@ -77,13 +83,13 @@ class Generator implements GeneratorInterface
      *
      * @param string $argumentName
      * @param string $argumentType
-     * @return Type
+     * @return TypeInterface|\GraphQL\Type\Definition\Type
      */
     private function decorateType(string $argumentName, string $argumentType)
     {
         $type = $this->typePool->getType($argumentType);
-        $type = strpos($argumentName, '!') !== false ? new NonNull($type) : $type;
-        $type = strpos($argumentName, '[]') !== false ? new ListOfType($type) : $type;
+        $type = strpos($argumentName, '!') !== false ? $this->typeFactory->createNonNull($type) : $type;
+        $type = strpos($argumentName, '[]') !== false ? $this->typeFactory->createList($type) : $type;
 
         return $type;
     }

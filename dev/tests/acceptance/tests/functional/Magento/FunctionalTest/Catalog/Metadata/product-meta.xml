@@ -27,7 +27,6 @@
             </array>
             <array key="custom_attributes">
                 <value>custom_attribute_array</value>
-                <value>custom_attribute</value>
             </array>
             <array key="options">
                 <value>product_option</value>
@@ -36,7 +35,6 @@
     </operation>
     <operation name="UpdateProduct" dataType="product" type="update" auth="adminOauth" url="/V1/products/{sku}" method="PUT">
         <contentType>application/json</contentType>
-        <param key="sku" type="path">{sku}</param>
         <object dataType="product" key="product">
             <field key="id">integer</field>
             <field key="sku">string</field>
@@ -55,7 +53,6 @@
             </array>
             <array key="custom_attributes">
                 <value>custom_attribute_array</value>
-                <value>custom_attribute</value>
             </array>
             <array key="options">
                 <value>product_option</value>
@@ -65,6 +62,60 @@
     </operation>
     <operation name="deleteProduct" dataType="product" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
         <contentType>application/json</contentType>
-        <param key="sku" type="path">{sku}</param>
+    </operation>
+    <operation name="CreateProduct2" dataType="product2" type="create" auth="adminOauth" url="/V1/products" method="POST">
+        <contentType>application/json</contentType>
+        <object dataType="product2" key="product">
+            <field key="sku">string</field>
+            <field key="name">string</field>
+            <field key="attribute_set_id">integer</field>
+            <field key="price">integer</field>
+            <field key="status">integer</field>
+            <field key="visibility">integer</field>
+            <field key="type_id">string</field>
+            <field key="created_at">string</field>
+            <field key="updated_at">string</field>
+            <field key="weight">integer</field>
+            <field key="extension_attributes">product_extension_attribute</field>
+            <array key="product_links">
+                <value>product_link</value>
+            </array>
+            <array key="custom_attributes">
+                <value>custom_attribute</value>
+            </array>
+            <array key="options">
+                <value>product_option</value>
+            </array>
+        </object>
+    </operation>
+    <operation name="UpdateProduct2" dataType="product2" type="update" auth="adminOauth" url="/V1/products/{sku}" method="PUT">
+        <contentType>application/json</contentType>
+        <object dataType="product2" key="product">
+            <field key="id">integer</field>
+            <field key="sku">string</field>
+            <field key="name">string</field>
+            <field key="attribute_set_id">integer</field>
+            <field key="price">integer</field>
+            <field key="status">integer</field>
+            <field key="visibility">integer</field>
+            <field key="type_id">string</field>
+            <field key="created_at">string</field>
+            <field key="updated_at">string</field>
+            <field key="weight">integer</field>
+            <field key="extension_attributes">product_extension_attribute</field>
+            <array key="product_links">
+                <value>product_link</value>
+            </array>
+            <array key="custom_attributes">
+                <value>custom_attribute</value>
+            </array>
+            <array key="options">
+                <value>product_option</value>
+            </array>
+        </object>
+        <field key="saveOptions">boolean</field>
+    </operation>
+    <operation name="deleteProduct2" dataType="product2" type="delete" auth="adminOauth" url="/V1/products/{sku}" method="DELETE">
+        <contentType>application/json</contentType>
     </operation>
 </config>
