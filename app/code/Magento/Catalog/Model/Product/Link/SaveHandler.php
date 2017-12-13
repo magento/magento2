@@ -18,7 +18,7 @@ class SaveHandler
     /**
      * @var ProductLinkRepositoryInterface
      */
-    protected $productLinkRepository;
+    protected $productLinkRepo;
 
     /**
      * @var MetadataPool
@@ -39,19 +39,19 @@ class SaveHandler
      * SaveHandler constructor.
      * @param MetadataPool $metadataPool
      * @param Link $linkResource
-     * @param ProductLinkRepositoryInterface $productLinkRepository
+     * @param ProductLinkRepositoryInterface $productLinkRepo
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      */
     public function __construct(
         MetadataPool $metadataPool,
         Link $linkResource,
-        ProductLinkRepositoryInterface $productLinkRepository,
+        ProductLinkRepositoryInterface $productLinkRepo,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
     )
     {
         $this->metadataPool = $metadataPool;
         $this->linkResource = $linkResource;
-        $this->productLinkRepository = $productLinkRepository;
+        $this->productLinkRepo = $productLinkRepo;
         $this->linkTypeProvider = $linkTypeProvider;
     }
 
