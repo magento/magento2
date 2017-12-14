@@ -40,7 +40,7 @@ class ConfigProvider implements ConfigProviderInterface
      * @param UrlInterface $urlBuilder
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
-     * @param Url $customerUrl
+     * @param Url|null $customerUrl
      */
     public function __construct(
         UrlInterface $urlBuilder,
@@ -48,7 +48,7 @@ class ConfigProvider implements ConfigProviderInterface
         ScopeConfigInterface $scopeConfig,
         Url $customerUrl = null
     ) {
-        $this->urlBuilder=$urlBuilder;
+        $this->urlBuilder = $urlBuilder;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
         $this->customerUrl = $customerUrl ?? \Magento\Framework\App\ObjectManager::getInstance()
