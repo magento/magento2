@@ -38,6 +38,7 @@ $tracks = [
         'title' => 'title 1',
         'carrier_code' => 'carrier code 1',
         'track_number' => 'track number 1',
+        'track_url' => 'track url 1',
         'description' => 'description 1',
         'qty' => 1,
         'weight' => 1,
@@ -46,6 +47,7 @@ $tracks = [
         'title' => 'title 2',
         'carrier_code' => 'carrier code 2',
         'track_number' => 'track number 2',
+        'track_url' => 'track url 3',
         'description' => 'description 2',
         'qty' => 2,
         'weight' => 1,
@@ -54,6 +56,7 @@ $tracks = [
         'title' => 'title 3',
         'carrier_code' => 'carrier code 3',
         'track_number' => 'track number 3',
+        'track_url' => 'track url 3',
         'description' => 'description 3',
         'qty' => 3,
         'weight' => 1,
@@ -62,6 +65,7 @@ $tracks = [
         'title' => 'title 4',
         'carrier_code' => 'carrier code 4',
         'track_number' => 'track number 4',
+        'track_url' => 'track url 4',
         'description' => 'description 4',
         'qty' => 4,
         'weight' => 1,
@@ -70,6 +74,7 @@ $tracks = [
         'title' => 'title 5',
         'carrier_code' => 'carrier code 5',
         'track_number' => 'track number 5',
+        'track_url' => 'track url 5',
         'description' => 'description 5',
         'qty' => 5,
         'weight' => 2,
@@ -92,3 +97,4 @@ foreach ($tracks as $data) {
     $track->setWeight($data['weight']);
     $shipmentTrackRepository->save($track);
 }
+

@@ -15,6 +15,7 @@
                 <th class="col-carrier"><?= /* @escapeNotVerified */ __('Carrier') ?></th>
                 <th class="col-title"><?= /* @escapeNotVerified */ __('Title') ?></th>
                 <th class="col-number"><?= /* @escapeNotVerified */ __('Number') ?></th>
+                <th class="col-url"><?= /* @escapeNotVerified */ __('URL') ?></th>
                 <th class="col-delete last"><?= /* @escapeNotVerified */ __('Action') ?></th>
             </tr>
         </thead>
@@ -43,6 +44,13 @@
                            name="number"
                            value="" />
                 </td>
+                <td class="col-url">
+                    <input class="input-text admin__control-text"
+                           type="text"
+                           id="track_url"
+                           name="track_url"
+                           value="" />
+                </td>
                 <td class="col-delete last"><?= $block->getSaveButtonHtml() ?></td>
             </tr>
         </tfoot>
@@ -58,6 +66,11 @@
                     <?php else: ?>
                     <a href="#" onclick="popWin('<?= /* @escapeNotVerified */ $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_track) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')"><?= $block->escapeHtml($_track->getNumber()) ?></a>
                     <div id="shipment_tracking_info_response_<?= /* @escapeNotVerified */ $_track->getId() ?>"></div>
+                    <?php endif; ?>
+                </td>
+                <td class="col-title">
+                    <?php if ($_track->getTrackUrl()): ?>
+                        <a href="<?= $block->escapeHtml($_track->getTrackUrl()) ?>" target="_blank" rel="noreferrer nofollow noopener"><?= __('Track URL') ?></a>
                     <?php endif; ?>
                 </td>
                 <td class="col-delete last"><button class="action-delete" type="button" onclick="deleteTrackingNumber('<?= /* @escapeNotVerified */ $block->getRemoveUrl($_track) ?>'); return false;"><span><?= /* @escapeNotVerified */ __('Delete') ?></span></button></td>

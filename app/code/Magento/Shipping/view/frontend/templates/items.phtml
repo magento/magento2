@@ -45,11 +45,16 @@
             $i = 1;
             $_size = $tracks->count();
             foreach ($tracks as $track): ?>
+                <?php if ($block->getValidTrackUrl($track) !== false) : ?>
+                    <a href="<?= $block->escapeHtml($track->getTrackUrl()) ?>" target="_blank" rel="noreferrer nofollow noopener">
+                        <span><?= $block->escapeHtml($track->getNumber()) ?></span>
+                    </a><?php else: ?>
                 <?php if ($track->isCustom()): ?><?= $block->escapeHtml($track->getNumber()) ?><?php else: ?><a
                     href="#"
                     data-mage-init='{"popupWindow": {"windowURL":"<?= /* @escapeNotVerified */ $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($track) ?>","windowName":"trackorder","width":800,"height":600,"left":0,"top":0,"resizable":1,"scrollbars":1}}'
                     class="action track"><span><?= $block->escapeHtml($track->getNumber()) ?></span>
-                    </a><?php endif; ?><?php if ($i != $_size): ?>, <?php endif; ?>
+                    </a><?php endif; ?>
+                <?php endif; ?><?php if ($i != $_size): ?>, <?php endif; ?>
                 <?php $i++;
             endforeach; ?>
         </dd>

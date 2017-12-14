@@ -7,24 +7,43 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php $_shipment = $block->getShipment() ?>
-<?php $_order = $block->getOrder() ?>
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+
+$_shipment = $block->getShipment();
+$_order = $block->getOrder();
+?>
 <?php if ($_shipment && $_order && $_shipment->getAllTracks()): ?>
-<br />
-<table class="shipment-track">
-    <thead>
+    <br />
+    <table class="shipment-track">
+        <thead>
         <tr>
             <th><?= /* @escapeNotVerified */  __('Shipped By') ?></th>
             <th><?= /* @escapeNotVerified */  __('Tracking Number') ?></th>
         </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($_shipment->getAllTracks() as $_item): ?>
-        <tr>
-            <td><?= $block->escapeHtml($_item->getTitle()) ?>:</td>
-            <td><?= $block->escapeHtml($_item->getNumber()) ?></td>
-        </tr>
-    <?php endforeach ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        <?php
+        foreach ($_shipment->getAllTracks() as $_item): ?>
+            <tr>
+                <td><?= $block->escapeHtml($_item->getTitle()) ?>:</td>
+                <td>
+                    <?php if (
+                        ($_item instanceof \Magento\Sales\Api\Data\TrackUrlInterface) &&
+                        (\Zend_Uri::check($track->getTrackUrl($_item)))
+                    ): ?>
+                        <a href="<?= $block->escapeUrl($_item->getTrackUrl()) ?>"
+                           target="_blank"
+                           rel="noreferrer nofollow noopener"
+                        >
+                            <?= $block->escapeHtml($_item->getNumber()) ?>
+                        </a>
+                    <?php else: ?>
+                        <?= $block->escapeHtml($_item->getNumber()) ?>
+                    <?php endif;?>
+                </td>
+            </tr>
+        <?php endforeach ?>
+        </tbody>
+    </table>
 <?php endif; ?>

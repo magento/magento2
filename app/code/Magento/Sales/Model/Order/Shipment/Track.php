@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\Order\Shipment;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\ShipmentTrackInterface;
+use Magento\Sales\Api\Data\TrackUrlInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
@@ -16,7 +17,7 @@ use Magento\Sales\Model\AbstractModel;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Track extends AbstractModel implements ShipmentTrackInterface
+class Track extends AbstractModel implements ShipmentTrackInterface, TrackUrlInterface
 {
     /**
      * Code of custom carrier
@@ -225,6 +226,16 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     /**
+     * Returns track_url
+     *
+     * @return string
+     */
+    public function getTrackUrl()
+    {
+        return $this->getData(ShipmentTrackInterface::TRACK_URL);
+    }
+
+    /**
      * Returns carrier_code
      *
      * @return string
@@ -368,6 +379,14 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     public function setTrackNumber($trackNumber)
     {
         return $this->setData(ShipmentTrackInterface::TRACK_NUMBER, $trackNumber);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTrackUrl($trackUrl)
+    {
+        return $this->setData(ShipmentTrackInterface::TRACK_URL, $trackUrl);
     }
 
     /**
