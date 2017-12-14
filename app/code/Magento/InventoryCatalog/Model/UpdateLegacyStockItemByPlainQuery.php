@@ -3,48 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Magento\InventoryCatalog\Model;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-
 /**
- * Update Legacy catalocinventory_stock_item database data
+ * Update Legacy cataloginventory_stock_item database data
  */
 class UpdateLegacyStockItemByPlainQuery
 {
     /**
-     * @var ResourceConnection
+     * @var LegacyUpdateService
      */
-    private $resourceConnection;
+    private $legacyUpdateService;
 
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
-
-    /**
-     * @param ResourceConnection $resourceConnection
-     * @param ProductRepositoryInterface $productRepository
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
-     */
     public function __construct(
-        ResourceConnection $resourceConnection,
-        ProductRepositoryInterface $productRepository,
-        DefaultSourceProviderInterface $defaultSourceProvider
-    ) {
-        $this->resourceConnection = $resourceConnection;
-        $this->productRepository = $productRepository;
-        $this->defaultSourceProvider = $defaultSourceProvider;
+        LegacyUpdateService $legacyUpdateService
+    )
+    {
+        $this->legacyUpdateService = $legacyUpdateService;
     }
 
     /**
@@ -56,18 +33,6 @@ class UpdateLegacyStockItemByPlainQuery
      */
     public function execute(string $sku, float $quantity)
     {
-        $product = $this->productRepository->get($sku);
-        $connection = $this->resourceConnection->getConnection();
-        $connection->update(
-            $this->resourceConnection->getTableName('cataloginventory_stock_item'),
-            [
-                StockItemInterface::QTY => new \Zend_Db_Expr(sprintf('%s + %s', StockItemInterface::QTY, $quantity)),
-            ],
-            [
-                StockItemInterface::STOCK_ID . ' = ?' => $this->defaultSourceProvider->getId(),
-                StockItemInterface::PRODUCT_ID . ' = ?' => $product->getId(),
-                'website_id = ?' => 0,
-            ]
-        );
+        $this->legacyUpdateService->execute($sku, $quantity, LegacyUpdateService::TYPE_STOCK_ITEM);
     }
 }

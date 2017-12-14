@@ -8,6 +8,38 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\InventoryCatalog\Api\DefaultStockProviderInterface" type="Magento\InventoryCatalog\Model\DefaultStockProvider"/>
     <preference for="Magento\InventoryCatalog\Api\DefaultSourceProviderInterface" type="Magento\InventoryCatalog\Model\DefaultSourceProvider"/>
+    <type name="Magento\InventoryCatalog\Model\LegacyUpdateService">
+        <arguments>
+            <argument name="tableName" xsi:type="array">
+                <item name="stock_item" xsi:type="string">cataloginventory_stock_item</item>
+                <item name="stock_status" xsi:type="string">cataloginventory_stock_status</item>
+            </argument>
+            <argument name="params" xsi:type="array">
+                <item name="stock_item" xsi:type="array">
+                    <item name="qty_key" xsi:type="const">
+                        Magento\CatalogInventory\Api\Data\StockItemInterface::QTY
+                    </item>
+                    <item name="stock_id_key" xsi:type="const">
+                        Magento\CatalogInventory\Api\Data\StockItemInterface::STOCK_ID
+                    </item>
+                    <item name="product_id_key" xsi:type="const">
+                        Magento\CatalogInventory\Api\Data\StockItemInterface::PRODUCT_ID
+                    </item>
+                </item>
+                <item name="stock_status" xsi:type="array">
+                    <item name="qty_key" xsi:type="const">
+                        Magento\CatalogInventory\Api\Data\StockStatusInterface::QTY
+                    </item>
+                    <item name="stock_id_key" xsi:type="const">
+                        Magento\CatalogInventory\Api\Data\StockStatusInterface::STOCK_ID
+                    </item>
+                    <item name="product_id_key" xsi:type="const">
+                        Magento\CatalogInventory\Api\Data\StockStatusInterface::PRODUCT_ID
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
         <plugin name="prevent_default_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
