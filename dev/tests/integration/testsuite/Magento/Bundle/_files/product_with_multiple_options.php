@@ -47,6 +47,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                 'default_title' => 'Option 1',
                 'type' => 'select',
                 'required' => 1,
+                'position' => 1,
                 'delete' => '',
             ],
             // Required "Radio Buttons" option
@@ -55,6 +56,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                 'default_title' => 'Option 2',
                 'type' => 'radio',
                 'required' => 1,
+                'position' => 2,
                 'delete' => '',
             ],
             // Required "Checkbox" option
@@ -63,6 +65,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                 'default_title' => 'Option 3',
                 'type' => 'checkbox',
                 'required' => 1,
+                'position' => 3,
                 'delete' => '',
             ],
             // Required "Multiple Select" option
@@ -71,6 +74,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                 'default_title' => 'Option 4',
                 'type' => 'multi',
                 'required' => 1,
+                'position' => 4,
                 'delete' => '',
             ],
             // Non-required "Multiple Select" option
@@ -79,6 +83,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                 'default_title' => 'Option 5',
                 'type' => 'multi',
                 'required' => 0,
+                'position' => 5,
                 'delete' => '',
             ]
         ]

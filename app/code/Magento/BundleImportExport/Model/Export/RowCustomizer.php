@@ -9,9 +9,10 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProductModel;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
-use Magento\ImportExport\Controller\Adminhtml\Import;
 use Magento\ImportExport\Model\Import as ImportModel;
 use \Magento\Catalog\Model\Product\Type\AbstractType;
+use \Magento\Framework\App\ObjectManager;
+use \Magento\Framework\App\ScopeResolverInterface;
 
 /**
  * Class RowCustomizer
@@ -104,6 +105,26 @@ class RowCustomizer implements RowCustomizerInterface
         AbstractType::SHIPMENT_TOGETHER => 'together',
         AbstractType::SHIPMENT_SEPARATELY => 'separately',
     ];
+
+    /**
+     * @var \Magento\Bundle\Model\ResourceModel\Option\Collection[]
+     */
+    private $optionsCollection = [];
+
+    /**
+     * @var array
+     */
+    private $storeIdToCode = [];
+
+    /**
+     * @var string
+     */
+    private $optionCollectionCacheKey = '_cache_instance_options_collection';
+
+    /**
+     * @var ScopeResolverInterface
+     */
+    private $scopeResolver;
 
     /**
      * Retrieve list of bundle specific columns
@@ -207,15 +228,13 @@ class RowCustomizer implements RowCustomizerInterface
      */
     protected function getFormattedBundleOptionValues($product)
     {
-        /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
-        $optionsCollection = $product->getTypeInstance()
-            ->getOptionsCollection($product)
-            ->setOrder('position', Collection::SORT_ORDER_ASC);
-
+        $optionsCollection = $this->getProductOptionsCollection($product);
         $bundleData = '';
-        foreach ($optionsCollection as $option) {
+        $optionTitles = $this->getBundleOptionTitles($product);
+        foreach ($optionsCollection->getItems() as $option) {
+            $optionValues = $this->getFormattedOptionValues($option, $optionTitles);
             $bundleData .= $this->getFormattedBundleSelections(
-                $this->getFormattedOptionValues($option),
+                $optionValues,
                 $product->getTypeInstance()
                     ->getSelectionsCollection([$option->getId()], $product)
                     ->setOrder('position', Collection::SORT_ORDER_ASC)
@@ -266,16 +285,23 @@ class RowCustomizer implements RowCustomizerInterface
      * Retrieve option value of bundle product
      *
      * @param \Magento\Bundle\Model\Option $option
+     * @param array $optionTitles
      * @return string
      */
-    protected function getFormattedOptionValues($option)
+    protected function getFormattedOptionValues($option, $optionTitles = [])
     {
-        return 'name' . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR
-        . $option->getTitle() . ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
-        . 'type' . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR
-        . $option->getType() . ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
-        . 'required' . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR
-        . $option->getRequired();
+        $names = implode(ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, array_map(
+            function ($title, $storeName) {
+                return $storeName . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR . $title;
+            },
+            $optionTitles[$option->getOptionId()],
+            array_keys($optionTitles[$option->getOptionId()])
+        ));
+        return $names . ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+            . 'type' . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR
+            . $option->getType() . ImportModel::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+            . 'required' . ImportProductModel::PAIR_NAME_VALUE_SEPARATOR
+            . $option->getRequired();
     }
 
     /**
@@ -379,5 +405,92 @@ class RowCustomizer implements RowCustomizerInterface
             $preparedAttributes[$code] = $value;
         }
         return $preparedAttributes;
+    }
+
+    /**
+     * Get product options titles.
+     * Values for all store views (default) should be specified with 'name' key.
+     * If user want to specify value or change existing for non default store views it should be specified with
+     * 'name_' prefix and needed store view suffix.
+     *
+     * For example:
+     *  - 'name=All store views name' for all store views
+     *  - 'name_specific_store=Specific store name' for store view with 'specific_store' store code
+     *
+     * @param \Magento\Catalog\Model\Product $product $product
+     * @return array
+     */
+    private function getBundleOptionTitles($product)
+    {
+        $storeIds = $product->getStoreIds();
+        $optionsCollection = $this->getProductOptionsCollection($product);
+        $optionsTitles = [];
+        /** @var \Magento\Bundle\Model\Option $option */
+        foreach ($optionsCollection->getItems() as $option) {
+            $optionsTitles[$option->getId()]['name'] = $option->getTitle();
+        }
+        if (array_count_values($storeIds) > 1) {
+            foreach ($storeIds as $storeId) {
+                $optionsCollection = $this->getProductOptionsCollection($product, $storeId);
+                /** @var \Magento\Bundle\Model\Option $option */
+                foreach ($optionsCollection->getItems() as $option) {
+                    $optionTitle = $option->getTitle();
+                    if ($optionsTitles[$option->getId()]['name'] != $optionTitle) {
+                        $optionsTitles[$option->getId()]['name_' . $this->getStoreCodeById($storeId)] = $optionTitle;
+                    }
+                }
+            }
+        }
+        return $optionsTitles;
+    }
+
+    /**
+     * Get product options collection by provided product model.
+     * Set given store id to the product if it was defined (default store id will be set if was not).
+     *
+     * @param \Magento\Catalog\Model\Product $product $product
+     * @param integer $storeId
+     * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
+     */
+    private function getProductOptionsCollection($product, $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID)
+    {
+        $productSku = $product->getSku();
+        if (!isset($this->optionsCollection[$productSku][$storeId])) {
+            $product->unsetData($this->optionCollectionCacheKey);
+            $product->setStoreId($storeId);
+            $this->optionsCollection[$productSku][$storeId] = $product->getTypeInstance()
+                ->getOptionsCollection($product)
+                ->setOrder('position', Collection::SORT_ORDER_ASC);
+        }
+        return $this->optionsCollection[$productSku][$storeId];
+    }
+
+    /**
+     * Retrieve store code by it's ID.
+     * Collect store id in $storeIdToCode[] private variable if it was not initialized earlier.
+     *
+     * @param $storeId
+     * @return mixed
+     */
+    private function getStoreCodeById($storeId)
+    {
+        if (!isset($this->storeIdToCode[$storeId])) {
+            $this->storeIdToCode[$storeId] = $this->getScopeResolver()->getScope($storeId)->getCode();
+        }
+        return $this->storeIdToCode[$storeId];
+    }
+
+    /**
+     * Initialize ScopeResolver if it was not and return it.
+     *
+     * @return ScopeResolverInterface
+     * @throws \RuntimeException
+     */
+    private function getScopeResolver()
+    {
+        if (!$this->scopeResolver) {
+            $this->scopeResolver = ObjectManager::getInstance()->get(ScopeResolverInterface::class);
+        }
+        return $this->scopeResolver;
     }
 }
