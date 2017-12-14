@@ -7,6 +7,7 @@ namespace Magento\Customer\Model\Checkout;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Customer\Model\Url;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -51,8 +52,8 @@ class ConfigProvider implements ConfigProviderInterface
         $this->urlBuilder = $urlBuilder;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
-        $this->customerUrl = $customerUrl ?? \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Customer\Model\Url::class);
+        $this->customerUrl = $customerUrl ?? ObjectManager::getInstance()
+                ->get(Url::class);
     }
 
     /**
