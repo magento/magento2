@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\SearchAdapter\Query;
+namespace Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query;
 
 use Magento\Framework\Search\RequestInterface;
 use Magento\Elasticsearch\Model\Config;

@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Model\Adapter\DataMapper;
+namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Elasticsearch\Model\Adapter\Container\Attribute as AttributeContainer;

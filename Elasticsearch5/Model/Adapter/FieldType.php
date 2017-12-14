@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Model\Adapter;
+namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
