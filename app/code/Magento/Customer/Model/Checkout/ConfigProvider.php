@@ -22,6 +22,12 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * @var UrlInterface
+     * @deprecated
+     */
+    protected $urlBuilder;
+
+    /**
+     * @var Url
      */
     protected $customerUrl;
 
@@ -31,18 +37,21 @@ class ConfigProvider implements ConfigProviderInterface
     protected $scopeConfig;
 
     /**
-     * @param Url $customerUrl
+     * @param UrlInterface $urlBuilder
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
+     * @param Url $customerUrl
      */
     public function __construct(
-        Url $customerUrl,
+        UrlInterface $urlBuilder,
         StoreManagerInterface $storeManager,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        Url $customerUrl = null
     ) {
-        $this->customerUrl = $customerUrl;
+        $this->urlBuilder=$urlBuilder;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
+        $this->customerUrl = $customerUrl ?? \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Customer\Model\Url::class);
     }
 
     /**

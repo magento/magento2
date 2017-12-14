@@ -29,7 +29,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerUrl;
+    protected $urlBuilder;
 
     /**
      * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -41,6 +41,11 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $store;
 
+    /**
+     * @var Url|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $customerUrl;
+
     protected function setUp()
     {
         $this->storeManager = $this->getMockForAbstractClass(
@@ -50,7 +55,12 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
             false
         );
 
-        $this->customerUrl = $this->createMock(\Magento\Customer\Model\Url::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(
+            \Magento\Framework\UrlInterface::class,
+            [],
+            '',
+            false
+        );
 
         $this->scopeConfig = $this->getMockForAbstractClass(
             \Magento\Framework\App\Config\ScopeConfigInterface::class,
@@ -68,10 +78,13 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
             ['getBaseUrl']
         );
 
+        $this->customerUrl = $this->createMock(\Magento\Customer\Model\Url::class);
+
         $this->provider = new ConfigProvider(
-            $this->customerUrl,
+            $this->urlBuilder,
             $this->storeManager,
-            $this->scopeConfig
+            $this->scopeConfig,
+            $this->customerUrl
         );
     }
 
