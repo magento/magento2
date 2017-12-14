@@ -27,6 +27,7 @@ class CreateTest extends WebapiAbstract
     public function testCreate()
     {
         $expectedData = [
+            SourceInterface::CODE => 'source-code-1',
             SourceInterface::NAME => 'source-name-1',
             SourceInterface::CONTACT_NAME => 'source-contact-name',
             SourceInterface::EMAIL => 'source-email',

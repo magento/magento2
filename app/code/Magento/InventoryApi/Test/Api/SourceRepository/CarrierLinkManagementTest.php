@@ -30,6 +30,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
     {
         $sourceId = 10;
         $expectedData = [
+            SourceInterface::CODE => 'source-code-1',
             SourceInterface::NAME => 'source-name-1',
             SourceInterface::POSTCODE => 'source-postcode',
             SourceInterface::COUNTRY_ID => 'US',
