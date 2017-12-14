@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Shipping\Model\Shipping;
 
 use Magento\Framework\DataObject;
@@ -140,7 +138,8 @@ class Labels extends \Magento\Shipping\Model\Shipping
         ) {
             throw new LocalizedException(
                 __(
-                    'We don\'t have enough information to create shipping labels. Please make sure your store information and settings are complete.'
+                    'We don\'t have enough information to create shipping labels.'
+                    . ' Please make sure your store information and settings are complete.'
                 )
             );
         }

@@ -358,8 +358,8 @@ QUERY;
         $visibleProduct4 = $productRepository->get('simple_41');
         $visibleProduct5 = $productRepository->get('simple_32');
         $visibleProduct6 = $productRepository->get('simple_31');
-        $filteredProducts = [$visibleProduct1, $visibleProduct2,
-                             $visibleProduct3, $visibleProduct4, $visibleProduct5, $visibleProduct6];
+        $filteredProducts = [$visibleProduct3, $visibleProduct4,
+                             $visibleProduct5, $visibleProduct6, $visibleProduct2, $visibleProduct1];
 
         $response = $this->graphQlQuery($query);
         $this->assertEquals(6, $response['products']['total_count']);

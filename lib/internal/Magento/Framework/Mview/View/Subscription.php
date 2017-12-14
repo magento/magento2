@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\App\ResourceConnection;
@@ -229,7 +227,6 @@ class Subscription implements SubscriptionInterface
                 break;
             default:
                 return '';
-
         }
         return sprintf(
             $trigger,

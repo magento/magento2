@@ -24,4 +24,9 @@
         <data key="section">appearance</data>
         <data key="fieldName">min_height</data>
     </entity>
+    <entity name="AssertThis" type="samplePerson">
+        <data key="firstname">Well</data>
+        <data key="lastname">Done</data>
+        <data key="email" unique="prefix">.email@gmail.com</data>
+    </entity>
 </config>

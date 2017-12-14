@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test class for \Magento\Paypal\Model\Ipn
  */
@@ -75,7 +73,10 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $configMock->expects($this->any())->method('getPayPalIpnUrl')
             ->will($this->returnValue('https://ipnpb_paypal_url'));
 
-        $this->curlFactory = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\CurlFactory::class, ['create', 'setConfig', 'write', 'read']);
+        $this->curlFactory = $this->createPartialMock(
+            \Magento\Framework\HTTP\Adapter\CurlFactory::class,
+            ['create', 'setConfig', 'write', 'read']
+        );
         $this->curlFactory->expects($this->any())->method('create')->will($this->returnSelf());
         $this->curlFactory->expects($this->any())->method('setConfig')->will($this->returnSelf());
         $this->curlFactory->expects($this->any())->method('write')->will($this->returnSelf());
@@ -83,7 +84,10 @@ class IpnTest extends \PHPUnit\Framework\TestCase
             '
                 VERIFIED'
         ));
-        $this->_paypalInfo = $this->createPartialMock(\Magento\Paypal\Model\Info::class, ['importToPayment', 'getMethod', 'getAdditionalInformation']);
+        $this->_paypalInfo = $this->createPartialMock(
+            \Magento\Paypal\Model\Info::class,
+            ['importToPayment', 'getMethod', 'getAdditionalInformation']
+        );
         $this->_paypalInfo->expects($this->any())->method('getMethod')->will($this->returnValue('some_method'));
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_ipn = $objectHelper->getObject(
@@ -133,7 +137,10 @@ class IpnTest extends \PHPUnit\Framework\TestCase
 
     public function testPaymentReviewRegisterPaymentFraud()
     {
-        $paymentMock = $this->createPartialMock(\Magento\Sales\Model\Order\Payment::class, ['getAdditionalInformation', '__wakeup', 'registerCaptureNotification']);
+        $paymentMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Payment::class,
+            ['getAdditionalInformation', '__wakeup', 'registerCaptureNotification']
+        );
         $paymentMock->expects($this->any())
             ->method('getAdditionalInformation')
             ->will($this->returnValue([]));
