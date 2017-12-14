@@ -63,7 +63,7 @@ class AbstractPdfTest extends \PHPUnit\Framework\TestCase
 
         /** Generate multiline block, that cover more than one page */
         $lines = [];
-        for($lineNumber = 1; $lineNumber <= 100; $lineNumber++) {
+        for ($lineNumber = 1; $lineNumber <= 100; $lineNumber++) {
             $lines[] = [[
                 'feed' => 0,
                 'font_size' => 10,
