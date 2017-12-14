@@ -8,7 +8,6 @@ namespace Magento\Customer\Model;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\AddressMetadataManagementInterface;
 use Magento\Customer\Model\Metadata\AttributeResolver;
-use Magento\Framework\App\Helper\Context;
 
 /**
  * Customer attribute checker.
