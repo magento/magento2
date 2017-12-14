@@ -8,9 +8,7 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Mview\View\CollectionInterface;
-use Magento\Setup\Fixtures\ConfigsApplyFixture;
 use Magento\Setup\Fixtures\FixtureModel;
-use Magento\Setup\Fixtures\IndexersStatesApplyFixture;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -86,7 +84,8 @@ class GenerateFixturesCommand extends Command
             }
 
             /** @var \Magento\Setup\Fixtures\ConfigsApplyFixture $configFixture */
-            $configFixture = $fixtureModel->getFixtureByName(ConfigsApplyFixture::class);
+            $configFixture = $fixtureModel
+                ->getFixtureByName(\Magento\Setup\Fixtures\ConfigsApplyFixture::class);
             $configFixture && $this->executeFixture($configFixture, $output);
 
             /** @var $config \Magento\Indexer\Model\Config */
@@ -108,7 +107,8 @@ class GenerateFixturesCommand extends Command
             $this->clearChangelog();
 
             /** @var \Magento\Setup\Fixtures\IndexersStatesApplyFixture $indexerFixture */
-            $indexerFixture = $fixtureModel->getFixtureByName(IndexersStatesApplyFixture::class);
+            $indexerFixture = $fixtureModel
+                ->getFixtureByName(\Magento\Setup\Fixtures\IndexersStatesApplyFixture::class);
             $indexerFixture && $this->executeFixture($indexerFixture, $output);
 
             if (!$input->getOption(self::SKIP_REINDEX_OPTION)) {

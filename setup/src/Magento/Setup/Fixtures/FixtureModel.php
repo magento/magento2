@@ -171,7 +171,6 @@ class FixtureModel
         return $this->fixturesByNames[$name];
     }
 
-
     /**
      * Get object manager
      *
