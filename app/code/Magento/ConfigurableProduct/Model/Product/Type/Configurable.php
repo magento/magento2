@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -682,7 +683,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ->setProductId($product->getData($metadata->getLinkField()))
                 ->save();
         }
-        /** @var $configurableAttributesCollection \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection  */
+        /** @var $configurableAttributesCollection \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection */
         $configurableAttributesCollection = $this->_attributeCollectionFactory->create();
         $configurableAttributesCollection->setProductFilter($product);
         $configurableAttributesCollection->addFieldToFilter(
@@ -1296,7 +1297,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 if ($salableOnly) {
                     $collection = $this->salableProcessor->process($collection);
                 }
-                $usedProducts = $collection->getItems();
+                $usedProducts = array_values($collection->getItems());
                 $this->saveUsedProductsCacheData($product, $usedProducts, $cacheKey);
             }
             $product->setData($dataFieldName, $usedProducts);
@@ -1397,7 +1398,16 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             ->addFilterByRequiredOptions()
             ->setStoreId($product->getStoreId());
 
-        $requiredAttributes = ['name', 'price', 'weight', 'image', 'thumbnail', 'status', 'media_gallery'];
+        $requiredAttributes = [
+            'name',
+            'price',
+            'weight',
+            'image',
+            'thumbnail',
+            'status',
+            'visibility',
+            'media_gallery'
+        ];
         foreach ($requiredAttributes as $attributeCode) {
             $collection->addAttributeToSelect($attributeCode);
         }
