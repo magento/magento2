@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/config/schema.xsd">
+    <table name="test_table" resource="sales">
+        <!--Columns-->
+        <column xsi:type="smallinteger" name="smallint" default="0" padding="3" />
+        <constraint xsi:type="unique">
+
+        </constraint>
+    </table>
+</schema>

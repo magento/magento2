@@ -11,6 +11,11 @@ namespace Magento\TestFramework\Deploy;
 class TestModuleManager
 {
     /**
+     * Name of file of DB XML declaration
+     */
+    const DECLARATIVE_FILE_NAME = "schema.xml";
+
+    /**
      * Add test module files to Magento code base
      *
      * @param string $moduleName
@@ -19,6 +24,7 @@ class TestModuleManager
      */
     public function addModuleFiles($moduleName)
     {
+        $moduleName = str_replace("Magento_", "", $moduleName);
         $pathToCommittedTestModules = TESTS_MODULES_PATH . '/Magento/' . $moduleName;
         $pathToInstalledMagentoInstanceModules = MAGENTO_MODULES_PATH . $moduleName;
         $iterator = new \RecursiveIteratorIterator(
@@ -55,14 +61,37 @@ class TestModuleManager
     }
 
     /**
+     * @param string $moduleName Like Magento_TestSetupModule
+     * @param string $revisionName Folder name, like reviisions/revision_1/schema.xml
+     * @param string $fileName For example schema.xml
+     * @param string $fileDir For example etc or Setup
+     */
+    public function updateRevision($moduleName, $revisionName, $fileName, $fileDir)
+    {
+        $modulePath = str_replace("Magento_", "", $moduleName);
+        $folder = MAGENTO_MODULES_PATH . $modulePath;
+        $oldFile = $folder . DIRECTORY_SEPARATOR . $fileDir . "/" . $fileName;
+        $revisionFile = MAGENTO_MODULES_PATH . $modulePath . "/revisions/" .
+            $revisionName . DIRECTORY_SEPARATOR . $fileName;
+
+        if (file_exists($oldFile) && file_exists($revisionFile)) {
+            unlink($oldFile);
+            rename($revisionFile, $oldFile);
+        } else {
+            throw new \InvalidArgumentException("Old File or revision files paths are invalid");
+        }
+    }
+
+    /**
      * Remove test module files to Magento code base
      *
      * @param string $moduleName
      * @return void
      */
-    public function removeModuleFiles($moduleName)//add logic to remove every time and add ability to disable
+    public function removeModuleFiles($moduleName)
     {
-        $folder = MAGENTO_MODULES_PATH . $moduleName;
+        $modulePath = str_replace("Magento_", "", $moduleName);
+        $folder = MAGENTO_MODULES_PATH . $modulePath;
 
         //remove test modules from magento codebase
         if (is_dir($folder)) {

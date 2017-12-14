@@ -41,40 +41,40 @@ class InstallTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->shellCommand = $objectManager->create(\Magento\TestFramework\Deploy\CliCommand::class);
-        $this->testModuleManager = $objectManager->create(\Magento\TestFramework\Deploy\TestModuleManager::class);
+        $this->shellCommand = $objectManager->get(\Magento\TestFramework\Deploy\CliCommand::class);
+        $this->testModuleManager = $objectManager->get(\Magento\TestFramework\Deploy\TestModuleManager::class);
         /** @var \Magento\Framework\Setup\ModuleDataSetupInterface $installer */
-        $installer = $objectManager->create(
-            \Magento\Framework\Setup\ModuleDataSetupInterface::class
-        );
-        $this->connection = $installer->getConnection();
     }
 
     public static function tearDownAfterClass()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $shellCommand = $objectManager->create(\Magento\TestFramework\Deploy\CliCommand::class);
+        $shellCommand = $objectManager->get(\Magento\TestFramework\Deploy\CliCommand::class);
 
         $shellCommand->disableModule(self::$moduleName);
-        $testEnv = $objectManager->create(\Magento\TestFramework\Deploy\TestModuleManager::class);
+        $testEnv = $objectManager->get(\Magento\TestFramework\Deploy\TestModuleManager::class);
         $testEnv->removeModuleFiles(self::$moduleName);
     }
 
+    /**
+     * @moduleName Magento_TestSetupModule1
+     */
     public function testInstallSchema()
     {
         $moduleName = self::$moduleName;
+        $this->shellCommand->install([$moduleName]);
         //check that table not exists
         foreach ($this->getTableNameMapping() as $name) {
-            $this->assertFalse($this->connection->isTableExists($name), "Table {$name} already exists");
+            self::assertFalse($this->connection->isTableExists($name), "Table {$name} already exists");
         }
-        $this->assertContains(
+        self::assertContains(
             'The following modules have been enabled:',
             $this->shellCommand->introduceModule($moduleName)
         );
-        $this->assertContains("Module 'Magento_$moduleName':", $this->shellCommand->upgrade());
+        self::assertContains("Module 'Magento_$moduleName':", $this->shellCommand->install([$moduleName]));
         //check that table exists and have corresponded columns
         foreach ($this->getTableNameMapping() as $name) {
-            $this->assertTrue($this->connection->isTableExists($name), "Table {$name} doesn't not exists");
+            self::assertTrue($this->connection->isTableExists($name), "Table {$name} doesn't not exists");
         }
     }
 

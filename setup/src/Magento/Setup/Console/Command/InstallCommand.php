@@ -7,6 +7,7 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Symfony\Component\Console\Input\ArrayInput;
+use Magento\Setup\Model\Declaration\Schema\Request;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Setup\Model\InstallerFactory;
@@ -34,6 +35,18 @@ class InstallCommand extends AbstractSetupCommand
      * Parameter indicating command whether to install Sample Data
      */
     const INPUT_KEY_USE_SAMPLE_DATA = 'use-sample-data';
+
+    /**
+     * List of comma-separated module names. That must be enabled during installation
+     * Available magic param all.
+     */
+    const INPUT_KEY_ENABLE_MODULES = 'enable_modules';
+
+    /**
+     * List of comma-separated module names. That must be avoided during installation.
+     * Avaiable magic param all.
+     */
+    const INPUT_KEY_DISABLE_MODULES = 'disable_modules';
 
     /**
      * Regex for sales_order_increment_prefix validation.
@@ -109,6 +122,26 @@ class InstallCommand extends AbstractSetupCommand
                 null,
                 InputOption::VALUE_NONE,
                 'Use sample data'
+            ),
+            new InputOption(
+                Request::DUMP_ENABLE_OPTIONS,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Should removed columns be dumped or recovered columns data reverted'
+            ),
+            new InputOption(
+                self::INPUT_KEY_ENABLE_MODULES,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'List of comma-separated module names. That must be included during installation. 
+                Avaiable magic param all.'
+            ),
+            new InputOption(
+                self::INPUT_KEY_DISABLE_MODULES,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'List of comma-separated module names. That must be avoided during installation. 
+                Avaiable magic param all.'
             )
         ]);
         $this->setName('setup:install')

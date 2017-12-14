@@ -136,6 +136,16 @@ class Application
     protected $dumpDb = true;
 
     /**
+     * @var bool
+     */
+    protected $canLoadArea = true;
+
+    /**
+     * @var bool
+     */
+    protected $canInstallSequence = true;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Shell $shell
@@ -287,6 +297,43 @@ class Application
     }
 
     /**
+     * Create logger instance and rewrite already exist one in ObjectManager
+     *
+     * @return \Psr\Log\LoggerInterface
+     */
+    private function initLogger()
+    {
+        $objectManager = Helper\Bootstrap::getObjectManager();
+        /** @var \Psr\Log\LoggerInterface $logger */
+        $logger = $objectManager->create(
+            \Magento\TestFramework\ErrorLog\Logger::class,
+            [
+                'name' => 'integration-tests',
+                'handlers' => [
+                    'system' => $objectManager->create(
+                        \Magento\Framework\Logger\Handler\System::class,
+                        [
+                            'exceptionHandler' => $objectManager->create(
+                                \Magento\Framework\Logger\Handler\Exception::class,
+                                ['filePath' => $this->installDir]
+                            ),
+                            'filePath' => $this->installDir
+                        ]
+                    ),
+                    'debug'  => $objectManager->create(
+                        \Magento\Framework\Logger\Handler\Debug::class,
+                        ['filePath' => $this->installDir]
+                    ),
+                ]
+            ]
+        );
+
+        $objectManager->removeSharedInstance(\Magento\Framework\Logger\Monolog::class);
+        $objectManager->addSharedInstance($logger, \Magento\Framework\Logger\Monolog::class);
+        return $logger;
+    }
+
+    /**
      * Initialize application
      *
      * @param array $overriddenParams
@@ -313,34 +360,11 @@ class Application
         $filesystem = $objectManager->get(\Magento\TestFramework\App\Filesystem::class);
         $objectManager->removeSharedInstance(\Magento\Framework\Filesystem::class);
         $objectManager->addSharedInstance($filesystem, \Magento\Framework\Filesystem::class);
-        /** @var \Psr\Log\LoggerInterface $logger */
-        $logger = $objectManager->create(
-            \Magento\TestFramework\ErrorLog\Logger::class,
-            [
-                'name' => 'integration-tests',
-                'handlers' => [
-                    'system' => $objectManager->create(
-                        \Magento\Framework\Logger\Handler\System::class,
-                        [
-                            'exceptionHandler' => $objectManager->create(
-                                \Magento\Framework\Logger\Handler\Exception::class,
-                                ['filePath' => $this->installDir]
-                            ),
-                            'filePath' => $this->installDir
-                        ]
-                    ),
-                    'debug'  => $objectManager->create(
-                        \Magento\Framework\Logger\Handler\Debug::class,
-                        ['filePath' => $this->installDir]
-                    ),
-                ]
-            ]
-        );
-        $objectManager->removeSharedInstance(\Magento\Framework\Logger\Monolog::class);
-        $objectManager->addSharedInstance($logger, \Magento\Framework\Logger\Monolog::class);
+        Helper\Bootstrap::setObjectManager($objectManager);
+        $this->initLogger();
         $sequenceBuilder = $objectManager->get(\Magento\TestFramework\Db\Sequence\Builder::class);
         $objectManager->addSharedInstance($sequenceBuilder, \Magento\SalesSequence\Model\Builder::class);
-        Helper\Bootstrap::setObjectManager($objectManager);
+
         $objectManagerConfiguration = [
             'preferences' => [
                 \Magento\Framework\App\State::class => \Magento\TestFramework\App\State::class,
@@ -378,16 +402,24 @@ class Application
                 ]
             ]
         );
-        $this->loadArea(\Magento\TestFramework\Application::DEFAULT_APP_AREA);
+
+        if ($this->canLoadArea) {
+            $this->loadArea(\Magento\TestFramework\Application::DEFAULT_APP_AREA);
+        }
+
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
             $objectManager->get(\Magento\Framework\ObjectManager\DynamicConfigInterface::class)->getConfiguration()
         );
         \Magento\Framework\Phrase::setRenderer(
             $objectManager->get(\Magento\Framework\Phrase\Renderer\Placeholder::class)
         );
-        /** @var \Magento\TestFramework\Db\Sequence $sequence */
-        $sequence = $objectManager->get(\Magento\TestFramework\Db\Sequence::class);
-        $sequence->generateSequences();
+
+        if ($this->canInstallSequence) {
+            /** @var \Magento\TestFramework\Db\Sequence $sequence */
+            $sequence = $objectManager->get(\Magento\TestFramework\Db\Sequence::class);
+            $sequence->generateSequences();
+        }
+
         $objectManager->create(\Magento\TestFramework\Config::class, ['configPath' => $this->globalConfigFile])
             ->rewriteAdditionalConfig();
     }

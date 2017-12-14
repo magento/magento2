@@ -250,9 +250,11 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
                 [
                     [ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT, null, true],
                     [ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY, null, true],
+                    ['modules/Magento_User', null, '1']
                 ]
             );
         $allModules = ['Foo_One' => [], 'Bar_Two' => []];
+
         $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
         $setup = $this->createMock(\Magento\Setup\Module\Setup::class);
         $table = $this->createMock(\Magento\Framework\DB\Ddl\Table::class);

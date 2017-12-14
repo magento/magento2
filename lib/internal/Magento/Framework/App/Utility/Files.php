@@ -475,6 +475,14 @@ class Files
                     []
                 )
             );
+            $files = array_merge(
+                $files,
+                $this->getFilesSubset(
+                    $this->componentRegistrar->getPaths(ComponentRegistrar::SETUP),
+                    $fileNamePattern,
+                    []
+                )
+            );
             $files = array_filter(
                 $files,
                 function ($file) use ($excludedFileNames) {

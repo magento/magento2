@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/config/schema.xsd">
+    <table name="reference_table" resource="sales">
+        <column xsi:type="tinyinteger" name="tinyint_ref" renameTo="tinyintref_2" default="0" padding="7" nullable="true" unsigned="false" />
+        <constraint xsi:type="primary" name="tinyint_primary">
+            <column name="tinyint_ref" />
+        </constraint>
+    </table>
+    <table name="test_table" resource="sales">
+        <!--Columns-->
+        <column xsi:type="smallinteger" name="smallint" default="0" padding="3" />
+        <column xsi:type="tinyinteger" name="tinyint" default="0" padding="7" nullable="true" unsigned="false" />
+        <column xsi:type="biginteger" name="bigint" default="0" padding="13" nullable="true" unsigned="false" />
+        <column xsi:type="float" name="float" default="0" scale="12" />
+        <column xsi:type="double" name="double" default="11111111.111111" scale="245"/>
+        <column xsi:type="decimal" name="decimal" default="0" scale="15" precission="4"/>
+        <column xsi:type="date" name="date" />
+        <column xsi:type="timestamp" name="timestamp" default="CURRENT_TIMESTAMP" on_update="true" />
+        <column xsi:type="datetime" name="datetime" default="0" />
+        <column xsi:type="longtext" name="longtext" length="111111111111" />
+        <column xsi:type="mediumtext" name="mediumtext" length="11222222" />
+        <column xsi:type="varchar" name="varchar" length="254" nullable="true" />
+        <column xsi:type="mediumblob" name="mediumblob" length="1122222" />
+        <column xsi:type="blob" name="blob" length="1122" />
+        <column xsi:type="boolean" name="boolean" />
+        <column xsi:type="varbinary" name="varbinary_rename" default="10101" disabled="true" renameTo="varbinary_renamed"  />
+        <!--Constraints-->
+        <constraint xsi:type="unique" name="some_unique_key">
+            <column name="smallint" />
+            <column name="bigint" />
+        </constraint>
+        <constraint xsi:type="foreign" name="some_foreign_key" column="tinyint" table="test_table" referenceTable="reference_table" referenceColumn="tinyint_ref" onDelete="NO ACTION" />
+        <!--Indexes-->
+        <index name="speedup_index" type="btree">
+            <column name="tinyint" />
+            <column name="bigint" />
+        </index>
+    </table>
+</schema>

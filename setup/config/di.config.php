@@ -56,6 +56,15 @@ return [
                 \Magento\Framework\Component\ComponentRegistrarInterface::class =>
                     \Magento\Framework\Component\ComponentRegistrar::class,
             ],
+            \Magento\Setup\Model\Declaration\Schema\Db\Parser::class => [
+                'parameters' => [
+                    'connectionScopes' => [
+                        'default',
+                        'checkout',
+                        'sales'
+                    ]
+                ]
+            ],
         ],
     ],
 ];
