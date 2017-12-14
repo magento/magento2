@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Tax\Test\Unit\Model\Sales\Total\Quote;
 
 use \Magento\Tax\Model\Sales\Total\Quote\Shipping;
@@ -64,11 +62,18 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     {
         $this->taxConfigMock = $this->createMock(\Magento\Tax\Model\Config::class);
         $this->taxCalculationMock = $this->createMock(\Magento\Tax\Api\TaxCalculationInterface::class);
-        $this->quoteDetailsDataObjectFactory = $this->createPartialMock(\Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory::class, ['create']);
-        $this->itemDetailsDataObjectFactory = $this->createPartialMock(\Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory::class, [
-                'create',
-            ]);
-        $this->taxClassKeyDataObjectFactory = $this->createPartialMock(\Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory::class, ['create']);
+        $this->quoteDetailsDataObjectFactory = $this->createPartialMock(
+            \Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory::class,
+            ['create']
+        );
+        $this->itemDetailsDataObjectFactory = $this->createPartialMock(
+            \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory::class,
+            ['create']
+        );
+        $this->taxClassKeyDataObjectFactory = $this->createPartialMock(
+            \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory::class,
+            ['create']
+        );
         $this->addressFactoryMock = $this->createMock(\Magento\Customer\Api\Data\AddressInterfaceFactory::class);
         $this->regionFactoryMock = $this->createMock(\Magento\Customer\Api\Data\RegionInterfaceFactory::class);
         $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);

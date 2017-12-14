@@ -8,7 +8,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// @codingStandardsIgnoreStart
 
 return [
     ['ADMIN_STORE_ID', 'Magento\Framework\AppInterface'],

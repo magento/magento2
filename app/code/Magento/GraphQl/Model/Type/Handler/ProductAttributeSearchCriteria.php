@@ -6,11 +6,10 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use GraphQL\Type\Definition\InputObjectType;
-use GraphQL\Type\Definition\Type;
 use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
+use Magento\Framework\GraphQl\Type\TypeFactory;
 
 /**
  * Define ProductAttributeSearchCriteria's GraphQL type
@@ -28,13 +27,23 @@ class ProductAttributeSearchCriteria implements HandlerInterface
     private $management;
 
     /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
      * @param TypeGenerator $typeGenerator
      * @param AttributeManagementInterface $management
+     * @param TypeFactory $typeFactory
      */
-    public function __construct(TypeGenerator $typeGenerator, AttributeManagementInterface $management)
-    {
+    public function __construct(
+        TypeGenerator $typeGenerator,
+        AttributeManagementInterface $management,
+        TypeFactory $typeFactory
+    ) {
         $this->typeGenerator = $typeGenerator;
         $this->management = $management;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
@@ -43,7 +52,7 @@ class ProductAttributeSearchCriteria implements HandlerInterface
     public function getType()
     {
         $reflector = new \ReflectionClass($this);
-        return new InputObjectType(
+        return $this->typeFactory->createInputObject(
             [
                 'name' => $reflector->getShortName(),
                 'fields' => $this->getFields()
@@ -54,7 +63,7 @@ class ProductAttributeSearchCriteria implements HandlerInterface
     /**
      * Retrieve fields
      *
-     * @return Type[]
+     * @return \Closure|array
      */
     private function getFields()
     {

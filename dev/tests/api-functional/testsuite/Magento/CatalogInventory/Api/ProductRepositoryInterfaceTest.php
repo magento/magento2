@@ -193,7 +193,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         if ($qty != null) {
             $productData[self::KEY_CUSTOM_ATTRIBUTES] = [
                 [self::KEY_ATTRIBUTE_CODE => 'description', 'value' => 'My Product Description'],
-                [self::KEY_ATTRIBUTE_CODE => self::CODE_QUANTITY_AND_STOCK_STATUS, 'value' => [true, $qty]],
+                [
+                    self::KEY_ATTRIBUTE_CODE => self::CODE_QUANTITY_AND_STOCK_STATUS,
+                    'value' => ['is_in_stock' => true, 'qty' => $qty]
+                ],
             ];
         }
 
@@ -271,6 +274,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     protected function saveProduct($product)
     {
+        if (isset($product['custom_attributes'])) {
+            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
+                    && !is_array($product['custom_attributes'][$i]['value'])
+                ) {
+                    $product['custom_attributes'][$i]['value'] = [""];
+                }
+            }
+        }
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
@@ -295,6 +307,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     protected function updateProduct($product)
     {
+        if (isset($product['custom_attributes'])) {
+            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
+                    && !is_array($product['custom_attributes'][$i]['value'])
+                ) {
+                    $product['custom_attributes'][$i]['value'] = [""];
+                }
+            }
+        }
         $sku = $product[ProductInterface::SKU];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
             $product[ProductInterface::SKU] = null;
