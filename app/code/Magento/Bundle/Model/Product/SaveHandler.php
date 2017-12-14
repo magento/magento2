@@ -8,6 +8,7 @@ namespace Magento\Bundle\Model\Product;
 use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\Bundle\Model\Product\Type;
 
 /**
  * Class SaveHandler
@@ -40,25 +41,49 @@ class SaveHandler implements ExtensionInterface
      * @param object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
      */
     public function execute($entity, $arguments = [])
     {
-        $bundleProductOptions = $entity->getExtensionAttributes()->getBundleProductOptions();
-        if ($entity->getTypeId() !== 'bundle' || empty($bundleProductOptions)) {
+        if ($entity->getTypeId() !== Type::TYPE_CODE) {
             return $entity;
         }
 
+        $existingBundleProductOptions = $this->optionRepository->getList($entity->getSku());
+        $bundleProductOptions = $entity->getExtensionAttributes()->getBundleProductOptions();
+
+        if (empty($existingBundleProductOptions) && empty($bundleProductOptions)) {
+            return $entity;
+        }
+
+        $existingOptionsIds = [];
+        $optionIds = [];
+        foreach ($existingBundleProductOptions as $option) {
+            $existingOptionsIds[] = $option->getOptionId();
+        }
+        foreach ($bundleProductOptions as $option) {
+            if ($option->getOptionId()) {
+                $optionIds[] = $option->getOptionId();
+            }
+        }
+
         if (!$entity->getCopyFromView()) {
-            /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
-            foreach ($this->optionRepository->getList($entity->getSku()) as $option) {
+            foreach (array_diff($existingOptionsIds, $optionIds) as $optionId) {
+                $option = $this->optionRepository->get($entity->getSku(), $optionId);
                 $this->removeOptionLinks($entity->getSku(), $option);
                 $this->optionRepository->delete($option);
+            }
+            foreach (array_intersect($optionIds, $existingOptionsIds) as $optionId) {
+                $option = $this->optionRepository->get($entity->getSku(), $optionId);
+                $this->removeOptionLinks($entity->getSku(), $option);
             }
 
             $options = $bundleProductOptions ?: [];
             foreach ($options as $option) {
-                $option->setOptionId(null);
                 $this->optionRepository->save($entity, $option);
             }
         } else {
