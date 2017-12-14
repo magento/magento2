@@ -23,7 +23,7 @@
             <createData entity="Simple_US_Customer" stepKey="createData2"/>
             <amOnUrl url="https://www.yahoo.com" stepKey="amOnPage"/>
             <waitForElementVisible stepKey="wait1" selector="#uh-logo" time="10"/>
-            <grabTextFrom returnVariable="text" selector="#uh-logo" stepKey="grabTextFrom1"/>
+            <grabTextFrom selector="#uh-logo" stepKey="grabTextFrom1"/>
 
             <!-- asserts without variable replacement -->
             <comment stepKey="c1" userInput="asserts without variable replacement"/>

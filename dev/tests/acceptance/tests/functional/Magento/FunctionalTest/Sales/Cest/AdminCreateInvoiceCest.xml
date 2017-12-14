@@ -53,7 +53,7 @@
             <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
             <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
             <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-            <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" returnVariable="orderNumber" stepKey="grabOrderNumber"/>
+            <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
             <!-- end todo -->
 
             <amOnPage url="{{AdminLoginPage.url}}" stepKey="goToAdmin"/>
@@ -64,7 +64,7 @@
 
             <amOnPage url="{{OrdersPage.url}}" stepKey="onOrdersPage"/>
             <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask3"/>
-            <fillField selector="{{OrdersGridSection.search}}" variable="orderNumber" stepKey="searchOrderNum"/>
+            <fillField selector="{{OrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
             <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
             <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
 
@@ -74,14 +74,14 @@
             <see selector="{{OrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
             <click selector="{{OrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
             <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask5" />
-            <see selector="{{OrderDetailsInvoicesSection.content}}" variable="orderNumber" stepKey="seeInvoice1"/>
+            <see selector="{{OrderDetailsInvoicesSection.content}}" userInput="{$grabOrderNumber}" stepKey="seeInvoice1"/>
             <see selector="{{OrderDetailsInvoicesSection.content}}" userInput="John Doe" stepKey="seeInvoice2"/>
             <click selector="{{OrderDetailsOrderViewSection.information}}" stepKey="clickInformation"/>
             <see selector="{{OrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus"/>
             <amOnPage url="{{InvoicesPage.url}}" stepKey="goToInvoices"/>
             <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask6" />
             <click selector="{{InvoicesGridSection.filter}}" stepKey="clickFilters"/>
-            <fillField selector="{{InvoicesFiltersSection.orderNum}}" variable="orderNumber" stepKey="searchOrderNum2"/>
+            <fillField selector="{{InvoicesFiltersSection.orderNum}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum2"/>
             <click selector="{{InvoicesGridSection.firstRow}}" stepKey="clickInvoice2"/>
             <see selector="{{InvoiceDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus2"/>
         </test>
