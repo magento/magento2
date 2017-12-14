@@ -30,14 +30,14 @@ class Plugin
     protected $config;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface $messageManager
+     * @var \Magento\Framework\App\Response\RedirectInterface
      */
     protected $redirector;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface $messageManager
+     * @var \Magento\Framework\Message\ManagerInterface
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
      * @param CustomerSession $customerSession
