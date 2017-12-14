@@ -52,7 +52,7 @@ class ConfigProvider implements ConfigProviderInterface
         $this->urlBuilder = $urlBuilder;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
-        $this->customerUrl = $customerUrl ?? ObjectManager::getInstance()
+        $this->customerUrl = $customerUrl?: ObjectManager::getInstance()
                 ->get(Url::class);
     }
 
