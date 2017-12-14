@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Shipping data helper
  */
@@ -56,7 +54,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve tracking url with params
      *
      * @param  string $key
-     * @param  \Magento\Sales\Model\Order|\Magento\Sales\Model\Order\Shipment|\Magento\Sales\Model\Order\Shipment\Track $model
+     * @param  \Magento\Sales\Model\Order
+     * |\Magento\Sales\Model\Order\Shipment|\Magento\Sales\Model\Order\Shipment\Track $model
      * @param  string $method Optional - method of a model to get id
      * @return string
      */

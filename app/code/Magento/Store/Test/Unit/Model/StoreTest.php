@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Store\Test\Unit\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
@@ -83,7 +81,10 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     public function testLoad($key, $field)
     {
         /** @var \Magento\Store\Model\ResourceModel\Store $resource */
-        $resource = $this->createPartialMock(\Magento\Store\Model\ResourceModel\Store::class, ['load', 'getIdFieldName', '__wakeup']);
+        $resource = $this->createPartialMock(
+            \Magento\Store\Model\ResourceModel\Store::class,
+            ['load', 'getIdFieldName', '__wakeup']
+        );
         $resource->expects($this->atLeastOnce())->method('load')
             ->with($this->isInstanceOf(\Magento\Store\Model\Store::class), $this->equalTo($key), $this->equalTo($field))
             ->will($this->returnSelf());
@@ -126,9 +127,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
-            'websiteRepository' => $websiteRepository,
-        ]);
+            \Magento\Store\Model\Store::class,
+            ['websiteRepository' => $websiteRepository,]
+        );
         $model->setWebsiteId($websiteId);
 
         $this->assertEquals($website, $model->getWebsite());
@@ -144,9 +145,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
-            'websiteRepository' => $websiteRepository,
-        ]);
+            \Magento\Store\Model\Store::class,
+            ['websiteRepository' => $websiteRepository,]
+        );
         $model->setWebsiteId(null);
 
         $this->assertFalse($model->getWebsite());
@@ -167,9 +168,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
-            'groupRepository' => $groupRepository,
-        ]);
+            \Magento\Store\Model\Store::class,
+            ['groupRepository' => $groupRepository,]
+        );
         $model->setGroupId($groupId);
 
         $this->assertEquals($group, $model->getGroup());
@@ -185,9 +186,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
-            'groupRepository' => $groupRepository,
-        ]);
+            \Magento\Store\Model\Store::class,
+            ['groupRepository' => $groupRepository,]
+        );
         $model->setGroupId(null);
 
         $this->assertFalse($model->getGroup());
@@ -498,10 +499,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Store::class, [
-            'config' => $configMock,
-            'currencyInstalled' => $currencyPath,
-        ]);
+            \Magento\Store\Model\Store::class,
+            ['config' => $configMock, 'currencyInstalled' => $currencyPath,]
+        );
 
         $this->assertEquals($expectedResult, $model->getAllowedCurrencies());
     }
@@ -571,7 +571,8 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             'unsecure request, no secure base url registered' => [false, 443, false, true, null],
             'unsecure request, not using registered port' => [false, 80],
             'unsecure request, using registered port, not using secure in frontend' => [false, 443, false, false],
-            'unsecure request, no secure base url registered, not using secure in frontend' => [false, 443, false, false, null],
+            'unsecure request, no secure base url registered, not using secure in frontend' =>
+                [false, 443, false, false, null],
             'unsecure request, not using registered port, not using secure in frontend' => [false, 80, false, false],
         ];
     }

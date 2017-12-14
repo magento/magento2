@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Model;
 
 use Magento\Payment\Helper\Formatter;
@@ -866,9 +864,11 @@ class Config extends AbstractConfig
      */
     public function getExpressCheckoutStartUrl($token)
     {
-        return sprintf('https://www.%spaypal.com/checkoutnow%s',
+        return sprintf(
+            'https://www.%spaypal.com/checkoutnow%s',
             $this->getValue('sandboxFlag') ? 'sandbox.' : '',
-            '?token=' . urlencode($token));
+            '?token=' . urlencode($token)
+        );
     }
 
     /**
@@ -1195,7 +1195,7 @@ class Config extends AbstractConfig
             self::PAYMENT_ACTION_AUTH => __('Authorization'),
             self::PAYMENT_ACTION_SALE => __('Sale'),
         ];
-        if (!is_null($this->_methodCode) && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
+        if ($this->_methodCode !== null && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
             $paymentActions[self::PAYMENT_ACTION_ORDER] = __('Order');
         }
         return $paymentActions;
