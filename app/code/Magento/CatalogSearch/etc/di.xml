@@ -132,6 +132,8 @@
         </arguments>
     </type>
     <preference for="Magento\Search\Model\SearchCollectionInterface" type="Magento\CatalogSearch\Model\ResourceModel\Search\Collection" />
+    <preference for="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\StockSelectProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\StockSelectProvider"/>
+
     <type name="Magento\Catalog\Model\Layer\Search\CollectionFilter">
         <plugin name="searchQuery" type="Magento\CatalogSearch\Model\Layer\Search\Plugin\CollectionFilter" />
     </type>
