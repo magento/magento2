@@ -181,6 +181,11 @@
             <argument name="idsLimit" xsi:type="number">1000</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ProductSkuLocator">
+        <arguments>
+            <argument name="skusLimit" xsi:type="number">1000</argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\Config\Source\ListPerPage">
         <arguments>
             <argument name="options" xsi:type="string">5,10,15,20,25</argument>
