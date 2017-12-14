@@ -45,7 +45,6 @@ class SaveHandler implements ExtensionInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
      */
     public function execute($entity, $arguments = [])
     {
