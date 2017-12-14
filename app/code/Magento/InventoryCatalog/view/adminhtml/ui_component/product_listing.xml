@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <columns name="product_columns">
+        <column name="qty"
+                class="Magento\InventoryCatalog\Ui\Component\Listing\Column\SourceItems"
+                component="Magento_InventoryCatalog/js/product/grid/cell/source-items"
+                sortOrder="75">
+            <settings>
+                <filter>false</filter>
+                <label translate="true">Quantity</label>
+            </settings>
+        </column>
+    </columns>
+</listing>
