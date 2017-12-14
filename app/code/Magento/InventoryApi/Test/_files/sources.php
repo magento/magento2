@@ -22,6 +22,7 @@ $sourcesData = [
     [
         // define only required and needed for tests fields
         SourceInterface::SOURCE_ID => 10,
+        SourceInterface::CODE => 'eu-1',
         SourceInterface::NAME => 'EU-source-1',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 100,
@@ -30,6 +31,7 @@ $sourcesData = [
     ],
     [
         SourceInterface::SOURCE_ID => 20,
+        SourceInterface::CODE => 'eu-2',
         SourceInterface::NAME => 'EU-source-2',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 200,
@@ -38,6 +40,7 @@ $sourcesData = [
     ],
     [
         SourceInterface::SOURCE_ID => 30,
+        SourceInterface::CODE => 'eu-3',
         SourceInterface::NAME => 'EU-source-3',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 300,
@@ -46,6 +49,7 @@ $sourcesData = [
     ],
     [
         SourceInterface::SOURCE_ID => 40,
+        SourceInterface::CODE => 'eu-dis',
         SourceInterface::NAME => 'EU-source-disabled',
         SourceInterface::ENABLED => false,
         SourceInterface::PRIORITY => 10,
@@ -54,6 +58,7 @@ $sourcesData = [
     ],
     [
         SourceInterface::SOURCE_ID => 50,
+        SourceInterface::CODE => 'us-1',
         SourceInterface::NAME => 'US-source-1',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 100,

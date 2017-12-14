@@ -53,6 +53,16 @@ interface SourceRepositoryInterface
     public function get(int $sourceId): SourceInterface;
 
     /**
+     * Get Source data by given code. If you want to create plugin on get method, also you need to create separate
+     * plugin on getList method, because entity loading way is different for these methods
+     *
+     * @param int $code
+     * @return \Magento\InventoryApi\Api\Data\SourceInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getByCode(string $code): SourceInterface;
+
+    /**
      * Find Sources by SearchCriteria
      * SearchCriteria is not required because load all stocks is useful case
      *

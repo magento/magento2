@@ -48,7 +48,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
      */
     public function getSourceId()
     {
-        return $this->getData(self::SOURCE_ID);
+        return (int)$this->getData(self::SOURCE_ID);
     }
 
     /**

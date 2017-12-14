@@ -16,6 +16,7 @@ use Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
 use Magento\InventoryImportExport\Model\Import\Command\CommandInterface;
 use Magento\InventoryImportExport\Model\Import\Serializer\Json;
 use Magento\InventoryImportExport\Model\Import\Validator\ValidatorInterface;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
@@ -28,6 +29,7 @@ class Sources extends AbstractEntity
      */
     const COL_SKU = SourceItemInterface::SKU;
     const COL_SOURCE = SourceItemInterface::SOURCE_ID;
+    const COL_SOURCE_CODE = 'source_' . SourceInterface::CODE;
     const COL_QTY = SourceItemInterface::QUANTITY;
     const COL_STATUS = SourceItemInterface::STATUS;
 

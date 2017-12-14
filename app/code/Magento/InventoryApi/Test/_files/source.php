@@ -25,6 +25,7 @@ $dataObjectHelper->populateWithArray(
     $source,
     [
         SourceInterface::SOURCE_ID => 10,
+        SourceInterface::CODE => 'source-code',
         SourceInterface::NAME => 'source-name-1',
         SourceInterface::CONTACT_NAME => 'source-contact-name',
         SourceInterface::EMAIL => 'source-email',

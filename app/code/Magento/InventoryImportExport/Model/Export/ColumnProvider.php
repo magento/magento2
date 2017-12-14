@@ -10,6 +10,7 @@ namespace Magento\InventoryImportExport\Model\Export;
 use Magento\Framework\Data\Collection as AttributeCollection;
 use Magento\InventoryImportExport\Model\Export\ColumnProviderInterface;
 use Magento\ImportExport\Model\Export;
+use \Magento\Framework\Exception\LocalizedException;
 
 /**
  * @inheritdoc
@@ -28,6 +29,10 @@ class ColumnProvider implements ColumnProviderInterface
 
         if (!isset($filters[Export::FILTER_ELEMENT_SKIP])) {
             return $columns;
+        }
+
+        if (count($filters[Export::FILTER_ELEMENT_SKIP]) ===  count($columns)) {
+            throw new LocalizedException(__('There is no data for the export.'));
         }
 
         // remove the skipped from columns

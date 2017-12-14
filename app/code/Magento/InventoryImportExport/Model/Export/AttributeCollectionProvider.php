@@ -10,6 +10,7 @@ namespace Magento\InventoryImportExport\Model\Export;
 use Magento\Eav\Model\Entity\AttributeFactory;
 use Magento\Framework\Data\Collection;
 use Magento\ImportExport\Model\Export\Factory as CollectionFactory;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryImportExport\Model\Export\Source\StockStatus;
 
@@ -49,12 +50,12 @@ class AttributeCollectionProvider
     {
         if (count($this->collection) === 0) {
             /** @var \Magento\Eav\Model\Entity\Attribute $sourceIdAttribute */
-            $sourceIdAttribute = $this->attributeFactory->create();
-            $sourceIdAttribute->setId(SourceItemInterface::SOURCE_ID);
-            $sourceIdAttribute->setDefaultFrontendLabel(SourceItemInterface::SOURCE_ID);
-            $sourceIdAttribute->setAttributeCode(SourceItemInterface::SOURCE_ID);
-            $sourceIdAttribute->setBackendType('int');
-            $this->collection->addItem($sourceIdAttribute);
+            $sourceCodeAttribute = $this->attributeFactory->create();
+            $sourceCodeAttribute->setId('source_' . SourceInterface::CODE);
+            $sourceCodeAttribute->setDefaultFrontendLabel('source_' . SourceInterface::CODE);
+            $sourceCodeAttribute->setAttributeCode('source_' . SourceInterface::CODE);
+            $sourceCodeAttribute->setBackendType('varchar');
+            $this->collection->addItem($sourceCodeAttribute);
 
             /** @var \Magento\Eav\Model\Entity\Attribute $skuAttribute */
             $skuAttribute = $this->attributeFactory->create();
