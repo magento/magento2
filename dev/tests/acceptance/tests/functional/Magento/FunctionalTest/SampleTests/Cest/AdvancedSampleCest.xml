@@ -39,7 +39,7 @@
             <amOnPage url="{{SamplePage.url('foo', SamplePerson.bar)}}" stepKey="amOnPage"/>
 
             <!-- Parameterized selector -->
-            <grabTextFrom selector="{{SampleSection.twoParamElement(SamplePerson.foo, 'bar')}}" returnVariable="myReturnVar" stepKey="grabTextFrom"/>
+            <grabTextFrom selector="{{SampleSection.twoParamElement(SamplePerson.foo, 'bar')}}" stepKey="grabTextFrom"/>
 
             <!-- Element with a timeout -->
             <click selector="{{SampleSection.timeoutElement}}" stepKey="click"/>

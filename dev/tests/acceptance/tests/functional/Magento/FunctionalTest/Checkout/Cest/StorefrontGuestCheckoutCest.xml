@@ -58,7 +58,7 @@
             <see selector="{{GuestCheckoutPaymentSection.cartItems}}" userInput="{{_defaultProduct.name}}" stepKey="seeProductInCart"/>
             <see selector="{{GuestCheckoutPaymentSection.billingAddress}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeAddress"/>
             <click selector="{{GuestCheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-            <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" returnVariable="orderNumber" stepKey="grabOrderNumber"/>
+            <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
             <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order # is:" stepKey="seeOrderNumber"/>
             <see selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeEmailYou"/>
             <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
@@ -67,7 +67,7 @@
             <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
             <amOnPage url="{{OrdersPage.url}}" stepKey="onOrdersPage"/>
             <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnOrdersPage"/>
-            <fillField selector="{{OrdersGridSection.search}}" variable="orderNumber" stepKey="fillOrderNum"/>
+            <fillField selector="{{OrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="fillOrderNum"/>
             <click selector="{{OrdersGridSection.submitSearch}}" stepKey="submitSearchOrderNum"/>
             <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnSearch"/>
             <click selector="{{OrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>

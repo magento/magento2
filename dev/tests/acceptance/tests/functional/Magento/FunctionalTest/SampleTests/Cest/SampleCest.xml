@@ -82,16 +82,16 @@
             <executeJS function="return $('#myField').val()" stepKey="executeJS"/>
             <fillField selector="#field" userInput="stuff" stepKey="fillField1"/>
             <fillField selectorArray="['name' => 'email']" userInput="stuff" stepKey="fillField2"/>
-            <grabAttributeFrom returnVariable="title" selector="#target" userInput="title" stepKey="grabAttributeFrom"/>
-            <grabCookie returnVariable="cookie" userInput="cookie" parameterArray="['domain' => 'www.google.com']" stepKey="grabCookie"/>
-            <grabFromCurrentUrl returnVariable="uri" url="~$/user/(\d+)/~" stepKey="grabFromCurrentUrl"/>
-            <grabMultiple returnVariable="multiple" selector="a" userInput="href" stepKey="grabMultiple"/>
-            <grabPageSource returnVariable="pageSource" stepKey="grabPageSource1"/>
-            <grabTextFrom returnVariable="text" selector="h1" stepKey="grabTextFrom1"/>
-            <grabValueFrom returnVariable="value1" selector=".form" stepKey="grabValueFrom1"/>
-            <grabValueFrom returnVariable="value2" selectorArray="['name' => 'username']" stepKey="grabValueFrom2"/>
+            <grabAttributeFrom selector="#target" userInput="title" stepKey="grabAttributeFrom"/>
+            <grabCookie userInput="cookie" parameterArray="['domain' => 'www.google.com']" stepKey="grabCookie"/>
+            <grabFromCurrentUrl url="~$/user/(\d+)/~" stepKey="grabFromCurrentUrl"/>
+            <grabMultiple selector="a" userInput="href" stepKey="grabMultiple"/>
+            <grabPageSource stepKey="grabPageSource1"/>
+            <grabTextFrom selector="h1" stepKey="grabTextFrom1"/>
+            <grabValueFrom selector=".form" stepKey="grabValueFrom1"/>
+            <grabValueFrom selectorArray="['name' => 'username']" stepKey="grabValueFrom2"/>
             <loadSessionSnapshot userInput="stuff" stepKey="loadSessionSnapshot1"/>
-            <loadSessionSnapshot returnVariable="snapshot" userInput="stuff" stepKey="loadSessionSnapshot2"/>
+            <loadSessionSnapshot userInput="stuff" stepKey="loadSessionSnapshot2"/>
             <makeScreenshot userInput="ScreenshotName" stepKey="makeScreenshot"/>
             <maximizeWindow stepKey="maximizeWindow"/>
             <moveBack stepKey="moveBack"/>
@@ -213,51 +213,51 @@
                 <severity value="CRITICAL"/>
                 <testCaseId value="#"/>
             </annotations>
-            <grabFromCurrentUrl returnVariable="randomStuff" stepKey="grabFromCurrentUrl1"/>
-            <amOnPage variable="randomStuff" stepKey="amOnPage1"/>
-            <amOnSubdomain variable="randomStuff" stepKey="amOnSubdomain1"/>
-            <amOnUrl variable="randomStuff" stepKey="amOnUrl1"/>
-            <appendField variable="randomStuff" selector="#randomField" stepKey="appendField1"/>
-            <attachFile variable="randomStuff" selector="#filePathField" stepKey="attachFile1"/>
-            <click variable="randomStuff" stepKey="click1"/>
-            <dontSee variable="randomStuff" stepKey="dontSee1"/>
-            <dontSeeCookie variable="randomStuff" stepKey="dontSeeCookie1"/>
-            <dontSeeCurrentUrlEquals variable="randomStuff" stepKey="dontSeeCurrentUrlEquals1"/>
-            <dontSeeCurrentUrlMatches variable="randomStuff" stepKey="dontSeeCurrentUrlMatches1"/>
-            <dontSeeInCurrentUrl variable="randomStuff" stepKey="dontSeeInCurrentUrl1"/>
-            <dontSeeInField selector="#stuff" variable="randomStuff" stepKey="dontSeeInField1"/>
-            <dontSeeInPageSource variable="randomStuff" stepKey="dontSeeInPageSource1"/>
-            <dontSeeInTitle variable="randomStuff" stepKey="dontSeeInTitle1"/>
-            <dontSeeLink variable="randomStuff" stepKey="dontSeeLink1"/>
-            <dontSeeOptionIsSelected selector="#dropdown" variable="randomStuff" stepKey="dontSeeOptionIsSelected1"/>
-            <fillField variable="randomStuff" selector="#field" stepKey="fillField1"/>
-            <grabAttributeFrom selector="#stuff" returnVariable="moreRandomStuff" variable="randomStuff" stepKey="grabAttributeFrom1"/>
-            <grabCookie returnVariable="cookies" variable="randomStuff" stepKey="grabValueFrom1"/>
-            <grabFromCurrentUrl returnVariable="url" variable="randomStuff" stepKey="grabFromCurrentUrl"/>
-            <grabMultiple returnVariable="multipleThings" selector="a" variable="randomStuff" stepKey="grabMultiple1"/>
-            <loadSessionSnapshot variable="randomStuff" stepKey="loadSessionSnapshot"/>
-            <pressKey selector="a" variable="randomStuff" stepKey="pressKey1"/>
-            <saveSessionSnapshot variable="randomStuff" stepKey="saveSessionSnapshot1"/>
-            <see variable="randomStuff" stepKey="see1"/>
-            <seeCookie variable="randomStuff" stepKey="seeCookie1"/>
-            <seeCurrentUrlEquals variable="randomStuff" stepKey="seeCurrentUrlEquals1"/>
-            <seeCurrentUrlMatches variable="randomStuff" stepKey="seeCurrentUrlMatches1"/>
-            <seeInCurrentUrl variable="randomStuff" stepKey="seeInCurrentUrl1"/>
-            <seeInField selector="a" variable="randomStuff" stepKey="seeInField1"/>
-            <seeInPopup variable="randomStuff" stepKey="seeInPopup"/>
-            <seeInTitle variable="randomStuff" stepKey="seeInTitle1"/>
-            <seeLink variable="randomStuff" stepKey="seeLink1"/>
-            <seeNumberOfElements selector="#stuff" variable="randomStuff" stepKey="seeNumberOfElements1"/>
-            <seeOptionIsSelected selector="#stuff" variable="randomStuff" stepKey="seeOptionIsSelected1"/>
-            <selectOption selector="#stuff" variable="randomStuff" stepKey="selectOption1"/>
-            <switchToIFrame variable="randomStuff" stepKey="switchToIFrame1"/>
-            <switchToNextTab variable="randomStuff" stepKey="switchToNextTab1"/>
-            <switchToPreviousTab variable="randomStuff" stepKey="switchToPreviousTab1"/>
-            <switchToNextTab variable="randomStuff" stepKey="switchToNextTab1"/>
-            <switchToWindow variable="randomStuff" stepKey="switchToWindow1"/>
-            <typeInPopup variable="randomStuff" stepKey="typeInPopup"/>
-            <unselectOption selector="#option" variable="randomStuff" stepKey="unselectOption1"/>
-            <waitForText variable="randomStuff" time="5" stepKey="waitForText1"/>
+            <grabFromCurrentUrl stepKey="grabFromCurrentUrl1"/>
+            <amOnPage url="{$randomStuff}" stepKey="amOnPage1"/>
+            <amOnSubdomain url="{$randomStuff}" stepKey="amOnSubdomain1"/>
+            <amOnUrl url="{$randomStuff}" stepKey="amOnUrl1"/>
+            <appendField userInput="{$randomStuff}" selector="#randomField" stepKey="appendField1"/>
+            <attachFile userInput="{$randomStuff}" selector="#filePathField" stepKey="attachFile1"/>
+            <click userInput="{$randomStuff}" stepKey="click1"/>
+            <dontSee userInput="{$randomStuff}" stepKey="dontSee1"/>
+            <dontSeeCookie userInput="{$randomStuff}" stepKey="dontSeeCookie1"/>
+            <dontSeeCurrentUrlEquals url="{$randomStuff}" stepKey="dontSeeCurrentUrlEquals1"/>
+            <dontSeeCurrentUrlMatches url="{$randomStuff}" stepKey="dontSeeCurrentUrlMatches1"/>
+            <dontSeeInCurrentUrl url="{$randomStuff}" stepKey="dontSeeInCurrentUrl1"/>
+            <dontSeeInField selector="#stuff" userInput="{$randomStuff}" stepKey="dontSeeInField1"/>
+            <dontSeeInPageSource userInput="{$randomStuff}" stepKey="dontSeeInPageSource1"/>
+            <dontSeeInTitle userInput="{$randomStuff}" stepKey="dontSeeInTitle1"/>
+            <dontSeeLink userInput="{$randomStuff}" stepKey="dontSeeLink1"/>
+            <dontSeeOptionIsSelected selector="#dropdown" userInput="{$randomStuff}" stepKey="dontSeeOptionIsSelected1"/>
+            <fillField userInput="{$randomStuff}" selector="#field" stepKey="fillField1"/>
+            <grabAttributeFrom selector="#stuff" userInput="{$randomStuff}" stepKey="grabAttributeFrom1"/>
+            <grabCookie userInput="{$randomStuff}" stepKey="grabValueFrom1"/>
+            <grabFromCurrentUrl url="{$randomStuff}" stepKey="grabFromCurrentUrl"/>
+            <grabMultiple selector="a" userInput="{$randomStuff}" stepKey="grabMultiple1"/>
+            <loadSessionSnapshot userInput="{$randomStuff}" stepKey="loadSessionSnapshot"/>
+            <pressKey selector="a" userInput="{$randomStuff}" stepKey="pressKey1"/>
+            <saveSessionSnapshot userInput="{$randomStuff}" stepKey="saveSessionSnapshot1"/>
+            <see userInput="{$randomStuff}" stepKey="see1"/>
+            <seeCookie userInput="{$randomStuff}" stepKey="seeCookie1"/>
+            <seeCurrentUrlEquals url="{$randomStuff}" stepKey="seeCurrentUrlEquals1"/>
+            <seeCurrentUrlMatches url="{$randomStuff}" stepKey="seeCurrentUrlMatches1"/>
+            <seeInCurrentUrl url="{$randomStuff}" stepKey="seeInCurrentUrl1"/>
+            <seeInField selector="a" userInput="{$randomStuff}" stepKey="seeInField1"/>
+            <seeInPopup userInput="{$randomStuff}" stepKey="seeInPopup"/>
+            <seeInTitle userInput="{$randomStuff}" stepKey="seeInTitle1"/>
+            <seeLink userInput="{$randomStuff}" stepKey="seeLink1"/>
+            <seeNumberOfElements selector="#stuff" userInput="{$randomStuff}" stepKey="seeNumberOfElements1"/>
+            <seeOptionIsSelected selector="#stuff" userInput="{$randomStuff}" stepKey="seeOptionIsSelected1"/>
+            <selectOption selector="#stuff" userInput="{$randomStuff}" stepKey="selectOption1"/>
+            <switchToIFrame userInput="{$randomStuff}" stepKey="switchToIFrame1"/>
+            <switchToNextTab userInput="{$randomStuff}" stepKey="switchToNextTab1"/>
+            <switchToPreviousTab userInput="{$randomStuff}" stepKey="switchToPreviousTab1"/>
+            <switchToNextTab userInput="{$randomStuff}" stepKey="switchToNextTab1"/>
+            <switchToWindow userInput="{$randomStuff}" stepKey="switchToWindow1"/>
+            <typeInPopup userInput="{$randomStuff}" stepKey="typeInPopup"/>
+            <unselectOption selector="#option" userInput="{$randomStuff}" stepKey="unselectOption1"/>
+            <waitForText userInput="{$randomStuff}" time="5" stepKey="waitForText1"/>
         </test>
         <test name="AllReplacementTest">
             <annotations>

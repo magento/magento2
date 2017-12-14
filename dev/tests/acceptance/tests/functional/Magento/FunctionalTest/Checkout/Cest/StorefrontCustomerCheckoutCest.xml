@@ -58,7 +58,7 @@
             <see stepKey="s47" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" />
             <click stepKey="s49" selector="{{CheckoutPaymentSection.placeOrder}}" />
             <waitForPageLoad stepKey="s51"/>
-            <grabTextFrom stepKey="s53" selector="{{CheckoutSuccessMainSection.orderNumber22}}" returnVariable="orderNumber" />
+            <grabTextFrom stepKey="s53" selector="{{CheckoutSuccessMainSection.orderNumber22}}"/>
             <see stepKey="s55" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" />
 
             <amOnPage stepKey="s59" url="{{AdminLoginPage.url}}" />
@@ -68,7 +68,7 @@
 
             <amOnPage stepKey="s67" url="{{OrdersPage.url}}"/>
             <waitForPageLoad stepKey="s75"/>
-            <fillField stepKey="s77" selector="{{OrdersGridSection.search}}" variable="orderNumber" />
+            <fillField stepKey="s77" selector="{{OrdersGridSection.search}}" userInput="{$s53}" />
             <waitForPageLoad stepKey="s78"/>
 
             <click stepKey="s81" selector="{{OrdersGridSection.submitSearch22}}" />
