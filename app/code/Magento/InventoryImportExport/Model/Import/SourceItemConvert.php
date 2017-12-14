@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryImportExport\Model\Import;
 
-use Magento\Customer\Model\Indexer\Source;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
