@@ -37,10 +37,12 @@ class TermTest extends \PHPUnit\Framework\TestCase
     public function testGetTerms(array $expected)
     {
         $result = $this->term->getTerms();
-        $actual = array_map(function ($object) {
-            return $object->setUpdatedAt(null)->getData();
-        },
-            $result);
+        $actual = array_map(
+            function ($object) {
+                return $object->setUpdatedAt(null)->getData();
+            },
+            $result
+        );
 
         self::assertEquals(
             $expected,
