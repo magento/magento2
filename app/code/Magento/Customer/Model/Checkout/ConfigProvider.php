@@ -51,7 +51,8 @@ class ConfigProvider implements ConfigProviderInterface
         $this->urlBuilder=$urlBuilder;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
-        $this->customerUrl = $customerUrl ?? \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Customer\Model\Url::class);
+        $this->customerUrl = $customerUrl ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Customer\Model\Url::class);
     }
 
     /**
