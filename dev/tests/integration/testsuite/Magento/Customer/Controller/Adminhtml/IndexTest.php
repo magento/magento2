@@ -217,8 +217,14 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->assertNotEquals(0, $this->accountManagement->getDefaultBillingAddress($customerId));
         $this->assertNull($this->accountManagement->getDefaultShippingAddress($customerId));
 
+        $urlPatternParts = [
+            $this->_baseControllerUrl . 'edit',
+            'id/' . $customerId,
+            'back/1',
+        ];
+        $urlPattern = '/^' . str_replace('/', '\/', implode('(/.*/)|/', $urlPatternParts)) . '/';
         $this->assertRedirect(
-            $this->stringStartsWith($this->_baseControllerUrl . 'edit/id/' . $customerId . '/back/1')
+            $this->matchesRegularExpression($urlPattern)
         );
 
         /** @var \Magento\Newsletter\Model\Subscriber $subscriber */

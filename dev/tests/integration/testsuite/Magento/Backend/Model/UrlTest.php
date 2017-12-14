@@ -44,15 +44,37 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $url = $this->_model->getUrl('adminhtml/auth/login');
         $this->assertContains('admin/auth/login/key/', $url);
 
-        $this->request->setParams(['param' => 'ab==']);
+        $routeParams = [
+            '_escape_params' => false,
+            'param1' => 'a1=='
+        ];
+        $url = $this->_model->getUrl('path', $routeParams);
+        $this->assertContains('/param1/a1==/', $url);
+
+        $this->request->setParams(['param2' => 'a2==']);
+        $routeParams = [
+            '_current' => true,
+            '_escape_params' => false,
+        ];
+        $url = $this->_model->getUrl('path', $routeParams);
+        $this->assertContains('/param2/a2==/', $url);
+
+        /** @var ParamEncoder $paramEncoder */
+        $paramEncoder = Bootstrap::getObjectManager()->get(ParamEncoder::class);
+        $routeParams = [
+            '_escape_params' => true,
+            'param3' => 'a3=='
+        ];
+        $url = $this->_model->getUrl('path', $routeParams);
+        $this->assertContains('/param3/' . $paramEncoder->encode('a3==') . '/', $url);
+
+        $this->request->setParams(['param4' => 'a4==']);
         $routeParams = [
             '_current' => true,
             '_escape_params' => true,
         ];
         $url = $this->_model->getUrl('path', $routeParams);
-        /** @var ParamEncoder $paramEncoder */
-        $paramEncoder = Bootstrap::getObjectManager()->get(ParamEncoder::class);
-        $this->assertContains('/param/' . $paramEncoder->encode('ab==') . '/', $url);
+        $this->assertContains('/param4/' . $paramEncoder->encode('a4==') . '/', $url);
     }
 
     /**
