@@ -19,8 +19,7 @@ class UpdateLegacyStockStatusByPlainQuery
 
     public function __construct(
         LegacyUpdateService $legacyUpdateService
-    )
-    {
+    ) {
         $this->legacyUpdateService = $legacyUpdateService;
     }
 
