@@ -10,6 +10,7 @@
 namespace Magento\Setup\Fixtures;
 
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
+use Magento\Setup\Exception;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -48,6 +49,13 @@ class FixtureModel
     protected $fixtures = [];
 
     /**
+     * List of fixtures indexed by class names
+     *
+     * @var \Magento\Setup\Fixtures\Fixture[]
+     */
+    private $fixturesByNames = [];
+
+    /**
      * Parameters labels
      *
      * @var array
@@ -64,14 +72,6 @@ class FixtureModel
      * @var FixtureConfig
      */
     private $config;
-
-    private $configurationFixtureInstanceClassName = \Magento\Setup\Fixtures\ConfigsApplyFixture::class;
-
-    private $configurationFixture;
-
-    private $indexerFixtureInstanceClassName = \Magento\Setup\Fixtures\IndexersStatesApplyFixture::class;
-
-    private $indexerFixture;
 
     /**
      * Constructor
@@ -118,22 +118,17 @@ class FixtureModel
                 ]
             );
 
-            if ($fixture instanceof $this->configurationFixtureInstanceClassName) {
-                $this->configurationFixture = $fixture;
-                continue;
-            }
-
-            if ($fixture instanceof $this->indexerFixtureInstanceClassName) {
-                $this->indexerFixture = $fixture;
-                continue;
-            }
-
             if (isset($this->fixtures[$fixture->getPriority()])) {
                 throw new \InvalidArgumentException(
                     sprintf('Duplicate priority %d in fixture %s', $fixture->getPriority(), $type)
                 );
             }
-            $this->fixtures[$fixture->getPriority()] = $fixture;
+
+            if ($fixture->getPriority() >= 0) {
+                $this->fixtures[$fixture->getPriority()] = $fixture;
+            }
+
+            $this->fixturesByNames[get_class($fixture)] = $fixture;
         }
 
         ksort($this->fixtures);
@@ -162,22 +157,20 @@ class FixtureModel
     }
 
     /**
-     * Returns configuration fixture
-     * @return \Magento\Setup\Fixtures\ConfigsApplyFixture
+     * Returns fixture by name
+     * @param $name string
+     * @return \Magento\Setup\Fixtures\Fixture
+     * @throws \Magento\Setup\Exception
      */
-    public function getConfigurationFixture()
+    public function getFixtureByName($name)
     {
-        return $this->configurationFixture;
+        if (!array_key_exists($name, $this->fixturesByNames)) {
+            throw new Exception('Wrong fixture name');
+        }
+
+        return $this->fixturesByNames[$name];
     }
 
-    /**
-     * Returns indexer fixture
-     * @return \Magento\Setup\Fixtures\IndexersStatesApplyFixture
-     */
-    public function getIndexerFixture()
-    {
-        return $this->indexerFixture;
-    }
 
     /**
      * Get object manager
