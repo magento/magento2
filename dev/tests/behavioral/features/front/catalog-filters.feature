@@ -3,12 +3,8 @@ Feature: Catalog category filters
 
   Scenario: Filtering products
 
-    Given I am on "/"
+    Given I am on "/index.php/women.html"
 
-    Then I wait for element with xpath "//*[@id='ui-id-6']/span[2]" to appear
-    And I click on the element with xpath "//*[@id='ui-id-6']/span[2]"
-
-    Then I wait for page to load "/index.php/women.html"
     And I wait for element with xpath "//*[@id='maincontent']/div[4]/div[2]/div/div/ul[1]/li[2]/a" to appear
     And I click on the element with xpath "//*[@id='maincontent']/div[4]/div[2]/div/div/ul[1]/li[2]/a"
 
