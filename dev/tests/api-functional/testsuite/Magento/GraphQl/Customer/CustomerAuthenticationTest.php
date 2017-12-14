@@ -77,27 +77,7 @@ QUERY;
             " Addresses field must be of an array type."
         );
         $this->assertCustomerFields($customer, $response['customer']);
-       $this->assertCustomerAddressesFields($customer, $response);
-    }
-
-    /**
-     * Verify Customer with valid token but invalid login credentials
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testCustomerTokenWithInvalidCredentials()
-    {
-        $userName = 'customer1@example.com';
-        $password = 'wrongPassword';
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('You did not sign in correctly or your account is temporarily disabled.');
-
-       /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = ObjectManager::getInstance()
-                                ->get(\Magento\Integration\Api\CustomerTokenServiceInterface::class);
-        $customerToken = $customerTokenService->createCustomerAccessToken($userName, $password);
-        $this->setToken($customerToken);
+        $this->assertCustomerAddressesFields($customer, $response);
     }
 
     /**
@@ -135,6 +115,7 @@ QUERY;
     }
 
     /**
+     * Veriy the all the whitelisted fields for a Customer Object
      * @param CustomerInterface $customer
      * @param  $actualResponse
      */
@@ -163,6 +144,7 @@ QUERY;
     }
 
     /**
+     * Verify the fields for CustomerAddress object
      * @param CustomerInterface $customer
      * @param array $actualResponse
      */
@@ -171,7 +153,6 @@ QUERY;
     {
         /** @var AddressInterface $addresses */
         $addresses = $customer->getAddresses();
-
         foreach( $addresses as $addressKey => $addressValue) {
             $this->assertNotEmpty($addressValue);
             $assertionMap = [

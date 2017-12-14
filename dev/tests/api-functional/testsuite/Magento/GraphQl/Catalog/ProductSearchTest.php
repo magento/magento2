@@ -211,12 +211,13 @@ QUERY;
 
     /**
      * The query returns a total_count of 2 records; setting the pageSize = 1 and currentPage2
-     * Expected result is to get the second product from the list on the second page
+     * Expected result is to get the second product on the list on the second page
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      */
     public function testSearchWithFilterPageSizeLessThanCurrentPage()
     {
+        $this->markTestSkipped('This is test is skipped due to MAGETWO-85680');
         $query
             = <<<QUERY
 {
@@ -266,7 +267,9 @@ QUERY;
          * @var ProductRepositoryInterface $productRepository
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get('simple2');
+        // when pagSize =1 and currentPage = 2, it should have simple2 on first page and simple1 on 2nd page
+        // since sorting is done on price in the DESC order
+        $product = $productRepository->get('simple1');
         $filteredProducts = [$product];
 
         $response = $this->graphQlQuery($query);
