@@ -27,14 +27,14 @@ class ConfigProvider implements ConfigProviderInterface
     protected $urlBuilder;
 
     /**
-     * @var Url
-     */
-    protected $customerUrl;
-
-    /**
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
+
+    /**
+     * @var Url
+     */
+    private $customerUrl;
 
     /**
      * @param UrlInterface $urlBuilder
