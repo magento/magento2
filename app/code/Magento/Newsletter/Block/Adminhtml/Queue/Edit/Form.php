@@ -76,7 +76,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         $dateFormat = $this->_localeDate->getDateFormat(
-            \IntlDateFormatter::MEDIUM
+            \IntlDateFormatter::SHORT
         );
         $timeFormat = $this->_localeDate->getTimeFormat(
             \IntlDateFormatter::MEDIUM
