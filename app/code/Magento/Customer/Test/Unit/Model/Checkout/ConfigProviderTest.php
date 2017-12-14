@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Checkout;
@@ -14,7 +14,7 @@ use Magento\Customer\Model\Url;
 use Magento\Customer\Model\Form;
 use Magento\Store\Model\ScopeInterface;
 
-class ConfigProviderTest extends \PHPUnit_Framework_TestCase
+class ConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfigProvider
@@ -29,7 +29,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerUrl;
+    protected $urlBuilder;
 
     /**
      * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -41,6 +41,11 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $store;
 
+    /**
+     * @var Url|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $customerUrl;
+
     protected function setUp()
     {
         $this->storeManager = $this->getMockForAbstractClass(
@@ -50,10 +55,12 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->customerUrl = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
-        ->disableOriginalConstructor()
-        ->setMethods(['getLoginUrl'])
-        ->getMock();
+        $this->urlBuilder = $this->getMockForAbstractClass(
+            \Magento\Framework\UrlInterface::class,
+            [],
+            '',
+            false
+        );
 
         $this->scopeConfig = $this->getMockForAbstractClass(
             \Magento\Framework\App\Config\ScopeConfigInterface::class,
@@ -71,10 +78,16 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
             ['getBaseUrl']
         );
 
+        $this->customerUrl = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getLoginUrl'])
+            ->getMock();
+
         $this->provider = new ConfigProvider(
-            $this->customerUrl,
+            $this->urlBuilder,
             $this->storeManager,
-            $this->scopeConfig
+            $this->scopeConfig,
+            $this->customerUrl
         );
     }
 
