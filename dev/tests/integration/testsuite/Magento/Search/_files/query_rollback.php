@@ -19,6 +19,6 @@ foreach ($queries as $queryText) {
     try {
         $query->loadByQueryText($queryText);
         $query->delete();
-    }  catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
+    } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
     }
 }
