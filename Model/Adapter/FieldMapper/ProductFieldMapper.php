@@ -11,14 +11,34 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use \Magento\Customer\Model\Session as CustomerSession;
-use Magento\Elasticsearch\Elasticsearch5\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper
-    as ES5ProductFieldMapper;
+use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper as ES5ProductFieldMapper;
+use Magento\Elasticsearch\Model\Adapter\FieldType;
 
 /**
  * Class ProductFieldMapper
  */
 class ProductFieldMapper extends ES5ProductFieldMapper implements FieldMapperInterface
 {
+    /**
+     * @param Config $eavConfig
+     * @param FieldType $fieldType
+     * @param CustomerSession $customerSession
+     * @param StoreManager $storeManager
+     * @param Registry $coreRegistry
+     */
+    public function __construct(
+        Config $eavConfig,
+        FieldType $fieldType,
+        CustomerSession $customerSession,
+        StoreManager $storeManager,
+        Registry $coreRegistry
+    ) {
+        $this->eavConfig = $eavConfig;
+        $this->fieldType = $fieldType;
+        $this->customerSession = $customerSession;
+        $this->storeManager = $storeManager;
+        $this->coreRegistry = $coreRegistry;
+    }
 
     /**
      * {@inheritdoc}

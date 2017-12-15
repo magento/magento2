@@ -22,6 +22,20 @@ use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper as ES5Mapper;
  */
 class Mapper extends ES5Mapper
 {
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param MatchQueryBuilder $matchQueryBuilder
+     * @param FilterBuilder $filterBuilder
+     */
+    public function __construct(
+        QueryBuilder $queryBuilder,
+        MatchQueryBuilder $matchQueryBuilder,
+        FilterBuilder $filterBuilder
+    ) {
+        $this->queryBuilder = $queryBuilder;
+        $this->matchQueryBuilder = $matchQueryBuilder;
+        $this->filterBuilder = $filterBuilder;
+    }
 
     /**
      * Build adapter dependent query

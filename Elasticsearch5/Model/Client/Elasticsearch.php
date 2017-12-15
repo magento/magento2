@@ -280,7 +280,7 @@ class Elasticsearch implements ClientInterface
      * Fix backward compatibility of field definition.
      * Allow to run both 2.x and 5.x servers.
      *
-     * @param array $query
+     * @param array $fieldInfo
      *
      * @return array
      */

@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldType;
+use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldType;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use \Magento\Customer\Model\Session as CustomerSession;
