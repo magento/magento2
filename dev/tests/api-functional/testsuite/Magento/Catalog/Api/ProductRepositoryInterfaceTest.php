@@ -314,7 +314,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $weight = 12.2;
         $sku = 'simple_product_without_specified_type';
         $product = [
-            'sku' => '' . $sku . '',
+            'sku' => $sku,
             'name' => 'Simple Product Without Specified Type',
             'price' => $price,
             'weight' => $weight,
