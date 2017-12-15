@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: skozar
- * Date: 15.12.17
- * Time: 15:19
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Unit\Controller\Account;
