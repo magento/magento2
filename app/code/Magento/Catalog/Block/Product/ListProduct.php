@@ -82,6 +82,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         Data $urlHelper,
+        \Magento\Catalog\Model\CollectionLoader $collectionLoader,
         array $data = []
     ) {
         $this->_catalogLayer = $layerResolver->get();
@@ -463,7 +464,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         if ($origCategory) {
             $layer->setCurrentCategory($origCategory);
         }
-        
+
         $this->addToolbarBlock($collection);
 
         $this->_eventManager->dispatch(
