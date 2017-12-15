@@ -57,7 +57,7 @@ class Varchar extends Column implements ElementDiffAwareInterface
     }
 
     /**
-     * Length can be integer value from 0 to 255
+     * Length can be integer value from 0 to 1024
      *
      * @return int
      */
