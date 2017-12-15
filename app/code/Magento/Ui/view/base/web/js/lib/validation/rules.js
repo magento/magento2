@@ -85,7 +85,7 @@ define([
         'range-words': [
             function (value, params) {
                 return utils.stripHtml(value).match(/\b\w+\b/g).length >= params[0] &&
-                    value.match(/bw+b/g).length < params[1];
+                    utils.stripHtml(value).match(/\b\w+\b/g).length < params[1];
             },
             $.mage.__('Please enter between {0} and {1} words.')
         ],
