@@ -213,6 +213,7 @@ require([
             $$('select[multiple]').each(function(element) {
                 var $element = Element.extend(element);
                 if (_.isEmpty($element.getValue())) {
+                    // empty option should be created to set empty value for multiselect
                     var option = document.createElement('option');
                     option.value = '';
                     $element.appendChild(option);
