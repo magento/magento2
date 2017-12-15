@@ -7,6 +7,7 @@
 namespace Magento\GraphQl\Controller;
 
 use Magento\Framework\App\FrontControllerInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -81,6 +82,7 @@ class GraphQl implements FrontControllerInterface
     public function dispatch(RequestInterface $request)
     {
         try {
+            /** @var $request Http */
             if ($request->getHeader('Content-Type')
                 && strpos($request->getHeader('Content-Type'), 'application/json') !== false
             ) {

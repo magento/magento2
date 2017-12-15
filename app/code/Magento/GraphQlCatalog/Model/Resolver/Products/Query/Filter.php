@@ -56,11 +56,11 @@ class Filter
      */
     public function getResult(SearchCriteriaInterface $searchCriteria)
     {
-        $products = $this->productRepository->getList($searchCriteria);
+        $products = $this->productDataProvider->getList($searchCriteria);
         $productArray = [];
         /** @var ProductInterface $product */
         foreach ($products->getItems() as $product) {
-            $productArray[] = $this->productDataProvider->getProduct($product->getSku());
+            $productArray[] = $this->productDataProvider->processProduct($product);
         }
         return $this->searchResultFactory->create($products->getTotalCount(), $productArray);
     }

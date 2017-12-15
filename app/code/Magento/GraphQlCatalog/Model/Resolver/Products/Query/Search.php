@@ -63,8 +63,6 @@ class Search
      */
     public function getResult(SearchCriteriaInterface $searchCriteria)
     {
-        $realPageSize = $searchCriteria->getPageSize();
-        $realCurrentPage = $searchCriteria->getCurrentPage();
         // Current page must be set to 0 and page size to max for search to grab all ID's as temporary workaround
         // for MAGETWO-85611
         $searchCriteria->setPageSize(PHP_INT_MAX);
@@ -77,20 +75,30 @@ class Search
             $ids[$item->getId()] = null;
             $searchIds[] = $item->getId();
         }
-        $searchCriteria->setPageSize($realPageSize);
-        $paginatedIds = $this->paginateIdList($searchIds, $searchCriteria);
-        $filter = $this->filterHelper->generate('entity_id', 'in', $paginatedIds);
 
-        $searchCriteria->setCurrentPage($realCurrentPage);
+        $filter = $this->filterHelper->generate('entity_id', 'in', $searchIds);
         $searchCriteria = $this->filterHelper->remove($searchCriteria, 'search_term');
         $searchCriteria = $this->filterHelper->add($searchCriteria, $filter);
         $searchResult = $this->filterQuery->getResult($searchCriteria);
-        foreach ($searchResult->getProductsSearchResult() as $product) {
-            $ids[$product['id']] = $product;
-        }
-        $products = array_filter($ids);
 
-        return $this->searchResultFactory->create($itemsResults->getTotalCount(), $products);
+        $paginatedIds = $this->paginateIdList($searchIds, $searchCriteria);
+        $products = [];
+        if (!isset($searchCriteria->getSortOrders()[0])) {
+            foreach ($searchResult->getProductsSearchResult() as $product) {
+                if (in_array($product['id'], $paginatedIds)) {
+                    $ids[$product['id']] = $product;
+                }
+            }
+            $products = array_filter($ids);
+        } else {
+            foreach ($searchResult->getProductsSearchResult() as $product) {
+                if (in_array($product['id'], $paginatedIds)) {
+                    $products[] = $product;
+                }
+            }
+        }
+
+        return $this->searchResultFactory->create($searchResult->getTotalCount(), $products);
     }
 
     /**

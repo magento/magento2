@@ -443,6 +443,18 @@ QUERY;
     {
         $productOptions = $product->getOptions();
         $this->assertNotEmpty($actualResponse['options'], "Precondition failed: 'options' must not be empty");
+        usort(
+            $actualResponse['options'],
+            function ($a, $b) {
+                return strcmp($a['title'], $b['title']);
+            }
+        );
+        usort(
+            $productOptions,
+            function ($a, $b) {
+                return strcmp($a['title'], $b['title']);
+            }
+        );
         foreach ($actualResponse['options'] as $optionsIndex => $optionsArray) {
             /** @var \Magento\Catalog\Model\Product\Option $option */
             $option = $productOptions[$optionsIndex];
