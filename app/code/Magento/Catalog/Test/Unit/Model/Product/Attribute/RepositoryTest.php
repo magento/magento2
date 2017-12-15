@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -87,7 +85,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->eavConfigMock = $this->createMock(\Magento\Eav\Model\Config::class);
         $this->eavConfigMock->expects($this->any())->method('getEntityType')
             ->willReturn(new \Magento\Framework\DataObject(['default_attribute_set_id' => 4]));
-        $this->validatorFactoryMock = $this->createPartialMock(\Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory::class, ['create']);
+        $this->validatorFactoryMock = $this->createPartialMock(
+            \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory::class,
+            ['create']
+        );
         $this->searchCriteriaBuilderMock =
             $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         $this->searchResultMock =
@@ -210,7 +211,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveInputExceptionRequiredField()
     {
-        $attributeMock = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, ['getFrontendLabels', 'getDefaultFrontendLabel', '__wakeup', 'getAttributeId', 'setAttributeId']);
+        $attributeMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            ['getFrontendLabels', 'getDefaultFrontendLabel', '__wakeup', 'getAttributeId', 'setAttributeId']
+        );
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn(null);
         $attributeMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();
         $attributeMock->expects($this->once())->method('getFrontendLabels')->willReturn(null);
@@ -225,7 +229,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveInputExceptionInvalidFieldValue()
     {
-        $attributeMock = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, ['getFrontendLabels', 'getDefaultFrontendLabel', 'getAttributeId', '__wakeup', 'setAttributeId']);
+        $attributeMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            ['getFrontendLabels', 'getDefaultFrontendLabel', 'getAttributeId', '__wakeup', 'setAttributeId']
+        );
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn(null);
         $attributeMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();
         $labelMock = $this->createMock(\Magento\Eav\Api\Data\AttributeFrontendLabelInterface::class);

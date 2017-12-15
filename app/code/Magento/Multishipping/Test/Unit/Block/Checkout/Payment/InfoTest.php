@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Multishipping\Test\Unit\Block\Checkout\Payment;
 
 use Magento\Multishipping\Block\Checkout\Payment\Info;

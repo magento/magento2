@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Fedex\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -641,7 +639,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 }
             }
 
-            if (is_null($amount)) {
+            if ($amount === null) {
                 $amount = (string)$rate->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount;
             }
         }
@@ -1135,7 +1133,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         // no available tracking details
         if (!$counter) {
             $this->appendTrackingError(
-                $trackingValue, __('For some reason we can\'t retrieve tracking info right now.')
+                $trackingValue,
+                __('For some reason we can\'t retrieve tracking info right now.')
             );
         }
     }

@@ -6,7 +6,7 @@
 
 /** This is project's console commands configuration for Robo task runner.
  *
- * @codingStandardsIgnoreFile
+ * @codingStandardsIgnoreStart
  * @see http://robo.li/
  */
 class RoboFile extends \Robo\Tasks

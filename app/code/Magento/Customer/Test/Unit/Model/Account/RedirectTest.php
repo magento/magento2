@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Model\Account;
 
 use Magento\Customer\Model\Account\Redirect;
