@@ -147,6 +147,16 @@ abstract class AbstractType
     private $productEntityLinkField;
 
     /**
+     * Skip set default values for list of attributes
+     * if value in import file is empty
+     *
+     * @var array
+     */
+    protected $_skipDefaultValues = [
+        \Magento\CatalogImportExport\Model\Import\Product::COL_VISIBILITY
+    ];
+
+    /**
      * AbstractType constructor
      *
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
@@ -517,7 +527,8 @@ abstract class AbstractType
                 }
             } elseif (array_key_exists($attrCode, $rowData)) {
                 $resultAttrs[$attrCode] = $rowData[$attrCode];
-            } elseif ($withDefaultValue && null !== $attrParams['default_value']) {
+            } elseif ($withDefaultValue && null !== $attrParams['default_value']
+                && !in_array($attrCode, $this->_skipDefaultValues)) {
                 $resultAttrs[$attrCode] = $attrParams['default_value'];
             }
         }
