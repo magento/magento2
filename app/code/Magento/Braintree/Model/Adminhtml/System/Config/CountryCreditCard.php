@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Braintree\Model\Adminhtml\System\Config;
 
 use Magento\Framework\App\Cache\TypeListInterface;
@@ -14,6 +15,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Braintree\Gateway\Config\Config;
 
 /**
  * Class CountryCreditCard
@@ -51,7 +53,8 @@ class CountryCreditCard extends Value
         AbstractDb $resourceCollection = null,
         array $data = [],
         Json $serializer = null
-    ) {
+    )
+    {
         $this->mathRandom = $mathRandom;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(Json::class);
@@ -65,17 +68,23 @@ class CountryCreditCard extends Value
      */
     public function beforeSave()
     {
-        $value = $this->getValue();
+        $value = json_decode(
+            $this->getValue(Config::KEY_COUNTRY_CREDIT_CARD),
+            true
+        );
+
         $result = [];
-        foreach ($value as $data) {
-            if (empty($data['country_id']) || empty($data['cc_types'])) {
-                continue;
-            }
-            $country = $data['country_id'];
-            if (array_key_exists($country, $result)) {
-                $result[$country] = $this->appendUniqueCountries($result[$country], $data['cc_types']);
-            } else {
-                $result[$country] = $data['cc_types'];
+        if (is_array($value)) {
+            foreach ($value as $data) {
+                if (empty($data['country_id']) || empty($data['cc_types'])) {
+                    continue;
+                }
+                $country = $data['country_id'];
+                if (array_key_exists($country, $result)) {
+                    $result[$country] = $this->appendUniqueCountries($result[$country], $data['cc_types']);
+                } else {
+                    $result[$country] = $data['cc_types'];
+                }
             }
         }
         $this->setValue($this->serializer->serialize($result));
