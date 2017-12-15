@@ -60,7 +60,7 @@ class Transport implements TransportInterface
      * @param \Zend_Mail_Transport_Sendmail $transport
      * @param MessageInterface $message Email message object
      * @param ScopeConfigInterface $scopeConfig Core store config
-     * @param null|\\Magento\Store\Model\Store $store
+     * @param null|\Magento\Store\Model\Store $store
      *
      * @throws \InvalidArgumentException when $message is not an instance of \Zend_Mail
      */
