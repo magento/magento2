@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Setup\Operation;
 
-use Magento\InventoryApi\Api\Data\SourceInterface;
-use Magento\InventoryCatalog\Model\DefaultSourceProvider;
-use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
+use Magento\InventoryCatalog\Model\DefaultSourceProvider;
 
 /**
  * Create default source during installation
@@ -65,6 +65,7 @@ class CreateDefaultSource
     {
         $data = [
             SourceInterface::SOURCE_ID => $this->defaultSourceProvider->getId(),
+            SourceInterface::CODE => 'default',
             SourceInterface::NAME => 'Default Source',
             SourceInterface::ENABLED => 1,
             SourceInterface::DESCRIPTION => 'Default Source',

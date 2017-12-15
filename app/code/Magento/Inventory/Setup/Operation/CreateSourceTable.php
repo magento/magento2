@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Setup\Operation;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
@@ -37,6 +38,7 @@ class CreateSourceTable
         $sourceTable = $this->addAddressFields($sourceTable);
         $sourceTable = $this->addContactInfoFields($sourceTable);
         $sourceTable = $this->addSourceCarrierFields($sourceTable);
+        $sourceTable = $this->addIndex($sourceTable, $setup);
 
         $setup->getConnection()->createTable($sourceTable);
     }
@@ -58,6 +60,14 @@ class CreateSourceTable
                 Table::OPTION_PRIMARY => true,
             ],
             'Source ID'
+        )->addColumn(
+            SourceInterface::CODE,
+            Table::TYPE_TEXT,
+            255,
+            [
+                Table::OPTION_NULLABLE => false,
+            ],
+            'Source Code'
         )->addColumn(
             SourceInterface::NAME,
             Table::TYPE_TEXT,
@@ -237,5 +247,22 @@ class CreateSourceTable
             'Use default carrier configuration'
         );
         return $sourceTable;
+    }
+
+    private function addIndex(Table $sourceTable, SchemaSetupInterface $setup)
+    {
+        return $sourceTable->addIndex(
+            $setup->getIdxName(
+                $setup->getTable(SourceResourceModel::TABLE_NAME_SOURCE),
+                [
+                    SourceInterface::CODE
+                ],
+                AdapterInterface::INDEX_TYPE_UNIQUE
+            ),
+            [
+                SourceInterface::CODE
+            ],
+            ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
+        );
     }
 }

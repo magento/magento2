@@ -51,6 +51,12 @@
             <resource ref="Magento_InventoryApi::stock_edit"/>
         </resources>
     </route>
+    <route url="/V1/inventory/stock/:stockId" method="DELETE">
+        <service class="Magento\InventoryApi\Api\StockRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="Magento_InventoryApi::stock_delete"/>
+        </resources>
+    </route>
     <route url="/V1/inventory/stock/:stockId" method="PUT">
         <service class="Magento\InventoryApi\Api\StockRepositoryInterface" method="save"/>
         <resources>
