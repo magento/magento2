@@ -10,6 +10,8 @@ use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterf
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
+ * Process integer type and separate it on type and padding
+ *
  * @inheritdoc
  */
 class Integer implements DbSchemaProcessorInterface

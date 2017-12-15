@@ -10,6 +10,9 @@ use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterf
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
+ * As all MySQL aliases as BOOL or BOOLEAN are converted to TINYINT(1)
+ * proposed to processed tinyint as boolean
+ *
  * @inheritdoc
  */
 class Boolean implements DbSchemaProcessorInterface

@@ -10,6 +10,9 @@ use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterf
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
+ * Look for all indexes that MySQL table has. Note, that we need to ignore
+ * all unique indexes, as this indexes belongs to constraints, as they limit DML queries
+ *
  * @inheritdoc
  */
 class Index implements DbSchemaProcessorInterface

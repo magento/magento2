@@ -10,7 +10,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 
 /**
  * Text column
- * Declared in SQL, like TEXT
+ * Declared in SQL, like: TEXT, MEDIUMTEXT, LONGTEXT
  */
 class Text extends Column implements ElementDiffAwareInterface
 {

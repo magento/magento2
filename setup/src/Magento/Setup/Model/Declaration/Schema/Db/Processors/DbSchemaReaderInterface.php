@@ -7,7 +7,8 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db\Processors;
 
 /**
- * This class is responsible for read different typ
+ * This class is responsible for read different schema
+ * structural elements: indexes, constraints, talbe names and columns
  */
 interface DbSchemaReaderInterface
 {

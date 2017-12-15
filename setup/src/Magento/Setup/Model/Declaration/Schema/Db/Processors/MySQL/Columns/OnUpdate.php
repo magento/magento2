@@ -10,6 +10,8 @@ use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterf
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
+ * On update attribute is like trigger and can be used for many different columns
+ *
  * @inheritdoc
  */
 class OnUpdate implements DbSchemaProcessorInterface

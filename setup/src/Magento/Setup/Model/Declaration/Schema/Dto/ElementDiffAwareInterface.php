@@ -6,7 +6,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
 /**
- * This interface provides all params, that should participate in element diff
+ * This interface provides all params, that should participate in elements comparison
  */
 interface ElementDiffAwareInterface
 {

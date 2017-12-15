@@ -11,6 +11,9 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
  * We always have 6 fields and we need to process all six of them
+ * For columns we do not need 'key'
+ * Also we need to make nullable and type in lower case
+ *
  * @inheritdoc
  */
 class Basic implements DbSchemaProcessorInterface

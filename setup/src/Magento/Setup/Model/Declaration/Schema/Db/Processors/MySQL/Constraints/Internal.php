@@ -10,7 +10,7 @@ use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterf
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Detect primary or unique constraints
+ * Detect primary or unique constraints and map them to appropriate format
  *
  * @inheritdoc
  */

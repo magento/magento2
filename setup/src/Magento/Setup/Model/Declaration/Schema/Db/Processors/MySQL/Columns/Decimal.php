@@ -10,6 +10,8 @@ use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterf
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
+ * Process decimal type and separate it into type, scale and precission
+ *
  * @inheritdoc
  */
 class Decimal implements DbSchemaProcessorInterface

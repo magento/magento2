@@ -11,7 +11,8 @@ use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaReaderInterface
 
 /**
  * Needs for different types of SQL engines
- * Depends on SQL engine, envolves different processors and prepare SQL code or Data Objects tables representation
+ * Depends on SQL engine, envolves different processors and convert from SQL schema represenation
+ * to readable <array> or from do DDL operations: convert from DTO`s objects to SQL definition and run SQL query.
  */
 class AdapterMediator
 {

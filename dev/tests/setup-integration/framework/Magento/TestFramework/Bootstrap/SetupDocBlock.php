@@ -27,7 +27,6 @@ class SetupDocBlock extends \Magento\TestFramework\Bootstrap\DocBlock
             new \Magento\TestFramework\Workaround\Cleanup\StaticProperties(),
             new \Magento\TestFramework\Isolation\WorkingDirectory(),
             new \Magento\TestFramework\Workaround\DeploymentConfig(),
-            new \Magento\TestFramework\Annotation\AppIsolation($application),
             new \Magento\TestFramework\Annotation\ComponentRegistrarFixture($this->_fixturesBaseDir),
             new \Magento\TestFramework\Annotation\SchemaFixture($this->_fixturesBaseDir),
             new \Magento\TestFramework\Annotation\Cache(),

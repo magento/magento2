@@ -8,7 +8,8 @@ namespace Magento\Setup\Model\Declaration\Schema\Casters;
 use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
- * Basic interpreter - used to map one xsi:type to element type
+ * Basic caster is cast configurations from db and from XML
+ * to one common format. It do not rely to element type.
  */
 class Base implements CasterInterface
 {

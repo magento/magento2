@@ -11,6 +11,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Sharding gives possibility to see what structural element should be installed on what shard
+ * You can find what is shard in any SQL documentation
  */
 class Sharding
 {

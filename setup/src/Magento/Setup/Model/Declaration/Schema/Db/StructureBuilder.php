@@ -15,6 +15,14 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Sharding;
 
 /**
+ * This type of builder is responsible for converting ENTIRE data, that comes from db
+ * into DTO`s format, with aggregation root: Structure
+ *
+ * Note: StructureBuilder can not be used for one structural element, like column or constraint
+ * because it should have references to other DTO objects.
+ * In order to convert build only 1 structural element use directly it factory
+ *
+ * @see Structure
  * @inheritdoc
  */
 class StructureBuilder
@@ -125,6 +133,8 @@ class StructureBuilder
 
     /**
      * Process references for all tables
+     * This needs to validate schema. And find out invalid references, for example
+     * for tables that do not exists already
      *
      * @param Table[] $tables
      * @return Table[]

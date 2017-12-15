@@ -10,6 +10,8 @@ use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterf
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
+ * Process timestamp and find out it on_update and default values
+ *
  * @inheritdoc
  */
 class Timestamp implements DbSchemaProcessorInterface

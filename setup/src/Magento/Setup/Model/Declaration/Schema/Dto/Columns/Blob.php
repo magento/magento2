@@ -9,7 +9,8 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 
 /**
- * blob column
+ * This column represent binary type
+ * We can have few binary types: blob, mediumblob, largeblog
  * Declared in SQL, like blob
  */
 class Blob extends Column implements ElementDiffAwareInterface

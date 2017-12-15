@@ -7,8 +7,8 @@
 namespace Magento\Setup\Model\Declaration\Schema;
 
 /**
- * Interface ChangeProcessorInterface
- * @package Magento\Setup\Model\Declaration\Schema
+ * With help of ChangeProcessorInterface you can go thorugh all element types
+ * and apply difference, that is persisted in ChangeRegistry
  */
 interface ChangeProcessorInterface
 {

@@ -10,6 +10,8 @@ use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterf
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
+ * Unsigned can be used for all numeric types
+ *
  * @inheritdoc
  */
 class Unsigned implements DbSchemaProcessorInterface

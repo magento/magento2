@@ -10,8 +10,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 
 /**
  * Boolean column
- * Declared in SQL, like TINYINT(1) or VARBINARY(2). Is just alias for integer or binary type.
- * Can have
+ * Declared in SQL, like TINYINT(1) or BOOL or BOOLEAN. Is just alias for integer or binary type.
  */
 class Boolean extends Column implements ElementDiffAwareInterface
 {

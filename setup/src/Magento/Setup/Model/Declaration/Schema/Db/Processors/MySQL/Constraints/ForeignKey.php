@@ -10,6 +10,9 @@ use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterf
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
+ * MySQL holds foreign keys definitions only in "CREATE TABLE" sql. So we can access them
+ * only with parsing of this statement, and searching by ADD CONSTRAINT FOREIGN KEY
+ *
  * @inheritdoc
  */
 class ForeignKey implements DbSchemaProcessorInterface

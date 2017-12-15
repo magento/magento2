@@ -7,7 +7,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Casters;
 
 /**
  * Date caster
- * Should not have any values
+ * Remove default and nullable attributes, as date type must not have any attributes
  */
 class Date implements CasterInterface
 {

@@ -6,8 +6,9 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
 /**
- * This interface says, that element was renamed and new name should be specified for element
- * Rename attribute do not participate in diff operation
+ * This interface can said, that element was renamed and new name should be specified for element
+ *
+ * If DTO implements this interface - then element can be renamed
  */
 interface ElementRenamedInterface
 {

@@ -10,14 +10,26 @@ use Magento\Setup\Model\Declaration\Schema\ChangeRegistryInterface;
 use Magento\Setup\Model\Declaration\Schema\Comparator;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementRenamedInterface;
-use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
 
 /**
  * Helper which provide methods, that helps to compare 2 different nodes:
  * For instance, 2 columns between each other
  */
-trait DiffManager
+class DiffManager
 {
+    /**
+     * @var Comparator
+     */
+    private $comparator;
+
+    /**
+     * @param Comparator $comparator
+     */
+    public function __construct(Comparator $comparator)
+    {
+        $this->comparator = $comparator;
+    }
+
     /**
      * Check whether new name is not corresponds with olds one
      *
@@ -147,16 +159,14 @@ trait DiffManager
     /**
      * Check whether element should be modified or not
      *
-     * @param Comparator $comparator
      * @param ElementInterface $element
      * @param ElementInterface $generatedElement
      * @return bool
      */
     public function shouldBeModified(
-        Comparator $comparator,
         ElementInterface $element,
         ElementInterface $generatedElement
     ) {
-        return !$comparator->compare($element, $generatedElement);
+        return !$this->comparator->compare($element, $generatedElement);
     }
 }

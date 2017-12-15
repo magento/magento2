@@ -7,7 +7,6 @@
 namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
 use Magento\Setup\Model\Declaration\Schema\ChangeRegistry;
-use Magento\Setup\Model\Declaration\Schema\Comparator;
 use Magento\Setup\Model\Declaration\Schema\DiffInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
@@ -15,31 +14,40 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 /**
  * As table can have different types of elements inside itself
  * We need to compare all of this elements
+ *
+ * If element exists only in XML -> then we need to create element
+ * If element exists in both version and are different -> then we need to modify element
+ * If element exists only in db -> then we need to remove this element
+ * If element wasRenamedFrom attribute is differ with name -> then we need to rename element
  */
 class TableDiff implements DiffInterface
 {
-    use DiffManager;
-
-    /** Column type for diff */
+    /**
+     * Column type for diff
+     */
     const COLUMN_DIFF_TYPE = "columns";
 
-    /** Constraint type for diff */
+    /**
+     * Constraint type for diff
+     */
     const CONSTRAINT_DIFF_TYPE = "constraints";
 
-    /** Constraint type for diff */
+    /**
+     * Constraint type for diff
+     */
     const INDEX_DIFF_TYPE = "indexes";
 
     /**
-     * @var Comparator
+     * @var DiffManager
      */
-    private $comparator;
+    private $diffManager;
 
     /**
-     * @param Comparator $comparator
+     * @param DiffManager $diffManager
      */
-    public function __construct(Comparator $comparator)
+    public function __construct(DiffManager $diffManager)
     {
-        $this->comparator = $comparator;
+        $this->diffManager = $diffManager;
     }
 
     /**
@@ -61,18 +69,19 @@ class TableDiff implements DiffInterface
 
             foreach ($declaredElements as $element) {
                 //If it is new for generated (generated from db) elements - we need to create it
-                if ($this->shouldBeCreatedOrRenamed($generatedElements, $element)) {
-                    if ($this->shouldBeRenamed($element)) {
-                        $generatedElements = $this->registerRename($changeRegistry, $element, $generatedElements);
+                if ($this->diffManager->shouldBeCreatedOrRenamed($generatedElements, $element)) {
+                    if ($this->diffManager->shouldBeRenamed($element)) {
+                        $generatedElements = $this->diffManager
+                            ->registerRename($changeRegistry, $element, $generatedElements);
                     } else {
-                        $this->registerCreation($changeRegistry, $element);
+                        $this->diffManager->registerCreation($changeRegistry, $element);
                     }
-                } else if ($this->shouldBeModified(
-                    $this->comparator,
+                } else if ($this->diffManager->shouldBeModified(
                     $element,
                     $generatedElements[$element->getName()]
                 )) {
-                    $this->registerModification($changeRegistry, $element, $generatedElements[$element->getName()]);
+                    $this->diffManager
+                        ->registerModification($changeRegistry, $element, $generatedElements[$element->getName()]);
                 }
                 //Unset processed elements from generated from db structure
                 //All other unprocessed elements will be added as removed ones
@@ -80,8 +89,8 @@ class TableDiff implements DiffInterface
             }
 
             //Elements that should be removed
-            if ($this->shouldBeRemoved($generatedElements)) {
-                $this->registerRemoval($changeRegistry, $generatedElements, $declaredElements);
+            if ($this->diffManager->shouldBeRemoved($generatedElements)) {
+                $this->diffManager->registerRemoval($changeRegistry, $generatedElements, $declaredElements);
             }
         }
     }

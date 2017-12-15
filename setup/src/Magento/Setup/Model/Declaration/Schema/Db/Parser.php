@@ -10,6 +10,9 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
 use Magento\Setup\Model\Declaration\Schema\SchemaParserInterface;
 
 /**
+ * Parser is responsible for builind structure.
+ * @see Structure
+ *
  * @inheritdoc
  */
 class Parser implements SchemaParserInterface

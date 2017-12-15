@@ -10,6 +10,9 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
 
 /**
  * Parser hydrate structure object with data from either db or XML file
+ * Usually parser use StructureBuilders
+ *
+ * Declaration has 2 structure builders, that build schema from db and from XML
  */
 interface SchemaParserInterface
 {

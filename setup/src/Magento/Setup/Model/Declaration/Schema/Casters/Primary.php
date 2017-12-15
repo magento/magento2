@@ -9,7 +9,9 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
 
 /**
  * Serves foreign key constraint needs.
- * Add additonal onDelete param
+ * By default primary key can have only one name - PRIMARY
+ * And this name is hardcoded. This is done, in order to prevent creating 2 primary keys
+ * for one table
  */
 class Primary implements CasterInterface
 {

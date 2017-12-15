@@ -6,8 +6,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Xml;
 
 /**
- * Class SchemaLocator
- * @package Magento\Setup\Model\Declaration\Schema\Xml
+ * This is system class that provides .xsd file for validation XML schema
  */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {

@@ -15,8 +15,12 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Sharding;
 
 /**
- * Class StructureBuilder
- * Return collection with DTO objects from array
+ * This type of builder is responsible for converting ENTIRE data, that comes from XML
+ * into DTO`s format, with aggregation root: Structure
+ *
+ * Note: StructureBuilder can not be used for one structural element, like column or constraint
+ * because it should have references to other DTO objects.
+ * In order to convert build only 1 structural element use directly it factory
  */
 class StructureBuilder
 {
