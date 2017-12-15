@@ -13,12 +13,14 @@ use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 
 /**
  * Delete Legacy cataloginventory_stock_item by plain MySql query
  * Use for skip delete by \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::delete
  */
-class DeleteLegacyStockItemByDefaultSourceItem
+class DisableLegacyStockItemByDefaultSourceItem
 {
     /**
      * @var ResourceConnection
@@ -28,18 +30,34 @@ class DeleteLegacyStockItemByDefaultSourceItem
     /**
      * @var ProductIdLocatorInterface
      */
-    private $idLocator;
+    private $productIdLocator;
+
+    /**
+     * @var DefaultSourceProviderInterface
+     */
+    private $defaultSourceProvider;
+
+    /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
-     * @param ProductIdLocatorInterface $idLocator
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
+     * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param ProductIdLocatorInterface $productIdLocator
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        ProductIdLocatorInterface $idLocator
+        DefaultSourceProviderInterface $defaultSourceProvider,
+        DefaultStockProviderInterface $defaultStockProvider,
+        ProductIdLocatorInterface $productIdLocator
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->idLocator = $idLocator;
+        $this->defaultSourceProvider = $defaultSourceProvider;
+        $this->defaultStockProvider = $defaultStockProvider;
+        $this->productIdLocator = $productIdLocator;
     }
 
     /**
@@ -47,16 +65,24 @@ class DeleteLegacyStockItemByDefaultSourceItem
      */
     public function execute(SourceItemInterface $sourceItem)
     {
-        $productIds = $this->idLocator->retrieveProductIdsBySkus([$sourceItem->getSku()]);
+        if ($sourceItem->getSourceId() != $this->defaultSourceProvider->getId()) {
+            return;
+        }
+
+        $productIds = $this->productIdLocator->retrieveProductIdsBySkus([$sourceItem->getSku()]);
         $productId = isset($productIds[$sourceItem->getSku()]) ? key($productIds[$sourceItem->getSku()]) : false;
 
         if ($productId) {
             $connection = $this->resourceConnection->getConnection();
-            $connection->delete(
+            $connection->update(
                 $this->resourceConnection->getTableName('cataloginventory_stock_item'),
                 [
+                    StockItemInterface::IS_IN_STOCK => 0,
+                    StockItemInterface::QTY => 0
+                ],
+                [
+                    StockItemInterface::STOCK_ID . ' = ?' => $this->defaultStockProvider->getId(),
                     StockItemInterface::PRODUCT_ID . ' = ?' => $productId,
-                    StockItemInterface::STOCK_ID . ' = ?' => Stock::DEFAULT_STOCK_ID,
                     Stock::WEBSITE_ID . ' = ?' => 0
                 ]
             );

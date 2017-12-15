@@ -9,6 +9,7 @@ namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
@@ -98,6 +99,7 @@ class DeleteLegacyCatalogInventoryPluginTest extends TestCase
         $criteria = $this->stockItemCriteriaFactory->create();
         $criteria->setProductsFilter([$product->getId()]);
         $criteria->setStockFilter($defaultStock);
+        $criteria->addFilter('filter_is_in_stock', StockItemInterface::IS_IN_STOCK, true);
 
         /** @var StockItemCollectionInterface $collectionBeforeChange */
         $stockItemsBeforeDelete = $this->oldStockItemRepository->getList($criteria)->getItems();

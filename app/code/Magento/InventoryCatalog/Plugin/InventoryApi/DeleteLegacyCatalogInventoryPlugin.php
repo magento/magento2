@@ -9,9 +9,8 @@ namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
-use Magento\InventoryCatalog\Model\DeleteLegacyStockItemByDefaultSourceItem;
-use Magento\InventoryCatalog\Model\DeleteLegacyStockStatusByDefaultSourceItem;
+use Magento\InventoryCatalog\Model\DisableLegacyStockItemByDefaultSourceItem;
+use Magento\InventoryCatalog\Model\DisableLegacyStockStatusByDefaultSourceItem;
 
 /**
  * Plugin help to delete related entries from the legacy catalog inventory tables cataloginventory_stock_status and
@@ -20,33 +19,25 @@ use Magento\InventoryCatalog\Model\DeleteLegacyStockStatusByDefaultSourceItem;
 class DeleteLegacyCatalogInventoryPlugin
 {
     /**
-     * @var DefaultSourceProviderInterface
+     * @var DisableLegacyStockItemByDefaultSourceItem
      */
-    private $defaultSourceProvider;
+    private $disableStockItemBySourceItem;
 
     /**
-     * @var DeleteLegacyStockItemByDefaultSourceItem
+     * @var DisableLegacyStockStatusByDefaultSourceItem
      */
-    private $deleteStockItemBySourceItem;
+    private $disableStockStatusBySourceItem;
 
     /**
-     * @var DeleteLegacyStockStatusByDefaultSourceItem
-     */
-    private $deleteStockStatusBySourceItem;
-
-    /**
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param DeleteLegacyStockItemByDefaultSourceItem $deleteStockItemBySourceItem
-     * @param DeleteLegacyStockStatusByDefaultSourceItem $deleteStockStatusBySourceItem
+     * @param DisableLegacyStockItemByDefaultSourceItem $disableStockItemBySourceItem
+     * @param DisableLegacyStockStatusByDefaultSourceItem $disableStockStatusBySourceItem
      */
     public function __construct(
-        DefaultSourceProviderInterface $defaultSourceProvider,
-        DeleteLegacyStockItemByDefaultSourceItem $deleteStockItemBySourceItem,
-        DeleteLegacyStockStatusByDefaultSourceItem $deleteStockStatusBySourceItem
+        DisableLegacyStockItemByDefaultSourceItem $disableStockItemBySourceItem,
+        DisableLegacyStockStatusByDefaultSourceItem $disableStockStatusBySourceItem
     ) {
-        $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->deleteStockItemBySourceItem = $deleteStockItemBySourceItem;
-        $this->deleteStockStatusBySourceItem = $deleteStockStatusBySourceItem;
+        $this->disableStockItemBySourceItem = $disableStockItemBySourceItem;
+        $this->disableStockStatusBySourceItem = $disableStockStatusBySourceItem;
     }
 
     /**
@@ -63,13 +54,9 @@ class DeleteLegacyCatalogInventoryPlugin
      */
     public function afterExecute(SourceItemsDeleteInterface $subject, $result, array $sourceItems)
     {
-        $defaultSourceId = $this->defaultSourceProvider->getId();
-
         foreach ($sourceItems as $sourceItem) {
-            if ($sourceItem->getSourceId() == $defaultSourceId) {
-                $this->deleteStockItemBySourceItem->execute($sourceItem);
-                $this->deleteStockStatusBySourceItem->execute($sourceItem);
-            }
+            $this->disableStockItemBySourceItem->execute($sourceItem);
+            $this->disableStockStatusBySourceItem->execute($sourceItem);
         }
     }
 }
