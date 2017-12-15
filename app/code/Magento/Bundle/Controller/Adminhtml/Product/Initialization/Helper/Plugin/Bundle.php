@@ -132,10 +132,6 @@ class Bundle
         }
         $options = [];
         foreach ($bundleOptionsData as $key => $optionData) {
-            if ((bool)$optionData['delete']) {
-                continue;
-            }
-
             $option = $this->optionFactory->create(['data' => $optionData]);
             $option->setSku($product->getSku());
             if (!$option->getOptionId()) {
