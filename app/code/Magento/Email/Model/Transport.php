@@ -60,21 +60,26 @@ class Transport implements TransportInterface
      * @param \Zend_Mail_Transport_Sendmail $transport
      * @param MessageInterface $message Email message object
      * @param ScopeConfigInterface $scopeConfig Core store config
-     * @param string|array|\Zend_Config|null $parameters Config options for sendmail parameters
+     * @param null|\\Magento\Store\Model\Store $store
      *
      * @throws \InvalidArgumentException when $message is not an instance of \Zend_Mail
      */
     public function __construct(
         \Zend_Mail_Transport_Sendmail $transport,
         MessageInterface $message,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        $store = null
     ) {
+
         if (!$message instanceof \Zend_Mail) {
             throw new \InvalidArgumentException('The message should be an instance of \Zend_Mail');
         }
         $this->transport = $transport;
         $this->message = $message;
         $this->scopeConfig = $scopeConfig;
+        $this->store = $store ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Store\Model\Store::class
+        );
     }
 
     /**
@@ -121,17 +126,6 @@ class Transport implements TransportInterface
     public function getMessage()
     {
         return $this->message;
-    }
-
-    /**
-     * Set store
-     * @param \Magento\Store\Model\Store
-     * @return $this;
-     */
-    public function setStore($store)
-    {
-        $this->store = $store;
-        return $this;
     }
 
     /**
