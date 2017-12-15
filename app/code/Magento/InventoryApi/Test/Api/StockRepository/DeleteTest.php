@@ -14,7 +14,7 @@ use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\TestFramework\Assert\AssertArrayContains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
-class GetListTest extends WebapiAbstract
+class DeleteTest extends WebapiAbstract
 {
     /**#@+
      * Service constants
