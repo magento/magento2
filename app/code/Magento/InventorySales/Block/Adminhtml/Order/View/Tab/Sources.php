@@ -3,13 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventorySales\Block\Adminhtml\Order\View\Tab;
 
 /**
- * Sources tab
+ * Tab for source items display on the order editing page
  *
- * @api
- * @since 100.0.2
  */
 class Sources extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -88,9 +88,8 @@ class Sources extends \Magento\Backend\Block\Template implements \Magento\Backen
             $itemSku = $orderItem->getSku();
             $orderItemId = $orderItem->getItemId();
             $sources = $this->getSourcesBySku($itemSku);
-
             foreach ($sources as $source) {
-                $sourceName = $this->sourceRepository->get($source->getSourceId())->getName();
+                $sourceName = $this->sourceRepository->get((int)$source->getSourceId())->getName();
                 $items[$sourceName][$orderItemId] = [
                     'sku' => $itemSku,
                     'qty' => $source->getQuantity()
@@ -107,7 +106,7 @@ class Sources extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param string $sku
      * @return array
      */
-    private function getSourcesBySku(string $sku)
+    private function getSourcesBySku(string $sku): array
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('sku', $sku)
@@ -119,7 +118,7 @@ class Sources extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabLabel()
     {
@@ -127,7 +126,7 @@ class Sources extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabTitle()
     {
@@ -135,7 +134,7 @@ class Sources extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canShowTab()
     {
@@ -143,7 +142,7 @@ class Sources extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isHidden()
     {
