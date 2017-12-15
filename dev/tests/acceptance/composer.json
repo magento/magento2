@@ -22,7 +22,7 @@
         "consolidation/robo": "^1.0.0",
         "symfony/process": ">=2.7 <3.4",
         "henrikbjorn/lurker": "^1.2",
-        "magento/magento2-functional-testing-framework": "1.0.0",
+        "magento/magento2-functional-testing-framework": "~1.0.0",
         "php": "7.0.2|7.0.4|~7.0.6|~7.1.0",
         "vlucas/phpdotenv": "~2.4"
     },
