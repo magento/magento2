@@ -22,7 +22,7 @@ class UrlDecoder
     {
         foreach ($params as &$param) {
             if (is_array($param)) {
-                $this->decodeParams($param);
+                $param = $this->decodeParams($param);
             } else {
                 if ($param !== null && is_string($param)) {
                     $param = rawurldecode($param);
