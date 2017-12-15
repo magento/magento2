@@ -883,7 +883,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function getResizedImageInfo()
     {
-        $errorMessage = 'Can\'t get information about the picture: ';
         try {
             if ($this->isBaseFilePlaceholder() == true) {
                 $image = $this->imageAsset->getSourceFile();
@@ -896,7 +895,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
             return $imageProperties;
         } finally {
             if (empty($imageProperties)) {
-                throw new NotLoadInfoImageException(__($errorMessage . $image));
+                throw new NotLoadInfoImageException(__('Can\'t get information about the picture: %1', $image));
             }
         }
     }

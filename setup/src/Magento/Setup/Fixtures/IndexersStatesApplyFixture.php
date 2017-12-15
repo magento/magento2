@@ -14,7 +14,7 @@ class IndexersStatesApplyFixture extends Fixture
     /**
      * @var int
      */
-    protected $priority = 170;
+    protected $priority = -1;
 
     /**
      * {@inheritdoc}

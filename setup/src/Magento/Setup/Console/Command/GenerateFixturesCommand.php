@@ -17,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command generates fixtures for performance tests
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GenerateFixturesCommand extends Command
 {
@@ -84,7 +85,8 @@ class GenerateFixturesCommand extends Command
             }
 
             /** @var \Magento\Setup\Fixtures\ConfigsApplyFixture $configFixture */
-            $configFixture = $fixtureModel->getConfigurationFixture();
+            $configFixture = $fixtureModel
+                ->getFixtureByName(\Magento\Setup\Fixtures\ConfigsApplyFixture::class);
             $configFixture && $this->executeFixture($configFixture, $output);
 
             /** @var $config \Magento\Indexer\Model\Config */
@@ -106,7 +108,8 @@ class GenerateFixturesCommand extends Command
             $this->clearChangelog();
 
             /** @var \Magento\Setup\Fixtures\IndexersStatesApplyFixture $indexerFixture */
-            $indexerFixture = $this->fixtureModel->getIndexerFixture();
+            $indexerFixture = $fixtureModel
+                ->getFixtureByName(\Magento\Setup\Fixtures\IndexersStatesApplyFixture::class);
             $indexerFixture && $this->executeFixture($indexerFixture, $output);
 
             if (!$input->getOption(self::SKIP_REINDEX_OPTION)) {
