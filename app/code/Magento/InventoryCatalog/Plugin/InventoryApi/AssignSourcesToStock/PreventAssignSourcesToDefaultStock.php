@@ -27,7 +27,7 @@ class PreventAssignSourcesToDefaultStock
     public function __construct(
         DefaultSourceProviderInterface $defaultSourceProvider,
         DefaultStockProviderInterface $defaultStockProvider
-    ){
+    ) {
         $this->defaultStockProvider = $defaultStockProvider;
         $this->defaultSourceProvider = $defaultSourceProvider;
     }
