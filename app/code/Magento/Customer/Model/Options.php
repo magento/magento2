@@ -92,13 +92,14 @@ class Options
         }
         $result = [];
         $options = explode(';', $options);
-        if ($isOptional && trim(current($options))) {
-            array_unshift($options, '');
-        }
         foreach ($options as $value) {
             $value = $this->escaper->escapeHtml(trim($value));
             $result[$value] = $value;
         }
+        if ($isOptional && trim(current($options))) {
+            $result = array_merge([' ' => ' '], $result);
+        }
+
         return $result;
     }
 }
