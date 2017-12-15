@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php foreach ($block->getSourceItems() as $sourceName => $sourceItems): ?>
+    <table class="data-table admin__table-primary edit-order-table">
+        <div class="admin__page-section-item-title">
+            <span class="title"><?= $sourceName ?></span>
+        </div>
+        <thead>
+            <tr class="headings">
+                <th><span>Sku</span></th>
+                <th><span>Qty</span></th>
+            </tr>
+        </thead>
+        <?php foreach ($sourceItems as $item): ?>
+            <tr>
+                <td><?= $item['sku'] ?></td>
+                <td><?= $item['qty'] ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+<?php endforeach; ?>
+
