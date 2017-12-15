@@ -19,6 +19,7 @@
         <arguments>
             <argument name="validators" xsi:type="array">
                 <item name="name" xsi:type="object">Magento\Inventory\Model\Source\Validator\NameValidator</item>
+                <item name="code" xsi:type="object">Magento\Inventory\Model\Source\Validator\CodeValidator</item>
                 <item name="postcode" xsi:type="object">Magento\Inventory\Model\Source\Validator\PostcodeValidator</item>
                 <item name="country" xsi:type="object">Magento\Inventory\Model\Source\Validator\CountryValidator</item>
                 <item name="carrier_links" xsi:type="object">Magento\Inventory\Model\Source\Validator\CarrierLinksValidator</item>
