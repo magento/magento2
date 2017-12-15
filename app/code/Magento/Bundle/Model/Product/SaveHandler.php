@@ -8,7 +8,6 @@ namespace Magento\Bundle\Model\Product;
 use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
-use Magento\Bundle\Model\Product\Type;
 
 /**
  * Class SaveHandler
@@ -59,39 +58,20 @@ class SaveHandler implements ExtensionInterface
             return $entity;
         }
 
-        $existingOptionsIds = [];
-        $optionIds = [];
-        foreach ($existingBundleProductOptions as $option) {
-            $existingOptionsIds[] = $option->getOptionId();
-        }
-        foreach ($bundleProductOptions as $option) {
-            if ($option->getOptionId()) {
-                $optionIds[] = $option->getOptionId();
-            }
-        }
+        $existingOptionsIds = $this->getOptionIds($existingBundleProductOptions);
+        $optionIds = $this->getOptionIds($bundleProductOptions);
+
+        $options = $bundleProductOptions ?: [];
 
         if (!$entity->getCopyFromView()) {
-            foreach (array_diff($existingOptionsIds, $optionIds) as $optionId) {
-                $option = $this->optionRepository->get($entity->getSku(), $optionId);
-                $this->removeOptionLinks($entity->getSku(), $option);
-                $this->optionRepository->delete($option);
-            }
-            foreach (array_intersect($optionIds, $existingOptionsIds) as $optionId) {
-                $option = $this->optionRepository->get($entity->getSku(), $optionId);
-                $this->removeOptionLinks($entity->getSku(), $option);
-            }
+            $this->processRemovedOptions($entity->getSku(), $existingOptionsIds, $optionIds);
+            $this->processExistedOptions($entity->getSku(), $existingOptionsIds, $optionIds);
 
-            $options = $bundleProductOptions ?: [];
-            foreach ($options as $option) {
-                $this->optionRepository->save($entity, $option);
-            }
+            $this->saveOptions($entity, $options);
         } else {
             //save only labels and not selections + product links
-            $options = $bundleProductOptions ?: [];
-            foreach ($options as $option) {
-                $this->optionRepository->save($entity, $option);
-                $entity->setCopyFromView(false);
-            }
+            $this->saveOptions($entity, $options);
+            $entity->setCopyFromView(false);
         }
         return $entity;
     }
@@ -99,6 +79,8 @@ class SaveHandler implements ExtensionInterface
     /**
      * @param string $entitySku
      * @param \Magento\Bundle\Api\Data\OptionInterface $option
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\InputException
      * @return void
      */
     protected function removeOptionLinks($entitySku, $option)
@@ -108,6 +90,74 @@ class SaveHandler implements ExtensionInterface
             foreach ($links as $link) {
                 $this->productLinkManagement->removeChild($entitySku, $option->getId(), $link->getSku());
             }
+        }
+    }
+
+    /**
+     * Perform save for all options entities
+     * @param object $entity
+     * @param array $options
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @return void
+     */
+    private function saveOptions($entity, $options)
+    {
+        foreach ($options as $option) {
+            $this->optionRepository->save($entity, $option);
+        }
+    }
+
+    /**
+     * Get options ids from array of the options entities
+     * @param array $options
+     * @return array
+     */
+    private function getOptionIds($options)
+    {
+        $optionIds = [];
+        /** @var \Magento\Bundle\Api\Data\OptionInterface $option */
+        foreach ($options as $option) {
+            if ($option->getOptionId()) {
+                $optionIds[] = $option->getOptionId();
+            }
+        }
+        return $optionIds;
+    }
+
+    /**
+     * Removes old options that no longer exists
+     * @param string $entitySku
+     * @param array $existingOptionsIds
+     * @param array $optionIds
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @return void
+     */
+    private function processRemovedOptions($entitySku, $existingOptionsIds, $optionIds)
+    {
+        foreach (array_diff($existingOptionsIds, $optionIds) as $optionId) {
+            $option = $this->optionRepository->get($entitySku, $optionId);
+            $this->removeOptionLinks($entitySku, $option);
+            $this->optionRepository->delete($option);
+        }
+    }
+
+    /**
+     * Removes option links for existed options
+     * @param string $entitySku
+     * @param array $existingOptionsIds
+     * @param array $optionIds
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\InputException
+     * @return void
+     */
+    private function processExistedOptions($entitySku, $existingOptionsIds, $optionIds)
+    {
+        foreach (array_intersect($optionIds, $existingOptionsIds) as $optionId) {
+            $option = $this->optionRepository->get($entitySku, $optionId);
+            $this->removeOptionLinks($entitySku, $option);
         }
     }
 }
