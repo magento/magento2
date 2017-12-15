@@ -54,7 +54,7 @@ class DeleteLegacyStockStatusByDefaultSourceItem
         if ($productId) {
             $connection = $this->resourceConnection->getConnection();
             $connection->delete(
-                $connection->getTableName('cataloginventory_stock_status'),
+                $this->resourceConnection->getTableName('cataloginventory_stock_status'),
                 [
                     StockStatusInterface::PRODUCT_ID . ' = ?' => $productId,
                     StockItemInterface::STOCK_ID . ' = ?' => Stock::DEFAULT_STOCK_ID,

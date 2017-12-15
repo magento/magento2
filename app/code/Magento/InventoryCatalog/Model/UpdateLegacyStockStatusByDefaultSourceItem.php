@@ -73,7 +73,7 @@ class UpdateLegacyStockStatusByDefaultSourceItem
         if ($productId) {
             $connection = $this->resourceConnection->getConnection();
             $connection->update(
-                $connection->getTableName('cataloginventory_stock_status'),
+                $this->resourceConnection->getTableName('cataloginventory_stock_status'),
                 [
                     StockStatusInterface::QTY => $sourceItem->getQuantity(),
                     StockStatusInterface::STOCK_STATUS => $sourceItem->getStatus()
