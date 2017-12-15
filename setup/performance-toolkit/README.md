@@ -62,7 +62,7 @@ The following parameters can be passed to the `benchmark.jmx` scenario:
 | admin_user                                    | admin               | Admin backend user.                                                                      |
 | admin_password                                | 123123q             | Admin backend password.                                                                  |
 | customer_password                             | 123123q             | Storefront customer password.                                                            |
-| customers_page_size                           | 20                  | Page size for customers grid in Magento Admin.                                           |
+| customers_page_size                           | 50                  | Page size for customers grid in Magento Admin.                                           |
 | files_folder                                  | ./files/            | Path to various files that are used in scenario (`setup/performance-toolkit/files`).     |
 | loops                                         | 1                   | Number of loops to run.                                                                  |
 | frontendPoolUsers                             | 1                   | Total number of Frontend threads.                                                        |
