@@ -16,7 +16,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
     echo ' textarea';
 } ?><?= /* @escapeNotVerified */ $class ?>">
     <label class="label" for="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text">
-        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+        <span><?= $block->escapeHtml(__($_option->getTitle())) ?></span>
         <?= /* @escapeNotVerified */ $block->getFormatedPrice() ?>
     </label>
 

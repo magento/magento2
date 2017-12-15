@@ -14,7 +14,7 @@
 
 <div class="field admin__field options<?php if ($_option->getRequired()) echo ' required _required' ?>">
     <label class="label admin__field-label">
-        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+        <span><?= $block->escapeHtml(__($_option->getTitle())) ?></span>
     </label>
 
     <div class="control admin__field-control">
