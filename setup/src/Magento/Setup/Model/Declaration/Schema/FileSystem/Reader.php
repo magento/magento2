@@ -10,7 +10,6 @@ use Magento\Framework\Config\ReaderInterface;
 
 /**
  * Class Reader
- * @package Magento\Setup\Model\Declaration\Schema\FileSystem
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem implements ReaderInterface
 {
@@ -43,7 +42,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem implements Read
         \Magento\Setup\Model\Declaration\Schema\Xml\Converter $converter,
         \Magento\Setup\Model\Declaration\Schema\Xml\SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
-        $fileName = 'schema.xml',
+        $fileName = 'db_schema.xml',
         $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global'
     ) {

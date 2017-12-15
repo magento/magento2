@@ -90,7 +90,7 @@ class UpgradeCommand extends AbstractSetupCommand
             $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
             $installer = $this->installerFactory->create(new ConsoleLogger($output));
             $installer->updateModulesSequence($keepGenerated);
-            $installer->installSchema($input->getOptions());
+            $installer->installSchema();
             $installer->installDataFixtures();
 
             if ($this->deploymentConfig->isAvailable()) {

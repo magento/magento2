@@ -74,11 +74,11 @@ class DiffOldSchemaTest extends SetupTestCase
      */
     public function testOldDiff()
     {
-        //Move schema.xml
+        //Move db_schema.xml
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule1',
             'old_diff',
-            'schema.xml',
+            'db_schema.xml',
             'etc'
         );
         //Move InstallSchema file and tried to install

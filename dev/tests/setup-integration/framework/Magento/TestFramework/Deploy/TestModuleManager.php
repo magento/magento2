@@ -13,7 +13,7 @@ class TestModuleManager
     /**
      * Name of file of DB XML declaration
      */
-    const DECLARATIVE_FILE_NAME = "schema.xml";
+    const DECLARATIVE_FILE_NAME = "db_schema.xml";
 
     /**
      * Add test module files to Magento code base
@@ -62,8 +62,8 @@ class TestModuleManager
 
     /**
      * @param string $moduleName Like Magento_TestSetupModule
-     * @param string $revisionName Folder name, like reviisions/revision_1/schema.xml
-     * @param string $fileName For example schema.xml
+     * @param string $revisionName Folder name, like reviisions/revision_1/db_schema.xml
+     * @param string $fileName For example db_schema.xml
      * @param string $fileDir For example etc or Setup
      */
     public function updateRevision($moduleName, $revisionName, $fileName, $fileDir)

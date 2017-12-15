@@ -134,14 +134,14 @@ class InstallCommand extends AbstractSetupCommand
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'List of comma-separated module names. That must be included during installation. 
-                Avaiable magic param all.'
+                Avaiable magic param "all".'
             ),
             new InputOption(
                 self::INPUT_KEY_DISABLE_MODULES,
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'List of comma-separated module names. That must be avoided during installation. 
-                Avaiable magic param all.'
+                Avaiable magic param "all".'
             )
         ]);
         $this->setName('setup:install')
