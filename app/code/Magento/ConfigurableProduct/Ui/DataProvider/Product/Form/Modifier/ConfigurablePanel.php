@@ -466,7 +466,17 @@ class ConfigurablePanel extends AbstractModifier
                         [],
                         ['dataScope' => 'product_link']
                     ),
-                    'sku_container' => $this->getColumn('sku', __('SKU')),
+                    'sku_container' => $this->getColumn(
+                        'sku',
+                        __('SKU'),
+                        [
+                            'validation' =>
+                                [
+                                    'min_text_length' => '1',
+                                    'max_text_length' => '10',
+                                ]
+                        ]
+                    ),
                     'price_container' => $this->getColumn(
                         'price',
                         __('Price'),
