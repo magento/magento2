@@ -141,6 +141,22 @@ class AssignSourcesToStockTest extends WebapiAbstract
                     'soap_message' => 'Could not assign Sources to Stock',
                 ],
             ],
+            'multiple_sources_assigned_to_default_stock' => [
+                [1, 20],
+                1,
+                [
+                    'rest_message' => 'You can only assign Default Source to Default Stock',
+                    'soap_message' => 'You can only assign Default Source to Default Stock',
+                ],
+            ],
+            'not_default_source_assigned_to_default_stock' => [
+                [10],
+                1,
+                [
+                    'rest_message' => 'You can only assign Default Source to Default Stock',
+                    'soap_message' => 'You can only assign Default Source to Default Stock',
+                ],
+            ],
         ];
     }
 
