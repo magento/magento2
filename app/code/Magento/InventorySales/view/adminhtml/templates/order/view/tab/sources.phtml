@@ -14,8 +14,8 @@
         </div>
         <thead>
             <tr class="headings">
-                <th><span><?= __('Sku') ?></span></th>
-                <th><span><?= __('Qty') ?></span></th>
+                <th><span><?= /* @escapeNotVerified */ __('Sku') ?></span></th>
+                <th><span><?= /* @escapeNotVerified */ __('Qty') ?></span></th>
             </tr>
         </thead>
         <?php foreach ($sourceItems as $item): ?>

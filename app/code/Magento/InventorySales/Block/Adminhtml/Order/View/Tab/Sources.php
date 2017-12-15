@@ -10,6 +10,7 @@ namespace Magento\InventorySales\Block\Adminhtml\Order\View\Tab;
 /**
  * Tab for source items display on the order editing page
  *
+ * @api
  */
 class Sources extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
