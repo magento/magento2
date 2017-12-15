@@ -76,6 +76,10 @@ class SenderBuilder
         }
 
         $transport = $this->transportBuilder->getTransport();
+        if ($store = $this->identityContainer->getStore()) {
+            $transport->setStore($store);
+        }
+
         $transport->sendMessage();
     }
 

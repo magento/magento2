@@ -44,7 +44,7 @@ class TransportInterfacePlugin
         TransportInterface $subject,
         \Closure $proceed
     ) {
-        if (!$this->scopeConfig->isSetFlag('system/smtp/disable', ScopeInterface::SCOPE_STORE)) {
+        if (!$this->scopeConfig->isSetFlag('system/smtp/disable', ScopeInterface::SCOPE_STORE, $subject->getStoreId())) {
             $proceed();
         }
     }

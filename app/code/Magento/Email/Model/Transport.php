@@ -10,6 +10,7 @@ use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Class that responsible for filling some message data before transporting it.
@@ -50,6 +51,12 @@ class Transport implements TransportInterface
     private $scopeConfig;
 
     /**
+     * Store
+     * @var \Magento\Store\Model\Store
+     */
+    private $store;
+
+    /**
      * @param \Zend_Mail_Transport_Sendmail $transport
      * @param MessageInterface $message Email message object
      * @param ScopeConfigInterface $scopeConfig Core store config
@@ -85,13 +92,16 @@ class Transport implements TransportInterface
              * 2 - use custom value
              * @see Magento\Config\Model\Config\Source\Yesnocustom
              */
+
             $isSetReturnPath = $this->scopeConfig->getValue(
                 self::XML_PATH_SENDING_SET_RETURN_PATH,
-                ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE,
+                $this->getStoreId()
             );
             $returnPathValue = $this->scopeConfig->getValue(
                 self::XML_PATH_SENDING_RETURN_PATH_EMAIL,
-                ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE,
+                $this->getStoreId()
             );
 
             if ($isSetReturnPath == '1') {
@@ -112,4 +122,25 @@ class Transport implements TransportInterface
     {
         return $this->message;
     }
+
+    /**
+     * Set store
+     * @param \Magento\Store\Model\Store
+     * @return $this;
+     */
+    public function setStore($store)
+    {
+        $this->store = $store;
+        return $this;
+    }
+
+    /**
+     * Retrieve store id
+     * @return int | null
+     */
+    public function getStoreId()
+    {
+        return $this->store ? $this->store->getId() : null;
+    }
+
 }
