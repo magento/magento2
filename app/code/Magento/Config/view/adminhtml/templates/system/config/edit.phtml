@@ -210,6 +210,15 @@ require([
                     Element.extend(element).disabled = false;
                 }
             });
+            $$('select[multiple]').each(function(element) {
+                var $element = Element.extend(element);
+                if (_.isEmpty($element.getValue())) {
+                    var option = document.createElement('option');
+                    option.value = '';
+                    $element.appendChild(option);
+                    $element.setValue(['']);
+                }
+            });
             jQuery(form).trigger('afterValidate');
             form.submit();
         }
