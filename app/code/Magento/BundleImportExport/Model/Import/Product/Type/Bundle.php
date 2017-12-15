@@ -12,7 +12,7 @@ use \Magento\Framework\App\ObjectManager;
 use \Magento\Bundle\Model\Product\Price as BundlePrice;
 use \Magento\Catalog\Model\Product\Type\AbstractType;
 use \Magento\CatalogImportExport\Model\Import\Product;
-use \Magento\Framework\App\ScopeResolverInterface;
+use \Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Bundle
@@ -138,9 +138,9 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     private $relationsDataSaver;
 
     /**
-     * @var ScopeResolverInterface
+     * @var StoreManagerInterface
      */
-    private $scopeResolver;
+    private $storeManager;
 
     /**
      * @var array
@@ -154,7 +154,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param array $params
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param Bundle\RelationsDataSaver|null $relationsDataSaver
-     * @param ScopeResolverInterface $scopeResolver
+     * @param StoreManagerInterface $storeManager
      * @throws \RuntimeException
      */
     public function __construct(
@@ -164,13 +164,13 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         array $params,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
         Bundle\RelationsDataSaver $relationsDataSaver = null,
-        ScopeResolverInterface $scopeResolver = null
+        StoreManagerInterface $storeManager = null
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
         $this->relationsDataSaver = $relationsDataSaver
             ?: ObjectManager::getInstance()->get(Bundle\RelationsDataSaver::class);
-        $this->scopeResolver = $scopeResolver
-            ?: ObjectManager::getInstance()->get(ScopeResolverInterface::class);
+        $this->storeManager = $storeManager
+            ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -277,8 +277,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param int $optionId
      * @param int $storeId
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function populateOptionValueTemplate($option, $optionId, $storeId = 0)
     {
@@ -289,7 +287,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             $optionNames = preg_grep($pattern, $keys);
             foreach ($optionNames as $optionName) {
                 preg_match($pattern, $optionName, $storeCodes);
-                $storeId = $this->getStoreIdByCode(array_pop($storeCodes));
+                $storeCode = array_pop($storeCodes);
+                $storeId = !$storeCode ? $storeId : $this->getStoreIdByCode($storeCode);
                 $optionValues[] = [
                     'option_id' => $optionId,
                     'parent_product_id' => $option['parent_id'],
@@ -725,21 +724,16 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
 
     /**
      * Get store id by store code.
-     * Default store code will be returned if no parameter or parameter with empty string provided
      *
      * @param string|null $storeCode
      * @return int
      */
-    private function getStoreIdByCode($storeCode = null)
+    private function getStoreIdByCode($storeCode)
     {
-        if (!$storeCode) {
-            return \Magento\Store\Model\Store::DEFAULT_STORE_ID;
-        } else {
-            if (!isset($this->storeIdToCode[$storeCode])) {
-                /** @var $store \Magento\Store\Model\Store */
-                foreach ($this->scopeResolver->getScopes() as $store) {
-                    $this->storeCodeToId[$store->getCode()] = $store->getId();
-                }
+        if (!isset($this->storeIdToCode[$storeCode])) {
+            /** @var $store \Magento\Store\Model\Store */
+            foreach ($this->storeManager->getStores() as $store) {
+                $this->storeCodeToId[$store->getCode()] = $store->getId();
             }
         }
         return $this->storeCodeToId[$storeCode];

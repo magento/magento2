@@ -340,7 +340,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Tests adding of custom options with multiple store views
      *
-     * @magentoDataFixture Magento//Store/_files/second_store.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppIsolation enabled
      */

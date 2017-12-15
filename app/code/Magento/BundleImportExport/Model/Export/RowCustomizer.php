@@ -12,7 +12,7 @@ use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollecti
 use Magento\ImportExport\Model\Import as ImportModel;
 use \Magento\Catalog\Model\Product\Type\AbstractType;
 use \Magento\Framework\App\ObjectManager;
-use \Magento\Framework\App\ScopeResolverInterface;
+use \Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class RowCustomizer
@@ -122,9 +122,9 @@ class RowCustomizer implements RowCustomizerInterface
     private $optionCollectionCacheKey = '_cache_instance_options_collection';
 
     /**
-     * @var ScopeResolverInterface
+     * @var StoreManagerInterface
      */
-    private $scopeResolver;
+    private $storeManager;
 
     /**
      * Retrieve list of bundle specific columns
@@ -422,13 +422,13 @@ class RowCustomizer implements RowCustomizerInterface
      */
     private function getBundleOptionTitles($product)
     {
-        $storeIds = $product->getStoreIds();
         $optionsCollection = $this->getProductOptionsCollection($product);
         $optionsTitles = [];
         /** @var \Magento\Bundle\Model\Option $option */
         foreach ($optionsCollection->getItems() as $option) {
             $optionsTitles[$option->getId()]['name'] = $option->getTitle();
         }
+        $storeIds = $product->getStoreIds();
         if (array_count_values($storeIds) > 1) {
             foreach ($storeIds as $storeId) {
                 $optionsCollection = $this->getProductOptionsCollection($product, $storeId);
@@ -475,22 +475,22 @@ class RowCustomizer implements RowCustomizerInterface
     private function getStoreCodeById($storeId)
     {
         if (!isset($this->storeIdToCode[$storeId])) {
-            $this->storeIdToCode[$storeId] = $this->getScopeResolver()->getScope($storeId)->getCode();
+            $this->storeIdToCode[$storeId] = $this->getStoreManager()->getStore($storeId);
         }
         return $this->storeIdToCode[$storeId];
     }
 
     /**
-     * Initialize ScopeResolver if it was not and return it.
+     * Initialize StoreManagerInterface if it was not and return it.
      *
-     * @return ScopeResolverInterface
+     * @return StoreManagerInterface
      * @throws \RuntimeException
      */
-    private function getScopeResolver()
+    private function getStoreManager()
     {
-        if (!$this->scopeResolver) {
-            $this->scopeResolver = ObjectManager::getInstance()->get(ScopeResolverInterface::class);
+        if (!$this->storeManager) {
+            $this->storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
         }
-        return $this->scopeResolver;
+        return $this->storeManager;
     }
 }
