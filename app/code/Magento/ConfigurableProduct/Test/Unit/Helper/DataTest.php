@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableProduct\Test\Unit\Helper;
 
 class DataTest extends \PHPUnit\Framework\TestCase
@@ -89,7 +87,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function getOptionsDataProvider()
     {
-        $currentProductMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeInstance', '__wakeup']);
+        $currentProductMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['getTypeInstance', '__wakeup']
+        );
         $provider = [];
         $provider[] = [
             [],
@@ -103,7 +104,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $attributes = [];
         for ($i = 1; $i < $attributesCount; $i++) {
             $attribute = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getProductAttribute']);
-            $productAttribute = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getId', 'getAttributeCode']);
+            $productAttribute = $this->createPartialMock(
+                \Magento\Framework\DataObject::class,
+                ['getId', 'getAttributeCode']
+            );
             $productAttribute->expects($this->any())
                 ->method('getId')
                 ->will($this->returnValue('attribute_id_' . $i));
@@ -124,7 +128,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($typeInstanceMock));
         $allowedProducts = [];
         for ($i = 1; $i <= 2; $i++) {
-            $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getData', 'getImage', 'getId', '__wakeup', 'getMediaGalleryImages']);
+            $productMock = $this->createPartialMock(
+                \Magento\Catalog\Model\Product::class,
+                ['getData', 'getImage', 'getId', '__wakeup', 'getMediaGalleryImages']
+            );
             $productMock->expects($this->any())
                 ->method('getData')
                 ->will($this->returnCallback([$this, 'getDataCallback']));
@@ -215,7 +222,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Data\Collection::class,
             $this->_model->getGalleryImages($productMock)
         );
-
     }
 
     /**

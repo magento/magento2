@@ -29,7 +29,6 @@ use Magento\Sitemap\Model\ResourceModel\Sitemap as SitemapResource;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
- * @codingStandardsIgnoreFile
  */
 class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
@@ -331,7 +330,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $mappedItems = $this->mapToSitemapItem();
         $this->_sitemapItems = array_merge($sitemapItems, $mappedItems);
 
-
         $this->_tags = [
             self::TYPE_INDEX => [
                 self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' .
@@ -391,7 +389,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         if (!preg_match('#^[a-zA-Z0-9_\.]+$#', $this->getSitemapFilename())) {
             throw new LocalizedException(
                 __(
-                    'Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed.'
+                    'Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename.'
+                    . ' No spaces or other characters are allowed.'
                 )
             );
         }

@@ -265,13 +265,21 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     public function getIdentities()
     {
         $identities = [];
-        foreach ($this->_getProductCollection() as $item) {
-            $identities = array_merge($identities, $item->getIdentities());
-        }
+
         $category = $this->getLayer()->getCurrentCategory();
         if ($category) {
             $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $category->getId();
         }
+
+        //Check if category page shows only static block (No products)
+        if ($category->getData('display_mode') == Category::DM_PAGE) {
+            return $identities;
+        }
+
+        foreach ($this->_getProductCollection() as $item) {
+            $identities = array_merge($identities, $item->getIdentities());
+        }
+
         return $identities;
     }
 

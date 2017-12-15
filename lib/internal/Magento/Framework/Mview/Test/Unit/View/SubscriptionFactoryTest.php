@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Mview\Test\Unit\View;
 
 use \Magento\Framework\Mview\View\SubscriptionFactory;
@@ -31,7 +29,10 @@ class SubscriptionFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreate()
     {
         $subscriptionInterfaceMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Mview\View\SubscriptionInterface::class, [], '', false
+            \Magento\Framework\Mview\View\SubscriptionInterface::class,
+            [],
+            '',
+            false
         );
         $this->objectManagerMock->expects($this->once())
             ->method('create')

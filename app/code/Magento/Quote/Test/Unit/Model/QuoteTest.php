@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -152,13 +150,21 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->quoteAddressFactoryMock = $this->createPartialMock(\Magento\Quote\Model\Quote\AddressFactory::class, ['create']);
+        $this->quoteAddressFactoryMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\AddressFactory::class,
+            ['create']
+        );
         $this->quoteAddressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, [
                 'isDeleted', 'getCollection', 'getId', 'getCustomerAddressId',
                 '__wakeup', 'getAddressType', 'getDeleteImmediately', 'validateMinimumAmount', 'setData'
             ]);
-        $this->quoteAddressCollectionMock = $this->createMock(\Magento\Quote\Model\ResourceModel\Quote\Address\Collection::class);
-        $this->extensibleDataObjectConverterMock = $this->createPartialMock(\Magento\Framework\Api\ExtensibleDataObjectConverter::class, ['toFlatArray']);
+        $this->quoteAddressCollectionMock = $this->createMock(
+            \Magento\Quote\Model\ResourceModel\Quote\Address\Collection::class
+        );
+        $this->extensibleDataObjectConverterMock = $this->createPartialMock(
+            \Magento\Framework\Api\ExtensibleDataObjectConverter::class,
+            ['toFlatArray']
+        );
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
             \Magento\Customer\Api\CustomerRepositoryInterface::class,
             [],
@@ -168,7 +174,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             true,
             ['getById', 'save']
         );
-        $this->objectCopyServiceMock = $this->createPartialMock(\Magento\Framework\DataObject\Copy::class, ['copyFieldsetToTarget']);
+        $this->objectCopyServiceMock = $this->createPartialMock(
+            \Magento\Framework\DataObject\Copy::class,
+            ['copyFieldsetToTarget']
+        );
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->objectFactoryMock = $this->createPartialMock(\Magento\Framework\DataObject\Factory::class, ['create']);
         $this->quoteAddressFactoryMock->expects(
@@ -207,9 +216,18 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->any())
             ->method('getEventDispatcher')
             ->will($this->returnValue($this->eventManagerMock));
-        $this->quoteItemCollectionFactoryMock = $this->createPartialMock(\Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory::class, ['create']);
-        $this->quotePaymentCollectionFactoryMock = $this->createPartialMock(\Magento\Quote\Model\ResourceModel\Quote\Payment\CollectionFactory::class, ['create']);
-        $this->paymentFactoryMock = $this->createPartialMock(\Magento\Quote\Model\Quote\PaymentFactory::class, ['create']);
+        $this->quoteItemCollectionFactoryMock = $this->createPartialMock(
+            \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory::class,
+            ['create']
+        );
+        $this->quotePaymentCollectionFactoryMock = $this->createPartialMock(
+            \Magento\Quote\Model\ResourceModel\Quote\Payment\CollectionFactory::class,
+            ['create']
+        );
+        $this->paymentFactoryMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\PaymentFactory::class,
+            ['create']
+        );
         $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -231,8 +249,13 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->itemProcessor = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->extensionAttributesJoinProcessorMock = $this->createMock(\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class);
-        $this->customerDataFactoryMock = $this->createPartialMock(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class, ['create']);
+        $this->extensionAttributesJoinProcessorMock = $this->createMock(
+            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class
+        );
+        $this->customerDataFactoryMock = $this->createPartialMock(
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
+            ['create']
+        );
         $this->quote = (new ObjectManager($this))
             ->getObject(
                 \Magento\Quote\Model\Quote::class,
@@ -337,7 +360,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
      */
     protected function getAddressMock($type)
     {
-        $shippingAddressMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getAddressType', '__wakeup', 'isDeleted']);
+        $shippingAddressMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['getAddressType', '__wakeup', 'isDeleted']
+        );
 
         $shippingAddressMock->expects($this->any())->method('getAddressType')->will($this->returnValue($type));
         $shippingAddressMock->expects($this->any())->method('isDeleted')->will($this->returnValue(false));
@@ -979,13 +1005,19 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     public function testGetPaymentIsNotDeleted()
     {
         $this->quote->setId(1);
-        $payment = $this->createPartialMock(\Magento\Quote\Model\Quote\Payment::class, ['setQuote', 'isDeleted', '__wakeup']);
+        $payment = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Payment::class,
+            ['setQuote', 'isDeleted', '__wakeup']
+        );
         $payment->expects($this->once())
             ->method('setQuote');
         $payment->expects($this->once())
             ->method('isDeleted')
             ->willReturn(false);
-        $quotePaymentCollectionMock = $this->createPartialMock(\Magento\Quote\Model\ResourceModel\Quote\Payment\Collection::class, ['setQuoteFilter', 'getFirstItem']);
+        $quotePaymentCollectionMock = $this->createPartialMock(
+            \Magento\Quote\Model\ResourceModel\Quote\Payment\Collection::class,
+            ['setQuoteFilter', 'getFirstItem']
+        );
         $quotePaymentCollectionMock->expects($this->once())
             ->method('setQuoteFilter')
             ->with(1)
@@ -1003,7 +1035,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     public function testGetPaymentIsDeleted()
     {
         $this->quote->setId(1);
-        $payment = $this->createPartialMock(\Magento\Quote\Model\Quote\Payment::class, ['setQuote', 'isDeleted', 'getId', '__wakeup']);
+        $payment = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Payment::class,
+            ['setQuote', 'isDeleted', 'getId', '__wakeup']
+        );
         $payment->expects($this->exactly(2))
         ->method('setQuote');
         $payment->expects($this->once())
@@ -1012,7 +1047,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $payment->expects($this->once())
             ->method('getId')
             ->willReturn(1);
-        $quotePaymentCollectionMock = $this->createPartialMock(\Magento\Quote\Model\ResourceModel\Quote\Payment\Collection::class, ['setQuoteFilter', 'getFirstItem']);
+        $quotePaymentCollectionMock = $this->createPartialMock(
+            \Magento\Quote\Model\ResourceModel\Quote\Payment\Collection::class,
+            ['setQuoteFilter', 'getFirstItem']
+        );
         $quotePaymentCollectionMock->expects($this->once())
             ->method('setQuoteFilter')
             ->with(1)
@@ -1039,7 +1077,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $item->expects($this->once())
             ->method('getId')
             ->willReturn(false);
-        $itemsMock = $this->createPartialMock(\Magento\Eav\Model\Entity\Collection\AbstractCollection::class, ['setQuote', 'addItem']);
+        $itemsMock = $this->createPartialMock(
+            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
+            ['setQuote', 'addItem']
+        );
         $itemsMock->expects($this->once())
             ->method('setQuote');
         $itemsMock->expects($this->once())
@@ -1093,7 +1134,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
             $productMock->expects($this->any())->method('getIsVirtual')->willReturn($type);
 
-            $itemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['isDeleted', 'getParentItemId', 'getProduct']);
+            $itemMock = $this->createPartialMock(
+                \Magento\Quote\Model\Quote\Item::class,
+                ['isDeleted', 'getParentItemId', 'getProduct']
+            );
             $itemMock->expects($this->any())
                 ->method('isDeleted')
                 ->willReturn(false);

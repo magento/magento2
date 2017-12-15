@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Source;
 
 use Magento\Eav\Model\Entity\AbstractEntity;
@@ -26,7 +24,10 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFlatColumns()
     {
-        $abstractAttributeMock = $this->createPartialMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class, ['getAttributeCode', '__wakeup']);
+        $abstractAttributeMock = $this->createPartialMock(
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            ['getAttributeCode', '__wakeup']
+        );
 
         $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
 
@@ -57,7 +58,10 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedOrder
      */
     public function testAddValueSortToCollection(
-        $direction, $isScopeGlobal, $expectedJoinCondition, $expectedOrder
+        $direction,
+        $isScopeGlobal,
+        $expectedJoinCondition,
+        $expectedOrder
     ) {
         $attributeMock = $this->getAttributeMock();
         $attributeMock->expects($this->any())->method('isScopeGlobal')->will($this->returnValue($isScopeGlobal));
@@ -159,7 +163,8 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
     {
         $collectionMethods = ['getSelect', 'getStoreId', 'getConnection'];
         $collectionMock = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class, $collectionMethods
+            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
+            $collectionMethods
         );
 
         $connectionMock = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['method']);

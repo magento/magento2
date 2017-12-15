@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\Attribute;
@@ -144,7 +142,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->registryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->getMock();
         $this->extensionAttributesFactory = $this->getMockBuilder(
-            \Magento\Framework\Api\ExtensionAttributesFactory::class)
+            \Magento\Framework\Api\ExtensionAttributesFactory::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeValueFactoryMock = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
@@ -177,12 +176,15 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->timezoneMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->getMock();
         $this->reservedAttributeListMock = $this->getMockBuilder(
-            \Magento\Catalog\Model\Product\ReservedAttributeList::class)
+            \Magento\Catalog\Model\Product\ReservedAttributeList::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $this->resolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->getMock();
-        $this->dateTimeFormatter = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface::class);
+        $this->dateTimeFormatter = $this->createMock(
+            \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface::class
+        );
 
         $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
             ->setMethods(['_construct', 'getConnection', 'getIdFieldName', 'saveInSetIncluding'])
