@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Braintree\Model\Adminhtml\System\Config;
 
 use Magento\Framework\App\Cache\TypeListInterface;
@@ -66,7 +67,11 @@ class CountryCreditCard extends Value
      */
     public function beforeSave()
     {
-        $value = $this->serializer->unserialize($this->getValue());
+        $value = json_decode(
+            $this->getValue(Config::KEY_COUNTRY_CREDIT_CARD),
+            true
+        );
+
         $result = [];
         if (is_array($value)) {
             foreach ($value as $data) {
