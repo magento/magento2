@@ -13,12 +13,14 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
  * Declared in SQL, like Varbinary(L),
  * where L - length
  */
-class Varbinary extends Column implements ElementDiffAwareInterface
+class Varbinary extends Column implements
+    ElementDiffAwareInterface,
+    ColumnNullableAwareInterface
 {
     /**
      * @inheritdoc
      */
-    protected $elementType = 'Varbinary';
+    protected $elementType = 'varbinary';
 
     /**
      * @inheritdoc

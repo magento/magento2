@@ -6,13 +6,16 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Db;
 
+use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaCreatorInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaReaderInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
  * Needs for different types of SQL engines
  * Depends on SQL engine, envolves different processors and convert from SQL schema represenation
- * to readable <array> or from do DDL operations: convert from DTO`s objects to SQL definition and run SQL query.
+ * to readable <array> or from do DDL operations: convert from DTO`s objects to SQL definition
  */
 class AdapterMediator
 {
@@ -51,22 +54,31 @@ class AdapterMediator
     /**
      * @var array
      */
-    private $columnProcessors;
+    private $processors;
+
     /**
      * @var DbSchemaReaderInterface
      */
     private $dbSchemaReader;
 
     /**
+     * @var DbSchemaCreatorInterface
+     */
+    private $dbSchemaCreator;
+
+    /**
      * @param DbSchemaReaderInterface $dbSchemaReader
-     * @param array $columnProcessors
+     * @param DbSchemaCreatorInterface $dbSchemaCreator
+     * @param array $processors
      */
     public function __construct(
         DbSchemaReaderInterface $dbSchemaReader,
-        array $columnProcessors
+        DbSchemaCreatorInterface $dbSchemaCreator,
+        array $processors
     ) {
-        $this->columnProcessors = $columnProcessors;
+        $this->processors = $processors;
         $this->dbSchemaReader = $dbSchemaReader;
+        $this->dbSchemaCreator = $dbSchemaCreator;
     }
 
     /**
@@ -77,18 +89,64 @@ class AdapterMediator
      * @param $type
      * @return array
      */
-    private function processElement(array $elementData, $type)
+    private function processElementFromDefinition(array $elementData, $type)
     {
-        if (!isset($this->columnProcessors[$type])) {
+        if (!isset($this->processors[$type])) {
             throw new \InvalidArgumentException(sprintf("Cannot find type %s", $type));
         }
 
         /** @var DbSchemaProcessorInterface $columnProcessor */
-        foreach ($this->columnProcessors[$type] as $columnProcessor) {
+        foreach ($this->processors[$type] as $columnProcessor) {
             $elementData = $columnProcessor->fromDefinition($elementData);
         }
 
         return $elementData;
+    }
+
+    /**
+     * Retrieve definition for all table elements
+     *
+     * @param Table $table
+     * @return array
+     */
+    public function getTableDefinition(Table $table)
+    {
+        $definition = [];
+        $data = [
+            DbSchemaCreatorInterface::COLUMN_FRAGMENT => $table->getColumns(),
+            DbSchemaCreatorInterface::CONSTRAINT_FRAGMENT => $table->getConstraints(),
+            DbSchemaCreatorInterface::INDEX_FRAGMENT => $table->getIndexes()
+        ];
+
+        foreach ($data as $type => $elements) {
+            /** @var ElementInterface $element */
+            foreach ($elements as $element) {
+                $definition[$type] = $this->processElementToDefinition($type, $element);
+            }
+        }
+
+        return $definition;
+    }
+
+    /**
+     * Process column definition
+     *
+     * @param string $type
+     * @param ElementInterface $element
+     * @return string
+     */
+    public function processElementToDefinition($type, ElementInterface $element)
+    {
+        $definition = '';
+        /** @var DbSchemaProcessorInterface $processor */
+        foreach ($this->processors[$type] as $processor) {
+            //One column processor can override or modify existing one
+            if ($processor->canBeApplied($element)) {
+                $definition = $processor->toDefinition($element);
+            }
+        }
+
+        return $definition;
     }
 
     /**
@@ -103,7 +161,7 @@ class AdapterMediator
         if (!isset($this->ddlCache[self::KEY_INDEXES][$tableName])) {
             $this->ddlCache[self::KEY_INDEXES][$tableName] = [];
             foreach ($this->dbSchemaReader->readIndexes($tableName, $resource) as $indexData) {
-                $index = $this->processElement($indexData, self::KEY_INDEXES);
+                $index = $this->processElementFromDefinition($indexData, self::KEY_INDEXES);
 
                 if (!isset($this->ddlCache[self::KEY_INDEXES][$tableName][$index['name']])) {
                     $this->ddlCache[self::KEY_INDEXES][$tableName][$index['name']] = [];
@@ -130,7 +188,7 @@ class AdapterMediator
             $this->ddlCache[self::KEY_CONSTRAINT][$tableName] = [];
             $constraintsData = $this->dbSchemaReader->readConstraints($tableName, $resource);
             foreach ($constraintsData as $constraintData) {
-                $constraint = $this->processElement($constraintData, self::KEY_CONSTRAINT);
+                $constraint = $this->processElementFromDefinition($constraintData, self::KEY_CONSTRAINT);
 
                 if (!isset($this->ddlCache[self::KEY_CONSTRAINT][$tableName][$constraint['name']])) {
                     $this->ddlCache[self::KEY_CONSTRAINT][$tableName][$constraint['name']] = [];
@@ -158,7 +216,7 @@ class AdapterMediator
         if (!isset($this->ddlCache[self::KEY_REFERENCE][$tableName])) {
             $this->ddlCache[self::KEY_REFERENCE][$tableName] = [];
             $createTable = $this->dbSchemaReader->readReferences($tableName, $resource);
-            $foreignKeys = $this->processElement($createTable, self::KEY_REFERENCE);
+            $foreignKeys = $this->processElementFromDefinition($createTable, self::KEY_REFERENCE);
             //Process foreign keys
             foreach ($foreignKeys as $foreignKey) {
                 $this->ddlCache[self::KEY_REFERENCE][$tableName][$foreignKey['name']] = $foreignKey;
@@ -178,7 +236,7 @@ class AdapterMediator
         if (!isset($this->ddlCache[self::KEY_COLUMNS][$tableName])) {
             $this->ddlCache[self::KEY_COLUMNS][$tableName] = [];
             foreach ($this->dbSchemaReader->readeColumns($tableName, $resource) as $rawColumn) {
-                $column = $this->processElement($rawColumn, self::KEY_COLUMNS);
+                $column = $this->processElementFromDefinition($rawColumn, self::KEY_COLUMNS);
                 $this->ddlCache[self::KEY_COLUMNS][$tableName][$column['name']] = $column;
             }
         }

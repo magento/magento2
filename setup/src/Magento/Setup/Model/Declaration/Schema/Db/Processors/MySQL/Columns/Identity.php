@@ -7,23 +7,28 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns;
 
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Columns\ColumnIdentityAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * On update attribute is like trigger and can be used for many different columns
+ * Find out whether column can be auto_incremented or not
  *
  * @inheritdoc
  */
-class OnUpdate implements DbSchemaProcessorInterface
+class Identity implements DbSchemaProcessorInterface
 {
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp $element
+     * MyMySQL flag, that says that we need to increment field, each time when we add new row
+     */
+    const IDENTITY_FLAG = 'auto_increment';
+
+    /**
+     * @param ColumnIdentityAwareInterface $element
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $element)
     {
-        return $element->getOnUpdate() ?
-            'ON UPDATE CURRENT_TIMESTAMP' : '';
+        return $element->isIdentity() ? strtoupper(self::IDENTITY_FLAG) : '';
     }
 
     /**
@@ -39,9 +44,8 @@ class OnUpdate implements DbSchemaProcessorInterface
      */
     public function fromDefinition(array $data)
     {
-        $matches = [];
-        if (preg_match('/^(?:on update)\s([\_\-\s\w\d]+)/', $data['extra'], $matches)) {
-            $data['on_update'] = $matches[1];
+        if (!empty($data['extra']) && strpos(self::IDENTITY_FLAG, $data['extra']) !== false) {
+            $data['identity'] = true;
         }
 
         return $data;

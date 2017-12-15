@@ -17,11 +17,39 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 class Text implements DbSchemaProcessorInterface
 {
     /**
+     * @var Nullable
+     */
+    private $nullable;
+
+    /**
+     * Text constructor.
+     * @param Nullable $nullable
+     */
+    public function __construct(Nullable $nullable)
+    {
+        $this->nullable = $nullable;
+    }
+
+    /**
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Text $element
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $element)
     {
-        return '';
+        return sprintf(
+            '%s(%s)',
+            $element->getElementType(),
+            $element->getLength(),
+            $this->nullable->toDefinition($element)
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function canBeApplied(ElementInterface $element)
+    {
+        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Text;
     }
 
     /**

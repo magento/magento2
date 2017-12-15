@@ -13,7 +13,11 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
  * Declared in SQL, like INT(11) or BIGINT(20)
  * Where digit is padding, how many zeros should be added before first non-zero digit
  */
-class Integer extends Column implements ElementDiffAwareInterface
+class Integer extends Column implements
+    ElementDiffAwareInterface,
+    ColumnUnsignedAwareInterface,
+    ColumnNullableAwareInterface,
+    ColumnIdentityAwareInterface
 {
     /**
      * By default element type is integer, but it can various: integer, smallinteger, biginteger, tinyinteger

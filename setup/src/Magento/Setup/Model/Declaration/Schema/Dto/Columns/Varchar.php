@@ -13,7 +13,9 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
  * Declared in SQL, like VARCHAR(L),
  * where L - length
  */
-class Varchar extends Column implements ElementDiffAwareInterface
+class Varchar extends Column implements
+    ElementDiffAwareInterface,
+    ColumnNullableAwareInterface
 {
     /**
      * @inheritdoc

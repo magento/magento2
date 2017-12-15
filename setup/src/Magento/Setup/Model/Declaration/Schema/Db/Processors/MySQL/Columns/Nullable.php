@@ -7,15 +7,15 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns;
 
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
-use Magento\Setup\Model\Declaration\Schema\Dto\Columns\ColumnUnsignedAwareInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Columns\ColumnNullableAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Unsigned can be used for all numeric types
+ * Go through all columns that can be nullable and modify them
  *
  * @inheritdoc
  */
-class Unsigned implements DbSchemaProcessorInterface
+class Nullable implements DbSchemaProcessorInterface
 {
     /**
      * MySQL flag, that says that we need to use unsigned numbers.
@@ -24,12 +24,16 @@ class Unsigned implements DbSchemaProcessorInterface
     const UNSIGNED_FLAG = 'unsigned';
 
     /**
-     * @param ColumnUnsignedAwareInterface $element
+     * @param ColumnNullableAwareInterface $element
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $element)
     {
-        return $element->isUnsigned() ? 'UNSIGNED' : '';
+        if ($element instanceof ColumnNullableAwareInterface) {
+            return $element->isNullable() ? 'NULL' : 'NOT NULL';
+        }
+
+        return '';
     }
 
     /**
@@ -41,16 +45,22 @@ class Unsigned implements DbSchemaProcessorInterface
     }
 
     /**
+     * Convert MySQL nullable string value into boolean
+     *
+     * @param string $nullableValue
+     * @return bool
+     */
+    private function processNullable($nullableValue)
+    {
+        return strtolower($nullableValue) === 'yes' ? true : false;
+    }
+
+    /**
      * @inheritdoc
      */
     public function fromDefinition(array $data)
     {
-        if (strpos(self::UNSIGNED_FLAG, $data['type']) !== false) {
-            $data['unsigned'] = true;
-        } else {
-            $data['unsigned'] = false;
-        }
-
+        $data['nullable'] = $this->processNullable($data['nullable']);
         return $data;
     }
 }

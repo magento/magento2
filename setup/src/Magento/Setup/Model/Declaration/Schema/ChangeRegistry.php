@@ -15,7 +15,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\TableElementInterface;
  * Holds information about all changes between 2 schemas: db and declaration XML
  * Holds 2 items:
  *  - new (Should be changed to)
- *  - old (Was)
+ *  - old ()
  */
 class ChangeRegistry implements ChangeRegistryInterface
 {

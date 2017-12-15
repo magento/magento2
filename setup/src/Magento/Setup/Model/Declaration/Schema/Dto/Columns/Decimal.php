@@ -13,7 +13,10 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
  * Declared in SQL, like FLOAT(S, P) or DECIMAL(S, P)
  * Where S - is scale, P - is precission
  */
-class Decimal extends Column implements ElementDiffAwareInterface
+class Decimal extends Column implements
+    ElementDiffAwareInterface,
+    ColumnUnsignedAwareInterface,
+    ColumnNullableAwareInterface
 {
     /**
      * By default element type is decimal, but it can various: decimal, float, double

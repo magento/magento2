@@ -12,7 +12,9 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
  * Text column
  * Declared in SQL, like: TEXT, MEDIUMTEXT, LONGTEXT
  */
-class Text extends Column implements ElementDiffAwareInterface
+class Text extends Column implements
+    ElementDiffAwareInterface,
+    ColumnNullableAwareInterface
 {
     /**
      * By default element type is text, but it can various: text, mediumtext, longtext

@@ -33,9 +33,23 @@ class Timestamp implements DbSchemaProcessorInterface
     /**
      * @inheritdoc
      */
+    public function canBeApplied(ElementInterface $element)
+    {
+        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp;
+    }
+
+    /**
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp $element
+     * @inheritdoc
+     */
     public function toDefinition(ElementInterface $element)
     {
-        return '';
+        return sprintf(
+            '%s %s %s',
+            $element->getElementType(),
+            $element->getDefault(),
+            $this->onUpdate->toDefinition($element)
+        );
     }
 
     /**

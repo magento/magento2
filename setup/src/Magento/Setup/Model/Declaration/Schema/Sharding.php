@@ -16,6 +16,11 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 class Sharding
 {
     /**
+     * Name of default connection
+     */
+    const DEFAULT_CONNECTION = 'default';
+
+    /**
      * @var DeploymentConfig
      */
     private $deploymentConfig;
@@ -47,6 +52,6 @@ class Sharding
      */
     public function getDefaultResource()
     {
-        return 'default';
+        return self::DEFAULT_CONNECTION;
     }
 }

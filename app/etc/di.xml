@@ -1401,7 +1401,7 @@
     </type>
     <type name="Magento\Setup\Model\Declaration\Schema\Db\AdapterMediator">
         <arguments>
-            <argument name="columnProcessors" xsi:type="array">
+            <argument name="processors" xsi:type="array">
                 <item name="column" xsi:type="array">
                     <item name="basic" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Basic</item>
                     <item name="integer" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Integer</item>
@@ -1409,16 +1409,13 @@
                     <item name="text" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Text</item>
                     <item name="timestamp" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Timestamp</item>
                     <item name="varchar" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Varchar</item>
-                    <item name="on_update" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\OnUpdate</item>
                 </item>
                 <item name="index" xsi:type="array">
                     <item name="indexGeneric" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Index</item>
                 </item>
-                <item name="reference" xsi:type="array">
-                    <item name="foreignKey" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Constraints\ForeignKey</item>
-                </item>
                 <item name="constraint" xsi:type="array">
                     <item name="unique" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Constraints\Internal</item>
+                    <item name="foreignKey" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Constraints\ForeignKey</item>
                 </item>
             </argument>
         </arguments>

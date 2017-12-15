@@ -17,11 +17,6 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 class Integer implements DbSchemaProcessorInterface
 {
     /**
-     * MyMySQL flag, that says that we need to increment field, each time when we add new row
-     */
-    const IDENTITY_FLAG = 'auto_increment';
-
-    /**
      * @var Unsigned
      */
     private $unsigned;
@@ -32,21 +27,56 @@ class Integer implements DbSchemaProcessorInterface
     private $boolean;
 
     /**
+     * @var Nullable
+     */
+    private $nullable;
+
+    /**
+     * @var Identity
+     */
+    private $identity;
+
+    /**
      * @param Unsigned $unsigned
      * @param bool $boolean
+     * @param Nullable $nullable
+     * @param Identity $identity
      */
-    public function __construct(Unsigned $unsigned, Boolean $boolean)
-    {
+    public function __construct(
+        Unsigned $unsigned,
+        Boolean $boolean,
+        Nullable $nullable,
+        Identity $identity
+    ) {
         $this->unsigned = $unsigned;
         $this->boolean = $boolean;
+        $this->nullable = $nullable;
+        $this->identity = $identity;
     }
 
     /**
      * @inheritdoc
      */
+    public function canBeApplied(ElementInterface $element)
+    {
+        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer;
+    }
+
+    /**
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer $element
+     * @inheritdoc
+     */
     public function toDefinition(ElementInterface $element)
     {
-        return '';
+        return sprintf(
+            '%s(%s) %s %s %s %s',
+            $element->getElementType(),
+            $element->getPadding(),
+            $this->unsigned->toDefinition($element),
+            $this->nullable->toDefinition($element),
+            $element->getDefault(),
+            $this->identity->toDefinition($element)
+        );
     }
 
     /**
@@ -70,10 +100,7 @@ class Integer implements DbSchemaProcessorInterface
                 $data['padding'] = $matches[2];
             }
 
-            if (!empty($data['extra']) && strpos(self::IDENTITY_FLAG, $data['extra']) !== false) {
-                $data['identity'] = true;
-            }
-
+            $data = $this->identity->fromDefinition($data);
             $data = $this->boolean->fromDefinition($data);
         }
 

@@ -31,22 +31,52 @@ class Basic implements DbSchemaProcessorInterface
     ];
 
     /**
+     * @var Unsigned
+     */
+    private $unsigned;
+
+    /**
+     * @var Nullable
+     */
+    private $nullable;
+
+    /**
+     * @param Unsigned $unsigned
+     * @param Nullable $nullable
+     */
+    public function __construct(Unsigned $unsigned, Nullable $nullable)
+    {
+        $this->unsigned = $unsigned;
+        $this->nullable = $nullable;
+    }
+
+    /**
+     * Basic type can not process any type of elements
+     *
+     * @param ElementInterface $element
+     * @return bool
+     */
+    public function canBeApplied(ElementInterface $element)
+    {
+        return false;
+    }
+
+    /**
+     * Column definition sequence:
+     *  - type
+     *  - padding/scale/precision
+     *  - unsigned
+     *  - nullable
+     *  - default
+     *  - identity
+     *  - comment
+     *  - after-comment
+     *
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $element)
     {
-        return '';
-    }
-
-    /**
-     * Convert MySQL nullable string value into boolean
-     *
-     * @param string $nullableValue
-     * @return bool
-     */
-    private function processNullable($nullableValue)
-    {
-        return strtolower($nullableValue) === 'yes' ? true : false;
+        throw new \LogicException("Basic processor, can`t convert any element to definition");
     }
 
     /**
@@ -56,7 +86,10 @@ class Basic implements DbSchemaProcessorInterface
     {
         $data = array_combine(array_values(self::$tokens), array_values($data));
         $data['type'] = strtolower($data['type']);
-        $data['nullable'] = $this->processNullable($data['nullable']);
+
+        $data = $this->unsigned->fromDefinition($data);
+        $data = $this->nullable->fromDefinition($data);
+
         unset($data['key']); //we do not need key, as it will be calculated from indexes
         return $data;
     }

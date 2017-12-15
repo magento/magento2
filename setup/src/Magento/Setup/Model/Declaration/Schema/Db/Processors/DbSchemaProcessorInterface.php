@@ -17,6 +17,14 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 interface DbSchemaProcessorInterface
 {
     /**
+     * Check whether current processor can process element
+     *
+     * @param ElementInterface $element
+     * @return mixed
+     */
+    public function canBeApplied(ElementInterface $element);
+
+    /**
      * Output always will be SQL definition
      *
      * @param ElementInterface $element

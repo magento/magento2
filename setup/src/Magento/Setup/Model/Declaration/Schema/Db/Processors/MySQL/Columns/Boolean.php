@@ -18,11 +18,53 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 class Boolean implements DbSchemaProcessorInterface
 {
     /**
+     * Type with what we will persist column
+     */
+    const TYPE = 'BOOLEAN';
+
+    /**
+     * Type of integer that will be used in MySQL for boolean
+     */
+    const INTEGER_TYPE = 'tinyinteger';
+
+    /**
+     * Padding for integer described below
+     */
+    const INTEGER_PADDING = '1';
+
+    /**
+     * @var Nullable
+     */
+    private $nullable;
+
+    /**
+     * @param Nullable $nullable
+     */
+    public function __construct(Nullable $nullable)
+    {
+        $this->nullable = $nullable;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function canBeApplied(ElementInterface $element)
+    {
+        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Boolean;
+    }
+
+    /**
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Boolean $element
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $element)
     {
-        return '';
+        return sprintf(
+            '%s %s %s',
+            self::TYPE,
+            $this->nullable->toDefinition($element),
+            $element->getDefault()
+        );
     }
 
     /**
@@ -32,9 +74,10 @@ class Boolean implements DbSchemaProcessorInterface
      */
     public function fromDefinition(array $data)
     {
-        if ($data['type'] === 'tinyinteger' && $data['padding'] === '1') {
+        if ($data['type'] === self::INTEGER_TYPE && $data['padding'] === self::INTEGER_PADDING) {
             $data['type'] = 'boolean';
             $data['default'] = (bool) $data['default'];
+            $data['unsigned'] = false; //For boolean we always do not want to have unsigned
         }
 
         return $data;

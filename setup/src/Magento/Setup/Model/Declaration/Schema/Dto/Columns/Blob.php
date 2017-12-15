@@ -13,7 +13,9 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
  * We can have few binary types: blob, mediumblob, largeblog
  * Declared in SQL, like blob
  */
-class Blob extends Column implements ElementDiffAwareInterface
+class Blob extends Column implements
+    ElementDiffAwareInterface,
+    ColumnNullableAwareInterface
 {
     /**
      * By default element type is blob, but it can various: blob, mediumblob, longblob
