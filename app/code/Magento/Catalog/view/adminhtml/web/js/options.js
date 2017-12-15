@@ -81,6 +81,9 @@ define([
                         element.addClassName('no-display');
                         element.addClassName('template');
                         element.hide();
+                        jQuery(element).find('input').each(function(index, el) {
+                            el.disabled = 'disabled';
+                        });
                         this.totalItems--;
                         this.updateItemsCountField();
                     }
