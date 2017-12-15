@@ -235,6 +235,17 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      *
      * @return bool
      */
+    public function isEnabledInFlat()
+    {
+        return $this->_isEnabledInFlat();
+    }
+
+
+    /**
+     * Is attribute enabled for flat indexing
+     *
+     * @return bool
+     */
     protected function _isEnabledInFlat()
     {
         return $this->getData('backend_type') == 'static'
