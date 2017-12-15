@@ -10,18 +10,18 @@
 <?php foreach ($block->getSourceItems() as $sourceName => $sourceItems): ?>
     <table class="data-table admin__table-primary edit-order-table">
         <div class="admin__page-section-item-title">
-            <span class="title"><?= $sourceName ?></span>
+            <span class="title"><?= /* @escapeNotVerified */ $sourceName ?></span>
         </div>
         <thead>
             <tr class="headings">
-                <th><span>Sku</span></th>
-                <th><span>Qty</span></th>
+                <th><span><?= __('Sku') ?></span></th>
+                <th><span><?= __('Qty') ?></span></th>
             </tr>
         </thead>
         <?php foreach ($sourceItems as $item): ?>
             <tr>
-                <td><?= $item['sku'] ?></td>
-                <td><?= $item['qty'] ?></td>
+                <td><?= /* @escapeNotVerified */ $item['sku'] ?></td>
+                <td><?= /* @escapeNotVerified */ $item['qty'] ?></td>
             </tr>
         <?php endforeach; ?>
     </table>

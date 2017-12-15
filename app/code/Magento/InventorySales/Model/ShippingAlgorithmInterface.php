@@ -10,6 +10,9 @@ namespace Magento\InventorySales\Model;
 use Magento\InventorySales\Model\ShippingAlgorithm\ResultInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
+/**
+ * @api
+ */
 interface ShippingAlgorithmInterface
 {
     /**

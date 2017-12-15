@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Model\ShippingAlgorithm;
 
+/**
+ * @api
+ */
 interface ResultInterface
 {
 }
