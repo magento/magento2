@@ -3,10 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper;
+namespace Magento\Elasticsearch\Test\Unit\Elasticsearch5\Model\Adapter\FieldMapper;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldType;
+use Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldType;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ProductFieldMapperTest extends \PHPUnit\Framework\TestCase
@@ -104,7 +104,7 @@ class ProductFieldMapperTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->mapper = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\FieldMapper\ProductFieldMapper::class,
+            \Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper::class,
             [
                 'eavConfig' => $this->eavConfig,
                 'storeManager' => $this->storeManager,
