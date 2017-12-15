@@ -231,7 +231,7 @@
           </elementProp>
           <elementProp name="apiProcessOrders" elementType="Argument">
             <stringProp name="Argument.name">apiProcessOrders</stringProp>
-            <stringProp name="Argument.value">${__P(apiProcessOrders,5)}</stringProp>
+            <stringProp name="Argument.value">${__P(apiProcessOrders,1)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="bamboo_build_number" elementType="Argument">
