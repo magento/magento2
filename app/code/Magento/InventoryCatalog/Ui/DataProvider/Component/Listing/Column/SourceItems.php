@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Ui\Component\Listing\Column;
+namespace Magento\InventoryCatalog\Ui\DataProvider\Component\Listing\Column;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
