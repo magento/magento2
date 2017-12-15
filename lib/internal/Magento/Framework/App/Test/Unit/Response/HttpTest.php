@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Response;
 
-use \Magento\Framework\App\Response\Http;
+use Magento\Framework\App\Response\Http;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -20,24 +20,33 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Stdlib\CookieManagerInterface
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cookieManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cookieMetadataFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Http\Context */
+    /**
+     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $dateTimeMock;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /**
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $requestMock;
+
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
     protected $objectManager;
 
     protected function setUp()

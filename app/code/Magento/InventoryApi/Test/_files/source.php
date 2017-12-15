@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
@@ -23,6 +25,7 @@ $dataObjectHelper->populateWithArray(
     $source,
     [
         SourceInterface::SOURCE_ID => 10,
+        SourceInterface::CODE => 'source-code-1',
         SourceInterface::NAME => 'source-name-1',
         SourceInterface::CONTACT_NAME => 'source-contact-name',
         SourceInterface::EMAIL => 'source-email',

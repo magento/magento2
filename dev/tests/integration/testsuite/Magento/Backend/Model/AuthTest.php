@@ -5,6 +5,7 @@
  */
 namespace Magento\Backend\Model;
 
+use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Exception\AuthenticationException;
 
 /**
@@ -86,6 +87,19 @@ class AuthTest extends \PHPUnit\Framework\TestCase
             $this->_model->getUser()
         );
         $this->assertGreaterThan(time() - 10, $this->_model->getAuthStorage()->getUpdatedAt());
+    }
+
+    public function testLoginFlushesFormKey()
+    {
+        /** @var FormKey $dataFormKey */
+        $dataFormKey = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(FormKey::class);
+        $beforeKey = $dataFormKey->getFormKey();
+        $this->_model->login(
+            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
+        $afterKey = $dataFormKey->getFormKey();
+        $this->assertNotEquals($beforeKey, $afterKey);
     }
 
     /**

@@ -50,6 +50,15 @@
             <opened>true</opened>
             <dataScope>general</dataScope>
         </settings>
+        <field name="code" formElement="input" sortOrder="20">
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Code</label>
+            </settings>
+        </field>
         <field name="name" formElement="input" sortOrder="20">
             <settings>
                 <validation>

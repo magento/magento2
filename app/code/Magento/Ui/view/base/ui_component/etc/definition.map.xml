@@ -206,6 +206,7 @@
                         <item name="ns" type="string" xsi:type="xpath">settings/ns</item>
                         <item name="componentType" type="string" xsi:type="xpath">settings/componentType</item>
                         <item name="dataScope" type="string" xsi:type="xpath">settings/dataScope</item>
+                        <item name="aclResource" type="string" xsi:type="xpath">aclResource</item>
                     </item>
                     <item name="js_config" xsi:type="array">
                         <item name="deps" type="deps" xsi:type="converter">settings/deps</item>

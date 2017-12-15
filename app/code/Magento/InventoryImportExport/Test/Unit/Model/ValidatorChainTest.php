@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Test\Unit\Model;
+namespace Magento\InventoryImportExport\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validation\ValidationResultFactory;
@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class ValidatorChainTest extends TestCase
 {
-
     /**
      * @var ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */

@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\Inventory\Test\Integration\Indexer;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Indexer\Alias;
-use Magento\Inventory\Indexer\IndexNameBuilder;
-use Magento\Inventory\Indexer\IndexStructureInterface;
+use Magento\Framework\MultiDimensionalIndex\Alias;
+use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
+use Magento\Inventory\Indexer\IndexStructure;
 
 class RemoveIndexData
 {
@@ -20,17 +20,17 @@ class RemoveIndexData
     private $indexNameBuilder;
 
     /**
-     * @var IndexStructureInterface
+     * @var IndexStructure
      */
     private $indexStructure;
 
     /**
      * @param IndexNameBuilder $indexNameBuilder
-     * @param IndexStructureInterface $indexStructure
+     * @param IndexStructure $indexStructure
      */
     public function __construct(
         IndexNameBuilder $indexNameBuilder,
-        IndexStructureInterface $indexStructure
+        IndexStructure $indexStructure
     ) {
         $this->indexNameBuilder = $indexNameBuilder;
         $this->indexStructure = $indexStructure;

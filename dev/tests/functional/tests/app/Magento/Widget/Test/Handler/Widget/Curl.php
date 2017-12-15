@@ -102,7 +102,7 @@ class Curl extends AbstractCurl
         $response = $curl->read();
         $curl->close();
 
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             throw new \Exception("Widget instance creation by curl handler was not successful! Response: $response");
         }
         $id = null;

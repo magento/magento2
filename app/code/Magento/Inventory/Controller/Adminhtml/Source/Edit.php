@@ -49,7 +49,7 @@ class Edit extends Action
      */
     public function execute(): ResultInterface
     {
-        $sourceId = $this->getRequest()->getParam(SourceInterface::SOURCE_ID);
+        $sourceId = (int)$this->getRequest()->getParam(SourceInterface::SOURCE_ID);
         try {
             $source = $this->sourceRepository->get($sourceId);
 

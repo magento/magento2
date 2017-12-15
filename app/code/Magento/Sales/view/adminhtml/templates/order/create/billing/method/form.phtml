@@ -55,9 +55,7 @@
             'Magento_Sales/order/create/form'
         ], function(mage) {
             mage.apply();
-        <?php if ($_methodsCount != 1) : ?>
             order.setPaymentMethod('<?= $block->escapeHtml($block->getSelectedMethodCode()); ?>');
-        <?php endif; ?>
         });
     </script>
 <?php else : ?>

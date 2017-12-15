@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventoryApi\Test\Api\SourceRepository;
 
 use Magento\Framework\Webapi\Rest\Request;
@@ -27,6 +29,7 @@ class UpdateTest extends WebapiAbstract
     {
         $sourceId = 10;
         $expectedData = [
+            SourceInterface::CODE => 'source-code-1-updated',
             SourceInterface::NAME => 'source-name-1-updated',
             SourceInterface::CONTACT_NAME => 'source-contact-name-updated',
             SourceInterface::EMAIL => 'source-email-updated',

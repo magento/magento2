@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventoryApi\Test\Api\SourceRepository;
 
 use Magento\Framework\Webapi\Exception;
@@ -86,6 +88,20 @@ class ValidationTest extends WebapiAbstract
                     ],
                 ],
             ],
+            'without_' . SourceInterface::CODE => [
+                SourceInterface::CODE,
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::CODE,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -148,6 +164,65 @@ class ValidationTest extends WebapiAbstract
     public function failedValidationDataProvider(): array
     {
         return [
+            'null_' . SourceInterface::CODE => [
+                SourceInterface::CODE,
+                null,
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::CODE,
+                            ],
+                        ],
+                    ],
+                ],
+            ], 'empty_' . SourceInterface::CODE => [
+                SourceInterface::CODE,
+                '',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::CODE,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'whitespaces_' . SourceInterface::CODE => [
+                SourceInterface::CODE,
+                ' ',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceInterface::CODE,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'whitespaces_in_code_' . SourceInterface::CODE => [
+                SourceInterface::CODE,
+                'source code',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not contain whitespaces.',
+                            'parameters' => [
+                                'field' => SourceInterface::CODE,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'null_' . SourceInterface::NAME => [
                 SourceInterface::NAME,
                 null,

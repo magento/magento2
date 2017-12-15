@@ -26,7 +26,7 @@ modules:
         \Magento\FunctionalTestingFramework\Module\MagentoWebDriver:
             url: "%MAGENTO_BASE_URL%"
             backend_name: admin
-            browser: chrome
+            browser: 'chrome'
             window_size: maximize
             username: "%MAGENTO_ADMIN_USERNAME%"
             password: "%MAGENTO_ADMIN_PASSWORD%"

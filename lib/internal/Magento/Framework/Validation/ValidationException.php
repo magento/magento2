@@ -12,6 +12,10 @@ use Magento\Framework\Phrase;
 /**
  * Validation exception with possibility to set several error messages
  *
+ * ValidationException exists to be compatible with the Web-API (SOAP and REST) implementation which currently
+ * uses Magento\Framework\Exception\AggregateExceptionInterface returned as a result of ServiceContracts call
+ * to support Multi-Error response.
+ *
  * @api
  */
 class ValidationException extends LocalizedException implements AggregateExceptionInterface
@@ -40,7 +44,7 @@ class ValidationException extends LocalizedException implements AggregateExcepti
     /**
      * @inheritdoc
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         $localizedErrors = [];
         if (null !== $this->validationResult) {
@@ -48,6 +52,6 @@ class ValidationException extends LocalizedException implements AggregateExcepti
                 $localizedErrors[] = new LocalizedException($error);
             }
         }
-        return  $localizedErrors;
+        return $localizedErrors;
     }
 }

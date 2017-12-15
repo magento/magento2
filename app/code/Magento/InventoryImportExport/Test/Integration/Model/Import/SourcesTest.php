@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Test\Integration\Model\Import;
+namespace Magento\InventoryImportExport\Test\Integration\Model\Import;
 
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -17,9 +17,6 @@ use Magento\InventoryImportExport\Model\Import\Sources;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-/**
- * TODO: fixture via composer
- */
 class SourcesTest extends TestCase
 {
     /**

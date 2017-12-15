@@ -9,7 +9,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminCategorySidebarActionSection">
-        <element name="AddRootCategoryButton" type="button" locator="#add_root_category_button" timeout="30"/>
-        <element name="AddSubcategoryButton" type="button" locator="#add_subcategory_button" timeout="30"/>
+        <element name="AddRootCategoryButton" type="button" selector="#add_root_category_button" timeout="30"/>
+        <element name="AddSubcategoryButton" type="button" selector="#add_subcategory_button" timeout="30"/>
     </section>
 </config>

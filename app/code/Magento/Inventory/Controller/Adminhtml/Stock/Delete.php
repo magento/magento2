@@ -56,6 +56,7 @@ class Delete extends Action
         }
 
         try {
+            $stockId = (int)$stockId;
             $this->stockRepository->deleteById($stockId);
             $this->messageManager->addSuccessMessage(__('The Stock has been deleted.'));
             $resultRedirect->setPath('*/*');

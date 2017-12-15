@@ -31,6 +31,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_InventoryApi::source</aclResource>
         <dataProvider class="Magento\Inventory\Ui\DataProvider\SourceDataProvider" name="inventory_source_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
@@ -92,6 +93,18 @@
                 <filter>textRange</filter>
                 <label translate="true">ID</label>
                 <sorting>asc</sorting>
+            </settings>
+        </column>
+        <column name="code" sortOrder="25">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Code</label>
+                <editor>
+                    <editorType>text</editorType>
+                    <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                    </validation>
+                </editor>
             </settings>
         </column>
         <column name="name" sortOrder="30">
@@ -268,7 +281,7 @@
                 <label translate="true">Priority</label>
             </settings>
         </column>
-        <actionsColumn name="actions" class="Magento\Backend\Ui\Component\Listing\Column\EditAction" sortOrder="100">
+        <actionsColumn name="actions" class="Magento\Backend\Ui\Component\Listing\Column\EditAction" sortOrder="200">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="editUrlPath" xsi:type="string">inventory/source/edit</item>

@@ -11,7 +11,12 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\EntityManager\HydratorInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use PHPUnit\Framework\Assert;
 
 class StockItemDataChecker
 {
@@ -41,24 +46,48 @@ class StockItemDataChecker
     private $productFactory;
 
     /**
+     * @var SourceItemRepositoryInterface
+     */
+    private $sourceItemRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var DefaultSourceProviderInterface
+     */
+    private $defaultSourceProvider;
+
+    /**
      * @param HydratorInterface $hydrator
      * @param StockItemRepositoryInterface $stockItemRepository
      * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
      * @param ProductRepositoryInterface $productRepository
      * @param ProductInterfaceFactory $productFactory
+     * @param SourceItemRepositoryInterface $sourceItemRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param DefaultSourceProviderInterface $defaultSourceProvider
      */
     public function __construct(
         HydratorInterface $hydrator,
         StockItemRepositoryInterface $stockItemRepository,
         StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory,
         ProductRepositoryInterface $productRepository,
-        ProductInterfaceFactory $productFactory
+        ProductInterfaceFactory $productFactory,
+        SourceItemRepositoryInterface $sourceItemRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        DefaultSourceProviderInterface $defaultSourceProvider
     ) {
         $this->hydrator = $hydrator;
         $this->stockItemRepository = $stockItemRepository;
         $this->stockItemCriteriaFactory = $stockItemCriteriaFactory;
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;
+        $this->sourceItemRepository = $sourceItemRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->defaultSourceProvider = $defaultSourceProvider;
     }
 
     /**
@@ -74,6 +103,7 @@ class StockItemDataChecker
         $productLoadedByModel = $this->productFactory->create();
         $productLoadedByModel->load($product->getId());
         $this->doCheckStockItemData($product, $expectedData);
+        $this->checkIntegrityWithInventory($product, $expectedData);
     }
 
     /**
@@ -97,10 +127,10 @@ class StockItemDataChecker
             StockItemInterface::IS_IN_STOCK => 0,
             StockItemInterface::QTY => 0,
         ]);
-        \PHPUnit\Framework\Assert::assertNotNull($product->getQuantityAndStockStatus());
+        Assert::assertNotNull($product->getQuantityAndStockStatus());
         $this->assertArrayContains($expectedQuantityAndStockStatusData, $product->getQuantityAndStockStatus());
 
-        \PHPUnit\Framework\Assert::assertNotNull($product->getData('quantity_and_stock_status'));
+        Assert::assertNotNull($product->getData('quantity_and_stock_status'));
         $this->assertArrayContains($expectedQuantityAndStockStatusData, $product->getData('quantity_and_stock_status'));
     }
 
@@ -112,7 +142,7 @@ class StockItemDataChecker
     private function assertArrayContains(array $expected, array $actual)
     {
         foreach ($expected as $key => $value) {
-            \PHPUnit\Framework\Assert::assertArrayHasKey(
+            Assert::assertArrayHasKey(
                 $key,
                 $actual,
                 "Expected value for key '{$key}' is missed"
@@ -120,12 +150,37 @@ class StockItemDataChecker
             if (is_array($value)) {
                 $this->assertArrayContains($value, $actual[$key]);
             } else {
-                \PHPUnit\Framework\Assert::assertEquals(
+                Assert::assertEquals(
                     $value,
                     $actual[$key],
                     "Expected value for key '{$key}' doesn't match"
                 );
             }
         }
+    }
+
+    /**
+     * @param Product $product
+     * @param array $expectedData
+     * @return void
+     */
+    private function checkIntegrityWithInventory(Product $product, array $expectedData)
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(SourceItemInterface::SOURCE_ID, $this->defaultSourceProvider->getId())
+            ->addFilter(SourceItemInterface::SKU, $product->getSku())
+            ->create();
+        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
+        Assert::assertCount(1, $sourceItems);
+
+        $sourceItem = reset($sourceItems);
+        Assert::assertEquals(
+            $expectedData[StockItemInterface::QTY],
+            $sourceItem->getQuantity()
+        );
+        Assert::assertEquals(
+            $expectedData[StockItemInterface::IS_IN_STOCK],
+            (int)$sourceItem->getStatus()
+        );
     }
 }

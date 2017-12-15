@@ -9,7 +9,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="CheckoutShippingMethodsSection">
-        <element name="next" type="button" locator="button.button.action.continue.primary"/>
-        <element name="firstShippingMethod" type="radio" locator=".row:nth-of-type(1) .col-method .radio"/>
+        <element name="next" type="button" selector="button.button.action.continue.primary"/>
+        <element name="firstShippingMethod" type="radio" selector=".row:nth-of-type(1) .col-method .radio"/>
     </section>
 </config>

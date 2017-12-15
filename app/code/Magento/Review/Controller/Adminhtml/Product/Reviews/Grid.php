@@ -13,6 +13,11 @@ use Magento\Framework\Controller\ResultFactory;
 class Grid extends Action
 {
     /**
+     * Authorization level of a basic admin session
+     */
+    const ADMIN_RESOURCE = 'Magento_Review::reviews_all';
+
+    /**
      * @var \Magento\Catalog\Controller\Adminhtml\Product\Builder
      */
     protected $productBuilder;

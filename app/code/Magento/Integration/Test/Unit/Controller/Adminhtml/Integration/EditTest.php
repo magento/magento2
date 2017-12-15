@@ -49,6 +49,9 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
                     ]
                 )
             );
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
         $this->pageTitleMock->expects($this->atLeastOnce())
             ->method('prepend');
         $this->_verifyLoadAndRenderLayout();
@@ -79,6 +82,9 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             )->will(
                 $this->throwException($invalidIdException)
             );
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
         $this->_verifyLoadAndRenderLayout();
         $integrationContr = $this->_createIntegrationController('Edit');
         $integrationContr->execute();

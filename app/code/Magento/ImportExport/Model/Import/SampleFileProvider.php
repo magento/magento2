@@ -48,7 +48,7 @@ class SampleFileProvider
     /**
      * Returns the Size for the given file associated to an Import entity
      *
-     * @param string $fileName
+     * @param string $entityName
      * @throws NoSuchEntityException
      * @return int
      */
@@ -92,7 +92,7 @@ class SampleFileProvider
         $filePath = $directoryRead->getRelativePath($fileAbsolutePath);
 
         if (!$directoryRead->isFile($filePath)) {
-            throw new NoSuchEntityException(__("There is no file: %s", $filePath));
+            throw new NoSuchEntityException(__("There is no file: %file", ['file' => $filePath]));
         }
 
         return $filePath;

@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Framework\Exception\FileSystemException;
+
 /**
  * Test class for \Magento\Catalog\Model\Product\Gallery\CreateHandler.
  *
@@ -56,6 +58,47 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->createHandler->execute($product);
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('media_gallery/duplicate/100'));
         $this->assertEquals($this->fileLabel, $product->getData('image_label'));
+    }
+
+    /**
+     * Check sanity of posted image file name
+     *
+     * @param string $imageFileName
+     * @throws FileSystemException
+     * @expectedException \Magento\Framework\Exception\FileSystemException
+     * @dataProvider illegalFilenameDataProvider
+     */
+    public function testExecuteWithIllegalFilename($imageFileName)
+    {
+        /** @var $product \Magento\Catalog\Model\Product */
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\Product::class
+        );
+        $product->load(1);
+        $product->setData(
+            'media_gallery',
+            ['images' => ['image' => ['file' => $imageFileName, 'label' => 'New image']]]
+        );
+        $product->setData('image', $imageFileName);
+
+        try {
+            $this->createHandler->execute($product);
+        } catch (FileSystemException $exception) {
+            $this->assertContains('doesn\'t exist or not a file', $exception->getLogMessage());
+            $this->assertNotContains('../', $exception->getLogMessage());
+            throw $exception;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function illegalFilenameDataProvider()
+    {
+        return [
+            ['../../../../../.htaccess'],
+            ['/../../../.././.htaccess.tmp'],
+        ];
     }
 
     /**

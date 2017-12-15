@@ -90,6 +90,11 @@ class ShipmentDocumentFactory
                 $appendComment,
                 $comment->getIsVisibleOnFront()
             );
+
+            if ($appendComment) {
+                $shipment->setCustomerNote($comment->getComment());
+                $shipment->setCustomerNoteNotify($appendComment);
+            }
         }
 
         return $shipment;

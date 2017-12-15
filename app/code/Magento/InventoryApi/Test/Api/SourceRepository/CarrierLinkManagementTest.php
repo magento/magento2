@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\InventoryApi\Test\Api\SourceRepository;
 
@@ -29,6 +30,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
     {
         $sourceId = 10;
         $expectedData = [
+            SourceInterface::CODE => 'source-code-1',
             SourceInterface::NAME => 'source-name-1',
             SourceInterface::POSTCODE => 'source-postcode',
             SourceInterface::COUNTRY_ID => 'US',

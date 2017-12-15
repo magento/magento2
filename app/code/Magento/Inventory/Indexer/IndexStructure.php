@@ -10,6 +10,9 @@ namespace Magento\Inventory\Indexer;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\MultiDimensionalIndex\IndexName;
+use Magento\Framework\MultiDimensionalIndex\IndexNameResolverInterface;
+use Magento\Framework\MultiDimensionalIndex\IndexStructureInterface;
 
 /**
  * @inheritdoc
@@ -64,7 +67,7 @@ class IndexStructure implements IndexStructureInterface
         $tableName = $this->indexNameResolver->resolveName($indexName);
 
         if ($connection->isTableExists($tableName)) {
-            throw new StateException(__('Table %s already exits', $tableName));
+            throw new StateException(__('Table %table already exits', ['table' => $tableName]));
         }
 
         $this->createTable($connection, $tableName);

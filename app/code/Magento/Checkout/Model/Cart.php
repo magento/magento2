@@ -366,9 +366,7 @@ class Cart extends DataObject implements CartInterface
             ) {
                 $request->setQty($minimumQty);
             }
-        }
 
-        if ($productId) {
             try {
                 $result = $this->getQuote()->addProduct($product, $request);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Inventory\Setup;
 
 use Magento\Framework\Setup\InstallSchemaInterface;
@@ -12,7 +14,6 @@ use Magento\Inventory\Setup\Operation\CreateReservationTable;
 use Magento\Inventory\Setup\Operation\CreateSourceCarrierLinkTable;
 use Magento\Inventory\Setup\Operation\CreateSourceItemTable;
 use Magento\Inventory\Setup\Operation\CreateSourceTable;
-use Magento\Inventory\Setup\Operation\CreateStockItemIndexTable;
 use Magento\Inventory\Setup\Operation\CreateStockSourceLinkTable;
 use Magento\Inventory\Setup\Operation\CreateStockTable;
 

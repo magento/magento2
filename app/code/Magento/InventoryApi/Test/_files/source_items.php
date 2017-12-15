@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\ResourceConnection;
 
 /** @var DataObjectHelper $dataObjectHelper */
 $dataObjectHelper = Bootstrap::getObjectManager()->get(DataObjectHelper::class);
@@ -57,11 +58,6 @@ $sourcesItemsData = [
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
     ],
 ];
-
-$resourceConnection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
-/** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
-$connection = $resourceConnection->getConnection();
-$connection->query('ALTER TABLE ' . $resourceConnection->getTableName('inventory_source_item') . ' AUTO_INCREMENT 1;');
 
 $sourceItems = [];
 foreach ($sourcesItemsData as $sourceItemData) {

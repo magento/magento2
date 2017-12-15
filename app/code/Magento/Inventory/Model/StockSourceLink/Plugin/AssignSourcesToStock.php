@@ -9,6 +9,7 @@ namespace Magento\Inventory\Model\StockSourceLink\Plugin;
 
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Inventory\Indexer\Stock\StockIndexer;
+use Magento\InventoryApi\Api\AssignSourcesToStockInterface;
 
 /**
  * TODO: remove this plugin (https://github.com/magento-engcom/msi/issues/213)
@@ -30,9 +31,11 @@ class AssignSourcesToStock
     }
 
     /**
-     * @inheritdoc
+     * @param AssignSourcesToStockInterface $subject
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute()
+    public function afterExecute(AssignSourcesToStockInterface $subject)
     {
         $indexer = $this->indexerRegistry->get(StockIndexer::INDEXER_ID);
         if ($indexer->isValid()) {

@@ -28,8 +28,6 @@ class ReservationCleanup implements ReservationCleanupInterface
     private $groupConcatMaxLen;
 
     /**
-     * ReservationCleanup constructor.
-     *
      * @param ResourceConnection $resource
      * @param int $groupConcatMaxLen
      */

@@ -49,7 +49,7 @@ class Edit extends Action
      */
     public function execute(): ResultInterface
     {
-        $stockId = $this->getRequest()->getParam(StockInterface::STOCK_ID);
+        $stockId = (int)$this->getRequest()->getParam(StockInterface::STOCK_ID);
         try {
             $stock = $this->stockRepository->get($stockId);
 

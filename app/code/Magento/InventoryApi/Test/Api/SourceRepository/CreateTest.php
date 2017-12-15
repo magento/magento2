@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\InventoryApi\Test\Api\SourceRepository;
 
 use Magento\Framework\App\ResourceConnection;
@@ -25,6 +27,7 @@ class CreateTest extends WebapiAbstract
     public function testCreate()
     {
         $expectedData = [
+            SourceInterface::CODE => 'source-code-1',
             SourceInterface::NAME => 'source-name-1',
             SourceInterface::CONTACT_NAME => 'source-contact-name',
             SourceInterface::EMAIL => 'source-email',

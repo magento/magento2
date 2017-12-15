@@ -14,17 +14,22 @@ class NodeSet implements \Iterator
     /**
      * @var Node[]
      */
-    private $_nodes = [];
+    private $_nodes;
 
     /**
      * @var int
      */
-    private $_currentNode = 0;
+    private $_current;
 
     /**
      * @var int
      */
-    private $_current = 0;
+    private $_currentNode;
+
+    /**
+     * @var int
+     */
+    private $count;
 
     /**
      * Constructor

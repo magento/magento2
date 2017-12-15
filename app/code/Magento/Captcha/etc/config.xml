@@ -17,10 +17,10 @@
         <admin>
             <captcha>
                 <type>default</type>
-                <enable>0</enable>
+                <enable>1</enable>
                 <font>linlibertine</font>
                 <mode>after_fail</mode>
-                <forms>backend_forgotpassword</forms>
+                <forms>backend_forgotpassword,backend_login</forms>
                 <failed_attempts_login>3</failed_attempts_login>
                 <failed_attempts_ip>1000</failed_attempts_ip>
                 <timeout>7</timeout>
@@ -36,10 +36,10 @@
         <customer>
             <captcha>
                 <type>default</type>
-                <enable>0</enable>
+                <enable>1</enable>
                 <font>linlibertine</font>
                 <mode>after_fail</mode>
-                <forms>user_forgotpassword</forms>
+                <forms>user_forgotpassword,user_login</forms>
                 <failed_attempts_login>3</failed_attempts_login>
                 <failed_attempts_ip>1000</failed_attempts_ip>
                 <timeout>7</timeout>

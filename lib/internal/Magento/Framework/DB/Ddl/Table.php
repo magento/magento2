@@ -78,19 +78,68 @@ class Table
 
     const ACTION_SET_DEFAULT = 'SET DEFAULT';
 
-    /**#@+
-     * Option keys for column options
+    /**
+     * Column option 'default'
+     *
+     * @var string
+     */
+    const OPTION_DEFAULT = 'default';
+
+    /**
+     * Column option 'identity'
+     *
+     * @var string
      */
     const OPTION_IDENTITY = 'identity';
-    const OPTION_UNSIGNED = 'unsigned';
-    const OPTION_NULLABLE = 'nullable';
-    const OPTION_PRIMARY = 'primary';
-    const OPTION_DEFAULT = 'default';
-    const OPTION_TYPE = 'type';
+
+    /**
+     * Column option 'length'
+     *
+     * @var string
+     */
     const OPTION_LENGTH = 'length';
-    const OPTION_SCALE = 'scale';
+
+    /**
+     * Column option 'nullable'
+     *
+     * @var string
+     */
+    const OPTION_NULLABLE = 'nullable';
+
+    /**
+     * Column option 'precision'
+     *
+     * @var string
+     */
     const OPTION_PRECISION = 'precision';
-    /**#@-*/
+
+    /**
+     * Column option 'primary'
+     *
+     * @var string
+     */
+    const OPTION_PRIMARY = 'primary';
+
+    /**
+     * Column option 'scale'
+     *
+     * @var string
+     */
+    const OPTION_SCALE = 'scale';
+
+    /**
+     * Column option 'type'
+     *
+     * @var string
+     */
+    const OPTION_TYPE = 'type';
+
+    /**
+     * Column option 'unsigned'
+     *
+     * @var string
+     */
+    const OPTION_UNSIGNED = 'unsigned';
 
     /**
      * Name of table

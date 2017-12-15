@@ -12,10 +12,6 @@
         <annotations>
             <features value="Product Creation"/>
             <stories value="Create a Simple Product via Admin"/>
-            <group value="product"/>
-            <env value="chrome"/>
-            <env value="firefox"/>
-            <env value="phantomjs"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" mergeKey="createPreReqCategory"/>
@@ -26,6 +22,9 @@
                 <description value="You should be able to create a Simple Product in the admin back-end."/>
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-23414"/>
+                <group value="product"/>
+                <env value="chrome"/>
+                <env value="headless"/>
             </annotations>
             <amOnPage url="{{AdminLoginPage.url}}" mergeKey="navigateToAdmin"/>
             <fillField userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" selector="{{AdminLoginFormSection.username}}" mergeKey="fillUsername"/>
@@ -38,7 +37,7 @@
             <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" mergeKey="fillSKU"/>
             <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" mergeKey="fillPrice"/>
             <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" mergeKey="fillQuantity"/>
-            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="['$$createPreReqCategory.name$$']" mergeKey="searchAndSelectCategory"/>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createPreReqCategory.name$$]" mergeKey="searchAndSelectCategory"/>
             <click selector="{{AdminProductSEOSection.sectionHeader}}" mergeKey="openSeoSection"/>
             <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" mergeKey="fillUrlKey"/>
             <click selector="{{AdminProductFormActionSection.saveButton}}" mergeKey="saveProduct"/>

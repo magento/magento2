@@ -6,6 +6,11 @@
 namespace Magento\Framework\Validation;
 
 /**
+ * ValidationResult object supposed to be created by dedicated validator service which makes a validation and checks
+ * whether all entity invariants (business rules that always should be fulfilled) are valid.
+ *
+ * ValidationResult represents a container storing all the validation errors that happened during the entity validation.
+ *
  * @api
  */
 class ValidationResult
@@ -26,7 +31,7 @@ class ValidationResult
     /**
      * @return bool
      */
-    public function isValid()
+    public function isValid(): bool
     {
         return empty($this->errors);
     }
@@ -34,7 +39,7 @@ class ValidationResult
     /**
      * @return array
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }
