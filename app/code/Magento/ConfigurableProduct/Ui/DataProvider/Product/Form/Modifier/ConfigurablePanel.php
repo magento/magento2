@@ -5,6 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form;
@@ -472,8 +473,8 @@ class ConfigurablePanel extends AbstractModifier
                         [
                             'validation' =>
                                 [
-                                    'min_text_length' => '1',
-                                    'max_text_length' => '10',
+                                    'required-entry' => true,
+                                    'max_text_length' => Sku::SKU_MAX_LENGTH,
                                 ]
                         ]
                     ),
