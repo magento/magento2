@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -107,7 +107,10 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->basicMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->dataMock = $this->basicMock(\Magento\Checkout\Helper\Data::class);
-        $this->quoteMock = $this->basicMock(\Magento\Quote\Model\Quote::class);
+        $this->quoteMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote::class,
+            ['getHasError', 'hasItems', 'validateMinimumAmount', 'hasError']
+        );
         $this->contextMock = $this->basicMock(\Magento\Framework\App\Action\Context::class);
         $this->sessionMock = $this->basicMock(\Magento\Customer\Model\Session::class);
         $this->onepageMock = $this->basicMock(\Magento\Checkout\Model\Type\Onepage::class);
@@ -118,7 +121,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->resultPageMock = $this->basicMock(\Magento\Framework\View\Result\Page::class);
         $this->pageConfigMock = $this->basicMock(\Magento\Framework\View\Page\Config::class);
         $this->titleMock = $this->basicMock(\Magento\Framework\View\Page\Title::class);
-        $this->url = $this->getMock(\Magento\Framework\UrlInterface::class);
+        $this->url = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->resultRedirectMock = $this->basicMock(\Magento\Framework\Controller\Result\Redirect::class);
 
         $resultPageFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
@@ -226,7 +229,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      * @param \PHPUnit_Framework_MockObject_MockObject $mock
      * @param string $method
      *
-     * @return \PHPUnit_Framework_MockObject_Builder_InvocationMocker
+     * @return \PHPUnit\Framework\MockObject_Builder_InvocationMocker
      */
     private function basicStub($mock, $method)
     {

@@ -28,16 +28,13 @@ class MassDeleteTest extends AbstractMassActionTest
     {
         parent::setUp();
 
-        $this->collectionFactoryMock = $this->getMock(
+        $this->collectionFactoryMock = $this->createPartialMock(
             \Magento\Cms\Model\ResourceModel\Page\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
 
         $this->pageCollectionMock =
-            $this->getMock(\Magento\Cms\Model\ResourceModel\Page\Collection::class, [], [], '', false);
+            $this->createMock(\Magento\Cms\Model\ResourceModel\Page\Collection::class);
 
         $this->massDeleteController = $this->objectManager->getObject(
             \Magento\Cms\Controller\Adminhtml\Page\MassDelete::class,
@@ -90,7 +87,7 @@ class MassDeleteTest extends AbstractMassActionTest
      */
     protected function getPageMock()
     {
-        $pageMock = $this->getMock(\Magento\Cms\Model\ResourceModel\Page\Collection::class, ['delete'], [], '', false);
+        $pageMock = $this->createPartialMock(\Magento\Cms\Model\ResourceModel\Page\Collection::class, ['delete']);
         $pageMock->expects($this->once())->method('delete')->willReturn(true);
 
         return $pageMock;

@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Product\View\Options\Type;
  * Product options text type block
  *
  * @api
+ * @since 100.0.2
  */
 class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
@@ -43,9 +44,9 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                 ]
             );
             if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN) {
-                $select->setName('options[' . $_option->getid() . ']')->addOption('', __('-- Please Select --'));
+                $select->setName('options[' . $_option->getId() . ']')->addOption('', __('-- Please Select --'));
             } else {
-                $select->setName('options[' . $_option->getid() . '][]');
+                $select->setName('options[' . $_option->getId() . '][]');
                 $select->setClass('multiselect admin__control-multiselect' . $require . ' product-custom-option');
             }
             foreach ($_option->getValues() as $_value) {

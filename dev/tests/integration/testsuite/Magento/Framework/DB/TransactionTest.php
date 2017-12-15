@@ -7,7 +7,7 @@ namespace Magento\Framework\DB;
 
 use Magento\Framework\Flag;
 
-class TransactionTest extends \PHPUnit_Framework_TestCase
+class TransactionTest extends \PHPUnit\Framework\TestCase
 {
     protected $objectManager;
 

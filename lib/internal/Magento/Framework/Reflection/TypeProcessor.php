@@ -8,6 +8,7 @@ namespace Magento\Framework\Reflection;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Phrase;
 use Zend\Code\Reflection\ClassReflection;
+use Zend\Code\Reflection\DocBlock\Tag\ReturnTag;
 use Zend\Code\Reflection\DocBlockReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
@@ -16,6 +17,7 @@ use Zend\Code\Reflection\ParameterReflection;
  * Type processor of config reader properties
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity) this suppress MUST be removed after removing deprecated methods.
  */
 class TypeProcessor
 {
@@ -39,26 +41,7 @@ class TypeProcessor
     const NORMALIZED_ANY_TYPE = 'anyType';
     /**#@-*/
 
-    /**
-     * Array of types data.
-     * <pre>array(
-     *     $complexTypeName => array(
-     *         'documentation' => $typeDocumentation
-     *         'parameters' => array(
-     *             $firstParameter => array(
-     *                 'type' => $type,
-     *                 'required' => $isRequired,
-     *                 'default' => $defaultValue,
-     *                 'documentation' => $parameterDocumentation
-     *             ),
-     *             ...
-     *         )
-     *     ),
-     *     ...
-     * )</pre>
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_types = [];
 
     /**
@@ -71,7 +54,7 @@ class TypeProcessor
      *
      * @return NameFinder
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getNameFinder()
     {
@@ -260,7 +243,7 @@ class TypeProcessor
      * @param string $getterName
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function dataObjectGetterNameToFieldName($getterName)
     {
@@ -273,7 +256,7 @@ class TypeProcessor
      * @param string $shortDescription
      * @return string
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function dataObjectGetterDescriptionToFieldDescription($shortDescription)
     {
@@ -294,22 +277,7 @@ class TypeProcessor
      */
     public function getGetterReturnType($methodReflection)
     {
-        $methodDocBlock = $methodReflection->getDocBlock();
-        if (!$methodDocBlock) {
-            throw new \InvalidArgumentException(
-                "Each getter must have description with @return annotation. "
-                . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
-            );
-        }
-        $returnAnnotations = $methodDocBlock->getTags('return');
-        if (empty($returnAnnotations)) {
-            throw new \InvalidArgumentException(
-                "Getter return type must be specified using @return annotation. "
-                . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
-            );
-        }
-        /** @var \Zend\Code\Reflection\DocBlock\Tag\ReturnTag $returnAnnotation */
-        $returnAnnotation = current($returnAnnotations);
+        $returnAnnotation = $this->getMethodReturnAnnotation($methodReflection);
         $types = $returnAnnotation->getTypes();
         $returnType = current($types);
         $nullable = in_array('null', $types);
@@ -381,7 +349,7 @@ class TypeProcessor
                 self::NORMALIZED_INT_TYPE,
                 self::NORMALIZED_FLOAT_TYPE,
                 self::NORMALIZED_DOUBLE_TYPE,
-                self::NORMALIZED_BOOLEAN_TYPE
+                self::NORMALIZED_BOOLEAN_TYPE,
             ]
         );
     }
@@ -584,7 +552,7 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding getter method
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -622,7 +590,7 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -639,7 +607,7 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function findAccessorMethodName(
         ClassReflection $class,
@@ -660,7 +628,7 @@ class TypeProcessor
      * @param string $methodName
      * @return bool
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected function classHasMethod(ClassReflection $class, $methodName)
     {
@@ -726,5 +694,57 @@ class TypeProcessor
             $type = $this->getArrayItemType($type);
         }
         return $type;
+    }
+
+    /**
+     * Parses `return` annotation from reflection method.
+     *
+     * @param MethodReflection $methodReflection
+     * @return ReturnTag
+     * @throws \InvalidArgumentException if doc block is empty or `@return` annotation doesn't exist
+     */
+    private function getMethodReturnAnnotation(MethodReflection $methodReflection)
+    {
+        $methodName = $methodReflection->getName();
+        $returnAnnotations = $this->getReturnFromDocBlock($methodReflection);
+        if (empty($returnAnnotations)) {
+            // method can inherit doc block from implemented interface, like for interceptors
+            $implemented = $methodReflection->getDeclaringClass()->getInterfaces();
+            /** @var ClassReflection $parentClassReflection */
+            foreach ($implemented as $parentClassReflection) {
+                if ($parentClassReflection->hasMethod($methodName)) {
+                    $returnAnnotations = $this->getReturnFromDocBlock(
+                        $parentClassReflection->getMethod($methodName)
+                    );
+                    break;
+                }
+            }
+            // throw an exception if even implemented interface doesn't have return annotations
+            if (empty($returnAnnotations)) {
+                throw new \InvalidArgumentException(
+                    "Getter return type must be specified using @return annotation. "
+                    . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodName}()"
+                );
+            }
+        }
+        return $returnAnnotations;
+    }
+
+    /**
+     * Parses `return` annotation from doc block.
+     *
+     * @param MethodReflection $methodReflection
+     * @return ReturnTag
+     */
+    private function getReturnFromDocBlock(MethodReflection $methodReflection)
+    {
+        $methodDocBlock = $methodReflection->getDocBlock();
+        if (!$methodDocBlock) {
+            throw new \InvalidArgumentException(
+                "Each getter must have a doc block. "
+                . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
+            );
+        }
+        return current($methodDocBlock->getTags('return'));
     }
 }

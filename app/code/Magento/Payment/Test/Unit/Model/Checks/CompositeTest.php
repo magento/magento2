@@ -8,7 +8,7 @@ namespace Magento\Payment\Test\Unit\Model\Checks;
 
 use \Magento\Payment\Model\Checks\Composite;
 
-class CompositeTest extends \PHPUnit_Framework_TestCase
+class CompositeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider paymentMethodDataProvider

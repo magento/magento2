@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\ProductTypes;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -35,15 +35,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->readerMock = $this->getMock(
-            \Magento\Catalog\Model\ProductTypes\Config\Reader::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->readerMock = $this->createMock(\Magento\Catalog\Model\ProductTypes\Config\Reader::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
     }
 
     /**

@@ -48,7 +48,7 @@ class UpdateExtensionGrid extends AbstractActionController
     public function extensionsAction()
     {
         $extensions = $this->gridExtension->getListForUpdate();
-        
+
         return new JsonModel(
             [
                 'success' => true,

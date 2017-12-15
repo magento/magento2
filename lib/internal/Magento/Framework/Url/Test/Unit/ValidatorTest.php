@@ -7,7 +7,7 @@ namespace Magento\Framework\Url\Test\Unit;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Url\Validator */
     protected $object;

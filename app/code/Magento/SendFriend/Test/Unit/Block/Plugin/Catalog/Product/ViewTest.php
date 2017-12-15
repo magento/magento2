@@ -8,7 +8,7 @@ namespace Magento\SendFriend\Test\Unit\Block\Plugin\Catalog\Product;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ViewTest extends \PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\SendFriend\Block\Plugin\Catalog\Product\View */
     protected $view;
@@ -24,14 +24,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->sendfriendModel = $this->getMock(
+        $this->sendfriendModel = $this->createPartialMock(
             \Magento\SendFriend\Model\SendFriend::class,
-            ['__wakeup', 'canEmailToFriend'],
-            [],
-            '',
-            false
+            ['__wakeup', 'canEmailToFriend']
         );
-        $this->productView = $this->getMock(\Magento\Catalog\Block\Product\View::class, [], [], '', false);
+        $this->productView = $this->createMock(\Magento\Catalog\Block\Product\View::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->view = $this->objectManagerHelper->getObject(

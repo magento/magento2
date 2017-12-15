@@ -8,7 +8,7 @@ namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
-class QueryResolverTest extends \PHPUnit_Framework_TestCase
+class QueryResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\QueryResolver
@@ -32,8 +32,8 @@ class QueryResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock(\Magento\Framework\App\ResourceConnection\ConfigInterface::class);
-        $this->cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->configMock = $this->createMock(\Magento\Framework\App\ResourceConnection\ConfigInterface::class);
+        $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
         $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
         $this->quoteResolver = new \Magento\Quote\Model\QueryResolver(
             $this->configMock,

@@ -22,7 +22,7 @@ class NotificationStorage
      */
 
     /**
-     * @var SerializerInterface
+     * @param FrontendInterface $cache
      */
     private $serializer;
 
@@ -93,7 +93,7 @@ class NotificationStorage
      * Get serializer
      *
      * @return SerializerInterface
-     * @deprecated
+     * @deprecated 100.2.0
      */
     private function getSerializer()
     {

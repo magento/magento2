@@ -15,7 +15,7 @@ use Magento\Setup\Fixtures\ConfigurableProductsFixture;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
+class ConfigurableProductsFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
@@ -41,20 +41,13 @@ class ConfigurableProductsFixtureTest extends \PHPUnit_Framework_TestCase
     {
         $this->fixtureModelMock = $this->getMockBuilder(\Magento\Setup\Fixtures\FixtureModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['createAttributeSet', 'getValue'])
+            ->setMethods(['createAttributeSet', 'getValue', 'getObjectManager'])
             ->getMock();
 
         $this->attributeSetsFixtureMock = $this->getMockBuilder(AttributeSetFixture::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->attributePatternMock = $this->getMockBuilder(Pattern::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->attributePatternMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->attributePatternMock = $this->getMockBuilder(Pattern::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -13,6 +13,7 @@ use Magento\Framework\Translate\Inline\ConfigInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Emulation extends \Magento\Framework\DataObject
 {

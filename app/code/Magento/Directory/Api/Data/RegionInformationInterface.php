@@ -10,6 +10,7 @@ namespace Magento\Directory\Api\Data;
  * Region Information interface.
  *
  * @api
+ * @since 100.0.2
  */
 interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

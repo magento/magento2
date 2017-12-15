@@ -21,6 +21,7 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractTemplate extends AbstractModel implements TemplateTypesInterface
 {

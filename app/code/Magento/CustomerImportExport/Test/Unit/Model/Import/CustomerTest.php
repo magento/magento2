@@ -13,7 +13,7 @@ namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
 use Magento\CustomerImportExport\Model\Import\Customer;
 
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Customer entity import model
@@ -95,13 +95,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 ])
             ->getMock();
 
-        $errorAggregator = $this->getMock(
-            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class,
-            ['hasToBeTerminated'],
-            [],
-            '',
-            false
-        );
+        $errorAggregator = $this->createPartialMock(\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class, ['hasToBeTerminated']);
 
         $availableBehaviors = new \ReflectionProperty($modelMock, '_availableBehaviors');
         $availableBehaviors->setAccessible(true);

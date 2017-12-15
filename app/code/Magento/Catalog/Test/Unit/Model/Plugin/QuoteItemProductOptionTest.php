@@ -17,7 +17,7 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface as ProductOption;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QuoteItemProductOptionTest extends \PHPUnit_Framework_TestCase
+class QuoteItemProductOptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var QuoteItemProductOptionPlugin

@@ -110,7 +110,7 @@ class Validate extends ImportResultController
 
     /**
      * @return Import
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getImport()
     {

@@ -5,6 +5,10 @@
  */
 namespace Magento\Directory\Model\Country\Postcode;
 
+/**
+ * Interface \Magento\Directory\Model\Country\Postcode\ValidatorInterface
+ *
+ */
 interface ValidatorInterface
 {
     /**

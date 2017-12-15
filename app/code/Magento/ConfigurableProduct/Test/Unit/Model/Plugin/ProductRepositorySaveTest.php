@@ -21,7 +21,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * Class ProductRepositorySaveTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
+class ProductRepositorySaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductAttributeRepositoryInterface|MockObject
@@ -79,7 +79,7 @@ class ProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId'])
+            ->setMethods(['getTypeId', 'getExtensionAttributes'])
             ->getMock();
 
         $this->result = $this->getMockBuilder(Product::class)

@@ -44,7 +44,7 @@ class FlagManager
      * Retrieves raw data from the flag.
      *
      * @param string $code The code of flag
-     * @return mixed
+     * @return string|int|float|bool|array|null
      */
     public function getFlagData($code)
     {
@@ -55,7 +55,7 @@ class FlagManager
      * Saves the flag value by code.
      *
      * @param string $code The code of flag
-     * @param mixed $value The value of flag
+     * @param string|int|float|bool|array|null $value The value of flag
      * @return bool
      */
     public function saveFlag($code, $value)

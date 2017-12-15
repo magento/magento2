@@ -12,4 +12,4 @@
  * @var $block \Magento\Catalog\Block\Product\View\Description
  */
 ?>
-<?php /* @escapeNotVerified */ echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($block->getProduct(), $block->getProduct()->getDescription(), 'description') ?>
+<?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Output')->productAttribute($block->getProduct(), $block->getProduct()->getDescription(), 'description') ?>

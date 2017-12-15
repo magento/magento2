@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data\Test\Unit;
 
-class AbstractDataObjectTest extends \PHPUnit_Framework_TestCase
+class AbstractDataObjectTest extends \PHPUnit\Framework\TestCase
 {
     public function testToArray()
     {

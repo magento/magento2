@@ -11,7 +11,7 @@ use \Magento\Framework\HTTP\ZendClient;
 /**
  * Class DeploymentsTest
  */
-class DeploymentsTest extends \PHPUnit_Framework_TestCase
+class DeploymentsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\NewRelicReporting\Model\Apm\Deployments

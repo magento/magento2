@@ -9,7 +9,7 @@
  */
 namespace Magento\Test\Bootstrap;
 
-class EnvironmentTest extends \PHPUnit_Framework_TestCase
+class EnvironmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var string

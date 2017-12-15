@@ -13,10 +13,13 @@ use Magento\Quote\Model\Quote;
  * Use this class to register own specifications.
  *
  * @api
+ * @since 100.0.2
  */
 class Composite implements SpecificationInterface
 {
-    /** @var SpecificationInterface[]  */
+    /**
+     * @var \Magento\Payment\Model\Checks\SpecificationInterface[]
+     */
     protected $list = [];
 
     /**

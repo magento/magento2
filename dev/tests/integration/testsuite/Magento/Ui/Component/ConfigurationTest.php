@@ -14,7 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Ui\Config\Reader\DefinitionMap;
 use Magento\Framework\Component\ComponentRegistrar;
 
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DirSearch

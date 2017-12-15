@@ -16,16 +16,25 @@ use Magento\Framework\Escaper;
 class Editor extends Textarea
 {
     /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    private $serializer;
+
+    /**
+     * Editor constructor.
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @throws \RuntimeException
      */
     public function __construct(
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
         Escaper $escaper,
-        $data = []
+        $data = [],
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
 
@@ -36,6 +45,8 @@ class Editor extends Textarea
             $this->setType('textarea');
             $this->setExtType('textarea');
         }
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -50,6 +61,21 @@ class Editor extends Textarea
         ];
 
         return $buttonTranslations;
+    }
+
+    /**
+     * @return bool|string
+     * @throws \InvalidArgumentException
+     */
+    private function getJsonConfig()
+    {
+        if (is_object($this->getConfig()) && method_exists($this->getConfig(), 'toJson')) {
+            return $this->getConfig()->toJson();
+        } else {
+            return $this->serializer->serialize(
+                $this->getConfig()
+            );
+        }
     }
 
     /**
@@ -132,7 +158,7 @@ class Editor extends Textarea
                 ], function(jQuery){' .
                 "\n" .
                 '  (function($) {$.mage.translate.add(' .
-                \Zend_Json::encode(
+                $this->serializer->serialize(
                     $this->getButtonTranslations()
                 ) .
                 ')})(jQuery);' .
@@ -141,9 +167,7 @@ class Editor extends Textarea
                 ' = new tinyMceWysiwygSetup("' .
                 $this->getHtmlId() .
                 '", ' .
-                \Zend_Json::encode(
-                    $this->getConfig()
-                ) .
+                $this->getJsonConfig() .
                 ');' .
                 $forceLoad .
                 '
@@ -180,7 +204,7 @@ class Editor extends Textarea
                     //<![CDATA[
                     require(["jquery", "mage/translate", "mage/adminhtml/wysiwyg/widget"], function(jQuery){
                         (function($) {
-                            $.mage.translate.add(' . \Zend_Json::encode($this->getButtonTranslations()) . ')
+                            $.mage.translate.add(' . $this->serializer->serialize($this->getButtonTranslations()) . ')
                         })(jQuery);
                     });
                     //]]>

@@ -21,7 +21,7 @@ phpenv rehash;
 test -n "$GITHUB_TOKEN" && composer config github-oauth.github.com "$GITHUB_TOKEN" || true
 
 # Node.js setup via NVM
-if [ $TEST_SUITE = "static" ] || [ test $TEST_SUITE == "js" ]; then
+if [ test $TEST_SUITE == "js" ]; then
     curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm

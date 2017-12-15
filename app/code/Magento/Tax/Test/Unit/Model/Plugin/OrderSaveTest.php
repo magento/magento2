@@ -8,7 +8,7 @@ namespace Magento\Tax\Test\Unit\Model\Plugin;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class OrderSaveTest extends \PHPUnit_Framework_TestCase
+class OrderSaveTest extends \PHPUnit\Framework\TestCase
 {
     const ORDERID = 123;
     const ITEMID = 151;

@@ -14,7 +14,7 @@ namespace Magento\Catalog\Model;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class CategoryTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Store\Model\Store

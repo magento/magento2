@@ -22,7 +22,7 @@
                     <formElements>
                         <fileUploader>
                             <settings>
-                                <allowedExtensions>jpg jpeg gif png svg</allowedExtensions>
+                                <allowedExtensions>jpg jpeg gif png</allowedExtensions>
                                 <maxFileSize>2097152</maxFileSize>
                                 <uploaderConfig>
                                     <param xsi:type="string" name="url">theme/design_config_fileUploader/save</param>

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\TestFramework\Test\Unit\Unit\Utility;
 
-class XsdValidatorTest extends \PHPUnit_Framework_TestCase
+class XsdValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Utility\XsdValidator

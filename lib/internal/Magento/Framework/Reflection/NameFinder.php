@@ -43,7 +43,7 @@ class NameFinder
     {
         return ucfirst(substr(strstr($shortDescription, " "), 1));
     }
-    
+
     /**
      * Find the getter method name for a property from the given class
      *
@@ -99,8 +99,9 @@ class NameFinder
         } else {
             throw new \LogicException(
                 sprintf(
-                    'Property "%s" does not have corresponding setter in class "%s".',
+                    'Property "%s" does not have accessor method "%s" in class "%s".',
                     $camelCaseProperty,
+                    $accessorName,
                     $class->getName()
                 )
             );

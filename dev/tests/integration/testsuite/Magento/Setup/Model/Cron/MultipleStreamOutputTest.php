@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-class MultipleStreamOutputTest extends \PHPUnit_Framework_TestCase
+class MultipleStreamOutputTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var MultipleStreamOutput

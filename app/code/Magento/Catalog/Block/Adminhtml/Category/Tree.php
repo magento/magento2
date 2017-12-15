@@ -22,6 +22,7 @@ use Magento\Store\Model\Store;
  * @package Magento\Catalog\Block\Adminhtml\Category
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 {

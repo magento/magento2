@@ -9,23 +9,23 @@
 /** @var $block \Magento\Swatches\Block\LayeredNavigation\RenderLayered */
 ?>
 <?php $swatchData = $block->getSwatchData(); ?>
-<div class="swatch-attribute swatch-layered <?php /* @escapeNotVerified */ echo $swatchData['attribute_code'] ?>"
-     attribute-code="<?php /* @escapeNotVerified */ echo $swatchData['attribute_code'] ?>"
-     attribute-id="<?php /* @escapeNotVerified */ echo $swatchData['attribute_id'] ?>">
+<div class="swatch-attribute swatch-layered <?= /* @escapeNotVerified */ $swatchData['attribute_code'] ?>"
+     attribute-code="<?= /* @escapeNotVerified */ $swatchData['attribute_code'] ?>"
+     attribute-id="<?= /* @escapeNotVerified */ $swatchData['attribute_id'] ?>">
     <div class="swatch-attribute-options clearfix">
         <?php foreach ($swatchData['options'] as $option => $label): ?>
-            <a href="<?php /* @escapeNotVerified */ echo $label['link'] ?>"
-               aria-label="<?php /* @escapeNotVerified */ echo $label['label'] ?>"
+            <a href="<?= /* @escapeNotVerified */ $label['link'] ?>"
+               aria-label="<?= /* @escapeNotVerified */ $label['label'] ?>"
                class="swatch-option-link-layered">
                 <?php if (isset($swatchData['swatches'][$option]['type'])) { ?>
                     <?php switch ($swatchData['swatches'][$option]['type']) {
                         case '3':
                             ?>
-                            <div class="swatch-option <?php /* @escapeNotVerified */ echo $label['custom_style'] ?>"
+                            <div class="swatch-option <?= /* @escapeNotVerified */ $label['custom_style'] ?>"
                                  tabindex="-1"
                                  option-type="3"
-                                 option-id="<?php /* @escapeNotVerified */ echo $option ?>"
-                                 option-label="<?php /* @escapeNotVerified */ echo $label['label'] ?>"
+                                 option-id="<?= /* @escapeNotVerified */ $option ?>"
+                                 option-label="<?= /* @escapeNotVerified */ $label['label'] ?>"
                                  option-tooltip-thumb=""
                                  option-tooltip-value=""
                                 ></div>
@@ -36,37 +36,37 @@
                             $swatchData['swatches'][$option]['value']); ?>
                             <?php $swatchImagePath = $block->getSwatchPath('swatch_image',
                             $swatchData['swatches'][$option]['value']); ?>
-                            <div class="swatch-option image <?php /* @escapeNotVerified */ echo $label['custom_style'] ?>"
+                            <div class="swatch-option image <?= /* @escapeNotVerified */ $label['custom_style'] ?>"
                                  tabindex="-1"
                                  option-type="2"
-                                 option-id="<?php /* @escapeNotVerified */ echo $option ?>"
-                                 option-label="<?php /* @escapeNotVerified */ echo $label['label'] ?>"
-                                 option-tooltip-thumb="<?php /* @escapeNotVerified */ echo $swatchThumbPath ?>"
+                                 option-id="<?= /* @escapeNotVerified */ $option ?>"
+                                 option-label="<?= /* @escapeNotVerified */ $label['label'] ?>"
+                                 option-tooltip-thumb="<?= /* @escapeNotVerified */ $swatchThumbPath ?>"
                                  option-tooltip-value=""
-                                 style="background: url(<?php /* @escapeNotVerified */ echo $swatchImagePath ?>) no-repeat center; background-size: initial;"></div>
+                                 style="background: url(<?= /* @escapeNotVerified */ $swatchImagePath ?>) no-repeat center; background-size: initial;"></div>
                             <?php    break;
                         case '1':
                             ?>
-                            <div class="swatch-option color <?php /* @escapeNotVerified */ echo $label['custom_style'] ?>"
+                            <div class="swatch-option color <?= /* @escapeNotVerified */ $label['custom_style'] ?>"
                                  tabindex="-1"
                                  option-type="1"
-                                 option-id="<?php /* @escapeNotVerified */ echo $option ?>"
-                                 option-label="<?php /* @escapeNotVerified */ echo $label['label'] ?>"
+                                 option-id="<?= /* @escapeNotVerified */ $option ?>"
+                                 option-label="<?= /* @escapeNotVerified */ $label['label'] ?>"
                                  option-tooltip-thumb=""
-                                 option-tooltip-value="<?php /* @escapeNotVerified */ echo $swatchData['swatches'][$option]['value'] ?>"
-                                 style="background: <?php /* @escapeNotVerified */ echo $swatchData['swatches'][$option]['value'] ?> no-repeat center; background-size: initial;"></div>
+                                 option-tooltip-value="<?= /* @escapeNotVerified */ $swatchData['swatches'][$option]['value'] ?>"
+                                 style="background: <?= /* @escapeNotVerified */ $swatchData['swatches'][$option]['value'] ?> no-repeat center; background-size: initial;"></div>
                             <?php    break;
                         case '0':
                         default:
                             ?>
-                                <div class="swatch-option text <?php /* @escapeNotVerified */ echo $label['custom_style'] ?>"
+                                <div class="swatch-option text <?= /* @escapeNotVerified */ $label['custom_style'] ?>"
                                      tabindex="-1"
                                      option-type="0"
-                                     option-id="<?php /* @escapeNotVerified */ echo $option ?>"
-                                     option-label="<?php /* @escapeNotVerified */ echo $label['label'] ?>"
+                                     option-id="<?= /* @escapeNotVerified */ $option ?>"
+                                     option-label="<?= /* @escapeNotVerified */ $label['label'] ?>"
                                      option-tooltip-thumb=""
                                      option-tooltip-value=""
-                                    ><?php /* @escapeNotVerified */ echo $swatchData['swatches'][$option]['value'] ?></div>
+                                    ><?= /* @escapeNotVerified */ $swatchData['swatches'][$option]['value'] ?></div>
                             <?php    break;
                     } ?>
                 <?php } ?>
@@ -77,7 +77,7 @@
 
 <script>
     require(["jquery", "jquery/ui", "Magento_Swatches/js/swatch-renderer"], function ($) {
-        $('.swatch-layered.<?php /* @escapeNotVerified */ echo $swatchData['attribute_code'] ?>')
+        $('.swatch-layered.<?= /* @escapeNotVerified */ $swatchData['attribute_code'] ?>')
             .find('[option-type="1"], [option-type="2"], [option-type="0"], [option-type="3"]')
             .SwatchRendererTooltip();
     });

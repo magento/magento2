@@ -13,7 +13,7 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Search\Model\Query;
 
-class CollectionFilterTest extends \PHPUnit_Framework_TestCase
+class CollectionFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CollectionFilterPlugin

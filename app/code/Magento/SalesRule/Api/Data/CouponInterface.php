@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Api\Data;
  * Interface CouponInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface CouponInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

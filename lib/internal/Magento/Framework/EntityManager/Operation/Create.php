@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\EntityManager\Operation;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\DuplicateException;
+use Magento\Framework\EntityManager\Sequence\SequenceApplier;
 use Magento\Framework\EntityManager\Operation\Create\CreateMain;
 use Magento\Framework\EntityManager\Operation\Create\CreateAttributes;
 use Magento\Framework\EntityManager\Operation\Create\CreateExtensions;
@@ -18,6 +20,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Class Create
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Create implements CreateInterface
 {
@@ -55,6 +59,11 @@ class Create implements CreateInterface
      * @var CreateExtensions
      */
     private $createExtensions;
+
+    /**
+     * @var SequenceApplier
+     */
+    private $sequenceApplier;
 
     /**
      * @param MetadataPool $metadataPool
@@ -105,6 +114,9 @@ class Create implements CreateInterface
                 ]
             );
             $this->eventManager->dispatchEntityEvent($entityType, 'save_before', ['entity' => $entity]);
+
+            $entity = $this->getSequenceApplier()->apply($entity);
+
             $entity = $this->createMain->execute($entity, $arguments);
             $entity = $this->createAttributes->execute($entity, $arguments);
             $entity = $this->createExtensions->execute($entity, $arguments);
@@ -125,5 +137,21 @@ class Create implements CreateInterface
             throw $e;
         }
         return $entity;
+    }
+
+    /**
+     * @return SequenceApplier
+     *
+     * @deprecated 100.2.0
+     */
+    private function getSequenceApplier()
+    {
+        if (!$this->sequenceApplier) {
+            $this->sequenceApplier = ObjectManager::getInstance()->get(
+                SequenceApplier::class
+            );
+        }
+
+        return $this->sequenceApplier;
     }
 }

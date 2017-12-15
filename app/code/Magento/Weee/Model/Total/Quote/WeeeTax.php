@@ -47,7 +47,7 @@ class WeeeTax extends Weee
             $this->processTotalAmount($total, $weeeTotal, $weeeBaseTotal, $weeeTotal, $weeeBaseTotal);
             return $this;
         }
-        
+
         $extraTaxableDetails = $total->getExtraTaxableDetails();
 
         if (isset($extraTaxableDetails[self::ITEM_TYPE])) {

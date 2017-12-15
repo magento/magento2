@@ -7,7 +7,7 @@ namespace Magento\Directory\Model\Country\Postcode;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Directory\Model\Country\Postcode\ValidatorInterface
@@ -95,7 +95,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ['countryId' => 'JE', 'postcode' => 'TY8 9PL'],
             ['countryId' => 'KZ', 'postcode' => '123456'],
             ['countryId' => 'KE', 'postcode' => '12345'],
-            ['countryId' => 'KR', 'postcode' => '123-456'],
+            ['countryId' => 'KR', 'postcode' => '12345'],
             ['countryId' => 'KG', 'postcode' => '123456'],
             ['countryId' => 'LV', 'postcode' => '1234'],
             ['countryId' => 'LI', 'postcode' => '1234'],

@@ -7,7 +7,7 @@ namespace Magento\Integration\Test\Unit\Helper;
 
 use Magento\Integration\Model\Integration;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Integration\Helper\Data */
     protected $dataHelper;

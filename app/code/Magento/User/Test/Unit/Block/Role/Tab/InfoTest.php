@@ -6,7 +6,7 @@
 
 namespace Magento\User\Test\Unit\Block\Role\Tab;
 
-class InfoTest extends \PHPUnit_Framework_TestCase
+class InfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\User\Block\Role\Tab\Info

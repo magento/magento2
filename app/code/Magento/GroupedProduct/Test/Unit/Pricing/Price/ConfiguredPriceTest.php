@@ -13,7 +13,7 @@ use Magento\GroupedProduct\Pricing\Price\FinalPrice;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
+class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConfiguredPrice

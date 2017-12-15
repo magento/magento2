@@ -10,7 +10,7 @@ use Magento\NewRelicReporting\Model\Observer\CheckConfig;
 /**
  * Class CheckConfigTest
  */
-class CheckConfigTest extends \PHPUnit_Framework_TestCase
+class CheckConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var CheckConfig

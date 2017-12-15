@@ -13,7 +13,7 @@
  */
 namespace Magento\Catalog\Model;
 
-class ProductPriceTest extends \PHPUnit_Framework_TestCase
+class ProductPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product

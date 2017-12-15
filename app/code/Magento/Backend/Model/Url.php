@@ -13,6 +13,8 @@ use Magento\Framework\App\ObjectManager;
  * Class \Magento\Backend\Model\UrlInterface
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
 class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlInterface
 {

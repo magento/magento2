@@ -38,14 +38,20 @@ define([
          * Recursive initializes observable actions.
          *
          * @param {Array} actions - Action objects.
+         * @param {String} [prefix] - An optional string that will be prepended
+         *      to the "type" field of all child actions.
          * @returns {Massactions} Chainable.
          */
-        recursiveObserveActions: function (actions) {
+        recursiveObserveActions: function (actions, prefix) {
             _.each(actions, function (action) {
+                if (prefix) {
+                    action.type = prefix + '.' + action.type;
+                }
+
                 if (action.actions) {
                     action.visible = ko.observable(false);
                     action.parent = actions;
-                    this.recursiveObserveActions(action.actions);
+                    this.recursiveObserveActions(action.actions, action.type);
                 }
             }, this);
 

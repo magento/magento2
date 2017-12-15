@@ -7,7 +7,7 @@ namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Theme\Model\Theme\ThemeUninstaller;
 
-class ThemeUninstallerTest extends \PHPUnit_Framework_TestCase
+class ThemeUninstallerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Theme\Model\Theme\ThemePackageInfo|\PHPUnit_Framework_MockObject_MockObject
@@ -36,9 +36,9 @@ class ThemeUninstallerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->themePackageInfo = $this->getMock(\Magento\Theme\Model\Theme\ThemePackageInfo::class, [], [], '', false);
-        $this->remove = $this->getMock(\Magento\Framework\Composer\Remove::class, [], [], '', false);
-        $this->themeProvider = $this->getMock(\Magento\Theme\Model\Theme\ThemeProvider::class, [], [], '', false);
+        $this->themePackageInfo = $this->createMock(\Magento\Theme\Model\Theme\ThemePackageInfo::class);
+        $this->remove = $this->createMock(\Magento\Framework\Composer\Remove::class);
+        $this->themeProvider = $this->createMock(\Magento\Theme\Model\Theme\ThemeProvider::class);
         $this->themeUninstaller = new ThemeUninstaller($this->themePackageInfo, $this->remove, $this->themeProvider);
         $this->output = $this->getMockForAbstractClass(
             \Symfony\Component\Console\Output\OutputInterface::class,
@@ -53,7 +53,7 @@ class ThemeUninstallerTest extends \PHPUnit_Framework_TestCase
         $this->output->expects($this->atLeastOnce())->method('writeln');
         $this->themePackageInfo->expects($this->never())->method($this->anything());
         $this->remove->expects($this->never())->method($this->anything());
-        $theme = $this->getMock(\Magento\Theme\Model\Theme::class, [], [], '', false);
+        $theme = $this->createMock(\Magento\Theme\Model\Theme::class);
         $theme->expects($this->exactly(3))->method('delete');
         $this->themeProvider->expects($this->exactly(3))->method('getThemeByFullPath')->willReturn($theme);
         $this->themeUninstaller->uninstallRegistry(

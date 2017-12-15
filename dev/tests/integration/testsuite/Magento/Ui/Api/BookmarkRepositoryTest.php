@@ -15,7 +15,7 @@ use Magento\Framework\Api\SortOrderBuilder;
  * @package Magento\Ups\Model
  * @magentoDbIsolation enabled
  */
-class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
+class BookmarkRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  BookmarkRepository */
     private $repository;

@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Indexer\Price;
 
-class IndexTableRowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
+class IndexTableRowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableRowSizeEstimator
@@ -25,13 +25,10 @@ class IndexTableRowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->websiteManagementMock = $this->getMock(\Magento\Store\Api\WebsiteManagementInterface::class);
-        $this->collectionFactoryMock = $this->getMock(
+        $this->websiteManagementMock = $this->createMock(\Magento\Store\Api\WebsiteManagementInterface::class);
+        $this->collectionFactoryMock = $this->createPartialMock(
             \Magento\Customer\Model\ResourceModel\Group\CollectionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
         $this->model = new \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableRowSizeEstimator(
             $this->websiteManagementMock,
@@ -41,16 +38,10 @@ class IndexTableRowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
 
     public function testEstimateRowSize()
     {
-        $expectedValue = 2400000;
+        $expectedValue = 4000000;
 
         $this->websiteManagementMock->expects($this->once())->method('getCount')->willReturn(100);
-        $collectionMock = $this->getMock(
-            \Magento\Customer\Model\ResourceModel\Group\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $collectionMock = $this->createMock(\Magento\Customer\Model\ResourceModel\Group\Collection::class);
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
         $collectionMock->expects($this->once())->method('getSize')->willReturn(200);
 

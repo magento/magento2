@@ -7,6 +7,8 @@ namespace Magento\Reports\Model\Product\Index;
 
 /**
  * Reports Product Index Abstract Model
+ * @api
+ * @since 100.0.2
  */
 abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
 {
@@ -151,16 +153,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
             return $this->getData('store_id');
         }
         return $this->_storeManager->getStore()->getId();
-    }
-
-    /**
-     * Retrieve resource instance wrapper
-     *
-     * @return \Magento\Reports\Model\ResourceModel\Product\Index\AbstractIndex
-     */
-    protected function _getResource()
-    {
-        return parent::_getResource();
     }
 
     /**

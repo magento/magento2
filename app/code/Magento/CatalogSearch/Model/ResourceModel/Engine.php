@@ -7,15 +7,20 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
 
 /**
  * CatalogSearch Fulltext Index Engine resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Engine implements EngineInterface
 {
+    /**
+     * @deprecated
+     * @see EngineInterface::FIELD_PREFIX
+     */
     const ATTRIBUTE_PREFIX = 'attr_';
 
     /**
      * Scope identifier
+     *
+     * @deprecated
+     * @see EngineInterface::SCOPE_IDENTIFIER
      */
     const SCOPE_FIELD_NAME = 'scope';
 

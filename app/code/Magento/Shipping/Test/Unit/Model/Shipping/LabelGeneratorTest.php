@@ -16,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LabelGeneratorTest extends \PHPUnit_Framework_TestCase
+class LabelGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     const CARRIER_CODE = 'fedex';
 
@@ -61,7 +61,7 @@ class LabelGeneratorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->trackFactory = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment\TrackFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -121,7 +121,7 @@ class LabelGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->filesystem->expects(static::once())
             ->method('getDirectoryWrite')
-            ->willReturn($this->getMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class));
+            ->willReturn($this->createMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class));
 
         $this->scopeConfig->expects(static::once())
             ->method('getValue')
@@ -164,7 +164,7 @@ class LabelGeneratorTest extends \PHPUnit_Framework_TestCase
         /**
          * @var $requestMock \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
          */
-        $requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->labelGenerator->create($shipmentMock, $requestMock);
     }
 

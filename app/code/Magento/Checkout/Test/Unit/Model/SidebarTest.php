@@ -7,7 +7,7 @@ namespace Magento\Checkout\Test\Unit\Model;
 
 use Magento\Checkout\Model\Sidebar;
 
-class SidebarTest extends \PHPUnit_Framework_TestCase
+class SidebarTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Sidebar */
     protected $sidebar;
@@ -23,9 +23,9 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cartMock = $this->getMock(\Magento\Checkout\Model\Cart::class, [], [], '', false);
-        $this->checkoutHelperMock = $this->getMock(\Magento\Checkout\Helper\Data::class, [], [], '', false);
-        $this->resolverMock = $this->getMock(\Magento\Framework\Locale\ResolverInterface::class);
+        $this->cartMock = $this->createMock(\Magento\Checkout\Model\Cart::class);
+        $this->checkoutHelperMock = $this->createMock(\Magento\Checkout\Helper\Data::class);
+        $this->resolverMock = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
 
         $this->sidebar = new Sidebar(
             $this->cartMock,

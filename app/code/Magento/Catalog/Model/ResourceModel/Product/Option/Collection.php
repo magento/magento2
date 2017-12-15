@@ -15,16 +15,19 @@ use Magento\Framework\EntityManager\MetadataPool;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var JoinProcessorInterface
+     * @since 101.0.0
      */
     protected $joinProcessor;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
+     * @since 101.0.0
      */
     protected $metadataPool;
 
@@ -246,6 +249,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * @return void
      * @throws \Exception
+     * @since 101.0.0
      */
     protected function _initSelect()
     {
@@ -265,6 +269,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $storeId
      * @param bool $requiredOnly
      * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]
+     * @since 101.0.0
      */
     public function getProductOptions($productId, $storeId, $requiredOnly = false)
     {

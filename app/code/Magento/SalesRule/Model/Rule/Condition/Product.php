@@ -49,6 +49,12 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $model->getBaseRowTotal()
         );
 
+        $attrCode = $this->getAttribute();
+
+        if ('category_ids' == $attrCode) {
+            return $this->validateAttribute($this->_getAvailableInCategories($product->getId()));
+        }
+
         return parent::validate($product);
     }
 

@@ -6,6 +6,7 @@
 namespace Magento\Rule\Model;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Rule\Model\Condition\ConditionInterface;
 
 class ConditionFactory
 {
@@ -40,10 +41,17 @@ class ConditionFactory
      *
      * @throws \LogicException
      * @throws \BadMethodCallException
+     * @throws \InvalidArgumentException
      */
     public function create($type)
     {
         if (!array_key_exists($type, $this->conditionModels)) {
+            if (!class_exists($type)) {
+                throw new \InvalidArgumentException('Class does not exist');
+            }
+            if (!in_array(ConditionInterface::class, class_implements($type))) {
+                throw new \InvalidArgumentException('Class does not implement condition interface');
+            }
             $this->conditionModels[$type] = $this->objectManager->create($type);
         }
 

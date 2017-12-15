@@ -9,6 +9,7 @@ use Magento\Framework\View\Layout\Condition\ConditionFactory;
 
 /**
  * Pool of generators for structural elements
+ * @api
  */
 class GeneratorPool
 {
@@ -229,6 +230,7 @@ class GeneratorPool
      * @param array $data
      *
      * @return bool
+     * @since 100.2.0
      */
     protected function visibilityConditionsExistsIn(array $data)
     {

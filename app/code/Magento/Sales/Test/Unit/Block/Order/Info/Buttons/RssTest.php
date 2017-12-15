@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * Class RssTest
  * @package Magento\Sales\Block\Order\Info\Buttons
  */
-class RssTest extends \PHPUnit_Framework_TestCase
+class RssTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Block\Order\Info\Buttons\Rss
@@ -45,11 +45,11 @@ class RssTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
-        $this->orderFactory = $this->getMock(\Magento\Sales\Model\OrderFactory::class, ['create'], [], '', false);
-        $this->urlBuilderInterface = $this->getMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
-        $this->scopeConfigInterface = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
+        $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
+        $this->urlBuilderInterface = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
+        $this->scopeConfigInterface = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->rss = $this->objectManagerHelper->getObject(

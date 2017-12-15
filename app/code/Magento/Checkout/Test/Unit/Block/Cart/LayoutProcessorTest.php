@@ -5,10 +5,8 @@
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
-
-class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
+class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * @var \Magento\Checkout\Block\Cart\LayoutProcessor
      */

@@ -5,7 +5,7 @@
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
-class SamplesTest extends \PHPUnit_Framework_TestCase
+class SamplesTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetUploadButtonsHtml()
     {

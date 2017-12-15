@@ -13,7 +13,7 @@ use Magento\Framework\ObjectManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use stdClass;
 
-class CollectorFactoryTest extends \PHPUnit_Framework_TestCase
+class CollectorFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface|MockObject

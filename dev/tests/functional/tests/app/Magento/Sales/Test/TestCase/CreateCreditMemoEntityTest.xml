@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Sales\Test\TestCase\CreateCreditMemoEntityTest" summary="Create Credit Memo for Offline Payment Methods" ticketId="MAGETWO-29116">
         <variation name="CreateCreditMemoEntityTestVariation1" summary="Assert items return to stock (partial refund)">
-            <data name="issue" xsi:type="string">MAGETWO-65659: [FT] Magento\Sales\Test\TestCase\CreateCreditMemoEntityTest fails randomly on Jenkins</data>
             <data name="order/data/refund" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="invoiceId" xsi:type="string">0</item>
@@ -38,7 +37,6 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertCreditMemoItems" />
         </variation>
         <variation name="CreateCreditMemoEntityTestVariation2" summary="Assert 0 shipping refund">
-            <data name="issue" xsi:type="string">MAGETWO-65659: [FT] Magento\Sales\Test\TestCase\CreateCreditMemoEntityTest fails randomly on Jenkins</data>
             <data name="order/data/refund" xsi:type="array">
                 <item name="0" xsi:type="array">
                     <item name="invoiceId" xsi:type="string">0</item>
@@ -59,7 +57,7 @@
             <data name="order/data/price/dataset" xsi:type="string">full_refund_with_zero_shipping_refund</data>
             <data name="configData" xsi:type="string">banktransfer</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertCreditMemoButton" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertNoCreditMemoButton" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundInRefundsGrid" />
             <constraint name="Magento\Sales\Test\Constraint\AssertRefundedGrandTotalOnFrontend" />

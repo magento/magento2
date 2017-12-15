@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Multishipping\Model\Checkout\Type;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
@@ -17,10 +14,13 @@ use Magento\Directory\Model\AllowedCountries;
 
 /**
  * Multishipping checkout model
+ *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @codingStandardsIgnoreFile
+ * @since 100.0.2
  */
 class Multishipping extends \Magento\Framework\DataObject
 {
@@ -158,7 +158,7 @@ class Multishipping extends \Magento\Framework\DataObject
     private $shippingAssignmentProcessor;
 
     /**
-     * Multishipping constructor.
+     * Constructor
      *
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
@@ -182,6 +182,7 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @param array $data
+     * @param \Magento\Quote\Api\Data\CartExtensionFactory|null $cartExtensionFactory
      * @param AllowedCountries|null $allowedCountryReader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -208,6 +209,7 @@ class Multishipping extends \Magento\Framework\DataObject
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         array $data = [],
+        \Magento\Quote\Api\Data\CartExtensionFactory $cartExtensionFactory = null,
         AllowedCountries $allowedCountryReader = null
     ) {
         $this->_eventManager = $eventManager;
@@ -231,6 +233,8 @@ class Multishipping extends \Magento\Framework\DataObject
         $this->quotePaymentToOrderPayment = $quotePaymentToOrderPayment;
         $this->quoteAddressToOrderAddress = $quoteAddressToOrderAddress;
         $this->totalsCollector = $totalsCollector;
+        $this->cartExtensionFactory = $cartExtensionFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Quote\Api\Data\CartExtensionFactory::class);
         $this->allowedCountryReader = $allowedCountryReader ?: ObjectManager::getInstance()
             ->get(AllowedCountries::class);
         parent::__construct($data);
@@ -813,13 +817,21 @@ class Multishipping extends \Magento\Framework\DataObject
      */
     public function validateMinimumAmount()
     {
-        return !($this->_scopeConfig->isSetFlag(
+        $minimumOrderActive = $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/active',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) && $this->_scopeConfig->isSetFlag(
+        );
+
+        if ($this->_scopeConfig->isSetFlag(
             'sales/minimum_order/multi_address',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) && !$this->getQuote()->validateMinimumAmount());
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+        ) {
+            $result = !($minimumOrderActive && !$this->getQuote()->validateMinimumAmount());
+        } else {
+            $result = !($minimumOrderActive && !$this->validateMinimumAmountForAddressItems());
+        }
+
+        return $result;
     }
 
     /**
@@ -1004,7 +1016,7 @@ class Multishipping extends \Magento\Framework\DataObject
     {
         $cartExtension = $quote->getExtensionAttributes();
         if ($cartExtension === null) {
-            $cartExtension = $this->getCartExtensionFactory()->create();
+            $cartExtension = $this->cartExtensionFactory->create();
         }
         /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment */
         $shippingAssignment = $this->getShippingAssignmentProcessor()->create($quote);
@@ -1017,18 +1029,6 @@ class Multishipping extends \Magento\Framework\DataObject
     }
 
     /**
-     * @return \Magento\Quote\Api\Data\CartExtensionFactory
-     */
-    private function getCartExtensionFactory()
-    {
-        if (!$this->cartExtensionFactory) {
-            $this->cartExtensionFactory = ObjectManager::getInstance()
-                ->get(\Magento\Quote\Api\Data\CartExtensionFactory::class);
-        }
-        return $this->cartExtensionFactory;
-    }
-
-    /**
      * @return \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor
      */
     private function getShippingAssignmentProcessor()
@@ -1038,5 +1038,42 @@ class Multishipping extends \Magento\Framework\DataObject
                 ->get(\Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor::class);
         }
         return $this->shippingAssignmentProcessor;
+    }
+
+    /**
+     * Validate minimum amount for "Checkout with Multiple Addresses" when
+     * "Validate Each Address Separately in Multi-address Checkout" is No.
+     *
+     * @return bool
+     */
+    private function validateMinimumAmountForAddressItems()
+    {
+        $result = true;
+        $storeId = $this->getQuote()->getStoreId();
+
+        $minAmount = $this->_scopeConfig->getValue(
+            'sales/minimum_order/amount',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        $taxInclude = $this->_scopeConfig->getValue(
+            'sales/minimum_order/tax_including',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+
+        $addresses = $this->getQuote()->getAllAddresses();
+
+        $baseTotal = 0;
+        foreach ($addresses as $address) {
+            $taxes = $taxInclude ? $address->getBaseTaxAmount() : 0;
+            $baseTotal += $address->getBaseSubtotalWithDiscount() + $taxes;
+        }
+
+        if ($baseTotal < $minAmount) {
+            $result = false;
+        }
+
+        return $result;
     }
 }

@@ -20,7 +20,9 @@ class SynonymActions extends Column
     const SYNONYM_URL_PATH_DELETE = 'search/synonyms/delete';
     const SYNONYM_URL_PATH_EDIT = 'search/synonyms/edit';
 
-    /** @var UrlInterface */
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
     protected $urlBuilder;
 
     /**

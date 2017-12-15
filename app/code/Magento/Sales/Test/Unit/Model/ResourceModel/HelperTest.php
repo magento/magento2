@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class HelperTest
  */
-class HelperTest extends \PHPUnit_Framework_TestCase
+class HelperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -38,29 +38,11 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManagerHelper($this);
-        $this->appResource = $this->getMock(
-            \Magento\Framework\App\ResourceConnection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->appResource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
 
-        $this->resourceHelper = $this->getMock(
-            \Magento\Reports\Model\ResourceModel\Helper::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->resourceHelper = $this->createMock(\Magento\Reports\Model\ResourceModel\Helper::class);
 
-        $this->connectionMock = $this->getMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
 
         $this->helper = $objectManager->getObject(
             \Magento\Sales\Model\ResourceModel\Helper::class,

@@ -11,13 +11,13 @@
 <?php $_product = $block->getProduct() ?>
 <?php if ($block->displayProductStockStatus()): ?>
     <?php if ($_product->isAvailable()): ?>
-        <p class="stock available" title="<?php /* @escapeNotVerified */ echo __('Availability:') ?>">
-            <span><?php /* @escapeNotVerified */ echo __('In stock') ?></span>
+        <p class="stock available" title="<?= /* @escapeNotVerified */ __('Availability:') ?>">
+            <span><?= /* @escapeNotVerified */ __('In stock') ?></span>
         </p>
     <?php else: ?>
-        <p class="stock unavailable" title="<?php /* @escapeNotVerified */ echo __('Availability:') ?>">
-            <span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span>
+        <p class="stock unavailable" title="<?= /* @escapeNotVerified */ __('Availability:') ?>">
+            <span><?= /* @escapeNotVerified */ __('Out of stock') ?></span>
         </p>
     <?php endif; ?>
 <?php endif; ?>
-<?php echo $block->getChildHtml('bundle_prices') ?>
+<?= $block->getChildHtml('bundle_prices') ?>

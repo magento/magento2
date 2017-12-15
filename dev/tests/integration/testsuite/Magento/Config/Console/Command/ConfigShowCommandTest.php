@@ -16,7 +16,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class ConfigShowCommandTest extends \PHPUnit_Framework_TestCase
+class ConfigShowCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface

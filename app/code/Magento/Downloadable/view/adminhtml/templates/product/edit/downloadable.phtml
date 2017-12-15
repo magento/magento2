@@ -203,10 +203,10 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
 });
 </script>
 
-<div data-tab-type="tab_content_downloadableInfo" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>_content"
-    <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'content', $block->getId()) ?>
+<div data-tab-type="tab_content_downloadableInfo" id="<?= /* @escapeNotVerified */ $block->getId() ?>_content"
+    <?= /* @escapeNotVerified */ $block->getUiId('tab', 'content', $block->getId()) ?>
 >
-<div id="alert_messages_block"><?php echo $block->getMessageHtml() ?></div>
+<div id="alert_messages_block"><?= $block->getMessageHtml() ?></div>
 <div class="admin__field admin__field-option admin__field-is-downloaodable">
     <input type="checkbox" data-action="change-type-product-downloadable"  class="admin__control-checkbox"
            name="is_downloadable" id="is-downloaodable" <?= $block->isDownloadable() ? 'checked="checked"' : ''?> />
@@ -215,7 +215,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
     </label>
 </div>
 <div class="entry-edit" id="product_info_tabs_downloadable_items">
-    <?php echo $block->getChildHtml() ?>
+    <?= $block->getChildHtml() ?>
 </div>
 <div style="display:none">
     <div id="custom-advice-container"></div>
@@ -224,7 +224,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
     <script>
         require(['prototype'], function(){
 
-        $(<?= /* @escapeNotVerified */  $block->getContentTabId(); ?>).select('input', 'select', 'textarea', 'button').each(function (item){
+        $(<?= /* @escapeNotVerified */  $block->getContentTabId() ?>).select('input', 'select', 'textarea', 'button').each(function (item){
             item.disabled = true;
             if (item.tagName.toLowerCase() == 'button') {
                 item.addClassName('disabled');
@@ -240,7 +240,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
         "*": {
             "Magento_Downloadable/downloadable-type-handler": {
                 "isDownloadable": "<?= /* @noEscape */ $block->isDownloadable() ? 'true' : 'false' ?>",
-                "tabId": "<?= /* @noEscape */ $block->getTabId()?>"
+                "tabId": "<?= /* @noEscape */ $block->getTabId() ?>"
             }
         }
     }

@@ -7,7 +7,7 @@ namespace Magento\Framework\View;
 
 use \Magento\Framework\App\State;
 
-class LayoutTestWithExceptions extends \PHPUnit_Framework_TestCase
+class LayoutTestWithExceptions extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Layout

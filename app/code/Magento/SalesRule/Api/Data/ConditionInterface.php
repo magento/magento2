@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Api\Data;
  * Interface ConditionInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface ConditionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

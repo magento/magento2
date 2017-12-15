@@ -153,7 +153,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
                 } else {
                     foreach ($emails as $index => $email) {
                         $email = trim($email);
-                        if (!\Zend_Validate::is($email, 'EmailAddress')) {
+                        if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
                             $error = __('Please enter a valid email address.');
                             break;
                         }

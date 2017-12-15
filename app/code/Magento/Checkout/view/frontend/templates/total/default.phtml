@@ -8,14 +8,14 @@
 
 ?>
 <tr class="totals">
-    <th colspan="<?php /* @escapeNotVerified */ echo $block->getColspan(); ?>" style="<?php /* @escapeNotVerified */ echo $block->getTotal()->getStyle() ?>" class="mark" scope="row">
+    <th colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>" style="<?= /* @escapeNotVerified */ $block->getTotal()->getStyle() ?>" class="mark" scope="row">
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?><strong><?php endif; ?>
-            <?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>
+            <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?></strong><?php endif; ?>
     </th>
-    <td style="<?php /* @escapeNotVerified */ echo $block->getTotal()->getStyle() ?>" class="amount" data-th="<?php echo $block->escapeHtml($block->getTotal()->getTitle()); ?>">
+    <td style="<?= /* @escapeNotVerified */ $block->getTotal()->getStyle() ?>" class="amount" data-th="<?= $block->escapeHtml($block->getTotal()->getTitle()) ?>">
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?><strong><?php endif; ?>
-            <span><?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValue()) ?></span>
+            <span><?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($block->getTotal()->getValue()) ?></span>
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()): ?></strong><?php endif; ?>
     </td>
 </tr>

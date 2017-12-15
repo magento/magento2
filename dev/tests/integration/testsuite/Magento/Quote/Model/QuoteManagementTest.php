@@ -8,7 +8,7 @@ namespace Magento\Quote\Model;
 use Magento\Catalog\Model\Product\Type;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class QuoteManagementTest extends \PHPUnit_Framework_TestCase
+class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Create order with product that has child items

@@ -7,7 +7,7 @@ namespace Magento\Framework\Data\Test\Unit\Form;
 
 use Magento\Framework\Data\Form\FilterFactory;
 
-class FilterFactoryTest extends \PHPUnit_Framework_TestCase
+class FilterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var FilterFactory

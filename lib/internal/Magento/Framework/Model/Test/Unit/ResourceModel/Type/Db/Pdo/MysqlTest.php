@@ -7,7 +7,7 @@ namespace Magento\Framework\Model\Test\Unit\ResourceModel\Type\Db\Pdo;
 
 use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 
-class MysqlTest extends \PHPUnit_Framework_TestCase
+class MysqlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -26,15 +26,9 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
-        $this->selectFactoryMock = $this->getMock(\Magento\Framework\DB\SelectFactory::class, [], [], '', false);
-        $this->mysqlFactoryMock = $this->getMock(
-            \Magento\Framework\DB\Adapter\Pdo\MysqlFactory::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->selectFactoryMock = $this->createMock(\Magento\Framework\DB\SelectFactory::class);
+        $this->mysqlFactoryMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\MysqlFactory::class);
     }
 
     /**
@@ -114,7 +108,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             $config,
             $this->mysqlFactoryMock
         );
-        $loggerMock = $this->getMock(\Magento\Framework\DB\LoggerInterface::class);
+        $loggerMock = $this->createMock(\Magento\Framework\DB\LoggerInterface::class);
         $this->assertNull($object->getConnection($loggerMock, $this->selectFactoryMock));
     }
 }

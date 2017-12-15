@@ -9,7 +9,7 @@
  */
 namespace Magento\TestFramework\TestCase;
 
-abstract class AbstractIntegrity extends \PHPUnit_Framework_TestCase
+abstract class AbstractIntegrity extends \PHPUnit\Framework\TestCase
 {
     /**
      * Cached index of enabled modules

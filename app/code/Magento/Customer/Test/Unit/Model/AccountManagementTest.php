@@ -5,11 +5,12 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
+use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\EmailNotificationInterface;
-use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\App\Area;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\ScopeInterface;
 
@@ -17,7 +18,7 @@ use Magento\Store\Model\ScopeInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AccountManagementTest extends \PHPUnit_Framework_TestCase
+class AccountManagementTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AccountManagement */
     protected $accountManagement;
@@ -115,67 +116,46 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     protected $emailNotificationMock;
 
     /**
+     * @var DateTimeFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateTimeFactory;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
-        $this->customerFactory = $this->getMock(
-            \Magento\Customer\Model\CustomerFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->manager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->customerFactory = $this->createPartialMock(\Magento\Customer\Model\CustomerFactory::class, ['create']);
+        $this->manager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->random = $this->getMock(\Magento\Framework\Math\Random::class);
-        $this->validator = $this->getMock(\Magento\Customer\Model\Metadata\Validator::class, [], [], '', false);
-        $this->validationResultsInterfaceFactory = $this->getMock(
-            \Magento\Customer\Api\Data\ValidationResultsInterfaceFactory::class,
-            [],
-            [],
-            '',
-            false
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->random = $this->createMock(\Magento\Framework\Math\Random::class);
+        $this->validator = $this->createMock(\Magento\Customer\Model\Metadata\Validator::class);
+        $this->validationResultsInterfaceFactory = $this->createMock(
+            \Magento\Customer\Api\Data\ValidationResultsInterfaceFactory::class
         );
-        $this->addressRepository = $this->getMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
-        $this->customerMetadata = $this->getMock(\Magento\Customer\Api\CustomerMetadataInterface::class);
-        $this->customerRegistry = $this->getMock(\Magento\Customer\Model\CustomerRegistry::class, [], [], '', false);
-        $this->logger = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->encryptor = $this->getMock(\Magento\Framework\Encryption\EncryptorInterface::class);
-        $this->share = $this->getMock(\Magento\Customer\Model\Config\Share::class, [], [], '', false);
-        $this->string = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class);
-        $this->customerRepository = $this->getMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $this->addressRepository = $this->createMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
+        $this->customerMetadata = $this->createMock(\Magento\Customer\Api\CustomerMetadataInterface::class);
+        $this->customerRegistry = $this->createMock(\Magento\Customer\Model\CustomerRegistry::class);
+        $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->encryptor = $this->createMock(\Magento\Framework\Encryption\EncryptorInterface::class);
+        $this->share = $this->createMock(\Magento\Customer\Model\Config\Share::class);
+        $this->string = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->customerRepository = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->transportBuilder = $this->getMock(
-            \Magento\Framework\Mail\Template\TransportBuilder::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->dataObjectProcessor = $this->getMock(
-            \Magento\Framework\Reflection\DataObjectProcessor::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->registry = $this->getMock(\Magento\Framework\Registry::class);
-        $this->customerViewHelper = $this->getMock(\Magento\Customer\Helper\View::class, [], [], '', false);
-        $this->dateTime = $this->getMock(\Magento\Framework\Stdlib\DateTime::class);
-        $this->customer = $this->getMock(\Magento\Customer\Model\Customer::class, [], [], '', false);
-        $this->objectFactory = $this->getMock(\Magento\Framework\DataObjectFactory::class, [], [], '', false);
-        $this->extensibleDataObjectConverter = $this->getMock(
-            \Magento\Framework\Api\ExtensibleDataObjectConverter::class,
-            [],
-            [],
-            '',
-            false
+        $this->transportBuilder = $this->createMock(\Magento\Framework\Mail\Template\TransportBuilder::class);
+        $this->dataObjectProcessor = $this->createMock(\Magento\Framework\Reflection\DataObjectProcessor::class);
+        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->customerViewHelper = $this->createMock(\Magento\Customer\Helper\View::class);
+        $this->dateTime = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
+        $this->customer = $this->createMock(\Magento\Customer\Model\Customer::class);
+        $this->objectFactory = $this->createMock(\Magento\Framework\DataObjectFactory::class);
+        $this->extensibleDataObjectConverter = $this->createMock(
+            \Magento\Framework\Api\ExtensibleDataObjectConverter::class
         );
         $this->authenticationMock = $this->getMockBuilder(AuthenticationInterface::class)
             ->disableOriginalConstructor()
@@ -185,8 +165,11 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->customerSecure = $this->getMockBuilder(\Magento\Customer\Model\Data\CustomerSecure::class)
+            ->setMethods(['setRpToken', 'addData', 'setRpTokenCreatedAt', 'setData'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->dateTimeFactory = $this->createMock(DateTimeFactory::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->accountManagement = $this->objectManagerHelper->getObject(
@@ -215,6 +198,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                 'customerModel' => $this->customer,
                 'objectFactory' => $this->objectFactory,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverter,
+                'dateTimeFactory' => $this->dateTimeFactory,
             ]
         );
         $reflection = new \ReflectionClass(get_class($this->accountManagement));
@@ -577,6 +561,8 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $customerEmail = 'email@email.com';
         $newLinkToken = '2jh43j5h2345jh23lh452h345hfuzasd96ofu';
 
+        $datetime = $this->prepareDateTimeFactory();
+
         $address = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -642,13 +628,16 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getUniqueHash')
             ->willReturn($newLinkToken);
         $customerSecure = $this->getMockBuilder(\Magento\Customer\Model\Data\CustomerSecure::class)
+            ->setMethods(['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash'])
             ->disableOriginalConstructor()
             ->getMock();
         $customerSecure->expects($this->any())
             ->method('setRpToken')
             ->with($newLinkToken);
         $customerSecure->expects($this->any())
-            ->method('setRpTokenCreatedAt');
+            ->method('setRpTokenCreatedAt')
+            ->with($datetime)
+            ->willReturnSelf();
         $customerSecure->expects($this->any())
             ->method('getPasswordHash')
             ->willReturn(null);
@@ -724,14 +713,14 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn(iconv_strlen($password, 'UTF-8'));
 
         if ($testNumber == 1) {
-            $this->setExpectedException(
+            $this->expectException(
                 \Magento\Framework\Exception\InputException::class,
                 'Please enter a password with at least ' . $minPasswordLength . ' characters.'
             );
         }
 
         if ($testNumber == 2) {
-            $this->setExpectedException(
+            $this->expectException(
                 \Magento\Framework\Exception\InputException::class,
                 'Minimum of different classes of characters in password is ' . $minCharacterSetsNum .
                 '. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.'
@@ -753,7 +742,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->with($password)
             ->willReturn(iconv_strlen($password, 'UTF-8'));
 
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\InputException::class,
             'Please enter a password with at most 256 characters.'
         );
@@ -779,6 +768,8 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $password = 'wrfewqedf1';
         $minPasswordLength = 5;
         $minCharacterSetsNum = 2;
+
+        $datetime = $this->prepareDateTimeFactory();
 
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
@@ -889,7 +880,9 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('setRpToken')
             ->with($newLinkToken);
         $customerSecure->expects($this->any())
-            ->method('setRpTokenCreatedAt');
+            ->method('setRpTokenCreatedAt')
+            ->with($datetime)
+            ->willReturnSelf();
         $customerSecure->expects($this->any())
             ->method('getPasswordHash')
             ->willReturn($hash);
@@ -1019,7 +1012,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     {
         $websiteId = 1;
 
-        $dateTime = date(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+        $datetime = $this->prepareDateTimeFactory();
 
         $customerData = ['key' => 'value'];
         $customerName = 'Customer Name';
@@ -1071,7 +1064,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->customerSecure->expects($this->any())
             ->method('setRpTokenCreatedAt')
-            ->with($dateTime)
+            ->with($datetime)
             ->willReturnSelf();
         $this->customerSecure->expects($this->any())
             ->method('addData')
@@ -1180,10 +1173,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->accountManagement->initiatePasswordReset($email, $template));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "" provided for the email type field
-     */
     public function testInitiatePasswordResetNoTemplate()
     {
         $storeId = 1;
@@ -1199,6 +1188,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareInitiatePasswordReset($email, $templateIdentifier, $sender, $storeId, $customerId, $hash);
 
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage(
+            'Invalid value of "" provided for the template field. Possible values: email_reminder or email_reset.'
+        );
         $this->accountManagement->initiatePasswordReset($email, $template);
     }
 
@@ -1281,17 +1274,19 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getRpToken')
             ->willReturn('newStringToken');
 
-        $date = date('Y-m-d', strtotime('-1 year'));
+        $pastDateTime = '2016-10-25 00:00:00';
 
         $this->customerSecure
             ->expects($this->any())
             ->method('getRpTokenCreatedAt')
-            ->willReturn($date);
+            ->willReturn($pastDateTime);
 
         $this->customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getResetPasswordLinkExpirationPeriod'])
             ->getMock();
+
+        $this->prepareDateTimeFactory();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->accountManagement = $this->objectManagerHelper->getObject(
@@ -1301,6 +1296,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                 'customerRegistry' => $this->customerRegistry,
                 'customerRepository' => $this->customerRepository,
                 'customerModel' => $this->customer,
+                'dateTimeFactory' => $this->dateTimeFactory,
             ]
         );
         $reflection = new \ReflectionClass(get_class($this->accountManagement));
@@ -1344,7 +1340,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->with(null);
         $customerSecure->expects($this->once())
             ->method('setRpTokenCreatedAt')
-            ->with(null);
+            ->willReturnSelf();
         $customerSecure->expects($this->any())
             ->method('getPasswordHash')
             ->willReturn($passwordHash);
@@ -1403,7 +1399,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->with($email)
             ->willThrowException($exception);
 
-        $this->setExpectedException(
+        $this->expectException(
             \Magento\Framework\Exception\InvalidEmailOrPasswordException::class,
             'Invalid login or password.'
         );
@@ -1610,6 +1606,8 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $storeId = 1;
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
 
+        $this->prepareDateTimeFactory();
+
         //Handle store
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
         $store->expects($this->any())
@@ -1654,7 +1652,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method("getId")
             ->willReturn($customerId);
-        //Return Customer from customer repositoryå
+        //Return Customer from customer repository
         $this->customerRepository
             ->expects($this->atLeastOnce())
             ->method('save')
@@ -1696,5 +1694,129 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn($store);
 
         $this->assertSame($customer, $this->accountManagement->createAccountWithPasswordHash($customer, $hash));
+    }
+
+    /**
+     * @return string
+     */
+    private function prepareDateTimeFactory()
+    {
+        $dateTime = '2017-10-25 18:57:08';
+        $timestamp = '1508983028';
+        $dateTimeMock = $this->createMock(\DateTime::class);
+        $dateTimeMock->expects($this->any())
+            ->method('format')
+            ->with(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
+            ->willReturn($dateTime);
+
+        $dateTimeMock
+            ->expects($this->any())
+            ->method('getTimestamp')
+            ->willReturn($timestamp);
+
+        $this->dateTimeFactory
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($dateTimeMock);
+
+        return $dateTime;
+    }
+
+    public function testCreateAccountUnexpectedValueException()
+    {
+        $websiteId = 1;
+        $storeId = null;
+        $defaultStoreId = 1;
+        $customerId = 1;
+        $customerEmail = 'email@email.com';
+        $newLinkToken = '2jh43j5h2345jh23lh452h345hfuzasd96ofu';
+        $exception = new \UnexpectedValueException('Template file was not found');
+
+        $datetime = $this->prepareDateTimeFactory();
+
+        $address = $this->createMock(\Magento\Customer\Api\Data\AddressInterface::class);
+        $address->expects($this->once())
+            ->method('setCustomerId')
+            ->with($customerId);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        $store->expects($this->once())
+            ->method('getId')
+            ->willReturn($defaultStoreId);
+        $website = $this->createMock(\Magento\Store\Model\Website::class);
+        $website->expects($this->atLeastOnce())
+            ->method('getStoreIds')
+            ->willReturn([1, 2, 3]);
+        $website->expects($this->once())
+            ->method('getDefaultStore')
+            ->willReturn($store);
+        $customer = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $customer->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customer->expects($this->atLeastOnce())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+        $customer->expects($this->atLeastOnce())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        $customer->expects($this->atLeastOnce())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $customer->expects($this->once())
+            ->method('setStoreId')
+            ->with($defaultStoreId);
+        $customer->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([$address]);
+        $customer->expects($this->once())
+            ->method('setAddresses')
+            ->with(null);
+        $this->customerRepository->expects($this->once())
+            ->method('get')
+            ->with($customerEmail)
+            ->willReturn($customer);
+        $this->share->expects($this->once())
+            ->method('isWebsiteScope')
+            ->willReturn(true);
+        $this->storeManager->expects($this->atLeastOnce())
+            ->method('getWebsite')
+            ->with($websiteId)
+            ->willReturn($website);
+        $this->customerRepository->expects($this->atLeastOnce())
+            ->method('save')
+            ->willReturn($customer);
+        $this->addressRepository->expects($this->atLeastOnce())
+            ->method('save')
+            ->with($address);
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customer);
+        $this->random->expects($this->once())
+            ->method('getUniqueHash')
+            ->willReturn($newLinkToken);
+        $customerSecure = $this->createPartialMock(
+            \Magento\Customer\Model\Data\CustomerSecure::class,
+            ['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash']
+        );
+        $customerSecure->expects($this->any())
+            ->method('setRpToken')
+            ->with($newLinkToken);
+        $customerSecure->expects($this->any())
+            ->method('setRpTokenCreatedAt')
+            ->with($datetime)
+            ->willReturnSelf();
+        $customerSecure->expects($this->any())
+            ->method('getPasswordHash')
+            ->willReturn(null);
+        $this->customerRegistry->expects($this->atLeastOnce())
+            ->method('retrieveSecureData')
+            ->willReturn($customerSecure);
+        $this->emailNotificationMock->expects($this->once())
+            ->method('newAccount')
+            ->willThrowException($exception);
+        $this->logger->expects($this->once())->method('error')->with($exception);
+
+        $this->accountManagement->createAccount($customer);
     }
 }

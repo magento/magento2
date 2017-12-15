@@ -9,6 +9,7 @@ namespace Magento\ImportExport\Model\Source\Export;
  * Source model of export file formats
  *
  * @api
+ * @since 100.0.2
  */
 class Format implements \Magento\Framework\Option\ArrayInterface
 {

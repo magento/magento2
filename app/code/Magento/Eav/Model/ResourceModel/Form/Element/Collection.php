@@ -8,7 +8,8 @@ namespace Magento\Eav\Model\ResourceModel\Form\Element;
 /**
  * Eav Form Element Resource Collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

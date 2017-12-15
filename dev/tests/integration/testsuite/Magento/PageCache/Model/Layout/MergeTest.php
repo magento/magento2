@@ -7,7 +7,7 @@ namespace Magento\PageCache\Model\Layout;
 
 use Magento\Framework\View\EntitySpecificHandlesList;
 
-class MergeTest extends \PHPUnit_Framework_TestCase
+class MergeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppArea frontend
@@ -19,7 +19,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         // Mock cache to avoid layout being read from existing cache
-        $cacheMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $cacheMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
         /** @var \Magento\Framework\View\Model\Layout\Merge $layoutMerge */
         $layoutMerge = $objectManager->create(
             \Magento\Framework\View\Model\Layout\Merge::class,

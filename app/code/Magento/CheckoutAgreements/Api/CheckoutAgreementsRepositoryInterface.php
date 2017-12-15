@@ -8,6 +8,7 @@ namespace Magento\CheckoutAgreements\Api;
 /**
  * Interface CheckoutAgreementsRepositoryInterface
  * @api
+ * @since 100.0.2
  */
 interface CheckoutAgreementsRepositoryInterface
 {

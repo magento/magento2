@@ -7,7 +7,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Export;
 
 use Magento\Config\Model\Config\Export\ExcludeList;
 
-class ExcludeListTest extends \PHPUnit_Framework_TestCase
+class ExcludeListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ExcludeList

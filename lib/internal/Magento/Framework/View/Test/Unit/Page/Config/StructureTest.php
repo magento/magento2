@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Test for page config structure model
  */
-class StructureTest extends \PHPUnit_Framework_TestCase
+class StructureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Structure

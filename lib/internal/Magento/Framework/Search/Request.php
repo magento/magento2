@@ -13,6 +13,7 @@ use Magento\Framework\Search\Request\QueryInterface;
  * Search Request
  *
  * @codeCoverageIgnore
+ * @api
  */
 class Request implements RequestInterface
 {

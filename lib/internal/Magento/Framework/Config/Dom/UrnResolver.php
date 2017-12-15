@@ -14,6 +14,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Phrase;
 
+/**
+ * @api
+ */
 class UrnResolver
 {
     /**

@@ -28,6 +28,7 @@
         <settings>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Customer::manage</aclResource>
         <dataProvider class="Magento\Customer\Ui\Component\DataProvider" name="customer_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
@@ -230,6 +231,7 @@
             <settings>
                 <timezone>false</timezone>
                 <dateFormat>MMM d, y</dateFormat>
+                <skipTimeZoneConversion>true</skipTimeZoneConversion>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
                 <label translate="true">Date of Birth</label>

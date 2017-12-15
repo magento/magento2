@@ -12,7 +12,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Registry;
 
-class BeforeAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
+class BeforeAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Customer\Observer\BeforeAddressSaveObserver
@@ -102,6 +102,7 @@ class BeforeAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
 
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getId', 'getIsDefaultBilling', 'getIsDefaultShipping', 'setForceProcess'])
             ->getMock();
         $address->expects($this->once())
             ->method('getId')

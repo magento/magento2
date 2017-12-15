@@ -8,7 +8,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 /**
  * @magentoAppArea adminhtml
  */
-class ContentTest extends \PHPUnit_Framework_TestCase
+class ContentTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetUploader()
     {

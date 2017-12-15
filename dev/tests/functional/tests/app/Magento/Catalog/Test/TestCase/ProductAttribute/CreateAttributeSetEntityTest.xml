@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\CreateAttributeSetEntityTest" summary="Create Attribute Set (Attribute Set)" ticketId="MAGETWO-25104">
         <variation name="CreateAttributeSetEntityTestVariation1">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="attributeSet/data/attribute_set_name" xsi:type="string">AttributeSet%isolation%</data>
             <data name="attributeSet/data/skeleton_set/dataset" xsi:type="string">default</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeSetSuccessSaveMessage" />

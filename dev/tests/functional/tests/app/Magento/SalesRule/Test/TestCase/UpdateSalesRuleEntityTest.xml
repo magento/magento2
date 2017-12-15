@@ -10,6 +10,7 @@
         <variation name="UpdateSalesRuleEntityTestVariation1">
             <data name="salesRuleOrigin/dataset" xsi:type="string">active_sales_rule_with_complex_conditions</data>
             <data name="salesRule/data/conditions_serialized" xsi:type="string">[Subtotal|is|400]</data>
+            <data name="salesRule/data/actions_serialized" xsi:type="string">[Category|is|%category_id%]</data>
             <data name="salesRule/data/simple_action" xsi:type="string">Buy X get Y free (discount amount is Y)</data>
             <data name="salesRule/data/discount_amount" xsi:type="string">1</data>
             <data name="salesRule/data/discount_step" xsi:type="string">3</data>

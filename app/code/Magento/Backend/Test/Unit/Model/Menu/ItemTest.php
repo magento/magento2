@@ -8,7 +8,7 @@ namespace Magento\Backend\Test\Unit\Model\Menu;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Menu\Item
@@ -63,20 +63,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_aclMock = $this->getMock(\Magento\Framework\AuthorizationInterface::class);
-        $this->_scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->_menuFactoryMock = $this->getMock(
-            \Magento\Backend\Model\MenuFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->_urlModelMock = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false);
-        $this->_moduleManager = $this->getMock(\Magento\Framework\Module\Manager::class, [], [], '', false);
-        $validatorMock = $this->getMock(\Magento\Backend\Model\Menu\Item\Validator::class);
+        $this->_aclMock = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
+        $this->_scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_menuFactoryMock = $this->createPartialMock(\Magento\Backend\Model\MenuFactory::class, ['create']);
+        $this->_urlModelMock = $this->createMock(\Magento\Backend\Model\Url::class);
+        $this->_moduleManager = $this->createMock(\Magento\Framework\Module\Manager::class);
+        $validatorMock = $this->createMock(\Magento\Backend\Model\Menu\Item\Validator::class);
         $validatorMock->expects($this->any())->method('validate');
-        $this->_moduleListMock = $this->getMock(\Magento\Framework\Module\ModuleListInterface::class);
+        $this->_moduleListMock = $this->createMock(\Magento\Framework\Module\ModuleListInterface::class);
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $this->objectManager->getObject(
@@ -213,7 +207,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetChildrenCreatesSubmenuOnFirstCall()
     {
-        $menuMock = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
+        $menuMock = $this->createMock(\Magento\Backend\Model\Menu::class);
 
         $this->_menuFactoryMock->expects($this->once())->method('create')->will($this->returnValue($menuMock));
 
@@ -228,7 +222,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     public function testToArray(array $data, array $expected)
     {
-        $menuMock = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
+        $menuMock = $this->createMock(\Magento\Backend\Model\Menu::class);
         $this->_menuFactoryMock->method('create')->will($this->returnValue($menuMock));
         $menuMock->method('toArray')
             ->willReturn($data['sub_menu']);
@@ -267,7 +261,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         array $populateFromData,
         array $expected
     ) {
-        $menuMock = $this->getMock(\Magento\Backend\Model\Menu::class, [], [], '', false);
+        $menuMock = $this->createMock(\Magento\Backend\Model\Menu::class);
         $this->_menuFactoryMock->method('create')->willReturn($menuMock);
         $menuMock->method('toArray')
             ->willReturn(['submenuArray']);

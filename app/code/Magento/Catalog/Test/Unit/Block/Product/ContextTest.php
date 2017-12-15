@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Block\Product;
 /**
  * Class ContextTest
  */
-class ContextTest extends \PHPUnit_Framework_TestCase
+class ContextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject

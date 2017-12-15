@@ -5,7 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Builder;
 
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin
@@ -54,23 +54,13 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productFactoryMock = $this->getMock(
-            \Magento\Catalog\Model\ProductFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+        $this->productFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
+        $this->configurableTypeMock = $this->createMock(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class
         );
-        $this->configurableTypeMock = $this->getMock(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $methods = ['setTypeId', 'getAttributes', 'addData', 'setWebsiteIds', '__wakeup'];
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, $methods, [], '', false);
+        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $methods);
         $attributeMethods = [
             'getId',
             'getFrontend',
@@ -79,12 +69,9 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             'setIsRequired',
             'getIsUnique',
         ];
-        $this->attributeMock = $this->getMock(
+        $this->attributeMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            $attributeMethods,
-            [],
-            '',
-            false
+            $attributeMethods
         );
         $configMethods = [
             'setStoreId',
@@ -97,27 +84,14 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             'setTypeId',
             'getSetAttributes',
         ];
-        $this->configurableMock = $this->getMock(
+        $this->configurableMock = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
-            $configMethods,
-            [],
-            '',
-            false
+            $configMethods
         );
-        $this->frontendAttrMock = $this->getMock(
-            \Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend::class,
-            [],
-            [],
-            '',
-            false
+        $this->frontendAttrMock = $this->createMock(
+            \Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend::class
         );
-        $this->subjectMock = $this->getMock(
-            \Magento\Catalog\Controller\Adminhtml\Product\Builder::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->subjectMock = $this->createMock(\Magento\Catalog\Controller\Adminhtml\Product\Builder::class);
         $this->plugin = new \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin(
             $this->productFactoryMock,
             $this->configurableTypeMock

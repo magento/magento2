@@ -178,4 +178,8 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="\Magento\Quote\Model\Cart\CartTotalRepository">
+        <plugin name="coupon_label_plugin" type="Magento\SalesRule\Plugin\CartTotalRepository" />
+    </type>
 </config>

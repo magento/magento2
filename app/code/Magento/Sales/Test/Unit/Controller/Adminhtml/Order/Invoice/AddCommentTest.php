@@ -5,7 +5,6 @@
  */
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 
-use Magento\Backend\App\Action;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 
@@ -13,8 +12,9 @@ use Magento\Sales\Api\InvoiceRepositoryInterface;
  * Class AddCommentTest
  * @package Magento\Sales\Controller\Adminhtml\Order\Invoice
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
-class AddCommentTest extends \PHPUnit_Framework_TestCase
+class AddCommentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -117,7 +117,20 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(
+                [
+                    'getRequest',
+                    'getResponse',
+                    'getObjectManager',
+                    'getTitle',
+                    'getSession',
+                    'getHelper',
+                    'getActionFlag',
+                    'getMessageManager',
+                    'getResultRedirectFactory',
+                    'getView'
+                ]
+            )
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getRequest')

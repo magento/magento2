@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Cache;
 
-class CleanStaticFilesTest extends \PHPUnit_Framework_TestCase
+class CleanStaticFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -37,7 +35,7 @@ class CleanStaticFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -60,7 +58,7 @@ class CleanStaticFilesTest extends \PHPUnit_Framework_TestCase
 
         $this->controller = $objectHelper->getObject(
             \Magento\Backend\Controller\Adminhtml\Cache\CleanStaticFiles::class,
-            ['context' => $context,]
+            ['context' => $context]
         );
     }
 

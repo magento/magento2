@@ -17,7 +17,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ResetPasswordTest extends \PHPUnit_Framework_TestCase
+class ResetPasswordTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Request mock instance

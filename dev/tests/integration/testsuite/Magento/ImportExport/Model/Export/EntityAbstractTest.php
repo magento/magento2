@@ -11,7 +11,7 @@
  */
 namespace Magento\ImportExport\Model\Export;
 
-class EntityAbstractTest extends \PHPUnit_Framework_TestCase
+class EntityAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\Export\AbstractEntity

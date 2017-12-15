@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Tests Address convert to order
  */
-class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
+class ToOrderAddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\DataObject\Copy | \PHPUnit_Framework_MockObject_MockObject
@@ -39,22 +39,13 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderAddressRepositoryMock = $this->getMock(
+        $this->orderAddressRepositoryMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\AddressRepository::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->objectCopyMock = $this->getMock(\Magento\Framework\DataObject\Copy::class, [], [], '', false);
-        $this->orderInterfaceMock = $this->getMock(
-            \Magento\Sales\Api\Data\OrderAddressInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->dataObjectHelper = $this->getMock(\Magento\Framework\Api\DataObjectHelper::class, [], [], '', false);
+        $this->objectCopyMock = $this->createMock(\Magento\Framework\DataObject\Copy::class);
+        $this->orderInterfaceMock = $this->createMock(\Magento\Sales\Api\Data\OrderAddressInterface::class);
+        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
         $objectManager = new ObjectManager($this);
         $this->converter = $objectManager->getObject(
             \Magento\Quote\Model\Quote\Address\ToOrderAddress::class,
@@ -73,7 +64,7 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \Magento\Quote\Model\Quote\Address $object
          */
-        $object = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
+        $object = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
         $this->objectCopyMock->expects($this->once())->method('getDataFromFieldset')->with(
             'sales_convert_quote_address',
             'to_order_address',

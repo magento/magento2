@@ -16,7 +16,7 @@ $tierPriceModel = $block->getPrice();
 $tierPrices = $tierPriceModel->getTierPriceList();
 ?>
 <?php if (count($tierPrices)) : ?>
-    <ul class="<?php /* @escapeNotVerified */ echo($block->hasListClass() ? $block->getListClass() : 'prices-tier items'); ?>">
+    <ul class="<?= /* @escapeNotVerified */ ($block->hasListClass() ? $block->getListClass() : 'prices-tier items') ?>">
         <?php foreach ($tierPrices as $index => $price) : ?>
             <li class="item">
                 <?php /* @escapeNotVerified */ echo __(

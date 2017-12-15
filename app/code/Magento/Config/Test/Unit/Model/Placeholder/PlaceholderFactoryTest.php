@@ -9,7 +9,7 @@ use Magento\Config\Model\Placeholder\Environment;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Framework\ObjectManagerInterface;
 
-class PlaceholderFactoryTest extends \PHPUnit_Framework_TestCase
+class PlaceholderFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var PlaceholderFactory

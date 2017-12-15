@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Writer\Csv;
 
-class AbstractWriterTest extends \PHPUnit_Framework_TestCase
+class AbstractWriterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\Dependency\Report\Writer\Csv\AbstractWriter|\PHPUnit_Framework_MockObject_MockObject
@@ -19,7 +19,7 @@ class AbstractWriterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->csvMock = $this->getMock(\Magento\Framework\File\Csv::class, [], [], '', false);
+        $this->csvMock = $this->createMock(\Magento\Framework\File\Csv::class);
 
         $this->writer = $this->getMockForAbstractClass(
             \Magento\Setup\Module\Dependency\Report\Writer\Csv\AbstractWriter::class,
@@ -30,7 +30,7 @@ class AbstractWriterTest extends \PHPUnit_Framework_TestCase
     public function testWrite()
     {
         $options = ['report_filename' => 'some_filename'];
-        $configMock = $this->getMock(\Magento\Setup\Module\Dependency\Report\Data\ConfigInterface::class);
+        $configMock = $this->createMock(\Magento\Setup\Module\Dependency\Report\Data\ConfigInterface::class);
         $preparedData = ['foo', 'baz', 'bar'];
 
         $this->writer->expects(
@@ -55,7 +55,7 @@ class AbstractWriterTest extends \PHPUnit_Framework_TestCase
      */
     public function testWriteWithWrongOptionReportFilename($options)
     {
-        $configMock = $this->getMock(\Magento\Setup\Module\Dependency\Report\Data\ConfigInterface::class);
+        $configMock = $this->createMock(\Magento\Setup\Module\Dependency\Report\Data\ConfigInterface::class);
 
         $this->writer->write($options, $configMock);
     }

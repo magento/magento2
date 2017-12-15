@@ -17,6 +17,7 @@ use Magento\Framework\Phrase;
  * Class Dom
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Dom
 {

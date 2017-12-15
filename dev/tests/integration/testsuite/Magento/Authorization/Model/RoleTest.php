@@ -8,7 +8,7 @@ namespace Magento\Authorization\Model;
 /**
  * @magentoAppArea adminhtml
  */
-class RoleTest extends \PHPUnit_Framework_TestCase
+class RoleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Authorization\Model\Role

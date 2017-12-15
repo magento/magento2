@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Type;
 
-class VirtualTest extends \PHPUnit_Framework_TestCase
+class VirtualTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Type\Virtual
@@ -15,20 +15,14 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class, [], [], '', false);
-        $coreRegistryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $fileStorageDbMock = $this->getMock(
-            \Magento\MediaStorage\Helper\File\Storage\Database::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $coreRegistryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $fileStorageDbMock = $this->createMock(\Magento\MediaStorage\Helper\File\Storage\Database::class);
         $filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $logger = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $productFactoryMock = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, [], [], '', false);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $productFactoryMock = $this->createMock(\Magento\Catalog\Model\ProductFactory::class);
         $this->_model = $objectHelper->getObject(
             \Magento\Catalog\Model\Product\Type\Virtual::class,
             [

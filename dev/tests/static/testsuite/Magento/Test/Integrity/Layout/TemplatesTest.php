@@ -9,7 +9,7 @@ namespace Magento\Test\Integrity\Layout;
 
 use Magento\Framework\App\Utility\Files;
 
-class TemplatesTest extends \PHPUnit_Framework_TestCase
+class TemplatesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array

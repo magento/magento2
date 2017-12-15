@@ -6,9 +6,6 @@
 namespace Magento\Sales\Model\Order;
 
 /**
- *
- * @method \Magento\Sales\Model\ResourceModel\Order\Tax _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Tax getResource()
  * @method int getOrderId()
  * @method \Magento\Sales\Model\Order\Tax setOrderId(int $value)
  * @method string getCode()

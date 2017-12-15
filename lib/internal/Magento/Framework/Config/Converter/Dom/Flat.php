@@ -9,6 +9,8 @@ use Magento\Framework\Config\Dom\ArrayNodeConfig;
 
 /**
  * Universal converter of any XML data to an array representation with no data loss
+ *
+ * @api
  */
 class Flat
 {
@@ -100,9 +102,9 @@ class Flat
             }
         } else {
             if ($result) {
-                $result['value'] = $value;
+                $result['value'] = trim($value);
             } else {
-                $result = $value;
+                $result = trim($value);
             }
         }
         return $result;

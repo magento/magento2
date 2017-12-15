@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
-class BooleanTest extends \PHPUnit_Framework_TestCase
+class BooleanTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Eav\Model\Attribute\Data\Boolean
@@ -14,9 +14,9 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $timezoneMock = $this->getMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
-        $localeResolverMock = $this->getMock(\Magento\Framework\Locale\ResolverInterface::class);
+        $timezoneMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $localeResolverMock = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
 
         $this->model = new \Magento\Eav\Model\Attribute\Data\Boolean($timezoneMock, $loggerMock, $localeResolverMock);
     }
@@ -31,10 +31,10 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
      */
     public function testOutputValue($format, $value, $expectedResult)
     {
-        $entityMock = $this->getMock(\Magento\Framework\Model\AbstractModel::class, [], [], '', false);
+        $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
         $entityMock->expects($this->once())->method('getData')->will($this->returnValue($value));
 
-        $attributeMock = $this->getMock(\Magento\Eav\Model\Attribute::class, [], [], '', false);
+        $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);

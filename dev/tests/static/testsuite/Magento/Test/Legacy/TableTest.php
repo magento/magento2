@@ -11,7 +11,7 @@ namespace Magento\Test\Legacy;
 
 use Magento\Framework\App\Utility\Files;
 
-class TableTest extends \PHPUnit_Framework_TestCase
+class TableTest extends \PHPUnit\Framework\TestCase
 {
     public function testTableName()
     {

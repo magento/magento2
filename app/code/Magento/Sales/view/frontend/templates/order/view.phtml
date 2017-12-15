@@ -12,23 +12,23 @@
     <?php $_order = $block->getOrder() ?>
 
     <div class="order-title">
-        <strong><?php /* @escapeNotVerified */ echo __('Items Ordered') ?></strong>
+        <strong><?= /* @escapeNotVerified */ __('Items Ordered') ?></strong>
         <?php if ($_order->getTracksCollection()->count()) : ?>
-            <?php echo $block->getChildHtml('tracking-info-link') ?>
+            <?= $block->getChildHtml('tracking-info-link') ?>
         <?php endif; ?>
     </div>
 
-    <?php echo $block->getChildHtml('order_items') ?>
+    <?= $block->getChildHtml('order_items') ?>
 
     <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order', $_order) && $_order->getGiftMessageId()): ?>
     <div class="block block-order-details-gift-message">
-        <div class="block-title"><strong><?php /* @escapeNotVerified */ echo __('Gift Message for This Order') ?></strong></div>
+        <div class="block-title"><strong><?= /* @escapeNotVerified */ __('Gift Message for This Order') ?></strong></div>
         <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($_order); ?>
         <div class="block-content">
             <dl class="item-options">
-                <dt class="item-sender"><strong class="label"><?php /* @escapeNotVerified */ echo __('From') ?></strong><?php echo $block->escapeHtml($_giftMessage->getSender()) ?></dt>
-                <dt class="item-recipient"><strong class="label"><?php /* @escapeNotVerified */ echo __('To') ?></strong><?php echo $block->escapeHtml($_giftMessage->getRecipient()) ?></dt>
-                <dd class="item-message"><?php /* @escapeNotVerified */ echo $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_order) ?></dd>
+                <dt class="item-sender"><strong class="label"><?= /* @escapeNotVerified */ __('From') ?></strong><?= $block->escapeHtml($_giftMessage->getSender()) ?></dt>
+                <dt class="item-recipient"><strong class="label"><?= /* @escapeNotVerified */ __('To') ?></strong><?= $block->escapeHtml($_giftMessage->getRecipient()) ?></dt>
+                <dd class="item-message"><?= /* @escapeNotVerified */ $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_order) ?></dd>
             </dl>
         </div>
     </div>
@@ -36,8 +36,8 @@
 
     <div class="actions-toolbar">
         <div class="secondary">
-            <a class="action back" href="<?php /* @escapeNotVerified */ echo $block->getBackUrl() ?>">
-                <span><?php /* @escapeNotVerified */ echo $block->getBackTitle() ?></span>
+            <a class="action back" href="<?= /* @escapeNotVerified */ $block->getBackUrl() ?>">
+                <span><?= /* @escapeNotVerified */ $block->getBackTitle() ?></span>
             </a>
         </div>
     </div>

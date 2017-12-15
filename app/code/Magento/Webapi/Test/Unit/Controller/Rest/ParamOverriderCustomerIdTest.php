@@ -10,7 +10,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Webapi\Controller\Rest\ParamOverriderCustomerId;
 
-class ParamOverriderCustomerIdTest extends \PHPUnit_Framework_TestCase
+class ParamOverriderCustomerIdTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ParamOverriderCustomerId

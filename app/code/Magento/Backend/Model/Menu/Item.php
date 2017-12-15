@@ -14,6 +14,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 class Item
 {
@@ -132,7 +133,7 @@ class Item
      * Serialized submenu string
      *
      * @var string
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected $_serializedSubmenu;
 
@@ -213,6 +214,7 @@ class Item
      * Retrieve item target
      *
      * @return string|null
+     * @since 100.2.0
      */
     public function getTarget()
     {
@@ -459,6 +461,7 @@ class Item
      * Get menu item data represented as an array
      *
      * @return array
+     * @since 100.2.0
      */
     public function toArray()
     {
@@ -484,6 +487,7 @@ class Item
      *
      * @param array $data
      * @return void
+     * @since 100.2.0
      */
     public function populateFromArray(array $data)
     {

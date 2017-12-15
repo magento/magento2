@@ -7,5 +7,5 @@
  * @var $block \Magento\OfflinePayments\Block\Info\Purchaseorder
  */
 ?>
-<?php echo $block->escapeHtml(__('Purchase Order Number: %1', $block->getInfo()->getPoNumber())) ?>
+<?= $block->escapeHtml(__('Purchase Order Number: %1', $block->getInfo()->getPoNumber())) ?>
     {{pdf_row_separator}}

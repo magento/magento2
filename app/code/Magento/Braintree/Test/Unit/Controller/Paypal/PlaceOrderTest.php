@@ -23,7 +23,7 @@ use Magento\Quote\Model\Quote;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PlaceOrderTest extends \PHPUnit_Framework_TestCase
+class PlaceOrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var OrderPlace|\PHPUnit_Framework_MockObject_MockObject

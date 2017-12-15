@@ -51,9 +51,7 @@ class Config
     const FALSE = 'false';
     /**#@-*/
 
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
+    /**#@-*/
     protected $scopeConfig;
 
     /**

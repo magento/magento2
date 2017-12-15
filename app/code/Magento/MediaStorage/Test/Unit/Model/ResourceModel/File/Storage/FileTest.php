@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Class FileTest
  */
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\MediaStorage\Model\ResourceModel\File\Storage\File
@@ -37,20 +37,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
-        $this->filesystemMock = $this->getMock(
-            \Magento\Framework\Filesystem::class,
-            ['getDirectoryRead'],
-            [],
-            '',
-            false
-        );
-        $this->directoryReadMock = $this->getMock(
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->filesystemMock = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryRead']);
+        $this->directoryReadMock = $this->createPartialMock(
             \Magento\Framework\Filesystem\Directory\Read::class,
-            ['isDirectory', 'readRecursively'],
-            [],
-            '',
-            false
+            ['isDirectory', 'readRecursively']
         );
 
         $this->storageFile = new \Magento\MediaStorage\Model\ResourceModel\File\Storage\File(

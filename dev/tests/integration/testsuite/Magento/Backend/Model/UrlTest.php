@@ -10,7 +10,7 @@ namespace Magento\Backend\Model;
  *
  * @magentoAppArea adminhtml
  */
-class UrlTest extends \PHPUnit_Framework_TestCase
+class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\UrlInterface

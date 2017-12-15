@@ -8,6 +8,7 @@
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('simple')
     ->setAttributeSetId(4)
+    ->setId(31)
     ->setWebsiteIds([1])
     ->setName('Simple Product')
     ->setSku('simple')

@@ -8,7 +8,7 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ConditionManagerTest extends \PHPUnit_Framework_TestCase
+class ConditionManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject

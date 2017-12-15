@@ -22,6 +22,7 @@
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertCheckoutErrorMessage" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDoesNotHaveDefaultAddresses" />
         </variation>
         <variation name="OnePageCheckoutBraintreeDeclinedTestVariation2" summary="Checkout with Braintree Credit Card configured with incorrect credentials" ticketId="MAGETWO-46244">
             <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>

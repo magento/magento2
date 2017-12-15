@@ -9,7 +9,7 @@ use \Magento\Framework\DB\Adapter\AdapterInterface;
 use \Magento\Framework\DB\Select;
 use \Magento\Framework\Indexer\BatchProvider;
 
-class BatchProviderTest extends \PHPUnit_Framework_TestCase
+class BatchProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BatchProvider
@@ -33,8 +33,8 @@ class BatchProviderTest extends \PHPUnit_Framework_TestCase
         $tableName = 'test_table';
         $linkField = 'id';
 
-        $selectMock = $this->getMock(Select::class, [], [], '', false);
-        $adapterMock = $this->getMock(AdapterInterface::class);
+        $selectMock = $this->createMock(Select::class);
+        $adapterMock = $this->createMock(AdapterInterface::class);
 
         $selectMock->expects($this->once())->method('from')->willReturnSelf();
         $adapterMock->expects($this->once())->method('select')->willReturn($selectMock);
@@ -60,8 +60,8 @@ class BatchProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBatchIds()
     {
-        $selectMock = $this->getMock(Select::class, [], [], '', false);
-        $adapterMock = $this->getMock(AdapterInterface::class);
+        $selectMock = $this->createMock(Select::class);
+        $adapterMock = $this->createMock(AdapterInterface::class);
 
         $selectMock->expects($this->once())->method('where')->with('(entity_id BETWEEN 10 AND 100)')->willReturnSelf();
         $adapterMock->expects($this->atLeastOnce())->method('quote')->willReturnArgument(0);

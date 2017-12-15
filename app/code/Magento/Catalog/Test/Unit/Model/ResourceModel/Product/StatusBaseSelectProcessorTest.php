@@ -22,7 +22,7 @@ use Magento\Store\Model\Store;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
+class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Config|\PHPUnit_Framework_MockObject_MockObject
@@ -70,7 +70,7 @@ class StatusBaseSelectProcessorTest extends \PHPUnit_Framework_TestCase
         $attributeId = 2;
         $currentStoreId = 1;
 
-        $metadata = $this->getMock(EntityMetadataInterface::class);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
         $metadata->expects($this->once())
             ->method('getLinkField')
             ->willReturn($linkField);

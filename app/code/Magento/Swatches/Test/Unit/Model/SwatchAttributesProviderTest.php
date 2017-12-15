@@ -5,13 +5,12 @@
  */
 namespace Magento\Swatches\Test\Unit\Model;
 
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute\Interceptor;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Swatches\Model\SwatchAttributeCodes;
 use Magento\Swatches\Model\SwatchAttributesProvider;
 
-class SwatchAttributesProviderTest extends \PHPUnit_Framework_TestCase
+class SwatchAttributesProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SwatchAttributesProvider
@@ -35,29 +34,14 @@ class SwatchAttributesProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->typeConfigurable = $this->getMock(
+        $this->typeConfigurable = $this->createPartialMock(
             Configurable::class,
-            ['getConfigurableAttributes', 'getCodes'],
-            [],
-            '',
-            false
+            ['getConfigurableAttributes', 'getCodes']
         );
 
-        $this->swatchAttributeCodes = $this->getMock(
-            SwatchAttributeCodes::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->swatchAttributeCodes = $this->createMock(SwatchAttributeCodes::class);
 
-        $this->productMock = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            ['getId', 'getTypeId'],
-            [],
-            '',
-            false
-        );
+        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', 'getTypeId']);
 
         $this->swatchAttributeProvider = (new ObjectManager($this))->getObject(SwatchAttributesProvider::class, [
             'typeConfigurable' => $this->typeConfigurable,
@@ -71,20 +55,13 @@ class SwatchAttributesProviderTest extends \PHPUnit_Framework_TestCase
         $this->productMock->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $productAttributeMock = $this->getMock(
-            Interceptor::class,
-            [],
-            [],
-            '',
-            false
+        $productAttributeMock = $this->getMockForAbstractClass(
+            \Magento\Framework\Interception\InterceptorInterface::class
         );
 
-        $configAttributeMock = $this->getMock(
+        $configAttributeMock = $this->createPartialMock(
             Configurable\Attribute::class,
-            ['getAttributeId', 'getProductAttribute'],
-            [],
-            '',
-            false
+            ['getAttributeId', 'getProductAttribute']
         );
         $configAttributeMock
             ->method('getAttributeId')

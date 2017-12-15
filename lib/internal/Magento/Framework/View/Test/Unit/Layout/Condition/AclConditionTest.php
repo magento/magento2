@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Test\Unit\Layout\Condition;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\View\Layout\AclCondition;
 
-class AclConditionTest extends \PHPUnit_Framework_TestCase
+class AclConditionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AclCondition

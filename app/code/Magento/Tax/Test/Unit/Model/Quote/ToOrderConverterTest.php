@@ -8,7 +8,11 @@ namespace Magento\Tax\Test\Unit\Model\Quote;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class ToOrderConverterTest
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ */
+class ToOrderConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Api\Data\OrderExtensionFactory|\PHPUnit_Framework_MockObject_MockObject

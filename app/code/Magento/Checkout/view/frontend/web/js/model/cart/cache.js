@@ -188,6 +188,19 @@ define([
         _isAddressChanged: function (address) {
             return JSON.stringify(_.pick(this.get('address'), this.requiredFields)) !==
                 JSON.stringify(_.pick(address, this.requiredFields));
+        },
+
+        /**
+         * Compare cached subtotal with provided.
+         * Custom method for check object equality.
+         *
+         * @param {float} subtotal
+         * @returns {Boolean}
+         */
+        _isSubtotalChanged: function (subtotal) {
+            var cached = parseFloat(this.get('totals').subtotal);
+
+            return subtotal !== cached;
         }
     };
 });

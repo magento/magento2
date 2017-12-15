@@ -88,7 +88,9 @@ class Product extends \Magento\Framework\Url\Helper\Data
      */
     protected $categoryRepository;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
     protected $_storeManager;
 
     /**
@@ -251,12 +253,18 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Retrieve thumbnail image url
      *
      * @param ModelProduct|\Magento\Framework\DataObject $product
-     * @return string
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return string|bool
      */
     public function getThumbnailUrl($product)
     {
-        return '';
+        $url = false;
+        $attribute = $product->getResource()->getAttribute('thumbnail');
+        if (!$product->getThumbnail()) {
+            $url = $this->_assetRepo->getUrl('Magento_Catalog::images/product/placeholder/thumbnail.jpg');
+        } elseif ($attribute) {
+            $url = $attribute->getFrontend()->getUrl($product);
+        }
+        return $url;
     }
 
     /**

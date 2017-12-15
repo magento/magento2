@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Module\I18n\Dictionary\Options;
 /**
  * Class ResolverTest
  */
-class ResolverFactoryTest extends \PHPUnit_Framework_TestCase
+class ResolverFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreate()
     {

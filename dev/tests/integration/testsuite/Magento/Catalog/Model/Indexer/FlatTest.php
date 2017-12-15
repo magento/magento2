@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer;
 
-class FlatTest extends \PHPUnit_Framework_TestCase
+class FlatTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var int

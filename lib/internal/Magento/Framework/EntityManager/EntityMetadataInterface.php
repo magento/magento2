@@ -48,7 +48,7 @@ interface EntityMetadataInterface
 
     /**
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     public function getEntityConnection();
 }

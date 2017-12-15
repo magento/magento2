@@ -5,7 +5,7 @@
  */
 namespace Magento\Widget\Test\Unit\Model;
 
-class NamespaceResolverTest extends \PHPUnit_Framework_TestCase
+class NamespaceResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\NamespaceResolver

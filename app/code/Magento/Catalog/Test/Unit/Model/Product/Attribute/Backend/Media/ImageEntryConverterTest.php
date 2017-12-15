@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend\Media;
 
-class ImageEntryConverterTest extends \PHPUnit_Framework_TestCase
+class ImageEntryConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -40,18 +40,13 @@ class ImageEntryConverterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mediaGalleryEntryFactoryMock =
-            $this->getMock(
+            $this->createPartialMock(
                 \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory::class,
-                ['create'],
-                [],
-                '',
-                false
+                ['create']
             );
 
         $this->mediaGalleryEntryMock =
-            $this->getMock(
-                \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class,
-                [
+            $this->createPartialMock(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class, [
                     'getId',
                     'setId',
                     'getMediaType',
@@ -70,19 +65,15 @@ class ImageEntryConverterTest extends \PHPUnit_Framework_TestCase
                     'setContent',
                     'getExtensionAttributes',
                     'setExtensionAttributes'
-                ],
-                [],
-                '',
-                false
-            );
+                ]);
 
         $this->mediaGalleryEntryFactoryMock->expects($this->any())->method('create')->willReturn(
             $this->mediaGalleryEntryMock
         );
 
-        $this->dataObjectHelperMock = $this->getMock(\Magento\Framework\Api\DataObjectHelper::class, [], [], '', false);
+        $this->dataObjectHelperMock = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
 
-        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -124,7 +115,8 @@ class ImageEntryConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->productMock->expects($this->any())->method('getMediaAttributeValues')->willReturn($productImages);
 
-        $this->modelObject->convertTo($this->productMock, $rowData);
+        $object = $this->modelObject->convertTo($this->productMock, $rowData);
+        $this->assertNotNull($object);
     }
 
     public function testConvertFromNullContent()
@@ -172,13 +164,7 @@ class ImageEntryConverterTest extends \PHPUnit_Framework_TestCase
                 1 => 'swatch_image',
             ]
         );
-        $imageContentInterface = $this->getMock(
-            \Magento\Framework\Api\Data\ImageContentInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $imageContentInterface = $this->createMock(\Magento\Framework\Api\Data\ImageContentInterface::class);
 
         $imageContentInterface->expects($this->once())->method('getBase64EncodedData')->willReturn(
             base64_encode('some_content')

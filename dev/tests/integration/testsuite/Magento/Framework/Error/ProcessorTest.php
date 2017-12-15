@@ -7,7 +7,7 @@ namespace Magento\Framework\Error;
 
 require_once __DIR__ . '/../../../../../../../pub/errors/processor.php';
 
-class ProcessorTest extends \PHPUnit_Framework_TestCase
+class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Error\Processor */
     private $processor;

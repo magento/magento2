@@ -12,7 +12,7 @@ use Magento\Analytics\Model\Connector\SignUpCommand;
 /**
  * Class SignUpCommandTest
  */
-class ConnectorTest extends \PHPUnit_Framework_TestCase
+class ConnectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject

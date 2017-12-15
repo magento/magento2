@@ -9,6 +9,7 @@ namespace Magento\Store\Model\ResourceModel;
  * Store group resource model
  *
  * @api
+ * @since 100.0.2
  */
 class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -41,6 +42,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Initialize unique fields
      *
      * @return $this
+     * @since 100.2.0
      */
     protected function _initUniqueFields()
     {

@@ -8,7 +8,7 @@ namespace Magento\Widget\Model\Widget;
 /**
  * @magentoAppArea adminhtml
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Model\Widget\Config

@@ -18,6 +18,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractCondition extends \Magento\Framework\DataObject implements ConditionInterface
 {

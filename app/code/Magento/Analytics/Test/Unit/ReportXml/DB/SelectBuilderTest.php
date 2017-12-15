@@ -13,7 +13,7 @@ use Magento\Framework\DB\Select;
 /**
  * Class SelectBuilderTest
  */
-class SelectBuilderTest extends \PHPUnit_Framework_TestCase
+class SelectBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SelectBuilder

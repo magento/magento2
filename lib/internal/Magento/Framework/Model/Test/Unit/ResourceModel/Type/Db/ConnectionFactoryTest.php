@@ -9,7 +9,7 @@ use Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface;
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactory;
 use Magento\Framework\ObjectManagerInterface;
 
-class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
+class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ConnectionFactory

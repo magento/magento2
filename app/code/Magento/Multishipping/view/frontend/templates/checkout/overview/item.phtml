@@ -17,39 +17,39 @@
 <?php /** @var $block Magento\Checkout\Block\Cart\Item\Renderer */ ?>
 <?php $_item = $block->getItem() ?>
 <tr>
-    <td class="col item" data-th="<?php echo $block->escapeHtml(__('Product Name')); ?>">
-        <?php echo $block->getRenderedBlock()->getItemHtml($_item) ?>
+    <td class="col item" data-th="<?= $block->escapeHtml(__('Product Name')) ?>">
+        <?= $block->getRenderedBlock()->getItemHtml($_item) ?>
     </td>
-    <td class="col price" data-th="<?php echo $block->escapeHtml(__('Price')); ?>">
+    <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
         <?php /* Including Tax */ ?>
             <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-                <span class="price-including-tax" data-label="<?php echo $block->escapeHtml(__('Incl. Tax')); ?>">
-                    <?php echo $block->getUnitPriceInclTaxHtml($_item); ?>
+                <span class="price-including-tax" data-label="<?= $block->escapeHtml(__('Incl. Tax')) ?>">
+                    <?= $block->getUnitPriceInclTaxHtml($_item) ?>
                 </span>
             <?php endif; ?>
         <?php /* end Including Tax */ ?>
         <?php /* Excluding Tax */ ?>
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-            <span class="price-excluding-tax" data-label="<?php echo $block->escapeHtml(__('Excl. Tax')); ?>">
-                <?php echo $block->getUnitPriceExclTaxHtml($_item); ?>
+            <span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
+                <?= $block->getUnitPriceExclTaxHtml($_item) ?>
             </span>
         <?php endif; ?>
         <?php /* end Excluding Tax */ ?>
     </td>
 
-    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty'));?>"><?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?></td>
-    <td class="col subtotal" data-th="<?php echo $block->escapeHtml(__('Subtotal')); ?>">
+    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><?= /* @escapeNotVerified */ $_item->getQty()*1 ?></td>
+    <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
     <?php /* Including Tax Subtotal */ ?>
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-        <span class="price-including-tax" data-label="<?php echo $block->escapeHtml(__('Incl. Tax')); ?>">
-            <?php echo $block->getRowTotalInclTaxHtml($_item); ?>
+        <span class="price-including-tax" data-label="<?= $block->escapeHtml(__('Incl. Tax')) ?>">
+            <?= $block->getRowTotalInclTaxHtml($_item) ?>
         </span>
         <?php endif; ?>
     <?php /* end Including Tax Subtotal */ ?>
     <?php /* Excluding Tax Subtotal */ ?>
     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-        <span class="price-excluding-tax" data-label="<?php echo $block->escapeHtml(__('Excl. Tax')); ?>">
-            <?php echo $block->getRowTotalExclTaxHtml($_item); ?>
+        <span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
+            <?= $block->getRowTotalExclTaxHtml($_item) ?>
         </span>
     <?php endif; ?>
     <?php /* end Excluding Tax Subtotal */ ?>

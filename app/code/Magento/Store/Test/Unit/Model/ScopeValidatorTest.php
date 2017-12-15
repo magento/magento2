@@ -10,7 +10,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Store\Model\ScopeValidator;
 
-class ScopeValidatorTest extends \PHPUnit_Framework_TestCase
+class ScopeValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopeValidator

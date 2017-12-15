@@ -19,10 +19,10 @@ class WorkingDirectory
     /**
      * Handler for 'endTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function startTest(\PHPUnit_Framework_TestCase $test)
+    public function startTest(\PHPUnit\Framework\TestCase $test)
     {
         $this->_currentWorkingDir = getcwd();
     }
@@ -30,10 +30,10 @@ class WorkingDirectory
     /**
      * Handler for 'startTest' event
      *
-     * @param \PHPUnit_Framework_TestCase $test
+     * @param \PHPUnit\Framework\TestCase $test
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function endTest(\PHPUnit_Framework_TestCase $test)
+    public function endTest(\PHPUnit\Framework\TestCase $test)
     {
         if (getcwd() != $this->_currentWorkingDir) {
             chdir($this->_currentWorkingDir);

@@ -4,10 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backup\Model\ResourceModel;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Helper extends \Magento\Framework\DB\Helper
 {
     /**
@@ -176,7 +178,9 @@ class Helper extends \Magento\Framework\DB\Helper
         $dbConfig = $this->getConnection()->getConfig();
 
         $versionRow = $this->getConnection()->fetchRow('SHOW VARIABLES LIKE \'version\'');
-        $hostName = !empty($dbConfig['unix_socket']) ? $dbConfig['unix_socket'] : (!empty($dbConfig['host']) ? $dbConfig['host'] : 'localhost');
+        $hostName = !empty($dbConfig['unix_socket'])
+            ? $dbConfig['unix_socket']
+            : (!empty($dbConfig['host']) ? $dbConfig['host'] : 'localhost');
 
         $header = "-- Magento DB backup\n" .
             "--\n" .

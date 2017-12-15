@@ -20,7 +20,7 @@ use Magento\MediaStorage\Model\File\UploaderFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LogoTest extends \PHPUnit_Framework_TestCase
+class LogoTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Logo */
     protected $model;

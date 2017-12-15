@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\Config;
 
-class ConverterTest extends \PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\Import\Config\Converter
@@ -25,13 +25,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filePath = realpath(__DIR__) . '/_files/';
-        $this->moduleManager = $this->getMock(
-            \Magento\Framework\Module\Manager::class,
-            ['isOutputEnabled'],
-            [],
-            '',
-            false
-        );
+        $this->moduleManager = $this->createPartialMock(\Magento\Framework\Module\Manager::class, ['isOutputEnabled']);
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
             \Magento\ImportExport\Model\Import\Config\Converter::class,

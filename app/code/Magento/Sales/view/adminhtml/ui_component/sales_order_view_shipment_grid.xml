@@ -24,6 +24,7 @@
             </filterUrlParams>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Sales::shipment</aclResource>
         <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="sales_order_view_shipment_grid_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>

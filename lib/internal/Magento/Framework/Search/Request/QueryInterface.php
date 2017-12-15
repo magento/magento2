@@ -7,6 +7,8 @@ namespace Magento\Framework\Search\Request;
 
 /**
  * Query Interface
+ *
+ * @api
  */
 interface QueryInterface
 {

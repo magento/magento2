@@ -533,7 +533,8 @@ define([
          * Init header elements
          */
         initHeader: function () {
-            var data;
+            var labels = [],
+                data;
 
             if (!this.labels().length) {
                 _.each(this.childTemplate.children, function (cell) {
@@ -547,8 +548,9 @@ define([
                         sortOrder: cell.config.sortOrder
                     });
 
-                    this.labels.push(data);
+                    labels.push(data);
                 }, this);
+                this.labels(_.sortBy(labels, 'sortOrder'));
             }
         },
 
@@ -559,7 +561,7 @@ define([
          * @param {Object} elem - instance
          */
         setMaxPosition: function (position, elem) {
-            if (position) {
+            if (position || position === 0) {
                 this.checkMaxPosition(position);
                 this.sort(position, elem);
             } else {
@@ -579,7 +581,7 @@ define([
                 updatedCollection;
 
             if (this.elems().filter(function (el) {
-                    return el.position;
+                    return el.position || el.position === 0;
                 }).length !== this.getChildItems().length) {
 
                 return false;

@@ -18,7 +18,7 @@ use Magento\Quote\Api\Data\ShippingInterface;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class ShippingAssignmentProcessorTest extends \PHPUnit_Framework_TestCase
+class ShippingAssignmentProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ShippingAssignmentProcessor

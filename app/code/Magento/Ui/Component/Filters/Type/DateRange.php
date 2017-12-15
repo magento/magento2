@@ -9,6 +9,8 @@ use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 
 /**
  * Class DateRange
+ * @api
+ * @since 100.0.2
  */
 class DateRange extends Range
 {

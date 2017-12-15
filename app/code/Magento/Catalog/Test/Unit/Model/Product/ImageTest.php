@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
 use Magento\Catalog\Model\View\Asset\Image\ContextFactory;
@@ -14,91 +13,70 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset\ContextInterface;
 
 /**
- * Class ImageTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class ImageTest extends \PHPUnit_Framework_TestCase
+class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Image
      */
-    protected $image;
+    private $image;
 
     /**
      * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $context;
-
-    /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $registry;
+    private $context;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $config;
+    private $config;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $coreFileHelper;
+    private $coreFileHelper;
 
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $filesystem;
+    private $filesystem;
 
     /**
      * @var \Magento\Framework\Image\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $factory;
-
-    /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $repository;
-
-    /**
-     * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $fileSystem;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $scopeConfigInterface;
+    private $factory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $mediaDirectory;
+    private $mediaDirectory;
 
     /**
      * @var \Magento\Framework\View\Asset\LocalInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $imageAsset;
+    private $imageAsset;
 
     /**
      * @var ImageFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $viewAssetImageFactory;
+    private $viewAssetImageFactory;
 
     /**
      * @var PlaceholderFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $viewAssetPlaceholderFactory;
+    private $viewAssetPlaceholderFactory;
 
     protected function setUp()
     {
-        $this->context = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
-        $this->registry = $this->getMock(\Magento\Framework\Registry::class);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->context = $this->createMock(\Magento\Framework\Model\Context::class);
 
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)
             ->disableOriginalConstructor()
@@ -120,31 +98,35 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create', 'isFile', 'isExist', 'getAbsolutePath'])
             ->getMock();
 
-        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->will($this->returnValue($this->mediaDirectory));
-        $this->factory = $this->getMock(\Magento\Framework\Image\Factory::class, [], [], '', false);
-        $this->repository = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
-        $this->fileSystem = $this->getMock(\Magento\Framework\View\FileSystem::class, [], [], '', false);
-        $this->scopeConfigInterface = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->factory = $this->createMock(\Magento\Framework\Image\Factory::class);
 
-        $context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
+        $this->viewAssetImageFactory = $this->getMockBuilder(ImageFactory::class)
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
-        $this->image = new \Magento\Catalog\Model\Product\Image(
-            $context,
-            $this->registry,
-            $this->storeManager,
-            $this->config,
-            $this->coreFileHelper,
-            $this->filesystem,
-            $this->factory,
-            $this->repository,
-            $this->fileSystem,
-            $this->scopeConfigInterface
+        $this->viewAssetPlaceholderFactory = $this->getMockBuilder(PlaceholderFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->image = $objectManager->getObject(
+            \Magento\Catalog\Model\Product\Image::class,
+            [
+                'storeManager' => $this->storeManager,
+                'catalogProductMediaConfig' => $this->config,
+                'coreFileStorageDatabase' => $this->coreFileHelper,
+                'filesystem' => $this->filesystem,
+                'imageFactory' => $this->factory,
+                'viewAssetImageFactory' => $this->viewAssetImageFactory,
+                'viewAssetPlaceholderFactory' => $this->viewAssetPlaceholderFactory
+            ]
         );
-        //Settings for backward compatible property
+
+        // Settings for backward compatible property
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->imageAsset = $this->getMockBuilder(\Magento\Framework\View\Asset\LocalInterface::class)
             ->getMockForAbstractClass();
@@ -152,26 +134,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $this->image,
             'imageAsset',
             $this->imageAsset
-        );
-
-        $this->viewAssetImageFactory = $this->getMockBuilder(ImageFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $objectManagerHelper->setBackwardCompatibleProperty(
-            $this->image,
-            'viewAssetImageFactory',
-            $this->viewAssetImageFactory
-        );
-
-        $this->viewAssetPlaceholderFactory = $this->getMockBuilder(PlaceholderFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $objectManagerHelper->setBackwardCompatibleProperty(
-            $this->image,
-            'viewAssetPlaceholderFactory',
-            $this->viewAssetPlaceholderFactory
         );
     }
 

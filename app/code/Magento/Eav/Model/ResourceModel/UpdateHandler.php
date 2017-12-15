@@ -190,7 +190,7 @@ class UpdateHandler implements AttributeInterface
     /**
      * Get read handler
      *
-     * @deprecated
+     * @deprecated 100.1.0
      *
      * @return ReadHandler
      */

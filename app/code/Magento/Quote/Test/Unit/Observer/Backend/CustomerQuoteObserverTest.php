@@ -8,7 +8,7 @@
 
 namespace Magento\Quote\Test\Unit\Observer\Backend;
 
-class CustomerQuoteObserverTest extends \PHPUnit_Framework_TestCase
+class CustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Observer\Backend\CustomerQuoteObserver
@@ -48,13 +48,13 @@ class CustomerQuoteObserverTest extends \PHPUnit_Framework_TestCase
         $this->configMock = $this->getMockBuilder(\Magento\Customer\Model\Config\Share::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->quoteRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
         $this->observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerDataObject'])
+            ->setMethods(['getCustomerDataObject', 'getOrigCustomerDataObject'])
             ->getMock();
         $this->observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->eventMock));
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

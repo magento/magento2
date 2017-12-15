@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Element;
 
-class TextTest extends \PHPUnit_Framework_TestCase
+class TextTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\Text

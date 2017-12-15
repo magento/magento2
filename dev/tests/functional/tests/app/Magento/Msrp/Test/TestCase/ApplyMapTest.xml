@@ -46,5 +46,9 @@
             <constraint name="Magento\Msrp\Test\Constraint\AssertMapOnProductView" />
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpInShoppingCart" />
         </variation>
+        <variation name="ApplyMapTestVariation6" summary="[Catalog] MSRP field is not displayed for bundle products with fixed price" ticketId="MAGETWO-63054">
+            <data name="product" xsi:type="string">bundleProduct::bundle_fixed_product</data>
+            <constraint name="Magento\Msrp\Test\Constraint\AssertProductEditPageAdvancedPricingFields" />
+        </variation>
     </testCase>
 </config>

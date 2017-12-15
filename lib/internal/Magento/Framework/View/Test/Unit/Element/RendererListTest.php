@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element;
 
-class RendererListTest extends \PHPUnit_Framework_TestCase
+class RendererListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\RendererList

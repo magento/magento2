@@ -7,7 +7,7 @@ namespace Magento\Customer\Test\Unit\CustomerData\Plugin;
 
 use Magento\Customer\CustomerData\Plugin\SessionChecker;
 
-class SessionCheckerTest extends \PHPUnit_Framework_TestCase
+class SessionCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var SessionChecker
@@ -56,7 +56,7 @@ class SessionCheckerTest extends \PHPUnit_Framework_TestCase
      * @param bool $result
      * @param string $callCount
      * @return void
-     * @dataProvider testBeforeStartDataProvider
+     * @dataProvider beforeStartDataProvider
      */
     public function testBeforeStart($result, $callCount)
     {
@@ -86,7 +86,7 @@ class SessionCheckerTest extends \PHPUnit_Framework_TestCase
         $this->plugin->beforeStart($this->sessionManager);
     }
 
-    public function testBeforeStartDataProvider()
+    public function beforeStartDataProvider()
     {
         return [
             [true, 'once'],

@@ -11,6 +11,10 @@
  */
 namespace Magento\CurrencySymbol\Block\Adminhtml\System;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Currency extends \Magento\Backend\Block\Template
 {
     /**

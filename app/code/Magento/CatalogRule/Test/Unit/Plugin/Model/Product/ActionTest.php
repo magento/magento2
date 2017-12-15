@@ -8,7 +8,7 @@ namespace Magento\CatalogRule\Test\Unit\Plugin\Model\Product;
 
 use \Magento\CatalogRule\Plugin\Model\Product\Action;
 
-class ActionTest extends \PHPUnit_Framework_TestCase
+class ActionTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\CatalogRule\Plugin\Model\Product\Action */
     protected $action;

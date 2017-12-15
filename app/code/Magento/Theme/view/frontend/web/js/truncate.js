@@ -6,7 +6,7 @@
 /**
  * JQuery UI Widget declaration: 'mage.truncateOptions'
  *
- * @api
+ * @deprecated since version 2.2.0
  */
 define([
     'jquery',

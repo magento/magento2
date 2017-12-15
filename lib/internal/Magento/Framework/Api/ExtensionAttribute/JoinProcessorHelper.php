@@ -15,10 +15,14 @@ use Magento\Framework\Api\SimpleDataObjectConverter;
  */
 class JoinProcessorHelper
 {
-    /** @var Config */
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\Config
+     */
     private $config;
 
-    /** @var JoinDataInterfaceFactory */
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinDataInterfaceFactory
+     */
     private $joinDataInterfaceFactory;
 
     /**

@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Block\Category\Plugin;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PriceBoxTagsTest extends \PHPUnit_Framework_TestCase
+class PriceBoxTagsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -119,8 +119,8 @@ class PriceBoxTagsTest extends \PHPUnit_Framework_TestCase
         $this->session->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $rateRequest = $this->getMockBuilder(\Magento\Framework\DataObject::class)->getMock();
         $this->taxCalculation->expects($this->once())->method('getRateRequest')->with(
-            new \Magento\Framework\DataObject($billingAddress),
             new \Magento\Framework\DataObject($shippingAddress),
+            new \Magento\Framework\DataObject($billingAddress),
             $customerTaxClassId,
             $scopeId,
             $customerId

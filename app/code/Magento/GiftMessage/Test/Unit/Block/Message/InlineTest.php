@@ -5,7 +5,7 @@
  */
 namespace Magento\GiftMessage\Test\Unit\Block\Message;
 
-class InlineTest extends \PHPUnit_Framework_TestCase
+class InlineTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\GiftMessage\Block\Message\Inline

@@ -6,7 +6,7 @@
 
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Indexer\Stock;
 
-class GroupedTest extends \PHPUnit_Framework_TestCase
+class GroupedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
@@ -39,16 +39,11 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class
         );
 
-        /** @var \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource */
-        $indexerStockFrontendResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class
-        );
-
         $productCollection->addAttributeToSelect('name');
         $productCollection->addUrlRewrite($category->getId());
         $productCollection->joinField(
             'qty',
-            $indexerStockFrontendResource->getMainTable(),
+            'cataloginventory_stock_status',
             'qty',
             'product_id=entity_id',
             '{{table}}.stock_id=1',

@@ -195,7 +195,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
      */
     protected function validateForRefund(\Magento\Sales\Api\Data\CreditmemoInterface $creditmemo)
     {
-        if ($creditmemo->getId()) {
+        if ($creditmemo->getId() && $creditmemo->getState() != \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot register an existing credit memo.')
             );
@@ -221,7 +221,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     /**
      * @return \Magento\Sales\Model\Order\RefundAdapterInterface
      *
-     * @deprecated
+     * @deprecated 100.1.3
      */
     private function getRefundAdapter()
     {
@@ -235,7 +235,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     /**
      * @return \Magento\Framework\App\ResourceConnection|mixed
      *
-     * @deprecated
+     * @deprecated 100.1.3
      */
     private function getResource()
     {
@@ -249,7 +249,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     /**
      * @return \Magento\Sales\Api\OrderRepositoryInterface
      *
-     * @deprecated
+     * @deprecated 100.1.3
      */
     private function getOrderRepository()
     {
@@ -263,7 +263,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
     /**
      * @return \Magento\Sales\Api\InvoiceRepositoryInterface
      *
-     * @deprecated
+     * @deprecated 100.1.3
      */
     private function getInvoiceRepository()
     {

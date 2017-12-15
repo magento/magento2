@@ -8,7 +8,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 /**
  * Class ToOrderItemTest
  */
-class ToOrderItemTest extends \PHPUnit_Framework_TestCase
+class ToOrderItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\Quote\Item\ToOrderItem
@@ -47,49 +47,16 @@ class ToOrderItemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderItemFactoryMock = $this->getMock(
+        $this->orderItemFactoryMock = $this->createPartialMock(
             \Magento\Sales\Api\Data\OrderItemInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $this->objectCopyServiceMock = $this->getMock(
-            \Magento\Framework\DataObject\Copy::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->quoteItemMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->productMock = $this->getMock(
-            \Magento\Catalog\Model\Product::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->productTypeMock = $this->getMock(
-            \Magento\Catalog\Model\Product\Type\Simple::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderItemMock = $this->getMock(
-            \Magento\Sales\Model\Order\Item::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $dataObjectHelper = $this->getMock(\Magento\Framework\Api\DataObjectHelper::class, [], [], '', false);
+        $this->objectCopyServiceMock = $this->createMock(\Magento\Framework\DataObject\Copy::class);
+        $this->quoteItemMock = $this->createMock(\Magento\Quote\Model\Quote\Item::class);
+        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->productTypeMock = $this->createMock(\Magento\Catalog\Model\Product\Type\Simple::class);
+        $this->orderItemMock = $this->createMock(\Magento\Sales\Model\Order\Item::class);
+        $dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
 
         $this->converter = new \Magento\Quote\Model\Quote\Item\ToOrderItem(
             $this->orderItemFactoryMock,

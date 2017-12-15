@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Block\System\Config;
 
-class EditTest extends \PHPUnit_Framework_TestCase
+class EditTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Block\System\Config\Edit
@@ -39,23 +39,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_systemConfigMock = $this->getMock(
-            \Magento\Config\Model\Config\Structure::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->_systemConfigMock = $this->createMock(\Magento\Config\Model\Config\Structure::class);
 
-        $this->_requestMock = $this->getMock(
-            \Magento\Framework\App\RequestInterface::class,
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->_requestMock->expects(
             $this->any()
         )->method(
@@ -66,17 +52,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('test_section')
         );
 
-        $this->_layoutMock = $this->getMock(\Magento\Framework\View\Layout::class, [], [], '', false, false);
+        $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
 
-        $this->_urlModelMock = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false, false);
+        $this->_urlModelMock = $this->createMock(\Magento\Backend\Model\Url::class);
 
-        $this->_sectionMock = $this->getMock(
-            \Magento\Config\Model\Config\Structure\Element\Section::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->_sectionMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Section::class);
         $this->_systemConfigMock->expects(
             $this->any()
         )->method(

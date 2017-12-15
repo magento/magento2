@@ -15,7 +15,7 @@ use Magento\Framework\ObjectManager\TestAsset\DependsOnInterface;
 use Magento\Framework\ObjectManager\TestAsset\HasOptionalParameters;
 use Magento\Framework\ObjectManager\TestAsset\TestAssetInterface;
 
-abstract class AbstractFactoryRuntimeDefinitionsTestCases extends \PHPUnit_Framework_TestCase
+abstract class AbstractFactoryRuntimeDefinitionsTestCases extends \PHPUnit\Framework\TestCase
 {
     const ALIAS_OVERRIDDEN_STRING = 'overridden';
     const ALIAS_OVERRIDDEN_INT = 99;

@@ -25,11 +25,7 @@ class Stat
     const EMALLOC_START = 'emalloc_start';
     /**#@-*/
 
-    /**
-     * Array of timers statistics data
-     *
-     * @var array
-     */
+    /**#@-*/
     protected $_timers = [];
 
     /**

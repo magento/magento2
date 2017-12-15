@@ -34,10 +34,12 @@ class Config
     const KEY_PARAMETERS = 'parameters';
     /*#@-*/
 
-    /** @var ModelConfig */
+    /*#@-*/
     protected $_config;
 
-    /** @var \Magento\Framework\Controller\Router\Route\Factory */
+    /**
+     * @var \Magento\Framework\Controller\Router\Route\Factory
+     */
     protected $_routeFactory;
 
     /**

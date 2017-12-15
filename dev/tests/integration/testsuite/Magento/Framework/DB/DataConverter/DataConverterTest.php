@@ -15,7 +15,7 @@ use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Query\BatchIterator;
 use Magento\Framework\ObjectManagerInterface;
 
-class DataConverterTest extends \PHPUnit_Framework_TestCase
+class DataConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var InQueryModifier|\PHPUnit_Framework_MockObject_MockObject

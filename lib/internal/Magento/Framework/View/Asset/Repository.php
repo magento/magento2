@@ -36,7 +36,7 @@ class Repository
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated
+     * @deprecated 100.1.1
      */
     private $themeList;
 

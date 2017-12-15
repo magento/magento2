@@ -10,7 +10,7 @@ use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\ScopeInterface;
 
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject

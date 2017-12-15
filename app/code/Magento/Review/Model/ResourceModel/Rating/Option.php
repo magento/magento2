@@ -9,6 +9,7 @@ namespace Magento\Review\Model\ResourceModel\Rating;
  * Rating option resource model
  *
  * @api
+ * @since 100.0.2
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -153,7 +154,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
             $connection->commit();
         } catch (\Exception $e) {
-            $connection->rollback();
+            $connection->rollBack();
             throw new \Exception($e->getMessage());
         }
         return $this;

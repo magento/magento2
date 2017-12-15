@@ -12,6 +12,7 @@ use Magento\Security\Model\ConfigInterface;
  * Factory class for @see \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection
  *
  * @api
+ * @since 100.1.0
  */
 class CollectionFactory
 {
@@ -19,6 +20,7 @@ class CollectionFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @since 100.1.0
      */
     protected $objectManager = null;
 
@@ -26,11 +28,13 @@ class CollectionFactory
      * Instance name to create
      *
      * @var string
+     * @since 100.1.0
      */
     protected $instanceName = null;
 
     /**
      * @var ConfigInterface
+     * @since 100.1.0
      */
     protected $securityConfig;
 
@@ -58,6 +62,7 @@ class CollectionFactory
      * @param string $accountReference
      * @param string $longIp
      * @return Collection
+     * @since 100.1.0
      */
     public function create(
         $securityEventType = null,

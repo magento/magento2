@@ -9,17 +9,17 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
+use Magento\Sales\Model\Order\InvoiceFactory;
 
 /**
  * Order creditmemo model
  *
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Creditmemo getResource()
  * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
  * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
  * @method string getCustomerNote()
@@ -28,6 +28,7 @@ use Magento\Sales\Model\EntityInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInterface
 {
@@ -41,7 +42,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
 
     const REPORT_DATE_TYPE_REFUND_CREATED = 'refund_created';
 
-    /*
+    /**
      * Identifier for order history item
      *
      * @var string
@@ -116,6 +117,11 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     protected $priceCurrency;
 
     /**
+     * @var InvoiceFactory
+     */
+    private $invoiceFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -131,6 +137,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param InvoiceFactory $invoiceFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -148,7 +155,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        InvoiceFactory $invoiceFactory = null
     ) {
         $this->_creditmemoConfig = $creditmemoConfig;
         $this->_orderFactory = $orderFactory;
@@ -158,6 +166,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         $this->_commentFactory = $commentFactory;
         $this->_commentCollectionFactory = $commentCollectionFactory;
         $this->priceCurrency = $priceCurrency;
+        $this->invoiceFactory = $invoiceFactory ?: ObjectManager::getInstance()->get(InvoiceFactory::class);
         parent::__construct(
             $context,
             $registry,
@@ -380,6 +389,9 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function getInvoice()
     {
+        if (!$this->getData('invoice') instanceof \Magento\Sales\Api\Data\InvoiceInterface && $this->getInvoiceId()) {
+            $this->setInvoice($this->invoiceFactory->create()->load($this->getInvoiceId()));
+        }
         return $this->getData('invoice');
     }
 
@@ -439,14 +451,14 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public static function getStates()
     {
-        if (is_null(self::$_states)) {
-            self::$_states = [
+        if (is_null(static::$_states)) {
+            static::$_states = [
                 self::STATE_OPEN => __('Pending'),
                 self::STATE_REFUNDED => __('Refunded'),
                 self::STATE_CANCELED => __('Canceled'),
             ];
         }
-        return self::$_states;
+        return static::$_states;
     }
 
     /**
@@ -461,11 +473,11 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
             $stateId = $this->getState();
         }
 
-        if (is_null(self::$_states)) {
-            self::getStates();
+        if (is_null(static::$_states)) {
+            static::getStates();
         }
-        if (isset(self::$_states[$stateId])) {
-            return self::$_states[$stateId];
+        if (isset(static::$_states[$stateId])) {
+            return static::$_states[$stateId];
         }
         return __('Unknown State');
     }
@@ -1525,6 +1537,5 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
-
     //@codeCoverageIgnoreEnd
 }

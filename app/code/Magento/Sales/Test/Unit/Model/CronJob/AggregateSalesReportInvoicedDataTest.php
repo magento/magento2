@@ -10,7 +10,7 @@ use \Magento\Sales\Model\CronJob\AggregateSalesReportInvoicedData;
 /**
  * Tests Magento\Sales\Model\CronJob\AggregateSalesReportInvoicedDataTest
  */
-class AggregateSalesReportInvoicedDataTest extends \PHPUnit_Framework_TestCase
+class AggregateSalesReportInvoicedDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject

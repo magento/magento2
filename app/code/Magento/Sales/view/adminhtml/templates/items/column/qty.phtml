@@ -10,35 +10,35 @@
 <?php if ($_item = $block->getItem()): ?>
 <table class="qty-table">
     <tr>
-        <th><?php /* @escapeNotVerified */ echo __('Ordered') ?></th>
-        <td><?php /* @escapeNotVerified */ echo $_item->getQtyOrdered()*1 ?></td>
+        <th><?= /* @escapeNotVerified */ __('Ordered') ?></th>
+        <td><?= /* @escapeNotVerified */ $_item->getQtyOrdered()*1 ?></td>
     </tr>
 
     <?php if ((float) $_item->getQtyInvoiced()): ?>
         <tr>
-            <th><?php /* @escapeNotVerified */ echo __('Invoiced') ?></th>
-            <td><?php /* @escapeNotVerified */ echo $_item->getQtyInvoiced()*1 ?></td>
+            <th><?= /* @escapeNotVerified */ __('Invoiced') ?></th>
+            <td><?= /* @escapeNotVerified */ $_item->getQtyInvoiced()*1 ?></td>
         </tr>
     <?php endif; ?>
 
     <?php if ((float) $_item->getQtyShipped()): ?>
         <tr>
-            <th><?php /* @escapeNotVerified */ echo __('Shipped') ?></th>
-            <td><?php /* @escapeNotVerified */ echo $_item->getQtyShipped()*1 ?></td>
+            <th><?= /* @escapeNotVerified */ __('Shipped') ?></th>
+            <td><?= /* @escapeNotVerified */ $_item->getQtyShipped()*1 ?></td>
         </tr>
     <?php endif; ?>
 
     <?php if ((float) $_item->getQtyRefunded()): ?>
         <tr>
-            <th><?php /* @escapeNotVerified */ echo __('Refunded') ?></th>
-            <td><?php /* @escapeNotVerified */ echo $_item->getQtyRefunded()*1 ?></td>
+            <th><?= /* @escapeNotVerified */ __('Refunded') ?></th>
+            <td><?= /* @escapeNotVerified */ $_item->getQtyRefunded()*1 ?></td>
         </tr>
     <?php endif; ?>
 
     <?php if ((float) $_item->getQtyCanceled()): ?>
         <tr>
-            <th><?php /* @escapeNotVerified */ echo __('Canceled') ?></th>
-            <td><?php /* @escapeNotVerified */ echo $_item->getQtyCanceled()*1 ?></td>
+            <th><?= /* @escapeNotVerified */ __('Canceled') ?></th>
+            <td><?= /* @escapeNotVerified */ $_item->getQtyCanceled()*1 ?></td>
         </tr>
     <?php endif; ?>
 

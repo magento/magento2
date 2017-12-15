@@ -8,6 +8,7 @@ namespace Magento\Quote\Api\Data;
 /**
  * Interface AddressInterface
  * @api
+ * @since 100.0.2
  */
 interface AddressInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {

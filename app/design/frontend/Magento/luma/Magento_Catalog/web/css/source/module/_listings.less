@@ -71,6 +71,10 @@
                 display: none;
 
                 .actions-secondary {
+                    > button.action {
+                        .lib-button-reset();
+                    }
+
                     > .action {
                         &:extend(.abs-actions-addto all);
                         &:before {
@@ -119,6 +123,12 @@
 
                 .price {
                     font-weight: normal;
+                }
+            }
+
+            .regular-price {
+                .price-label {
+                    display: none;
                 }
             }
 
@@ -265,6 +275,12 @@
                 .product-item-inner {
                     display: block;
                 }
+                .sidebar & {
+                    .product-item-photo {
+                        top: 9px;
+                        left: 9px;
+                    }
+                }
             }
         }
     }
@@ -295,6 +311,7 @@
             display: table-cell;
             padding-left: 10px;
             width: 50%;
+            vertical-align: middle;
 
             > .action {
                 margin-right: 10px;

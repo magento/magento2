@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
 
-class InvoiceSenderTest extends \PHPUnit_Framework_TestCase
+class InvoiceSenderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Sales/_files/order.php

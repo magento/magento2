@@ -5,8 +5,8 @@
  */
 namespace Magento\Sniffs\Less;
 
-use PHP_CodeSniffer_File;
-use PHP_CodeSniffer_Sniff;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
 
 /**
  * Class ImportantPropertySniff
@@ -16,7 +16,7 @@ use PHP_CodeSniffer_Sniff;
  * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#important-property
  *
  */
-class ImportantPropertySniff implements PHP_CodeSniffer_Sniff
+class ImportantPropertySniff implements Sniff
 {
     /**
      * A list of tokenizers this sniff supports.
@@ -36,7 +36,7 @@ class ImportantPropertySniff implements PHP_CodeSniffer_Sniff
     /**
      * {@inheritdoc}
      */
-    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 

@@ -11,7 +11,7 @@ use Magento\Framework\Pricing\PriceInfoInterface;
 /**
  * Class MsrpPriceTest
  */
-class MsrpPriceTest extends \PHPUnit_Framework_TestCase
+class MsrpPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Msrp\Pricing\Price\MsrpPrice
@@ -55,16 +55,13 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->saleableItem = $this->getMock(
+        $this->saleableItem = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
-            ['getPriceInfo', '__wakeup'],
-            [],
-            '',
-            false
+            ['getPriceInfo', '__wakeup']
         );
 
-        $this->priceInfo = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
-        $this->price = $this->getMock(\Magento\Catalog\Pricing\Price\BasePrice::class, [], [], '', false);
+        $this->priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
+        $this->price = $this->createMock(\Magento\Catalog\Pricing\Price\BasePrice::class);
 
         $this->priceInfo->expects($this->any())
             ->method('getAdjustments')
@@ -83,16 +80,13 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->helper = $this->getMock(
+        $this->helper = $this->createPartialMock(
             \Magento\Msrp\Helper\Data::class,
-            ['isShowPriceOnGesture', 'getMsrpPriceMessage', 'canApplyMsrp'],
-            [],
-            '',
-            false
+            ['isShowPriceOnGesture', 'getMsrpPriceMessage', 'canApplyMsrp']
         );
-        $this->config = $this->getMock(\Magento\Msrp\Model\Config::class, ['isEnabled'], [], '', false);
+        $this->config = $this->createPartialMock(\Magento\Msrp\Model\Config::class, ['isEnabled']);
 
-        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $this->object = new \Magento\Msrp\Pricing\Price\MsrpPrice(
             $this->saleableItem,

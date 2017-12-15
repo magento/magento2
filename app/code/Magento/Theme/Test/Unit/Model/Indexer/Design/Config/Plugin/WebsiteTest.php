@@ -10,7 +10,7 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Theme\Model\Data\Design\Config;
 use Magento\Theme\Model\Indexer\Design\Config\Plugin\Website;
 
-class WebsiteTest extends \PHPUnit_Framework_TestCase
+class WebsiteTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Website */
     protected $model;

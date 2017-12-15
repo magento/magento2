@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Config;
 
-class InitialTest extends \PHPUnit_Framework_TestCase
+class InitialTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -37,18 +37,12 @@ class InitialTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->cacheMock = $this->getMock(
-            \Magento\Framework\App\Cache\Type\Config::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->cacheMock = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
         $this->cacheMock->expects($this->any())
             ->method('load')
             ->with('initial_config')
             ->willReturn(json_encode($this->data));
-        $serializerMock = $this->getMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
         $serializerMock->method('unserialize')
             ->willReturn($this->data);
 

@@ -6,7 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Stock;
 
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDbIsolation disabled
@@ -32,16 +32,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class
         );
 
-        /** @var \Magento\Indexer\Model\ResourceModel\FrontendResource $indexerStockFrontendResource */
-        $indexerStockFrontendResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\FrontendResource::class
-        );
-
         $productCollection->addUrlRewrite($category->getId());
         $productCollection->addAttributeToSelect('name');
         $productCollection->joinField(
             'qty',
-            $indexerStockFrontendResource->getMainTable(),
+            'cataloginventory_stock_status',
             'qty',
             'product_id=entity_id',
             '{{table}}.stock_id=1',

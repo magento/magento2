@@ -7,7 +7,7 @@ namespace Magento\Backend\Test\Unit\Model\Locale;
 
 use Magento\Framework\Locale\Resolver;
 
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Model\Locale\Manager
@@ -36,15 +36,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_session = $this->getMock(\Magento\Backend\Model\Session::class, [], [], '', false);
+        $this->_session = $this->createMock(\Magento\Backend\Model\Session::class);
 
-        $this->_authSession = $this->getMock(
-            \Magento\Backend\Model\Auth\Session::class,
-            ['getUser'],
-            [],
-            '',
-            false
-        );
+        $this->_authSession = $this->createPartialMock(\Magento\Backend\Model\Auth\Session::class, ['getUser']);
         
         $this->_backendConfig = $this->getMockForAbstractClass(
             \Magento\Backend\App\ConfigInterface::class,
@@ -57,7 +51,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->_authSession->expects($this->any())->method('getUser')->will($this->returnValue($userMock));
 
-        $this->_translator = $this->getMock(\Magento\Framework\TranslateInterface::class, [], [], '', false);
+        $this->_translator = $this->getMockBuilder(\Magento\Framework\TranslateInterface::class)
+            ->setMethods(['init', 'setLocale'])
+            ->getMockForAbstractClass();
 
         $this->_translator->expects($this->any())->method('setLocale')->will($this->returnValue($this->_translator));
 

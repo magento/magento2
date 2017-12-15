@@ -13,6 +13,7 @@ use Magento\Integration\Model\Integration as IntegrationModel;
  * Class for handling API section within integration.
  *
  * @api
+ * @since 100.0.2
  */
 class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
@@ -31,10 +32,14 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected $aclResourceProvider;
 
-    /** @var \Magento\Integration\Helper\Data */
+    /**
+     * @var \Magento\Integration\Helper\Data
+     */
     protected $integrationData;
 
-    /** @var \Magento\Integration\Api\IntegrationServiceInterface */
+    /**
+     * @var \Magento\Integration\Api\IntegrationServiceInterface
+     */
     protected $integrationService;
 
     /**
@@ -144,6 +149,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Retrieve saved resource
      *
      * @return array|bool
+     * @since 100.1.0
      */
     protected function retrieveFormResources()
     {

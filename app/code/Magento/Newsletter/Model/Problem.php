@@ -8,8 +8,6 @@ namespace Magento\Newsletter\Model;
 /**
  * Newsletter problem model
  *
- * @method \Magento\Newsletter\Model\ResourceModel\Problem _getResource()
- * @method \Magento\Newsletter\Model\ResourceModel\Problem getResource()
  * @method int getSubscriberId()
  * @method \Magento\Newsletter\Model\Problem setSubscriberId(int $value)
  * @method int getQueueId()
@@ -22,6 +20,7 @@ namespace Magento\Newsletter\Model;
  * @author     Magento Core Team <core@magentocommerce.com>
  *
  * @api
+ * @since 100.0.2
  */
 class Problem extends \Magento\Framework\Model\AbstractModel
 {

@@ -15,7 +15,7 @@ use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 /**
  * Class ProductDataProviderTest
  */
-class ProductDataProviderTest extends \PHPUnit_Framework_TestCase
+class ProductDataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

@@ -9,7 +9,7 @@ namespace Magento\Customer\Test\Unit\Model\Address;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractAddressTest extends \PHPUnit_Framework_TestCase
+class AbstractAddressTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject  */
     protected $contextMock;
@@ -43,36 +43,21 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMock(\Magento\Framework\Model\Context::class, [], [], '', false);
-        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
-        $this->directoryDataMock = $this->getMock(\Magento\Directory\Helper\Data::class, [], [], '', false);
-        $this->eavConfigMock = $this->getMock(\Magento\Eav\Model\Config::class, [], [], '', false);
-        $this->addressConfigMock = $this->getMock(\Magento\Customer\Model\Address\Config::class, [], [], '', false);
-        $this->regionFactoryMock = $this->getMock(
-            \Magento\Directory\Model\RegionFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->countryFactoryMock = $this->getMock(
+        $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->directoryDataMock = $this->createMock(\Magento\Directory\Helper\Data::class);
+        $this->eavConfigMock = $this->createMock(\Magento\Eav\Model\Config::class);
+        $this->addressConfigMock = $this->createMock(\Magento\Customer\Model\Address\Config::class);
+        $this->regionFactoryMock = $this->createPartialMock(\Magento\Directory\Model\RegionFactory::class, ['create']);
+        $this->countryFactoryMock = $this->createPartialMock(
             \Magento\Directory\Model\CountryFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+            ['create']
         );
-        $regionCollectionMock = $this->getMock(
-            \Magento\Directory\Model\ResourceModel\Region\Collection::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $regionCollectionMock = $this->createMock(\Magento\Directory\Model\ResourceModel\Region\Collection::class);
         $regionCollectionMock->expects($this->any())
             ->method('getSize')
             ->will($this->returnValue(0));
-        $countryMock = $this->getMock(\Magento\Directory\Model\Country::class, [], [], '', false);
+        $countryMock = $this->createMock(\Magento\Directory\Model\Country::class);
         $countryMock->expects($this->any())
             ->method('getRegionCollection')
             ->will($this->returnValue($regionCollectionMock));
@@ -80,7 +65,7 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($countryMock));
 
-        $this->resourceMock = $this->getMock(\Magento\Customer\Model\ResourceModel\Customer::class, [], [], '', false);
+        $this->resourceMock = $this->createMock(\Magento\Customer\Model\ResourceModel\Customer::class);
         $this->resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -182,12 +167,9 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function prepareGetRegion($countryId, $regionName = 'RegionName')
     {
-        $region = $this->getMock(
+        $region = $this->createPartialMock(
             \Magento\Directory\Model\Region::class,
-            ['getCountryId', 'getName', '__wakeup', 'load'],
-            [],
-            '',
-            false
+            ['getCountryId', 'getName', '__wakeup', 'load']
         );
         $region->expects($this->once())
             ->method('getName')
@@ -205,12 +187,9 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function prepareGetRegionCode($countryId, $regionCode = 'UK')
     {
-        $region = $this->getMock(
+        $region = $this->createPartialMock(
             \Magento\Directory\Model\Region::class,
-            ['getCountryId', 'getCode', '__wakeup', 'load'],
-            [],
-            '',
-            false
+            ['getCountryId', 'getCode', '__wakeup', 'load']
         );
         $region->expects($this->once())
             ->method('getCode')
@@ -303,7 +282,7 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate($data, $expected)
     {
-        $attributeMock = $this->getMock(\Magento\Eav\Model\Entity\Attribute::class, [], [], '', false);
+        $attributeMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute::class);
         $attributeMock->expects($this->any())
             ->method('getIsRequired')
             ->willReturn(true);
@@ -375,6 +354,38 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
                 ['countryId is a required field.'],
             ],
             'validated' => [array_merge($data, ['country_id' => $countryId++]), true],
+        ];
+    }
+
+    /**
+     * @dataProvider getStreetFullDataProvider
+     */
+    public function testGetStreetFullAlwaysReturnsString($expectedResult, $street)
+    {
+        $this->model->setData('street', $street);
+        $this->assertEquals($expectedResult, $this->model->getStreetFull());
+    }
+
+    /**
+     * @dataProvider getStreetFullDataProvider
+     */
+    public function testSetDataStreetAlwaysConvertedToString($expectedResult, $street)
+    {
+        $this->model->setData('street', $street);
+        $this->assertEquals($expectedResult, $this->model->getData('street'));
+    }
+
+    /**
+     * @return array
+     */
+    public function getStreetFullDataProvider()
+    {
+        return [
+            [null, null],
+            ['', []],
+            ["first line\nsecond line", ['first line', 'second line']],
+            ['single line', ['single line']],
+            ['single line', 'single line'],
         ];
     }
 }

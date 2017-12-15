@@ -12,7 +12,7 @@ use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
 use Magento\Catalog\Model\Category;
 
-class MoveTest extends \PHPUnit_Framework_TestCase
+class MoveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManager

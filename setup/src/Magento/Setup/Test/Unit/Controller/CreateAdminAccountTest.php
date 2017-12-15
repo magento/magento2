@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\CreateAdminAccount;
 
-class CreateAdminAccountTest extends \PHPUnit_Framework_TestCase
+class CreateAdminAccountTest extends \PHPUnit\Framework\TestCase
 {
     public function testIndexAction()
     {

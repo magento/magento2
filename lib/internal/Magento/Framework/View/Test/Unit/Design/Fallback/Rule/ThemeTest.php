@@ -12,7 +12,7 @@ use Magento\Framework\View\Design\Fallback\Rule\Theme;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ThemeTest extends \PHPUnit_Framework_TestCase
+class ThemeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RuleInterface|\PHPUnit_Framework_MockObject_MockObject

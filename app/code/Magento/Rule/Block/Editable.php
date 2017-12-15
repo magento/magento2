@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Editable extends AbstractBlock implements RendererInterface
 {

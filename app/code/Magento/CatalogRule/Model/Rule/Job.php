@@ -26,6 +26,7 @@ use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Job extends \Magento\Framework\DataObject
 {

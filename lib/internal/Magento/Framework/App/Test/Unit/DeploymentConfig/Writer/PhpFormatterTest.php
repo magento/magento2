@@ -5,14 +5,14 @@
  */
 namespace Magento\Framework\App\Test\Unit\DeploymentConfig\Writer;
 
-use \Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
+use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 
-class PhpFormatterTest extends \PHPUnit_Framework_TestCase
+class PhpFormatterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider formatWithCommentDataProvider
-     * @param string|array $data
-     * @param array $comments
+     * @param string[] $data
+     * @param string[] $comments
      * @param string $expectedResult
      */
     public function testFormat($data, $comments, $expectedResult)
@@ -55,68 +55,68 @@ class PhpFormatterTest extends \PHPUnit_Framework_TestCase
         ];
         $expectedResult1 = <<<TEXT
 <?php
-return array (
+return [
   'ns1' => 
-  array (
+  [
     's1' => 
-    array (
+    [
       0 => 's11',
       1 => 's12',
-    ),
+    ],
     's2' => 
-    array (
+    [
       0 => 's21',
       1 => 's22',
-    ),
-  ),
+    ],
+  ],
   /**
    * For the section: ns2
    * comment for namespace 2
    */
   'ns2' => 
-  array (
+  [
     's1' => 
-    array (
+    [
       0 => 's11',
-    ),
-  ),
+    ],
+  ],
   'ns3' => 'just text',
-  'ns4' => 'just text'
-);
+  'ns4' => 'just text',
+];
 
 TEXT;
         $expectedResult2 = <<<TEXT
 <?php
-return array (
+return [
   /**
    * For the section: ns1
    * comment for' namespace 1
    */
   'ns1' => 
-  array (
+  [
     's1' => 
-    array (
+    [
       0 => 's11',
       1 => 's12',
-    ),
+    ],
     's2' => 
-    array (
+    [
       0 => 's21',
       1 => 's22',
-    ),
-  ),
+    ],
+  ],
   /**
    * For the section: ns2
    * comment for namespace 2.
    * Next comment for' namespace 2
    */
   'ns2' => 
-  array (
+  [
     's1' => 
-    array (
+    [
       0 => 's11',
-    ),
-  ),
+    ],
+  ],
   /**
    * For the section: ns3
    * comment for" namespace 3
@@ -126,16 +126,40 @@ return array (
    * For the section: ns4
    * comment for namespace 4
    */
+  'ns4' => 'just text',
+];
+
+TEXT;
+
+        $expectedResult3 = <<<TEXT
+<?php
+return [
+  'ns1' => [
+    's1' => [
+      's11',
+      's12'
+    ],
+    's2' => [
+      's21',
+      's22'
+    ]
+  ],
+  'ns2' => [
+    's1' => [
+      's11'
+    ]
+  ],
+  'ns3' => 'just text',
   'ns4' => 'just text'
-);
+];
 
 TEXT;
         return [
             ['string', [], "<?php\nreturn 'string';\n"],
             ['string', ['comment'], "<?php\nreturn 'string';\n"],
-            [$array, [], "<?php\nreturn " . var_export($array, true) . ";\n"],
             [$array, $comments1, $expectedResult1],
             [$array, $comments2, $expectedResult2],
+            [$array, [], $expectedResult3],
         ];
     }
 }

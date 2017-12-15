@@ -12,7 +12,7 @@ use Magento\TestFramework\Utility\FunctionDetector;
 /**
  * Tests to detect unsecure functions usage
  */
-class UnsecureFunctionsUsageTest extends \PHPUnit_Framework_TestCase
+class UnsecureFunctionsUsageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Php unsecure functions

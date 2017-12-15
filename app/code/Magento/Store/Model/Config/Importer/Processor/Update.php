@@ -92,6 +92,10 @@ class Update implements ProcessorInterface
             ];
 
             foreach ($entities as $scope) {
+                if (!isset($data[$scope])) {
+                    continue;
+                }
+
                 $items = $this->dataDifferenceCalculator->getItemsToUpdate($scope, $data[$scope]);
 
                 if (!$items) {

@@ -10,6 +10,7 @@ use Magento\Framework\Search\Request\FilterInterface;
 /**
  * Range Filter
  * @SuppressWarnings(PHPMD.ShortVariable)
+ * @api
  */
 class Range implements FilterInterface
 {

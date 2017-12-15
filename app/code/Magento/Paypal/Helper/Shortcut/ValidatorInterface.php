@@ -6,6 +6,10 @@
 
 namespace Magento\Paypal\Helper\Shortcut;
 
+/**
+ * Interface \Magento\Paypal\Helper\Shortcut\ValidatorInterface
+ *
+ */
 interface ValidatorInterface
 {
     /**

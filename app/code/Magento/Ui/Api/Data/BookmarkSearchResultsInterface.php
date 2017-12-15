@@ -10,6 +10,7 @@ namespace Magento\Ui\Api\Data;
  * Interface for bookmark search results
  *
  * @api
+ * @since 100.0.2
  */
 interface BookmarkSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {

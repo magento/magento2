@@ -7,7 +7,7 @@ namespace Magento\Framework\App\Test\Unit\ObjectManager;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
-class ConfigCacheTest extends \PHPUnit_Framework_TestCase
+class ConfigCacheTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\ObjectManager\ConfigCache
@@ -27,13 +27,13 @@ class ConfigCacheTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->cacheFrontendMock = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $this->cacheFrontendMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
         $this->configCache = $objectManagerHelper->getObject(
             \Magento\Framework\App\ObjectManager\ConfigCache::class,
             ['cacheFrontend' => $this->cacheFrontendMock]
         );
 
-        $this->serializerMock = $this->getMock(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->configCache,
             'serializer',

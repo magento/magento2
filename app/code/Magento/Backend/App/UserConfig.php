@@ -12,6 +12,10 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Console\Response;
 use Magento\Framework\AppInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class UserConfig implements AppInterface
 {
     /**

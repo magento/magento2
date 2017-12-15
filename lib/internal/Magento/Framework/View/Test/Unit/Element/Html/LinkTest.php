@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
-class LinkTest extends \PHPUnit_Framework_TestCase
+class LinkTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array

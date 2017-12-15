@@ -10,13 +10,13 @@ use Magento\Braintree\Gateway\Response\ThreeDSecureDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class ThreeDSecureDetailsHandlerTest
  */
-class ThreeDSecureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
+class ThreeDSecureDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 {
 
     const TRANSACTION_ID = '432er5ww3e';

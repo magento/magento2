@@ -7,7 +7,7 @@ namespace Magento\Braintree\Test\Unit\Gateway\Response\PayPal;
 
 use Braintree\Transaction;
 use Braintree\Transaction\PayPalDetails;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Response\PayPal\VaultDetailsHandler;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -25,7 +25,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * Class VaultDetailsHandlerTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
+class VaultDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 {
     private static $transactionId = '1n2suy';
 

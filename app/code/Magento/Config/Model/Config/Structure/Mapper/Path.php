@@ -9,6 +9,10 @@
  */
 namespace Magento\Config\Model\Config\Structure\Mapper;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Path extends \Magento\Config\Model\Config\Structure\AbstractMapper
 {
     /**

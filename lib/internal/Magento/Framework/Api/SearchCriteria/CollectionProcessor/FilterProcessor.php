@@ -75,7 +75,7 @@ class FilterProcessor implements CollectionProcessorInterface
                 $conditions[] = [$condition => $filter->getValue()];
             }
         }
-        
+
         if ($fields) {
             $collection->addFieldToFilter($fields, $conditions);
         }

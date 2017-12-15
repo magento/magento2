@@ -886,6 +886,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
     /**
      * @inheritdoc
+     * @since 100.0.11
      */
     public function __sleep()
     {
@@ -897,6 +898,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
     /**
      * @inheritdoc
+     * @since 100.0.11
      */
     public function __wakeup()
     {

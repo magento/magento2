@@ -8,7 +8,7 @@ namespace Magento\Reports\Test\Unit\Observer;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomerLoginObserverTest extends \PHPUnit_Framework_TestCase
+class CustomerLoginObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Reports\Observer\CustomerLoginObserver

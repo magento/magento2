@@ -10,7 +10,9 @@ use Magento\Framework\HTTP\Header;
 
 class XssProtection extends AbstractHeaderProvider
 {
-    /** Header name */
+    /**
+     * @var string
+     */
     protected $headerName = 'X-XSS-Protection';
 
     /** Matches IE 8 browsers */
@@ -22,7 +24,9 @@ class XssProtection extends AbstractHeaderProvider
     /** Value for IE 8 */
     const HEADER_DISABLED = '0';
 
-    /** @var Header */
+    /**
+     * @var \Magento\Framework\HTTP\Header
+     */
     private $headerService;
 
     /**

@@ -11,7 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\DB\FieldDataConverter;
 use Magento\Framework\DB\DataConverter\DataConverterInterface;
 
-class FieldDataConverterFactoryTest extends \PHPUnit_Framework_TestCase
+class FieldDataConverterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -31,8 +31,8 @@ class FieldDataConverterFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMock(ObjectManagerInterface::class);
-        $this->dataConverterMock = $this->getMock(DataConverterInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->dataConverterMock = $this->createMock(DataConverterInterface::class);
         $this->fieldDataConverterFactory = $objectManager->getObject(
             FieldDataConverterFactory::class,
             [

@@ -13,7 +13,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class SpecialPriceIndexerTest extends \PHPUnit_Framework_TestCase
+class SpecialPriceIndexerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ProductRepositoryInterface

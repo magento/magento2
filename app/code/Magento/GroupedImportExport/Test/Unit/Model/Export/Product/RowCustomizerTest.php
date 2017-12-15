@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * Class RowCustomizerTest
  */
-class RowCustomizerTest extends \PHPUnit_Framework_TestCase
+class RowCustomizerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerHelper

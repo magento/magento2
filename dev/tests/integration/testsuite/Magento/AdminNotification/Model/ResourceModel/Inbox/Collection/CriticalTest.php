@@ -5,7 +5,7 @@
  */
 namespace Magento\AdminNotification\Model\ResourceModel\Inbox\Collection;
 
-class CriticalTest extends \PHPUnit_Framework_TestCase
+class CriticalTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection\Critical

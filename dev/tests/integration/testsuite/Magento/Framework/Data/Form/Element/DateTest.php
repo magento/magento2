@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
-class DateTest extends \PHPUnit_Framework_TestCase
+class DateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Data\Form\ElementFactory

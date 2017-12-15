@@ -12,30 +12,44 @@ use Magento\Framework\Exception\LocalizedException;
  * Variation Handler
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class VariationHandler
 {
-    /** @var \Magento\Catalog\Model\Product\Gallery\Processor */
+    /**
+     * @var \Magento\Catalog\Model\Product\Gallery\Processor
+     * @since 100.1.0
+     */
     protected $mediaGalleryProcessor;
 
-    /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable */
+    /**
+     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     */
     protected $configurableProduct;
 
-    /** @var \Magento\Eav\Model\Entity\Attribute\SetFactory */
+    /**
+     * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
+     */
     protected $attributeSetFactory;
 
-    /** @var \Magento\Eav\Model\EntityFactory */
+    /**
+     * @var \Magento\Eav\Model\EntityFactory
+     */
     protected $entityFactory;
 
-    /** @var \Magento\Catalog\Model\ProductFactory */
+    /**
+     * @var \Magento\Catalog\Model\ProductFactory
+     */
     protected $productFactory;
 
-    /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[] */
+    /**
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
+     */
     private $attributes;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
-     * @deprecated
+     * @deprecated 100.1.0
      */
     protected $stockConfiguration;
 
@@ -100,7 +114,7 @@ class VariationHandler
     /**
      * Prepare attribute set comprising all selected configurable attributes
      *
-     * @deprecated since 2.1.0
+     * @deprecated 100.1.0
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      */
@@ -114,6 +128,7 @@ class VariationHandler
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
+     * @since 100.1.0
      */
     public function prepareAttributeSet(\Magento\Catalog\Model\Product $product)
     {

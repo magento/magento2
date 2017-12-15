@@ -12,7 +12,7 @@ use Magento\Security\Model\ConfigInterface;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory;
 use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection;
 
-class CollectionFactoryTest extends \PHPUnit_Framework_TestCase
+class CollectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
     protected $objectManagerMock;

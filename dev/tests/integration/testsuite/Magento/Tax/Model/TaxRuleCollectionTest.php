@@ -8,7 +8,7 @@ namespace Magento\Tax\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
-class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
+class TaxRuleCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoAppIsolation enabled
@@ -45,6 +45,7 @@ class TaxRuleCollectionTest extends \PHPUnit_Framework_TestCase
             'customer_tax_classes' => $firstTaxRuleFixture->getCustomerTaxClassIds(),
             'product_tax_classes' => $firstTaxRuleFixture->getProductTaxClassIds(),
             'tax_rates' => $firstTaxRuleFixture->getTaxRateIds(),
+            'tax_rates_codes' => $firstTaxRuleFixture->getTaxRatesCodes()
         ];
 
         $this->assertEquals($expectedTaxRuleData, $taxRule, 'Tax rule data is invalid.');

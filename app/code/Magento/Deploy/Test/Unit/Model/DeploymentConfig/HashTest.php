@@ -13,7 +13,7 @@ use Magento\Framework\Flag;
 use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\FlagFactory;
 
-class HashTest extends \PHPUnit_Framework_TestCase
+class HashTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Generator|\PHPUnit_Framework_MockObject_MockObject

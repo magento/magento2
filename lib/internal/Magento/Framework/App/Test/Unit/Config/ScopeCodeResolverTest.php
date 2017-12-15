@@ -10,7 +10,7 @@ use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ScopeResolverPool;
 
-class ScopeCodeResolverTest extends \PHPUnit_Framework_TestCase
+class ScopeCodeResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ScopeResolverPool|\PHPUnit_Framework_MockObject_MockObject

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Authorization\Model\ResourceModel;
 
 use Magento\Framework\App\ObjectManager;
@@ -101,7 +99,10 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
                 // If all was selected save it only and nothing else.
                 if ($postedResources === [$this->_rootResource->getId()]) {
-                    $insertData = $this->_prepareDataForTable(new \Magento\Framework\DataObject($row), $this->getMainTable());
+                    $insertData = $this->_prepareDataForTable(
+                        new \Magento\Framework\DataObject($row),
+                        $this->getMainTable()
+                    );
 
                     $connection->insert($this->getMainTable(), $insertData);
                 } else {
@@ -113,7 +114,10 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                         $row['permission'] = in_array($resourceId, $postedResources) ? 'allow' : 'deny';
                         $row['resource_id'] = $resourceId;
 
-                        $insertData = $this->_prepareDataForTable(new \Magento\Framework\DataObject($row), $this->getMainTable());
+                        $insertData = $this->_prepareDataForTable(
+                            new \Magento\Framework\DataObject($row),
+                            $this->getMainTable()
+                        );
                         $connection->insert($this->getMainTable(), $insertData);
                     }
                 }

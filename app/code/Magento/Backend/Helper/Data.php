@@ -8,7 +8,10 @@ namespace Magento\Backend\Helper;
 use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
+ * @api
+ * @deprecated 100.2.0
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
 class Data extends AbstractHelper
 {

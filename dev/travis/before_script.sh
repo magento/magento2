@@ -71,26 +71,30 @@ case $TEST_SUITE in
             --output-file="$changed_files_ce" \
             --base-path="$TRAVIS_BUILD_DIR" \
             --repo='https://github.com/magento/magento2.git' \
-            --branch='develop'
+            --branch="$TRAVIS_BRANCH"
         cat "$changed_files_ce" | sed 's/^/  + including /'
 
         cd ../../..
-
-        cp package.json.sample package.json
-        cp Gruntfile.js.sample Gruntfile.js
-        yarn
         ;;
     js)
         cp package.json.sample package.json
         cp Gruntfile.js.sample Gruntfile.js
         yarn
 
-        echo "Installing Magento"
-        mysql -uroot -e 'CREATE DATABASE magento2;'
-        php bin/magento setup:install -q --admin-user="admin" --admin-password="123123q" --admin-email="admin@example.com" --admin-firstname="John" --admin-lastname="Doe"
+        if [[ $GRUNT_COMMAND != "static" ]]; then
+            echo "Installing Magento"
+            mysql -uroot -e 'CREATE DATABASE magento2;'
+            php bin/magento setup:install -q \
+                --admin-user="admin" \
+                --admin-password="123123q" \
+                --admin-email="admin@example.com" \
+                --admin-firstname="John" \
+                --admin-lastname="Doe"
 
-        echo "Deploying Static Content"
-        php bin/magento setup:static-content:deploy -f -q -j=2 --no-css --no-less --no-images --no-fonts --no-misc --no-html-minify
+            echo "Deploying Static Content"
+            php bin/magento setup:static-content:deploy -f -q -j=2 \
+                --no-css --no-less --no-images --no-fonts --no-misc --no-html-minify
+        fi
         ;;
     functional)
         echo "Installing Magento"
@@ -117,10 +121,12 @@ case $TEST_SUITE in
 
         composer install && composer require se/selenium-server-standalone:2.53.1
         export DISPLAY=:1.0
-        sh ./vendor/se/selenium-server-standalone/bin/selenium-server-standalone -port 4444 -host 127.0.0.1 -Dwebdriver.firefox.bin=$(which firefox) -trustAllSSLCertificate &> ~/selenium.log &
+        sh ./vendor/se/selenium-server-standalone/bin/selenium-server-standalone -port 4444 -host 127.0.0.1 \
+            -Dwebdriver.firefox.bin=$(which firefox) -trustAllSSLCertificate &> ~/selenium.log &
+
         cp ./phpunit.xml.dist ./phpunit.xml
         sed -e "s?127.0.0.1?${MAGENTO_HOST_NAME}?g" --in-place ./phpunit.xml
-        sed -e "s?basic?travis_acceptance_${ACCEPTANCE_INDEX}?g" --in-place ./phpunit.xml
+        sed -e "s?basic?travis_acceptance?g" --in-place ./phpunit.xml
         cp ./.htaccess.sample ./.htaccess
         cd ./utils
         php -f mtf troubleshooting:check-all

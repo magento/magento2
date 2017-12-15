@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 /**
  * Entity attribute select source interface
  *
  * Source is providing the selection options for user interface
  *
+ * @api
+ * @since 100.0.2
  */
-namespace Magento\Eav\Model\Entity\Attribute\Source;
-
 interface SourceInterface
 {
     /**

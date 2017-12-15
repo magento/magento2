@@ -12,7 +12,7 @@ use Magento\Sales\Model\Order;
  * @package Magento\Checkout\Block\Onepage
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SuccessTest extends \PHPUnit_Framework_TestCase
+class SuccessTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Checkout\Block\Onepage\Success
@@ -43,8 +43,8 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->orderConfig = $this->getMock(\Magento\Sales\Model\Order\Config::class, [], [], '', false);
-        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class, [], [], '', false);
+        $this->orderConfig = $this->createMock(\Magento\Sales\Model\Order\Config::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
 
         $this->layout = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
             ->disableOriginalConstructor()
@@ -101,7 +101,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAdditionalInfoHtml()
     {
-        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class, [], [], '', false);
+        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $layout->expects(
             $this->once()
         )->method(
@@ -163,7 +163,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
 
     public function testGetContinueUrl()
     {
-        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
         $storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue('Expected Result'));
 

@@ -1,7 +1,5 @@
 <?php
 /**
- * Form Element Image Data Model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -14,13 +12,69 @@ use Magento\Framework\Api\ArrayObjectSearch;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\File\UploaderFactory;
+use Magento\Framework\Filesystem;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Image extends File
 {
     /**
      * @var ImageContentInterfaceFactory
      */
     private $imageContentFactory;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param null $value
+     * @param string $entityTypeCode
+     * @param bool $isAjax
+     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
+     * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator
+     * @param Filesystem $fileSystem
+     * @param UploaderFactory $uploaderFactory
+     * @param \Magento\Customer\Model\FileProcessorFactory|null $fileProcessorFactory
+     * @param \Magento\Framework\Api\Data\ImageContentInterfaceFactory|null $imageContentInterfaceFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        $value,
+        $entityTypeCode,
+        $isAjax,
+        \Magento\Framework\Url\EncoderInterface $urlEncoder,
+        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator,
+        Filesystem $fileSystem,
+        UploaderFactory $uploaderFactory,
+        \Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null,
+        \Magento\Framework\Api\Data\ImageContentInterfaceFactory $imageContentInterfaceFactory = null
+    ) {
+        parent::__construct(
+            $localeDate,
+            $logger,
+            $attribute,
+            $localeResolver,
+            $value,
+            $entityTypeCode,
+            $isAjax,
+            $urlEncoder,
+            $fileValidator,
+            $fileSystem,
+            $uploaderFactory,
+            $fileProcessorFactory
+        );
+        $this->imageContentFactory = $imageContentInterfaceFactory ?: ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\Data\ImageContentInterfaceFactory::class);
+    }
 
     /**
      * Validate file by attribute validate rules
@@ -138,7 +192,7 @@ class Image extends File
             $base64EncodedData = $this->getFileProcessor()->getBase64EncodedData($temporaryFile);
 
             /** @var ImageContentInterface $imageContentDataObject */
-            $imageContentDataObject = $this->getImageContentFactory()->create()
+            $imageContentDataObject = $this->imageContentFactory->create()
                 ->setName($value['name'])
                 ->setBase64EncodedData($base64EncodedData)
                 ->setType($value['type']);
@@ -150,21 +204,5 @@ class Image extends File
         }
 
         return $this->_value;
-    }
-
-    /**
-     * Get ImageContentInterfaceFactory instance
-     *
-     * @return ImageContentInterfaceFactory
-     *
-     * @deprecated
-     */
-    private function getImageContentFactory()
-    {
-        if ($this->imageContentFactory === null) {
-            $this->imageContentFactory = ObjectManager::getInstance()
-                ->get(\Magento\Framework\Api\Data\ImageContentInterfaceFactory::class);
-        }
-        return $this->imageContentFactory;
     }
 }

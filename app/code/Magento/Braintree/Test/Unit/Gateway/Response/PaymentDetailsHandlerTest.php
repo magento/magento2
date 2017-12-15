@@ -10,13 +10,13 @@ use Magento\Braintree\Gateway\Response\PaymentDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class PaymentDetailsHandlerTest
  */
-class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
+class PaymentDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 {
     const TRANSACTION_ID = '432erwwe';
 

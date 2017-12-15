@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Api;
 
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
-use Magento\TestFramework\Helper\Bootstrap;
 
 class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
@@ -91,6 +90,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $expectedData = [
             'attribute_code' => $attributeCode,
             'is_required' => true,
+            'entity_type_id' => "4",
             "frontend_input" => "select",
             "is_visible_on_front" => true,
             "is_searchable" => true,
@@ -142,6 +142,8 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             'attribute' => [
                 'attribute_id' => $attribute['attribute_id'],
                 'attribute_code' => $attributeCode,
+                'entity_type_id' => 4,
+                'is_used_in_grid' => true,
                 'default_frontend_label' => 'default_label_new',
                 'frontend_labels' => [
                     ['store_id' => 1, 'label' => 'front_lbl_new'],
@@ -183,11 +185,42 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $result = $this->updateAttribute($attributeCode, $attributeData);
 
         $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
+        $this->assertEquals(true, $result['is_used_in_grid']);
         $this->assertEquals($attributeCode, $result['attribute_code']);
         $this->assertEquals('default_label_new', $result['default_frontend_label']);
         //New option set as default
         $this->assertEquals($result['options'][3]['value'], $result['default_value']);
         $this->assertEquals("Default Blue Updated", $result['options'][1]['label']);
+    }
+
+    /**
+     * Test source model and backend type can not be changed to custom, as they depends on attribute frontend type.
+     *
+     * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     * @return void
+     */
+    public function testUpdateAttributeSourceAndType()
+    {
+        $attributeCode = uniqid('label_attr_code');
+        $attribute = $this->createAttribute($attributeCode);
+        $attributeData = [
+            'attribute' => [
+                'attribute_id' => $attribute['attribute_id'],
+                'attribute_code' => $attributeCode,
+                'entity_type_id' => 4,
+                'is_required' => false,
+                'frontend_input' => 'select',
+                'source_model' => "Some/Custom/Source/Model",
+                'backend_type' => 'varchar',
+                'frontend_labels' => [
+                    ['store_id' => 1, 'label' => 'front_lbl_new'],
+                ],
+            ],
+        ];
+
+        $result = $this->updateAttribute($attributeCode, $attributeData);
+        $this->assertEquals(\Magento\Eav\Model\Entity\Attribute\Source\Table::class, $result['source_model']);
+        $this->assertEquals('int', $result['backend_type']);
     }
 
     /**
@@ -202,6 +235,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             'attribute' => [
                 'attribute_id' => $attribute['attribute_id'],
                 'attribute_code' => $attributeCode,
+                'entity_type_id' => 4,
                 'is_required' => true,
                 'frontend_labels' => [
                     ['store_id' => 0, 'label' => 'front_lbl_new'],
@@ -278,6 +312,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $attributeData = [
             'attribute' => [
                 'attribute_code' => $attributeCode,
+                'entity_type_id' => '4',
                 'frontend_labels' => [
                     [
                         'store_id' => 0,

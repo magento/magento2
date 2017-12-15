@@ -6,7 +6,8 @@
 namespace Magento\Ui\Component\Form\Element;
 
 /**
- * Class CheckboxSet
+ * @api
+ * @since 100.1.0
  */
 class CheckboxSet extends AbstractOptionsField
 {
@@ -14,6 +15,7 @@ class CheckboxSet extends AbstractOptionsField
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getComponentName()
     {
@@ -22,6 +24,7 @@ class CheckboxSet extends AbstractOptionsField
 
     /**
      * {@inheritdoc}
+     * @since 100.1.0
      */
     public function getIsSelected($optionValue)
     {

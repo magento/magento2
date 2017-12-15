@@ -45,6 +45,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @method float getRowTotal()
  * @method float getPriceInclTax()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface

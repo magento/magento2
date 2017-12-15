@@ -22,7 +22,7 @@ use Magento\Paypal\Model\Payflow\Transparent;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Response|\PHPUnit_Framework_MockObject_MockObject */
     private $object;

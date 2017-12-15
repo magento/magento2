@@ -7,6 +7,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Status;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Edit extends \Magento\Sales\Block\Adminhtml\Order\Status\NewStatus
 {

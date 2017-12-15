@@ -13,8 +13,9 @@ require_once __DIR__ . '/../../../../_files/tax_calculation_data_aggregated.php'
 
 /**
  * Class TaxTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxTest extends \PHPUnit_Framework_TestCase
+class TaxTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Utility object for setting up tax rates, tax classes and tax rules

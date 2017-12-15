@@ -15,7 +15,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\DB\Select;
 
-class DecimalRowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
+class DecimalRowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DecimalRowSizeEstimator
@@ -44,11 +44,11 @@ class DecimalRowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->connectionMock = $this->getMock(AdapterInterface::class);
-        $this->indexerResourceMock = $this->getMock(Decimal::class, [], [], '', false);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->indexerResourceMock = $this->createMock(Decimal::class);
         $this->indexerResourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
-        $this->storeManagementMock = $this->getMock(StoreManagementInterface::class);
-        $this->metadataPoolMock = $this->getMock(MetadataPool::class, [], [], '', false);
+        $this->storeManagementMock = $this->createMock(StoreManagementInterface::class);
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
 
         $this->model = new DecimalRowSizeEstimator(
             $this->storeManagementMock,
@@ -59,13 +59,13 @@ class DecimalRowSizeEstimatorTest extends \PHPUnit_Framework_TestCase
 
     public function testEstimateRowSize()
     {
-        $entityMetadataMock = $this->getMock(EntityMetadataInterface::class);
+        $entityMetadataMock = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->with(ProductInterface::class)
             ->willReturn($entityMetadataMock);
 
-        $selectMock = $this->getMock(Select::class, [], [], '', false);
+        $selectMock = $this->createMock(Select::class);
 
         $maxRowsPerStore = 100;
         $storeCount = 10;

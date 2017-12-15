@@ -18,7 +18,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  *
  * @see Structure
  */
-class StructureTest extends \PHPUnit_Framework_TestCase
+class StructureTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Structure|Mock
@@ -317,16 +317,26 @@ class StructureTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $tabMock->expects($this->once())
             ->method('rewind');
-        $tabMock->expects($this->once())
-            ->method('current')
+        $section = $this->getMockBuilder(Structure\Element\Section::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['isVisible', 'getData'])
+            ->getMock();
+        $section->expects($this->any())
+            ->method('isVisible')
+            ->willReturn(true);
+        $section->expects($this->any())
+            ->method('getData')
             ->willReturn('currentSection');
+        $tabMock->expects($this->any())
+            ->method('current')
+            ->willReturn($section);
         $this->_tabIteratorMock->expects($this->once())
             ->method('rewind');
         $this->_tabIteratorMock->expects($this->once())
             ->method('current')
             ->willReturn($tabMock);
 
-        $this->assertEquals('currentSection', $this->_model->getFirstSection());
+        $this->assertEquals('currentSection', $this->_model->getFirstSection()->getData());
     }
 
     public function testGetElementReturnsProperElementByPathCachesObject()

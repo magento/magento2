@@ -10,6 +10,7 @@ namespace Magento\Wishlist\Helper;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
  */
 class Rss extends \Magento\Wishlist\Helper\Data
 {

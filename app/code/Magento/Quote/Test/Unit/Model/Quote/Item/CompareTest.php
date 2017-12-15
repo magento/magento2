@@ -11,7 +11,7 @@ namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 /**
  * Class CompareTest
  */
-class CompareTest extends \PHPUnit_Framework_TestCase
+class CompareTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Quote\Model\Quote\Item\Compare
@@ -43,28 +43,11 @@ class CompareTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->itemMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            ['__wakeup', 'getProductId', 'getOptions'],
-            [],
-            '',
-            false
-        );
-        $this->comparedMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Item::class,
-            ['__wakeup', 'getProductId', 'getOptions'],
-            [],
-            '',
-            false
-        );
-        $this->optionMock = $this->getMock(
-            \Magento\Quote\Model\Quote\Item\Option::class,
-            ['__wakeup', 'getCode', 'getValue'],
-            [],
-            '',
-            false
-        );
+        $this->itemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['__wakeup', 'getProductId', 'getOptions']);
+        $this->comparedMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['__wakeup', 'getProductId', 'getOptions']);
+        $this->optionMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item\Option::class, ['__wakeup', 'getCode', 'getValue']);
         $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+            ->setMethods(['unserialize'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $serializer->expects($this->any())

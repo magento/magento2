@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote;
  * Checks possibility of payment method to be used in admin area
  *
  * @api
+ * @since 100.0.2
  */
 class CanUseInternal implements SpecificationInterface
 {

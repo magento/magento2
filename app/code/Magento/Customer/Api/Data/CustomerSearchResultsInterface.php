@@ -9,6 +9,7 @@ namespace Magento\Customer\Api\Data;
 /**
  * Interface for customer search results.
  * @api
+ * @since 100.0.2
  */
 interface CustomerSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {

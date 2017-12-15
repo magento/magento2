@@ -8,7 +8,7 @@ namespace Magento\User\Block\Role\Grid;
 /**
  * @magentoAppArea adminhtml
  */
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\User\Block\Role\Grid\User

@@ -12,7 +12,7 @@ use Magento\Ui\Model\BookmarkManagement;
 /**
  * Class BookmarkManagementTest
  */
-class BookmarkManagementTest extends \PHPUnit_Framework_TestCase
+class BookmarkManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var BookmarkManagement

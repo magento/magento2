@@ -8,7 +8,7 @@ namespace Magento\Wishlist\Test\Unit\Model;
 
 use \Magento\Wishlist\Model\AuthenticationState;
 
-class AuthenticationStateTest extends \PHPUnit_Framework_TestCase
+class AuthenticationStateTest extends \PHPUnit\Framework\TestCase
 {
     public function testIsEnabled()
     {

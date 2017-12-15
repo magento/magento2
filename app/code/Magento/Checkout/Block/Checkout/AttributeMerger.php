@@ -168,20 +168,19 @@ class AttributeMerger
 
         $element = [
             'component' => isset($additionalConfig['component']) ? $additionalConfig['component'] : $uiComponent,
-            'config' => [
-                // customScope is used to group elements within a single form (e.g. they can be validated separately)
-                'customScope' => $dataScopePrefix,
-                'customEntry' => isset($additionalConfig['config']['customEntry'])
-                    ? $additionalConfig['config']['customEntry']
-                    : null,
-                'template' => 'ui/form/field',
-                'elementTmpl' => isset($additionalConfig['config']['elementTmpl'])
-                    ? $additionalConfig['config']['elementTmpl']
-                    : $elementTemplate,
-                'tooltip' => isset($additionalConfig['config']['tooltip'])
-                    ? $additionalConfig['config']['tooltip']
-                    : null
-            ],
+            'config' => $this->mergeConfigurationNode(
+                'config',
+                $additionalConfig,
+                [
+                    'config' => [
+                        // customScope is used to group elements within a single
+                        // form (e.g. they can be validated separately)
+                        'customScope' => $dataScopePrefix,
+                        'template' => 'ui/form/field',
+                        'elementTmpl' => $elementTemplate,
+                    ],
+                ]
+            ),
             'dataScope' => $dataScopePrefix . '.' . $attributeCode,
             'label' => $attributeConfig['label'],
             'provider' => $providerName,
@@ -315,21 +314,35 @@ class AttributeMerger
      */
     protected function getDefaultValue($attributeCode)
     {
+        if ($attributeCode === 'country_id') {
+            return $this->directoryHelper->getDefaultCountry();
+        }
+
+        $customer = $this->getCustomer();
+        if ($customer === null) {
+            return null;
+        }
+
+        $attributeValue = null;
         switch ($attributeCode) {
+            case 'prefix':
+                $attributeValue = $customer->getPrefix();
+                break;
             case 'firstname':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getFirstname();
-                }
+                $attributeValue = $customer->getFirstname();
+                break;
+            case 'middlename':
+                $attributeValue = $customer->getMiddlename();
                 break;
             case 'lastname':
-                if ($this->getCustomer()) {
-                    return $this->getCustomer()->getLastname();
-                }
+                $attributeValue = $customer->getLastname();
                 break;
-            case 'country_id':
-                return $this->directoryHelper->getDefaultCountry();
+            case 'suffix':
+                $attributeValue = $customer->getSuffix();
+                break;
         }
-        return null;
+
+        return $attributeValue;
     }
 
     /**
@@ -365,7 +378,7 @@ class AttributeMerger
      *
      * @param array $countryOptions
      * @return array
-     * @deprecated
+     * @deprecated 100.2.0
      */
     protected function orderCountryOptions(array $countryOptions)
     {

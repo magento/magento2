@@ -5,7 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Backend\Image;
 
-class LogoTest extends \PHPUnit_Framework_TestCase
+class LogoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Config\Model\Config\Backend\Image\Logo
@@ -73,7 +73,7 @@ class LogoTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('/tmp/val'));
         $this->uploaderMock->expects($this->once())
             ->method('setAllowedExtensions')
-            ->with($this->equalTo(['jpg', 'jpeg', 'gif', 'png', 'svg']));
+            ->with($this->equalTo(['jpg', 'jpeg', 'gif', 'png']));
         $this->model->beforeSave();
     }
 }

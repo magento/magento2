@@ -13,7 +13,7 @@ class SearchResponseBuilder
 {
     /**
      * @var DocumentFactory
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private $documentFactory;
 

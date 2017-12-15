@@ -8,6 +8,7 @@ namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
 /**
  * CatalogInventory Stock Indexer Interface
  * @api
+ * @since 100.0.2
  */
 interface StockInterface
 {

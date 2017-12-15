@@ -3,6 +3,11 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @deprecated Not used anymore
+ * @see Magento_Bundle/js/components/bundle-record
+ * @see Magento_Bundle/js/components/bundle-checkbox
+ */
 define([
     'Magento_Ui/js/form/element/select',
     'uiRegistry'

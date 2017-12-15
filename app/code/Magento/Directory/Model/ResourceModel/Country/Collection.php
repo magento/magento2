@@ -18,6 +18,7 @@ use Magento\Store\Model\ScopeInterface;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -64,6 +65,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     /**
      * @var string[]
+     * @since 100.1.0
      */
     protected $countriesWithNotRequiredStates;
 
@@ -148,7 +150,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Return Allowed Countries reader
      *
-     * @deprecated
+     * @deprecated 100.1.2
      * @return \Magento\Directory\Model\AllowedCountries
      */
     private function getAllowedCountriesReader()
@@ -313,6 +315,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Get list of countries with required states
      *
      * @return \Magento\Directory\Model\Country[]
+     * @since 100.1.0
      */
     public function getCountriesWithRequiredStates()
     {

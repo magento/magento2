@@ -11,6 +11,7 @@ use Magento\Customer\Model\Context;
  * Sales order view block
  *
  * @api
+ * @since 100.0.2
  */
 class View extends \Magento\Framework\View\Element\Template
 {
@@ -27,9 +28,10 @@ class View extends \Magento\Framework\View\Element\Template
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\Framework\App\Http\Context
+     * @since 100.2.0
      */
-    protected $_customerSession;
+    protected $httpContext;
 
     /**
      * @var \Magento\Payment\Helper\Data

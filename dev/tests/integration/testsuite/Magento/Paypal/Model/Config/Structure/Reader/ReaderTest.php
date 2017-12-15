@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 /**
  * Class ReaderTest
  */
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends \PHPUnit\Framework\TestCase
 {
     const EXPECTED = '/dev/tests/integration/testsuite/Magento/Paypal/Model/Config/Structure/Reader/_files/expected';
 

@@ -103,7 +103,7 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
      */
     protected function validateEmailFormat($email)
     {
-        if (!\Zend_Validate::is($email, 'EmailAddress')) {
+        if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a valid email address.'));
         }
     }

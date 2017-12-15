@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab\View\Grid\Renderer;
 
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     protected $item;
@@ -24,7 +24,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ];
         }
 
-        $product = $this->getMock(\Magento\Catalog\Model\Product::class, ['getTypeId', 'getName'], [], '', false);
+        $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeId', 'getName']);
         $product
             ->expects($this->once())
             ->method('getTypeId')
@@ -34,59 +34,33 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getName')
             ->will($this->returnValue('testProductName'));
 
-        $this->item = $this->getMock(\Magento\Wishlist\Model\Item::class, ['getProduct'], [], '', false);
+        $this->item = $this->createPartialMock(\Magento\Wishlist\Model\Item::class, ['getProduct']);
         $this->item
             ->expects($this->atLeastOnce())
             ->method('getProduct')
             ->will($this->returnValue($product));
 
-        $productConfig = $this->getMock(\Magento\Catalog\Helper\Product\Configuration::class, null, [], '', false);
-        $productConfigPool = $this->getMock(
+        $productConfigPool = $this->createPartialMock(
             \Magento\Catalog\Helper\Product\ConfigurationPool::class,
-            ['get'],
-            [],
-            '',
-            false
+            ['get']
         );
-
-        $helper = $this->getMock(
-            \Magento\Bundle\Helper\Catalog\Product\Configuration::class,
-            ['getOptions'],
-            [],
-            '',
-            false
-        );
-        $escaper = $this->getMock(\Magento\Framework\Escaper::class, ['escapeHtml'], [], '', false);
+        $helper = $this->createPartialMock(\Magento\Bundle\Helper\Catalog\Product\Configuration::class, ['getOptions']);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $productConfig = $objectManager->getObject(\Magento\Catalog\Helper\Product\Configuration::class);
+        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
         if ($withoutOptions) {
             $helper
                 ->expects($this->once())
                 ->method('getOptions')
                 ->will($this->returnValue(null));
-            $escaper
-                ->expects($this->once())
-                ->method('escapeHtml')
-                ->with('testProductName')
-                ->will($this->returnValue('testProductName'));
         } else {
             $helper
                 ->expects($this->once())
                 ->method('getOptions')
                 ->will($this->returnValue($options));
-
-            $escaper
-                ->expects($this->at(0))
-                ->method('escapeHtml')
-                ->with('testProductName')
-                ->will($this->returnValue('testProductName'));
-            for ($i = 1; $i <= count($options); $i++) {
-                $escaper
-                    ->expects($this->at($i))
-                    ->method('escapeHtml')
-                    ->will($this->returnValue("testLabel{$i}"));
-            }
         }
 
-        $context = $this->getMock(\Magento\Backend\Block\Context::class, ['getEscaper'], [], '', false);
+        $context = $this->createPartialMock(\Magento\Backend\Block\Context::class, ['getEscaper']);
         $context
             ->expects($this->once())
             ->method('getEscaper')

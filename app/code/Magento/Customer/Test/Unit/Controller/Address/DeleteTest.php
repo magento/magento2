@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DeleteTest extends \PHPUnit_Framework_TestCase
+class DeleteTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Delete */
     protected $model;

@@ -13,7 +13,7 @@ namespace Magento\PageCache\Test\Unit\Helper;
  * Class DataTest
  *
  */
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Data

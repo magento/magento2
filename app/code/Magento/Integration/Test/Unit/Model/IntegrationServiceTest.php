@@ -9,7 +9,7 @@ namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Integration\Model\Integration;
 
-class IntegrationServiceTest extends \PHPUnit_Framework_TestCase
+class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
 {
     const VALUE_INTEGRATION_ID = 1;
 

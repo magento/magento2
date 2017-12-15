@@ -914,15 +914,15 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     }
 
     /**
-     * Made additional request to paypal to get autharization id
+     * Made additional request to PayPal to get authorization id
      *
      * @return void
      */
     public function callDoReauthorization()
     {
-        $request = $this->_export($this->_doReauthorizationRequest);
+        $request = $this->_exportToRequest($this->_doReauthorizationRequest);
         $response = $this->call('DoReauthorization', $request);
-        $this->_import($response, $this->_doReauthorizationResponse);
+        $this->_importFromResponse($this->_doReauthorizationResponse, $response);
     }
 
     /**
@@ -991,7 +991,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     {
         $request = $this->_exportToRequest($this->_refundTransactionRequest);
         if ($this->getRefundType() === \Magento\Paypal\Model\Config::REFUND_TYPE_PARTIAL) {
-            $request['AMT'] = $this->getAmount();
+            $request['AMT'] = $this->formatPrice($this->getAmount());
         }
         $response = $this->call(self::REFUND_TRANSACTION, $request);
         $this->_importFromResponse($this->_refundTransactionResponse, $response);
@@ -1284,6 +1284,15 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             isset($response['VERSION']) ? $response['VERSION'] : ''
         );
         $this->_logger->critical($exceptionLogMessage);
+
+        /**
+         * The response code 10415 'Transaction has already been completed for this token'
+         * must not fails place order. The old Paypal interface does not lock 'Send' button
+         * it may result to re-send data.
+         */
+        if (in_array((string)ProcessableException::API_TRANSACTION_HAS_BEEN_COMPLETED, $this->_callErrors)) {
+            return;
+        }
 
         $exceptionPhrase = __('PayPal gateway has rejected request. %1', $errorMessages);
 

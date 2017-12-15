@@ -15,7 +15,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RepositoryTest extends \PHPUnit_Framework_TestCase
+class RepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
@@ -77,12 +77,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock(
+        $this->objectManagerMock = $this->createPartialMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,
-            ['create', 'get'],
-            [],
-            '',
-            false
+            ['create', 'get']
         );
         $this->urlMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
@@ -90,7 +87,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->designMock = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->themeProvider = $this->getMock(ThemeProviderInterface::class);
+        $this->themeProvider = $this->createMock(ThemeProviderInterface::class);
         $this->sourceMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Source::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -115,13 +112,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repositoryMapMock = $this->getMock(
-            \Magento\Framework\View\Asset\File::class,
-            ['getMap'],
-            [],
-            '',
-            false
-        );
+        $repositoryMapMock = $this->createPartialMock(\Magento\Framework\View\Asset\File::class, ['getMap']);
         $repositoryMapMock->method('getMap')->willReturn([]);
         $this->objectManagerMock->method('get')
             ->with(\Magento\Framework\View\Asset\RepositoryMap::class)
@@ -244,7 +235,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStaticViewFileContext()
     {
-        $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class, [], [], '', false);
+        $themeMock = $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class);
         $this->designMock
             ->expects($this->any())
             ->method('getDesignParams')
@@ -400,7 +391,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUrl()
     {
-        $themeMock = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class, [], [], '', false);
+        $themeMock = $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class);
         $this->designMock
             ->expects($this->any())
             ->method('getDesignParams')

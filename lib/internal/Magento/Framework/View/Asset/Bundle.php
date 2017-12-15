@@ -13,7 +13,7 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
  * Bundle model
- * @deprecated since 2.2.0
+ * @deprecated 100.2.0
  * @see \Magento\Deploy\Package\Bundle
  */
 class Bundle
@@ -28,7 +28,9 @@ class Bundle
      */
     protected $assetsContent = [];
 
-    /** @var Bundle\ConfigInterface */
+    /**
+     * @var \Magento\Framework\View\Asset\Bundle\ConfigInterface
+     */
     protected $bundleConfig;
 
     /**
@@ -210,7 +212,11 @@ class Bundle
         $assetContentType = $asset->getContentType();
         $assetKey = $this->getAssetKey($asset);
         if (!isset($this->assetsContent[$assetContextCode][$assetContentType][$assetKey])) {
-            $this->assetsContent[$assetContextCode][$assetContentType][$assetKey] = utf8_encode($asset->getContent());
+            $content = $asset->getContent();
+            if (mb_detect_encoding($content) !== "UTF-8") {
+                $content = mb_convert_encoding($content, "UTF-8");
+            }
+            $this->assetsContent[$assetContextCode][$assetContentType][$assetKey] = $content;
         }
 
         return $this->assetsContent[$assetContextCode][$assetContentType][$assetKey];

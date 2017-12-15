@@ -112,7 +112,7 @@ class Reader
                     continue;
                 }
                 $allFilesData[$configFile] = $fileData;
-                if (!empty($fileData)) {
+                if (is_array($fileData) && count($fileData) > 0) {
                     $result = array_replace_recursive($result, $fileData);
                 }
             }
@@ -127,7 +127,7 @@ class Reader
      * @param string $pathConfig The path config
      * @param bool $ignoreInitialConfigFiles Whether ignore custom pools
      * @return array
-     * @deprecated Magento does not support custom config file pools since 2.2.0 version
+     * @deprecated 100.2.0 Magento does not support custom config file pools since 2.2.0 version
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function loadConfigFile($fileKey, $pathConfig, $ignoreInitialConfigFiles = false)

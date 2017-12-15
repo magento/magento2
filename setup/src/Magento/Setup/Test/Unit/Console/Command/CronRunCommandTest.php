@@ -9,7 +9,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Console\Command\CronRunCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CronRunCommandTest extends \PHPUnit_Framework_TestCase
+class CronRunCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|DeploymentConfig
@@ -43,10 +43,10 @@ class CronRunCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
-        $this->queue = $this->getMock(\Magento\Setup\Model\Cron\Queue::class, [], [], '', false);
-        $this->readinessCheck = $this->getMock(\Magento\Setup\Model\Cron\ReadinessCheck::class, [], [], '', false);
-        $this->status = $this->getMock(\Magento\Setup\Model\Cron\Status::class, [], [], '', false);
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->queue = $this->createMock(\Magento\Setup\Model\Cron\Queue::class);
+        $this->readinessCheck = $this->createMock(\Magento\Setup\Model\Cron\ReadinessCheck::class);
+        $this->status = $this->createMock(\Magento\Setup\Model\Cron\Status::class);
         $this->command = new CronRunCommand(
             $this->deploymentConfig,
             $this->queue,

@@ -11,9 +11,10 @@ define([
     'jquery',
     'mage/template',
     'text!Magento_Ui/templates/grid/cells/thumbnail/preview.html',
+    'underscore',
     'Magento_Ui/js/modal/modal',
     'mage/translate'
-], function (Column, $, mageTemplate, thumbnailPreviewTemplate) {
+], function (Column, $, mageTemplate, thumbnailPreviewTemplate, _) {
     'use strict';
 
     return Column.extend({
@@ -61,7 +62,7 @@ define([
          * @returns {String}
          */
         getAlt: function (row) {
-            return row[this.index + '_alt'];
+            return _.escape(row[this.index + '_alt']);
         },
 
         /**

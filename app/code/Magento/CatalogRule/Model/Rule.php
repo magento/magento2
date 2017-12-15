@@ -14,8 +14,6 @@ use Magento\Framework\DataObject\IdentityInterface;
 /**
  * Catalog Rule data model
  *
- * @method \Magento\CatalogRule\Model\ResourceModel\Rule _getResource()
- * @method \Magento\CatalogRule\Model\ResourceModel\Rule getResource()
  * @method \Magento\CatalogRule\Model\Rule setFromDate(string $value)
  * @method \Magento\CatalogRule\Model\Rule setToDate(string $value)
  * @method \Magento\CatalogRule\Model\Rule setCustomerGroupIds(string $value)
@@ -521,12 +519,22 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         if ($this->isObjectNew()) {
             $this->getMatchingProductIds();
             if (!empty($this->_productIds) && is_array($this->_productIds)) {
-                $this->_ruleProductProcessor->reindexList($this->_productIds);
+                $this->_getResource()->addCommitCallback([$this, 'reindex']);
             }
         } else {
             $this->_ruleProductProcessor->getIndexer()->invalidate();
         }
         return parent::afterSave();
+    }
+
+    /**
+     * Init indexing process after rule save
+     *
+     * @return void
+     */
+    public function reindex()
+    {
+        $this->_ruleProductProcessor->reindexList($this->_productIds);
     }
 
     /**
@@ -777,7 +785,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
 
     /**
      * @return Data\Condition\Converter
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getRuleConditionConverter()
     {

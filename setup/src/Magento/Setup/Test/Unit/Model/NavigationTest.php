@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Model;
 
 use \Magento\Setup\Model\Navigation;
 
-class NavigationTest extends \PHPUnit_Framework_TestCase
+class NavigationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceLocatorInterface
@@ -48,13 +48,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
                     ['main' => false],
                 ]
             ]));
-        $this->deploymentConfig = $this->getMock(
-            \Magento\Framework\App\DeploymentConfig::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->navigation = new Navigation($this->serviceLocatorMock, $this->deploymentConfig);
     }
 

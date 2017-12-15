@@ -9,7 +9,7 @@ namespace Magento\Cms\Test\Unit\Model\Wysiwyg;
  * @covers \Magento\Cms\Model\Wysiwyg\Config
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Config
@@ -73,7 +73,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->backendUrlMock = $this->getMockBuilder(\Magento\Backend\Model\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -160,7 +160,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getUri')
             ->willReturn('pub/static');
         /** @var \Magento\Framework\View\Asset\ContextInterface|\PHPUnit_Framework_MockObject_MockObject $contextMock */
-        $contextMock = $this->getMock(\Magento\Framework\View\Asset\ContextInterface::class);
+        $contextMock = $this->createMock(\Magento\Framework\View\Asset\ContextInterface::class);
         $contextMock->expects($this->once())
             ->method('getBaseUrl')
             ->willReturn('localhost/pub/static/');

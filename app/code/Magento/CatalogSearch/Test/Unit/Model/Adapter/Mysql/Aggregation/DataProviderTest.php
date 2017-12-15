@@ -7,11 +7,11 @@
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Mysql\Aggregation;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider\QueryBuilder;
 use Magento\Eav\Model\Config;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Indexer\Model\ResourceModel\FrontendResource;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 use Magento\Framework\Search\Request\BucketInterface;
@@ -22,9 +22,11 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\DB\Ddl\Table;
 
 /**
+ * Test for Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataProviderTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DataProvider
@@ -54,117 +56,68 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $frontendResourceMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $frontendResourceStockMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $adapterMock;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\StateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $stateFactoryMock;
+    private $queryBuilderMock;
 
     protected function setUp()
     {
-        $this->eavConfigMock = $this->getMock(Config::class, [], [], '', false);
-        $this->resourceConnectionMock = $this->getMock(ResourceConnection::class, [], [], '', false);
-        $this->scopeResolverMock = $this->getMock(ScopeResolverInterface::class);
-        $this->sessionMock = $this->getMock(Session::class, [], [], '', false);
-        $this->frontendResourceMock = $this->getMock(FrontendResource::class, [], [], '', false);
-        $this->frontendResourceStockMock = $this->getMock(FrontendResource::class, [], [], '', false);
-        $this->adapterMock = $this->getMock(AdapterInterface::class);
+        $this->eavConfigMock = $this->createMock(Config::class);
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
+        $this->scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
+        $this->sessionMock = $this->createMock(Session::class);
+        $this->adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
-        $this->stateFactoryMock = $this->getMockBuilder(\Magento\Indexer\Model\Indexer\StateFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->queryBuilderMock = $this->createMock(QueryBuilder::class);
 
         $this->model = new DataProvider(
             $this->eavConfigMock,
             $this->resourceConnectionMock,
             $this->scopeResolverMock,
             $this->sessionMock,
-            $this->frontendResourceMock,
-            $this->stateFactoryMock,
-            $this->frontendResourceStockMock
+            $this->queryBuilderMock
         );
     }
 
-    public function testGetDataSetUsesFrontendPriceIndexerTableIfAttributeIsPrice()
+    public function testGetDataSet()
     {
         $storeId = 1;
-        $attributeCode = 'price';
+        $attributeCode = 'my_decimal';
 
-        $scopeMock = $this->getMock(Store::class, [], [], '', false);
+        $scopeMock = $this->createMock(Store::class);
         $scopeMock->expects($this->any())->method('getId')->willReturn($storeId);
-        $dimensionMock = $this->getMock(Dimension::class, [], [], '', false);
+
+        $dimensionMock = $this->createMock(Dimension::class);
         $dimensionMock->expects($this->any())->method('getValue')->willReturn($storeId);
+
         $this->scopeResolverMock->expects($this->any())->method('getScope')->with($storeId)->willReturn($scopeMock);
 
-        $bucketMock = $this->getMock(BucketInterface::class);
+        $bucketMock = $this->createMock(BucketInterface::class);
         $bucketMock->expects($this->once())->method('getField')->willReturn($attributeCode);
-        $attributeMock = $this->getMock(Attribute::class, [], [], '', false);
-        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
-        $this->eavConfigMock->expects($this->once())
-            ->method('getAttribute')->with(Product::ENTITY, $attributeCode)
-            ->willReturn($attributeMock);
 
-        $selectMock = $this->getMock(Select::class, [], [], '', false);
-        $selectMock->expects($this->any())->method('from')->willReturnSelf();
-        $selectMock->expects($this->any())->method('where')->willReturnSelf();
-        $selectMock->expects($this->any())->method('columns')->willReturnSelf();
-        $this->adapterMock->expects($this->once())->method('select')->willReturn($selectMock);
-        $tableMock = $this->getMock(Table::class);
+        $attributeMock = $this->createMock(Attribute::class);
+        $this->eavConfigMock->expects($this->once())->method('getAttribute')
+            ->with(Product::ENTITY, $attributeCode)->willReturn($attributeMock);
 
-        // verify that frontend indexer table is used
-        $this->frontendResourceMock->expects($this->once())->method('getMainTable');
+        $tableMock = $this->createMock(Table::class);
+        $tableMock->expects($this->once())->method('getName')->willReturn('test');
+
+        $this->sessionMock->expects($this->once())->method('getCustomerGroupId')->willReturn(1);
+
+        $this->queryBuilderMock->expects($this->once())->method('build')
+            ->with($attributeMock, 'test', $storeId, 1);
 
         $this->model->getDataSet($bucketMock, ['scope' => $dimensionMock], $tableMock);
     }
 
-    public function testGetDataSetUsesFrontendPriceIndexerTableForDecimalAttributes()
+    public function testExecute()
     {
-        $storeId = 1;
-        $attributeCode = 'my_decimal';
-        $stateMock = $this->getMock(\Magento\Indexer\Model\Indexer\State::class, [], [], '', false);
-        $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
-        $stateMock->expects($this->once())
-            ->method('loadByIndexer')
-            ->with(\Magento\Catalog\Model\Indexer\Product\Eav\Processor::INDEXER_ID)
-            ->willReturnSelf();
-        // verify that frontend indexer table is used
-        $stateMock->expects($this->once())->method('getTableSuffix')->willReturn('_replica');
+        $selectMock = $this->createMock(Select::class);
+        $this->adapterMock->expects($this->once())->method('fetchAssoc')->with($selectMock);
 
-        $scopeMock = $this->getMock(Store::class, [], [], '', false);
-        $scopeMock->expects($this->any())->method('getId')->willReturn($storeId);
-        $dimensionMock = $this->getMock(Dimension::class, [], [], '', false);
-        $dimensionMock->expects($this->any())->method('getValue')->willReturn($storeId);
-        $this->scopeResolverMock->expects($this->any())->method('getScope')->with($storeId)->willReturn($scopeMock);
-
-        $bucketMock = $this->getMock(BucketInterface::class);
-        $bucketMock->expects($this->once())->method('getField')->willReturn($attributeCode);
-        $attributeMock = $this->getMock(Attribute::class, [], [], '', false);
-        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
-        $this->eavConfigMock->expects($this->once())
-            ->method('getAttribute')->with(Product::ENTITY, $attributeCode)
-            ->willReturn($attributeMock);
-
-        $selectMock = $this->getMock(Select::class, [], [], '', false);
-        $selectMock->expects($this->any())->method('from')->willReturnSelf();
-        $selectMock->expects($this->any())->method('distinct')->willReturnSelf();
-        $selectMock->expects($this->any())->method('where')->willReturnSelf();
-        $selectMock->expects($this->any())->method('columns')->willReturnSelf();
-        $selectMock->expects($this->any())->method('joinLeft')->willReturnSelf();
-        $selectMock->expects($this->any())->method('group')->willReturnSelf();
-        $this->adapterMock->expects($this->any())->method('select')->willReturn($selectMock);
-        $tableMock = $this->getMock(Table::class);
-        $this->model->getDataSet($bucketMock, ['scope' => $dimensionMock], $tableMock);
+        $this->model->execute($selectMock);
     }
 }

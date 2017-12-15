@@ -25,7 +25,7 @@ use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AlternativeSourceTest extends \PHPUnit_Framework_TestCase
+class AlternativeSourceTest extends \PHPUnit\Framework\TestCase
 {
     const AREA = 'test-area';
 

@@ -11,6 +11,7 @@ use Magento\Framework\Phrase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Mapper
 {

@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 /**
  * @magentoAppArea adminhtml
  */
-class LabelsTest extends \PHPUnit_Framework_TestCase
+class LabelsTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct()
     {

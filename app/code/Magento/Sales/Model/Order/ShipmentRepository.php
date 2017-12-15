@@ -35,7 +35,9 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
      */
     protected $registry = [];
 
-    /** @var  CollectionProcessorInterface */
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
     private $collectionProcessor;
 
     /**
@@ -161,7 +163,7 @@ class ShipmentRepository implements \Magento\Sales\Api\ShipmentRepositoryInterfa
     /**
      * Retrieve collection processor
      *
-     * @deprecated
+     * @deprecated 100.2.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

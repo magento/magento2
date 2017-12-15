@@ -7,14 +7,15 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Sitemap\Model;
+
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
+use Magento\Robots\Model\Config\Value;
+use Magento\Framework\DataObject;
 
 /**
  * Sitemap model
  *
- * @method \Magento\Sitemap\Model\ResourceModel\Sitemap _getResource()
- * @method \Magento\Sitemap\Model\ResourceModel\Sitemap getResource()
  * @method string getSitemapType()
  * @method \Magento\Sitemap\Model\Sitemap setSitemapType(string $value)
  * @method string getSitemapFilename()
@@ -27,8 +28,10 @@ use Magento\Framework\App\ObjectManager;
  * @method \Magento\Sitemap\Model\Sitemap setStoreId(int $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
+ * @since 100.0.2
  */
-class Sitemap extends \Magento\Framework\Model\AbstractModel
+class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
     const OPEN_TAG_KEY = 'start';
 
@@ -39,6 +42,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     const TYPE_INDEX = 'sitemap';
 
     const TYPE_URL = 'url';
+
+    /**
+     * Last mode date min value
+     */
+    const LAST_MOD_MIN_VAL = '0000-01-01 00:00:00';
 
     /**
      * Real file path
@@ -147,6 +155,21 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     protected $dateTime;
 
     /**
+     * Model cache tag for clear cache in after save and after delete
+     *
+     * @var string
+     * @since 100.2.0
+     */
+    protected $_cacheTag = true;
+
+    /**
+     * Last mode min timestamp value
+     *
+     * @var int
+     */
+    private $lastModMinTsVal;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -196,6 +219,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         $this->_storeManager = $storeManager;
         $this->_request = $request;
         $this->dateTime = $dateTime;
+
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -225,55 +249,81 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Initialize sitemap items
+     * Add a sitemap item to the array of sitemap items
+     *
+     * @param DataObject $sitemapItem
+     * @return $this
+     * @since 100.2.0
+     */
+    public function addSitemapItem(DataObject $sitemapItem)
+    {
+        $this->_sitemapItems[] = $sitemapItem;
+
+        return $this;
+    }
+
+    /**
+     * Collect all sitemap items
      *
      * @return void
+     * @since 100.2.0
      */
-    protected function _initSitemapItems()
+    public function collectSitemapItems()
     {
         /** @var $helper \Magento\Sitemap\Helper\Data */
         $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
+        $this->_storeManager->setCurrentStore($storeId);
 
-        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
+        $this->addSitemapItem(new DataObject(
             [
                 'changefreq' => $helper->getCategoryChangefreq($storeId),
                 'priority' => $helper->getCategoryPriority($storeId),
                 'collection' => $this->_categoryFactory->create()->getCollection($storeId),
             ]
-        );
+        ));
 
-        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
+        $this->addSitemapItem(new DataObject(
             [
                 'changefreq' => $helper->getProductChangefreq($storeId),
                 'priority' => $helper->getProductPriority($storeId),
                 'collection' => $this->_productFactory->create()->getCollection($storeId),
             ]
-        );
+        ));
 
-        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
+        $this->addSitemapItem(new DataObject(
             [
                 'changefreq' => $helper->getPageChangefreq($storeId),
                 'priority' => $helper->getPagePriority($storeId),
                 'collection' => $this->_cmsFactory->create()->getCollection($storeId),
             ]
-        );
+        ));
+    }
+
+    /**
+     * Initialize sitemap
+     *
+     * @return void
+     */
+    protected function _initSitemapItems()
+    {
+        $this->collectSitemapItems();
 
         $this->_tags = [
             self::TYPE_INDEX => [
                 self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' .
-                PHP_EOL .
-                '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' .
-                PHP_EOL,
+                    PHP_EOL .
+                    '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' .
+                    PHP_EOL,
                 self::CLOSE_TAG_KEY => '</sitemapindex>',
             ],
             self::TYPE_URL => [
                 self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' .
-                PHP_EOL .
-                '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' .
-                ' xmlns:content="http://www.google.com/schemas/sitemap-content/1.0"' .
-                ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' .
-                PHP_EOL,
+                    PHP_EOL .
+                    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' .
+                    ' xmlns:content="http://www.google.com/schemas/sitemap-content/1.0"' .
+                    ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' .
+                    PHP_EOL,
                 self::CLOSE_TAG_KEY => '</urlset>',
             ],
         ];
@@ -341,6 +391,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     public function generateXml()
     {
         $this->_initSitemapItems();
+
         /** @var $sitemapItem \Magento\Framework\DataObject */
         foreach ($this->_sitemapItems as $sitemapItem) {
             $changefreq = $sitemapItem->getChangefreq();
@@ -381,11 +432,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         } else {
             // Otherwise create index file with list of generated sitemaps
             $this->_createSitemapIndex();
-        }
-
-        // Push sitemap to robots.txt
-        if ($this->_isEnabledSubmissionRobots()) {
-            $this->_addSitemapToRobotsTxt($this->getSitemapFilename());
         }
 
         $this->setSitemapTime($this->_dateModel->gmtDate('Y-m-d H:i:s'));
@@ -448,7 +494,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      * @param null|string $lastmod
      * @param null|string $changefreq
      * @param null|string $priority
-     * @param null|array $images
+     * @param null|array|\Magento\Framework\DataObject $images
      * @return string
      * Sitemap images
      * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=178636
@@ -473,7 +519,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
             // Add Images to sitemap
             foreach ($images->getCollection() as $image) {
                 $row .= '<image:image>';
-                $row .= '<image:loc>' . htmlspecialchars($this->_getMediaUrl($image->getUrl())) . '</image:loc>';
+                $row .= '<image:loc>' . htmlspecialchars($image->getUrl()) . '</image:loc>';
                 $row .= '<image:title>' . htmlspecialchars($images->getTitle()) . '</image:title>';
                 if ($image->getCaption()) {
                     $row .= '<image:caption>' . htmlspecialchars($image->getCaption()) . '</image:caption>';
@@ -483,9 +529,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
             // Add PageMap image for Google web search
             $row .= '<PageMap xmlns="http://www.google.com/schemas/sitemap-pagemap/1.0"><DataObject type="thumbnail">';
             $row .= '<Attribute name="name" value="' . htmlspecialchars($images->getTitle()) . '"/>';
-            $row .= '<Attribute name="src" value="' . htmlspecialchars(
-                $this->_getMediaUrl($images->getThumbnail())
-            ) . '"/>';
+            $row .= '<Attribute name="src" value="' . htmlspecialchars($images->getThumbnail()) . '"/>';
             $row .= '</DataObject></PageMap>';
         }
 
@@ -591,6 +635,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      */
     protected function _getStoreBaseUrl($type = \Magento\Framework\UrlInterface::URL_TYPE_LINK)
     {
+        /** @var \Magento\Store\Model\Store $store */
         $store = $this->_storeManager->getStore($this->getStoreId());
         $isSecure = $store->isUrlSecure();
         return rtrim($store->getBaseUrl($type, $isSecure), '/') . '/';
@@ -613,6 +658,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $url
      * @return string
+     * @deprecated 100.2.0 No longer used, as we're generating product image URLs inside collection instead
+     * @see \Magento\Sitemap\Model\ResourceModel\Catalog\Product::_loadProductImages()
      */
     protected function _getMediaUrl($url)
     {
@@ -627,7 +674,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      */
     protected function _getFormattedLastmodDate($date)
     {
-        return date('c', strtotime($date));
+        if ($this->lastModMinTsVal === null) {
+            $this->lastModMinTsVal = strtotime(self::LAST_MOD_MIN_VAL);
+        }
+        $timestamp = max(strtotime($date), $this->lastModMinTsVal);
+        return date('c', $timestamp);
     }
 
     /**
@@ -682,6 +733,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      * Check is enabled submission to robots.txt
      *
      * @return bool
+     * @deprecated 100.2.0 Because the robots.txt file is not generated anymore,
+     *             this method is not needed and will be removed in major release.
      */
     protected function _isEnabledSubmissionRobots()
     {
@@ -696,6 +749,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $sitemapFileName
      * @return void
+     * @deprecated 100.2.0 Because the robots.txt file is not generated anymore,
+     *             this method is not needed and will be removed in major release.
      */
     protected function _addSitemapToRobotsTxt($sitemapFileName)
     {
@@ -732,5 +787,18 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         }
 
         return PHP_EOL;
+    }
+
+    /**
+     * Get unique page cache identities
+     *
+     * @return array
+     * @since 100.2.0
+     */
+    public function getIdentities()
+    {
+        return [
+            Value::CACHE_TAG . '_' . $this->getStoreId(),
+        ];
     }
 }

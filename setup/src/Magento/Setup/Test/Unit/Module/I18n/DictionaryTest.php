@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Module\I18n;
 
-class DictionaryTest extends \PHPUnit_Framework_TestCase
+class DictionaryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Setup\Module\I18n\Dictionary
@@ -20,8 +20,8 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
 
     public function testPhraseCollecting()
     {
-        $phraseFirstMock = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
-        $phraseSecondMock = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
+        $phraseFirstMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
+        $phraseSecondMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
 
         $this->_dictionary->addPhrase($phraseFirstMock);
         $this->_dictionary->addPhrase($phraseSecondMock);
@@ -31,11 +31,11 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDuplicates()
     {
-        $phraseFirstMock = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
+        $phraseFirstMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
         $phraseFirstMock->expects($this->once())->method('getKey')->will($this->returnValue('key_1'));
-        $phraseSecondMock = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
+        $phraseSecondMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
         $phraseSecondMock->expects($this->once())->method('getKey')->will($this->returnValue('key_1'));
-        $phraseThirdMock = $this->getMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class, [], [], '', false);
+        $phraseThirdMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
         $phraseThirdMock->expects($this->once())->method('getKey')->will($this->returnValue('key_3'));
 
         $this->_dictionary->addPhrase($phraseFirstMock);

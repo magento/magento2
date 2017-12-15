@@ -7,7 +7,7 @@ namespace Magento\CustomerImportExport\Test\Unit\Model\ResourceModel\Import\Cust
 
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 
-class StorageTest extends \PHPUnit_Framework_TestCase
+class StorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Storage
@@ -66,7 +66,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $customerCollection->expects($this->once())->method('getSelect')->will($this->returnValue($select));
 
-        $byPagesIterator = $this->getMock(\stdClass::class, ['iterate']);
+        $byPagesIterator = $this->createPartialMock(\stdClass::class, ['iterate']);
         $byPagesIterator->expects($this->once())
             ->method('iterate')
             ->will($this->returnCallback([$this, 'iterate']));

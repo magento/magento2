@@ -10,7 +10,7 @@ use \Magento\Integration\Model\Integration;
 /**
  * Class to test Integration Manager
  */
-class ManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Integration service

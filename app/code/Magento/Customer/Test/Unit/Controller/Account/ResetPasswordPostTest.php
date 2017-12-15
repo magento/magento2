@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ResetPasswordPostTest extends \PHPUnit_Framework_TestCase
+class ResetPasswordPostTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Controller\Account\ResetPasswordPost */
     protected $model;

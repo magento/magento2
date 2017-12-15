@@ -14,6 +14,9 @@ use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use Magento\Framework\Search\EntityMetadata;
 use Magento\Framework\Search\RequestInterface;
 
+/**
+ * @api
+ */
 class Builder
 {
     /**
@@ -114,7 +117,7 @@ class Builder
      *
      * @param Table $documentsTable
      * @return array
-     * @deprecated Added for backward compatibility
+     * @deprecated 100.1.0 Added for backward compatibility
      */
     private function getDocumentIds(Table $documentsTable)
     {

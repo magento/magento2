@@ -48,12 +48,12 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     /**
      * Configuration path for persistent identifier
      */
-    const PARAM_PERSISTENT_IDENTIFIER   = 'session/redis/param_persistent_identifier';
+    const PARAM_PERSISTENT_IDENTIFIER   = 'session/redis/persistent_identifier';
 
     /**
      * Configuration path for compression threshold
      */
-    const PARAM_COMPRESSION_THRESHOLD   = 'session/redis/param_compression_threshold';
+    const PARAM_COMPRESSION_THRESHOLD   = 'session/redis/compression_threshold';
 
     /**
      * Configuration path for compression library
@@ -116,6 +116,11 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     const SESSION_MAX_LIFETIME = 31536000;
 
     /**
+     * Try to break lock for at most this many seconds
+     */
+    const DEFAULT_FAIL_AFTER = 15;
+
+    /**
      * Deployment config
      *
      * @var DeploymentConfig $deploymentConfig
@@ -126,6 +131,11 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+
+    /**
+     * @var State
+     */
+    private $appState;
 
     /**
      * @param DeploymentConfig $deploymentConfig
@@ -287,5 +297,13 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
             return (int)$this->scopeConfig->getValue(self::XML_PATH_ADMIN_SESSION_LIFETIME);
         }
         return (int)$this->scopeConfig->getValue(self::XML_PATH_COOKIE_LIFETIME, StoreScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFailAfter()
+    {
+        return self::DEFAULT_FAIL_AFTER;
     }
 }

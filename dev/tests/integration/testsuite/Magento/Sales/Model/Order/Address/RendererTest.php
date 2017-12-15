@@ -14,7 +14,7 @@ use Magento\Store\Model\Store;
 use Magento\Sales\Model\Order\Address as OrderAddress;
 use Magento\Sales\Model\Order;
 
-class RendererTest extends \PHPUnit_Framework_TestCase
+class RendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface

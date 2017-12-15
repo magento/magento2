@@ -16,17 +16,20 @@ use Magento\Framework\EntityManager\EntityManager;
 /**
  * Sitemap cms page collection model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @since 100.0.2
  */
 class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var MetadataPool
+     * @since 100.1.0
      */
     protected $metadataPool;
 
     /**
      * @var EntityManager
+     * @since 100.1.0
      */
     protected $entityManager;
 
@@ -59,6 +62,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @inheritDoc
+     * @since 100.1.0
      */
     public function getConnection()
     {
@@ -126,6 +130,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param string $field field to load by (defaults to model id)
      * @return $this
+     * @since 100.1.0
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
@@ -156,6 +161,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @inheritDoc
+     * @since 100.1.0
      */
     public function save(AbstractModel $object)
     {
@@ -195,6 +201,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * @inheritDoc
+     * @since 100.1.0
      */
     public function delete(AbstractModel $object)
     {

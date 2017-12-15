@@ -5,32 +5,35 @@
  */
 namespace Magento\CatalogImportExport\Model\Indexer\Product\Price\Plugin;
 
-class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\AbstractPlugin
+class Import
 {
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
+    private $indexerRegistry;
+
+    /**
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     */
+    public function __construct(\Magento\Framework\Indexer\IndexerRegistry $indexerRegistry)
+    {
+        $this->indexerRegistry = $indexerRegistry;
+    }
+
     /**
      * After import handler
      *
      * @param \Magento\ImportExport\Model\Import $subject
      * @param bool $result
      * @return bool
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterImportSource(\Magento\ImportExport\Model\Import $subject, $result)
     {
-        if (!$this->getPriceIndexer()->isScheduled()) {
-            $this->invalidateIndexer();
+        $priceIndexer = $this->indexerRegistry->get(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID);
+        if (!$priceIndexer->isScheduled()) {
+            $priceIndexer->invalidate();
         }
         return $result;
-    }
-
-    /**
-     * Get price indexer
-     *
-     * @return \Magento\Framework\Indexer\IndexerInterface
-     */
-    protected function getPriceIndexer()
-    {
-        return $this->indexerRegistry->get(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID);
     }
 }

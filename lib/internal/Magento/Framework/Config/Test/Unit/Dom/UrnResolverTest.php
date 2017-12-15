@@ -8,7 +8,7 @@ namespace Magento\Framework\Config\Test\Unit\Dom;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Component\ComponentRegistrar;
 
-class UrnResolverTest extends \PHPUnit_Framework_TestCase
+class UrnResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var UrnResolver

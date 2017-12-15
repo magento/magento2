@@ -12,7 +12,7 @@ use Magento\TestFramework\App\State;
  * @magentoComponentsDir Magento/Backend/Block/_files/design
  * @magentoDbIsolation enabled
  */
-class MassactionTest extends \PHPUnit_Framework_TestCase
+class MassactionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Massaction

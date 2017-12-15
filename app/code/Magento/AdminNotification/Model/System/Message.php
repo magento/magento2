@@ -7,6 +7,8 @@ namespace Magento\AdminNotification\Model\System;
 
 /**
  * @codeCoverageIgnore
+ * @api
+ * @since 100.0.2
  */
 class Message extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Notification\MessageInterface
 {

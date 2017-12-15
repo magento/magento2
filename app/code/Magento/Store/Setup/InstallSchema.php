@@ -23,7 +23,7 @@ class InstallSchema implements InstallSchemaInterface
     private $defaultCategory;
 
     /**
-     * @deprecated
+     * @deprecated 100.1.0
      * @return DefaultCategory
      */
     private function getDefaultCategory()

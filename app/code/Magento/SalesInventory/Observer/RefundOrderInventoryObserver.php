@@ -14,7 +14,7 @@ use Magento\SalesInventory\Model\Order\ReturnProcessor;
 
 /**
  * Catalog inventory module observer
- * @deprecated
+ * @deprecated 100.2.0
  */
 class RefundOrderInventoryObserver implements ObserverInterface
 {
@@ -90,11 +90,8 @@ class RefundOrderInventoryObserver implements ObserverInterface
                 $returnToStockItems[] = $item->getOrderItemId();
             }
         }
-        $this->returnProcessor->execute(
-            $creditmemo,
-            $order,
-            $returnToStockItems,
-            $this->stockConfiguration->isAutoReturnEnabled()
-        );
+        if (!empty($returnToStockItems)) {
+            $this->returnProcessor->execute($creditmemo, $order, $returnToStockItems);
+        }
     }
 }

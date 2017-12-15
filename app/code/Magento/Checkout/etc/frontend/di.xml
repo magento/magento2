@@ -33,6 +33,7 @@
         <arguments>
             <argument name="clientSideSections" xsi:type="array">
                 <item name="checkout-data" xsi:type="string">checkout-data</item>
+                <item name="cart-data" xsi:type="string">cart-data</item>
             </argument>
         </arguments>
     </type>

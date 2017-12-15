@@ -13,12 +13,11 @@ use Magento\Sales\Model\AbstractModel;
  * Sales order address model
  *
  * @api
- * @method \Magento\Sales\Model\ResourceModel\Order\Address _getResource()
- * @method \Magento\Sales\Model\ResourceModel\Order\Address getResource()
  * @method \Magento\Customer\Api\Data\AddressInterface getCustomerAddressData()
  * @method Address setCustomerAddressData(\Magento\Customer\Api\Data\AddressInterface $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @since 100.0.2
  */
 class Address extends AbstractModel implements OrderAddressInterface, AddressModelInterface
 {

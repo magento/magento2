@@ -23,7 +23,7 @@ use PHPUnit_Framework_MockObject_MockObject as Mock;
  * @see LockProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LockProcessorTest extends \PHPUnit_Framework_TestCase
+class LockProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var LockProcessor
@@ -206,10 +206,10 @@ class LockProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->valueMock);
         $this->arrayManagerMock->expects($this->never())
             ->method('set');
-        $this->valueMock->expects($this->never())
+        $this->valueMock->expects($this->once())
             ->method('getValue');
         $this->valueMock->expects($this->once())
-            ->method('validateBeforeSave')
+            ->method('afterSave')
             ->willThrowException(new \Exception('Invalid values'));
         $this->deploymentConfigWriterMock->expects($this->never())
             ->method('saveConfig');

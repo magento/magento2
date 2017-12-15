@@ -9,6 +9,7 @@ namespace Magento\Framework\Search\Dynamic;
  * Algorithm for layer value filter
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 class Algorithm
 {

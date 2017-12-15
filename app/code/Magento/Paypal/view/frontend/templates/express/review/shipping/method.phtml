@@ -14,17 +14,17 @@
             <select name="shipping_method" id="shipping_method" class="required-entry">
                 <?php if (!$currentRate): ?>
                     <option value="">
-                        <?php echo $block->escapeHtml(__('Please select a shipping method...')); ?>
+                        <?= $block->escapeHtml(__('Please select a shipping method...')) ?>
                     </option>
                 <?php endif; ?>
                 <?php foreach ($groups as $code => $rates): ?>
-                    <optgroup label="<?php echo $block->escapeHtml($block->getCarrierName($code)) ?>"
+                    <optgroup label="<?= $block->escapeHtml($block->getCarrierName($code)) ?>"
                               style="font-style:normal;">
                         <?php foreach ($rates as $rate): ?>
                             <option
-                                value="<?php echo $block->escapeHtml($block->renderShippingRateValue($rate)); ?>"
-                                    <?php echo($currentRate === $rate) ? ' selected="selected"' : ''; ?>>
-                                <?php /* @noEscape */ echo $block->renderShippingRateOption($rate); ?>
+                                value="<?= $block->escapeHtml($block->renderShippingRateValue($rate)) ?>"
+                                    <?= ($currentRate === $rate) ? ' selected="selected"' : '' ?>>
+                                <?= /* @noEscape */ $block->renderShippingRateOption($rate) ?>
                             </option>
                         <?php endforeach; ?>
                     </optgroup>
@@ -33,18 +33,18 @@
         <?php else: ?>
             <p>
                 <strong>
-                    <?php echo $block->escapeHtml(__('Sorry, no quotes are available for this order right now.')); ?>
+                    <?= $block->escapeHtml(__('Sorry, no quotes are available for this order right now.')) ?>
                 </strong>
             </p>
         <?php endif; ?>
     <?php else: ?>
         <p>
             <strong>
-                <?php /* @noEscape */ echo $block->renderShippingRateOption($block->getCurrentShippingRate()); ?>
+                <?= /* @noEscape */ $block->renderShippingRateOption($block->getCurrentShippingRate()) ?>
             </strong>
         </p>
     <?php endif; ?>
 </div>
 <div style="display: none" id="shipping_method_update">
-    <p><?php echo $block->escapeHtml(__('Please update order data to get shipping methods and rates')); ?></p>
+    <p><?= $block->escapeHtml(__('Please update order data to get shipping methods and rates')) ?></p>
 </div>

@@ -11,7 +11,7 @@ namespace Magento\Framework\View\Test\Unit\Design\Theme\Customization;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class PathTest extends \PHPUnit_Framework_TestCase
+class PathTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\View\Design\Theme\Customization\Path
@@ -37,8 +37,8 @@ class PathTest extends \PHPUnit_Framework_TestCase
     {
         $this->_theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject $filesystem */
-        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
-        $this->_directory = $this->getMock(\Magento\Framework\Filesystem\Directory\Read::class, [], [], '', false);
+        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->_directory = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($this->_directory));
         $this->_directory->expects($this->any())->method('getAbsolutePath')->will($this->returnArgument(0));
         $this->componentRegistrar = $this->getMockForAbstractClass(

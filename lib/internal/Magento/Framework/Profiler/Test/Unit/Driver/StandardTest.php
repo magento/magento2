@@ -7,10 +7,10 @@
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver;
 
-class StandardTest extends \PHPUnit_Framework_TestCase
+class StandardTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Profiler\Driver\Standard\Stat|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Profiler\Driver\Standard\Stat|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_stat;
 
@@ -21,7 +21,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_stat = $this->getMock(\Magento\Framework\Profiler\Driver\Standard\Stat::class);
+        $this->_stat = $this->createMock(\Magento\Framework\Profiler\Driver\Standard\Stat::class);
         $this->_driver = new \Magento\Framework\Profiler\Driver\Standard(['stat' => $this->_stat]);
     }
 
@@ -89,7 +89,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
      */
     public function testInitOutputs()
     {
-        $outputFactory = $this->getMock(\Magento\Framework\Profiler\Driver\Standard\Output\Factory::class);
+        $outputFactory = $this->createMock(\Magento\Framework\Profiler\Driver\Standard\Output\Factory::class);
         $config = [
             'outputs' => [
                 'outputTypeOne' => ['baseDir' => '/custom/base/dir'],
@@ -99,8 +99,8 @@ class StandardTest extends \PHPUnit_Framework_TestCase
             'outputFactory' => $outputFactory,
         ];
 
-        $outputOne = $this->getMock(\Magento\Framework\Profiler\Driver\Standard\OutputInterface::class);
-        $outputTwo = $this->getMock(\Magento\Framework\Profiler\Driver\Standard\OutputInterface::class);
+        $outputOne = $this->createMock(\Magento\Framework\Profiler\Driver\Standard\OutputInterface::class);
+        $outputTwo = $this->createMock(\Magento\Framework\Profiler\Driver\Standard\OutputInterface::class);
 
         $outputFactory->expects(
             $this->at(0)
@@ -132,9 +132,9 @@ class StandardTest extends \PHPUnit_Framework_TestCase
      */
     public function testDisplayAndRegisterOutput()
     {
-        $outputOne = $this->getMock(\Magento\Framework\Profiler\Driver\Standard\OutputInterface::class);
+        $outputOne = $this->createMock(\Magento\Framework\Profiler\Driver\Standard\OutputInterface::class);
         $outputOne->expects($this->once())->method('display')->with($this->_stat);
-        $outputTwo = $this->getMock(\Magento\Framework\Profiler\Driver\Standard\OutputInterface::class);
+        $outputTwo = $this->createMock(\Magento\Framework\Profiler\Driver\Standard\OutputInterface::class);
         $outputTwo->expects($this->once())->method('display')->with($this->_stat);
 
         $this->_driver->registerOutput($outputOne);

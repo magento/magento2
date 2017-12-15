@@ -5,18 +5,18 @@
  */
 namespace Magento\Store\Test\Unit\App\Action\Plugin;
 
+use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\Http\Context;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Action\AbstractAction;
-use Magento\Framework\App\RequestInterface;
 
 /**
  * Class ContextPluginTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ContextTest extends \PHPUnit_Framework_TestCase
+class ContextTest extends \PHPUnit\Framework\TestCase
 {
     const CURRENCY_SESSION = 'CNY';
     const CURRENCY_DEFAULT = 'USD';
@@ -77,42 +77,15 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->sessionMock = $this->getMock(
-            \Magento\Framework\Session\Generic::class,
-            ['getCurrencyCode'],
-            [],
-            '',
-            false
-        );
-        $this->httpContextMock = $this->getMock(
-            \Magento\Framework\App\Http\Context::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->storeCookieManager = $this->getMock(\Magento\Store\Api\StoreCookieManagerInterface::class);
-        $this->storeMock = $this->getMock(
-            \Magento\Store\Model\Store::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->currentStoreMock = $this->getMock(
-            \Magento\Store\Model\Store::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->websiteMock = $this->getMock(
+        $this->sessionMock = $this->createPartialMock(\Magento\Framework\Session\Generic::class, ['getCurrencyCode']);
+        $this->httpContextMock = $this->createMock(\Magento\Framework\App\Http\Context::class);
+        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeCookieManager = $this->createMock(\Magento\Store\Api\StoreCookieManagerInterface::class);
+        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->currentStoreMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->websiteMock = $this->createPartialMock(
             \Magento\Store\Model\Website::class,
-            ['getDefaultStore', '__wakeup'],
-            [],
-            '',
-            false
+            ['getDefaultStore', '__wakeup']
         );
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)->getMockForAbstractClass();
         $this->subjectMock = $this->getMockBuilder(AbstractAction::class)

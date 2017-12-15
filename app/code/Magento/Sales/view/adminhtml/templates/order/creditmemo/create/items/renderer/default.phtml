@@ -11,17 +11,17 @@
 <?php $_item = $block->getItem() ?>
 <?php $block->setPriceDataObject($_item); ?>
 <tr>
-    <td class="col-product"><?php echo $block->getColumnHtml($_item, 'name') ?></td>
+    <td class="col-product"><?= $block->getColumnHtml($_item, 'name') ?></td>
     <td class="col-price">
-        <?php echo $block->getColumnHtml($_item, 'price'); ?>
+        <?= $block->getColumnHtml($_item, 'price') ?>
     </td>
-    <td class="col-ordered-qty"><?php echo $block->getColumnHtml($_item, 'qty') ?></td>
+    <td class="col-ordered-qty"><?= $block->getColumnHtml($_item, 'qty') ?></td>
     <?php if ($block->canParentReturnToStock($_item)) : ?>
         <td class="col-return-to-stock">
         <?php if ($block->canReturnItemToStock($_item)) : ?>
             <input type="checkbox"
                    class="admin__control-checkbox"
-                   name="creditmemo[items][<?php /* @escapeNotVerified */ echo $_item->getOrderItemId() ?>][back_to_stock]"
+                   name="creditmemo[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>][back_to_stock]"
                    value="1"<?php if ($_item->getBackToStock()):?> checked<?php endif;?>/>
             <label class="admin__field-label"></label>
         <?php endif; ?>
@@ -31,18 +31,18 @@
     <?php if ($block->canEditQty()) : ?>
         <input type="text"
                class="input-text admin__control-text qty-input"
-               name="creditmemo[items][<?php /* @escapeNotVerified */ echo $_item->getOrderItemId() ?>][qty]"
-               value="<?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?>"/>
+               name="creditmemo[items][<?= /* @escapeNotVerified */ $_item->getOrderItemId() ?>][qty]"
+               value="<?= /* @escapeNotVerified */ $_item->getQty()*1 ?>"/>
     <?php else : ?>
-        <?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?>
+        <?= /* @escapeNotVerified */ $_item->getQty()*1 ?>
     <?php endif; ?>
     </td>
     <td class="col-subtotal">
-        <?php echo $block->getColumnHtml($_item, 'subtotal'); ?>
+        <?= $block->getColumnHtml($_item, 'subtotal') ?>
     </td>
-    <td class="col-tax-amount"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('tax_amount') ?></td>
-    <td class="col-discont"><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('discount_amount') ?></td>
+    <td class="col-tax-amount"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('tax_amount') ?></td>
+    <td class="col-discont"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('discount_amount') ?></td>
     <td class="col-total last">
-        <?php echo $block->getColumnHtml($_item, 'total'); ?>
+        <?= $block->getColumnHtml($_item, 'total') ?>
     </td>
 </tr>

@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\ScopeInterface;
 
-class ConfirmationTest extends \PHPUnit_Framework_TestCase
+class ConfirmationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Confirmation

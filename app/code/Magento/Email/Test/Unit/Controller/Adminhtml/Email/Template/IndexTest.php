@@ -9,7 +9,7 @@ namespace Magento\Email\Test\Unit\Controller\Adminhtml\Email\Template;
  * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexTest extends \PHPUnit_Framework_TestCase
+class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Email\Controller\Adminhtml\Email\Template\Index

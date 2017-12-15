@@ -10,7 +10,7 @@ namespace Magento\Framework\Communication;
  *
  * @magentoCache config disabled
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Check how valid communication XML config is parsed.

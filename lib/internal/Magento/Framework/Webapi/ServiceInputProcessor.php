@@ -29,19 +29,29 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
     const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
-    /** @var \Magento\Framework\Reflection\TypeProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     */
     protected $typeProcessor;
 
-    /** @var ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     protected $objectManager;
 
-    /** @var AttributeValueFactory */
+    /**
+     * @var \Magento\Framework\Api\AttributeValueFactory
+     */
     protected $attributeValueFactory;
 
-    /** @var  CustomAttributeTypeLocatorInterface */
+    /**
+     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface
+     */
     protected $customAttributeTypeLocator;
 
-    /** @var  MethodsMap */
+    /**
+     * @var \Magento\Framework\Reflection\MethodsMap
+     */
     protected $methodsMap;
 
     /**
@@ -77,7 +87,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      *
      * @return \Magento\Framework\Reflection\NameFinder
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getNameFinder()
     {
@@ -264,7 +274,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             throw new SerializationException(new Phrase('There is an empty custom attribute specified.'));
         } elseif (!$customAttributeCode) {
             throw new SerializationException(new Phrase('A custom attribute is specified without an attribute code.'));
-        } elseif (!isset($customAttribute[AttributeValue::VALUE])) {
+        } elseif (!array_key_exists(AttributeValue::VALUE, $customAttribute)) {
             throw new SerializationException(
                 new Phrase('Value is not set for attribute code "' . $customAttributeCode . '"')
             );
@@ -305,6 +315,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      */
     public function convertValue($data, $type)
     {
+        if ($data === '') {
+            return $data;
+        }
+
         $isArrayType = $this->typeProcessor->isArrayType($type);
         if ($isArrayType && isset($data['item'])) {
             $data = $this->_removeSoapItemNode($data);
@@ -315,13 +329,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             /** Complex type or array of complex types */
             if ($isArrayType) {
                 // Initializing the result for array type else it will return null for empty array
-                $result = is_array($data) ? [] : null;
-                $itemType = $this->typeProcessor->getArrayItemType($type);
-                if (is_array($data)) {
-                    foreach ($data as $key => $item) {
-                        $result[$key] = $this->_createFromArray($itemType, $item);
-                    }
-                }
+                $result = $this->getResultForArrayType($data, $type);
             } else {
                 $result = $this->_createFromArray($type, $data);
             }
@@ -374,5 +382,24 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 throw $exception;
             }
         }
+    }
+
+    /**
+     * @param mixed $data
+     * @param string $type
+     *
+     * @return array|null
+     */
+    private function getResultForArrayType($data, $type)
+    {
+        $result = is_array($data) ? [] : null;
+        $itemType = $this->typeProcessor->getArrayItemType($type);
+        if (is_array($data)) {
+            foreach ($data as $key => $item) {
+                $result[$key] = $this->_createFromArray($itemType, $item);
+            }
+        }
+
+        return $result;
     }
 }

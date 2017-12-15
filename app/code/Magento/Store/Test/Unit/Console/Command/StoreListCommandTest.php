@@ -15,7 +15,7 @@ use Magento\Framework\Console\Cli;
 /**
  * @package Magento\Store\Test\Unit\Console\Command
  */
-class StoreListCommandTest extends \PHPUnit_Framework_TestCase
+class StoreListCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var StoreListCommand

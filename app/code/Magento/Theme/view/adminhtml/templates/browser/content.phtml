@@ -11,8 +11,8 @@
  * @var $block \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content
  */
 ?>
-<?php echo $block->getChildHtml('wysiwyg_files.js') ?>
+<?= $block->getChildHtml('wysiwyg_files.js') ?>
 
-<div id="contents-uploader" class="contents-uploader"><?php echo $block->getChildHtml('wysiwyg_files.uploader') ?></div>
+<div id="contents-uploader" class="contents-uploader"><?= $block->getChildHtml('wysiwyg_files.uploader') ?></div>
 <div id="contents"></div>
-<div id="contents-newfolder" class="no-display"><?php echo $block->getChildHtml('wysiwyg_files.newfolder') ?></div>
+<div id="contents-newfolder" class="no-display"><?= $block->getChildHtml('wysiwyg_files.newfolder') ?></div>

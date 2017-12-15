@@ -13,6 +13,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * Class Container
  *
  * @api
+ * @since 100.0.2
  */
 abstract class Container implements IdentityInterface
 {

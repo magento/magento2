@@ -9,6 +9,10 @@
  */
 namespace Magento\Framework\Code\Minifier;
 
+/**
+ * Interface \Magento\Framework\Code\Minifier\AdapterInterface
+ *
+ */
 interface AdapterInterface
 {
     /**

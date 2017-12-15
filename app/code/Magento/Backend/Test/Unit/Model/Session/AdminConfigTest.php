@@ -9,9 +9,7 @@
  */
 namespace Magento\Backend\Test\Unit\Model\Session;
 
-use Magento\TestFramework\ObjectManager;
-
-class AdminConfigTest extends \PHPUnit_Framework_TestCase
+class AdminConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\App\RequestInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -40,13 +38,9 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock(
+        $this->requestMock = $this->createPartialMock(
             \Magento\Framework\App\Request\Http::class,
-            ['getBasePath', 'isSecure', 'getHttpHost'],
-            [],
-            '',
-            false,
-            false
+            ['getBasePath', 'isSecure', 'getHttpHost']
         );
         $this->requestMock->expects($this->atLeastOnce())->method('getBasePath')->will($this->returnValue('/'));
         $this->requestMock->expects($this->atLeastOnce())
@@ -54,14 +48,15 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('init.host'));
         $this->objectManager =  new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->validatorFactory = $this->getMockBuilder(\Magento\Framework\ValidatorFactory::class)
+            ->setMethods(['setInstanceName', 'create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $backendUrl = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false);
+        $backendUrl = $this->createMock(\Magento\Backend\Model\Url::class);
         $backendUrl->expects($this->once())->method('getBaseUrl')->will($this->returnValue('/'));
-        $this->backendUrlFactory = $this->getMock(\Magento\Backend\Model\UrlFactory::class, ['create'], [], '', false);
+        $this->backendUrlFactory = $this->createPartialMock(\Magento\Backend\Model\UrlFactory::class, ['create']);
         $this->backendUrlFactory->expects($this->any())->method('create')->willReturn($backendUrl);
 
-        $this->filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $dirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')

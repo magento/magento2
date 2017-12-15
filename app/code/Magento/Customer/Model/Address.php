@@ -18,6 +18,7 @@ use Magento\Framework\Indexer\StateInterface;
  * @method int getParentId() getParentId()
  * @method \Magento\Customer\Model\Address setParentId() setParentId(int $parentId)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Address extends \Magento\Customer\Model\Address\AbstractAddress
 {
@@ -351,13 +352,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
-        if (!$indexer->isScheduled()) {
-            $indexer->reindexRow($this->getCustomerId());
-        }
+        $indexer->reindexRow($this->getCustomerId());
     }
 
     /**
      * {@inheritdoc}
+     * @since 100.0.6
      */
     protected function getCustomAttributesCodes()
     {
@@ -367,7 +367,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Get new AttributeList dependency for application code.
      * @return \Magento\Customer\Model\Address\CustomAttributeListInterface
-     * @deprecated
+     * @deprecated 100.0.6
      */
     private function getAttributeList()
     {
@@ -383,6 +383,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Retrieve attribute set id for customer address.
      *
      * @return int
+     * @since 100.2.0
      */
     public function getAttributeSetId()
     {

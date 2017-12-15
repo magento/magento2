@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Translate\Test\Unit;
 
-class AdapterAbstractTest extends \PHPUnit_Framework_TestCase
+class AdapterAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\Translate\AbstractAdapter

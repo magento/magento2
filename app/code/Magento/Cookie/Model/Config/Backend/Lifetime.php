@@ -10,7 +10,9 @@ namespace Magento\Cookie\Model\Config\Backend;
  */
 class Lifetime extends \Magento\Framework\App\Config\Value
 {
-    /** @var  \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator */
+    /**
+     * @var \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator
+     */
     protected $configValidator;
 
     /**

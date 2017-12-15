@@ -12,6 +12,7 @@ namespace Magento\Sales\Api\Data;
  * document lists the products and their quantities in the delivery package. Merchants and customers can track
  * shipments.
  * @api
+ * @since 100.0.2
  */
 interface ShipmentTrackSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {

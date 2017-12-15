@@ -9,7 +9,7 @@ use \Magento\Framework\App\PageCache\Version;
 
 use Magento\TestFramework\ObjectManager;
 
-class VersionTest extends \PHPUnit_Framework_TestCase
+class VersionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Version instance
@@ -45,7 +45,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->cookieManagerMock = $this->getMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(
@@ -77,7 +77,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock->expects($this->once())->method('isPost')->will($this->returnValue($isPost));
         if ($isPost) {
-            $publicCookieMetadataMock = $this->getMock(\Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class);
+            $publicCookieMetadataMock = $this->createMock(\Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class);
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setPath')
                 ->with('/')

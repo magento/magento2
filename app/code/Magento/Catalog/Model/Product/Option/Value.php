@@ -11,17 +11,17 @@ namespace Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Catalog\Pricing\Price\BasePrice;
 
 /**
  * Catalog product option select type model
  *
  * @api
- * @method \Magento\Catalog\Model\ResourceModel\Product\Option\Value _getResource()
- * @method \Magento\Catalog\Model\ResourceModel\Product\Option\Value getResource()
  * @method int getOptionId()
  * @method \Magento\Catalog\Model\Product\Option\Value setOptionId(int $value)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @since 100.0.2
  */
 class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface
 {
@@ -41,9 +41,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     const KEY_OPTION_TYPE_ID = 'option_type_id';
     /**#@-*/
 
-    /**
-     * @var array
-     */
+    /**#@-*/
     protected $_values = [];
 
     /**
@@ -193,6 +191,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     public function saveValues()
     {
         foreach ($this->getValues() as $value) {
+            $this->isDeleted(false);
             $this->setData(
                 $value
             )->setData(
@@ -226,7 +225,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     public function getPrice($flag = false)
     {
         if ($flag && $this->getPriceType() == self::TYPE_PERCENT) {
-            $basePrice = $this->getOption()->getProduct()->getFinalPrice();
+            $basePrice = $this->getOption()->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
             $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
             return $price;
         }

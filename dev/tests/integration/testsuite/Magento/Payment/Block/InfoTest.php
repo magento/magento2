@@ -5,7 +5,7 @@
  */
 namespace Magento\Payment\Block;
 
-class InfoTest extends \PHPUnit_Framework_TestCase
+class InfoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoConfigFixture current_store payment/banktransfer/title Bank Method Title

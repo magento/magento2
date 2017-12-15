@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Filter\Test\Unit;
 
-class StripTagsTest extends \PHPUnit_Framework_TestCase
+class StripTagsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers \Magento\Framework\Filter\StripTags::filter

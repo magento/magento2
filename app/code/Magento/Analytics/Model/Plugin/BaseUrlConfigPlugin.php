@@ -5,97 +5,57 @@
  */
 namespace Magento\Analytics\Model\Plugin;
 
-use Magento\Analytics\Model\SubscriptionStatusProvider;
-use Magento\Framework\FlagManager;
-use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Analytics\Model\Config\Backend\Baseurl\SubscriptionUpdateHandler;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Value;
+use Magento\Store\Model\Store;
 
 /**
- * Class BaseUrlConfigPlugin
- *
- * Plugin checks if value changed than save old base url and call subscription update.
+ * Plugin on Base URL config value AfterSave method.
  */
 class BaseUrlConfigPlugin
 {
     /**
-     * @var FlagManager
+     * @var SubscriptionUpdateHandler
      */
-    private $flagManager;
+    private $subscriptionUpdateHandler;
 
     /**
-     * @var SubscriptionStatusProvider
-     */
-    private $subscriptionStatusProvider;
-
-    /**
-     * @var WriterInterface
-     */
-    private $configWriter;
-
-    /**
-     * Cron expression by next pattern:
-     * # Minute # Hour # Day of the Month # Month of the Year # Day of the Week.
-     *
-     * @var string
-     */
-    private $cronExpression = '0 * * * *';
-
-    /**
-     * Config path for schedule setting of subscription handler.
-     */
-    const UPDATE_CRON_STRING_PATH = "crontab/default/jobs/analytics_update/schedule/cron_expr";
-
-    /**
-     * Represents a flag code for analytics old base url.
-     */
-    const OLD_BASE_URL_FLAG_CODE = 'analytics_old_base_url';
-
-    /**
-     * @param FlagManager $flagManager
-     * @param SubscriptionStatusProvider $subscriptionStatusProvider
-     * @param WriterInterface $configWriter
+     * @param SubscriptionUpdateHandler $subscriptionUpdateHandler
      */
     public function __construct(
-        FlagManager $flagManager,
-        SubscriptionStatusProvider $subscriptionStatusProvider,
-        WriterInterface $configWriter
+        SubscriptionUpdateHandler $subscriptionUpdateHandler
     ) {
-        $this->flagManager = $flagManager;
-        $this->subscriptionStatusProvider = $subscriptionStatusProvider;
-        $this->configWriter = $configWriter;
+        $this->subscriptionUpdateHandler = $subscriptionUpdateHandler;
     }
 
     /**
-     * Sets update analytics cron job if base url was changed.
+     * Add additional handling after config value was saved.
      *
-     * @param \Magento\Config\Model\Config\Backend\Baseurl $subject
-     * @param \Magento\Config\Model\Config\Backend\Baseurl $result
-     * @return \Magento\Config\Model\Config\Backend\Baseurl
+     * @param Value $subject
+     * @param Value $result
+     * @return Value
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterAfterSave(
-        \Magento\Config\Model\Config\Backend\Baseurl $subject,
-        \Magento\Config\Model\Config\Backend\Baseurl $result
+        Value $subject,
+        Value $result
     ) {
-        if (!$result->isValueChanged()) {
-            return $result;
-        }
-
         if ($this->isPluginApplicable($result)) {
-            $this->flagManager->saveFlag(static::OLD_BASE_URL_FLAG_CODE, $result->getOldValue());
-            $this->configWriter->save(self::UPDATE_CRON_STRING_PATH, $this->cronExpression);
+            $this->subscriptionUpdateHandler->processUrlUpdate($result->getOldValue());
         }
 
         return $result;
     }
 
     /**
-     * @param \Magento\Config\Model\Config\Backend\Baseurl $result
-     *
+     * @param Value $result
      * @return bool
      */
-    private function isPluginApplicable(\Magento\Config\Model\Config\Backend\Baseurl $result)
+    private function isPluginApplicable(Value $result)
     {
-        return $result->getData('path') === \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL
-            && $this->subscriptionStatusProvider->getStatus() === SubscriptionStatusProvider::ENABLED;
+        return $result->isValueChanged()
+            && ($result->getPath() === Store::XML_PATH_SECURE_BASE_URL)
+            && ($result->getScope() === ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
     }
 }

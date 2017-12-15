@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Validator;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test creation of validator config

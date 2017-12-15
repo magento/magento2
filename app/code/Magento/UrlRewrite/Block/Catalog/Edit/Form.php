@@ -27,10 +27,14 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
      */
     protected $_categoryFactory;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     */
     protected $productUrlPathGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     */
     protected $categoryUrlPathGenerator;
 
     /**

@@ -22,13 +22,19 @@ class InlineEdit extends \Magento\Backend\App\Action
      */
     const ADMIN_RESOURCE = 'Magento_Cms::save';
 
-    /** @var PostDataProcessor */
+    /**
+     * @var \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor
+     */
     protected $dataProcessor;
 
-    /** @var PageRepository  */
+    /**
+     * @var \Magento\Cms\Api\PageRepositoryInterface
+     */
     protected $pageRepository;
 
-    /** @var JsonFactory  */
+    /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
     protected $jsonFactory;
 
     /**

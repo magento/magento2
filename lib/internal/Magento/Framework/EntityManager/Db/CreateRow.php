@@ -91,7 +91,10 @@ class CreateRow
         $entityTable = $metadata->getEntityTable();
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
         $connection->insert($entityTable, $this->prepareData($metadata, $connection, $data));
-        $data[$linkField] = $connection->lastInsertId($entityTable);
+
+        if (!isset($data[$linkField]) || !$data[$linkField]) {
+            $data[$linkField] = $connection->lastInsertId($entityTable);
+        }
 
         return $data;
     }

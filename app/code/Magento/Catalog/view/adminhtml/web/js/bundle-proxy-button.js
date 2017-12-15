@@ -5,6 +5,7 @@
 
 /**
  * @api
+ * @deprecated since version 2.2.0
  */
 define([
     'Magento_Ui/js/form/components/button',

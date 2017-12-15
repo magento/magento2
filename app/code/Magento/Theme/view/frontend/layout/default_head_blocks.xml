@@ -13,6 +13,7 @@
     </head>
     <body>
         <referenceContainer name="after.body.start">
+            <block class="Magento\Framework\View\Element\Template" name="head.polyfill" as="polyfill" template="Magento_Theme::js/polyfill.phtml" before="-"/>
             <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Theme::js/components.phtml" before="-"/>
         </referenceContainer>
     </body>

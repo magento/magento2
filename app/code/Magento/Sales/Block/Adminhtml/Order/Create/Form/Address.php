@@ -293,11 +293,17 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
 
     /**
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $countryElement
+     * @param string|int $storeId
+     *
      * @return void
      */
-    private function processCountryOptions(\Magento\Framework\Data\Form\Element\AbstractElement $countryElement)
-    {
-        $storeId = $this->getBackendQuoteSession()->getStoreId();
+    protected function processCountryOptions(
+        \Magento\Framework\Data\Form\Element\AbstractElement $countryElement,
+        $storeId = null
+    ) {
+        if ($storeId === null) {
+            $storeId = $this->getBackendQuoteSession()->getStoreId();
+        }
         $options = $this->getCountriesCollection()
             ->loadByStore($storeId)
             ->toOptionArray();
@@ -307,7 +313,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
 
     /**
      * Retrieve Directiry Countries collection
-     * @deprecated
+     * @deprecated 100.1.3
      * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     private function getCountriesCollection()
@@ -322,7 +328,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
 
     /**
      * Retrieve Backend Quote Session
-     * @deprecated
+     * @deprecated 100.1.3
      * @return Quote
      */
     private function getBackendQuoteSession()

@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\App\Response\HeaderProvider;
 
+/**
+ * Interface \Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface
+ *
+ */
 interface HeaderProviderInterface
 {
     /**

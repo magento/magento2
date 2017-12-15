@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Unit test of sales emails sending observer.
  */
-class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
+class EmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Subject of testing.
@@ -51,13 +51,7 @@ class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->emailSender = $this->getMock(
-            \Magento\Sales\Model\Order\Email\Sender::class,
-            ['send'],
-            [],
-            '',
-            false
-        );
+        $this->emailSender = $this->createPartialMock(\Magento\Sales\Model\Order\Email\Sender::class, ['send']);
 
         $this->entityResource = $this->getMockForAbstractClass(
             \Magento\Sales\Model\ResourceModel\EntityAbstract::class,
@@ -79,13 +73,7 @@ class EmailSenderHandlerTest extends \PHPUnit_Framework_TestCase
             ['addFieldToFilter', 'getItems']
         );
 
-        $this->globalConfig = $this->getMock(
-            \Magento\Framework\App\Config::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $this->globalConfig = $this->createMock(\Magento\Framework\App\Config::class);
 
         $this->object = $objectManager->getObject(
             \Magento\Sales\Model\EmailSenderHandler::class,

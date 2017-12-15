@@ -16,7 +16,7 @@ class GetAttributes extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Catalog::attributes_attributes';
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
 
     /**
      * Store manager

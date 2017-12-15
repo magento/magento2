@@ -10,46 +10,46 @@
 <?php /** @var  $block \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer */ ?>
 <?php $_item = $block->getItem() ?>
 <?php $_order = $block->getItem()->getOrderItem()->getOrder() ?>
-<tr id="order-item-row-<?php /* @escapeNotVerified */ echo $_item->getId() ?>">
-    <td class="col name" data-th="<?php echo $block->escapeHtml(__('Product Name')); ?>">
-        <strong class="product name product-item-name"><?php echo $block->escapeHtml($_item->getName()) ?></strong>
+<tr id="order-item-row-<?= /* @escapeNotVerified */ $_item->getId() ?>">
+    <td class="col name" data-th="<?= $block->escapeHtml(__('Product Name')) ?>">
+        <strong class="product name product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
         <?php if ($_options = $block->getItemOptions()): ?>
         <dl class="item-options">
         <?php foreach ($_options as $_option) : ?>
-            <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
+            <dt><?= $block->escapeHtml($_option['label']) ?></dt>
             <?php if (!$block->getPrintStatus()): ?>
                 <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
                 <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
-                    <?php /* @escapeNotVerified */ echo $_formatedOptionValue['value'] ?>
+                    <?= /* @escapeNotVerified */ $_formatedOptionValue['value'] ?>
                     <?php if (isset($_formatedOptionValue['full_view'])): ?>
                     <div class="tooltip content">
                         <dl class="item options">
-                            <dt><?php echo $block->escapeHtml($_option['label']) ?></dt>
-                            <dd><?php /* @escapeNotVerified */ echo $_formatedOptionValue['full_view'] ?></dd>
+                            <dt><?= $block->escapeHtml($_option['label']) ?></dt>
+                            <dd><?= /* @escapeNotVerified */ $_formatedOptionValue['full_view'] ?></dd>
                         </dl>
                     </div>
                     <?php endif; ?>
                 </dd>
             <?php else: ?>
-                <dd><?php echo $block->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])) ?></dd>
+                <dd><?= $block->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])) ?></dd>
             <?php endif; ?>
         <?php endforeach; ?>
         </dl>
         <?php endif; ?>
         <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
         <?php if ($addInfoBlock) :?>
-            <?php echo $addInfoBlock->setItem($_item->getOrderItem())->toHtml(); ?>
+            <?= $addInfoBlock->setItem($_item->getOrderItem())->toHtml() ?>
         <?php endif; ?>
-        <?php echo $block->escapeHtml($_item->getDescription()) ?>
+        <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="col sku" data-th="<?php echo $block->escapeHtml(__('SKU')); ?>"><?php /* @escapeNotVerified */ echo $block->prepareSku($block->getSku()) ?></td>
-    <td class="col price" data-th="<?php echo $block->escapeHtml(__('Price')); ?>">
-        <?php echo $block->getItemPriceHtml(); ?>
+    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?= /* @escapeNotVerified */ $block->prepareSku($block->getSku()) ?></td>
+    <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
+        <?= $block->getItemPriceHtml() ?>
     </td>
-    <td class="col qty" data-th="<?php echo $block->escapeHtml(__('Qty Invoiced')); ?>">
-        <span class="qty summary"><?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?></span>
+    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty Invoiced')) ?>">
+        <span class="qty summary"><?= /* @escapeNotVerified */ $_item->getQty()*1 ?></span>
     </td>
-    <td class="col subtotal" data-th="<?php echo $block->escapeHtml(__('Subtotal')); ?>">
-        <?php echo $block->getItemRowTotalHtml(); ?>
+    <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
+        <?= $block->getItemRowTotalHtml() ?>
     </td>
 </tr>

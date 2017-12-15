@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product;
 
-class TypeTest extends \PHPUnit_Framework_TestCase
+class TypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Product\Type

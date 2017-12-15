@@ -140,7 +140,7 @@ class Store extends Column
      *
      * @return StoreManager
      *
-     * @deprecated
+     * @deprecated 100.1.0
      */
     private function getStoreManager()
     {

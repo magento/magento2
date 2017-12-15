@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order;
 /**
  * Class PaymentDataObjectFactoryTest
  */
-class PaymentDataObjectFactoryTest extends \PHPUnit_Framework_TestCase
+class PaymentDataObjectFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var PaymentDataObjectFactory */
     protected $model;
@@ -57,7 +57,7 @@ class PaymentDataObjectFactoryTest extends \PHPUnit_Framework_TestCase
                 ->getMock();
 
         $this->paymentDataObjectMock =
-            $this->getMock(\Magento\Payment\Gateway\Data\PaymentDataObjectInterface::class);
+            $this->createMock(\Magento\Payment\Gateway\Data\PaymentDataObjectInterface::class);
 
         $this->model = new PaymentDataObjectFactory(
             $this->objectManagerMock,

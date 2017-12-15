@@ -17,6 +17,7 @@ use Magento\Catalog\Helper\Image;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -115,19 +116,23 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'thumb' => $image->getData('small_image_url'),
                 'img' => $image->getData('medium_image_url'),
                 'full' => $image->getData('large_image_url'),
-                'caption' => $image->getLabel(),
+                'caption' => ($image->getLabel() ?: $this->getProduct()->getName()),
                 'position' => $image->getPosition(),
                 'isMain' => $this->isMainImage($image),
+                'type' => str_replace('external-', '', $image->getMediaType()),
+                'videoUrl' => $image->getVideoUrl(),
             ];
         }
         if (empty($imagesItems)) {
             $imagesItems[] = [
-                'thumb' => $this->getImage($this->getProduct(), 'product_thumbnail_image')->getImageUrl(),
-                'img' => $this->getImage($this->getProduct(), 'product_base_image')->getImageUrl(),
-                'full' => $this->getImage($this->getProduct(), 'product_page_image_large')->getImageUrl(),
+                'thumb' => $this->_imageHelper->getDefaultPlaceholderUrl('thumbnail'),
+                'img' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
+                'full' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
                 'caption' => '',
                 'position' => '0',
                 'isMain' => true,
+                'type' => 'image',
+                'videoUrl' => null,
             ];
         }
         return json_encode($imagesItems);

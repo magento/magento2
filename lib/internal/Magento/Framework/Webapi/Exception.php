@@ -105,7 +105,7 @@ class Exception extends LocalizedException
         if ($httpCode < 400 || $httpCode > 599) {
             throw new \InvalidArgumentException(sprintf('The specified HTTP code "%d" is invalid.', $httpCode));
         }
-        parent::__construct($phrase);
+        parent::__construct($phrase, null, $code);
         $this->code = $code;
         $this->_httpCode = $httpCode;
         $this->_details = $details;

@@ -9,6 +9,7 @@ namespace Magento\Directory\Model\Config\Source;
  * Options provider for countries list
  *
  * @api
+ * @since 100.0.2
  */
 class Country implements \Magento\Framework\Option\ArrayInterface
 {

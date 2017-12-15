@@ -15,7 +15,7 @@ use Magento\Framework\Api\SortOrderBuilder;
  * @package Magento\Sales\Model\Order]
  * @magentoDbIsolation enabled
  */
-class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
+class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AddressRepository */
     protected $repository;

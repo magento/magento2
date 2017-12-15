@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Plugin\Model\Indexer\Category\Product;
 
 use \Magento\Catalog\Plugin\Model\Indexer\Category\Product\Execute;
 
-class ExecuteTest extends \PHPUnit_Framework_TestCase
+class ExecuteTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Catalog\Plugin\Model\Indexer\Category\Product\Execute */
     protected $execute;

@@ -8,7 +8,7 @@ namespace Magento\Framework\Component\Test\Unit;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-class ComponentRegistrarTest extends \PHPUnit_Framework_TestCase
+class ComponentRegistrarTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Module registrar object
@@ -45,7 +45,6 @@ class ComponentRegistrarTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessageRegExp /Module 'test_module_one' from '\w+' has been already defined in '\w+'./
      */
     public function testRegistrarWithExceptionForModules()
     {

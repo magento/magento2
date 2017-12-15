@@ -14,7 +14,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EntityAbstractTest extends \PHPUnit_Framework_TestCase
+class EntityAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test for method _saveValidatedBunches()

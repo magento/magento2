@@ -8,7 +8,9 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 /**
  * Grid checkbox column renderer
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @api
+ * @deprecated 100.2.0 in favour of UI component implementation
+ * @since 100.0.2
  */
 class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

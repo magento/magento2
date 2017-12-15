@@ -10,7 +10,7 @@ use \Magento\Payment\Helper\Data;
 
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 
-class DataTest extends \PHPUnit_Framework_TestCase
+class DataTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Payment\Helper\Data */
     private $helper;
@@ -42,7 +42,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\App\Helper\Context $context */
         $context = $arguments['context'];
         $this->scopeConfig = $context->getScopeConfig();
-        $this->layoutMock = $this->getMock(\Magento\Framework\View\LayoutInterface::class, [], [], '', false);
+        $this->layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $layoutFactoryMock = $arguments['layoutFactory'];
         $layoutFactoryMock->expects($this->once())->method('create')->willReturn($this->layoutMock);
 

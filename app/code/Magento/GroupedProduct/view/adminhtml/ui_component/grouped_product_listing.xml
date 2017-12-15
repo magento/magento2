@@ -24,6 +24,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>Magento_Catalog::products</aclResource>
         <dataProvider class="Magento\GroupedProduct\Ui\DataProvider\Product\GroupedProductDataProvider" name="grouped_product_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>

@@ -10,10 +10,10 @@
  */
 /* @escapeNotVerified */ echo $block->renderChildComponent('before_form');
 ?>
-<div data-role="spinner" data-component="<?php /* @escapeNotVerified */ echo $block->getName(); ?>.areas" class="admin__data-grid-loading-mask">
+<div data-role="spinner" data-component="<?= /* @escapeNotVerified */ $block->getName() ?>.areas" class="admin__data-grid-loading-mask">
     <div class="grid-loader"></div>
 </div>
-<div data-bind="scope: '<?php /* @escapeNotVerified */ echo $block->getName(); ?>.areas'" class="entry-edit form-inline">
+<div data-bind="scope: '<?= /* @escapeNotVerified */ $block->getName() ?>.areas'" class="entry-edit form-inline">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>
 <?php

@@ -10,6 +10,7 @@ namespace Magento\Variable\Controller\Adminhtml\System\Variable;
  * Retrieve variables list for WYSIWYG
  *
  * @api
+ * @since 100.0.2
  */
 class WysiwygPlugin extends \Magento\Variable\Controller\Adminhtml\System\Variable
 {

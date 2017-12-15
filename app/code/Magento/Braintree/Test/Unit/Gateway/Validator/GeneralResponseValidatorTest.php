@@ -10,9 +10,9 @@ use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 use Magento\Braintree\Gateway\Validator\GeneralResponseValidator;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\SubjectReader;
 
-class GeneralResponseValidatorTest extends \PHPUnit_Framework_TestCase
+class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var GeneralResponseValidator
@@ -64,7 +64,7 @@ class GeneralResponseValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidate(array $validationSubject, $isValid, $messages)
     {
         /** @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject $resultMock */
-        $resultMock = $this->getMock(ResultInterface::class);
+        $resultMock = $this->createMock(ResultInterface::class);
 
         $this->subjectReaderMock->expects(self::once())
             ->method('readResponseObject')

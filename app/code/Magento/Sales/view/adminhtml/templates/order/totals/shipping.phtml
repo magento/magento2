@@ -12,7 +12,7 @@
 
 <?php if ((float) $_source->getShippingAmount() || $_source->getShippingDescription()): ?>
     <tr>
-        <td class="label"><?php /* @escapeNotVerified */ echo __('Shipping &amp; Handling') ?></td>
-        <td><?php /* @escapeNotVerified */ echo $block->displayPriceAttribute('shipping_amount') ?></td>
+        <td class="label"><?= /* @escapeNotVerified */ __('Shipping &amp; Handling') ?></td>
+        <td><?= /* @escapeNotVerified */ $block->displayPriceAttribute('shipping_amount') ?></td>
     </tr>
 <?php endif; ?>

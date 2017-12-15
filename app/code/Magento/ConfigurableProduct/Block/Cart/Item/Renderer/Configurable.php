@@ -13,6 +13,7 @@ use Magento\Framework\DataObject\IdentityInterface;
  * Shopping cart item render block for configurable products.
  *
  * @api
+ * @since 100.0.2
  */
 class Configurable extends Renderer implements IdentityInterface
 {

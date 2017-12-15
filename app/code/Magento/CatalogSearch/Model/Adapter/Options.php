@@ -9,6 +9,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Search\Adapter\OptionsInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @api
+ * @since 100.0.2
+ */
 class Options implements OptionsInterface
 {
     const XML_PATH_INTERVAL_DIVISION_LIMIT = 'catalog/layered_navigation/interval_division_limit';

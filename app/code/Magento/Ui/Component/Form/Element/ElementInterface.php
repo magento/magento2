@@ -9,6 +9,8 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Interface ElementInterface
+ * @api
+ * @since 100.0.2
  */
 interface ElementInterface extends UiComponentInterface
 {
