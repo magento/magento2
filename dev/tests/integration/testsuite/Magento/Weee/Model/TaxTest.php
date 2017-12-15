@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Weee\Model;
 
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
@@ -65,12 +63,15 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         );
         $dataObjectHelper = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\DataObjectHelper::class);
         $expected = $this->_extensibleDataObjectConverter->toFlatArray(
-            $customerRepository->getById(1), [], \Magento\Customer\Api\Data\CustomerInterface::class
+            $customerRepository->getById(1),
+            [],
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $customerDataSet = $customerFactory->create();
         $dataObjectHelper->populateWithArray(
             $customerDataSet,
-            $expected, \Magento\Customer\Api\Data\CustomerInterface::class
+            $expected,
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $fixtureGroupCode = 'custom_group';
         $fixtureTaxClassId = 3;

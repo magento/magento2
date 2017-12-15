@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
 class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
@@ -30,7 +28,9 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
                 $template = $this->_objectManager->create(\Magento\Newsletter\Model\Template::class)->load($templateId);
 
                 if (!$template->getId() || $template->getIsSystem()) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the newsletter template and try again.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Please correct the newsletter template and try again.')
+                    );
                 }
 
                 $queue->setTemplateId(

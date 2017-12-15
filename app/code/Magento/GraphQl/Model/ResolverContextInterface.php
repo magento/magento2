@@ -53,17 +53,17 @@ interface ResolverContextInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\GraphQl\Model\ContextInterfaceExtensionInterface|null
+     * @return \Magento\GraphQl\Model\ResolverContextExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\GraphQl\Model\ContextInterfaceExtensionInterface $extensionAttributes
+     * @param \Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\GraphQl\Model\ContextInterfaceExtensionInterface $extensionAttributes
+        \Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes
     );
 }

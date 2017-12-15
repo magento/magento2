@@ -64,7 +64,7 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\GraphQl\Model\ContextInterfaceExtensionInterface||null
+     * @return \Magento\GraphQl\Model\ResolverContextExtensionInterface||null
      */
     public function getExtensionAttributes()
     {
@@ -74,10 +74,10 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\GraphQl\Model\ContextInterfaceExtensionInterface $extensionAttributes
+     * @param \Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\GraphQl\Model\ContextInterfaceExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(\Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
