@@ -38,4 +38,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\ProductList\CollectionLoader">
+        <plugin name="ProductListCollectionLoader" type="Magento\Review\Model\Plugin\ProductList\CollectionLoader" sortOrder="1" />
+    </type>
 </config>
