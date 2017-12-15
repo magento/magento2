@@ -8,7 +8,7 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <columns name="product_columns">
         <column name="qty"
-                class="Magento\InventoryCatalog\Ui\Component\Listing\Column\SourceItems"
+                class="Magento\InventoryCatalog\Ui\DataProvider\Component\Listing\Column\SourceItems"
                 component="Magento_InventoryCatalog/js/product/grid/cell/source-items"
                 sortOrder="75">
             <settings>
