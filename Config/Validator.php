@@ -125,7 +125,7 @@ class Validator
         $pattern = '/^' . str_replace('.', '\.', $wildcardKey);
         $pattern = str_replace('#', '.+', $pattern);
         $pattern = str_replace('*', '[^\.]+', $pattern);
-        if (strpos($wildcardKey, '#') == strlen($wildcardKey)) {
+        if (strpos($wildcardKey, '#') === strlen($wildcardKey)) {
             $pattern .= '/';
         } else {
             $pattern .= '$/';
