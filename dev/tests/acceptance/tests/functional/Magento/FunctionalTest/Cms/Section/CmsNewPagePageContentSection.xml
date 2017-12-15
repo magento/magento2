@@ -27,6 +27,7 @@
         <element name="Browse" type="button" selector=".mce-i-browse"/>
         <element name="BrowseUploadImage" type="file" selector=".fileupload" />
         <element name="image" type="text" selector="//small[text()='{{var1}}']" parameterized="true"/>
+        <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
         <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open" />
         <element name="ImageDescription" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-last" />
         <element name="Height" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-first" />
@@ -51,7 +52,9 @@
         <element name="SpecialCharacter" type="button" selector=".mce-i-charmap" />
         <element name="FolderName" type="button" selector="input[data-role='promptField']" />
         <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
-        <element name="StorageRoot" type="button" selector="#root > .jstree-icon" />
+        <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
+        <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
+        <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
     </section>
     <section name="VariableSection">
         <element name="InsertWidget" type="button" selector="#insert_variable"/>
