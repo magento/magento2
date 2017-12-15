@@ -5,7 +5,6 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <cest name="AdminAddImageToWYSIWYGCest">
@@ -44,41 +43,25 @@
             <click selector="{{CmsWYSIWYGSection.CreateFolder}}" stepKey="createFolder"/>
             <waitForElementVisible selector="{{CmsWYSIWYGSection.FolderName}}" stepKey="waitForPopUp" />
             <fillField selector="{{CmsWYSIWYGSection.FolderName}}" userInput="{{ImageFolder.name}}" stepKey="fillFolderName" />
-            
             <click selector="{{CmsWYSIWYGSection.AcceptFolderName}}" stepKey="acceptFolderName" />
-            <!--<waitForPageLoad stepKey="waitForPageLoad2" />-->
             <waitForLoadingMaskToDisappear stepKey="waitForLoading3" />
-            <!--<waitForElementVisible selector="{{CmsWYSIWYGSection.StorageRootArrow}}" stepKey="waitForArrow" />-->
-            <!--<waitForPageLoad stepKey="waitForPageLoad3" />-->
-            <!--<waitForLoadingMaskToDisappear stepKey="waitForLoading4" />-->
             <conditionalClick selector="{{CmsWYSIWYGSection.StorageRootArrow}}" dependentSelector="{{CmsWYSIWYGSection.checkIfArrowExpand}}" stepKey="clickArrowIfCloses" visible="true"/>
             <waitForText userInput="{{ImageFolder.name}}" stepKey="waitForNewFolder" />
             <click userInput="{{ImageFolder.name}}" stepKey="clickOnCreatedFolder" />
-
-
             <waitForLoadingMaskToDisappear stepKey="waitForLoading5" />
             <attachFile selector="{{CmsWYSIWYGSection.BrowseUploadImage}}" userInput="{{ImageUpload.file}}" stepKey="uploadImage1"/>
-
             <waitForLoadingMaskToDisappear stepKey="waitForLoading6" />
             <waitForElementVisible  selector="{{CmsWYSIWYGSection.image(ImageUpload.file)}}" stepKey="waitForUploadImage1" />
             <seeElement selector="{{CmsWYSIWYGSection.imageSelected(ImageUpload.file)}}" stepKey="seeImageSelected" />
             <see selector="{{CmsWYSIWYGSection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn"/>
-
             <click selector="{{CmsWYSIWYGSection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected" />
             <waitForText userInput="OK" stepKey="waitForConfirm" />
             <click selector="{{CmsWYSIWYGSection.confirmDelete}}" stepKey="confirmDelete" />
             <waitForElementNotVisible selector="{{CmsWYSIWYGSection.image(ImageUpload.file)}}" stepKey="waitForImageDeleted" />
             <dontSeeElement selector="{{CmsWYSIWYGSection.image(ImageUpload.file)}}" stepKey="dontSeeImage" />
-
             <attachFile selector="{{CmsWYSIWYGSection.BrowseUploadImage}}" userInput="{{ImageUpload.file}}" stepKey="uploadImage2"/>
-
             <waitForLoadingMaskToDisappear stepKey="waitForLoading9" />
             <waitForElementVisible selector="{{CmsWYSIWYGSection.image(ImageUpload.file)}}" stepKey="waitForUploadImage2" />
-
-            <!--<waitForPageLoad  stepKey="wait5"/>-->
-
-            <!--<click selector="{{CmsWYSIWYGSection.image(ImageUpload.file)}}" stepKey="selectImage" />-->
-
             <click selector="{{CmsWYSIWYGSection.InsertFile}}" stepKey="clickInsertBtn" />
             <waitForLoadingMaskToDisappear stepKey="waitForLoading7" />
             <waitForElementVisible selector="{{CmsWYSIWYGSection.OkBtn}}" stepKey="waitForOkBtn" />
