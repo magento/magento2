@@ -77,7 +77,7 @@
                     <item name="breakLine" xsi:type="boolean">false</item>
                 </item>
             </argument>
-            <container name="assign_sources_button" component="Magento_Ui/js/form/components/button" template="ui/form/components/button/container">
+            <container class="Magento\Inventory\Ui\Component\AssignSourcesButton" name="assign_sources_button" component="Magento_Ui/js/form/components/button" template="ui/form/components/button/container">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
