@@ -135,7 +135,7 @@ class AssignSourcesToStockTest extends WebapiAbstract
             ],
             'nonexistent_source_id' => [
                 [-1, 20],
-                1,
+                10,
                 [
                     'rest_message' => 'Could not assign Sources to Stock',
                     'soap_message' => 'Could not assign Sources to Stock',
