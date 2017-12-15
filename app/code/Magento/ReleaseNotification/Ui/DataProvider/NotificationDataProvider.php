@@ -3,18 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ReleaseNotification\Ui\DataProvider;
 
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\Data\Collection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
- * Data Provider for the Release Notification UI component.
+ * Class NotificationDataProvider
+ *
+ * Data Provider for the Release Notifications UI component.
  */
-class DataProvider implements DataProviderInterface
+class NotificationDataProvider implements DataProviderInterface
 {
+    /**
+     * @var PoolInterface
+     */
+    protected $pool;
+
     /**
      * Search result object.
      *
@@ -28,13 +37,6 @@ class DataProvider implements DataProviderInterface
      * @var SearchCriteriaInterface
      */
     private $searchCriteria;
-
-    /**
-     * Data collection.
-     *
-     * @var Collection
-     */
-    private $collection;
 
     /**
      * Own name of this provider.
@@ -51,24 +53,59 @@ class DataProvider implements DataProviderInterface
     private $data;
 
     /**
+     * Provider configuration meta.
+     *
+     * @var array
+     */
+    private $meta;
+
+    /**
      * @param string $name
      * @param SearchResultInterface $searchResult
      * @param SearchCriteriaInterface $searchCriteria
-     * @param Collection $collection
+     * @param PoolInterface $pool
+     * @param array $meta
      * @param array $data
      */
     public function __construct(
         $name,
         SearchResultInterface $searchResult,
         SearchCriteriaInterface $searchCriteria,
-        Collection $collection,
+        PoolInterface $pool,
+        array $meta = [],
         array $data = []
     ) {
         $this->name = $name;
         $this->searchResult = $searchResult;
         $this->searchCriteria = $searchCriteria;
-        $this->collection = $collection;
+        $this->pool = $pool;
+        $this->meta = $meta;
         $this->data = $data;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getData()
+    {
+        /** @var ModifierInterface $modifier */
+        foreach ($this->pool->getModifiersInstances() as $modifier) {
+            $this->data = $modifier->modifyData($this->data);
+        }
+
+        return $this->data;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMeta()
+    {
+        /** @var ModifierInterface $modifier */
+        foreach ($this->pool->getModifiersInstances() as $modifier) {
+            $this->meta = $modifier->modifyMeta($this->meta);
+        }
+        return $this->meta;
     }
 
     /**
@@ -95,14 +132,6 @@ class DataProvider implements DataProviderInterface
         $this->data['config'] = $config;
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getMeta()
-    {
-        return [];
     }
 
     /**
@@ -146,14 +175,6 @@ class DataProvider implements DataProviderInterface
     public function getRequestFieldName()
     {
         return 'release_notification';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getData()
-    {
-        return $this->collection->toArray();
     }
 
     /**

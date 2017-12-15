@@ -1,0 +1,292 @@
+{
+  "modal": [
+    {
+      "version": "2.2.2",
+      "edition": "Community",
+      "locale": "en_US",
+      "pages": [
+        {
+          "id": 1,
+          "name": "1",
+          "mainContent": {
+            "title": "What's new with Magento 2.2.2",
+            "imageUrl": "",
+            "content": [
+              {
+                "text": "Magento 2.2.2 offers advanced new features, including:"
+              }
+            ],
+            "lists": []
+          },
+          "subHeading": [
+            {
+              "title": "Advanced Reporting",
+              "imageUrl": "https://drakelair2.magedevteam.com/analytics_demo/pub/static/version1510681368/adminhtml/Magento/backend/en_US/Magento_ReleaseNotification/images/analytics-icon.svg",
+              "content": "Gain valuable insights through a dynamic suite of product, order, and customer reports, powered by Magento Business Intelligence."
+            },
+            {
+              "title": "Instant Purchase",
+              "imageUrl": "https://drakelair2.magedevteam.com/analytics_demo/pub/static/version1510681368/adminhtml/Magento/backend/en_US/Magento_ReleaseNotification/images/instant-purchase-icon.svg",
+              "content": "Simplify ordering and boost conversion rates by allowing your customers to use stored payment and shipping information to skip tedious checkout steps."
+            },
+            {
+              "title": "Advanced Reporting",
+              "imageUrl": "https://drakelair2.magedevteam.com/analytics_demo/pub/static/version1510681368/adminhtml/Magento/backend/en_US/Magento_ReleaseNotification/images/email-marketing-icon.svg",
+              "content": "Send smarter, faster email campaigns with marketing automation from dotmailer, powered by your Magento store's live data."
+            }
+          ],
+          "footer": {
+            "content": "Release notes and additional details can be found at http://devdocs.magento.com/ [Magento DevDocs]."
+          }
+        },
+        {
+          "id": 2,
+          "name": "2",
+          "mainContent": {
+            "title": "Advanced Reporting",
+            "imageUrl": "https://drakelair2.magedevteam.com/analytics_demo/pub/static/version1510681368/adminhtml/Magento/backend/en_US/Magento_ReleaseNotification/images/analytics-icon.svg",
+            "content": [
+              {
+                "text": "Advanced Reporting provides you with a dynamic suite of reports with rich insights about the health of your business."
+              },
+              {
+                "text": "As part of the Advanced Reporting service, we may also use your customer data for such purposes as benchmarking, improving our products and services, and providing you with new and improved analytics."
+              },
+              {
+                "text": "By using Magento 2.2.2, you agree to the Advanced Reporting https://magento.com/legal/terms/privacy [Privacy Policy] and https://magento.com/legal/terms/cloud-terms [Terms of Service]. You may opt out at any time from the Stores Configuration page."
+              }
+            ],
+            "lists": []
+          },
+          "subHeading": [],
+          "footer": {
+            "content": ""
+          }
+        },
+        {
+          "id": 3,
+          "name": "3",
+          "mainContent": {
+            "title": "Instant Purchase",
+            "imageUrl": "https://drakelair2.magedevteam.com/analytics_demo/pub/static/version1510681368/adminhtml/Magento/backend/en_US/Magento_ReleaseNotification/images/instant-purchase-icon.svg",
+            "content": [
+              {
+                "text": "Now you can deliver an Amazon-like experience with a new, streamlined checkout option. Logged-in customers can use previously-stored payment credentials and shipping information to skip steps, making the process faster and easier, especially for mobile shoppers. Key features include:"
+              }
+            ],
+            "lists": [
+              {
+                "text": "Configurable “Instant Purchase” button to place orders."
+              },
+              {
+                "text": "Support for all payment solutions using Braintree Vault, including Braintree Credit Card, Braintree PayPal, and PayPal Payflow Pro."
+              },
+              {
+                "text": "Shipping to the customer’s default address using the lowest cost, available shipping method."
+              },
+              {
+                "text": "Ability for developers to customize the Instant Purchase business logic to meet merchant needs."
+              }
+            ]
+          },
+          "subHeading": [],
+          "footer": {
+            "content": ""
+          }
+        },
+        {
+          "id": 4,
+          "name": "4",
+          "mainContent": {
+            "title": "Email Marketing Automation",
+            "imageUrl": "https://drakelair2.magedevteam.com/analytics_demo/pub/static/version1510681368/adminhtml/Magento/backend/en_US/Magento_ReleaseNotification/images/instant-purchase-icon.svg",
+            "content": [
+              {
+                "text": "Unlock an unparalleled level of insight and control of your eCommerce marketing with dotmailer Email Marketing Automation. Included with Magento 2.2.2 for easy set-up, dotmailer ensures every customer’s journey is captured, segmented, and personalized, enabling you to deliver customer-centric campaigns that beat your results over and over again. Benefits include:"
+              }
+            ],
+            "lists": [
+              {
+                "text": "No obligation 14-day trial."
+              },
+              {
+                "text": "Automation campaigns using your live Magento store data that drive revenue, including abandoned cart, abandoned browse, product replenishment, and many more."
+              },
+              {
+                "text": "Built-in solution for transactional emails."
+              },
+              {
+                "text": "Telephone support and advice from marketing experts included."
+              }
+            ]
+          },
+          "subHeading": [],
+          "footer": {
+            "content": ""
+          }
+        }
+      ],
+      "pageCount": 4
+    },
+    {
+      "version": "2.3.0",
+      "edition": "Community",
+      "locale": "en_US",
+      "pages": [
+        {
+          "id": 1,
+          "name": "1",
+          "mainContent": {
+            "title": "What's new with Magento 2.3.0",
+            "imageUrl": "",
+            "content": [
+              {
+                "text": "Overview Text"
+              }
+            ],
+            "lists": []
+          },
+          "subHeading": [
+            {
+              "title": "Highlight 1 Title",
+              "imageUrl": "http://via.placeholder.com/65x58",
+              "content": "Highlight 1 Text"
+            },
+            {
+              "title": "Highlight 2 Title",
+              "imageUrl": "http://via.placeholder.com/65x58",
+              "content": "Highlight 2 Text."
+            },
+            {
+              "title": "Highlight 3 Title",
+              "imageUrl": "http://via.placeholder.com/65x58",
+              "content": "Highlight 3 Text"
+            }
+          ],
+          "footer": {
+            "content": "Footer link to http://devdocs.magento.com/ [Magento DevDocs]."
+          }
+        },
+        {
+          "id": 2,
+          "name": "2",
+          "mainContent": {
+            "title": "2.3.0 Page 1 Title",
+            "imageUrl": "http://via.placeholder.com/55x49",
+            "content": [
+              {
+                "text": "Paragraph 1"
+              },
+              {
+                "text": "Paragraph 2"
+              },
+              {
+                "text": "Paragraph 3"
+              }
+            ],
+            "lists": []
+          },
+          "subHeading": [],
+          "footer": {
+            "content": ""
+          }
+        },
+        {
+          "id": 3,
+          "name": "3",
+          "mainContent": {
+            "title": "2.3.0 Page 2 Title",
+            "imageUrl": "http://via.placeholder.com/55x49",
+            "content": [
+              {
+                "text": "2.3.0 Page 2 Content"
+              }
+            ],
+            "lists": [
+              {
+                "text": "Item 1"
+              },
+              {
+                "text": "Item 2"
+              },
+              {
+                "text": "Item 3"
+              },
+              {
+                "text": "Item 4"
+              }
+            ]
+          },
+          "subHeading": [],
+          "footer": {
+            "content": ""
+          }
+        },
+        {
+          "id": 4,
+          "name": "4",
+          "mainContent": {
+            "title": "2.3.0 Page 3 Title",
+            "imageUrl": "http://via.placeholder.com/55x49",
+            "content": [
+              {
+                "text": "2.3.0 Page 3 Content"
+              }
+            ],
+            "lists": [
+              {
+                "text": "Item 1"
+              },
+              {
+                "text": "Item 2"
+              },
+              {
+                "text": "Item 3"
+              },
+              {
+                "text": "Item 4"
+              }
+            ]
+          },
+          "subHeading": [],
+          "footer": {
+            "content": ""
+          }
+        }
+      ],
+      "pageCount": 4
+    },
+    {
+      "version": "default",
+      "edition": "Community",
+      "locale": "en_US",
+      "pages": [
+        {
+          "id": 1,
+          "name": "1",
+          "mainContent": {
+            "title": "Default Content",
+            "imageUrl": "",
+            "content": [
+              {
+                "text": "Default Text"
+              }
+            ],
+            "lists": []
+          },
+          "subHeading": [
+            {
+              "title": "Error",
+              "imageUrl": "http://via.placeholder.com/65x58",
+              "content": "An error occured getting the correct content!"
+            }
+          ],
+          "footer": {
+            "content": "Default Footer link to http://devdocs.magento.com/ [Magento DevDocs]."
+          }
+        }
+      ],
+      "pageCount": 1
+    }
+  ]
+}

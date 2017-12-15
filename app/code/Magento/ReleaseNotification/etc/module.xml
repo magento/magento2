@@ -10,6 +10,7 @@
         <sequence>
             <module name="Magento_User"/>
             <module name="Magento_Backend"/>
+            <module name="Magento_Ui"/>
         </sequence>
     </module>
 </config>

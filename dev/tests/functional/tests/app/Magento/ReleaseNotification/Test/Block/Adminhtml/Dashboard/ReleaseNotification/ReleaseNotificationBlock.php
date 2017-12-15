@@ -15,7 +15,7 @@ class ReleaseNotificationBlock extends Modal
     /**
      * @var string
      */
-    private $releaseNotificationText = '[data-index="release_notification_text"]';
+    private $releaseNotificationText = '[data-index="notification_text"]';
 
     /**
      * @inheritdoc
