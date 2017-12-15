@@ -226,7 +226,6 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         } else {
             $routeParams = $secret;
         }
-        // we should not add params if '_current' key exists, it was already added
         if (is_array($this->_getRouteParams())) {
             $routeParams = array_merge($this->_getRouteParams(), $routeParams);
         }
