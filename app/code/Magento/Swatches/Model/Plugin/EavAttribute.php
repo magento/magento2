@@ -10,6 +10,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Swatches\Model\Swatch;
+use Magento\Swatches\Model\ResourceModel\Swatch as SwatchResource;
 
 /**
  * Plugin model for Catalog Resource Attribute
@@ -17,6 +18,11 @@ use Magento\Swatches\Model\Swatch;
 class EavAttribute
 {
     const DEFAULT_STORE_ID = 0;
+
+    /**
+     * @var SwatchResource
+     */
+    protected $swatchResource;
 
     /**
      * Base option title used for string operations to detect is option already exists or new
@@ -68,6 +74,7 @@ class EavAttribute
     public function __construct(
         \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
         \Magento\Swatches\Model\SwatchFactory $swatchFactory,
+        SwatchResource $swatchResource,
         \Magento\Swatches\Helper\Data $swatchHelper,
         Json $serializer = null
     ) {
@@ -75,6 +82,7 @@ class EavAttribute
         $this->swatchFactory = $swatchFactory;
         $this->swatchHelper = $swatchHelper;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
+        $this->swatchResource = $swatchResource;
     }
 
     /**
@@ -157,10 +165,32 @@ class EavAttribute
             if (!empty($additionalData)) {
                 $additionalData = $this->serializer->unserialize($additionalData);
                 if (is_array($additionalData) && isset($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY])) {
+                    if ($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY] == Swatch::SWATCH_INPUT_TYPE_VISUAL) {
+                        $this->cleanEavAttributeOptionSwatchValues($attribute);
+                    }
                     unset($additionalData[Swatch::SWATCH_INPUT_TYPE_KEY]);
                     $attribute->setData('additional_data', $this->serializer->serialize($additionalData));
                 }
             }
+        }
+    }
+
+    /**
+     * Clean swatch option values after switching to the dropdown type.
+     *
+     * @param Attribute $attribute
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function cleanEavAttributeOptionSwatchValues(Attribute $attribute)
+    {
+        $optionsIDs = [];
+        if (count($attribute->getOption())) {
+            $options = $attribute->getOption();
+            foreach ($options['value'] as $id => $item) {
+                $optionsIDs[] = $id;
+            }
+
+            $this->swatchResource->clearSwatchOptionByOptionId($optionsIDs);
         }
     }
 
@@ -235,6 +265,7 @@ class EavAttribute
     {
         if ($this->swatchHelper->isVisualSwatch($attribute)) {
             $this->processVisualSwatch($attribute);
+            $this->cleanTextSwatchValuesAfterSwitch($attribute);
         } elseif ($this->swatchHelper->isTextSwatch($attribute)) {
             $this->processTextualSwatch($attribute);
         }
@@ -263,6 +294,27 @@ class EavAttribute
 
                 $this->saveSwatchData($swatch, $optionId, self::DEFAULT_STORE_ID, $swatchType, $value);
                 $this->isSwatchExists = null;
+            }
+        }
+    }
+
+    /**
+     * Cleaning the text type of swatch option values after switching.
+     *
+     * @param $attribute
+     */
+    private function cleanTextSwatchValuesAfterSwitch( Attribute $attribute)
+    {
+        $optionsIDs = [];
+        if (count($attribute->getOptiontext())) {
+            $options = $attribute->getOptiontext();
+            if (count($options)) {
+                foreach ($options['value'] as $id => $item) {
+                    $optionsIDs[] = $id;
+                }
+
+                $type = Swatch::SWATCH_TYPE_TEXTUAL;
+                $this->swatchResource->clearSwatchOptionTextByOptionId($optionsIDs, $type);
             }
         }
     }

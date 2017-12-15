@@ -15,6 +15,10 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 class SwatchAttributesProvider
 {
     /**
+     * @var \Magento\Swatches\Helper\Data
+     */
+    protected $swatchHelper;
+    /**
      * @var Configurable
      */
     private $typeConfigurable;
@@ -36,10 +40,12 @@ class SwatchAttributesProvider
      */
     public function __construct(
         Configurable $typeConfigurable,
-        SwatchAttributeCodes $swatchAttributeCodes
+        SwatchAttributeCodes $swatchAttributeCodes,
+        \Magento\Swatches\Helper\Data\Proxy $swatchHelper
     ) {
         $this->typeConfigurable = $typeConfigurable;
         $this->swatchAttributeCodes = $swatchAttributeCodes;
+        $this->swatchHelper = $swatchHelper;
     }
 
     /**
@@ -60,9 +66,13 @@ class SwatchAttributesProvider
 
             $swatchAttributes = [];
             foreach ($configurableAttributes as $configurableAttribute) {
-                if (array_key_exists($configurableAttribute->getAttributeId(), $swatchAttributeCodeMap)) {
-                    $swatchAttributes[$configurableAttribute->getAttributeId()]
-                        = $configurableAttribute->getProductAttribute();
+                // Due to $this->swatchAttributeCodes->getCodes() - return swatch data for every attribute.
+                if ($this->swatchHelper->isSwatchAttribute($configurableAttribute->getProductAttribute())) {
+                    if (array_key_exists($configurableAttribute->getAttributeId(), $swatchAttributeCodeMap)) {
+                        $swatchAttributes[$configurableAttribute->getAttributeId()]
+                            = $configurableAttribute->getProductAttribute();
+                    }
+
                 }
             }
             $this->attributesPerProduct[$product->getId()] = $swatchAttributes;
