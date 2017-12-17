@@ -106,6 +106,9 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
             unset($data['_use_rewrite']);
         }
 
+        // move "key" param to the end
+        uksort($data, function($a, $b) {return $b === 'key' ? -1 : 1;});
+
         foreach ($data as $key => $value) {
             if (!is_scalar($value) || $key == 'key' || !$this->getData('escape_params')) {
                 $this->setRouteParam($key, $value);
