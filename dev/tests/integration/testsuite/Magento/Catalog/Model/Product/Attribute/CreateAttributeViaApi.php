@@ -12,19 +12,15 @@ class CreateAttributeViaApi extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        $this->attributeFactory = $objectManager->create(
+        $this->attributeFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Api\Data\ProductAttributeInterfaceFactory::class
         );
-        $this->attributeRepository = $objectManager->create(
+        $this->attributeRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Product\Attribute\Repository::class
         );
-        $this->dataObjectHelper = $objectManager->create(
+        $this->dataObjectHelper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\Api\DataObjectHelper::class
         );
-
-
     }
 
     public function testCustomSourceModel()
@@ -54,4 +50,3 @@ class CreateAttributeViaApi extends \PHPUnit\Framework\TestCase
         $this->attributeRepository->deleteById($attribute_code);
     }
 }
-
