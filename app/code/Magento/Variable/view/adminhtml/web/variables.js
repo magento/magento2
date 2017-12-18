@@ -152,7 +152,7 @@ define([
                 msg,
                 variablePath,
                 $wrapper,
-                lostVariableClass = 'magento-variable-lost';
+                lostVariableClass = 'magento-placeholder-error';
 
             if (
                 this.isEditMode &&
