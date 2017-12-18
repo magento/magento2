@@ -6,21 +6,21 @@
 
 namespace Magento\Setup\Model\Declaration\Schema;
 
-use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
+use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 
 /**
- * Parser hydrate structure object with data from either db or XML file
- * Usually parser use StructureBuilders
+ * Parser hydrate schema object with data from either db or XML file
+ * Usually parser use SchemaBuilders
  *
- * Declaration has 2 structure builders, that build schema from db and from XML
+ * Declaration has 2 schema builders, that build schema from db and from XML
  */
 interface SchemaParserInterface
 {
     /**
-     * Parse XML or DB changes into structure
+     * Parse XML or DB changes into schema
      *
-     * @param Structure $structure
+     * @param Schema $schema
      * @return mixed
      */
-    public function parse(Structure $structure);
+    public function parse(Schema $schema);
 }

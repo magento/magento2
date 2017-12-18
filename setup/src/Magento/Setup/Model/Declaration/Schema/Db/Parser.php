@@ -6,35 +6,35 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Db;
 
-use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
+use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\SchemaParserInterface;
 
 /**
- * Parser is responsible for builind structure.
- * @see Structure
+ * Parser is responsible for builind schema.
+ * @see Schema
  *
  * @inheritdoc
  */
 class Parser implements SchemaParserInterface
 {
     /**
-     * @var StructureBuilder
+     * @var SchemaBuilder
      */
-    private $structureBuilder;
+    private $schemaBuilder;
 
     /**
-     * @param StructureBuilder $structureBuilder
+     * @param SchemaBuilder $schemaBuilder
      */
-    public function __construct(StructureBuilder $structureBuilder)
+    public function __construct(SchemaBuilder $schemaBuilder)
     {
-        $this->structureBuilder = $structureBuilder;
+        $this->schemaBuilder = $schemaBuilder;
     }
 
     /**
      * @inheritdoc
      */
-    public function parse(Structure $structure)
+    public function parse(Schema $schema)
     {
-        return $this->structureBuilder->build($structure);
+        return $this->schemaBuilder->build($schema);
     }
 }

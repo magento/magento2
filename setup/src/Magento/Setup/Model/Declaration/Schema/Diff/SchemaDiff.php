@@ -7,7 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
 use Magento\Setup\Model\Declaration\Schema\ChangeRegistry;
-use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
+use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 
 /**
  * Agregation root of all diffs
@@ -17,7 +17,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
  * If table exists in both version -> then we need to go deeper and inspect each element
  * If table exists only in db -> then we need to remove this table
  */
-class StructureDiff
+class SchemaDiff
 {
     /**
      * @var TableDiff
@@ -42,18 +42,18 @@ class StructureDiff
     }
 
     /**
-     * @param Structure $structure
-     * @param Structure $generatedStructure
+     * @param Schema $schema
+     * @param Schema $generatedSchema
      * @param ChangeRegistry $changeRegistry
      */
     public function diff(
-        Structure $structure,
-        Structure $generatedStructure,
+        Schema $schema,
+        Schema $generatedSchema,
         ChangeRegistry $changeRegistry
     ) {
-        $generatedTables = $generatedStructure->getTables();
+        $generatedTables = $generatedSchema->getTables();
 
-        foreach ($structure->getTables() as $name => $table) {
+        foreach ($schema->getTables() as $name => $table) {
             if ($this->diffManager->shouldBeCreated($generatedTables, $table)) {
                 $this->diffManager->registerCreation($changeRegistry, $table);
             } else {
@@ -64,7 +64,7 @@ class StructureDiff
         }
         //Removal process
         if ($this->diffManager->shouldBeRemoved($generatedTables)) {
-            $this->diffManager->registerRemoval($changeRegistry, $generatedTables, $structure->getTables());
+            $this->diffManager->registerRemoval($changeRegistry, $generatedTables, $schema->getTables());
         }
     }
 }

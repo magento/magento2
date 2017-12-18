@@ -9,8 +9,8 @@ namespace Magento\Setup;
 use Magento\Setup\Model\Declaration\Schema\ChangeRegistryFactory;
 use Magento\Setup\Model\Declaration\Schema\ChangeRegistryInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\Parser;
-use Magento\Setup\Model\Declaration\Schema\Diff\StructureDiff;
-use Magento\Setup\Model\Declaration\Schema\Dto\StructureFactory;
+use Magento\Setup\Model\Declaration\Schema\Diff\SchemaDiff;
+use Magento\Setup\Model\Declaration\Schema\Dto\SchemaFactory;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -33,9 +33,9 @@ class DiffOldSchemaTest extends SetupTestCase
     private $cliCommad;
 
     /**
-     * @var StructureFactory
+     * @var SchemaFactory
      */
-    private $structureFactory;
+    private $SchemaFactory;
 
     /**
      * @var DeclarativeParser
@@ -48,9 +48,9 @@ class DiffOldSchemaTest extends SetupTestCase
     private $generatedParser;
 
     /**
-     * @var StructureDiff
+     * @var SchemaDiff
      */
-    private $structureDiff;
+    private $SchemaDiff;
 
     /**
      * @var ChangeRegistryFactory
@@ -60,12 +60,12 @@ class DiffOldSchemaTest extends SetupTestCase
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->structureFactory = $objectManager->get(StructureFactory::class);
+        $this->SchemaFactory = $objectManager->get(SchemaFactory::class);
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
         $this->cliCommad = $objectManager->get(CliCommand::class);
         $this->declarativeParser = $objectManager->get(DeclarativeParser::class);
         $this->generatedParser = $objectManager->get(Parser::class);
-        $this->structureDiff = $objectManager->get(StructureDiff::class);
+        $this->SchemaDiff = $objectManager->get(SchemaDiff::class);
         $this->changeRegistryFactory = $objectManager->get(ChangeRegistryFactory::class);
     }
 
@@ -91,11 +91,11 @@ class DiffOldSchemaTest extends SetupTestCase
 
         $this->cliCommad->install(['Magento_TestSetupDeclarationModule1']);
         $changeRegistry = $this->changeRegistryFactory->create();
-        $generatedStructure = $this->structureFactory->create();
-        $declarativeStructure = $this->structureFactory->create();
-        $declarativeStructure = $this->declarativeParser->parse($declarativeStructure);
-        $generatedStructure = $this->generatedParser->parse($generatedStructure);
-        $this->structureDiff->diff($declarativeStructure, $generatedStructure, $changeRegistry);
+        $generatedSchema = $this->SchemaFactory->create();
+        $declarativeSchema = $this->SchemaFactory->create();
+        $declarativeSchema = $this->declarativeParser->parse($declarativeSchema);
+        $generatedSchema = $this->generatedParser->parse($generatedSchema);
+        $this->SchemaDiff->diff($declarativeSchema, $generatedSchema, $changeRegistry);
         //Change operations
         $changeOperations = $changeRegistry->get(ChangeRegistryInterface::CHANGE_OPERATION);
         self::assertCount(1, $changeOperations);

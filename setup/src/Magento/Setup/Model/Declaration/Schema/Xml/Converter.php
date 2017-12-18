@@ -9,7 +9,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Xml;
 
 /**
  * This converter serve needs of Declaration Filesystem reader:
- * @see \Magento\Setup\Model\Declaration\Schema\FileSystem\Reader
+ * @see \Magento\Setup\Model\Declaration\Schema\FileSystem\XmlReader
  *
  * It allows to convert declarative schema to raw array and add default values
  * for column types and for constraints

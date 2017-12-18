@@ -10,22 +10,22 @@ use Magento\Setup\Model\Declaration\Schema\Casters\CasterAggregator;
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaReaderInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory;
-use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
+use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Sharding;
 
 /**
  * This type of builder is responsible for converting ENTIRE data, that comes from db
- * into DTO`s format, with aggregation root: Structure
+ * into DTO`s format, with aggregation root: Schema
  *
- * Note: StructureBuilder can not be used for one structural element, like column or constraint
+ * Note: SchemaBuilder can not be used for one structural element, like column or constraint
  * because it should have references to other DTO objects.
  * In order to convert build only 1 structural element use directly it factory
  *
- * @see Structure
+ * @see Schema
  * @inheritdoc
  */
-class StructureBuilder
+class SchemaBuilder
 {
     /**
      * @var AdapterMediator
@@ -69,7 +69,7 @@ class StructureBuilder
     /**
      * @inheritdoc
      */
-    public function build(Structure $structure)
+    public function build(Schema $schema)
     {
         $tables = [];
 
@@ -114,11 +114,11 @@ class StructureBuilder
             $table->addIndexes($indexes);
             $table->addConstraints($constraints);
             $tables[$table->getName()] = $table;
-            $structure->addTable($table);
+            $schema->addTable($table);
         }
 
         $this->processReferenceKeys($tables);
-        return $structure;
+        return $schema;
     }
 
     /**

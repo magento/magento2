@@ -77,7 +77,7 @@ class TableDiff implements DiffInterface
                     $this->diffManager
                         ->registerModification($changeRegistry, $element, $generatedElements[$element->getName()]);
                 }
-                //Unset processed elements from generated from db structure
+                //Unset processed elements from generated from db schema
                 //All other unprocessed elements will be added as removed ones
                 unset($generatedElements[$element->getName()]);
             }

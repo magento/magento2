@@ -9,19 +9,19 @@ use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory;
 use Magento\Setup\Model\Declaration\Schema\Dto\Index;
-use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
+use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Sharding;
 
 /**
  * This type of builder is responsible for converting ENTIRE data, that comes from XML
- * into DTO`s format, with aggregation root: Structure
+ * into DTO`s format, with aggregation root: Schema
  *
- * Note: StructureBuilder can not be used for one structural element, like column or constraint
+ * Note: SchemaBuilder can not be used for one structural element, like column or constraint
  * because it should have references to other DTO objects.
  * In order to convert build only 1 structural element use directly it factory
  */
-class StructureBuilder
+class SchemaBuilder
 {
     /**
      * @var array
@@ -44,7 +44,7 @@ class StructureBuilder
     private $booleanUtils;
 
     /**
-     * StructureBuilder constructor.
+     * SchemaBuilder constructor.
      * @param ElementFactory $elementFactory
      * @param BooleanUtils $booleanUtils
      * @param Sharding $sharding
@@ -74,22 +74,22 @@ class StructureBuilder
     }
 
     /**
-     * Build structure
+     * Build schema
      *
-     * @param Structure $structure
-     * @return Structure
+     * @param Schema $schema
+     * @return Schema
      */
-    public function build(Structure $structure)
+    public function build(Schema $schema)
     {
         foreach ($this->tablesData as $tableData) {
-            if (!$structure->getTableByName($tableData['name'])) {
+            if (!$schema->getTableByName($tableData['name'])) {
                 if (!$this->isDisabled($tableData)) {
-                    $this->processTable($structure, $tableData);
+                    $this->processTable($schema, $tableData);
                 }
             }
         }
 
-        return $structure;
+        return $schema;
     }
 
     /**
@@ -157,16 +157,16 @@ class StructureBuilder
     }
 
     /**
-     * Process tables and add them to structure
+     * Process tables and add them to schema
      * If table already exists - then we need to skip it
      *
-     * @param Structure $structure
+     * @param Schema $schema
      * @param array $tableData
      * @return \Magento\Setup\Model\Declaration\Schema\Dto\Table
      */
-    private function processTable(Structure $structure, array $tableData)
+    private function processTable(Schema $schema, array $tableData)
     {
-        if (!$structure->getTableByName($tableData['name'])) {
+        if (!$schema->getTableByName($tableData['name'])) {
             $resource = $this->getStructuralElementResource($tableData);
             $tableParams = [
                 'name' => $tableData['name'],
@@ -176,14 +176,14 @@ class StructureBuilder
             $table = $this->elementFactory->create('table', $tableParams);
             $columns = $this->processColumns($tableData, $resource, $table);
             $table->addColumns($columns);
-            $structure->addTable($table);
+            $schema->addTable($table);
             //Add indexes to table
             $table->addIndexes($this->processIndexes($tableData, $resource, $table));
             //Add internal and reference constraints
-            $table->addConstraints($this->processConstraints($tableData, $resource, $structure));
+            $table->addConstraints($this->processConstraints($tableData, $resource, $schema));
         }
 
-        return $structure->getTableByName($tableData['name']);
+        return $schema->getTableByName($tableData['name']);
     }
 
     /**
@@ -239,10 +239,10 @@ class StructureBuilder
      *
      * @param array $tableData
      * @param $resource
-     * @param Structure $structure
+     * @param Schema $schema
      * @return Constraint[]
      */
-    private function processConstraints(array $tableData, $resource, Structure $structure)
+    private function processConstraints(array $tableData, $resource, Schema $schema)
     {
         if (!isset($tableData['constraint'])) {
             return [];
@@ -254,21 +254,21 @@ class StructureBuilder
             if ($this->isDisabled($constraintData)) {
                 continue;
             }
-            $table = $structure->getTableByName($tableData['name']);
+            $table = $schema->getTableByName($tableData['name']);
             $constraintData = $this->processGenericData($constraintData, $resource, $table);
-            //As foreign constraint has different structure we need to process it in different way
+            //As foreign constraint has different schema we need to process it in different way
             if ($constraintData['type'] === 'foreign') {
                 $constraintData['column'] = $table->getColumnByName(
                     $constraintData['column']
                 );
                 //always in foreign key name will be old and in raw data will be always old too
-                $structure->addTable(
+                $schema->addTable(
                     $this->processTable(
-                        $structure,
+                        $schema,
                         $this->tablesData[$constraintData['referenceTable']]
                     )
                 );
-                $constraintData['referenceTable'] = $structure->getTableByName(
+                $constraintData['referenceTable'] = $schema->getTableByName(
                     $constraintData['referenceTable']
                 );
 

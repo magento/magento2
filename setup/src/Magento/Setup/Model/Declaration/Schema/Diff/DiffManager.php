@@ -31,7 +31,7 @@ class DiffManager
     }
 
     /**
-     * Check whether this is element is new or not, by checking it in db structure
+     * Check whether this is element is new or not, by checking it in db schema
      *
      * @param ElementInterface[] $generatedElements
      * @return bool

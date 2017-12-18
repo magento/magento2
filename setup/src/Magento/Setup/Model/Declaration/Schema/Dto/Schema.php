@@ -6,10 +6,10 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
 /**
- * Structure is aggregation root, which holds all structural elements
+ * Schema is aggregation root, which holds all structural elements
  * and allow access to tables by their names
  */
-class Structure
+class Schema
 {
     /**
      * @var Table[]

@@ -1403,4 +1403,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="\Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="xml" xsi:type="object">Magento\Setup\Model\Declaration\Schema\FileSystem\XmlReader</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
