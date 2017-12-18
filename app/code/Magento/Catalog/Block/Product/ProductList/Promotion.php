@@ -30,8 +30,8 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
-     * @param CollectionFactory $productCollectionFactory
      * @param CollectionLoader $collectionLoader
+     * @param CollectionFactory $productCollectionFactory
      * @param array $data
      */
     public function __construct(
@@ -40,8 +40,8 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         \Magento\Framework\Url\Helper\Data $urlHelper,
-        CollectionFactory $productCollectionFactory,
         CollectionLoader $collectionLoader,
+        CollectionFactory $productCollectionFactory,
         array $data = []
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;

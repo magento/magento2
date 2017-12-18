@@ -5,10 +5,10 @@
  */
 
 namespace Magento\Review\Model\Plugin\ProductList;
+
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Catalog\Model\Product\ProductList\CollectionLoader as Loader;
 use Magento\Review\Model\ReviewFactory;
-
 
 /**
  * Class CollectionLoader
@@ -39,6 +39,7 @@ class CollectionLoader
      * @param Loader $subject
      * @param AbstractCollection $result
      * @return AbstractCollection
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterLoad(
         Loader $subject,
