@@ -17,7 +17,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadWithFilterSearch($request, $filters, $expectedCount)
     {
-        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/272');
         $objManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var  \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $fulltextCollection */
         $fulltextCollection = $objManager->create(
