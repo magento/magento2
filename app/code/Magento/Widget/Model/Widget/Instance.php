@@ -34,6 +34,11 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     const PRODUCT_LAYOUT_HANDLE = 'catalog_product_view';
 
+    /**
+     * @deprecated see self::SINGLE_PRODUCT_LAYOUT_HANDLE
+     */
+    const SINGLE_PRODUCT_LAYOUT_HANLDE = self::SINGLE_PRODUCT_LAYOUT_HANDLE;
+    
     const SINGLE_PRODUCT_LAYOUT_HANDLE = 'catalog_product_view_id_{{ID}}';
 
     const PRODUCT_TYPE_LAYOUT_HANDLE = 'catalog_product_view_type_{{TYPE}}';
