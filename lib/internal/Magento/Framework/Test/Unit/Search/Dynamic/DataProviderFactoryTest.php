@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Test\Search\Dynamic;
+namespace Magento\Framework\Test\Unit\Search\Dynamic;
 
 use Magento\Framework\Search\Dynamic\DataProviderFactory;
 use Magento\Framework\ObjectManagerInterface;

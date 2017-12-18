@@ -14,11 +14,33 @@ use Magento\Framework\Search\EngineResolverInterface;
 class AdapterFactory
 {
     /**
+     * Scope configuration
+     *
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @deprecated since it is not used anymore
+     */
+    protected $scopeConfig;
+
+    /**
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
+
+    /**
+     * Config path
+     *
+     * @var string
+     * @deprecated since it is not used anymore
+     */
+    protected $path;
+
+    /**
+     * Config Scope
+     * @deprecated since it is not used anymore
+     */
+    protected $scope;
 
     /**
      * Pool of existing adapters

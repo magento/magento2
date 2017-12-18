@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogSearch\Test\Unit\ResourceModel;
+namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
 
 use Magento\CatalogSearch\Model\ResourceModel\EngineInterface;
 use Magento\CatalogSearch\Model\ResourceModel\EngineProvider;
@@ -38,8 +38,8 @@ class EngineProviderTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->engineResolverMock->expects($this->once())
-            ->method('getCurrentSearchEngine')
-            ->willReturn($currentEngine);
+        ->method('getCurrentSearchEngine')
+        ->willReturn($currentEngine);
 
         $engineMock = $this->getMockBuilder($currentEngineClass)
             ->setMethods(['isAvailable'])

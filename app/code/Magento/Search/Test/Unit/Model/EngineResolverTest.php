@@ -101,7 +101,8 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
 
         $this->loggerMock->expects($this->any())
             ->method('error')
-            ->with($engine . ' search engine doesn\'t exists. Falling back to '
+            ->with(
+                $engine . ' search engine doesn\'t exists. Falling back to '
                 . EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE
             );
 

@@ -42,7 +42,6 @@ class ResultPageBuilderTest extends \PHPUnit\Framework\TestCase
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
 
-
         $this->model = new ResultPageBuilder(
             $this->resultPageFactoryMock,
             $this->engineResolverMock,
@@ -76,7 +75,6 @@ class ResultPageBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($resultPageMock);
 
         $this->assertEquals($resultPageMock, $this->model->build());
-
     }
 
     public function testBuildWithDisabledEngine()
@@ -104,6 +102,5 @@ class ResultPageBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($resultPageMock);
 
         $this->assertEquals($resultPageMock, $this->model->build());
-
     }
 }

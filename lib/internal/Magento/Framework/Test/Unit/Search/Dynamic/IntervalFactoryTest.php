@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Test\Search\Dynamic;
+namespace Magento\Framework\Test\Unit\Search\Dynamic;
 
 use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Framework\ObjectManagerInterface;
@@ -67,7 +67,6 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $dataProvider = 'current_interval';
         $dataProviders = [];
-        $data = ['data'];
 
         $this->engineResolverMock->expects($this->once())
             ->method('getCurrentSearchEngine')
