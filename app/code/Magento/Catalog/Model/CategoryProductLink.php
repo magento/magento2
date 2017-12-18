@@ -6,11 +6,14 @@
 
 namespace Magento\Catalog\Model;
 
+use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\Catalog\Api\Data\CategoryProductLinkInterface;
+
 /**
  * @codeCoverageIgnore
  */
-class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObject implements
-    \Magento\Catalog\Api\Data\CategoryProductLinkInterface
+class CategoryProductLink extends AbstractExtensibleObject implements
+    CategoryProductLinkInterface
 {
     /**#@+
      * Constant for confirmation status
@@ -80,7 +83,11 @@ class CategoryProductLink extends \Magento\Framework\Api\AbstractExtensibleObjec
      */
     public function getExtensionAttributes()
     {
-        return $this->_getExtensionAttributes();
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (!$extensionAttributes) {
+            return $this->extensionFactory->create(CategoryProductLinkInterface::class);
+        }
+        return $extensionAttributes;
     }
 
     /**
