@@ -19,6 +19,7 @@
         <buttons>
             <button name="save" class="Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Save"/>
             <button name="addAttribute" class="Magento\Catalog\Block\Adminhtml\Product\Edit\Button\AddAttribute"/>
+            <button name="customerView" class="Magento\Catalog\Block\Adminhtml\Product\Edit\Button\CustomerView"/>
             <button name="back" class="Magento\Catalog\Block\Adminhtml\Product\Edit\Button\Back"/>
         </buttons>
         <deps>

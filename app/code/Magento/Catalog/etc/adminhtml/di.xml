@@ -16,6 +16,11 @@
             <argument name="attributeLabelCache" xsi:type="object">Magento\Framework\App\Cache\Type\Translate</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Edit\Action\UrlBuilder">
+        <arguments>
+            <argument name="frontendUrlBuilder" xsi:type="object">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Block\Adminhtml\Product\Frontend\Product\Watermark">
         <arguments>
             <argument name="imageTypes" xsi:type="array">
