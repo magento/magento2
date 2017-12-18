@@ -14,6 +14,7 @@ define([
                 'Magento_Checkout/js/action/place-order': jasmine.createSpy('placeOrderAction'),
                 'Magento_CheckoutAgreements/js/model/agreements-assigner': jasmine.createSpy('agreementsAssigner')
             },
+            defaultContext = require.s.contexts._,
             mixin,
             placeOrderAction;
 
@@ -35,6 +36,11 @@ define([
         });
 
         describe('Magento_Checkout/js/action/place-order', function () {
+            it('Magento_CheckoutAgreements/js/model/place-order-mixin is applied', function () {
+                var placeOrderMixins = defaultContext.config.config.mixins['Magento_Checkout/js/action/place-order'];
+                expect(placeOrderMixins['Magento_CheckoutAgreements/js/model/place-order-mixin']).toBe(true);
+            });
+
             it('Magento_CheckoutAgreements/js/model/agreements-assigner is called', function () {
                 var messageContainer = jasmine.createSpy('messageContainer'),
                     paymentData = {};
