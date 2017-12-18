@@ -92,7 +92,7 @@ class Notifications implements ModifierInterface
                 $meta = $this->buildNotificationMeta($meta, $page, $isLastPage);
             }
         } else {
-            $meta = $this->buildFallbackNotificationMeta($meta);
+            $meta = $this->hideNotification($meta);
         }
 
         return $meta;
@@ -149,12 +149,12 @@ class Notifications implements ModifierInterface
     }
 
     /**
-     * Builds the fallback notification modal in case the Magento Marketing service is unavailable
+     * Sets the modal to not display if no content is available.
      *
      * @param array $meta
      * @return array
      */
-    private function buildFallbackNotificationMeta(array $meta)
+    private function hideNotification(array $meta)
     {
         $meta['notification_modal_1']['arguments']['data']['config']['options'] = [
             'autoOpen' => false
@@ -164,9 +164,9 @@ class Notifications implements ModifierInterface
     }
 
     /**
-     * Returns the notification modal content data in JSON format from the Magento Marketing service or session cache
+     * Returns the notification modal content data
      *
-     * @returns string
+     * @returns array
      */
     private function getNotificationContent()
     {

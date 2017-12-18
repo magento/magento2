@@ -16,9 +16,7 @@ use Magento\ReleaseNotification\Model\Connector\ResponseHandlerInterface;
 class NotificationResponse implements ResponseHandlerInterface
 {
     /**
-     * @param string $responseBody
-     *
-     * @return array|false
+     * @inheritdoc
      */
     public function handleResponse($responseBody)
     {
