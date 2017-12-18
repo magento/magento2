@@ -5,11 +5,11 @@
  */
 namespace Magento\AdvancedSearch\Test\Unit\Model;
 
+use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Search\Model\EngineResolver;
 use Magento\Framework\ObjectManagerInterface;
 
-class DataProviderTest extends \PHPUnit\Framework\TestCase
+class SuggestedQueriesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\AdvancedSearch\Model\SuggestedQueries;
@@ -17,7 +17,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var EngineResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $engineResolverMock;
 

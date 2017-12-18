@@ -6,7 +6,7 @@
 namespace Magento\AdvancedSearch\Model\Client;
 
 use \Magento\Framework\ObjectManagerInterface;
-use \Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Search\EngineResolverInterface;
 
 /**
  * @api
@@ -14,14 +14,6 @@ use \Magento\Framework\App\Config\ScopeConfigInterface;
  */
 class ClientResolver
 {
-    /**
-     * Scope configuration
-     *
-     * @var ScopeConfigInterface
-     * @since 100.1.0
-     */
-    protected $scopeConfig;
-
     /**
      * Object Manager instance
      *
@@ -45,41 +37,26 @@ class ClientResolver
     private $clientOptionsPool;
 
     /**
-     * Config path
-     *
-     * @var string
-     * @since 100.1.0
+     * @var EngineResolver
      */
-    protected $path;
-
-    /**
-     * Config Scope
-     * @since 100.1.0
-     */
-    protected $scope;
+    private $engineResolver;
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param ScopeConfigInterface $scopeConfig,
      * @param array $clientFactories
      * @param array $clientOptions
-     * @param string $path
-     * @param string $scopeType
+     * @param EngineResolverInterface $engineResolver
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        ScopeConfigInterface $scopeConfig,
         array $clientFactories,
         array $clientOptions,
-        $path,
-        $scopeType
+        EngineResolverInterface $engineResolver
     ) {
         $this->objectManager = $objectManager;
-        $this->scopeConfig = $scopeConfig;
         $this->clientFactoryPool = $clientFactories;
         $this->clientOptionsPool = $clientOptions;
-        $this->path = $path;
-        $this->scope = $scopeType;
+        $this->engineResolver = $engineResolver;
     }
 
     /**
@@ -90,7 +67,7 @@ class ClientResolver
      */
     public function getCurrentEngine()
     {
-        return $this->scopeConfig->getValue($this->path, $this->scope);
+        return $this->engineResolver->getCurrentSearchEngine();
     }
 
     /**

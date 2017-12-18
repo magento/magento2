@@ -6,13 +6,14 @@
 namespace Magento\AdvancedSearch\Model;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Search\Model\QueryInterface;
 use Magento\Search\Model\EngineResolver;
 
 class SuggestedQueries implements SuggestedQueriesInterface
 {
     /**
-     * @var EngineResolver
+     * @var EngineResolverInterface
      */
     private $engineResolver;
 
@@ -36,12 +37,15 @@ class SuggestedQueries implements SuggestedQueriesInterface
     /**
      * SuggestedQueries constructor.
      *
-     * @param EngineResolver $engineResolver
+     * @param EngineResolverInterface $engineResolver
      * @param ObjectManagerInterface $objectManager
      * @param array $data
      */
-    public function __construct(EngineResolver $engineResolver, ObjectManagerInterface $objectManager, array $data)
-    {
+    public function __construct(
+        EngineResolverInterface $engineResolver,
+        ObjectManagerInterface $objectManager,
+        array $data
+    ) {
         $this->engineResolver = $engineResolver;
         $this->objectManager = $objectManager;
         $this->data = $data;

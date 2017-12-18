@@ -12,6 +12,7 @@ use Magento\Customer\Model\ResourceModel\Group;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Model\ResourceModel\Attribute;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Search\Model\EngineResolver;
 
 class CustomerGroup extends AbstractPlugin
@@ -22,19 +23,19 @@ class CustomerGroup extends AbstractPlugin
     protected $clientOptions;
 
     /**
-     * @var EngineResolver
+     * @var EngineResolverInterface
      */
     protected $engineResolver;
 
     /**
      * @param IndexerRegistry $indexerRegistry
      * @param ClientOptionsInterface $clientOptions
-     * @param EngineResolver $engineResolver
+     * @param EngineResolverInterface $engineResolver
      */
     public function __construct(
         IndexerRegistry $indexerRegistry,
         ClientOptionsInterface $clientOptions,
-        EngineResolver $engineResolver
+        EngineResolverInterface $engineResolver
     ) {
         parent::__construct($indexerRegistry);
         $this->clientOptions = $clientOptions;

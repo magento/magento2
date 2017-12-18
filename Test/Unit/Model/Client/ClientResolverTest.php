@@ -6,64 +6,55 @@
 
 namespace Magento\AdvancedSearch\Test\Unit\Model\Client;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
+use Magento\AdvancedSearch\Model\Client\ClientInterface;
+use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\AdvancedSearch\Model\Client\ClientResolver;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Search\EngineResolverInterface;
 
 class ClientResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\AdvancedSearch\Model\Client\ClientResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $helper;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $scopeConfig;
+    private $engineResolverMock;
 
     protected function setUp()
     {
-        $this->helper = new ObjectManager($this);
+        $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
+            ->getMockForAbstractClass();
 
-        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
-        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-
-        $this->model= $this->helper->getObject(
-            \Magento\AdvancedSearch\Model\Client\ClientResolver::class,
-            [
-                'objectManager' => $this->objectManager,
-                'scopeConfig' => $this->scopeConfig,
-                'clientFactories' => ['engineName' => 'engineFactoryClass'],
-                'clientOptions' => ['engineName' => 'engineOptionClass'],
-                'path' => 'some_path',
-                'scopeType' => 'some_scopeType'
-            ]
+        $this->model = new ClientResolver(
+            $this->objectManager,
+            ['engineName' => 'engineFactoryClass'],
+            ['engineName' => 'engineOptionClass'],
+            $this->engineResolverMock
         );
     }
 
     public function testCreate()
     {
-        $this->scopeConfig->expects($this->once())->method('getValue')
-            ->with($this->equalTo('some_path'), $this->equalTo('some_scopeType'))
+        $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->will($this->returnValue('engineName'));
 
-        $factoryMock = $this->createMock(\Magento\AdvancedSearch\Model\Client\ClientFactoryInterface::class);
+        $factoryMock = $this->createMock(ClientFactoryInterface::class);
 
-        $clientMock = $this->createMock(\Magento\AdvancedSearch\Model\Client\ClientInterface::class);
+        $clientMock = $this->createMock(ClientInterface::class);
 
-        $clientOptionsMock = $this->createMock(\Magento\AdvancedSearch\Model\Client\ClientOptionsInterface::class);
+        $clientOptionsMock = $this->createMock(ClientOptionsInterface::class);
 
         $this->objectManager->expects($this->exactly(2))->method('create')
             ->withConsecutive(
@@ -84,7 +75,7 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($clientMock));
 
         $result = $this->model->create();
-        $this->assertInstanceOf(\Magento\AdvancedSearch\Model\Client\ClientInterface::class, $result);
+        $this->assertInstanceOf(ClientInterface::class, $result);
     }
 
     /**
@@ -109,8 +100,7 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCurrentEngine()
     {
-        $this->scopeConfig->expects($this->once())->method('getValue')
-            ->with($this->equalTo('some_path'), $this->equalTo('some_scopeType'))
+        $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->will($this->returnValue('engineName'));
 
         $this->assertEquals('engineName', $this->model->getCurrentEngine());
