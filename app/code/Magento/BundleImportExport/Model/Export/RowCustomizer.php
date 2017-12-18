@@ -475,7 +475,7 @@ class RowCustomizer implements RowCustomizerInterface
     private function getStoreCodeById($storeId)
     {
         if (!isset($this->storeIdToCode[$storeId])) {
-            $this->storeIdToCode[$storeId] = $this->getStoreManager()->getStore($storeId);
+            $this->storeIdToCode[$storeId] = $this->getStoreManager()->getStore($storeId)->getCode();
         }
         return $this->storeIdToCode[$storeId];
     }
