@@ -15,14 +15,14 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * A unit test for testing of the representation of a Notification request.
+ * A unit test for testing of the representation of a HttpContentProvider request.
  */
 class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var HttpContentProvider
      */
-    private $notificationRequest;
+    private $httpContentProvider;
 
     /**
      * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -73,7 +73,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $objectManager = new ObjectManager($this);
-        $this->notificationRequest = $objectManager->getObject(
+        $this->httpContentProvider = $objectManager->getObject(
             HttpContentProvider::class,
             [
                 'httpClient' => $this->httpClientMock,
@@ -128,7 +128,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getResult')
             ->with($response, $status)
             ->willReturn($expectedBody);
-        $this->assertEquals($expectedBody, $this->notificationRequest->getContent());
+        $this->assertEquals($expectedBody, $this->httpContentProvider->getContent());
     }
 
     /**
@@ -166,7 +166,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
             ->method('warning');
         $this->loggerMock->expects($this->once())
             ->method('critical');
-        $this->assertFalse($this->notificationRequest->getContent());
+        $this->assertFalse($this->httpContentProvider->getContent());
     }
 
     public function getContentDataProvider()

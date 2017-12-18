@@ -9,6 +9,8 @@ namespace Magento\ReleaseNotification\Ui\DataProvider\Modifier;
 use Magento\ReleaseNotification\Model\ContentProviderInterface;
 use Magento\ReleaseNotification\Ui\Renderer\NotificationRenderer;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\App\CacheInterface;
 use Magento\Ui\Component;
 
 /**
@@ -21,7 +23,7 @@ class Notifications implements ModifierInterface
     /**
      * @var ContentProviderInterface
      */
-    private $request;
+    private $contentProvider;
 
     /**
      * @var NotificationRenderer
@@ -29,15 +31,38 @@ class Notifications implements ModifierInterface
     private $renderer;
 
     /**
-     * @param ContentProviderInterface $request
+     * Prefix for cache
+     *
+     * @var string
+     */
+    private static $cachePrefix = 'release-notification-content-';
+
+    /**
+     * @var CacheInterface
+     */
+    private $cacheStorage;
+
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @param ContentProviderInterface $contentProvider
      * @param NotificationRenderer $builder
+     * @param CacheInterface $cacheStorage
+     * @param SerializerInterface $serializer
      */
     public function __construct(
-        ContentProviderInterface $request,
-        NotificationRenderer $builder
+        ContentProviderInterface $contentProvider,
+        NotificationRenderer $builder,
+        CacheInterface $cacheStorage,
+        SerializerInterface $serializer
     ) {
-        $this->request = $request;
+        $this->contentProvider = $contentProvider;
         $this->renderer = $builder;
+        $this->cacheStorage = $cacheStorage;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -139,12 +164,20 @@ class Notifications implements ModifierInterface
     }
 
     /**
-     * Returns the notification modal content data in JSON format from the Magento Marketing service
+     * Returns the notification modal content data in JSON format from the Magento Marketing service or session cache
      *
      * @returns string
      */
     private function getNotificationContent()
     {
-        return $this->request->getContent();
+        $cacheKey = self::$cachePrefix . $this->contentProvider->getTargetVersion() . "-"
+            . $this->contentProvider->getEdition() . "-" . $this->contentProvider->getLocale();
+        $modalContent = $this->cacheStorage->load($cacheKey);
+        if ($modalContent === false) {
+            $modalContent = $this->contentProvider->getContent();
+            $this->cacheStorage->save($modalContent, $cacheKey);
+        }
+
+        return $this->serializer->unserialize($modalContent);
     }
 }

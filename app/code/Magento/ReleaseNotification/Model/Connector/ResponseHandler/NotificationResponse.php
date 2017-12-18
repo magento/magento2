@@ -16,11 +16,11 @@ use Magento\ReleaseNotification\Model\Connector\ResponseHandlerInterface;
 class NotificationResponse implements ResponseHandlerInterface
 {
     /**
-     * @param array $responseBody
+     * @param string $responseBody
      *
      * @return array|false
      */
-    public function handleResponse(array $responseBody)
+    public function handleResponse($responseBody)
     {
         return !empty($responseBody) ? $responseBody : false;
     }

@@ -21,4 +21,26 @@ interface ContentProviderInterface
      * @return string|false
      */
     public function getContent();
+
+    /**
+     * Returns the current Magento version used to retrieve the release notification content.
+     * Version information after the dash (-) character is removed (ex. -dev or -rc).
+     *
+     * @return string
+     */
+    public function getTargetVersion();
+
+    /**
+     * Returns the Magento edition
+     *
+     * @return string
+     */
+    public function getEdition();
+
+    /**
+     * Returns the admin user's interface locale
+     *
+     * @return string
+     */
+    public function getLocale();
 }

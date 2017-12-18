@@ -14,8 +14,8 @@ namespace Magento\ReleaseNotification\Model\Connector;
 interface ResponseHandlerInterface
 {
     /**
-     * @param array $responseBody
+     * @param string $responseBody
      * @return bool|string
      */
-    public function handleResponse(array $responseBody);
+    public function handleResponse($responseBody);
 }

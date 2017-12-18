@@ -5,7 +5,6 @@
  */
 namespace Magento\ReleaseNotification\Test\Unit\Model\Connector\Http;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\ReleaseNotification\Model\Connector\ResponseHandlerInterface;
 use Magento\ReleaseNotification\Model\Connector\Http\ResponseResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -30,25 +29,17 @@ class ResponseResolverTest extends \PHPUnit\Framework\TestCase
      */
     private $notFoundResponseHandlerMock;
 
-    /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $serializerInterfaceMock;
-
     public function setUp()
     {
         $this->responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->getMockForAbstractClass();
         $this->notFoundResponseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->getMockForAbstractClass();
-        $this->serializerInterfaceMock = $this->getMockBuilder(SerializerInterface::class)
-            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
         $this->responseResolver = $objectManager->getObject(
             ResponseResolver::class,
             [
-                'serializer' => $this->serializerInterfaceMock,
                 'responseHandlers' => [
                     200 => $this->responseHandlerMock,
                     404 => $this->notFoundResponseHandlerMock
@@ -59,18 +50,12 @@ class ResponseResolverTest extends \PHPUnit\Framework\TestCase
 
     public function testGetResult()
     {
-        $expectedBody = ['test' => 'testValue'];
-        $response = json_encode($expectedBody);
+        $response = ['test' => 'testValue'];
         $status = 200;
-
-        $this->serializerInterfaceMock->expects($this->once())
-            ->method('unserialize')
-            ->with($response)
-            ->willReturn($expectedBody);
 
         $this->responseHandlerMock->expects($this->once())
             ->method('handleResponse')
-            ->with($expectedBody)
+            ->with($response)
             ->willReturn(true);
         $this->notFoundResponseHandlerMock->expects($this->never())->method('handleResponse');
 

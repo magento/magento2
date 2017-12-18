@@ -129,6 +129,33 @@ class HttpContentProvider implements ContentProviderInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getTargetVersion()
+    {
+        $metadataVersion = $this->productMetadata->getVersion();
+        $version = strstr($metadataVersion, '-', true);
+
+        return !$version ? $metadataVersion : $version;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEdition()
+    {
+        return $this->productMetadata->getEdition();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLocale()
+    {
+        return $this->session->getUser()->getInterfaceLocale();
+    }
+
+    /**
      * Returns the default content as a fallback if there is no content retrieved from the service/
      *
      * @return string
@@ -139,7 +166,7 @@ class HttpContentProvider implements ContentProviderInterface
             $this->config->getValue(self::$notificationUrlConfigPath),
             [
                 'version' => self::$defaultContentVersion,
-                'edition' => $this->productMetadata->getEdition(),
+                'edition' => $this->getEdition(),
                 'locale' => $this->session->getUser()->getInterfaceLocale()
             ]
         );
@@ -157,20 +184,6 @@ class HttpContentProvider implements ContentProviderInterface
     {
         $this->httpClient->get($url);
         return $this->httpClient->getBody();
-    }
-
-    /**
-     * Returns the current Magento version used to retrieve the release notification content.
-     * Version information after the dash (-) character is removed (ex. -dev or -rc).
-     *
-     * @return string
-     */
-    private function getTargetVersion()
-    {
-        $metadataVersion = $this->productMetadata->getVersion();
-        $version = strstr($metadataVersion, '-', true);
-
-        return !$version ? $metadataVersion : $version;
     }
 
     /**

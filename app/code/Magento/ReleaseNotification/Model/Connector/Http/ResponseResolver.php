@@ -6,7 +6,6 @@
 
 namespace Magento\ReleaseNotification\Model\Connector\Http;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\ReleaseNotification\Model\Connector\ResponseHandlerInterface;
 
 /**
@@ -16,10 +15,6 @@ use Magento\ReleaseNotification\Model\Connector\ResponseHandlerInterface;
  */
 class ResponseResolver
 {
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
 
     /**
      * @var array
@@ -27,14 +22,11 @@ class ResponseResolver
     private $responseHandlers;
 
     /**
-     * @param SerializerInterface $serializer
      * @param ResponseHandlerInterface[] $responseHandlers
      */
     public function __construct(
-        SerializerInterface $serializer,
         array $responseHandlers = []
     ) {
-        $this->serializer = $serializer;
         $this->responseHandlers = $responseHandlers;
     }
 
@@ -46,9 +38,8 @@ class ResponseResolver
     public function getResult($response, $status)
     {
         $result = false;
-        $responseBody = $this->serializer->unserialize($response);
         if (array_key_exists($status, $this->responseHandlers)) {
-            $result = $this->responseHandlers[$status]->handleResponse($responseBody);
+            $result = $this->responseHandlers[$status]->handleResponse($response);
         }
 
         return $result;
