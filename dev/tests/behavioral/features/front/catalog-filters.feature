@@ -16,10 +16,10 @@ Feature: Catalog category filters
     Then I wait for page to load "/index.php/women/tops-women/jackets-women.html?style_general=125"
 
     #Color
-    And I wait for element with xpath "//*[@id='narrow-by-list']/div[3]/div[1]" to appear
-    And I click on the element with xpath "//*[@id='narrow-by-list']/div[3]/div[1]"
-    And I wait for element with xpath "//*[@id='narrow-by-list']/div[3]/div[2]/div/div/a[2]/div" to appear
-    And I click on the element with xpath "//*[@id='narrow-by-list']/div[3]/div[2]/div/div/a[2]/div"
+ #   And I wait for element with xpath "//*[@id='narrow-by-list']/div[3]/div[1]" to appear
+ #   And I click on the element with xpath "//*[@id='narrow-by-list']/div[3]/div[1]"
+ #   And I wait for element with xpath "//*[@id='narrow-by-list']/div[4]/div[2]/div/div/a[4]/div" to appear
+ #   And I click on the element with xpath "//*[@id='narrow-by-list']/div[4]/div[2]/div/div/a[4]/div"
     #Size
     And I wait for element with xpath "//*[@id='narrow-by-list']/div[1]/div[1]" to appear
     And I click on the element with xpath "//*[@id='narrow-by-list']/div[1]/div[1]"

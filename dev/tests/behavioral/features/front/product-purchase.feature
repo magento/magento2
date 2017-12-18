@@ -31,7 +31,7 @@ Feature: Product purchase
     And I click on the element with xpath "//*[@id='top-cart-btn-checkout']"
 
     #Checkout
-    And I wait for page to load "/index.php/checkout/"
+    Then I wait for page to load "/index.php/checkout/"
     And I wait for element with xpath "//*[@id='customer-email']" to appear
 
     And I fill in the following:
@@ -55,8 +55,8 @@ Feature: Product purchase
 
     #Payment
     Then I wait for page to load "/index.php/checkout/#payment"
-    And I wait for element with xpath "//*[@id='checkout-payment-method-load']/div/div/div[2]/div[2]/div[4]/div/button/span" to appear
-    And I click on the element with xpath "//*[@id='checkout-payment-method-load']/div/div/div[2]/div[2]/div[4]/div/button/span"
+    And I wait for element with xpath "//*[@id='checkout-payment-method-load']/div/div/div[2]/div[2]/div[4]/div/button" to appear
+    And I click on the element with xpath "//*[@id='checkout-payment-method-load']/div/div/div[2]/div[2]/div[4]/div/button"
 
     #Success
     Then I wait for page to load "/index.php/checkout/onepage/success/"
