@@ -57,6 +57,12 @@ $sourcesItemsData = [
         SourceItemInterface::QUANTITY => 5,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
     ],
+    [
+        SourceItemInterface::SOURCE_ID => 20, // EU-source-2
+        SourceItemInterface::SKU => 'SKU-3',
+        SourceItemInterface::QUANTITY => 6,
+        SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
+    ],
 ];
 
 $sourceItems = [];

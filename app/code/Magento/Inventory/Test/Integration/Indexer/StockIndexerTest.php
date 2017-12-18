@@ -99,4 +99,18 @@ class StockIndexerTest extends TestCase
         self::assertEquals(5, $this->getProductQuantityInStock->execute('SKU-2', 20));
         self::assertEquals(5, $this->getProductQuantityInStock->execute('SKU-2', 30));
     }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     */
+    public function testReindexZeroQuantityIfSourceItemIsOutOfStock()
+    {
+        $this->indexer->reindexAll();
+
+        self::assertEquals(0, $this->getProductQuantityInStock->execute('SKU-3', 10));
+    }
 }
