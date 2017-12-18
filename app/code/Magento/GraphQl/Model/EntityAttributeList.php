@@ -37,7 +37,7 @@ class EntityAttributeList
     ) {
         $this->management =  $management;
         $this->eavSetupFactory = $eavSetupFactory;
-        $this->eavSetup = $eavSetup = $this->eavSetupFactory->create();
+        $this->eavSetup = $this->eavSetupFactory->create();
     }
 
     public function getDefaultEntityAttributes(string $entityCode)

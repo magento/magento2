@@ -7,6 +7,12 @@
 namespace Magento\Framework\GraphQl;
 
 use Magento\Framework\GraphQl\Type\Definition;
+use Magento\Framework\GraphQl\Type\Definition\ObjectType;
+use Magento\Framework\GraphQl\Type\Definition\InterfaceType;
+use Magento\Framework\GraphQl\Type\Definition\InputObjectType;
+use Magento\Framework\GraphQl\Type\Definition\EnumType;
+use Magento\Framework\GraphQl\Type\Definition\ListOfType;
+use Magento\Framework\GraphQl\Type\Definition\NonNull;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use GraphQL\Type\Definition\Type;
 
@@ -31,7 +37,7 @@ class TypeFactory
      */
     public function createObject(array $config)
     {
-        return new Definition\ObjectType($config);
+        return new ObjectType($config);
     }
 
     /**
@@ -40,7 +46,7 @@ class TypeFactory
      */
     public function createInterface(array $config)
     {
-        return new Definition\InterfaceType($config);
+        return new InterfaceType($config);
     }
 
     /**
@@ -49,7 +55,7 @@ class TypeFactory
      */
     public function createInputObject(array $config)
     {
-        return new Definition\InputObjectType($config);
+        return new InputObjectType($config);
     }
 
     /**
@@ -58,7 +64,7 @@ class TypeFactory
      */
     public function createEnum(array $config)
     {
-        return new Definition\EnumType($config);
+        return new EnumType($config);
     }
 
     /**
@@ -67,7 +73,7 @@ class TypeFactory
      */
     public function createList(Type $definedType)
     {
-        return new Definition\ListOfType($definedType);
+        return new ListOfType($definedType);
     }
 
     /**
@@ -76,6 +82,6 @@ class TypeFactory
      */
     public function createNonNull(Type $definedType)
     {
-        return new Definition\NonNull($definedType);
+        return new NonNull($definedType);
     }
 }

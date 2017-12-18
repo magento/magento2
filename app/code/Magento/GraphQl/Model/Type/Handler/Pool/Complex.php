@@ -5,6 +5,7 @@
  */
 
 namespace Magento\GraphQl\Model\Type\Handler\Pool;
+
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 use Magento\GraphQl\Model\Type\HandlerConfig;

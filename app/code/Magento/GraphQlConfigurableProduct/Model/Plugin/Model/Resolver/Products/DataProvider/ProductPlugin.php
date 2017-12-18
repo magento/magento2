@@ -16,6 +16,7 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Pr
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
+use Magento\Framework\DataObject;
 use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 
@@ -96,6 +97,21 @@ class ProductPlugin
             $attributes = $this->attributeCollection->getItems();
         }
 
+        $result = $this->addConfigurableData($result, $children, $attributes);
+
+        return $result;
+    }
+
+    /**
+     * Add configurable data to any configurable products in result set
+     *
+     * @param SearchResultsInterface $result
+     * @param DataObject[] $children
+     * @param DataObject[] $attributes
+     * @return SearchResultsInterface
+     */
+    private function addConfigurableData($result, $children, $attributes)
+    {
         foreach ($result->getItems() as $product) {
             if ($product->getTypeId() === Configurable::TYPE_CODE) {
                 $extensionAttributes = $product->getExtensionAttributes();

@@ -52,27 +52,7 @@ class FieldConfig
             return $this->instances[$fieldName];
         }
         if (isset($this->config[$fieldName])) {
-            $this->instances[$fieldName] = [];
-            foreach ($this->config[$fieldName] as $argumentName => $fieldConfig) {
-                $this->instances[$fieldName][$argumentName] = $this->argumentConfigFactory->create(
-                    [
-                        'defaultValue' => isset($fieldConfig['defaultValue']) ? $fieldConfig['defaultValue'] : null,
-                        'valueParser'=> isset($fieldConfig['valueParser'])
-                            ? $fieldConfig['valueParser']
-                            : null
-                    ]
-                );
-            }
-            foreach ($arguments as $argumentName => $argumentValue) {
-                if (!isset($this->instances[$fieldName][$argumentName])) {
-                    $this->instances[$fieldName][$argumentName] = $this->argumentConfigFactory->create(
-                        [
-                            'defaultValue' => null,
-                            'valueParser'=> null
-                        ]
-                    );
-                }
-            }
+            $this->processConfiguredField($fieldName, $arguments);
         } else {
             foreach (array_keys($arguments) as $argument) {
                 $this->instances[$fieldName][$argument] = $this->argumentConfigFactory->create([
@@ -86,6 +66,31 @@ class FieldConfig
             return $this->instances[$fieldName];
         } else {
             return [];
+        }
+    }
+
+    private function processConfiguredField(string $fieldName, array $arguments)
+    {
+        $this->instances[$fieldName] = [];
+        foreach ($this->config[$fieldName] as $argumentName => $fieldConfig) {
+            $this->instances[$fieldName][$argumentName] = $this->argumentConfigFactory->create(
+                [
+                    'defaultValue' => isset($fieldConfig['defaultValue']) ? $fieldConfig['defaultValue'] : null,
+                    'valueParser'=> isset($fieldConfig['valueParser'])
+                        ? $fieldConfig['valueParser']
+                        : null
+                ]
+            );
+        }
+        foreach (array_keys($arguments) as $argumentName) {
+            if (!isset($this->instances[$fieldName][$argumentName])) {
+                $this->instances[$fieldName][$argumentName] = $this->argumentConfigFactory->create(
+                    [
+                        'defaultValue' => null,
+                        'valueParser'=> null
+                    ]
+                );
+            }
         }
     }
 }

@@ -77,8 +77,9 @@ class ResolverContext extends \Magento\Framework\Model\AbstractExtensibleModel i
      * @param \Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes)
-    {
+    public function setExtensionAttributes(
+        \Magento\GraphQl\Model\ResolverContextExtensionInterface $extensionAttributes
+    ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
 

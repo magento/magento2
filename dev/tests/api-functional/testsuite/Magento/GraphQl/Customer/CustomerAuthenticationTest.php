@@ -153,7 +153,7 @@ QUERY;
     {
         /** @var AddressInterface $addresses */
         $addresses = $customer->getAddresses();
-        foreach( $addresses as $addressKey => $addressValue) {
+        foreach ($addresses as $addressKey => $addressValue) {
             $this->assertNotEmpty($addressValue);
             $assertionMap = [
                 ['response_field' => 'id', 'expected_value' => $addresses[$addressKey]->getId()],
@@ -169,7 +169,6 @@ QUERY;
             $this->assertResponseFields($actualResponse['customer']['addresses'][$addressKey], $assertionMap);
         }
     }
-
 
     /**
      * @param array $actualResponse
