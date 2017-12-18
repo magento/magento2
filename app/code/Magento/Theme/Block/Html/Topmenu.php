@@ -331,7 +331,7 @@ class Topmenu extends Template implements IdentityInterface
     /**
      * Add identity
      *
-     * @param array $identity
+     * @param string|array $identity
      * @return void
      */
     public function addIdentity($identity)

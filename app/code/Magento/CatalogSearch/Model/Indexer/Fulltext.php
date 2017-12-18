@@ -123,11 +123,12 @@ class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\F
         $saveHandler = $this->indexerHandlerFactory->create([
             'data' => $this->data
         ]);
+
         foreach ($storeIds as $storeId) {
             $dimension = $this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId]);
             $productIds = array_unique(array_merge($ids, $this->fulltextResource->getRelationsByChild($ids)));
             $saveHandler->deleteIndex([$dimension], new \ArrayObject($productIds));
-            $saveHandler->saveIndex([$dimension], $this->fullAction->rebuildStoreIndex($storeId, $ids));
+            $saveHandler->saveIndex([$dimension], $this->fullAction->rebuildStoreIndex($storeId, $productIds));
         }
     }
 
