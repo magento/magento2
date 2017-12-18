@@ -8,7 +8,6 @@ namespace Magento\GraphQlConfigurableProduct\Model\Plugin\Model\Resolver\Product
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection
     as AttributeCollection;
@@ -17,6 +16,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
 use Magento\Framework\DataObject;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 
@@ -48,6 +48,11 @@ class ProductPlugin
     private $searchCriteriaBuilder;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * ProductPlugin constructor.
      *
      * @param Configurable $configurable
@@ -55,19 +60,22 @@ class ProductPlugin
      * @param ProductCollection $productCollection
      * @param ProductRepositoryInterface $productRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         Configurable $configurable,
         AttributeCollection $attributeCollection,
         ProductCollection $productCollection,
         ProductRepositoryInterface $productRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        MetadataPool $metadataPool
     ) {
         $this->configurable = $configurable;
         $this->attributeCollection = $attributeCollection;
         $this->productCollection = $productCollection;
         $this->productRepository = $productRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -111,12 +119,13 @@ class ProductPlugin
      */
     private function addConfigurableData($result, $children, $attributes)
     {
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         foreach ($result->getItems() as $product) {
             if ($product->getTypeId() === Configurable::TYPE_CODE) {
                 $extensionAttributes = $product->getExtensionAttributes();
                 $childrenIds = [];
                 foreach ($children as $child) {
-                    if ($child->getParentId() === $product->getId()) {
+                    if ($child->getParentId() === $product->getData($linkField)) {
                         $childrenIds[] = $child->getId();
                     }
                 }

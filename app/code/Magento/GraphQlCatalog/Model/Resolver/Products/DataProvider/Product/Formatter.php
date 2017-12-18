@@ -54,7 +54,7 @@ class Formatter
     public function format(Product $product)
     {
         $productData = $product->getData();
-        $productData['id'] = $productData['entity_id'];
+        $productData['id'] = $product->getId();
         unset($productData['entity_id']);
 
         $productData = $this->mediaGalleryEntriesFormatter->format($product, $productData);

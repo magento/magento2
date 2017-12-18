@@ -82,7 +82,9 @@ class ConfigurableProductPostProcessor implements PostFetchProcessorInterface
             $childData = $this->formatter->format($childProduct);
             $childId = (int)$childProduct->getId();
             foreach ($productData as $key => $item) {
-                if (array_key_exists($childId, $item['configurable_product_links'])) {
+                if (isset($item['configurable_product_links'])
+                    && array_key_exists($childId, $item['configurable_product_links'])
+                ) {
                     $productData[$key]['configurable_product_links'][$childId] = $childData;
                     $categoryLinks = $this->productResource->getCategoryIds($childProduct);
                     foreach ($categoryLinks as $position => $link) {

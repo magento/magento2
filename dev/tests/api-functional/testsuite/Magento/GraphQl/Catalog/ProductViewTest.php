@@ -455,21 +455,15 @@ QUERY;
     {
         $productOptions = $product->getOptions();
         $this->assertNotEmpty($actualResponse['options'], "Precondition failed: 'options' must not be empty");
-        usort(
-            $actualResponse['options'],
-            function ($a, $b) {
-                return strcmp($a['title'], $b['title']);
+        foreach ($actualResponse['options'] as $optionsArray) {
+            $option = null;
+            /** @var \Magento\Catalog\Model\Product\Option $optionSelect */
+            foreach ($productOptions as $optionSelect) {
+                if ($optionSelect->getOptionId() == $optionsArray['option_id']) {
+                    $option = $optionSelect;
+                    break;
+                }
             }
-        );
-        usort(
-            $productOptions,
-            function ($a, $b) {
-                return strcmp($a['title'], $b['title']);
-            }
-        );
-        foreach ($actualResponse['options'] as $optionsIndex => $optionsArray) {
-            /** @var \Magento\Catalog\Model\Product\Option $option */
-            $option = $productOptions[$optionsIndex];
             $assertionMap = [
                 ['response_field' => 'product_sku', 'expected_value' => $option->getProductSku()],
                 ['response_field' => 'sort_order', 'expected_value' => $option->getSortOrder()],
