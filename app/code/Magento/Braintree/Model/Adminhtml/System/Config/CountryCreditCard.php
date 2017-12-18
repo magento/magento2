@@ -67,10 +67,12 @@ class CountryCreditCard extends Value
      */
     public function beforeSave()
     {
-        $value = json_decode(
-            $this->getValue(Config::KEY_COUNTRY_CREDIT_CARD),
-            true
-        );
+        $value = null;
+        try {
+            $value = $this->serializer->unserialize($this->getValue(Config::KEY_COUNTRY_CREDIT_CARD));
+        } catch (\Exception $e) {
+            unset($e);
+        }
 
         $result = [];
         if (is_array($value)) {
