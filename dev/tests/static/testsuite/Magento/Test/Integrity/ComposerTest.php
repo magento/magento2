@@ -47,10 +47,10 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * @param string $dir
-         * @param string $packageType
-         */
+            /**
+             * @param string $dir
+             * @param string $packageType
+             */
             function ($dir, $packageType) {
                 $file = $dir . '/composer.json';
                 $this->assertFileExists($file);
