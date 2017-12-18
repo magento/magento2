@@ -127,6 +127,15 @@ class RowCustomizer implements RowCustomizerInterface
     private $storeManager;
 
     /**
+     * @param StoreManagerInterface $storeManager
+     * @throws \RuntimeException
+     */
+    public function __construct(StoreManagerInterface $storeManager = null)
+    {
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+    }
+
+    /**
      * Retrieve list of bundle specific columns
      * @return array
      */
@@ -475,22 +484,8 @@ class RowCustomizer implements RowCustomizerInterface
     private function getStoreCodeById($storeId)
     {
         if (!isset($this->storeIdToCode[$storeId])) {
-            $this->storeIdToCode[$storeId] = $this->getStoreManager()->getStore($storeId)->getCode();
+            $this->storeIdToCode[$storeId] = $this->storeManager->getStore($storeId)->getCode();
         }
         return $this->storeIdToCode[$storeId];
-    }
-
-    /**
-     * Initialize StoreManagerInterface if it was not and return it.
-     *
-     * @return StoreManagerInterface
-     * @throws \RuntimeException
-     */
-    private function getStoreManager()
-    {
-        if (!$this->storeManager) {
-            $this->storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
-        }
-        return $this->storeManager;
     }
 }
