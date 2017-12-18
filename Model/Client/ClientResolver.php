@@ -15,6 +15,15 @@ use Magento\Framework\Search\EngineResolverInterface;
 class ClientResolver
 {
     /**
+     * Scope configuration
+     *
+     * @var ScopeConfigInterface
+     * @since 100.1.0
+     * @deprecated since it is not used anymore
+     */
+    protected $scopeConfig;
+
+    /**
      * Object Manager instance
      *
      * @var ObjectManagerInterface
@@ -40,6 +49,22 @@ class ClientResolver
      * @var EngineResolver
      */
     private $engineResolver;
+
+    /**
+     * Config path
+     *
+     * @var string
+     * @since 100.1.0
+     * @deprecated since it is not used anymore
+     */
+    protected $path;
+
+    /**
+     * Config Scope
+     * @since 100.1.0
+     * @deprecated since it is not used anymore
+     */
+    protected $scope;
 
     /**
      * @param ObjectManagerInterface $objectManager
