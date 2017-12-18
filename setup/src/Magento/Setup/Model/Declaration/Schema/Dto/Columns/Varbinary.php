@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Columns;
 
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
  * Varbinary column
@@ -16,14 +17,41 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 class Varbinary extends Column implements ElementDiffAwareInterface
 {
     /**
-     * @inheritdoc
+     * @var bool
      */
-    protected $elementType = 'Varbinary';
+    private $nullable;
 
     /**
-     * @inheritdoc
+     * @var int
      */
-    protected $structuralElementData;
+    private $default;
+
+    /**
+     * @var int
+     */
+    private $length;
+
+    /**
+     * @param string $name
+     * @param string $elementType
+     * @param Table $table
+     * @param bool $nullable
+     * @param int $length
+     * @param float|int $default
+     */
+    public function __construct(
+        string $name,
+        string $elementType,
+        Table $table,
+        int $length,
+        bool $nullable = true,
+        int $default = null
+    ) {
+        parent::__construct($name, $elementType, $table);
+        $this->nullable = $nullable;
+        $this->default = $default;
+        $this->length = $length;
+    }
     
     /**
      * Check whether column can be nullable
@@ -32,17 +60,7 @@ class Varbinary extends Column implements ElementDiffAwareInterface
      */
     public function isNullable()
     {
-        return isset($this->structuralElementData['nullable']) && $this->structuralElementData['nullable'];
-    }
-
-    /**
-     * Check whether column has default value
-     *
-     * @return bool
-     */
-    public function hasDefault()
-    {
-        return isset($this->structuralElementData['default']);
+        return $this->nullable;
     }
 
     /**
@@ -53,7 +71,7 @@ class Varbinary extends Column implements ElementDiffAwareInterface
      */
     public function getDefault()
     {
-        return $this->hasDefault() ? $this->structuralElementData['default'] : null;
+        return $this->default;
     }
 
     /**
@@ -63,7 +81,7 @@ class Varbinary extends Column implements ElementDiffAwareInterface
      */
     public function getLength()
     {
-        return $this->structuralElementData['length'];
+        return $this->length;
     }
 
     /**
@@ -72,7 +90,7 @@ class Varbinary extends Column implements ElementDiffAwareInterface
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->elementType,
+            'type' => $this->getElementType(),
             'nullable' => $this->isNullable(),
             'default' => $this->getDefault(),
             'length' => $this->getLength()

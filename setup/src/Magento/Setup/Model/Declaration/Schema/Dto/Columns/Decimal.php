@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Columns;
 
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
  * Decimal column
@@ -16,15 +17,57 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 class Decimal extends Column implements ElementDiffAwareInterface
 {
     /**
-     * By default element type is decimal, but it can various: decimal, float, double
-     * @inheritdoc
+     * @var int
      */
-    protected $elementType = 'decimal';
+    private $precission;
 
     /**
-     * @inheritdoc
+     * @var int
      */
-    protected $structuralElementData;
+    private $scale;
+
+    /**
+     * @var bool
+     */
+    private $nullable;
+
+    /**
+     * @var float
+     */
+    private $default;
+
+    /**
+     * @var bool
+     */
+    private $unsigned;
+
+    /**
+     * @param string $name
+     * @param string $elementType
+     * @param Table $table
+     * @param int $precission
+     * @param int $scale
+     * @param bool $nullable
+     * @param float $default
+     * @param bool $unsigned
+     */
+    public function __construct(
+        string $name,
+        string $elementType,
+        Table $table,
+        int $precission,
+        int $scale,
+        bool $nullable = true,
+        bool $unsigned = false,
+        float $default = null
+    ) {
+        parent::__construct($name, $elementType, $table);
+        $this->precission = $precission;
+        $this->scale = $scale;
+        $this->nullable = $nullable;
+        $this->default = $default;
+        $this->unsigned = $unsigned;
+    }
 
     /**
      * Column precission
@@ -33,7 +76,7 @@ class Decimal extends Column implements ElementDiffAwareInterface
      */
     public function getPrecission()
     {
-        return $this->structuralElementData['precission'];
+        return $this->precission;
     }
 
     /**
@@ -43,7 +86,7 @@ class Decimal extends Column implements ElementDiffAwareInterface
      */
     public function getScale()
     {
-        return $this->structuralElementData['scale'];
+        return $this->scale;
     }
 
     /**
@@ -53,17 +96,7 @@ class Decimal extends Column implements ElementDiffAwareInterface
      */
     public function isNullable()
     {
-        return isset($this->structuralElementData['nullable']) && $this->structuralElementData['nullable'];
-    }
-
-    /**
-     * Check whether column has default value
-     *
-     * @return bool
-     */
-    public function hasDefault()
-    {
-        return isset($this->structuralElementData['default']);
+        return $this->nullable;
     }
 
     /**
@@ -74,7 +107,7 @@ class Decimal extends Column implements ElementDiffAwareInterface
      */
     public function getDefault()
     {
-        return $this->hasDefault() ? $this->structuralElementData['default'] : null;
+        return $this->default;
     }
 
     /**
@@ -84,7 +117,7 @@ class Decimal extends Column implements ElementDiffAwareInterface
      */
     public function isUnsigned()
     {
-        return isset($this->structuralElementData['unsigned']) && $this->structuralElementData['unsigned'];
+        return $this->unsigned;
     }
 
     /**
@@ -93,7 +126,7 @@ class Decimal extends Column implements ElementDiffAwareInterface
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->elementType,
+            'type' => $this->getElementType(),
             'nullable' => $this->isNullable(),
             'precission' => $this->getPrecission(),
             'scale' => $this->getScale(),

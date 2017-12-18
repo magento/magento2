@@ -3,30 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Model\Declaration\Schema\Casters;
+namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
+
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * This type is equal to SQL DECIMAL(SCALE,PRECISION) type. Usually it is used for accurate operations
  * with decimal numbers. For example, for price
  * Usually decimal is concatinated from 2 integers, so it has not round problems
  */
-class Decimal implements CasterInterface
+class Decimal implements FactoryInterface
 {
+    /**
+     * Default SQL precission
+     */
     const DEFAULT_PRECISSION = "10";
 
+    /**
+     * Default SQL scale
+     */
     const DEFAULT_SCALE = "0";
 
     /**
-     * @var Base
+     * @var ObjectManagerInterface
      */
-    private $base;
+    private $objectManager;
 
     /**
-     * @param Base $base
+     * @var string
      */
-    public function __construct(Base $base)
-    {
-        $this->base = $base;
+    private $className;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param string $className
+     */
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        $className = \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Decimal::class
+    ) {
+        $this->objectManager = $objectManager;
+        $this->className = $className;
     }
 
     /**
@@ -35,10 +52,8 @@ class Decimal implements CasterInterface
      * {@inheritdoc}
      * @return array
      */
-    public function cast(array $data)
+    public function create(array $data)
     {
-        $data = $this->base->cast($data);
-
         if (!isset($data['precission'])) {
             $data['precission'] = self::DEFAULT_PRECISSION;
         }
@@ -51,6 +66,6 @@ class Decimal implements CasterInterface
             $data['default'] = (float) $data['default'];
         }
 
-        return $data;
+        return $this->objectManager->create($this->className, $data);
     }
 }

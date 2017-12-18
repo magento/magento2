@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Columns;
 
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
  * This column represent binary type
@@ -16,15 +17,25 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 class Blob extends Column implements ElementDiffAwareInterface
 {
     /**
-     * By default element type is blob, but it can various: blob, mediumblob, longblob
-     * @inheritdoc
+     * @var bool
      */
-    protected $elementType = 'blob';
+    private $nullable;
 
     /**
-     * @inheritdoc
+     * @param string $name
+     * @param string $elementType
+     * @param Table $table
+     * @param $nullable
      */
-    protected $structuralElementData;
+    public function __construct(
+        string $name,
+        string $elementType,
+        Table $table,
+        bool $nullable = true
+    ) {
+        parent::__construct($name, $elementType, $table);
+        $this->nullable = $nullable;
+    }
 
     /**
      * Check whether column can be nullable
@@ -33,7 +44,7 @@ class Blob extends Column implements ElementDiffAwareInterface
      */
     public function isNullable()
     {
-        return isset($this->structuralElementData['nullable']) && $this->structuralElementData['nullable'];
+        return $this->nullable;
     }
 
     /**
@@ -42,7 +53,7 @@ class Blob extends Column implements ElementDiffAwareInterface
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->elementType,
+            'type' => $this->getElementType(),
             'nullable' => $this->isNullable()
         ];
     }

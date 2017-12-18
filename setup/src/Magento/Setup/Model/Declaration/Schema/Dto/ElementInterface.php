@@ -26,12 +26,4 @@ interface ElementInterface
      * @return string
      */
     public function getElementType();
-
-    /**
-     * As different structural elements can be created on different shards
-     * We should have possibility to determine what element belongs to what shard
-     *
-     * @return string
-     */
-    public function getResource();
 }

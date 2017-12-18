@@ -19,20 +19,10 @@ class Date extends Column implements ElementDiffAwareInterface
     /**
      * @inheritdoc
      */
-    protected $elementType = 'date';
-
-    /**
-     * @inheritdoc
-     */
-    protected $structuralElementData;
-
-    /**
-     * @inheritdoc
-     */
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->elementType
+            'type' => $this->getElementType()
         ];
     }
 }

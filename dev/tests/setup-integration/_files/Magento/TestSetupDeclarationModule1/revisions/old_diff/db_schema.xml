@@ -7,7 +7,7 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/config/schema.xsd">
     <table name="reference_table" resource="default">
-        <column xsi:type="smallinteger" name="smallint_ref" renameTo="smallint_ref2" default="0" padding="2" nullable="true" unsigned="false" />
+        <column xsi:type="smallinteger" name="smallint_ref" padding="6" nullable="false" unsigned="false" identity="true" />
         <constraint xsi:type="primary" name="tinyint_primary">
             <column name="smallint_ref" />
         </constraint>

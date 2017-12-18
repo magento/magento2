@@ -96,31 +96,9 @@ class DiffOldSchemaTest extends SetupTestCase
         $declarativeStructure = $this->declarativeParser->parse($declarativeStructure);
         $generatedStructure = $this->generatedParser->parse($generatedStructure);
         $this->structureDiff->diff($declarativeStructure, $generatedStructure, $changeRegistry);
-        //Rename operations
-        $renameOperations = $changeRegistry->get(ChangeRegistryInterface::RENAME_OPERAION);
-        self::assertCount(1, $renameOperations);
-        self::assertArrayHasKey('smallinteger', $renameOperations);
-        self::assertCount(1, $renameOperations['smallinteger']);
-        self::assertEquals('smallint_ref2', $renameOperations['smallinteger'][0]['new']->getName());
         //Change operations
         $changeOperations = $changeRegistry->get(ChangeRegistryInterface::CHANGE_OPERATION);
-        self::assertCount(3, $changeOperations);
-        self::assertEquals(
-            $this->getPrimaryKeyDbSensitiveData(),
-            $changeOperations['primary'][0]['old']->getDiffSensitiveParams()
-        );
-        self::assertEquals(
-            $this->getPrimaryKeyXmlSensitiveData(),
-            $changeOperations['primary'][0]['new']->getDiffSensitiveParams()
-        );
-        self::assertEquals(
-            $this->getForeignKeyXmlSensitiveData(),
-            $changeOperations['foreign'][0]['new']->getDiffSensitiveParams()
-        );
-        self::assertEquals(
-            $this->getForeignKeyDbSensitiveData(),
-            $changeOperations['foreign'][0]['old']->getDiffSensitiveParams()
-        );
+        self::assertCount(1, $changeOperations);
         self::assertEquals(
             $this->getBigIntKeyXmlSensitiveData(),
             $changeOperations['biginteger'][0]['new']->getDiffSensitiveParams()
@@ -133,64 +111,6 @@ class DiffOldSchemaTest extends SetupTestCase
             5,
             $changeRegistry->get(ChangeRegistryInterface::REMOVE_OPERATION)['table']
         );
-    }
-
-    /**
-     * @return array
-     */
-    private function getForeignKeyXmlSensitiveData()
-    {
-        return [
-            'type' => 'foreign',
-            'column' => 'smallint',
-            'referenceColumn' => 'smallint_ref2',
-            'referenceTableName' => 'reference_table',
-            'tableName' => 'test_table',
-            'onDelete' => 'CASCADE',
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function getForeignKeyDbSensitiveData()
-    {
-        return [
-            'type' => 'foreign',
-            'column' => 'smallint',
-            'referenceColumn' => 'smallint_ref',
-            'referenceTableName' => 'reference_table',
-            'tableName' => 'test_table',
-            'onDelete' => 'CASCADE',
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function getPrimaryKeyXmlSensitiveData()
-    {
-        return [
-            'type' => 'primary',
-            'columns' =>
-                [
-                    0 => 'smallint_ref2',
-                ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function getPrimaryKeyDbSensitiveData()
-    {
-        return [
-            'type' => 'primary',
-            'columns' =>
-                [
-                    0 => 'smallint_ref',
-                ],
-        ];
     }
 
     /**

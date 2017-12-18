@@ -14,23 +14,22 @@ class Column extends GenericElement implements
     TableElementInterface
 {
     /**
-     * @inheritdoc
+     * @var Table
      */
-    protected $elementType = 'column';
+    private $table;
 
     /**
-     * @inheritdoc
-     */
-    protected $structuralElementData;
-
-    /**
-     * @param array $structuralElementData
+     * @param string $name
      * @param string $elementType
+     * @param Table $table
      */
-    public function __construct(array $structuralElementData, $elementType)
-    {
-        $this->structuralElementData = $structuralElementData;
-        $this->elementType = $elementType;
+    public function __construct(
+        string $name,
+        string $elementType,
+        Table $table
+    ) {
+        parent::__construct($name, $elementType);
+        $this->table = $table;
     }
 
     /**
@@ -40,6 +39,6 @@ class Column extends GenericElement implements
      */
     public function getTable()
     {
-        return $this->structuralElementData['table'];
+        return $this->table;
     }
 }

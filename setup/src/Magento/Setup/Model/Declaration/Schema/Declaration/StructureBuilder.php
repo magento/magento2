@@ -10,7 +10,6 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory;
 use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
-use Magento\Setup\Model\Declaration\Schema\Dto\StructureFactory;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Sharding;
 
@@ -94,29 +93,6 @@ class StructureBuilder
     }
 
     /**
-     * If some element was renamed, we need to retrieve new name instead of old one
-     *
-     * @param array $elementData
-     * @return string
-     */
-    private function resolveElementName(array $elementData)
-    {
-        return isset($elementData['renameTo']) ? $elementData['renameTo'] : $elementData['name'];
-    }
-
-    /**
-     * If element was renamed or should be renamed we need to retrieve its old name
-     * In order to do rename in future or in order to do compare
-     *
-     * @param array $elementData
-     * @return string
-     */
-    private function wasRenamedFrom(array $elementData)
-    {
-        return isset($elementData['renameTo']) ? $elementData['name'] : null;
-    }
-
-    /**
      * @param array $tableData
      * @return string
      */
@@ -174,8 +150,6 @@ class StructureBuilder
      */
     private function processGenericData(array $elementData, $resource, Table $table)
     {
-        $elementData['wasRenamedFrom'] = $this->wasRenamedFrom($elementData);
-        $elementData['name'] = $this->resolveElementName($elementData);
         $elementData['table'] = $table;
         $elementData['resource'] = $resource;
 
@@ -192,12 +166,11 @@ class StructureBuilder
      */
     private function processTable(Structure $structure, array $tableData)
     {
-        if (!$structure->getTableByNameOrId($tableData['name'])) {
+        if (!$structure->getTableByName($tableData['name'])) {
             $resource = $this->getStructuralElementResource($tableData);
             $tableParams = [
-                'name' => $this->resolveElementName($tableData),
+                'name' => $tableData['name'],
                 'resource' => $resource,
-                'wasRenamedFrom' => $this->wasRenamedFrom($tableData)
             ];
             /** @var Table $table */
             $table = $this->elementFactory->create('table', $tableParams);
@@ -210,7 +183,7 @@ class StructureBuilder
             $table->addConstraints($this->processConstraints($tableData, $resource, $structure));
         }
 
-        return $structure->getTableByNameOrId($tableData['name']);
+        return $structure->getTableByName($tableData['name']);
     }
 
     /**
@@ -225,7 +198,7 @@ class StructureBuilder
         $columns = [];
 
         foreach ($columnNames as $columnName) {
-            $columns[] = $table->getColumnByNameOrId($columnName);
+            $columns[] = $table->getColumnByName($columnName);
         }
 
         return $columns;
@@ -253,7 +226,7 @@ class StructureBuilder
             }
 
             $indexData = $this->processGenericData($indexData, $resource, $table);
-            $indexData['column'] = $this->convertColumnNamesToObjects($indexData['column'], $table);
+            $indexData['columns'] = $this->convertColumnNamesToObjects($indexData['column'], $table);
             $index = $this->elementFactory->create('index', $indexData);
             $indexes[$index->getName()] = $index;
         }
@@ -285,7 +258,7 @@ class StructureBuilder
             $constraintData = $this->processGenericData($constraintData, $resource, $table);
             //As foreign constraint has different structure we need to process it in different way
             if ($constraintData['type'] === 'foreign') {
-                $constraintData['column'] = $table->getColumnByNameOrId(
+                $constraintData['column'] = $table->getColumnByName(
                     $constraintData['column']
                 );
                 //always in foreign key name will be old and in raw data will be always old too
@@ -295,7 +268,7 @@ class StructureBuilder
                         $this->tablesData[$constraintData['referenceTable']]
                     )
                 );
-                $constraintData['referenceTable'] = $structure->getTableByNameOrId(
+                $constraintData['referenceTable'] = $structure->getTableByName(
                     $constraintData['referenceTable']
                 );
 
@@ -303,11 +276,11 @@ class StructureBuilder
                     throw new \LogicException("Cannot find reference table");
                 }
 
-                $constraintData['referenceColumn'] = $constraintData['referenceTable']->getColumnByNameOrId(
+                $constraintData['referenceColumn'] = $constraintData['referenceTable']->getColumnByName(
                     $constraintData['referenceColumn']
                 );
             } else {
-                $constraintData['column'] = $this->convertColumnNamesToObjects($constraintData['column'], $table);
+                $constraintData['columns'] = $this->convertColumnNamesToObjects($constraintData['column'], $table);
             }
 
             $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);

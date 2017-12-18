@@ -16,7 +16,6 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
  * If table exists only in XML -> then we need to create table
  * If table exists in both version -> then we need to go deeper and inspect each element
  * If table exists only in db -> then we need to remove this table
- * If table wasRenamedFrom attribute is differ with name -> then we need to rename table
  */
 class StructureDiff
 {
@@ -55,12 +54,8 @@ class StructureDiff
         $generatedTables = $generatedStructure->getTables();
 
         foreach ($structure->getTables() as $name => $table) {
-            if ($this->diffManager->shouldBeCreatedOrRenamed($generatedTables, $table)) {
-                if ($this->diffManager->shouldBeRenamed($table)) {
-                    $generatedTables = $this->diffManager->registerRename($changeRegistry, $table, $generatedTables);
-                } else {
-                    $this->diffManager->registerCreation($changeRegistry, $table);
-                }
+            if ($this->diffManager->shouldBeCreated($generatedTables, $table)) {
+                $this->diffManager->registerCreation($changeRegistry, $table);
             } else {
                 $this->tableDiff->diff($table, $generatedTables[$name], $changeRegistry);
             }

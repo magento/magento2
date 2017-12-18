@@ -31,11 +31,6 @@ interface ChangeRegistryInterface
     const REMOVE_OPERATION = "remove";
 
     /**
-     * For elements that needs to be renamed
-     */
-    const RENAME_OPERAION = "rename";
-
-    /**
      * Retrieve operations by type
      *
      * @param string $type

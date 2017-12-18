@@ -31,28 +31,14 @@ class DiffManager
     }
 
     /**
-     * Check whether new name is not corresponds with olds one
-     *
-     * @param ElementRenamedInterface | ElementInterface $element
-     * @return mixed
-     */
-    public function shouldBeRenamed(ElementInterface $element)
-    {
-        return $element->getName() !== $element->wasRenamedFrom() && $element->wasRenamedFrom() !== null;
-    }
-
-    /**
      * Check whether this is element is new or not, by checking it in db structure
      *
      * @param ElementInterface[] $generatedElements
-     * @param ElementInterface | ElementRenamedInterface $element
      * @return bool
      */
-    public function shouldBeCreatedOrRenamed(array $generatedElements, ElementInterface $element)
+    public function shouldBeCreated(array $generatedElements, ElementInterface $element)
     {
-        return
-            !isset($generatedElements[$element->getName()]) ||
-            $this->shouldBeRenamed($element) && !isset($generatedElements[$element->wasRenamedFrom()]);
+        return !isset($generatedElements[$element->getName()]);
     }
 
     /**
@@ -116,31 +102,6 @@ class DiffManager
                 ChangeRegistryInterface::REMOVE_OPERATION
             );
         }
-    }
-
-    /**
-     * After registration rename, we need to remove renamed element from generated structure
-     * in order to prevent double registration of this object
-     *
-     * @param ChangeRegistryInterface $changeRegistry
-     * @param ElementInterface | ElementRenamedInterface $element
-     * @param array $generatedElements
-     * @return array
-     */
-    public function registerRename(
-        ChangeRegistryInterface $changeRegistry,
-        ElementInterface $element,
-        array $generatedElements
-    ) {
-        $changeRegistry->register(
-            $element,
-            $element->getElementType(),
-            ChangeRegistryInterface::RENAME_OPERAION,
-            $generatedElements[$element->wasRenamedFrom()]
-        );
-
-        unset($generatedElements[$element->wasRenamedFrom()]);
-        return $generatedElements;
     }
 
     /**

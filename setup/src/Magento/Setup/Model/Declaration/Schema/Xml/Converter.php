@@ -7,8 +7,6 @@
  */
 namespace Magento\Setup\Model\Declaration\Schema\Xml;
 
-use Magento\Setup\Model\Declaration\Schema\Casters\CasterAggregator;
-
 /**
  * This converter serve needs of Declaration Filesystem reader:
  * @see \Magento\Setup\Model\Declaration\Schema\FileSystem\Reader
@@ -18,19 +16,6 @@ use Magento\Setup\Model\Declaration\Schema\Casters\CasterAggregator;
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
-    /**
-     * @var CasterAggregator
-     */
-    private $casterAggregator;
-
-    /**
-     * @param CasterAggregator $casterAggregator
-     */
-    public function __construct(CasterAggregator $casterAggregator)
-    {
-        $this->casterAggregator = $casterAggregator;
-    }
-
     /**
      * Convert config from XML to array
      *
@@ -111,7 +96,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
         if ($xsiType) {
             $attributes['type'] = $xsiType;
-            return $this->casterAggregator->cast($attributes);
         }
 
         return $attributes;

@@ -39,27 +39,6 @@ class Structure
     }
 
     /**
-     * Try to find table by its name or by its old name, that was specified as id
-     *
-     * @param string $nameOrId
-     * @return null | Table
-     */
-    public function getTableByNameOrId($nameOrId)
-    {
-        if (isset($this->tables[$nameOrId])) {
-            return $this->tables[$nameOrId];
-        }
-
-        foreach ($this->tables as $table) {
-            if ($table->wasRenamedFrom() === $nameOrId) {
-                return $table;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Retrieve table by it name
      *
      * @param $name

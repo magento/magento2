@@ -4,14 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Casters;
+namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
  * Can accept only 2 values: true or false
  */
-class Boolean implements CasterInterface
+class Boolean implements FactoryInterface
 {
     /**
      * Default value for boolean xsi:type
@@ -19,9 +20,14 @@ class Boolean implements CasterInterface
     const DEFAULT_BOOLEAN = false;
 
     /**
-     * @var Base
+     * @var ObjectManagerInterface
      */
-    private $base;
+    private $objectManager;
+
+    /**
+     * @var string
+     */
+    private $className;
 
     /**
      * @var BooleanUtils
@@ -29,12 +35,17 @@ class Boolean implements CasterInterface
     private $booleanUtils;
 
     /**
-     * @param Base $base
+     * @param ObjectManagerInterface $objectManager
      * @param BooleanUtils $booleanUtils
+     * @param string $className
      */
-    public function __construct(Base $base, BooleanUtils $booleanUtils)
-    {
-        $this->base = $base;
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        BooleanUtils $booleanUtils,
+        $className = \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Boolean::class
+    ) {
+        $this->objectManager = $objectManager;
+        $this->className = $className;
         $this->booleanUtils = $booleanUtils;
     }
 
@@ -44,16 +55,14 @@ class Boolean implements CasterInterface
      * {@inheritdoc}
      * @return array
      */
-    public function cast(array $data)
+    public function create(array $data)
     {
-        $data = $this->base->cast($data);
-
         if (isset($data['default'])) {
             $data['default'] = $this->booleanUtils->toBoolean($data['default']);
         } else {
             $data['default'] = self::DEFAULT_BOOLEAN;
         }
 
-        return $data;
+        return $this->objectManager->create($this->className, $data);
     }
 }

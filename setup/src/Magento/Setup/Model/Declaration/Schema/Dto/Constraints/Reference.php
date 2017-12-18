@@ -17,22 +17,55 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 class Reference extends Constraint implements ElementDiffAwareInterface
 {
     /**
-     * @inheritdoc
-     * Can be unique or primay
+     * @var Column
      */
-    protected $elementType = 'foreign';
+    private $column;
 
     /**
-     * @inheritdoc
+     * @var Table
      */
-    protected $structuralElementData;
+    private $referenceTable;
+
+    /**
+     * @var Column
+     */
+    private $referenceColumn;
+    /**
+     * @var string
+     */
+    private $onDelete;
+
+    /**
+     * @param string $name
+     * @param string $elementType
+     * @param Table $table
+     * @param Column $column
+     * @param Table $referenceTable
+     * @param Column $referenceColumn
+     * @param string $onDelete
+     */
+    public function __construct(
+        string $name,
+        string $elementType,
+        Table $table,
+        Column $column,
+        Table $referenceTable,
+        Column $referenceColumn,
+        string $onDelete
+    ) {
+        parent::__construct($name, $elementType, $table);
+        $this->column = $column;
+        $this->referenceTable = $referenceTable;
+        $this->referenceColumn = $referenceColumn;
+        $this->onDelete = $onDelete;
+    }
 
     /**
      * @return Column
      */
     public function getColumn()
     {
-        return $this->structuralElementData['column'];
+        return $this->column;
     }
 
     /**
@@ -42,7 +75,7 @@ class Reference extends Constraint implements ElementDiffAwareInterface
      */
     public function getReferenceColumn()
     {
-        return $this->structuralElementData['referenceColumn'];
+        return $this->referenceColumn;
     }
 
     /**
@@ -53,7 +86,7 @@ class Reference extends Constraint implements ElementDiffAwareInterface
      */
     public function getReferenceTable()
     {
-        return $this->structuralElementData['referenceTable'];
+        return $this->referenceTable;
     }
 
     /**
@@ -63,7 +96,7 @@ class Reference extends Constraint implements ElementDiffAwareInterface
      */
     public function getOnDelete()
     {
-        return $this->structuralElementData['onDelete'];
+        return $this->onDelete;
     }
 
     /**
@@ -72,7 +105,7 @@ class Reference extends Constraint implements ElementDiffAwareInterface
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->elementType,
+            'type' => $this->getElementType(),
             'column' => $this->getColumn()->getName(),
             'referenceColumn' => $this->getReferenceColumn()->getName(),
             'referenceTableName' => $this->getReferenceTable()->getName(),
