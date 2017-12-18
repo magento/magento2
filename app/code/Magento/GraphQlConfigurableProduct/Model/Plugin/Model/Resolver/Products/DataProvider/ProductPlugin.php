@@ -95,9 +95,8 @@ class ProductPlugin
             $children = $this->productCollection->getItems();
             /** @var Attribute[] $attributes */
             $attributes = $this->attributeCollection->getItems();
+            $result = $this->addConfigurableData($result, $children, $attributes);
         }
-
-        $result = $this->addConfigurableData($result, $children, $attributes);
 
         return $result;
     }
