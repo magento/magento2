@@ -8,12 +8,15 @@ namespace Magento\GraphQl\Model\Resolver;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
+use Magento\GraphQl\Model\ResolverInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Product field resolver, used for GraphQL request processing.
  */
-class Product
+class Product implements ResolverInterface
 {
     /**
      * @var ProductRepositoryInterface
@@ -31,24 +34,44 @@ class Product
     private $mediaGalleryResolver;
 
     /**
-     * Initialize dependencies
-     *
+     * @var SerializerInterface
+     */
+    private $jsonSerializer;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param ServiceOutputProcessor $serviceOutputProcessor
      * @param MediaGalleryEntries $mediaGalleryResolver
+     * @param SerializerInterface $jsonSerializer
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         ServiceOutputProcessor $serviceOutputProcessor,
-        MediaGalleryEntries $mediaGalleryResolver
+        MediaGalleryEntries $mediaGalleryResolver,
+        SerializerInterface $jsonSerializer
     ) {
         $this->productRepository = $productRepository;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->mediaGalleryResolver = $mediaGalleryResolver;
+        $this->jsonSerializer = $jsonSerializer;
     }
 
     /**
-     * Resolves product by Sku
+     * {@inheritdoc}
+     */
+    public function resolve(array $args)
+    {
+        if (isset($args['sku'])) {
+            return $this->getProduct($args['sku']->getValue());
+        } elseif (isset($args['id'])) {
+            return $this->getProductById($args['id']->getValue());
+        }
+
+        throw new GraphQlInputException(__('Missing arguments for correct type resolution.'));
+    }
+
+    /**
+     * Get product data by Sku
      *
      * @param string $sku
      * @return array|null
@@ -65,7 +88,7 @@ class Product
     }
 
     /**
-     * Resolves product by Id
+     * Get product data by Id
      *
      * @param int $productId
      * @return array|null
@@ -82,7 +105,7 @@ class Product
     }
 
     /**
-     * Retrieve single product data in array format
+     * Transform single product data from object to in array format
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $productObject
      * @return array|null
@@ -94,16 +117,20 @@ class Product
             ProductRepositoryInterface::class,
             'get'
         );
-        $product = array_merge($product, $product['extension_attributes']);
+        if (isset($product['extension_attributes'])) {
+            $product = array_merge($product, $product['extension_attributes']);
+        }
+        $customAttributes = [];
         if (isset($product['custom_attributes'])) {
-            $customAttributes = [];
             foreach ($product['custom_attributes'] as $attribute) {
                 $isArray = false;
                 if (is_array($attribute['value'])) {
                     $isArray = true;
                     foreach ($attribute['value'] as $attributeValue) {
                         if (is_array($attributeValue)) {
-                            $customAttributes[$attribute['attribute_code']] = json_encode($attribute['value']);
+                            $customAttributes[$attribute['attribute_code']] = $this->jsonSerializer->serialize(
+                                $attribute['value']
+                            );
                             continue;
                         }
                         $customAttributes[$attribute['attribute_code']] = implode(',', $attribute['value']);

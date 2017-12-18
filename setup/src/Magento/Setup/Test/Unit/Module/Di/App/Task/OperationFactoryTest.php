@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
 use Magento\Setup\Module\Di\App\Task\OperationException;
@@ -72,7 +70,11 @@ class OperationFactoryTest extends \PHPUnit\Framework\TestCase
         return  [
             [OperationFactory::AREA_CONFIG_GENERATOR, [], \Magento\Setup\Module\Di\App\Task\Operation\Area::class],
             [OperationFactory::INTERCEPTION, null, \Magento\Setup\Module\Di\App\Task\Operation\Interception::class],
-            [OperationFactory::INTERCEPTION_CACHE, 1, \Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache::class],
+            [
+                OperationFactory::INTERCEPTION_CACHE,
+                1,
+                \Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache::class
+            ],
         ];
     }
 }

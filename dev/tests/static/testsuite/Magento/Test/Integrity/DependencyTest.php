@@ -182,7 +182,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         $componentRegistrar = new ComponentRegistrar();
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $library) {
             $library = str_replace('\\', '/', $library);
-            if (strpos($library, 'Framework/')) {
+            if (strpos($library, 'Framework/') !== false) {
                 $partOfLibraryPath = explode('/', $library);
                 self::$whiteList[] = implode('\\', array_slice($partOfLibraryPath, -3));
             }

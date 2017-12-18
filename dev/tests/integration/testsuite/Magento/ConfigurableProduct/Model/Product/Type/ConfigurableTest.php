@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -301,7 +299,8 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $product->addCustomOption('attributes',
+        $product->addCustomOption(
+            'attributes',
             $serializer->serialize([$attribute['attribute_id'] => $optionValueId])
         );
 

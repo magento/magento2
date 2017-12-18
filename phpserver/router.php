@@ -76,10 +76,12 @@ if (php_sapi_name() === 'cli-server') {
 
         $debug("file: $file");
 
-        if (file_exists($origFile)) {
+        if (file_exists($origFile) || file_exists($file)) {
+            if (file_exists($origFile)) {
+                $file = $origFile;
+            }
+
             $debug('file exists');
-            return false;
-        } else if (file_exists($file)) {
             $mimeTypes = [
                 'css' => 'text/css',
                 'js'  => 'application/javascript',
@@ -93,9 +95,8 @@ if (php_sapi_name() === 'cli-server') {
                 'html' => 'text/html',
             ];
 
-            $type = isset($mimeTypes[$ext]) && $mimeTypes[$ext];
-            if ($type) {
-                header("Content-Type: $type");
+            if (isset($mimeTypes[$ext])) {
+                header("Content-Type: $mimeTypes[$ext]");
             }
             readfile($file);
             return;

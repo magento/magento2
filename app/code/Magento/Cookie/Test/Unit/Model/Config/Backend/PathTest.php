@@ -6,8 +6,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Cookie\Test\Unit\Model\Config\Backend;
 
 use Magento\Framework\Session\Config\Validator\CookiePathValidator;
@@ -27,7 +25,8 @@ class PathTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->validatorMock = $this->getMockBuilder(
-            \Magento\Framework\Session\Config\Validator\CookiePathValidator::class)
+            \Magento\Framework\Session\Config\Validator\CookiePathValidator::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleResource::class)

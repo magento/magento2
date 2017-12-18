@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
@@ -421,7 +419,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public static function getStates()
     {
-        if (is_null(static::$_states)) {
+        if (static::$_states === null) {
             static::$_states = [
                 self::STATE_OPEN => __('Pending'),
                 self::STATE_REFUNDED => __('Refunded'),
@@ -439,11 +437,11 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function getStateName($stateId = null)
     {
-        if (is_null($stateId)) {
+        if ($stateId === null) {
             $stateId = $this->getState();
         }
 
-        if (is_null(static::$_states)) {
+        if (static::$_states === null) {
             static::getStates();
         }
         if (isset(static::$_states[$stateId])) {
