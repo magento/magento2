@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQlConfigurableProduct\Model\Plugin\Model\Resolver\Products\DataProvider\Product;
+namespace Magento\GraphQlConfigurableProduct\Model\Plugin\Model\Resolver\Products\DataProvider;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -19,7 +19,7 @@ use Magento\Framework\Api\SearchResultsInterfaceFactory;
 use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 
-class GetListPlugin
+class ProductPlugin
 {
     /**
      * @var Configurable
@@ -47,7 +47,7 @@ class GetListPlugin
     private $searchCriteriaBuilder;
 
     /**
-     * GetListPlugin constructor.
+     * ProductPlugin constructor.
      *
      * @param Configurable $configurable
      * @param AttributeCollection $attributeCollection

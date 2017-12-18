@@ -84,6 +84,19 @@ class SchemaGenerator implements SchemaGeneratorInterface
             'fields' => $schemaConfig['fields'],
             'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
                 $fieldName = $info->fieldName;
+                $fieldNodes = $info->fieldNodes;
+                $selections = [];
+//                foreach ($fieldNodes as $fieldNode) {
+//                    foreach ($fieldNode->selectionSet->selections as $field) {
+//                        $name = $field->name;
+//                        if (isset($field->selectionSet)) {
+//                            $selections[$name] = $this->getFields;
+//                        }
+//                        foreach ($field->selectionSet->selections as $selection) {
+//                            $selections[$name] = $selection->name;
+//                        }
+//                    }
+//                }
                 $resolver = $this->resolverFactory->create($fieldName);
 
                 $fieldArguments = [];
