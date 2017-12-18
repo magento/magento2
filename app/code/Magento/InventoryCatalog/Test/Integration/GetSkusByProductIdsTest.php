@@ -24,7 +24,7 @@ class GetSkusByProductIdsTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture ../../../../app/code/Magento/Catalog/controllers/_files/products_for_search.php
+     * @magentoDataFixture Magento/Catalog/_files/products_for_search.php
      */
     public function testExecute()
     {
