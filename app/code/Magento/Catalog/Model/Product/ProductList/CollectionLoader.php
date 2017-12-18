@@ -19,6 +19,7 @@ class CollectionLoader
      * @param AbstractCollection $collection
      *
      * @return AbstractCollection
+     * @SuppressWarnings(Generic.CodeAnalysis.UnusedFunctionParameter)
      */
     public function load($collection) {
         $collection->load();

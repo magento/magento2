@@ -80,6 +80,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Data $urlHelper
+     * @param CollectionLoader $collectionLoader
      * @param array $data
      */
     public function __construct(

@@ -6,6 +6,7 @@
 
 namespace Magento\Review\Model\Plugin\ProductList;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Catalog\Model\Product\ProductList\CollectionLoader as Loader;
 use Magento\Review\Model\ReviewFactory;
 
 
@@ -35,12 +36,12 @@ class CollectionLoader
     /**
      * Append review summary before rendering html
      *
-     * @param \Magento\Catalog\Model\Product\ProductList\CollectionLoader $subject
+     * @param Loader $subject
      * @param AbstractCollection $result
      * @return AbstractCollection
      */
     public function afterLoad(
-        \Magento\Catalog\Model\Product\ProductList\CollectionLoader $subject,
+        Loader $subject,
         AbstractCollection $result
     ) {
         $this->reviewFactory->create()->appendSummary($result);
