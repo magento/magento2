@@ -48,7 +48,7 @@
             <state>true</state>
             <options>
                 <option name="modalClass" xsi:type="string">release-notification-modal</option>
-                <option name="title" xsi:type="string" translate="true">An Error Occurred</option>
+                <option name="title" xsi:type="string" translate="true">Sorry, we had a problem loading our “What’s new” content.</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
@@ -64,7 +64,12 @@
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
-                        <item name="text" xsi:type="string" translate="true">The content is unable to be displayed</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
+                        <p>To learn more about new features, see our latest Release Notes in
+                        <a href="http://devdocs.magento.com/magento-release-information.html"
+                        target="_blank">DevDocs' Release Information</a>.
+                        </p>]]></item>
                     </item>
                 </argument>
             </container>
@@ -103,7 +108,7 @@
             <onCancel>actionCancel</onCancel>
             <options>
                 <option name="modalClass" xsi:type="string">release-notification-modal</option>
-                <option name="title" xsi:type="string" translate="true">An Error Occurred</option>
+                <option name="title" xsi:type="string" translate="true">Sorry, we had a problem loading our “What’s new” content.</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
@@ -119,7 +124,12 @@
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
-                        <item name="text" xsi:type="string" translate="true">The content is unable to be displayed</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
+                        <p>To learn more about new features, see our latest Release Notes in
+                        <a href="http://devdocs.magento.com/magento-release-information.html"
+                        target="_blank">DevDocs' Release Information</a>.
+                        </p>]]></item>
                     </item>
                 </argument>
             </container>
@@ -179,7 +189,7 @@
             <onCancel>actionCancel</onCancel>
             <options>
                 <option name="modalClass" xsi:type="string">release-notification-modal</option>
-                <option name="title" xsi:type="string" translate="true">An Error Occurred</option>
+                <option name="title" xsi:type="string" translate="true">Sorry, we had a problem loading our “What’s new” content.</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
@@ -195,7 +205,12 @@
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
-                        <item name="text" xsi:type="string" translate="true">The content is unable to be displayed</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
+                        <p>To learn more about new features, see our latest Release Notes in
+                        <a href="http://devdocs.magento.com/magento-release-information.html"
+                        target="_blank">DevDocs' Release Information</a>.
+                        </p>]]></item>
                     </item>
                 </argument>
             </container>
@@ -255,7 +270,7 @@
             <onCancel>actionCancel</onCancel>
             <options>
                 <option name="modalClass" xsi:type="string">release-notification-modal</option>
-                <option name="title" xsi:type="string" translate="true">An Error Occurred</option>
+                <option name="title" xsi:type="string" translate="true">Sorry, we had a problem loading our “What’s new” content.</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="responsive" xsi:type="boolean">true</option>
                 <option name="innerScroll" xsi:type="boolean">true</option>
@@ -271,7 +286,12 @@
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
-                        <item name="text" xsi:type="string" translate="true">The content is unable to be displayed</item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[
+                        <p>We’ll try to show it again the next time you sign in to Magento Admin.</p>
+                        <p>To learn more about new features, see our latest Release Notes in
+                        <a href="http://devdocs.magento.com/magento-release-information.html"
+                        target="_blank">DevDocs' Release Information</a>.
+                        </p>]]></item>
                     </item>
                 </argument>
             </container>
@@ -309,7 +329,7 @@
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
                                     <item name="targetName" xsi:type="string">ns = ${ $.ns }, index = notification_modal_4</item>
-                                    <item name="actionName" xsi:type="string">closeReleaseNotes</item>
+                                    <item name="actionName" xsi:type="string">closeModal</item>
                                 </item>
                             </item>
                         </item>
