@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
@@ -23,28 +22,28 @@ class UpdateLegacyStockStatusByPlainQuery
     private $resourceConnection;
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @var DefaultSourceProviderInterface
      */
     private $defaultSourceProvider;
 
     /**
+     * @var GetProductIdsBySkusInterface
+     */
+    private $getProductIdsBySkus;
+
+    /**
      * @param ResourceConnection $resourceConnection
-     * @param ProductRepositoryInterface $productRepository
      * @param DefaultSourceProviderInterface $defaultSourceProvider
+     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        ProductRepositoryInterface $productRepository,
-        DefaultSourceProviderInterface $defaultSourceProvider
+        DefaultSourceProviderInterface $defaultSourceProvider,
+        GetProductIdsBySkusInterface $getProductIdsBySkus
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->productRepository = $productRepository;
         $this->defaultSourceProvider = $defaultSourceProvider;
+        $this->getProductIdsBySkus = $getProductIdsBySkus;
     }
 
     /**
@@ -56,7 +55,8 @@ class UpdateLegacyStockStatusByPlainQuery
      */
     public function execute(string $sku, float $quantity)
     {
-        $product = $this->productRepository->get($sku);
+        $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
+
         $connection = $this->resourceConnection->getConnection();
         $connection->update(
             $this->resourceConnection->getTableName('cataloginventory_stock_status'),
@@ -65,7 +65,7 @@ class UpdateLegacyStockStatusByPlainQuery
             ],
             [
                 StockStatusInterface::STOCK_ID . ' = ?' => $this->defaultSourceProvider->getId(),
-                StockStatusInterface::PRODUCT_ID . ' = ?' => $product->getId(),
+                StockStatusInterface::PRODUCT_ID . ' = ?' => $productId,
                 'website_id = ?' => 0,
             ]
         );

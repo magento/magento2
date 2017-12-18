@@ -8,6 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\InventoryCatalog\Api\DefaultStockProviderInterface" type="Magento\InventoryCatalog\Model\DefaultStockProvider"/>
     <preference for="Magento\InventoryCatalog\Api\DefaultSourceProviderInterface" type="Magento\InventoryCatalog\Model\DefaultSourceProvider"/>
+    <preference for="Magento\Catalog\Model\GetProductIdsBySkusInterface" type="Magento\Catalog\Model\GetProductIdsBySkus"/>
+    <preference for="Magento\Catalog\Model\GetSkusByProductIdsInterface" type="Magento\Catalog\Model\GetSkusByProductIds"/>
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
         <plugin name="prevent_default_stock_deleting"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\DefaultStockPlugin"/>
