@@ -5,6 +5,9 @@
  */
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
+use Magento\Framework\Stdlib\BooleanUtils;
+use Magento\Setup\Model\Declaration\Schema\Dto\Factories\FactoryInterface;
+
 /**
  * This is abstract factory that allows to
  * instantiate any type of structural elements
@@ -18,14 +21,44 @@ class ElementFactory
      * Where @key - is xsi:type of the object
      * Where @value - is instance class name
      */
-    private $types = [];
+    private $typeFactories = [];
 
     /**
-     * @param array $types
+     * @var BooleanUtils
      */
-    public function __construct(array $types)
+    private $booleanUtils;
+
+    /**
+     * @param FactoryInterface[] $typeFactories
+     * @param BooleanUtils $booleanUtils
+     */
+    public function __construct(array $typeFactories, BooleanUtils $booleanUtils)
     {
-        $this->types = $types;
+        $this->typeFactories = $typeFactories;
+        $this->booleanUtils = $booleanUtils;
+    }
+
+    /**
+     * As we have few attributes, that are generic and be applied to few types:
+     *  - nullable
+     *  - unsigned
+     *
+     * We need to cast this attributes to boolean values in abstract factory
+     *
+     * @param array $elementStructuralData
+     * @return array
+     */
+    private function castGenericAttributes(array $elementStructuralData)
+    {
+        if (isset($elementStructuralData['nullable'])) {
+            $elementStructuralData['nullable'] = $this->booleanUtils->toBoolean($elementStructuralData['nullable']);
+        }
+
+        if (isset($elementStructuralData['unsigned'])) {
+            $elementStructuralData['unsigned'] = $this->booleanUtils->toBoolean($elementStructuralData['unsigned']);
+        }
+
+        return $elementStructuralData;
     }
 
     /**
@@ -37,11 +70,12 @@ class ElementFactory
      */
     public function create($type, array $elementStructuralData)
     {
-        if (!isset($this->types[$type])) {
+        if (!isset($this->typeFactories[$type])) {
             throw new \InvalidArgumentException(sprintf("Types %s is not declared", $type));
         }
 
-        $elementStructuralData['type'] = $type;
-        return new $this->types[$type]($elementStructuralData, $type);
+        $elementStructuralData = $this->castGenericAttributes($elementStructuralData);
+        $elementStructuralData['elementType'] = $type;
+        return $this->typeFactories[$type]->create($elementStructuralData);
     }
 }

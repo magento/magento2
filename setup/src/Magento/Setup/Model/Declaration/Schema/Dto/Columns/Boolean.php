@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Columns;
 
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
  * Boolean column
@@ -17,14 +18,33 @@ class Boolean extends Column implements
     ColumnNullableAwareInterface
 {
     /**
-     * @inheritdoc
+     * @var bool
      */
-    protected $elementType = 'boolean';
+    private $nullable;
 
     /**
-     * @inheritdoc
+     * @var bool
      */
-    protected $structuralElementData;
+    private $default;
+
+    /**
+     * @param string $name
+     * @param string $elementType
+     * @param Table $table
+     * @param $nullable
+     * @param $default
+     */
+    public function __construct(
+        string $name,
+        string $elementType,
+        Table $table,
+        bool $nullable = true,
+        bool $default = false
+    ) {
+        parent::__construct($name, $elementType, $table);
+        $this->nullable = $nullable;
+        $this->default = $default;
+    }
 
     /**
      * Check whether column can be nullable
@@ -33,17 +53,7 @@ class Boolean extends Column implements
      */
     public function isNullable()
     {
-        return isset($this->structuralElementData['nullable']) && $this->structuralElementData['nullable'];
-    }
-
-    /**
-     * Check whether column has default value
-     *
-     * @return bool
-     */
-    public function hasDefault()
-    {
-        return isset($this->structuralElementData['default']);
+        return $this->nullable;
     }
 
     /**
@@ -54,7 +64,7 @@ class Boolean extends Column implements
      */
     public function getDefault()
     {
-        return $this->hasDefault() ? $this->structuralElementData['default'] : null;
+        return $this->default;
     }
 
     /**
@@ -63,7 +73,6 @@ class Boolean extends Column implements
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->elementType,
             'nullable' => $this->isNullable(),
             'default' => $this->getDefault()
         ];

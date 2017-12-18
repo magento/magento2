@@ -10,6 +10,7 @@ use Magento\Setup\Model\Declaration\Schema\Declaration\Parser;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
+use Magento\Setup\Model\Declaration\Schema\Dto\SchemaFactory;
 use Magento\Setup\Model\Declaration\Schema\Dto\StructureFactory;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -31,7 +32,7 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
     private $parser;
 
     /**
-     * @var StructureFactory
+     * @var SchemaFactory
      */
     private $structureFactory;
 
@@ -39,7 +40,7 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->parser = $objectManager->create(Parser::class);
-        $this->structureFactory = $objectManager->get(StructureFactory::class);
+        $this->structureFactory = $objectManager->get(SchemaFactory::class);
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
     }
 
@@ -61,7 +62,7 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
         //Test column
         $testTable = $structure->getTableByName('test_table');
         /** @var Timestamp $timestampColumn */
-        $timestampColumn = $testTable->getColumnByNameOrId('timestamp');
+        $timestampColumn = $testTable->getColumnByName('timestamp');
         self::assertEquals($timestampColumn->getOnUpdate(), 'CURRENT_TIMESTAMP');
         //Test disabled
         self::assertArrayNotHasKey('varbinary_rename', $testTable->getColumns());

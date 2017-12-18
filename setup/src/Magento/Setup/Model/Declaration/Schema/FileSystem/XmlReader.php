@@ -11,7 +11,7 @@ use Magento\Framework\Config\ReaderInterface;
 /**
  * Class Reader
  */
-class Reader extends \Magento\Framework\Config\Reader\Filesystem implements ReaderInterface
+class XmlReader extends \Magento\Framework\Config\Reader\Filesystem implements ReaderInterface
 {
     /**
      * Attributes by names of which we will do nodes merge

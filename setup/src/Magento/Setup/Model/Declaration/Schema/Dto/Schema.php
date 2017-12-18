@@ -6,10 +6,10 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
 /**
- * Structure is aggregation root, which holds all structural elements
+ * Schema is aggregation root, which holds all structural elements
  * and allow access to tables by their names
  */
-class Structure
+class Schema
 {
     /**
      * @var Table[]
@@ -36,27 +36,6 @@ class Structure
     {
         $this->tables[$table->getName()] = $table;
         return $this;
-    }
-
-    /**
-     * Try to find table by its name or by its old name, that was specified as id
-     *
-     * @param string $nameOrId
-     * @return null | Table
-     */
-    public function getTableByNameOrId($nameOrId)
-    {
-        if (isset($this->tables[$nameOrId])) {
-            return $this->tables[$nameOrId];
-        }
-
-        foreach ($this->tables as $table) {
-            if ($table->wasRenamedFrom() === $nameOrId) {
-                return $table;
-            }
-        }
-
-        return null;
     }
 
     /**

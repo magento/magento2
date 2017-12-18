@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Declaration;
 
-use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
-use Magento\Setup\Model\Declaration\Schema\FileSystem\Reader;
+use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
+use Magento\Setup\Model\Declaration\Schema\FileSystem\XmlReader;
 use Magento\Setup\Model\Declaration\Schema\SchemaParserInterface;
 
 /**
@@ -17,47 +17,36 @@ use Magento\Setup\Model\Declaration\Schema\SchemaParserInterface;
 class Parser implements SchemaParserInterface
 {
     /**
-     * @var Reader
+     * @var ReaderComposite
      */
-    private $reader;
+    private $readerComposite;
 
     /**
-     * @var StructureBuilder
+     * @var SchemaBuilder
      */
-    private $structureBuilder;
+    private $schemaBuilder;
 
     /**
-     * @var DynamicStructureInterface
+     * @param ReaderComposite $readerComposite
+     * @param SchemaBuilder $schemaBuilder
      */
-    private $dynamicStructure;
-
-    /**
-     * @param Reader $reader
-     * @param StructureBuilder $structureBuilder
-     * @param DynamicStructureInterface $dynamicStructure
-     */
-    public function __construct(
-        Reader $reader,
-        StructureBuilder $structureBuilder,
-        DynamicStructureInterface $dynamicStructure
-    ) {
-        $this->reader = $reader;
-        $this->structureBuilder = $structureBuilder;
-        $this->dynamicStructure = $dynamicStructure;
+    public function __construct(ReaderComposite $readerComposite, SchemaBuilder $schemaBuilder)
+    {
+        $this->readerComposite = $readerComposite;
+        $this->schemaBuilder = $schemaBuilder;
     }
 
     /**
-     * Convert XML to object representation
+     * Convert data from different sources to object representation
      *
-     * @param Structure $structure
-     * @return Structure
+     * @param Schema $schema
+     * @return Schema
      */
-    public function parse(Structure $structure)
+    public function parse(Schema $schema)
     {
-        $info = $this->reader->read();
-        $info = array_replace_recursive($info, $this->dynamicStructure->getStructure());
-        $this->structureBuilder->addTablesData($info['table']);
-        $structure = $this->structureBuilder->build($structure);
-        return $structure;
+        $data = $this->readerComposite->read();
+        $this->schemaBuilder->addTablesData($data['table']);
+        $schema = $this->schemaBuilder->build($schema);
+        return $schema;
     }
 }

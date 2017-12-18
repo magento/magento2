@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Columns;
 
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
  * Integer column
@@ -20,15 +21,55 @@ class Integer extends Column implements
     ColumnIdentityAwareInterface
 {
     /**
-     * By default element type is integer, but it can various: integer, smallinteger, biginteger, tinyinteger
-     * @inheritdoc
+     * @var bool
      */
-    protected $elementType = 'integer';
+    private $nullable;
 
     /**
-     * @inheritdoc
+     * @var int
      */
-    protected $structuralElementData;
+    private $default;
+
+    /**
+     * @var bool
+     */
+    private $unsigned;
+    /**
+     * @var int
+     */
+    private $padding;
+    /**
+     * @var bool
+     */
+    private $identity;
+
+    /**
+     * @param string $name
+     * @param string $elementType
+     * @param Table $table
+     * @param int $padding
+     * @param bool $nullable
+     * @param bool $unsigned
+     * @param bool $identity
+     * @param float|int $default
+     */
+    public function __construct(
+        string $name,
+        string $elementType,
+        Table $table,
+        int $padding,
+        bool $nullable = true,
+        bool $unsigned = false,
+        bool $identity = false,
+        int $default = null
+    ) {
+        parent::__construct($name, $elementType, $table);
+        $this->nullable = $nullable;
+        $this->default = $default;
+        $this->unsigned = $unsigned;
+        $this->padding = $padding;
+        $this->identity = $identity;
+    }
 
     /**
      * Column padding
@@ -37,7 +78,7 @@ class Integer extends Column implements
      */
     public function getPadding()
     {
-        return $this->structuralElementData['padding'];
+        return $this->padding;
     }
 
     /**
@@ -47,18 +88,9 @@ class Integer extends Column implements
      */
     public function isNullable()
     {
-        return isset($this->structuralElementData['nullable']) && $this->structuralElementData['nullable'];
+        return $this->nullable;
     }
 
-    /**
-     * Check whether column has default value
-     *
-     * @return bool
-     */
-    public function hasDefault()
-    {
-        return isset($this->structuralElementData['default']);
-    }
 
     /**
      * Return default value
@@ -68,7 +100,7 @@ class Integer extends Column implements
      */
     public function getDefault()
     {
-        return $this->hasDefault() ? $this->structuralElementData['default'] : null;
+        return $this->default;
     }
 
     /**
@@ -78,7 +110,7 @@ class Integer extends Column implements
      */
     public function isUnsigned()
     {
-        return isset($this->structuralElementData['unsigned']) && $this->structuralElementData['unsigned'];
+        return $this->unsigned;
     }
 
     /**
@@ -88,7 +120,7 @@ class Integer extends Column implements
      */
     public function isIdentity()
     {
-        return isset($this->structuralElementData['identity']) && $this->structuralElementData['identity'];
+        return $this->identity;
     }
 
     /**
@@ -97,7 +129,7 @@ class Integer extends Column implements
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->elementType,
+            'type' => $this->getElementType(),
             'nullable' => $this->isNullable(),
             'padding' => $this->getPadding(),
             'unsigned' => $this->isUnsigned(),

@@ -15,46 +15,34 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto;
  *  - index
  */
 abstract class GenericElement implements
-    ElementInterface,
-    ElementRenamedInterface
+    ElementInterface
 {
     /**
-     * Data that comes from reader and consist all information
-     * about structural element
-     *
-     * @var array
-     */
-    protected $structuralElementData = [];
-
-    /**
-     * Structural element type
-     *
      * @var string
      */
-    protected $elementType;
+    private $elementType;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @param string $name
+     * @param string $elementType
+     */
+    public function __construct(string $name, string $elementType)
+    {
+        $this->elementType = $elementType;
+        $this->name = $name;
+    }
 
     /**
      * @inheritdoc
      */
     public function getName()
     {
-        return $this->structuralElementData['name'];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getResource()
-    {
-        return $this->structuralElementData['resource'];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function wasRenamedFrom()
-    {
-        return $this->structuralElementData['wasRenamedFrom'];
+        return $this->name;
     }
 
     /**

@@ -16,11 +16,6 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
 class Table extends GenericElement implements ElementInterface
 {
     /**
-     * @inheritdoc
-     */
-    protected $structuralElementData;
-
-    /**
      * @var Constraint[]
      */
     private $constraints = [];
@@ -41,11 +36,31 @@ class Table extends GenericElement implements ElementInterface
     private $indexes = [];
 
     /**
-     * @param array $structuralElementData
+     * @var string
      */
-    public function __construct(array $structuralElementData)
-    {
-        $this->structuralElementData = $structuralElementData;
+    private $resource;
+
+    /**
+     * @param string $name
+     * @param string $elementType
+     * @param string $resource
+     * @param array $columns
+     * @param array $indexes
+     * @param array $constraints
+     */
+    public function __construct(
+        string $name,
+        string $elementType,
+        string $resource,
+        array $columns = [],
+        array $indexes = [],
+        array $constraints = []
+    ) {
+        parent::__construct($name, $elementType);
+        $this->columns = $columns;
+        $this->indexes = $indexes;
+        $this->constraints = $constraints;
+        $this->resource = $resource;
     }
 
     /**
@@ -113,6 +128,16 @@ class Table extends GenericElement implements ElementInterface
     }
 
     /**
+     * Retrieve shard name, on which table will exists
+     *
+     * @return string
+     */
+    public function getResource()
+    {
+        return $this->resource;
+    }
+
+    /**
      * This is workaround, as any DTO object couldnt be changed after instantiation.
      * However there is case, when we have 2 tables with constraints in different tables,
      * that depends to each other table. So we need to setup DTO first and only then pass
@@ -136,24 +161,15 @@ class Table extends GenericElement implements ElementInterface
     }
 
     /**
-     * If we want to rename our column: then it name will be changed
-     * But we want to search by old name
-     * As this name can be used in constraints and indexes
+     * If column exists - retrieve column
      *
      * @param string $nameOrId
      * @return Column
      */
-    public function getColumnByNameOrId($nameOrId)
+    public function getColumnByName($nameOrId)
     {
         if (isset($this->columns[$nameOrId])) {
             return $this->columns[$nameOrId];
-        }
-
-        //If it was renamed
-        foreach ($this->columns as $column) {
-            if ($column->wasRenamedFrom() === $nameOrId) {
-                return $column;
-            }
         }
 
         throw new \LogicException(sprintf("Cannot find column with name or id %s", $nameOrId));

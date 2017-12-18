@@ -8,7 +8,7 @@ namespace Magento\Setup\Model\Declaration\Schema;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
-use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
+use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\Dto\TableElementInterface;
 
 /**
@@ -30,9 +30,9 @@ class ChangeRegistry implements ChangeRegistryInterface
     private $whiteListTables = [];
 
     /**
-     * @var Structure
+     * @var Schema
      */
-    private $structure;
+    private $schema;
 
     /**
      * @var Request
@@ -142,20 +142,20 @@ class ChangeRegistry implements ChangeRegistryInterface
     /**
      * @inheritdoc
      */
-    public function registerStructure(Structure $structure)
+    public function registerSchema(Schema $schema)
     {
-        $this->structure = $structure;
+        $this->schema = $schema;
     }
 
     /**
-     * Retrieve current structure
+     * Retrieve current schema
      * This function needs for rollback functionality
      *
-     * @return Structure
+     * @return Schema
      */
-    public function getCurrentStructureState()
+    public function getCurrentSchemaState()
     {
-        return $this->structure;
+        return $this->schema;
     }
 
     /**

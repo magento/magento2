@@ -7,7 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema;
 
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
-use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
+use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 
 /**
  * ChangeRegistry is type of classes, that holds all information
@@ -29,11 +29,6 @@ interface ChangeRegistryInterface
      * For elements that needs to be removed
      */
     const REMOVE_OPERATION = "remove";
-
-    /**
-     * For elements that needs to be renamed
-     */
-    const RENAME_OPERAION = "rename";
 
     /**
      * Retrieve operations by type
@@ -61,19 +56,19 @@ interface ChangeRegistryInterface
     );
 
     /**
-     * Register current state of structure to registry
+     * Register current state of schema to registry
      *
-     * @param Structure $structure
+     * @param Schema $schema
      * @return void
      */
-    public function registerStructure(Structure $structure);
+    public function registerSchema(Schema $schema);
 
     /**
-     * Retrieve current structure object
+     * Retrieve current schema object
      *
-     * @return Structure
+     * @return Schema
      */
-    public function getCurrentStructureState();
+    public function getCurrentSchemaState();
 
     /**
      * Return current installation request

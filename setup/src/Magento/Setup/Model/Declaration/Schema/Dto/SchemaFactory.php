@@ -9,9 +9,9 @@ use Zend\Di\Di;
 use Zend\Di\ServiceLocatorInterface;
 
 /**
- * Factory class for @see \Magento\Setup\Model\Declaration\Schema\Dto\Structure
+ * Factory class for @see \Magento\Setup\Model\Declaration\Schema\Dto\Schema
  */
-class StructureFactory
+class SchemaFactory
 {
     /**
      * @var Di
@@ -21,7 +21,7 @@ class StructureFactory
     /**
      * @var string
      */
-    private $instanceName = Structure::class;
+    private $instanceName = Schema::class;
 
     /**
      * EntityFactory constructor.
@@ -36,7 +36,7 @@ class StructureFactory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Setup\Model\Declaration\Schema\Dto\Structure | object
+     * @return \Magento\Setup\Model\Declaration\Schema\Dto\Schema | object
      */
     public function create(array $data = [])
     {

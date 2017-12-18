@@ -10,22 +10,22 @@ use Magento\Setup\Model\Declaration\Schema\Casters\CasterAggregator;
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaReaderInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory;
-use Magento\Setup\Model\Declaration\Schema\Dto\Structure;
+use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Sharding;
 
 /**
  * This type of builder is responsible for converting ENTIRE data, that comes from db
- * into DTO`s format, with aggregation root: Structure
+ * into DTO`s format, with aggregation root: Schema
  *
- * Note: StructureBuilder can not be used for one structural element, like column or constraint
+ * Note: SchemaBuilder can not be used for one structural element, like column or constraint
  * because it should have references to other DTO objects.
  * In order to convert build only 1 structural element use directly it factory
  *
- * @see Structure
+ * @see Schema
  * @inheritdoc
  */
-class StructureBuilder
+class SchemaBuilder
 {
     /**
      * @var AdapterMediator
@@ -36,11 +36,6 @@ class StructureBuilder
      * @var ElementFactory
      */
     private $elementFactory;
-
-    /**
-     * @var CasterAggregator
-     */
-    private $casterAggregator;
 
     /**
      * @var DbSchemaReaderInterface
@@ -58,18 +53,15 @@ class StructureBuilder
      * @param ElementFactory $elementFactory
      * @param DbSchemaReaderInterface $dbSchemaReader
      * @param Sharding $sharding
-     * @param CasterAggregator $casterAggregator
      */
     public function __construct(
         AdapterMediator $adapter,
         ElementFactory $elementFactory,
         DbSchemaReaderInterface $dbSchemaReader,
-        Sharding $sharding,
-        CasterAggregator $casterAggregator
+        Sharding $sharding
     ) {
         $this->adapter = $adapter;
         $this->elementFactory = $elementFactory;
-        $this->casterAggregator = $casterAggregator;
         $this->dbSchemaReader = $dbSchemaReader;
         $this->sharding = $sharding;
     }
@@ -77,7 +69,7 @@ class StructureBuilder
     /**
      * @inheritdoc
      */
-    public function build(Structure $structure)
+    public function build(Schema $schema)
     {
         $tables = [];
 
@@ -92,12 +84,12 @@ class StructureBuilder
 
             /** @var Table $table */
             $table = $this->elementFactory->create('table', [
-                'name' => $tableName
+                'name' => $tableName,
+                'resource' => $this->sharding->getDefaultResource()
             ]);
 
             // Process columns
             foreach ($columnsData as $columnData) {
-                $columnData = $this->casterAggregator->cast($columnData);
                 $columnData['table'] = $table;
                 $column = $this->elementFactory->create($columnData['type'], $columnData);
                 $columns[$column->getName()] = $column;
@@ -106,16 +98,14 @@ class StructureBuilder
             $table->addColumns($columns);
             //Process indexes
             foreach ($indexesData as $indexData) {
-                $indexData = $this->casterAggregator->cast($indexData);
-                $indexData['column'] = $this->resolveInternalRelations($columns, $indexData);
+                $indexData['columns'] = $this->resolveInternalRelations($columns, $indexData);
                 $indexData['table'] = $table;
                 $index = $this->elementFactory->create('index', $indexData);
                 $indexes[$index->getName()] = $index;
             }
             //Process internal constraints
             foreach ($constrainsData as $constraintData) {
-                $constraintData = $this->casterAggregator->cast($constraintData);
-                $constraintData['column'] = $this->resolveInternalRelations($columns, $constraintData);
+                $constraintData['columns'] = $this->resolveInternalRelations($columns, $constraintData);
                 $constraintData['table'] = $table;
                 $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);
                 $constraints[$constraint->getName()] = $constraint;
@@ -124,11 +114,11 @@ class StructureBuilder
             $table->addIndexes($indexes);
             $table->addConstraints($constraints);
             $tables[$table->getName()] = $table;
-            $structure->addTable($table);
+            $schema->addTable($table);
         }
 
         $this->processReferenceKeys($tables);
-        return $structure;
+        return $schema;
     }
 
     /**
@@ -147,11 +137,10 @@ class StructureBuilder
 
             foreach ($referencesData as $referenceData) {
                 //Prepare reference data
-                $referenceData = $this->casterAggregator->cast($referenceData);
                 $referenceData['table'] = $tables[$tableName];
-                $referenceData['column'] = $tables[$tableName]->getColumnByNameOrId($referenceData['column']);
+                $referenceData['column'] = $tables[$tableName]->getColumnByName($referenceData['column']);
                 $referenceData['referenceTable'] = $tables[$referenceData['referenceTable']];
-                $referenceData['referenceColumn'] = $referenceData['referenceTable']->getColumnByNameOrId(
+                $referenceData['referenceColumn'] = $referenceData['referenceTable']->getColumnByName(
                     $referenceData['referenceColumn']
                 );
 

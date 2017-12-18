@@ -18,7 +18,6 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
  * If element exists only in XML -> then we need to create element
  * If element exists in both version and are different -> then we need to modify element
  * If element exists only in db -> then we need to remove this element
- * If element wasRenamedFrom attribute is differ with name -> then we need to rename element
  */
 class TableDiff implements DiffInterface
 {
@@ -69,13 +68,8 @@ class TableDiff implements DiffInterface
 
             foreach ($declaredElements as $element) {
                 //If it is new for generated (generated from db) elements - we need to create it
-                if ($this->diffManager->shouldBeCreatedOrRenamed($generatedElements, $element)) {
-                    if ($this->diffManager->shouldBeRenamed($element)) {
-                        $generatedElements = $this->diffManager
-                            ->registerRename($changeRegistry, $element, $generatedElements);
-                    } else {
-                        $this->diffManager->registerCreation($changeRegistry, $element);
-                    }
+                if ($this->diffManager->shouldBeCreated($generatedElements, $element)) {
+                    $this->diffManager->registerCreation($changeRegistry, $element);
                 } else if ($this->diffManager->shouldBeModified(
                     $element,
                     $generatedElements[$element->getName()]
@@ -83,7 +77,7 @@ class TableDiff implements DiffInterface
                     $this->diffManager
                         ->registerModification($changeRegistry, $element, $generatedElements[$element->getName()]);
                 }
-                //Unset processed elements from generated from db structure
+                //Unset processed elements from generated from db schema
                 //All other unprocessed elements will be added as removed ones
                 unset($generatedElements[$element->getName()]);
             }

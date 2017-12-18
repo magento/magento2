@@ -7,30 +7,15 @@
  */
 namespace Magento\Setup\Model\Declaration\Schema\Xml;
 
-use Magento\Setup\Model\Declaration\Schema\Casters\CasterAggregator;
-
 /**
  * This converter serve needs of Declaration Filesystem reader:
- * @see \Magento\Setup\Model\Declaration\Schema\FileSystem\Reader
+ * @see \Magento\Setup\Model\Declaration\Schema\FileSystem\XmlReader
  *
  * It allows to convert declarative schema to raw array and add default values
  * for column types and for constraints
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
-    /**
-     * @var CasterAggregator
-     */
-    private $casterAggregator;
-
-    /**
-     * @param CasterAggregator $casterAggregator
-     */
-    public function __construct(CasterAggregator $casterAggregator)
-    {
-        $this->casterAggregator = $casterAggregator;
-    }
-
     /**
      * Convert config from XML to array
      *
@@ -111,7 +96,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
         if ($xsiType) {
             $attributes['type'] = $xsiType;
-            return $this->casterAggregator->cast($attributes);
         }
 
         return $attributes;

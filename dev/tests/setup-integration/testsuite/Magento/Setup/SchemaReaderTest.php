@@ -15,16 +15,20 @@ use Magento\TestFramework\TestCase\SetupTestCase;
  */
 class SchemaReaderTest extends SetupTestCase
 {
-    /** @var  \Magento\Setup\Model\Declaration\Schema\FileSystem\Reader */
+    /**
+     * @var  \Magento\Setup\Model\Declaration\Schema\FileSystem\XmlReader
+     */
     private $reader;
 
-    /** @var  TestModuleManager */
+    /**
+     * @var  TestModuleManager
+     */
     private $moduleManager;
 
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->reader = $objectManager->get(\Magento\Setup\Model\Declaration\Schema\FileSystem\Reader::class);
+        $this->reader = $objectManager->get(\Magento\Setup\Model\Declaration\Schema\FileSystem\XmlReader::class);
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
     }
 

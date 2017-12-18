@@ -8,6 +8,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Constraints;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
  * Internal key constraint is constraint that add KEY onto table columns, on which it is declared
@@ -21,22 +22,33 @@ class Internal extends Constraint implements ElementDiffAwareInterface
     const PRIMARY_NAME = "PRIMARY";
 
     /**
-     * @inheritdoc
-     * Can be unique or primary
+     * @var array
      */
-    protected $elementType = 'unique';
+    private $columns;
 
     /**
-     * @inheritdoc
+     * Internal constructor.
+     * @param string $name
+     * @param string $elementType
+     * @param Table $table
+     * @param array $columns
      */
-    protected $structuralElementData;
+    public function __construct(
+        $name,
+        $elementType,
+        Table $table,
+        array $columns
+    ) {
+        parent::__construct($name, $elementType, $table);
+        $this->columns = $columns;
+    }
 
     /**
      * @return Column[]
      */
     public function getColumns()
     {
-        return $this->structuralElementData['column'];
+        return $this->columns;
     }
 
     /**
@@ -45,7 +57,7 @@ class Internal extends Constraint implements ElementDiffAwareInterface
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->elementType,
+            'type' => $this->getElementType(),
             'columns' => array_map(
                 function (Column $column) {
                     return $column->getName();

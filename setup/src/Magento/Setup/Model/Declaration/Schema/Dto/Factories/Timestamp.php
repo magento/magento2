@@ -3,8 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Model\Declaration\Schema\Casters;
+namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
@@ -16,12 +17,17 @@ use Magento\Framework\Stdlib\BooleanUtils;
  * to your local time again.
  * Unix range: 1970-01-01 00:00:01' UTC to '2038-01-09 03:14:07'
  */
-class Timestamp implements CasterInterface
+class Timestamp implements FactoryInterface
 {
     /**
-     * @var Base
+     * @var ObjectManagerInterface
      */
-    private $base;
+    private $objectManager;
+
+    /**
+     * @var string
+     */
+    private $className;
 
     /**
      * @var BooleanUtils
@@ -29,24 +35,27 @@ class Timestamp implements CasterInterface
     private $booleanUtils;
 
     /**
-     * @param Base $base
+     * @param ObjectManagerInterface $objectManager
      * @param BooleanUtils $booleanUtils
+     * @param string $className
      */
-    public function __construct(Base $base, BooleanUtils $booleanUtils)
-    {
-        $this->base = $base;
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        BooleanUtils $booleanUtils,
+        $className = \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp::class
+    ) {
+        $this->objectManager = $objectManager;
+        $this->className = $className;
         $this->booleanUtils = $booleanUtils;
     }
-
     /**
      * Change on_update and default params
      *
      * {@inheritdoc}
      * @return array
      */
-    public function cast(array $data)
+    public function create(array $data)
     {
-        $data = $this->base->cast($data);
         //As we have only one value for timestamp on update -> it is convinient to use boolean type for it
         //But later we need to convert it to SQL value
         if (isset($data['on_update']) && $data['on_update'] !== 'CURRENT_TIMESTAMP') {
@@ -63,6 +72,6 @@ class Timestamp implements CasterInterface
 
         unset($data['nullable']);
 
-        return $data;
+        return $this->objectManager->create($this->className, $data);
     }
 }

@@ -15,23 +15,30 @@ class Index extends GenericElement implements
     ElementDiffAwareInterface
 {
     /**
-     * @inheritdoc
+     * @var Table
      */
-    protected $elementType = 'index';
+    private $table;
 
     /**
-     * @inheritdoc
+     * @var array
      */
-    protected $structuralElementData;
+    private $columns;
 
     /**
-     * @param array $structuralElementData
+     * @param string $name
      * @param string $elementType
+     * @param Table $table
+     * @param array $columns
      */
-    public function __construct(array $structuralElementData, $elementType)
-    {
-        $this->structuralElementData = $structuralElementData;
-        $this->elementType = $elementType;
+    public function __construct(
+        string $name,
+        string $elementType,
+        Table $table,
+        array $columns
+    ) {
+        parent::__construct($name, $elementType);
+        $this->table = $table;
+        $this->columns = $columns;
     }
 
     /**
@@ -41,7 +48,7 @@ class Index extends GenericElement implements
      */
     public function getColumns()
     {
-        return $this->structuralElementData['column'];
+        return $this->columns;
     }
 
     /**
@@ -51,7 +58,7 @@ class Index extends GenericElement implements
      */
     public function getTable()
     {
-        return $this->structuralElementData['table'];
+        return $this->table;
     }
 
     /**
@@ -60,7 +67,7 @@ class Index extends GenericElement implements
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->elementType,
+            'type' => $this->getElementType(),
             'columns' => array_map(
                 function (Column $column) {
                     return $column->getName();

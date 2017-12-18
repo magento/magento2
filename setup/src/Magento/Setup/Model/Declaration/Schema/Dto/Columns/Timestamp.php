@@ -7,6 +7,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Dto\Columns;
 
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
  * Timestamp column
@@ -16,15 +17,33 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementDiffAwareInterface;
 class Timestamp extends Column implements ElementDiffAwareInterface
 {
     /**
-     * By default element type is timesstamp. But can be also datetime
-     * @inheritdoc
+     * @var string
      */
-    protected $elementType = 'timestamp';
+    private $default;
 
     /**
-     * @inheritdoc
+     * @var null|string
      */
-    protected $structuralElementData;
+    private $onUpdate;
+
+    /**
+     * @param string $name
+     * @param string $elementType
+     * @param Table $table
+     * @param string $default
+     * @param string|null $onUpdate
+     */
+    public function __construct(
+        string $name,
+        string $elementType,
+        Table $table,
+        string $default,
+        string $onUpdate = null
+    ) {
+        parent::__construct($name, $elementType, $table);
+        $this->default = $default;
+        $this->onUpdate = $onUpdate;
+    }
 
     /**
      * Return default value
@@ -34,17 +53,7 @@ class Timestamp extends Column implements ElementDiffAwareInterface
      */
     public function getDefault()
     {
-        return $this->structuralElementData['default'];
-    }
-
-    /**
-     * on_update is optional param
-     *
-     * @return bool
-     */
-    public function hasOnUpdate()
-    {
-        return isset($this->structuralElementData['on_update']);
+        return $this->default;
     }
 
     /**
@@ -54,7 +63,7 @@ class Timestamp extends Column implements ElementDiffAwareInterface
      */
     public function getOnUpdate()
     {
-        return $this->hasOnUpdate() ? $this->structuralElementData['on_update'] : null;
+        return $this->onUpdate;
     }
 
     /**
@@ -63,7 +72,7 @@ class Timestamp extends Column implements ElementDiffAwareInterface
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->elementType,
+            'type' => $this->getElementType(),
             'default' => $this->getDefault(),
             'onUpdate' => $this->getOnUpdate()
         ];
