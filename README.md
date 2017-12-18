@@ -38,8 +38,10 @@ To suggest documentation improvements, click [here][4].
 | ![reject](http://devdocs.magento.com/common/images/github_reject.png) | The pull request has been rejected and will not be merged into mainline code. Possible reasons can include but are not limited to: issue has already been fixed in another code contribution, or there is an issue with the code contribution. |
 | ![bug report](http://devdocs.magento.com/common/images/github_bug.png) | The Magento Team has confirmed that this issue contains the minimum required information to reproduce. |
 | ![acknowledged](http://devdocs.magento.com/common/images/gitHub_acknowledged.png) | The Magento Team has validated the issue and an internal ticket has been created. |
-| ![acknowledged](http://devdocs.magento.com/common/images/github_inProgress.png) | The internal ticket is currently in progress, fix is scheduled to be delivered. |
-| ![acknowledged](http://devdocs.magento.com/common/images/github_needsUpdate.png) | The Magento Team needs additional information from the reporter to properly prioritize and process the issue or pull request. |
+| ![in progress](http://devdocs.magento.com/common/images/github_inProgress.png) | The internal ticket is currently in progress, fix is scheduled to be delivered. |
+| ![needs update](http://devdocs.magento.com/common/images/github_needsUpdate.png) | The Magento Team needs additional information from the reporter to properly prioritize and process the issue or pull request. |
+
+To learn more about issue gate labels click [here](https://github.com/magento/magento2/wiki/Magento-Issue-Gates)
 
 <h2>Reporting security issues</h2>
 
