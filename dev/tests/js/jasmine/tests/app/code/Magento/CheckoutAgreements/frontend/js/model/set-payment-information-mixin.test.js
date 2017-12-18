@@ -39,6 +39,7 @@ define([
             it('Magento_CheckoutAgreements/js/model/set-payment-information-mixin is applied', function () {
                 var placeOrderMixins = defaultContext
                     .config.config.mixins['Magento_Checkout/js/action/set-payment-information'];
+
                 expect(placeOrderMixins['Magento_CheckoutAgreements/js/model/set-payment-information-mixin'])
                     .toBe(true);
             });
@@ -46,6 +47,7 @@ define([
             it('Magento_CheckoutAgreements/js/model/agreements-assigner is called', function () {
                 var messageContainer = jasmine.createSpy('messageContainer'),
                     paymentData = {};
+
                 mixin(placeOrderAction)(messageContainer, paymentData);
                 expect(mocks['Magento_CheckoutAgreements/js/model/agreements-assigner'])
                     .toHaveBeenCalledWith(paymentData);
