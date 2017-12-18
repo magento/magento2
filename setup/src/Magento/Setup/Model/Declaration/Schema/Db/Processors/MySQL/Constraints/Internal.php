@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Constraints;
 
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
@@ -22,11 +23,41 @@ class Internal implements DbSchemaProcessorInterface
     const PRIMARY_NAME = 'PRIMARY';
 
     /**
+     * Primary key name, that is used in definition
+     */
+    const PRIMARY_KEY_NAME = 'PRIMARY KEY';
+
+    /**
+     * Uniqe key name, that is used in definition
+     */
+    const UNIQUE_KEY_NAME = 'UNIQUE KEY';
+
+    /**
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal $element
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $element)
     {
-        return '';
+        $columnsList = array_map(
+            function(Column $column) {
+                return $column->getName();
+            },
+            $element->getColumns()
+        );
+
+        return sprintf(
+            '%s (%s)',
+            $element->getElementType() === 'primary' ? 'PRIMARY KEY' : 'UNIQUE KEY',
+            implode(',', $columnsList)
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function canBeApplied(ElementInterface $element)
+    {
+        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
     }
 
     /**

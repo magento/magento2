@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL;
 
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
@@ -24,11 +25,32 @@ class Index implements DbSchemaProcessorInterface
     ];
 
     /**
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Index $element
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $element)
     {
-        return '';
+        $columnsList = array_map(
+            function(Column $column) {
+                return $column->getName();
+            },
+            $element->getColumns()
+        );
+        //as we used index types, that are similar to MySQL ones, we can just make it upper
+        return sprintf(
+            '%s %s (%s)',
+            strtoupper($element->getElementType()),
+            $element->getName(),
+            implode(',', $columnsList)
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function canBeApplied(ElementInterface $element)
+    {
+        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Index;
     }
 
     /**

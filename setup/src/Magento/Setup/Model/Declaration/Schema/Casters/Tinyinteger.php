@@ -6,6 +6,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Casters;
 
 /**
+ * @TODO: factories instead of casters
  * Serves needs in integer digits. Default padding is 1.
  * Size is 1 byte.
  */

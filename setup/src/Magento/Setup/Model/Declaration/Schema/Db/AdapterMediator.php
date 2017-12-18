@@ -121,7 +121,7 @@ class AdapterMediator
         foreach ($data as $type => $elements) {
             /** @var ElementInterface $element */
             foreach ($elements as $element) {
-                $definition[$type] = $this->processElementToDefinition($type, $element);
+                $definition[$type][$element->getName()] = $this->processElementToDefinition($type, $element);
             }
         }
 

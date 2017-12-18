@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Constraints;
 
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
@@ -18,11 +19,32 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 class ForeignKey implements DbSchemaProcessorInterface
 {
     /**
+     * @param Reference $element
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $element)
     {
-        return '';
+        /** @TODO: purge records, if the are not satisfied on delete statement */
+        $foreignKeySql = sprintf(
+            "FOREIGN KEY (%s) REFERENCES %s (%s)",
+            $element->getColumn()->getName(),
+            $element->getReferenceTable()->getName(),
+            $element->getReferenceColumn()->getName()
+        );
+
+        if ($element->getOnDelete()) {
+            $foreignKeySql .= sprintf("ON DELETE %s", $element->getOnDelete());
+        }
+
+        return $foreignKeySql;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function canBeApplied(ElementInterface $element)
+    {
+        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
     }
 
     /**

@@ -11,6 +11,7 @@ use Magento\Setup\Model\Declaration\Schema\FileSystem\Reader;
 use Magento\Setup\Model\Declaration\Schema\SchemaParserInterface;
 
 /**
+ * @TODO: add composite readers
  * Read schema data from XML and convert it to objects representation
  */
 class Parser implements SchemaParserInterface
