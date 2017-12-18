@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Image as MagentoImage;
@@ -877,17 +878,26 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Return resized product image information
-     *
      * @return array
+     * @throws NotLoadInfoImageException
      */
     public function getResizedImageInfo()
     {
-        if ($this->isBaseFilePlaceholder() == true) {
-            $image = $this->imageAsset->getSourceFile();
-        } else {
-            $image = $this->imageAsset->getPath();
+        try {
+            if ($this->isBaseFilePlaceholder() == true) {
+                $image = $this->imageAsset->getSourceFile();
+            } else {
+                $image = $this->imageAsset->getPath();
+            }
+
+            $imageProperties = getimagesize($image);
+
+            return $imageProperties;
+        } finally {
+            if (empty($imageProperties)) {
+                throw new NotLoadInfoImageException(__('Can\'t get information about the picture: %1', $image));
+            }
         }
-        return getimagesize($image);
     }
 
     /**
