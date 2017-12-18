@@ -32,6 +32,11 @@ class SwatchAttributesProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $productMock;
 
+    /**
+     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeHelperMock;
+
     protected function setUp()
     {
         $this->typeConfigurable = $this->createPartialMock(
@@ -43,45 +48,91 @@ class SwatchAttributesProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', 'getTypeId']);
 
+        $this->attributeHelperMock = $this->createMock(\Magento\Swatches\Helper\Attribute::class);
+
         $this->swatchAttributeProvider = (new ObjectManager($this))->getObject(SwatchAttributesProvider::class, [
             'typeConfigurable' => $this->typeConfigurable,
             'swatchAttributeCodes' => $this->swatchAttributeCodes,
+            'attributeHelper' => $this->attributeHelperMock
         ]);
     }
 
-    public function testProvide()
+    public function dataForIsSwatchAttribute()
+    {
+        return [
+            [
+                [false]
+            ],
+            [
+                [true]
+            ],
+            [
+                [false, false]
+            ],
+            [
+                [false, true]
+            ],
+            [
+                [true, false]
+            ],
+            [
+                [true, true]
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider dataForIsSwatchAttribute
+     */
+    public function testProvide(array $dataForIsSwatchAttribute)
     {
         $this->productMock->method('getId')->willReturn(1);
         $this->productMock->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $productAttributeMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Interception\InterceptorInterface::class
-        );
+        $configurableAttributes = [];
+        $expected = [];
 
-        $configAttributeMock = $this->createPartialMock(
-            Configurable\Attribute::class,
-            ['getAttributeId', 'getProductAttribute']
-        );
-        $configAttributeMock
-            ->method('getAttributeId')
-            ->willReturn(1);
+        // Test cases where swatchAttributeCodes::getCodes returns attribute codes which are no longer swatch attributes
+        foreach ($dataForIsSwatchAttribute as $attributeId => $isSwatchAttribute) {
+            $productAttributeMock = $this->createPartialMock(
+                \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+                ['setData', 'hasData', 'getData']
+            );
 
-        $configAttributeMock
-            ->method('getProductAttribute')
-            ->willReturn($productAttributeMock);
+            $this->attributeHelperMock
+                ->expects($this->at($attributeId))
+                ->method('isSwatchAttribute')
+                ->with($productAttributeMock)
+                ->willReturn($isSwatchAttribute);
+
+            $configAttributeMock = $this->createPartialMock(
+                Configurable\Attribute::class,
+                ['getAttributeId', 'getProductAttribute']
+            );
+            $configAttributeMock
+                ->method('getAttributeId')
+                ->willReturn($attributeId);
+            $configAttributeMock
+                ->method('getProductAttribute')
+                ->willReturn($productAttributeMock);
+
+            $configurableAttributes[] = $configAttributeMock;
+
+            if ($isSwatchAttribute) {
+                $expected[$attributeId] = $productAttributeMock;
+            }
+        }
 
         $this->typeConfigurable
             ->method('getConfigurableAttributes')
             ->with($this->productMock)
-            ->willReturn([$configAttributeMock]);
+            ->willReturn($configurableAttributes);
 
-        $swatchAttributes = [1 => 'text_swatch'];
         $this->swatchAttributeCodes
             ->method('getCodes')
-            ->willReturn($swatchAttributes);
+            ->willReturn($dataForIsSwatchAttribute);
 
-        $expected = [1 => $productAttributeMock];
         $result = $this->swatchAttributeProvider->provide($this->productMock);
 
         $this->assertEquals($expected, $result);

@@ -8,6 +8,7 @@ namespace Magento\Swatches\Model;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
+use Magento\Swatches\Helper\Attribute as AttributeHelper;
 
 /**
  * Provide list of swatch attributes for product.
@@ -31,15 +32,23 @@ class SwatchAttributesProvider
     private $attributesPerProduct;
 
     /**
+     * @var AttributeHelper
+     */
+    protected $attributeHelper;
+
+    /**
      * @param Configurable $typeConfigurable
      * @param SwatchAttributeCodes $swatchAttributeCodes
+     * @param AttributeHelper $attributeHelper
      */
     public function __construct(
         Configurable $typeConfigurable,
-        SwatchAttributeCodes $swatchAttributeCodes
+        SwatchAttributeCodes $swatchAttributeCodes,
+        AttributeHelper $attributeHelper
     ) {
         $this->typeConfigurable = $typeConfigurable;
         $this->swatchAttributeCodes = $swatchAttributeCodes;
+        $this->attributeHelper = $attributeHelper;
     }
 
     /**
@@ -61,8 +70,12 @@ class SwatchAttributesProvider
             $swatchAttributes = [];
             foreach ($configurableAttributes as $configurableAttribute) {
                 if (array_key_exists($configurableAttribute->getAttributeId(), $swatchAttributeCodeMap)) {
-                    $swatchAttributes[$configurableAttribute->getAttributeId()]
-                        = $configurableAttribute->getProductAttribute();
+                    $productAttribute = $configurableAttribute->getProductAttribute();
+
+                    // Check if product attribute is actually an swatch attribute
+                    if ($productAttribute && $this->attributeHelper->isSwatchAttribute($productAttribute)) {
+                        $swatchAttributes[$configurableAttribute->getAttributeId()] = $productAttribute;
+                    }
                 }
             }
             $this->attributesPerProduct[$product->getId()] = $swatchAttributes;

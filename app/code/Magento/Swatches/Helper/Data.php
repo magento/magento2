@@ -19,6 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory as SwatchCollectionFactory;
 use Magento\Swatches\Model\Swatch;
 use Magento\Swatches\Model\SwatchAttributesProvider;
+use Magento\Swatches\Helper\Attribute as AttributeHelper;
 
 /**
  * Class Helper Data
@@ -77,17 +78,6 @@ class Data
     private $swatchAttributesProvider;
 
     /**
-     * Data key which should populated to Attribute entity from "additional_data" field
-     *
-     * @var array
-     */
-    protected $eavAttributeAdditionalDataKeys = [
-        Swatch::SWATCH_INPUT_TYPE_KEY,
-        'update_product_preview_image',
-        'use_product_image_for_swatch'
-    ];
-
-    /**
      * Serializer to/from JSON.
      *
      * @var Json
@@ -95,11 +85,17 @@ class Data
     private $serializer;
 
     /**
+     * @var AttributeHelper
+     */
+    protected $attributeHelper;
+
+    /**
      * @param CollectionFactory $productCollectionFactory
      * @param ProductRepositoryInterface $productRepository
      * @param StoreManagerInterface $storeManager
      * @param SwatchCollectionFactory $swatchCollectionFactory
      * @param Image $imageHelper
+     * @param AttributeHelper $attributeHelper
      * @param Json|null $serializer
      * @param SwatchAttributesProvider $swatchAttributesProvider
      */
@@ -109,6 +105,7 @@ class Data
         StoreManagerInterface $storeManager,
         SwatchCollectionFactory $swatchCollectionFactory,
         Image $imageHelper,
+        AttributeHelper $attributeHelper,
         Json $serializer = null,
         SwatchAttributesProvider $swatchAttributesProvider = null
     ) {
@@ -120,6 +117,7 @@ class Data
         $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
         $this->swatchAttributesProvider = $swatchAttributesProvider
             ?: ObjectManager::getInstance()->get(SwatchAttributesProvider::class);
+        $this->attributeHelper = $attributeHelper;
     }
 
     /**
@@ -128,44 +126,7 @@ class Data
      */
     public function assembleAdditionalDataEavAttribute(Attribute $attribute)
     {
-        $initialAdditionalData = [];
-        $additionalData = (string) $attribute->getData('additional_data');
-        if (!empty($additionalData)) {
-            $additionalData = $this->serializer->unserialize($additionalData);
-            if (is_array($additionalData)) {
-                $initialAdditionalData = $additionalData;
-            }
-        }
-
-        $dataToAdd = [];
-        foreach ($this->eavAttributeAdditionalDataKeys as $key) {
-            $dataValue = $attribute->getData($key);
-            if (null !== $dataValue) {
-                $dataToAdd[$key] = $dataValue;
-            }
-        }
-        $additionalData = array_merge($initialAdditionalData, $dataToAdd);
-        $attribute->setData('additional_data', $this->serializer->serialize($additionalData));
-        return $this;
-    }
-
-    /**
-     * @param Attribute $attribute
-     * @return $this
-     */
-    private function populateAdditionalDataEavAttribute(Attribute $attribute)
-    {
-        $serializedAdditionalData = $attribute->getData('additional_data');
-        if ($serializedAdditionalData) {
-            $additionalData = $this->serializer->unserialize($serializedAdditionalData);
-            if (isset($additionalData) && is_array($additionalData)) {
-                foreach ($this->eavAttributeAdditionalDataKeys as $key) {
-                    if (isset($additionalData[$key])) {
-                        $attribute->setData($key, $additionalData[$key]);
-                    }
-                }
-            }
-        }
+        $this->attributeHelper->assembleAdditionalDataEavAttribute($attribute);
         return $this;
     }
 
@@ -527,8 +488,7 @@ class Data
      */
     public function isSwatchAttribute(Attribute $attribute)
     {
-        $result = $this->isVisualSwatch($attribute) || $this->isTextSwatch($attribute);
-        return $result;
+        return $this->attributeHelper->isSwatchAttribute($attribute);
     }
 
     /**
@@ -539,10 +499,7 @@ class Data
      */
     public function isVisualSwatch(Attribute $attribute)
     {
-        if (!$attribute->hasData(Swatch::SWATCH_INPUT_TYPE_KEY)) {
-            $this->populateAdditionalDataEavAttribute($attribute);
-        }
-        return $attribute->getData(Swatch::SWATCH_INPUT_TYPE_KEY) == Swatch::SWATCH_INPUT_TYPE_VISUAL;
+        return $this->attributeHelper->isVisualSwatch($attribute);
     }
 
     /**
@@ -553,10 +510,7 @@ class Data
      */
     public function isTextSwatch(Attribute $attribute)
     {
-        if (!$attribute->hasData(Swatch::SWATCH_INPUT_TYPE_KEY)) {
-            $this->populateAdditionalDataEavAttribute($attribute);
-        }
-        return $attribute->getData(Swatch::SWATCH_INPUT_TYPE_KEY) == Swatch::SWATCH_INPUT_TYPE_TEXT;
+        return $this->attributeHelper->isTextSwatch($attribute);
     }
 
     /**
