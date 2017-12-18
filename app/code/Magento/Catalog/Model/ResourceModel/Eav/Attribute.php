@@ -240,7 +240,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         return $this->_isEnabledInFlat();
     }
 
-
     /**
      * Is attribute enabled for flat indexing
      *
