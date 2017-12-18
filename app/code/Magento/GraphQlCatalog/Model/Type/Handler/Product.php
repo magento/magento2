@@ -120,6 +120,33 @@ class Product implements HandlerInterface
         $content = $mediaGalleryEntries['content'];
         $result['media_gallery_entries'][0]['video_content'] = $videoContent;
         $result['media_gallery_entries'][0]['content'] = $content;
+        $result['category_ids'] = ['int'];
+        $result['media_gallery'] =
+            [
+                'images' => [
+                    0 => [
+                        'value_id' => 'string',
+                        'file' => 'string',
+                        'media_type' => 'string',
+                        'entity_id' => 'string',
+                        'label' => 'string',
+                        'position' => 'string',
+                        'disabled' => 'string',
+                        'label_default' => 'string',
+                        'position_default' => 'string',
+                        'disabled_default' => 'string',
+                        'video_provider' => 'string',
+                        'video_url' => 'string',
+                        'video_description' => 'string',
+                        'video_metadata' => 'string',
+                        'video_provider_default' => 'string',
+                        'video_url_default' => 'string',
+                        'video_title_default' => 'string',
+                        'video_description_default' => 'string',
+                        'video_metadata_default' => 'string'
+                    ]
+                ]
+            ];
 
         $resolvedTypes = $this->typeGenerator->generate($typeName, $result);
         $fields = $resolvedTypes->config['fields'];

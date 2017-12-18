@@ -173,8 +173,7 @@ QUERY;
             $categoryIdsAttribute = $childProduct->getCustomAttribute('category_ids');
             $this->assertNotEmpty($categoryIdsAttribute, "Precondition failed: 'category_ids' must not be empty");
             $categoryIdsAttributeValue = $categoryIdsAttribute ? $categoryIdsAttribute->getValue() : [];
-            $expectedValue = implode(',', $categoryIdsAttributeValue);
-            $this->assertEquals($expectedValue, $actualResponse['category_ids']);
+            $this->assertEquals($categoryIdsAttributeValue, $actualResponse['category_ids']);
             unset($configurableProductLinkArray['category_ids']);
 
             $mediaGalleryEntries = $childProduct->getMediaGalleryEntries();

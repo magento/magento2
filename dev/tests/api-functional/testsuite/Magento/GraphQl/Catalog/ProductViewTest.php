@@ -62,6 +62,12 @@ class ProductViewTest extends GraphQlAbstract
             links_purchased_separately
             links_title
             media_gallery
+            {
+                images
+                {
+                    file
+                }
+            }
             meta_description
             meta_keyword
             meta_title
@@ -239,6 +245,12 @@ QUERY;
             links_purchased_separately
             links_title
             media_gallery
+            {
+                images
+                {
+                    file
+                }
+            }
             meta_description
             meta_keyword
             meta_title
@@ -412,8 +424,8 @@ QUERY;
         $categoryIdsAttribute = $product->getCustomAttribute('category_ids');
         $this->assertNotEmpty($categoryIdsAttribute, "Precondition failed: 'category_ids' must not be empty");
         $categoryIdsAttributeValue = $categoryIdsAttribute ? $categoryIdsAttribute->getValue() : [];
-        $expectedValue = implode(',', $categoryIdsAttributeValue);
-        $this->assertEquals($expectedValue, $actualResponse['category_ids']);
+//        $expectedValue = implode(',', $categoryIdsAttributeValue);
+        $this->assertEquals($categoryIdsAttributeValue, $actualResponse['category_ids']);
     }
 
     /**

@@ -7,6 +7,8 @@
 namespace Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Model\Product\TierPrice;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\SearchResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -23,11 +25,6 @@ use Magento\GraphQl\Model\EntityAttributeList;
  */
 class Product
 {
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
     /**
      * @var ServiceOutputProcessor
      */
@@ -64,17 +61,6 @@ class Product
     private $searchResultsFactory;
 
     /**
-     * @var EntityAttributeList
-     */
-    private $entityAttributeList;
-
-    /**
-     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection
-     */
-    private $configurable;
-
-    /**
-     * @param ProductRepositoryInterface $productRepository
      * @param ServiceOutputProcessor $serviceOutputProcessor
      * @param MediaGalleryEntries $mediaGalleryResolver
      * @param SerializerInterface $jsonSerializer
@@ -82,22 +68,16 @@ class Product
      * @param JoinProcessorInterface $joinProcessor
      * @param CollectionProcessorInterface $collectionProcessor
      * @param ProductSearchResultsInterfaceFactory $searchResultsFactory
-     * @param EntityAttributeList $entityAttributeList
-     * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection $collection
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
         ServiceOutputProcessor $serviceOutputProcessor,
         MediaGalleryEntries $mediaGalleryResolver,
         SerializerInterface $jsonSerializer,
         CollectionFactory $collectionFactory,
         JoinProcessorInterface $joinProcessor,
         CollectionProcessorInterface $collectionProcessor,
-        ProductSearchResultsInterfaceFactory $searchResultsFactory,
-        EntityAttributeList $entityAttributeList,
-        \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection $collection
+        ProductSearchResultsInterfaceFactory $searchResultsFactory
     ) {
-        $this->productRepository = $productRepository;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->mediaGalleryResolver = $mediaGalleryResolver;
         $this->jsonSerializer = $jsonSerializer;
@@ -105,42 +85,6 @@ class Product
         $this->joinProcessor = $joinProcessor;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchResultsFactory = $searchResultsFactory;
-        $this->entityAttributeList = $entityAttributeList;
-        $this->configurable = $collection;
-    }
-
-    /**
-     * Get product data by Sku
-     *
-     * @param string $sku
-     * @return array|null
-     */
-    public function getProduct(string $sku)
-    {
-        try {
-            $productObject = $this->productRepository->get($sku);
-        } catch (NoSuchEntityException $e) {
-            // No error should be thrown, null result should be returned
-            return null;
-        }
-        return $this->processProduct($productObject);
-    }
-
-    /**
-     * Get product data by Id
-     *
-     * @param int $productId
-     * @return array|null
-     */
-    public function getProductById(int $productId)
-    {
-        try {
-            $productObject = $this->productRepository->getById($productId);
-        } catch (NoSuchEntityException $e) {
-            // No error should be thrown, null result should be returned
-            return null;
-        }
-        return $this->processProduct($productObject);
     }
 
     /**
@@ -151,44 +95,42 @@ class Product
      */
     public function processProduct(\Magento\Catalog\Api\Data\ProductInterface $productObject)
     {
-//        $productObject = $this->productRepository->get($productObject->getSku());
-        $product = $this->serviceOutputProcessor->process(
-            $productObject,
-            ProductRepositoryInterface::class,
-            'get'
-        );
-        if (isset($product['extension_attributes'])) {
-            $product = array_merge($product, $product['extension_attributes']);
-        }
-        $customAttributes = [];
-        if (isset($product['custom_attributes'])) {
-            foreach ($product['custom_attributes'] as $attribute) {
-                $isArray = false;
-                if (is_array($attribute['value'])) {
-                    $isArray = true;
-                    foreach ($attribute['value'] as $attributeValue) {
-                        if (is_array($attributeValue)) {
-                            $customAttributes[$attribute['attribute_code']] = $this->jsonSerializer->serialize(
-                                $attribute['value']
-                            );
-                            continue;
-                        }
-                        $customAttributes[$attribute['attribute_code']] = implode(',', $attribute['value']);
-                        continue;
-                    }
+        /** @var \Magento\Catalog\Model\Product  $productObject */
+        $productArray = $productObject->getData();
+        $productArray['id'] = $productArray['entity_id'];
+        unset($productArray['entity_id']);
+        $productArray['media_gallery_entries'] = $productObject->getMediaGalleryEntries();
+        if (isset($productArray['media_gallery_entries'])) {
+            foreach ($productArray['media_gallery_entries'] as $key => $entry) {
+                if ($entry->getExtensionAttributes() && $entry->getExtensionAttributes()->getVideoContent()) {
+                    $productArray['media_gallery_entries'][$key]['video_content']
+                        = $entry->getExtensionAttributes()->getVideoContent()->getData();
                 }
-                if ($isArray) {
-                    continue;
-                }
-                $customAttributes[$attribute['attribute_code']] = $attribute['value'];
             }
         }
-        $product = array_merge($product, $customAttributes);
-        $product = array_merge($product, $product['product_links']);
-        $product['media_gallery_entries']
-            = $this->mediaGalleryResolver->getMediaGalleryEntries($productObject->getSku());
+        if (isset($productArray['options'])) {
+            /** @var Option $option */
+            foreach ($productArray['options'] as $key => $option) {
+                $productArray['options'][$key] = $option->getData();
+                $productArray['options'][$key]['product_sku'] = $option->getProductSku();
+                $values = $option->getValues() ?: [];
+                /** @var Option\Value $value */
+                foreach ($values as $value) {
+                    $productArray['options'][$key]['values'][] = $value->getData();
+                }
+            }
+        }
+        $tierPrices = $productObject->getTierPrices();
+        if ($tierPrices) {
+            /** @var TierPrice $tierPrice */
+            foreach ($tierPrices as $tierPrice) {
+                $productArray['tier_prices'][] = $tierPrice->getData();
+            }
+        } else {
+            $productArray['tier_prices'] = null;
+        }
 
-        return $product;
+        return $productArray;
     }
 
     /**
