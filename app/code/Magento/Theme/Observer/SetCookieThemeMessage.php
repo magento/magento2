@@ -3,16 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Theme\Controller\Result;
 
+namespace Magento\Theme\Observer;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Controller\Result\Json;
-use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Serialize\Serializer\Json as SerializerJson;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
- * Plugin for putting messages to cookies
+ * Set CookieTheme Message Observer model
  */
-class MessagePlugin
+class SetCookieThemeMessage implements ObserverInterface
 {
     /**
      * Cookies name for messages
@@ -20,49 +28,49 @@ class MessagePlugin
     const MESSAGES_COOKIES_NAME = 'mage-messages';
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface
+     * @var CookieManagerInterface
      */
     private $cookieManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @var CookieMetadataFactory
      */
     private $cookieMetadataFactory;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
     private $messageManager;
 
     /**
-     * @var \Magento\Framework\View\Element\Message\InterpretationStrategyInterface
+     * @var InterpretationStrategyInterface
      */
     private $interpretationStrategy;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var SerializerJson
      */
     private $serializer;
 
     /**
-     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
-     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param CookieManagerInterface          $cookieManager
+     * @param CookieMetadataFactory           $cookieMetadataFactory
+     * @param ManagerInterface                $messageManager
+     * @param InterpretationStrategyInterface $interpretationStrategy
+     * @param SerializerJson|null             $serializer
      */
     public function __construct(
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
-        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        CookieManagerInterface $cookieManager,
+        CookieMetadataFactory $cookieMetadataFactory,
+        ManagerInterface $messageManager,
+        InterpretationStrategyInterface $interpretationStrategy,
+        SerializerJson $serializer = null
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->messageManager = $messageManager;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
+            ->get(SerializerJson::class);
         $this->interpretationStrategy = $interpretationStrategy;
     }
 
@@ -72,18 +80,31 @@ class MessagePlugin
      * Checks the result that controller actions must return. If result is not JSON type, then
      * sets 'mage-messages' cookie.
      *
-     * @param ResultInterface $subject
-     * @param ResultInterface $result
-     * @return ResultInterface
+     * @param Observer $observer
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
-    public function afterRenderResult(
-        ResultInterface $subject,
-        ResultInterface $result
-    ) {
-        if (!($subject instanceof Json)) {
+    public function execute(Observer $observer)
+    {
+        if ($this->isJsonResponse($observer) !== false) {
             $this->setCookie($this->getMessages());
+        };
+    }
+
+    /**
+     * Check If Response is Json
+     * @param Observer $observer
+     * @return bool
+     */
+    protected function isJsonResponse(Observer $observer)
+    {
+        try {
+            $this->serializer->unserialize($observer->getResponse()->getBody());
+        } catch (\Exception $e) {
+            return false;
         }
-        return $result;
+        return true;
     }
 
     /**
@@ -105,9 +126,10 @@ class MessagePlugin
      *   ],
      * ]
      *
-     *
-     * @param array $messages List of Magento messages that must be set as 'mage-messages' cookie.
-     * @return void
+     * @param array $messages
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
     private function setCookie(array $messages)
     {
