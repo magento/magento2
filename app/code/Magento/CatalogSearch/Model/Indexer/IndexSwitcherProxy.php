@@ -6,9 +6,8 @@
 
 namespace Magento\CatalogSearch\Model\Indexer;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Search\EngineResolverInterface;
 
 /**
  * Proxy for adapter-specific index switcher
@@ -30,35 +29,25 @@ class IndexSwitcherProxy implements IndexSwitcherInterface
     private $handlers;
 
     /**
-     * @var ScopeConfigInterface
+     * @var EngineResolverInterface
      */
-    private $scopeConfig;
-
-    /**
-     * Configuration path by which current indexer handler stored
-     *
-     * @var string
-     */
-    private $configPath;
+    private $engineResolver;
 
     /**
      * Factory constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @param ScopeConfigInterface $scopeConfig
-     * @param string $configPath
+     * @param EngineResolverInterface $engineResolver
      * @param string[] $handlers
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        ScopeConfigInterface $scopeConfig,
-        $configPath,
+        EngineResolverInterface $engineResolver,
         array $handlers = []
     ) {
         $this->objectManager = $objectManager;
-        $this->scopeConfig = $scopeConfig;
-        $this->configPath = $configPath;
         $this->handlers = $handlers;
+        $this->engineResolver = $engineResolver;
     }
 
     /**
@@ -72,7 +61,7 @@ class IndexSwitcherProxy implements IndexSwitcherInterface
      */
     public function switchIndex(array $dimensions)
     {
-        $currentHandler = $this->scopeConfig->getValue($this->configPath, ScopeInterface::SCOPE_STORE);
+        $currentHandler = $this->engineResolver->getCurrentSearchEngine();
         if (!isset($this->handlers[$currentHandler])) {
             return;
         }
