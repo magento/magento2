@@ -7,31 +7,31 @@ declare(strict_types=1);
 
 namespace Magento\InventorySales\Block\Adminhtml\Order\View\Tab;
 
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Registry;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventoryApi\Api\SourceRepositoryInterface;
+
 /**
  * Tab for source items display on the order editing page
  *
  * @api
  */
-class Sources extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Sources extends Template implements TabInterface
 {
     /**
-     * Template
-     *
-     * @var string
+     * @var Registry
      */
-    protected $_template = 'order/view/tab/sources.phtml';
+    private $registry;
 
     /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
+     * @var SearchCriteriaBuilder
      */
-    protected $_coreRegistry = null;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * @var SourceItemRepositoryInterface
@@ -44,35 +44,26 @@ class Sources extends \Magento\Backend\Block\Template implements \Magento\Backen
     private $sourceRepository;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\InventoryApi\Api\SourceItemRepositoryInterface $sourceItemRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param Context $context
+     * @param Registry $registry
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SourceItemRepositoryInterface $sourceItemRepository
+     * @param SourceRepositoryInterface $sourceRepository
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\InventoryApi\Api\SourceItemRepositoryInterface $sourceItemRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\InventoryApi\Api\SourceRepositoryInterface $sourceRepository,
+        Context $context,
+        Registry $registry,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SourceItemRepositoryInterface $sourceItemRepository,
+        SourceRepositoryInterface $sourceRepository,
         array $data = []
     ) {
-        $this->_coreRegistry = $registry;
+        parent::__construct($context, $data);
+        $this->registry = $registry;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->sourceItemRepository = $sourceItemRepository;
         $this->sourceRepository = $sourceRepository;
-        parent::__construct($context, $data);
-    }
-
-    /**
-     * Retrieve order model instance
-     *
-     * @return \Magento\Sales\Model\Order
-     */
-    public function getOrder()
-    {
-        return $this->_coreRegistry->registry('current_order');
     }
 
     /**
@@ -80,41 +71,36 @@ class Sources extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @return array
      */
-    public function getSourceItems()
+    public function getSourceItemsData()
     {
-        $order = $this->getOrder();
+        $order = $this->registry->registry('current_order');
 
-        $items = [];
+        $sourceItemsData = [];
         foreach ($order->getAllVisibleItems() as $orderItem) {
-            $itemSku = $orderItem->getSku();
-            $orderItemId = $orderItem->getItemId();
-            $sources = $this->getSourcesBySku($itemSku);
-            foreach ($sources as $source) {
-                $sourceName = $this->sourceRepository->get((int)$source->getSourceId())->getName();
-                $items[$sourceName][$orderItemId] = [
-                    'sku' => $itemSku,
-                    'qty' => $source->getQuantity()
+            $sourceItems = $this->getSourceItemsBySku($orderItem->getSku());
+
+            foreach ($sourceItems as $sourceItem) {
+                $sourceName = $this->sourceRepository->get((int)$sourceItem->getSourceId())->getName();
+                $sourceItemsData[$sourceName][] = [
+                    'sku' => $sourceItem->getSku(),
+                    'qty' => $sourceItem->getQuantity(),
                 ];
             }
         }
-
-        return $items;
+        return $sourceItemsData;
     }
 
     /**
-     * Getting sources by sku
-     *
      * @param string $sku
-     * @return array
+     * @return SourceItemInterface[]
      */
-    private function getSourcesBySku(string $sku): array
+    private function getSourceItemsBySku(string $sku): array
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('sku', $sku)
+            ->addFilter(SourceItemInterface::SKU, $sku)
             ->create();
 
         $sourceItemSearchResult = $this->sourceItemRepository->getList($searchCriteria);
-
         return $sourceItemSearchResult->getItems();
     }
 

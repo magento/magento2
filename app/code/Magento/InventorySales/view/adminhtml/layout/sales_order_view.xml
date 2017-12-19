@@ -8,10 +8,10 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="sales_order_tabs">
-            <block class="Magento\InventorySales\Block\Adminhtml\Order\View\Tab\Sources" name="sales_order_sources.grid.container"/>
+            <block class="Magento\InventorySales\Block\Adminhtml\Order\View\Tab\Sources" name="order_tab_sources" template="Magento_InventorySales::order/view/tab/sources.phtml"/>
             <action method="addTab">
                 <argument name="name" xsi:type="string">order_sources</argument>
-                <argument name="block" xsi:type="string">sales_order_sources.grid.container</argument>
+                <argument name="block" xsi:type="string">order_tab_sources</argument>
             </action>
         </referenceBlock>
     </body>
