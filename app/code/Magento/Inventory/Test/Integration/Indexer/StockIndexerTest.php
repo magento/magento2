@@ -107,7 +107,7 @@ class StockIndexerTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
      */
-    public function testReindexZeroQuantityIfSourceItemIsOutOfStock()
+    public function testStockItemsHasZeroQuantityIfSourceItemsAreOutOfStock()
     {
         $this->indexer->reindexAll();
 

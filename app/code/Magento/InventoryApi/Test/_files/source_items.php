@@ -25,6 +25,8 @@ $sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::
  * SKU-1 - EU-source-4(id:40) - 10qty (disabled source)
  *
  * SKU-2 - US-source-1(id:30) - 5qty
+ *
+ * SKU-3 - EU-source-2(id:20) - 6qty (out of stock)
  */
 $sourcesItemsData = [
     [
