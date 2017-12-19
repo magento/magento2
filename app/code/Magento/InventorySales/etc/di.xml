@@ -24,4 +24,9 @@
     <type name="Magento\InventoryApi\Api\IsProductInStockInterface">
         <plugin name="backorder_inventory_stock_status" type="Magento\InventorySales\Plugin\InventoryApi\BackorderStockStatusPlugin"/>
     </type>
+    <type name="Magento\CatalogInventory\Model\StockManagement">
+        <plugin name="process_back_item_qty" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessBackItemQtyPlugin"/>
+        <plugin name="process_register_products_sale" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRegisterProductsSalePlugin"/>
+        <plugin name="process_revert_products_sale" type="Magento\InventorySales\Plugin\CatalogInventory\StockManagement\ProcessRevertProductsSalePlugin"/>
+    </type>
 </config>
