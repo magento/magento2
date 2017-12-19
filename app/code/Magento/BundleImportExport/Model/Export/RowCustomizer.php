@@ -294,7 +294,7 @@ class RowCustomizer implements RowCustomizerInterface
      * Retrieve option value of bundle product
      *
      * @param \Magento\Bundle\Model\Option $option
-     * @param array $optionTitles
+     * @param string[] $optionTitles
      * @return string
      */
     protected function getFormattedOptionValues($option, $optionTitles = [])
@@ -464,7 +464,7 @@ class RowCustomizer implements RowCustomizerInterface
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     private function getProductOptionCollections(
-        $product,
+        \Magento\Catalog\Model\Product $product,
         $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID
     ): \Magento\Bundle\Model\ResourceModel\Option\Collection {
         $productSku = $product->getSku();

@@ -726,10 +726,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Get store id by store code.
      *
-     * @param string|null $storeCode
+     * @param string $storeCode
      * @return int
      */
-    private function getStoreIdByCode($storeCode): int
+    private function getStoreIdByCode(string $storeCode): int
     {
         if (!isset($this->storeIdToCode[$storeCode])) {
             /** @var $store \Magento\Store\Model\Store */

@@ -1385,7 +1385,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 if (Store::DEFAULT_STORE_ID === $storeId) {
                     $row['required'] = $option['is_require'];
                     $row['price'] = $option['price'];
-                    $row['price_type'] = ($option['price_type'] == 'percent') ? $option['price_type'] : 'fixed';
+                    $row['price_type'] = ($option['price_type'] === 'percent') ? 'percent' : 'fixed';
                     $row['sku'] = $option['sku'];
                     if ($option['max_characters']) {
                         $row['max_characters'] = $option['max_characters'];
@@ -1406,9 +1406,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         $row['option_title'] = $value['title'];
                         if (Store::DEFAULT_STORE_ID === $storeId) {
                             $row['option_title'] = $value['title'];
-                            $valuePriceType = ($value['price_type'] == 'percent') ? $value['price_type'] : 'fixed';
                             $row['price'] = $value['price'];
-                            $row['price_type'] = $valuePriceType;
+                            $row['price_type'] = ($value['price_type'] === 'percent') ? 'percent' : 'fixed';
                             $row['sku'] = $value['sku'];
                         }
                         $customOptionsData[$productId][$storeId][] = $this->optionRowToCellString($row);
