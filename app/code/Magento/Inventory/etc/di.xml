@@ -15,6 +15,8 @@
     <preference for="Magento\Inventory\Model\Source\Command\GetInterface" type="Magento\Inventory\Model\Source\Command\Get"/>
     <preference for="Magento\Inventory\Model\Source\Command\GetListInterface" type="Magento\Inventory\Model\Source\Command\GetList"/>
     <preference for="Magento\Inventory\Model\Source\Command\SaveInterface" type="Magento\Inventory\Model\Source\Command\Save"/>
+    <preference for="Magento\InventoryApi\Api\GetPrioritisedSourcesProductsQuantityInterface"
+                type="Magento\Inventory\Model\Source\Command\GetPrioritisedSourcesProductsQuantity"/>
     <type name="Magento\Inventory\Model\Source\Validator\ValidatorChain">
         <arguments>
             <argument name="validators" xsi:type="array">
