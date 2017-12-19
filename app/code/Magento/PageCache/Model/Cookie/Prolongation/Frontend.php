@@ -5,6 +5,8 @@
  */
 namespace Magento\PageCache\Model\Cookie\Prolongation;
 
+use \Magento\Framework\Stdlib\Cookie\CookieMetadata;
+
 /**
  * Frontend cookie prolongation model.
  */
@@ -34,8 +36,7 @@ class Frontend implements ProlongationInterface
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
-    )
-    {
+    ) {
         $this->_cookieManager = $cookieManager;
         $this->_cookieMetadataFactory = $cookieMetadataFactory;
         $this->_sessionConfig = $sessionConfig;
@@ -66,7 +67,7 @@ class Frontend implements ProlongationInterface
      */
     protected function _isCookieSet()
     {
-        return !is_null($this->_getCookieValue());
+        return $this->_getCookieValue() === null;
     }
 
     /**
@@ -100,9 +101,9 @@ class Frontend implements ProlongationInterface
     {
         return $this->_cookieMetadataFactory->createSensitiveCookieMetadata(
             [
-                \Magento\Framework\Stdlib\Cookie\CookieMetadata::KEY_DOMAIN => $this->_sessionConfig->getCookieDomain(),
-                \Magento\Framework\Stdlib\Cookie\CookieMetadata::KEY_PATH => $this->_sessionConfig->getCookiePath(),
-                \Magento\Framework\Stdlib\Cookie\CookieMetadata::KEY_DURATION => $this->_sessionConfig->getCookieLifetime(),
+                CookieMetadata::KEY_DOMAIN => $this->_sessionConfig->getCookieDomain(),
+                CookieMetadata::KEY_PATH => $this->_sessionConfig->getCookiePath(),
+                CookieMetadata::KEY_DURATION => $this->_sessionConfig->getCookieLifetime(),
             ]
         );
     }

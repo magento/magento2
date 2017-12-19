@@ -9,6 +9,8 @@ use \Magento\PageCache\Model\Config as PageCacheConfig;
 
 /**
  * Cookie prolongation block.
+ *
+ * @api
  */
 class Prolongation extends \Magento\Framework\View\Element\Template
 {

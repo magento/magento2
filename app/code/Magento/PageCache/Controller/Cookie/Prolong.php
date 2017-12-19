@@ -24,8 +24,7 @@ class Prolong extends \Magento\Framework\App\Action\Action
     public function __construct(
         \Magento\PageCache\Model\Cookie\Prolongation\Frontend $frontendCookieProlongation,
         \Magento\Framework\App\Action\Context $context
-    )
-    {
+    ) {
         $this->_frontendCookieProlongation = $frontendCookieProlongation;
         parent::__construct($context);
     }

@@ -1,9 +1,7 @@
-<!--
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
 define([
     'jquery',
     'jquery/ui'
@@ -28,7 +26,7 @@ define([
          * @private
          */
         _prolongCookie: function () {
-            if (this.options.prolongActionUrl.length == 0) {
+            if (this.options.prolongActionUrl.length === 0) {
                 return;
             }
 

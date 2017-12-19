@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\PageCache\Test\Unit\Block\Cookie;
+namespace Magento\PageCache\Test\Unit\Block\Cookie\Prolongation;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
