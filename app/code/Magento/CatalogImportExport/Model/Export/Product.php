@@ -1347,6 +1347,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
     /**
      * Collect custom options data for products that will be exported.
+     *
      * Option name and type will be collected for all store views, all other data (which can't be changed on store view
      * level will be collected for DEFAULT_STORE_ID only.
      * Store view specified data will be saved to the additional store view row.
@@ -1381,7 +1382,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $productId = $option['product_id'];
                 $row['name'] = $option['title'];
                 $row['type'] = $option['type'];
-                if (Store::DEFAULT_STORE_ID == $storeId) {
+                if (Store::DEFAULT_STORE_ID === $storeId) {
                     $row['required'] = $option['is_require'];
                     $row['price'] = $option['price'];
                     $row['price_type'] = ($option['price_type'] == 'percent') ? $option['price_type'] : 'fixed';
@@ -1403,7 +1404,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 if ($values) {
                     foreach ($values as $value) {
                         $row['option_title'] = $value['title'];
-                        if (Store::DEFAULT_STORE_ID == $storeId) {
+                        if (Store::DEFAULT_STORE_ID === $storeId) {
                             $row['option_title'] = $value['title'];
                             $valuePriceType = ($value['price_type'] == 'percent') ? $value['price_type'] : 'fixed';
                             $row['price'] = $value['price'];

@@ -1197,6 +1197,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_tables['catalog_product_option_type_value']
         );
         $prevOptionId = 0;
+        $optionId = null;
+        $valueId = null;
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $products = [];
             $options = [];
@@ -1209,7 +1211,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $childCount = [];
 
             foreach ($bunch as $rowNumber => $rowData) {
-                if (empty($rowData[PRODUCT::COL_STORE_VIEW_CODE]) && isset($optionId) && isset($valueId)) {
+                if (isset($optionId, $valueId) && empty($rowData[PRODUCT::COL_STORE_VIEW_CODE])) {
                     $nextOptionId = $optionId;
                     $nextValueId = $valueId;
                 }

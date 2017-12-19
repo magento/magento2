@@ -109,7 +109,7 @@ class RowCustomizer implements RowCustomizerInterface
     /**
      * @var \Magento\Bundle\Model\ResourceModel\Option\Collection[]
      */
-    private $optionsCollection = [];
+    private $optionCollections = [];
 
     /**
      * @var array
@@ -130,9 +130,9 @@ class RowCustomizer implements RowCustomizerInterface
      * @param StoreManagerInterface $storeManager
      * @throws \RuntimeException
      */
-    public function __construct(StoreManagerInterface $storeManager = null)
+    public function __construct(StoreManagerInterface $storeManager)
     {
-        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -237,10 +237,10 @@ class RowCustomizer implements RowCustomizerInterface
      */
     protected function getFormattedBundleOptionValues($product)
     {
-        $optionsCollection = $this->getProductOptionsCollection($product);
+        $optionCollections = $this->getProductOptionCollections($product);
         $bundleData = '';
         $optionTitles = $this->getBundleOptionTitles($product);
-        foreach ($optionsCollection->getItems() as $option) {
+        foreach ($optionCollections->getItems() as $option) {
             $optionValues = $this->getFormattedOptionValues($option, $optionTitles);
             $bundleData .= $this->getFormattedBundleSelections(
                 $optionValues,
@@ -418,6 +418,7 @@ class RowCustomizer implements RowCustomizerInterface
 
     /**
      * Get product options titles.
+     *
      * Values for all store views (default) should be specified with 'name' key.
      * If user want to specify value or change existing for non default store views it should be specified with
      * 'name_' prefix and needed store view suffix.
@@ -429,20 +430,20 @@ class RowCustomizer implements RowCustomizerInterface
      * @param \Magento\Catalog\Model\Product $product $product
      * @return array
      */
-    private function getBundleOptionTitles($product)
+    private function getBundleOptionTitles($product): array
     {
-        $optionsCollection = $this->getProductOptionsCollection($product);
+        $optionCollections = $this->getProductOptionCollections($product);
         $optionsTitles = [];
         /** @var \Magento\Bundle\Model\Option $option */
-        foreach ($optionsCollection->getItems() as $option) {
+        foreach ($optionCollections->getItems() as $option) {
             $optionsTitles[$option->getId()]['name'] = $option->getTitle();
         }
         $storeIds = $product->getStoreIds();
         if (array_count_values($storeIds) > 1) {
             foreach ($storeIds as $storeId) {
-                $optionsCollection = $this->getProductOptionsCollection($product, $storeId);
+                $optionCollections = $this->getProductOptionCollections($product, $storeId);
                 /** @var \Magento\Bundle\Model\Option $option */
-                foreach ($optionsCollection->getItems() as $option) {
+                foreach ($optionCollections->getItems() as $option) {
                     $optionTitle = $option->getTitle();
                     if ($optionsTitles[$option->getId()]['name'] != $optionTitle) {
                         $optionsTitles[$option->getId()]['name_' . $this->getStoreCodeById($storeId)] = $optionTitle;
@@ -455,33 +456,37 @@ class RowCustomizer implements RowCustomizerInterface
 
     /**
      * Get product options collection by provided product model.
+     *
      * Set given store id to the product if it was defined (default store id will be set if was not).
      *
      * @param \Magento\Catalog\Model\Product $product $product
      * @param integer $storeId
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
-    private function getProductOptionsCollection($product, $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID)
-    {
+    private function getProductOptionCollections(
+        $product,
+        $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID
+    ): \Magento\Bundle\Model\ResourceModel\Option\Collection {
         $productSku = $product->getSku();
-        if (!isset($this->optionsCollection[$productSku][$storeId])) {
+        if (!isset($this->optionCollections[$productSku][$storeId])) {
             $product->unsetData($this->optionCollectionCacheKey);
             $product->setStoreId($storeId);
-            $this->optionsCollection[$productSku][$storeId] = $product->getTypeInstance()
-                ->getOptionsCollection($product)
+            $this->optionCollections[$productSku][$storeId] = $product->getTypeInstance()
+                ->getOptionCollections($product)
                 ->setOrder('position', Collection::SORT_ORDER_ASC);
         }
-        return $this->optionsCollection[$productSku][$storeId];
+        return $this->optionCollections[$productSku][$storeId];
     }
 
     /**
      * Retrieve store code by it's ID.
+     *
      * Collect store id in $storeIdToCode[] private variable if it was not initialized earlier.
      *
      * @param $storeId
-     * @return mixed
+     * @return string
      */
-    private function getStoreCodeById($storeId)
+    private function getStoreCodeById($storeId): string
     {
         if (!isset($this->storeIdToCode[$storeId])) {
             $this->storeIdToCode[$storeId] = $this->storeManager->getStore($storeId)->getCode();

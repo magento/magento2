@@ -155,6 +155,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param Bundle\RelationsDataSaver|null $relationsDataSaver
      * @param StoreManagerInterface $storeManager
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \RuntimeException
      */
     public function __construct(
@@ -288,7 +289,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             foreach ($optionNames as $optionName) {
                 preg_match($pattern, $optionName, $storeCodes);
                 $storeCode = array_pop($storeCodes);
-                $storeId = !$storeCode ? $storeId : $this->getStoreIdByCode($storeCode);
+                $storeId = $storeCode ? $this->getStoreIdByCode($storeCode) : $storeId;
                 $optionValues[] = [
                     'option_id' => $optionId,
                     'parent_product_id' => $option['parent_id'],
@@ -728,7 +729,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      * @param string|null $storeCode
      * @return int
      */
-    private function getStoreIdByCode($storeCode)
+    private function getStoreIdByCode($storeCode): int
     {
         if (!isset($this->storeIdToCode[$storeCode])) {
             /** @var $store \Magento\Store\Model\Store */
