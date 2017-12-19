@@ -24,6 +24,21 @@
     </p>
     <?php endif; ?>
     <?= $block->getChildHtml() ?>
+
+    <?php $failedAddresses = $block->getCheckoutData()->getShippingAddresses() ?>
+    <?php if (count($failedAddresses) > 0): ?>
+        <div class="actions">
+            <a class="action continue" title="<?= $block->escapeHtml(__('Back to Order Review')) ?>" href="<?= /* @escapeNotVerified */ $block->getUrl('*/*/overview') ?>"><span><?= $block->escapeHtml(__('Back to Order Review')) ?></span></a>
+        </div>
+        <h3>Failed addresses:</h3>
+        <?php foreach ($failedAddresses as $address): ?>
+            <b style="color:red"><?= /* @noEscape */ $block->getCheckoutData()->getAddressError($address); ?></b><br/>
+            <?= /* @noEscape */ $block->getCheckoutData()->getAddressHtml($address); ?>
+            <br/><br/>
+        <?php endforeach; ?>
+        <br/><br/>
+    <?php endif; ?>
+
     <div class="actions">
         <a class="action continue" title="<?= $block->escapeHtml(__('Continue Shopping')) ?>" href="<?= /* @escapeNotVerified */ $block->getContinueUrl() ?>"><span><?= $block->escapeHtml(__('Continue Shopping')) ?></span></a>
     </div>

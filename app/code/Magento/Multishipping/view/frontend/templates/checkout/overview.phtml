@@ -47,6 +47,9 @@
                     <strong><?= /* @escapeNotVerified */ __('Address %1 <span>of %2</span>', ($_index+1), $block->getShippingAddressCount()) ?></strong>
                 </div>
                 <div class="box box-shipping-address">
+                    <?php if ($error = $block->getCheckoutData()->getAddressError($_address)):?>
+                        <b style="color:red"><?= /* @noEscape */ $error; ?></b><br/>
+                    <?php endif;?>
                     <strong class="box-title">
                         <span><?= /* @escapeNotVerified */ __('Shipping To') ?></span>
                         <a href="<?= /* @escapeNotVerified */ $block->getEditShippingAddressUrl($_address) ?>" class="action edit"><span><?= /* @escapeNotVerified */ __('Change') ?></span></a>
@@ -115,6 +118,9 @@
     <?php if ($block->getQuote()->hasVirtualItems()): ?>
     <div class="block block-other">
         <div class="block-title"><strong><?= /* @escapeNotVerified */ __('Other items in your order') ?></strong></div>
+        <?php if ($error = $block->getCheckoutData()->getAddressError($block->getQuote()->getBillingAddress())):?>
+            <b style="color:red"><?= /* @noEscape */ $error; ?></b><br/>
+        <?php endif;?>
         <div class="block-content">
             <strong class="subtitle">
                 <span><?= /* @escapeNotVerified */ __('Items') ?></span>
