@@ -463,20 +463,14 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Adding attribute to entity
      *
      * @param AbstractAttribute $attribute
-     * @param DataObject|null $object
      * @return $this
      */
-    public function addAttribute(AbstractAttribute $attribute, $object = null)
+    public function addAttribute(AbstractAttribute $attribute)
     {
         $attribute->setEntity($this);
         $attributeCode = $attribute->getAttributeCode();
 
         $this->_attributesByCode[$attributeCode] = $attribute;
-
-        if ($object !== null) {
-            $suffix = $this->getAttributesCacheSuffix($object);
-            $this->attributesByScope[$suffix][$attributeCode] = $attribute;
-        }
 
         if ($attribute->isStatic()) {
             $this->_staticAttributes[$attributeCode] = $attribute;
@@ -488,13 +482,28 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     }
 
     /**
+     * Adding attribute to entity by scope.
+     *
+     * @param AbstractAttribute $attribute
+     * @param DataObject|null $entity
+     * @return $this
+     */
+    public function addAttributeByScope(AbstractAttribute $attribute, $entity = null)
+    {
+        $suffix = $entity !== null ? $this->getAttributesCacheSuffix($entity) : '0-0';
+        $attributeCode = $attribute->getAttributeCode();
+        $this->attributesByScope[$suffix][$attributeCode] = $attribute;
+        return $this->addAttribute($attribute);
+    }
+
+    /**
      * Get attributes by scope
      *
      * @return array
      */
     private function getAttributesByScope($suffix)
     {
-        return (isset($this->attributesByScope[$suffix]) && !empty($this->attributesByScope[$suffix]))
+        return !empty($this->attributesByScope[$suffix])
             ? $this->attributesByScope[$suffix]
             : $this->getAttributesByCode();
     }
