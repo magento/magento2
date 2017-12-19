@@ -12,13 +12,13 @@
         $_methods = $block->getMethods();
         $_methodsCount = count($_methods);
         $_counter = 0;
+        $currentSelectedMethod = $block->getSelectedMethodCode();
     ?>
     <?php foreach ($_methods as $_method) :
         $_code = $_method->getCode();
         $_counter++;
     ?>
         <dt class="admin__field-option">
-        <?php if ($_methodsCount > 1) : ?>
             <input id="p_method_<?= $block->escapeHtml($_code); ?>"
                    value="<?= $block->escapeHtml($_code); ?>"
                    type="radio" name="payment[method]"
@@ -29,15 +29,6 @@
                     <?php endif; ?>
                     <?php $className = ($_counter == $_methodsCount) ? ' validate-one-required-by-name' : ''; ?>
                    class="admin__control-radio<?= $block->escapeHtml($className); ?>"/>
-        <?php else :?>
-            <span class="no-display">
-                <input id="p_method_<?= $block->escapeHtml($_code); ?>"
-                       value="<?= $block->escapeHtml($_code); ?>"
-                       type="radio"
-                       name="payment[method]" class="admin__control-radio"
-                       checked="checked"/>
-            </span>
-        <?php endif;?>
 
             <label class="admin__field-label"
                    for="p_method_<?= $block->escapeHtml($_code); ?>"><?= $block->escapeHtml($_method->getTitle()) ?>
@@ -56,7 +47,9 @@
         ], function(mage) {
             mage.apply();
         <?php if ($_methodsCount != 1) : ?>
-            order.setPaymentMethod('<?= $block->escapeHtml($block->getSelectedMethodCode()); ?>');
+            order.setPaymentMethod('<?= $currentSelectedMethod?>');
+        <?php else: ?>
+            payment.switchMethod('<?= $currentSelectedMethod?>');
         <?php endif; ?>
         });
     </script>
