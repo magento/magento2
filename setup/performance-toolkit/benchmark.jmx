@@ -36377,7 +36377,7 @@ if (totalCount == null) {
                     <collectionProp name="Arguments.arguments">
                         <elementProp name="" elementType="HTTPArgument">
                             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                            <stringProp name="Argument.value">{"query":"{\n  customer {\n    created_at\n    group_id\n\n    prefix\n    firstname\n    middlename\n    lastname\n    suffix\n    email\n    default_billing\n    default_shipping\n\n    dob\n    taxvat\n\n    reward_update_notification\n    reward_warning_notification\n    id\n    addresses {\n        id\n        customer_id\n        region {\n            region_code\n          region\n          region_id\n        }\n        region_id\n        country_id\n        street \n        company\n        telephone\n        fax\n        postcode\n        city\n        firstname\n        lastname\n        middlename\n        prefix\n        suffix\n        vat_id\n        default_shipping\n        default_billing\n    }\n    is_subscribed\n  }\n}","variables":null,"operationName":null}</stringProp>
+                            <stringProp name="Argument.value">{"query":"{\n  customer {\n    created_at\n    group_id\n\n    prefix\n    firstname\n    middlename\n    lastname\n    suffix\n    email\n    default_billing\n    default_shipping\n\n    dob\n    taxvat\n\n    id\n    addresses {\n        id\n        customer_id\n        region {\n            region_code\n          region\n          region_id\n        }\n        region_id\n        country_id\n        street \n        company\n        telephone\n        fax\n        postcode\n        city\n        firstname\n        lastname\n        middlename\n        prefix\n        suffix\n        vat_id\n        default_shipping\n        default_billing\n    }\n    is_subscribed\n  }\n}","variables":null,"operationName":null}</stringProp>
                             <stringProp name="Argument.metadata">=</stringProp>
                         </elementProp>
                     </collectionProp>
@@ -36418,14 +36418,6 @@ if (totalCount == null) {
                     <boolProp name="INVERT">false</boolProp>
                     <boolProp name="ISREGEX">true</boolProp>
                 </com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>
-                <hashTree/>
-                <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract customer token" enabled="true">
-                    <stringProp name="VAR">blahvar</stringProp>
-                    <stringProp name="JSONPATH">$</stringProp>
-                    <stringProp name="DEFAULT"/>
-                    <stringProp name="VARIABLE"/>
-                    <stringProp name="SUBJECT">BODY</stringProp>
-                </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
                 <hashTree/>
             </hashTree>
         </hashTree>
