@@ -68,7 +68,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @var array
      */
-    protected $attributesByScope = [];
+    private $attributesByScope = [];
 
     /**
      * Two-dimensional array by table name and attribute name
