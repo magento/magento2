@@ -166,7 +166,7 @@ class Notifications implements ModifierInterface
     /**
      * Returns the notification modal content data
      *
-     * @returns array
+     * @returns array|false
      */
     private function getNotificationContent()
     {
@@ -178,6 +178,6 @@ class Notifications implements ModifierInterface
             $this->cacheStorage->save($modalContent, $cacheKey);
         }
 
-        return $this->serializer->unserialize($modalContent);
+        return !$modalContent ? $modalContent : $this->serializer->unserialize($modalContent);
     }
 }

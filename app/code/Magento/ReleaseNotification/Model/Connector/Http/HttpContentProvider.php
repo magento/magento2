@@ -28,13 +28,6 @@ class HttpContentProvider implements ContentProviderInterface
     private static $notificationUrlConfigPath = 'releaseNotification/url/content';
 
     /**
-     * Version query parameter value for default release notification content if version specific content is not found.
-     *
-     * @var string
-     */
-    private static $defaultContentVersion = 'default';
-
-    /**
      * @var ClientInterface
      */
     private $httpClient;
@@ -106,9 +99,6 @@ class HttpContentProvider implements ContentProviderInterface
 
         try {
             $response = $this->getResponse($url);
-            if ($response == "[]") {
-                $response = $this->getDefaultContent();
-            }
             $status = $this->httpClient->getStatus();
             $result = $this->responseResolver->getResult($response, $status);
         } catch (\Exception $e) {
@@ -153,24 +143,6 @@ class HttpContentProvider implements ContentProviderInterface
     public function getLocale()
     {
         return $this->session->getUser()->getInterfaceLocale();
-    }
-
-    /**
-     * Returns the default content as a fallback if there is no content retrieved from the service/
-     *
-     * @return string
-     */
-    private function getDefaultContent()
-    {
-        $url = $this->buildUrl(
-            $this->config->getValue(self::$notificationUrlConfigPath),
-            [
-                'version' => self::$defaultContentVersion,
-                'edition' => $this->getEdition(),
-                'locale' => $this->session->getUser()->getInterfaceLocale()
-            ]
-        );
-        return $this->getResponse($url);
     }
 
     /**
