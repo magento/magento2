@@ -220,12 +220,13 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      *  return converted percent to price
      *
      * @param bool $flag
+     * @param string $priceCode
      * @return float|int
      */
-    public function getPrice($flag = false)
+    public function getPrice($flag = false, $priceCode = \Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE)
     {
         if ($flag && $this->getPriceType() == self::TYPE_PERCENT) {
-            $basePrice = $this->getOption()->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
+            $basePrice = $this->getOption()->getProduct()->getPriceInfo()->getPrice($priceCode)->getValue();
             $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
             return $price;
         }

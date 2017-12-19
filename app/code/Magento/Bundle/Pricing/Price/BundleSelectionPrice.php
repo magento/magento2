@@ -128,7 +128,11 @@ class BundleSelectionPrice extends AbstractPrice
                     'catalog_product_get_final_price',
                     ['product' => $product, 'qty' => $this->bundleProduct->getQty()]
                 );
-                $value = $product->getData('final_price') * ($selectionPriceValue / 100);
+                if ($this->useRegularPrice) {
+                    $value = $product->getData('price') * ($selectionPriceValue / 100);
+                } else {
+                    $value = $product->getData('final_price') * ($selectionPriceValue / 100);
+                }
             } else {
                 // calculate price for selection type fixed
                 $value = $this->priceCurrency->convert($selectionPriceValue);

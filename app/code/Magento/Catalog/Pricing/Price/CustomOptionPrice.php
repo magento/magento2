@@ -56,11 +56,12 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
     /**
      * Get minimal and maximal option values
      *
+     * @param string $priceCode
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function getValue()
+    public function getValue($priceCode = \Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE)
     {
         $optionValues = [];
         $options = $this->product->getOptions();
@@ -85,7 +86,8 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
                 } else {
                     /** @var $optionValue \Magento\Catalog\Model\Product\Option\Value */
                     foreach ($optionItem->getValues() as $optionValue) {
-                        $price = $optionValue->getPrice($optionValue->getPriceType() == Value::TYPE_PERCENT);
+                        $price =
+                            $optionValue->getPrice($optionValue->getPriceType() == Value::TYPE_PERCENT, $priceCode);
                         if ($min === null) {
                             $min = $price;
                         } elseif ($price < $min) {
@@ -133,12 +135,13 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
      * Return the minimal or maximal price for custom options
      *
      * @param bool $getMin
+     * @param string $priceCode
      * @return float
      */
-    public function getCustomOptionRange($getMin)
+    public function getCustomOptionRange($getMin, $priceCode = \Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE)
     {
         $optionValue = 0.;
-        $options = $this->getValue();
+        $options = $this->getValue($priceCode);
         foreach ($options as $option) {
             if ($getMin) {
                 $optionValue += $option['min'];

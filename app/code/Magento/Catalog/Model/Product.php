@@ -610,6 +610,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param bool $calculate
      * @return void
+     * @deprecated
      */
     public function setPriceCalculation($calculate = true)
     {
@@ -1159,10 +1160,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getFinalPrice($qty = null)
     {
-        if ($this->_getData('final_price') === null) {
-            $this->setFinalPrice($this->getPriceModel()->getFinalPrice($qty, $this));
+        if ($this->_calculatePrice || $this->_getData('final_price') === null) {
+            return $this->getPriceModel()->getFinalPrice($qty, $this);
+        } else {
+            return $this->_getData('final_price');
         }
-        return $this->_getData('final_price');
     }
 
     /**
