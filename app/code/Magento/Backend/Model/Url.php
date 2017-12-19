@@ -202,7 +202,9 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         }
 
         $cacheSecretKey = false;
-        if (is_array($routeParams) && isset($routeParams['_cache_secret_key'])) {
+        $routeParams = is_array($routeParams) ? $routeParams : [];
+
+        if (isset($routeParams['_cache_secret_key'])) {
             unset($routeParams['_cache_secret_key']);
             $cacheSecretKey = true;
         }
@@ -220,11 +222,13 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
                     self::SECRET_KEY_PARAM_NAME => $this->getSecretKey($routeName, $controllerName, $actionName),
                 ];
             }
-            if (is_array($routeParams)) {
-                $routeParams = array_merge($routeParams, $secret);
-            } else {
-                $routeParams = $secret;
-            }
+
+            $routeParams = array_merge($routeParams, $secret);
+        }
+
+        $routePathParams = $this->_getRouteParams();
+        if (is_array($routePathParams)) {
+            $routeParams = array_merge($routePathParams, $routeParams);
         }
 
         return parent::getUrl("{$routeName}/{$controllerName}/{$actionName}", $routeParams);
