@@ -472,7 +472,7 @@ class RowCustomizer implements RowCustomizerInterface
             $product->unsetData($this->optionCollectionCacheKey);
             $product->setStoreId($storeId);
             $this->optionCollections[$productSku][$storeId] = $product->getTypeInstance()
-                ->getOptionCollections($product)
+                ->getOptionsCollection($product)
                 ->setOrder('position', Collection::SORT_ORDER_ASC);
         }
         return $this->optionCollections[$productSku][$storeId];
