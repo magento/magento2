@@ -3,16 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Test\Unit\Search\Dynamic;
+namespace Magento\Framework\Search\Test\Unit\Dynamic;
 
-use Magento\Framework\Search\Dynamic\IntervalFactory;
+use Magento\Framework\Search\Dynamic\DataProviderFactory;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Search\Dynamic\IntervalInterface;
+use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\EngineResolverInterface;
 
 class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var IntervalFactory */
+    /** @var DataProviderFactory */
     private $model;
 
     /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -31,8 +31,8 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreate()
     {
-        $dataProvider = 'current_interval';
-        $dataProviderClass = IntervalInterface::class;
+        $dataProvider = 'current_provider';
+        $dataProviderClass = DataProviderInterface::class;
         $dataProviders = [
             $dataProvider => $dataProviderClass,
         ];
@@ -50,7 +50,7 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
             ->with($dataProviderClass, $data)
             ->willReturn($dataProviderMock);
 
-        $this->model = new IntervalFactory(
+        $this->model = new DataProviderFactory(
             $this->objectManagerMock,
             $this->engineResolverMock,
             $dataProviders
@@ -61,31 +61,34 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Interval not found by config current_interval
+     * @expectedExceptionMessage DataProvider not found by config current_provider
      */
-    public function testCreateWithoutIntervals()
+    public function testCreateWithoutProviders()
     {
-        $dataProvider = 'current_interval';
+        $dataProvider = 'current_provider';
         $dataProviders = [];
+        $data = ['data'];
 
         $this->engineResolverMock->expects($this->once())
             ->method('getCurrentSearchEngine')
             ->willReturn($dataProvider);
 
-        $this->model = new IntervalFactory(
+        $this->model = new DataProviderFactory(
             $this->objectManagerMock,
             $this->engineResolverMock,
             $dataProviders
         );
+
+        $this->model->create($data);
     }
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Interval not instance of interface
+     * @expectedExceptionMessage DataProvider not instance of interface
      */
-    public function testCreateWithWrongInterval()
+    public function testCreateWithWrongProvider()
     {
-        $dataProvider = 'current_interval';
+        $dataProvider = 'current_provider';
         $dataProviderClass = \stdClass::class;
         $dataProviders = [
             $dataProvider => $dataProviderClass,
@@ -104,7 +107,7 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
             ->with($dataProviderClass, $data)
             ->willReturn($dataProviderMock);
 
-        $this->model = new IntervalFactory(
+        $this->model = new DataProviderFactory(
             $this->objectManagerMock,
             $this->engineResolverMock,
             $dataProviders
