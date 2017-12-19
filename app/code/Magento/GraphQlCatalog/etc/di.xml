@@ -11,4 +11,11 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQlEav\Model\Resolver\Query\Type">
+        <arguments>
+            <argument name="customTypes" xsi:type="array">
+                <item name="media_gallery" xsi:type="string">ProductMediaGallery</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
