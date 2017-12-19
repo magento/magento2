@@ -22,11 +22,18 @@
     <rule ref="Magento.LiteralNamespaces.LiteralNamespaces">
         <exclude-pattern>*/_files/*</exclude-pattern>
     </rule>
-    <rule ref="Magento.MagentoModule.ForbiddenFunctions">
-        <include-pattern>*/(app/code|vendor)/*</include-pattern>
+    <rule ref="Magento.Functions.OutputBuffering">
+        <include-pattern>*/(app/code|vendor|setup/src|lib/internal/Magento)/*</include-pattern>
+        <exclude-pattern>*/lib/internal/Magento/Framework/Image/Adapter/Gd2.php</exclude-pattern>
+        <exclude-pattern>*/lib/internal/Magento/Framework/View/Result/Page.php</exclude-pattern>
+        <exclude-pattern>*/lib/internal/Magento/Framework/View/TemplateEngine/Php.php</exclude-pattern>
+        <exclude-pattern>*/Test/Unit/*</exclude-pattern>
     </rule>
-    <rule ref="Magento.MagentoModule.GlobalVariables">
-        <include-pattern>*/(app/code|vendor)/*</include-pattern>
+    <rule ref="Magento.Variables.GlobalVariables">
+        <include-pattern>*/(app/code|vendor|setup/src)/*</include-pattern>
+        <exclude-pattern>*/setup/src/Magento/Setup/Controller/WebConfiguration.php</exclude-pattern>
+        <exclude-pattern>*/setup/src/Magento/Setup/Mvc/Bootstrap/InitParamListener.php</exclude-pattern>
+        <exclude-pattern>*/Test/Unit/*</exclude-pattern>
     </rule>
 
     <rule ref="Generic.PHP.CharacterBeforePHPOpeningTag"/>

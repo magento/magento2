@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sniffs\MagentoModule;
+namespace Magento\Sniffs\Functions;
 
 /**
- * Sniff prohibiting usage of certain functions in Magento modules.
+ * Sniff prohibiting usage of output buffering functions.
  */
-class ForbiddenFunctionsSniff extends \PHP_CodeSniffer\Standards\Generic\Sniffs\PHP\ForbiddenFunctionsSniff
+class OutputBufferingSniff extends \PHP_CodeSniffer\Standards\Generic\Sniffs\PHP\ForbiddenFunctionsSniff
 {
     public $forbiddenFunctions = ['ob_start' => null];
 
@@ -19,7 +19,7 @@ class ForbiddenFunctionsSniff extends \PHP_CodeSniffer\Standards\Generic\Sniffs\
     protected function addError($phpcsFile, $stackPtr, $function, $pattern = null)
     {
         $data = [$function];
-        $error = 'The usage of %s() in Magento modules is forbidden';
+        $error = 'The usage of %s() is forbidden';
         $type = 'Found';
 
         if ($this->error === true) {
