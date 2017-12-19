@@ -31,6 +31,10 @@ class BuiltinPlugin
      * @var \Magento\Framework\App\State
      */
     protected $state;
+    /**
+     * @var \Magento\PageCache\Model\Cookie\Prolongation\Frontend
+     */
+    protected $frontendCookieProlongation;
 
     /**
      * Constructor
@@ -39,17 +43,20 @@ class BuiltinPlugin
      * @param \Magento\Framework\App\PageCache\Version $version
      * @param \Magento\Framework\App\PageCache\Kernel $kernel
      * @param \Magento\Framework\App\State $state
+     * @param \Magento\PageCache\Model\Cookie\Prolongation\Frontend $frontendCookieProlongation
      */
     public function __construct(
         \Magento\PageCache\Model\Config $config,
         \Magento\Framework\App\PageCache\Version $version,
         \Magento\Framework\App\PageCache\Kernel $kernel,
-        \Magento\Framework\App\State $state
+        \Magento\Framework\App\State $state,
+        \Magento\PageCache\Model\Cookie\Prolongation\Frontend $frontendCookieProlongation
     ) {
         $this->config = $config;
         $this->version = $version;
         $this->kernel = $kernel;
         $this->state = $state;
+        $this->frontendCookieProlongation = $frontendCookieProlongation;
     }
 
     /**
@@ -77,6 +84,7 @@ class BuiltinPlugin
             }
         } else {
             $this->addDebugHeader($result, 'X-Magento-Cache-Debug', 'HIT', true);
+            $this->frontendCookieProlongation->execute();
         }
         return $result;
     }

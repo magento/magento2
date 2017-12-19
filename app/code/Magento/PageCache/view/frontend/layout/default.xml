@@ -13,5 +13,8 @@
         <referenceContainer name="content">
             <block class="Magento\PageCache\Block\Javascript" template="Magento_PageCache::javascript.phtml" name="pageCache" as="pageCache"/>
         </referenceContainer>
+        <referenceContainer name="before.body.end">
+            <block class="Magento\PageCache\Block\Cookie\Prolongation" name="cookie_prolongation" template="Magento_PageCache::cookie/prolongation.phtml"/>
+        </referenceContainer>
     </body>
 </page>

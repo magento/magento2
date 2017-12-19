@@ -56,6 +56,11 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
     protected $requestMock;
 
     /**
+     * @var \Magento\PageCache\Model\Cookie\Prolongation\Frontend|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $frontendCookieProlongationMock;
+
+    /**
      * SetUp
      */
     protected function setUp()
@@ -64,6 +69,9 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
         $this->versionMock = $this->createMock(\Magento\Framework\App\PageCache\Version::class);
         $this->kernelMock = $this->createMock(\Magento\Framework\App\PageCache\Kernel::class);
         $this->stateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->frontendCookieProlongationMock = $this->createMock(
+            \Magento\PageCache\Model\Cookie\Prolongation\Frontend::class
+        );
         $this->frontControllerMock = $this->createMock(\Magento\Framework\App\FrontControllerInterface::class);
         $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
@@ -75,7 +83,8 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
             $this->configMock,
             $this->versionMock,
             $this->kernelMock,
-            $this->stateMock
+            $this->stateMock,
+            $this->frontendCookieProlongationMock
         );
     }
 
@@ -194,6 +203,11 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
             $this->responseMock->expects($this->never())
                 ->method('setHeader');
         }
+
+        $this->frontendCookieProlongationMock
+            ->expects($this->once())
+            ->method('execute');
+
         $this->assertSame(
             $this->responseMock,
             $this->plugin->aroundDispatch($this->frontControllerMock, $this->closure, $this->requestMock)
