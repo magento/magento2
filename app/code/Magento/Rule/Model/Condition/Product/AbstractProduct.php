@@ -137,6 +137,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
              */
             $this->_defaultOperatorInputByType['category'] = ['==', '!=', '{}', '!{}', '()', '!()'];
             $this->_arrayInputTypes[] = 'category';
+            $this->_defaultOperatorInputByType['sku'] = ['==', '!=', '{}', '!{}', '()', '!()'];
         }
         return $this->_defaultOperatorInputByType;
     }
@@ -382,6 +383,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         if ($this->getAttributeObject()->getAttributeCode() == 'category_ids') {
             return 'category';
         }
+        if ($this->getAttributeObject()->getAttributeCode() == 'sku') {
+            return 'sku';
+        }
         switch ($this->getAttributeObject()->getFrontendInput()) {
             case 'select':
                 return 'select';
@@ -606,7 +610,10 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                     $this->getValueParsed()
                 )->__toString()
             );
+        } elseif ($this->getAttribute() === 'sku') {
+            $this->isMultipleSku();
         }
+
         return parent::getBindArgumentValue();
     }
 
@@ -704,7 +711,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     public function getOperatorForValidate()
     {
         $operator = $this->getOperator();
-        if ($this->getInputType() == 'category') {
+        if ($this->getInputType() == 'category' || $this->isMultipleSku()) {
             if ($operator == '==') {
                 $operator = '{}';
             } elseif ($operator == '!=') {
@@ -752,5 +759,32 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         }
 
         return $selectOptions;
+    }
+
+    /**
+     * Check condition contains multiple sku.
+     *
+     * @return bool
+     */
+    private function isMultipleSku()
+    {
+        $result = false;
+        if ($this->getInputType() === 'sku') {
+            if ($this->hasValueParsed()) {
+                $value = $this->getData('value_parsed');
+                if (count($value > 1)) {
+                    $result = true;
+                }
+            } else {
+                $value = $this->getData('value');
+                $value = preg_split('#\s*[,;]\s*#', $value, null, PREG_SPLIT_NO_EMPTY);
+                if (count($value > 1)) {
+                    $this->setValueParsed($value);
+                    $result = true;
+                }
+            }
+        }
+
+        return $result;
     }
 }
