@@ -16,6 +16,7 @@ use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Braintree\Gateway\Config\Config;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class CountryCreditCard
@@ -33,6 +34,13 @@ class CountryCreditCard extends Value
     private $serializer;
 
     /**
+     * Logger.
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -40,8 +48,9 @@ class CountryCreditCard extends Value
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param LoggerInterface $logger
+     * @param array $data
      */
     public function __construct(
         Context $context,
@@ -51,12 +60,14 @@ class CountryCreditCard extends Value
         Random $mathRandom,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
-        array $data = [],
-        Json $serializer = null
+        Json $serializer = null,
+        LoggerInterface $logger = null,
+        array $data = []
     ) {
         $this->mathRandom = $mathRandom;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(Json::class);
+        $this->logger = $logger;
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
@@ -71,7 +82,7 @@ class CountryCreditCard extends Value
         try {
             $value = $this->serializer->unserialize($this->getValue(Config::KEY_COUNTRY_CREDIT_CARD));
         } catch (\Exception $e) {
-            unset($e);
+            $this->logger->error($e->getMessage());
         }
 
         $result = [];
