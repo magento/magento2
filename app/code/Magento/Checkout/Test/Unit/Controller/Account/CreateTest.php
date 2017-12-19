@@ -38,12 +38,14 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     protected $orderCustomerService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $objectManagerMock;
+    private $resultFactory;
 
-    protected $resultFactory;
-    protected $resultPage;
+    /**
+     * @var \Magento\Framework\Controller\ResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resultPage;
 
     protected function setUp()
     {
@@ -53,12 +55,10 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $this->orderCustomerService = $this->createMock(\Magento\Sales\Api\OrderCustomerManagementInterface::class);
         $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
 
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $contextMock = $this->createPartialMock(
             \Magento\Framework\App\Action\Context::class,
             ['getObjectManager', 'getResultFactory']
         );
-        $contextMock->expects($this->once())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
