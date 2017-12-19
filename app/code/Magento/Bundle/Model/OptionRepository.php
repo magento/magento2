@@ -247,7 +247,6 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return \Magento\Catalog\Api\Data\ProductInterface
      */
     private function getProduct($sku)
     {
