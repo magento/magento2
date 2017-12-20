@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\FixtureModel;
+use Magento\Setup\Fixtures\FixtureModel;
 
 class FixtureModelTest extends \PHPUnit_Framework_TestCase
 {

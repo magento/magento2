@@ -7,7 +7,7 @@
 namespace Magento\Setup\Test\Unit\Fixtures;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Magento\Setup\Fixtures\CustomersFixture;
+use Magento\Setup\Fixtures\CustomersFixture;
 
 class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
 {
@@ -68,12 +68,12 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->collectionFactoryMock = $this->getMock(
-            \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class,
+                \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
-        );
+            );
 
         $this->collectionMock = $this->getMock(
             \Magento\Customer\Model\ResourceModel\Customer\Collection::class,

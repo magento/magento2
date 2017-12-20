@@ -355,7 +355,7 @@ class OrdersFixture extends Fixture
                     $this->query('quote_item', $order, $itemData);
                     $this->query('quote_item_option', $order, $itemData, [
                         '%code%' => 'info_buyRequest',
-                        '%value%' => serialize([
+                        '%value%' => json_encode([
                             'product' => $productId($entityId, $i, Type::TYPE_SIMPLE),
                             'qty' => "1",
                             'uenc' => 'aHR0cDovL21hZ2UyLmNvbS9jYXRlZ29yeS0xLmh0bWw'
@@ -597,7 +597,7 @@ class OrdersFixture extends Fixture
             $productsResult[$key]['id'] = $simpleId;
             $productsResult[$key]['sku'] = $simpleProduct->getSku();
             $productsResult[$key]['name'] = $simpleProduct->getName();
-            $productsResult[$key]['buyRequest'] = serialize([
+            $productsResult[$key]['buyRequest'] = json_encode([
                 "info_buyRequest" => [
                     "uenc" => "aHR0cDovL21hZ2VudG8uZGV2L2NvbmZpZ3VyYWJsZS1wcm9kdWN0LTEuaHRtbA,,",
                     "product" => $simpleId,
@@ -622,7 +622,8 @@ class OrdersFixture extends Fixture
         foreach ($productIds as $key => $configurableId) {
             $configurableProduct = $this->productRepository->getById($configurableId);
             $options = $this->optionRepository->getList($configurableProduct->getSku());
-            $configurableChild = $this->linkManagement->getChildren($configurableProduct->getSku())[0];
+            $configurableChild = $configurableProduct->getTypeInstance()->getUsedProducts($configurableProduct);
+            $configurableChild = reset($configurableChild);
             $simpleSku = $configurableChild->getSku();
             $simpleId = $this->productRepository->get($simpleSku)->getId();
 
@@ -672,13 +673,13 @@ class OrdersFixture extends Fixture
             $productsResult[$key]['name'] = $configurableProduct->getName();
             $productsResult[$key]['childId'] = $simpleId;
             $productsResult[$key]['buyRequest'] = [
-                'order' => serialize($configurableBuyRequest),
-                'quote' => serialize($quoteConfigurableBuyRequest),
-                'super_attribute' => serialize($superAttribute)
+                'order' => json_encode($configurableBuyRequest),
+                'quote' => json_encode($quoteConfigurableBuyRequest),
+                'super_attribute' => json_encode($superAttribute)
             ];
             $productsResult[$key]['childBuyRequest'] = [
-                'order' => serialize($simpleBuyRequest),
-                'quote' => serialize($quoteSimpleBuyRequest),
+                'order' => json_encode($simpleBuyRequest),
+                'quote' => json_encode($quoteSimpleBuyRequest),
             ];
         }
         return $productsResult;

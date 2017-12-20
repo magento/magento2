@@ -7,7 +7,7 @@
 namespace Magento\Setup\Test\Unit\Fixtures;
 
 use Magento\Setup\Fixtures\AttributeSet\AttributeSetFixture;
-use \Magento\Setup\Fixtures\AttributeSetsFixture;
+use Magento\Setup\Fixtures\AttributeSetsFixture;
 
 /**
  * @SuppressWarnings(PHPMD)

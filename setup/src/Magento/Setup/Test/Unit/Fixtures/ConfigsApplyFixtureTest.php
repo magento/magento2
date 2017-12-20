@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\ConfigsApplyFixture;
+use Magento\Setup\Fixtures\ConfigsApplyFixture;
 
 class ConfigsApplyFixtureTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,7 +53,9 @@ class ConfigsApplyFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
-        $configMock = $this->getMock(\Magento\Framework\App\Config\ValueInterface::class, [], [], '', false);
+        $configMock = $this->getMockBuilder(\Magento\Framework\App\Config\ValueInterface::class)
+            ->setMethods(['save'])
+            ->getMockForAbstractClass();
         $configMock->expects($this->never())->method('save');
 
         $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);

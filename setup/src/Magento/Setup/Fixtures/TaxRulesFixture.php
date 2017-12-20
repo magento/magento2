@@ -6,16 +6,16 @@
 
 namespace Magento\Setup\Fixtures;
 
-use \Magento\Tax\Model\Config;
-use \Magento\Config\Model\Config\Backend\Admin\Custom;
-use \Magento\Framework\App\Config\Storage\Writer as ConfigWriter;
-use \Magento\Tax\Api\Data\TaxRateInterface;
-use \Magento\Tax\Api\Data\TaxRuleInterface;
-use \Magento\Tax\Api\TaxRateRepositoryInterface;
-use \Magento\Tax\Api\TaxRuleRepositoryInterface;
-use \Magento\Tax\Api\Data\TaxRateInterfaceFactory;
-use \Magento\Tax\Api\Data\TaxRuleInterfaceFactory;
-use \Magento\Tax\Model\ResourceModel\Calculation\Rate\CollectionFactory;
+use Magento\Config\Model\Config\Backend\Admin\Custom;
+use Magento\Framework\App\Config\Storage\Writer as ConfigWriter;
+use Magento\Tax\Api\Data\TaxRateInterface;
+use Magento\Tax\Api\Data\TaxRateInterfaceFactory;
+use Magento\Tax\Api\Data\TaxRuleInterface;
+use Magento\Tax\Api\Data\TaxRuleInterfaceFactory;
+use Magento\Tax\Api\TaxRateRepositoryInterface;
+use Magento\Tax\Api\TaxRuleRepositoryInterface;
+use Magento\Tax\Model\Config;
+use Magento\Tax\Model\ResourceModel\Calculation\Rate\CollectionFactory;
 
 /**
  * Tax rules fixture generator

@@ -6,11 +6,11 @@
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\CustomerGroupsFixture;
-use \Magento\Customer\Api\Data\GroupInterface;
-use \Magento\Customer\Api\Data\GroupInterfaceFactory;
-use \Magento\Customer\Api\GroupRepositoryInterface;
-use \Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Api\Data\GroupInterfaceFactory;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
+use Magento\Setup\Fixtures\CustomerGroupsFixture;
 
 /**
  * Test Customer Groups generation
