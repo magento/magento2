@@ -35000,8 +35000,7 @@ if (testLabel
         <collectionProp name="Arguments.arguments">
           <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{	"query":"{\n  products(\n    find: {\n          and: {\n            price: {gt: \"10\"}\n            or: {\n\t\t\t\t\t\t\t\tsku:{like:\"%Product%\"}             \n                name:{like:\"%Configurable Product%\"}              \n             }\n           }          \n        }\n    pageSize: 200\n    currentPage: 1\n    sort: {\n      price: ASC\n      name:DESC\n    }\n  ) {\n    total_count\n    items {\n        attribute_set_id\n        country_of_manufacture\n        created_at\n        custom_design\n        custom_design_from\n        custom_design_to\n        custom_layout\n        custom_layout_update\n        description\n        gallery\n        gift_message_available\n        has_options\n        image\n        image_label\n        links_exist\n        links_purchased_separately\n        links_title\n        media_gallery\n        meta_description\n        meta_keyword\n        meta_title\n        minimal_price\n        msrp\n        msrp_display_actual_price_type\n        name\n        news_from_date\n        news_to_date\n        old_id\n        options_container\n        page_layout\n        price\n        price_type\n        price_view\n        required_options\n        samples_title\n        shipment_type\n        short_description\n        sku\n        small_image\n        small_image_label\n        special_from_date\n        special_price\n        special_to_date\n        status\n        swatch_image\n        tax_class_id\n        thumbnail\n        thumbnail_label\n        tier_price\n        type_id\n        updated_at\n        url_key\n        url_path\n        visibility\n        website_ids\n        weight\n        weight_type\n    }\n    page_info {\n      page_size\n      current_page\n    }\n  }\n}\n\n","variables":null,"operationName":null}&#xD;
-</stringProp>
+            <stringProp name="Argument.value">{"query":"{\n  products(\n    filter: {\n         price: {gt: \"10\"}\n         or: {\n            sku:{like:\"%Product%\"}\n            name:{like:\"%Configurable Product%\"}\n          }\n        }\n    pageSize: 200\n    currentPage: 1\n    sort: {\n      price: ASC\n      name:DESC\n    }\n  ) {\n    total_count\n    items {\n        attribute_set_id\n        country_of_manufacture\n        created_at\n        custom_design\n        custom_design_from\n        custom_design_to\n        custom_layout\n        custom_layout_update\n        description\n        gallery\n        gift_message_available\n        has_options\n        image\n        image_label\n        links_exist\n        links_purchased_separately\n        links_title\n        media_gallery{\n               images\n                {\n                    file\n                }\n            }\n        meta_description\n        meta_keyword\n        meta_title\n        minimal_price\n        msrp\n        msrp_display_actual_price_type\n        name\n        news_from_date\n        news_to_date\n        old_id\n        options_container\n        page_layout\n        price\n        price_type\n        price_view\n        required_options\n        samples_title\n        shipment_type\n        short_description\n        sku\n        small_image\n        small_image_label\n        special_from_date\n        special_price\n        special_to_date\n        status\n        swatch_image\n        tax_class_id\n        thumbnail\n        thumbnail_label\n        tier_price\n        type_id\n        updated_at\n        url_key\n        url_path\n        visibility\n        website_ids\n        weight\n        weight_type\n    }\n    page_info {\n      page_size\n      current_page\n    }\n  }\n}\n\n","variables":null,"operationName":null}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -35020,7 +35019,8 @@ if (testLabel
       <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
       <boolProp name="HTTPSampler.monitor">false</boolProp>
       <stringProp name="HTTPSampler.embedded_url_re"/>
-    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_multiple_products_with_extensible_data_objects.jmx</stringProp></HTTPSamplerProxy>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_multiple_products_with_extensible_data_objects_using_filter_only.jmx</stringProp>
+    </HTTPSamplerProxy>
     <hashTree>
       <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract total_count" enabled="true">
         <stringProp name="VAR">graphql_products_query_total_count</stringProp>
@@ -35036,16 +35036,14 @@ if (testLabel
 if (totalCount == null) {
         Failure = true;
         FailureMessage = "Not Expected \"totalCount\" to be null";
-    } else {
-    	if (Integer.parseInt(totalCount) &lt; 300) {
-        Failure = true;
-        FailureMessage = "Expected \"totalCount\" to be &gt; 300, Actual: " + totalCount;
-    	} else {
-    		Failure = false;
-    	}
-    }
-
-
+} else {
+	if (Integer.parseInt(totalCount) &lt; 300) {
+   Failure = true;
+   FailureMessage = "Expected \"totalCount\" to be greater than 300, Actual: " + totalCount;
+	} else {
+		Failure = false;
+	}
+}
 </stringProp>
         <stringProp name="BeanShellAssertion.filename"/>
         <stringProp name="BeanShellAssertion.parameters"/>
@@ -35182,44 +35180,73 @@ if (totalCount == null) {
       <hashTree/>
     </hashTree>
   
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query simple product" enabled="true">
-            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                        <stringProp name="Argument.value">{"query":"{\n    product(sku: \"${simple_product_sku}\")\n    {\n        attribute_set_id\n        category_ids\n        category_links\n        {\n            category_id\n            position\n        }\n        cost\n        country_of_manufacture\n        created_at\n        custom_design\n        custom_design_from\n        custom_design_to\n        custom_layout\n        custom_layout_update\n        description\n        gallery\n        gift_message_available\n        has_options\n        id\n        image\n        image_label\n        links_exist\n        links_purchased_separately\n        links_title\n        media_gallery\n        meta_description\n        meta_keyword\n        meta_title\n        media_gallery_entries\n        {\n            disabled\n            file\n            id\n            label\n            media_type\n            position\n            types\n            content\n            {\n                base64_encoded_data\n                type\n                name\n            }\n            video_content\n            {\n                media_type\n                video_description\n                video_metadata\n                video_provider\n                video_title\n                video_url\n            }\n        }\n        minimal_price\n        msrp\n        msrp_display_actual_price_type\n        name\n        news_from_date\n        news_to_date\n        old_id\n        options_container\n        options\n        {\n            file_extension\n            image_size_x\n            image_size_y\n            is_require\n            max_characters\n            option_id\n            price\n            price_type\n            product_sku\n            sku\n            sort_order\n            title\n            type\n            values\n            {\n                title\n                sort_order\n                price\n                price_type\n                sku\n                option_type_id\n            }\n        }\n        page_layout\n        price\n        price_type\n        price_view\n        product_links\n        {\n            link_type\n            linked_product_sku\n            linked_product_type\n            position\n            qty\n            sku\n        }\n        required_options\n        samples_title\n        shipment_type\n        short_description\n        sku\n        small_image\n        small_image_label\n        special_from_date\n        special_price\n        special_to_date\n        status\n        swatch_image\n        tax_class_id\n        thumbnail\n        thumbnail_label\n        tier_price\n        tier_prices\n        {\n            customer_group_id\n            percentage_value\n            qty\n            value\n            website_id\n        }\n        type_id\n        updated_at\n        url_key\n        url_path\n        visibility\n        website_ids\n        weight\n        weight_type\n    }\n}","variables":null,"operationName":null}</stringProp>
-                        <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                </collectionProp>
-            </elementProp>
-            <stringProp name="HTTPSampler.domain"/>
-            <stringProp name="HTTPSampler.port"/>
-            <stringProp name="HTTPSampler.connect_timeout"/>
-            <stringProp name="HTTPSampler.response_timeout"/>
-            <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
-            <stringProp name="HTTPSampler.contentEncoding"/>
-            <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
-            <stringProp name="HTTPSampler.method">POST</stringProp>
-            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-            <boolProp name="HTTPSampler.monitor">false</boolProp>
-            <stringProp name="HTTPSampler.embedded_url_re"/>
-        <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_simple_product_with_extensible_data_objects.jmx</stringProp></HTTPSamplerProxy>
-        <hashTree>
-            <com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion" testname="Assert product sku" enabled="true">
-                <stringProp name="JSON_PATH">$.data.product.sku</stringProp>
-                <stringProp name="EXPECTED_VALUE">${simple_product_sku}</stringProp>
-                <boolProp name="JSONVALIDATION">true</boolProp>
-                <boolProp name="EXPECT_NULL">false</boolProp>
-                <boolProp name="INVERT">false</boolProp>
-                <boolProp name="ISREGEX">true</boolProp>
-            </com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>
-            <hashTree/>
-        </hashTree>
-    
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query simple product" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"{\n    products(filter: {sku: { eq: \"${simple_product_sku}\" } })\n    {\ntotal_count\n       items {\n            attribute_set_id\n            category_ids\n            category_links\n            {\n                category_id\n                position\n            }\n            cost\n            country_of_manufacture\n            created_at\n            custom_design\n            custom_design_from\n            custom_design_to\n            custom_layout\n            custom_layout_update\n            description\n            gallery\n            gift_message_available\n            has_options\n            id\n            image\n            image_label\n            links_exist\n            links_purchased_separately\n            links_title\n            media_gallery{\n               images\n                {\n                    file\n                }\n            }\n            meta_description\n            meta_keyword\n            meta_title\n            media_gallery_entries\n            {\n                disabled\n                file\n                id\n                label\n                media_type\n                position\n                types\n                content\n                {\n                    base64_encoded_data\n                    type\n                    name\n                }\n                video_content\n                {\n                    media_type\n                    video_description\n                    video_metadata\n                    video_provider\n                    video_title\n                    video_url\n                }\n            }\n            minimal_price\n            msrp\n            msrp_display_actual_price_type\n            name\n            news_from_date\n            news_to_date\n            old_id\n            options_container\n            options\n            {\n                file_extension\n                image_size_x\n                image_size_y\n                is_require\n                max_characters\n                option_id\n                price\n                price_type\n                product_sku\n                sku\n                sort_order\n                title\n                type\n                values\n                {\n                    title\n                    sort_order\n                    price\n                    price_type\n                    sku\n                    option_type_id\n                }\n            }\n            page_layout\n            price\n            price_type\n            price_view\n            product_links\n            {\n                link_type\n                linked_product_sku\n                linked_product_type\n                position\n                qty\n                sku\n            }\n            required_options\n            samples_title\n            shipment_type\n            short_description\n            sku\n            small_image\n            small_image_label\n            special_from_date\n            special_price\n            special_to_date\n            status\n            swatch_image\n            tax_class_id\n            thumbnail\n            thumbnail_label\n            tier_price\n            tier_prices\n            {\n                customer_group_id\n                percentage_value\n                qty\n                value\n                website_id\n            }\n            type_id\n            updated_at\n            url_key\n            url_path\n            visibility\n            website_ids\n            weight\n            weight_type\n        }\n    }\n}\n","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_simple_product_with_extensible_data_objects.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract total_count" enabled="true">
+        <stringProp name="VAR">graphql_products_query_total_count</stringProp>
+        <stringProp name="JSONPATH">$.data.products.total_count</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+      <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Assert total count = 1" enabled="true">
+        <stringProp name="BeanShellAssertion.query">String totalCount=vars.get("graphql_products_query_total_count");
+
+if (totalCount == null) {
+        Failure = true;
+        FailureMessage = "Not Expected \"totalCount\" to be null";
+} else {
+	if (Integer.parseInt(totalCount) != 1) {
+   Failure = true;
+   FailureMessage = "Expected \"totalCount\" to be equal to 1, Actual: " + totalCount;
+	} else {
+		Failure = false;
+	}
+}
+</stringProp>
+        <stringProp name="BeanShellAssertion.filename"/>
+        <stringProp name="BeanShellAssertion.parameters"/>
+        <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+      </BeanShellAssertion>
+      <hashTree/>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion" testname="Assert product sku" enabled="true">
+        <stringProp name="JSON_PATH">$.data.products.items[0].sku</stringProp>
+        <stringProp name="EXPECTED_VALUE">${simple_product_sku}</stringProp>
+        <boolProp name="JSONVALIDATION">true</boolProp>
+        <boolProp name="EXPECT_NULL">false</boolProp>
+        <boolProp name="INVERT">false</boolProp>
+        <boolProp name="ISREGEX">true</boolProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>
+      <hashTree/>
+    </hashTree>
+  
     <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Create configurable product" enabled="true">
   <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/create_configurable_product_with_extensible_data_objects.jmx</stringProp>
 </OnceOnlyController>
@@ -36005,7 +36032,7 @@ if (totalCount == null) {
         <collectionProp name="Arguments.arguments">
           <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{"query":"{\n  product(sku:\"${configurable_product_sku}\") {\n \tattribute_set_id\n        category_ids\n        category_links\n        {\n            category_id\n            position\n        }\n        cost\n        country_of_manufacture\n        created_at\n        custom_design\n        custom_design_from\n        custom_design_to\n        custom_layout\n        custom_layout_update\n        description\n        gallery\n        gift_message_available\n        has_options\n        id\n        image\n        image_label\n        links_exist\n        links_purchased_separately\n        links_title\n        media_gallery\n        meta_description\n        meta_keyword\n        meta_title\n        media_gallery_entries\n        {\n            disabled\n            file\n            id\n            label\n            media_type\n            position\n            types\n            content\n            {\n                base64_encoded_data\n                type\n                name\n            }\n            video_content\n            {\n                media_type\n                video_description\n                video_metadata\n                video_provider\n                video_title\n                video_url\n            }\n        }\n        minimal_price\n        msrp\n        msrp_display_actual_price_type\n        name\n        news_from_date\n        news_to_date\n        old_id\n        options_container\n        options\n        {\n            file_extension\n            image_size_x\n            image_size_y\n            is_require\n            max_characters\n            option_id\n            price\n            price_type\n            product_sku\n            sku\n            sort_order\n            title\n            type\n            values\n            {\n                title\n                sort_order\n                price\n                price_type\n                sku\n                option_type_id\n            }\n        }\n        page_layout\n        price\n        price_type\n        price_view\n        product_links\n        {\n            link_type\n            linked_product_sku\n            linked_product_type\n            position\n            qty\n            sku\n        }\n        required_options\n        samples_title\n        shipment_type\n        short_description\n        sku\n        small_image\n        small_image_label\n        special_from_date\n        special_price\n        special_to_date\n        status\n        swatch_image\n        tax_class_id\n        thumbnail\n        thumbnail_label\n        tier_price\n        tier_prices\n        {\n            customer_group_id\n            percentage_value\n            qty\n            value\n            website_id\n        }\n        type_id\n        updated_at\n        url_key\n        url_path\n        visibility\n        website_ids\n        weight\n        weight_type\n    ... on ConfigurableProduct {\n      configurable_product_options {\n        id\n        attribute_id\n        label\n        position\n        is_use_default\n        values {\n          value_index\n        }\n        product_id\n      }\n      configurable_product_links {\n          sku\n          color\n          attribute_set_id\n          category_ids\n          category_links\n          {\n              category_id\n              position\n          }\n          cost\n          country_of_manufacture\n          created_at\n          custom_design\n          custom_design_from\n          custom_design_to\n          custom_layout\n          custom_layout_update\n          description\n          gallery\n          gift_message_available\n          has_options\n          id\n          image\n          image_label\n          links_exist\n          links_purchased_separately\n          links_title\n          media_gallery\n          meta_description\n          meta_keyword\n          meta_title\n          media_gallery_entries\n          {\n              disabled\n              file\n              id\n              label\n              media_type\n              position\n              types\n              content\n              {\n                  base64_encoded_data\n                  type\n                  name\n              }\n              video_content\n              {\n                  media_type\n                  video_description\n                  video_metadata\n                  video_provider\n                  video_title\n                  video_url\n              }\n          }\n          minimal_price\n          msrp\n          msrp_display_actual_price_type\n          name\n          news_from_date\n          news_to_date\n          old_id\n          options_container\n          options\n          {\n              file_extension\n              image_size_x\n              image_size_y\n              is_require\n              max_characters\n              option_id\n              price\n              price_type\n              product_sku\n              sku\n              sort_order\n              title\n              type\n              values\n              {\n                  title\n                  sort_order\n                  price\n                  price_type\n                  sku\n                  option_type_id\n              }\n          }\n          page_layout\n          price\n          price_type\n          price_view\n          product_links\n          {\n              link_type\n              linked_product_sku\n              linked_product_type\n              position\n              qty\n              sku\n          }\n          required_options\n          samples_title\n          shipment_type\n          short_description\n          sku\n          small_image\n          small_image_label\n          special_from_date\n          special_price\n          special_to_date\n          status\n          swatch_image\n          tax_class_id\n          thumbnail\n          thumbnail_label\n          tier_price\n          tier_prices\n          {\n              customer_group_id\n              percentage_value\n              qty\n              value\n              website_id\n          }\n          type_id\n          updated_at\n          url_key\n          url_path\n          visibility\n          website_ids\n          weight\n          weight_type\n      }\n    }\n  } \n}\n\n","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.value">{"query":"{\n    products(filter: {sku: {eq:\"${configurable_product_sku}\"} }) {\ntotal_count\n        items {\n            attribute_set_id\n            category_ids\n            category_links\n            {\n                category_id\n                position\n            }\n            cost\n            country_of_manufacture\n            created_at\n            custom_design\n            custom_design_from\n            custom_design_to\n            custom_layout\n            custom_layout_update\n            description\n            gallery\n            gift_message_available\n            has_options\n            id\n            image\n            image_label\n            links_exist\n            links_purchased_separately\n            links_title\n            media_gallery{\n               images\n                {\n                    file\n                }\n            }\n            meta_description\n            meta_keyword\n            meta_title\n            media_gallery_entries\n            {\n                disabled\n                file\n                id\n                label\n                media_type\n                position\n                types\n                content\n                {\n                    base64_encoded_data\n                    type\n                    name\n                }\n                video_content\n                {\n                    media_type\n                    video_description\n                    video_metadata\n                    video_provider\n                    video_title\n                    video_url\n                }\n            }\n            minimal_price\n            msrp\n            msrp_display_actual_price_type\n            name\n            news_from_date\n            news_to_date\n            old_id\n            options_container\n            options\n            {\n                file_extension\n                image_size_x\n                image_size_y\n                is_require\n                max_characters\n                option_id\n                price\n                price_type\n                product_sku\n                sku\n                sort_order\n                title\n                type\n                values\n                {\n                    title\n                    sort_order\n                    price\n                    price_type\n                    sku\n                    option_type_id\n                }\n            }\n            page_layout\n            price\n            price_type\n            price_view\n            product_links\n            {\n                link_type\n                linked_product_sku\n                linked_product_type\n                position\n                qty\n                sku\n            }\n            required_options\n            samples_title\n            shipment_type\n            short_description\n            sku\n            small_image\n            small_image_label\n            special_from_date\n            special_price\n            special_to_date\n            status\n            swatch_image\n            tax_class_id\n            thumbnail\n            thumbnail_label\n            tier_price\n            tier_prices\n            {\n                customer_group_id\n                percentage_value\n                qty\n                value\n                website_id\n            }\n            type_id\n            updated_at\n            url_key\n            url_path\n            visibility\n            website_ids\n            weight\n            weight_type\n            ... on ConfigurableProduct {\n                configurable_product_options {\n                    id\n                    attribute_id\n                    label\n                    position\n                    is_use_default\n                    values {\n                        value_index\n                    }\n                    product_id\n                }\n                configurable_product_links {\n                    sku\n                    color\n                    attribute_set_id\n                    category_ids\n                    category_links\n                    {\n                        category_id\n                        position\n                    }\n                    cost\n                    country_of_manufacture\n                    created_at\n                    custom_design\n                    custom_design_from\n                    custom_design_to\n                    custom_layout\n                    custom_layout_update\n                    description\n                    gallery\n                    gift_message_available\n                    has_options\n                    id\n                    image\n                    image_label\n                    links_exist\n                    links_purchased_separately\n                    links_title\n                    media_gallery{\n               images\n                {\n                    file\n                }\n            }\n                    meta_description\n                    meta_keyword\n                    meta_title\n                    media_gallery_entries\n                    {\n                        disabled\n                        file\n                        id\n                        label\n                        media_type\n                        position\n                        types\n                        content\n                        {\n                            base64_encoded_data\n                            type\n                            name\n                        }\n                        video_content\n                        {\n                            media_type\n                            video_description\n                            video_metadata\n                            video_provider\n                            video_title\n                            video_url\n                        }\n                    }\n                    minimal_price\n                    msrp\n                    msrp_display_actual_price_type\n                    name\n                    news_from_date\n                    news_to_date\n                    old_id\n                    options_container\n                    options\n                    {\n                        file_extension\n                        image_size_x\n                        image_size_y\n                        is_require\n                        max_characters\n                        option_id\n                        price\n                        price_type\n                        product_sku\n                        sku\n                        sort_order\n                        title\n                        type\n                        values\n                        {\n                            title\n                            sort_order\n                            price\n                            price_type\n                            sku\n                            option_type_id\n                        }\n                    }\n                    page_layout\n                    price\n                    price_type\n                    price_view\n                    product_links\n                    {\n                        link_type\n                        linked_product_sku\n                        linked_product_type\n                        position\n                        qty\n                        sku\n                    }\n                    required_options\n                    samples_title\n                    shipment_type\n                    short_description\n                    sku\n                    small_image\n                    small_image_label\n                    special_from_date\n                    special_price\n                    special_to_date\n                    status\n                    swatch_image\n                    tax_class_id\n                    thumbnail\n                    thumbnail_label\n                    tier_price\n                    tier_prices\n                    {\n                        customer_group_id\n                        percentage_value\n                        qty\n                        value\n                        website_id\n                    }\n                    type_id\n                    updated_at\n                    url_key\n                    url_path\n                    visibility\n                    website_ids\n                    weight\n                    weight_type\n                }\n            }\n        }\n    }\n}\n","variables":null,"operationName":null}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -36024,10 +36051,41 @@ if (totalCount == null) {
       <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
       <boolProp name="HTTPSampler.monitor">false</boolProp>
       <stringProp name="HTTPSampler.embedded_url_re"/>
-    <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_configurable_product_with_extensible_data_objects.jmx</stringProp></HTTPSamplerProxy>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_configurable_product_with_extensible_data_objects.jmx</stringProp>
+    </HTTPSamplerProxy>
     <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract total_count" enabled="true">
+        <stringProp name="VAR">graphql_products_query_total_count</stringProp>
+        <stringProp name="JSONPATH">$.data.products.total_count</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+      <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Assert total count = 1" enabled="true">
+        <stringProp name="BeanShellAssertion.query">String totalCount=vars.get("graphql_products_query_total_count");
+
+if (totalCount == null) {
+        Failure = true;
+        FailureMessage = "Not Expected \"totalCount\" to be null";
+} else {
+	if (Integer.parseInt(totalCount) != 1) {
+   Failure = true;
+   FailureMessage = "Expected \"totalCount\" to be equal to 1, Actual: " + totalCount;
+	} else {
+		Failure = false;
+	}
+}
+
+
+</stringProp>
+        <stringProp name="BeanShellAssertion.filename"/>
+        <stringProp name="BeanShellAssertion.parameters"/>
+        <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+      </BeanShellAssertion>
+      <hashTree/>
       <com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion" testname="Assert configurable product sku" enabled="true">
-        <stringProp name="JSON_PATH">$.data.product.sku</stringProp>
+        <stringProp name="JSON_PATH">$.data.products.items[0].sku</stringProp>
         <stringProp name="EXPECTED_VALUE">${configurable_product_sku}</stringProp>
         <boolProp name="JSONVALIDATION">true</boolProp>
         <boolProp name="EXPECT_NULL">false</boolProp>
@@ -36036,7 +36094,7 @@ if (totalCount == null) {
       </com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>
       <hashTree/>
       <com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion" testname="Assert configurable child product sku #1" enabled="true">
-        <stringProp name="JSON_PATH">$.data.product.configurable_product_links[?(@.sku =~ /apsku-test-${configurable_product_attribute_color_1}/i)].sku</stringProp>
+        <stringProp name="JSON_PATH">$.data.products.items[0].configurable_product_links[?(@.sku =~ /apsku-test-${configurable_product_attribute_color_1}/i)].sku</stringProp>
         <stringProp name="EXPECTED_VALUE">["apsku-test-${configurable_product_attribute_color_1}"]</stringProp>
         <boolProp name="JSONVALIDATION">true</boolProp>
         <boolProp name="EXPECT_NULL">false</boolProp>
@@ -36045,7 +36103,7 @@ if (totalCount == null) {
       </com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>
       <hashTree/>
       <com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion" testname="Assert configurable child product sku #2" enabled="true">
-        <stringProp name="JSON_PATH">$.data.product.configurable_product_links[?(@.sku =~ /apsku-test-${configurable_product_attribute_color_2}/i)].sku</stringProp>
+        <stringProp name="JSON_PATH">$.data.products.items[0].configurable_product_links[?(@.sku =~ /apsku-test-${configurable_product_attribute_color_2}/i)].sku</stringProp>
         <stringProp name="EXPECTED_VALUE">["apsku-test-${configurable_product_attribute_color_2}"]</stringProp>
         <boolProp name="JSONVALIDATION">true</boolProp>
         <boolProp name="EXPECT_NULL">false</boolProp>
@@ -36054,7 +36112,316 @@ if (totalCount == null) {
       </com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>
       <hashTree/>
     </hashTree>
-  </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query products with full text search and filter" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"{\n    products(search: \"configurable\"\n  filter: {\n         price: {gt: \"10\"} } ) {\ntotal_count\n        items {\n            attribute_set_id\n            category_ids\n            category_links\n            {\n                category_id\n                position\n            }\n            cost\n            country_of_manufacture\n            created_at\n            custom_design\n            custom_design_from\n            custom_design_to\n            custom_layout\n            custom_layout_update\n            description\n            gallery\n            gift_message_available\n            has_options\n            id\n            image\n            image_label\n            links_exist\n            links_purchased_separately\n            links_title\n            media_gallery{\n               images\n                {\n                    file\n                }\n            }\n            meta_description\n            meta_keyword\n            meta_title\n            media_gallery_entries\n            {\n                disabled\n                file\n                id\n                label\n                media_type\n                position\n                types\n                content\n                {\n                    base64_encoded_data\n                    type\n                    name\n                }\n                video_content\n                {\n                    media_type\n                    video_description\n                    video_metadata\n                    video_provider\n                    video_title\n                    video_url\n                }\n            }\n            minimal_price\n            msrp\n            msrp_display_actual_price_type\n            name\n            news_from_date\n            news_to_date\n            old_id\n            options_container\n            options\n            {\n                file_extension\n                image_size_x\n                image_size_y\n                is_require\n                max_characters\n                option_id\n                price\n                price_type\n                product_sku\n                sku\n                sort_order\n                title\n                type\n                values\n                {\n                    title\n                    sort_order\n                    price\n                    price_type\n                    sku\n                    option_type_id\n                }\n            }\n            page_layout\n            price\n            price_type\n            price_view\n            product_links\n            {\n                link_type\n                linked_product_sku\n                linked_product_type\n                position\n                qty\n                sku\n            }\n            required_options\n            samples_title\n            shipment_type\n            short_description\n            sku\n            small_image\n            small_image_label\n            special_from_date\n            special_price\n            special_to_date\n            status\n            swatch_image\n            tax_class_id\n            thumbnail\n            thumbnail_label\n            tier_price\n            tier_prices\n            {\n                customer_group_id\n                percentage_value\n                qty\n                value\n                website_id\n            }\n            type_id\n            updated_at\n            url_key\n            url_path\n            visibility\n            website_ids\n            weight\n            weight_type\n            ... on ConfigurableProduct {\n                configurable_product_options {\n                    id\n                    attribute_id\n                    label\n                    position\n                    is_use_default\n                    values {\n                        value_index\n                    }\n                    product_id\n                }\n                configurable_product_links {\n                    sku\n                    color\n                    attribute_set_id\n                    category_ids\n                    category_links\n                    {\n                        category_id\n                        position\n                    }\n                    cost\n                    country_of_manufacture\n                    created_at\n                    custom_design\n                    custom_design_from\n                    custom_design_to\n                    custom_layout\n                    custom_layout_update\n                    description\n                    gallery\n                    gift_message_available\n                    has_options\n                    id\n                    image\n                    image_label\n                    links_exist\n                    links_purchased_separately\n                    links_title\n                    media_gallery{\n               images\n                {\n                    file\n                }\n            }\n                    meta_description\n                    meta_keyword\n                    meta_title\n                    media_gallery_entries\n                    {\n                        disabled\n                        file\n                        id\n                        label\n                        media_type\n                        position\n                        types\n                        content\n                        {\n                            base64_encoded_data\n                            type\n                            name\n                        }\n                        video_content\n                        {\n                            media_type\n                            video_description\n                            video_metadata\n                            video_provider\n                            video_title\n                            video_url\n                        }\n                    }\n                    minimal_price\n                    msrp\n                    msrp_display_actual_price_type\n                    name\n                    news_from_date\n                    news_to_date\n                    old_id\n                    options_container\n                    options\n                    {\n                        file_extension\n                        image_size_x\n                        image_size_y\n                        is_require\n                        max_characters\n                        option_id\n                        price\n                        price_type\n                        product_sku\n                        sku\n                        sort_order\n                        title\n                        type\n                        values\n                        {\n                            title\n                            sort_order\n                            price\n                            price_type\n                            sku\n                            option_type_id\n                        }\n                    }\n                    page_layout\n                    price\n                    price_type\n                    price_view\n                    product_links\n                    {\n                        link_type\n                        linked_product_sku\n                        linked_product_type\n                        position\n                        qty\n                        sku\n                    }\n                    required_options\n                    samples_title\n                    shipment_type\n                    short_description\n                    sku\n                    small_image\n                    small_image_label\n                    special_from_date\n                    special_price\n                    special_to_date\n                    status\n                    swatch_image\n                    tax_class_id\n                    thumbnail\n                    thumbnail_label\n                    tier_price\n                    tier_prices\n                    {\n                        customer_group_id\n                        percentage_value\n                        qty\n                        value\n                        website_id\n                    }\n                    type_id\n                    updated_at\n                    url_key\n                    url_path\n                    visibility\n                    website_ids\n                    weight\n                    weight_type\n                }\n            }\n        }\n    }\n}\n","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_multiple_products_with_extensible_data_objects_using_full_text_and_filter.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract total_count" enabled="true">
+        <stringProp name="VAR">graphql_search_products_query_total_count_fulltext_filter</stringProp>
+        <stringProp name="JSONPATH">$.data.products.total_count</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+      <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Assert total count &gt; 0" enabled="true">
+        <stringProp name="BeanShellAssertion.query">String totalCount=vars.get("graphql_search_products_query_total_count_fulltext_filter");
+
+if (totalCount == null) {
+        Failure = true;
+        FailureMessage = "Not Expected \"totalCount\" to be null";
+} else {
+	if (Integer.parseInt(totalCount) &lt; 1) {
+   Failure = true;
+   FailureMessage = "Expected \"totalCount\" to be greater than zero, Actual: " + totalCount;
+	} else {
+		Failure = false;
+	}
+}
+
+
+</stringProp>
+        <stringProp name="BeanShellAssertion.filename"/>
+        <stringProp name="BeanShellAssertion.parameters"/>
+        <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+      </BeanShellAssertion>
+      <hashTree/>
+    </hashTree>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query products with full text search only" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="" elementType="HTTPArgument">
+            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+            <stringProp name="Argument.value">{"query":"{\n    products(search: \"configurable\") {\ntotal_count\n        items {\n            attribute_set_id\n            category_ids\n            category_links\n            {\n                category_id\n                position\n            }\n            cost\n            country_of_manufacture\n            created_at\n            custom_design\n            custom_design_from\n            custom_design_to\n            custom_layout\n            custom_layout_update\n            description\n            gallery\n            gift_message_available\n            has_options\n            id\n            image\n            image_label\n            links_exist\n            links_purchased_separately\n            links_title\n            media_gallery{\n               images\n                {\n                    file\n                }\n            }\n            meta_description\n            meta_keyword\n            meta_title\n            media_gallery_entries\n            {\n                disabled\n                file\n                id\n                label\n                media_type\n                position\n                types\n                content\n                {\n                    base64_encoded_data\n                    type\n                    name\n                }\n                video_content\n                {\n                    media_type\n                    video_description\n                    video_metadata\n                    video_provider\n                    video_title\n                    video_url\n                }\n            }\n            minimal_price\n            msrp\n            msrp_display_actual_price_type\n            name\n            news_from_date\n            news_to_date\n            old_id\n            options_container\n            options\n            {\n                file_extension\n                image_size_x\n                image_size_y\n                is_require\n                max_characters\n                option_id\n                price\n                price_type\n                product_sku\n                sku\n                sort_order\n                title\n                type\n                values\n                {\n                    title\n                    sort_order\n                    price\n                    price_type\n                    sku\n                    option_type_id\n                }\n            }\n            page_layout\n            price\n            price_type\n            price_view\n            product_links\n            {\n                link_type\n                linked_product_sku\n                linked_product_type\n                position\n                qty\n                sku\n            }\n            required_options\n            samples_title\n            shipment_type\n            short_description\n            sku\n            small_image\n            small_image_label\n            special_from_date\n            special_price\n            special_to_date\n            status\n            swatch_image\n            tax_class_id\n            thumbnail\n            thumbnail_label\n            tier_price\n            tier_prices\n            {\n                customer_group_id\n                percentage_value\n                qty\n                value\n                website_id\n            }\n            type_id\n            updated_at\n            url_key\n            url_path\n            visibility\n            website_ids\n            weight\n            weight_type\n            ... on ConfigurableProduct {\n                configurable_product_options {\n                    id\n                    attribute_id\n                    label\n                    position\n                    is_use_default\n                    values {\n                        value_index\n                    }\n                    product_id\n                }\n                configurable_product_links {\n                    sku\n                    color\n                    attribute_set_id\n                    category_ids\n                    category_links\n                    {\n                        category_id\n                        position\n                    }\n                    cost\n                    country_of_manufacture\n                    created_at\n                    custom_design\n                    custom_design_from\n                    custom_design_to\n                    custom_layout\n                    custom_layout_update\n                    description\n                    gallery\n                    gift_message_available\n                    has_options\n                    id\n                    image\n                    image_label\n                    links_exist\n                    links_purchased_separately\n                    links_title\n                    media_gallery{\n               images\n                {\n                    file\n                }\n            }\n                    meta_description\n                    meta_keyword\n                    meta_title\n                    media_gallery_entries\n                    {\n                        disabled\n                        file\n                        id\n                        label\n                        media_type\n                        position\n                        types\n                        content\n                        {\n                            base64_encoded_data\n                            type\n                            name\n                        }\n                        video_content\n                        {\n                            media_type\n                            video_description\n                            video_metadata\n                            video_provider\n                            video_title\n                            video_url\n                        }\n                    }\n                    minimal_price\n                    msrp\n                    msrp_display_actual_price_type\n                    name\n                    news_from_date\n                    news_to_date\n                    old_id\n                    options_container\n                    options\n                    {\n                        file_extension\n                        image_size_x\n                        image_size_y\n                        is_require\n                        max_characters\n                        option_id\n                        price\n                        price_type\n                        product_sku\n                        sku\n                        sort_order\n                        title\n                        type\n                        values\n                        {\n                            title\n                            sort_order\n                            price\n                            price_type\n                            sku\n                            option_type_id\n                        }\n                    }\n                    page_layout\n                    price\n                    price_type\n                    price_view\n                    product_links\n                    {\n                        link_type\n                        linked_product_sku\n                        linked_product_type\n                        position\n                        qty\n                        sku\n                    }\n                    required_options\n                    samples_title\n                    shipment_type\n                    short_description\n                    sku\n                    small_image\n                    small_image_label\n                    special_from_date\n                    special_price\n                    special_to_date\n                    status\n                    swatch_image\n                    tax_class_id\n                    thumbnail\n                    thumbnail_label\n                    tier_price\n                    tier_prices\n                    {\n                        customer_group_id\n                        percentage_value\n                        qty\n                        value\n                        website_id\n                    }\n                    type_id\n                    updated_at\n                    url_key\n                    url_path\n                    visibility\n                    website_ids\n                    weight\n                    weight_type\n                }\n            }\n        }\n    }\n}\n","variables":null,"operationName":null}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="HTTPSampler.domain"/>
+      <stringProp name="HTTPSampler.port"/>
+      <stringProp name="HTTPSampler.connect_timeout"/>
+      <stringProp name="HTTPSampler.response_timeout"/>
+      <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+      <stringProp name="HTTPSampler.contentEncoding"/>
+      <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
+      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+      <boolProp name="HTTPSampler.monitor">false</boolProp>
+      <stringProp name="HTTPSampler.embedded_url_re"/>
+      <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_multiple_products_with_extensible_data_objects_using_full_text_only.jmx</stringProp>
+    </HTTPSamplerProxy>
+    <hashTree>
+      <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract total_count" enabled="true">
+        <stringProp name="VAR">graphql_search_products_query_total_count</stringProp>
+        <stringProp name="JSONPATH">$.data.products.total_count</stringProp>
+        <stringProp name="DEFAULT"/>
+        <stringProp name="VARIABLE"/>
+        <stringProp name="SUBJECT">BODY</stringProp>
+      </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+      <hashTree/>
+      <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="Assert total count &gt; 0" enabled="true">
+        <stringProp name="BeanShellAssertion.query">String totalCount=vars.get("graphql_search_products_query_total_count");
+
+if (totalCount == null) {
+        Failure = true;
+        FailureMessage = "Not Expected \"totalCount\" to be null";
+} else {
+	if (Integer.parseInt(totalCount) &lt; 1) {
+   Failure = true;
+   FailureMessage = "Expected \"totalCount\" to be greater than zero, Actual: " + totalCount;
+	} else {
+		Failure = false;
+	}
+}
+
+
+</stringProp>
+        <stringProp name="BeanShellAssertion.filename"/>
+        <stringProp name="BeanShellAssertion.parameters"/>
+        <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+      </BeanShellAssertion>
+      <hashTree/>
+    </hashTree>
+  
+        <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Query Customer" enabled="true"/>
+        <hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create customer" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                        <elementProp name="" elementType="HTTPArgument">
+                            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                            <stringProp name="Argument.value">{&#xD;
+                                "customer": {&#xD;
+                                &#xD;
+                                "email": "customer_${__time()}-${__threadNum}-${__Random(1,1000000)}@example.com",&#xD;
+                                "firstname": "test_${__time()}-${__threadNum}-${__Random(1,1000000)}",&#xD;
+                                "lastname": "Doe"&#xD;
+                                },&#xD;
+                                "password": "test@123"&#xD;
+                                }</stringProp>
+                            <stringProp name="Argument.metadata">=</stringProp>
+                        </elementProp>
+                    </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain"/>
+                <stringProp name="HTTPSampler.port"/>
+                <stringProp name="HTTPSampler.connect_timeout"/>
+                <stringProp name="HTTPSampler.response_timeout"/>
+                <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+                <stringProp name="HTTPSampler.contentEncoding"/>
+                <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/customers</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.monitor">false</boolProp>
+                <stringProp name="HTTPSampler.embedded_url_re"/>
+                <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_frontend_customer.jmx</stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+                <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract customer id" enabled="true">
+                    <stringProp name="VAR">customer_id</stringProp>
+                    <stringProp name="JSONPATH">$.id</stringProp>
+                    <stringProp name="DEFAULT"/>
+                    <stringProp name="VARIABLE"/>
+                    <stringProp name="SUBJECT">BODY</stringProp>
+                </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+                <hashTree/>
+                <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert customer id not null" enabled="true">
+                    <collectionProp name="Asserion.test_strings">
+                        <stringProp name="89649215">^\d+$</stringProp>
+                    </collectionProp>
+                    <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+                    <boolProp name="Assertion.assume_success">false</boolProp>
+                    <intProp name="Assertion.test_type">1</intProp>
+                    <stringProp name="Assertion.scope">variable</stringProp>
+                    <stringProp name="Scope.variable">customer_id</stringProp>
+                </ResponseAssertion>
+                <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Check customer" enabled="true">
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+                    <collectionProp name="Arguments.arguments"/>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain"/>
+                <stringProp name="HTTPSampler.port"/>
+                <stringProp name="HTTPSampler.connect_timeout"/>
+                <stringProp name="HTTPSampler.response_timeout"/>
+                <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+                <stringProp name="HTTPSampler.contentEncoding"/>
+                <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/customers/${customer_id}</stringProp>
+                <stringProp name="HTTPSampler.method">GET</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.monitor">false</boolProp>
+                <stringProp name="HTTPSampler.embedded_url_re"/>
+                <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/check_customer.jmx</stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+                <com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion" testname="jp@gc - JSON Path Assertion" enabled="true">
+                    <stringProp name="JSON_PATH">$.id</stringProp>
+                    <stringProp name="EXPECTED_VALUE">${customer_id}</stringProp>
+                    <boolProp name="JSONVALIDATION">true</boolProp>
+                    <boolProp name="EXPECT_NULL">false</boolProp>
+                    <boolProp name="INVERT">false</boolProp>
+                    <boolProp name="ISREGEX">true</boolProp>
+                </com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>
+                <hashTree/>
+                <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract customer email" enabled="true">
+                    <stringProp name="VAR">customer_email</stringProp>
+                    <stringProp name="JSONPATH">$.email</stringProp>
+                    <stringProp name="DEFAULT"/>
+                    <stringProp name="VARIABLE"/>
+                    <stringProp name="SUBJECT">BODY</stringProp>
+                </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+                <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create customer token" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                        <elementProp name="" elementType="HTTPArgument">
+                            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                            <stringProp name="Argument.value">{&#xD;
+                                "username":"${customer_email}",&#xD;
+                                "password":"test@123"&#xD;
+                                }&#xD;
+                            </stringProp>
+                            <stringProp name="Argument.metadata">=</stringProp>
+                        </elementProp>
+                    </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain"/>
+                <stringProp name="HTTPSampler.port"/>
+                <stringProp name="HTTPSampler.connect_timeout"/>
+                <stringProp name="HTTPSampler.response_timeout"/>
+                <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+                <stringProp name="HTTPSampler.contentEncoding"/>
+                <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/integration/customer/token</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.monitor">false</boolProp>
+                <stringProp name="HTTPSampler.embedded_url_re"/>
+                <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/api/create_customer.jmx</stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+                <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="Extract customer token" enabled="true">
+                    <stringProp name="VAR">customer_token</stringProp>
+                    <stringProp name="JSONPATH">$</stringProp>
+                    <stringProp name="DEFAULT"/>
+                    <stringProp name="VARIABLE"/>
+                    <stringProp name="SUBJECT">BODY</stringProp>
+                </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
+                <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Query customer with token" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                        <elementProp name="" elementType="HTTPArgument">
+                            <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                            <stringProp name="Argument.value">{"query":"{\n  customer {\n    created_at\n    group_id\n\n    prefix\n    firstname\n    middlename\n    lastname\n    suffix\n    email\n    default_billing\n    default_shipping\n\n    dob\n    taxvat\n\n    id\n    addresses {\n        id\n        customer_id\n        region {\n            region_code\n          region\n          region_id\n        }\n        region_id\n        country_id\n        street \n        company\n        telephone\n        fax\n        postcode\n        city\n        firstname\n        lastname\n        middlename\n        prefix\n        suffix\n        vat_id\n        default_shipping\n        default_billing\n    }\n    is_subscribed\n  }\n}","variables":null,"operationName":null}</stringProp>
+                            <stringProp name="Argument.metadata">=</stringProp>
+                        </elementProp>
+                    </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain"/>
+                <stringProp name="HTTPSampler.port"/>
+                <stringProp name="HTTPSampler.connect_timeout"/>
+                <stringProp name="HTTPSampler.response_timeout"/>
+                <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+                <stringProp name="HTTPSampler.contentEncoding"/>
+                <stringProp name="HTTPSampler.path">${base_path}graphql</stringProp>
+                <stringProp name="HTTPSampler.method">POST</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.monitor">false</boolProp>
+                <stringProp name="HTTPSampler.embedded_url_re"/>
+                <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/graphql/query_frontend_customer.jmx</stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+                <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Set Customer Token" enabled="true">
+                    <boolProp name="resetInterpreter">false</boolProp>
+                    <stringProp name="parameters"/>
+                    <stringProp name="filename"/>
+                    <stringProp name="script">import org.apache.jmeter.protocol.http.control.Header;
+
+                        sampler.getHeaderManager().removeHeaderNamed("Authorization");
+
+                        sampler.getHeaderManager().add(new Header("Authorization","Bearer " + vars.get("customer_token")));</stringProp>
+                </BeanShellPreProcessor>
+                <hashTree/>
+                <com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.gui.JSONPathAssertionGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion" testname="Assert customer lastname" enabled="true">
+                    <stringProp name="JSON_PATH">$.data.customer.lastname</stringProp>
+                    <stringProp name="EXPECTED_VALUE">Doe</stringProp>
+                    <boolProp name="JSONVALIDATION">true</boolProp>
+                    <boolProp name="EXPECT_NULL">false</boolProp>
+                    <boolProp name="INVERT">false</boolProp>
+                    <boolProp name="ISREGEX">true</boolProp>
+                </com.atlantbh.jmeter.plugins.jsonutils.jsonpathassertion.JSONPathAssertion>
+                <hashTree/>
+            </hashTree>
+        </hashTree>
+    </hashTree>
 
   </hashTree>
 
