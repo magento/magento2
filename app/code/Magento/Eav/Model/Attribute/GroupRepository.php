@@ -178,6 +178,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return null|string
+     * @deprecated
      */
     protected function retrieveAttributeSetIdFromSearchCriteria(
         \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
