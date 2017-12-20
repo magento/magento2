@@ -46,6 +46,10 @@ class ReservationsAppend implements ReservationsAppendInterface
      */
     public function execute(array $reservations)
     {
+        if (empty($reservations)) {
+            throw new InputException(__('Input data is empty'));
+        }
+
         /** @var ReservationInterface $reservation */
         foreach ($reservations as $reservation) {
             if (null !== $reservation->getReservationId()) {
