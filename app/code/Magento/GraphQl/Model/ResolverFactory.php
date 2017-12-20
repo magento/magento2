@@ -6,10 +6,11 @@
 
 namespace Magento\GraphQl\Model;
 
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Create resolver class to generate resolve function for GraphQL type
+ * Create configured resolver class to resolve requested field data.
  */
 class ResolverFactory
 {
@@ -19,11 +20,18 @@ class ResolverFactory
     private $objectManager;
 
     /**
-     * @param ObjectManagerInterface $objectManager
+     * @var QueryConfig
      */
-    public function __construct(ObjectManagerInterface $objectManager)
+    private $config;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param QueryConfig $config
+     */
+    public function __construct(ObjectManagerInterface $objectManager, QueryConfig $config)
     {
         $this->objectManager = $objectManager;
+        $this->config = $config;
     }
 
     /**
@@ -31,19 +39,10 @@ class ResolverFactory
      *
      * @param string $resolverName
      * @return ResolverInterface
+     * @throws GraphQlInputException
      */
     public function create($resolverName)
     {
-        $resolverName = ucfirst($resolverName);
-        $qualifiedName = __NAMESPACE__ . '\\Resolver\\' . $resolverName;
-        if (!class_exists($qualifiedName)) {
-            throw new \LogicException(sprintf('Resolver %s does not exist', $resolverName));
-        }
-        $resolver = $this->objectManager->create($qualifiedName);
-        if (!$resolver instanceof ResolverInterface) {
-            throw new \LogicException(sprintf('Class name %s is not a resolver', $resolverName));
-        }
-
-        return $resolver;
+        return $this->config->getResolverClass($resolverName);
     }
 }
