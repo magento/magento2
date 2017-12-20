@@ -19,9 +19,9 @@ $salesChannelFactory = Bootstrap::getObjectManager()->get(SalesChannelInterfaceF
  * EU-stock(id:10) - EU-website (code:eu_website)
  * US-stock(id:20) - US-website (code:us_website)
  */
-$salesChannels = [10 => 'eu_website', 20 => 'us_website'];
+$salesChannelData = [10 => 'eu_website', 20 => 'us_website'];
 
-foreach ($salesChannels as $storeId => $websiteCode) {
+foreach ($salesChannelData as $storeId => $websiteCode) {
     $stock = $stockRepository->get($storeId);
     $extensionAttributes = $stock->getExtensionAttributes();
     $salesChannels = $extensionAttributes->getSalesChannels();

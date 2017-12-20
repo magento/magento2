@@ -15,13 +15,13 @@ $stockRepository = Bootstrap::getObjectManager()->get(StockRepositoryInterface::
 /** @var SalesChannelInterfaceFactory $salesChannelFactory */
 $salesChannelFactory = Bootstrap::getObjectManager()->get(SalesChannelInterfaceFactory::class);
 
-$salesChannels = ['eu_website', 'us_website'];
+$websiteCodes = ['eu_website', 'us_website'];
 $defaultStock = $stockRepository->get(1);
 $extensionAttributes = $defaultStock->getExtensionAttributes();
 $salesChannels = $extensionAttributes->getSalesChannels();
 
 // reassign on Default Stock because website can't exists without link to any Stock
-foreach ($salesChannels as $websiteCode) {
+foreach ($websiteCodes as $websiteCode) {
     /** @var SalesChannelInterface $salesChannel */
     $salesChannel = $salesChannelFactory->create();
     $salesChannel->setCode($websiteCode);
@@ -29,4 +29,4 @@ foreach ($salesChannels as $websiteCode) {
     $salesChannels[] = $salesChannel;
 }
 $extensionAttributes->setSalesChannels($salesChannels);
-$stockRepository->save($stock);
+$stockRepository->save($defaultStock);
