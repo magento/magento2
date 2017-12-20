@@ -24,7 +24,7 @@ interface SourceItemInterface extends ExtensibleDataInterface
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
     const SKU = 'sku';
-    const SOURCE_ID = 'source_id';
+    const SOURCE_CODE = 'source_code';
     const QUANTITY = 'quantity';
     const STATUS = 'status';
     /**#@-*/
@@ -52,19 +52,19 @@ interface SourceItemInterface extends ExtensibleDataInterface
     public function setSku($sku);
 
     /**
-     * Get source id
+     * Get source code
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getSourceId();
+    public function getSourceCode();
 
     /**
-     * Set source id
+     * Set source code
      *
-     * @param int|null $sourceId
+     * @param stirng|null $sourceId
      * @return void
      */
-    public function setSourceId($sourceId);
+    public function setSourceCode($sourceCode);
 
     /**
      * Get source item quantity

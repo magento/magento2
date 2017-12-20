@@ -132,7 +132,7 @@ class UpdateSourceItemAtLegacyStockSettingPlugin
         } else {
             /** @var SourceItemInterface $sourceItem */
             $sourceItem = $this->sourceItemFactory->create();
-            $sourceItem->setSourceId($this->defaultSourceProvider->getId());
+            $sourceItem->setSourceCode($this->defaultSourceProvider->getCode());
             $sourceItem->setSku($productSku);
         }
 

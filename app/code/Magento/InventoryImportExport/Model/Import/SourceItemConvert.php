@@ -46,7 +46,7 @@ class SourceItemConvert
             $source = $this->sourceRepository->getByCode($rowData[Sources::COL_SOURCE_CODE]);
             /** @var SourceItemInterface $sourceItem */
             $sourceItem = $this->sourceItemFactory->create();
-            $sourceItem->setSourceId($source->getSourceId());
+            $sourceItem->setSourceCode($source->getCode());
             $sourceItem->setSku($rowData[Sources::COL_SKU]);
             $sourceItem->setQuantity($rowData[Sources::COL_QTY]);
 

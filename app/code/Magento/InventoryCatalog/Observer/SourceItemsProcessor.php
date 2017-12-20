@@ -130,7 +130,7 @@ class SourceItemsProcessor
         $sourceItemMap = [];
         if ($sourceItems) {
             foreach ($sourceItems as $sourceItem) {
-                $sourceItemMap[$sourceItem->getSourceId()] = $sourceItem;
+                $sourceItemMap[$sourceItem->getSourceCode()] = $sourceItem;
             }
         }
         return $sourceItemMap;

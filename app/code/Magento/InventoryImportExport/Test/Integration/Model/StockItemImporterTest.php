@@ -121,7 +121,7 @@ class StockItemImporterTest extends TestCase
             $comparableArray[$sourceItem->getSku()] = [
                 SourceItemInterface::SKU => $sourceItem->getSku(),
                 SourceItemInterface::QUANTITY => $sourceItem->getQuantity(),
-                SourceItemInterface::SOURCE_ID => (string)$sourceItem->getSourceId(),
+                SourceItemInterface::SOURCE_CODE => (string)$sourceItem->getSourceCode(),
                 SourceItemInterface::STATUS => $sourceItem->getStatus()
             ];
         }

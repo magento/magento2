@@ -18,7 +18,7 @@ class SourceItem extends AbstractDb
      * Constants related to specific db layer
      */
     const TABLE_NAME_SOURCE_ITEM = 'inventory_source_item';
-    const ID_FIELD_NAME = 'source_item_id';
+    const ID_FIELD_NAME = 'source_code';
     /**#@-*/
 
     /**

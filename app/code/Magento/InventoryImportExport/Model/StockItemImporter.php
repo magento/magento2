@@ -68,7 +68,7 @@ class StockItemImporter implements StockItemImporterInterface
                 $qty = (isset($stockDatum['qty'])) ? $stockDatum['qty'] : 0;
                 $sourceItem = $this->sourceItemFactory->create();
                 $sourceItem->setSku($stockDatum[Product::COL_SKU]);
-                $sourceItem->setSourceId($this->defaultSource->getId());
+                $sourceItem->setSourceCode($this->defaultSource->getCode());
                 $sourceItem->setQuantity($qty);
                 $sourceItem->setStatus($inStock);
                 $sourceItems[] = $sourceItem;

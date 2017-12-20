@@ -236,10 +236,9 @@ class SourcesTest extends TestCase
     {
         $comparableArray = [];
         foreach ($sourceItems as $sourceItem) {
-            $key = sprintf('%s-%s', $sourceItem->getSourceId(), $sourceItem->getSku());
-            $source = $this->sourceRepository->get($sourceItem->getSourceId());
+            $key = sprintf('%s-%s', $sourceItem->getSourceCode(), $sourceItem->getSku());
             $comparableArray[$key] = $this->buildRowDataArray(
-                $source->getCode(),
+                $sourceItem->getSourceCode(),
                 $sourceItem->getSku(),
                 $sourceItem->getQuantity(),
                 $sourceItem->getStatus()
@@ -256,8 +255,7 @@ class SourcesTest extends TestCase
     private function updateDataArrayByBunch(array $data, array $bunch)
     {
         foreach ($bunch as $bunchData) {
-            $source = $this->sourceRepository->getByCode($bunchData[Sources::COL_SOURCE_CODE]);
-            $key = sprintf('%s-%s', $source->getSourceId(), $bunchData[Sources::COL_SKU]);
+            $key = sprintf('%s-%s', $bunchData[Sources::COL_SOURCE_CODE], $bunchData[Sources::COL_SKU]);
             $data[$key] = $this->buildRowDataArray(
                 $bunchData[Sources::COL_SOURCE_CODE],
                 $bunchData[Sources::COL_SKU],

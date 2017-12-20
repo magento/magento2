@@ -35,10 +35,10 @@ class SourceIdValidator implements SourceItemValidatorInterface
     public function validate(SourceItemInterface $source): ValidationResult
     {
         $errors = [];
-        if (!is_numeric($source->getSourceId())) {
+        if (!is_string($source->getSourceCode())) {
             $errors[] = __(
-                '"%field" should be numeric.',
-                ['field' => SourceItemInterface::SOURCE_ID]
+                '"%field" should be string.',
+                ['field' => SourceItemInterface::SOURCE_CODE]
             );
         }
 
