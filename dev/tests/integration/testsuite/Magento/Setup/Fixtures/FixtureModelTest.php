@@ -6,9 +6,9 @@
 
 namespace Magento\Setup\Fixtures;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Indexer\Model\Config;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class Application test
@@ -118,7 +118,7 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
 
         foreach ($this->entityAsserts as $entityAssert) {
             try {
-                $entityAssert->assert();
+                $this->assertTrue($entityAssert->assert());
             } catch (\AssertionError $assertionError) {
                 $this->assertTrue(false, $assertionError->getMessage());
             }

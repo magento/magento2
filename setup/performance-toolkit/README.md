@@ -44,7 +44,7 @@ For run Admin Pool in multithreading mode, please be sure, that:
 
 **Note:** Before generating medium or large profiles, it may be necessary to increase the value of `tmp_table_size` and `max_heap_table_size` parameters for MySQL to 512Mb or more. The value of `memory_limit` for PHP should be 1Gb or more.
 
-There are two JMeter scenarios located in `setup/performance-toolkit` folder: `benchmark.jmx`.
+There are two JMeter scenarios located in `setup/performance-toolkit` folder: `benchmark.jmx` and `benchmark_2015.jmx` (legacy version).
 
 **Note:** To be sure that all quotes are empty, run the following MySQL query before each run of a scenario:
 
