@@ -69,6 +69,9 @@ class ProcessRevertProductsSalePlugin
      */
     public function aroundRevertProductsSale(StockManagement $subject, callable $proceed, $items, $websiteId = null)
     {
+        if (empty($items)) {
+            return [];
+        }
         if (null === $websiteId) {
             //TODO: is we need to throw exception?
             throw new LocalizedException(__('$websiteId is required'));
