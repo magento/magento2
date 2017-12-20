@@ -66,10 +66,6 @@ class AssignWebsiteToDefaultStockTest extends TestCase
         self::assertEquals(SalesChannelInterface::TYPE_WEBSITE, $salesChannel->getType());
     }
 
-    /**
-     * Creates website inside of test so need to enable db isolation to prevent change db state after test execution
-     * @magentoDbIsolation enabled
-     */
     public function testCreateWebsiteIfSalesChannelsAreEmpty()
     {
         $websiteCode = 'test_1';
