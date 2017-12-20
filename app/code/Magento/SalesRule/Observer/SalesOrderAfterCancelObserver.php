@@ -91,7 +91,7 @@ class SalesOrderAfterCancelObserver implements ObserverInterface
 
                     if ($ruleCustomer->getId()) {
                         if ($ruleCustomer->getTimesUsed() > 0) {
-                            $ruleCustomer->setTimesUsed($ruleCustomer->getTimesUsed() + 1);
+                            $ruleCustomer->setTimesUsed($ruleCustomer->getTimesUsed() - 1);
                         }
                     } else {
                         $ruleCustomer->setCustomerId($customerId)->setRuleId($ruleId)->setTimesUsed(0);
