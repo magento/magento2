@@ -347,7 +347,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
                 'firstname' => 'test firstname',
                 'lastname' => 'test lastname',
             ],
-            'subscription' => 'false'
+            'subscription' => '0'
         ];
         $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);

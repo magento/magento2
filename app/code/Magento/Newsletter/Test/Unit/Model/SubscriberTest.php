@@ -5,6 +5,9 @@
  */
 namespace Magento\Newsletter\Test\Unit\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SubscriberTest extends \PHPUnit_Framework_TestCase
 {
     /**
