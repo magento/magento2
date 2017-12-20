@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
@@ -15,6 +14,7 @@ use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 
 /**
  * Class provides around Plugin on Magento\CatalogInventory\Model\ResourceModel::correctItemsQty
@@ -22,11 +22,6 @@ use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
  */
 class UpdateSourceItemAtLegacyQtyCounterPlugin
 {
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
     /**
      * @var SourceItemRepositoryInterface
      */
@@ -53,27 +48,32 @@ class UpdateSourceItemAtLegacyQtyCounterPlugin
     private $resourceConnection;
 
     /**
-     * @param ProductRepositoryInterface $productRepository
+     * @var GetSkusByProductIdsInterface
+     */
+    private $getSkusByProductIds;
+
+    /**
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SourceItemsSaveInterface $sourceItemsSave
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ResourceConnection $resourceConnection
+     * @param GetSkusByProductIdsInterface $getSkusByProductIds
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
         SourceItemRepositoryInterface $sourceItemRepository,
         SourceItemsSaveInterface $sourceItemsSave,
         DefaultSourceProviderInterface $defaultSourceProvider,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        GetSkusByProductIdsInterface $getSkusByProductIds
     ) {
-        $this->productRepository = $productRepository;
         $this->sourceItemRepository = $sourceItemRepository;
         $this->sourceItemsSave = $sourceItemsSave;
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->resourceConnection = $resourceConnection;
+        $this->getSkusByProductIds = $getSkusByProductIds;
     }
 
     /**
@@ -146,14 +146,11 @@ class UpdateSourceItemAtLegacyQtyCounterPlugin
      */
     private function getProductQuantitiesBySku(array $productQuantitiesByProductId): array
     {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('entity_id', array_keys($productQuantitiesByProductId), 'in')
-            ->create();
-        $products = $this->productRepository->getList($searchCriteria)->getItems();
+        $productSkus = $this->getSkusByProductIds->execute(array_keys($productQuantitiesByProductId));
 
         $productQuantitiesBySku = [];
-        foreach ($products as $product) {
-            $productQuantitiesBySku[$product->getSku()] = $productQuantitiesByProductId[$product->getId()];
+        foreach ($productSkus as $productId => $productSku) {
+            $productQuantitiesBySku[$productSku] = $productQuantitiesByProductId[$productId];
         }
         return $productQuantitiesBySku;
     }
