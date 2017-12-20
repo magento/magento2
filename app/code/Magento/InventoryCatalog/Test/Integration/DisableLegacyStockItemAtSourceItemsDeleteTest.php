@@ -23,7 +23,7 @@ use Magento\CatalogInventory\Api\StockItemCriteriaInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\Data\StockItemCollectionInterface;
 
-class DeleteLegacyCatalogInventoryPluginTest extends TestCase
+class DisableLegacyStockItemAtSourceItemsDeleteTest extends TestCase
 {
     /**
      * @var StockItemRepositoryInterface
@@ -86,7 +86,6 @@ class DeleteLegacyCatalogInventoryPluginTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
-     * @magentoDbIsolation enabled
      */
     public function testDeleteDefaultSourceItemTriggersDeleteStockItem()
     {
@@ -94,7 +93,7 @@ class DeleteLegacyCatalogInventoryPluginTest extends TestCase
         $productSku = 'SKU-4';
         $product = $this->productRepository->get($productSku);
 
-        /** @var StockItemCriteriaInterface  $criteria */
+        /** @var StockItemCriteriaInterface $criteria */
         $defaultStock = $this->stockRegistry->getStock();
         $criteria = $this->stockItemCriteriaFactory->create();
         $criteria->setProductsFilter([$product->getId()]);

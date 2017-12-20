@@ -16,7 +16,7 @@ use Magento\InventoryCatalog\Model\DisableLegacyStockStatusByDefaultSourceItem;
  * Plugin help to delete related entries from the legacy catalog inventory tables cataloginventory_stock_status and
  * cataloginventory_stock_item if deleted source item is default source item.
  */
-class DeleteLegacyCatalogInventoryPlugin
+class DisableLegacyStockItemAtSourceItemsDeletePlugin
 {
     /**
      * @var DisableLegacyStockItemByDefaultSourceItem
@@ -50,7 +50,6 @@ class DeleteLegacyCatalogInventoryPlugin
      * @see SourceItemsDeleteInterface::execute
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function afterExecute(SourceItemsDeleteInterface $subject, $result, array $sourceItems)
     {

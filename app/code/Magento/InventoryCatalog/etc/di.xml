@@ -20,7 +20,7 @@
         <plugin name="update_legacy_catalog_inventory_at_source_items_save" type="Magento\InventoryCatalog\Plugin\InventoryApi\UpdateLegacyCatalogInventoryOnSourceItemsSavePlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
-        <plugin name="delete_legacy_catalog_inventory_plugin" type="Magento\InventoryCatalog\Plugin\InventoryApi\DeleteLegacyCatalogInventoryPlugin"/>
+        <plugin name="disable_legacy_catalog_inventory_plugin" type="Magento\InventoryCatalog\Plugin\InventoryApi\DisableLegacyStockItemAtSourceItemsDeletePlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\ReservationsAppendInterface">
         <plugin name="update_legacy_catalog_inventory_at_stock_deduction" type="Magento\InventoryCatalog\Plugin\InventoryApi\UpdateLegacyCatalogInventoryAtStockDeductionPlugin"/>

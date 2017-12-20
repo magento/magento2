@@ -7,10 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Model;
 
-use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
@@ -32,9 +30,9 @@ class UpdateLegacyStockStatusByDefaultSourceItem
     private $defaultSourceProvider;
 
     /**
-     * @var ProductIdLocatorInterface
+     * @var GetProductIdsBySkusInterface
      */
-    private $productIdLocator;
+    private $getProductIdsBySkus;
     /**
      * @var DefaultStockProviderInterface
      */
@@ -44,18 +42,18 @@ class UpdateLegacyStockStatusByDefaultSourceItem
      * @param ResourceConnection $resourceConnection
      * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param DefaultStockProviderInterface $defaultStockProvider
-     * @param ProductIdLocatorInterface $productIdLocator
+     * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         DefaultSourceProviderInterface $defaultSourceProvider,
         DefaultStockProviderInterface $defaultStockProvider,
-        ProductIdLocatorInterface $productIdLocator
+        GetProductIdsBySkusInterface $getProductIdsBySkus
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->defaultSourceProvider = $defaultSourceProvider;
         $this->defaultStockProvider = $defaultStockProvider;
-        $this->productIdLocator = $productIdLocator;
+        $this->getProductIdsBySkus = $getProductIdsBySkus;
     }
 
     /**
@@ -67,8 +65,8 @@ class UpdateLegacyStockStatusByDefaultSourceItem
             return;
         }
 
-        $productIds = $this->productIdLocator->retrieveProductIdsBySkus([$sourceItem->getSku()]);
-        $productId = isset($productIds[$sourceItem->getSku()]) ? key($productIds[$sourceItem->getSku()]) : false;
+        $productIds = $this->getProductIdsBySkus->execute([$sourceItem->getSku()]);
+        $productId = isset($productIds[$sourceItem->getSku()]) ? $productIds[$sourceItem->getSku()] : false;
 
         if ($productId) {
             $connection = $this->resourceConnection->getConnection();

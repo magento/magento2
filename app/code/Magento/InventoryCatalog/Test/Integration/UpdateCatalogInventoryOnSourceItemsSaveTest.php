@@ -13,7 +13,6 @@ use Magento\CatalogInventory\Api\Data\StockItemCollectionInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Registry;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
@@ -45,7 +44,7 @@ class UpdateCatalogInventoryOnSourceItemsSaveTest extends TestCase
     /**
      * @var StockItemRepositoryInterface
      */
-    private $oldStockItemRepository;
+    private $legacyIdStockItemRepository;
 
     /**
      * @var StockRegistryInterface
@@ -75,7 +74,7 @@ class UpdateCatalogInventoryOnSourceItemsSaveTest extends TestCase
     protected function setUp()
     {
         $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
-        $this->oldStockItemRepository = Bootstrap::getObjectManager()->get(StockItemRepositoryInterface::class);
+        $this->legacyIdStockItemRepository = Bootstrap::getObjectManager()->get(StockItemRepositoryInterface::class);
         $this->stockItemCriteriaFactory = Bootstrap::getObjectManager()->get(StockItemCriteriaInterfaceFactory::class);
         $this->stockRegistry = Bootstrap::getObjectManager()->get(StockRegistryInterface::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
@@ -112,7 +111,7 @@ class UpdateCatalogInventoryOnSourceItemsSaveTest extends TestCase
             ->create();
 
         /** @var StockItemCollectionInterface $collectionBeforeChange */
-        $stockItemsBeforeUpdate = $this->oldStockItemRepository->getList($criteria)->getItems();
+        $stockItemsBeforeUpdate = $this->legacyIdStockItemRepository->getList($criteria)->getItems();
         $this->assertCount(1, $stockItemsBeforeUpdate);
 
         /** @var StockItemInterface $stockItem */
@@ -132,7 +131,7 @@ class UpdateCatalogInventoryOnSourceItemsSaveTest extends TestCase
         $this->sourceItemsSave->execute([$sourceItem]);
 
         /** @var StockItemCollectionInterface $collectionBeforeChange */
-        $stockItemsAfterUpdate = $this->oldStockItemRepository->getList($criteria)->getItems();
+        $stockItemsAfterUpdate = $this->legacyIdStockItemRepository->getList($criteria)->getItems();
         $this->assertCount(1, $stockItemsAfterUpdate);
 
         /** @var StockItemInterface $stockItem */
