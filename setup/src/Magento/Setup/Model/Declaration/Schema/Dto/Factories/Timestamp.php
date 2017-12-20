@@ -56,13 +56,14 @@ class Timestamp implements FactoryInterface
      */
     public function create(array $data)
     {
+        $data['onUpdate'] = isset($data['on_update']) ? $data['on_update'] : null;
         //As we have only one value for timestamp on update -> it is convinient to use boolean type for it
         //But later we need to convert it to SQL value
-        if (isset($data['on_update']) && $data['on_update'] !== 'CURRENT_TIMESTAMP') {
-            if ($this->booleanUtils->toBoolean($data['on_update'])) {
-                $data['on_update'] = 'CURRENT_TIMESTAMP';
+        if ($data['onUpdate'] && $data['onUpdate'] !== 'CURRENT_TIMESTAMP') {
+            if ($this->booleanUtils->toBoolean($data['onUpdate'])) {
+                $data['onUpdate'] = 'CURRENT_TIMESTAMP';
             } else {
-                unset($data['on_update']);
+                unset($data['onUpdate']);
             }
         }
         //By default we do not want to use default attribute

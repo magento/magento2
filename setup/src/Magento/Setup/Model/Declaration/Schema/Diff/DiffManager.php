@@ -6,10 +6,8 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
-use Magento\Setup\Model\Declaration\Schema\ChangeRegistryInterface;
 use Magento\Setup\Model\Declaration\Schema\Comparator;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
-use Magento\Setup\Model\Declaration\Schema\Dto\ElementRenamedInterface;
 
 /**
  * Helper which provide methods, that helps to compare 2 different nodes:
@@ -34,6 +32,7 @@ class DiffManager
      * Check whether this is element is new or not, by checking it in db schema
      *
      * @param ElementInterface[] $generatedElements
+     * @param ElementInterface $element
      * @return bool
      */
     public function shouldBeCreated(array $generatedElements, ElementInterface $element)
@@ -56,19 +55,19 @@ class DiffManager
      * Register element, that should changes
      *
      *
-     * @param ChangeRegistryInterface $changeRegistry
+     * @param DiffInterface $diff
      * @param ElementInterface $element
      * @param ElementInterface $generatedElement
      */
     public function registerModification(
-        ChangeRegistryInterface $changeRegistry,
+        DiffInterface $diff,
         ElementInterface $element,
         ElementInterface $generatedElement
     ) {
-        $changeRegistry->register(
+        $diff->register(
             $element,
             $element->getElementType(),
-            ChangeRegistryInterface::CHANGE_OPERATION,
+            DiffInterface::CHANGE_OPERATION,
             $generatedElement
         );
     }
@@ -77,12 +76,12 @@ class DiffManager
      * If elements really dont exists in declaration - we will remove them
      * If some mistake happens (and element is just not preprocessed), we will throw exception
      *
-     * @param ChangeRegistryInterface $changeRegistry
+     * @param DiffInterface $diff
      * @param ElementInterface[] $generatedElements
      * @param ElementInterface[] $elements
      */
     public function registerRemoval(
-        ChangeRegistryInterface $changeRegistry,
+        DiffInterface $diff,
         array $generatedElements,
         array $elements
     ) {
@@ -96,24 +95,24 @@ class DiffManager
                 );
             }
 
-            $changeRegistry->register(
+            $diff->register(
                 $generatedElement,
                 $generatedElement->getElementType(),
-                ChangeRegistryInterface::REMOVE_OPERATION
+                DiffInterface::REMOVE_OPERATION
             );
         }
     }
 
     /**
-     * @param ChangeRegistryInterface $changeRegistry
+     * @param DiffInterface $diff
      * @param ElementInterface $element
      */
-    public function registerCreation(ChangeRegistryInterface $changeRegistry, ElementInterface $element)
+    public function registerCreation(DiffInterface $diff, ElementInterface $element)
     {
-        $changeRegistry->register(
+        $diff->register(
             $element,
             $element->getElementType(),
-            ChangeRegistryInterface::CREATE_OPERATION
+            DiffInterface::CREATE_OPERATION
         );
     }
 

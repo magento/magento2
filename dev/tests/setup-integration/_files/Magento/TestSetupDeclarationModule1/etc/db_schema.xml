@@ -7,7 +7,7 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/config/schema.xsd">
     <table name="reference_table" resource="sales">
-        <column xsi:type="tinyinteger" name="tinyint_ref" renameTo="tinyintref_2" default="0" padding="7" nullable="true" unsigned="false" />
+        <column xsi:type="tinyinteger" name="tinyint_ref" default="0" padding="7" nullable="true" unsigned="false" />
         <constraint xsi:type="primary" name="tinyint_primary">
             <column name="tinyint_ref" />
         </constraint>
@@ -29,7 +29,7 @@
         <column xsi:type="mediumblob" name="mediumblob" length="1122222" />
         <column xsi:type="blob" name="blob" length="1122" />
         <column xsi:type="boolean" name="boolean" />
-        <column xsi:type="varbinary" name="varbinary_rename" default="10101" disabled="true" renameTo="varbinary_renamed"  />
+        <column xsi:type="varbinary" name="varbinary_rename" default="10101" disabled="true" />
         <!--Constraints-->
         <constraint xsi:type="unique" name="some_unique_key">
             <column name="smallint" />

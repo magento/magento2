@@ -4,16 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema;
+namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
+use Magento\Setup\Model\Declaration\Schema\Request;
 
 /**
- * ChangeRegistry is type of classes, that holds all information
+ * DiffInterface is type of classes, that holds all information
  * that need to be changed from one installation to another
  */
-interface ChangeRegistryInterface
+interface DiffInterface
 {
     /**
      * For elements that needs to be created

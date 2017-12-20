@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
-use Magento\Setup\Model\Declaration\Schema\ChangeRegistry;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 
 /**
@@ -30,41 +29,51 @@ class SchemaDiff
     private $diffManager;
 
     /**
+     * @var DiffFactory
+     */
+    private $diffFactory;
+
+    /**
      * @param DiffManager $diffManager
      * @param TableDiff $tableDiff
+     * @param DiffFactory $diffFactory
      */
     public function __construct(
         DiffManager $diffManager,
-        TableDiff $tableDiff
+        TableDiff $tableDiff,
+        DiffFactory $diffFactory
     ) {
         $this->tableDiff = $tableDiff;
         $this->diffManager = $diffManager;
+        $this->diffFactory = $diffFactory;
     }
 
     /**
      * @param Schema $schema
      * @param Schema $generatedSchema
-     * @param ChangeRegistry $changeRegistry
+     * @return Diff
      */
     public function diff(
         Schema $schema,
-        Schema $generatedSchema,
-        ChangeRegistry $changeRegistry
+        Schema $generatedSchema
     ) {
         $generatedTables = $generatedSchema->getTables();
+        $diff = $this->diffFactory->create();
 
         foreach ($schema->getTables() as $name => $table) {
             if ($this->diffManager->shouldBeCreated($generatedTables, $table)) {
-                $this->diffManager->registerCreation($changeRegistry, $table);
+                $this->diffManager->registerCreation($diff, $table);
             } else {
-                $this->tableDiff->diff($table, $generatedTables[$name], $changeRegistry);
+                $this->tableDiff->diff($table, $generatedTables[$name], $diff);
             }
 
             unset($generatedTables[$name]);
         }
         //Removal process
         if ($this->diffManager->shouldBeRemoved($generatedTables)) {
-            $this->diffManager->registerRemoval($changeRegistry, $generatedTables, $schema->getTables());
+            $this->diffManager->registerRemoval($diff, $generatedTables, $schema->getTables());
         }
+
+        return $diff;
     }
 }

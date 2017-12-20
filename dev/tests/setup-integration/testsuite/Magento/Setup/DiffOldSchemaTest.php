@@ -6,16 +6,15 @@
 
 namespace Magento\Setup;
 
-use Magento\Setup\Model\Declaration\Schema\ChangeRegistryFactory;
-use Magento\Setup\Model\Declaration\Schema\ChangeRegistryInterface;
-use Magento\Setup\Model\Declaration\Schema\Db\Parser;
+use Magento\Setup\Model\Declaration\Schema\Diff\DiffFactory;
+use Magento\Setup\Model\Declaration\Schema\Diff\DiffInterface;
+use Magento\Setup\Model\Declaration\Schema\SchemaConfig;
 use Magento\Setup\Model\Declaration\Schema\Diff\SchemaDiff;
-use Magento\Setup\Model\Declaration\Schema\Dto\SchemaFactory;
+use Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
-use \Magento\Setup\Model\Declaration\Schema\Declaration\Parser as DeclarativeParser;
 
 /**
  * The purpose of this test is verifying initial InstallSchema, InstallData scripts
@@ -33,40 +32,28 @@ class DiffOldSchemaTest extends SetupTestCase
     private $cliCommad;
 
     /**
-     * @var SchemaFactory
-     */
-    private $SchemaFactory;
-
-    /**
-     * @var DeclarativeParser
-     */
-    private $declarativeParser;
-
-    /**
-     * @var Parser
-     */
-    private $generatedParser;
-
-    /**
      * @var SchemaDiff
      */
-    private $SchemaDiff;
+    private $schemaDiff;
 
     /**
-     * @var ChangeRegistryFactory
+     * @var DiffFactory
      */
     private $changeRegistryFactory;
+
+    /**
+     * @var SchemaConfigInterface
+     */
+    private $schemaConfig;
 
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->SchemaFactory = $objectManager->get(SchemaFactory::class);
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
         $this->cliCommad = $objectManager->get(CliCommand::class);
-        $this->declarativeParser = $objectManager->get(DeclarativeParser::class);
-        $this->generatedParser = $objectManager->get(Parser::class);
-        $this->SchemaDiff = $objectManager->get(SchemaDiff::class);
-        $this->changeRegistryFactory = $objectManager->get(ChangeRegistryFactory::class);
+        $this->schemaConfig = $objectManager->get(SchemaConfigInterface::class);
+        $this->schemaDiff = $objectManager->get(SchemaDiff::class);
+        $this->changeRegistryFactory = $objectManager->get(DiffFactory::class);
     }
 
     /**
@@ -90,14 +77,11 @@ class DiffOldSchemaTest extends SetupTestCase
         );
 
         $this->cliCommad->install(['Magento_TestSetupDeclarationModule1']);
-        $changeRegistry = $this->changeRegistryFactory->create();
-        $generatedSchema = $this->SchemaFactory->create();
-        $declarativeSchema = $this->SchemaFactory->create();
-        $declarativeSchema = $this->declarativeParser->parse($declarativeSchema);
-        $generatedSchema = $this->generatedParser->parse($generatedSchema);
-        $this->SchemaDiff->diff($declarativeSchema, $generatedSchema, $changeRegistry);
+        $declarativeSchema = $this->schemaConfig->getDeclarationConfig();
+        $generatedSchema = $this->schemaConfig->getDbConfig();
+        $diff = $this->schemaDiff->diff($declarativeSchema, $generatedSchema);
         //Change operations
-        $changeOperations = $changeRegistry->get(ChangeRegistryInterface::CHANGE_OPERATION);
+        $changeOperations = $diff->get(DiffInterface::CHANGE_OPERATION);
         self::assertCount(1, $changeOperations);
         self::assertEquals(
             $this->getBigIntKeyXmlSensitiveData(),
@@ -109,7 +93,7 @@ class DiffOldSchemaTest extends SetupTestCase
         );
         self::assertCount(
             5,
-            $changeRegistry->get(ChangeRegistryInterface::REMOVE_OPERATION)['table']
+            $diff->get(DiffInterface::REMOVE_OPERATION)['table']
         );
     }
 

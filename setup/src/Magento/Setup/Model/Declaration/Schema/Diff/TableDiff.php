@@ -6,8 +6,6 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
-use Magento\Setup\Model\Declaration\Schema\ChangeRegistry;
-use Magento\Setup\Model\Declaration\Schema\DiffInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
@@ -19,7 +17,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
  * If element exists in both version and are different -> then we need to modify element
  * If element exists only in db -> then we need to remove this element
  */
-class TableDiff implements DiffInterface
+class TableDiff
 {
     /**
      * Column type for diff
@@ -52,13 +50,13 @@ class TableDiff implements DiffInterface
     /**
      * @param Table | ElementInterface $declaredTable
      * @param Table | ElementInterface $generatedTable
-     * @param ChangeRegistry $changeRegistry
+     * @param Diff $changeRegistry
      * @inheritdoc
      */
     public function diff(
         ElementInterface $declaredTable,
         ElementInterface $generatedTable,
-        ChangeRegistry $changeRegistry
+        Diff $changeRegistry
     ) {
         $types = [self::COLUMN_DIFF_TYPE, self::CONSTRAINT_DIFF_TYPE, self::INDEX_DIFF_TYPE];
         //We do inspection for each element type

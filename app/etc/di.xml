@@ -176,6 +176,7 @@
     <preference for="Magento\Setup\Model\Declaration\Schema\Declaration\DynamicStructureInterface" type="Magento\Setup\Model\Declaration\Schema\Declaration\Structure\Dynamic" />
     <preference for="Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface" type="Magento\Eav\Model\TypeLocator\ComplexType"/>
     <preference for="Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaReaderInterface" type="Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\DbSchemaReader" />
+    <preference for="Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface" type="Magento\Setup\Model\Declaration\Schema\SchemaConfig" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
