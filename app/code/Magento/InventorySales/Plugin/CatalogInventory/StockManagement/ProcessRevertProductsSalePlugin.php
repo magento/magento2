@@ -67,7 +67,7 @@ class ProcessRevertProductsSalePlugin
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundRegisterProductsSale(StockManagement $subject, callable $proceed, $items, $websiteId = null)
+    public function aroundRevertProductsSale(StockManagement $subject, callable $proceed, $items, $websiteId = null)
     {
         if (null === $websiteId) {
             //TODO: is we need to throw exception?

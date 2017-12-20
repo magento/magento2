@@ -17,7 +17,7 @@ use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\Indexer\Model\Indexer;
 use Magento\Inventory\Indexer\SourceItem\SourceItemIndexer;
 
-class ReservationPlacingDuringPlaceOrderTest extends TestCase
+class ReservationPlacingDuringBackItemQtyTest extends TestCase
 {
     /**
      * @var Indexer
@@ -73,7 +73,7 @@ class ReservationPlacingDuringPlaceOrderTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/websites.php
      * @magentoDataFixture ../../../../app/code/Magento/InventorySalesApi/Test/_files/stock_website_link.php
      */
-    public function testRegisterProductsSale()
+    public function testRevertProductsSale()
     {
         $product = $this->productRepository->get('SKU-1');
         $website = $this->websiteRepository->get('eu_website');
@@ -81,7 +81,7 @@ class ReservationPlacingDuringPlaceOrderTest extends TestCase
         $this->indexer->reindexAll();
         self::assertEquals(8.5, $this->getProductQtyInStock->execute('SKU-1', 10));
 
-        $this->stockManagement->registerProductsSale([$product->getId() => 3.5], $website->getId());
-        self::assertEquals(5, $this->getProductQtyInStock->execute('SKU-1', 10));
+        $this->stockManagement->backItemQty($product->getId(), 3.5, $website->getId());
+        self::assertEquals(12, $this->getProductQtyInStock->execute('SKU-1', 10));
     }
 }

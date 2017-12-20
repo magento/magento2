@@ -49,9 +49,6 @@ class IsProductInStockTest extends TestCase
      */
     private $removeIndexData;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
@@ -66,10 +63,7 @@ class IsProductInStockTest extends TestCase
         $this->removeIndexData->execute([10]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function tearDown()
+    protected function tearDown()
     {
         $this->removeIndexData->execute([10]);
     }
