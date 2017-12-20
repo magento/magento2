@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <actionGroup name="CreateNoReportAdminUserAndRoleActionGroup">
+        <arguments>
+            <argument name="user_role" defaultValue="adminNoReportRole"/>
+            <argument name="user" defaultValue="adminNoReport"/>
+        </arguments>
+        <amOnPage stepKey="amOnAdminLoginPage" url="{{AdminLoginPage.url}}"/>
+        <fillField stepKey="fillUsernameAdmin" selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}"/>
+        <fillField stepKey="fillPasswordAdmin" selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <click stepKey="clickOnSignIn" selector="{{AdminLoginFormSection.signIn}}"/>
+
+        <amOnPage stepKey="amOnAdminUsersPage" url="{{AdminUsersPage.url}}"/>
+        <fillField stepKey="fillUsernameSearch" selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="$$noReportUser.username$$"/>
+        <click stepKey="clickSearchButton" selector="{{AdminUserGridSection.searchButton}}"/>
+        <waitForPageLoad stepKey="wait1" time="10"/>
+        <see stepKey="seeFoundUsername" selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="$$noReportUser.username$$"/>
+        <click stepKey="clickFoundUsername" selector="{{AdminUserGridSection.searchResultFirstRow}}"/>
+        <waitForPageLoad stepKey="wait2" time="30"/>
+        <seeInField stepKey="seeUsernameInField" selector="{{AdminEditUserSection.usernameTextField}}" userInput="$$noReportUser.username$$"/>
+        <fillField stepKey="fillCurrentPassword" selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <click stepKey="clickUserRoleTab" selector="{{AdminEditUserSection.userRoleTab}}"/>
+
+        <fillField stepKey="fillRoleNameSearch" selector="{{AdminEditUserSection.roleNameFilterTextField}}" userInput="$$noReportUserRole.rolename$$"/>
+        <click stepKey="clickSearchButtonUserRole" selector="{{AdminEditUserSection.searchButton}}"/>
+        <waitForPageLoad stepKey="wait3" time="10"/>
+        <see stepKey="seeFoundRoleName" selector="{{AdminEditUserSection.roleNameInFirstRow}}" userInput="$$noReportUserRole.rolename$$"/>
+        <click stepKey="clickFoundRoleName" selector="{{AdminEditUserSection.searchResultFirstRow}}"/>
+        <click stepKey="clickSaveButton" selector="{{AdminEditUserSection.saveButton}}"/>
+        <waitForPageLoad stepKey="wait4" time="10"/>
+        <see stepKey="saveUserSuccessMessage" selector="{{AdminUserGridSection.successMessage}}" userInput="You saved the user."/>
+        <amOnPage stepKey="amOnLogoutPage50" url="admin/admin/auth/logout/"/>
+    </actionGroup>
+</config>
