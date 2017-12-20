@@ -41,17 +41,17 @@ abstract class GraphQlAbstract extends WebapiAbstract
     public function graphQlQuery(
         string $query,
         array $variables = [],
-        string $operationName = ''
+        string $operationName = '',
+        array $headers = []
     ) {
         return $this->getGraphQlClient()->postQuery(
             $query,
             $variables,
             $operationName,
             $this->setStoreCodeInHeader(),
-            $this->composeHeaders()
+            $this->composeHeaders($headers)
         );
     }
-
     /**
      * @param string $token
      * @return void
@@ -89,13 +89,13 @@ abstract class GraphQlAbstract extends WebapiAbstract
     /**
      * @return string[]
      */
-    private function composeHeaders()
+    private function composeHeaders($headers)
     {
-        $headers = [];
-        if (!empty($this->token)) {
-            $headers = [sprintf('Authorization: Bearer %s', $this->token)];
+        $headersArray =[];
+        foreach ($headers as $key => $value) {
+            $headersArray[] = sprintf('%s: %s', $key, $value);
         }
-        return $headers;
+        return $headersArray;
     }
 
     /**

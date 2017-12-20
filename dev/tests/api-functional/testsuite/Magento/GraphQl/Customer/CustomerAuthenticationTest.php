@@ -63,13 +63,17 @@ QUERY;
         $customerTokenService = ObjectManager::getInstance()
                                ->get(\Magento\Integration\Api\CustomerTokenServiceInterface::class);
         $customerToken = $customerTokenService->createCustomerAccessToken($userName, $password);
-        $this->setToken($customerToken);
 
+       // $headerMap = [
+    //        'Authorization' => 'Bearer ' . $customerToken,
+     //       'Store code' => 1
+     //   ];
+        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         /** @var CustomerRepositoryInterface $customerRepository */
         $customerRepository = ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
         $customer = $customerRepository->get('customer@example.com');
 
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
         $this->assertArrayHasKey('customer', $response);
         $this->assertArrayHasKey('addresses', $response['customer']);
         $this->assertTrue(

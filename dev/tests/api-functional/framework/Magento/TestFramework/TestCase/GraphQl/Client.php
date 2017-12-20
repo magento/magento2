@@ -52,10 +52,10 @@ class Client
      * @return array|string|int|float|bool
      * @throws \Exception
      */
-    public function postQuery(string $query, array $variables = [], string $operationName = '', array $storeCodeInHeader = [], array $headers = [])
+    public function postQuery(string $query, array $variables = [], string $operationName = '', array $headers = [])
     {
         $url = $this->getEndpointUrl();
-        $headers = array_merge($headers, ['Accept: application/json', 'Content-Type: application/json'], $storeCodeInHeader);
+        $headers = array_merge($headers, ['Accept: application/json', 'Content-Type: application/json']);
         $requestArray = [
             'query' => $query,
             'variables' => empty($variables) ? $variables : null,

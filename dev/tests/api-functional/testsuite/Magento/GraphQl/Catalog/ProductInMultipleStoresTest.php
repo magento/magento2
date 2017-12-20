@@ -45,6 +45,13 @@ class ProductInMultipleStoresTest extends GraphQlAbstract
     }
 }
 QUERY;
+        $userName = 'customer@example.com';
+        $password = 'password';
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = ObjectManager::getInstance()
+            ->get(\Magento\Integration\Api\CustomerTokenServiceInterface::class);
+        $customerToken = $customerTokenService->createCustomerAccessToken($userName, $password);
+
         // get store code
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
         $storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
@@ -56,7 +63,13 @@ QUERY;
                 continue;
             }
         }
+        [
+            'Authorization' => 'Bearer'. $token,
+            'Store code' => $storeCode
+        ];
+
         $response = $this->graphQlQuery($query);
+
         /**
          * @var ProductRepositoryInterface $productRepository
          */
