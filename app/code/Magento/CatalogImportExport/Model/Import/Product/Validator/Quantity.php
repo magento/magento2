@@ -6,6 +6,7 @@
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
 
 /**
  * Class Quantity
@@ -18,7 +19,7 @@ class Quantity extends AbstractImportValidator implements RowValidatorInterface
     public function isValid($value)
     {
         $this->_clearMessages();
-        if (!empty($value['qty']) && !is_numeric($value['qty'])) {
+        if (!empty($value['qty']) && (!is_numeric($value['qty']) && $value['qty'] !== AbstractType::EMPTY_VALUE)) {
             $this->_addMessages(
                 [
                     sprintf(

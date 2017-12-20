@@ -6,6 +6,7 @@
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
 use Magento\Framework\Validator\AbstractValidator;
 
 /**
@@ -188,6 +189,11 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         if (!strlen(trim($rowData[$attrCode]))) {
             return true;
         }
+
+        if ($rowData[$attrCode] === AbstractType::EMPTY_VALUE && !$attrParams['is_required']) {
+            return true;
+        }
+
         switch ($attrParams['type']) {
             case 'varchar':
             case 'text':
