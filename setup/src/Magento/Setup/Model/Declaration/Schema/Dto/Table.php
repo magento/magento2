@@ -16,6 +16,12 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
 class Table extends GenericElement implements ElementInterface
 {
     /**
+     * In case if we will need to change this object: add, modify or drop, we will need
+     * to define it by its type
+     */
+    const TYPE = 'table';
+
+    /**
      * @var Constraint[]
      */
     private $constraints = [];
@@ -28,7 +34,7 @@ class Table extends GenericElement implements ElementInterface
     /**
      * @var string
      */
-    protected $elementType = 'table';
+    protected $type = 'table';
 
     /**
      * @var Index[]
@@ -42,7 +48,7 @@ class Table extends GenericElement implements ElementInterface
 
     /**
      * @param string $name
-     * @param string $elementType
+     * @param string $type
      * @param string $resource
      * @param array $columns
      * @param array $indexes
@@ -50,13 +56,13 @@ class Table extends GenericElement implements ElementInterface
      */
     public function __construct(
         string $name,
-        string $elementType,
+        string $type,
         string $resource,
         array $columns = [],
         array $indexes = [],
         array $constraints = []
     ) {
-        parent::__construct($name, $elementType);
+        parent::__construct($name, $type);
         $this->columns = $columns;
         $this->indexes = $indexes;
         $this->constraints = $constraints;
@@ -180,7 +186,7 @@ class Table extends GenericElement implements ElementInterface
      * Allowed types: columns, constraints, indexes...
      *
      * @param string $type
-     * @return ElementInterface[] | ElementRenamedInterface[]
+     * @return ElementInterface[]
      */
     public function getElementsByType($type)
     {
@@ -200,5 +206,13 @@ class Table extends GenericElement implements ElementInterface
     public function addIndexes(array $indexes)
     {
         $this->indexes = array_replace($this->indexes, $indexes);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getElementType()
+    {
+        return self::TYPE;
     }
 }

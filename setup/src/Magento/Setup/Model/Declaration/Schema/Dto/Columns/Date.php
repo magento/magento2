@@ -22,7 +22,7 @@ class Date extends Column implements ElementDiffAwareInterface
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->getElementType()
+            'type' => $this->getType()
         ];
     }
 }

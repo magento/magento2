@@ -29,17 +29,17 @@ class Internal extends Constraint implements ElementDiffAwareInterface
     /**
      * Internal constructor.
      * @param string $name
-     * @param string $elementType
+     * @param string $type
      * @param Table $table
      * @param array $columns
      */
     public function __construct(
         $name,
-        $elementType,
+        $type,
         Table $table,
         array $columns
     ) {
-        parent::__construct($name, $elementType, $table);
+        parent::__construct($name, $type, $table);
         $this->columns = $columns;
     }
 
@@ -57,7 +57,7 @@ class Internal extends Constraint implements ElementDiffAwareInterface
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->getElementType(),
+            'type' => $this->getType(),
             'columns' => array_map(
                 function (Column $column) {
                     return $column->getName();

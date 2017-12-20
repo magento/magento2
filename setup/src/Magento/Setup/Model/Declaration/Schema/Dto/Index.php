@@ -15,6 +15,12 @@ class Index extends GenericElement implements
     ElementDiffAwareInterface
 {
     /**
+     * In case if we will need to change this object: add, modify or drop, we will need
+     * to define it by its type
+     */
+    const TYPE = 'index';
+
+    /**
      * @var Table
      */
     private $table;
@@ -26,17 +32,17 @@ class Index extends GenericElement implements
 
     /**
      * @param string $name
-     * @param string $elementType
+     * @param string $type
      * @param Table $table
      * @param array $columns
      */
     public function __construct(
         string $name,
-        string $elementType,
+        string $type,
         Table $table,
         array $columns
     ) {
-        parent::__construct($name, $elementType);
+        parent::__construct($name, $type);
         $this->table = $table;
         $this->columns = $columns;
     }
@@ -67,7 +73,7 @@ class Index extends GenericElement implements
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->getElementType(),
+            'type' => $this->getType(),
             'columns' => array_map(
                 function (Column $column) {
                     return $column->getName();
@@ -75,5 +81,13 @@ class Index extends GenericElement implements
                 $this->getColumns()
             )
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getElementType()
+    {
+        return self::TYPE;
     }
 }

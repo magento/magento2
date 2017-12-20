@@ -46,7 +46,7 @@ class Decimal extends Column implements
 
     /**
      * @param string $name
-     * @param string $elementType
+     * @param string $type
      * @param Table $table
      * @param int $precission
      * @param int $scale
@@ -56,7 +56,7 @@ class Decimal extends Column implements
      */
     public function __construct(
         string $name,
-        string $elementType,
+        string $type,
         Table $table,
         int $precission,
         int $scale,
@@ -64,7 +64,7 @@ class Decimal extends Column implements
         bool $unsigned = false,
         float $default = null
     ) {
-        parent::__construct($name, $elementType, $table);
+        parent::__construct($name, $type, $table);
         $this->precission = $precission;
         $this->scale = $scale;
         $this->nullable = $nullable;
@@ -129,7 +129,7 @@ class Decimal extends Column implements
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->getElementType(),
+            'type' => $this->getType(),
             'nullable' => $this->isNullable(),
             'precission' => $this->getPrecission(),
             'scale' => $this->getScale(),

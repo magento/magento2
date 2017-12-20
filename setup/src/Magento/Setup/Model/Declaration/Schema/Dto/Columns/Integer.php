@@ -45,7 +45,7 @@ class Integer extends Column implements
 
     /**
      * @param string $name
-     * @param string $elementType
+     * @param string $type
      * @param Table $table
      * @param int $padding
      * @param bool $nullable
@@ -55,7 +55,7 @@ class Integer extends Column implements
      */
     public function __construct(
         string $name,
-        string $elementType,
+        string $type,
         Table $table,
         int $padding,
         bool $nullable = true,
@@ -63,7 +63,7 @@ class Integer extends Column implements
         bool $identity = false,
         int $default = null
     ) {
-        parent::__construct($name, $elementType, $table);
+        parent::__construct($name, $type, $table);
         $this->nullable = $nullable;
         $this->default = $default;
         $this->unsigned = $unsigned;
@@ -129,7 +129,7 @@ class Integer extends Column implements
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->getElementType(),
+            'type' => $this->getType(),
             'nullable' => $this->isNullable(),
             'padding' => $this->getPadding(),
             'unsigned' => $this->isUnsigned(),

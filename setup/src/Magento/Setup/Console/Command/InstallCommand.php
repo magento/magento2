@@ -49,6 +49,11 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_DISABLE_MODULES = 'disable_modules';
 
     /**
+     * This mode allows to install Magento in declarative way
+     */
+    const DECLARATION_MODE_KEY = 'declaration_mode';
+
+    /**
      * Regex for sales_order_increment_prefix validation.
      */
     const SALES_ORDER_INCREMENT_PREFIX_RULE = '/^.{0,20}$/';
@@ -142,6 +147,12 @@ class InstallCommand extends AbstractSetupCommand
                 InputOption::VALUE_OPTIONAL,
                 'List of comma-separated module names. That must be avoided during installation. 
                 Avaiable magic param "all".'
+            ),
+            new InputOption(
+                self::DECLARATION_MODE_KEY,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'This mode allows to install Magento in declarative way'
             )
         ]);
         $this->setName('setup:install')

@@ -14,31 +14,45 @@ class Column extends GenericElement implements
     TableElementInterface
 {
     /**
+     * In case if we will need to change this object: add, modify or drop, we will need
+     * to define it by its type
+     */
+    const TYPE = 'column';
+
+    /**
      * @var Table
      */
     private $table;
 
     /**
      * @param string $name
-     * @param string $elementType
+     * @param string $type
      * @param Table $table
      */
     public function __construct(
         string $name,
-        string $elementType,
+        string $type,
         Table $table
     ) {
-        parent::__construct($name, $elementType);
+        parent::__construct($name, $type);
         $this->table = $table;
     }
 
     /**
      * Retrieve table name
      *
-     * @return string
+     * @return Table
      */
     public function getTable()
     {
         return $this->table;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getElementType()
+    {
+        return self::TYPE;
     }
 }

@@ -173,9 +173,9 @@
     <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
     <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
     <preference for="Magento\Framework\Indexer\Config\DependencyInfoProviderInterface" type="Magento\Framework\Indexer\Config\DependencyInfoProvider" />
-    <preference for="Magento\Setup\Model\Declaration\Schema\Declaration\DynamicStructureInterface" type="Magento\Setup\Model\Declaration\Schema\Declaration\Structure\Dynamic" />
     <preference for="Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface" type="Magento\Eav\Model\TypeLocator\ComplexType"/>
     <preference for="Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaReaderInterface" type="Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\DbSchemaReader" />
+    <preference for="Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaWriterInterface" type="Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\DbSchemaWriter" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -1404,6 +1404,17 @@
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="xml" xsi:type="object">Magento\Setup\Model\Declaration\Schema\FileSystem\XmlReader</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Setup\Model\Declaration\Schema\OperationsExecutor">
+        <arguments>
+            <argument name="operations" xsi:type="array">
+                <item name="create_table" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\CreateTable</item>
+                <item name="drop_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\DropElement</item>
+                <item name="add_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\AddElement</item>
+                <item name="modify_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\ModifyElement</item>
+                <item name="drop_table" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\DropTable</item>
             </argument>
         </arguments>
     </type>

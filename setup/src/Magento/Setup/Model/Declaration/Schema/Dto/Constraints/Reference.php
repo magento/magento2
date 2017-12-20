@@ -37,7 +37,7 @@ class Reference extends Constraint implements ElementDiffAwareInterface
 
     /**
      * @param string $name
-     * @param string $elementType
+     * @param string $type
      * @param Table $table
      * @param Column $column
      * @param Table $referenceTable
@@ -46,14 +46,14 @@ class Reference extends Constraint implements ElementDiffAwareInterface
      */
     public function __construct(
         string $name,
-        string $elementType,
+        string $type,
         Table $table,
         Column $column,
         Table $referenceTable,
         Column $referenceColumn,
         string $onDelete
     ) {
-        parent::__construct($name, $elementType, $table);
+        parent::__construct($name, $type, $table);
         $this->column = $column;
         $this->referenceTable = $referenceTable;
         $this->referenceColumn = $referenceColumn;
@@ -105,7 +105,7 @@ class Reference extends Constraint implements ElementDiffAwareInterface
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->getElementType(),
+            'type' => $this->getType(),
             'column' => $this->getColumn()->getName(),
             'referenceColumn' => $this->getReferenceColumn()->getName(),
             'referenceTableName' => $this->getReferenceTable()->getName(),

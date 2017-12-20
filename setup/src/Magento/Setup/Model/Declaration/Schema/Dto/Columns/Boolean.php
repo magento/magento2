@@ -29,19 +29,19 @@ class Boolean extends Column implements
 
     /**
      * @param string $name
-     * @param string $elementType
+     * @param string $type
      * @param Table $table
      * @param $nullable
      * @param $default
      */
     public function __construct(
         string $name,
-        string $elementType,
+        string $type,
         Table $table,
         bool $nullable = true,
         bool $default = false
     ) {
-        parent::__construct($name, $elementType, $table);
+        parent::__construct($name, $type, $table);
         $this->nullable = $nullable;
         $this->default = $default;
     }

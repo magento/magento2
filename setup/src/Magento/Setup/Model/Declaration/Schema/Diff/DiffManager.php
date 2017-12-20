@@ -10,6 +10,12 @@ use Magento\Setup\Model\Declaration\Schema\ChangeRegistryInterface;
 use Magento\Setup\Model\Declaration\Schema\Comparator;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementRenamedInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Table;
+use Magento\Setup\Model\Declaration\Schema\Operations\AddElement;
+use Magento\Setup\Model\Declaration\Schema\Operations\CreateTable;
+use Magento\Setup\Model\Declaration\Schema\Operations\DropElement;
+use Magento\Setup\Model\Declaration\Schema\Operations\DropTable;
+use Magento\Setup\Model\Declaration\Schema\Operations\ModifyElement;
 
 /**
  * Helper which provide methods, that helps to compare 2 different nodes:
@@ -67,8 +73,7 @@ class DiffManager
     ) {
         $changeRegistry->register(
             $element,
-            $element->getElementType(),
-            ChangeRegistryInterface::CHANGE_OPERATION,
+            ModifyElement::OPERATION_NAME,
             $generatedElement
         );
     }
@@ -87,6 +92,7 @@ class DiffManager
         array $elements
     ) {
         foreach ($generatedElements as $generatedElement) {
+            $operation = $generatedElement instanceof Table ? DropTable::OPERATION_NAME : DropElement::OPERATION_NAME;
             if (isset($elements[$generatedElement->getName()])) {
                 throw new \LogicException(
                     sprintf(
@@ -98,8 +104,7 @@ class DiffManager
 
             $changeRegistry->register(
                 $generatedElement,
-                $generatedElement->getElementType(),
-                ChangeRegistryInterface::REMOVE_OPERATION
+                $operation
             );
         }
     }
@@ -110,10 +115,10 @@ class DiffManager
      */
     public function registerCreation(ChangeRegistryInterface $changeRegistry, ElementInterface $element)
     {
+        $operation = $element instanceof Table ? CreateTable::OPERATION_NAME : AddElement::OPERATION_NAME;
         $changeRegistry->register(
             $element,
-            $element->getElementType(),
-            ChangeRegistryInterface::CREATE_OPERATION
+            $operation
         );
     }
 

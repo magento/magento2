@@ -118,17 +118,18 @@ class CliCommand
 
     /**
      * @param array $modules
-     * @throws \Exception
+     * @param array $installParams
      * @return string
+     * @throws \Exception
      */
-    public function install(array $modules)
+    public function install(array $modules, array $installParams = [])
     {
         if (empty($modules)) {
             throw new \Exception("Cannot install Magento without modules");
         }
 
         $params = $this->parametersHolder->getInitParams();
-        $installParams = [
+        $installParams += [
             InstallCommand::INPUT_KEY_ENABLE_MODULES => implode(",", $modules),
             InstallCommand::INPUT_KEY_DISABLE_MODULES => 'all'
         ];

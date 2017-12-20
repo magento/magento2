@@ -45,23 +45,28 @@ class ChangeRegistry implements ChangeRegistryInterface
     private $componentRegistrar;
 
     /**
-     * @param ComponentRegistrar $componentRegistrar
+     * @var ElementHistoryFactory
      */
-    public function __construct(ComponentRegistrar $componentRegistrar)
-    {
+    private $elementHistoryFactory;
+
+    /**
+     * @param ComponentRegistrar $componentRegistrar
+     * @param ElementHistoryFactory $elementHistoryFactory
+     */
+    public function __construct(
+        ComponentRegistrar $componentRegistrar,
+        ElementHistoryFactory $elementHistoryFactory
+    ) {
         $this->componentRegistrar = $componentRegistrar;
+        $this->elementHistoryFactory = $elementHistoryFactory;
     }
 
     /**
      * @inheritdoc
      */
-    public function get($operation, $type = null)
+    public function get($operation)
     {
-        if (empty($type)) {
-            return isset($this->changes[$operation]) ? $this->changes[$operation] : [];
-        }
-
-        return isset($this->changes[$operation][$type]) ? $this->changes[$operation][$type] : [];
+        return isset($this->changes[$operation]) ? $this->changes[$operation] : [];
     }
 
     /**
@@ -103,7 +108,7 @@ class ChangeRegistry implements ChangeRegistryInterface
     private function canBeRegistered(ElementInterface $object)
     {
         $whiteList = $this->getWhiteListTables();
-        $type = $object->getElementType();
+        $type = $object->getType();
 
         if ($object instanceof TableElementInterface) {
             return isset($whiteList['table'][$object->getTable()->getName()][$type][$object->getName()]);
@@ -124,18 +129,16 @@ class ChangeRegistry implements ChangeRegistryInterface
     /**
      * @inheritdoc
      */
-    public function register(ElementInterface $dtoObject, $type, $operation, ElementInterface $oldDtoObject = null)
+    public function register(ElementInterface $dtoObject, $operation, ElementInterface $oldDtoObject = null)
     {
         //Comment until whitelist functionality will be done
         if (!$this->canBeRegistered($dtoObject)) {
             #return $this; //ignore any operations for non registered elements changes
         }
-
-        $this->changes[$operation][$type][] = [
-            'new' => $dtoObject,
-            'old' => $oldDtoObject
-        ];
-
+        $historyData = ['new' => $dtoObject, 'old' => $oldDtoObject];
+        $history = $this->elementHistoryFactory->create($historyData);
+        //dtoObjects can have 4 types: column, constraint, index, table
+        $this->changes[$operation][] = $history;
         return $this;
     }
 

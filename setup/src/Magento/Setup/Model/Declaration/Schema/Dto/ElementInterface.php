@@ -21,7 +21,18 @@ interface ElementInterface
     public function getName();
 
     /**
-     * Retrieve structural element type: column, constraint, table, index ...
+     * Retrieve element low level type: varchar, char, foreign key, etc..
+     *
+     * @return string
+     */
+    public function getType();
+
+    /**
+     * Retrieve high level type: column, constraint, index, table
+     *
+     * On high level different elements can be created or modified in different ways
+     * So for each high level type of elements were created different operations
+     * And in order to distinguish this types of elements we use this method
      *
      * @return string
      */

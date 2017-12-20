@@ -75,7 +75,7 @@ class ElementFactory
         }
 
         $elementStructuralData = $this->castGenericAttributes($elementStructuralData);
-        $elementStructuralData['elementType'] = $type;
+        $elementStructuralData['type'] = $type;
         return $this->typeFactories[$type]->create($elementStructuralData);
     }
 }

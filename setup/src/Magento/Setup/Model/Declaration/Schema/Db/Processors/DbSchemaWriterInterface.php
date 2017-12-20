@@ -10,23 +10,8 @@ namespace Magento\Setup\Model\Declaration\Schema\Db\Processors;
  * This class is responsible for read different schema
  * structural elements: indexes, constraints, talbe names and columns
  */
-interface DbSchemaCreatorInterface
+interface DbSchemaWriterInterface
 {
-    /**
-     * Fragment where primary and unique constraints SQL will be holdeed
-     */
-    const CONSTRAINT_FRAGMENT = 'constraint';
-
-    /**
-     * Fragment where COLUMNS SQL will be holded
-     */
-    const COLUMN_FRAGMENT = 'column';
-
-    /**
-     * Fragment where indexes SQL is holded
-     */
-    const INDEX_FRAGMENT = 'index';
-
     /**
      * Create table from SQL fragments, like columns, constraints, foreign keys, indexes, etc
      *
@@ -35,4 +20,44 @@ interface DbSchemaCreatorInterface
      * @return void
      */
     public function createTable(array $tableOptions, array $sqlFragments);
+
+    /**
+     * Drop table from SQL database
+     *
+     * @param array $tableOptions must have 2 options: table_name, resource
+     * @return mixed
+     */
+    public function dropTable(array $tableOptions);
+
+    /**
+     * Add generic element to table (table must be specified in elementOptions)
+     *
+     * Can be: column, constraint, index
+     *
+     * @param array $elementOptions must have 3 options: resource, column_name, table_name
+     * @param string $elementDefinition, for example: like CHAR(200) NOT NULL
+     * @param string $elementType
+     * @return mixed
+     */
+    public function addElement(array $elementOptions, $elementDefinition, $elementType);
+
+    /**
+     * Modify column and change it definition
+     *
+     * Please note: that from all structural elements only column can be modified
+     *
+     * @param array $columnOptions must have 3 options: resource, column_name, table_name
+     * @param string $columnDefinition
+     * @return void
+     */
+    public function modifyColumn(array $columnOptions, $columnDefinition);
+
+    /**
+     * Drop any element (constraint, column, index) from index
+     *
+     * @param string $elementType enum(CONSTRAINT, INDEX, COLUMN)
+     * @param array $elementOptions
+     * @return \Zend_Db_Statement_Interface
+     */
+    public function dropElement($elementType, array $elementOptions);
 }

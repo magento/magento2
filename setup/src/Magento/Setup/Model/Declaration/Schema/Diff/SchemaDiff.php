@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
 use Magento\Setup\Model\Declaration\Schema\ChangeRegistry;
+use Magento\Setup\Model\Declaration\Schema\ChangeRegistryInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 
 /**
@@ -45,6 +46,7 @@ class SchemaDiff
      * @param Schema $schema
      * @param Schema $generatedSchema
      * @param ChangeRegistry $changeRegistry
+     * @return ChangeRegistryInterface
      */
     public function diff(
         Schema $schema,
@@ -66,5 +68,7 @@ class SchemaDiff
         if ($this->diffManager->shouldBeRemoved($generatedTables)) {
             $this->diffManager->registerRemoval($changeRegistry, $generatedTables, $schema->getTables());
         }
+
+        return $changeRegistry;
     }
 }

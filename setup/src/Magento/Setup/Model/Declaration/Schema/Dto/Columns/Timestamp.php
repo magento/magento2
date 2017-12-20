@@ -28,19 +28,19 @@ class Timestamp extends Column implements ElementDiffAwareInterface
 
     /**
      * @param string $name
-     * @param string $elementType
+     * @param string $type
      * @param Table $table
      * @param string $default
      * @param string|null $onUpdate
      */
     public function __construct(
         string $name,
-        string $elementType,
+        string $type,
         Table $table,
         string $default,
         string $onUpdate = null
     ) {
-        parent::__construct($name, $elementType, $table);
+        parent::__construct($name, $type, $table);
         $this->default = $default;
         $this->onUpdate = $onUpdate;
     }
@@ -72,7 +72,7 @@ class Timestamp extends Column implements ElementDiffAwareInterface
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->getElementType(),
+            'type' => $this->getType(),
             'default' => $this->getDefault(),
             'onUpdate' => $this->getOnUpdate()
         ];

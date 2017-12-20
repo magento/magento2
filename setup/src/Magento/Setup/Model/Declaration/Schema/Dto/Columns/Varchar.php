@@ -35,7 +35,7 @@ class Varchar extends Column implements
 
     /**
      * @param string $name
-     * @param string $elementType
+     * @param string $type
      * @param Table $table
      * @param bool $nullable
      * @param int $length
@@ -43,13 +43,13 @@ class Varchar extends Column implements
      */
     public function __construct(
         string $name,
-        string $elementType,
+        string $type,
         Table $table,
         int $length,
         bool $nullable = true,
         int $default = null
     ) {
-        parent::__construct($name, $elementType, $table);
+        parent::__construct($name, $type, $table);
         $this->nullable = $nullable;
         $this->default = $default;
         $this->length = $length;
@@ -92,7 +92,7 @@ class Varchar extends Column implements
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->getElementType(),
+            'type' => $this->getType(),
             'nullable' => $this->isNullable(),
             'default' => $this->getDefault(),
             'length' => $this->getLength()

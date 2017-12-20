@@ -9,8 +9,14 @@ namespace Magento\Setup\Model\Declaration\Schema\Db;
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaCreatorInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaReaderInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaWriterInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Column;
+use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\GenericElement;
+use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
+use Magento\Setup\Model\Declaration\Schema\Dto\TableElementInterface;
 
 /**
  * Needs for different types of SQL engines
@@ -62,23 +68,23 @@ class AdapterMediator
     private $dbSchemaReader;
 
     /**
-     * @var DbSchemaCreatorInterface
+     * @var DbSchemaWriterInterface
      */
-    private $dbSchemaCreator;
+    private $dbSchemaWriter;
 
     /**
      * @param DbSchemaReaderInterface $dbSchemaReader
-     * @param DbSchemaCreatorInterface $dbSchemaCreator
+     * @param DbSchemaWriterInterface $dbSchemaCreator
      * @param array $processors
      */
     public function __construct(
         DbSchemaReaderInterface $dbSchemaReader,
-        DbSchemaCreatorInterface $dbSchemaCreator,
+        DbSchemaWriterInterface $dbSchemaCreator,
         array $processors
     ) {
         $this->processors = $processors;
         $this->dbSchemaReader = $dbSchemaReader;
-        $this->dbSchemaCreator = $dbSchemaCreator;
+        $this->dbSchemaWriter = $dbSchemaCreator;
     }
 
     /**
@@ -107,25 +113,108 @@ class AdapterMediator
      * Retrieve definition for all table elements
      *
      * @param Table $table
-     * @return array
+     * @return void
      */
-    public function getTableDefinition(Table $table)
+    public function createTable(Table $table)
     {
         $definition = [];
+        $tableOptions = [
+            'resource' => $table->getResource(),
+            'name' => $table->getName()
+        ];
         $data = [
-            DbSchemaCreatorInterface::COLUMN_FRAGMENT => $table->getColumns(),
-            DbSchemaCreatorInterface::CONSTRAINT_FRAGMENT => $table->getConstraints(),
-            DbSchemaCreatorInterface::INDEX_FRAGMENT => $table->getIndexes()
+            Column::TYPE => $table->getColumns(),
+            Constraint::TYPE => $table->getConstraints(),
+            Index::TYPE => $table->getIndexes()
         ];
 
         foreach ($data as $type => $elements) {
             /** @var ElementInterface $element */
             foreach ($elements as $element) {
-                $definition[$type][$element->getName()] = $this->processElementToDefinition($type, $element);
+                $definition[$type][$element->getName()] = $this->processElementToDefinition($element);
             }
         }
 
-        return $definition;
+        $this->dbSchemaWriter->createTable($tableOptions, $definition);
+    }
+
+    /**
+     * Prepare and add element (column, constraint, index) to table
+     *
+     * @param ElementInterface | TableElementInterface $element
+     * @return void
+     */
+    public function addElement(ElementInterface $element)
+    {
+        $elementOptions = [
+            'table_name' => $element->getTable()->getResource(),
+            'element_name' => $element->getName(),
+            'resource' => $element->getTable()->getResource()
+        ];
+        $definition = $this->processElementToDefinition($element);
+
+        $this->dbSchemaWriter->addElement(
+            $elementOptions,
+            $definition,
+            $element->getElementType()
+        );
+    }
+
+    /**
+     * Prepare and drop element from table
+     *
+     * @param ElementInterface | TableElementInterface $element
+     * @return void
+     */
+    public function dropElement(ElementInterface $element)
+    {
+        $elementOptions = [
+            'table_name' => $element->getTable()->getResource(),
+            'element_name' => $element->getName(),
+            'resource' => $element->getTable()->getResource()
+        ];
+
+        $this->dbSchemaWriter->dropElement(
+            $element->getElementType(),
+            $elementOptions
+        );
+    }
+
+    /**
+     * Modify column definition for existing table
+     *
+     * @param Column $column
+     */
+    public function modifyColumn(Column $column)
+    {
+        $columnOptions = [
+            'table_name' => $column->getTable()->getResource(),
+            'element_name' => $column->getName(),
+            'resource' => $column->getTable()->getResource()
+        ];
+        $definition = $this->processElementToDefinition(
+            $column
+        );
+
+        $this->dbSchemaWriter->modifyColumn(
+            $columnOptions,
+            $definition
+        );
+    }
+
+    /**
+     * Drop table from DB
+     *
+     * @param Table $table
+     */
+    public function dropTable(Table $table)
+    {
+        $tableOptions = [
+            'name' => $table->getName(),
+            'resource' => $table->getResource()
+        ];
+
+        $this->dbSchemaWriter->dropTable($tableOptions);
     }
 
     /**
@@ -135,11 +224,11 @@ class AdapterMediator
      * @param ElementInterface $element
      * @return string
      */
-    public function processElementToDefinition($type, ElementInterface $element)
+    public function processElementToDefinition(ElementInterface $element)
     {
         $definition = '';
         /** @var DbSchemaProcessorInterface $processor */
-        foreach ($this->processors[$type] as $processor) {
+        foreach ($this->processors[$element->getElementType()] as $processor) {
             //One column processor can override or modify existing one
             if ($processor->canBeApplied($element)) {
                 $definition = $processor->toDefinition($element);

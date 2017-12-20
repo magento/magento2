@@ -314,7 +314,7 @@ class Installer
         if (!empty($request[InstallCommand::INPUT_KEY_CLEANUP_DB])) {
             $script[] = ['Cleaning up database...', 'cleanupDb', []];
         }
-        $script[] = ['Installing database schema:', 'installSchema', []];
+        $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
         $script[] = ['Installing data...', 'installDataFixtures', []];
@@ -762,9 +762,10 @@ class Installer
     /**
      * Installs DB schema
      *
+     * @param array $request
      * @return void
      */
-    public function installSchema()
+    public function installSchema(array $request)
     {
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
@@ -772,7 +773,14 @@ class Installer
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
-        $this->handleDBSchemaData($setup, 'schema');
+
+        if ($request[InstallCommand::DECLARATION_MODE_KEY]) {
+            /** @var DeclarationInstaller $declarativeInstaller */
+            $declarativeInstaller = $this->objectManagerProvider->get()->get(DeclarationInstaller::class);
+            $declarativeInstaller->installSchema($request);
+        } else {
+            $this->handleDBSchemaData($setup, 'schema');
+        }
     }
 
     /**

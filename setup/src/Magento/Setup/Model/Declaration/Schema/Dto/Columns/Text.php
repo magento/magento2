@@ -24,17 +24,17 @@ class Text extends Column implements
 
     /**
      * @param string $name
-     * @param string $elementType
+     * @param string $type
      * @param Table $table
      * @param $nullable
      */
     public function __construct(
         string $name,
-        string $elementType,
+        string $type,
         Table $table,
         bool $nullable = true
     ) {
-        parent::__construct($name, $elementType, $table);
+        parent::__construct($name, $type, $table);
         $this->nullable = $nullable;
     }
 
@@ -54,7 +54,7 @@ class Text extends Column implements
     public function getDiffSensitiveParams()
     {
         return [
-            'type' => $this->getElementType(),
+            'type' => $this->getType(),
             'nullable' => $this->isNullable(),
         ];
     }

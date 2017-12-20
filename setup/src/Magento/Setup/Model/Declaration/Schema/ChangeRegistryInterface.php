@@ -16,41 +16,35 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 interface ChangeRegistryInterface
 {
     /**
-     * For elements that needs to be created
-     */
-    const CREATE_OPERATION = 'create';
-
-    /**
-     * For elements that needs to be changed
-     */
-    const CHANGE_OPERATION = 'change';
-
-    /**
-     * For elements that needs to be removed
-     */
-    const REMOVE_OPERATION = "remove";
-
-    /**
      * Retrieve operations by type
      *
-     * @param string $type
+     * Please note: that we wants to save history and we retrieve next structure:
+     * [
+     *   'column_a' => ElementHistory [
+     *      'new' => [
+     *          ...
+     *      ],
+     *      'old' => [
+     *          ...
+     *      ]
+     *   ]
+     * ]
+     *
      * @param string $operation
-     * @return array
+     * @return ElementHistory[]
      */
-    public function get($operation, $type = null);
+    public function get($operation);
 
     /**
      * Register operation
      *
      * @param ElementInterface|object $dtoObject
-     * @param string $type
      * @param string $operation
      * @param ElementInterface $oldDtoObject
      * @return void
      */
     public function register(
         ElementInterface $dtoObject,
-        $type,
         $operation,
         ElementInterface $oldDtoObject = null
     );

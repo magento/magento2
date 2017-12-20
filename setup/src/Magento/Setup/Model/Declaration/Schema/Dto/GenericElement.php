@@ -20,7 +20,7 @@ abstract class GenericElement implements
     /**
      * @var string
      */
-    private $elementType;
+    private $type;
 
     /**
      * @var string
@@ -29,11 +29,11 @@ abstract class GenericElement implements
 
     /**
      * @param string $name
-     * @param string $elementType
+     * @param string $type
      */
-    public function __construct(string $name, string $elementType)
+    public function __construct(string $name, string $type)
     {
-        $this->elementType = $elementType;
+        $this->type = $type;
         $this->name = $name;
     }
 
@@ -48,8 +48,8 @@ abstract class GenericElement implements
     /**
      * @inheritdoc
      */
-    public function getElementType()
+    public function getType()
     {
-        return $this->elementType;
+        return $this->type;
     }
 }
