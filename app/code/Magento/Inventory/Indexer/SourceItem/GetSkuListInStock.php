@@ -76,7 +76,7 @@ class GetSkuListInStock
                 ]
             )->joinInner(
                 ['stock_source_link' => $sourceStockLinkTable],
-                'source_item.' . SourceItemInterface::SOURCE_ID . ' = stock_source_link.' . StockSourceLink::SOURCE_ID,
+                'source_item.' . SourceItemInterface::SOURCE_CODE . ' = stock_source_link.' . StockSourceLink::SOURCE_CODE,
                 [StockSourceLink::STOCK_ID]
             )->where('source_item.source_item_id IN (?)', $sourceItemIds)
             ->group(['stock_source_link.' . StockSourceLink::STOCK_ID]);

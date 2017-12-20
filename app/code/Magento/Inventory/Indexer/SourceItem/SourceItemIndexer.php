@@ -96,9 +96,9 @@ class SourceItemIndexer implements ActionInterface
     /**
      * @inheritdoc
      */
-    public function executeRow($sourceId)
+    public function executeRow($sourceItemId)
     {
-        $this->executeList([$sourceId]);
+        $this->executeList([$sourceItemId]);
     }
 
     /**

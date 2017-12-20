@@ -9,7 +9,6 @@ namespace Magento\Inventory\Model;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Inventory\Model\Source\Command\GetInterface;
-use Magento\Inventory\Model\Source\Command\GetByCodeInterface;
 use Magento\Inventory\Model\Source\Command\GetListInterface;
 use Magento\Inventory\Model\Source\Command\SaveInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
@@ -32,11 +31,6 @@ class SourceRepository implements SourceRepositoryInterface
     private $commandGet;
 
     /**
-     * @var GetByCodeInterface
-     */
-    private $commandGetByCode;
-
-    /**
      * @var GetListInterface
      */
     private $commandGetList;
@@ -49,19 +43,17 @@ class SourceRepository implements SourceRepositoryInterface
     public function __construct(
         SaveInterface $commandSave,
         GetInterface $commandGet,
-        GetByCodeInterface $commandGetByCode,
         GetListInterface $commandGetList
     ) {
         $this->commandSave = $commandSave;
         $this->commandGet = $commandGet;
-        $this->commandGetByCode = $commandGetByCode;
         $this->commandGetList = $commandGetList;
     }
 
     /**
      * @inheritdoc
      */
-    public function save(SourceInterface $source): int
+    public function save(SourceInterface $source): string
     {
         return $this->commandSave->execute($source);
     }
@@ -69,17 +61,9 @@ class SourceRepository implements SourceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function get(int $sourceId): SourceInterface
+    public function get(string $code): SourceInterface
     {
-        return $this->commandGet->execute($sourceId);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getByCode(string $code): SourceInterface
-    {
-        return $this->commandGetByCode->execute($code);
+        return $this->commandGet->execute($code);
     }
 
     /**

@@ -32,29 +32,29 @@ class SourceItemsDeleteTest extends WebapiAbstract
     {
         $sourceItemsForDelete = [
             [
-                SourceItemInterface::SOURCE_ID => 10,
+                SourceItemInterface::SOURCE_CODE => 'eu-1',
                 SourceItemInterface::SKU => 'SKU-1',
             ],
             [
-                SourceItemInterface::SOURCE_ID => 20,
+                SourceItemInterface::SOURCE_CODE => 'eu-2',
                 SourceItemInterface::SKU => 'SKU-1',
             ],
         ];
         $expectedSourceItemsAfterDeleting = [
             [
-                SourceItemInterface::SOURCE_ID => 30,
+                SourceItemInterface::SOURCE_CODE => 'eu-3',
                 SourceItemInterface::SKU => 'SKU-1',
                 SourceItemInterface::QUANTITY => 10,
                 SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
             ],
             [
-                SourceItemInterface::SOURCE_ID => 40,
+                SourceItemInterface::SOURCE_CODE => 'eu-dis',
                 SourceItemInterface::SKU => 'SKU-1',
                 SourceItemInterface::QUANTITY => 10,
                 SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
             ],
             [
-                SourceItemInterface::SOURCE_ID => 50,
+                SourceItemInterface::SOURCE_CODE => 'us-1',
                 SourceItemInterface::SKU => 'SKU-2',
                 SourceItemInterface::QUANTITY => 5,
                 SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,

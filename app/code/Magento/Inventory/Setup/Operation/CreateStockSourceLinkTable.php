@@ -65,14 +65,13 @@ class CreateStockSourceLinkTable
             ],
             'Stock ID'
         )->addColumn(
-            StockSourceLink::SOURCE_ID,
-            Table::TYPE_INTEGER,
-            null,
+            StockSourceLink::SOURCE_CODE,
+            Table::TYPE_TEXT,
+            255,
             [
                 Table::OPTION_NULLABLE => false,
-                Table::OPTION_UNSIGNED => true,
             ],
-            'Source ID'
+            'Source Code'
         )->addForeignKey(
             $setup->getFkName(
                 $stockSourceLinkTable,
@@ -87,26 +86,26 @@ class CreateStockSourceLinkTable
         )->addForeignKey(
             $setup->getFkName(
                 $stockSourceLinkTable,
-                StockSourceLink::SOURCE_ID,
+                StockSourceLink::SOURCE_CODE,
                 $sourceTable,
-                SourceInterface::SOURCE_ID
+                SourceInterface::CODE
             ),
-            StockSourceLink::SOURCE_ID,
+            StockSourceLink::SOURCE_CODE,
             $sourceTable,
-            SourceInterface::SOURCE_ID,
+            SourceInterface::CODE,
             AdapterInterface::FK_ACTION_CASCADE
         )->addIndex(
             $setup->getIdxName(
                 $stockSourceLinkTable,
                 [
                     StockSourceLink::STOCK_ID,
-                    StockSourceLink::SOURCE_ID,
+                    StockSourceLink::SOURCE_CODE,
                 ],
                 AdapterInterface::INDEX_TYPE_UNIQUE
             ),
             [
                 StockSourceLink::STOCK_ID,
-                StockSourceLink::SOURCE_ID,
+                StockSourceLink::SOURCE_CODE,
             ],
             ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
         );

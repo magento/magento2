@@ -15,6 +15,13 @@ namespace Magento\InventoryCatalog\Api;
 interface DefaultSourceProviderInterface
 {
     /**
+     * Get Default Source code
+     *
+     * @return string
+     */
+    public function getCode(): string;
+
+    /**
      * Get Default Source id
      *
      * @return int

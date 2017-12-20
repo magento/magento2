@@ -78,15 +78,6 @@ class SourceItemCollectionFactory implements SourceItemCollectionFactoryInterfac
         /** @var Collection $collection */
         $collection = $this->objectManager->create(Collection::class);
         $columns = $this->columnProvider->getColumns($attributeCollection, $filters);
-        if (($key = array_search(self::SOURCE_CODE_FIELD, $columns)) !== false) {
-            unset($columns[$key]);
-            $collection->join(
-                ['s' => $this->resourceConnection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE)],
-                sprintf('s.%s = main_table.%s', SourceInterface::SOURCE_ID, SourceItemInterface::SOURCE_ID),
-                ['source_code' => SourceInterface::CODE]
-            );
-            $collection->addFilterToMap('source_code', sprintf('s.%s', SourceInterface::CODE));
-        }
         $collection->addFieldToSelect($columns);
 
         foreach ($this->retrieveFilterData($filters) as $columnName => $value) {

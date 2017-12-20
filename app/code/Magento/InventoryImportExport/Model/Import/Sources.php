@@ -28,8 +28,7 @@ class Sources extends AbstractEntity
      * Column names for import file
      */
     const COL_SKU = SourceItemInterface::SKU;
-    const COL_SOURCE = SourceItemInterface::SOURCE_ID;
-    const COL_SOURCE_CODE = 'source_' . SourceInterface::CODE;
+    const COL_SOURCE_CODE = SourceItemInterface::SOURCE_CODE;
     const COL_QTY = SourceItemInterface::QUANTITY;
     const COL_STATUS = SourceItemInterface::STATUS;
 

@@ -90,7 +90,7 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
         $connection = $this->resourceConnection->getConnection();
         $connection->delete(
             $this->resourceConnection->getTableName(SourceCarrierLink::TABLE_NAME_SOURCE_CARRIER_LINK),
-            $connection->quoteInto('source_id = ?', $source->getSourceId())
+            $connection->quoteInto('source_code = ?', $source->getCode())
         );
     }
 
@@ -103,7 +103,7 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
         $carrierLinkData = [];
         foreach ($source->getCarrierLinks() as $carrierLink) {
             $carrierLinkData[] = [
-                'source_id' => $source->getSourceId(),
+                'source_code' => $source->getCode(),
                 SourceCarrierLinkInterface::CARRIER_CODE => $carrierLink->getCarrierCode(),
                 SourceCarrierLinkInterface::POSITION => $carrierLink->getPosition(),
             ];
@@ -121,7 +121,7 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
     public function loadCarrierLinksBySource(SourceInterface $source)
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceInterface::SOURCE_ID, $source->getSourceId())
+            ->addFilter(SourceInterface::CODE, $source->getCode())
             ->create();
 
         /** @var Collection $collection */

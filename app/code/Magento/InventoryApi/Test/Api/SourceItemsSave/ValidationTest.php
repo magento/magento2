@@ -27,7 +27,7 @@ class ValidationTest extends WebapiAbstract
     private $validData = [
         SourceItemInterface::SKU => 'SKU-1',
         SourceItemInterface::QUANTITY => 1.5,
-        SourceItemInterface::SOURCE_ID => 10,
+        SourceItemInterface::SOURCE_CODE => 'eu-1',
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
     ];
 
@@ -77,15 +77,15 @@ class ValidationTest extends WebapiAbstract
                     ],
                 ],
             ],
-            'without_' . SourceItemInterface::SOURCE_ID => [
-                SourceItemInterface::SOURCE_ID,
+            'without_' . SourceItemInterface::SOURCE_CODE => [
+                SourceItemInterface::SOURCE_CODE,
                 [
                     'message' => 'Validation Failed',
                     'errors' => [
                         [
-                            'message' => '"%field" should be numeric.',
+                            'message' => '"%field" should be string.',
                             'parameters' => [
-                                'field' => SourceItemInterface::SOURCE_ID,
+                                'field' => SourceItemInterface::SOURCE_CODE,
                             ],
                         ],
                     ],
@@ -230,24 +230,24 @@ class ValidationTest extends WebapiAbstract
                     ],
                 ],
             ],
-            'null_' . SourceItemInterface::SOURCE_ID => [
-                SourceItemInterface::SOURCE_ID,
+            'null_' . SourceItemInterface::SOURCE_CODE => [
+                SourceItemInterface::SOURCE_CODE,
                 null,
                 [
                     'message' => 'Validation Failed',
                     'errors' => [
                         [
-                            'message' => '"%field" should be numeric.',
+                            'message' => '"%field" should be string.',
                             'parameters' => [
-                                'field' => SourceItemInterface::SOURCE_ID,
+                                'field' => SourceItemInterface::SOURCE_CODE,
                             ],
                         ],
                     ],
                 ],
             ],
-            'not_exists_' . SourceItemInterface::SOURCE_ID => [
-                SourceItemInterface::SOURCE_ID,
-                100,
+            'not_exists_' . SourceItemInterface::SOURCE_CODE => [
+                SourceItemInterface::SOURCE_CODE,
+                'eu-12',
                 [
                     'message' => 'Could not save Source Item',
                 ],
@@ -310,20 +310,20 @@ class ValidationTest extends WebapiAbstract
                         . '" processing. Invalid type for value: "test". Expected Type: "float".',
                 ],
             ],
-            'empty_' . SourceItemInterface::SOURCE_ID => [
-                SourceItemInterface::SOURCE_ID,
+            'empty_' . SourceItemInterface::SOURCE_CODE => [
+                SourceItemInterface::SOURCE_CODE,
                 '',
                 [
-                    'message' => 'Error occurred during "' . SourceItemInterface::SOURCE_ID
-                        . '" processing. Invalid type for value: "". Expected Type: "int".',
+                    'message' => 'Error occurred during "' . SourceItemInterface::SOURCE_CODE
+                        . '" processing. Invalid type for value: "". Expected Type: "string".',
                 ],
             ],
-            'array_' . SourceItemInterface::SOURCE_ID => [
-                SourceItemInterface::SOURCE_ID,
+            'array_' . SourceItemInterface::SOURCE_CODE => [
+                SourceItemInterface::SOURCE_CODE,
                 [],
                 [
-                    'message' => 'Error occurred during "' . SourceItemInterface::SOURCE_ID
-                        . '" processing. Invalid type for value: "array". Expected Type: "int".',
+                    'message' => 'Error occurred during "' . SourceItemInterface::SOURCE_CODE
+                        . '" processing. Invalid type for value: "array". Expected Type: "string".',
                 ],
             ],
         ];

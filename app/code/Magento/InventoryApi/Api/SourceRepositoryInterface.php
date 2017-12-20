@@ -36,21 +36,11 @@ interface SourceRepositoryInterface
      * Save Source data
      *
      * @param \Magento\InventoryApi\Api\Data\SourceInterface $source
-     * @return int
+     * @return string
      * @throws \Magento\Framework\Validation\ValidationException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(SourceInterface $source): int;
-
-    /**
-     * Get Source data by given sourceId. If you want to create plugin on get method, also you need to create separate
-     * plugin on getList method, because entity loading way is different for these methods
-     *
-     * @param int $sourceId
-     * @return \Magento\InventoryApi\Api\Data\SourceInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function get(int $sourceId): SourceInterface;
+    public function save(SourceInterface $source): string;
 
     /**
      * Get Source data by given code. If you want to create plugin on get method, also you need to create separate
@@ -60,7 +50,7 @@ interface SourceRepositoryInterface
      * @return \Magento\InventoryApi\Api\Data\SourceInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getByCode(string $code): SourceInterface;
+    public function get(string $code): SourceInterface;
 
     /**
      * Find Sources by SearchCriteria

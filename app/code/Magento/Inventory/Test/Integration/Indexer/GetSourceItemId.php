@@ -28,10 +28,10 @@ class GetSourceItemId
 
     /**
      * @param string $sku
-     * @param int $sourceId
+     * @param string $sourceCode
      * @return int
      */
-    public function execute(string $sku, int $sourceId): int
+    public function execute(string $sku, string $sourceCode): string
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
@@ -40,7 +40,7 @@ class GetSourceItemId
                 [SourceItemResourceModel::ID_FIELD_NAME]
             )
             ->where(SourceItemInterface::SKU . ' = ?', $sku)
-            ->where(SourceItemInterface::SOURCE_ID . ' = ?', $sourceId);
+            ->where(SourceItemInterface::SOURCE_CODE . ' = ?', $sourceCode);
 
         return (int)$connection->fetchOne($select);
     }

@@ -28,9 +28,8 @@ class CarrierLinkManagementTest extends WebapiAbstract
      */
     public function testCarrierLinksManagement(array $carrierLinks)
     {
-        $sourceId = 10;
+        $sourceCode = 'source-code-1';
         $expectedData = [
-            SourceInterface::CODE => 'source-code-1',
             SourceInterface::NAME => 'source-name-1',
             SourceInterface::POSTCODE => 'source-postcode',
             SourceInterface::COUNTRY_ID => 'US',
@@ -38,8 +37,8 @@ class CarrierLinkManagementTest extends WebapiAbstract
             SourceInterface::CARRIER_LINKS => $carrierLinks,
         ];
 
-        $this->saveSource($sourceId, $expectedData);
-        $sourceData = $this->getSourceDataById($sourceId);
+        $this->saveSource($sourceCode, $expectedData);
+        $sourceData = $this->getSourceDataByCode($sourceCode);
 
         self::assertArrayHasKey(SourceInterface::USE_DEFAULT_CARRIER_CONFIG, $sourceData);
         self::assertEquals(
@@ -96,15 +95,15 @@ class CarrierLinkManagementTest extends WebapiAbstract
     }
 
     /**
-     * @param int $sourceId
+     * @param string $sourceCode
      * @param array $data
      * @return void
      */
-    private function saveSource(int $sourceId, array $data)
+    private function saveSource(string $sourceCode, array $data)
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceCode,
                 'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -116,20 +115,20 @@ class CarrierLinkManagementTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, ['source' => $data]);
         } else {
             $requestData = $data;
-            $requestData['sourceId'] = $sourceId;
+            $requestData['sourceCode'] = $sourceCode;
             $this->_webApiCall($serviceInfo, ['source' => $requestData]);
         }
     }
 
     /**
-     * @param int $sourceId
+     * @param string $sourceCode
      * @return array
      */
-    private function getSourceDataById(int $sourceId): array
+    private function getSourceDataByCode(string $sourceCode): array
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceCode,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -139,8 +138,8 @@ class CarrierLinkManagementTest extends WebapiAbstract
         ];
         $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId]);
-        self::assertArrayHasKey(SourceInterface::SOURCE_ID, $response);
+            : $this->_webApiCall($serviceInfo, ['sourceCode' => $sourceCode]);
+        self::assertArrayHasKey(SourceInterface::CODE, $response);
         return $response;
     }
 

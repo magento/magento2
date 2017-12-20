@@ -23,12 +23,12 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
      */
     public function testGetSourceItemConfiguration()
     {
-        $sourceId = 10;
+        $sourceCode = 'eu-1';
         $sku = 'SKU-1';
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId . '/' . $sku,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceCode . '/' . $sku,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -39,12 +39,12 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
 
         $sourceItemConfiguration = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'sku' => $sku]);
+            : $this->_webApiCall($serviceInfo, ['sourceCode' => $sourceCode, 'sku' => $sku]);
 
         self::assertInternalType('array', $sourceItemConfiguration);
         self::assertNotEmpty($sourceItemConfiguration);
 
-        self::assertEquals($sourceId, $sourceItemConfiguration[SourceItemConfigurationInterface::SOURCE_ID]);
+        self::assertEquals($sourceCode, $sourceItemConfiguration[SourceItemConfigurationInterface::SOURCE_CODE]);
         self::assertEquals($sku, $sourceItemConfiguration[SourceItemConfigurationInterface::SKU]);
         self::assertEquals(2, $sourceItemConfiguration[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]);
     }

@@ -50,14 +50,13 @@ class CreateSourceConfigurationTable
     private function addBaseFields(Table $sourceItemConfigurationTable): Table
     {
         return $sourceItemConfigurationTable->addColumn(
-            SourceItemConfigurationInterface::SOURCE_ID,
-            Table::TYPE_INTEGER,
-            null,
+            SourceItemConfigurationInterface::SOURCE_CODE,
+            Table::TYPE_TEXT,
+            255,
             [
-                Table::OPTION_UNSIGNED => true,
                 Table::OPTION_NULLABLE => false,
             ],
-            'Source ID'
+            'Source Code'
         )->addColumn(
             SourceItemInterface::SKU,
             Table::TYPE_TEXT,
@@ -80,7 +79,7 @@ class CreateSourceConfigurationTable
             'Notify Quantity'
         )->addIndex(
             'idx_primary',
-            [SourceItemConfigurationInterface::SOURCE_ID, SourceItemInterface::SKU],
+            [SourceItemConfigurationInterface::SOURCE_CODE, SourceItemInterface::SKU],
             ['type' => AdapterInterface::INDEX_TYPE_PRIMARY]
         );
     }
@@ -101,13 +100,13 @@ class CreateSourceConfigurationTable
         return $sourceItemConfigurationTable->addForeignKey(
             $setup->getFkName(
                 $sourceItemConfigurationTable->getName(),
-                SourceItemConfigurationInterface::SOURCE_ID,
+                SourceItemConfigurationInterface::SOURCE_CODE,
                 $sourceItemTable,
-                SourceInterface::SOURCE_ID
+                SourceInterface::CODE
             ),
-            SourceItemConfigurationInterface::SOURCE_ID,
+            SourceItemConfigurationInterface::SOURCE_CODE,
             $sourceItemTable,
-            SourceInterface::SOURCE_ID,
+            SourceInterface::CODE,
             AdapterInterface::FK_ACTION_CASCADE
         );
     }

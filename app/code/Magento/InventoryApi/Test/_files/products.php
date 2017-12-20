@@ -14,7 +14,7 @@ use Magento\Framework\Module\Manager;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
-use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
@@ -60,8 +60,8 @@ $moduleManager = Bootstrap::getObjectManager()->get(Manager::class);
 if ($moduleManager->isEnabled('Magento_InventoryCatalog')) {
     /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
     $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
-    /** @var DefaultStockProviderInterface $defaultStockProvider */
-    $defaultStockProvider = $objectManager->get(DefaultStockProviderInterface::class);
+    /** @var DefaultSourceProviderInterface $defaultSourceProvider */
+    $defaultSourceProvider = $objectManager->get(DefaultSourceProviderInterface::class);
     /** @var SourceItemRepositoryInterface $sourceItemRepository */
     $sourceItemRepository = $objectManager->get(SourceItemRepositoryInterface::class);
     /** @var SourceItemsDeleteInterface $sourceItemsDelete */
@@ -69,7 +69,7 @@ if ($moduleManager->isEnabled('Magento_InventoryCatalog')) {
 
     $searchCriteria = $searchCriteriaBuilder
         ->addFilter(SourceItemInterface::SKU, ['SKU-1', 'SKU-2', 'SKU-3'], 'in')
-        ->addFilter(SourceItemInterface::SOURCE_ID, $defaultStockProvider->getId())
+        ->addFilter(SourceItemInterface::SOURCE_CODE, $defaultSourceProvider->getCode())
         ->create();
     $sourceItems = $sourceItemRepository->getList($searchCriteria)->getItems();
     if (count($sourceItems)) {

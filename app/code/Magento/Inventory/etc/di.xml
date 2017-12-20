@@ -43,7 +43,7 @@
         <arguments>
             <argument name="validators" xsi:type="array">
                 <item name="sku" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\SkuValidator</item>
-                <item name="sourceId" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\SourceIdValidator</item>
+                <item name="sourceCode" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\SourceCodeValidator</item>
                 <item name="quantity" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\QuantityValidator</item>
                 <item name="status" xsi:type="object">Magento\Inventory\Model\SourceItem\Validator\StatusValidator</item>
             </argument>

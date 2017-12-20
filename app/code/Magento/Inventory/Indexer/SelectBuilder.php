@@ -51,11 +51,11 @@ class SelectBuilder
 
         // find all enabled sources
         $select = $connection->select()
-            ->from($sourceTable, [SourceInterface::SOURCE_ID])
+            ->from($sourceTable, [SourceInterface::CODE])
             ->where(SourceInterface::ENABLED . ' = ?', 1);
-        $sourceIds = $connection->fetchCol($select);
+        $sourceCodes = $connection->fetchCol($select);
 
-        if (0 === count($sourceIds)) {
+        if (0 === count($sourceCodes)) {
             return $select;
         }
 
@@ -71,11 +71,11 @@ class SelectBuilder
             )
             ->joinLeft(
                 ['stock_source_link' => $sourceStockLinkTable],
-                'source_item.' . SourceItemInterface::SOURCE_ID . ' = stock_source_link.' . StockSourceLink::SOURCE_ID,
+                'source_item.' . SourceItemInterface::SOURCE_CODE . ' = stock_source_link.' . StockSourceLink::SOURCE_CODE,
                 []
             )
             ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
-            ->where('stock_source_link.' . StockSourceLink::SOURCE_ID . ' IN (?)', $sourceIds)
+            ->where('stock_source_link.' . StockSourceLink::SOURCE_CODE . ' IN (?)', $sourceCodes)
             ->group([SourceItemInterface::SKU]);
         return $select;
     }

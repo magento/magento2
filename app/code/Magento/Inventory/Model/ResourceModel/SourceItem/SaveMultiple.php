@@ -46,7 +46,7 @@ class SaveMultiple
         $tableName = $this->resourceConnection->getTableName(SourceItemResourceModel::TABLE_NAME_SOURCE_ITEM);
 
         $columnsSql = $this->buildColumnsSqlPart([
-            SourceItemInterface::SOURCE_ID,
+            SourceItemInterface::SOURCE_CODE,
             SourceItemInterface::SKU,
             SourceItemInterface::QUANTITY,
             SourceItemInterface::STATUS

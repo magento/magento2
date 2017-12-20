@@ -80,9 +80,8 @@ class SourceValidator implements ValidatorInterface
     {
         $sources = $this->sourceRepository->getList();
         foreach ($sources->getItems() as $source) {
-            $sourceId = $source->getSourceId();
             $sourceCode = $source->getCode();
-            $this->sourceCodes[$sourceCode] = $sourceId;
+            $this->sourceCodes[$sourceCode] = $sourceCode;
         }
     }
 }

@@ -77,7 +77,7 @@ class StockItemImporterTest extends TestCase
         $expectedData = [
             SourceItemInterface::SKU => $stockData['sku'],
             SourceItemInterface::QUANTITY => '1.0000',
-            SourceItemInterface::SOURCE_ID => (string) $this->defaultSourceProvider->getId(),
+            SourceItemInterface::SOURCE_CODE => (string) $this->defaultSourceProvider->getCode(),
             SourceItemInterface::STATUS => (string) SourceItemInterface::STATUS_IN_STOCK
         ];
 
@@ -101,8 +101,8 @@ class StockItemImporterTest extends TestCase
         );
 
         $searchCriteriaBuilder->addFilter(
-            SourceItemInterface::SOURCE_ID,
-            $this->defaultSourceProvider->getId()
+            SourceItemInterface::SOURCE_CODE,
+            $this->defaultSourceProvider->getCode()
         );
 
         /** @var SearchCriteria $searchCriteria */

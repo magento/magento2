@@ -12,7 +12,7 @@ use Magento\InventoryApi\Api\Data\SourceItemExtensionInterface;
 
 /**
  * Represents amount of product on physical storage
- * Entity id getter is missed because entity identifies by compound identifier (sku and source_id)
+ * Entity id getter is missed because entity identifies by compound identifier (sku and source_code)
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
@@ -61,7 +61,7 @@ interface SourceItemInterface extends ExtensibleDataInterface
     /**
      * Set source code
      *
-     * @param stirng|null $sourceId
+     * @param stirng|null $sourceCode
      * @return void
      */
     public function setSourceCode($sourceCode);

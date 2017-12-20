@@ -212,7 +212,7 @@ class SourcesTest extends TestCase
     }
 
     /**
-     * @param int $sourceID
+     * @param string $sourceCode
      * @param string $sku
      * @param int $qty
      * @param int $status

@@ -124,7 +124,7 @@ class UpdateSourceItemAtLegacyStockSettingPlugin
 
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(SourceItemInterface::SKU, $productSku)
-            ->addFilter(SourceItemInterface::SOURCE_ID, $this->defaultSourceProvider->getId())
+            ->addFilter(SourceItemInterface::SOURCE_CODE, $this->defaultSourceProvider->getCode())
             ->create();
         $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
         if (count($sourceItems)) {

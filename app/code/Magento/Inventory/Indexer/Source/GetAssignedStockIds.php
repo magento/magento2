@@ -31,10 +31,10 @@ class GetAssignedStockIds
     }
 
     /**
-     * @param int[] $sourceIds
+     * @param string[] $sourceCodes
      * @return int[]
      */
-    public function execute(array $sourceIds): array
+    public function execute(array $sourceCodes): array
     {
         $connection = $this->resourceConnection->getConnection();
         $sourceStockLinkTable = $this->resourceConnection->getTableName(
@@ -44,7 +44,7 @@ class GetAssignedStockIds
         $select = $connection
             ->select()
             ->from($sourceStockLinkTable, StockSourceLink::STOCK_ID)
-            ->where(StockSourceLink::SOURCE_ID . ' IN (?)', $sourceIds)
+            ->where(StockSourceLink::SOURCE_CODE . ' IN (?)', $sourceCodes)
             ->group(StockSourceLink::STOCK_ID);
 
         $stockIds = $connection->fetchCol($select);

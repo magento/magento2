@@ -53,14 +53,13 @@ class CreateSourceCarrierLinkTable
             ],
             'Source Carrier Link ID'
         )->addColumn(
-            SourceInterface::SOURCE_ID,
-            Table::TYPE_INTEGER,
-            null,
+            SourceInterface::CODE,
+            Table::TYPE_TEXT,
+            255,
             [
                 Table::OPTION_NULLABLE => false,
-                Table::OPTION_UNSIGNED => true,
             ],
-            'Source ID'
+            'Source Code'
         )->addColumn(
             SourceCarrierLinkInterface::CARRIER_CODE,
             Table::TYPE_TEXT,
@@ -81,13 +80,13 @@ class CreateSourceCarrierLinkTable
         )->addForeignKey(
             $setup->getFkName(
                 $sourceCarrierLinkTable,
-                SourceInterface::SOURCE_ID,
+                SourceInterface::CODE,
                 $sourceTable,
-                SourceInterface::SOURCE_ID
+                SourceInterface::CODE
             ),
-            SourceInterface::SOURCE_ID,
+            SourceInterface::CODE,
             $sourceTable,
-            SourceInterface::SOURCE_ID,
+            SourceInterface::CODE,
             AdapterInterface::FK_ACTION_CASCADE
         );
     }

@@ -98,7 +98,7 @@ class ProcessSourceItemsObserver implements ObserverInterface
         $qtyAndStockStatus = $productParams['quantity_and_stock_status'];
         $qty = $qtyAndStockStatus['qty'];
         $stockStatus = $qtyAndStockStatus['is_in_stock'];
-        $defaultSourceId = $this->defaultSourceProvider->getId();
+        $defaultSourceCode = $this->defaultSourceProvider->getCode();
 
         /** @var  $sourceItem SourceItemInterface */
         $sourceItem = $this->sourceItemInterfaceFactory->create([
@@ -106,7 +106,7 @@ class ProcessSourceItemsObserver implements ObserverInterface
                 SourceItemInterface::SKU => $sku,
                 SourceItemInterface::QUANTITY => $qty,
                 SourceItemInterface::STATUS => $stockStatus,
-                SourceItemInterface::SOURCE_ID => $defaultSourceId
+                SourceItemInterface::SOURCE_CODE => $defaultSourceCode
             ]
         ]);
 

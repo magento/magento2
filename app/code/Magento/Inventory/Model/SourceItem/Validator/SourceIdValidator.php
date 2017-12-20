@@ -14,7 +14,7 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 /**
  * Check that source id is valid
  */
-class SourceIdValidator implements SourceItemValidatorInterface
+class SourceCodeValidator implements SourceItemValidatorInterface
 {
     /**
      * @var ValidationResultFactory

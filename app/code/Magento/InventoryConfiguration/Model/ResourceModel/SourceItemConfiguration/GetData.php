@@ -30,11 +30,11 @@ class GetData
     }
 
     /**
-     * @param int $sourceId
+     * @param string $sourceCode
      * @param string $sku
      * @return array|null
      */
-    public function execute(int $sourceId, string $sku)
+    public function execute(string $sourceCode, string $sku)
     {
         $connection = $this->resourceConnection->getConnection();
         $sourceItemConfigurationTable = $this->resourceConnection
@@ -42,7 +42,7 @@ class GetData
 
         $select = $connection->select()
             ->from($sourceItemConfigurationTable)
-            ->where(SourceItemConfigurationInterface::SOURCE_ID . ' = ?', $sourceId)
+            ->where(SourceItemConfigurationInterface::SOURCE_CODE . ' = ?', $sourceCode)
             ->where(SourceItemConfigurationInterface::SKU . ' = ?', $sku);
 
         $row = $connection->fetchRow($select);
