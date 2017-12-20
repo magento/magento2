@@ -611,7 +611,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 )->__toString()
             );
         } elseif ($this->getAttribute() === 'sku') {
-            $this->isMultipleSku();
+            $value = $this->getData('value');
+            $value = preg_split('#\s*[,;]\s*#', $value, null, PREG_SPLIT_NO_EMPTY);
+            $this->setValueParsed($value);
         }
 
         return parent::getBindArgumentValue();
@@ -711,7 +713,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     public function getOperatorForValidate()
     {
         $operator = $this->getOperator();
-        if ($this->getInputType() == 'category' || $this->isMultipleSku()) {
+        if (in_array($this->getInputType(), ['category', 'sku'])) {
             if ($operator == '==') {
                 $operator = '{}';
             } elseif ($operator == '!=') {
@@ -759,32 +761,5 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         }
 
         return $selectOptions;
-    }
-
-    /**
-     * Check condition contains multiple sku.
-     *
-     * @return bool
-     */
-    private function isMultipleSku()
-    {
-        $result = false;
-        if ($this->getInputType() === 'sku') {
-            if ($this->hasValueParsed()) {
-                $value = $this->getData('value_parsed');
-                if (count($value > 1)) {
-                    $result = true;
-                }
-            } else {
-                $value = $this->getData('value');
-                $value = preg_split('#\s*[,;]\s*#', $value, null, PREG_SPLIT_NO_EMPTY);
-                if (count($value > 1)) {
-                    $this->setValueParsed($value);
-                    $result = true;
-                }
-            }
-        }
-
-        return $result;
     }
 }
