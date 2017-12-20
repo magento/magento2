@@ -192,7 +192,6 @@ class ConfigurableProductsFixture extends Fixture
         $this->websiteCategoryProvider = $websiteCategoryProvider;
         $this->priceProvider = $priceProvider;
         $this->swatchesGenerator = $swatchesGenerator;
-        $this->serializer = $serializer;
     }
 
     /**
