@@ -104,7 +104,7 @@ class SourceRepositoryTest extends TestCase
         $this->commandGet
             ->expects($this->once())
             ->method('execute')
-            ->with($sourceId)
+            ->with($sourceCode)
             ->willReturn($this->source);
 
         self::assertEquals($this->source, $this->sourceRepository->get($sourceCode));

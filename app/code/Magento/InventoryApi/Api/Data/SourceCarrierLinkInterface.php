@@ -23,6 +23,7 @@ interface SourceCarrierLinkInterface extends ExtensibleDataInterface
      */
     const CARRIER_CODE = 'carrier_code';
     const POSITION = 'position';
+    const SOURCE_CODE = 'source_code';
     /**#@-*/
 
     /**

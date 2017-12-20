@@ -71,7 +71,11 @@ class SelectBuilder
             )
             ->joinLeft(
                 ['stock_source_link' => $sourceStockLinkTable],
-                'source_item.' . SourceItemInterface::SOURCE_CODE . ' = stock_source_link.' . StockSourceLink::SOURCE_CODE,
+                sprintf(
+                    'source_item.%s = stock_source_link.%s',
+                    SourceItemInterface::SOURCE_CODE,
+                    StockSourceLink::SOURCE_CODE
+                ),
                 []
             )
             ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
