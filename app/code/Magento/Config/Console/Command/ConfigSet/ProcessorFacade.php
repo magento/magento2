@@ -97,13 +97,31 @@ class ProcessorFacade
      * @param string $scope The configuration scope (default, website, or store)
      * @param string $scopeCode The scope code
      * @param boolean $lock The lock flag
+     * @return string Processor response message
+     * @throws ValidatorException If some validation is wrong
+     * @since 100.2.0
+     * @deprecated
+     * @see processWithLockTarget()
+     */
+    public function process($path, $value, $scope, $scopeCode, $lock)
+    {
+        return $this->processWithLockTarget($path, $value, $scope, $scopeCode, $lock);
+    }
+
+
+    /**
+     * Processes config:set command with the option to set a target file.
+     *
+     * @param string $path The configuration path in format section/group/field_name
+     * @param string $value The configuration value
+     * @param string $scope The configuration scope (default, website, or store)
+     * @param string $scopeCode The scope code
+     * @param boolean $lock The lock flag
      * @param string $lockTarget
      * @return string Processor response message
      * @throws ValidatorException If some validation is wrong
-     * @internal param bool $share The share flag
-     * @since 100.2.0
      */
-    public function process($path, $value, $scope, $scopeCode, $lock, $lockTarget = ConfigFilePool::APP_ENV)
+    public function processWithLockTarget($path, $value, $scope, $scopeCode, $lock, $lockTarget = ConfigFilePool::APP_ENV)
     {
         try {
             $this->scopeValidator->isValid($scope, $scopeCode);

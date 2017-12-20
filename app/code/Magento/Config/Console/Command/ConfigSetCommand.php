@@ -173,7 +173,7 @@ class ConfigSetCommand extends Command
                     $lockTargetPath = ConfigFilePool::APP_CONFIG;
                 }
 
-                return $this->processorFacadeFactory->create()->process(
+                return $this->processorFacadeFactory->create()->processWithLockTarget(
                     $input->getArgument(static::ARG_PATH),
                     $input->getArgument(static::ARG_VALUE),
                     $input->getOption(static::OPTION_SCOPE),
