@@ -90,7 +90,7 @@
                         <label translate="true">Name</label>
                     </settings>
                 </field>
-                <field component="Magento_InventoryCatalog/js/components/select-handle-disabled" name="status" formElement="select" sortOrder="30">
+                <field name="status" formElement="select" sortOrder="30">
                     <settings>
                         <dataType>text</dataType>
                         <dataScope>status</dataScope>
