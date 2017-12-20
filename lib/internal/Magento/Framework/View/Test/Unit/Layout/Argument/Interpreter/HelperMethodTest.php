@@ -67,7 +67,8 @@ class HelperMethodTest extends \PHPUnit\Framework\TestCase
      */
     public function testEvaluateException($helperMethod, $expectedExceptionMessage)
     {
-        $this->expectException('\InvalidArgumentException', $expectedExceptionMessage);
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage($expectedExceptionMessage);
         $input = ['value' => 'some text', 'helper' => $helperMethod];
         $this->_model->evaluate($input);
     }
