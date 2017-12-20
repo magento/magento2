@@ -8,6 +8,12 @@ namespace Magento\PageCache\Test\Unit\Model\App\FrontController;
 
 use Magento\PageCache\Model\App\FrontController\BuiltinPlugin;
 
+/**
+ * Front controller build-in plugin test class.
+ * @covers BuiltinPlugin
+ *
+ * @SuppressWarnings("PHPMD.LongVariable")
+ */
 class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**

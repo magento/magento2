@@ -9,6 +9,8 @@ use \Magento\Framework\Stdlib\Cookie\CookieMetadata;
 
 /**
  * Frontend cookie prolongation model.
+ *
+ * @SuppressWarnings("PHPMD.LongVariable")
  */
 class Frontend implements ProlongationInterface
 {
@@ -67,7 +69,7 @@ class Frontend implements ProlongationInterface
      */
     protected function _isCookieSet()
     {
-        return $this->_getCookieValue() === null;
+        return $this->_getCookieValue() !== null;
     }
 
     /**

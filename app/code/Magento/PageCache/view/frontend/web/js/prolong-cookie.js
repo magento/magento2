@@ -10,7 +10,7 @@ define([
 
     $.widget('mage.prolongCookie', {
         options: {
-            prolongActionUrl: '',
+            prolongActionUrl: ''
         },
 
         /**
@@ -23,6 +23,8 @@ define([
 
         /**
          * Prolongs cookie(s) lifetime by performing post ajax request.
+         * TODO: avoid additional request sending every time the page is opened.
+         *
          * @private
          */
         _prolongCookie: function () {
@@ -31,7 +33,7 @@ define([
             }
 
             $.post(this.options.prolongActionUrl);
-        },
+        }
     });
 
     return $.mage.prolongCookie;

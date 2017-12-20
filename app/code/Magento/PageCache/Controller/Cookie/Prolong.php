@@ -7,6 +7,8 @@ namespace Magento\PageCache\Controller\Cookie;
 
 /**
  * Prolong cookie action.
+ *
+ * @SuppressWarnings("PHPMD.LongVariable")
  */
 class Prolong extends \Magento\Framework\App\Action\Action
 {

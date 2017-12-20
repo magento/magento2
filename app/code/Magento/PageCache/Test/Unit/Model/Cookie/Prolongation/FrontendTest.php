@@ -3,13 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\PageCache\Test\Unit\Block\Cookie\Prolongation;
+namespace Magento\PageCache\Test\Unit\Model\Cookie\Prolongation;
 
 use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Frontend cookie prolongation model test class.
  * @covers \Magento\PageCache\Model\Cookie\Prolongation\Frontend
+ *
+ * @SuppressWarnings("PHPMD.LongVariable")
  */
 class FrontendTest extends \PHPUnit\Framework\TestCase
 {

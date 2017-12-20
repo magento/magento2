@@ -10,6 +10,8 @@ use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 /**
  * Prolong cookie action test class.
  * @covers \Magento\PageCache\Controller\Cookie\Prolong
+ *
+ * @SuppressWarnings("PHPMD.LongVariable")
  */
 class ProlongTest extends \PHPUnit\Framework\TestCase
 {

@@ -9,6 +9,8 @@ use Magento\Framework\App\Response\Http as ResponseHttp;
 
 /**
  * Plugin for processing builtin cache
+ *
+ * @SuppressWarnings("PHPMD.LongVariable")
  */
 class BuiltinPlugin
 {
