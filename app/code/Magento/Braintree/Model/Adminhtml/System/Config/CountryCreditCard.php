@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Braintree\Model\Adminhtml\System\Config;
 
 use Magento\Framework\App\Cache\TypeListInterface;
@@ -15,8 +14,6 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Braintree\Gateway\Config\Config;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class CountryCreditCard
@@ -34,13 +31,6 @@ class CountryCreditCard extends Value
     private $serializer;
 
     /**
-     * Logger.
-     *
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -49,7 +39,6 @@ class CountryCreditCard extends Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     * @param LoggerInterface $logger
      * @param array $data
      */
     public function __construct(
@@ -61,13 +50,11 @@ class CountryCreditCard extends Value
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         Json $serializer = null,
-        LoggerInterface $logger = null,
         array $data = []
     ) {
         $this->mathRandom = $mathRandom;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(Json::class);
-        $this->logger = $logger;
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
@@ -78,13 +65,7 @@ class CountryCreditCard extends Value
      */
     public function beforeSave()
     {
-        $value = null;
-        try {
-            $value = $this->serializer->unserialize($this->getValue(Config::KEY_COUNTRY_CREDIT_CARD));
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-        }
-
+        $value = $this->getValue();
         $result = [];
         if (is_array($value)) {
             foreach ($value as $data) {

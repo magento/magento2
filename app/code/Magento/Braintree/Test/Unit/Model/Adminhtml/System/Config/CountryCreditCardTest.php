@@ -63,11 +63,11 @@ class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider beforeSaveDataProvider
-     * @param array $value
+     * @param array|string $value
      * @param array $expectedValue
      * @param string $encodedValue
      */
-    public function testBeforeSave(array $value, array $expectedValue, $encodedValue)
+    public function testBeforeSave($value, array $expectedValue, $encodedValue)
     {
         $this->model->setValue($value);
 
@@ -87,6 +87,11 @@ class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
     public function beforeSaveDataProvider()
     {
         return [
+            'string' => [
+                'value' => '[]',
+                'expected' => [],
+                'encoded' => '[]'
+            ],
             'empty_value' => [
                 'value' => [],
                 'expected' => [],
