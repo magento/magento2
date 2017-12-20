@@ -6,8 +6,8 @@
 
 namespace Magento\Developer\Model\XmlCatalog\Format;
 
-use Magento\Developer\Model\XmlCatalog\Format\PhpStorm\DomDocumentFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DomDocument\DomDocumentFactory;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
@@ -66,7 +66,23 @@ class PhpStorm implements FormatInterface
                 \Magento\Framework\Filesystem\DriverPool::FILE,
                 'r'
             );
-            $dom = $this->domDocumentFactory->create($file->readAll());
+            $dom = $this->domDocumentFactory->create();
+            $fileContent = $file->readAll();
+            if (!empty($fileContent)) {
+                $dom->loadXML($fileContent);
+            } else {
+                $projectNode = $dom->createElement('project');
+
+                //PhpStorm 9 version for component is "4"
+                $projectNode->setAttribute('version', '4');
+                $dom->appendChild($projectNode);
+                $rootComponentNode = $dom->createElement('component');
+
+                //PhpStorm 9 version for ProjectRootManager is "2"
+                $rootComponentNode->setAttribute('version', '2');
+                $rootComponentNode->setAttribute('name', 'ProjectRootManager');
+                $projectNode->appendChild($rootComponentNode);
+            }
             $xpath = new \DOMXPath($dom);
             $nodeList = $xpath->query('/project');
             $projectNode = $nodeList->item(0);
@@ -74,6 +90,17 @@ class PhpStorm implements FormatInterface
         } catch (FileSystemException $f) {
             //create file if does not exists
             $dom = $this->domDocumentFactory->create();
+            $projectNode = $dom->createElement('project');
+
+            //PhpStorm 9 version for component is "4"
+            $projectNode->setAttribute('version', '4');
+            $dom->appendChild($projectNode);
+            $rootComponentNode = $dom->createElement('component');
+
+            //PhpStorm 9 version for ProjectRootManager is "2"
+            $rootComponentNode->setAttribute('version', '2');
+            $rootComponentNode->setAttribute('name', 'ProjectRootManager');
+            $projectNode->appendChild($rootComponentNode);
         }
 
         $xpath = new \DOMXPath($dom);
