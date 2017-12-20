@@ -13,9 +13,6 @@ use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Framework\Exception\LocalizedException;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class Save extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
@@ -210,7 +207,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->dataObjectHelper->populateWithArray(
                     $customer,
                     $customerData,
-                    '\Magento\Customer\Api\Data\CustomerInterface'
+                    \Magento\Customer\Api\Data\CustomerInterface::class
                 );
                 $addresses = [];
                 foreach ($addressesData as $addressData) {
@@ -224,7 +221,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $this->dataObjectHelper->populateWithArray(
                         $addressDataObject,
                         $addressData,
-                        '\Magento\Customer\Api\Data\AddressInterface'
+                        \Magento\Customer\Api\Data\AddressInterface::class
                     );
                     $addresses[] = $addressDataObject;
                 }
@@ -253,7 +250,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $isSubscribed = $this->getRequest()->getPost('subscription');
                 }
                 if ($isSubscribed !== null) {
-                    if ($isSubscribed !== 'false') {
+                    if ($isSubscribed !== '0') {
                         $this->_subscriberFactory->create()->subscribeCustomerById($customerId);
                     } else {
                         $this->_subscriberFactory->create()->unsubscribeCustomerById($customerId);

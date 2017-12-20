@@ -7,14 +7,14 @@ namespace Magento\Newsletter\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
  * Subscriber model
  *
- * @method \Magento\Newsletter\Model\ResourceModel\Subscriber _getResource()
- * @method \Magento\Newsletter\Model\ResourceModel\Subscriber getResource()
  * @method int getStoreId()
  * @method $this setStoreId(int $value)
  * @method string getChangeStatusAt()
@@ -94,6 +94,13 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     protected $_customerSession;
 
     /**
+     * Date
+     *
+     * @var DateTime
+     */
+    private $dateTime;
+
+    /**
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -133,9 +140,10 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param DateTime|null $dateTime
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -151,7 +159,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        DateTime $dateTime = null
     ) {
         $this->_newsletterData = $newsletterData;
         $this->_scopeConfig = $scopeConfig;
@@ -161,6 +170,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->customerRepository = $customerRepository;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->inlineTranslation = $inlineTranslation;
+        $this->dateTime = $dateTime ?: ObjectManager::getInstance()->get(DateTime::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -263,7 +273,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * @param boolean $scope
      * @return $this
      */
-
     public function setMessagesScope($scope)
     {
         $this->getResource()->setMessagesScope($scope);
@@ -349,6 +358,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     {
         try {
             $customerData = $this->customerRepository->getById($customerId);
+            $customerData->setStoreId($this->_storeManager->getStore()->getId());
             $data = $this->getResource()->loadByCustomerData($customerData);
             $this->addData($data);
             if (!empty($data) && $customerData->getId() && !$this->getCustomerId()) {
@@ -446,6 +456,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $this->setStatusChanged(true);
 
         try {
+            /* Save model before sending out email */
             $this->save();
             if ($isConfirmNeed === true
                 && $isOwnSubscribes === false
@@ -545,12 +556,21 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
 
         $sendInformationEmail = false;
         $status = self::STATUS_SUBSCRIBED;
+        $isConfirmNeed = $this->_scopeConfig->getValue(
+            self::XML_PATH_CONFIRMATION_FLAG,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) == 1 ? true : false;
         if ($subscribe) {
             if (AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED
                 == $this->customerAccountManagement->getConfirmationStatus($customerId)
             ) {
                 $status = self::STATUS_UNCONFIRMED;
+            } elseif ($isConfirmNeed) {
+                $status = self::STATUS_NOT_ACTIVE;
             }
+        } elseif (($this->getStatus() == self::STATUS_UNCONFIRMED) && ($customerData->getConfirmation() === null)) {
+            $status = self::STATUS_SUBSCRIBED;
+            $sendInformationEmail = true;
         } else {
             $status = self::STATUS_UNSUBSCRIBED;
         }
@@ -584,7 +604,9 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $sendSubscription = $sendInformationEmail;
         if ($sendSubscription === null xor $sendSubscription) {
             try {
-                if ($this->isStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
+                if ($isConfirmNeed) {
+                    $this->sendConfirmationRequestEmail();
+                } elseif ($this->isStatusChanged() && $status == self::STATUS_UNSUBSCRIBED) {
                     $this->sendUnsubscriptionEmail();
                 } elseif ($this->isStatusChanged() && $status == self::STATUS_SUBSCRIBED) {
                     $this->sendConfirmationSuccessEmail();
@@ -797,5 +819,19 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             $name = $this->getFirstname() . ' ' . $this->getLastname();
         }
         return $name;
+    }
+
+    /**
+     * Set date of last changed status
+     *
+     * @return $this
+     */
+    public function beforeSave()
+    {
+        parent::beforeSave();
+        if ($this->dataHasChangedFor('subscriber_status')) {
+            $this->setChangeStatusAt($this->dateTime->gmtDate());
+        }
+        return $this;
     }
 }
