@@ -7,7 +7,7 @@
 namespace Magento\Framework\GraphQl\Argument\SearchCriteria\ArgumentApplier;
 
 use Magento\Framework\GraphQl\ArgumentInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\ObjectManager;
@@ -19,6 +19,8 @@ use Magento\Framework\Phrase;
  */
 class Sort implements ArgumentApplierInterface
 {
+    const ARGUMENT_NAME = 'sort';
+
     /** @var SortOrderBuilder */
     private $sortOrderBuilder;
 
@@ -47,7 +49,7 @@ class Sort implements ArgumentApplierInterface
             $searchCriteria->setSortOrders($sortOrders);
         } elseif (!empty($argument->getValue())) {
             throw new \Magento\Framework\Exception\RuntimeException(
-                new Phrase('Argument %1 not of type array or null', $argument->getName())
+                new Phrase('Argument %1 not of type array or null', [$argument->getName()])
             );
         }
     }

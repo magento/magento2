@@ -6,19 +6,20 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
-use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\Framework\GraphQl\TypeFactory;
 
 /**
  * Define SearchCriteriaExpression GraphQL type
  */
 class SearchCriteriaExpression implements HandlerInterface
 {
+    const SEARCH_CRITERIA_EXPRESSION_TYPE_NAME = 'SearchCriteriaExpression';
+
     /**
-     * @var TypeGenerator
+     * @var Pool
      */
-    private $typeGenerator;
+    private $pool;
 
     /**
      * @var TypeFactory
@@ -26,12 +27,12 @@ class SearchCriteriaExpression implements HandlerInterface
     private $typeFactory;
 
     /**
-     * @param TypeGenerator $typeGenerator
-     * @param TypeFactory $typeFactory
+     * @param Pool $pool
+     * @param \Magento\Framework\GraphQl\TypeFactory $typeFactory
      */
-    public function __construct(TypeGenerator $typeGenerator, TypeFactory $typeFactory)
+    public function __construct(Pool $pool, TypeFactory $typeFactory)
     {
-        $this->typeGenerator = $typeGenerator;
+        $this->pool = $pool;
         $this->typeFactory = $typeFactory;
     }
 
@@ -40,10 +41,9 @@ class SearchCriteriaExpression implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = new \ReflectionClass($this);
         return $this->typeFactory->createInputObject(
             [
-                'name' => $reflector->getShortName(),
+                'name' => self::SEARCH_CRITERIA_EXPRESSION_TYPE_NAME,
                 'fields' => $this->getFields()
             ]
         );
@@ -56,28 +56,26 @@ class SearchCriteriaExpression implements HandlerInterface
      */
     private function getFields()
     {
-        $reflector = new \ReflectionClass($this);
-        $className = $reflector->getShortName();
-
-        $schema = [
-            'eq' => 'String',
-            'finset' => ['String'],
-            'from' => 'String',
-            'gt' => 'String',
-            'gteq' => 'String',
-            'in' => ['String'],
-            'like' => 'String',
-            'lt' => 'String',
-            'lteq' => 'String',
-            'moreq' => 'String',
-            'neq' => 'String',
-            'nin' => ['String'],
-            'notnull' => 'String',
-            'null' => 'String',
-            'to' => 'String',
+        $stringType = $this->pool->getType('String');
+        $stringListType = $this->typeFactory->createList($stringType);
+        
+        $fields = [
+            'eq' => $stringType,
+            'finset' => $stringListType,
+            'from' => $stringType,
+            'gt' => $stringType,
+            'gteq' => $stringType,
+            'in' => $stringListType,
+            'like' => $stringType,
+            'lt' => $stringType,
+            'lteq' => $stringType,
+            'moreq' => $stringType,
+            'neq' => $stringType,
+            'nin' => $stringListType,
+            'notnull' => $stringType,
+            'null' => $stringType,
+            'to' => $stringType,
         ];
-        $resolvedTypes = $this->typeGenerator->generate($className, $schema);
-        $fields = $resolvedTypes->config['fields'];
 
         return $fields;
     }

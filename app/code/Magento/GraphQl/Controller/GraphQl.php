@@ -7,6 +7,7 @@
 namespace Magento\GraphQl\Controller;
 
 use Magento\Framework\App\FrontControllerInterface;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -15,6 +16,7 @@ use Magento\Framework\Webapi\Response;
 use Magento\GraphQl\Model\SchemaGeneratorInterface;
 use Magento\Framework\GraphQl\RequestProcessor;
 use Magento\Framework\GraphQl\ExceptionFormatter;
+use Magento\GraphQl\Model\ResolverContext;
 
 /**
  * Front controller for web API GraphQL area.
@@ -44,25 +46,31 @@ class GraphQl implements FrontControllerInterface
     /** @var ExceptionFormatter */
     private $graphQlError;
 
+    /** @var ResolverContext */
+    private $context;
+
     /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
      * @param RequestProcessor $requestProcessor
      * @param ExceptionFormatter $graphQlError
+     * @param ResolverContext $context
      */
     public function __construct(
         Response $response,
         SchemaGeneratorInterface $schemaGenerator,
         SerializerInterface $jsonSerializer,
         RequestProcessor $requestProcessor,
-        ExceptionFormatter $graphQlError
+        ExceptionFormatter $graphQlError,
+        ResolverContext $context
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
         $this->jsonSerializer = $jsonSerializer;
         $this->requestProcessor = $requestProcessor;
         $this->graphQlError = $graphQlError;
+        $this->context = $context;
     }
 
     /**
@@ -74,6 +82,7 @@ class GraphQl implements FrontControllerInterface
     public function dispatch(RequestInterface $request)
     {
         try {
+            /** @var $request Http */
             if ($request->getHeader('Content-Type')
                 && strpos($request->getHeader('Content-Type'), 'application/json') !== false
             ) {
@@ -87,7 +96,7 @@ class GraphQl implements FrontControllerInterface
                 $schema,
                 isset($data['query']) ? $data['query'] : '',
                 null,
-                null,
+                $this->context,
                 isset($data['variables']) ? $data['variables'] : []
             );
         } catch (\Exception $error) {
