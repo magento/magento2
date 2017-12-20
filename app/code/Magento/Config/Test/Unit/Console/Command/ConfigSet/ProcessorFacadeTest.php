@@ -123,7 +123,7 @@ class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(
             'Value was saved.',
-            $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false)
+            $this->model->processWithLockTarget('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false)
         );
     }
 
@@ -139,7 +139,7 @@ class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
             ->method('isValid')
             ->willThrowException($exception);
 
-        $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false);
+        $this->model->processWithLockTarget('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false);
     }
 
     /**
@@ -174,7 +174,7 @@ class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
         $this->configMock->expects($this->never())
             ->method('clean');
 
-        $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false);
+        $this->model->processWithLockTarget('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false);
     }
 
     /**
@@ -200,7 +200,7 @@ class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
         $this->configMock->expects($this->never())
             ->method('clean');
 
-        $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false);
+        $this->model->processWithLockTarget('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, false);
     }
 
     public function testExecuteLockEnv()
@@ -220,7 +220,7 @@ class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(
             'Value was saved in app/etc/env.php and locked.',
-            $this->model->process('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, true)
+            $this->model->processWithLockTarget('test/test/test', 'test', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, true)
         );
     }
 
@@ -241,7 +241,7 @@ class ProcessorFacadeTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame(
             'Value was saved in app/etc/config.php and locked.',
-            $this->model->process(
+            $this->model->processWithLockTarget(
                 'test/test/test',
                 'test',
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT,

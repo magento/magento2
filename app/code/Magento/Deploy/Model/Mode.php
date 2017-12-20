@@ -217,7 +217,7 @@ class Mode
         $configs = $this->configProvider->getConfigs($this->getMode(), $mode);
         foreach ($configs as $path => $item) {
             $this->emulatedAreaProcessor->process(function () use ($path, $item) {
-                $this->processorFacadeFactory->create()->process(
+                $this->processorFacadeFactory->create()->processWithLockTarget(
                     $path,
                     $item['value'],
                     ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
