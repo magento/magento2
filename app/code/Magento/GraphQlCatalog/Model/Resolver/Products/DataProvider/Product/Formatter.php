@@ -54,6 +54,11 @@ class Formatter
     public function format(Product $product)
     {
         $productData = $product->getData();
+        foreach ($product->getCustomAttributes() as $customAttribute) {
+            if (!isset($productData[$customAttribute->getAttributeCode()])) {
+                $productData[$customAttribute->getAttributeCode()] = $customAttribute->getValue();
+            }
+        }
         $productData['id'] = $product->getId();
         unset($productData['entity_id']);
 

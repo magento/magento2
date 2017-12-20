@@ -80,9 +80,9 @@ class ProductSort implements HandlerInterface
     {
         $attributes = $this->entityAttributeList->getDefaultEntityAttributes(\Magento\Catalog\Model\Product::ENTITY);
         $result = [];
-        foreach ($attributes as $attribute) {
-            if ((!$attribute->getIsUserDefined()) && !is_array($attribute)) {
-                $result[$attribute->getAttributeCode()] = $this->typePool->getType(SortEnum::SORT_ENUM_TYPE_NAME);
+        foreach ($attributes as $attributeCode => $sortable) {
+            if ($sortable) {
+                $result[$attributeCode] = $this->typePool->getType(SortEnum::SORT_ENUM_TYPE_NAME);
             }
         }
 

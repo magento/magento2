@@ -6,6 +6,7 @@
 
 namespace Magento\GraphQlCustomer\Model\Type\Handler;
 
+use Magento\Customer\Api\MetadataInterface;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\GraphQl\Model\EntityAttributeList;
 use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
@@ -47,24 +48,32 @@ class Customer implements HandlerInterface
     private $typeLocator;
 
     /**
+     * @var MetadataInterface
+     */
+    private $metadataService;
+
+    /**
      * @param Pool $typePool
      * @param TypeGenerator $typeGenerator
      * @param EntityAttributeList $entityAttributeList
      * @param TypeFactory $typeFactory
      * @param Type $typeLocator
+     * @param MetadataInterface $metadataService
      */
     public function __construct(
         Pool $typePool,
         TypeGenerator $typeGenerator,
         EntityAttributeList $entityAttributeList,
         TypeFactory $typeFactory,
-        Type $typeLocator
+        Type $typeLocator,
+        MetadataInterface $metadataService
     ) {
         $this->typePool = $typePool;
         $this->typeGenerator = $typeGenerator;
         $this->entityAttributeList = $entityAttributeList;
         $this->typeFactory = $typeFactory;
         $this->typeLocator = $typeLocator;
+        $this->metadataService = $metadataService;
     }
 
     /**
@@ -91,14 +100,17 @@ class Customer implements HandlerInterface
     {
         $result = [];
         $customerEntityType = \Magento\Customer\Model\Customer::ENTITY;
-        $attributes = $this->entityAttributeList->getDefaultEntityAttributes($customerEntityType);
-        foreach ($attributes as $attribute) {
+        $attributes = $this->entityAttributeList->getDefaultEntityAttributes(
+            $customerEntityType,
+            $this->metadataService
+        );
+        foreach (array_keys($attributes) as $attributeCode) {
             $locatedType = $this->typeLocator->getType(
-                $attribute->getAttributeCode(),
+                $attributeCode,
                 $customerEntityType
             ) ?: 'string';
             $locatedType = $locatedType === TypeProcessor::NORMALIZED_ANY_TYPE ? 'string' : $locatedType;
-            $result[$attribute->getAttributeCode()] = $locatedType;
+            $result[$attributeCode] = $locatedType;
         }
 
         $staticAttributes = $this->typeGenerator->getTypeData('CustomerDataCustomerInterface');

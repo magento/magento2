@@ -15,6 +15,7 @@ use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\TypeFactory;
 use Magento\GraphQl\Model\Type\Handler\Pool;
 use Magento\GraphQlEav\Model\Resolver\Query\Type;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
 /**
  * Define product's GraphQL type
@@ -49,24 +50,32 @@ class Product implements HandlerInterface
     private $typeLocator;
 
     /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $productAttributeRepository;
+
+    /**
      * @param Pool $typePool
      * @param TypeGenerator $typeGenerator
      * @param EntityAttributeList $entityAttributeList
      * @param TypeFactory $typeFactory
      * @param Type $typeLocator
+     * @param ProductAttributeRepositoryInterface $productAttributeRepository
      */
     public function __construct(
         Pool $typePool,
         TypeGenerator $typeGenerator,
         EntityAttributeList $entityAttributeList,
         TypeFactory $typeFactory,
-        Type $typeLocator
+        Type $typeLocator,
+        ProductAttributeRepositoryInterface $productAttributeRepository
     ) {
         $this->typePool = $typePool;
         $this->typeGenerator = $typeGenerator;
         $this->entityAttributeList = $entityAttributeList;
         $this->typeFactory = $typeFactory;
         $this->typeLocator = $typeLocator;
+        $this->productAttributeRepository = $productAttributeRepository;
     }
 
     /**
@@ -112,14 +121,17 @@ class Product implements HandlerInterface
     {
         $result = [];
         $productEntityType = \Magento\Catalog\Model\Product::ENTITY;
-        $attributes = $this->entityAttributeList->getDefaultEntityAttributes($productEntityType);
-        foreach ($attributes as $attribute) {
+        $attributes = $this->entityAttributeList->getDefaultEntityAttributes(
+            $productEntityType,
+            $this->productAttributeRepository
+        );
+        foreach (array_keys($attributes) as $attributeCode) {
             $locatedType = $this->typeLocator->getType(
-                $attribute->getAttributeCode(),
+                $attributeCode,
                 $productEntityType
             ) ?: 'string';
             $locatedType = $locatedType === TypeProcessor::NORMALIZED_ANY_TYPE ? 'string' : $locatedType;
-            $result[$attribute->getAttributeCode()] = $locatedType;
+            $result[$attributeCode] = $locatedType;
         }
 
         $staticAttributes = $this->typeGenerator->getTypeData('CatalogDataProductInterface');
