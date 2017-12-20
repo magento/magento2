@@ -119,7 +119,7 @@ class SaveHandler
             }
         }
 
-        // Check if at least on link without position exists per Link type
+        // Check if at least one link without position exists per Link type
         foreach ($linksByType as $type => $links) {
             foreach ($links as $link) {
                 if (!array_key_exists('position', $link->getData())) {
