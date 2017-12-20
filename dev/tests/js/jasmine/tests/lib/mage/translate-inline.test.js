@@ -80,7 +80,8 @@ define([
                     },
                     expectedEequestData = 'area=test&test=test',
                     translateInline = $(translateSelector).translateInline(options),
-                    $submitButton = $('body').find('.action-primary');
+                    $submitButton = $('body').find('.action-primary'),
+                    originalAjax = $.ajax;
 
                 $.ajax = jasmine.createSpy().and.callFake(function (request) {
                     expect(request.url).toBe(options.ajaxUrl);
@@ -94,6 +95,7 @@ define([
 
                 translateInline.trigger('edit.editTrigger');
                 $submitButton.trigger('click');
+                $.ajax = originalAjax;
             });
 
             it('Check translation destroy', function () {
