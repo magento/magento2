@@ -87,7 +87,10 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
                     /** @var $optionValue \Magento\Catalog\Model\Product\Option\Value */
                     foreach ($optionItem->getValues() as $optionValue) {
                         $price =
-                            $optionValue->getPrice($optionValue->getPriceType() == Value::TYPE_PERCENT, $priceCode);
+                            $optionValue->getPriceByPriceCode(
+                                $priceCode,
+                                $optionValue->getPriceType() == Value::TYPE_PERCENT
+                            );
                         if ($min === null) {
                             $min = $price;
                         } elseif ($price < $min) {
