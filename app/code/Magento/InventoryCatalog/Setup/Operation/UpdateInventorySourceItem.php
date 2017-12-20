@@ -12,6 +12,7 @@ use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 
 /**
  * Update Inventory Stock Item Data from CatalogInventory to Inventory Source Item with default source ID
@@ -75,7 +76,8 @@ class UpdateInventorySourceItem
                 SourceItemInterface::QUANTITY,
                 SourceItemInterface::STATUS,
                 SourceItemInterface::SKU,
-            ]
+            ],
+            Mysql::INSERT_ON_DUPLICATE
         );
         $this->resourceConnection->getConnection()->query($sql);
     }
