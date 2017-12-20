@@ -25,6 +25,11 @@ abstract class GraphQlAbstract extends WebapiAbstract
     private $token = '';
 
     /**
+     * @var string
+     */
+    private $storeCode = '';
+
+    /**
      * Perform GraphQL call to the system under test.
      *
      * @see \Magento\TestFramework\TestCase\GraphQl\Client::call()
@@ -42,6 +47,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
             $query,
             $variables,
             $operationName,
+            $this->setStoreCodeInHeader(),
             $this->composeHeaders()
         );
     }
@@ -64,6 +70,23 @@ abstract class GraphQlAbstract extends WebapiAbstract
     }
 
     /**
+     * @param string $storeCode
+     * @return void
+     */
+    public function setStoreCode(string $storeCode)
+    {
+        $this->storeCode = $storeCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStoreCode()
+    {
+        return $this->storeCode;
+    }
+
+    /**
      * @return string[]
      */
     private function composeHeaders()
@@ -73,6 +96,18 @@ abstract class GraphQlAbstract extends WebapiAbstract
             $headers = [sprintf('Authorization: Bearer %s', $this->token)];
         }
         return $headers;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function setStoreCodeInHeader()
+    {
+        $storeCodeInHeader = [];
+        if (!empty($this->storeCode)) {
+            $storeCodeInHeader = [sprintf('Store Code : %s', $this->storeCode)];
+        }
+        return $storeCodeInHeader;
     }
 
     /**
