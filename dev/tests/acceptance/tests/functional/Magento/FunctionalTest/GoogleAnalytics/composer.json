@@ -28,7 +28,7 @@
         "map": [
             [
                 "*",
-                "dev/tests/acceptance/tests/functional/Magento/FunctionalTest/GoogleAnalytics"
+                "tests/functional/Magento/FunctionalTest/GoogleAnalytics"
             ]
         ]
     }
