@@ -16,10 +16,12 @@ $registry = Bootstrap::getObjectManager()->get(Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-for ($i = 0; $i < 3; $i++) {
+$websiteCodes = ['eu_website', 'us_website', 'global_website'];
+
+foreach ($websiteCodes as $websiteCode) {
     /** @var Website $website */
     $website = Bootstrap::getObjectManager()->create(Website::class);
-    $website->load('test_' . $i);
+    $website->load($websiteCode);
     $website->delete();
 }
 

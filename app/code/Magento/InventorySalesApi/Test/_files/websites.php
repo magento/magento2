@@ -8,12 +8,14 @@ declare(strict_types=1);
 use Magento\Store\Model\Website;
 use Magento\TestFramework\Helper\Bootstrap;
 
-for ($i = 0; $i < 3; $i++) {
-    /** @var $website Website */
+$websiteCodes = ['eu_website', 'us_website', 'global_website'];
+
+foreach ($websiteCodes as $websiteCode) {
+    /** @var Website $website */
     $website = Bootstrap::getObjectManager()->create(Website::class);
     $website->setData([
-        'code' => 'test_' . $i,
-        'name' => 'Test Website ' . $i,
+        'code' => $websiteCode,
+        'name' => 'Test Website ' . $websiteCode,
         'default_group_id' => '1',
         'is_default' => '0',
     ]);
