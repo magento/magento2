@@ -71,17 +71,7 @@ class PhpStorm implements FormatInterface
             if (!empty($fileContent)) {
                 $dom->loadXML($fileContent);
             } else {
-                $projectNode = $dom->createElement('project');
-
-                //PhpStorm 9 version for component is "4"
-                $projectNode->setAttribute('version', '4');
-                $dom->appendChild($projectNode);
-                $rootComponentNode = $dom->createElement('component');
-
-                //PhpStorm 9 version for ProjectRootManager is "2"
-                $rootComponentNode->setAttribute('version', '2');
-                $rootComponentNode->setAttribute('name', 'ProjectRootManager');
-                $projectNode->appendChild($rootComponentNode);
+                $this->initEmptyFile($dom);
             }
             $xpath = new \DOMXPath($dom);
             $nodeList = $xpath->query('/project');
@@ -90,17 +80,7 @@ class PhpStorm implements FormatInterface
         } catch (FileSystemException $f) {
             //create file if does not exists
             $dom = $this->domDocumentFactory->create();
-            $projectNode = $dom->createElement('project');
-
-            //PhpStorm 9 version for component is "4"
-            $projectNode->setAttribute('version', '4');
-            $dom->appendChild($projectNode);
-            $rootComponentNode = $dom->createElement('component');
-
-            //PhpStorm 9 version for ProjectRootManager is "2"
-            $rootComponentNode->setAttribute('version', '2');
-            $rootComponentNode->setAttribute('name', 'ProjectRootManager');
-            $projectNode->appendChild($rootComponentNode);
+            $projectNode = $this->initEmptyFile($dom);
         }
 
         $xpath = new \DOMXPath($dom);
@@ -126,5 +106,27 @@ class PhpStorm implements FormatInterface
         );
         $file->write($dom->saveXML());
         $file->close();
+    }
+
+    /**
+     * Setup basic empty dom elements
+     *
+     * @param \DOMDocument $dom
+     * @return \DOMElement
+     */
+    private function initEmptyFile(\DOMDocument $dom)
+    {
+        $projectNode = $dom->createElement('project');
+
+        //PhpStorm 9 version for component is "4"
+        $projectNode->setAttribute('version', '4');
+        $dom->appendChild($projectNode);
+        $rootComponentNode = $dom->createElement('component');
+
+        //PhpStorm 9 version for ProjectRootManager is "2"
+        $rootComponentNode->setAttribute('version', '2');
+        $rootComponentNode->setAttribute('name', 'ProjectRootManager');
+        $projectNode->appendChild($rootComponentNode);
+        return $projectNode;
     }
 }
