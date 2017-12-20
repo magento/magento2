@@ -14,7 +14,6 @@ use Magento\Inventory\Model\ResourceModel\SourceItem as SourceItemResourceModel;
 use Magento\Inventory\Model\ResourceModel\SourceItem;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
-use Magento\InventoryApi\Api\Data\SourceInterface;
 
 class CreateSourceConfigurationTable
 {
@@ -102,11 +101,11 @@ class CreateSourceConfigurationTable
                 $sourceItemConfigurationTable->getName(),
                 SourceItemConfigurationInterface::SOURCE_CODE,
                 $sourceItemTable,
-                SourceInterface::CODE
+                SourceItemInterface::SOURCE_CODE
             ),
             SourceItemConfigurationInterface::SOURCE_CODE,
             $sourceItemTable,
-            SourceInterface::CODE,
+            SourceItemInterface::SOURCE_CODE,
             AdapterInterface::FK_ACTION_CASCADE
         );
     }

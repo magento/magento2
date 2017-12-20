@@ -99,7 +99,7 @@ class SourceRepositoryTest extends TestCase
 
     public function testGet()
     {
-        $sourceId = 42;
+        $sourceCode = 'default';
 
         $this->commandGet
             ->expects($this->once())
@@ -107,7 +107,7 @@ class SourceRepositoryTest extends TestCase
             ->with($sourceId)
             ->willReturn($this->source);
 
-        self::assertEquals($this->source, $this->sourceRepository->get($sourceId));
+        self::assertEquals($this->source, $this->sourceRepository->get($sourceCode));
     }
 
     /**
@@ -116,15 +116,15 @@ class SourceRepositoryTest extends TestCase
      */
     public function testGetWithNoSuchEntityException()
     {
-        $sourceId = 42;
+        $sourceCode = 'default';
 
         $this->commandGet
             ->expects($this->once())
             ->method('execute')
-            ->with($sourceId)
+            ->with($sourceCode)
             ->willThrowException(new NoSuchEntityException(__('Some error')));
 
-        $this->sourceRepository->get($sourceId);
+        $this->sourceRepository->get($sourceCode);
     }
 
     public function testGetListWithoutSearchCriteria()
