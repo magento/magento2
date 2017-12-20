@@ -748,6 +748,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             return $this->getBaseUrl() . $routeParams['_direct'];
         }
 
+        if (isset($routeParams['_base_url_redirection']) && $routeParams['_base_url_redirection'] === true) {
+            unset($routeParams['_base_url_redirection']);
+            return $this->getBaseUrl() . $routePath;
+        }
+
         $this->_setRoutePath($routePath);
         if (is_array($routeParams)) {
             $this->_setRouteParams($routeParams, false);
