@@ -10,7 +10,7 @@ use Magento\PageCache\Model\App\FrontController\BuiltinPlugin;
 
 /**
  * Front controller build-in plugin test class.
- * @covers BuiltinPlugin
+ * @covers \Magento\PageCache\Model\App\FrontController\BuiltinPlugin
  *
  * @SuppressWarnings("PHPMD.LongVariable")
  */
