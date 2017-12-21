@@ -16,7 +16,7 @@ use Magento\GraphQl\Model\SchemaGeneratorInterface;
 use Magento\Framework\GraphQl\QueryProcessor;
 use Magento\Framework\GraphQl\ExceptionFormatter;
 use Magento\GraphQl\Model\ResolverContext;
-use Magento\Framework\GraphQl\HttpRequestProcessorPool;
+use Magento\Framework\GraphQl\HttpRequestProcessor;
 
 /**
  * Front controller for web API GraphQL area.
@@ -54,7 +54,7 @@ class GraphQl implements FrontControllerInterface
     private $context;
 
     /**
-     * @var HttpRequestProcessorPool
+     * @var HttpRequestProcessor
      */
     private $requestProcessor;
 
@@ -65,7 +65,7 @@ class GraphQl implements FrontControllerInterface
      * @param QueryProcessor $queryProcessor
      * @param ExceptionFormatter $graphQlError
      * @param ResolverContext $context
-     * @param HttpRequestProcessorPool $requestProcessor
+     * @param HttpRequestProcessor $requestProcessor
      */
     public function __construct(
         Response $response,
@@ -74,7 +74,7 @@ class GraphQl implements FrontControllerInterface
         QueryProcessor $queryProcessor,
         ExceptionFormatter $graphQlError,
         ResolverContext $context,
-        HttpRequestProcessorPool $requestProcessor
+        HttpRequestProcessor $requestProcessor
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;

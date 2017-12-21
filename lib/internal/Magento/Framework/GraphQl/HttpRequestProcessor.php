@@ -11,19 +11,19 @@ use Magento\Framework\App\Request\Http;
 /**
  * Hold information about all http processors objects that can handle a header entry
  */
-class HttpRequestProcessorPool
+class HttpRequestProcessor
 {
     /**
      * @var HttpHeaderProcessorInterface[]
      */
-    private $graphQlHeaders = [];
+    private $headerProcessors = [];
 
     /**
      * @param HttpHeaderProcessorInterface[] $graphQlHeaders
      */
     public function __construct(array $graphQlHeaders)
     {
-        $this->graphQlHeaders = $graphQlHeaders;
+        $this->headerProcessors = $graphQlHeaders;
     }
 
     /**
@@ -33,7 +33,7 @@ class HttpRequestProcessorPool
      */
     public function processHeaders(Http $request)
     {
-        foreach ($this->graphQlHeaders as $headerName => $headerClass) {
+        foreach ($this->headerProcessors as $headerName => $headerClass) {
             $headerClass->processHeaderValue($request->getHeader($headerName));
         }
     }

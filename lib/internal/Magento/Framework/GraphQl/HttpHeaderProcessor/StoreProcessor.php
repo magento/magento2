@@ -33,7 +33,7 @@ class StoreProcessor implements HttpHeaderProcessorInterface
     /**
      * Handle the value of the store and set the scope
      *
-     * @inheritDoc
+     * {@inheritDoc}
      * @throws NoSuchEntityException
      */
     public function processHeaderValue($headerValue)
@@ -46,6 +46,8 @@ class StoreProcessor implements HttpHeaderProcessorInterface
             } elseif (strtolower($storeCode) !== 'default') {
                 throw new GraphQlInputException(__('Store code %1 does not exist', $storeCode));
             }
+        } else {
+            throw new GraphQlInputException(__('Store code is empty'));
         }
     }
 }
