@@ -38,8 +38,8 @@
         </settings>
         <dataProvider class="Magento\Inventory\Ui\DataProvider\SourceDataProvider" name="inventory_source_form_data_source">
             <settings>
-                <requestFieldName>code</requestFieldName>
-                <primaryFieldName>code</primaryFieldName>
+                <requestFieldName>source_id</requestFieldName>
+                <primaryFieldName>source_id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>

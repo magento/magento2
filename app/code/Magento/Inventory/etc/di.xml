@@ -13,7 +13,7 @@
     <preference for="Magento\InventoryApi\Api\Data\SourceSearchResultsInterface" type="Magento\Inventory\Model\SourceSearchResults"/>
     <preference for="Magento\Inventory\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement"/>
     <preference for="Magento\Inventory\Model\Source\Command\GetInterface" type="Magento\Inventory\Model\Source\Command\Get"/>
-    <preference for="Magento\Inventory\Model\Source\Command\GetByCodeInterface" type="Magento\Inventory\Model\Source\Command\GetByCode"/>
+    <preference for="Magento\Inventory\Model\Source\Command\GetBySourceIdInterface" type="Magento\Inventory\Model\Source\Command\GetBySourceId"/>
     <preference for="Magento\Inventory\Model\Source\Command\GetListInterface" type="Magento\Inventory\Model\Source\Command\GetList"/>
     <preference for="Magento\Inventory\Model\Source\Command\SaveInterface" type="Magento\Inventory\Model\Source\Command\Save"/>
     <type name="Magento\Inventory\Model\Source\Validator\ValidatorChain">

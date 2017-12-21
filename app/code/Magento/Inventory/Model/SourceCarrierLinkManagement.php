@@ -121,7 +121,7 @@ class SourceCarrierLinkManagement implements SourceCarrierLinkManagementInterfac
     public function loadCarrierLinksBySource(SourceInterface $source)
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceInterface::CODE, $source->getCode())
+            ->addFilter(SourceCarrierLinkInterface::SOURCE_CODE, $source->getCode())
             ->create();
 
         /** @var Collection $collection */

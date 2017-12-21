@@ -60,7 +60,7 @@ class UpdateInventorySourceItem
             ->from(
                 $legacyStockItemTable,
                 [
-                    'source_code' => new \Zend_Db_Expr($defaultSourceCode),
+                    'source_code' => new \Zend_Db_Expr('\'' .$defaultSourceCode . '\''),
                     'qty',
                     'is_in_stock'
                 ]

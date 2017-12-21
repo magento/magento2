@@ -78,13 +78,13 @@ class Save extends Action
         }
 
         try {
-            $sourceCode = isset($requestData['general'][SourceInterface::CODE])
-                ? (string)$requestData['general'][SourceInterface::CODE]
+            $sourceId = isset($requestData['general'][SourceInterface::SOURCE_ID])
+                ? (int)$requestData['general'][SourceInterface::SOURCE_ID]
                 : null;
-            $sourceCode = $this->processSave($requestData, $sourceCode);
+            $sourceId = $this->processSave($requestData, $sourceId);
 
             $this->messageManager->addSuccessMessage(__('The Source has been saved.'));
-            $this->processRedirectAfterSuccessSave($resultRedirect, $sourceCode);
+            $this->processRedirectAfterSuccessSave($resultRedirect, $sourceId);
         } catch (NoSuchEntityException $e) {
             $this->messageManager->addErrorMessage(__('The Source does not exist.'));
             $this->processRedirectAfterFailureSave($resultRedirect);
@@ -92,13 +92,13 @@ class Save extends Action
             foreach ($e->getErrors() as $localizedError) {
                 $this->messageManager->addErrorMessage($localizedError->getMessage());
             }
-            $this->processRedirectAfterFailureSave($resultRedirect, $sourceCode);
+            $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
         } catch (CouldNotSaveException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-            $this->processRedirectAfterFailureSave($resultRedirect, $sourceCode);
+            $this->processRedirectAfterFailureSave($resultRedirect, $sourceId);
         } catch (Exception $e) {
             $this->messageManager->addErrorMessage(__('Could not save Source.'));
-            $this->processRedirectAfterFailureSave($resultRedirect, $sourceCode ?? null);
+            $this->processRedirectAfterFailureSave($resultRedirect, $sourceId ?? null);
         }
 
         return $resultRedirect;
@@ -106,17 +106,17 @@ class Save extends Action
 
     /**
      * @param array $requestData
-     * @param string|null $sourceCode
+     * @param int|null $sourceId
      *
-     * @return string
+     * @return int
      */
-    private function processSave(array $requestData, string $sourceCode = null): string
+    private function processSave(array $requestData, int $sourceId = null): int
     {
-        if (null === $sourceCode) {
+        if (null === $sourceId) {
             /** @var SourceInterface $source */
             $source = $this->sourceFactory->create();
         } else {
-            $source = $this->sourceRepository->get($sourceCode);
+            $source = $this->sourceRepository->getBySourceId($sourceId);
         }
         $source = $this->sourceHydrator->hydrate($source, $requestData);
 
@@ -128,7 +128,7 @@ class Save extends Action
             ]
         );
 
-        $sourceCode = $this->sourceRepository->save($source);
+        $sourceId = $this->sourceRepository->save($source);
 
         $this->_eventManager->dispatch(
             'controller_action_inventory_source_save_after',
@@ -138,20 +138,20 @@ class Save extends Action
             ]
         );
 
-        return $sourceCode;
+        return $sourceId;
     }
 
     /**
      * @param Redirect $resultRedirect
-     * @param string $sourceCode
+     * @param int $sourceId
      *
      * @return void
      */
-    private function processRedirectAfterSuccessSave(Redirect $resultRedirect, string $sourceCode)
+    private function processRedirectAfterSuccessSave(Redirect $resultRedirect, int $sourceId)
     {
         if ($this->getRequest()->getParam('back')) {
             $resultRedirect->setPath('*/*/edit', [
-                SourceInterface::CODE => $sourceCode,
+                SourceInterface::SOURCE_ID => $sourceId,
                 '_current' => true,
             ]);
         } elseif ($this->getRequest()->getParam('redirect_to_new')) {
@@ -165,17 +165,17 @@ class Save extends Action
 
     /**
      * @param Redirect $resultRedirect
-     * @param string|null $sourceCode
+     * @param int|null $sourceId
      *
      * @return void
      */
-    private function processRedirectAfterFailureSave(Redirect $resultRedirect, string $sourceCode = null)
+    private function processRedirectAfterFailureSave(Redirect $resultRedirect, int $sourceId = null)
     {
-        if (null === $sourceCode) {
+        if (null === $sourceId) {
             $resultRedirect->setPath('*/*/new');
         } else {
             $resultRedirect->setPath('*/*/edit', [
-                SourceInterface::CODE => $sourceCode,
+                SourceInterface::SOURCE_ID => $sourceId,
                 '_current' => true,
             ]);
         }
