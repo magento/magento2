@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 
@@ -65,7 +66,7 @@ class SourceItemConfiguration extends AbstractModifier
     {
         foreach ($assignedSources as &$source) {
             $sourceConfiguration = $this->getSourceItemConfiguration->execute(
-                (string)$source[SourceInterface::CODE],
+                (string)$source[SourceItemInterface::SOURCE_CODE],
                 $product->getSku()
             );
 
