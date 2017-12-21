@@ -20,7 +20,7 @@ use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class SetToZeroLegacyStockStatusAtSourceItemsDeleteTest extends TestCase
+class SetOutOfStockToLegacyStockStatusAtSourceItemsDeleteTest extends TestCase
 {
     /**
      * @var ProductRepositoryInterface
@@ -77,7 +77,7 @@ class SetToZeroLegacyStockStatusAtSourceItemsDeleteTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
      */
-    public function testSetToZero()
+    public function testSetOutOfStock()
     {
         $productSku = 'SKU-1';
         $product = $this->productRepository->get($productSku);
