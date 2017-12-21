@@ -13,6 +13,7 @@
                 sortOrder="40">
             <settings>
                 <label translate="true">Sales Channels</label>
+                <sortable>false</sortable>
             </settings>
         </column>
     </columns>
