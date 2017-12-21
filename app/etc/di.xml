@@ -1221,4 +1221,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Mview\View\Subscription">
+        <arguments>
+            <argument name="ignoredUpdateColumns" xsi:type="array">
+                <item name="updated_at" xsi:type="string">updated_at</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
