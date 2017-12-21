@@ -59,9 +59,6 @@ class UpdateLegacyCatalogInventoryDuringReservationPlacingTest extends TestCase
      */
     private $productRepository;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
@@ -121,7 +118,6 @@ class UpdateLegacyCatalogInventoryDuringReservationPlacingTest extends TestCase
      */
     public function testThatReservationPlacedUpdatesBothOldAndNewStocks()
     {
-        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $reservationQuantity = -5;
 
         $this->indexer->reindexAll();

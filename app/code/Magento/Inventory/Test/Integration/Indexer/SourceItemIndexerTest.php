@@ -35,9 +35,6 @@ class SourceItemIndexerTest extends TestCase
      */
     private $getSourceItemId;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         $this->indexer = Bootstrap::getObjectManager()->get(IndexerInterface::class);
@@ -52,10 +49,7 @@ class SourceItemIndexerTest extends TestCase
         $this->getSourceItemId = Bootstrap::getObjectManager()->get(GetSourceItemId::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function tearDown()
+    protected function tearDown()
     {
         $this->removeIndexData->execute([10, 20, 30]);
     }
