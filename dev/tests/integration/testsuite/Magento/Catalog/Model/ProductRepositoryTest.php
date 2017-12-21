@@ -67,7 +67,6 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers ProductRepositoryInterface::save
      * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
      * @dataProvider provideAttributesForUpdate
      * @param string $code
