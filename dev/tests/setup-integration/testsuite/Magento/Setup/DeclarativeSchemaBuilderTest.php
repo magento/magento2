@@ -6,12 +6,10 @@
 
 namespace Magento\Setup;
 
-use Magento\Setup\Model\Declaration\Schema\Declaration\Parser;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
-use Magento\Setup\Model\Declaration\Schema\Dto\SchemaFactory;
-use Magento\Setup\Model\Declaration\Schema\Dto\StructureFactory;
+use Magento\Setup\Model\Declaration\Schema\SchemaConfig;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
@@ -27,20 +25,14 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
     private $moduleManager;
 
     /**
-     * @var Parser
+     * @var SchemaConfig
      */
-    private $parser;
-
-    /**
-     * @var SchemaFactory
-     */
-    private $structureFactory;
+    private $schemaConfig;
 
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->parser = $objectManager->create(Parser::class);
-        $this->structureFactory = $objectManager->get(SchemaFactory::class);
+        $this->schemaConfig = $objectManager->create(SchemaConfig::class);
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
     }
 
@@ -51,16 +43,15 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
      */
     public function testSchemaBuilder()
     {
-        $structure = $this->structureFactory->create();
-        $structure = $this->parser->parse($structure);
+        $dbSchema = $this->schemaConfig->getDeclarationConfig();
         //Test primary key and renaming
-        $referenceTable = $structure->getTableByName('reference_table');
+        $referenceTable = $dbSchema->getTableByName('reference_table');
         /** @var Internal $primaryKey */
         $primaryKey = $referenceTable->getPrimaryConstraint();
         $columns = $primaryKey->getColumns();
-        self::assertEquals(reset($columns)->getName(), 'tinyintref_2');
+        self::assertEquals(reset($columns)->getName(), 'tinyint_ref');
         //Test column
-        $testTable = $structure->getTableByName('test_table');
+        $testTable = $dbSchema->getTableByName('test_table');
         /** @var Timestamp $timestampColumn */
         $timestampColumn = $testTable->getColumnByName('timestamp');
         self::assertEquals($timestampColumn->getOnUpdate(), 'CURRENT_TIMESTAMP');
@@ -70,6 +61,6 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
         /** @var Reference $foreignKey */
         $foreignKey = $testTable->getConstraintByName('some_foreign_key');
         self::assertEquals($foreignKey->getOnDelete(), 'NO ACTION');
-        self::assertEquals($foreignKey->getReferenceColumn()->getName(), 'tinyintref_2');
+        self::assertEquals($foreignKey->getReferenceColumn()->getName(), 'tinyint_ref');
     }
 }

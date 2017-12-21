@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema;
+namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
 use Magento\Framework\ObjectManagerInterface;
 use Zend\Di\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
 
 /**
- * @see ChangeRegistryInterface
+ * @see DiffInterface
  */
-class ChangeRegistryFactory
+class DiffFactory
 {
     /**
      * @var ObjectManagerInterface
@@ -30,10 +30,10 @@ class ChangeRegistryFactory
     }
 
     /**
-     * @return ChangeRegistryInterface
+     * @return Diff
      */
     public function create()
     {
-        return $this->objectManager->create(ChangeRegistry::class);
+        return $this->objectManager->create(Diff::class);
     }
 }

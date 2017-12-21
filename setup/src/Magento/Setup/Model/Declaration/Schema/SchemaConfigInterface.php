@@ -14,13 +14,19 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
  *
  * Declaration has 2 schema builders, that build schema from db and from XML
  */
-interface SchemaParserInterface
+interface SchemaConfigInterface
 {
     /**
-     * Parse XML or DB changes into schema
+     * Parse DB schema
      *
-     * @param Schema $schema
-     * @return mixed
+     * @return Schema
      */
-    public function parse(Schema $schema);
+    public function getDbConfig();
+
+    /**
+     * Parse XML schema
+     *
+     * @return Schema
+     */
+    public function getDeclarationConfig();
 }

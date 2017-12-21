@@ -6,6 +6,7 @@
 
 namespace Magento\Setup;
 
+use Magento\Setup\Model\Declaration\Schema\Declaration\ReaderComposite;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
@@ -28,7 +29,7 @@ class SchemaReaderTest extends SetupTestCase
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->reader = $objectManager->get(\Magento\Setup\Model\Declaration\Schema\FileSystem\XmlReader::class);
+        $this->reader = $objectManager->get(ReaderComposite::class);
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
     }
 

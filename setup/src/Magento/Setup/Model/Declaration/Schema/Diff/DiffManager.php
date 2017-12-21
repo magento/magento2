@@ -6,10 +6,8 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
-use Magento\Setup\Model\Declaration\Schema\ChangeRegistryInterface;
 use Magento\Setup\Model\Declaration\Schema\Comparator;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
-use Magento\Setup\Model\Declaration\Schema\Dto\ElementRenamedInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Operations\AddElement;
 use Magento\Setup\Model\Declaration\Schema\Operations\CreateTable;
@@ -40,6 +38,7 @@ class DiffManager
      * Check whether this is element is new or not, by checking it in db schema
      *
      * @param ElementInterface[] $generatedElements
+     * @param ElementInterface $element
      * @return bool
      */
     public function shouldBeCreated(array $generatedElements, ElementInterface $element)
@@ -62,16 +61,16 @@ class DiffManager
      * Register element, that should changes
      *
      *
-     * @param ChangeRegistryInterface $changeRegistry
+     * @param DiffInterface $diff
      * @param ElementInterface $element
      * @param ElementInterface $generatedElement
      */
     public function registerModification(
-        ChangeRegistryInterface $changeRegistry,
+        DiffInterface $diff,
         ElementInterface $element,
         ElementInterface $generatedElement
     ) {
-        $changeRegistry->register(
+        $diff->register(
             $element,
             ModifyElement::OPERATION_NAME,
             $generatedElement
@@ -82,12 +81,12 @@ class DiffManager
      * If elements really dont exists in declaration - we will remove them
      * If some mistake happens (and element is just not preprocessed), we will throw exception
      *
-     * @param ChangeRegistryInterface $changeRegistry
+     * @param DiffInterface $diff
      * @param ElementInterface[] $generatedElements
      * @param ElementInterface[] $elements
      */
     public function registerRemoval(
-        ChangeRegistryInterface $changeRegistry,
+        DiffInterface $diff,
         array $generatedElements,
         array $elements
     ) {
@@ -102,7 +101,7 @@ class DiffManager
                 );
             }
 
-            $changeRegistry->register(
+            $diff->register(
                 $generatedElement,
                 $operation
             );
@@ -110,10 +109,10 @@ class DiffManager
     }
 
     /**
-     * @param ChangeRegistryInterface $changeRegistry
+     * @param DiffInterface $diff
      * @param ElementInterface $element
      */
-    public function registerCreation(ChangeRegistryInterface $changeRegistry, ElementInterface $element)
+    public function registerCreation(DiffInterface $diff, ElementInterface $element)
     {
         $operation = $element instanceof Table ? CreateTable::OPERATION_NAME : AddElement::OPERATION_NAME;
         $changeRegistry->register(

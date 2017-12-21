@@ -4,12 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema;
+namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\Dto\TableElementInterface;
+use Magento\Setup\Model\Declaration\Schema\Request;
 
 /**
  * Holds information about all changes between 2 schemas: db and declaration XML
@@ -17,7 +18,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\TableElementInterface;
  *  - new (Should be changed to)
  *  - old ()
  */
-class ChangeRegistry implements ChangeRegistryInterface
+class Diff implements DiffInterface
 {
     /**
      * @var array
