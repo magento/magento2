@@ -9,6 +9,7 @@ namespace Magento\Framework\GraphQl\HttpHeaderProcessor;
 use Magento\Framework\GraphQl\HttpHeaderProcessorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Process the "Store" header entry
@@ -43,7 +44,7 @@ class StoreProcessor implements HttpHeaderProcessorInterface
             if (isset($stores[$storeCode])) {
                 $this->storeManager->setCurrentStore($storeCode);
             } else {
-                throw new NoSuchEntityException(__('Store code %1 does not exist', $storeCode));
+                throw new GraphQlInputException(__('Store code %1 does not exist', $storeCode));
             }
         }
     }
