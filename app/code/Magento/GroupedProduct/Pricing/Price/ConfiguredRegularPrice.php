@@ -3,20 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GroupedProduct\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
-use Magento\Catalog\Pricing\Price\RegularPrice;
 
-class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInterface
+/**
+ * Configured regular price model.
+ */
+class ConfiguredRegularPrice extends AbstractPrice
 {
     /**
      * Price type configured
      */
-    const PRICE_CODE = self::CONFIGURED_REGULAR_PRICE_CODE;
+    const PRICE_CODE = ConfiguredPriceInterface::CONFIGURED_REGULAR_PRICE_CODE;
 
     /**
      * @var null|ItemInterface
@@ -70,6 +74,15 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
      */
     public function getValue()
     {
-        return $this->item ? $this->calculatePrice() : parent::getValue();
+        if ($this->item) {
+            return $this->calculatePrice();
+        } else {
+            if ($this->value === null) {
+                $price = $this->product->getPrice();
+                $priceInCurrentCurrency = $this->priceCurrency->convertAndRound($price);
+                $this->value = $priceInCurrentCurrency ? floatval($priceInCurrentCurrency) : false;
+            }
+            return $this->value;
+        }
     }
 }

@@ -3,8 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Pricing\Price;
 
+/**
+ * Bundle option price calculation model.
+ */
 class BundleOptions
 {
     /**
@@ -88,13 +93,13 @@ class BundleOptions
     /**
      * Get selection amount
      *
-     * @param \Magento\Framework\Pricing\SaleableInterface $bundleProduct
+     * @param \Magento\Catalog\Model\Product $bundleProduct
      * @param \Magento\Bundle\Model\Selection $selection
      * @param bool $useRegularPrice
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     public function getOptionSelectionAmount(
-        \Magento\Framework\Pricing\SaleableInterface $bundleProduct,
+        \Magento\Catalog\Model\Product $bundleProduct,
         $selection,
         bool $useRegularPrice = false
     ) {

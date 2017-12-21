@@ -3,16 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
- * Configured price model
+ * Configured regular price model
  */
 class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInterface
 {
@@ -45,10 +45,10 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
         CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         ItemInterface $item = null,
-        ConfiguredOptions $configuredOptions = null
+        ConfiguredOptions $configuredOptions
     ) {
         $this->item = $item;
-        $this->configuredOptions = $configuredOptions ?: ObjectManager::getInstance()->get(ConfiguredOptions::class);
+        $this->configuredOptions = $configuredOptions;
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
     }
 

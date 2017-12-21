@@ -15,7 +15,6 @@ use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 /**
  * Configured price model
  * @api
- * @since 100.0.2
  */
 class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPriceInterface
 {
@@ -171,7 +170,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * @param \Magento\Bundle\Model\Option $option
      * @return BundleSelectionPrice[]
      */
-    protected function createSelectionPriceList(\Magento\Bundle\Model\Option $option)
+    protected function createSelectionPriceList(\Magento\Bundle\Model\Option $option): array
     {
         return $this->calculator->createSelectionPriceList($option, $this->product);
     }
