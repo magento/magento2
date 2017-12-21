@@ -23,7 +23,7 @@ use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
  * Class provides around Plugin on \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::save
  * to update data in Inventory source item based on legacy Stock Item data
  */
-class UpdateSourceItemAtLegacyStockSettingPlugin
+class UpdateSourceItemAtLegacyStockItemSavePlugin
 {
     /**
      * @var SourceItemRepositoryInterface

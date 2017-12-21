@@ -39,7 +39,7 @@ $stockData = [
         'qty' => 0,
         'is_in_stock' => false,
         'manage_stock' => true
-    ]
+    ],
 ];
 
 for ($i = 1; $i <= 3; $i++) {
@@ -67,6 +67,7 @@ if ($moduleManager->isEnabled('Magento_InventoryCatalog')) {
     /** @var SourceItemsDeleteInterface $sourceItemsDelete */
     $sourceItemsDelete = $objectManager->get(SourceItemsDeleteInterface::class);
 
+    // Unassign created product from default Source
     $searchCriteria = $searchCriteriaBuilder
         ->addFilter(SourceItemInterface::SKU, ['SKU-1', 'SKU-2', 'SKU-3'], 'in')
         ->addFilter(SourceItemInterface::SOURCE_CODE, $defaultSourceProvider->getCode())
