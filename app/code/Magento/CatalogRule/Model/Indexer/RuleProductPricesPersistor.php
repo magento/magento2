@@ -68,7 +68,7 @@ class RuleProductPricesPersistor
         $indexTable = $this->resource->getTableName('catalogrule_product_price');
         if ($useAdditionalTable) {
             $indexTable = $this->resource->getTableName(
-                $this->tableSwapper->getWorkingTableNameFor('catalogrule_product_price')
+                $this->tableSwapper->getWorkingTableName('catalogrule_product_price')
             );
         }
 

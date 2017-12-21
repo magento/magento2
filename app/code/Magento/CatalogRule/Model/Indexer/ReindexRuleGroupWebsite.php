@@ -70,10 +70,10 @@ class ReindexRuleGroupWebsite
         $ruleProductTable = $this->resource->getTableName('catalogrule_product');
         if ($useAdditionalTable) {
             $indexTable = $this->resource->getTableName(
-                $this->tableSwapper->getWorkingTableNameFor('catalogrule_group_website')
+                $this->tableSwapper->getWorkingTableName('catalogrule_group_website')
             );
             $ruleProductTable = $this->resource->getTableName(
-                $this->tableSwapper->getWorkingTableNameFor('catalogrule_product')
+                $this->tableSwapper->getWorkingTableName('catalogrule_product')
             );
         }
 

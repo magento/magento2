@@ -26,6 +26,9 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
      */
     private $resourceConnection;
 
+    /**
+     * @param ResourceConnection $resource
+     */
     public function __construct(ResourceConnection $resource)
     {
         $this->resourceConnection = $resource;
@@ -69,7 +72,7 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
     /**
      * @inheritDoc
      */
-    public function getWorkingTableNameFor(string $originalTable): string
+    public function getWorkingTableName(string $originalTable): string
     {
         $originalTable = $this->resourceConnection->getTableName($originalTable);
         if (!array_key_exists($originalTable, $this->temporaryTables)) {
@@ -97,7 +100,7 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
             $temporaryOriginalName = $this->resourceConnection->getTableName(
                 $tableName . $this->generateRandomSuffix()
             );
-            $temporaryTableName = $this->getWorkingTableNameFor($tableName);
+            $temporaryTableName = $this->getWorkingTableName($tableName);
             $toRename[] = [
                 'oldName' => $tableName,
                 'newName' => $temporaryOriginalName

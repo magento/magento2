@@ -19,7 +19,7 @@ interface IndexerTableSwapperInterface
      *
      * @return string
      */
-    public function getWorkingTableNameFor(string $originalTable): string;
+    public function getWorkingTableName(string $originalTable): string;
 
     /**
      * Swap working tables with actual tables to save new indexes.
