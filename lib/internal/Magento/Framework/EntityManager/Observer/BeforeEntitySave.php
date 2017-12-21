@@ -28,13 +28,13 @@ class BeforeEntitySave implements ObserverInterface
     {
         $entity = $observer->getEvent()->getEntity();
         if ($entity instanceof AbstractModel) {
-            if ($entity->getResource() instanceof  AbstractDb) {
-                $entity = $entity->getResource()->serializeFields($entity);
+            $resource = $entity->getResource();
+            if ($resource instanceof  AbstractDb) {
+                $entity = $resource->serializeFields($entity);
             }
             $entity->validateBeforeSave();
             $entity->beforeSave();
             $entity->setParentId((int)$entity->getParentId());
-            $resource = $entity->getResource();
             if ($resource instanceof EavResource) {
                 //Because another item might have been loaded/saved before
                 //with different set of attributes.
