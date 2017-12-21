@@ -17,10 +17,23 @@ class Inputtype implements \Magento\Framework\Option\ArrayInterface
         return [
             ['value' => 'text', 'label' => __('Text Field')],
             ['value' => 'textarea', 'label' => __('Text Area')],
+            ['value' => 'texteditor', 'label' => __('Text Editor')],
             ['value' => 'date', 'label' => __('Date')],
             ['value' => 'boolean', 'label' => __('Yes/No')],
             ['value' => 'multiselect', 'label' => __('Multiple Select')],
             ['value' => 'select', 'label' => __('Dropdown')]
+        ];
+    }
+
+    /**
+     * Get volatile input types.
+     *
+     * @return array
+     */
+    public function getVolatileInputTypes()
+    {
+        return [
+            ['textarea', 'texteditor'],
         ];
     }
 }

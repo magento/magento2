@@ -224,6 +224,13 @@ class Save extends Attribute
                 $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
             }
 
+            if ($data['frontend_input'] === 'texteditor') {
+                $data['is_wysiwyg_enabled'] = 1;
+                $data['frontend_input'] = 'textarea';
+            } elseif ($data['frontend_input'] === 'texteditor') {
+                $data['is_wysiwyg_enabled'] = 0;
+            }
+
             $defaultValueField = $model->getDefaultValueByInput($data['frontend_input']);
             if ($defaultValueField) {
                 $data['default_value'] = $this->getRequest()->getParam($defaultValueField);
