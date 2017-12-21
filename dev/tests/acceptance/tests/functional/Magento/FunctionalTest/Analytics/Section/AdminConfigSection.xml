@@ -8,5 +8,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminConfigSection">
         <element name="advancedReportingMenuItem" type="text" selector="//a[contains(concat(' ',normalize-space(@class),' '),'item-nav')]/span[text()='Advanced Reporting']"/>
+        <element name="advancedReportingIndustry" type="select" selector="#analytics_general_vertical"/>
+        <element name="advancedReportingIndustryLabel" type="text" selector=".config-vertical-label>label>span"/>
+        <element name="advancedReportingBlankIndustryError" type="text" selector=".message-error>div"/>
+        <element name="advancedReportingSuccessMessage" type="text" selector=".message-success>div"/>
+        <element name="saveButton" type="button" selector="#save"/>
     </section>
 </config>
