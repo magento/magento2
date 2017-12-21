@@ -22,10 +22,8 @@ tinyMCE.addI18n({
          */
         init: function (ed, url) {
             ed.addCommand('mceMagentowidget', function () {
-                var pluginSettings = ed.settings.magentoPluginsOptions.get('magentowidget');
-
                 widgetTools.openDialog(
-                    pluginSettings['window_url'] + 'widget_target_id/' + ed.getElement().id + '/'
+                    ed.settings['magentowidget_url'] + 'widget_target_id/' + ed.getElement().id + '/'
                 );
             });
 
