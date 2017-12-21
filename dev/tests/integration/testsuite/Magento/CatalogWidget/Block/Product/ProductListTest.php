@@ -71,8 +71,10 @@ class ProductListTest extends \PHPUnit\Framework\TestCase
         // Load products collection filtered using specified conditions and perform assesrions
         $productCollection = $this->block->createCollection();
         $productCollection->load();
+        //Both products satisfy because product #1 has the 1st option selected,
+        //#2 - other 3.
         $this->assertEquals(
-            1,
+            2,
             $productCollection->count(),
             "Product collection was not filtered according to the widget condition."
         );
