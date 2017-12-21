@@ -112,7 +112,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->with(100)
             ->will($this->returnValue($customer));
 
-        $resultJson = '{"errors": "false", "message": "A letter with further instructions will be sent to your email."}';
+        $resultJson = '{"errors":"false", "message":"A letter with further instructions will be sent to your email."}';
         $this->resultFactory->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_JSON)
