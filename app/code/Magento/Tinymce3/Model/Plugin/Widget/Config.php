@@ -73,6 +73,9 @@ class Config
         return $result;
     }
 
+    /**
+     * @return string
+     */
     private function getWysiwygJsPluginSrc()
     {
         $editorPluginJs = 'Magento_Tinymce3::tiny_mce/plugins/magentowidget/editor_plugin.js';
