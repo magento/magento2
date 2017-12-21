@@ -9,6 +9,7 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
+use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var DataObjectHelper $dataObjectHelper */
@@ -17,50 +18,29 @@ $dataObjectHelper = Bootstrap::getObjectManager()->get(DataObjectHelper::class);
 $sourceItemFactory = Bootstrap::getObjectManager()->get(SourceItemInterfaceFactory::class);
 /** @var  SourceItemsSaveInterface $sourceItemsSave */
 $sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
+/** @var DefaultSourceProviderInterface $defaultSourceProvider */
+$defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
 
 /**
- * SKU-1 - EU-source-1(id:10) - 5.5qty
- * SKU-1 - EU-source-2(id:20) - 3qty
- * SKU-1 - EU-source-3(id:30) - 10qty (out of stock)
- * SKU-1 - EU-source-4(id:40) - 10qty (disabled source)
- *
- * SKU-2 - US-source-1(id:30) - 5qty
- *
- * SKU-3 - EU-source-2(id:20) - 6qty (out of stock)
+ * SKU-1 - Default-source-1(id:10) - 5.5qty
+ * SKU-2 - Default-source-1(id:30) - 5qty
+ * SKU-3 - Default-source-2(id:20) - 6qty (out of stock)
  */
 $sourcesItemsData = [
     [
-        SourceItemInterface::SOURCE_ID => 10, // EU-source-1
+        SourceItemInterface::SOURCE_ID => $defaultSourceProvider->getId(),
         SourceItemInterface::SKU => 'SKU-1',
         SourceItemInterface::QUANTITY => 5.5,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
     ],
     [
-        SourceItemInterface::SOURCE_ID => 20, // EU-source-2
-        SourceItemInterface::SKU => 'SKU-1',
-        SourceItemInterface::QUANTITY => 3,
-        SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
-    ],
-    [
-        SourceItemInterface::SOURCE_ID => 30, // EU-source-3
-        SourceItemInterface::SKU => 'SKU-1',
-        SourceItemInterface::QUANTITY => 10,
-        SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
-    ],
-    [
-        SourceItemInterface::SOURCE_ID => 40, // EU-source-disabled
-        SourceItemInterface::SKU => 'SKU-1',
-        SourceItemInterface::QUANTITY => 10,
-        SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
-    ],
-    [
-        SourceItemInterface::SOURCE_ID => 50, // US-source-1
+        SourceItemInterface::SOURCE_ID => $defaultSourceProvider->getId(),
         SourceItemInterface::SKU => 'SKU-2',
         SourceItemInterface::QUANTITY => 5,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
     ],
     [
-        SourceItemInterface::SOURCE_ID => 20, // EU-source-2
+        SourceItemInterface::SOURCE_ID => $defaultSourceProvider->getId(),
         SourceItemInterface::SKU => 'SKU-3',
         SourceItemInterface::QUANTITY => 6,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
