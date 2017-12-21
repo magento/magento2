@@ -28,10 +28,7 @@
                 <testCaseId value="MAGETWO-82648"/>
                 <group value="analytics"/>
             </annotations>
-            <amOnPage stepKey="amOnAdminLoginPage" url="{{AdminLoginPage.url}}"/>
-            <fillField stepKey="fillUsernameAdmin" selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}"/>
-            <fillField stepKey="fillPasswordAdmin" selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
-            <click stepKey="clickOnSignIn" selector="{{AdminLoginFormSection.signIn}}"/>
+            <loginAsAdmin stepKey="loginAsAdmin"/>
 
             <amOnPage stepKey="amOnAdminUsersPage" url="{{AdminUsersPage.url}}"/>
             <fillField stepKey="fillUsernameSearch" selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="$$noReportUser.username$$"/>
