@@ -5,26 +5,21 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model;
+namespace Magento\InventoryCatalog\Model\ResourceModel;
 
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 
 /**
- * Update Legacy catalocinventory_stock_item database data
+ * Apply data to legacy cataloginventory_stock_status table via plain MySql query
  */
-class UpdateLegacyStockItemByPlainQuery
+class ApplyDataToLegacyStockStatus
 {
     /**
      * @var ResourceConnection
      */
     private $resourceConnection;
-
-    /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
 
     /**
      * @var GetProductIdsBySkusInterface
@@ -33,22 +28,17 @@ class UpdateLegacyStockItemByPlainQuery
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DefaultSourceProviderInterface $defaultSourceProvider,
         GetProductIdsBySkusInterface $getProductIdsBySkus
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->defaultSourceProvider = $defaultSourceProvider;
         $this->getProductIdsBySkus = $getProductIdsBySkus;
     }
 
     /**
-     * Execute Plain MySql query on catalaginventory_stock_item
-     *
      * @param string $sku
      * @param float $quantity
      * @return void
@@ -59,13 +49,12 @@ class UpdateLegacyStockItemByPlainQuery
 
         $connection = $this->resourceConnection->getConnection();
         $connection->update(
-            $this->resourceConnection->getTableName('cataloginventory_stock_item'),
+            $this->resourceConnection->getTableName('cataloginventory_stock_status'),
             [
-                StockItemInterface::QTY => new \Zend_Db_Expr(sprintf('%s + %s', StockItemInterface::QTY, $quantity)),
+                StockStatusInterface::QTY => new \Zend_Db_Expr(sprintf('%s + %s', StockStatusInterface::QTY, $quantity))
             ],
             [
-                StockItemInterface::STOCK_ID . ' = ?' => $this->defaultSourceProvider->getId(),
-                StockItemInterface::PRODUCT_ID . ' = ?' => $productId,
+                StockStatusInterface::PRODUCT_ID . ' = ?' => $productId,
                 'website_id = ?' => 0,
             ]
         );
