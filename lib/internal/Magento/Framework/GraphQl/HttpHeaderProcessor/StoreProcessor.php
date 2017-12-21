@@ -43,7 +43,7 @@ class StoreProcessor implements HttpHeaderProcessorInterface
             $stores = $this->storeManager->getStores(false, true);
             if (isset($stores[$storeCode])) {
                 $this->storeManager->setCurrentStore($storeCode);
-            } else {
+            } elseif (strtolower($storeCode) !== 'default') {
                 throw new GraphQlInputException(__('Store code %1 does not exist', $storeCode));
             }
         }
