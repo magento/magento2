@@ -31,7 +31,7 @@
             <see stepKey="seeAdvancedReportingIndustryLabel" selector="{{AdminConfigSection.advancedReportingIndustryLabel}}" userInput="Industry"/>
             <selectOption stepKey="selectAdvancedReportingIndustry" selector="{{AdminConfigSection.advancedReportingIndustry}}" userInput="Apps and Games"/>
             <click stepKey="clickSaveConfigButton" selector="{{AdminConfigSection.saveButton}}"/>
-            <see stepKey="seeBlankIndustryErrorMessage" selector="{{AdminConfigSection.advancedReportingSuccessMessage}}" userInput="You saved the configuration."/>
+            <see stepKey="seeIndustrySuccessMessage" selector="{{AdminConfigSection.advancedReportingSuccessMessage}}" userInput="You saved the configuration."/>
         </test>
     </cest>
 </config>
