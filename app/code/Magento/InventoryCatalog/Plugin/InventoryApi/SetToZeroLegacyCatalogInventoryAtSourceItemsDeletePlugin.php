@@ -15,8 +15,8 @@ use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockStatus;
 
 /**
- * Set to zero (qty, status) to legacy catalog inventory tables cataloginventory_stock_status and
- * cataloginventory_stock_item if deleted source item which is related to default source
+ * Set to zero Qty and status to ‘Out of Stock’ for legacy CatalogInventory Stock Status and Stock Item DB tables,
+ * if corresponding MSI SourceItem assigned to Default Source has been deleted
  */
 class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
 {

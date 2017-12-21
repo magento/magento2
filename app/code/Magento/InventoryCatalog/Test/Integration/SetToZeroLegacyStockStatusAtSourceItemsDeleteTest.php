@@ -77,7 +77,7 @@ class SetToZeroLegacyStockStatusAtSourceItemsDeleteTest extends TestCase
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
      */
-    public function testSetToZeroLegacyCatalogInventoryAtSourceItemsDelete()
+    public function testSetToZero()
     {
         $productSku = 'SKU-1';
         $product = $this->productRepository->get($productSku);

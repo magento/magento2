@@ -14,8 +14,8 @@ use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockStatus;
 
 /**
- * Set data (qty, status) to legacy catalog inventory tables cataloginventory_stock_status and
- * cataloginventory_stock_item if saved source item which is related to default source
+ * Set Qty and status for legacy CatalogInventory Stock Status and Stock Item DB tables,
+ * if corresponding MSI SourceItem assigned to Default Source has been saved
  */
 class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
 {

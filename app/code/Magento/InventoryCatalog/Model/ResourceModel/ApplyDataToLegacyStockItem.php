@@ -5,26 +5,21 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Model;
+namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 
 /**
- * Update Legacy catalocinventory_stock_item database data
+ * Apply data to legacy catalocinventory_stock_item table via plain MySql query
  */
-class UpdateLegacyStockItemByPlainQuery
+class ApplyDataToLegacyStockItem
 {
     /**
      * @var ResourceConnection
      */
     private $resourceConnection;
-
-    /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
 
     /**
      * @var GetProductIdsBySkusInterface
@@ -33,22 +28,17 @@ class UpdateLegacyStockItemByPlainQuery
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DefaultSourceProviderInterface $defaultSourceProvider,
         GetProductIdsBySkusInterface $getProductIdsBySkus
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->defaultSourceProvider = $defaultSourceProvider;
         $this->getProductIdsBySkus = $getProductIdsBySkus;
     }
 
     /**
-     * Execute Plain MySql query on catalaginventory_stock_item
-     *
      * @param string $sku
      * @param float $quantity
      * @return void
@@ -64,7 +54,6 @@ class UpdateLegacyStockItemByPlainQuery
                 StockItemInterface::QTY => new \Zend_Db_Expr(sprintf('%s + %s', StockItemInterface::QTY, $quantity)),
             ],
             [
-                StockItemInterface::STOCK_ID . ' = ?' => $this->defaultSourceProvider->getId(),
                 StockItemInterface::PRODUCT_ID . ' = ?' => $productId,
                 'website_id = ?' => 0,
             ]
