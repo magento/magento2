@@ -20,8 +20,8 @@ class CouponUsesIncrement extends AbstractCouponUses
      */
     public function afterPlace(Order $subject, Order $result)
     {
-       $this->updateCouponUses($subject, true);
+        $this->updateCouponUses($subject, true);
 
-       return $subject;
+        return $subject;
     }
 }

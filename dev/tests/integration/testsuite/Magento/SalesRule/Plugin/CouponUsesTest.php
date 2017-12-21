@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\SalesRule\Observer;
+namespace Magento\SalesRule\Plugin;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
