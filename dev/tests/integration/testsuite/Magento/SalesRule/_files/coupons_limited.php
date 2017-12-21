@@ -6,7 +6,7 @@
 
 use Magento\SalesRule\Model\Coupon;
 
-require_once 'rules.php';
+require 'rules.php';
 
 $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class

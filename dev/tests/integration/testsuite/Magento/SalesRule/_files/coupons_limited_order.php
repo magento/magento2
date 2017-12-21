@@ -7,7 +7,7 @@
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
 
-require_once 'coupons_limited.php';
+require 'coupons_limited.php';
 require __DIR__ . '/../../../Magento/Sales/_files/order.php';
 
 $collection = Bootstrap::getObjectManager()->create(

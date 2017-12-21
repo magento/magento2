@@ -18,4 +18,4 @@ foreach ($couponCodes as $couponCode) {
     $coupon->delete();
 }
 
-require_once 'rules_rollback.php';
+require 'rules_rollback.php';

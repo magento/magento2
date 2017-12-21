@@ -5,4 +5,4 @@
  */
 
 require __DIR__ . '/../../../Magento/Sales/_files/order_rollback.php';
-require_once 'coupons_limited_rollback.php';
+require 'coupons_limited_rollback.php';
