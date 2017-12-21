@@ -128,6 +128,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
 
         $xmlElement = $this->carrier->parseXml($xmlString);
 
+        // @codingStandardsIgnoreLine
         echo $xmlElement->asXML();
     }
 

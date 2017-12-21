@@ -6,11 +6,11 @@
 
 namespace Magento\GraphQl\Model\Type;
 
-use GraphQL\Type\Definition\ListOfType;
-use GraphQL\Type\Definition\NonNull;
-use GraphQL\Type\Definition\Type;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Model\Type\Handler\Pool;
+use Magento\Framework\GraphQl\TypeFactory;
+use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
+use Magento\GraphQl\Model\QueryConfig;
 
 /**
  * {@inheritdoc}
@@ -23,18 +23,44 @@ class Generator implements GeneratorInterface
     private $typePool;
 
     /**
-     * @var array
+     * @var HandlerConfig
      */
-    private $typeMap;
+    private $typeConfig;
+
+    /**
+     * @var QueryConfig
+     */
+    private $queryConfig;
+
+    /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
+     * @var HandlerFactory
+     */
+    private $handlerFactory;
 
     /**
      * @param Pool $typePool
-     * @param array $typeMap
+     * @param HandlerConfig $typeConfig
+     * @param QueryConfig $queryConfig
+     * @param TypeFactory $typeFactory
+     * @param HandlerFactory $handlerFactory
      */
-    public function __construct(Pool $typePool, array $typeMap)
-    {
+    public function __construct(
+        Pool $typePool,
+        HandlerConfig $typeConfig,
+        QueryConfig $queryConfig,
+        TypeFactory $typeFactory,
+        HandlerFactory $handlerFactory
+    ) {
         $this->typePool = $typePool;
-        $this->typeMap = $typeMap;
+        $this->typeConfig = $typeConfig;
+        $this->queryConfig = $queryConfig;
+        $this->typeFactory = $typeFactory;
+        $this->handlerFactory = $handlerFactory;
     }
 
     /**
@@ -43,19 +69,20 @@ class Generator implements GeneratorInterface
     public function generateTypes(string $typeName)
     {
         $types = [];
-        if (!isset($this->typeMap[$typeName])) {
-            throw new LocalizedException(__('Invalid GraphQL query name.'));
-        }
-        /** @var HandlerInterface $handler */
-        foreach ($this->typeMap['types'] as $handler) {
+        /** @var string $handlerName */
+        foreach ($this->typeConfig->getTypes() as $typeName => $handlerName) {
+            $handler = $this->handlerFactory->create($handlerName);
             $type = $handler->getType();
-            $this->typePool->registerType($type);
-            $types[] = $type;
+            if (!$this->typePool->isTypeRegistered($typeName)) {
+                $this->typePool->registerType($type);
+                $types[] = $type;
+            } else {
+                $types[] = $this->typePool->getType($typeName);
+            }
         }
 
         $fields = [];
-        $mappedFields = $this->typeMap[$typeName];
-        foreach ($mappedFields['fields'] as $fieldName => $values) {
+        foreach ($this->queryConfig->getQueryFields() as $fieldName => $values) {
             $arguments = [];
             if (!isset($values['args'])) {
                 $values['args'] = [];
@@ -77,13 +104,14 @@ class Generator implements GeneratorInterface
      *
      * @param string $argumentName
      * @param string $argumentType
-     * @return Type
+     * @return TypeInterface|\GraphQL\Type\Definition\Type
+     * @throws GraphQlInputException
      */
     private function decorateType(string $argumentName, string $argumentType)
     {
         $type = $this->typePool->getType($argumentType);
-        $type = strpos($argumentName, '!') !== false ? new NonNull($type) : $type;
-        $type = strpos($argumentName, '[]') !== false ? new ListOfType($type) : $type;
+        $type = strpos($argumentName, '[]') !== false ? $this->typeFactory->createList($type) : $type;
+        $type = strpos($argumentName, '!') !== false ? $this->typeFactory->createNonNull($type) : $type;
 
         return $type;
     }

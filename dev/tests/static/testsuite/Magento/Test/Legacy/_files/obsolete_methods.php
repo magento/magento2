@@ -6,7 +6,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// @codingStandardsIgnoreStart
 
 return [
     ['__get', 'Magento\Framework\DataObject'],
@@ -280,6 +280,11 @@ return [
     ['callbackQueryHook', 'Magento\Core\Model\Resource\Setup'],
     ['canCreateUser', 'Magento\User\Model\ResourceModel\User'],
     ['canPrint', 'Magento\Checkout\Block\Onepage\Success'],
+    [
+        'getAllServiceDataInterfaces',
+        'Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface',
+        'Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface::getDataTypes()'
+    ],
     [
         'canTestHeaders',
         'Magento\TestFramework\Bootstrap',

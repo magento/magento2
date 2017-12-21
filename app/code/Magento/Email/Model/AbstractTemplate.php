@@ -289,7 +289,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         /**
          * trim copyright message
          */
-        if (preg_match('/^<!--[\w\W]+?-->/m', $templateText, $matches) && strpos($matches[0], 'Copyright') > 0) {
+        if (preg_match('/^<!--[\w\W]+?-->/m', $templateText, $matches) && strpos($matches[0], 'Copyright') !== false) {
             $templateText = str_replace($matches[0], '', $templateText);
         }
 

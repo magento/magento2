@@ -5,11 +5,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Test\Unit\Model;
 
 use \Magento\Quote\Model\ShippingAddressManagement;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -83,7 +82,10 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
         $this->totalsCollectorMock = $this->createMock(\Magento\Quote\Model\Quote\TotalsCollector::class);
         $this->addressRepository = $this->createMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
 
-        $this->amountErrorMessageMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class, ['getMessage']);
+        $this->amountErrorMessageMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class,
+            ['getMessage']
+        );
 
         $this->service = $this->objectManager->getObject(
             \Magento\Quote\Model\ShippingAddressManagement::class,
@@ -121,7 +123,10 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
         $addressId = 1;
         $customerAddressId = 150;
 
-        $quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getIsMultiShipping', 'isVirtual', 'validateMinimumAmount', 'setShippingAddress', 'getShippingAddress']);
+        $quoteMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote::class,
+            ['getIsMultiShipping', 'isVirtual', 'validateMinimumAmount', 'setShippingAddress', 'getShippingAddress']
+        );
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cart867')
@@ -200,7 +205,10 @@ class ShippingAddressManagementTest extends \PHPUnit\Framework\TestCase
 
         $customerAddressId = 150;
 
-        $quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getIsMultiShipping', 'isVirtual', 'validateMinimumAmount', 'setShippingAddress', 'getShippingAddress']);
+        $quoteMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote::class,
+            ['getIsMultiShipping', 'isVirtual', 'validateMinimumAmount', 'setShippingAddress', 'getShippingAddress']
+        );
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cart867')

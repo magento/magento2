@@ -6,79 +6,97 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Definition\Type;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
+use Magento\GraphQl\Model\Type\Handler\Pool\Complex;
 use Magento\GraphQl\Model\Type\HandlerFactory;
+use Magento\Framework\GraphQl\TypeFactory;
+use Magento\GraphQl\Model\Type\HandlerConfig;
 
 /**
  * Retrieve type's registered in pool, or generate types yet to be instantiated and register them
  */
 class Pool
 {
+    const TYPE_STRING = 'String';
+    const TYPE_INT = 'Int';
+    const TYPE_BOOLEAN = 'Boolean';
+    const TYPE_FLOAT = 'Float';
+    const TYPE_ID = 'ID';
+
     /**
      * @var HandlerFactory
      */
     private $typeHandlerFactory;
 
     /**
-     * @var Type[]
+     * @var \Magento\Framework\GraphQl\TypeFactory
+     */
+    private $typeFactory;
+
+    /**
+     * @var HandlerConfig
+     */
+    private $typeConfig;
+
+    /**
+     * @var Complex
+     */
+    private $complexType;
+
+    /**
+     * @var TypeInterface[]
      */
     private $typeRegistry = [];
 
     /**
      * @param HandlerFactory $typeHandlerFactory
+     * @param \Magento\Framework\GraphQl\TypeFactory $typeFactory
+     * @param HandlerConfig $typeConfig
+     * @param Complex $complexType
      */
-    public function __construct(\Magento\GraphQl\Model\Type\HandlerFactory $typeHandlerFactory)
-    {
+    public function __construct(
+        HandlerFactory $typeHandlerFactory,
+        TypeFactory $typeFactory,
+        HandlerConfig $typeConfig,
+        Complex $complexType
+    ) {
         $this->typeHandlerFactory = $typeHandlerFactory;
+        $this->typeFactory = $typeFactory;
+        $this->typeConfig = $typeConfig;
+        $this->complexType = $complexType;
     }
 
     /**
-     * {@inheritdoc}
+     * Get a type of @see TypeInterface or scalar native GraphQL
+     *
+     * @param string $typeName
+     * @return TypeInterface|\GraphQL\Type\Definition\Type
+     * @throws \LogicException
+     * @throws GraphQlInputException
      */
     public function getType(string $typeName)
     {
-        if ($type = $this->mapScalarType($typeName)) {
-            return $type;
-        }
-
-        if ($type = $this->getComplexType($typeName)) {
-            return $type;
-        }
-
-        throw new \LogicException(sprintf('%s type could not be resolved or generated.', $typeName));
-    }
-
-    /**
-     * Retrieve type's configuration based off name
-     *
-     * @param string $typeName
-     * @return Type|null
-     * @throws \LogicException Type Handler could not be found, and type does not exist in registry
-     */
-    public function getComplexType(string $typeName)
-    {
-        if (isset($this->typeRegistry[$typeName])) {
+        if ($this->isTypeRegistered($typeName)) {
             return $this->typeRegistry[$typeName];
         }
-        $typeHandlerName = __NAMESPACE__ . '\\'. $typeName;
-        if (!class_exists($typeHandlerName)) {
-            throw new \LogicException(sprintf('Type handler not implemented for %s', $typeHandlerName));
+
+        if ($this->isScalar($typeName)) {
+            $this->typeRegistry[$typeName] = $this->typeFactory->createScalar($typeName);
+        } else {
+            $this->typeRegistry[$typeName] = $this->complexType->getComplexType($typeName);
         }
 
-        $typeHandler = $this->typeHandlerFactory->create($typeHandlerName);
-
-        $this->typeRegistry[$typeName] = $typeHandler->getType();
         return $this->typeRegistry[$typeName];
     }
 
     /**
      * Register type to Pool's type registry.
      *
-     * @param Type $type
+     * @param TypeInterface|\GraphQL\Type\Definition\Type $type
      * @throws \LogicException
      */
-    public function registerType(Type $type)
+    public function registerType(TypeInterface $type)
     {
         if (isset($this->typeRegistry[$type->name])) {
             throw new \LogicException('Type name already exists in registry');
@@ -98,27 +116,19 @@ class Pool
     }
 
     /**
-     * Map type name to scalar GraphQL type, otherwise return null
+     * If type is a scalar type
      *
      * @param string $typeName
-     * @return Type|null
+     * @return bool
      */
-    private function mapScalarType($typeName)
+    private function isScalar(string $typeName)
     {
-        $scalarTypes = $this->getInternalTypes();
-
-        return isset($scalarTypes[$typeName]) ? $scalarTypes[$typeName] : null;
-    }
-
-    /**
-     * Get all internal scalar types
-     *
-     * @return array
-     */
-    private function getInternalTypes()
-    {
-        // TODO: Fix this when creating new wrappers for webonyx. This is only a temporary workaround for static tests.
-        $object = new ObjectType(['name' => 'fake', 'fields' => 'fake']);
-        return $object->getInternalTypes();
+        $type = new \ReflectionClass(self::class);
+        $constants =  $type->getConstants();
+        if (in_array($typeName, $constants)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

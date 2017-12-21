@@ -6,15 +6,17 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use GraphQL\Type\Definition\EnumType;
 use Magento\GraphQl\Model\Type\Generator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
+use Magento\Framework\GraphQl\TypeFactory;
 
 /**
- * Define SortEnum's GraphQL Type
+ * Define SortEnum GraphQL Type
  */
 class SortEnum implements HandlerInterface
 {
+    const SORT_ENUM_TYPE_NAME = 'SortEnum';
+
     /**
      * @var Pool
      */
@@ -26,13 +28,23 @@ class SortEnum implements HandlerInterface
     private $typeGenerator;
 
     /**
+     * @var TypeFactory
+     */
+    private $typeFactory;
+
+    /**
      * @param Pool $typePool
      * @param Generator $typeGenerator
+     * @param TypeFactory $typeFactory
      */
-    public function __construct(Pool $typePool, Generator $typeGenerator)
-    {
+    public function __construct(
+        Pool $typePool,
+        Generator $typeGenerator,
+        TypeFactory $typeFactory
+    ) {
         $this->typePool = $typePool;
         $this->typeGenerator = $typeGenerator;
+        $this->typeFactory = $typeFactory;
     }
 
     /**
@@ -40,10 +52,9 @@ class SortEnum implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = new \ReflectionClass($this);
-        return new EnumType(
+        return $this->typeFactory->createEnum(
             [
-                'name' => $reflector->getShortName(),
+                'name' => self::SORT_ENUM_TYPE_NAME,
                 'values' => ['ASC', 'DESC'],
             ]
         );

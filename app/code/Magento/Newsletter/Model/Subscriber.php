@@ -621,6 +621,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             $this->setStatus(self::STATUS_SUBSCRIBED)
                 ->setStatusChanged(true)
                 ->save();
+
+            $this->sendConfirmationSuccessEmail();
             return true;
         }
 
