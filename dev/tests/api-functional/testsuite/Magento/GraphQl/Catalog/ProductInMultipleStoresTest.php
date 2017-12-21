@@ -10,6 +10,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Store\Model\Store;
 use \Magento\Store\Model\StoreManagerInterface;
 
 class ProductInMultipleStoresTest extends GraphQlAbstract
@@ -21,7 +22,7 @@ class ProductInMultipleStoresTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testQueryAllFieldsSimpleProduct()
+    public function testProductFromSpecificStore()
     {
         $prductSku = 'simple';
 
@@ -45,38 +46,26 @@ class ProductInMultipleStoresTest extends GraphQlAbstract
     }
 }
 QUERY;
-        $userName = 'customer@example.com';
-        $password = 'password';
-        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = ObjectManager::getInstance()
-            ->get(\Magento\Integration\Api\CustomerTokenServiceInterface::class);
-        $customerToken = $customerTokenService->createCustomerAccessToken($userName, $password);
 
-        // get store code
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
+        /** @var \Magento\Store\Model\Store $store */
+        $store =  ObjectManager::getInstance()->get(\Magento\Store\Model\Store::class);
+        $storeId = $store->getId();
         $storeCodeFromFixture = 'fixture_second_store';
-        $stores = $storeManager->getStores();
-        foreach ($stores as $store) {
-            if ($store->getCode() === $storeCodeFromFixture) {
-                $this->setStoreCode($store->getCode());
-                continue;
-            }
-        }
-        [
-            'Authorization' => 'Bearer'. $token,
-            'Store code' => $storeCode
-        ];
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product::class);
+        $product->load($prductSku);
 
-        $response = $this->graphQlQuery($query);
+        $productNameInFixtureStore = 'Product\'s Name in Fixture Store';
+        $product->setName($productNameInFixtureStore)->setStoreId($storeId)->save();
+        $productPriceInFixtureStore = 10.75;
+        $product->setPrice($productPriceInFixtureStore)->setStoreId($storeId);
 
-        /**
-         * @var ProductRepositoryInterface $productRepository
-         */
-        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get($prductSku, false, null, true);
+        $headerMap = ['Store' => $storeCodeFromFixture];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $this->assertEquals($productNameInFixtureStore, $response['products']['items'][0]['name']);
+        $this->assertEquals($productPriceInFixtureStore, $response['products']['items'][0]['price']);
+
         $this->assertBaseFields($product, $response['products']['items'][0]);
-
     }
 
 
