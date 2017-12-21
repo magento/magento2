@@ -9,23 +9,17 @@ namespace Magento\InventoryCatalog\Model\ResourceModel;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Model\GetProductIdsBySkusInterface;
 
 /**
- * Set to zero Legacy catalocinventory_stock_item database data via plain MySql query
+ * Update legacy catalocinventory_stock_item database data via plain MySql query
  */
-class SetToZeroLegacyStockItem
+class SetDataToLegacyStockItem
 {
     /**
      * @var ResourceConnection
      */
     private $resourceConnection;
-
-    /**
-     * @var DefaultSourceProviderInterface
-     */
-    private $defaultSourceProvider;
 
     /**
      * @var GetProductIdsBySkusInterface
@@ -34,24 +28,23 @@ class SetToZeroLegacyStockItem
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param DefaultSourceProviderInterface $defaultSourceProvider
      * @param GetProductIdsBySkusInterface $getProductIdsBySkus
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DefaultSourceProviderInterface $defaultSourceProvider,
         GetProductIdsBySkusInterface $getProductIdsBySkus
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->defaultSourceProvider = $defaultSourceProvider;
         $this->getProductIdsBySkus = $getProductIdsBySkus;
     }
 
     /**
      * @param string $sku
+     * @param float $quantity
+     * @param int $status
      * @return void
      */
-    public function execute(string $sku)
+    public function execute(string $sku, float $quantity, int $status)
     {
         $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
 
@@ -59,11 +52,10 @@ class SetToZeroLegacyStockItem
         $connection->update(
             $this->resourceConnection->getTableName('cataloginventory_stock_item'),
             [
-                StockItemInterface::IS_IN_STOCK => 0,
-                StockItemInterface::QTY => 0,
+                StockItemInterface::IS_IN_STOCK => $status,
+                StockItemInterface::QTY => $quantity,
             ],
             [
-                StockItemInterface::STOCK_ID . ' = ?' => $this->defaultSourceProvider->getId(),
                 StockItemInterface::PRODUCT_ID . ' = ?' => $productId,
                 'website_id = ?' => 0,
             ]

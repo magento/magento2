@@ -11,7 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
-use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
+use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -19,7 +19,7 @@ use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 
-class SetToZeroLegacyStockItemAtSourceItemDeleteTest extends TestCase
+class SetDataToLegacyStockItemAtSourceItemsSaveTest extends TestCase
 {
     /**
      * @var ProductRepositoryInterface
@@ -47,9 +47,9 @@ class SetToZeroLegacyStockItemAtSourceItemDeleteTest extends TestCase
     private $sourceItemRepository;
 
     /**
-     * @var SourceItemsDeleteInterface
+     * @var SourceItemsSaveInterface
      */
-    private $sourceItemsDelete;
+    private $sourceItemsSave;
 
     /**
      * @var DefaultSourceProviderInterface
@@ -68,7 +68,7 @@ class SetToZeroLegacyStockItemAtSourceItemDeleteTest extends TestCase
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
         $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
 
-        $this->sourceItemsDelete = Bootstrap::getObjectManager()->get(SourceItemsDeleteInterface::class);
+        $this->sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
         $this->defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
     }
 
@@ -90,7 +90,7 @@ class SetToZeroLegacyStockItemAtSourceItemDeleteTest extends TestCase
         $legacyStockItems = $this->legacyStockItemRepository->getList($legacyStockItemCriteria)->getItems();
         self::assertCount(1, $legacyStockItems);
 
-        $legacyStockItem = current($legacyStockItems);
+        $legacyStockItem = reset($legacyStockItems);
         self::assertTrue($legacyStockItem->getIsInStock());
         self::assertEquals(5.5, $legacyStockItem->getQty());
 
@@ -101,13 +101,16 @@ class SetToZeroLegacyStockItemAtSourceItemDeleteTest extends TestCase
         $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
         self::assertCount(1, $sourceItems);
 
-        $this->sourceItemsDelete->execute($sourceItems);
+        $sourceItem = reset($sourceItems);
+        $sourceItem->setQuantity(20);
+        $sourceItem->setStatus(SourceItemInterface::STATUS_OUT_OF_STOCK);
+        $this->sourceItemsSave->execute($sourceItems);
 
         $legacyStockItems = $this->legacyStockItemRepository->getList($legacyStockItemCriteria)->getItems();
         self::assertCount(1, $legacyStockItems);
 
         $legacyStockItem = current($legacyStockItems);
         self::assertFalse($legacyStockItem->getIsInStock());
-        self::assertEquals(0, $legacyStockItem->getQty());
+        self::assertEquals(20, $legacyStockItem->getQty());
     }
 }

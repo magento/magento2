@@ -17,7 +17,8 @@
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\StockRepository\PreventDeleting\AssignedToSalesChannelsStockPlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
-        <plugin name="update_legacy_catalog_inventory_at_source_items_save" type="Magento\InventoryCatalog\Plugin\InventoryApi\UpdateLegacyCatalogInventoryOnSourceItemsSavePlugin"/>
+        <plugin name="set_data_to_legacy_catalog_inventory_at_source_items_save"
+                type="Magento\InventoryCatalog\Plugin\InventoryApi\SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
         <plugin name="set_to_zero_legacy_catalog_inventory_at_source_items_delete"

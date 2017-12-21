@@ -7,18 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 
-use Magento\CatalogInventory\Model\Stock\Status;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\InventoryApi\Api\SourceItemsDeleteInterface;
+use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockItem;
 use Magento\InventoryCatalog\Model\ResourceModel\SetDataToLegacyStockStatus;
 
 /**
- * Set to zero (qty, status) to legacy catalog inventory tables cataloginventory_stock_status and
- * cataloginventory_stock_item if deleted source item which is related to default source
+ * Set data (qty, status) to legacy catalog inventory tables cataloginventory_stock_status and
+ * cataloginventory_stock_item if saved source item which is related to default source
  */
-class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
+class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
 {
     /**
      * @var DefaultSourceProviderInterface
@@ -51,21 +50,29 @@ class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
     }
 
     /**
-     * @param SourceItemsDeleteInterface $subject
+     * @param SourceItemsSaveInterface $subject
      * @param void $result
      * @param SourceItemInterface[] $sourceItems
      * @return void
-     * @see SourceItemsDeleteInterface::execute
+     * @see SourceItemsSaveInterface::execute
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(SourceItemsDeleteInterface $subject, $result, array $sourceItems)
+    public function afterExecute(SourceItemsSaveInterface $subject, $result, array $sourceItems)
     {
         foreach ($sourceItems as $sourceItem) {
             if ((int)$sourceItem->getSourceId() !== $this->defaultSourceProvider->getId()) {
                 continue;
             }
-            $this->setDataToLegacyStockItem->execute($sourceItem->getSku(), 0, 0);
-            $this->setDataToLegacyStockStatus->execute($sourceItem->getSku(), 0, Status::STATUS_OUT_OF_STOCK);
+            $this->setDataToLegacyStockItem->execute(
+                $sourceItem->getSku(),
+                (float)$sourceItem->getQuantity(),
+                (int)$sourceItem->getStatus()
+            );
+            $this->setDataToLegacyStockStatus->execute(
+                $sourceItem->getSku(),
+                (float)$sourceItem->getQuantity(),
+                (int)$sourceItem->getStatus()
+            );
         }
     }
 }
