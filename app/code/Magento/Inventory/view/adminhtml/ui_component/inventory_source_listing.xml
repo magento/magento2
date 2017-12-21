@@ -85,7 +85,7 @@
         </settings>
         <selectionsColumn name="ids" sortOrder="10">
             <settings>
-                <indexField>source_id</indexField>
+                <indexField>code</indexField>
             </settings>
         </selectionsColumn>
         <column name="source_id" sortOrder="20">
