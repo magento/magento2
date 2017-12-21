@@ -27,9 +27,6 @@ class AfterEntitySave implements ObserverInterface
     {
         $entity = $observer->getEvent()->getEntity();
         if ($entity instanceof AbstractModel) {
-            if (method_exists($entity->getResource(), 'loadAllAttributes')) {
-                $entity->getResource()->loadAllAttributes($entity);
-            }
             $entity->getResource()->afterSave($entity);
             $entity->afterSave();
             $entity->getResource()->addCommitCallback([$entity, 'afterCommitCallback']);
