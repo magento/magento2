@@ -45,6 +45,10 @@ class Dir
     {
         $path = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
 
+        if (! isset($path)) {
+            throw new \LogicException("Component '$moduleName' of type '$type' is not correctly registered.");
+        }
+
         if ($type) {
             if (!in_array($type, [
                 self::MODULE_ETC_DIR,
