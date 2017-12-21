@@ -8,6 +8,8 @@ namespace Magento\Swatches\Model;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
+use \Magento\Swatches\Helper\Data as SwatchesHelper;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Provide list of swatch attributes for product.
@@ -17,7 +19,7 @@ class SwatchAttributesProvider
     /**
      * @var \Magento\Swatches\Helper\Data
      */
-    protected $swatchHelper;
+    protected $swatchesHelper;
     /**
      * @var Configurable
      */
@@ -35,17 +37,20 @@ class SwatchAttributesProvider
     private $attributesPerProduct;
 
     /**
-     * @param Configurable $typeConfigurable
+     * SwatchAttributesProvider constructor.
+     *
+     * @param Configurable         $typeConfigurable
      * @param SwatchAttributeCodes $swatchAttributeCodes
+     * @param SwatchesHelper|null    $swatchHelper
      */
     public function __construct(
         Configurable $typeConfigurable,
         SwatchAttributeCodes $swatchAttributeCodes,
-        \Magento\Swatches\Helper\Data\Proxy $swatchHelper
+        SwatchesHelper $swatchHelper = null
     ) {
         $this->typeConfigurable = $typeConfigurable;
         $this->swatchAttributeCodes = $swatchAttributeCodes;
-        $this->swatchHelper = $swatchHelper;
+        $this->swatchesHelper = $swatchHelper ?: ObjectManager::getInstance()->create(SwatchesHelper::class);
     }
 
     /**
@@ -66,17 +71,27 @@ class SwatchAttributesProvider
 
             $swatchAttributes = [];
             foreach ($configurableAttributes as $configurableAttribute) {
-                // Due to $this->swatchAttributeCodes->getCodes() - return swatch data for every attribute.
-                if ($this->swatchHelper->isSwatchAttribute($configurableAttribute->getProductAttribute())) {
+                if ($this->getIsSwatchAttribute($configurableAttribute->getProductAttribute())) {
                     if (array_key_exists($configurableAttribute->getAttributeId(), $swatchAttributeCodeMap)) {
                         $swatchAttributes[$configurableAttribute->getAttributeId()]
                             = $configurableAttribute->getProductAttribute();
                     }
-
                 }
             }
             $this->attributesPerProduct[$product->getId()] = $swatchAttributes;
         }
         return $this->attributesPerProduct[$product->getId()];
+    }
+
+    /**
+     * This method introduced only for the case when customer already has converted attribute.
+     *
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $productAttribute
+     * @return bool
+     * @deprecated
+     */
+    private function getIsSwatchAttribute($productAttribute)
+    {
+        return $this->swatchesHelper->isSwatchAttribute($productAttribute);
     }
 }

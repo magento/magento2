@@ -81,4 +81,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="\Magento\Swatches\Model\SwatchAttributesProvider">
+        <arguments>
+            <argument name="swatchHelper" xsi:type="object">\Magento\Swatches\Helper\Data\Proxy</argument>
+        </arguments>
+    </type>
 </config>

@@ -22,7 +22,7 @@ class EavAttribute
     /**
      * @var SwatchResource
      */
-    protected $swatchResource;
+    private $swatchResource;
 
     /**
      * Base option title used for string operations to detect is option already exists or new
@@ -70,19 +70,20 @@ class EavAttribute
      * @param \Magento\Swatches\Model\SwatchFactory $swatchFactory
      * @param \Magento\Swatches\Helper\Data $swatchHelper
      * @param Json|null $serializer
+     * @param SwatchResource|null $swatchResource
      */
     public function __construct(
         \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
         \Magento\Swatches\Model\SwatchFactory $swatchFactory,
-        SwatchResource $swatchResource,
         \Magento\Swatches\Helper\Data $swatchHelper,
-        Json $serializer = null
+        Json $serializer = null,
+        SwatchResource $swatchResource = null
     ) {
         $this->swatchCollectionFactory = $collectionFactory;
         $this->swatchFactory = $swatchFactory;
         $this->swatchHelper = $swatchHelper;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
-        $this->swatchResource = $swatchResource;
+        $this->swatchResource = $swatchResource ?: ObjectManager::getInstance()->create(SwatchResource::class);
     }
 
     /**
@@ -183,12 +184,12 @@ class EavAttribute
      */
     private function cleanEavAttributeOptionSwatchValues(Attribute $attribute)
     {
-        $optionsIDs = [];
         if (count($attribute->getOption())) {
             $options = $attribute->getOption();
-            foreach ($options['value'] as $id => $item) {
-                $optionsIDs[] = $id;
-            }
+//            foreach ($options['value'] as $id => $item) {
+//                $optionsIDs[] = $id;
+//            }
+            $optionsIDs = array_keys($options['value']);
 
             $this->swatchResource->clearSwatchOptionByOptionId($optionsIDs);
         }
@@ -309,12 +310,8 @@ class EavAttribute
         if (count($attribute->getOptiontext())) {
             $options = $attribute->getOptiontext();
             if (count($options)) {
-                foreach ($options['value'] as $id => $item) {
-                    $optionsIDs[] = $id;
-                }
-
-                $type = Swatch::SWATCH_TYPE_TEXTUAL;
-                $this->swatchResource->clearSwatchOptionTextByOptionId($optionsIDs, $type);
+                $optionsIDs[] = array_keys($options['value']);
+                $this->swatchResource->clearSwatchOptionTextByOptionId($optionsIDs, Swatch::SWATCH_TYPE_TEXTUAL);
             }
         }
     }

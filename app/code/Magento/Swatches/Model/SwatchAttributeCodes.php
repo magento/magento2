@@ -67,7 +67,7 @@ class SwatchAttributeCodes
      *
      * @return array
      */
-        public function getCodes()
+    public function getCodes()
     {
         if ($this->swatchAttributeCodes === null) {
             $swatchAttributeCodesCache = $this->cache->load($this->cacheKey);
