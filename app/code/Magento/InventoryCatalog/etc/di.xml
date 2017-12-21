@@ -16,7 +16,7 @@
     </type>
     <type name="Magento\InventoryApi\Api\AssignSourcesToStockInterface">
         <plugin name="prevent_assign_sources_to_default_stock"
-                type="Magento\InventoryCatalog\Plugin\InventoryApi\AssignSourcesToStock\PreventAssignSourcesToDefaultStock"/>
+                type="Magento\InventoryCatalog\Plugin\InventoryApi\AssignSourcesToStock\PreventAssignSourcesToDefaultStockPlugin"/>
     </type>
     <type name="Magento\InventoryApi\Api\ReservationsAppendInterface">
         <plugin name="update_legacy_catalog_inventory_at_stock_deduction" type="Magento\InventoryCatalog\Plugin\InventoryApi\UpdateLegacyCatalogInventoryAtStockDeductionPlugin"/>
