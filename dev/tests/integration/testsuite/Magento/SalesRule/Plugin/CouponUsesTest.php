@@ -14,12 +14,12 @@ use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test decreasing coupon usages after order cancellation.
+ * Test increasing coupon usages after after order placing and decreasing after order cancellation.
  *
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class SalesOrderAfterCancelObserverTest extends \PHPUnit\Framework\TestCase
+class CouponUsesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface
