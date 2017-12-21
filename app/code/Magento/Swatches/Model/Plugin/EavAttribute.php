@@ -186,9 +186,6 @@ class EavAttribute
     {
         if (count($attribute->getOption())) {
             $options = $attribute->getOption();
-//            foreach ($options['value'] as $id => $item) {
-//                $optionsIDs[] = $id;
-//            }
             $optionsIDs = array_keys($options['value']);
 
             $this->swatchResource->clearSwatchOptionByOptionId($optionsIDs);
@@ -309,8 +306,8 @@ class EavAttribute
         $optionsIDs = [];
         if (count($attribute->getOptiontext())) {
             $options = $attribute->getOptiontext();
-            if (count($options)) {
-                $optionsIDs[] = array_keys($options['value']);
+            if (count($options) && isset($options['value'])) {
+                $optionsIDs = array_keys($options['value']);
                 $this->swatchResource->clearSwatchOptionTextByOptionId($optionsIDs, Swatch::SWATCH_TYPE_TEXTUAL);
             }
         }
