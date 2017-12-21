@@ -31,7 +31,7 @@ class GetSourceItemId
      * @param string $sourceCode
      * @return int
      */
-    public function execute(string $sku, string $sourceCode): string
+    public function execute(string $sku, string $sourceCode): int
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
