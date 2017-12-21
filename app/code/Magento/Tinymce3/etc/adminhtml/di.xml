@@ -34,4 +34,7 @@
     <type name="Magento\Widget\Model\Widget\Config">
         <plugin name="change_widget_plugin" type="Magento\Tinymce3\Model\Plugin\Widget\Config" />
     </type>
+    <type name="Magento\Widget\Model\Widget">
+        <plugin name="change_widget_placeholder" type="Magento\Tinymce3\Model\Plugin\Widget" />
+    </type>
 </config>

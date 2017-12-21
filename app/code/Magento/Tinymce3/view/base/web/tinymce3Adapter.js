@@ -480,10 +480,6 @@ define([
                     attributes.type = attributes.type.replace(/\\\\/g, '\\');
                     imageSrc = this.config['widget_placeholders'][attributes.type];
 
-                    if (imageSrc !== undefined) {
-                        imageSrc = imageSrc.replace(new RegExp('\.png|\.gif'), '_tinymce3.png');
-                    }
-
                     imageHtml = '<img';
                     imageHtml += ' id="' + Base64.idEncode(match[0]) + '"';
                     imageHtml += ' src="' + imageSrc + '"';
@@ -519,18 +515,12 @@ define([
                 var attributes = this.parseAttributesString(match[1]),
                     widgetCode;
 
-                if (attributes.src.indexOf('_tinymce3.png') === -1) {
-                    attributes.src = attributes.src.replace(new RegExp('\.png|\.gif'), '_tinymce3.png');
-                }
-
                 if (attributes.id) {
                     widgetCode = Base64.idDecode(attributes.id);
 
                     if (widgetCode.indexOf('{{widget') !== -1) {
                         return widgetCode;
                     }
-
-                    return match[0];
                 }
 
                 return match[0];

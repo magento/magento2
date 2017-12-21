@@ -1,5 +1,5 @@
 <?php
-/**le
+/**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -19,6 +19,7 @@ class Config
 
     /**
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor
      */
     public function __construct(
         \Magento\Framework\View\Asset\Repository $assetRepo,
