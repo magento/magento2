@@ -94,7 +94,7 @@ class StockSourceLinkProcessor
         }
         if ($sourceIdsForDelete) {
             foreach ($sourceIdsForDelete as $sourceIdForDelete) {
-                $this->unassignSourceFromStock->execute($sourceIdForDelete, $stockId);
+                $this->unassignSourceFromStock->execute((int) $sourceIdForDelete, $stockId);
             }
         }
     }
