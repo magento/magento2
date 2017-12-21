@@ -15,9 +15,16 @@ use Magento\Framework\ObjectManagerInterface;
 class Integer implements FactoryInterface
 {
     /**
-     * Default padding number
+     * Describe default for different integer types
+     *
+     * @var array
      */
-    const DEFAULT_PADDING = "11";
+    private static $defaultPadding = [
+        'integer' => '11',
+        'tinyinteger' => '2',
+        'smallinteger' => '5',
+        'biginteger' => '20'
+    ];
 
     /**
      * @var ObjectManagerInterface
@@ -50,7 +57,11 @@ class Integer implements FactoryInterface
     public function create(array $data)
     {
         if (!isset($data['padding'])) {
-            $data['padding'] = self::DEFAULT_PADDING;
+            $data['padding'] = self::$defaultPadding[$data['type']];
+        }
+        //Auto increment field can`t be null
+        if (isset($data['identity']) && $data['identity']) {
+            $data['nullable'] = false;
         }
 
         if (isset($data['default'])) {

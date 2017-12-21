@@ -42,6 +42,7 @@ class ElementFactory
      * As we have few attributes, that are generic and be applied to few types:
      *  - nullable
      *  - unsigned
+     *  - identity
      *
      * We need to cast this attributes to boolean values in abstract factory
      *
@@ -50,12 +51,13 @@ class ElementFactory
      */
     private function castGenericAttributes(array $elementStructuralData)
     {
-        if (isset($elementStructuralData['nullable'])) {
-            $elementStructuralData['nullable'] = $this->booleanUtils->toBoolean($elementStructuralData['nullable']);
-        }
+        $booleanAttributes = ['nullable', 'unsigned', 'identity'];
 
-        if (isset($elementStructuralData['unsigned'])) {
-            $elementStructuralData['unsigned'] = $this->booleanUtils->toBoolean($elementStructuralData['unsigned']);
+        foreach ($booleanAttributes as $booleanAttribute) {
+            if (isset($elementStructuralData[$booleanAttribute])) {
+                $elementStructuralData[$booleanAttribute] = $this->booleanUtils
+                    ->toBoolean($elementStructuralData[$booleanAttribute]);
+            }
         }
 
         return $elementStructuralData;

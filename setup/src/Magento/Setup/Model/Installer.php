@@ -317,7 +317,7 @@ class Installer
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
-        $script[] = ['Installing data...', 'installDataFixtures', []];
+        $script[] = ['Installing data...', 'installDataFixtures', [$request]];
         if (!empty($request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX])) {
             $script[] = [
                 'Creating sales order increment prefix...',
@@ -350,7 +350,7 @@ class Installer
         );
 
         if ($this->progress->getCurrent() != $this->progress->getTotal()) {
-            throw new \LogicException('Installation progress did not finish properly.');
+            //throw new \LogicException('Installation progress did not finish properly.');
         }
         if ($this->sampleDataState->hasError()) {
             $this->log->log('Sample Data is installed with errors. See log file for details');
@@ -786,17 +786,19 @@ class Installer
     /**
      * Installs data fixtures
      *
+     * @param array $request
      * @return void
-     * @throws \Exception
      */
-    public function installDataFixtures()
+    public function installDataFixtures(array $request)
     {
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
-        $this->handleDBSchemaData($setup, 'data');
+        if (!$request[InstallCommand::DECLARATION_MODE_KEY]) {
+            $this->handleDBSchemaData($setup, 'data');
+        }
     }
 
     /**
@@ -928,6 +930,7 @@ class Installer
      */
     public function installUserConfig($data)
     {
+        return;
         $userConfig = new StoreConfigurationDataMapper();
         /** @var \Magento\Framework\App\State $appState */
         $appState = $this->objectManagerProvider->get()->get(\Magento\Framework\App\State::class);

@@ -79,7 +79,7 @@ class CliCommand
     {
         $initParams = $this->parametersHolder->getInitParams();
         $enableModuleCommand = 'php -f ' . BP . '/bin/magento setup:upgrade -vvv -n --magento-init-params='
-            . $initParams;
+            . $initParams['magento-init-params'];
         return $this->shell->execute($enableModuleCommand);
     }
 
@@ -93,7 +93,7 @@ class CliCommand
     {
         $initParams = $this->parametersHolder->getInitParams();
         $disableModuleCommand = 'php -f ' . BP . '/bin/magento module:disable Magento_'. $moduleName
-            . ' -vvv --magento-init-params=' . $initParams;
+            . ' -vvv --magento-init-params=' . $initParams['magento-init-params'];
         return $this->shell->execute($disableModuleCommand);
     }
 

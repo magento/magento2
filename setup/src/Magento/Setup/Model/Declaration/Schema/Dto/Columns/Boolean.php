@@ -15,7 +15,8 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
  */
 class Boolean extends Column implements
     ElementDiffAwareInterface,
-    ColumnNullableAwareInterface
+    ColumnNullableAwareInterface,
+    ColumnDefaultAwareInterface
 {
     /**
      * @var bool

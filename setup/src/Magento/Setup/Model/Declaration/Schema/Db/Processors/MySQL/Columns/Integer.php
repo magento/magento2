@@ -37,21 +37,29 @@ class Integer implements DbSchemaProcessorInterface
     private $identity;
 
     /**
+     * @var DefaultDefinition
+     */
+    private $defaultDefinition;
+
+    /**
      * @param Unsigned $unsigned
      * @param bool $boolean
      * @param Nullable $nullable
      * @param Identity $identity
+     * @param DefaultDefinition $defaultDefinition
      */
     public function __construct(
         Unsigned $unsigned,
         Boolean $boolean,
         Nullable $nullable,
-        Identity $identity
+        Identity $identity,
+        DefaultDefinition $defaultDefinition
     ) {
         $this->unsigned = $unsigned;
         $this->boolean = $boolean;
         $this->nullable = $nullable;
         $this->identity = $identity;
+        $this->defaultDefinition = $defaultDefinition;
     }
 
     /**
@@ -70,11 +78,11 @@ class Integer implements DbSchemaProcessorInterface
     {
         return sprintf(
             '%s(%s) %s %s %s %s',
-            $element->getElementType(),
+            str_replace('integer', 'int', $element->getType()),
             $element->getPadding(),
             $this->unsigned->toDefinition($element),
             $this->nullable->toDefinition($element),
-            $element->getDefault(),
+            $this->defaultDefinition->toDefinition($element),
             $this->identity->toDefinition($element)
         );
     }

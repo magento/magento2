@@ -26,11 +26,31 @@ class Sharding
     private $deploymentConfig;
 
     /**
-     * @param DeploymentConfig $deploymentConfig
+     * Under resources means connection names
+     * Each connection name represents each shard
+     *
+     * @var array
      */
-    public function __construct(DeploymentConfig $deploymentConfig)
+    private $resources;
+
+    /**
+     * @param DeploymentConfig $deploymentConfig
+     * @param array $resources
+     */
+    public function __construct(DeploymentConfig $deploymentConfig, array $resources)
     {
         $this->deploymentConfig = $deploymentConfig;
+        $this->resources = $resources;
+    }
+
+    /**
+     * Depends on different settings we should have different qty of connection names
+     *
+     * @return array
+     */
+    public function getResources()
+    {
+        return $this->resources;
     }
 
     /**

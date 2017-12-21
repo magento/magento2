@@ -87,7 +87,6 @@ class Basic implements DbSchemaProcessorInterface
         $data = array_combine(array_values(self::$tokens), array_values($data));
         $data['type'] = strtolower($data['type']);
 
-        $data = $this->unsigned->fromDefinition($data);
         $data = $this->nullable->fromDefinition($data);
 
         unset($data['key']); //we do not need key, as it will be calculated from indexes

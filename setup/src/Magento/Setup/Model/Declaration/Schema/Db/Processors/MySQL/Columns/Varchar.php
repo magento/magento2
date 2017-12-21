@@ -20,11 +20,18 @@ class Varchar implements DbSchemaProcessorInterface
     private $nullable;
 
     /**
-     * @param Nullable $nullable
+     * @var DefaultDefinition
      */
-    public function __construct(Nullable $nullable)
+    private $defaultDefinition;
+
+    /**
+     * @param Nullable $nullable
+     * @param DefaultDefinition $defaultDefinition
+     */
+    public function __construct(Nullable $nullable, DefaultDefinition $defaultDefinition)
     {
         $this->nullable = $nullable;
+        $this->defaultDefinition = $defaultDefinition;
     }
 
     /**
@@ -36,10 +43,10 @@ class Varchar implements DbSchemaProcessorInterface
     {
         return sprintf(
             '%s(%s) %s %s',
-            $element->getElementType(),
+            $element->getType(),
             $element->getLength(),
             $this->nullable->toDefinition($element),
-            $element->getDefault()
+            $this->defaultDefinition->toDefinition($element)
         );
     }
 

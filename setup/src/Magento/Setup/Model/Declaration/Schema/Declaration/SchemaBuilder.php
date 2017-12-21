@@ -6,6 +6,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Declaration;
 
 use Magento\Framework\Stdlib\BooleanUtils;
+use Magento\Setup\Exception;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory;
 use Magento\Setup\Model\Declaration\Schema\Dto\Index;
@@ -14,7 +15,6 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\Sharding;
 
 /**
- * @TODO: rename to schema
  * This type of builder is responsible for converting ENTIRE data, that comes from XML
  * into DTO`s format, with aggregation root: Schema
  *
@@ -53,20 +53,28 @@ class SchemaBuilder
     private $booleanUtils;
 
     /**
+     * @var ValidationComposite
+     */
+    private $validationComposite;
+
+    /**
      * SchemaBuilder constructor.
      * @param ElementFactory $elementFactory
      * @param BooleanUtils $booleanUtils
      * @param Sharding $sharding
+     * @param ValidationComposite $validationComposite
      * @internal param array $tablesData
      */
     public function __construct(
         ElementFactory $elementFactory,
         BooleanUtils $booleanUtils,
-        Sharding $sharding
+        Sharding $sharding,
+        ValidationComposite $validationComposite
     ) {
         $this->sharding = $sharding;
         $this->elementFactory = $elementFactory;
         $this->booleanUtils = $booleanUtils;
+        $this->validationComposite = $validationComposite;
     }
 
     /**
@@ -83,9 +91,30 @@ class SchemaBuilder
     }
 
     /**
+     * Do schema validation and print all errors
+     *
+     * @param Schema $schema
+     * @throws Exception
+     */
+    private function validate(Schema $schema)
+    {
+        $errors = $this->validationComposite->validate($schema);
+
+        if (!empty($errors)) {
+            $messages = '';
+            foreach ($errors as $error) {
+                $messages .= sprintf("%s%s", PHP_EOL, $error['message']);
+            }
+
+            throw new Exception($messages);
+        }
+    }
+
+    /**
      * Build schema
      *
      * @param Schema $schema
+     * @throws Exception
      * @return Schema
      */
     public function build(Schema $schema)
@@ -97,6 +126,8 @@ class SchemaBuilder
                 }
             }
         }
+
+        $this->validate($schema);
 
         return $schema;
     }

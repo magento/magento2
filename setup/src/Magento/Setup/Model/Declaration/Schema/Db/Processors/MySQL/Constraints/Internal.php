@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Constraints;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
@@ -33,21 +34,37 @@ class Internal implements DbSchemaProcessorInterface
     const UNIQUE_KEY_NAME = 'UNIQUE KEY';
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @param ResourceConnection $resourceConnection
+     */
+    public function __construct(ResourceConnection $resourceConnection)
+    {
+        $this->resourceConnection = $resourceConnection;
+    }
+
+    /**
      * @param \Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal $element
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $element)
     {
+        $adapter = $this->resourceConnection->getConnection(
+            $element->getTable()->getResource()
+        );
         $columnsList = array_map(
-            function(Column $column) {
-                return $column->getName();
+            function(Column $column) use ($adapter) {
+                return $adapter->quoteIdentifier($column->getName());
             },
             $element->getColumns()
         );
 
         return sprintf(
             '%s (%s)',
-            $element->getElementType() === 'primary' ? 'PRIMARY KEY' : 'UNIQUE KEY',
+            $element->getType() === 'primary' ? 'PRIMARY KEY' : 'UNIQUE KEY',
             implode(',', $columnsList)
         );
     }
@@ -65,12 +82,16 @@ class Internal implements DbSchemaProcessorInterface
      */
     public function fromDefinition(array $data)
     {
-        return [
-            'name' => $data['Key_name'],
-            'column' => [
-                $data['Column_name'] => $data['Column_name']
-            ],
-            'type' => $data['Key_name'] === self::PRIMARY_NAME ? 'primary' : 'unique'
-        ];
+        if (isset($data['Key_name'])) {
+            $data = [
+                'name' => $data['Key_name'],
+                'column' => [
+                    $data['Column_name'] => $data['Column_name']
+                ],
+                'type' => $data['Key_name'] === self::PRIMARY_NAME ? 'primary' : 'unique'
+            ];
+        }
+
+        return $data;
     }
 }

@@ -14,7 +14,9 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
  * Declared in SQL, like Timestamp
  * Has 2 additional params: default and on_update
  */
-class Timestamp extends Column implements ElementDiffAwareInterface
+class Timestamp extends Column implements
+    ElementDiffAwareInterface,
+    ColumnDefaultAwareInterface
 {
     /**
      * @var string
@@ -30,7 +32,7 @@ class Timestamp extends Column implements ElementDiffAwareInterface
      * @param string $name
      * @param string $type
      * @param Table $table
-     * @param string $default
+     * @param $default
      * @param string|null $onUpdate
      */
     public function __construct(

@@ -115,7 +115,7 @@ class DiffManager
     public function registerCreation(DiffInterface $diff, ElementInterface $element)
     {
         $operation = $element instanceof Table ? CreateTable::OPERATION_NAME : AddElement::OPERATION_NAME;
-        $changeRegistry->register(
+        $diff->register(
             $element,
             $operation
         );

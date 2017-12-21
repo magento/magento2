@@ -16,7 +16,8 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
  */
 class Varbinary extends Column implements
     ElementDiffAwareInterface,
-    ColumnNullableAwareInterface
+    ColumnNullableAwareInterface,
+    ColumnDefaultAwareInterface
 {
     /**
      * @var bool

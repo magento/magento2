@@ -45,12 +45,7 @@ class Unsigned implements DbSchemaProcessorInterface
      */
     public function fromDefinition(array $data)
     {
-        if (strpos(self::UNSIGNED_FLAG, $data['type']) !== false) {
-            $data['unsigned'] = true;
-        } else {
-            $data['unsigned'] = false;
-        }
-
+        $data['unsigned'] = strpos($data['type'], self::UNSIGNED_FLAG) !== false;
         return $data;
     }
 }

@@ -52,18 +52,28 @@ class Internal extends Constraint implements ElementDiffAwareInterface
     }
 
     /**
+     * Retrieve column names
+     *
+     * @return array
+     */
+    public function getColumnNames()
+    {
+        return array_map(
+            function (Column $column) {
+                return $column->getName();
+            },
+            $this->getColumns()
+        );
+    }
+
+    /**
      * @inheritdoc
      */
     public function getDiffSensitiveParams()
     {
         return [
             'type' => $this->getType(),
-            'columns' => array_map(
-                function (Column $column) {
-                    return $column->getName();
-                },
-                $this->getColumns()
-            )
+            'columns' => $this->getColumnNames()
         ];
     }
 }

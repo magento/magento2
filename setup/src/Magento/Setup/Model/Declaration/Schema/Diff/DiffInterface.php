@@ -8,6 +8,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
+use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\Request;
 
 /**
@@ -31,10 +32,10 @@ interface DiffInterface
      *   ]
      * ]
      *
-     * @param string $operation
+     * @param string $operation If operation is not specified, changes for all operations will be retrieved
      * @return ElementHistory[]
      */
-    public function get($operation);
+    public function get($operation = null);
 
     /**
      * Register operation

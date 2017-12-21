@@ -16,12 +16,5 @@
         </xs:annotation>
 
         <xs:attributeGroup ref="baseColumn" />
-        <xs:attribute name="length">
-            <xs:simpleType>
-                <xs:restriction base="xs:integer">
-                    <xs:minInclusive value="16777216"/>
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
     </xs:complexType>
 </xs:schema>

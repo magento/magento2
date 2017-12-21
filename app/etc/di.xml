@@ -1357,9 +1357,9 @@
                 <item name="decimal" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Decimal</item>
                 <item name="float" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Decimal</item>
                 <item name="double" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Decimal</item>
-                <item name="smallinteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\SmallInteger</item>
-                <item name="tinyinteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\TinyInteger</item>
-                <item name="biginteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\BigInteger</item>
+                <item name="smallinteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
+                <item name="tinyinteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
+                <item name="biginteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
                 <item name="integer" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
                 <item name="date" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Date</item>
                 <item name="timestamp" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Timestamp</item>
@@ -1385,11 +1385,25 @@
             <argument name="processors" xsi:type="array">
                 <item name="column" xsi:type="array">
                     <item name="basic" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Basic</item>
+                    <item name="boolean" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Boolean</item>
                     <item name="integer" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Integer</item>
+                    <item name="smallinteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Integer</item>
+                    <item name="tinyinteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Integer</item>
+                    <item name="biginteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Integer</item>
                     <item name="decimal" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Decimal</item>
+                    <item name="float" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Decimal</item>
+                    <item name="double" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Decimal</item>
                     <item name="text" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Text</item>
+                    <item name="blob" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Blob</item>
+                    <item name="mediumblob" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Blob</item>
+                    <item name="longblob" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Blob</item>
+                    <item name="mediumtext" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Text</item>
+                    <item name="longtext" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Text</item>
+                    <item name="datetime" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Timestamp</item>
+                    <item name="date" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Date</item>
                     <item name="timestamp" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Timestamp</item>
                     <item name="varchar" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Varchar</item>
+                    <item name="varbinary" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Varchar</item>
                 </item>
                 <item name="index" xsi:type="array">
                     <item name="indexGeneric" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Index</item>
@@ -1411,11 +1425,25 @@
     <type name="Magento\Setup\Model\Declaration\Schema\OperationsExecutor">
         <arguments>
             <argument name="operations" xsi:type="array">
-                <item name="create_table" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\CreateTable</item>
-                <item name="drop_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\DropElement</item>
-                <item name="add_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\AddElement</item>
-                <item name="modify_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\ModifyElement</item>
                 <item name="drop_table" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\DropTable</item>
+                <item name="create_table" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\CreateTable</item>
+                <item name="add_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\AddElement</item>
+                <item name="drop_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\DropElement</item>
+                <item name="modify_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\ModifyElement</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="\Magento\Setup\Model\Declaration\Schema\Sharding">
+        <arguments>
+            <argument name="resources" xsi:type="array">
+                <item name="default" xsi:type="string">default</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="\Magento\Setup\Model\Declaration\Schema\Declaration\ValidationComposite">
+        <arguments>
+            <argument name="rules" xsi:type="array">
+                <item name="check_references" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Declaration\ValidationRules\CheckReferenceColumnHasIndex</item>
             </argument>
         </arguments>
     </type>

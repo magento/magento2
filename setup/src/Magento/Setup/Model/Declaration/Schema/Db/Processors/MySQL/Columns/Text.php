@@ -10,7 +10,7 @@ use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterf
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Process blob and text types
+ * Process text types
  *
  * @inheritdoc
  */
@@ -31,15 +31,14 @@ class Text implements DbSchemaProcessorInterface
     }
 
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Text $element
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Blob $element
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $element)
     {
         return sprintf(
-            '%s(%s)',
-            $element->getElementType(),
-            $element->getLength(),
+            '%s %s',
+            $element->getType(),
             $this->nullable->toDefinition($element)
         );
     }
@@ -58,7 +57,7 @@ class Text implements DbSchemaProcessorInterface
     public function fromDefinition(array $data)
     {
         $matches = [];
-        if (preg_match('/^(tiny|medium|long)(text|blob)\s(\d+)/', $data['type'], $matches)) {
+        if (preg_match('/^(tiny|medium|long)(text)\s*(\d+)/', $data['type'], $matches)) {
             if (isset($matches[0])) {
                 $data['type'] = $matches[0] . $matches[1];
                 $data['length'] = $matches[2];

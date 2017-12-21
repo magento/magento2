@@ -10,6 +10,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
 use Magento\Setup\Model\Declaration\Schema\Dto\TableElementInterface;
+use Magento\Setup\Model\Declaration\Schema\ElementHistoryFactory;
 use Magento\Setup\Model\Declaration\Schema\Request;
 
 /**
@@ -65,8 +66,12 @@ class Diff implements DiffInterface
     /**
      * @inheritdoc
      */
-    public function get($operation)
+    public function get($operation = null)
     {
+        if ($operation === null) {
+            return $this->changes;
+        }
+
         return isset($this->changes[$operation]) ? $this->changes[$operation] : [];
     }
 

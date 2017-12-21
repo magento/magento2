@@ -17,7 +17,8 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 class Decimal extends Column implements
     ElementDiffAwareInterface,
     ColumnUnsignedAwareInterface,
-    ColumnNullableAwareInterface
+    ColumnNullableAwareInterface,
+    ColumnDefaultAwareInterface
 {
     /**
      * @var int

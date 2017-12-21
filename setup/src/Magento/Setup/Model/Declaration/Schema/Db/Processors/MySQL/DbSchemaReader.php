@@ -21,13 +21,6 @@ class DbSchemaReader implements DbSchemaReaderInterface
     private $resourceConnection;
 
     /**
-     * Tables cache
-     *
-     * @var array
-     */
-    private $tables;
-
-    /**
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(ResourceConnection $resourceConnection)
@@ -89,7 +82,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
      * @param string $resource
      * @return array
      */
-    private function getCreateTableSql($tableName, $resource)
+    public function getCreateTableSql($tableName, $resource)
     {
         $adapter = $this->resourceConnection->getConnection($resource);
         $sql = sprintf('SHOW CREATE TABLE %s', $tableName);
@@ -123,12 +116,8 @@ class DbSchemaReader implements DbSchemaReaderInterface
      */
     public function readTables($resource = 'default')
     {
-        if (!isset($this->tables[AdapterMediator::KEY_TABLE])) {
-            $this->tables[AdapterMediator::KEY_TABLE] = $this->resourceConnection
+        return $this->resourceConnection
                 ->getConnection($resource)
                 ->getTables();
-        }
-
-        return $this->tables[AdapterMediator::KEY_TABLE];
     }
 }

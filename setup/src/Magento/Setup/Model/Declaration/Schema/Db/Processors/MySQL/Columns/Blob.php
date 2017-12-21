@@ -14,7 +14,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  *
  * @inheritdoc
  */
-class Text implements DbSchemaProcessorInterface
+class Blob implements DbSchemaProcessorInterface
 {
     /**
      * @var Nullable
@@ -31,15 +31,14 @@ class Text implements DbSchemaProcessorInterface
     }
 
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Text $element
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Blob $element
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $element)
     {
         return sprintf(
-            '%s(%s)',
+            '%s %s',
             $element->getType(),
-            $element->getLength(),
             $this->nullable->toDefinition($element)
         );
     }
@@ -49,7 +48,7 @@ class Text implements DbSchemaProcessorInterface
      */
     public function canBeApplied(ElementInterface $element)
     {
-        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Text;
+        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Blob;
     }
 
     /**

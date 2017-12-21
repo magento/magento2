@@ -27,13 +27,20 @@ class Decimal implements DbSchemaProcessorInterface
     private $unsigned;
 
     /**
+     * @var DefaultDefinition
+     */
+    private $defaultDefinition;
+
+    /**
      * @param Nullable $nullable
      * @param Unsigned $unsigned
+     * @param DefaultDefinition $defaultDefinition
      */
-    public function __construct(Nullable $nullable, Unsigned $unsigned)
+    public function __construct(Nullable $nullable, Unsigned $unsigned, DefaultDefinition $defaultDefinition)
     {
         $this->nullable = $nullable;
         $this->unsigned = $unsigned;
+        $this->defaultDefinition = $defaultDefinition;
     }
 
     /**
@@ -52,12 +59,12 @@ class Decimal implements DbSchemaProcessorInterface
     {
         return sprintf(
             '%s(%s, %s) %s %s %s',
-            $element->getElementType(),
+            $element->getType(),
             $element->getScale(),
             $element->getPrecission(),
             $this->unsigned->toDefinition($element),
             $this->nullable->toDefinition($element),
-            $element->getDefault()
+            $this->defaultDefinition->toDefinition($element)
         );
     }
 
@@ -76,9 +83,11 @@ class Decimal implements DbSchemaProcessorInterface
             $data['type'] = $matches[1];
 
             if (isset($matches[2]) && isset($matches[3])) {
-                $data['scale'] = $matches[3];
-                $data['precission'] = $matches[2];
+                $data['scale'] = $matches[2];
+                $data['precission'] = $matches[3];
             }
+
+            $data = $this->unsigned->fromDefinition($data);
         }
 
         return $data;

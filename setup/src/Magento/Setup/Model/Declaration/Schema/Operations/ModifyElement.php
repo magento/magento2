@@ -9,6 +9,8 @@ namespace Magento\Setup\Model\Declaration\Schema\Operations;
 use Magento\Setup\Model\Declaration\Schema\Db\AdapterMediator;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
+use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
+use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
@@ -54,7 +56,9 @@ class ModifyElement implements OperationInterface
     {
         $element = $elementHistory->getNew();
 
-        if ($element instanceof Constraint || $element instanceof Index) {
+        if ($element instanceof Internal) {
+            $this->adapterMediator->modifyConstraint($element);
+        } else if ($element instanceof Index || $element instanceof Reference) {
             $this->adapterMediator->dropElement($element);
             $this->adapterMediator->addElement($element);
         } else {

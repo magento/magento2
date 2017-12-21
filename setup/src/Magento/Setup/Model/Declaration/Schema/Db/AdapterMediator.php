@@ -131,7 +131,8 @@ class AdapterMediator
         foreach ($data as $type => $elements) {
             /** @var ElementInterface $element */
             foreach ($elements as $element) {
-                $definition[$type][$element->getName()] = $this->processElementToDefinition($element);
+                $definition[$type][$element->getName()] = $this
+                    ->processElementToDefinition($element);
             }
         }
 
@@ -147,7 +148,7 @@ class AdapterMediator
     public function addElement(ElementInterface $element)
     {
         $elementOptions = [
-            'table_name' => $element->getTable()->getResource(),
+            'table_name' => $element->getTable()->getName(),
             'element_name' => $element->getName(),
             'resource' => $element->getTable()->getResource()
         ];
@@ -161,6 +162,27 @@ class AdapterMediator
     }
 
     /**
+     *
+     *
+     * @param Constraint $constraint
+     */
+    public function modifyConstraint(Constraint $constraint)
+    {
+        $constraintOptions = [
+            'table_name' => $constraint->getTable()->getName(),
+            'element_name' => $constraint->getName(),
+            'resource' => $constraint->getTable()->getResource(),
+            'type' => $constraint->getType()
+        ];
+        $definition = $this->processElementToDefinition($constraint);
+
+        $this->dbSchemaWriter->modifyConstraint(
+            $constraintOptions,
+            $definition
+        );
+    }
+
+    /**
      * Prepare and drop element from table
      *
      * @param ElementInterface | TableElementInterface $element
@@ -169,9 +191,10 @@ class AdapterMediator
     public function dropElement(ElementInterface $element)
     {
         $elementOptions = [
-            'table_name' => $element->getTable()->getResource(),
+            'table_name' => $element->getTable()->getName(),
             'element_name' => $element->getName(),
-            'resource' => $element->getTable()->getResource()
+            'resource' => $element->getTable()->getResource(),
+            'type' => $element->getType()
         ];
 
         $this->dbSchemaWriter->dropElement(
@@ -188,7 +211,7 @@ class AdapterMediator
     public function modifyColumn(Column $column)
     {
         $columnOptions = [
-            'table_name' => $column->getTable()->getResource(),
+            'table_name' => $column->getTable()->getName(),
             'element_name' => $column->getName(),
             'resource' => $column->getTable()->getResource()
         ];
@@ -220,7 +243,6 @@ class AdapterMediator
     /**
      * Process column definition
      *
-     * @param string $type
      * @param ElementInterface $element
      * @return string
      */
@@ -305,7 +327,7 @@ class AdapterMediator
         if (!isset($this->ddlCache[self::KEY_REFERENCE][$tableName])) {
             $this->ddlCache[self::KEY_REFERENCE][$tableName] = [];
             $createTable = $this->dbSchemaReader->readReferences($tableName, $resource);
-            $foreignKeys = $this->processElementFromDefinition($createTable, self::KEY_REFERENCE);
+            $foreignKeys = $this->processElementFromDefinition($createTable, self::KEY_CONSTRAINT);
             //Process foreign keys
             foreach ($foreignKeys as $foreignKey) {
                 $this->ddlCache[self::KEY_REFERENCE][$tableName][$foreignKey['name']] = $foreignKey;
@@ -331,5 +353,15 @@ class AdapterMediator
         }
 
         return $this->ddlCache[self::KEY_COLUMNS][$tableName];
+    }
+
+    /**
+     * Flush cache
+     *
+     * @return void
+     */
+    public function flushCache()
+    {
+        $this->ddlCache = [];
     }
 }

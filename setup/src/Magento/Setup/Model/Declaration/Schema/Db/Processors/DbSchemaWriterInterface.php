@@ -53,6 +53,16 @@ interface DbSchemaWriterInterface
     public function modifyColumn(array $columnOptions, $columnDefinition);
 
     /**
+     * As we can`t just drop and recreate constraint in 2 requests
+     * we need to do this in one request
+     *
+     * @param array $constraintOptions
+     * @param string $constraintDefinition
+     * @return void
+     */
+    public function modifyConstraint(array $constraintOptions, $constraintDefinition);
+
+    /**
      * Drop any element (constraint, column, index) from index
      *
      * @param string $elementType enum(CONSTRAINT, INDEX, COLUMN)

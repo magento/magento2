@@ -30,6 +30,7 @@ class Reference extends Constraint implements ElementDiffAwareInterface
      * @var Column
      */
     private $referenceColumn;
+
     /**
      * @var string
      */

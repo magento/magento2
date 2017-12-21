@@ -27,7 +27,7 @@ class Blob extends Column implements
      * @param string $name
      * @param string $type
      * @param Table $table
-     * @param $nullable
+     * @param bool $nullable
      */
     public function __construct(
         string $name,

@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
+use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 
 /**
  * Table structural element
@@ -87,6 +88,24 @@ class Table extends GenericElement implements ElementInterface
     public function getConstraintByName($name)
     {
         return isset($this->constraints[$name]) ? $this->constraints[$name] : false;
+    }
+
+    /**
+     * This method lookup only for foreign keys constraints
+     *
+     * @return Constraint[]
+     */
+    public function getReferenceConstraints()
+    {
+        $constraints = [];
+
+        foreach ($this->getConstraints() as $constraint) {
+            if ($constraint instanceof Reference) {
+                $constraints[] = $constraint;
+            }
+        }
+
+        return $constraints;
     }
 
     /**

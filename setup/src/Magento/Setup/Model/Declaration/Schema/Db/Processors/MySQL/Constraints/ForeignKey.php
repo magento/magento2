@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Constraints;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
@@ -19,21 +20,43 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 class ForeignKey implements DbSchemaProcessorInterface
 {
     /**
+     * Usually used in MySQL requests
+     */
+    const FOREIGN_KEY_NAME = 'FOREIGN KEY';
+
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @param ResourceConnection $resourceConnection
+     */
+    public function __construct(ResourceConnection $resourceConnection)
+    {
+        $this->resourceConnection = $resourceConnection;
+    }
+
+    /**
      * @param Reference $element
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $element)
     {
+        $adapter = $this->resourceConnection->getConnection(
+            $element->getTable()->getResource()
+        );
         /** @TODO: purge records, if the are not satisfied on delete statement */
         $foreignKeySql = sprintf(
-            "FOREIGN KEY (%s) REFERENCES %s (%s)",
-            $element->getColumn()->getName(),
-            $element->getReferenceTable()->getName(),
-            $element->getReferenceColumn()->getName()
+            "%s (%s) REFERENCES %s (%s)",
+            self::FOREIGN_KEY_NAME,
+            $adapter->quoteIdentifier($element->getColumn()->getName()),
+            $adapter->quoteIdentifier($element->getReferenceTable()->getName()),
+            $adapter->quoteIdentifier($element->getReferenceColumn()->getName())
         );
 
         if ($element->getOnDelete()) {
-            $foreignKeySql .= sprintf("ON DELETE %s", $element->getOnDelete());
+            $foreignKeySql .= sprintf(" ON DELETE %s", $element->getOnDelete());
         }
 
         return $foreignKeySql;

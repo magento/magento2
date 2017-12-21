@@ -6,6 +6,7 @@
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Framework\Filesystem\Io\File;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TestModuleManager;
 
@@ -46,6 +47,24 @@ class CopyModules
         //This annotation can be declared only on method level
         if (isset($annotations['method']['moduleName'])) {
             $this->cliCommand->introduceModule($annotations['method']['moduleName'][0]);
+        }
+    }
+
+    /**
+     * Handler for 'startTest' event
+     *
+     * @param \PHPUnit\Framework\TestCase $test
+     */
+    public function endTest(\PHPUnit\Framework\TestCase $test)
+    {
+        $annotations = $test->getAnnotations();
+        //This annotation can be declared only on method level
+        if (isset($annotations['method']['moduleName'])) {
+            $path = MAGENTO_MODULES_PATH .
+                //Take only module name from Magento_ModuleName
+                explode("_", $annotations['method']['moduleName'][0])[1];
+
+            //File::rmdirRecursive($path);
         }
     }
 }

@@ -5,13 +5,10 @@
  */
 namespace Magento\Setup\Model;
 
-use Magento\Setup\Model\Declaration\Schema\ChangeRegistryFactory;
-use Magento\Setup\Model\Declaration\Schema\Declaration\Parser;
 use Magento\Setup\Model\Declaration\Schema\Diff\SchemaDiff;
-use Magento\Setup\Model\Declaration\Schema\Dto\SchemaFactory;
 use Magento\Setup\Model\Declaration\Schema\OperationsExecutor;
 use Magento\Setup\Model\Declaration\Schema\RequestFactory;
-use Magento\Setup\Model\Declaration\Schema\SchemaParserInterface;
+use Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface;
 
 /**
  * Declaration Installer is facade for installation and upgrade db in declaration mode
@@ -19,24 +16,9 @@ use Magento\Setup\Model\Declaration\Schema\SchemaParserInterface;
 class DeclarationInstaller
 {
     /**
-     * @var Parser
-     */
-    private $declarationParser;
-
-    /**
-     * @var SchemaFactory
-     */
-    private $structureFactory;
-
-    /**
      * @var OperationsExecutor
      */
     private $operationsExecutor;
-
-    /**
-     * @var SchemaParserInterface
-     */
-    private $generatedParser;
 
     /**
      * @var SchemaDiff
@@ -44,45 +26,31 @@ class DeclarationInstaller
     private $schemaDiff;
 
     /**
-     * @var ChangeRegistryFactory
-     */
-    private $changeRegistryFactory;
-
-    /**
      * @var RequestFactory
      */
     private $requestFactory;
-    /**
-     * @var Parser
-     */
-    private $declarativeParser;
 
     /**
-     * @param SchemaFactory $structureFactory
-     * @param Declaration\Schema\Db\Parser|SchemaParserInterface $generatedParser
-     * @param Parser $declarativeParser
-     * @param ChangeRegistryFactory $changeRegistryFactory
-     * @param SchemaDiff $structureDiff
+     * @var SchemaConfigInterface
+     */
+    private $schemaConfig;
+
+    /**
+     * @param SchemaConfigInterface $schemaConfig
+     * @param SchemaDiff $schemaDiff
      * @param OperationsExecutor $operationsExecutor
      * @param RequestFactory $requestFactory
      */
     public function __construct(
-        SchemaFactory $structureFactory,
-        \Magento\Setup\Model\Declaration\Schema\Db\Parser $generatedParser,
-        \Magento\Setup\Model\Declaration\Schema\Declaration\Parser $declarativeParser,
-        ChangeRegistryFactory $changeRegistryFactory,
-        SchemaDiff $structureDiff,
+        SchemaConfigInterface $schemaConfig,
+        SchemaDiff $schemaDiff,
         OperationsExecutor $operationsExecutor,
         RequestFactory $requestFactory
     ) {
-        $this->declarationParser = $declarativeParser;
-        $this->structureFactory = $structureFactory;
         $this->operationsExecutor = $operationsExecutor;
-        $this->generatedParser = $generatedParser;
-        $this->schemaDiff = $structureDiff;
-        $this->changeRegistryFactory = $changeRegistryFactory;
         $this->requestFactory = $requestFactory;
-        $this->declarativeParser = $declarativeParser;
+        $this->schemaConfig = $schemaConfig;
+        $this->schemaDiff = $schemaDiff;
     }
 
     /**
@@ -93,16 +61,13 @@ class DeclarationInstaller
      */
     public function installSchema(array $requestData)
     {
-        $changeRegistry = $this->changeRegistryFactory->create();
-        $schema = $this->structureFactory->create();
-        $generatedStructure = $this->structureFactory->create();
-        $this->declarationParser->parse($schema);
-        $this->generatedParser->parse($generatedStructure);
-        $this->schemaDiff->diff($schema, $generatedStructure, $changeRegistry);
-        $changeRegistry->registerSchema($schema);
-        $changeRegistry->registerInstallationRequest(
+        $declarativeSchema = $this->schemaConfig->getDeclarationConfig();
+        $dbSchema = $this->schemaConfig->getDbConfig();
+        $diff = $this->schemaDiff->diff($declarativeSchema, $dbSchema);
+        $diff->registerSchema($declarativeSchema);
+        $diff->registerInstallationRequest(
             $this->requestFactory->create($requestData)
         );
-        $this->operationsExecutor->execute($changeRegistry);
+        $this->operationsExecutor->execute($diff);
     }
 }

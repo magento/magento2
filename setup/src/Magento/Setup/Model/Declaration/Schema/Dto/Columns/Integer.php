@@ -18,7 +18,8 @@ class Integer extends Column implements
     ElementDiffAwareInterface,
     ColumnUnsignedAwareInterface,
     ColumnNullableAwareInterface,
-    ColumnIdentityAwareInterface
+    ColumnIdentityAwareInterface,
+    ColumnDefaultAwareInterface
 {
     /**
      * @var bool

@@ -48,6 +48,7 @@ class Timestamp implements FactoryInterface
         $this->className = $className;
         $this->booleanUtils = $booleanUtils;
     }
+
     /**
      * Change on_update and default params
      *

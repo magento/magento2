@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 
 /**
@@ -48,6 +49,23 @@ class TableDiff
     }
 
     /**
+     * As SQL engine can automatically create indexes for foreign keys in order to speedup selection
+     * and we do not have this keys in declaration - we need to ignore them
+     *
+     * @param Table $table
+     * @param Index[] $indexes
+     * @return Index[]
+     */
+    private function excludeAutoIndexes(Table $table, array $indexes)
+    {
+        foreach ($table->getReferenceConstraints() as $constraint) {
+            unset($indexes[$constraint->getName()]);
+        }
+
+        return $indexes;
+    }
+
+    /**
      * @param Table | ElementInterface $declaredTable
      * @param Table | ElementInterface $generatedTable
      * @param Diff $changeRegistry
@@ -63,6 +81,10 @@ class TableDiff
         foreach ($types as $elementType) {
             $generatedElements = $generatedTable->getElementsByType($elementType);
             $declaredElements = $declaredTable->getElementsByType($elementType);
+
+            if ($elementType === self::INDEX_DIFF_TYPE) {
+                $generatedElements = $this->excludeAutoIndexes($generatedTable, $generatedElements);
+            }
 
             foreach ($declaredElements as $element) {
                 //If it is new for generated (generated from db) elements - we need to create it

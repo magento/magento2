@@ -16,7 +16,8 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
  */
 class Varchar extends Column implements
     ElementDiffAwareInterface,
-    ColumnNullableAwareInterface
+    ColumnNullableAwareInterface,
+    ColumnDefaultAwareInterface
 {
     /**
      * @var bool

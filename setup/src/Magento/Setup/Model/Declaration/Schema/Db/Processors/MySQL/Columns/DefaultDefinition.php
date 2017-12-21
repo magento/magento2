@@ -7,23 +7,41 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns;
 
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Columns\ColumnDefaultAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * On update attribute is like trigger and can be used for many different columns
+ * Cast from and to default definitions
  *
  * @inheritdoc
  */
-class Default implements DbSchemaProcessorInterface
+class DefaultDefinition implements DbSchemaProcessorInterface
 {
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp $element
+     * @param ColumnDefaultAwareInterface $element
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $element)
     {
-        return $element->getOnUpdate() ?
-            'ON UPDATE CURRENT_TIMESTAMP' : '';
+        return $element->getDefault() !== null && $element->getDefault() !== '' ?
+            sprintf('DEFAULT %s', $this->defaultStringify($element->getDefault())) : '';
+    }
+
+    /**
+     * Stringify default before we will collect definition
+     *
+     * @param mixed $default
+     * @return string
+     */
+    private function defaultStringify($default)
+    {
+        if ($default === true) {
+            $default = 'TRUE';
+        } elseif ($default === false) {
+            $default = 'FALSE';
+        }
+
+        return $default;
     }
 
     /**
@@ -39,11 +57,6 @@ class Default implements DbSchemaProcessorInterface
      */
     public function fromDefinition(array $data)
     {
-        $matches = [];
-        if (preg_match('/^(?:on update)\s([\_\-\s\w\d]+)/', $data['extra'], $matches)) {
-            $data['on_update'] = $matches[1];
-        }
-
         return $data;
     }
 }

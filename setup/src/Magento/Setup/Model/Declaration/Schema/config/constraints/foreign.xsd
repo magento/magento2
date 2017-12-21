@@ -30,11 +30,9 @@
     
     <xs:simpleType name="referenceOptionsType">
         <xs:restriction base="xs:string">
-            <xs:enumeration value="RESTRICT" />
             <xs:enumeration value="CASCADE" />
             <xs:enumeration value="SET NULL" />
             <xs:enumeration value="NO ACTION" />
-            <xs:enumeration value="SET DEFAULT" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

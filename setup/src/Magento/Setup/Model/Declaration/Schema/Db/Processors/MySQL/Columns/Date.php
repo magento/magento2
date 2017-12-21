@@ -7,7 +7,6 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns;
 
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
-use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Date;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
@@ -15,35 +14,14 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  *
  * @inheritdoc
  */
-class Timestamp implements DbSchemaProcessorInterface
+class Date implements DbSchemaProcessorInterface
 {
-    /**
-     * @var OnUpdate
-     */
-    private $onUpdate;
-
-    /**
-     * @var DefaultDefinition
-     */
-    private $defaultDefinition;
-
-    /**
-     * @param OnUpdate $onUpdate
-     * @param DefaultDefinition $defaultDefinition
-     */
-    public function __construct(OnUpdate $onUpdate, DefaultDefinition $defaultDefinition)
-    {
-        $this->onUpdate = $onUpdate;
-        $this->defaultDefinition = $defaultDefinition;
-    }
-
     /**
      * @inheritdoc
      */
     public function canBeApplied(ElementInterface $element)
     {
-        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp ||
-            $element instanceof Date;
+        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Date;
     }
 
     /**
@@ -53,10 +31,8 @@ class Timestamp implements DbSchemaProcessorInterface
     public function toDefinition(ElementInterface $element)
     {
         return sprintf(
-            '%s %s %s',
-            $element->getType(),
-            $this->defaultDefinition->toDefinition($element),
-            $this->onUpdate->toDefinition($element)
+            '%s',
+            $element->getType()
         );
     }
 
@@ -65,12 +41,6 @@ class Timestamp implements DbSchemaProcessorInterface
      */
     public function fromDefinition(array $data)
     {
-        $matches = [];
-        if (preg_match('/^(timestamp|datetime)/', $data['type'], $matches)) {
-            $data['type'] = $matches[1];
-            $data = $this->onUpdate->fromDefinition($data);
-        }
-
         return $data;
     }
 }

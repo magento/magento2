@@ -18,7 +18,20 @@
 
         <xs:attributeGroup ref="baseColumn" />
         <xs:attribute name="default" type="xs:integer" />
-        <xs:attribute name="padding" type="xs:integer" />
+        <xs:attribute name="padding">
+            <xs:annotation>
+                <xs:documentation>
+                    We can use padding only from 2, because padding 1 used for boolean type.
+                    And we need to distinguish boolean and integer
+                </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:integer">
+                    <xs:maxInclusive value="255" />
+                    <xs:minInclusive value="2" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
         <xs:attribute name="unsigned" type="xs:boolean" />
         <xs:attribute name="identity" type="xs:boolean" />
         <xs:attribute name="nullable" type="xs:boolean" />

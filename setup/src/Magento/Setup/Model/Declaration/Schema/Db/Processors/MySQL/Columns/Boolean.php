@@ -38,11 +38,18 @@ class Boolean implements DbSchemaProcessorInterface
     private $nullable;
 
     /**
-     * @param Nullable $nullable
+     * @var DefaultDefinition
      */
-    public function __construct(Nullable $nullable)
+    private $defaultDefinition;
+
+    /**
+     * @param Nullable $nullable
+     * @param DefaultDefinition $defaultDefinition
+     */
+    public function __construct(Nullable $nullable, DefaultDefinition $defaultDefinition)
     {
         $this->nullable = $nullable;
+        $this->defaultDefinition = $defaultDefinition;
     }
 
     /**
@@ -63,7 +70,7 @@ class Boolean implements DbSchemaProcessorInterface
             '%s %s %s',
             self::TYPE,
             $this->nullable->toDefinition($element),
-            $element->getDefault()
+            $this->defaultDefinition->toDefinition($element)
         );
     }
 
