@@ -17,6 +17,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
+use Magento\Inventory\Model\StockSourceLink;
 
 /**
  * @api
@@ -137,7 +138,7 @@ class StockDataProvider extends DataProvider
         $assignedSourcesData = [];
         foreach ($assignedSources as $assignedSource) {
             $assignedSourcesData[] = [
-                SourceInterface::CODE => $assignedSource->getCode(),
+                StockSourceLink::SOURCE_CODE => $assignedSource->getCode(),
                 SourceInterface::NAME => $assignedSource->getName(),
             ];
         }
