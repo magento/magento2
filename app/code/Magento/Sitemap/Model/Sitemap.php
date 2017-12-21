@@ -273,6 +273,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         /** @var $helper \Magento\Sitemap\Helper\Data */
         $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
+        $this->_storeManager->setCurrentStore($storeId);
 
         $this->addSitemapItem(new DataObject(
             [
