@@ -467,16 +467,6 @@ define([
         },
 
         /**
-         * Search by widget plugin and retrieve it
-         * @return {Object}
-         */
-        getWidgetPluginData: function () {
-            return _.filter(this.config.plugins, function (plugin) {
-                return plugin.name === 'magentowidget';
-            })[0];
-        },
-
-        /**
          * @param {Object} content
          * @return {*}
          */
@@ -627,15 +617,6 @@ define([
          */
         saveContent: function (o) {
             o.content = this.decodeContent(o.content);
-        },
-
-        /**
-         * Return the content stored in the WYSIWYG field
-         * @param {String} id
-         * @return {String}
-         */
-        getContent: function (id) {
-            return id ? this.get(id).getContent() : this.activeEditor().getContent();
         },
 
         /**
