@@ -10,6 +10,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Eav\Model\Entity\AbstractEntity as EavResource;
 
 /**
  * Class BeforeEntitySave
@@ -33,6 +34,12 @@ class BeforeEntitySave implements ObserverInterface
             $entity->validateBeforeSave();
             $entity->beforeSave();
             $entity->setParentId((int)$entity->getParentId());
+            $resource = $entity->getResource();
+            if ($resource instanceof EavResource) {
+                //Because another item might have been loaded/saved before
+                //with different set of attributes.
+                $resource->loadAllAttributes($entity);
+            }
             $entity->getResource()->beforeSave($entity);
         }
     }
