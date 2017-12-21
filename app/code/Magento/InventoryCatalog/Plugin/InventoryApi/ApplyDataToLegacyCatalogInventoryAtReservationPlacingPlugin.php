@@ -52,7 +52,6 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingPlugin
         DefaultStockProviderInterface $defaultStockProvider,
         ApplyDataToLegacyStockItem $applyDataToLegacyStockItem,
         ApplyDataToLegacyStockStatus $applyDataToLegacyStockStatus
-
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->defaultStockProvider = $defaultStockProvider;
