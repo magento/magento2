@@ -63,11 +63,6 @@ QUERY;
         $customerTokenService = ObjectManager::getInstance()
                                ->get(\Magento\Integration\Api\CustomerTokenServiceInterface::class);
         $customerToken = $customerTokenService->createCustomerAccessToken($userName, $password);
-
-       // $headerMap = [
-    //        'Authorization' => 'Bearer ' . $customerToken,
-     //       'Store code' => 1
-     //   ];
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         /** @var CustomerRepositoryInterface $customerRepository */
         $customerRepository = ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
