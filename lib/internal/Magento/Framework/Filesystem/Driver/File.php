@@ -528,7 +528,7 @@ class File implements DriverInterface
     public function filePutContents($path, $content, $mode = null)
     {
         $result = @file_put_contents($this->getScheme() . $path, $content, $mode);
-        if (!$result) {
+        if ($result === false) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
                     'The specified "%1" file could not be written %2',

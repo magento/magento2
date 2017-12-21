@@ -10,6 +10,7 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Setup\Test\Block\SelectVersion\OtherComponentsGrid;
 
 /**
  * Select version block.
@@ -36,6 +37,13 @@ class SelectVersion extends Form
      * @var string
      */
     private $showAllVersions = '#showUnstable';
+
+    /**
+     * CSS selector for Other Components Grid Block.
+     *
+     * @var string
+     */
+    private $otherComponentsGrid = '.admin__data-grid-wrap[ng-show="componentsProcessed"]';
 
     /**
      * Click on 'Next' button.
@@ -76,13 +84,28 @@ class SelectVersion extends Form
     }
 
     /**
-     * Choose 'yes' for upgrade option called 'Other components'
+     * Choose 'yes' for upgrade option called 'Other components'.
      *
+     * @param array $packages
      * @return void
      */
-    public function chooseUpgradeOtherComponents()
+    public function chooseUpgradeOtherComponents(array $packages)
     {
-        $this->_rootElement->find("[for=yesUpdateComponents]", Locator::SELECTOR_CSS)->click();
-        $this->waitForElementVisible("[ng-show='componentsProcessed']");
+        $this->_rootElement->find("[for=yesUpdateComponents]")->click();
+        $this->waitForElementNotVisible("[ng-show=\"!componentsProcessed\"");
+        $this->getOtherComponentsGrid()->setVersions($packages);
+    }
+
+    /**
+     * Get grid block for other components.
+     *
+     * @return OtherComponentsGrid
+     */
+    private function getOtherComponentsGrid()
+    {
+        return $this->blockFactory->create(
+            OtherComponentsGrid::class,
+            ['element' => $this->_rootElement->find($this->otherComponentsGrid)]
+        );
     }
 }
