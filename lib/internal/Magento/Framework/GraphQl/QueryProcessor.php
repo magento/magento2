@@ -11,10 +11,10 @@ use Magento\Framework\GraphQl\Type\Schema;
 /**
  * Wrapper for GraphQl execution of a schema
  */
-class RequestProcessor
+class QueryProcessor
 {
     /**
-     * Processes a GraphQl request according to defined schema
+     * Process a GraphQl query according to defined schema
      *
      * @param Schema $schema
      * @param string $source
