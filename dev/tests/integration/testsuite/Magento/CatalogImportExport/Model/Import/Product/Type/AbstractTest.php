@@ -225,6 +225,60 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
                     'price' => 10,
                 ],
             ],
+            [
+                [
+                    'sku' => '',
+                    'store_view_code' => 'German',
+                    '_attribute_set' => 'Default',
+                    'product_type' => '',
+                    'name' => 'Simple 01 German',
+                    'price' => 0,
+                ],
+                [
+                    'sku' => '',
+                    'store_view_code' => 'German',
+                    '_attribute_set' => 'Default',
+                    'product_type' => '',
+                    'name' => 'Simple 01 German',
+                    'price' => 0,
+                ],
+            ],
+            [
+                [
+                    'sku' => '',
+                    'store_view_code' => 'German',
+                    '_attribute_set' => 'Default',
+                    'product_type' => '',
+                    'name' => 'Simple 01 German',
+                    'weight' => '',
+                ],
+                [
+                    'sku' => '',
+                    'store_view_code' => 'German',
+                    '_attribute_set' => 'Default',
+                    'product_type' => '',
+                    'name' => 'Simple 01 German',
+                    'weight' => '',
+                ],
+            ],
+            [
+                [
+                    'sku' => '',
+                    'store_view_code' => 'German',
+                    '_attribute_set' => 'Default',
+                    'product_type' => '',
+                    'name' => 'Simple 01 German',
+                    'description' => '',
+                ],
+                [
+                    'sku' => '',
+                    'store_view_code' => 'German',
+                    '_attribute_set' => 'Default',
+                    'product_type' => '',
+                    'name' => 'Simple 01 German',
+                    'description' => '',
+                ],
+            ],
         ];
     }
 }
