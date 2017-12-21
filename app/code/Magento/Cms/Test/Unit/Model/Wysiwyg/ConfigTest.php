@@ -67,6 +67,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $filesystemMock;
 
     /**
+     * @var \Magento\Cms\Model\Wysiwyg\CompositeConfigProvider
+     */
+    private $configProvider;
+
+    /**
      * @var array
      */
     protected $windowSize = [];
@@ -105,8 +110,28 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'width' => 1200,
             'height' => 800,
         ];
-
+        $defaultConfigProvider = new \Magento\Cms\Model\WysiwygDefaultConfig();
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $configProviderFactory = $this->getMockBuilder(\Magento\Cms\Model\Wysiwyg\ConfigProviderFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $configProviderFactory->expects($this->any())->method('create')->willReturn($defaultConfigProvider);
+        $this->configProvider = $this->getMockBuilder(\Magento\Cms\Model\Wysiwyg\CompositeConfigProvider::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs(
+                [
+                    'activeEditor' => $this->getMockBuilder(\Magento\Ui\Block\Wysiwyg\ActiveEditor::class)
+                        ->disableOriginalConstructor()->getMock(),
+                    'configProviderFactory' => $configProviderFactory,
+                    'variablePluginConfigProvider' => [],
+                    'widgetPluginConfigProvider' => [],
+                    'wysiwygConfigPostProcessor' => ['default' => \Magento\Cms\Model\WysiwygDefaultConfig::class],
+
+                ]
+            )
+            ->setMethods(['processVariableConfig', 'processWidgetConfig'])
+            ->getMock();
+
         $this->wysiwygConfig = $objectManager->getObject(
             \Magento\Cms\Model\Wysiwyg\Config::class,
             [
@@ -119,6 +144,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'windowSize' => $this->windowSize,
                 'storeManager' => $this->storeManagerMock,
                 'filesystem' => $this->filesystemMock,
+                'configProvider' => $this->configProvider
             ]
         );
     }
@@ -165,11 +191,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('isAllowed')
             ->with('Magento_Cms::media_gallery')
             ->willReturn($isAuthorizationAllowed);
-        $this->variableConfigMock->expects($this->any())
-            ->method('getWysiwygPluginSettings')
+        $this->configProvider->expects($this->any())
+            ->method('processVariableConfig')
             ->willReturn($wysiwygPluginSettings);
-        $this->widgetConfigMock->expects($this->any())
-            ->method('getPluginSettings')
+        $this->configProvider->expects($this->any())
+            ->method('processWidgetConfig')
             ->willReturn($pluginSettings);
 
         $config = $this->wysiwygConfig->getConfig($data);

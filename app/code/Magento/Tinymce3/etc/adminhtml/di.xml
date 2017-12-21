@@ -22,13 +22,7 @@
             <argument name="pool" xsi:type="object">UiModifierPool</argument>
         </arguments>
     </type>
-    <type name="Magento\Cms\Model\Wysiwyg\Config">
-        <plugin name="add_tmce3_css" type="Magento\Tinymce3\Model\Plugin\Wysiwyg\Config" sortOrder="10" />
-    </type>
     <type name="Magento\Cms\Model\Config\Source\Wysiwyg\Editor">
         <plugin name="change_tinymce_label" type="Magento\Tinymce3\Model\Config\Source\Wysiwyg\EditorPlugin" />
-    </type>
-    <type name="Magento\Variable\Model\Variable\Config">
-        <plugin name="change_variable_plugin" type="Magento\Tinymce3\Model\Plugin\Variable\Config" />
     </type>
 </config>

@@ -43,7 +43,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $config = $this->_model->getConfig();
         $publicPathPattern = 'http://localhost/pub/static/%s/adminhtml/Magento/backend/en_US/mage/%s';
-        $this->assertStringMatchesFormat($publicPathPattern, $config->getPopupCss());
         $this->assertStringMatchesFormat($publicPathPattern, $config->getContentCss());
     }
 

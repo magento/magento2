@@ -8,7 +8,7 @@ namespace Magento\Widget\Model\Widget;
 /**
  * Widgets Insertion Plugin Config for Editor HTML Element
  */
-class Config
+class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
@@ -46,6 +46,18 @@ class Config
     private $registry;
 
     /**
+     * List of postProcessors by adapter type
+     *
+     * @var array
+     */
+    private $postProcessors;
+
+    /**
+     * @var \Magento\Ui\Block\Wysiwyg\ActiveEditor
+     */
+    private $activeEditor;
+
+    /**
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
@@ -59,7 +71,9 @@ class Config
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Widget\Model\WidgetFactory $widgetFactory,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\Framework\Registry $registry
+        \Magento\Framework\Registry $registry,
+        \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor,
+        array $postProcessors = []
     ) {
         $this->_backendUrl = $backendUrl;
         $this->urlDecoder = $urlDecoder;
@@ -67,6 +81,8 @@ class Config
         $this->_widgetFactory = $widgetFactory;
         $this->urlEncoder = $urlEncoder;
         $this->registry = $registry;
+        $this->postProcessors = $postProcessors;
+        $this->activeEditor = $activeEditor;
     }
 
     /**
@@ -75,7 +91,7 @@ class Config
      * @param \Magento\Framework\DataObject $config
      * @return array
      */
-    public function getPluginSettings($config)
+    public function getConfig($config)
     {
         $url = $this->_assetRepo->getUrl(
             'mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js'
@@ -91,6 +107,12 @@ class Config
             'widget_error_image_url' => $errorImageUrl
         ];
 
+        $adapterType = $this->activeEditor->getWysiwygAdapterPath();
+
+        //Extension point to update plugin settings by adapter type
+        if (isset($this->postProcessors[$adapterType])) {
+            $settings = $this->postProcessors[$adapterType]->process($settings);
+        }
         return $settings;
     }
 
@@ -175,5 +197,18 @@ class Config
     protected function _getSkippedWidgets()
     {
         return $this->registry->registry('skip_widgets');
+    }
+
+    /**
+     * @param array $config
+     * @return array
+     */
+    private function updateConfig($config)
+    {
+        $adapterType = $this->activeEditor->getWysiwygAdapterPath();
+        if (isset($this->postProcessors[$adapterType])) {
+            $config = $this->postProcessors[$adapterType]->process($config);
+        }
+        return $config;
     }
 }

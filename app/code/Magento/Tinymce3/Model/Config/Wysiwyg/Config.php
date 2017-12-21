@@ -3,9 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Tinymce3\Model\Plugin\Wysiwyg;
+namespace Magento\Tinymce3\Model\Config\Wysiwyg;
 
-class Config
+class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
@@ -21,16 +21,11 @@ class Config
     }
 
     /**
-     * @param \Magento\Cms\Model\Wysiwyg\Config $subject
      * @param \Magento\Framework\DataObject $config
      * @return \Magento\Framework\DataObject
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetConfig(
-        \Magento\Cms\Model\Wysiwyg\Config $subject,
-        \Magento\Framework\DataObject $config
-    ) {
+    public function getConfig($config)
+    {
         $config->addData([
             'popup_css' => $this->assetRepo->getUrl(
                 'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/dialog.css'
