@@ -227,7 +227,7 @@ class Save extends Attribute
             if ($data['frontend_input'] === 'texteditor') {
                 $data['is_wysiwyg_enabled'] = 1;
                 $data['frontend_input'] = 'textarea';
-            } elseif ($data['frontend_input'] === 'texteditor') {
+            } elseif ($data['frontend_input'] === 'textarea') {
                 $data['is_wysiwyg_enabled'] = 0;
             }
 
