@@ -5,6 +5,8 @@
  */
 namespace Magento\Tinymce3\Model\Plugin\Widget;
 
+use Magento\Tinymce3\Model\Config\Source\Wysiwyg\Editor;
+
 class Config
 {
     /**
@@ -39,7 +41,7 @@ class Config
         \Magento\Widget\Model\Widget\Config $subject,
         $result
     ) {
-        if ($this->activeEditor->getWysiwygAdapterPath() === 'Magento_Tinymce3/tinymce3Adapter') {
+        if ($this->activeEditor->getWysiwygAdapterPath() === Editor::WYSIWYG_EDITOR_CONFIG_VALUE) {
             $magento_widget_plugin_arr_index = array_search('magentowidget', array_column($result['plugins'], 'name'));
 
             if ($magento_widget_plugin_arr_index !== false) {
@@ -68,7 +70,7 @@ class Config
         \Magento\Widget\Model\Widget\Config $subject,
         $result
     ) {
-        if ($this->activeEditor->getWysiwygAdapterPath() === 'Magento_Tinymce3/tinymce3Adapter') {
+        if ($this->activeEditor->getWysiwygAdapterPath() === Editor::WYSIWYG_EDITOR_CONFIG_VALUE) {
             $result = $this->getWysiwygJsPluginSrc();
         }
         return $result;

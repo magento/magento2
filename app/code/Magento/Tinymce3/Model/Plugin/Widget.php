@@ -5,6 +5,8 @@
  */
 namespace Magento\Tinymce3\Model\Plugin;
 
+use Magento\Tinymce3\Model\Config\Source\Wysiwyg\Editor;
+
 class Widget
 {
     /**
@@ -31,7 +33,7 @@ class Widget
         \Magento\Widget\Model\Widget $subject,
         $result
     ) {
-        if ($this->activeEditor->getWysiwygAdapterPath() === 'Magento_Tinymce3/tinymce3Adapter') {
+        if ($this->activeEditor->getWysiwygAdapterPath() === Editor::WYSIWYG_EDITOR_CONFIG_VALUE) {
             $placeholder_ext_strlen = strlen('.' . pathinfo($result, PATHINFO_EXTENSION));
             $placeholder_sans_ext = substr(
                 $result,

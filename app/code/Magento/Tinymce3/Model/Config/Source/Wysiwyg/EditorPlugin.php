@@ -18,7 +18,7 @@ class EditorPlugin
      */
     public function afterToOptionArray(\Magento\Cms\Model\Config\Source\Wysiwyg\Editor $subject, $optionArray)
     {
-        $optionArray[] = ['value' => 'Magento_Tinymce3/tinymce3Adapter', 'label' => __('TinyMCE 3 (deprecated)')];
+        $optionArray[] = ['value' => Editor::WYSIWYG_EDITOR_CONFIG_VALUE, 'label' => __('TinyMCE 3 (deprecated)')];
 
         return $optionArray;
     }

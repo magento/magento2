@@ -5,11 +5,25 @@
  */
 namespace Magento\Tinymce3\Ui\DataProvider\Category\Form\Modifier;
 
+use Magento\Tinymce3\Model\Config\Source\Wysiwyg\Editor;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
-use Magento\Ui\DataProvider\Modifier\WysiwygModifierInterface;
 
 class WysiwygConfigModifier implements ModifierInterface
 {
+    /**
+     * @var \Magento\Ui\Block\Wysiwyg\ActiveEditor
+     */
+    private $activeEditor;
+
+    /**
+     * @param \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor
+     */
+    public function __construct(
+        \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor
+    ) {
+        $this->activeEditor = $activeEditor;
+    }
+
     /**
      * @param array $data
      * @return array
@@ -25,14 +39,16 @@ class WysiwygConfigModifier implements ModifierInterface
      */
     public function modifyMeta(array $meta)
     {
-        $tinymceThreeSettings = [
-            'add_variables' => false,
-            'add_widgets' => false,
-            'add_directives' => true
-        ];
+        if ($this->activeEditor->getWysiwygAdapterPath() === Editor::WYSIWYG_EDITOR_CONFIG_VALUE) {
+            $tinymceThreeSettings = [
+                'add_variables' => false,
+                'add_widgets' => false,
+                'add_directives' => true
+            ];
 
-        $meta['content']['children']['description']['arguments']['data']['config']['wysiwygConfigData']
-            = $tinymceThreeSettings;
+            $meta['content']['children']['description']['arguments']['data']['config']['wysiwygConfigData']
+                = $tinymceThreeSettings;
+        }
 
         return $meta;
     }
