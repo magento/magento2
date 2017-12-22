@@ -21,7 +21,7 @@ use Magento\InventoryApi\Api\Data\ReservationInterface;
  *
  * @api
  */
-interface ReservationsAppendInterface
+interface AppendReservationsInterface
 {
     /**
      * Append reservations

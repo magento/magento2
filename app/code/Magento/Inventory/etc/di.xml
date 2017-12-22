@@ -111,7 +111,7 @@
     <!-- Reservation -->
     <preference for="Magento\InventoryApi\Api\GetProductQuantityInStockInterface" type="Magento\Inventory\Model\GetProductQuantityInStock"/>
     <preference for="Magento\InventoryApi\Api\IsProductInStockInterface" type="Magento\Inventory\Model\IsProductInStock"/>
-    <preference for="Magento\InventoryApi\Api\ReservationsAppendInterface" type="Magento\Inventory\Model\Reservation\Command\ReservationsAppend"/>
+    <preference for="Magento\InventoryApi\Api\AppendReservationsInterface" type="Magento\Inventory\Model\Reservation\Command\AppendReservations"/>
     <preference for="Magento\InventoryApi\Api\ReservationBuilderInterface" type="Magento\Inventory\Model\Reservation\ReservationBuilder"/>
     <preference for="Magento\InventoryApi\Api\Data\ReservationInterface" type="Magento\Inventory\Model\Reservation"/>
     <preference for="Magento\Inventory\Model\ReservationCleanupInterface" type="Magento\Inventory\Model\ResourceModel\Reservation\ReservationCleanup"/>

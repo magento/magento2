@@ -13,7 +13,7 @@ use Magento\Inventory\Model\ReservationCleanupInterface;
 use Magento\Inventory\Test\Integration\Indexer\RemoveIndexData;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
-use Magento\InventoryApi\Api\ReservationsAppendInterface;
+use Magento\InventoryApi\Api\AppendReservationsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -30,9 +30,9 @@ class GetProductQuantityInStockTest extends TestCase
     private $reservationBuilder;
 
     /**
-     * @var ReservationsAppendInterface
+     * @var AppendReservationsInterface
      */
-    private $reservationsAppend;
+    private $appendReservations;
 
     /**
      * @var ReservationCleanupInterface
@@ -55,7 +55,7 @@ class GetProductQuantityInStockTest extends TestCase
         $this->indexer->load(StockIndexer::INDEXER_ID);
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
-        $this->reservationsAppend = Bootstrap::getObjectManager()->get(ReservationsAppendInterface::class);
+        $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
         $this->reservationCleanup = Bootstrap::getObjectManager()->create(ReservationCleanupInterface::class);
 
         $this->getProductQtyInStock = Bootstrap::getObjectManager()->create(
@@ -97,7 +97,7 @@ class GetProductQuantityInStockTest extends TestCase
     {
         $this->indexer->reindexRow(10);
 
-        $this->reservationsAppend->execute([
+        $this->appendReservations->execute([
             // emulate order placement reserve 5 units)
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(-5)->build(),
             // emulate partial order canceling (1.5 units)
@@ -105,7 +105,7 @@ class GetProductQuantityInStockTest extends TestCase
         ]);
         self::assertEquals(5, $this->getProductQtyInStock->execute('SKU-1', 10));
 
-        $this->reservationsAppend->execute([
+        $this->appendReservations->execute([
             // unreserved 3.5 units for cleanup
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(3.5)->build(),
         ]);
