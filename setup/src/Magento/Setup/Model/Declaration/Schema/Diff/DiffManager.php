@@ -64,6 +64,7 @@ class DiffManager
      * @param DiffInterface $diff
      * @param ElementInterface $element
      * @param ElementInterface $generatedElement
+     * @return DiffInterface
      */
     public function registerModification(
         DiffInterface $diff,
@@ -75,6 +76,7 @@ class DiffManager
             ModifyElement::OPERATION_NAME,
             $generatedElement
         );
+        return $diff;
     }
 
     /**
@@ -84,6 +86,7 @@ class DiffManager
      * @param DiffInterface $diff
      * @param ElementInterface[] $generatedElements
      * @param ElementInterface[] $elements
+     * @return DiffInterface
      */
     public function registerRemoval(
         DiffInterface $diff,
@@ -106,11 +109,14 @@ class DiffManager
                 $operation
             );
         }
+
+        return $diff;
     }
 
     /**
      * @param DiffInterface $diff
      * @param ElementInterface $element
+     * @return DiffInterface
      */
     public function registerCreation(DiffInterface $diff, ElementInterface $element)
     {
@@ -119,6 +125,8 @@ class DiffManager
             $element,
             $operation
         );
+
+        return $diff;
     }
 
     /**

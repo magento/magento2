@@ -68,13 +68,13 @@ class TableDiff
     /**
      * @param Table | ElementInterface $declaredTable
      * @param Table | ElementInterface $generatedTable
-     * @param Diff $changeRegistry
+     * @param Diff $diff
      * @inheritdoc
      */
     public function diff(
         ElementInterface $declaredTable,
         ElementInterface $generatedTable,
-        Diff $changeRegistry
+        Diff $diff
     ) {
         $types = [self::COLUMN_DIFF_TYPE, self::CONSTRAINT_DIFF_TYPE, self::INDEX_DIFF_TYPE];
         //We do inspection for each element type
@@ -89,13 +89,13 @@ class TableDiff
             foreach ($declaredElements as $element) {
                 //If it is new for generated (generated from db) elements - we need to create it
                 if ($this->diffManager->shouldBeCreated($generatedElements, $element)) {
-                    $this->diffManager->registerCreation($changeRegistry, $element);
+                    $diff = $this->diffManager->registerCreation($diff, $element);
                 } else if ($this->diffManager->shouldBeModified(
                     $element,
                     $generatedElements[$element->getName()]
                 )) {
-                    $this->diffManager
-                        ->registerModification($changeRegistry, $element, $generatedElements[$element->getName()]);
+                    $diff = $this->diffManager
+                        ->registerModification($diff, $element, $generatedElements[$element->getName()]);
                 }
                 //Unset processed elements from generated from db schema
                 //All other unprocessed elements will be added as removed ones
@@ -104,8 +104,10 @@ class TableDiff
 
             //Elements that should be removed
             if ($this->diffManager->shouldBeRemoved($generatedElements)) {
-                $this->diffManager->registerRemoval($changeRegistry, $generatedElements, $declaredElements);
+                $diff = $this->diffManager->registerRemoval($diff, $generatedElements, $declaredElements);
             }
         }
+
+        return $diff;
     }
 }
