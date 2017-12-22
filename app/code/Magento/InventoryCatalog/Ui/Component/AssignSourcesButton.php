@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Ui\Component;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\InventoryApi\Api\Data\StockInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\Ui\Component\Container;
@@ -19,10 +20,17 @@ class AssignSourcesButton extends Container
      */
     private $defaultStockProvider;
 
+    /**
+     * AssignSourcesButton constructor.
+     * @param ContextInterface $context
+     * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param UiComponentInterface[] $components
+     * @param array $data
+     */
     public function __construct(
         ContextInterface $context,
         DefaultStockProviderInterface $defaultStockProvider,
-        $components = [],
+        array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);

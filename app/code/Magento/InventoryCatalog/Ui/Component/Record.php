@@ -20,10 +20,17 @@ class Record extends Container
      */
     private $defaultStockProvider;
 
+    /**
+     * Record constructor.
+     * @param ContextInterface $context
+     * @param DefaultStockProviderInterface $defaultStockProvider
+     * @param UiComponentInterface[] $components
+     * @param array $data
+     */
     public function __construct(
         ContextInterface $context,
         DefaultStockProviderInterface $defaultStockProvider,
-        $components = [],
+        array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
