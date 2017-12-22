@@ -427,13 +427,6 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Catalog\Ui\DataProvider\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool">
-        <arguments>
-            <argument name="modifiers" xsi:type="array">
-                <item name="wysiwygDefaultSettings" xsi:type="object">Magento\Ui\DataProvider\Modifier\Wysiwyg\DefaultWysiwygSettings</item>
-            </argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Ui\Model\UiComponentTypeResolver">
         <arguments>
             <argument name="uiComponentTypeMap" xsi:type="array">

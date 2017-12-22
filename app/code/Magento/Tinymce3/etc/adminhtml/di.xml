@@ -7,16 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Cms\Model\Wysiwyg\Config"/>
-    <virtualType name="UiModifierPool" type="Magento\Ui\DataProvider\Modifier\Pool">
-        <arguments>
-            <argument name="modifiers" xsi:type="array">
-                <item name="wysiwyg-tmce3" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Tinymce3\Ui\DataProvider\Category\Form\Modifier\WysiwygConfigModifier</item>
-                    <item name="sortOrder" xsi:type="number">10</item>
-                </item>
-            </argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Catalog\Model\Category\DataProvider">
         <arguments>
             <argument name="pool" xsi:type="object">UiModifierPool</argument>
