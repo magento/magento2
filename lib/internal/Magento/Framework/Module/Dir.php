@@ -48,7 +48,7 @@ class Dir
         // An empty $type means it's getting the directory of the module itself.
         if (empty($type) && !isset($path)) {
             // Note: do not throw \LogicException, as it would break backwards-compatibility.
-            throw new \InvalidArgumentException("Component '$moduleName' of type '$type' is not correctly registered.");
+            throw new \InvalidArgumentException("Module '$moduleName' is not correctly registered.");
         }
 
         if ($type) {
