@@ -48,15 +48,14 @@ Feature: Product purchase
     And I select "United States" from "country_id"
     And I fill in the following:
       | telephone          | 4166666666      |
-    And I click on the element with xpath "//*[@id='s_method_flatrate_flatrate']"
-
+    And I click on the element with xpath "//*[@id='checkout-shipping-method-load']/table/tbody/tr[1]/td[1]/input"
     And I wait for element with xpath "//*[@id='shipping-method-buttons-container']/div/button" to appear
     And I click on the element with xpath "//*[@id='shipping-method-buttons-container']/div/button"
 
     #Payment
     Then I wait for page to load "/index.php/checkout/#payment"
-    And I wait for element with xpath "//*[@id='checkout-payment-method-load']/div/div/div[2]/div[2]/div[4]/div/button" to appear
-    And I click on the element with xpath "//*[@id='checkout-payment-method-load']/div/div/div[2]/div[2]/div[4]/div/button"
+    And I wait for element with xpath "//*[@id='checkout-payment-method-load']/div/div/div[2]/div[2]/div[4]/div/button/span" to appear
+    And I click on the element with xpath "//*[@id='checkout-payment-method-load']/div/div/div[2]/div[2]/div[4]/div/button/span"
 
     #Success
     Then I wait for page to load "/index.php/checkout/onepage/success/"
