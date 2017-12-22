@@ -45,8 +45,9 @@ class Dir
     {
         $path = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
 
-        if (!isset($path)) {
-            // (Do not throw \LogicException, as it would break backwards-compatibility.)
+        // An empty $type means it's gettind the directory of the module itself.
+        if (empty($type) && !isset($path)) {
+            // Note: do not throw \LogicException, as it would break backwards-compatibility.
             throw new \InvalidArgumentException("Component '$moduleName' of type '$type' is not correctly registered.");
         }
 
