@@ -148,6 +148,8 @@ class Product implements HandlerInterface
                 ]
             ];
 
+        $result['price'] = ProductPrice::PRODUCT_PRICE_TYPE_NAME;
+
         $resolvedTypes = $this->typeGenerator->generate($typeName, $result);
         $fields = $resolvedTypes->config['fields'];
 
