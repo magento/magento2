@@ -5,7 +5,9 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Test class for Catalog attribute resource model.
@@ -25,6 +27,11 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     protected $productResource;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
@@ -38,6 +45,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->productResource = $this->objectManager->get(
             \Magento\Catalog\Model\ResourceModel\Product::class
         );
+        $this->metadataPool = $this->objectManager->get(MetadataPool::class);
     }
 
     /**
@@ -125,11 +133,12 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     private function getProductAttributeValues($attributeId, $productId, $table)
     {
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $connection = $this->productResource->getConnection();
         $select = $connection->select()
             ->from($this->productResource->getTable($table))
             ->where('attribute_id=?', $attributeId)
-            ->where('entity_id=?', $productId);
+            ->where($linkField . '=?', $productId);
 
         return $connection->fetchAll($select);
     }
