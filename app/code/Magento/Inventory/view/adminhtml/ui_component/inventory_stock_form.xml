@@ -72,11 +72,16 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="formElement" xsi:type="string">container</item>
-                    <item name="label" xsi:type="string"/>
                     <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="dataScope" xsi:type="string" />
+                    <item name="label" xsi:type="string" />
                 </item>
             </argument>
             <button name="assign_sources_button" template="ui/form/components/button/container">
+                <settings>
+                    <title translate="true">Assign Sources</title>
+                    <dataScope />
+                </settings>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
@@ -86,7 +91,6 @@
                                 <item name="actionName" xsi:type="string">toggleModal</item>
                             </item>
                         </item>
-                        <item name="title" xsi:type="string" translate="true">Assign Sources</item>
                         <item name="additionalForGroup" xsi:type="boolean">true</item>
                         <item name="additionalClasses" xsi:type="string">admin__field-medium</item>
                     </item>
@@ -123,6 +127,7 @@
                     <item name="config" xsi:type="array">
                         <item name="isTemplate" xsi:type="boolean">true</item>
                         <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="dataScope" xsi:type="string" />
                     </item>
                 </argument>
                 <field name="source_id" formElement="input" sortOrder="10">
