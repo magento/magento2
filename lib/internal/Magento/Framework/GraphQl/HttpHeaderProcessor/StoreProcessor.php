@@ -46,8 +46,6 @@ class StoreProcessor implements HttpHeaderProcessorInterface
             } elseif (strtolower($storeCode) !== 'default') {
                 throw new GraphQlInputException(__('Store code %1 does not exist', $storeCode));
             }
-        } else {
-            throw new GraphQlInputException(__('Store code is empty'));
         }
     }
 }
