@@ -12,7 +12,10 @@ use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\SalesRule\Model\RuleFactory;
 
-class AbstractCouponUses
+/**
+ * Abstract class for plugins that are accounting the coupon uses.
+ */
+abstract class AbstractCouponUses
 {
     /**
      * @var RuleFactory
