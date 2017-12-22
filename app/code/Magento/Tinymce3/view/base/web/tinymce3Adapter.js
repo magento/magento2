@@ -473,15 +473,12 @@ define([
         encodeWidgets: function (content) {
             return content.gsub(/\{\{widget(.*?)\}\}/i, function (match) {
                 var attributes = this.parseAttributesString(match[1]),
-                    imageSrc, imageHtml;
+                    imageSrc,
+                    imageHtml;
 
                 if (attributes.type) {
                     attributes.type = attributes.type.replace(/\\\\/g, '\\');
                     imageSrc = this.config['widget_placeholders'][attributes.type];
-
-                    if (imageSrc !== undefined) {
-                        imageSrc = imageSrc.replace(new RegExp('\.png|\.gif'), '_tinymce3.png');
-                    }
 
                     imageHtml = '<img';
                     imageHtml += ' id="' + Base64.idEncode(match[0]) + '"';
@@ -518,18 +515,12 @@ define([
                 var attributes = this.parseAttributesString(match[1]),
                     widgetCode;
 
-                if (attributes.src.indexOf('_tinymce3.png') === -1) {
-                    attributes.src = attributes.src.replace(new RegExp('\.png|\.gif'), '_tinymce3.png');
-                }
-
                 if (attributes.id) {
                     widgetCode = Base64.idDecode(attributes.id);
 
                     if (widgetCode.indexOf('{{widget') !== -1) {
                         return widgetCode;
                     }
-
-                    return match[0];
                 }
 
                 return match[0];
@@ -618,15 +609,6 @@ define([
          */
         saveContent: function (o) {
             o.content = this.decodeContent(o.content);
-        },
-
-        /**
-         * Return the content stored in the WYSIWYG field
-         * @param {String} id
-         * @return {String}
-         */
-        getContent: function (id) {
-            return id ? this.get(id).getContent() : this.activeEditor().getContent();
         },
 
         /**

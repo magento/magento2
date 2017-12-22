@@ -93,18 +93,23 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
      */
     public function getConfig($config)
     {
-        $url = $this->_assetRepo->getUrl(
-            'mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js'
-        );
+        $widgetWysiwyg = [
+            [
+                'name' => 'magentowidget',
+                'src' => $this->getWysiwygJsPluginSrc(),
+                'options' => [
+                    'window_url' => $this->getWidgetWindowUrl($config),
+                    'types' => $this->getAvailableWidgets($config),
+                    'error_image_url' => $this->getErrorImageUrl()
+                ],
+            ]
+        ];
 
-        $errorImageUrl = $this->_assetRepo->getUrl('Magento_Widget::error.png');
+        $configPlugins = $config->getData('plugins');
 
-        $settings = [
-            'widget_plugin_src' => $url,
+        $widgetConfig = [
+            'plugins' => array_merge($configPlugins, $widgetWysiwyg),
             'widget_placeholders' => $this->_widgetFactory->create()->getPlaceholderImageUrls(),
-            'widget_window_url' => $this->getWidgetWindowUrl($config),
-            'widget_types' => $this->getAvailableWidgets($config),
-            'widget_error_image_url' => $errorImageUrl
         ];
 
         $adapterType = $this->activeEditor->getWysiwygAdapterPath();
@@ -113,7 +118,25 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
         if (isset($this->postProcessors[$adapterType])) {
             $settings = $this->postProcessors[$adapterType]->process($settings);
         }
-        return $settings;
+        return $widgetConfig;
+    }
+
+    /**
+     * Return url to error image
+     * @return string
+     */
+    public function getErrorImageUrl()
+    {
+        return $this->_assetRepo->getUrl('Magento_Widget::error.png');
+    }
+
+    /**
+     * Return url to wysiwyg plugin
+     * @return string
+     */
+    public function getWysiwygJsPluginSrc()
+    {
+        return $this->_assetRepo->getUrl('mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js');
     }
 
     /**
