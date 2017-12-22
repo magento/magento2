@@ -7,6 +7,9 @@ namespace Magento\Tinymce3\Model\Plugin;
 
 use Magento\Tinymce3\Model\Config\Source\Wysiwyg\Editor;
 
+/**
+ * @todo remove this plugin
+ */
 class Widget
 {
     /**

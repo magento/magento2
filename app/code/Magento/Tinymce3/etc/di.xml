@@ -16,6 +16,9 @@
             <argument name="variablePluginConfigPovider" xsi:type="array">
                 <item name="Magento_Tinymce3/tinymce3Adapter" xsi:type="string">Magento\Tinymce3\Model\Config\Variable\Config</item>
             </argument>
+            <argument name="widgetPluginConfigProvider" xsi:type="array">
+                <item name="Magento_Tinymce3/tinymce3Adapter" xsi:type="string">Magento\Tinymce3\Model\Config\Widget\Config</item>
+            </argument>
         </arguments>
     </type>
 </config>

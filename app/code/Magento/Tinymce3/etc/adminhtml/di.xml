@@ -15,9 +15,6 @@
     <type name="Magento\Cms\Model\Config\Source\Wysiwyg\Editor">
         <plugin name="change_tinymce_label" type="Magento\Tinymce3\Model\Config\Source\Wysiwyg\EditorPlugin" />
     </type>
-    <type name="Magento\Widget\Model\Widget\Config">
-        <plugin name="change_widget_plugin" type="Magento\Tinymce3\Model\Plugin\Widget\Config" />
-    </type>
     <type name="Magento\Widget\Model\Widget">
         <plugin name="change_widget_placeholder" type="Magento\Tinymce3\Model\Plugin\Widget" />
     </type>

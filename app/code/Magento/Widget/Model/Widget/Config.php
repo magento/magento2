@@ -111,13 +111,6 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
             'plugins' => array_merge($configPlugins, $widgetWysiwyg),
             'widget_placeholders' => $this->_widgetFactory->create()->getPlaceholderImageUrls(),
         ];
-
-        $adapterType = $this->activeEditor->getWysiwygAdapterPath();
-
-        //Extension point to update plugin settings by adapter type
-        if (isset($this->postProcessors[$adapterType])) {
-            $settings = $this->postProcessors[$adapterType]->process($settings);
-        }
         return $widgetConfig;
     }
 
@@ -220,18 +213,5 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
     protected function _getSkippedWidgets()
     {
         return $this->registry->registry('skip_widgets');
-    }
-
-    /**
-     * @param array $config
-     * @return array
-     */
-    private function updateConfig($config)
-    {
-        $adapterType = $this->activeEditor->getWysiwygAdapterPath();
-        if (isset($this->postProcessors[$adapterType])) {
-            $config = $this->postProcessors[$adapterType]->process($config);
-        }
-        return $config;
     }
 }
