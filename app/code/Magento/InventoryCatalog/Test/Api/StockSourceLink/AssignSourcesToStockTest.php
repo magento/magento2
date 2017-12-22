@@ -29,8 +29,11 @@ class AssignSourcesToStockTest extends WebapiAbstract
      * @throws \Exception
      * @dataProvider dataProviderWrongParameters
      */
-    public function testAssignSourcesToStockWithWrongParameters(array $sourceIds, int $stockId, array $expectedErrorData)
-    {
+    public function testAssignSourcesToStockWithWrongParameters(
+        array $sourceIds,
+        int $stockId,
+        array $expectedErrorData
+    ) {
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_ASSIGN_SOURCES_TO_STOCK . '/' . $stockId,
