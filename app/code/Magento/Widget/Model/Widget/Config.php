@@ -101,9 +101,7 @@ class Config
 
     /**
      * Return url to error image
-     *
      * @return string
-     * @codeCoverageIgnore
      */
     public function getErrorImageUrl()
     {
@@ -112,9 +110,7 @@ class Config
 
     /**
      * Return url to wysiwyg plugin
-     *
      * @return string
-     * @codeCoverageIgnore
      */
     public function getWysiwygJsPluginSrc()
     {
