@@ -56,17 +56,17 @@ class SourceIndexer implements ActionInterface
     /**
      * @inheritdoc
      */
-    public function executeRow($sourceCode)
+    public function executeRow($sourceId)
     {
-        $this->executeList([$sourceCode]);
+        $this->executeList([$sourceId]);
     }
 
     /**
      * @inheritdoc
      */
-    public function executeList(array $sourceCode)
+    public function executeList(array $sourceIds)
     {
-        $stockIds = $this->getAssignedStockIds->execute($sourceCode);
+        $stockIds = $this->getAssignedStockIds->execute($sourceIds);
         $this->stockIndexer->executeList($stockIds);
     }
 }

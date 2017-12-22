@@ -10,6 +10,8 @@ namespace Magento\Inventory\Indexer\Source;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
 use Magento\Inventory\Model\StockSourceLink;
+use Magento\Inventory\Model\ResourceModel\Source;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 
 /**
  * Returns assigned Stock ids by given Source ids
@@ -31,20 +33,35 @@ class GetAssignedStockIds
     }
 
     /**
-     * @param string[] $sourceCodes
+     * @param string[] $sourceIds
      * @return int[]
      */
-    public function execute(array $sourceCodes): array
+    public function execute(array $sourceIds): array
     {
         $connection = $this->resourceConnection->getConnection();
         $sourceStockLinkTable = $this->resourceConnection->getTableName(
             StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK
         );
+        $sourceTable = $this->resourceConnection->getTableName(
+            Source::TABLE_NAME_SOURCE
+        );
 
         $select = $connection
             ->select()
-            ->from($sourceStockLinkTable, StockSourceLink::STOCK_ID)
-            ->where(StockSourceLink::SOURCE_CODE . ' IN (?)', $sourceCodes)
+            ->from(
+                ['sourceStockLink' => $sourceStockLinkTable],
+                StockSourceLink::STOCK_ID
+            )
+            ->joinInner(
+                ['source' => $sourceTable],
+                sprintf(
+                    'sourceStockLink.%s = source.%s',
+                    SourceInterface::CODE,
+                    StockSourceLink::SOURCE_CODE
+                ),
+                []
+            )
+            ->where(SourceInterface::SOURCE_ID . ' IN (?)', $sourceIds)
             ->group(StockSourceLink::STOCK_ID);
 
         $stockIds = $connection->fetchCol($select);
