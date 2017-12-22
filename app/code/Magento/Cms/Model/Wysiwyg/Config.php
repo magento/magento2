@@ -13,6 +13,7 @@ use Magento\Ui\Component\Wysiwyg\ConfigInterface;
  * Wysiwyg Config for Editor HTML Element
  *
  * @api
+ * @deprecated file will be moved to UI module in future release
  * @since 100.0.2
  */
 class Config extends \Magento\Framework\DataObject implements ConfigInterface
@@ -166,23 +167,41 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
             [
                 'enabled' => $this->isEnabled(),
                 'hidden' => $this->isHidden(),
+                'baseStaticUrl' => $this->_assetRepo->getStaticViewFileContext()->getBaseUrl(),
+                'baseStaticDefaultUrl' => str_replace('index.php/', '', $this->_backendUrl->getBaseUrl())
+                    . $this->filesystem->getUri(DirectoryList::STATIC_VIEW) . '/',
+                'directives_url' => $this->_backendUrl->getUrl('cms/wysiwyg/directive'),
                 'use_container' => false,
                 'add_variables' => true,
                 'add_widgets' => true,
                 'no_display' => false,
                 'encode_directives' => true,
-                'baseStaticUrl' => $this->_assetRepo->getStaticViewFileContext()->getBaseUrl(),
-                'baseStaticDefaultUrl' => str_replace('index.php/', '', $this->_backendUrl->getBaseUrl())
-                    . $this->filesystem->getUri(DirectoryList::STATIC_VIEW) . '/',
-                'directives_url' => $this->_backendUrl->getUrl('cms/wysiwyg/directive'),
-                'popup_css' => $this->_assetRepo->getUrl(
-                    'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/dialog.css'
-                ),
-                'content_css' => $this->_assetRepo->getUrl(
-                    'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/content.css'
-                ),
                 'width' => '100%',
                 'height' => '500px',
+                'tinymce4' => [
+                    'toolbar' => 'formatselect | bold italic underline | alignleft aligncenter alignright | '
+                        . 'bullist numlist | link image table charmap',
+                    'plugins' => implode(
+                        ' ',
+                        [
+                            'advlist',
+                            'autolink',
+                            'lists',
+                            'link',
+                            'image',
+                            'charmap',
+                            'media',
+                            'noneditable',
+                            'table',
+                            'contextmenu',
+                            'paste',
+                            'code',
+                            'help',
+                            'table'
+                        ]
+                    ),
+                    'content_css' => $this->_assetRepo->getUrl('mage/adminhtml/wysiwyg/tiny_mce/themes/ui.css')
+                ],
                 'plugins' => [],
             ]
         );
