@@ -14,7 +14,8 @@ define([
             var select = $(this),
                 currentValue = select.find('option:selected').val(),
                 compatibleTypes = config.inputTypes,
-                enabledTypes = [], iterator,
+                enabledTypes = [],
+                iterator,
                 warning = $('<label>')
                     .hide()
                     .text($.mage.__('These changes affect all related products.'))
