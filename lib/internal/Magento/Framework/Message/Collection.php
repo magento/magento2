@@ -37,7 +37,7 @@ class Collection
         }
         // Prevent adding duplicate messages.
         $foundIndex = array_search($message, $this->messages[$message->getType()], false);
-        if (false === $foundIndex){
+        if (false === $foundIndex) {
             $this->messages[$message->getType()][] = $message;
             $this->lastAddedMessage = $message;
         } else {
