@@ -52,6 +52,10 @@
                     <label>Enable WYSIWYG Editor</label>
                     <source_model>Magento\Cms\Model\Config\Source\Wysiwyg\Enabled</source_model>
                 </field>
+                <field id="editor" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>WYSIWYG Editor</label>
+                    <source_model>Magento\Cms\Model\Config\Source\Wysiwyg\Editor</source_model>
+                </field>
             </group>
         </section>
     </system>

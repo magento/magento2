@@ -48,23 +48,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests that config doesn't process incoming already prepared data
-     *
-     * @dataProvider getConfigNoProcessingDataProvider
-     */
-    public function testGetConfigNoProcessing($original)
-    {
-        $config = $this->_model->getConfig($original);
-        $actual = $config->getData();
-        foreach (array_keys($actual) as $key) {
-            if (!isset($original[$key])) {
-                unset($actual[$key]);
-            }
-        }
-        $this->assertEquals($original, $actual);
-    }
-
-    /**
      * @return array
      */
     public function getConfigNoProcessingDataProvider()

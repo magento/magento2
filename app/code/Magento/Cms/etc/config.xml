@@ -20,6 +20,7 @@
         <cms>
             <wysiwyg>
                 <enabled>enabled</enabled>
+                <editor>mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter</editor>
             </wysiwyg>
         </cms>
         <system>
