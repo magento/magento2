@@ -20,6 +20,11 @@ abstract class GraphQlAbstract extends WebapiAbstract
     private $graphQlClient;
 
     /**
+     * @var string
+     */
+    private $token = '';
+
+    /**
      * Perform GraphQL call to the system under test.
      *
      * @see \Magento\TestFramework\TestCase\GraphQl\Client::call()
@@ -28,9 +33,46 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @param string $operationName
      * @return array|int|string|float|bool GraphQL call results
      */
-    public function graphQlQuery(string $query, array $variables = [], string $operationName = '')
+    public function graphQlQuery(
+        string $query,
+        array $variables = [],
+        string $operationName = ''
+    ) {
+        return $this->getGraphQlClient()->postQuery(
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders()
+        );
+    }
+
+    /**
+     * @param string $token
+     * @return void
+     */
+    public function setToken(string $token)
     {
-        return $this->getGraphQlClient()->postQuery($query, $variables, $operationName);
+        $this->token = $token;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function composeHeaders()
+    {
+        $headers = [];
+        if (!empty($this->token)) {
+            $headers = [sprintf('Authorization: Bearer %s', $this->token)];
+        }
+        return $headers;
     }
 
     /**
