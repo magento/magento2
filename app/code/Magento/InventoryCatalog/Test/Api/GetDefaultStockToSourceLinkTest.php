@@ -22,7 +22,7 @@ class GetDefaultStockToSourceLinkTest extends WebapiAbstract
     public function testGetDefaultStockToSourceLink()
     {
         $defaultStockId = 1;
-        $defaultSourceId = 1;
+        $defaultSourceCode = 'default';
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/inventory/stock/get-assigned-sources/' . $defaultStockId,
@@ -38,6 +38,6 @@ class GetDefaultStockToSourceLinkTest extends WebapiAbstract
         } else {
             $source = $this->_webApiCall($serviceInfo, ['stockId' => $defaultStockId]);
         }
-        $this->assertEquals([$defaultSourceId], array_column($source, SourceInterface::SOURCE_ID));
+        $this->assertEquals([$defaultSourceCode], array_column($source, SourceInterface::CODE));
     }
 }

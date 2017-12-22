@@ -21,10 +21,10 @@ class GetDefaultSourceTest extends WebapiAbstract
      */
     public function testGetDefaultSource()
     {
-        $defaultSourceId = 1;
+        $defaultSourceCode = 'default';
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/inventory/source/' . $defaultSourceId,
+                'resourcePath' => '/V1/inventory/source/' . $defaultSourceCode,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -35,8 +35,8 @@ class GetDefaultSourceTest extends WebapiAbstract
         if (self::ADAPTER_REST == TESTS_WEB_API_ADAPTER) {
             $source = $this->_webApiCall($serviceInfo);
         } else {
-            $source = $this->_webApiCall($serviceInfo, ['sourceId' => $defaultSourceId]);
+            $source = $this->_webApiCall($serviceInfo, ['sourceCode' => $defaultSourceCode]);
         }
-        $this->assertEquals($defaultSourceId, $source[SourceInterface::SOURCE_ID]);
+        $this->assertEquals($defaultSourceCode, $source[SourceInterface::CODE]);
     }
 }
