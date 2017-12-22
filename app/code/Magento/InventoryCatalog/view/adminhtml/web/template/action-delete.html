@@ -6,8 +6,8 @@
 -->
 <button class="action-delete"
         attr="{'data-action': 'remove_row'}"
-        disabled="disabled"
         data-bind="
+            disable: disabled,
             click: $data.deleteRecord.bind($data, $record().index, $record().recordId),
             attr: {
                 title: $parent.deleteButtonLabel
