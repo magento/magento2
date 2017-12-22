@@ -50,6 +50,7 @@ class OnePageCheckoutOfflinePaymentMethodsTest extends Scenario
      */
     public function test()
     {
+        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/333');
         $this->executeScenario();
     }
 }

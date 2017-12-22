@@ -32,11 +32,11 @@ class SalesChannelManagementTest extends WebapiAbstract
         $salesChannels = [
             [
                 SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                SalesChannelInterface::CODE => 'test_0',
+                SalesChannelInterface::CODE => 'eu_website',
             ],
             [
                 SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                SalesChannelInterface::CODE => 'test_1',
+                SalesChannelInterface::CODE => 'us_website',
             ],
         ];
         $stockData = [
@@ -90,11 +90,11 @@ class SalesChannelManagementTest extends WebapiAbstract
                 [
                     [
                         SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                        SalesChannelInterface::CODE => 'test_1',
+                        SalesChannelInterface::CODE => 'us_website',
                     ],
                     [
                         SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                        SalesChannelInterface::CODE => 'test_2',
+                        SalesChannelInterface::CODE => 'global_website',
                     ],
                 ],
             ],

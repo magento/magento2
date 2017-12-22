@@ -35,9 +35,6 @@ class SourceItemIndexerTest extends TestCase
      */
     private $getSourceItemId;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         $this->indexer = Bootstrap::getObjectManager()->get(IndexerInterface::class);
@@ -52,10 +49,7 @@ class SourceItemIndexerTest extends TestCase
         $this->getSourceItemId = Bootstrap::getObjectManager()->get(GetSourceItemId::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function tearDown()
+    protected function tearDown()
     {
         $this->removeIndexData->execute([10, 20, 30]);
     }
@@ -112,5 +106,19 @@ class SourceItemIndexerTest extends TestCase
 
         self::assertEquals(5, $this->getProductQuantityInStock->execute('SKU-2', 20));
         self::assertEquals(5, $this->getProductQuantityInStock->execute('SKU-2', 30));
+    }
+
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stocks.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock_source_link.php
+     */
+    public function testStockItemsHasZeroQuantityIfSourceItemsAreOutOfStock()
+    {
+        $this->indexer->reindexAll();
+
+        self::assertEquals(0, $this->getProductQuantityInStock->execute('SKU-3', 10));
     }
 }

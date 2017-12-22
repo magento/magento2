@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\InventoryCatalog\Plugin\CatalogInventory;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResourceModel;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -18,12 +17,13 @@ use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 
 /**
  * Class provides around Plugin on \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::save
  * to update data in Inventory source item based on legacy Stock Item data
  */
-class UpdateSourceItemAtLegacyStockSettingPlugin
+class UpdateSourceItemAtLegacyStockItemSavePlugin
 {
     /**
      * @var SourceItemRepositoryInterface
@@ -51,14 +51,14 @@ class UpdateSourceItemAtLegacyStockSettingPlugin
     private $defaultSourceProvider;
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
+
+    /**
+     * @var GetSkusByProductIdsInterface
+     */
+    private $getSkusByProductIds;
 
     /**
      * @param SourceItemRepositoryInterface $sourceItemRepository
@@ -66,8 +66,8 @@ class UpdateSourceItemAtLegacyStockSettingPlugin
      * @param SourceItemInterfaceFactory $sourceItemFactory
      * @param SourceItemsSaveInterface $sourceItemsSave
      * @param DefaultSourceProviderInterface $defaultSourceProvider
-     * @param ProductRepositoryInterface $productRepository
      * @param ResourceConnection $resourceConnection
+     * @param GetSkusByProductIdsInterface $getSkusByProductIds
      */
     public function __construct(
         SourceItemRepositoryInterface $sourceItemRepository,
@@ -75,16 +75,16 @@ class UpdateSourceItemAtLegacyStockSettingPlugin
         SourceItemInterfaceFactory $sourceItemFactory,
         SourceItemsSaveInterface $sourceItemsSave,
         DefaultSourceProviderInterface $defaultSourceProvider,
-        ProductRepositoryInterface $productRepository,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        GetSkusByProductIdsInterface $getSkusByProductIds
     ) {
         $this->sourceItemRepository = $sourceItemRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->sourceItemFactory = $sourceItemFactory;
         $this->sourceItemsSave = $sourceItemsSave;
         $this->defaultSourceProvider = $defaultSourceProvider;
-        $this->productRepository = $productRepository;
         $this->resourceConnection = $resourceConnection;
+        $this->getSkusByProductIds = $getSkusByProductIds;
     }
 
     /**
@@ -119,10 +119,11 @@ class UpdateSourceItemAtLegacyStockSettingPlugin
      */
     private function updateSourceItemBasedOnLegacyStockItem(Item $legacyStockItem)
     {
-        $product = $this->productRepository->getById($legacyStockItem->getProductId());
+        $productSku = $this->getSkusByProductIds
+            ->execute([$legacyStockItem->getProductId()])[$legacyStockItem->getProductId()];
 
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceItemInterface::SKU, $product->getSku())
+            ->addFilter(SourceItemInterface::SKU, $productSku)
             ->addFilter(SourceItemInterface::SOURCE_ID, $this->defaultSourceProvider->getId())
             ->create();
         $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
@@ -132,7 +133,7 @@ class UpdateSourceItemAtLegacyStockSettingPlugin
             /** @var SourceItemInterface $sourceItem */
             $sourceItem = $this->sourceItemFactory->create();
             $sourceItem->setSourceId($this->defaultSourceProvider->getId());
-            $sourceItem->setSku($product->getSku());
+            $sourceItem->setSku($productSku);
         }
 
         $sourceItem->setQuantity((float)$legacyStockItem->getQty());
