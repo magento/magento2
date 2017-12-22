@@ -40,11 +40,11 @@ class PreventAssignSourcesToDefaultStockPlugin
      * @throws InputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(AssignSourcesToStockInterface $subject, array $sourceIds, int $stockId)
+    public function beforeExecute(AssignSourcesToStockInterface $subject, array $sourceCodes, int $stockId)
     {
-        if ($this->defaultStockProvider->getId() !== $stockId
-            || (1 == count($sourceIds) && $this->defaultSourceProvider->getId() == $sourceIds[0])) {
-            return [$sourceIds, $stockId];
+        if ($this->defaultStockProvider->getId() === $stockId
+            && (1 === count($sourceCodes) && $this->defaultSourceProvider->getCode() === $sourceCodes[0])) {
+            return [$sourceCodes, $stockId];
         }
 
         throw new InputException(__('You can only assign Default Source to Default Stock'));
