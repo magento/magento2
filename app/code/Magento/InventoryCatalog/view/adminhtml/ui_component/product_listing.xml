@@ -13,6 +13,7 @@
                 sortOrder="75">
             <settings>
                 <filter>false</filter>
+                <sortable>false</sortable>
                 <label translate="true">Quantity</label>
             </settings>
         </column>
