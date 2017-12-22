@@ -7,7 +7,6 @@
 namespace Magento\GraphQlCatalog\Model\Type\Handler;
 
 use Magento\GraphQl\Model\EntityAttributeList;
-use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\TypeFactory;
 use Magento\GraphQl\Model\Type\Handler\Pool;
@@ -21,7 +20,7 @@ class ProductAttributeSearchCriteria implements HandlerInterface
     const PRODUCT_ATTRIBUTE_SEARCH_CRITERIA_TYPE_NAME = 'ProductAttributeSearchCriteria';
 
     /**
-     * @var TypeGenerator
+     * @var Pool
      */
     private $pool;
 
