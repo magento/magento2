@@ -6,7 +6,7 @@
 
 namespace Magento\GraphQlCustomer\Model\Type\Handler;
 
-use Magento\Customer\Api\MetadataInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\GraphQl\Model\EntityAttributeList;
 use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
@@ -48,7 +48,7 @@ class Customer implements HandlerInterface
     private $typeLocator;
 
     /**
-     * @var MetadataInterface
+     * @var CustomerMetadataInterface
      */
     private $metadataService;
 
@@ -58,7 +58,7 @@ class Customer implements HandlerInterface
      * @param EntityAttributeList $entityAttributeList
      * @param TypeFactory $typeFactory
      * @param Type $typeLocator
-     * @param MetadataInterface $metadataService
+     * @param CustomerMetadataInterface $metadataService
      */
     public function __construct(
         Pool $typePool,
@@ -66,7 +66,7 @@ class Customer implements HandlerInterface
         EntityAttributeList $entityAttributeList,
         TypeFactory $typeFactory,
         Type $typeLocator,
-        MetadataInterface $metadataService
+        CustomerMetadataInterface $metadataService
     ) {
         $this->typePool = $typePool;
         $this->typeGenerator = $typeGenerator;

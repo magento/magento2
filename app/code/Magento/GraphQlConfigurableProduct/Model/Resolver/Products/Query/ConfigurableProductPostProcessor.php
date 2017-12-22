@@ -10,12 +10,12 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product;
 use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter;
-use Magento\GraphQlCatalog\Model\Resolver\Products\Query\PostFetchProcessorInterface;
+use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
 
 /**
  * Retrieves simple product data for child products, and formats configurable data
  */
-class ConfigurableProductPostProcessor implements PostFetchProcessorInterface
+class ConfigurableProductPostProcessor implements \Magento\Framework\GraphQl\Query\PostFetchProcessorInterface
 {
     /**
      * @var SearchCriteriaBuilder
@@ -58,20 +58,20 @@ class ConfigurableProductPostProcessor implements PostFetchProcessorInterface
     /**
      * Process all configurable product data, including adding simple product data and formatting relevant attributes.
      *
-     * @param array $productData
+     * @param array $resultData
      * @return array
      */
-    public function process(array $productData)
+    public function process(array $resultData)
     {
         $childrenIds = [];
-        foreach ($productData as $key => $product) {
+        foreach ($resultData as $key => $product) {
             if ($product['type_id'] === Configurable::TYPE_CODE) {
                 $formattedChildIds = [];
                 foreach ($product['configurable_product_links'] as $childId) {
                     $childrenIds[] = (int)$childId;
                     $formattedChildIds[$childId] = null;
                 }
-                $productData[$key]['configurable_product_links'] = $formattedChildIds;
+                $resultData[$key]['configurable_product_links'] = $formattedChildIds;
             }
         }
 
@@ -81,20 +81,20 @@ class ConfigurableProductPostProcessor implements PostFetchProcessorInterface
         foreach ($childProducts->getItems() as $childProduct) {
             $childData = $this->formatter->format($childProduct);
             $childId = (int)$childProduct->getId();
-            foreach ($productData as $key => $item) {
+            foreach ($resultData as $key => $item) {
                 if (isset($item['configurable_product_links'])
                     && array_key_exists($childId, $item['configurable_product_links'])
                 ) {
-                    $productData[$key]['configurable_product_links'][$childId] = $childData;
+                    $resultData[$key]['configurable_product_links'][$childId] = $childData;
                     $categoryLinks = $this->productResource->getCategoryIds($childProduct);
                     foreach ($categoryLinks as $position => $link) {
-                        $productData[$key]['configurable_product_links'][$childId]['category_links'][] =
+                        $resultData[$key]['configurable_product_links'][$childId]['category_links'][] =
                             ['position' => $position, 'category_id' => $link];
                     }
                 }
             }
         }
 
-        return $productData;
+        return $resultData;
     }
 }

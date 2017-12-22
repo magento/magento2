@@ -9,6 +9,7 @@ namespace Magento\GraphQlCatalog\Model\Resolver\Products\Query;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
 use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product;
 use Magento\GraphQlCatalog\Model\Resolver\Products\SearchResult;
 use Magento\GraphQlCatalog\Model\Resolver\Products\SearchResultFactory;
@@ -63,7 +64,7 @@ class Filter
         Product $productDataProvider,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Formatter $formatter,
-        array $postProcessors
+        array $postProcessors = []
     ) {
         $this->productRepository = $productRepository;
         $this->searchResultFactory = $searchResultFactory;

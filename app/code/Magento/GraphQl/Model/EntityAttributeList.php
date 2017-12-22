@@ -62,7 +62,8 @@ class EntityAttributeList
      * Retrieve all EAV and custom attribute codes from all attribute sets for given entity code.
      *
      * Returned in the format [$attributeCode => $isSortable] with $isSortable being a boolean value where an attribute
-     * can be sorted with in a search criteria expression.
+     * can be sorted with in a search criteria expression. The metadata service parameter is only required if type has
+     * custom attributes.
      *
      * @param string $entityCode
      * @param MetadataServiceInterface $metadataService
@@ -89,7 +90,7 @@ class EntityAttributeList
                     $this->attributeManagement->getAttributes($entityCode, $attributeSet->getAttributeSetId())
                 );
             } catch (NoSuchEntityException $exception) {
-                throw new GraphQlInputException(__('Entity code %1 does not exist.' [$entityCode]));
+                throw new GraphQlInputException(__('Entity code %1 does not exist.', [$entityCode]));
             }
         }
         $attributeCodes = [];
@@ -103,7 +104,7 @@ class EntityAttributeList
         foreach ($attributes as $attribute) {
             if (!array_key_exists($attribute->getAttributeCode(), $attributeCodes)) {
                 $attributeCodes[$attribute->getAttributeCode()]
-                    = ((! $attribute->isUserDefined()) && !is_array($attribute));
+                    = ((! $attribute->getIsUserDefined()) && !is_array($attribute));
             }
         }
         return $attributeCodes;
