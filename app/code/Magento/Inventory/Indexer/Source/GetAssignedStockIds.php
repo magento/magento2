@@ -56,8 +56,8 @@ class GetAssignedStockIds
                 ['source' => $sourceTable],
                 sprintf(
                     'sourceStockLink.%s = source.%s',
-                    SourceInterface::CODE,
-                    StockSourceLink::SOURCE_CODE
+                    StockSourceLink::SOURCE_CODE,
+                    SourceInterface::CODE
                 ),
                 []
             )
