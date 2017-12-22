@@ -23,13 +23,13 @@ class AssignSourcesToStockTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock.php
-     * @param string|array $sourceIds
-     * @param string|int $stockId
+     * @param array $sourceIds
+     * @param int $stockId
      * @param array $expectedErrorData
      * @throws \Exception
      * @dataProvider dataProviderWrongParameters
      */
-    public function testAssignSourcesToStockWithWrongParameters($sourceIds, $stockId, array $expectedErrorData)
+    public function testAssignSourcesToStockWithWrongParameters(array $sourceIds, int $stockId, array $expectedErrorData)
     {
         $serviceInfo = [
             'rest' => [
