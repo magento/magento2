@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Eav\Model\Entity\Attribute as EavAttribute;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
@@ -27,6 +28,11 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     protected $productResource;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @var MetadataPool
      */
     private $metadataPool;
@@ -45,6 +51,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->productResource = $this->objectManager->get(
             \Magento\Catalog\Model\ResourceModel\Product::class
         );
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $this->metadataPool = $this->objectManager->get(MetadataPool::class);
     }
 
@@ -55,9 +62,10 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testDeleteEntity()
     {
-        /* @var \Magento\Eav\Model\Entity\Attribute $attribute */
-        $attribute = $this->objectManager->get(\Magento\Eav\Model\Entity\Attribute::class);
+        /* @var EavAttribute $attribute */
+        $attribute = $this->objectManager->get(EavAttribute::class);
         $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'text_attribute');
+        $product = $this->productRepository->get('simple');
 
         $entityEavAttributeRow = $this->getEavEntityAttributeRow(
             $attribute->getEntityTypeId(),
@@ -70,9 +78,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         );
 
         $entityAttributeValues = $this->getProductAttributeValues(
-            $attribute->getId(),
-            1,
-            'catalog_product_entity_text'
+            $attribute,
+            $product
         );
         $this->assertNotEmpty(
             $entityAttributeValues,
@@ -93,9 +100,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         );
 
         $entityAttributeValues = $this->getProductAttributeValues(
-            $attribute->getId(),
-            1,
-            'catalog_product_entity_text'
+            $attribute,
+            $product
         );
         $this->assertEmpty(
             $entityAttributeValues,
@@ -126,19 +132,21 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve product attribute values.
      *
-     * @param int $attributeId
-     * @param int $productId
-     * @param string $table
+     * @param EavAttribute $attribute
+     * @param ProductInterface $product
      * @return array
      */
-    private function getProductAttributeValues($attributeId, $productId, $table)
+    private function getProductAttributeValues($attribute, $product)
     {
+        $backendTable = $attribute->getBackend()->getTable();
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkFieldValue = $product->getData($linkField);
+
         $connection = $this->productResource->getConnection();
         $select = $connection->select()
-            ->from($this->productResource->getTable($table))
-            ->where('attribute_id=?', $attributeId)
-            ->where($linkField . '=?', $productId);
+            ->from($this->productResource->getTable($backendTable))
+            ->where('attribute_id=?', $attribute->getId())
+            ->where($linkField . '=?', $linkFieldValue);
 
         return $connection->fetchAll($select);
     }
