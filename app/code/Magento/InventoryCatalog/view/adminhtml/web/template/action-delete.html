@@ -1,0 +1,18 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<button class="action-delete"
+        attr="{'data-action': 'remove_row'}"
+        disabled="disabled"
+        data-bind="
+            click: $data.deleteRecord.bind($data, $record().index, $record().recordId),
+            attr: {
+                title: $parent.deleteButtonLabel
+            }
+        ">
+    <span translate="$parent.deleteButtonLabel"></span>
+    <small if="$data.notice" html="notice" />
+</button>
