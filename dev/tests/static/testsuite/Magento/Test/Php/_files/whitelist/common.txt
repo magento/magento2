@@ -1,8 +1,9 @@
 # Format: <componentType=module|library|theme|language|*> <componentName> <globPattern> or simply <globPattern>
-* * /
-dev/tools/Magento
-dev/tests
-phpserver
-pub
-setup
-*.php
+# * * /
+# dev/tools/Magento
+# dev/tests
+# phpserver
+# pub
+# setup
+# *.php
+dev/tests/integration/testsuite/Magento/Catalog/Model/Product/Attribute/RepositoryTest.php
