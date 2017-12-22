@@ -13,7 +13,7 @@
     </view>
     <view id="inventory_source" class="Magento\Inventory\Indexer\Source\Mview\Action" group="indexer">
         <subscriptions>
-            <table name="inventory_source" entity_column="source_code" />
+            <table name="inventory_source" entity_column="source_id" />
         </subscriptions>
     </view>
     <view id="inventory_source_item" class="Magento\Inventory\Indexer\SourceItem\Mview\Action" group="indexer">
