@@ -17,7 +17,7 @@ interface FeedFactoryInterface
 
     /**
      * Returns FeedInterface object from a custom array
-     * 
+     *
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\RuntimeException
      * @param  array  $data
@@ -25,7 +25,7 @@ interface FeedFactoryInterface
      * @return FeedInterface
      */
     public function create(
-        array $data, 
+        array $data,
         $format = self::FORMAT_RSS
     );
 }

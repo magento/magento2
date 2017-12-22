@@ -48,7 +48,7 @@ class FeedFactory implements FeedFactoryInterface
      * {@inheritdoc}
      */
     public function create(
-        array $data, 
+        array $data,
         $format = FeedFactoryInterface::FORMAT_RSS
     ) {
         if (!isset($this->formats[$format])) {
@@ -62,7 +62,7 @@ class FeedFactory implements FeedFactoryInterface
             throw new \Magento\Framework\Exception\InputException(
                 __('Wrong format handler type'),
                 $e
-            );   
+            );
         }
 
         try {

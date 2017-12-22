@@ -103,7 +103,7 @@ class Rss
     public function createRssXml()
     {
         $feed = $this->feedFactory->create(
-            $this->getFeeds(), 
+            $this->getFeeds(),
             FeedFactoryInterface::FORMAT_RSS
         );
 

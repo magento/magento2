@@ -10,14 +10,14 @@ namespace Magento\Framework\App;
  */
 interface FeedInterface
 {
-	/**
+    /**
      * XML feed output format
      */
     const FORMAT_XML = 'xml';
 
     /**
      * @param string $format
-     * 
+     *
      * @return string
      */
     public function getFormattedContentAs(

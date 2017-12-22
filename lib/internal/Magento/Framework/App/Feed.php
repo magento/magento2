@@ -18,22 +18,22 @@ class Feed implements FeedInterface
         \Zend_Feed $feed,
         array $data
     ) {
-       $this->feed = $feed;
-       $this->data = $data;
+        $this->feed = $feed;
+        $this->data = $data;
     }
 
     /**
      * Returns the formatted feed content
      *
      * @param string $format
-     * 
+     *
      * @return string
      */
     public function getFormattedContentAs(
         $format = self::FORMAT_XML
     ) {
         $feed = $this->feed::importArray(
-            $this->data, 
+            $this->data,
             FeedFactoryInterface::FORMAT_RSS
         );
         return $this->feed->saveXml();
