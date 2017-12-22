@@ -42,11 +42,11 @@ class PreventAssignSourcesToDefaultStockPlugin
      */
     public function beforeExecute(AssignSourcesToStockInterface $subject, array $sourceCodes, int $stockId)
     {
-        if ($this->defaultStockProvider->getId() === $stockId
-            && (1 === count($sourceCodes) && $this->defaultSourceProvider->getCode() === $sourceCodes[0])) {
-            return [$sourceCodes, $stockId];
+        if ($this->defaultStockProvider->getId() === $stockId) {
+            if((1 !== count($sourceCodes) || $this->defaultSourceProvider->getCode() !== $sourceCodes[0])) {
+                throw new InputException(__('You can only assign Default Source to Default Stock'));
+            }
         }
-
-        throw new InputException(__('You can only assign Default Source to Default Stock'));
+        return [$sourceCodes, $stockId];
     }
 }
