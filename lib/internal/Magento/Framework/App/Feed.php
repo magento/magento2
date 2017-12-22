@@ -36,6 +36,6 @@ class Feed implements FeedInterface
             $this->data,
             FeedFactoryInterface::FORMAT_RSS
         );
-        return $this->feed->saveXml();
+        return $feed->saveXml();
     }
 }

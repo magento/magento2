@@ -15,11 +15,6 @@ use Psr\Log\LoggerInterface;
 class FeedFactory implements FeedFactoryInterface
 {
     /**
-     * @var FeedProcessorInterface
-     */
-    private $feedProcessor;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -53,14 +48,14 @@ class FeedFactory implements FeedFactoryInterface
     ) {
         if (!isset($this->formats[$format])) {
             throw new \Magento\Framework\Exception\InputException(
-                __('The format is not supported'),
+                new \Magento\Framework\Phrase('The format is not supported'),
                 $e
             );
         }
 
         if (!is_subclass_of($this->formats[$format], \Magento\Framework\App\FeedInterface::class)) {
             throw new \Magento\Framework\Exception\InputException(
-                __('Wrong format handler type'),
+                new \Magento\Framework\Phrase('Wrong format handler type'),
                 $e
             );
         }
@@ -73,7 +68,7 @@ class FeedFactory implements FeedFactoryInterface
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new \Magento\Framework\Exception\RuntimeException(
-                __('There has been an error with import'),
+                new \Magento\Framework\Phrase('There has been an error with import'),
                 $e
             );
         }
