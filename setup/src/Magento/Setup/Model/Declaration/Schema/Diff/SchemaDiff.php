@@ -62,16 +62,16 @@ class SchemaDiff
 
         foreach ($schema->getTables() as $name => $table) {
             if ($this->diffManager->shouldBeCreated($generatedTables, $table)) {
-                $this->diffManager->registerCreation($diff, $table);
+                $diff = $this->diffManager->registerCreation($diff, $table);
             } else {
-                $this->tableDiff->diff($table, $generatedTables[$name], $diff);
+                $diff = $this->tableDiff->diff($table, $generatedTables[$name], $diff);
             }
 
             unset($generatedTables[$name]);
         }
         //Removal process
         if ($this->diffManager->shouldBeRemoved($generatedTables)) {
-            $this->diffManager->registerRemoval($diff, $generatedTables, $schema->getTables());
+            $diff = $this->diffManager->registerRemoval($diff, $generatedTables, $schema->getTables());
         }
 
         return $diff;
