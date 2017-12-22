@@ -175,8 +175,8 @@ class SourcesTest extends TestCase
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $afterImportData = $this->getSourceItemList($searchCriteria);
 
-        $this->assertArrayHasKey('20-SKU-1', $afterImportData);
-        $this->assertArrayHasKey('50-SKU-2', $afterImportData);
+        $this->assertArrayHasKey('eu-2-SKU-1', $afterImportData);
+        $this->assertArrayHasKey('us-1-SKU-2', $afterImportData);
     }
 
     /**
@@ -190,7 +190,7 @@ class SourcesTest extends TestCase
     {
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $beforeImportData = $this->getSourceItemList($searchCriteria);
-        $this->assertArrayHasKey('10-SKU-1', $beforeImportData);
+        $this->assertArrayHasKey('eu-1-SKU-1', $beforeImportData);
 
         /** @see \Magento\InventoryImportExport\Model\Import\Command\Replace::execute */
         $this->importer->setParameters([
@@ -205,10 +205,10 @@ class SourcesTest extends TestCase
         $afterImportData = $this->getSourceItemList($searchCriteria);
 
         // checks whether original source item which has not been imported stays in database
-        $this->assertEquals($beforeImportData['10-SKU-1'], $afterImportData['10-SKU-1']);
+        $this->assertEquals($beforeImportData['eu-1-SKU-1'], $afterImportData['eu-1-SKU-1']);
 
-        $this->assertArrayHasKey('20-SKU-1', $afterImportData);
-        $this->assertArrayHasKey('50-SKU-2', $afterImportData);
+        $this->assertArrayHasKey('eu-2-SKU-1', $afterImportData);
+        $this->assertArrayHasKey('us-1-SKU-2', $afterImportData);
     }
 
     /**

@@ -1,5 +1,5 @@
-source_id,sku,status,quantity
-1,sku1,1,10
-2,sku2,1,10
-3,sku3,1,10
-4,sku4,1,15
+source_code,sku,status,quantity
+ue-1,sku1,1,10
+eu-2,sku2,1,10
+eu-3,sku3,1,10
+eu-dis,sku4,1,15
