@@ -6,6 +6,8 @@
 namespace Magento\CatalogInventory\Model;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\RegisterProductSaleInterface;
+use Magento\CatalogInventory\Api\RevertProductSaleInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
 use Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface;
@@ -14,9 +16,9 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock as ResourceStock;
 
 /**
- * Class StockManagement
+ * Implements a few interfaces for backward compatibility
  */
-class StockManagement implements StockManagementInterface
+class StockManagement implements StockManagementInterface, RegisterProductSaleInterface, RevertProductSaleInterface
 {
     /**
      * @var StockRegistryProviderInterface

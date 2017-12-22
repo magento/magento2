@@ -65,7 +65,8 @@ class SelectBuilder
                 ['source_item' => $sourceItemTable],
                 [
                     SourceItemInterface::SKU,
-                    SourceItemInterface::QUANTITY => 'SUM(' . SourceItemInterface::QUANTITY . ')',
+                    SourceItemInterface::QUANTITY => 'SUM(IF(source_item.' . SourceItemInterface::STATUS . ' = '
+                        . SourceItemInterface::STATUS_OUT_OF_STOCK . ', 0, ' . SourceItemInterface::QUANTITY . '))',
                 ]
             )
             ->joinLeft(
@@ -73,7 +74,6 @@ class SelectBuilder
                 'source_item.' . SourceItemInterface::SOURCE_ID . ' = stock_source_link.' . StockSourceLink::SOURCE_ID,
                 []
             )
-            ->where('source_item.' . SourceItemInterface::STATUS . ' = ?', SourceItemInterface::STATUS_IN_STOCK)
             ->where('stock_source_link.' . StockSourceLink::STOCK_ID . ' = ?', $stockId)
             ->where('stock_source_link.' . StockSourceLink::SOURCE_ID . ' IN (?)', $sourceIds)
             ->group([SourceItemInterface::SKU]);

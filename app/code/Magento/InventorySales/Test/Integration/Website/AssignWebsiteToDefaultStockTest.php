@@ -46,10 +46,7 @@ class AssignWebsiteToDefaultStockTest extends TestCase
         $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
     }
 
-    /**
-     * Test if Main website is associated to Default stock
-     */
-    public function testIfWebsiteIsAssignedToDefaultStock()
+    public function testThatMainWebsiteIsAssignedToDefaultStock()
     {
         $websiteCode = $this->storeManager->getWebsite()->getCode();
 
@@ -67,10 +64,10 @@ class AssignWebsiteToDefaultStockTest extends TestCase
     }
 
     /**
-     * Creates website inside of test so need to enable db isolation to prevent change db state after test execution
+     * If test has not fixture then magentoDbIsolation will be disabled
      * @magentoDbIsolation enabled
      */
-    public function testCreateWebsiteIfSalesChannelsAreEmpty()
+    public function testThatNewWebsiteWillBeAssignedToDefaultStock()
     {
         $websiteCode = 'test_1';
 
@@ -87,14 +84,14 @@ class AssignWebsiteToDefaultStockTest extends TestCase
         $salesChannels = $extensionAttributes->getSalesChannels();
         self::assertContainsOnlyInstancesOf(SalesChannelInterface::class, $salesChannels);
 
-        $salesChannelsOfCreatedWebsite = array_filter($salesChannels, function ($aSalesChannel) use ($websiteCode) {
-            return $aSalesChannel->getCode() === $websiteCode;
+        $salesChannelsOfCreatedWebsite = array_filter($salesChannels, function ($salesChannel) use ($websiteCode) {
+            return $salesChannel->getCode() === $websiteCode;
         });
 
         self::assertCount(1, $salesChannelsOfCreatedWebsite);
 
-        $aSalesChannelOfCreatedWebsite = reset($salesChannelsOfCreatedWebsite);
-        self::assertEquals($website->getCode(), $aSalesChannelOfCreatedWebsite->getCode());
-        self::assertEquals(SalesChannelInterface::TYPE_WEBSITE, $aSalesChannelOfCreatedWebsite->getType());
+        $salesChannelOfCreatedWebsite = reset($salesChannelsOfCreatedWebsite);
+        self::assertEquals($website->getCode(), $salesChannelOfCreatedWebsite->getCode());
+        self::assertEquals(SalesChannelInterface::TYPE_WEBSITE, $salesChannelOfCreatedWebsite->getType());
     }
 }

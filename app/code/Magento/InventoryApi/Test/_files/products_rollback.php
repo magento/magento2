@@ -42,13 +42,14 @@ if (!empty($products)) {
     $registry->register('isSecureArea', true);
 
     foreach ($products as $product) {
-        /** @var \Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory */
         $criteria = $stockStatusCriteriaFactory->create();
         $criteria->setProductsFilter($product->getId());
 
         $result = $stockStatusRepository->getList($criteria);
-        $stockStatus = current($result->getItems());
-        $stockStatusRepository->delete($stockStatus);
+        if ($result->getTotalCount()) {
+            $stockStatus = current($result->getItems());
+            $stockStatusRepository->delete($stockStatus);
+        }
 
         $productRepository->delete($product);
     }

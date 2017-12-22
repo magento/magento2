@@ -13,7 +13,7 @@ use Magento\Inventory\Model\ReservationCleanupInterface;
 use Magento\Inventory\Test\Integration\Indexer\RemoveIndexData;
 use Magento\InventoryApi\Api\IsProductInStockInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
-use Magento\InventoryApi\Api\ReservationsAppendInterface;
+use Magento\InventoryApi\Api\AppendReservationsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -30,9 +30,9 @@ class IsProductInStockTest extends TestCase
     private $reservationBuilder;
 
     /**
-     * @var ReservationsAppendInterface
+     * @var AppendReservationsInterface
      */
-    private $reservationsAppend;
+    private $appendReservations;
 
     /**
      * @var ReservationCleanupInterface
@@ -49,16 +49,13 @@ class IsProductInStockTest extends TestCase
      */
     private $removeIndexData;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
         $this->indexer->load(StockIndexer::INDEXER_ID);
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
-        $this->reservationsAppend = Bootstrap::getObjectManager()->get(ReservationsAppendInterface::class);
+        $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
         $this->reservationCleanup = Bootstrap::getObjectManager()->get(ReservationCleanupInterface::class);
         $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
 
@@ -66,10 +63,7 @@ class IsProductInStockTest extends TestCase
         $this->removeIndexData->execute([10]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function tearDown()
+    protected function tearDown()
     {
         $this->removeIndexData->execute([10]);
     }
@@ -100,12 +94,12 @@ class IsProductInStockTest extends TestCase
         $this->indexer->reindexRow(10);
 
         // emulate order placement (reserve -8.5 units)
-        $this->reservationsAppend->execute([
+        $this->appendReservations->execute([
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(-8.5)->build(),
         ]);
         self::assertFalse($this->isProductInStock->execute('SKU-1', 10));
 
-        $this->reservationsAppend->execute([
+        $this->appendReservations->execute([
             // unreserve 8.5 units for cleanup
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(8.5)->build(),
         ]);
