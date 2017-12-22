@@ -96,7 +96,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Retrieve eav attribute row. 
+     * Retrieve eav attribute row.
      *
      * @param int $entityTypeId
      * @param int $attributeSetId
@@ -107,7 +107,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     {
         $connection = $this->productResource->getConnection();
         $select = $connection->select()
-            ->from($connection->getTableName('eav_entity_attribute'))
+            ->from($this->productResource->getTable('eav_entity_attribute'))
             ->where('attribute_set_id=?', $attributeSetId)
             ->where('attribute_id=?', $attributeId)
             ->where('entity_type_id=?', $entityTypeId);
@@ -127,7 +127,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     {
         $connection = $this->productResource->getConnection();
         $select = $connection->select()
-            ->from($connection->getTableName($table))
+            ->from($this->productResource->getTable($table))
             ->where('attribute_id=?', $attributeId)
             ->where('entity_id=?', $productId);
 
