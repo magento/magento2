@@ -43,7 +43,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $config = $this->_model->getConfig();
         $publicPathPattern = 'http://localhost/pub/static/%s/adminhtml/Magento/backend/en_US/mage/%s';
-        $this->assertStringMatchesFormat($publicPathPattern, $config->getContentCss());
+        $tinyMce4Config = $config->getData('tinymce4');
+        $this->assertStringMatchesFormat($publicPathPattern, $tinyMce4Config['content_css']);
     }
 
     /**
