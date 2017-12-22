@@ -43,7 +43,7 @@ class SourceItemConvert
     {
         $sourceItems = [];
         foreach ($bunch as $rowData) {
-            $source = $this->sourceRepository->getByCode($rowData[Sources::COL_SOURCE_CODE]);
+            $source = $this->sourceRepository->get($rowData[Sources::COL_SOURCE_CODE]);
             /** @var SourceItemInterface $sourceItem */
             $sourceItem = $this->sourceItemFactory->create();
             $sourceItem->setSourceCode($source->getCode());
