@@ -252,7 +252,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $messages,
             $this->model->getItems($messages)
-            );
+        );
         $this->assertEquals(
             $lastMessage,
             $this->model->getLastAddedMessage()
