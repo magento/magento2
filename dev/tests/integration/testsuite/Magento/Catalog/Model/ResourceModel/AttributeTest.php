@@ -42,7 +42,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test to delete catalog eav attribute entity.
-     * 
+     *
      * @magentoDataFixture Magento/Catalog/_files/product_eav_attribute.php
      */
     public function testDeleteEntity()
