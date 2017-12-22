@@ -73,7 +73,6 @@
                 <item name="config" xsi:type="array">
                     <item name="formElement" xsi:type="string">container</item>
                     <item name="label" xsi:type="string"/>
-                    <item name="dataScope" xsi:type="string"/>
                     <item name="breakLine" xsi:type="boolean">false</item>
                 </item>
             </argument>
@@ -90,7 +89,6 @@
                         <item name="title" xsi:type="string" translate="true">Assign Sources</item>
                         <item name="additionalForGroup" xsi:type="boolean">true</item>
                         <item name="additionalClasses" xsi:type="string">admin__field-medium</item>
-                        <item name="dataScope" xsi:type="string"/>
                     </item>
                 </argument>
             </button>
@@ -125,7 +123,6 @@
                     <item name="config" xsi:type="array">
                         <item name="isTemplate" xsi:type="boolean">true</item>
                         <item name="is_collection" xsi:type="boolean">true</item>
-                        <item name="dataScope" xsi:type="string"/>
                     </item>
                 </argument>
                 <field name="source_id" formElement="input" sortOrder="10">
