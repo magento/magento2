@@ -11,6 +11,7 @@ namespace Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Catalog\Pricing\Price\BasePrice;
 
 /**
  * Catalog product option select type model
@@ -224,7 +225,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     public function getPrice($flag = false)
     {
         if ($flag && $this->getPriceType() == self::TYPE_PERCENT) {
-            $basePrice = $this->getOption()->getProduct()->getFinalPrice();
+            $basePrice = $this->getOption()->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
             $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
             return $price;
         }
