@@ -34,7 +34,7 @@ class PreventAssignSourcesToDefaultStockPlugin
 
     /**
      * @param AssignSourcesToStockInterface $subject
-     * @param array $sourceIds
+     * @param array $sourceCodes
      * @param int $stockId
      * @return array
      * @throws InputException

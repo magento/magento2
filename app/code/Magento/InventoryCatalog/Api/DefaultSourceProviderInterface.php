@@ -20,11 +20,4 @@ interface DefaultSourceProviderInterface
      * @return string
      */
     public function getCode(): string;
-
-    /**
-     * Get Default Source id
-     *
-     * @return int
-     */
-    public function getId(): int;
 }

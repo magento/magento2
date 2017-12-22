@@ -48,8 +48,7 @@ class SourceItem extends AbstractExtensibleModel implements SourceItemInterface
      */
     public function getSourceCode()
     {
-        $sourceCode = $this->getData(self::SOURCE_CODE);
-        return ($sourceCode === null) ? null : (string)$sourceCode;
+        return $this->getData(self::SOURCE_CODE);
     }
 
     /**

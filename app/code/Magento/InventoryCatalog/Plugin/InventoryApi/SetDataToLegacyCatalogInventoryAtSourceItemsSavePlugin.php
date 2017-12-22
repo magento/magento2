@@ -60,7 +60,7 @@ class SetDataToLegacyCatalogInventoryAtSourceItemsSavePlugin
     public function afterExecute(SourceItemsSaveInterface $subject, $result, array $sourceItems)
     {
         foreach ($sourceItems as $sourceItem) {
-            if ((int)$sourceItem->getSourceId() !== $this->defaultSourceProvider->getId()) {
+            if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
                 continue;
             }
             $this->setDataToLegacyStockItem->execute(
