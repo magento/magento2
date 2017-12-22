@@ -11,14 +11,24 @@ namespace Magento\Framework\App;
 class Feed implements FeedInterface
 {
     /**
-     * @param Zend_Feed $feed
+     * @var \Zend_Feed
+     */
+    private $feedProcessor;
+
+    /**
+     * @var array
+     */
+    private $data;
+
+    /**
+     * @param Zend_Feed $feedProcessor
      * @param array $data
      */
     public function __construct(
-        \Zend_Feed $feed,
+        \Zend_Feed $feedProcessor,
         array $data
     ) {
-        $this->feed = $feed;
+        $this->feedProcessor = $feedProcessor;
         $this->data = $data;
     }
 
@@ -32,7 +42,7 @@ class Feed implements FeedInterface
     public function getFormattedContentAs(
         $format = self::FORMAT_XML
     ) {
-        $feed = $this->feed::importArray(
+        $feed = $this->feedProcessor::importArray(
             $this->data,
             FeedFactoryInterface::FORMAT_RSS
         );

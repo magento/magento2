@@ -15,14 +15,19 @@ use Psr\Log\LoggerInterface;
 class FeedFactory implements FeedFactoryInterface
 {
     /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @var ObjectManagerInterface
+     * @var array
      */
-    private $objectManager;
+    private $formats;
 
     /**
      * @param ObjectManagerInterface $objectManger
