@@ -9,7 +9,7 @@ namespace Magento\InventoryCatalog\Plugin\InventoryApi;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
-use Magento\InventoryApi\Api\ReservationsAppendInterface;
+use Magento\InventoryApi\Api\AppendReservationsInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\ApplyDataToLegacyStockItem;
 use Magento\InventoryCatalog\Model\ResourceModel\ApplyDataToLegacyStockStatus;
@@ -60,13 +60,13 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingPlugin
     }
 
     /**
-     * @param ReservationsAppendInterface $subject
+     * @param AppendReservationsInterface $subject
      * @param void $result
      * @param ReservationInterface[] $reservations
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(ReservationsAppendInterface $subject, $result, array $reservations)
+    public function afterExecute(AppendReservationsInterface $subject, $result, array $reservations)
     {
         if ($this->stockConfiguration->canSubtractQty()) {
             foreach ($reservations as $reservation) {

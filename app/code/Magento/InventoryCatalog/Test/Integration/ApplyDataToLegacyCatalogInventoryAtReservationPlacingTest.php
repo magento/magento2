@@ -9,7 +9,7 @@ namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
-use Magento\InventoryApi\Api\ReservationsAppendInterface;
+use Magento\InventoryApi\Api\AppendReservationsInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
@@ -39,9 +39,9 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
     private $reservationBuilder;
 
     /**
-     * @var ReservationsAppendInterface
+     * @var AppendReservationsInterface
      */
-    private $reservationsAppend;
+    private $appendReservations;
 
     protected function setUp()
     {
@@ -53,7 +53,7 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
         $this->legacyStockItemRepository = Bootstrap::getObjectManager()->get(StockItemRepositoryInterface::class);
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
-        $this->reservationsAppend = Bootstrap::getObjectManager()->get(ReservationsAppendInterface::class);
+        $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
     }
 
     /**
@@ -79,7 +79,7 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
         self::assertTrue($legacyStockItem->getIsInStock());
         self::assertEquals(5.5, $legacyStockItem->getQty());
 
-        $this->reservationsAppend->execute([
+        $this->appendReservations->execute([
             $this->reservationBuilder->setStockId(1)->setSku('SKU-1')->setQuantity(-2.5)->build()
         ]);
 
@@ -113,7 +113,7 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
         self::assertTrue($legacyStockItem->getIsInStock());
         self::assertEquals(5.5, $legacyStockItem->getQty());
 
-        $this->reservationsAppend->execute([
+        $this->appendReservations->execute([
             $this->reservationBuilder->setStockId(1)->setSku('SKU-1')->setQuantity(-2.5)->build()
         ]);
 

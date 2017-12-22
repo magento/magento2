@@ -11,7 +11,7 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\StockManagement;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
-use Magento\InventoryApi\Api\ReservationsAppendInterface;
+use Magento\InventoryApi\Api\AppendReservationsInterface;
 use Magento\InventoryCatalog\Model\GetSkusByProductIdsInterface;
 use Magento\InventorySales\Model\StockByWebsiteIdResolver;
 
@@ -36,26 +36,26 @@ class ProcessRegisterProductsSalePlugin
     private $reservationBuilder;
 
     /**
-     * @var ReservationsAppendInterface
+     * @var AppendReservationsInterface
      */
-    private $reservationsAppend;
+    private $appendReservations;
 
     /**
      * @param GetSkusByProductIdsInterface $getSkusByProductIds
      * @param StockByWebsiteIdResolver $stockByWebsiteIdResolver
      * @param ReservationBuilderInterface $reservationBuilder
-     * @param ReservationsAppendInterface $reservationsAppend
+     * @param AppendReservationsInterface $appendReservations
      */
     public function __construct(
         GetSkusByProductIdsInterface $getSkusByProductIds,
         StockByWebsiteIdResolver $stockByWebsiteIdResolver,
         ReservationBuilderInterface $reservationBuilder,
-        ReservationsAppendInterface $reservationsAppend
+        AppendReservationsInterface $appendReservations
     ) {
         $this->getSkusByProductIds = $getSkusByProductIds;
         $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver;
         $this->reservationBuilder = $reservationBuilder;
-        $this->reservationsAppend = $reservationsAppend;
+        $this->appendReservations = $appendReservations;
     }
 
     /**
@@ -87,7 +87,7 @@ class ProcessRegisterProductsSalePlugin
                 ->setStockId($stockId)
                 ->build();
         }
-        $this->reservationsAppend->execute($reservations);
+        $this->appendReservations->execute($reservations);
 
         return [];
     }

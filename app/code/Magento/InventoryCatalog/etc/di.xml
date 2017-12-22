@@ -28,7 +28,7 @@
         <plugin name="set_to_zero_legacy_catalog_inventory_at_source_items_delete"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin"/>
     </type>
-    <type name="Magento\InventoryApi\Api\ReservationsAppendInterface">
+    <type name="Magento\InventoryApi\Api\AppendReservationsInterface">
         <plugin name="apply_data_to_legacy_catalog_inventory_at_reservation_placing"
                 type="Magento\InventoryCatalog\Plugin\InventoryApi\ApplyDataToLegacyCatalogInventoryAtReservationPlacingPlugin"/>
     </type>
