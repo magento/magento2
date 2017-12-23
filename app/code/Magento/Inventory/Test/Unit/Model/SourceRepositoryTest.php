@@ -71,15 +71,12 @@ class SourceRepositoryTest extends TestCase
 
     public function testSave()
     {
-        $sourceId = 42;
-
         $this->commandSave
             ->expects($this->once())
             ->method('execute')
-            ->with($this->source)
-            ->willReturn($sourceId);
+            ->with($this->source);
 
-        self::assertEquals($sourceId, $this->sourceRepository->save($this->source));
+        $this->sourceRepository->save($this->source);
     }
 
     /**

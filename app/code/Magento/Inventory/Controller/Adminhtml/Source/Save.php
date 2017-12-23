@@ -79,7 +79,7 @@ class Save extends Action
 
         try {
             $sourceCode = $requestData['general'][SourceInterface::CODE];
-            $sourceId = $this->processSave($requestData, $sourceCode);
+            $this->processSave($requestData, $sourceCode);
 
             $this->messageManager->addSuccessMessage(__('The Source has been saved.'));
             $this->processRedirectAfterSuccessSave($resultRedirect, $sourceCode);
@@ -106,7 +106,7 @@ class Save extends Action
      * @param array $requestData
      * @param string $sourceCode
      *
-     * @return int
+     * @return void
      */
     private function processSave(array $requestData, string $sourceCode): int
     {
@@ -127,7 +127,7 @@ class Save extends Action
             ]
         );
 
-        $sourceId = $this->sourceRepository->save($source);
+        $this->sourceRepository->save($source);
 
         $this->_eventManager->dispatch(
             'controller_action_inventory_source_save_after',
@@ -136,8 +136,6 @@ class Save extends Action
                 'source' => $source,
             ]
         );
-
-        return $sourceId;
     }
 
     /**

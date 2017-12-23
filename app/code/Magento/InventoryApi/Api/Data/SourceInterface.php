@@ -43,21 +43,6 @@ interface SourceInterface extends ExtensibleDataInterface
     const CARRIER_LINKS = 'carrier_links';
 
     /**
-     * Get source id
-     *
-     * @return int|null
-     */
-    public function getSourceId();
-
-    /**
-     * Set source id
-     *
-     * @param int|null $sourceId
-     * @return void
-     */
-    public function setSourceId($sourceId);
-
-    /**
      * Get source code
      *
      * @return string|null
