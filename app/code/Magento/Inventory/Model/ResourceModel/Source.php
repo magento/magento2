@@ -54,7 +54,7 @@ class Source extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init(self::TABLE_NAME_SOURCE, SourceInterface::SOURCE_ID);
+        $this->_init(self::TABLE_NAME_SOURCE, SourceInterface::CODE);
     }
 
     /**

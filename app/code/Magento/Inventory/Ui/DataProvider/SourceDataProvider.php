@@ -83,11 +83,10 @@ class SourceDataProvider extends DataProvider
             // It is need for support of several fieldsets.
             // For details see \Magento\Ui\Component\Form::getDataSourceData
             if ($data['totalRecords'] > 0) {
-                $sourceId = (int)$data['items'][0][SourceInterface::SOURCE_ID];
-                $sourceCode = (string)$data['items'][0][SourceInterface::CODE];
+                $sourceCode = $data['items'][0][SourceInterface::CODE];
                 $sourceGeneralData = $data['items'][0];
                 $sourceGeneralData['carrier_codes'] =  $this->getAssignedCarrierCodes($sourceCode);
-                $dataForSingle[$sourceId] = [
+                $dataForSingle[$sourceCode] = [
                     'general' => $sourceGeneralData,
                 ];
                 $data = $dataForSingle;
@@ -110,7 +109,7 @@ class SourceDataProvider extends DataProvider
             $result->getItems(),
             $result->getTotalCount(),
             $searchCriteria,
-            SourceInterface::SOURCE_ID
+            SourceInterface::CODE
         );
         return $searchResult;
     }

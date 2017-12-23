@@ -49,9 +49,9 @@ class Edit extends Action
      */
     public function execute(): ResultInterface
     {
-        $sourceId = (int)$this->getRequest()->getParam(SourceInterface::SOURCE_ID);
+        $sourceCode = $this->getRequest()->getParam(SourceInterface::CODE);
         try {
-            $source = $this->sourceRepository->getBySourceId($sourceId);
+            $source = $this->sourceRepository->get($sourceCode);
 
             /** @var Page $result */
             $result = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
@@ -64,7 +64,7 @@ class Edit extends Action
             /** @var Redirect $result */
             $result = $this->resultRedirectFactory->create();
             $this->messageManager->addErrorMessage(
-                __('Source with source id "%value" does not exist.', ['value' => $sourceId])
+                __('Source with source code "%value" does not exist.', ['value' => $sourceCode])
             );
             $result->setPath('*/*');
         }
