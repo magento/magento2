@@ -108,7 +108,7 @@ class Save extends Action
      *
      * @return void
      */
-    private function processSave(array $requestData, string $sourceCode): int
+    private function processSave(array $requestData, string $sourceCode)
     {
         try {
             $source = $this->sourceRepository->get($sourceCode);
