@@ -86,7 +86,7 @@ class SwatchAttributesProvider
     /**
      * This method introduced only for the case when customer already has converted attribute.
      *
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $productAttribute
+     * @param $productAttribute
      * @return bool
      * @deprecated
      */
