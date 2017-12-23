@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Inventory\Indexer\Source;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
 use Magento\Inventory\Model\StockSourceLink;
 use Magento\Inventory\Model\ResourceModel\Source;
@@ -61,7 +62,7 @@ class GetAssignedStockIds
                 ),
                 []
             )
-            ->where(SourceInterface::SOURCE_ID . ' IN (?)', $sourceIds)
+            ->where(SourceResourceModel::SOURCE_ID_FIELD . ' IN (?)', $sourceIds)
             ->group(StockSourceLink::STOCK_ID);
 
         $stockIds = $connection->fetchCol($select);

@@ -21,7 +21,6 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const SOURCE_ID = 'source_id';
     const CODE = 'code';
     const NAME = 'name';
     const CONTACT_NAME = 'contact_name';

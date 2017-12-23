@@ -50,7 +50,7 @@ class CreateSourceTable
     private function addBaseFields(Table $sourceTable): Table
     {
         return $sourceTable->addColumn(
-            SourceInterface::SOURCE_ID,
+            SourceResourceModel::SOURCE_ID_FIELD,
             Table::TYPE_INTEGER,
             null,
             [

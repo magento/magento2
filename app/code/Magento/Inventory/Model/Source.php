@@ -32,7 +32,7 @@ class Source extends AbstractExtensibleModel implements SourceInterface
      */
     public function setSourceId($sourceId)
     {
-        return $this->setData(self::SOURCE_ID, $sourceId);
+        return $this->setData(SourceResourceModel::SOURCE_ID_FIELD, $sourceId);
     }
 
     /**

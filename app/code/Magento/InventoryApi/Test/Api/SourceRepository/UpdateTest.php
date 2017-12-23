@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryApi\Test\Api\SourceRepository;
 
 use Magento\Framework\Webapi\Rest\Request;
+use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\TestFramework\Assert\AssertArrayContains;
@@ -97,7 +98,7 @@ class UpdateTest extends WebapiAbstract
         $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId]);
-        self::assertArrayHasKey(SourceInterface::SOURCE_ID, $response);
+        self::assertArrayHasKey(SourceResourceModel::SOURCE_ID_FIELD, $response);
         return $response;
     }
 }

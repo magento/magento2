@@ -29,6 +29,7 @@ class Source extends AbstractDb
      */
     const TABLE_NAME_SOURCE = 'inventory_source';
     /**#@-*/
+    const SOURCE_ID_FIELD = 'source_id';
 
     /**
      * @var SourceCarrierLinkManagementInterface

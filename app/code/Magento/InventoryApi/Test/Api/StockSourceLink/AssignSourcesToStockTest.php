@@ -9,7 +9,7 @@ namespace Magento\InventoryApi\Test\Api\StockSourceLink;
 
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\InventoryApi\Api\Data\SourceInterface;
+use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class AssignSourcesToStockTest extends WebapiAbstract
@@ -46,7 +46,7 @@ class AssignSourcesToStockTest extends WebapiAbstract
             : $this->_webApiCall($serviceInfo, ['sourceIds' => $sourceIds, 'stockId' => $stockId]);
 
         $assignedSourcesForStock = $this->getAssignedSourcesForStock($stockId);
-        self::assertEquals($sourceIds, array_column($assignedSourcesForStock, SourceInterface::SOURCE_ID));
+        self::assertEquals($sourceIds, array_column($assignedSourcesForStock, SourceResourceModel::SOURCE_ID_FIELD));
     }
 
     /**
