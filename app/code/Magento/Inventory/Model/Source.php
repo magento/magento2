@@ -30,6 +30,14 @@ class Source extends AbstractExtensibleModel implements SourceInterface
     /**
      * @inheritdoc
      */
+    public function setSourceId($sourceId)
+    {
+        return $this->setData(self::SOURCE_ID, $sourceId);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getCode()
     {
         return $this->getData(self::CODE);
