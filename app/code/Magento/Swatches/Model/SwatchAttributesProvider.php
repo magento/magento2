@@ -71,7 +71,7 @@ class SwatchAttributesProvider
 
             $swatchAttributes = [];
             foreach ($configurableAttributes as $configurableAttribute) {
-                if ($this->getIsSwatchAttribute($configurableAttribute->getProductAttribute())) {
+                if ($this->hasSwatchAttribute($configurableAttribute->getProductAttribute())) {
                     if (array_key_exists($configurableAttribute->getAttributeId(), $swatchAttributeCodeMap)) {
                         $swatchAttributes[$configurableAttribute->getAttributeId()]
                             = $configurableAttribute->getProductAttribute();
@@ -90,7 +90,7 @@ class SwatchAttributesProvider
      * @return bool
      * @deprecated
      */
-    private function getIsSwatchAttribute($productAttribute)
+    private function hasSwatchAttribute($productAttribute)
     {
         return $this->swatchesHelper->isSwatchAttribute($productAttribute);
     }
