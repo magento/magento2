@@ -178,6 +178,14 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * @return string $validationStrategy
+     */
+    public function getValidationStrategy()
+    {
+        return $this->validationStrategy;
+    }
+
+    /**
      * @return bool
      */
     public function hasToBeTerminated()
