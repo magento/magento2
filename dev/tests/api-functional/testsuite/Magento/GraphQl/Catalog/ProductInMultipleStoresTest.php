@@ -22,7 +22,7 @@ class ProductInMultipleStoresTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testProductFromSpecificStore()
+    public function testProductFromSpecificAndDefaultStore()
     {
         $prductSku = 'simple';
 
@@ -56,12 +56,14 @@ QUERY;
         $product = ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product::class);
         $product->load($product->getIdBySku($prductSku));
 
+        //use case for custom store
         $productNameInFixtureStore = 'Product\'s Name in Fixture Store';
         $product->setName($productNameInFixtureStore)->setStoreId($storeId)->save();
-
         $headerMap = ['Store' => $storeCodeFromFixture];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
-        $this->assertEquals($productNameInFixtureStore, $response['products']['items'][0]['name'],'Product name in fixture store is invalid.');
+        $this->assertEquals($productNameInFixtureStore, $response['products']['items'][0]['name'], 'Product name in fixture store is invalid.');
+
+        //use case for default storeCode
         $nameInDefaultStore = 'Simple Product';
         $headerMapDefault = ['Store' => 'default'];
         $response = $this->graphQlQuery($query, [], '', $headerMapDefault);
@@ -70,5 +72,21 @@ QUERY;
             $response['products']['items'][0]['name'],
             'Product name in default store is invalid.'
         );
+
+        //use case for empty storeCode
+        $headerMapEmpty = ['Store' => ''];
+        $response = $this->graphQlQuery($query, [], '', $headerMapEmpty);
+        $this->assertEquals(
+            $nameInDefaultStore,
+            $response['products']['items'][0]['name'],
+            'Product in the default store should be returned'
+        );
+
+        // use case for invalid storeCode
+        $nonExistingStoreCode = "non_existent_store";
+        $headerMapInvalidStoreCode = ['Store' => $nonExistingStoreCode];
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Store code non_existent_store does not exist');
+        $this->graphQlQuery($query, [], '', $headerMapInvalidStoreCode);
     }
 }
