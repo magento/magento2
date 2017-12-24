@@ -45,6 +45,9 @@
         <element name="SpecialCharacter" type="button" selector=".mce-i-charmap" />
         <element name="FolderName" type="button" selector="input[data-role='promptField']" />
         <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
-        <element name="StorageRoot" type="button" selector="#root > .jstree-icon" />
+        <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
+        <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
+        <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
+        <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
     </section>
 </config>

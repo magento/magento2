@@ -7,11 +7,11 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <cest name="AdminAddImageToWYSIWYGCest">
+    <cest name="AdminAddImageToWYSIWYGCMSCest">
         <annotations>
-            <features value="Add Image to WYSIWYG"/>
-            <stories value="Add Media to WYSIWYG"/>
-            <group value="addImage"/>
+            <features value="Add Image to WYSIWYG CMS"/>
+            <stories value="Default WYSIWYG toolbar configuration with Magento Media Gallery-MAGETWO-42041"/>
+            <group value="addImageCMS"/>
             <env value="chrome"/>
         </annotations>
         <before>
@@ -19,12 +19,12 @@
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
-        <test name="AddImageToWYSIWYGEditor">
+        <test name="AddImageToWYSIWYGEditorCMS">
             <annotations>
-                <title value="You should be able to add image to WYSIWYG Editor"/>
-                <description value="You should be able to add image to WYSIWYG Editor."/>
+                <title value="You should be able to add image to WYSIWYG Editor CMS"/>
+                <description value="You should be able to add image to WYSIWYG Editor CMS"/>
                 <severity value="CRITICAL"/>
-                <testCaseId value="MAGETWO-83697"/>
+                <testCaseId value="MAGETWO-85825 "/>
             </annotations>
             <amOnPage url="{{CmsNewPagePage.url}}" stepKey="goToNewCMSPage" />
             <waitForPageLoad stepKey="wait"/>
