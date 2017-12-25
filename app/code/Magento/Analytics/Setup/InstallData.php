@@ -30,7 +30,7 @@ class InstallData implements InstallDataInterface
                     'scope' => 'default',
                     'scope_id' => 0,
                     'path' => 'analytics/subscription/enabled',
-                    'value' => 1
+                    'value' => 0
                 ],
                 [
                     'scope' => 'default',
