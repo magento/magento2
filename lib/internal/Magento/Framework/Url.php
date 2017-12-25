@@ -528,16 +528,18 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         }
         $this->_setActionName($action);
 
+        $routePathParams = [];
         if (!empty($routePieces)) {
             while (!empty($routePieces)) {
                 $key = array_shift($routePieces);
                 if (!empty($routePieces)) {
                     $value = array_shift($routePieces);
-                    $this->getRouteParamsResolver()->setRouteParam($key, $value);
+                    $routePathParams[$key] = $value;
                 }
             }
         }
 
+        $this->getRouteParamsResolver()->setRouteParams($routePathParams);
         return $this;
     }
 
