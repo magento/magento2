@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
+use Magento\Catalog\Pricing\Price\RegularPrice;
 
 /**
  * Catalog product option select type model
@@ -22,6 +23,9 @@ use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
  * @method \Magento\Catalog\Model\Product\Option\Value setOptionId(int $value)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - added use of constants instead of string literals:
+ *      BasePrice::PRICE_CODE - instead of 'base_price'
+ *      RegularPrice::PRICE_CODE - instead of 'regular_price'
  * @since 100.0.2
  */
 class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface
@@ -246,8 +250,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     public function getRegularPrice()
     {
-        return $this->customOptionPriceCalculator
-            ->getOptionPriceByPriceCode($this, \Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE);
+        return $this->customOptionPriceCalculator->getOptionPriceByPriceCode($this, RegularPrice::PRICE_CODE);
     }
 
     /**
