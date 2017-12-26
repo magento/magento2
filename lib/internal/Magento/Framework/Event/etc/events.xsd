@@ -60,11 +60,11 @@
     <xs:simpleType name="eventName">
         <xs:annotation>
             <xs:documentation>
-                Event name can contain only [a-zA-Z_].
+                Event name can contain only [a-zA-Z0-9_].
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z_]+" />
+            <xs:pattern value="[a-zA-Z0-9_]+" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

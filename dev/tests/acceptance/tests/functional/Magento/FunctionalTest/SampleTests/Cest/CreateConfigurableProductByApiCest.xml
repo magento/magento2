@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+    <cest name="CreateConfigurableProductByApiCest">
+        <annotations>
+            <features value="Create a Configurable Product By API"/>
+            <stories value="Create a Configurable Product By API"/>
+            <group value="skip"/>
+        </annotations>
+        <before>
+            <createData stepKey="categoryHandle" entity="SimpleSubCategory" />
+            <createData stepKey="baseConfigProductHandle" entity="BaseConfigurableProduct" >
+                <required-entity createDataKey="categoryHandle"/>
+            </createData>
+            <createData stepKey="productAttributeHandle" entity="productAttributeWithTwoOptions"/>
+
+            <createData stepKey="productAttributeOption1Handle" entity="productAttributeOption1">
+                <required-entity createDataKey="productAttributeHandle"/>
+            </createData>
+            <createData stepKey="productAttributeOption2Handle" entity="productAttributeOption2">
+                <required-entity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <createData stepKey="addToAttributeSetHandle" entity="AddToDefaultSet">
+                <required-entity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <getData stepKey="getAttributeOption1Handle" entity="ProductAttributeOptionGetter" index="1">
+                <required-entity createDataKey="productAttributeHandle"/>
+            </getData>
+            <getData stepKey="getAttributeOption2Handle" entity="ProductAttributeOptionGetter" index="2">
+                <required-entity createDataKey="productAttributeHandle"/>
+            </getData>
+
+            <createData stepKey="childProductHandle1" entity="SimpleOne">
+                <required-entity createDataKey="productAttributeHandle"/>
+                <required-entity createDataKey="getAttributeOption1Handle"/>
+            </createData>
+            <createData stepKey="childProductHandle2" entity="SimpleOne">
+                <required-entity createDataKey="productAttributeHandle"/>
+                <required-entity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData stepKey="configProductOptionHandle" entity="ConfigurableProductTwoOptions">
+                <required-entity createDataKey="baseConfigProductHandle"/>
+                <required-entity createDataKey="productAttributeHandle"/>
+                <required-entity createDataKey="getAttributeOption1Handle"/>
+                <required-entity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData stepKey="configProductHandle1" entity="ConfigurableProductAddChild">
+                <required-entity createDataKey="childProductHandle1"/>
+                <required-entity createDataKey="baseConfigProductHandle"/>
+            </createData>
+            <createData stepKey="configProductHandle2" entity="ConfigurableProductAddChild">
+                <required-entity createDataKey="childProductHandle2"/>
+                <required-entity createDataKey="baseConfigProductHandle"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData stepKey="d2" createDataKey="childProductHandle1"/>
+            <deleteData stepKey="d3" createDataKey="childProductHandle2"/>
+            <deleteData stepKey="d7" createDataKey="baseConfigProductHandle"/>
+            <deleteData stepKey="d8" createDataKey="categoryHandle"/>
+            <deleteData stepKey="d6" createDataKey="productAttributeHandle"/>
+        </after>
+        <test name="CreateConfigurableProductByApiTest">
+        </test>
+    </cest>
+</config>
