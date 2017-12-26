@@ -80,19 +80,13 @@ class SourcesTest extends TestCase
         $this->assertTrue($result, 'Expect result TRUE as given data is valid.');
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testImportDataWithWrongBehavior()
     {
         $this->importer->setParameters([
             'behavior' => 'WrongBehavior'
         ]);
 
-        $bunch = [
-            $this->buildRowDataArray('eu-1', 'SKU-1', 6.88, 1)
-        ];
-        $this->importData($bunch);
+        $this->assertEquals($this->importer->getBehavior(), \Magento\ImportExport\Model\Import::getDefaultBehavior());
     }
 
     /**
