@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ReleaseNotification\Model\Connector\Http;
+namespace Magento\ReleaseNotification\Model\ContentProvider\Http;
 
 use Magento\ReleaseNotification\Model\ContentProviderInterface;
 use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Backend\Model\Auth\Session;
+use Magento\Setup\Module\I18n\Locale;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\HTTP\ClientInterface;
 
@@ -21,21 +21,9 @@ use Magento\Framework\HTTP\ClientInterface;
 class HttpContentProvider implements ContentProviderInterface
 {
     /**
-     * Path to the configuration value which contains an URL that provides the release notification data.
-     *
-     * @var string
-     */
-    private static $notificationUrlConfigPath = 'releaseNotification/url/content';
-
-    /**
      * @var ClientInterface
      */
     private $httpClient;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $config;
 
     /**
      * @var ProductMetadataInterface
@@ -58,26 +46,32 @@ class HttpContentProvider implements ContentProviderInterface
     private $logger;
 
     /**
+     * @var UrlBuilder
+     */
+    private $urlBuilder;
+
+    /**
+     * HttpContentProvider constructor.
      * @param ClientInterface $httpClient
-     * @param ScopeConfigInterface $config
      * @param ProductMetadataInterface $productMetadata
      * @param Session $session
      * @param ResponseResolver $responseResolver
+     * @param UrlBuilder $urlBuilder
      * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $httpClient,
-        ScopeConfigInterface $config,
         ProductMetadataInterface $productMetadata,
         Session $session,
         ResponseResolver $responseResolver,
+        UrlBuilder $urlBuilder,
         LoggerInterface $logger
     ) {
         $this->httpClient = $httpClient;
-        $this->config = $config;
         $this->productMetadata = $productMetadata;
         $this->session = $session;
         $this->responseResolver = $responseResolver;
+        $this->urlBuilder = $urlBuilder;
         $this->logger = $logger;
     }
 
@@ -88,29 +82,22 @@ class HttpContentProvider implements ContentProviderInterface
     {
         $result = false;
 
-        $url = $this->buildUrl(
-            $this->config->getValue(self::$notificationUrlConfigPath),
-            [
-                'version' => $this->getTargetVersion(),
-                'edition' => $this->productMetadata->getEdition(),
-                'locale' => $this->session->getUser()->getInterfaceLocale()
-            ]
-        );
+        $locale = $this->session->getUser()->getInterfaceLocale();
+        $version = $this->getTargetVersion();
+        $edition = $this->productMetadata->getEdition();
+        $url = $this->urlBuilder->getUrl($version, $edition, $locale);
 
         try {
-            $response = $this->getResponse($url);
-            $status = $this->httpClient->getStatus();
-            $result = $this->responseResolver->getResult($response, $status);
+            $result = $this->retrieveContent($url);
+            if (!$result && ($locale !== Locale::DEFAULT_SYSTEM_LOCALE)) {
+                $defaultLocalUrl = $this->urlBuilder->getUrl($version, $edition, Locale::DEFAULT_SYSTEM_LOCALE);
+                $result = $this->retrieveContent($defaultLocalUrl);
+            }
         } catch (\Exception $e) {
             $this->logger->warning(
                 sprintf(
-                    'Retrieving the release notification content from the Magento Marketing service has failed: %s',
+                    'Failed to retrieve the release notification content. The respose is: %s',
                     !empty($response) ? $response : 'Response body is empty.'
-                )
-            );
-            $this->logger->critical(
-                new \Exception(
-                    sprintf('Magento Marketing service CURL connection error: %s', $e->getMessage())
                 )
             );
         }
@@ -159,16 +146,15 @@ class HttpContentProvider implements ContentProviderInterface
     }
 
     /**
-     * Builds the URL to request the release notification content data based on passed query parameters.
+     * Retrieve content from given url
      *
-     * @param $baseUrl
-     * @param $queryData
-     * @return string
+     * @param $url
+     * @return bool|string
      */
-    private function buildUrl($baseUrl, $queryData)
+    private function retrieveContent($url)
     {
-        $query = http_build_query($queryData, '', '&');
-        $baseUrl .= '?' . $query;
-        return $baseUrl;
+        return empty($url)
+            ? false
+            : $this->responseResolver->getResult($this->getResponse($url), $this->httpClient->getStatus());
     }
 }

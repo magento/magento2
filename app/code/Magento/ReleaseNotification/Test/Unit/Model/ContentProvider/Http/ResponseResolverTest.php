@@ -3,11 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ReleaseNotification\Test\Unit\Model\Connector\Http;
+namespace Magento\ReleaseNotification\Test\Unit\Model\ContentProvider\Http;
 
-use Magento\ReleaseNotification\Model\Connector\ResponseHandlerInterface;
-use Magento\ReleaseNotification\Model\Connector\Http\ResponseResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\ReleaseNotification\Model\ContentProvider\Http\ResponseHandlerInterface;
 
 /**
  * Class ResponseResolverTest
@@ -15,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ResponseResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ResponseResolver
+     * @var \Magento\ReleaseNotification\Model\ContentProvider\Http\ResponseResolver
      */
     private $responseResolver;
 
@@ -38,7 +37,7 @@ class ResponseResolverTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = new ObjectManager($this);
         $this->responseResolver = $objectManager->getObject(
-            ResponseResolver::class,
+            \Magento\ReleaseNotification\Model\ContentProvider\Http\ResponseResolver::class,
             [
                 'responseHandlers' => [
                     200 => $this->responseHandlerMock,

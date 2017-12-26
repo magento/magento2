@@ -49,18 +49,18 @@ class Notifications implements ModifierInterface
 
     /**
      * @param ContentProviderInterface $contentProvider
-     * @param NotificationRenderer $builder
+     * @param NotificationRenderer $render
      * @param CacheInterface $cacheStorage
      * @param SerializerInterface $serializer
      */
     public function __construct(
         ContentProviderInterface $contentProvider,
-        NotificationRenderer $builder,
+        NotificationRenderer $render,
         CacheInterface $cacheStorage,
         SerializerInterface $serializer
     ) {
         $this->contentProvider = $contentProvider;
-        $this->renderer = $builder;
+        $this->renderer = $render;
         $this->cacheStorage = $cacheStorage;
         $this->serializer = $serializer;
     }
@@ -81,15 +81,12 @@ class Notifications implements ModifierInterface
         $modalContent = $this->getNotificationContent();
 
         if ($modalContent) {
-            $pages = $modalContent[0]['pages'];
-            $lastPage = end($pages);
-            $isLastPage = false;
+            $pages = $modalContent['pages'];
+            $pageCount = count($pages);
+            $ctr = 1;
 
             foreach ($pages as $page) {
-                if ($page == $lastPage) {
-                    $isLastPage = true;
-                }
-                $meta = $this->buildNotificationMeta($meta, $page, $isLastPage);
+                $meta = $this->buildNotificationMeta($meta, $page, $ctr++ == $pageCount);
             }
         } else {
             $meta = $this->hideNotification($meta);

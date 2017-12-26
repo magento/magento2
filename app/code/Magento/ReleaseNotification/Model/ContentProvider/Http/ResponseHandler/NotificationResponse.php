@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ReleaseNotification\Model\Connector\ResponseHandler;
+namespace Magento\ReleaseNotification\Model\ContentProvider\Http\ResponseHandler;
 
-use Magento\ReleaseNotification\Model\Connector\ResponseHandlerInterface;
+use Magento\ReleaseNotification\Model\ContentProvider\Http\ResponseHandlerInterface;
 
 /**
  * Class NotificationResponse
@@ -20,6 +20,6 @@ class NotificationResponse implements ResponseHandlerInterface
      */
     public function handleResponse($responseBody)
     {
-        return !empty($responseBody) ? $responseBody : false;
+        return empty($responseBody) ? false : $responseBody;
     }
 }

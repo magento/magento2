@@ -3,9 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ReleaseNotification\Test\Unit\Model\Connector\ResponseHandler;
+namespace Magento\ReleaseNotification\Test\Unit\Model\ContentProvider\Http\ResponseHandler;
 
-use Magento\ReleaseNotification\Model\Connector\ResponseHandler\NotificationResponse;
+use Magento\ReleaseNotification\Model\ContentProvider\Http\ResponseHandler\NotificationResponse;
 
 /**
  * Class NotificationResponseTest

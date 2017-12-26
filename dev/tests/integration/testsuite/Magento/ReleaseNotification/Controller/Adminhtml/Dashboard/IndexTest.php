@@ -6,7 +6,7 @@
  */
 namespace Magento\ReleaseNotification\Controller\Adminhtml\Dashboard;
 
-use Magento\ReleaseNotification\Model\Connector\Http\HttpContentProvider;
+use Magento\ReleaseNotification\Model\ContentProvider\Http\HttpContentProvider;
 use Magento\ReleaseNotification\Model\ContentProviderInterface;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\TestFramework\ObjectManager;
@@ -17,7 +17,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     private $objectManager;
 
     /**
-     * @var HttpContentProvider | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ReleaseNotification\Model\ContentProvider\Http\HttpContentProvider | \PHPUnit_Framework_MockObject_MockObject
      */
     private $contentProviderMock;
 

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ReleaseNotification\Model\Connector;
+namespace Magento\ReleaseNotification\Model\ContentProvider\Http;
 
 /**
  * Class ResponseHandlerInterface

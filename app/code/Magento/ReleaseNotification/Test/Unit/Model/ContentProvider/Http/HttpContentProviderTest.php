@@ -3,14 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ReleaseNotification\Test\Unit\Model\Connector\Http;
+namespace Magento\ReleaseNotification\Test\Unit\Model\ContentProvider\Http;
 
-use Magento\ReleaseNotification\Model\Connector\Http\ResponseResolver;
-use Magento\ReleaseNotification\Model\Connector\Http\HttpContentProvider;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\ReleaseNotification\Model\ContentProvider\Http\ResponseResolver;
+use Magento\ReleaseNotification\Model\ContentProvider\Http\HttpContentProvider;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\HTTP\ClientInterface;
+use Magento\ReleaseNotification\Model\ContentProvider\Http\UrlBuilder;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -30,9 +30,9 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
     private $loggerMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $configMock;
+    private $urlBuilderMock;
 
     /**
      * @var ProductMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -50,7 +50,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
     private $httpClientMock;
 
     /**
-     * @var ResponseResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ReleaseNotification\Model\ContentProvider\Http\ResponseResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     private $responseResolverMock;
 
@@ -58,7 +58,9 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
     {
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMockForAbstractClass();
-        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
+        $this->urlBuilderMock = $this->getMockBuilder(UrlBuilder::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getUrl'])
             ->getMockForAbstractClass();
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->getMockForAbstractClass();
@@ -77,7 +79,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
             HttpContentProvider::class,
             [
                 'httpClient' => $this->httpClientMock,
-                'config' => $this->configMock,
+                'urlBuilder' => $this->urlBuilderMock,
                 'productMetadata' => $this->productMetadataMock,
                 'session' => $this->sessionMock,
                 'responseResolver' => $this->responseResolverMock,
@@ -86,28 +88,21 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @param string $metadataVersion
-     * @param string $metadataEdition
-     * @param string $configUrl
-     * @param string $expectedUrl
-     * @dataProvider getContentDataProvider
-     */
-    public function testGetContentSuccess($metadataVersion, $metadataEdition, $configUrl, $expectedUrl)
+    public function testGetContentSuccess()
     {
         $expectedBody = ['test' => 'testValue'];
         $response = json_encode($expectedBody);
         $status = 200;
 
-        $this->configMock->expects($this->any())
-            ->method('getValue')
-            ->willReturn($configUrl);
+        $this->urlBuilderMock->expects($this->any())
+            ->method('getUrl')
+            ->willReturn('contentUrl');
         $this->productMetadataMock->expects($this->once())
             ->method('getVersion')
-            ->willReturn($metadataVersion);
+            ->willReturn('version');
         $this->productMetadataMock->expects($this->once())
             ->method('getEdition')
-            ->willReturn($metadataEdition);
+            ->willReturn('edition');
         $this->sessionMock->expects($this->once())
             ->method('getUser')
             ->willReturn($this->sessionMock);
@@ -116,8 +111,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn('en_US');
         $this->httpClientMock->expects($this->once())
             ->method('get')
-            ->with($expectedUrl)
-            ->willReturn(null);
+            ->with('contentUrl');
         $this->httpClientMock->expects($this->once())
             ->method('getBody')
             ->willReturn($response);
@@ -131,24 +125,18 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedBody, $this->httpContentProvider->getContent());
     }
 
-    /**
-     * @param string $metadataVersion
-     * @param string $metadataEdition
-     * @param string $configUrl
-     * @param string $expectedUrl
-     * @dataProvider getContentDataProvider
-     */
-    public function testGetContentFailure($metadataVersion, $metadataEdition, $configUrl, $expectedUrl)
+    public function testGetContentFailure()
     {
-        $this->configMock->expects($this->any())
-            ->method('getValue')
-            ->willReturn($configUrl);
+        $this->urlBuilderMock->expects($this->any())
+            ->method('getUrl')
+            ->with('version', 'edition', 'en_US')
+            ->willReturn('contentUrl');
         $this->productMetadataMock->expects($this->once())
             ->method('getVersion')
-            ->willReturn($metadataVersion);
+            ->willReturn('version');
         $this->productMetadataMock->expects($this->once())
             ->method('getEdition')
-            ->willReturn($metadataEdition);
+            ->willReturn('edition');
         $this->sessionMock->expects($this->once())
             ->method('getUser')
             ->willReturn($this->sessionMock);
@@ -157,45 +145,91 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn('en_US');
         $this->httpClientMock->expects($this->once())
             ->method('get')
-            ->with($expectedUrl)
+            ->with('contentUrl')
             ->will($this->throwException(new \Exception));
         $this->httpClientMock->expects($this->never())->method('getBody');
         $this->httpClientMock->expects($this->never())->method('getStatus');
         $this->responseResolverMock->expects($this->never())->method('getResult');
         $this->loggerMock->expects($this->once())
             ->method('warning');
-        $this->loggerMock->expects($this->once())
-            ->method('critical');
         $this->assertFalse($this->httpContentProvider->getContent());
     }
 
-    public function getContentDataProvider()
+    public function testGetContentSuccessOnDefault()
     {
-        return [
-            [
-                '2.2.2-dev',
-                'Community',
-                'http://api.magento.com/modal',
-                'http://api.magento.com/modal?version=2.2.2&edition=Community&locale=en_US'
-            ],
-            [
-                '2.2.2-rc',
-                'Community',
-                'http://api.magento.com/modal',
-                'http://api.magento.com/modal?version=2.2.2&edition=Community&locale=en_US'
-            ],
-            [
-                '2.2.2',
-                'Community',
-                'http://api.magento.com/modal',
-                'http://api.magento.com/modal?version=2.2.2&edition=Community&locale=en_US'
-            ],
-            [
-                '2.3.0',
-                'Community',
-                'http://api.magento.com/modal',
-                'http://api.magento.com/modal?version=2.3.0&edition=Community&locale=en_US'
-            ],
-        ];
+        $expectedBody = ['test' => 'testValue'];
+        $response = json_encode($expectedBody);
+
+        $this->urlBuilderMock->expects($this->any())
+            ->method('getUrl')
+            ->willReturn('contentUrl');
+        $this->productMetadataMock->expects($this->once())
+            ->method('getVersion')
+            ->willReturn('version');
+        $this->productMetadataMock->expects($this->once())
+            ->method('getEdition')
+            ->willReturn('edition');
+        $this->sessionMock->expects($this->once())
+            ->method('getUser')
+            ->willReturn($this->sessionMock);
+        $this->sessionMock->expects($this->once())
+            ->method('getInterfaceLocale')
+            ->willReturn('fr_FR');
+        $this->httpClientMock->expects($this->exactly(2))
+            ->method('get')
+            ->with('contentUrl');
+        $this->httpClientMock->expects($this->at(0))
+            ->method('getBody')
+            ->willReturn('');
+        $this->httpClientMock->expects($this->at(1))
+            ->method('getBody')
+            ->willReturn($response);
+        $this->httpClientMock->expects($this->at(0))
+            ->method('getStatus')
+            ->willReturn(400);
+        $this->httpClientMock->expects($this->at(1))
+            ->method('getStatus')
+            ->willReturn(200);
+        $this->responseResolverMock->expects($this->at(0))
+            ->method('getResult')
+            ->willReturn(false);
+        $this->responseResolverMock->expects($this->at(1))
+            ->method('getResult')
+            ->willReturn($expectedBody);
+        $this->assertEquals($expectedBody, $this->httpContentProvider->getContent());
+    }
+
+    public function testGetEmptyContent()
+    {
+        $this->urlBuilderMock->expects($this->any())
+            ->method('getUrl')
+            ->willReturn('contentUrl');
+        $this->productMetadataMock->expects($this->once())
+            ->method('getVersion')
+            ->willReturn('version');
+        $this->productMetadataMock->expects($this->once())
+            ->method('getEdition')
+            ->willReturn('edition');
+        $this->sessionMock->expects($this->once())
+            ->method('getUser')
+            ->willReturn($this->sessionMock);
+        $this->sessionMock->expects($this->once())
+            ->method('getInterfaceLocale')
+            ->willReturn('fr_FR');
+        $this->httpClientMock->expects($this->exactly(2))
+            ->method('get')
+            ->with('contentUrl');
+        $this->httpClientMock->expects($this->exactly(2))
+            ->method('getBody')
+            ->willReturn('');
+        $this->httpClientMock->expects($this->exactly(2))
+            ->method('getStatus')
+            ->willReturn(400);
+        $this->responseResolverMock->expects($this->exactly(2))
+            ->method('getResult')
+            ->willReturn(false);
+        $this->loggerMock->expects($this->never())
+            ->method('warning');
+        $this->assertFalse($this->httpContentProvider->getContent());
     }
 }

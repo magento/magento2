@@ -7,10 +7,11 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <releaseNotification>
-            <url>
-                <content>10.235.40.15:3000/modal</content>
-            </url>
-        </releaseNotification>
+        <system>
+            <release_notification>
+                <content_url> </content_url>
+                <use_https>1</use_https>
+            </release_notification>
+        </system>
     </default>
 </config>

@@ -4,11 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-return '[
-  {
-    "version": "2.3.0",
-    "edition": "Community",
-    "locale": "en_US",
+return '{
     "pages": [
       {
         "id": 1,
@@ -130,8 +126,6 @@ return '[
           "content": ""
         }
       }
-    ],
-    "pageCount": 4
+    ]
   }
-]
 ';
