@@ -66,7 +66,7 @@ class InlineEdit extends Action
         if ($request->isXmlHttpRequest() && $request->isPost() && $requestData) {
             foreach ($requestData as $itemData) {
                 try {
-                    $sourceCode = $itemData[SourceInterface::CODE];
+                    $sourceCode = $itemData[SourceInterface::SOURCE_CODE];
                     $source = $this->sourceRepository->get($sourceCode);
                     $this->dataObjectHelper->populateWithArray($source, $itemData, SourceInterface::class);
                     $this->sourceRepository->save($source);

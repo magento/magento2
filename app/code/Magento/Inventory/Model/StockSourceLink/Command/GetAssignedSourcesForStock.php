@@ -70,7 +70,7 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
             $sourceCodes = $this->getAssignedSourceCodes($stockId);
 
             $searchCriteria = $this->searchCriteriaBuilder
-                ->addFilter(SourceInterface::CODE, $sourceCodes, 'in')
+                ->addFilter(SourceInterface::SOURCE_CODE, $sourceCodes, 'in')
                 ->create();
             $searchResult = $this->sourceRepository->getList($searchCriteria);
             return $searchResult->getItems();

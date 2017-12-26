@@ -29,7 +29,13 @@ class Source extends AbstractDb
      */
     const TABLE_NAME_SOURCE = 'inventory_source';
     /**#@-*/
-    const SOURCE_ID_FIELD = 'source_id';
+
+    /**
+     * Primary key auto increment flag
+     *
+     * @var bool
+     */
+    protected $_isPkAutoIncrement = false;
 
     /**
      * @var SourceCarrierLinkManagementInterface
@@ -55,7 +61,7 @@ class Source extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init(self::TABLE_NAME_SOURCE, SourceInterface::CODE);
+        $this->_init(self::TABLE_NAME_SOURCE, SourceInterface::SOURCE_CODE);
     }
 
     /**

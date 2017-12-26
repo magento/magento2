@@ -28,14 +28,17 @@ class ProcessSourceItemsObserver implements ObserverInterface
      * @var SourceItemsProcessor
      */
     private $sourceItemsProcessor;
+
     /**
      * @var DefaultSourceProviderInterface
      */
     private $defaultSourceProvider;
+
     /**
      * @var SourceItemInterfaceFactory
      */
     private $sourceItemInterfaceFactory;
+
     /**
      * @var SourceItemsSaveInterface
      */
@@ -106,7 +109,7 @@ class ProcessSourceItemsObserver implements ObserverInterface
                 SourceItemInterface::SKU => $sku,
                 SourceItemInterface::QUANTITY => $qty,
                 SourceItemInterface::STATUS => $stockStatus,
-                SourceItemInterface::SOURCE_CODE => $defaultSourceCode
+                SourceItemInterface::SOURCE_CODE => $defaultSourceCode,
             ]
         ]);
 

@@ -27,7 +27,7 @@ class SourceItemCollectionFactory implements SourceItemCollectionFactoryInterfac
     /**
      * Source code field name
      */
-    const SOURCE_CODE_FIELD = 'source_' . SourceInterface::CODE;
+    const SOURCE_CODE_FIELD = 'source_' . SourceInterface::SOURCE_CODE;
 
     /**
      * @var ObjectManagerInterface
@@ -45,26 +45,18 @@ class SourceItemCollectionFactory implements SourceItemCollectionFactoryInterfac
     private $columnProvider;
 
     /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
-
-    /**
      * @param ObjectManagerInterface $objectManager
      * @param FilterProcessorAggregator $filterProcessor
      * @param ColumnProviderInterface $columnProvider
-     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         FilterProcessorAggregator $filterProcessor,
-        ColumnProviderInterface $columnProvider,
-        ResourceConnection $resourceConnection
+        ColumnProviderInterface $columnProvider
     ) {
         $this->objectManager = $objectManager;
         $this->filterProcessor = $filterProcessor;
         $this->columnProvider = $columnProvider;
-        $this->resourceConnection = $resourceConnection;
     }
 
     /**

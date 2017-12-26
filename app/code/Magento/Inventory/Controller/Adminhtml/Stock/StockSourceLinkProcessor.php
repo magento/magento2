@@ -82,10 +82,10 @@ class StockSourceLinkProcessor
         $sourceCodesForDelete = [];
 
         foreach ($assignedSources as $assignedSource) {
-            if (array_key_exists($assignedSource->getCode(), $sourceCodesForSave)) {
-                unset($sourceCodesForSave[$assignedSource->getCode()]);
+            if (array_key_exists($assignedSource->getSourceCode(), $sourceCodesForSave)) {
+                unset($sourceCodesForSave[$assignedSource->getSourceCode()]);
             } else {
-                $sourceCodesForDelete[] = $assignedSource->getCode();
+                $sourceCodesForDelete[] = $assignedSource->getSourceCode();
             }
         }
 

@@ -21,7 +21,7 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const CODE = 'code';
+    const SOURCE_CODE = 'source_code';
     const NAME = 'name';
     const CONTACT_NAME = 'contact_name';
     const EMAIL = 'email';
@@ -46,15 +46,15 @@ interface SourceInterface extends ExtensibleDataInterface
      *
      * @return string|null
      */
-    public function getCode();
+    public function getSourceCode();
 
     /**
      * Set source code
      *
-     * @param string|null $code
+     * @param string|null $sourceCode
      * @return void
      */
-    public function setCode($code);
+    public function setSourceCode($sourceCode);
 
     /**
      * Get source name

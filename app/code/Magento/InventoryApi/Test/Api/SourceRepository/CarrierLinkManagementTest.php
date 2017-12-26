@@ -139,7 +139,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
         $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['sourceCode' => $sourceCode]);
-        self::assertArrayHasKey(SourceInterface::CODE, $response);
+        self::assertArrayHasKey(SourceInterface::SOURCE_CODE, $response);
         return $response;
     }
 
@@ -178,6 +178,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
         return [
             'use_global_configuration_chosen' => [
                 [
+                    SourceInterface::SOURCE_CODE => 'source-code-1',
                     SourceInterface::NAME => 'source-name-1',
                     SourceInterface::POSTCODE => 'source-postcode',
                     SourceInterface::COUNTRY_ID => 'US',
@@ -208,6 +209,7 @@ class CarrierLinkManagementTest extends WebapiAbstract
             ],
             'carrier_codes_not_exits' => [
                 [
+                    SourceInterface::SOURCE_CODE => 'source-code-1',
                     SourceInterface::NAME => 'source-name-1',
                     SourceInterface::POSTCODE => 'source-postcode',
                     SourceInterface::COUNTRY_ID => 'US',

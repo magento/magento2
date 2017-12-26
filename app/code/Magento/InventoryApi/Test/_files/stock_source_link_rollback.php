@@ -14,12 +14,12 @@ $unassignSourceFromStock = Bootstrap::getObjectManager()->get(UnassignSourceFrom
 $unassignSourceFromStock->execute('eu-1', 10);
 $unassignSourceFromStock->execute('eu-2', 10);
 $unassignSourceFromStock->execute('eu-3', 10);
-$unassignSourceFromStock->execute('eu-dis', 10);
+$unassignSourceFromStock->execute('eu-disabled', 10);
 // US stock
 $unassignSourceFromStock->execute('us-1', 20);
 // Global Stock
 $unassignSourceFromStock->execute('eu-1', 30);
 $unassignSourceFromStock->execute('eu-2', 30);
 $unassignSourceFromStock->execute('eu-3', 30);
-$unassignSourceFromStock->execute('eu-dis', 30);
+$unassignSourceFromStock->execute('eu-disabled', 30);
 $unassignSourceFromStock->execute('us-1', 30);

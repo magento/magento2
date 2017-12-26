@@ -21,7 +21,7 @@ interface UnassignSourceFromStockInterface
      *
      * If Source or Stock with given code doesn't exist then do nothing
      *
-     * @param int $sourceCode
+     * @param string $sourceCode
      * @param int $stockId
      * @return void
      * @throws \Magento\Framework\Exception\InputException

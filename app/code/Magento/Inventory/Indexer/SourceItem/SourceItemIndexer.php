@@ -13,7 +13,6 @@ use Magento\Framework\MultiDimensionalIndex\Alias;
 use Magento\Framework\MultiDimensionalIndex\IndexHandlerInterface;
 use Magento\Framework\MultiDimensionalIndex\IndexNameBuilder;
 use Magento\Framework\MultiDimensionalIndex\IndexStructureInterface;
-use Magento\Inventory\Indexer\IndexDataProvider;
 use Magento\Inventory\Indexer\Stock\StockIndexer;
 
 /**

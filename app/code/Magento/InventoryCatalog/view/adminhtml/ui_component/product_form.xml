@@ -45,7 +45,7 @@
                 <item name="config" xsi:type="array">
                     <item name="dataProvider" xsi:type="string">data.sources.assign_sources_grid</item>
                     <item name="map" xsi:type="array">
-                        <item name="source_code" xsi:type="string">code</item>
+                        <item name="source_code" xsi:type="string">source_code</item>
                         <item name="name" xsi:type="string">name</item>
                         <item name="qty" xsi:type="string">qty</item>
                     </item>
@@ -79,7 +79,7 @@
                         <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                         <dataType>text</dataType>
                         <dataScope>source_code</dataScope>
-                        <label translate="true">Code</label>
+                        <label translate="true">ID</label>
                     </settings>
                 </field>
                 <field name="name" formElement="input" sortOrder="20">

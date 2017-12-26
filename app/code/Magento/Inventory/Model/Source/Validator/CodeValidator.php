@@ -34,16 +34,15 @@ class CodeValidator implements SourceValidatorInterface
      */
     public function validate(SourceInterface $source): ValidationResult
     {
-        $value = (string)$source->getCode();
+        $value = (string)$source->getSourceCode();
 
         if ('' === trim($value)) {
-            $errors[] = __('"%field" can not be empty.', ['field' => SourceInterface::CODE]);
+            $errors[] = __('"%field" can not be empty.', ['field' => SourceInterface::SOURCE_CODE]);
         } elseif (preg_match('/\s/', $value)) {
-            $errors[] = __('"%field" can not contain whitespaces.', ['field' => SourceInterface::CODE]);
+            $errors[] = __('"%field" can not contain whitespaces.', ['field' => SourceInterface::SOURCE_CODE]);
         } else {
             $errors = [];
         }
-
         return $this->validationResultFactory->create(['errors' => $errors]);
     }
 }

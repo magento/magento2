@@ -25,9 +25,9 @@ interface GetInterface
     /**
      * Get Source data by given code
      *
-     * @param string $code
+     * @param string $sourceCode
      * @return SourceInterface
      * @throws NoSuchEntityException
      */
-    public function execute(string $code): SourceInterface;
+    public function execute(string $sourceCode): SourceInterface;
 }

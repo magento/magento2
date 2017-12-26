@@ -10,6 +10,7 @@ namespace Magento\InventoryImportExport\Model;
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Inventory\Model\SourceItemFactory;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemsSaveInterface;
 use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
 
@@ -66,6 +67,7 @@ class StockItemImporter implements StockItemImporterInterface
             if (isset($stockDatum[Product::COL_SKU])) {
                 $inStock = (isset($stockDatum['is_in_stock'])) ? $stockDatum['is_in_stock'] : 0;
                 $qty = (isset($stockDatum['qty'])) ? $stockDatum['qty'] : 0;
+                /** @var SourceItemInterface $sourceItem */
                 $sourceItem = $this->sourceItemFactory->create();
                 $sourceItem->setSku($stockDatum[Product::COL_SKU]);
                 $sourceItem->setSourceCode($this->defaultSource->getCode());

@@ -55,15 +55,15 @@ class SourceRepository implements SourceRepositoryInterface
      */
     public function save(SourceInterface $source)
     {
-        return $this->commandSave->execute($source);
+        $this->commandSave->execute($source);
     }
 
     /**
      * @inheritdoc
      */
-    public function get(string $code): SourceInterface
+    public function get(string $sourceCode): SourceInterface
     {
-        return $this->commandGet->execute($code);
+        return $this->commandGet->execute($sourceCode);
     }
 
     /**

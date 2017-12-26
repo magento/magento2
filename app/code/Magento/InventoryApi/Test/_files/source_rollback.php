@@ -6,11 +6,11 @@
 declare(strict_types=1);
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var ResourceConnection $connection */
 $connection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
 $connection->getConnection()->delete($connection->getTableName('inventory_source'), [
-    SourceResourceModel::SOURCE_ID_FIELD . ' = ?' => 10,
+    SourceInterface::SOURCE_CODE . ' IN (?)' => ['source-code-1', 'source-code-1-updated']
 ]);

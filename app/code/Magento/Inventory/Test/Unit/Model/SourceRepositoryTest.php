@@ -71,12 +71,15 @@ class SourceRepositoryTest extends TestCase
 
     public function testSave()
     {
+        $sourceCode = 'source-code';
+
         $this->commandSave
             ->expects($this->once())
             ->method('execute')
-            ->with($this->source);
+            ->with($this->source)
+            ->willReturn($sourceCode);
 
-        $this->sourceRepository->save($this->source);
+        self::assertEquals($sourceCode, $this->sourceRepository->save($this->source));
     }
 
     /**
@@ -96,7 +99,7 @@ class SourceRepositoryTest extends TestCase
 
     public function testGet()
     {
-        $sourceCode = 'default';
+        $sourceCode = 'source-code';
 
         $this->commandGet
             ->expects($this->once())
@@ -113,7 +116,7 @@ class SourceRepositoryTest extends TestCase
      */
     public function testGetWithNoSuchEntityException()
     {
-        $sourceCode = 'default';
+        $sourceCode = 'source-code';
 
         $this->commandGet
             ->expects($this->once())

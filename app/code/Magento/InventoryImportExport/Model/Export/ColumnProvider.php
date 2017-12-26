@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryImportExport\Model\Export;
 
 use Magento\Framework\Data\Collection as AttributeCollection;
-use Magento\InventoryImportExport\Model\Export\ColumnProviderInterface;
 use Magento\ImportExport\Model\Export;
 use \Magento\Framework\Exception\LocalizedException;
 
@@ -31,7 +30,7 @@ class ColumnProvider implements ColumnProviderInterface
             return $columns;
         }
 
-        if (count($filters[Export::FILTER_ELEMENT_SKIP]) ===  count($columns)) {
+        if (count($filters[Export::FILTER_ELEMENT_SKIP]) === count($columns)) {
             throw new LocalizedException(__('There is no data for the export.'));
         }
 

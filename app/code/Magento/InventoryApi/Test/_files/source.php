@@ -6,7 +6,6 @@
 declare(strict_types=1);
 
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
@@ -25,8 +24,7 @@ $source = $sourceFactory->create();
 $dataObjectHelper->populateWithArray(
     $source,
     [
-        SourceResourceModel::SOURCE_ID_FIELD => 10,
-        SourceInterface::CODE => 'source-code',
+        SourceInterface::SOURCE_CODE => 'source-code-1',
         SourceInterface::NAME => 'source-name-1',
         SourceInterface::CONTACT_NAME => 'source-contact-name',
         SourceInterface::EMAIL => 'source-email',

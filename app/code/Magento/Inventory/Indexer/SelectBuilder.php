@@ -51,7 +51,7 @@ class SelectBuilder
 
         // find all enabled sources
         $select = $connection->select()
-            ->from($sourceTable, [SourceInterface::CODE])
+            ->from($sourceTable, [SourceInterface::SOURCE_CODE])
             ->where(SourceInterface::ENABLED . ' = ?', 1);
         $sourceCodes = $connection->fetchCol($select);
 

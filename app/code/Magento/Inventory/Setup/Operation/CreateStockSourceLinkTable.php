@@ -88,11 +88,11 @@ class CreateStockSourceLinkTable
                 $stockSourceLinkTable,
                 StockSourceLink::SOURCE_CODE,
                 $sourceTable,
-                SourceInterface::CODE
+                SourceInterface::SOURCE_CODE
             ),
             StockSourceLink::SOURCE_CODE,
             $sourceTable,
-            SourceInterface::CODE,
+            SourceInterface::SOURCE_CODE,
             AdapterInterface::FK_ACTION_CASCADE
         )->addIndex(
             $setup->getIdxName(

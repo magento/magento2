@@ -64,7 +64,7 @@ class CreateDefaultSource
     public function execute()
     {
         $data = [
-            SourceInterface::CODE => 'default',
+            SourceInterface::SOURCE_CODE => $this->defaultSourceProvider->getCode(),
             SourceInterface::NAME => 'Default Source',
             SourceInterface::ENABLED => 1,
             SourceInterface::DESCRIPTION => 'Default Source',

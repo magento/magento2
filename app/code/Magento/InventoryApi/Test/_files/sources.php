@@ -6,7 +6,6 @@
 declare(strict_types=1);
 
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceInterfaceFactory;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
@@ -22,8 +21,7 @@ $sourceRepository = Bootstrap::getObjectManager()->get(SourceRepositoryInterface
 $sourcesData = [
     [
         // define only required and needed for tests fields
-        SourceResourceModel::SOURCE_ID_FIELD => 10,
-        SourceInterface::CODE => 'eu-1',
+        SourceInterface::SOURCE_CODE => 'eu-1',
         SourceInterface::NAME => 'EU-source-1',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 100,
@@ -31,8 +29,7 @@ $sourcesData = [
         SourceInterface::COUNTRY_ID => 'FR',
     ],
     [
-        SourceResourceModel::SOURCE_ID_FIELD => 20,
-        SourceInterface::CODE => 'eu-2',
+        SourceInterface::SOURCE_CODE => 'eu-2',
         SourceInterface::NAME => 'EU-source-2',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 200,
@@ -40,8 +37,7 @@ $sourcesData = [
         SourceInterface::COUNTRY_ID => 'FR',
     ],
     [
-        SourceResourceModel::SOURCE_ID_FIELD => 30,
-        SourceInterface::CODE => 'eu-3',
+        SourceInterface::SOURCE_CODE => 'eu-3',
         SourceInterface::NAME => 'EU-source-3',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 300,
@@ -49,8 +45,7 @@ $sourcesData = [
         SourceInterface::COUNTRY_ID => 'DE',
     ],
     [
-        SourceResourceModel::SOURCE_ID_FIELD => 40,
-        SourceInterface::CODE => 'eu-dis',
+        SourceInterface::SOURCE_CODE => 'eu-disabled',
         SourceInterface::NAME => 'EU-source-disabled',
         SourceInterface::ENABLED => false,
         SourceInterface::PRIORITY => 10,
@@ -58,8 +53,7 @@ $sourcesData = [
         SourceInterface::COUNTRY_ID => 'DE',
     ],
     [
-        SourceResourceModel::SOURCE_ID_FIELD => 50,
-        SourceInterface::CODE => 'us-1',
+        SourceInterface::SOURCE_CODE => 'us-1',
         SourceInterface::NAME => 'US-source-1',
         SourceInterface::ENABLED => true,
         SourceInterface::PRIORITY => 100,

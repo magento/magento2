@@ -100,7 +100,7 @@
                 <item name="js_config" xsi:type="array">
                     <item name="dataProvider" xsi:type="string">data.sources.assign_sources_grid</item>
                     <item name="map" xsi:type="array">
-                        <item name="source_code" xsi:type="string">code</item>
+                        <item name="source_code" xsi:type="string">source_code</item>
                         <item name="name" xsi:type="string">name</item>
                     </item>
                     <item name="identificationDRProperty" xsi:type="string">source_code</item>

@@ -75,7 +75,7 @@ class SourceItemConfigurationsSaveTest extends WebapiAbstract
         ];
         $sourceItemConfiguration = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceCode, 'sku' => $sku]);
+            : $this->_webApiCall($serviceInfo, ['sourceCode' => $sourceCode, 'sku' => $sku]);
 
         self::assertInternalType('array', $sourceItemConfiguration);
         self::assertNotEmpty($sourceItemConfiguration);

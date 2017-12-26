@@ -30,37 +30,37 @@ $sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::
  */
 $sourcesItemsData = [
     [
-        SourceItemInterface::SOURCE_CODE => 'eu-1', // EU-source-1
+        SourceItemInterface::SOURCE_CODE => 'eu-1',
         SourceItemInterface::SKU => 'SKU-1',
         SourceItemInterface::QUANTITY => 5.5,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
     ],
     [
-        SourceItemInterface::SOURCE_CODE => 'eu-2', // EU-source-2
+        SourceItemInterface::SOURCE_CODE => 'eu-2',
         SourceItemInterface::SKU => 'SKU-1',
         SourceItemInterface::QUANTITY => 3,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
     ],
     [
-        SourceItemInterface::SOURCE_CODE => 'eu-3', // EU-source-3
+        SourceItemInterface::SOURCE_CODE => 'eu-3',
         SourceItemInterface::SKU => 'SKU-1',
         SourceItemInterface::QUANTITY => 10,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
     ],
     [
-        SourceItemInterface::SOURCE_CODE => 'eu-dis', // EU-source-disabled
+        SourceItemInterface::SOURCE_CODE => 'eu-disabled',
         SourceItemInterface::SKU => 'SKU-1',
         SourceItemInterface::QUANTITY => 10,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
     ],
     [
-        SourceItemInterface::SOURCE_CODE => 'us-1', // US-source-1
+        SourceItemInterface::SOURCE_CODE => 'us-1',
         SourceItemInterface::SKU => 'SKU-2',
         SourceItemInterface::QUANTITY => 5,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
     ],
     [
-        SourceItemInterface::SOURCE_CODE => 'eu-2', // EU-source-2
+        SourceItemInterface::SOURCE_CODE => 'eu-2',
         SourceItemInterface::SKU => 'SKU-3',
         SourceItemInterface::QUANTITY => 6,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,

@@ -9,7 +9,6 @@ namespace Magento\InventoryImportExport\Model\Import;
 
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterfaceFactory;
-use Magento\InventoryApi\Api\SourceRepositoryInterface;
 
 class SourceItemConvert
 {
@@ -18,20 +17,12 @@ class SourceItemConvert
      */
     private $sourceItemFactory;
 
-    /**´
-     * @var SourceRepositoryInterface
-     */
-    private $sourceRepository;
-
     /**
      * @param SourceItemInterfaceFactory $sourceItemFactory
      */
-    public function __construct(
-        SourceItemInterfaceFactory $sourceItemFactory,
-        SourceRepositoryInterface $sourceRepository
-    ) {
+    public function __construct(SourceItemInterfaceFactory $sourceItemFactory)
+    {
         $this->sourceItemFactory = $sourceItemFactory;
-        $this->sourceRepository = $sourceRepository;
     }
 
     /**
@@ -43,10 +34,9 @@ class SourceItemConvert
     {
         $sourceItems = [];
         foreach ($bunch as $rowData) {
-            $source = $this->sourceRepository->get($rowData[Sources::COL_SOURCE_CODE]);
             /** @var SourceItemInterface $sourceItem */
             $sourceItem = $this->sourceItemFactory->create();
-            $sourceItem->setSourceCode($source->getCode());
+            $sourceItem->setSourceCode($rowData[Sources::COL_SOURCE]);
             $sourceItem->setSku($rowData[Sources::COL_SKU]);
             $sourceItem->setQuantity($rowData[Sources::COL_QTY]);
 

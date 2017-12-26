@@ -42,10 +42,7 @@ class UpdateInventorySourceItem
     }
 
     /**
-     * Insert Stock Item to Inventory Source Item by raw MySQL query
-     *
      * @param ModuleDataSetupInterface $setup
-     *
      * @return void
      */
     public function execute(ModuleDataSetupInterface $setup)

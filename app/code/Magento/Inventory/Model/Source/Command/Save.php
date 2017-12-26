@@ -61,7 +61,8 @@ class Save implements SaveInterface
         }
 
         try {
-            return $this->sourceResource->save($source);
+            $this->sourceResource->save($source);
+            $source->getSourceCode();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not save Source'), $e);

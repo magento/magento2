@@ -83,7 +83,7 @@ class ValidationTest extends WebapiAbstract
                     'message' => 'Validation Failed',
                     'errors' => [
                         [
-                            'message' => '"%field" should be string.',
+                            'message' => '"%field" can not be empty.',
                             'parameters' => [
                                 'field' => SourceItemInterface::SOURCE_CODE,
                             ],
@@ -237,7 +237,37 @@ class ValidationTest extends WebapiAbstract
                     'message' => 'Validation Failed',
                     'errors' => [
                         [
-                            'message' => '"%field" should be string.',
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceItemInterface::SOURCE_CODE,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'empty_' . SourceItemInterface::SOURCE_CODE => [
+                SourceItemInterface::SOURCE_CODE,
+                '',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
+                            'parameters' => [
+                                'field' => SourceItemInterface::SOURCE_CODE,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'whitespaces_' . SourceItemInterface::SOURCE_CODE => [
+                SourceItemInterface::SOURCE_CODE,
+                ' ',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not be empty.',
                             'parameters' => [
                                 'field' => SourceItemInterface::SOURCE_CODE,
                             ],
@@ -247,9 +277,24 @@ class ValidationTest extends WebapiAbstract
             ],
             'not_exists_' . SourceItemInterface::SOURCE_CODE => [
                 SourceItemInterface::SOURCE_CODE,
-                'eu-12',
+                'not-existed-source-code',
                 [
                     'message' => 'Could not save Source Item',
+                ],
+            ],
+            'with_whitespaces_' . SourceItemInterface::SOURCE_CODE => [
+                SourceItemInterface::SOURCE_CODE,
+                'source code',
+                [
+                    'message' => 'Validation Failed',
+                    'errors' => [
+                        [
+                            'message' => '"%field" can not contain whitespaces.',
+                            'parameters' => [
+                                'field' => SourceItemInterface::SOURCE_CODE,
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ];
@@ -308,14 +353,6 @@ class ValidationTest extends WebapiAbstract
                 [
                     'message' => 'Error occurred during "' . SourceItemInterface::QUANTITY
                         . '" processing. Invalid type for value: "test". Expected Type: "float".',
-                ],
-            ],
-            'empty_' . SourceItemInterface::SOURCE_CODE => [
-                SourceItemInterface::SOURCE_CODE,
-                '',
-                [
-                    'message' => 'Error occurred during "' . SourceItemInterface::SOURCE_CODE
-                        . '" processing. Invalid type for value: "". Expected Type: "string".',
                 ],
             ],
             'array_' . SourceItemInterface::SOURCE_CODE => [

@@ -35,7 +35,7 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
     /**
      * Set source code
      *
-     * @param int $sourceCode
+     * @param string $sourceCode
      * @return void
      */
     public function setSourceCode(string $sourceCode);

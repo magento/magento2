@@ -95,11 +95,11 @@ class CreateSourceItemTable
                 $sourceItemTable,
                 SourceItemInterface::SOURCE_CODE,
                 $sourceTable,
-                SourceInterface::CODE
+                SourceInterface::SOURCE_CODE
             ),
             SourceItemInterface::SOURCE_CODE,
             $sourceTable,
-            SourceInterface::CODE,
+            SourceInterface::SOURCE_CODE,
             AdapterInterface::FK_ACTION_CASCADE
         )->addIndex(
             $setup->getIdxName(

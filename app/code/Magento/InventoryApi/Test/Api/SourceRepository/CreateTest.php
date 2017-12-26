@@ -9,7 +9,6 @@ namespace Magento\InventoryApi\Test\Api\SourceRepository;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\TestFramework\Assert\AssertArrayContains;
@@ -27,8 +26,9 @@ class CreateTest extends WebapiAbstract
 
     public function testCreate()
     {
+        $sourceCode = 'source-code-1';
         $expectedData = [
-            SourceInterface::CODE => 'source-code-1',
+            SourceInterface::SOURCE_CODE => 'source-code-1',
             SourceInterface::NAME => 'source-name-1',
             SourceInterface::CONTACT_NAME => 'source-contact-name',
             SourceInterface::EMAIL => 'source-email',
@@ -66,10 +66,9 @@ class CreateTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        $sourceId = $this->_webApiCall($serviceInfo, ['source' => $expectedData]);
+        $this->_webApiCall($serviceInfo, ['source' => $expectedData]);
 
-        self::assertNotEmpty($sourceId);
-        AssertArrayContains::assert($expectedData, $this->getSourceDataById($sourceId));
+        AssertArrayContains::assert($expectedData, $this->getSourceDataByCode($sourceCode));
     }
 
     protected function tearDown()
@@ -83,14 +82,14 @@ class CreateTest extends WebapiAbstract
     }
 
     /**
-     * @param int $sourceId
+     * @param string $sourceCode
      * @return array
      */
-    private function getSourceDataById(int $sourceId): array
+    private function getSourceDataByCode(string $sourceCode): array
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceCode,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -100,8 +99,8 @@ class CreateTest extends WebapiAbstract
         ];
         $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId]);
-        self::assertArrayHasKey(SourceResourceModel::SOURCE_ID_FIELD, $response);
+            : $this->_webApiCall($serviceInfo, ['sourceCode' => $sourceCode]);
+        self::assertArrayHasKey(SourceInterface::SOURCE_CODE, $response);
         return $response;
     }
 }

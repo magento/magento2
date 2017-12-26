@@ -16,7 +16,6 @@ use Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
 use Magento\InventoryImportExport\Model\Import\Command\CommandInterface;
 use Magento\InventoryImportExport\Model\Import\Serializer\Json;
 use Magento\InventoryImportExport\Model\Import\Validator\ValidatorInterface;
-use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**

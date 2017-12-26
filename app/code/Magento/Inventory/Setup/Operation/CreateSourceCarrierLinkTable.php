@@ -82,11 +82,11 @@ class CreateSourceCarrierLinkTable
                 $sourceCarrierLinkTable,
                 SourceCarrierLinkInterface::SOURCE_CODE,
                 $sourceTable,
-                SourceInterface::CODE
+                SourceInterface::SOURCE_CODE
             ),
             SourceCarrierLinkInterface::SOURCE_CODE,
             $sourceTable,
-            SourceInterface::CODE,
+            SourceInterface::SOURCE_CODE,
             AdapterInterface::FK_ACTION_CASCADE
         );
     }

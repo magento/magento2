@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryApi\Test\Api\SourceRepository;
 
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
 use Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface;
 use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\TestFramework\Assert\AssertArrayContains;
@@ -28,9 +27,8 @@ class UpdateTest extends WebapiAbstract
      */
     public function testUpdate()
     {
-        $sourceId = 10;
+        $sourceCode = 'source-code-1';
         $expectedData = [
-            SourceInterface::CODE => 'source-code-1-updated',
             SourceInterface::NAME => 'source-name-1-updated',
             SourceInterface::CONTACT_NAME => 'source-contact-name-updated',
             SourceInterface::EMAIL => 'source-email-updated',
@@ -60,7 +58,7 @@ class UpdateTest extends WebapiAbstract
         ];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceCode,
                 'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -72,22 +70,22 @@ class UpdateTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, ['source' => $expectedData]);
         } else {
             $requestData = $expectedData;
-            $requestData['sourceId'] = $sourceId;
+            $requestData['sourceCode'] = $sourceCode;
             $this->_webApiCall($serviceInfo, ['source' => $requestData]);
         }
 
-        AssertArrayContains::assert($expectedData, $this->getSourceDataById($sourceId));
+        AssertArrayContains::assert($expectedData, $this->getSourceDataByCode($sourceCode));
     }
 
     /**
-     * @param int $sourceId
+     * @param string $sourceCode
      * @return array
      */
-    private function getSourceDataById(int $sourceId): array
+    private function getSourceDataByCode(string $sourceCode): array
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceCode,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -97,8 +95,8 @@ class UpdateTest extends WebapiAbstract
         ];
         $response = (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId]);
-        self::assertArrayHasKey(SourceResourceModel::SOURCE_ID_FIELD, $response);
+            : $this->_webApiCall($serviceInfo, ['sourceCode' => $sourceCode]);
+        self::assertArrayHasKey(SourceInterface::SOURCE_CODE, $response);
         return $response;
     }
 }

@@ -9,7 +9,7 @@ namespace Magento\InventoryApi\Test\Api\StockSourceLink;
 
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\Inventory\Model\ResourceModel\Source as SourceResourceModel;
+use Magento\InventoryApi\Api\Data\SourceInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class AssignSourcesToStockTest extends WebapiAbstract
@@ -29,7 +29,7 @@ class AssignSourcesToStockTest extends WebapiAbstract
      */
     public function testAssignSourcesToStock()
     {
-        $sourceIds = [10, 20];
+        $sourceCodes = ['eu-1', 'eu-2'];
         $stockId = 10;
         $serviceInfo = [
             'rest' => [
@@ -42,23 +42,23 @@ class AssignSourcesToStockTest extends WebapiAbstract
             ],
         ];
         (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
-            ? $this->_webApiCall($serviceInfo, ['sourceIds' => $sourceIds])
-            : $this->_webApiCall($serviceInfo, ['sourceIds' => $sourceIds, 'stockId' => $stockId]);
+            ? $this->_webApiCall($serviceInfo, ['sourceCodes' => $sourceCodes])
+            : $this->_webApiCall($serviceInfo, ['sourceCodes' => $sourceCodes, 'stockId' => $stockId]);
 
         $assignedSourcesForStock = $this->getAssignedSourcesForStock($stockId);
-        self::assertEquals($sourceIds, array_column($assignedSourcesForStock, SourceResourceModel::SOURCE_ID_FIELD));
+        self::assertEquals($sourceCodes, array_column($assignedSourcesForStock, SourceInterface::SOURCE_CODE));
     }
 
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock.php
-     * @param string|array $sourceIds
+     * @param string|array $sourceCodes
      * @param string|int $stockId
      * @param array $expectedErrorData
      * @throws \Exception
      * @dataProvider dataProviderWrongParameters
      */
-    public function testAssignSourcesToStockWithWrongParameters($sourceIds, $stockId, array $expectedErrorData)
+    public function testAssignSourcesToStockWithWrongParameters($sourceCodes, $stockId, array $expectedErrorData)
     {
         $serviceInfo = [
             'rest' => [
@@ -72,8 +72,8 @@ class AssignSourcesToStockTest extends WebapiAbstract
         ];
         try {
             (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
-                ? $this->_webApiCall($serviceInfo, ['sourceIds' => $sourceIds])
-                : $this->_webApiCall($serviceInfo, ['sourceIds' => $sourceIds, 'stockId' => $stockId]);
+                ? $this->_webApiCall($serviceInfo, ['sourceCodes' => $sourceCodes])
+                : $this->_webApiCall($serviceInfo, ['sourceCodes' => $sourceCodes, 'stockId' => $stockId]);
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
@@ -100,7 +100,7 @@ class AssignSourcesToStockTest extends WebapiAbstract
     {
         return [
             'not_numeric_stock_id' => [
-                [10, 20],
+                ['eu-1', 'eu-2'],
                 'not_numeric',
                 [
                     'rest_message' => 'Invalid type for value: "not_numeric". Expected Type: "int".',
@@ -109,23 +109,23 @@ class AssignSourcesToStockTest extends WebapiAbstract
                 ],
             ],
             'nonexistent_stock_id' => [
-                [10, 20],
+                ['eu-1', 'eu-2'],
                 -1,
                 [
                     'rest_message' => 'Could not assign Sources to Stock',
                     'soap_message' => 'Could not assign Sources to Stock',
                 ],
             ],
-            'not_array_source_ids' => [
+            'not_array_source_codes' => [
                 'not_array',
                 10,
                 [
-                    'rest_message' => 'Invalid type for value: "string". Expected Type: "int[]".',
-                    // During SOAP source_ids parameter will be converted to empty array so error is different
+                    'rest_message' => 'Invalid type for value: "string". Expected Type: "string[]".',
+                    // During SOAP source_codes parameter will be converted to empty array so error is different
                     'soap_message' => 'Input data is invalid',
                 ],
             ],
-            'empty_source_ids' => [
+            'empty_source_codes' => [
                 [],
                 10,
                 [
@@ -133,8 +133,8 @@ class AssignSourcesToStockTest extends WebapiAbstract
                     'soap_message' => 'Input data is invalid',
                 ],
             ],
-            'nonexistent_source_id' => [
-                [-1, 20],
+            'nonexistent_source_code' => [
+                ['not-existed-source-code', 'eu-1'],
                 10,
                 [
                     'rest_message' => 'Could not assign Sources to Stock',

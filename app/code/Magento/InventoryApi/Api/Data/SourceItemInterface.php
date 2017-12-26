@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\InventoryApi\Api\Data\SourceItemExtensionInterface;
 
 /**
  * Represents amount of product on physical storage
@@ -61,7 +60,7 @@ interface SourceItemInterface extends ExtensibleDataInterface
     /**
      * Set source code
      *
-     * @param stirng|null $sourceCode
+     * @param string|null $sourceCode
      * @return void
      */
     public function setSourceCode($sourceCode);

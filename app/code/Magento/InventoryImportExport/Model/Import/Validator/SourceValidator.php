@@ -63,7 +63,7 @@ class SourceValidator implements ValidatorInterface
     /**
      * Returns exits already the source in sources.
      *
-     * @param int $sourceCode
+     * @param string $sourceCode
      * @return bool
      */
     private function isExistingSource($sourceCode): bool
@@ -80,7 +80,7 @@ class SourceValidator implements ValidatorInterface
     {
         $sources = $this->sourceRepository->getList();
         foreach ($sources->getItems() as $source) {
-            $sourceCode = $source->getCode();
+            $sourceCode = $source->getSourceCode();
             $this->sourceCodes[$sourceCode] = $sourceCode;
         }
     }

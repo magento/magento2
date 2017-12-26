@@ -42,14 +42,14 @@ class Get implements GetInterface
     /**
      * @inheritdoc
      */
-    public function execute(string $code): SourceInterface
+    public function execute(string $sourceCode): SourceInterface
     {
         /** @var SourceInterface $source */
         $source = $this->sourceFactory->create();
-        $this->sourceResource->load($source, $code, SourceInterface::CODE);
+        $this->sourceResource->load($source, $sourceCode, SourceInterface::SOURCE_CODE);
 
-        if (null === $source->getCode()) {
-            throw new NoSuchEntityException(__('Source with code "%value" does not exist.', ['value' => $code]));
+        if (null === $source->getSourceCode()) {
+            throw new NoSuchEntityException(__('Source with code "%value" does not exist.', ['value' => $sourceCode]));
         }
         return $source;
     }

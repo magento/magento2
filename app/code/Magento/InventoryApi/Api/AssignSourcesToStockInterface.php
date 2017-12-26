@@ -19,9 +19,9 @@ interface AssignSourcesToStockInterface
     /**
      * Assign Sources to Stock
      *
-     * If one of the Sources or Stock with given codes don't exist then exception will be throw
+     * If one of the Sources or Stock with given id don't exist then exception will be throw
      *
-     * @param int[] $sourceCodes
+     * @param string[] $sourceCodes
      * @param int $stockId
      * @return void
      * @throws \Magento\Framework\Exception\InputException

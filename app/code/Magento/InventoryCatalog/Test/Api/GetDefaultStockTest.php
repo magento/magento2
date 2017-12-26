@@ -8,20 +8,30 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Api;
 
 use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Rest\Request;
 
-/**
- * Class GetDefaultStockTest
- */
 class GetDefaultStockTest extends WebapiAbstract
 {
+    /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
+    }
+
     /**
      * Test that default Stock is present after installation
      */
     public function testGetDefaultSource()
     {
-        $defaultStockId = 1;
+        $defaultStockId = $this->defaultStockProvider->getId();
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/inventory/stock/' . $defaultStockId,

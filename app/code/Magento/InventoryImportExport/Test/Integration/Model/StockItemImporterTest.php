@@ -78,8 +78,8 @@ class StockItemImporterTest extends TestCase
         $expectedData = [
             SourceItemInterface::SKU => $stockData['sku'],
             SourceItemInterface::QUANTITY => '1.0000',
-            SourceItemInterface::SOURCE_CODE => (string) $this->defaultSourceProvider->getCode(),
-            SourceItemInterface::STATUS => (string) SourceItemInterface::STATUS_IN_STOCK
+            SourceItemInterface::SOURCE_CODE => (string)$this->defaultSourceProvider->getCode(),
+            SourceItemInterface::STATUS => (string)SourceItemInterface::STATUS_IN_STOCK
         ];
 
         $this->assertArrayHasKey('SKU-1', $compareData);
@@ -122,7 +122,7 @@ class StockItemImporterTest extends TestCase
             $comparableArray[$sourceItem->getSku()] = [
                 SourceItemInterface::SKU => $sourceItem->getSku(),
                 SourceItemInterface::QUANTITY => $sourceItem->getQuantity(),
-                SourceItemInterface::SOURCE_CODE => (string)$sourceItem->getSourceCode(),
+                SourceItemInterface::SOURCE_CODE => $sourceItem->getSourceCode(),
                 SourceItemInterface::STATUS => $sourceItem->getStatus()
             ];
         }
