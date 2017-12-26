@@ -44,8 +44,8 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
         $quantity,
         CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        ItemInterface $item = null,
-        ConfiguredOptions $configuredOptions
+        ConfiguredOptions $configuredOptions,
+        ItemInterface $item = null
     ) {
         $this->item = $item;
         $this->configuredOptions = $configuredOptions;
