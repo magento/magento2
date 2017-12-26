@@ -558,7 +558,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         $isConfirmNeed = 1 === (int)$this->_scopeConfig->getValue(
             self::XML_PATH_CONFIRMATION_FLAG,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
+        );
         $status = $this->getSubscriptionStatus($subscribe, $isConfirmNeed, $customerId);
         if ($status == self::STATUS_SUBSCRIBED && $customerData->getConfirmation() === null) {
             $sendInformationEmail = true;
@@ -627,9 +627,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             } elseif ($isConfirmNeed) {
                 $status = self::STATUS_NOT_ACTIVE;
             }
-        } elseif (($this->getStatus() == self::STATUS_UNCONFIRMED)) {
-            $status = self::STATUS_SUBSCRIBED;
-        } else {
+        } elseif (($this->getStatus() != self::STATUS_UNCONFIRMED)) {
             $status = self::STATUS_UNSUBSCRIBED;
         }
 
