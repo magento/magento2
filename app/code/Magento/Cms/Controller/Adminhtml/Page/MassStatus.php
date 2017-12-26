@@ -13,10 +13,10 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
 
 /**
- * Class MassDisable
+ * Class MassStatus
  * @package Magento\Cms\Controller\Adminhtml\Page
  */
-class MassDisable extends \Magento\Backend\App\Action
+class MassStatus extends \Magento\Backend\App\Action
 {
     /**
      * Authorization level of a basic admin session
@@ -63,25 +63,33 @@ class MassDisable extends \Magento\Backend\App\Action
      * Execute action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
 
         try {
+            $status = $this->getRequest()->getParam('status');
+            if ($status === null) {
+                throw new LocalizedException(__('Status is a required param.'));
+            }
+            $status = (bool) $status;
+            $statusLabel = $status ? __('Enabled') : __('Disabled');
             foreach ($collection as $item) {
-                $item->setIsActive(false);
+                $item->setIsActive($status);
                 $this->pageRepository->save($item);
             }
 
             $this->messageManager->addSuccessMessage(
-                __('A total of %1 record(s) have been disabled.', $collection->getSize())
+                __('A total of %1 record(s) have changed their status to %2.', $collection->getSize(), $statusLabel)
             );
         } catch (LocalizedException $e) {
             $this->messageManager->addExceptionMessage($e->getPrevious() ?: $e);
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, __('Something went wrong while disabling the page.'));
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('Something went wrong while changing the page status.')
+            );
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

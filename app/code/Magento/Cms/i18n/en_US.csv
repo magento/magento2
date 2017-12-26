@@ -53,8 +53,9 @@ Blocks,Blocks
 "New Page","New Page"
 Pages,Pages
 "Something went wrong while saving the page.","Something went wrong while saving the page."
-"A total of %1 record(s) have been disabled.","A total of %1 record(s) have been disabled."
-"A total of %1 record(s) have been enabled.","A total of %1 record(s) have been enabled."
+"Status is a required param.","Status is a required param."
+"A total of %1 record(s) have changed their status to %2.","A total of %1 record(s) have changed their status to %2."
+"Something went wrong while changing the page status.","Something went wrong while changing the page status."
 "Page Title","Page Title"
 "To apply changes you should fill in hidden required ""%1"" field","To apply changes you should fill in hidden required ""%1"" field"
 "You saved the page.","You saved the page."
