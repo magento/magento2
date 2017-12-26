@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventoryCatalog\Test\Api\StockRepository;
+namespace Magento\InventorySalesApi\Test\Api\StockRepository;
 
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;

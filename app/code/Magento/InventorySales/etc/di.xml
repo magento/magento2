@@ -18,6 +18,8 @@
         <plugin name="load_sales_channels_on_get_list" type="Magento\InventorySales\Plugin\Inventory\StockRepository\LoadSalesChannelsOnGetListPlugin"/>
         <plugin name="load_sales_channels_on_get" type="Magento\InventorySales\Plugin\Inventory\StockRepository\LoadSalesChannelsOnGetPlugin"/>
         <plugin name="save_sales_channels_links" type="Magento\InventorySales\Plugin\Inventory\StockRepository\SaveSalesChannelsLinksPlugin"/>
+        <plugin name="prevent_assigned_to_sales_channels_stock_deleting"
+                type="Magento\InventorySales\Plugin\InventoryApi\StockRepository\PreventDeleting\AssignedToSalesChannelsStockPlugin"/>
     </type>
     <type name="Magento\Inventory\Ui\DataProvider\StockDataProvider">
         <plugin name="sales_channel_data" type="Magento\InventorySales\Plugin\Inventory\Ui\StockDataProvider\SalesChannels" />
