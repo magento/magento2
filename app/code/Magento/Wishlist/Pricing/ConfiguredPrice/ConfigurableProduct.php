@@ -7,10 +7,18 @@ namespace Magento\Wishlist\Pricing\ConfiguredPrice;
 
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
-use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Framework\Pricing\Price\AbstractPrice;
 
-class ConfigurableProduct extends FinalPrice implements ConfiguredPriceInterface
+/**
+ * Pricing configuration of wishlist product.
+ */
+class ConfigurableProduct extends AbstractPrice
 {
+    /**
+     * Price type final
+     */
+    const PRICE_CODE = 'final_price';
+
     /**
      * @var ItemInterface
      */
@@ -26,7 +34,7 @@ class ConfigurableProduct extends FinalPrice implements ConfiguredPriceInterface
         /** @var \Magento\Wishlist\Model\Item\Option $customOption */
         $customOption = $this->getProduct()->getCustomOption('simple_product');
         $product = $customOption ? $customOption->getProduct() : $this->getProduct();
-        return $product->getPriceInfo()->getPrice(self::CONFIGURED_PRICE_CODE)->getAmount();
+        return $product->getPriceInfo()->getPrice(ConfiguredPriceInterface::CONFIGURED_PRICE_CODE)->getAmount();
     }
 
     /**
@@ -39,7 +47,7 @@ class ConfigurableProduct extends FinalPrice implements ConfiguredPriceInterface
         /** @var \Magento\Wishlist\Model\Item\Option $customOption */
         $customOption = $this->getProduct()->getCustomOption('simple_product');
         $product = $customOption ? $customOption->getProduct() : $this->getProduct();
-        return $product->getPriceInfo()->getPrice(self::CONFIGURED_REGULAR_PRICE_CODE)->getAmount();
+        return $product->getPriceInfo()->getPrice(ConfiguredPriceInterface::CONFIGURED_REGULAR_PRICE_CODE)->getAmount();
     }
 
     /**
