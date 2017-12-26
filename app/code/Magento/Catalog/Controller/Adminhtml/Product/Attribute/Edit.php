@@ -43,6 +43,9 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         if (!empty($data)) {
             $model->addData($data);
         }
+        if ($model->getFrontendInput() === 'textarea' && $model->getIsWysiwygEnabled()) {
+            $model->setFrontendInput('texteditor');
+        }
         $attributeData = $this->getRequest()->getParam('attribute');
         if (!empty($attributeData) && $id === null) {
             $model->addData($attributeData);
