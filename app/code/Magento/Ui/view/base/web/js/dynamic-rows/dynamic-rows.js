@@ -226,7 +226,9 @@ define([
 
         /** @inheritdoc */
         destroy: function () {
-            this.dnd().destroy();
+            if (this.dnd()) {
+                this.dnd().destroy();
+            }
             this._super();
         },
 
