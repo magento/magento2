@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
 
 /**
  * Catalog product option select type model
@@ -62,6 +63,11 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     protected $_valueCollectionFactory;
 
     /**
+     * @var CustomOptionPriceCalculator
+     */
+    private $customOptionPriceCalculator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory $valueCollectionFactory
@@ -75,9 +81,12 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory $valueCollectionFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        CustomOptionPriceCalculator $customOptionPriceCalculator = null
     ) {
         $this->_valueCollectionFactory = $valueCollectionFactory;
+        $this->customOptionPriceCalculator = $customOptionPriceCalculator
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CustomOptionPriceCalculator::class);
         parent::__construct(
             $context,
             $registry,
@@ -224,30 +233,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     public function getPrice($flag = false)
     {
-        if ($flag && $this->getPriceType() == self::TYPE_PERCENT) {
-            $basePrice = $this->getOption()->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
-            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
-            return $price;
-        }
-        return $this->_getData(self::KEY_PRICE);
-    }
-
-    /**
-     * Return price by price code.
-     * If $flag is true and price is percent return converted percent to price.
-     *
-     * @param string $priceCode
-     * @param bool $flag
-     * @return float|int
-     */
-    public function getPriceByPriceCode(
-        $priceCode = \Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE,
-        $flag = false
-    ) {
-        if ($flag && $this->getPriceType() == self::TYPE_PERCENT) {
-            $basePrice = $this->getOption()->getProduct()->getPriceInfo()->getPrice($priceCode)->getValue();
-            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
-            return $price;
+        if ($flag) {
+            return $this->customOptionPriceCalculator->getOptionPriceByPriceCode($this, BasePrice::PRICE_CODE);
         }
         return $this->_getData(self::KEY_PRICE);
     }
@@ -259,12 +246,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     public function getRegularPrice()
     {
-        if ($this->getPriceType() == self::TYPE_PERCENT) {
-            $basePrice = $this->getOption()->getProduct()->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue();
-            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
-            return $price;
-        }
-        return $this->_getData(self::KEY_PRICE);
+        return $this->customOptionPriceCalculator
+            ->getOptionPriceByPriceCode($this, \Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE);
     }
 
     /**

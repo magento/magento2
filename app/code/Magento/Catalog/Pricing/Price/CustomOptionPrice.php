@@ -36,21 +36,30 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
     protected $excludeAdjustment = null;
 
     /**
+     * @var CustomOptionPriceCalculator
+     */
+    private $customOptionPriceCalculator;
+
+    /**
      * @param SaleableInterface $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $excludeAdjustment
+     * @param CustomOptionPriceCalculator $customOptionPriceCalculator
      */
     public function __construct(
         SaleableInterface $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        $excludeAdjustment = null
+        $excludeAdjustment = null,
+        CustomOptionPriceCalculator $customOptionPriceCalculator = null
     ) {
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->excludeAdjustment = $excludeAdjustment;
+        $this->customOptionPriceCalculator = $customOptionPriceCalculator
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CustomOptionPriceCalculator::class);
     }
 
     /**
@@ -87,10 +96,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
                     /** @var $optionValue \Magento\Catalog\Model\Product\Option\Value */
                     foreach ($optionItem->getValues() as $optionValue) {
                         $price =
-                            $optionValue->getPriceByPriceCode(
-                                $priceCode,
-                                $optionValue->getPriceType() == Value::TYPE_PERCENT
-                            );
+                            $this->customOptionPriceCalculator->getOptionPriceByPriceCode($optionValue, $priceCode);
                         if ($min === null) {
                             $min = $price;
                         } elseif ($price < $min) {
