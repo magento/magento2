@@ -17,6 +17,10 @@ class PriceAdjustment implements HandlerInterface
 {
     const PRICE_ADJUSTMENT_TYPE_NAME = 'PriceAdjustment';
 
+    const ADJUSTMENT_INCLUDED = 'Included';
+
+    const ADJUSTMENT_EXCLUDED = 'Excluded';
+
     /**
      * @var Pool
      */
@@ -50,7 +54,12 @@ class PriceAdjustment implements HandlerInterface
                 'fields' => [
                     'amount' => $this->typePool->getType(Money::MONEY_TYPE_NAME),
                     'code' => $this->typePool->getType(PriceAdjustmentCodes::ADJUSTMENTS_TYPE_NAME),
-                    'description' => $this->typeFactory->createList($this->typePool->getType(Pool::TYPE_STRING)),
+                    'description' => $this->typeFactory->createEnum(
+                        [
+                            'name' => 'Description',
+                            'values' => [self::ADJUSTMENT_INCLUDED, self::ADJUSTMENT_EXCLUDED],
+                        ]
+                    ),
                 ]
             ]
         );

@@ -10,6 +10,8 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
+use Magento\GraphQlCatalog\Model\Type\Handler\PriceAdjustment;
 
 /**
  * Format a product's price information to conform to GraphQL schema representation
@@ -43,8 +45,10 @@ class Price
      */
     public function format(Product $product, array $productData)
     {
-        $product->getStore()->getBaseCurrency()->getCurrencyCode();
+       // $included = $product->getPriceInfo()->getAdjustments()['tax']->isIncludedInDisplayPrice();
         $priceInfo = $this->priceInfoFactory->create($product);
+
+        //$priceInfo->getPrices()
         $finalPriceAmount =  $priceInfo->getPrice('final_price')->getAmount();
         $regularPriceAmount =  $priceInfo->getPrice('regular_price')->getAmount();
 
@@ -54,23 +58,24 @@ class Price
                     'value' => $finalPriceAmount->getValue(),
                     'currency' => $this->getStoreCurrencyCode()
                 ],
-                'adjustments' => $this->createAdjustmentsArray($finalPriceAmount)
+                'adjustments' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $finalPriceAmount)
             ],
             'regularPrice' => [
                 'amount' => [
                     'value' => $regularPriceAmount->getValue(),
                     'currency' => $this->getStoreCurrencyCode()
                 ],
-                'adjustments' => $this->createAdjustmentsArray($regularPriceAmount)
+                'adjustments' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $regularPriceAmount)
             ],
-            'maximalPrice' => [
+        ];
+
+        $productData['price']['maximalPrice'] = [
                 'amount' => [
                     'value' => max($regularPriceAmount->getValue(), $finalPriceAmount->getValue()),
                     'currency' => $this->getStoreCurrencyCode()
                 ],
                 'adjustments' => []
-            ]
-        ];
+            ];
 
         return $productData;
     }
@@ -78,20 +83,25 @@ class Price
     /**
      * Fill an adjustment array structure with amounts from an amount type
      *
+     * @param AdjustmentInterface[] $adjustments
      * @param AmountInterface $amount
      * @return array
      */
-    private function createAdjustmentsArray(AmountInterface $amount)
+    private function createAdjustmentsArray(array $adjustments, AmountInterface $amount)
     {
         $priceAdjustmentsArray = [];
-        foreach ($amount->getAdjustmentAmounts() as $adjustmentCode => $adjustmentValue) {
+        foreach ($adjustments as $adjustmentCode => $adjustment) {
+            if ($amount->hasAdjustment($adjustmentCode) && $amount->getAdjustmentAmount($adjustmentCode)) {
                 $priceAdjustmentsArray[] = [
                     'code' => $adjustmentCode,
                     'amount' => [
-                        'value' => $adjustmentValue,
+                        'value' => $amount->getAdjustmentAmount($adjustmentCode),
                         'currency' => $this->getStoreCurrencyCode(),
-                    ]
+                    ],
+                    'description' => $adjustment->isIncludedInDisplayPrice() ?
+                        PriceAdjustment::ADJUSTMENT_INCLUDED : PriceAdjustment::ADJUSTMENT_EXCLUDED
                 ];
+            }
         }
         return $priceAdjustmentsArray;
     }
