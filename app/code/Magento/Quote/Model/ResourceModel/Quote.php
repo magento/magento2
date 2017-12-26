@@ -62,6 +62,10 @@ class Quote extends AbstractDb
     protected function _getLoadSelect($field, $value, $object)
     {
         $select = parent::_getLoadSelect($field, $value, $object);
+        if ($this->getIdFieldName() === $field) {
+            return $select;
+        }
+
         $storeIds = $object->getSharedStoreIds();
         if ($storeIds) {
             if ($storeIds != ['*']) {
