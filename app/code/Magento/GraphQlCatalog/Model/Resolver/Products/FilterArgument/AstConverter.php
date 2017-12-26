@@ -114,9 +114,9 @@ class AstConverter
     {
         $result = [];
         $attributes = $this->entityAttributeList->getDefaultEntityAttributes(\Magento\Catalog\Model\Product::ENTITY);
-        foreach ($attributes as $attribute) {
-            if ((!$attribute->getIsUserDefined()) && !is_array($attribute)) {
-                $result[$attribute->getAttributeCode()] = 'String';
+        foreach ($attributes as $attributeName => $isType) {
+            if ($isType) {
+                $result[$attributeName] = 'String';
             }
         }
 
