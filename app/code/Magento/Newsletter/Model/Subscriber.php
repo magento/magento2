@@ -555,24 +555,13 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         }
 
         $sendInformationEmail = false;
-        $status = self::STATUS_SUBSCRIBED;
-        $isConfirmNeed = $this->_scopeConfig->getValue(
-            self::XML_PATH_CONFIRMATION_FLAG,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) == 1 ? true : false;
-        if ($subscribe) {
-            if (AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED
-                == $this->customerAccountManagement->getConfirmationStatus($customerId)
-            ) {
-                $status = self::STATUS_UNCONFIRMED;
-            } elseif ($isConfirmNeed) {
-                $status = self::STATUS_NOT_ACTIVE;
-            }
-        } elseif (($this->getStatus() == self::STATUS_UNCONFIRMED) && ($customerData->getConfirmation() === null)) {
-            $status = self::STATUS_SUBSCRIBED;
+        $isConfirmNeed = 1 === (int)$this->_scopeConfig->getValue(
+                self::XML_PATH_CONFIRMATION_FLAG,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+        $status = $this->getSubscriptionStatus($subscribe, $isConfirmNeed, $customerId);
+        if ($status == self::STATUS_SUBSCRIBED && $customerData->getConfirmation() === null) {
             $sendInformationEmail = true;
-        } else {
-            $status = self::STATUS_UNSUBSCRIBED;
         }
         /**
          * If subscription status has been changed then send email to the customer
@@ -617,6 +606,34 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             }
         }
         return $this;
+    }
+
+    /**
+     * Get subscription status
+     *
+     * @param bool $subscribe
+     * @param bool $isConfirmNeed
+     * @param string $customerId
+     * @return int
+     */
+    private function getSubscriptionStatus($subscribe, $isConfirmNeed, $customerId)
+    {
+        $status = self::STATUS_SUBSCRIBED;
+        if ($subscribe) {
+            if (AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED
+                == $this->customerAccountManagement->getConfirmationStatus($customerId)
+            ) {
+                $status = self::STATUS_UNCONFIRMED;
+            } elseif ($isConfirmNeed) {
+                $status = self::STATUS_NOT_ACTIVE;
+            }
+        } elseif (($this->getStatus() == self::STATUS_UNCONFIRMED)) {
+            $status = self::STATUS_SUBSCRIBED;
+        } else {
+            $status = self::STATUS_UNSUBSCRIBED;
+        }
+
+        return $status;
     }
 
     /**
