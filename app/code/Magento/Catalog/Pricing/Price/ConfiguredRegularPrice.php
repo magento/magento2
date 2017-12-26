@@ -36,8 +36,8 @@ class ConfiguredRegularPrice extends RegularPrice implements ConfiguredPriceInte
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param ConfiguredOptions $configuredOptions
      * @param ItemInterface|null $item
-     * @param ConfiguredOptions|null $configuredOptions
      */
     public function __construct(
         Product $saleableItem,
