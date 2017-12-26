@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Ui\DataProvider\Component\Listing\Column;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
@@ -15,7 +16,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
 /**
- * Add grid column for source items. Prepare data
+ * Add grid column with source items data
  */
 class SourceItems extends Column
 {
@@ -68,7 +69,7 @@ class SourceItems extends Column
     {
         if ($dataSource['data']['totalRecords'] > 0) {
             foreach ($dataSource['data']['items'] as &$row) {
-                $row['qty'] = isset($row['sku']) ? $this->prepareSourceItemsData($row['sku']) : [];
+                $row['qty'] = $this->getSourceItemsData($row['sku']);
             }
         }
         unset($row);
@@ -82,26 +83,23 @@ class SourceItems extends Column
      * @param string $sku
      * @return array
      */
-    private function prepareSourceItemsData(string $sku)
+    private function getSourceItemsData(string $sku): array
     {
-        $preparedSourceData = [];
-
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('sku', $sku)
+            ->addFilter(SourceItemInterface::SKU, $sku)
             ->create();
-        $sourceList = $this->sourceItemRepository->getList($searchCriteria);
+        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
 
-        /** @var \Magento\InventoryApi\Api\Data\SourceItemInterface $sourceItem */
-        foreach ($sourceList->getItems() as $sourceItem) {
-            $qty = (float)$sourceItem->getQuantity();
+        $sourceItemsData = [];
+        foreach ($sourceItems as $sourceItem) {
             $source = $this->sourceRepository->get((int)$sourceItem->getSourceId());
+            $qty = (float)$sourceItem->getQuantity();
 
-            $preparedSourceData[] = [
-                'name' => $source->getName(),
-                'qty' => $qty
+            $sourceItemsData[] = [
+                'source_name' => $source->getName(),
+                'qty' => $qty,
             ];
         }
-
-        return $preparedSourceData;
+        return $sourceItemsData;
     }
 }

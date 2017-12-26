@@ -13,12 +13,12 @@ define([
         },
 
         /**
-         * Get source items with qty
+         * Get source items data (source name and qty)
          *
          * @param {Object} record - Record object
          * @returns {Array} Result array
          */
-        getSourceItems: function (record) {
+        getSourceItemsData: function (record) {
             var result = record[this.index] ? record[this.index] : [];
 
             return result;
