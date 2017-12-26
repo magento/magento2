@@ -10,7 +10,7 @@ use GraphQl\Type\Definition\ResolveInfo;
 use Magento\Framework\GraphQl\Type\SchemaFactory;
 use Magento\GraphQl\Model\Type\Generator;
 use Magento\Framework\GraphQl\ArgumentFactory;
-use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\Framework\GraphQl\TypeFactory;
 
 /**
  * Generate a query field and concrete types for GraphQL schema
@@ -84,6 +84,19 @@ class SchemaGenerator implements SchemaGeneratorInterface
             'fields' => $schemaConfig['fields'],
             'resolveField' => function ($value, $args, $context, ResolveInfo $info) {
                 $fieldName = $info->fieldName;
+                $fieldNodes = $info->fieldNodes;
+                $selections = [];
+//                foreach ($fieldNodes as $fieldNode) {
+//                    foreach ($fieldNode->selectionSet->selections as $field) {
+//                        $name = $field->name;
+//                        if (isset($field->selectionSet)) {
+//                            $selections[$name] = $this->getFields;
+//                        }
+//                        foreach ($field->selectionSet->selections as $selection) {
+//                            $selections[$name] = $selection->name;
+//                        }
+//                    }
+//                }
                 $resolver = $this->resolverFactory->create($fieldName);
 
                 $fieldArguments = [];
@@ -93,16 +106,19 @@ class SchemaGenerator implements SchemaGeneratorInterface
                     $argumentValue = isset($args[$argumentName])
                         ? $args[$argumentName]
                         : $declaredArgument->getDefaultValue();
-                    if ($declaredArgument->getValueParser()) {
+                    if ($declaredArgument->getValueParser() && $argumentValue !== null) {
                         $argumentValue = $declaredArgument->getValueParser()->parse($argumentValue);
                     }
-                    $fieldArguments[$argumentName] = $this->argumentFactory->create(
-                        $argumentName,
-                        $argumentValue
-                    );
+
+                    if ($argumentValue !== null) {
+                        $fieldArguments[$argumentName] = $this->argumentFactory->create(
+                            $argumentName,
+                            $argumentValue
+                        );
+                    }
                 }
 
-                return $resolver->resolve($fieldArguments);
+                return $resolver->resolve($fieldArguments, $context);
             }
         ]);
         $schema = $this->schemaFactory->create(['query' => $config, 'types' => $schemaConfig['types']]);
