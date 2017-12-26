@@ -774,7 +774,7 @@ class Installer
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
 
-        if ($request[InstallCommand::DECLARATION_MODE_KEY]) {
+        if (isset($request[InstallCommand::DECLARATION_MODE_KEY]) && $request[InstallCommand::DECLARATION_MODE_KEY]) {
             /** @var DeclarationInstaller $declarativeInstaller */
             $declarativeInstaller = $this->objectManagerProvider->get()->get(DeclarationInstaller::class);
             $declarativeInstaller->installSchema($request);
