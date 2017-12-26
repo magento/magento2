@@ -49,9 +49,7 @@ class PriceAdjustment implements HandlerInterface
                 'name' => self::PRICE_ADJUSTMENT_TYPE_NAME,
                 'fields' => [
                     'amount' => $this->typePool->getType(Money::MONEY_TYPE_NAME),
-                    'code' => $this->typeFactory->createList(
-                        $this->typePool->getType(PriceAdjustmentCodes::ADJUSTMENTS_TYPE_NAME)
-                    ),
+                    'code' => $this->typePool->getType(PriceAdjustmentCodes::ADJUSTMENTS_TYPE_NAME),
                     'description' => $this->typeFactory->createList($this->typePool->getType(Pool::TYPE_STRING)),
                 ]
             ]

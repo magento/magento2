@@ -1,0 +1,110 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter;
+
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Store\Model\StoreManagerInterface;
+
+/**
+ * Format a product's price information to conform to GraphQL schema representation
+ */
+class Price
+{
+    /** @var StoreManagerInterface */
+    private $storeManager;
+
+    /** @var PriceInfoFactory */
+    private $priceInfoFactory;
+
+    /**
+     * @param StoreManagerInterface $storeManager
+     * @param PriceInfoFactory $priceInfoFactory
+     */
+    public function __construct(
+        StoreManagerInterface $storeManager,
+        PriceInfoFactory $priceInfoFactory
+    ) {
+        $this->storeManager = $storeManager;
+        $this->priceInfoFactory = $priceInfoFactory;
+    }
+
+    /**
+     * Format product's tier price data to conform to GraphQL schema
+     *
+     * @param Product $product
+     * @param array $productData
+     * @return array
+     */
+    public function format(Product $product, array $productData)
+    {
+        $product->getStore()->getBaseCurrency()->getCurrencyCode();
+        $priceInfo = $this->priceInfoFactory->create($product);
+        $finalPriceAmount =  $priceInfo->getPrice('final_price')->getAmount();
+        $regularPriceAmount =  $priceInfo->getPrice('regular_price')->getAmount();
+
+        $productData['price'] = [
+            'minimalPrice' => [
+                'amount' => [
+                    'value' => $finalPriceAmount->getValue(),
+                    'currency' => $this->getStoreCurrencyCode()
+                ],
+                'adjustments' => $this->createAdjustmentsArray($finalPriceAmount)
+            ],
+            'regularPrice' => [
+                'amount' => [
+                    'value' => $regularPriceAmount->getValue(),
+                    'currency' => $this->getStoreCurrencyCode()
+                ],
+                'adjustments' => $this->createAdjustmentsArray($regularPriceAmount)
+            ],
+            'maximalPrice' => [
+                'amount' => [
+                    'value' => max($regularPriceAmount->getValue(), $finalPriceAmount->getValue()),
+                    'currency' => $this->getStoreCurrencyCode()
+                ],
+                'adjustments' => []
+            ]
+        ];
+
+        return $productData;
+    }
+
+    /**
+     * Fill an adjustment array structure with amounts from an amount type
+     *
+     * @param AmountInterface $amount
+     * @return array
+     */
+    private function createAdjustmentsArray(AmountInterface $amount)
+    {
+        $priceAdjustmentsArray = [];
+        foreach ($amount->getAdjustmentAmounts() as $adjustmentCode => $adjustmentValue) {
+                $priceAdjustmentsArray[] = [
+                    'code' => $adjustmentCode,
+                    'amount' => [
+                        'value' => $adjustmentValue,
+                        'currency' => $this->getStoreCurrencyCode(),
+                    ]
+                ];
+        }
+        return $priceAdjustmentsArray;
+    }
+
+    /**
+     * Retrieve current store's currency code
+     *
+     * @return string
+     */
+    private function getStoreCurrencyCode()
+    {
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $this->storeManager->getStore();
+        return $store->getCurrentCurrencyCode();
+    }
+}
