@@ -13,6 +13,8 @@ use Magento\Catalog\Model\Product\Option\Value as ProductOptionValue;
 class CustomOptionPriceCalculator
 {
     /**
+     * Calculates prices of custom option by code.
+     *
      * @param ProductOptionValue $optionValue
      * @param string $priceCode
      * @return float|int
