@@ -47,19 +47,19 @@ class SaveHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = [])
     {
-        if ($entity->getTypeId() !== Type::TYPE_CODE) {
+        $bundleProductOptions = $entity->getExtensionAttributes()->getBundleProductOptions();
+        if ($entity->getTypeId() !== Type::TYPE_CODE || empty($bundleProductOptions)) {
             return $entity;
         }
 
         $existingBundleProductOptions = $this->optionRepository->getList($entity->getSku());
-        $bundleProductOptions = $entity->getExtensionAttributes()->getBundleProductOptions();
 
-        if (empty($existingBundleProductOptions) && empty($bundleProductOptions)) {
-            return $entity;
-        }
-
-        $existingOptionsIds = $this->getOptionIds($existingBundleProductOptions);
-        $optionIds = $this->getOptionIds($bundleProductOptions);
+        $existingOptionsIds = !empty($existingBundleProductOptions)
+            ?  $this->getOptionIds($existingBundleProductOptions)
+            : [];
+        $optionIds = !empty($bundleProductOptions)
+            ? $this->getOptionIds($bundleProductOptions)
+            : [];
 
         $options = $bundleProductOptions ?: [];
 
@@ -116,6 +116,11 @@ class SaveHandler implements ExtensionInterface
     private function getOptionIds($options)
     {
         $optionIds = [];
+
+        if (empty($options)) {
+            return $optionIds;
+        }
+
         /** @var \Magento\Bundle\Api\Data\OptionInterface $option */
         foreach ($options as $option) {
             if ($option->getOptionId()) {
