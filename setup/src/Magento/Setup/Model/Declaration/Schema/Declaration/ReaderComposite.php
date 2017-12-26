@@ -33,7 +33,7 @@ class ReaderComposite implements ReaderInterface
      */
     public function read($scope = null)
     {
-        $schema = [];
+        $schema = ['table' => []];
         foreach ($this->readers as $reader) {
             $schema = array_replace_recursive($schema, $reader->read($scope));
         }

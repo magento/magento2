@@ -930,7 +930,6 @@ class Installer
      */
     public function installUserConfig($data)
     {
-        return;
         $userConfig = new StoreConfigurationDataMapper();
         /** @var \Magento\Framework\App\State $appState */
         $appState = $this->objectManagerProvider->get()->get(\Magento\Framework\App\State::class);

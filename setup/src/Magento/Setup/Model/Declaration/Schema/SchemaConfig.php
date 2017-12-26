@@ -71,10 +71,6 @@ class SchemaConfig implements SchemaConfigInterface
     {
         $schema = $this->schemaFactory->create();
         $data = $this->readerComposite->read();
-
-        if (!isset($data['table'])) {
-            $data = $this->readerComposite->read();
-        }
         $this->declarativeSchemaBuilder->addTablesData($data['table']);
         $schema = $this->declarativeSchemaBuilder->build($schema);
         return $schema;

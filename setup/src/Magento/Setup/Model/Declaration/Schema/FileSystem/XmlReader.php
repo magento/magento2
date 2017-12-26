@@ -30,8 +30,8 @@ class XmlReader extends \Magento\Framework\Config\Reader\Filesystem implements R
     /**
      * Reader constructor.
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Setup\Model\Declaration\Schema\Xml\Converter $converter
-     * @param \Magento\Setup\Model\Declaration\Schema\Xml\SchemaLocator $schemaLocator
+     * @param \Magento\Setup\Model\Declaration\Schema\Config\Converter $converter
+     * @param \Magento\Setup\Model\Declaration\Schema\Config\SchemaLocator $schemaLocator
      * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @param string $fileName
      * @param string $domDocumentClass
@@ -39,8 +39,8 @@ class XmlReader extends \Magento\Framework\Config\Reader\Filesystem implements R
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
-        \Magento\Setup\Model\Declaration\Schema\Xml\Converter $converter,
-        \Magento\Setup\Model\Declaration\Schema\Xml\SchemaLocator $schemaLocator,
+        \Magento\Setup\Model\Declaration\Schema\Config\Converter $converter,
+        \Magento\Setup\Model\Declaration\Schema\Config\SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'db_schema.xml',
         $domDocumentClass = \Magento\Framework\Config\Dom::class,

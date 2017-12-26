@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/config/schema.xsd">
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
     <table name="reference_table" resource="default">
         <column xsi:type="tinyinteger" name="tinyint_ref" padding="7" nullable="false" identity="true" unsigned="false" />
         <column xsi:type="tinyinteger" name="tinyint_without_padding" default="0" nullable="false" unsigned="false" />

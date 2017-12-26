@@ -19,6 +19,9 @@ use Magento\Framework\Stdlib\BooleanUtils;
  */
 class Timestamp implements FactoryInterface
 {
+    /** Nullable timestamp */
+    const NULL_TIMESTAMP = 'NULL';
+
     /**
      * @var ObjectManagerInterface
      */
@@ -69,7 +72,7 @@ class Timestamp implements FactoryInterface
         }
         //By default we do not want to use default attribute
         if (!isset($data['default'])) {
-            $data['default'] = null;
+            $data['default'] = self::NULL_TIMESTAMP;
         }
 
         unset($data['nullable']);

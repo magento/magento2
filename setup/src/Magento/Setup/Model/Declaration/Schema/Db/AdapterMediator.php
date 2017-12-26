@@ -356,7 +356,7 @@ class AdapterMediator
     }
 
     /**
-     * Flush cache
+     * As all read operations are cached, sometimes we need to flush them
      *
      * @return void
      */

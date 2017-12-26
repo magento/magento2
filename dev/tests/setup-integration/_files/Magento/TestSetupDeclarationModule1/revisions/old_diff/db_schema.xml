@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/config/schema.xsd">
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
     <table name="reference_table" resource="default">
         <column xsi:type="smallinteger" name="smallint_ref" padding="6" nullable="false" unsigned="false" identity="true" />
         <constraint xsi:type="primary" name="tinyint_primary">
@@ -19,7 +19,7 @@
         <column xsi:type="float" name="float" default="0" precission="10" scale="0" />
         <column xsi:type="date" name="date" />
         <column xsi:type="timestamp" name="timestamp" default="CURRENT_TIMESTAMP" on_update="true" />
-        <column xsi:type="mediumtext" name="mediumtext" length="11222222" />
+        <column xsi:type="mediumtext" name="mediumtext" />
         <column xsi:type="varchar" name="varchar" length="254" nullable="true" />
         <column xsi:type="boolean" name="boolean" />
         <!--Constraints-->
