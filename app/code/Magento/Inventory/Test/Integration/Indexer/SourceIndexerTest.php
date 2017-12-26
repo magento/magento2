@@ -54,8 +54,7 @@ class SourceIndexerTest extends TestCase
 
         $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
         $this->removeIndexData->execute([10, 20, 30]);
-
-
+        
         $this->sourceRepository = Bootstrap::getObjectManager()->get(SourceRepositoryInterface::class);
 
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
