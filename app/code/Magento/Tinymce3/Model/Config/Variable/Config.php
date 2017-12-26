@@ -5,6 +5,10 @@
  */
 namespace Magento\Tinymce3\Model\Config\Variable;
 
+/**
+ * Class Config adds variable plugin information required for tinymce3 editor
+ *
+ */
 class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
 {
     /**

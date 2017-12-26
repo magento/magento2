@@ -105,13 +105,23 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
             ]
         ];
 
-        $configPlugins = $config->getData('plugins');
+        $configPlugins = $config->getData('plugins') ?: [];
 
         $widgetConfig = [
             'plugins' => array_merge($configPlugins, $widgetWysiwyg),
-            'widget_placeholders' => $this->_widgetFactory->create()->getPlaceholderImageUrls(),
+            'widget_placeholders' => $this->getWidgetPlaceholderImageUrls(),
         ];
         return $widgetConfig;
+    }
+
+    /**
+     * Return list of available placeholders for widget
+     *
+     * @return array
+     */
+    public function getWidgetPlaceholderImageUrls()
+    {
+        return $this->_widgetFactory->create()->getPlaceholderImageUrls();
     }
 
     /**
@@ -188,7 +198,7 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
      * @param \Magento\Framework\DataObject $config Editor element config
      * @return array
      */
-    private function getAvailableWidgets($config)
+    public function getAvailableWidgets($config)
     {
         if (!$config->hasData('widget_types')) {
             $result = [];

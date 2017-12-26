@@ -5,8 +5,9 @@
  */
 namespace Magento\Tinymce3\Model\Config\Wysiwyg;
 
-use Magento\Tinymce3\Model\Config\Source\Wysiwyg\Editor;
-
+/**
+ * Class Config adds information about required css files for tinymce3 editor
+ */
 class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
 {
     /**
@@ -15,20 +16,12 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
     private $assetRepo;
 
     /**
-     * @var \Magento\Ui\Block\Wysiwyg\ActiveEditor
-     */
-    private $activeEditor;
-
-    /**
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor
      */
     public function __construct(
-        \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor
+        \Magento\Framework\View\Asset\Repository $assetRepo
     ) {
         $this->assetRepo = $assetRepo;
-        $this->activeEditor = $activeEditor;
     }
 
     /**
@@ -37,16 +30,14 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
      */
     public function getConfig($config)
     {
-        if ($this->activeEditor->getWysiwygAdapterPath() === Editor::WYSIWYG_EDITOR_CONFIG_VALUE) {
-            $config->addData([
-                'popup_css' => $this->assetRepo->getUrl(
-                    'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/dialog.css'
-                ),
-                'content_css' => $this->assetRepo->getUrl(
-                    'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/content.css'
-                )
-            ]);
-        }
+        $config->addData([
+            'popup_css' => $this->assetRepo->getUrl(
+                'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/dialog.css'
+            ),
+            'content_css' => $this->assetRepo->getUrl(
+                'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/content.css'
+            )
+        ]);
 
         return $config;
     }

@@ -7,9 +7,6 @@ namespace Magento\Tinymce3\Model\Plugin;
 
 use Magento\Tinymce3\Model\Config\Source\Wysiwyg\Editor;
 
-/**
- * @todo remove this plugin
- */
 class Widget
 {
     /**
@@ -18,35 +15,53 @@ class Widget
     private $activeEditor;
 
     /**
+     * @var array
+     */
+    private $placeholderImages;
+
+    /**
+     * @var \Magento\Framework\View\Asset\Repository
+     */
+    private $assetRepo;
+
+    /**
      * @param \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor
+     * @param \Magento\Tinymce3\Model\Config\Widget\PlaceholderImagesPool $placeholderImages
      */
     public function __construct(
-        \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor
-    ) {
+        \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
+        \Magento\Tinymce3\Model\Config\Widget\PlaceholderImagesPool $placeholderImages
+    )
+    {
         $this->activeEditor = $activeEditor;
+        $this->placeholderImages = $placeholderImages;
+        $this->assetRepo = $assetRepo;
     }
 
     /**
      * @param \Magento\Widget\Model\Widget $subject
-     * @param string $result
+     * @param $proceed
+     * @param $type
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetPlaceholderImageUrl(
+    public function aroundGetPlaceholderImageUrl(
         \Magento\Widget\Model\Widget $subject,
-        $result
-    ) {
-        if ($this->activeEditor->getWysiwygAdapterPath() === Editor::WYSIWYG_EDITOR_CONFIG_VALUE) {
-            $placeholder_ext_strlen = strlen('.' . pathinfo($result, PATHINFO_EXTENSION));
-            $placeholder_sans_ext = substr(
-                $result,
-                0,
-                strlen($result) - $placeholder_ext_strlen
-            );
-
-            $result = $placeholder_sans_ext . '_tinymce3.png';
+        $proceed,
+        $type
+    )
+    {
+        if ($this->activeEditor->getWysiwygAdapterPath() !== Editor::WYSIWYG_EDITOR_CONFIG_VALUE) {
+            return $proceed($type);
         }
+        $placeholders = $this->placeholderImages->getWidgetPlaceholders();
+        $defaultImage = $this->assetRepo->getUrl('Magento_Tinymce3::images/widget/placeholder.png');
 
-        return $result;
+        if (isset($placeholders[$type])) {
+            return $this->assetRepo->getUrl($placeholders[$type]);
+        }
+        return $defaultImage;
     }
+
 }

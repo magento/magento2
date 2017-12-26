@@ -5,6 +5,9 @@
  */
 namespace Magento\Tinymce3\Model\Config\Widget;
 
+/**
+ * Class Config adds widget plugin information required for tinymce3 editor
+ */
 class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
 {
     /**
@@ -18,42 +21,38 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
     private $widgetConfig;
 
     /**
+     * Config constructor.
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Widget\Model\Widget\Config $widgetConfig
+     * @param array $widgetPlaceholders
      */
     public function __construct(
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Widget\Model\Widget\Config $widgetConfig
+        \Magento\Widget\Model\Widget\Config $widgetConfig,
+        array $widgetPlaceholders = []
     ) {
         $this->assetRepo = $assetRepo;
         $this->widgetConfig = $widgetConfig;
+        $this->widgetPlaceholders = $widgetPlaceholders;
     }
 
     /**
-     * @param \Magento\Framework\DataObject $config
-     * @return array
+     * {@inheritdoc}
      */
     public function getConfig($config)
     {
-        /** @todo override config without widget dependency */
-        $result = $this->widgetConfig->getConfig($config);
-        $magento_widget_plugin_arr_index = array_search('magentowidget', array_column($result['plugins'], 'name'));
-
-        if ($magento_widget_plugin_arr_index !== false) {
-            $widget_plugin_options = $result['plugins'][$magento_widget_plugin_arr_index];
-            $result = [
-                'widget_plugin_src' => $this->getWysiwygJsPluginSrc(),
-                'widget_window_url' => $widget_plugin_options['options']['window_url'],
-                'widget_types' => $widget_plugin_options['options']['types'],
-                'widget_error_image_url' => $widget_plugin_options['options']['error_image_url'],
-                'widget_placeholders' => $result['widget_placeholders']
-            ];
-        }
-
-        return $result;
+        return [
+            'widget_plugin_src' => $this->getWysiwygJsPluginSrc(),
+            'widget_window_url' => $this->widgetConfig->getWidgetWindowUrl($config),
+            'widget_types' => $this->widgetConfig->getAvailableWidgets($config),
+            'widget_error_image_url' => $this->widgetConfig->getErrorImageUrl(),
+            'widget_placeholders' => $this->widgetConfig->getWidgetPlaceholderImageUrls()
+        ];
     }
 
     /**
+     * Return path to tinymce3 widget plugin
+     *
      * @return string
      */
     private function getWysiwygJsPluginSrc()
