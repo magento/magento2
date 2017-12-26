@@ -15,6 +15,15 @@ class CustomOptionPriceCalculator
     /**
      * Calculates prices of custom option by code.
      *
+     * Price is calculated depends on Price Code.
+     * Existing logic was taken from methods \Magento\Catalog\Model\Product\Option\Value::(getPrice|getRegularPrice)
+     * where $priceCode was hardcoded and changed to have dynamical approach.
+     *
+     * Examples of usage:
+     *      \Magento\Catalog\Pricing\Price\CustomOptionPrice::getValue
+     *      \Magento\Catalog\Model\Product\Option\Value::getPrice
+     *      \Magento\Catalog\Model\Product\Option\Value::getRegularPrice
+     *
      * @param ProductOptionValue $optionValue
      * @param string $priceCode
      * @return float|int
