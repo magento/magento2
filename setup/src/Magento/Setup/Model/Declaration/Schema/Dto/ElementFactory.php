@@ -11,8 +11,8 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Factories\FactoryInterface;
 /**
  * This is abstract factory that allows to
  * instantiate any type of structural elements
- * @see ElementInterface
  *
+ * @see ElementInterface
  */
 class ElementFactory
 {
@@ -30,7 +30,7 @@ class ElementFactory
 
     /**
      * @param FactoryInterface[] $typeFactories
-     * @param BooleanUtils $booleanUtils
+     * @param BooleanUtils       $booleanUtils
      */
     public function __construct(array $typeFactories, BooleanUtils $booleanUtils)
     {
@@ -46,7 +46,7 @@ class ElementFactory
      *
      * We need to cast this attributes to boolean values in abstract factory
      *
-     * @param array $elementStructuralData
+     * @param  array $elementStructuralData
      * @return array
      */
     private function castGenericAttributes(array $elementStructuralData)
@@ -66,8 +66,8 @@ class ElementFactory
     /**
      * Instantiate different types of elements, depends on their xsi:type
      *
-     * @param string $type
-     * @param array $elementStructuralData
+     * @param  string $type
+     * @param  array  $elementStructuralData
      * @return ElementInterface | object
      */
     public function create($type, array $elementStructuralData)

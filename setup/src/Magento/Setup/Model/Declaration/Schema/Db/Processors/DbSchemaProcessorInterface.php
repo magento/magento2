@@ -19,7 +19,7 @@ interface DbSchemaProcessorInterface
     /**
      * Check whether current processor can process element
      *
-     * @param ElementInterface $element
+     * @param  ElementInterface $element
      * @return mixed
      */
     public function canBeApplied(ElementInterface $element);
@@ -27,7 +27,7 @@ interface DbSchemaProcessorInterface
     /**
      * Output always will be SQL definition
      *
-     * @param ElementInterface $element
+     * @param  ElementInterface $element
      * @return string
      */
     public function toDefinition(ElementInterface $element);
@@ -38,7 +38,7 @@ interface DbSchemaProcessorInterface
      *  'type' => 'name VARCHAR(255)'\
      *  'nullable' => 'no'
      *
-     * @param array $data
+     * @param  array $data
      * @return array
      */
     public function fromDefinition(array $data);

@@ -75,7 +75,7 @@ class AdapterMediator
     /**
      * @param DbSchemaReaderInterface $dbSchemaReader
      * @param DbSchemaWriterInterface $dbSchemaCreator
-     * @param array $processors
+     * @param array                   $processors
      */
     public function __construct(
         DbSchemaReaderInterface $dbSchemaReader,
@@ -91,8 +91,8 @@ class AdapterMediator
      * Go through all processors and modify column data
      * depends on type column has
      *
-     * @param array $elementData
-     * @param $type
+     * @param  array $elementData
+     * @param  $type
      * @return array
      */
     private function processElementFromDefinition(array $elementData, $type)
@@ -101,7 +101,9 @@ class AdapterMediator
             throw new \InvalidArgumentException(sprintf("Cannot find type %s", $type));
         }
 
-        /** @var DbSchemaProcessorInterface $columnProcessor */
+        /**
+ * @var DbSchemaProcessorInterface $columnProcessor 
+*/
         foreach ($this->processors[$type] as $columnProcessor) {
             $elementData = $columnProcessor->fromDefinition($elementData);
         }
@@ -112,7 +114,7 @@ class AdapterMediator
     /**
      * Retrieve definition for all table elements
      *
-     * @param Table $table
+     * @param  Table $table
      * @return void
      */
     public function createTable(Table $table)
@@ -129,7 +131,9 @@ class AdapterMediator
         ];
 
         foreach ($data as $type => $elements) {
-            /** @var ElementInterface $element */
+            /**
+ * @var ElementInterface $element 
+*/
             foreach ($elements as $element) {
                 $definition[$type][$element->getName()] = $this
                     ->processElementToDefinition($element);
@@ -142,7 +146,7 @@ class AdapterMediator
     /**
      * Prepare and add element (column, constraint, index) to table
      *
-     * @param ElementInterface | TableElementInterface $element
+     * @param  ElementInterface | TableElementInterface $element
      * @return void
      */
     public function addElement(ElementInterface $element)
@@ -185,7 +189,7 @@ class AdapterMediator
     /**
      * Prepare and drop element from table
      *
-     * @param ElementInterface | TableElementInterface $element
+     * @param  ElementInterface | TableElementInterface $element
      * @return void
      */
     public function dropElement(ElementInterface $element)
@@ -243,13 +247,15 @@ class AdapterMediator
     /**
      * Process column definition
      *
-     * @param ElementInterface $element
+     * @param  ElementInterface $element
      * @return string
      */
     public function processElementToDefinition(ElementInterface $element)
     {
         $definition = '';
-        /** @var DbSchemaProcessorInterface $processor */
+        /**
+ * @var DbSchemaProcessorInterface $processor 
+*/
         foreach ($this->processors[$element->getElementType()] as $processor) {
             //One column processor can override or modify existing one
             if ($processor->canBeApplied($element)) {
@@ -263,8 +269,8 @@ class AdapterMediator
     /**
      * Retrieve the list of all Magento non-unique and non-primary indexes
      *
-     * @param string $tableName
-     * @param string $resource
+     * @param  string $tableName
+     * @param  string $resource
      * @return array
      */
     public function getIndexesList($tableName, $resource)
@@ -318,8 +324,8 @@ class AdapterMediator
     /**
      * Retrieve list of preprocessed foreign keys
      *
-     * @param string $tableName
-     * @param string $resource
+     * @param  string $tableName
+     * @param  string $resource
      * @return array
      */
     public function getReferencesList($tableName, $resource)
@@ -339,7 +345,7 @@ class AdapterMediator
 
     /**
      * @param $tableName
-     * @param string $resource
+     * @param string    $resource
      * @return array
      */
     public function getColumnsList($tableName, $resource)

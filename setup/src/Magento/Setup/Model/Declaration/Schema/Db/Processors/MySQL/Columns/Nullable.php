@@ -47,7 +47,7 @@ class Nullable implements DbSchemaProcessorInterface
     /**
      * Convert MySQL nullable string value into boolean
      *
-     * @param string $nullableValue
+     * @param  string $nullableValue
      * @return bool
      */
     private function processNullable($nullableValue)

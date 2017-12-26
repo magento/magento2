@@ -22,7 +22,7 @@ use Magento\Setup\Model\Declaration\Schema\Sharding;
  * because it should have references to other DTO objects.
  * In order to convert build only 1 structural element use directly it factory
  *
- * @see Schema
+ * @see        Schema
  * @inheritdoc
  */
 class SchemaBuilder
@@ -49,10 +49,11 @@ class SchemaBuilder
 
     /**
      * Parser constructor.
-     * @param AdapterMediator $adapter
-     * @param ElementFactory $elementFactory
+     *
+     * @param AdapterMediator         $adapter
+     * @param ElementFactory          $elementFactory
      * @param DbSchemaReaderInterface $dbSchemaReader
-     * @param Sharding $sharding
+     * @param Sharding                $sharding
      */
     public function __construct(
         AdapterMediator $adapter,
@@ -83,11 +84,15 @@ class SchemaBuilder
                 $indexesData = $this->adapter->getIndexesList($tableName, $resource);
                 $constrainsData = $this->adapter->getConstraintsList($tableName, $resource);
 
-                /** @var Table $table */
-                $table = $this->elementFactory->create('table', [
+                /**
+ * @var Table $table 
+*/
+                $table = $this->elementFactory->create(
+                    'table', [
                     'name' => $tableName,
                     'resource' => $resource
-                ]);
+                    ]
+                );
 
                 // Process columns
                 foreach ($columnsData as $columnData) {
@@ -128,7 +133,7 @@ class SchemaBuilder
      * This needs to validate schema. And find out invalid references, for example
      * for tables that do not exists already
      *
-     * @param Table[] $tables
+     * @param  Table[] $tables
      * @return Table[]
      */
     private function processReferenceKeys(array $tables)
@@ -159,8 +164,8 @@ class SchemaBuilder
     /**
      * Retrieve column objects from names
      *
-     * @param Column[] $columns
-     * @param array $data
+     * @param  Column[] $columns
+     * @param  array    $data
      * @return Column[]
      */
     private function resolveInternalRelations(array $columns, array $data)

@@ -12,7 +12,6 @@ use Magento\TestFramework\TestCase\MutableDataInterface;
 
 /**
  * Handler for applying reinstallMagento annotation
- *
  */
 class DataProviderFromFile
 {

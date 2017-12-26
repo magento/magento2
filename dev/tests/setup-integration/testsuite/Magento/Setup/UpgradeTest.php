@@ -53,7 +53,9 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
         $objectManager = Bootstrap::getObjectManager();
         $this->shellCommand = $objectManager->create(\Magento\TestFramework\Deploy\CliCommand::class);
         $this->testModuleManager = $objectManager->create(\Magento\TestFramework\Deploy\TestModuleManager::class);
-        /** @var \Magento\Framework\Setup\ModuleDataSetupInterface $installer */
+        /**
+ * @var \Magento\Framework\Setup\ModuleDataSetupInterface $installer 
+*/
         $this->installer = $objectManager->create(
             \Magento\Framework\Setup\ModuleDataSetupInterface::class
         );
@@ -145,7 +147,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
      */
     public function testTableDataAfterInstall($tableName)
     {
-        $expectedData = $expectedData = require __DIR__ . '/_files/expectedData.php';
+        $expectedData = $expectedData = include __DIR__ . '/_files/expectedData.php';
         $name = $this->tablesName[$tableName];
         $this->assertTrue($this->connection->isTableExists($name), "Table {$name} doesn't not exists");
         $select = $this->connection->select()->from($this->installer->getTable($name));
@@ -210,12 +212,12 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $tableName
-     * @param int $count
+     * @param int    $count
      * @dataProvider tableDataAfterUpgradeDataProvider
      */
     public function testDataAfterUpgrade($count, $tableName)
     {
-        $expectedData = $expectedData = require __DIR__ . '/_files/expectedDataAfterUpgrade.php';
+        $expectedData = $expectedData = include __DIR__ . '/_files/expectedDataAfterUpgrade.php';
         $name = $this->installer->getTable($tableName);
         $this->assertTrue($this->connection->isTableExists($name), "Table {$name} doesn't not exists");
         $select = $this->connection->select()->from($name);
@@ -236,7 +238,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
     /**
      * Convert actual foreign keys data
      *
-     * @param array $actualRelations
+     * @param  array $actualRelations
      * @return array
      */
     private function getForeignKeysData($actualRelations)
@@ -256,7 +258,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
     /**
      * Convert actual indexes data
      *
-     * @param array $actualIndexesList
+     * @param  array $actualIndexesList
      * @return array
      */
     private function getIndexesData($actualIndexesList)
@@ -277,7 +279,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
     /**
      * Convert actual table schema structure
      *
-     * @param array $actualTableStructure
+     * @param  array $actualTableStructure
      * @return array
      */
     private function getConvertedStructure($actualTableStructure)
@@ -298,9 +300,9 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
     private function getExpectedData()
     {
         if (empty($this->expectedData)) {
-            $expectedSchema = require __DIR__ . '/_files/expectedSchema.php';
-            $expectedRelations = require __DIR__ . '/_files/expectedRelations.php';
-            $expectedIndexes = require __DIR__ . '/_files/expectedIndexes.php';
+            $expectedSchema = include __DIR__ . '/_files/expectedSchema.php';
+            $expectedRelations = include __DIR__ . '/_files/expectedRelations.php';
+            $expectedIndexes = include __DIR__ . '/_files/expectedIndexes.php';
             $this->expectedData = [
                 $expectedSchema,
                 $expectedRelations,
@@ -313,7 +315,7 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
     /**
      * Return array of table names in format 'initial table name' => 'table name with prefix'
      *
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $installer
+     * @param  \Magento\Framework\Setup\ModuleDataSetupInterface $installer
      * @return array
      */
     private function getTableNameMapping($installer)

@@ -132,8 +132,8 @@ return [
                             'smallint' => 'smallint',
                             'bigint' => 'bigint',
                         ],
-                    'type' => 'unique',
-                    'name' => 'some_unique_key',
+                        'type' => 'unique',
+                        'name' => 'some_unique_key',
                 ],
                 'some_foreign_key' => [
                     'type' => 'foreign',

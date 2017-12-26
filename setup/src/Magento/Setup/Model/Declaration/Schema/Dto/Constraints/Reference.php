@@ -39,9 +39,9 @@ class Reference extends Constraint implements ElementDiffAwareInterface
     /**
      * @param string $name
      * @param string $type
-     * @param Table $table
+     * @param Table  $table
      * @param Column $column
-     * @param Table $referenceTable
+     * @param Table  $referenceTable
      * @param Column $referenceColumn
      * @param string $onDelete
      */
@@ -81,7 +81,6 @@ class Reference extends Constraint implements ElementDiffAwareInterface
 
     /**
      * External table to where we do reference
-     *
      *
      * @return Table
      */

@@ -59,10 +59,11 @@ class SchemaBuilder
 
     /**
      * SchemaBuilder constructor.
-     * @param ElementFactory $elementFactory
-     * @param BooleanUtils $booleanUtils
-     * @param Sharding $sharding
-     * @param ValidationComposite $validationComposite
+     *
+     * @param    ElementFactory      $elementFactory
+     * @param    BooleanUtils        $booleanUtils
+     * @param    Sharding            $sharding
+     * @param    ValidationComposite $validationComposite
      * @internal param array $tablesData
      */
     public function __construct(
@@ -81,7 +82,7 @@ class SchemaBuilder
      * Add tables data to builder
      * Tables data holds tables information: columns, constraints, indexes, attributes
      *
-     * @param array $tablesData
+     * @param  array $tablesData
      * @return self
      */
     public function addTablesData(array $tablesData)
@@ -93,7 +94,7 @@ class SchemaBuilder
     /**
      * Do schema validation and print all errors
      *
-     * @param Schema $schema
+     * @param  Schema $schema
      * @throws Exception
      */
     private function validate(Schema $schema)
@@ -113,7 +114,7 @@ class SchemaBuilder
     /**
      * Build schema
      *
-     * @param Schema $schema
+     * @param  Schema $schema
      * @throws Exception
      * @return Schema
      */
@@ -145,7 +146,7 @@ class SchemaBuilder
     /**
      * Check whether element is disabled and should not appear in final declaration
      *
-     * @param array $structuralElementData
+     * @param  array $structuralElementData
      * @return bool
      */
     private function isDisabled(array $structuralElementData)
@@ -158,9 +159,9 @@ class SchemaBuilder
      * Instantiate column DTO objects from array
      * If column was renamed new key will be associated to it
      *
-     * @param array $tableData
-     * @param string $resource
-     * @param Table $table
+     * @param  array  $tableData
+     * @param  string $resource
+     * @param  Table  $table
      * @return array
      */
     private function processColumns(array $tableData, $resource, Table $table)
@@ -183,9 +184,9 @@ class SchemaBuilder
     /**
      * Process generic data that is support by all 3 child types: columns, constraints, indexes
      *
-     * @param array $elementData
-     * @param Table $table
-     * @param $resource
+     * @param  array    $elementData
+     * @param  Table    $table
+     * @param  $resource
      * @return array
      */
     private function processGenericData(array $elementData, $resource, Table $table)
@@ -200,8 +201,8 @@ class SchemaBuilder
      * Process tables and add them to schema
      * If table already exists - then we need to skip it
      *
-     * @param Schema $schema
-     * @param array $tableData
+     * @param  Schema $schema
+     * @param  array  $tableData
      * @return \Magento\Setup\Model\Declaration\Schema\Dto\Table
      */
     private function processTable(Schema $schema, array $tableData)
@@ -212,7 +213,9 @@ class SchemaBuilder
                 'name' => $tableData['name'],
                 'resource' => $resource,
             ];
-            /** @var Table $table */
+            /**
+ * @var Table $table 
+*/
             $table = $this->elementFactory->create('table', $tableParams);
             $columns = $this->processColumns($tableData, $resource, $table);
             $table->addColumns($columns);
@@ -229,8 +232,8 @@ class SchemaBuilder
     /**
      * Convert column names to objects
      *
-     * @param array $columnNames
-     * @param Table $table
+     * @param  array $columnNames
+     * @param  Table $table
      * @return array
      */
     private function convertColumnNamesToObjects(array $columnNames, Table $table)
@@ -247,9 +250,9 @@ class SchemaBuilder
     /**
      * Convert and instantiate index objects
      *
-     * @param array $tableData
-     * @param $resource
-     * @param Table $table
+     * @param  array    $tableData
+     * @param  $resource
+     * @param  Table    $table
      * @return Index[]
      */
     private function processIndexes(array $tableData, $resource, Table $table)
@@ -277,9 +280,9 @@ class SchemaBuilder
     /**
      * Convert and instantiate constraint objects
      *
-     * @param array $tableData
-     * @param $resource
-     * @param Schema $schema
+     * @param  array    $tableData
+     * @param  $resource
+     * @param  Schema   $schema
      * @return Constraint[]
      */
     private function processConstraints(array $tableData, $resource, Schema $schema)

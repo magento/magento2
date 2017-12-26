@@ -17,7 +17,7 @@ class Comparator
 {
     /**
      * @param ElementInterface | ElementDiffAwareInterface $first
-     * @param ElementInterface | ElementDiffAwareInterface  $second
+     * @param ElementInterface | ElementDiffAwareInterface $second
      * @return bool
      */
     public function compare(ElementInterface $first, ElementInterface $second)

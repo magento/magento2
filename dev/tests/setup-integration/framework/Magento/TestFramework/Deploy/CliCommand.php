@@ -32,8 +32,8 @@ class CliCommand
     /**
      * ShellCommand constructor.
      *
-     * @param TestModuleManager $testEnv
-     * @param ParametersHolder $paramatersHolder
+     * @param    TestModuleManager $testEnv
+     * @param    ParametersHolder  $paramatersHolder
      * @internal param Shell $shell
      */
     public function __construct(
@@ -47,7 +47,7 @@ class CliCommand
     /**
      * Copy Test module files and execute enable module command
      *
-     * @param string $moduleName
+     * @param  string $moduleName
      * @return string
      */
     public function introduceModule($moduleName)
@@ -59,7 +59,7 @@ class CliCommand
     /**
      * Execute enable module command
      *
-     * @param string $moduleName
+     * @param  string $moduleName
      * @return string
      */
     public function enableModule($moduleName)
@@ -86,7 +86,7 @@ class CliCommand
     /**
      * Execute disable module command
      *
-     * @param string $moduleName
+     * @param  string $moduleName
      * @return string
      */
     public function disableModule($moduleName)
@@ -99,6 +99,7 @@ class CliCommand
 
     /**
      * Split quote db configuration
+     *
      * @return void
      */
     public function splitQuote()
@@ -107,14 +108,17 @@ class CliCommand
         $installParams = $this->toCliArguments(
             $this->parametersHolder->getDbData('checkout')
         );
-        $command = 'php -f ' . BP . '/bin/magento setup:db-schema:split-quote '
-            . implode(" ", array_keys($installParams)) . ' -vvv --magento-init-params=' . $initParams['magento-init-params'];
+        $command = 'php -f ' . BP . '/bin/magento setup:db-schema:split-quote ' .
+            implode(" ", array_keys($installParams)) .
+            ' -vvv --magento-init-params=' .
+            $initParams['magento-init-params'];
 
         $this->shell->execute($command, array_values($installParams));
     }
 
     /**
      * Split sales db configuration
+     *
      * @return void
      */
     public function splitSales()
@@ -123,8 +127,10 @@ class CliCommand
         $installParams = $this->toCliArguments(
             $this->parametersHolder->getDbData('sales')
         );
-        $command = 'php -f ' . BP . '/bin/magento setup:db-schema:split-sales '
-            . implode(" ", array_keys($installParams)) . ' -vvv --magento-init-params=' . $initParams['magento-init-params'];
+        $command = 'php -f ' . BP . '/bin/magento setup:db-schema:split-sales ' .
+            implode(" ", array_keys($installParams)) .
+            ' -vvv --magento-init-params=' .
+            $initParams['magento-init-params'];
 
         $this->shell->execute($command, array_values($installParams));
     }
@@ -132,7 +138,7 @@ class CliCommand
     /**
      * Convert from raw params to CLI arguments, like --admin-username
      *
-     * @param array $params
+     * @param  array $params
      * @return array
      */
     private function toCliArguments(array $params)

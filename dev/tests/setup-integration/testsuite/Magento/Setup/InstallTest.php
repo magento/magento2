@@ -43,7 +43,9 @@ class InstallTest extends \PHPUnit\Framework\TestCase
         $objectManager = Bootstrap::getObjectManager();
         $this->shellCommand = $objectManager->get(\Magento\TestFramework\Deploy\CliCommand::class);
         $this->testModuleManager = $objectManager->get(\Magento\TestFramework\Deploy\TestModuleManager::class);
-        /** @var \Magento\Framework\Setup\ModuleDataSetupInterface $installer */
+        /**
+ * @var \Magento\Framework\Setup\ModuleDataSetupInterface $installer 
+*/
     }
 
     public static function tearDownAfterClass()
@@ -85,7 +87,7 @@ class InstallTest extends \PHPUnit\Framework\TestCase
      */
     public function testColumnStructure($initialName, $name)
     {
-        $expectedSchema = require __DIR__ . '/_files/expectedSchema.php';
+        $expectedSchema = include __DIR__ . '/_files/expectedSchema.php';
         //check if table prefix was defined
         $this->assertTrue($this->connection->isTableExists($name), "Table {$name} doesn't not exists");
         $tableSchema = $this->connection->describeTable($name);
@@ -104,7 +106,7 @@ class InstallTest extends \PHPUnit\Framework\TestCase
      */
     public function testVerifyRelations($initialName, $name)
     {
-        $expectedRelations = require __DIR__ . '/_files/expectedRelations.php';
+        $expectedRelations = include __DIR__ . '/_files/expectedRelations.php';
         //check that table not exists
         $this->assertTrue($this->connection->isTableExists($name), "Table {$name} doesn't not exists");
         $actualForeignKeyName = $this->connection->getForeignKeys($name);
@@ -131,7 +133,7 @@ class InstallTest extends \PHPUnit\Framework\TestCase
      */
     public function testVerifyIndexes($initialName, $name)
     {
-        $expectedIndexes = require __DIR__ . '/_files/expectedIndexes.php';
+        $expectedIndexes = include __DIR__ . '/_files/expectedIndexes.php';
         //check that table not exists
         $this->assertTrue($this->connection->isTableExists($name), "Table {$name} doesn't not exists");
         $actualIndexList = $this->connection->getIndexList($name);

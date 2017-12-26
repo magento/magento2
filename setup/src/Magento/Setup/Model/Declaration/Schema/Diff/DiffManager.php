@@ -37,8 +37,8 @@ class DiffManager
     /**
      * Check whether this is element is new or not, by checking it in db schema
      *
-     * @param ElementInterface[] $generatedElements
-     * @param ElementInterface $element
+     * @param  ElementInterface[] $generatedElements
+     * @param  ElementInterface   $element
      * @return bool
      */
     public function shouldBeCreated(array $generatedElements, ElementInterface $element)
@@ -49,7 +49,7 @@ class DiffManager
     /**
      * Check whether we have elements that should be removed from database
      *
-     * @param array $generatedElements
+     * @param  array $generatedElements
      * @return bool
      */
     public function shouldBeRemoved(array $generatedElements)
@@ -60,10 +60,9 @@ class DiffManager
     /**
      * Register element, that should changes
      *
-     *
-     * @param DiffInterface $diff
-     * @param ElementInterface $element
-     * @param ElementInterface $generatedElement
+     * @param  DiffInterface    $diff
+     * @param  ElementInterface $element
+     * @param  ElementInterface $generatedElement
      * @return DiffInterface
      */
     public function registerModification(
@@ -83,9 +82,9 @@ class DiffManager
      * If elements really dont exists in declaration - we will remove them
      * If some mistake happens (and element is just not preprocessed), we will throw exception
      *
-     * @param DiffInterface $diff
-     * @param ElementInterface[] $generatedElements
-     * @param ElementInterface[] $elements
+     * @param  DiffInterface      $diff
+     * @param  ElementInterface[] $generatedElements
+     * @param  ElementInterface[] $elements
      * @return DiffInterface
      */
     public function registerRemoval(
@@ -114,7 +113,7 @@ class DiffManager
     }
 
     /**
-     * @param DiffInterface $diff
+     * @param DiffInterface    $diff
      * @param ElementInterface $element
      * @return DiffInterface
      */
@@ -132,8 +131,8 @@ class DiffManager
     /**
      * Check whether element should be modified or not
      *
-     * @param ElementInterface $element
-     * @param ElementInterface $generatedElement
+     * @param  ElementInterface $element
+     * @param  ElementInterface $generatedElement
      * @return bool
      */
     public function shouldBeModified(

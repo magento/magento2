@@ -43,7 +43,7 @@ class Boolean implements DbSchemaProcessorInterface
     private $defaultDefinition;
 
     /**
-     * @param Nullable $nullable
+     * @param Nullable          $nullable
      * @param DefaultDefinition $defaultDefinition
      */
     public function __construct(Nullable $nullable, DefaultDefinition $defaultDefinition)

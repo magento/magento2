@@ -16,7 +16,7 @@ interface FactoryInterface
     /**
      * Compute and return effective value of an argument
      *
-     * @param array $data
+     * @param  array $data
      * @return ElementInterface
      */
     public function create(array $data);

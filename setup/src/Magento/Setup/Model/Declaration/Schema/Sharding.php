@@ -35,7 +35,7 @@ class Sharding
 
     /**
      * @param DeploymentConfig $deploymentConfig
-     * @param array $resources
+     * @param array            $resources
      */
     public function __construct(DeploymentConfig $deploymentConfig, array $resources)
     {
@@ -64,7 +64,7 @@ class Sharding
     /**
      * Check whether our resource is valid one
      *
-     * @param string $scopeName
+     * @param  string $scopeName
      * @return bool
      */
     public function canUseResource($scopeName)

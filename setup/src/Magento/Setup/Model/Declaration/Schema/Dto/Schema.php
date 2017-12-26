@@ -29,7 +29,7 @@ class Schema
     /**
      * Add table by name key to tables registry
      *
-     * @param Table $table
+     * @param  Table $table
      * @return $this
      */
     public function addTable(Table $table)
@@ -41,7 +41,7 @@ class Schema
     /**
      * Retrieve table by it name
      *
-     * @param $name
+     * @param  $name
      * @return bool|Table
      */
     public function getTableByName($name)

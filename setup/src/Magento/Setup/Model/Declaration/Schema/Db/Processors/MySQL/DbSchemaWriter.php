@@ -35,9 +35,9 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     /**
      * Prepare constraint statement by compiling name and definition together
      *
-     * @param string $name
-     * @param string $indexDefinition
-     * @param string $elementType: can be COLUMN, CONSTRAINT or INDEX
+     * @param  string $name
+     * @param  string $indexDefinition
+     * @param  string $elementType:    can be COLUMN, CONSTRAINT or INDEX
      * @return string
      */
     private function getAddElementSQL($elementType, $name, $indexDefinition)
@@ -51,8 +51,8 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      * To format:
      *  $name $definition
      *
-     * @param array $columnsDefinition
-     * @param AdapterInterface $adapter
+     * @param  array            $columnsDefinition
+     * @param  AdapterInterface $adapter
      * @return array
      */
     private function getColumnsWithNames(array $columnsDefinition, AdapterInterface $adapter)
@@ -108,7 +108,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     /**
      * Drop table from MySQL database
      *
-     * @param array $tableOptions
+     * @param  array $tableOptions
      * @return \Zend_Db_Statement_Interface
      */
     public function dropTable(array $tableOptions)
@@ -128,9 +128,9 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     /**
      * For Primary key we do not need to specify name
      *
-     * @param string $elementType
-     * @param string $type
-     * @param string $name
+     * @param  string $elementType
+     * @param  string $type
+     * @param  string $name
      * @return string
      */
     private function getDropElementSQL($elementType, $type, $name)
@@ -154,9 +154,9 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      * Add element to already existed table
      * We can add three different elements: column, constraint or index
      *
-     * @param array $elementOptions should consists from 3 elements: resource, elementname, tablename
-     * @param string $elementDefinition
-     * @param string $elementType
+     * @param  array  $elementOptions    should consists from 3 elements: resource, elementname, tablename
+     * @param  string $elementDefinition
+     * @param  string $elementType
      * @return \Zend_Db_Statement_Interface
      */
     public function addElement(array $elementOptions, $elementDefinition, $elementType)
@@ -182,8 +182,8 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     /**
      * Modify column and change it definition
      *
-     * @param array $columnOptions
-     * @param string $columnDefinition
+     * @param  array  $columnOptions
+     * @param  string $columnDefinition
      * @return \Zend_Db_Statement_Interface
      */
     public function modifyColumn(array $columnOptions, $columnDefinition)
@@ -206,25 +206,25 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     /**
      * Detect what type of constraint we have
      *
-     * @param string $type
+     * @param  string $type
      * @return string
      */
     private function getConstraintType($type)
     {
         switch ($type) {
-            case 'foreign':
-                $elementType = ForeignKey::FOREIGN_KEY_NAME;
-                break;
-            case 'primary':
-                $elementType = Internal::PRIMARY_KEY_NAME;
-                break;
-            case 'unique':
-            case 'index':
-                //In MySQL for unique and for index drop syntax is the same
-                $elementType = Index::INDEX_KEY_NAME;
-                break;
-            default:
-                $elementType = Constraint::TYPE;
+        case 'foreign':
+            $elementType = ForeignKey::FOREIGN_KEY_NAME;
+            break;
+        case 'primary':
+            $elementType = Internal::PRIMARY_KEY_NAME;
+            break;
+        case 'unique':
+        case 'index':
+            //In MySQL for unique and for index drop syntax is the same
+            $elementType = Index::INDEX_KEY_NAME;
+            break;
+        default:
+            $elementType = Constraint::TYPE;
         }
 
         return $elementType;
@@ -268,8 +268,8 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     /**
      * Drop any element (constraint, column, index) from index
      *
-     * @param string $elementType enum(CONSTRAINT, INDEX, COLUMN)
-     * @param array $elementOptions
+     * @param  string $elementType    enum(CONSTRAINT, INDEX, COLUMN)
+     * @param  array  $elementOptions
      * @return \Zend_Db_Statement_Interface
      */
     public function dropElement($elementType, array $elementOptions)

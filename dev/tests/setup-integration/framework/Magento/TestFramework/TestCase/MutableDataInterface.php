@@ -14,7 +14,7 @@ interface MutableDataInterface
     /**
      * Set dataproviders data
      *
-     * @param array $data
+     * @param  array $data
      * @return void
      */
     public function setData(array $data);

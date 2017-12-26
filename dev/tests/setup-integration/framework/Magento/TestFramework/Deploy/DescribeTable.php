@@ -28,7 +28,7 @@ class DescribeTable
     /**
      * Describe shards
      *
-     * @param string $shardName
+     * @param  string $shardName
      * @return array
      */
     public function describeShard($shardName)

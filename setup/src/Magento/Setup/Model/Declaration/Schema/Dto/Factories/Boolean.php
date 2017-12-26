@@ -36,8 +36,8 @@ class Boolean implements FactoryInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param BooleanUtils $booleanUtils
-     * @param string $className
+     * @param BooleanUtils           $booleanUtils
+     * @param string                 $className
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -53,6 +53,7 @@ class Boolean implements FactoryInterface
      * Convert default attribute from string to boolean value
      *
      * {@inheritdoc}
+     *
      * @return array
      */
     public function create(array $data)

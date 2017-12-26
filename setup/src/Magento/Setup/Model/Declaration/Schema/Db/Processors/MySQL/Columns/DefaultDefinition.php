@@ -30,7 +30,7 @@ class DefaultDefinition implements DbSchemaProcessorInterface
     /**
      * Stringify default before we will collect definition
      *
-     * @param mixed $default
+     * @param  mixed $default
      * @return string
      */
     private function defaultStringify($default)

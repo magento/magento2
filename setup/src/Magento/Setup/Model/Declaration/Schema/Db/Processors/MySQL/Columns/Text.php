@@ -23,6 +23,7 @@ class Text implements DbSchemaProcessorInterface
 
     /**
      * Text constructor.
+     *
      * @param Nullable $nullable
      */
     public function __construct(Nullable $nullable)

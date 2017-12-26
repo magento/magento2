@@ -13,6 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Represents
+ *
  * @magentoSchemaFixture {link_to_file.php}
  */
 class DeploymentConfig

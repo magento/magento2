@@ -15,7 +15,7 @@ interface ValidationInterface
     /**
      * Do different validations on readed db schema
      *
-     * @param Schema $schema
+     * @param  Schema $schema
      * @return array Return array of errors. If everything is ok - retrieve empty array
      */
     public function validate(Schema $schema);

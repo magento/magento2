@@ -45,13 +45,13 @@ class Integer extends Column implements
     private $identity;
 
     /**
-     * @param string $name
-     * @param string $type
-     * @param Table $table
-     * @param int $padding
-     * @param bool $nullable
-     * @param bool $unsigned
-     * @param bool $identity
+     * @param string    $name
+     * @param string    $type
+     * @param Table     $table
+     * @param int       $padding
+     * @param bool      $nullable
+     * @param bool      $unsigned
+     * @param bool      $identity
      * @param float|int $default
      */
     public function __construct(

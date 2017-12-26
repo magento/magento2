@@ -25,6 +25,7 @@ class RequestFactory
 
     /**
      * RequestFactory constructor.
+     *
      * @param Di $zendDi
      */
     public function __construct(Di $zendDi)
@@ -35,7 +36,7 @@ class RequestFactory
     /**
      * Create request object with requestOptions params
      *
-     * @param array $requestOptions
+     * @param  array $requestOptions
      * @return Request
      */
     public function create(array $requestOptions = [])

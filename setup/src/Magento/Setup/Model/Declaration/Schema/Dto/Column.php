@@ -27,7 +27,7 @@ class Column extends GenericElement implements
     /**
      * @param string $name
      * @param string $type
-     * @param Table $table
+     * @param Table  $table
      */
     public function __construct(
         string $name,

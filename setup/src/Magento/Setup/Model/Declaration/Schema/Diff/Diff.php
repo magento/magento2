@@ -52,7 +52,7 @@ class Diff implements DiffInterface
     private $elementHistoryFactory;
 
     /**
-     * @param ComponentRegistrar $componentRegistrar
+     * @param ComponentRegistrar    $componentRegistrar
      * @param ElementHistoryFactory $elementHistoryFactory
      */
     public function __construct(
@@ -79,7 +79,6 @@ class Diff implements DiffInterface
      * Retrieve array of whitelisted tables
      * Whitelist tables should have JSON format and should be added through
      * CLI command: should be done in next story
-     *
      *
      * @return array
      */
@@ -108,7 +107,7 @@ class Diff implements DiffInterface
      * For example, if element is not in whitelist.json it cant
      * be registered due to backward incompatability
      *
-     * @param ElementInterface $object
+     * @param  ElementInterface $object
      * @return bool
      */
     private function canBeRegistered(ElementInterface $object)
@@ -139,7 +138,7 @@ class Diff implements DiffInterface
     {
         //Comment until whitelist functionality will be done
         if (!$this->canBeRegistered($dtoObject)) {
-            #return $this; //ignore any operations for non registered elements changes
+            // return $this; //ignore any operations for non registered elements changes
         }
         $historyData = ['new' => $dtoObject, 'old' => $oldDtoObject];
         $history = $this->elementHistoryFactory->create($historyData);

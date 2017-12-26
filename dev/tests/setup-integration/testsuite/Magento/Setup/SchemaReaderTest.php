@@ -46,7 +46,7 @@ class SchemaReaderTest extends SetupTestCase
     /**
      * Helper method. Decrease number of params
      *
-     * @param string $revisionName
+     * @param  string $revisionName
      * @return void
      */
     private function updateRevisionTo($revisionName)

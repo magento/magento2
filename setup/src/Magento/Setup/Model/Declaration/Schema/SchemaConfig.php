@@ -37,10 +37,10 @@ class SchemaConfig implements SchemaConfigInterface
     private $readerComposite;
 
     /**
-     * @param DbSchemaBuilder $dbSchemaBuilder
+     * @param DbSchemaBuilder          $dbSchemaBuilder
      * @param DeclarativeSchemaBuilder $declarativeSchemaBuilder
-     * @param SchemaFactory $schemaFactory
-     * @param ReaderComposite $readerComposite
+     * @param SchemaFactory            $schemaFactory
+     * @param ReaderComposite          $readerComposite
      */
     public function __construct(
         DbSchemaBuilder $dbSchemaBuilder,

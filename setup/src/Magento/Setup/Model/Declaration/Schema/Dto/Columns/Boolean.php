@@ -29,9 +29,9 @@ class Boolean extends Column implements
     private $default;
 
     /**
-     * @param string $name
-     * @param string $type
-     * @param Table $table
+     * @param string   $name
+     * @param string   $type
+     * @param Table    $table
      * @param $nullable
      * @param $default
      */

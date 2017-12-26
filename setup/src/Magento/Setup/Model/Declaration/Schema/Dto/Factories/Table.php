@@ -25,7 +25,7 @@ class Table implements FactoryInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param string $className
+     * @param string                 $className
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -39,6 +39,7 @@ class Table implements FactoryInterface
      * Set default padding, like BIGINT(20)
      *
      * {@inheritdoc}
+     *
      * @return array
      */
     public function create(array $data)

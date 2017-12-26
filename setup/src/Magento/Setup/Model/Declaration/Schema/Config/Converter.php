@@ -9,6 +9,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Config;
 
 /**
  * This converter serve needs of Declaration Filesystem reader:
+ *
  * @see \Magento\Setup\Model\Declaration\Schema\FileSystem\XmlReader
  *
  * It allows to convert declarative schema to raw array and add default values
@@ -19,7 +20,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Convert config from XML to array
      *
-     * @param \DOMDocument $source
+     * @param  \DOMDocument $source
      * @return array
      */
     public function convert($source)
@@ -33,7 +34,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * So we do not need root elements in result, only table names
      * So proposed to select only tables from all DomDOCUMENT
      *
-     * @param \DOMDocument $element
+     * @param  \DOMDocument $element
      * @return \DOMNodeList
      */
     private function getTablesNode(\DOMDocument $element)
@@ -74,7 +75,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * XSI:TYPE is in another namespace, so we need to do additio
      * Note: name is mandatory attribute
      *
-     * @param \DOMElement $element
+     * @param  \DOMElement $element
      * @return bool
      */
     private function hasAttributesExceptName(\DOMElement $element)
@@ -86,7 +87,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Mix attributes that comes from XML schema with default ones
      * So if you will not have some attribute in schema - it will be taken from default one
      *
-     * @param \DOMElement $domElement
+     * @param  \DOMElement $domElement
      * @return mixed
      */
     private function interpretateAttributes(\DOMElement $domElement)
@@ -104,7 +105,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Convert XML attributes into raw array with attributes
      *
-     * @param \DOMElement $element
+     * @param  \DOMElement $element
      * @return array
      */
     private function getAttributes(\DOMElement $element)

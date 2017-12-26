@@ -29,7 +29,7 @@ class MediumBlob implements FactoryInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param string $className
+     * @param string                 $className
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -43,6 +43,7 @@ class MediumBlob implements FactoryInterface
      * Set default padding, like SMALLINT(5)
      *
      * {@inheritdoc}
+     *
      * @return array
      */
     public function create(array $data)

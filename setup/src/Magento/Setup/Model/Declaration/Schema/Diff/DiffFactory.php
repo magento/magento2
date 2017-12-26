@@ -7,8 +7,6 @@
 namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
 use Magento\Framework\ObjectManagerInterface;
-use Zend\Di\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceManager;
 
 /**
  * @see DiffInterface
@@ -22,6 +20,7 @@ class DiffFactory
 
     /**
      * ChangeRegistryFactory constructor.
+     *
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(ObjectManagerInterface $objectManager)

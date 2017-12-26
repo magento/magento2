@@ -56,7 +56,7 @@ class Internal implements DbSchemaProcessorInterface
             $element->getTable()->getResource()
         );
         $columnsList = array_map(
-            function(Column $column) use ($adapter) {
+            function (Column $column) use ($adapter) {
                 return $adapter->quoteIdentifier($column->getName());
             },
             $element->getColumns()

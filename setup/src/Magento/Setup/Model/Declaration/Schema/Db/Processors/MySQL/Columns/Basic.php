@@ -53,7 +53,7 @@ class Basic implements DbSchemaProcessorInterface
     /**
      * Basic type can not process any type of elements
      *
-     * @param ElementInterface $element
+     * @param  ElementInterface $element
      * @return bool
      */
     public function canBeApplied(ElementInterface $element)

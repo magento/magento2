@@ -24,7 +24,7 @@ interface OperationInterface
     /**
      * Apply change of any type
      *
-     * @param ElementHistory $elementHistory
+     * @param  ElementHistory $elementHistory
      * @return void
      */
     public function doOperation(ElementHistory $elementHistory);

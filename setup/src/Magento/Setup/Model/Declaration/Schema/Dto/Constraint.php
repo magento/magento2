@@ -27,8 +27,8 @@ class Constraint extends GenericElement implements
     /**
      * @param string $name
      * @param string $type
-     * @param Table $table
-     * @param array $columns
+     * @param Table  $table
+     * @param array  $columns
      */
     public function __construct(
         string $name,

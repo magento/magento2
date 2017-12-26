@@ -53,8 +53,8 @@ class TableDiff
      * As SQL engine can automatically create indexes for foreign keys in order to speedup selection
      * and we do not have this keys in declaration - we need to ignore them
      *
-     * @param Table $table
-     * @param Index[] $indexes
+     * @param  Table   $table
+     * @param  Index[] $indexes
      * @return Index[]
      */
     private function excludeAutoIndexes(Table $table, array $indexes)
@@ -69,7 +69,7 @@ class TableDiff
     /**
      * @param Table | ElementInterface $declaredTable
      * @param Table | ElementInterface $generatedTable
-     * @param Diff $diff
+     * @param Diff                     $diff
      * @inheritdoc
      */
     public function diff(
@@ -101,9 +101,10 @@ class TableDiff
                 if ($this->diffManager->shouldBeCreated($generatedElements, $element)) {
                     $diff = $this->diffManager->registerCreation($diff, $element);
                 } else if ($this->diffManager->shouldBeModified(
-                    $element,
-                    $generatedElements[$element->getName()]
-                )) {
+                        $element,
+                        $generatedElements[$element->getName()]
+                    )
+                ) {
                     $diff = $this->diffManager
                         ->registerModification($diff, $element, $generatedElements[$element->getName()]);
                 }

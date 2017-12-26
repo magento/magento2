@@ -17,6 +17,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
@@ -45,9 +46,11 @@ class UpgradeData implements UpgradeDataInterface
                     'telephone' => 12345678,
                 ]
             );
-            $setup->getConnection()->update($setup->getTable('setup_tests_entity_table'), [
+            $setup->getConnection()->update(
+                $setup->getTable('setup_tests_entity_table'), [
                 'increment_id'=> 1
-            ], 'increment_id = null');
+                ], 'increment_id = null'
+            );
 
             $setup->getConnection()->insertForce(
                 $setup->getTable('setup_tests_entity_passwords'),

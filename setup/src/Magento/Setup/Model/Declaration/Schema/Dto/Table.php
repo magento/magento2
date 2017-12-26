@@ -52,9 +52,9 @@ class Table extends GenericElement implements
      * @param string $name
      * @param string $type
      * @param string $resource
-     * @param array $columns
-     * @param array $indexes
-     * @param array $constraints
+     * @param array  $columns
+     * @param array  $indexes
+     * @param array  $constraints
      */
     public function __construct(
         string $name,
@@ -189,7 +189,7 @@ class Table extends GenericElement implements
     /**
      * If column exists - retrieve column
      *
-     * @param string $nameOrId
+     * @param  string $nameOrId
      * @return Column
      */
     public function getColumnByName($nameOrId)
@@ -205,7 +205,7 @@ class Table extends GenericElement implements
      * Retrieve elements by specific type
      * Allowed types: columns, constraints, indexes...
      *
-     * @param string $type
+     * @param  string $type
      * @return ElementInterface[]
      */
     public function getElementsByType($type)

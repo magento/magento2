@@ -33,7 +33,7 @@ class Timestamp implements DbSchemaProcessorInterface
     private $defaultDefinition;
 
     /**
-     * @param OnUpdate $onUpdate
+     * @param OnUpdate          $onUpdate
      * @param DefaultDefinition $defaultDefinition
      */
     public function __construct(OnUpdate $onUpdate, DefaultDefinition $defaultDefinition)

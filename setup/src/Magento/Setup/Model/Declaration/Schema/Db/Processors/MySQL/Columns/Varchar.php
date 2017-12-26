@@ -25,7 +25,7 @@ class Varchar implements DbSchemaProcessorInterface
     private $defaultDefinition;
 
     /**
-     * @param Nullable $nullable
+     * @param Nullable          $nullable
      * @param DefaultDefinition $defaultDefinition
      */
     public function __construct(Nullable $nullable, DefaultDefinition $defaultDefinition)
@@ -35,7 +35,7 @@ class Varchar implements DbSchemaProcessorInterface
     }
 
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Varchar $element
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Varchar   $element
      * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Varbinary $element
      * @inheritdoc
      */

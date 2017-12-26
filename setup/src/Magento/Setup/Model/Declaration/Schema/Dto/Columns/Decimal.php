@@ -48,12 +48,12 @@ class Decimal extends Column implements
     /**
      * @param string $name
      * @param string $type
-     * @param Table $table
-     * @param int $precission
-     * @param int $scale
-     * @param bool $nullable
-     * @param float $default
-     * @param bool $unsigned
+     * @param Table  $table
+     * @param int    $precission
+     * @param int    $scale
+     * @param bool   $nullable
+     * @param float  $default
+     * @param bool   $unsigned
      */
     public function __construct(
         string $name,

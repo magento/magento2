@@ -42,10 +42,10 @@ class Integer implements DbSchemaProcessorInterface
     private $defaultDefinition;
 
     /**
-     * @param Unsigned $unsigned
-     * @param bool $boolean
-     * @param Nullable $nullable
-     * @param Identity $identity
+     * @param Unsigned          $unsigned
+     * @param bool              $boolean
+     * @param Nullable          $nullable
+     * @param Identity          $identity
      * @param DefaultDefinition $defaultDefinition
      */
     public function __construct(

@@ -26,7 +26,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 
     /**
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
-     * @param string $schemaUrn
+     * @param string                                    $schemaUrn
      */
     public function __construct(
         \Magento\Framework\Config\Dom\UrnResolver $urnResolver,

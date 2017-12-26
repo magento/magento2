@@ -36,7 +36,7 @@ class Decimal implements FactoryInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param string $className
+     * @param string                 $className
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -50,6 +50,7 @@ class Decimal implements FactoryInterface
      * Set shape to floating point, that is by default (10,0)
      *
      * {@inheritdoc}
+     *
      * @return array
      */
     public function create(array $data)

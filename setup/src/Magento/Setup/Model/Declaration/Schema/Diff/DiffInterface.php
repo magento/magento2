@@ -32,7 +32,7 @@ interface DiffInterface
      *   ]
      * ]
      *
-     * @param string $operation If operation is not specified, changes for all operations will be retrieved
+     * @param  string $operation If operation is not specified, changes for all operations will be retrieved
      * @return ElementHistory[]
      */
     public function get($operation = null);
@@ -40,9 +40,9 @@ interface DiffInterface
     /**
      * Register operation
      *
-     * @param ElementInterface|object $dtoObject
-     * @param string $operation
-     * @param ElementInterface $oldDtoObject
+     * @param  ElementInterface|object $dtoObject
+     * @param  string                  $operation
+     * @param  ElementInterface        $oldDtoObject
      * @return void
      */
     public function register(
@@ -54,7 +54,7 @@ interface DiffInterface
     /**
      * Register current state of schema to registry
      *
-     * @param Schema $schema
+     * @param  Schema $schema
      * @return void
      */
     public function registerSchema(Schema $schema);
@@ -76,7 +76,7 @@ interface DiffInterface
     /**
      * Register installation request with all needed options
      *
-     * @param Request $request
+     * @param  Request $request
      * @return void
      */
     public function registerInstallationRequest(Request $request);

@@ -35,11 +35,11 @@ class Varbinary extends Column implements
     private $length;
 
     /**
-     * @param string $name
-     * @param string $type
-     * @param Table $table
-     * @param bool $nullable
-     * @param int $length
+     * @param string    $name
+     * @param string    $type
+     * @param Table     $table
+     * @param bool      $nullable
+     * @param int       $length
      * @param float|int $default
      */
     public function __construct(

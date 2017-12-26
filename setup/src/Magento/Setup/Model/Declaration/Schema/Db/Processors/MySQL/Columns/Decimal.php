@@ -32,8 +32,8 @@ class Decimal implements DbSchemaProcessorInterface
     private $defaultDefinition;
 
     /**
-     * @param Nullable $nullable
-     * @param Unsigned $unsigned
+     * @param Nullable          $nullable
+     * @param Unsigned          $unsigned
      * @param DefaultDefinition $defaultDefinition
      */
     public function __construct(Nullable $nullable, Unsigned $unsigned, DefaultDefinition $defaultDefinition)

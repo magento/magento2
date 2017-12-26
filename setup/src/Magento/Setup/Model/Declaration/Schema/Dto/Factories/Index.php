@@ -29,7 +29,7 @@ class Index implements FactoryInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param string $className
+     * @param string                 $className
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -43,6 +43,7 @@ class Index implements FactoryInterface
      * Set default on delete to foreign key
      *
      * {@inheritdoc}
+     *
      * @return array
      */
     public function create(array $data)

@@ -79,7 +79,7 @@ try {
     if ($settings->getAsBoolean('TESTS_CLEANUP')) {
         $application->cleanup();
         //remove test modules files
-        require_once __DIR__ . '/../../setup-integration/framework/removeTestModules.php';
+        include_once __DIR__ . '/../../setup-integration/framework/removeTestModules.php';
     }
     //We do not want to install anything
     $application->initialize([]);

@@ -28,10 +28,11 @@ class Internal extends Constraint implements ElementDiffAwareInterface
 
     /**
      * Internal constructor.
+     *
      * @param string $name
      * @param string $type
-     * @param Table $table
-     * @param array $columns
+     * @param Table  $table
+     * @param array  $columns
      */
     public function __construct(
         $name,

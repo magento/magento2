@@ -29,9 +29,9 @@ class Timestamp extends Column implements
     private $onUpdate;
 
     /**
-     * @param string $name
-     * @param string $type
-     * @param Table $table
+     * @param string      $name
+     * @param string      $type
+     * @param Table       $table
      * @param $default
      * @param string|null $onUpdate
      */

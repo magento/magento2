@@ -9,6 +9,7 @@ namespace Magento\TestFramework\Bootstrap;
  * Bootstrap of the custom DocBlock annotations
  *
  * \Magento\TestFramework\Isolation\DeploymentConfig was excluded for setup/upgrade tests
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SetupDocBlock extends \Magento\TestFramework\Bootstrap\DocBlock
@@ -16,7 +17,7 @@ class SetupDocBlock extends \Magento\TestFramework\Bootstrap\DocBlock
     /**
      * Get list of subscribers. In addition, register <b>reinstallMagento</b> annotation processing.
      *
-     * @param \Magento\TestFramework\Application $application
+     * @param  \Magento\TestFramework\Application $application
      * @return array
      */
     protected function _getSubscribers(\Magento\TestFramework\Application $application)

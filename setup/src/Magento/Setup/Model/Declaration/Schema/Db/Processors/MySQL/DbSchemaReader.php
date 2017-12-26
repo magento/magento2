@@ -31,8 +31,8 @@ class DbSchemaReader implements DbSchemaReaderInterface
     /**
      * Prepare and fetch query: Describe {table_name}
      *
-     * @param string $tableName
-     * @param string $resource
+     * @param  string $tableName
+     * @param  string $resource
      * @return array
      */
     public function readeColumns($tableName, $resource)
@@ -48,8 +48,8 @@ class DbSchemaReader implements DbSchemaReaderInterface
     /**
      * Fetch all indexes from table
      *
-     * @param string $tableName
-     * @param string $resource
+     * @param  string $tableName
+     * @param  string $resource
      * @return array
      */
     public function readIndexes($tableName, $resource)
@@ -78,8 +78,8 @@ class DbSchemaReader implements DbSchemaReaderInterface
     /**
      * Retrieve Create table SQL, from SHOW CREATE TABLE query
      *
-     * @param string $tableName
-     * @param string $resource
+     * @param  string $tableName
+     * @param  string $resource
      * @return array
      */
     public function getCreateTableSql($tableName, $resource)
@@ -111,13 +111,13 @@ class DbSchemaReader implements DbSchemaReaderInterface
     /**
      * Return names of all tables from shard
      *
-     * @param string $resource Shard name
+     * @param  string $resource Shard name
      * @return array
      */
     public function readTables($resource)
     {
         return $this->resourceConnection
-                ->getConnection($resource)
-                ->getTables();
+            ->getConnection($resource)
+            ->getTables();
     }
 }

@@ -35,7 +35,7 @@ class SchemaDiff
 
     /**
      * @param DiffManager $diffManager
-     * @param TableDiff $tableDiff
+     * @param TableDiff   $tableDiff
      * @param DiffFactory $diffFactory
      */
     public function __construct(

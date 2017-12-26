@@ -15,8 +15,8 @@ interface DbSchemaReaderInterface
     /**
      * Read indexes, from Magento tables
      *
-     * @param string $tableName
-     * @param string $resource
+     * @param  string $tableName
+     * @param  string $resource
      * @return array
      */
     public function readIndexes($tableName, $resource);
@@ -24,8 +24,8 @@ interface DbSchemaReaderInterface
     /**
      * Read constraints, from Magento tables
      *
-     * @param string $tableName
-     * @param string $resource
+     * @param  string $tableName
+     * @param  string $resource
      * @return array
      */
     public function readConstraints($tableName, $resource);
@@ -33,8 +33,8 @@ interface DbSchemaReaderInterface
     /**
      * Read columns, from Magento tables
      *
-     * @param string $tableName
-     * @param string $resource
+     * @param  string $tableName
+     * @param  string $resource
      * @return array
      */
     public function readeColumns($tableName, $resource);
@@ -42,8 +42,8 @@ interface DbSchemaReaderInterface
     /**
      * Read references (foreign keys) from Magento tables
      *
-     * @param string $tableName
-     * @param string $resource
+     * @param  string $tableName
+     * @param  string $resource
      * @return array
      */
     public function readReferences($tableName, $resource);
@@ -51,7 +51,7 @@ interface DbSchemaReaderInterface
     /**
      * Read table names, from Magento tables
      *
-     * @param string $resource
+     * @param  string $resource
      * @return array
      */
     public function readTables($resource);

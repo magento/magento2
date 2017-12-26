@@ -6,7 +6,6 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto\Factories;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
 
 /**
  * Serves unique key constraint needs
@@ -25,7 +24,7 @@ class Unique implements FactoryInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param string $className
+     * @param string                 $className
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -39,6 +38,7 @@ class Unique implements FactoryInterface
      * Set default padding, like INTEGER(11)
      *
      * {@inheritdoc}
+     *
      * @return array
      */
     public function create(array $data)

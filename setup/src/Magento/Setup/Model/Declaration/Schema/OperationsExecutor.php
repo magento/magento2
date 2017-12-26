@@ -31,8 +31,8 @@ class OperationsExecutor
     private $resourceConnection;
 
     /**
-     * @param array $operations
-     * @param Sharding $sharding
+     * @param array              $operations
+     * @param Sharding           $sharding
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
@@ -77,8 +77,8 @@ class OperationsExecutor
      * Loop through all operations that are configured in di.xml
      * and execute them with elements from ChangeRegistyr
      *
-     * @see OperationInterface
-     * @param DiffInterface $diff
+     * @see    OperationInterface
+     * @param  DiffInterface $diff
      * @return void
      */
     public function execute(DiffInterface $diff)

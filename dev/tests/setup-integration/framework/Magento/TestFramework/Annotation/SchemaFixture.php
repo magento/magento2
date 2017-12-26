@@ -11,6 +11,7 @@ namespace Magento\TestFramework\Annotation;
 
 /**
  * Represents
+ *
  * @magentoSchemaFixture {link_to_file.php}
  */
 class SchemaFixture
@@ -30,7 +31,7 @@ class SchemaFixture
     /**
      * Constructor
      *
-     * @param string $fixtureBaseDir
+     * @param  string $fixtureBaseDir
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct($fixtureBaseDir)
@@ -46,7 +47,7 @@ class SchemaFixture
     /**
      * Apply magento data fixture on
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param  \PHPUnit\Framework\TestCase $test
      * @return void
      */
     public function startTest(\PHPUnit\Framework\TestCase $test)
@@ -69,8 +70,8 @@ class SchemaFixture
     /**
      * Retrieve fixtures from annotation
      *
-     * @param \PHPUnit\Framework\TestCase $test
-     * @param string $scope
+     * @param  \PHPUnit\Framework\TestCase $test
+     * @param  string                      $scope
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -114,7 +115,7 @@ class SchemaFixture
     /**
      * Execute single fixture script
      *
-     * @param string|array $fixture
+     * @param  string|array $fixture
      * @throws \Exception
      */
     protected function _applyOneFixture($fixture)
@@ -123,7 +124,7 @@ class SchemaFixture
             if (is_callable($fixture)) {
                 call_user_func($fixture);
             } else {
-                require $fixture;
+                include $fixture;
             }
         } catch (\Exception $e) {
             throw new \Exception(
@@ -137,7 +138,7 @@ class SchemaFixture
     /**
      * Execute fixture scripts if any
      *
-     * @param array $fixtures
+     * @param  array $fixtures
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _applyFixtures(array $fixtures)

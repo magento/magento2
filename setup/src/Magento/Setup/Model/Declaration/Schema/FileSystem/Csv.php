@@ -21,8 +21,8 @@ class Csv
     /**
      * Save to csv data with batches
      *
-     * @param $file
-     * @param array $data
+     * @param  $file
+     * @param  array $data
      * @return $this
      */
     public function save($file, array $data)
@@ -48,7 +48,7 @@ class Csv
     /**
      * Generator which allows to read file
      *
-     * @param $file
+     * @param  $file
      * @return \Generator
      */
     public function readGenerator($file)

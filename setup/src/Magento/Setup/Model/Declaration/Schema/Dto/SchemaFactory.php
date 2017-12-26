@@ -6,7 +6,6 @@
 namespace Magento\Setup\Model\Declaration\Schema\Dto;
 
 use Zend\Di\Di;
-use Zend\Di\ServiceLocatorInterface;
 
 /**
  * Factory class for @see \Magento\Setup\Model\Declaration\Schema\Dto\Schema
@@ -25,6 +24,7 @@ class SchemaFactory
 
     /**
      * EntityFactory constructor.
+     *
      * @param Di $zendDi
      */
     public function __construct(Di $zendDi)
@@ -35,7 +35,7 @@ class SchemaFactory
     /**
      * Create class instance with specified parameters
      *
-     * @param array $data
+     * @param  array $data
      * @return \Magento\Setup\Model\Declaration\Schema\Dto\Schema | object
      */
     public function create(array $data = [])

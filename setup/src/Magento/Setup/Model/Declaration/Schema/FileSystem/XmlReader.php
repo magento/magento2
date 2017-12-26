@@ -28,7 +28,6 @@ class XmlReader extends \Magento\Framework\Config\Reader\Filesystem implements R
     ];
 
     /**
-     * Reader constructor.
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
      * @param \Magento\Setup\Model\Declaration\Schema\Config\Converter $converter
      * @param \Magento\Setup\Model\Declaration\Schema\Config\SchemaLocator $schemaLocator

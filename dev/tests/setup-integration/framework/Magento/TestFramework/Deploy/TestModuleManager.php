@@ -18,7 +18,7 @@ class TestModuleManager
     /**
      * Add test module files to Magento code base
      *
-     * @param string $moduleName
+     * @param  string $moduleName
      * @return void
      * @throws \RuntimeException
      */
@@ -61,10 +61,10 @@ class TestModuleManager
     }
 
     /**
-     * @param string $moduleName Like Magento_TestSetupModule
+     * @param string $moduleName   Like Magento_TestSetupModule
      * @param string $revisionName Folder name, like reviisions/revision_1/db_schema.xml
-     * @param string $fileName For example db_schema.xml
-     * @param string $fileDir For example etc or Setup
+     * @param string $fileName     For example db_schema.xml
+     * @param string $fileDir      For example etc or Setup
      */
     public function updateRevision($moduleName, $revisionName, $fileName, $fileDir)
     {
@@ -85,7 +85,7 @@ class TestModuleManager
     /**
      * Remove test module files to Magento code base
      *
-     * @param string $moduleName
+     * @param  string $moduleName
      * @return void
      */
     public function removeModuleFiles($moduleName)
@@ -102,7 +102,7 @@ class TestModuleManager
     /**
      * Update module files
      *
-     * @param string $moduleName
+     * @param  string $moduleName
      * @return void
      */
     public function updateModuleFiles($moduleName)

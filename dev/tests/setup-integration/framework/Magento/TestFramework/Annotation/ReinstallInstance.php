@@ -8,7 +8,6 @@ namespace Magento\TestFramework\Annotation;
 
 /**
  * Handler for applying reinstallMagento annotation
- *
  */
 class ReinstallInstance
 {

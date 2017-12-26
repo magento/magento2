@@ -39,8 +39,8 @@ class Timestamp implements FactoryInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param BooleanUtils $booleanUtils
-     * @param string $className
+     * @param BooleanUtils           $booleanUtils
+     * @param string                 $className
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -56,6 +56,7 @@ class Timestamp implements FactoryInterface
      * Change on_update and default params
      *
      * {@inheritdoc}
+     *
      * @return array
      */
     public function create(array $data)
