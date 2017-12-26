@@ -10,6 +10,7 @@
         <sequence>
             <module name="Magento_Store"/>
             <module name="Magento_Theme"/>
+            <module name="Magento_Variable"/>
         </sequence>
     </module>
 </config>

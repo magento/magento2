@@ -223,10 +223,11 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     private function assertConsistentModuleName(\SimpleXMLElement $xml, $packageName)
     {
         $moduleName = (string)$xml->module->attributes()->name;
+        $expectedPackageName = $this->convertModuleToPackageName($moduleName);
         $this->assertEquals(
+            $expectedPackageName,
             $packageName,
-            $this->convertModuleToPackageName($moduleName),
-            "For the module '{$moduleName}', the expected package name is '{$packageName}'"
+            "For the module '{$moduleName}', the expected package name is '{$expectedPackageName}'"
         );
     }
 
@@ -318,7 +319,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     {
         list($vendor, $name) = explode('_', $moduleName, 2);
         $package = 'module';
-        foreach (preg_split('/([A-Z][a-z\d]+)/', $name, -1, PREG_SPLIT_DELIM_CAPTURE) as $chunk) {
+        foreach (preg_split('/([A-Z\d][a-z]*)/', $name, -1, PREG_SPLIT_DELIM_CAPTURE) as $chunk) {
             $package .= $chunk ? "-{$chunk}" : '';
         }
         return strtolower("{$vendor}/{$package}");
