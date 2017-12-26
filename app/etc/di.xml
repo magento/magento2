@@ -1425,6 +1425,7 @@
     <type name="Magento\Setup\Model\Declaration\Schema\OperationsExecutor">
         <arguments>
             <argument name="operations" xsi:type="array">
+                <item name="recreate_table" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\ReCreateTable</item>
                 <item name="drop_table" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\DropTable</item>
                 <item name="create_table" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\CreateTable</item>
                 <item name="add_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\AddElement</item>

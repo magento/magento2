@@ -14,7 +14,8 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
  * Aggregate inside itself: columns, constraints and indexes
  * Resource is also specified on this strucural element
  */
-class Table extends GenericElement implements ElementInterface
+class Table extends GenericElement implements
+    ElementInterface
 {
     /**
      * In case if we will need to change this object: add, modify or drop, we will need

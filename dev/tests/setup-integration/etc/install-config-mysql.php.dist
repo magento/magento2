@@ -5,15 +5,31 @@
  */
 
 return [
-    'db-host' => 'localhost',
-    'db-user' => 'dbuser',
-    'db-password' => '123',
-    'db-name' => 'magento_setup_tests',
-    'db-prefix' => '',
-    'backend-frontname' => 'backend',
-    'admin-user' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
-    'admin-password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
-    'admin-email' => \Magento\TestFramework\Bootstrap::ADMIN_EMAIL,
-    'admin-firstname' => \Magento\TestFramework\Bootstrap::ADMIN_FIRSTNAME,
-    'admin-lastname' => \Magento\TestFramework\Bootstrap::ADMIN_LASTNAME
+    'default' => [
+        'db-host' => 'localhost',
+        'db-user' => 'root',
+        'db-password' => '',
+        'db-name' => 'magento_integration_tests',
+        'db-prefix' => '',
+        'backend-frontname' => 'admin',
+        'admin-user' => 'admin',
+        'admin-password' => '123123q',
+        'admin-email' => \Magento\TestFramework\Bootstrap::ADMIN_EMAIL,
+        'admin-firstname' => \Magento\TestFramework\Bootstrap::ADMIN_FIRSTNAME,
+        'admin-lastname' => \Magento\TestFramework\Bootstrap::ADMIN_LASTNAME,
+        'enable_modules' => 'Magento_TestSetupModule2,Magento_TestSetupModule1,Magento_Backend',
+        'disable_modules' => 'all'
+    ],
+    'checkout' => [
+        'host' => 'localhost',
+        'username' => 'root',
+        'password' => '',
+        'dbname' => 'checkout'
+    ],
+    'sales' => [
+        'host' => 'localhost',
+        'username' => 'root',
+        'password' => '',
+        'dbname' => 'sales'
+    ]
 ];

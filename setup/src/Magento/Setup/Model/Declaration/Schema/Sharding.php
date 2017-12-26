@@ -50,7 +50,15 @@ class Sharding
      */
     public function getResources()
     {
-        return $this->resources;
+        $resources = [];
+
+        foreach ($this->resources as $resource) {
+            if ($this->canUseResource($resource)) {
+                $resources[] = $resource;
+            }
+        }
+
+        return $resources;
     }
 
     /**
@@ -61,7 +69,8 @@ class Sharding
      */
     public function canUseResource($scopeName)
     {
-        $connections = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS);
+        $connections = $this->deploymentConfig
+            ->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS);
         return isset($connections[$scopeName]);
     }
 

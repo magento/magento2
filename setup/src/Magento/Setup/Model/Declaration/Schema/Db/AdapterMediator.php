@@ -267,7 +267,7 @@ class AdapterMediator
      * @param string $resource
      * @return array
      */
-    public function getIndexesList($tableName, $resource = 'default')
+    public function getIndexesList($tableName, $resource)
     {
         if (!isset($this->ddlCache[self::KEY_INDEXES][$tableName])) {
             $this->ddlCache[self::KEY_INDEXES][$tableName] = [];
@@ -293,7 +293,7 @@ class AdapterMediator
      * @param string $resource
      * @return mixed
      */
-    public function getConstraintsList($tableName, $resource = 'default')
+    public function getConstraintsList($tableName, $resource)
     {
         if (!isset($this->ddlCache[self::KEY_CONSTRAINT][$tableName])) {
             $this->ddlCache[self::KEY_CONSTRAINT][$tableName] = [];
@@ -322,7 +322,7 @@ class AdapterMediator
      * @param string $resource
      * @return array
      */
-    public function getReferencesList($tableName, $resource = 'default')
+    public function getReferencesList($tableName, $resource)
     {
         if (!isset($this->ddlCache[self::KEY_REFERENCE][$tableName])) {
             $this->ddlCache[self::KEY_REFERENCE][$tableName] = [];
@@ -342,7 +342,7 @@ class AdapterMediator
      * @param string $resource
      * @return array
      */
-    public function getColumnsList($tableName, $resource = 'default')
+    public function getColumnsList($tableName, $resource)
     {
         if (!isset($this->ddlCache[self::KEY_COLUMNS][$tableName])) {
             $this->ddlCache[self::KEY_COLUMNS][$tableName] = [];

@@ -98,6 +98,38 @@ class CliCommand
     }
 
     /**
+     * Split quote db configuration
+     * @return void
+     */
+    public function splitQuote()
+    {
+        $initParams = $this->parametersHolder->getInitParams();
+        $installParams = $this->toCliArguments(
+            $this->parametersHolder->getDbData('checkout')
+        );
+        $command = 'php -f ' . BP . '/bin/magento setup:db-schema:split-quote '
+            . implode(" ", array_keys($installParams)) . ' -vvv --magento-init-params=' . $initParams['magento-init-params'];
+
+        $this->shell->execute($command, array_values($installParams));
+    }
+
+    /**
+     * Split sales db configuration
+     * @return void
+     */
+    public function splitSales()
+    {
+        $initParams = $this->parametersHolder->getInitParams();
+        $installParams = $this->toCliArguments(
+            $this->parametersHolder->getDbData('sales')
+        );
+        $command = 'php -f ' . BP . '/bin/magento setup:db-schema:split-sales '
+            . implode(" ", array_keys($installParams)) . ' -vvv --magento-init-params=' . $initParams['magento-init-params'];
+
+        $this->shell->execute($command, array_values($installParams));
+    }
+
+    /**
      * Convert from raw params to CLI arguments, like --admin-username
      *
      * @param array $params
@@ -136,8 +168,8 @@ class CliCommand
         $installParams = $this->toCliArguments(
             array_merge(
                 $params,
-                $installParams,
-                $this->parametersHolder->getDbData()
+                $this->parametersHolder->getDbData('default'),
+                $installParams
             )
         );
         // run install script

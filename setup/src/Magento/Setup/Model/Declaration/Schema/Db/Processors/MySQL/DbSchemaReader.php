@@ -114,7 +114,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
      * @param string $resource Shard name
      * @return array
      */
-    public function readTables($resource = 'default')
+    public function readTables($resource)
     {
         return $this->resourceConnection
                 ->getConnection($resource)

@@ -47,11 +47,15 @@ class ParametersHolder
      * -db-password
      * -db-host
      *
+     * @param string $resource can be default, checkout, sales
      * @return array
      */
-    public function getDbData()
+    public function getDbData($resource)
     {
-        return include TESTS_INSTALL_CONFIG_FILE;
+        $dbData = include TESTS_BASE_DIR .
+            DIRECTORY_SEPARATOR .
+            TESTS_INSTALL_CONFIG_FILE;
+        return $dbData[$resource];
     }
 
     /**

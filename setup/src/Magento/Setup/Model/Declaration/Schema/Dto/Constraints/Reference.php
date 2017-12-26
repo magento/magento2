@@ -111,7 +111,8 @@ class Reference extends Constraint implements ElementDiffAwareInterface
             'referenceColumn' => $this->getReferenceColumn()->getName(),
             'referenceTableName' => $this->getReferenceTable()->getName(),
             'tableName' => $this->getTable()->getName(),
-            'onDelete' => $this->getOnDelete()
+            'onDelete' => $this->getOnDelete(),
+            'resource' => $this->getTable()->getResource()
         ];
     }
 }

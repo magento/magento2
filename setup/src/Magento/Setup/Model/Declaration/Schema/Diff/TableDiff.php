@@ -9,6 +9,7 @@ namespace Magento\Setup\Model\Declaration\Schema\Diff;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
+use Magento\Setup\Model\Declaration\Schema\Operations\ReCreateTable;
 
 /**
  * As table can have different types of elements inside itself
@@ -76,6 +77,15 @@ class TableDiff
         ElementInterface $generatedTable,
         Diff $diff
     ) {
+        //Handle changing resource
+        if ($generatedTable->getResource() !== $declaredTable->getResource()) {
+            $diff->register(
+                $declaredTable,
+                ReCreateTable::OPERATION_NAME,
+                $generatedTable
+            );
+        }
+
         $types = [self::COLUMN_DIFF_TYPE, self::CONSTRAINT_DIFF_TYPE, self::INDEX_DIFF_TYPE];
         //We do inspection for each element type
         foreach ($types as $elementType) {

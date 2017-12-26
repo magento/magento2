@@ -9,11 +9,11 @@ namespace Magento\Setup;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Model\Declaration\Schema\Db\AdapterMediator;
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\DbSchemaReader;
 use Magento\Setup\Model\Declaration\Schema\Diff\SchemaDiff;
 use Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface;
 use Magento\Setup\Model\Declaration\Schema\Sharding;
 use Magento\TestFramework\Deploy\CliCommand;
+use Magento\TestFramework\Deploy\DescribeTable;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
@@ -49,9 +49,9 @@ class DeclarativeInstallerTest extends SetupTestCase
     private $resourceConnection;
 
     /**
-     * @var DbSchemaReader
+     * @var DescribeTable
      */
-    private $dbSchemaReader;
+    private $describeTable;
 
     public function setUp()
     {
@@ -61,28 +61,10 @@ class DeclarativeInstallerTest extends SetupTestCase
         /** @var AdapterMediator $adapterMediator */
         $adapterMediator = $objectManager->get(AdapterMediator::class);
         $adapterMediator->flushCache();
-        $this->dbSchemaReader = $objectManager->create(DbSchemaReader::class);
+        $this->describeTable = $objectManager->get(DescribeTable::class);
         $this->schemaDiff = $objectManager->get(SchemaDiff::class);
         $this->schemaConfig = $objectManager->get(SchemaConfigInterface::class);
         $this->resourceConnection = $objectManager->get(ResourceConnection::class);
-    }
-
-    /**
-     * Describe shards
-     *
-     * @param string $shardName
-     * @return array
-     */
-    private function describeShard($shardName)
-    {
-        $data = [];
-        $tables = $this->dbSchemaReader->readTables($shardName);
-
-        foreach ($tables as $table) {
-            $data[$table] = $this->dbSchemaReader->getCreateTableSql($table, $shardName)['Create Table'];
-        }
-
-        return $data;
     }
 
     /**
@@ -101,10 +83,10 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDbConfig()
         );
 
-        //$tablesData = $this->describeShard(Sharding::DEFAULT_CONNECTION);
+        //$tablesData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
         //Second time installation should not find anything as we do not change anything
         self::assertNull($diff->get());
-        $shardData = $this->describeShard(Sharding::DEFAULT_CONNECTION);
+        $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
         self::assertEquals($shardData, $this->getData());
     }
 
@@ -137,7 +119,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDbConfig()
         );
         self::assertNull($diff->get());
-        $shardData = $this->describeShard(Sharding::DEFAULT_CONNECTION);
+        $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
         self::assertEquals($shardData, $this->getData());
     }
 
@@ -171,7 +153,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDbConfig()
         );
         self::assertNull($diff->get());
-        $shardData = $this->describeShard(Sharding::DEFAULT_CONNECTION);
+        $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
         self::assertEquals($shardData, $this->getData());
     }
 
@@ -205,7 +187,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDbConfig()
         );
         self::assertNull($diff->get());
-        $shardData = $this->describeShard(Sharding::DEFAULT_CONNECTION);
+        $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
         self::assertEquals($shardData, $this->getData());
     }
 
@@ -239,7 +221,7 @@ class DeclarativeInstallerTest extends SetupTestCase
             $this->schemaConfig->getDbConfig()
         );
         self::assertNull($diff->get());
-        $shardData = $this->describeShard(Sharding::DEFAULT_CONNECTION);
+        $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
         self::assertEquals($shardData, $this->getData());
     }
 }

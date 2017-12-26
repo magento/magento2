@@ -73,48 +73,50 @@ class SchemaBuilder
     {
         $tables = [];
 
-        foreach ($this->dbSchemaReader->readTables($this->sharding->getDefaultResource()) as $tableName) {
-            $columns = [];
-            $indexes = [];
-            $constraints = [];
+        foreach ($this->sharding->getResources() as $resource) {
+            foreach ($this->dbSchemaReader->readTables($resource) as $tableName) {
+                $columns = [];
+                $indexes = [];
+                $constraints = [];
 
-            $columnsData = $this->adapter->getColumnsList($tableName);
-            $indexesData = $this->adapter->getIndexesList($tableName);
-            $constrainsData = $this->adapter->getConstraintsList($tableName);
+                $columnsData = $this->adapter->getColumnsList($tableName, $resource);
+                $indexesData = $this->adapter->getIndexesList($tableName, $resource);
+                $constrainsData = $this->adapter->getConstraintsList($tableName, $resource);
 
-            /** @var Table $table */
-            $table = $this->elementFactory->create('table', [
-                'name' => $tableName,
-                'resource' => $this->sharding->getDefaultResource()
-            ]);
+                /** @var Table $table */
+                $table = $this->elementFactory->create('table', [
+                    'name' => $tableName,
+                    'resource' => $resource
+                ]);
 
-            // Process columns
-            foreach ($columnsData as $columnData) {
-                $columnData['table'] = $table;
-                $column = $this->elementFactory->create($columnData['type'], $columnData);
-                $columns[$column->getName()] = $column;
+                // Process columns
+                foreach ($columnsData as $columnData) {
+                    $columnData['table'] = $table;
+                    $column = $this->elementFactory->create($columnData['type'], $columnData);
+                    $columns[$column->getName()] = $column;
+                }
+
+                $table->addColumns($columns);
+                //Process indexes
+                foreach ($indexesData as $indexData) {
+                    $indexData['columns'] = $this->resolveInternalRelations($columns, $indexData);
+                    $indexData['table'] = $table;
+                    $index = $this->elementFactory->create('index', $indexData);
+                    $indexes[$index->getName()] = $index;
+                }
+                //Process internal constraints
+                foreach ($constrainsData as $constraintData) {
+                    $constraintData['columns'] = $this->resolveInternalRelations($columns, $constraintData);
+                    $constraintData['table'] = $table;
+                    $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);
+                    $constraints[$constraint->getName()] = $constraint;
+                }
+
+                $table->addIndexes($indexes);
+                $table->addConstraints($constraints);
+                $tables[$table->getName()] = $table;
+                $schema->addTable($table);
             }
-
-            $table->addColumns($columns);
-            //Process indexes
-            foreach ($indexesData as $indexData) {
-                $indexData['columns'] = $this->resolveInternalRelations($columns, $indexData);
-                $indexData['table'] = $table;
-                $index = $this->elementFactory->create('index', $indexData);
-                $indexes[$index->getName()] = $index;
-            }
-            //Process internal constraints
-            foreach ($constrainsData as $constraintData) {
-                $constraintData['columns'] = $this->resolveInternalRelations($columns, $constraintData);
-                $constraintData['table'] = $table;
-                $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);
-                $constraints[$constraint->getName()] = $constraint;
-            }
-
-            $table->addIndexes($indexes);
-            $table->addConstraints($constraints);
-            $tables[$table->getName()] = $table;
-            $schema->addTable($table);
         }
 
         $this->processReferenceKeys($tables);
@@ -131,8 +133,9 @@ class SchemaBuilder
      */
     private function processReferenceKeys(array $tables)
     {
-        foreach ($this->dbSchemaReader->readTables($this->sharding->getDefaultResource()) as $tableName) {
-            $referencesData = $this->adapter->getReferencesList($tableName);
+        foreach ($tables as $table) {
+            $tableName = $table->getName();
+            $referencesData = $this->adapter->getReferencesList($tableName, $table->getResource());
             $references = [];
 
             foreach ($referencesData as $referenceData) {

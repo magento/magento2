@@ -308,9 +308,15 @@ class SchemaBuilder
                         $this->tablesData[$constraintData['referenceTable']]
                     )
                 );
-                $constraintData['referenceTable'] = $schema->getTableByName(
+                $referenceTable = $schema->getTableByName(
                     $constraintData['referenceTable']
                 );
+
+                if ($referenceTable->getResource() !== $table->getResource()) {
+                    continue; //we should avoid creating foreign keys
+                    //for tables that are on another shard
+                }
+                $constraintData['referenceTable'] = $referenceTable;
 
                 if (!$constraintData['referenceTable']) {
                     throw new \LogicException("Cannot find reference table");
@@ -319,12 +325,13 @@ class SchemaBuilder
                 $constraintData['referenceColumn'] = $constraintData['referenceTable']->getColumnByName(
                     $constraintData['referenceColumn']
                 );
+                $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);
+                $constraints[$constraint->getName()] = $constraint;
             } else {
                 $constraintData['columns'] = $this->convertColumnNamesToObjects($constraintData['column'], $table);
+                $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);
+                $constraints[$constraint->getName()] = $constraint;
             }
-
-            $constraint = $this->elementFactory->create($constraintData['type'], $constraintData);
-            $constraints[$constraint->getName()] = $constraint;
         }
 
         return $constraints;
