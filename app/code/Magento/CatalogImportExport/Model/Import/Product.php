@@ -2001,12 +2001,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $dirConfig = DirectoryList::getDefaultConfig();
             $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
 
-            $DS = DIRECTORY_SEPARATOR;
-
             if (!empty($this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR])) {
                 $tmpPath = $this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR];
             } else {
-                $tmpPath = $dirAddon . $DS . $this->_mediaDirectory->getRelativePath('import');
+                $tmpPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath('import');
             }
 
             if (!$this->_fileUploader->setTmpDir($tmpPath)) {
@@ -2015,7 +2013,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 );
             }
             $destinationDir = "catalog/product";
-            $destinationPath = $dirAddon . $DS . $this->_mediaDirectory->getRelativePath($destinationDir);
+            $destinationPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath($destinationDir);
 
             $this->_mediaDirectory->create($destinationPath);
             if (!$this->_fileUploader->setDestDir($destinationPath)) {
@@ -2578,7 +2576,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (empty($rowData['additional_attributes'])) {
             return $rowData;
         }
-        $rowData = array_merge($rowData, $this->parseAdditionalAttributes($rowData['additional_attributes']));
+        $rowData = array_merge($rowData, $this->getAdditionalAttributes($rowData['additional_attributes']));
         return $rowData;
     }
 
@@ -2594,7 +2592,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param string $additionalAttributes Attributes data that will be parsed
      * @return array
      */
-    private function parseAdditionalAttributes($additionalAttributes)
+    private function getAdditionalAttributes($additionalAttributes)
     {
         return empty($this->_parameters[Import::FIELDS_ENCLOSURE])
             ? $this->parseAttributesWithoutWrappedValues($additionalAttributes)
