@@ -36,6 +36,7 @@ class SplitDbTest extends SetupTestCase
 
     /**
      * @moduleName Magento_TestSetupDeclarationModule2
+     * @dataProviderFromFile Magento/TestSetupDeclarationModule2/fixture/shards.php
      */
     public function testSplitDbInstallation()
     {
@@ -55,5 +56,6 @@ class SplitDbTest extends SetupTestCase
         $default = $this->describeTable->describeShard('default');
         $sales = $this->describeTable->describeShard('sales');
         $checkout = $this->describeTable->describeShard('checkout');
+        self::assertEquals(array_replace($default, $sales, $checkout), $this->getData());
     }
 }
