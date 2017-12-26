@@ -5,11 +5,6 @@
  */
 namespace Magento\Catalog\Pricing\Price;
 
-use Magento\Catalog\Pricing\Price;
-use Magento\Framework\Pricing\Price\AbstractPrice;
-use Magento\Framework\Pricing\SaleableInterface;
-use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
-use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Catalog\Model\Product\Option\Value as ProductOptionValue;
 
 /**
@@ -24,7 +19,7 @@ class CustomOptionPriceCalculator
      */
     public function getOptionPriceByPriceCode(
         ProductOptionValue $optionValue,
-        string $priceCode = \Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE
+        string $priceCode = BasePrice::PRICE_CODE
     ) {
         if ($optionValue->getPriceType() === ProductOptionValue::TYPE_PERCENT) {
             $basePrice = $optionValue->getOption()->getProduct()->getPriceInfo()->getPrice($priceCode)->getValue();
