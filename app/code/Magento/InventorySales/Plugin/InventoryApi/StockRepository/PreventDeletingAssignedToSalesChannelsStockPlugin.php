@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Plugin\InventoryApi\StockRepository\PreventDeleting;
+namespace Magento\InventorySales\Plugin\InventoryApi\StockRepository;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\InventoryApi\Api\StockRepositoryInterface;
@@ -14,7 +14,7 @@ use Magento\InventorySales\Model\GetAssignedSalesChannelsForStockInterface;
 /**
  * Prevent deleting of Stock which assigned at least one Sales Channel
  */
-class AssignedToSalesChannelsStockPlugin
+class PreventDeletingAssignedToSalesChannelsStockPlugin
 {
     /**
      * @var GetAssignedSalesChannelsForStockInterface
