@@ -7,12 +7,13 @@
  * @api
  */
 define([
+    'wysiwygAdapter',
     'Magento_Ui/js/lib/view/utils/async',
     'underscore',
     'ko',
     './abstract',
-    'Magento_Variable/variables'
-], function ($, _, ko, Abstract) {
+    'Magento_Variable/variables',
+], function (wysiwyg, $, _, ko, Abstract) {
     'use strict';
 
     return Abstract.extend({
@@ -94,14 +95,16 @@ define([
             this.$wysiwygEditorButton.attr('disabled', status);
 
             /* eslint-disable no-undef */
-            if (wysiwygAdapter) {
-                _.each(wysiwygAdapter.activeEditor().controlManager.controls, function (property, index, controls) {
-                    controls[property.id].setDisabled(status);
-                });
+            if (typeof wysiwyg != 'undefined' && wysiwyg.activeEditor()) {
 
-                wysiwygAdapter.activeEditor().getBody().setAttribute('contenteditable', !status);
+                if(typeof wysiwyg.activeEditor().controlManager !== 'undefined') {
+                    _.each(wysiwyg.activeEditor().controlManager.controls, function (property, index, controls) {
+                        controls[property.id].setDisabled(status);
+                    });
+                }
+
+                wysiwyg.activeEditor().getBody().setAttribute('contenteditable', !status);
             }
-
             /* eslint-enable  no-undef*/
         }
     });
