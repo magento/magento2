@@ -796,7 +796,7 @@ class Installer
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
-        if (!$request[InstallCommand::DECLARATION_MODE_KEY]) {
+        if (!isset($request[InstallCommand::DECLARATION_MODE_KEY]) || !$request[InstallCommand::DECLARATION_MODE_KEY]) {
             $this->handleDBSchemaData($setup, 'data');
         }
     }
@@ -1154,28 +1154,28 @@ class Installer
         $connections = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS, []);
         //Do database cleanup for all shards
         foreach ($connections as $config) {
-            if ($config) {
-                try {
-                    $connection = $this->connectionFactory->create($config);
-                    if (!$connection) {
-                        $this->log->log("Can't create connection to database - skipping database cleanup");
-                    }
-                } catch (\Exception $e) {
-                    $this->log->log($e->getMessage() . ' - skipping database cleanup');
-                    return;
+            try {
+                $connection = $this->connectionFactory->create($config);
+                if (!$connection) {
+                    $this->log->log("Can't create connection to database - skipping database cleanup");
                 }
-
-                $dbName = $connection->quoteIdentifier($config[ConfigOptionsListConstants::KEY_NAME]);
-                //If for different shards one database was specified - no need to clean it few times
-                if (!in_array($dbName, $cleanedUpDatabases)) {
-                    $this->log->log("Cleaning up database {$dbName}");
-                    $connection->query("DROP DATABASE IF EXISTS {$dbName}");
-                    $connection->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
-                    $cleanedUpDatabases[] = $dbName;
-                }
-            } else {
-                $this->log->log('No database connection defined - skipping database cleanup');
+            } catch (\Exception $e) {
+                $this->log->log($e->getMessage() . ' - skipping database cleanup');
+                return;
             }
+
+            $dbName = $connection->quoteIdentifier($config[ConfigOptionsListConstants::KEY_NAME]);
+            //If for different shards one database was specified - no need to clean it few times
+            if (!in_array($dbName, $cleanedUpDatabases)) {
+                $this->log->log("Cleaning up database {$dbName}");
+                $connection->query("DROP DATABASE IF EXISTS {$dbName}");
+                $connection->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
+                $cleanedUpDatabases[] = $dbName;
+            }
+        }
+
+        if (empty($config)) {
+            $this->log->log('No database connection defined - skipping database cleanup');
         }
     }
 

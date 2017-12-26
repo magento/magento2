@@ -142,10 +142,12 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
      * @var array
      */
     private static $dbConfig = [
-        ConfigOptionsListConstants::KEY_HOST => '127.0.0.1',
-        ConfigOptionsListConstants::KEY_NAME => 'magento',
-        ConfigOptionsListConstants::KEY_USER => 'magento',
-        ConfigOptionsListConstants::KEY_PASSWORD => '',
+        'default' => [
+            ConfigOptionsListConstants::KEY_HOST => '127.0.0.1',
+            ConfigOptionsListConstants::KEY_NAME => 'magento',
+            ConfigOptionsListConstants::KEY_USER => 'magento',
+            ConfigOptionsListConstants::KEY_PASSWORD => '',
+        ]
     ];
 
     /**
@@ -398,6 +400,10 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
 
     public function testUninstall()
     {
+        $this->config->expects($this->once())
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS)
+            ->willReturn([]);
         $this->configReader->expects($this->once())->method('getFiles')->willReturn(['ConfigOne.php', 'ConfigTwo.php']);
         $configDir = $this->getMockForAbstractClass(
             \Magento\Framework\Filesystem\Directory\WriteInterface::class
@@ -466,7 +472,7 @@ class InstallerTest extends \PHPUnit\Framework\TestCase
     {
         $this->config->expects($this->once())
             ->method('get')
-            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT)
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS)
             ->willReturn(self::$dbConfig);
         $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn('`magento`');
         $this->connection->expects($this->at(1))->method('query')->with('DROP DATABASE IF EXISTS `magento`');

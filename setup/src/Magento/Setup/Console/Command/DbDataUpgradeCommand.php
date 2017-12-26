@@ -66,6 +66,6 @@ class DbDataUpgradeCommand extends AbstractSetupCommand
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         $installer = $this->installFactory->create(new ConsoleLogger($output));
-        $installer->installDataFixtures();
+        $installer->installDataFixtures($input->getOptions());
     }
 }
