@@ -46,16 +46,19 @@ class Price
     public function format(Product $product, array $productData)
     {
         $priceInfo = $this->priceInfoFactory->create($product);
-        $finalPriceAmount =  $priceInfo->getPrice('final_price')->getAmount();
+        /** @var \Magento\Catalog\Pricing\Price\FinalPriceInterface $finalPrice */
+        $finalPrice = $priceInfo->getPrice('final_price');
+        $minimalPriceAmount =  $finalPrice->getMinimalPrice();
+        $maximalPriceAmount =  $finalPrice->getMaximalPrice();
         $regularPriceAmount =  $priceInfo->getPrice('regular_price')->getAmount();
 
         $productData['price'] = [
             'minimalPrice' => [
                 'amount' => [
-                    'value' => $finalPriceAmount->getValue(),
+                    'value' => $minimalPriceAmount->getValue(),
                     'currency' => $this->getStoreCurrencyCode()
                 ],
-                'adjustments' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $finalPriceAmount)
+                'adjustments' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $minimalPriceAmount)
             ],
             'regularPrice' => [
                 'amount' => [
@@ -67,12 +70,12 @@ class Price
         ];
 
         $productData['price']['maximalPrice'] = [
-                'amount' => [
-                    'value' => max($regularPriceAmount->getValue(), $finalPriceAmount->getValue()),
-                    'currency' => $this->getStoreCurrencyCode()
-                ],
-                'adjustments' => []
-            ];
+            'amount' => [
+                'value' => $maximalPriceAmount->getValue(),
+                'currency' => $this->getStoreCurrencyCode()
+            ],
+            'adjustments' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $maximalPriceAmount)
+        ];
 
         return $productData;
     }
