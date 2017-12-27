@@ -69,7 +69,7 @@ class Save extends Action
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $request = $this->getRequest();
-        $requestData = $request->getPost();
+        $requestData = $request->getPost()->toArray();
 
         if (!$request->isPost() || empty($requestData['general'])) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));

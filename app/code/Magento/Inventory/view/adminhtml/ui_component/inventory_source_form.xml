@@ -50,7 +50,7 @@
             <opened>true</opened>
             <dataScope>general</dataScope>
         </settings>
-        <field name="code" formElement="input" sortOrder="20">
+        <field name="source_code" formElement="input" sortOrder="20">
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
