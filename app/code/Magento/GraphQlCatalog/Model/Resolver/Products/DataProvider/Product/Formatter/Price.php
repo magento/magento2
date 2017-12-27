@@ -67,14 +67,13 @@ class Price
                 ],
                 'adjustments' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $regularPriceAmount)
             ],
-        ];
-
-        $productData['price']['maximalPrice'] = [
-            'amount' => [
-                'value' => $maximalPriceAmount->getValue(),
-                'currency' => $this->getStoreCurrencyCode()
-            ],
-            'adjustments' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $maximalPriceAmount)
+            'maximalPrice' => [
+                'amount' => [
+                    'value' => $maximalPriceAmount->getValue(),
+                    'currency' => $this->getStoreCurrencyCode()
+                ],
+                'adjustments' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $maximalPriceAmount)
+            ]
         ];
 
         return $productData;
