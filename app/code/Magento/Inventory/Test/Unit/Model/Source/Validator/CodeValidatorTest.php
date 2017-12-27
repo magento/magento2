@@ -50,7 +50,7 @@ class CodeValidatorTest extends TestCase
         ]);
 
         $this->source->expects($this->once())
-            ->method('getCode')
+            ->method('getSourceCode')
             ->willReturn('  ');
         $this->codeValidator->validate($this->source);
     }
@@ -68,7 +68,7 @@ class CodeValidatorTest extends TestCase
             'validationResultFactory' => $this->validationResultFactory
         ]);
         $this->source->expects($this->once())
-            ->method('getCode')
+            ->method('getSourceCode')
             ->willReturn(' source code ');
         $this->codeValidator->validate($this->source);
     }
@@ -83,7 +83,7 @@ class CodeValidatorTest extends TestCase
             'validationResultFactory' => $this->validationResultFactory
         ]);
         $this->source->expects($this->once())
-            ->method('getCode')
+            ->method('getSourceCode')
             ->willReturn(' source_code ');
 
         $result = $this->codeValidator->validate($this->source);

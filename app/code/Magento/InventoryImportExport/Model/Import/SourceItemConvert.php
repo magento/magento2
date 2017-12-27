@@ -36,7 +36,7 @@ class SourceItemConvert
         foreach ($bunch as $rowData) {
             /** @var SourceItemInterface $sourceItem */
             $sourceItem = $this->sourceItemFactory->create();
-            $sourceItem->setSourceCode($rowData[Sources::COL_SOURCE]);
+            $sourceItem->setSourceCode($rowData[Sources::COL_SOURCE_CODE]);
             $sourceItem->setSku($rowData[Sources::COL_SKU]);
             $sourceItem->setQuantity($rowData[Sources::COL_QTY]);
 

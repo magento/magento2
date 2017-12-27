@@ -114,13 +114,6 @@ class UnassignSourceFromStockTest extends WebapiAbstract
                     'message' => 'Invalid type for value: "not_numeric". Expected Type: "int".',
                 ],
             ],
-            'not_string_source_code' => [
-                10,
-                [],
-                [
-                    'message' => 'Invalid type for value: "10". Expected Type: "string".',
-                ],
-            ],
         ];
     }
 
