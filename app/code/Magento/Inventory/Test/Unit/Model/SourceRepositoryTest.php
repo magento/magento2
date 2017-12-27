@@ -79,7 +79,7 @@ class SourceRepositoryTest extends TestCase
             ->with($this->source)
             ->willReturn($sourceCode);
 
-        self::assertEquals($sourceCode, $this->sourceRepository->save($this->source));
+        $this->sourceRepository->save($this->source);
     }
 
     /**
