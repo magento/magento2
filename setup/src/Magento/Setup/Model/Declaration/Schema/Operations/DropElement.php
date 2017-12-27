@@ -63,16 +63,12 @@ class DropElement implements OperationInterface
          * @var TableElementInterface | ElementInterface $element
          */
         $element = $elementHistory->getNew();
-        $elementOptions = [
-            'table_name' => $element->getTable()->getName(),
-            'element_name' => $element->getName(),
-            'resource' => $element->getTable()->getResource(),
-            'type' => $element->getType()
-        ];
 
         $this->dbSchemaWriter->dropElement(
-            $element->getElementType(),
-            $elementOptions
+            $element->getTable()->getResource(),
+            $element->getName(),
+            $element->getTable()->getName(),
+            $element->getType()
         );
     }
 }

@@ -15,59 +15,70 @@ interface DbSchemaWriterInterface
     /**
      * Create table from SQL fragments, like columns, constraints, foreign keys, indexes, etc
      *
-     * @param  array $tableOptions
+     * @param $tableName
+     * @param $resource
      * @param  array $definition
      * @return void
      */
-    public function createTable(array $tableOptions, array $definition);
+    public function createTable($tableName, $resource, array $definition);
 
     /**
      * Drop table from SQL database
      *
-     * @param  array $tableOptions must have 2 options: table_name, resource
+     * @param string $tableName
+     * @param string $resource
      * @return mixed
      */
-    public function dropTable(array $tableOptions);
+    public function dropTable($tableName, $resource);
 
     /**
      * Add generic element to table (table must be specified in elementOptions)
      *
      * Can be: column, constraint, index
      *
-     * @param  array  $elementOptions     must have 3 options: resource, column_name, table_name
-     * @param  string $elementDefinition, for example: like CHAR(200) NOT NULL
-     * @param  string $elementType
+     * @param string $elementName
+     * @param string $resource
+     * @param string $tableName
+     * @param string $elementDefinition , for example: like CHAR(200) NOT NULL
+     * @param string $elementType
      * @return mixed
      */
-    public function addElement(array $elementOptions, $elementDefinition, $elementType);
+    public function addElement($elementName, $resource, $tableName, $elementDefinition, $elementType);
 
     /**
      * Modify column and change it definition
      *
      * Please note: that from all structural elements only column can be modified
      *
-     * @param  array  $columnOptions    must have 3 options: resource, column_name, table_name
+     * @param $resource
+     * @param $columnName
+     * @param $tableName
      * @param  string $columnDefinition
      * @return void
      */
-    public function modifyColumn(array $columnOptions, $columnDefinition);
+    public function modifyColumn($resource, $columnName, $tableName, $columnDefinition);
 
     /**
      * As we can`t just drop and recreate constraint in 2 requests
      * we need to do this in one request
      *
-     * @param  array  $constraintOptions
-     * @param  string $constraintDefinition
+     * @param string $resource
+     * @param string $elementName
+     * @param string $tableName
+     * @param string $type
+     * @param string $constraintDefinition
      * @return void
      */
-    public function modifyConstraint(array $constraintOptions, $constraintDefinition);
+    public function modifyConstraint($resource, $elementName, $tableName, $type, $constraintDefinition);
 
     /**
      * Drop any element (constraint, column, index) from index
      *
-     * @param  string $elementType    enum(CONSTRAINT, INDEX, COLUMN)
-     * @param  array  $elementOptions
+     * @param string $resource
+     * @param string $elementName
+     * @param string $tableName
+     * @param string $type
      * @return \Zend_Db_Statement_Interface
      */
-    public function dropElement($elementType, array $elementOptions);
+    public function dropElement($resource, $elementName, $tableName, $type);
 }

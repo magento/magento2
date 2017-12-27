@@ -80,17 +80,12 @@ class ModifyElement implements OperationInterface
      */
     private function modifyConstraint(Constraint $constraint)
     {
-        $constraintOptions = [
-            'table_name' => $constraint->getTable()->getName(),
-            'element_name' => $constraint->getName(),
-            'resource' => $constraint->getTable()->getResource(),
-            'type' => $constraint->getType()
-        ];
-        $definition = $this->definitionAggregator->toDefinition($constraint);
-
         $this->dbSchemaWriter->modifyConstraint(
-            $constraintOptions,
-            $definition
+            $constraint->getTable()->getResource(),
+            $constraint->getName(),
+            $constraint->getTable()->getName(),
+            $constraint->getType(),
+            $this->definitionAggregator->toDefinition($constraint)
         );
     }
 
@@ -102,15 +97,12 @@ class ModifyElement implements OperationInterface
      */
     private function modifyColumn(Column $column)
     {
-        $columnOptions = [
-            'table_name' => $column->getTable()->getName(),
-            'element_name' => $column->getName(),
-            'resource' => $column->getTable()->getResource()
-        ];
         $definition = $this->definitionAggregator->toDefinition($column);
 
         $this->dbSchemaWriter->modifyColumn(
-            $columnOptions,
+            $column->getTable()->getResource(),
+            $column->getName(),
+            $column->getTable()->getName(),
             $definition
         );
     }

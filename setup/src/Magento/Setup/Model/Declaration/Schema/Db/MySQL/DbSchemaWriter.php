@@ -9,11 +9,10 @@ namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
-use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Constraints\ForeignKey;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Constraints\Internal;
-use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
+use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 
 /**
  * @inheritdoc
@@ -72,15 +71,12 @@ class DbSchemaWriter implements DbSchemaWriterInterface
 
     /**
      * @inheritdoc
-     * @param array $tableOptions
-     * @param array $definition
      * @return \Zend_Db_Statement_Interface
      */
-    public function createTable(array $tableOptions, array $definition)
+    public function createTable($tableName, $resource, array $definition)
     {
-        $connection = $tableOptions['resource'];
         $fragmentsSQL = [];
-        $adapter = $this->resourceConnection->getConnection($connection);
+        $adapter = $this->resourceConnection->getConnection($resource);
 
         foreach ([Constraint::TYPE, \Magento\Setup\Model\Declaration\Schema\Dto\Index::TYPE] as $elementType) {
             if (isset($definition[$elementType])) { //Some element types can be optional
@@ -98,7 +94,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
 
         $sql = sprintf(
             "CREATE TABLE %s (\n%s,\n%s\n)",
-            $adapter->quoteIdentifier($tableOptions['name']),
+            $adapter->quoteIdentifier($tableName),
             implode(", \n", $this->getColumnsWithNames($definition[Column::TYPE], $adapter)),
             implode(", \n", $fragmentsSQL)
         );
@@ -109,14 +105,12 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     /**
      * Drop table from MySQL database
      *
-     * @param  array $tableOptions
+     * @inheritdoc
      * @return \Zend_Db_Statement_Interface
      */
-    public function dropTable(array $tableOptions)
+    public function dropTable($tableName, $resource)
     {
-        $connection = $tableOptions['resource'];
-        $tableName = $tableOptions['name'];
-        $adapter = $this->resourceConnection->getConnection($connection);
+        $adapter = $this->resourceConnection->getConnection($resource);
 
         $sql = sprintf(
             'DROP TABLE %s',
@@ -129,43 +123,38 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     /**
      * For Primary key we do not need to specify name
      *
-     * @param  string $elementType
+     * As MySQL do not have DROP CONSTRAINT syntax, we need different DROP statements for different operations
+     *
      * @param  string $type
      * @param  string $name
      * @return string
      */
-    private function getDropElementSQL($elementType, $type, $name)
+    private function getDropElementSQL($type, $name)
     {
-        if ($elementType === Constraint::TYPE) {
-            if ($type === 'primary') {
+        switch ($type) {
+            case Constraint::PRIMARY_TYPE:
                 return 'DROP PRIMARY KEY';
-            }
-
-            $elementType = $this->getConstraintType($type);
+            case Constraint::UNIQUE_TYPE:
+                return sprintf('DROP KEY %s', $name);
+            case \Magento\Setup\Model\Declaration\Schema\Dto\Index::TYPE:
+                return sprintf('DROP INDEX %s', $name);
+            case Reference::TYPE:
+                return sprintf('DROP FOREIGN KEY %s', $name);
+            default:
+                return sprintf('DROP COLUMN %s', $name);
         }
-
-        return sprintf(
-            'DROP %s %s',
-            strtoupper($elementType),
-            $name
-        );
     }
 
     /**
      * Add element to already existed table
      * We can add three different elements: column, constraint or index
      *
-     * @param  array  $elementOptions    should consists from 3 elements: resource, elementname, tablename
-     * @param  string $elementDefinition
-     * @param  string $elementType
+     * @inheritdoc
      * @return \Zend_Db_Statement_Interface
      */
-    public function addElement(array $elementOptions, $elementDefinition, $elementType)
+    public function addElement($elementName, $resource, $tableName, $elementDefinition, $elementType)
     {
-        $connection = $elementOptions['resource'];
-        $elementName = $elementOptions['element_name'];
-        $tableName = $elementOptions['table_name'];
-        $adapter = $this->resourceConnection->getConnection($connection);
+        $adapter = $this->resourceConnection->getConnection($resource);
 
         $sql = sprintf(
             'ALTER TABLE %s %s',
@@ -183,52 +172,21 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     /**
      * Modify column and change it definition
      *
-     * @param  array  $columnOptions
-     * @param  string $columnDefinition
+     * @inheritdoc
      * @return \Zend_Db_Statement_Interface
      */
-    public function modifyColumn(array $columnOptions, $columnDefinition)
+    public function modifyColumn($resource, $columnName, $tableName, $columnDefinition)
     {
-        $connection = $columnOptions['resource'];
-        $columName = $columnOptions['element_name'];
-        $tableName = $columnOptions['table_name'];
-        $adapter = $this->resourceConnection->getConnection($connection);
+        $adapter = $this->resourceConnection->getConnection($resource);
 
         $sql = sprintf(
             'ALTER TABLE %s MODIFY COLUMN %s %s',
             $adapter->quoteIdentifier($tableName),
-            $adapter->quoteIdentifier($columName),
+            $adapter->quoteIdentifier($columnName),
             $columnDefinition
         );
 
         return $adapter->query($sql);
-    }
-
-    /**
-     * Detect what type of constraint we have
-     *
-     * @param  string $type
-     * @return string
-     */
-    private function getConstraintType($type)
-    {
-        switch ($type) {
-            case 'reference':
-                $elementType = ForeignKey::FOREIGN_KEY_NAME;
-                break;
-            case 'primary':
-                $elementType = Internal::PRIMARY_KEY_NAME;
-                break;
-            case 'unique':
-            case 'index':
-                //In MySQL for unique and for index drop syntax is the same
-                $elementType = Index::INDEX_KEY_NAME;
-                break;
-            default:
-                $elementType = Constraint::TYPE;
-        }
-
-        return $elementType;
     }
 
     /**
@@ -238,27 +196,20 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      *
      * @inheritdoc
      */
-    public function modifyConstraint(array $constraintOptions, $constraintDefinition)
+    public function modifyConstraint($resource, $elementName, $tableName, $type, $constraintDefinition)
     {
-        $connection = $constraintOptions['resource'];
-        $elementName = $constraintOptions['element_name'];
-        $tableName = $constraintOptions['table_name'];
-        $type = $constraintOptions['type'];
-        $adapter = $this->resourceConnection->getConnection($connection);
-
+        $adapter = $this->resourceConnection->getConnection($resource);
         $sql = sprintf(
             'ALTER TABLE %s %s, %s',
             $adapter->quoteIdentifier($tableName),
             $this->getDropElementSQL(
-                Constraint::TYPE,
                 $type,
                 $adapter->quoteIdentifier($elementName)
             ),
             $this->getAddElementSQL(
                 Constraint::TYPE,
-                //We need to ignore name for PRIMARY KEY
-                $elementName === Internal::PRIMARY_NAME ?
-                    '' : $adapter->quoteIdentifier($elementName),
+                //We need to avoid `PRIMARY` name in modify constraint syntax
+                $elementName === Internal::PRIMARY_NAME ? '' : $adapter->quoteIdentifier($elementName),
                 $constraintDefinition
             )
         );
@@ -267,25 +218,17 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     }
 
     /**
-     * Drop any element (constraint, column, index) from index
-     *
-     * @param  string $elementType    enum(CONSTRAINT, INDEX, COLUMN)
-     * @param  array  $elementOptions
+     * @inheritdoc
      * @return \Zend_Db_Statement_Interface
      */
-    public function dropElement($elementType, array $elementOptions)
+    public function dropElement($resource, $elementName, $tableName, $type)
     {
-        $connection = $elementOptions['resource'];
-        $elementName = $elementOptions['element_name'];
-        $tableName = $elementOptions['table_name'];
-        $type = $elementOptions['type'];
-        $adapter = $this->resourceConnection->getConnection($connection);
+        $adapter = $this->resourceConnection->getConnection($resource);
 
         $sql = sprintf(
             'ALTER TABLE %s %s',
             $adapter->quoteIdentifier($tableName),
             $this->getDropElementSQL(
-                $elementType,
                 $type,
                 $adapter->quoteIdentifier($elementName)
             )

@@ -20,6 +20,16 @@ class Constraint extends GenericElement implements
     const TYPE = 'constraint';
 
     /**
+     * Means PRIMARY KEY
+     */
+    const PRIMARY_TYPE = 'primary';
+
+    /**
+     * Means UNIQUE KEY
+     */
+    const UNIQUE_TYPE = 'unique';
+
+    /**
      * @var Table
      */
     private $table;

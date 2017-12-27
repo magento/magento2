@@ -63,12 +63,7 @@ class CreateTable implements OperationInterface
     {
         /** @var Table $table */
         $table = $elementHistory->getNew();
-
         $definition = [];
-        $tableOptions = [
-            'resource' => $table->getResource(),
-            'name' => $table->getName()
-        ];
         $data = [
             Column::TYPE => $table->getColumns(),
             Constraint::TYPE => $table->getConstraints(),
@@ -84,6 +79,6 @@ class CreateTable implements OperationInterface
             }
         }
 
-        $this->dbSchemaWriter->createTable($tableOptions, $definition);
+        $this->dbSchemaWriter->createTable($table->getName(), $table->getResource(), $definition);
     }
 }

@@ -62,15 +62,12 @@ class AddElement implements OperationInterface
          * @var TableElementInterface | ElementInterface $element
          */
         $element = $elementHistory->getNew();
-        $elementOptions = [
-            'table_name' => $element->getTable()->getName(),
-            'element_name' => $element->getName(),
-            'resource' => $element->getTable()->getResource()
-        ];
         $definition = $this->definitionAggregator->toDefinition($element);
 
         $this->dbSchemaWriter->addElement(
-            $elementOptions,
+            $element->getName(),
+            $element->getTable()->getResource(),
+            $element->getTable()->getName(),
             $definition,
             $element->getElementType()
         );
