@@ -69,55 +69,49 @@ class Save extends Action
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $request = $this->getRequest();
-        $requestData = $request->getParams();
-        if (!$request->isPost()
-            || empty($requestData['general'])
-            || empty($requestData['general'][SourceInterface::SOURCE_CODE])
-        ) {
+        $requestData = $request->getPost();
+
+        if (!$request->isPost() || empty($requestData['general'])) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
             $this->processRedirectAfterFailureSave($resultRedirect);
-
             return $resultRedirect;
         }
 
+        $sourceCodeQueryParam = $request->getQuery(SourceInterface::SOURCE_CODE);
         try {
-            $sourceCode = $requestData['general'][SourceInterface::SOURCE_CODE];
-            $this->processSave($requestData, $sourceCode);
+            $source = (null !== $sourceCodeQueryParam)
+                ? $this->sourceRepository->get($sourceCodeQueryParam)
+                : $this->sourceFactory->create();
+
+            $this->processSave($source, $requestData);
 
             $this->messageManager->addSuccessMessage(__('The Source has been saved.'));
-            $this->processRedirectAfterSuccessSave($resultRedirect, $sourceCode);
+            $this->processRedirectAfterSuccessSave($resultRedirect, $source->getSourceCode());
         } catch (NoSuchEntityException $e) {
             $this->messageManager->addErrorMessage(__('The Source does not exist.'));
-            $this->processRedirectAfterFailureSave($resultRedirect, $sourceCode);
+            $this->processRedirectAfterFailureSave($resultRedirect);
         } catch (ValidationException $e) {
             foreach ($e->getErrors() as $localizedError) {
                 $this->messageManager->addErrorMessage($localizedError->getMessage());
             }
-            $this->processRedirectAfterFailureSave($resultRedirect, $sourceCode);
+            $this->processRedirectAfterFailureSave($resultRedirect, $sourceCodeQueryParam ?? $sourceCodeQueryParam);
         } catch (CouldNotSaveException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-            $this->processRedirectAfterFailureSave($resultRedirect, $sourceCode);
+            $this->processRedirectAfterFailureSave($resultRedirect, $sourceCodeQueryParam ?? $sourceCodeQueryParam);
         } catch (Exception $e) {
             $this->messageManager->addErrorMessage(__('Could not save Source.'));
-            $this->processRedirectAfterFailureSave($resultRedirect, $sourceCode);
+            $this->processRedirectAfterFailureSave($resultRedirect, $sourceCodeQueryParam ?? $sourceCodeQueryParam);
         }
-
         return $resultRedirect;
     }
 
     /**
+     * @param SourceInterface $source
      * @param array $requestData
-     * @param string $sourceCode
      * @return void
      */
-    private function processSave(array $requestData, string $sourceCode)
+    private function processSave(SourceInterface $source, array $requestData)
     {
-        try {
-            $source = $this->sourceRepository->get($sourceCode);
-        } catch (NoSuchEntityException $e) {
-            /** @var SourceInterface $source */
-            $source = $this->sourceFactory->create();
-        }
         $source = $this->sourceHydrator->hydrate($source, $requestData);
 
         $this->_eventManager->dispatch(
