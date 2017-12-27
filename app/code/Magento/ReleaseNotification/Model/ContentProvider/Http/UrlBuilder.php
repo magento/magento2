@@ -50,6 +50,6 @@ class UrlBuilder
     {
         $scheme = $this->config->isSetFlag(self::$useHttpsFlagConfigPath) ? 'https://' : 'http://';
         $baseUrl = $this->config->getValue(self::$notificationContentUrlConfigPath);
-        return empty($baseUrl) ? '' : $scheme . $baseUrl . $version . '-' . $edition . '-' . $locale . '.json#';
+        return empty($baseUrl) ? '' : $scheme . $baseUrl . $version . '-' . $edition . '-' . $locale . '.json';
     }
 }
