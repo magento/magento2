@@ -48,13 +48,13 @@ class AttributeCollectionProvider
     public function get(): Collection
     {
         if (count($this->collection) === 0) {
-            /** @var \Magento\Eav\Model\Entity\Attribute $sourceIdAttribute */
-            $sourceIdAttribute = $this->attributeFactory->create();
-            $sourceIdAttribute->setId(SourceItemInterface::SOURCE_ID);
-            $sourceIdAttribute->setDefaultFrontendLabel(SourceItemInterface::SOURCE_ID);
-            $sourceIdAttribute->setAttributeCode(SourceItemInterface::SOURCE_ID);
-            $sourceIdAttribute->setBackendType('int');
-            $this->collection->addItem($sourceIdAttribute);
+            /** @var \Magento\Eav\Model\Entity\Attribute $sourceCodeAttribute */
+            $sourceCodeAttribute = $this->attributeFactory->create();
+            $sourceCodeAttribute->setId(SourceItemInterface::SOURCE_CODE);
+            $sourceCodeAttribute->setDefaultFrontendLabel(SourceItemInterface::SOURCE_CODE);
+            $sourceCodeAttribute->setAttributeCode(SourceItemInterface::SOURCE_CODE);
+            $sourceCodeAttribute->setBackendType('varchar');
+            $this->collection->addItem($sourceCodeAttribute);
 
             /** @var \Magento\Eav\Model\Entity\Attribute $skuAttribute */
             $skuAttribute = $this->attributeFactory->create();

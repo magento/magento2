@@ -10,4 +10,4 @@ use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface
 
 /** @var DeleteSourceItemConfigurationInterface $deleteSourceItemConfiguration */
 $deleteSourceItemConfiguration = Bootstrap::getObjectManager()->get(DeleteSourceItemConfigurationInterface::class);
-$deleteSourceItemConfiguration->execute(10, 'SKU-1');
+$deleteSourceItemConfiguration->execute('eu-1', 'SKU-1');

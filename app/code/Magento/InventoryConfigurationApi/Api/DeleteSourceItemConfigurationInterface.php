@@ -15,9 +15,9 @@ namespace Magento\InventoryConfigurationApi\Api;
 interface DeleteSourceItemConfigurationInterface
 {
     /**
-     * @param int $sourceId
+     * @param string $sourceCode
      * @param string $sku
      * @return void
      */
-    public function execute(int $sourceId, string $sku);
+    public function execute(string $sourceCode, string $sku);
 }

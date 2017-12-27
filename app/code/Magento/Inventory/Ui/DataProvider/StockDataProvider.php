@@ -137,7 +137,7 @@ class StockDataProvider extends DataProvider
         $assignedSourcesData = [];
         foreach ($assignedSources as $assignedSource) {
             $assignedSourcesData[] = [
-                SourceInterface::SOURCE_ID => $assignedSource->getSourceId(),
+                SourceInterface::SOURCE_CODE => $assignedSource->getSourceCode(),
                 SourceInterface::NAME => $assignedSource->getName(),
             ];
         }

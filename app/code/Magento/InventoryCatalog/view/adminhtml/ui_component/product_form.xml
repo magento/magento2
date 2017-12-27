@@ -45,11 +45,11 @@
                 <item name="config" xsi:type="array">
                     <item name="dataProvider" xsi:type="string">data.sources.assign_sources_grid</item>
                     <item name="map" xsi:type="array">
-                        <item name="source_id" xsi:type="string">source_id</item>
+                        <item name="source_code" xsi:type="string">source_code</item>
                         <item name="name" xsi:type="string">name</item>
                         <item name="qty" xsi:type="string">qty</item>
                     </item>
-                    <item name="identificationDRProperty" xsi:type="string">source_id</item>
+                    <item name="identificationDRProperty" xsi:type="string">source_code</item>
                 </item>
             </argument>
             <settings>
@@ -57,7 +57,7 @@
                 <defaultRecord>false</defaultRecord>
                 <addButton>false</addButton>
                 <recordTemplate>record</recordTemplate>
-                <identificationProperty>source_id</identificationProperty>
+                <identificationProperty>source_code</identificationProperty>
                 <links>
                     <link name="insertData">${ $.provider }:${ $.dataProvider }</link>
                 </links>
@@ -74,11 +74,11 @@
                         <item name="dataScope" xsi:type="string"/>
                     </item>
                 </argument>
-                <field name="source_id" formElement="input" sortOrder="10">
+                <field name="source_code" formElement="input" sortOrder="10">
                     <settings>
                         <elementTmpl>ui/dynamic-rows/cells/text</elementTmpl>
                         <dataType>text</dataType>
-                        <dataScope>source_id</dataScope>
+                        <dataScope>source_code</dataScope>
                         <label translate="true">ID</label>
                     </settings>
                 </field>

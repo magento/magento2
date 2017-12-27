@@ -78,23 +78,23 @@ class StockSourceLinkProcessor
         $this->validateStockSourceData($stockSourceLinksData);
 
         $assignedSources = $this->getAssignedSourcesForStock->execute($stockId);
-        $sourceIdsForSave = array_flip(array_column($stockSourceLinksData, StockSourceLink::SOURCE_ID));
-        $sourceIdsForDelete = [];
+        $sourceCodesForSave = array_flip(array_column($stockSourceLinksData, StockSourceLink::SOURCE_CODE));
+        $sourceCodesForDelete = [];
 
         foreach ($assignedSources as $assignedSource) {
-            if (array_key_exists($assignedSource->getSourceId(), $sourceIdsForSave)) {
-                unset($sourceIdsForSave[$assignedSource->getSourceId()]);
+            if (array_key_exists($assignedSource->getSourceCode(), $sourceCodesForSave)) {
+                unset($sourceCodesForSave[$assignedSource->getSourceCode()]);
             } else {
-                $sourceIdsForDelete[] = $assignedSource->getSourceId();
+                $sourceCodesForDelete[] = $assignedSource->getSourceCode();
             }
         }
 
-        if ($sourceIdsForSave) {
-            $this->assignSourcesToStock->execute(array_keys($sourceIdsForSave), $stockId);
+        if ($sourceCodesForSave) {
+            $this->assignSourcesToStock->execute(array_keys($sourceCodesForSave), $stockId);
         }
-        if ($sourceIdsForDelete) {
-            foreach ($sourceIdsForDelete as $sourceIdForDelete) {
-                $this->unassignSourceFromStock->execute((int) $sourceIdForDelete, $stockId);
+        if ($sourceCodesForDelete) {
+            foreach ($sourceCodesForDelete as $sourceCodeForDelete) {
+                $this->unassignSourceFromStock->execute($sourceCodeForDelete, $stockId);
             }
         }
     }
@@ -107,7 +107,7 @@ class StockSourceLinkProcessor
     private function validateStockSourceData(array $stockSourceLinksData)
     {
         foreach ($stockSourceLinksData as $stockSourceLinkData) {
-            if (!isset($stockSourceLinkData[StockSourceLink::SOURCE_ID])) {
+            if (!isset($stockSourceLinkData[StockSourceLink::SOURCE_CODE])) {
                 throw new InputException(__('Wrong Stock to Source relation parameters given.'));
             }
         }

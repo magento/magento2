@@ -21,24 +21,24 @@ interface SourceItemConfigurationInterface extends ExtensibleDataInterface
     /**
      * Constant for fields in data array
      */
-    const SOURCE_ID = 'source_id';
+    const SOURCE_CODE = 'source_code';
     const SKU = 'sku';
     const INVENTORY_NOTIFY_QTY = 'notify_stock_qty';
 
     /**
-     * Get source id
+     * Get source code
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getSourceId();
+    public function getSourceCode();
 
     /**
-     * Set source id
+     * Set source code
      *
-     * @param int $sourceId
+     * @param string $sourceCode
      * @return void
      */
-    public function setSourceId(int $sourceId);
+    public function setSourceCode(string $sourceCode);
 
     /**
      * Get notify stock qty

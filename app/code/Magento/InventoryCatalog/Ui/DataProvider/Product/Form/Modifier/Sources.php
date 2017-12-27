@@ -75,14 +75,14 @@ class Sources extends AbstractModifier
         $collection->addFilter(SourceItemInterface::SKU, $product->getSku());
         $collection->join(
             ['s' => $this->resourceConnection->getTableName(SourceResourceModel::TABLE_NAME_SOURCE)],
-            sprintf('s.%s = main_table.%s', SourceInterface::SOURCE_ID, SourceItemInterface::SOURCE_ID),
+            sprintf('s.%s = main_table.%s', SourceInterface::SOURCE_CODE, SourceItemInterface::SOURCE_CODE),
             ['source_name' => SourceInterface::NAME]
         );
 
         $sourceItemsData = [];
         foreach ($collection->getData() as $row) {
             $sourceItemsData[] = [
-                SourceItemInterface::SOURCE_ID => $row[SourceItemInterface::SOURCE_ID],
+                SourceItemInterface::SOURCE_CODE => $row[SourceItemInterface::SOURCE_CODE],
                 SourceItemInterface::QUANTITY => $row[SourceItemInterface::QUANTITY],
                 SourceItemInterface::STATUS => $row[SourceItemInterface::STATUS],
                 SourceInterface::NAME => $row['source_name'],

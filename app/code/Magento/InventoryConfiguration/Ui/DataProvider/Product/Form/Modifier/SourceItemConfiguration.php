@@ -65,18 +65,19 @@ class SourceItemConfiguration extends AbstractModifier
     {
         foreach ($assignedSources as &$source) {
             $sourceConfiguration = $this->getSourceItemConfiguration->execute(
-                (int)$source[SourceInterface::SOURCE_ID],
+                (string)$source[SourceInterface::SOURCE_CODE],
                 $product->getSku()
             );
 
             $source[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY] =
                 $sourceConfiguration[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY];
         }
+        unset($source);
         return $assignedSources;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {

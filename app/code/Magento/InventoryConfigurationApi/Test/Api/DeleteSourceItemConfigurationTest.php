@@ -24,13 +24,13 @@ class DeleteSourceItemConfigurationTest extends WebapiAbstract
      */
     public function testDeleteSourceItemConfiguration()
     {
-        $sourceId = 10;
+        $sourceCode = 'eu-1';
         $sku = 'SKU-1';
 
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?'
-                    . http_build_query(['sourceId' => $sourceId, 'sku' => $sku]),
+                    . http_build_query(['sourceCode' => $sourceCode, 'sku' => $sku]),
                 'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
@@ -41,9 +41,9 @@ class DeleteSourceItemConfigurationTest extends WebapiAbstract
 
         (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'sku' => $sku]);
+            : $this->_webApiCall($serviceInfo, ['sourceCode' => $sourceCode, 'sku' => $sku]);
 
-        $sourceItemConfiguration = $this->getSourceItemConfiguration($sourceId, $sku);
+        $sourceItemConfiguration = $this->getSourceItemConfiguration($sourceCode, $sku);
         $defaultNotifyQtyValue = 1;
         self::assertEquals(
             $defaultNotifyQtyValue,
@@ -52,15 +52,15 @@ class DeleteSourceItemConfigurationTest extends WebapiAbstract
     }
 
     /**
-     * @param int $sourceId
+     * @param string $sourceCode
      * @param string $sku
      * @return array
      */
-    private function getSourceItemConfiguration(int $sourceId, string $sku)
+    private function getSourceItemConfiguration(string $sourceCode, string $sku)
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId . '/' . $sku,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceCode . '/' . $sku,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -70,7 +70,7 @@ class DeleteSourceItemConfigurationTest extends WebapiAbstract
         ];
         $sourceItemConfiguration = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'sku' => $sku]);
+            : $this->_webApiCall($serviceInfo, ['sourceCode' => $sourceCode, 'sku' => $sku]);
 
         self::assertInternalType('array', $sourceItemConfiguration);
         self::assertNotEmpty($sourceItemConfiguration);

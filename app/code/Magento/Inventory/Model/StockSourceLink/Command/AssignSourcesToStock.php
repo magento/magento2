@@ -43,13 +43,13 @@ class AssignSourcesToStock implements AssignSourcesToStockInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $sourceIds, int $stockId)
+    public function execute(array $sourceCodes, int $stockId)
     {
-        if (empty($sourceIds)) {
+        if (empty($sourceCodes)) {
             throw new InputException(__('Input data is invalid'));
         }
         try {
-            $this->saveMultiple->execute($sourceIds, $stockId);
+            $this->saveMultiple->execute($sourceCodes, $stockId);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not assign Sources to Stock'), $e);

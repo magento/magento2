@@ -24,8 +24,7 @@ $source = $sourceFactory->create();
 $dataObjectHelper->populateWithArray(
     $source,
     [
-        SourceInterface::SOURCE_ID => 10,
-        SourceInterface::CODE => 'source-code-1',
+        SourceInterface::SOURCE_CODE => 'source-code-1',
         SourceInterface::NAME => 'source-name-1',
         SourceInterface::CONTACT_NAME => 'source-contact-name',
         SourceInterface::EMAIL => 'source-email',

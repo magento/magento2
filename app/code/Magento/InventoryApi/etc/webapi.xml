@@ -14,7 +14,7 @@
             <resource ref="Magento_InventoryApi::source"/>
         </resources>
     </route>
-    <route url="/V1/inventory/source/:sourceId" method="GET">
+    <route url="/V1/inventory/source/:sourceCode" method="GET">
         <service class="Magento\InventoryApi\Api\SourceRepositoryInterface" method="get"/>
         <resources>
             <resource ref="Magento_InventoryApi::source"/>
@@ -26,7 +26,7 @@
             <resource ref="Magento_InventoryApi::source_edit"/>
         </resources>
     </route>
-    <route url="/V1/inventory/source/:sourceId" method="PUT">
+    <route url="/V1/inventory/source/:sourceCode" method="PUT">
         <service class="Magento\InventoryApi\Api\SourceRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_InventoryApi::source_edit"/>
@@ -94,7 +94,7 @@
             <resource ref="Magento_InventoryApi::source_stock_link"/>
         </resources>
     </route>
-    <route url="/V1/inventory/stock/unassign-source/:stockId/:sourceId" method="DELETE">
+    <route url="/V1/inventory/stock/unassign-source/:stockId/:sourceCode" method="DELETE">
         <service class="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" method="execute"/>
         <resources>
             <resource ref="Magento_InventoryApi::source_stock_link"/>

@@ -70,7 +70,7 @@ if ($moduleManager->isEnabled('Magento_InventoryCatalog')) {
     // Unassign created product from default Source
     $searchCriteria = $searchCriteriaBuilder
         ->addFilter(SourceItemInterface::SKU, ['SKU-1', 'SKU-2', 'SKU-3'], 'in')
-        ->addFilter(SourceItemInterface::SOURCE_ID, $defaultSourceProvider->getId())
+        ->addFilter(SourceItemInterface::SOURCE_CODE, $defaultSourceProvider->getCode())
         ->create();
     $sourceItems = $sourceItemRepository->getList($searchCriteria)->getItems();
     if (count($sourceItems)) {

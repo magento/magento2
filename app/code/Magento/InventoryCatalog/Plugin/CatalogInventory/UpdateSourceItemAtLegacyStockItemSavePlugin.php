@@ -124,7 +124,7 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
 
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(SourceItemInterface::SKU, $productSku)
-            ->addFilter(SourceItemInterface::SOURCE_ID, $this->defaultSourceProvider->getId())
+            ->addFilter(SourceItemInterface::SOURCE_CODE, $this->defaultSourceProvider->getCode())
             ->create();
         $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
         if (count($sourceItems)) {
@@ -132,7 +132,7 @@ class UpdateSourceItemAtLegacyStockItemSavePlugin
         } else {
             /** @var SourceItemInterface $sourceItem */
             $sourceItem = $this->sourceItemFactory->create();
-            $sourceItem->setSourceId($this->defaultSourceProvider->getId());
+            $sourceItem->setSourceCode($this->defaultSourceProvider->getCode());
             $sourceItem->setSku($productSku);
         }
 

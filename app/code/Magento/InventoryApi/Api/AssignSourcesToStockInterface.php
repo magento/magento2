@@ -21,11 +21,11 @@ interface AssignSourcesToStockInterface
      *
      * If one of the Sources or Stock with given id don't exist then exception will be throw
      *
-     * @param int[] $sourceIds
+     * @param string[] $sourceCodes
      * @param int $stockId
      * @return void
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(array $sourceIds, int $stockId);
+    public function execute(array $sourceCodes, int $stockId);
 }

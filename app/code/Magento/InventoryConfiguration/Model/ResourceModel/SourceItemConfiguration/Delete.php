@@ -31,18 +31,18 @@ class Delete
     }
 
     /**
-     * @param int $sourceId
+     * @param string $sourceCode
      * @param string $sku
      * @return void
      */
-    public function execute(int $sourceId, string $sku)
+    public function execute(string $sourceCode, string $sku)
     {
         $connection = $this->resourceConnection->getConnection();
         $sourceItemConfigurationTable = $this->resourceConnection
             ->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
 
         $connection->delete($sourceItemConfigurationTable, [
-            SourceItemConfigurationInterface::SOURCE_ID . ' = ?' => $sourceId,
+            SourceItemConfigurationInterface::SOURCE_CODE . ' = ?' => $sourceCode,
             SourceItemConfigurationInterface::SKU . ' = ?' => $sku,
         ]);
     }

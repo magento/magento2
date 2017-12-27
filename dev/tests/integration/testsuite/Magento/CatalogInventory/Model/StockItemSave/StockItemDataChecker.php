@@ -167,7 +167,7 @@ class StockItemDataChecker
     private function checkIntegrityWithInventory(Product $product, array $expectedData)
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceItemInterface::SOURCE_ID, $this->defaultSourceProvider->getId())
+            ->addFilter(SourceItemInterface::SOURCE_CODE, $this->defaultSourceProvider->getCode())
             ->addFilter(SourceItemInterface::SKU, $product->getSku())
             ->create();
         $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();

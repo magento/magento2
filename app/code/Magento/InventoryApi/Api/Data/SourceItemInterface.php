@@ -8,11 +8,10 @@ declare(strict_types=1);
 namespace Magento\InventoryApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\InventoryApi\Api\Data\SourceItemExtensionInterface;
 
 /**
  * Represents amount of product on physical storage
- * Entity id getter is missed because entity identifies by compound identifier (sku and source_id)
+ * Entity id getter is missed because entity identifies by compound identifier (sku and source_code)
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
@@ -24,7 +23,7 @@ interface SourceItemInterface extends ExtensibleDataInterface
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
     const SKU = 'sku';
-    const SOURCE_ID = 'source_id';
+    const SOURCE_CODE = 'source_code';
     const QUANTITY = 'quantity';
     const STATUS = 'status';
     /**#@-*/
@@ -52,19 +51,19 @@ interface SourceItemInterface extends ExtensibleDataInterface
     public function setSku($sku);
 
     /**
-     * Get source id
+     * Get source code
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getSourceId();
+    public function getSourceCode();
 
     /**
-     * Set source id
+     * Set source code
      *
-     * @param int|null $sourceId
+     * @param string|null $sourceCode
      * @return void
      */
-    public function setSourceId($sourceId);
+    public function setSourceCode($sourceCode);
 
     /**
      * Get source item quantity

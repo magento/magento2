@@ -63,11 +63,11 @@ class DeleteMultiple
                 SourceItemInterface::SKU . ' = ?',
                 $sourceItem->getSku()
             );
-            $sourceIdCondition = $connection->quoteInto(
-                SourceItemInterface::SOURCE_ID . ' = ?',
-                $sourceItem->getSourceId()
+            $sourceCodeCondition = $connection->quoteInto(
+                SourceItemInterface::SOURCE_CODE . ' = ?',
+                $sourceItem->getSourceCode()
             );
-            $condition[] = '(' . $skuCondition . ' AND ' . $sourceIdCondition . ')';
+            $condition[] = '(' . $skuCondition . ' AND ' . $sourceCodeCondition . ')';
         }
         return implode(' OR ', $condition);
     }

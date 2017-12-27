@@ -45,7 +45,7 @@ class SaveMultiple
             ->getTableName(CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION);
 
         $columnsSql = $this->buildColumnsSqlPart([
-            SourceItemConfigurationInterface::SOURCE_ID,
+            SourceItemConfigurationInterface::SOURCE_CODE,
             SourceItemConfigurationInterface::SKU,
             SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY
         ]);
@@ -97,7 +97,7 @@ class SaveMultiple
         $bind = [];
         foreach ($sourceItemConfigurations as $sourceItemConfiguration) {
             $bind = array_merge($bind, [
-                $sourceItemConfiguration->getSourceId(),
+                $sourceItemConfiguration->getSourceCode(),
                 $sourceItemConfiguration->getSku(),
                 $sourceItemConfiguration->getNotifyStockQty()
             ]);

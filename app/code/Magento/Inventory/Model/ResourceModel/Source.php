@@ -31,6 +31,13 @@ class Source extends AbstractDb
     /**#@-*/
 
     /**
+     * Primary key auto increment flag
+     *
+     * @var bool
+     */
+    protected $_isPkAutoIncrement = false;
+
+    /**
      * @var SourceCarrierLinkManagementInterface
      */
     private $sourceCarrierLinkManagement;
@@ -54,7 +61,7 @@ class Source extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init(self::TABLE_NAME_SOURCE, SourceInterface::SOURCE_ID);
+        $this->_init(self::TABLE_NAME_SOURCE, SourceInterface::SOURCE_CODE);
     }
 
     /**
