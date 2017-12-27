@@ -9,7 +9,7 @@ namespace Magento\Inventory\Test\Integration\Stock;
 
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Inventory\Indexer\Stock\StockIndexer;
-use Magento\Inventory\Model\ReservationCleanupInterface;
+use Magento\Inventory\Model\CleanupReservationsInterface;
 use Magento\Inventory\Test\Integration\Indexer\RemoveIndexData;
 use Magento\InventoryApi\Api\GetProductQuantityInStockInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
@@ -35,9 +35,9 @@ class GetProductQuantityInStockTest extends TestCase
     private $appendReservations;
 
     /**
-     * @var ReservationCleanupInterface
+     * @var CleanupReservationsInterface
      */
-    private $reservationCleanup;
+    private $cleanupReservations;
 
     /**
      * @var GetProductQuantityInStockInterface
@@ -56,7 +56,7 @@ class GetProductQuantityInStockTest extends TestCase
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
-        $this->reservationCleanup = Bootstrap::getObjectManager()->create(ReservationCleanupInterface::class);
+        $this->cleanupReservations = Bootstrap::getObjectManager()->create(CleanupReservationsInterface::class);
 
         $this->getProductQtyInStock = Bootstrap::getObjectManager()->create(
             GetProductQuantityInStockInterface::class
@@ -69,7 +69,7 @@ class GetProductQuantityInStockTest extends TestCase
     protected function tearDown()
     {
         $this->removeIndexData->execute([10]);
-        $this->reservationCleanup->execute();
+        $this->cleanupReservations->execute();
     }
 
     /**

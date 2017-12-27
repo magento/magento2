@@ -9,7 +9,7 @@ namespace Magento\Inventory\Test\Integration\Stock;
 
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Inventory\Indexer\Stock\StockIndexer;
-use Magento\Inventory\Model\ReservationCleanupInterface;
+use Magento\Inventory\Model\CleanupReservationsInterface;
 use Magento\Inventory\Test\Integration\Indexer\RemoveIndexData;
 use Magento\InventoryApi\Api\IsProductInStockInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
@@ -35,9 +35,9 @@ class IsProductInStockTest extends TestCase
     private $appendReservations;
 
     /**
-     * @var ReservationCleanupInterface
+     * @var CleanupReservationsInterface
      */
-    private $reservationCleanup;
+    private $cleanupReservations;
 
     /**
      * @var IsProductInStockInterface
@@ -56,7 +56,7 @@ class IsProductInStockTest extends TestCase
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
-        $this->reservationCleanup = Bootstrap::getObjectManager()->get(ReservationCleanupInterface::class);
+        $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
 
         $this->removeIndexData = Bootstrap::getObjectManager()->create(RemoveIndexData::class);
@@ -103,6 +103,6 @@ class IsProductInStockTest extends TestCase
             // unreserve 8.5 units for cleanup
             $this->reservationBuilder->setStockId(10)->setSku('SKU-1')->setQuantity(8.5)->build(),
         ]);
-        $this->reservationCleanup->execute();
+        $this->cleanupReservations->execute();
     }
 }
