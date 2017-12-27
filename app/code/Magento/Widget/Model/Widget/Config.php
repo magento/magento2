@@ -100,7 +100,8 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
                 'options' => [
                     'window_url' => $this->getWidgetWindowUrl($config),
                     'types' => $this->getAvailableWidgets($config),
-                    'error_image_url' => $this->getErrorImageUrl()
+                    'error_image_url' => $this->getErrorImageUrl(),
+                    'placeholders' => $this->_widgetFactory->create()->getPlaceholderImageUrls(),
                 ],
             ]
         ];
@@ -109,7 +110,6 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
 
         $widgetConfig = [
             'plugins' => array_merge($configPlugins, $widgetWysiwyg),
-            'widget_placeholders' => $this->_widgetFactory->create()->getPlaceholderImageUrls(),
         ];
         return $widgetConfig;
     }

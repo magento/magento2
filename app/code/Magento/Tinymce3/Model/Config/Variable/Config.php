@@ -44,6 +44,7 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
             $pluginData = array_shift($pluginConfig);
             $editorPluginJs = 'Magento_Tinymce3::wysiwyg/tiny_mce/plugins/magentovariable/editor_plugin.js';
             $pluginData['src'] = $this->assetRepo->getUrl($editorPluginJs);
+            $settings['variable_placeholders'] = $pluginData['placeholders'];
         }
         $settings['plugins'] = [$pluginData];
         return $settings;

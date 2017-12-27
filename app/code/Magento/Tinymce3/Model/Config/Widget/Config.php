@@ -37,16 +37,16 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
     {
         /** @todo override config without widget dependency */
         $result = $this->widgetConfig->getConfig($config);
-        $magento_widget_plugin_arr_index = array_search('magentowidget', array_column($result['plugins'], 'name'));
+        $widgetPluginArrIndex = array_search('magentowidget', array_column($result['plugins'], 'name'));
 
-        if ($magento_widget_plugin_arr_index !== false) {
-            $widget_plugin_options = $result['plugins'][$magento_widget_plugin_arr_index];
+        if ($widgetPluginArrIndex !== false) {
+            $widgetPluginOptions = $result['plugins'][$widgetPluginArrIndex]['options'];
             $result = [
                 'widget_plugin_src' => $this->getWysiwygJsPluginSrc(),
-                'widget_window_url' => $widget_plugin_options['options']['window_url'],
-                'widget_types' => $widget_plugin_options['options']['types'],
-                'widget_error_image_url' => $widget_plugin_options['options']['error_image_url'],
-                'widget_placeholders' => $result['widget_placeholders']
+                'widget_window_url' => $widgetPluginOptions['window_url'],
+                'widget_types' => $widgetPluginOptions['types'],
+                'widget_error_image_url' => $widgetPluginOptions['error_image_url'],
+                'widget_placeholders' => $widgetPluginOptions['placeholders']
             ];
         }
 

@@ -104,12 +104,12 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
                     'url' => $this->getVariablesWysiwygActionUrl(),
                     'onclick' => $onclickParts,
                     'class' => 'add-variable plugin',
+                    'placeholders' => $this->getVariablesWysiwygData()
                 ],
             ],
         ];
         $configPlugins = $config->getData('plugins');
         $variableConfig['plugins'] = array_merge($configPlugins, $variableWysiwyg);
-        $variableConfig['variable_placeholders'] = $this->getVariablesWysiwygData();
         return $variableConfig;
     }
 

@@ -48,20 +48,21 @@ class CompositeConfigProvider
      * ConfigProcessor constructor.
      *
      * @param \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor
-     * @param array $variablePluginConfigPovider
+     * @param \Magento\Cms\Model\Wysiwyg\ConfigProviderFactory $configProviderFactory
+     * @param array $variablePluginConfigProvider
      * @param array $widgetPluginConfigProvider
      * @param array $wysiwygConfigPostProcessor
      */
     public function __construct(
         \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor,
         \Magento\Cms\Model\Wysiwyg\ConfigProviderFactory $configProviderFactory,
-        array $variablePluginConfigPovider,
+        array $variablePluginConfigProvider,
         array $widgetPluginConfigProvider,
         array $wysiwygConfigPostProcessor
     ) {
         $this->activeEditor = $activeEditor;
         $this->configProviderFactory = $configProviderFactory;
-        $this->variablePluginConfigProvider = $variablePluginConfigPovider;
+        $this->variablePluginConfigProvider = $variablePluginConfigProvider;
         $this->widgetPluginConfigProvider = $widgetPluginConfigProvider;
         $this->wysiwygConfigPostProcessor = $wysiwygConfigPostProcessor;
     }
@@ -88,7 +89,7 @@ class CompositeConfigProvider
      * @param \Magento\Framework\DataObject $config
      * @return \Magento\Framework\DataObject
      */
-    public function processWysiswygConfig($config)
+    public function processWysiwygConfig($config)
     {
         return $this->updateConfig($config, $this->wysiwygConfigPostProcessor);
     }

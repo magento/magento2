@@ -236,17 +236,17 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
             $config->addData($data);
         }
 
-        if ($config->getData('add_variables')) {
-            $settings = $this->configProvider->processVariableConfig($config);
-            $config->addData($settings);
-        }
-
         if ($config->getData('add_widgets')) {
             $settings = $this->configProvider->processWidgetConfig($config);
             $config->addData($settings);
         }
 
-        return $this->configProvider->processWysiswygConfig($config);
+        if ($config->getData('add_variables')) {
+            $settings = $this->configProvider->processVariableConfig($config);
+            $config->addData($settings);
+        }
+
+        return $this->configProvider->processWysiwygConfig($config);
     }
 
     /**
