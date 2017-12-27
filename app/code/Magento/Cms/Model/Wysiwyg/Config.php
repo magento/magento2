@@ -114,6 +114,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
     private $configProvider;
 
     /**
+     * Config constructor.
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\AuthorizationInterface $authorization
@@ -125,6 +126,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
      * @param Filesystem $filesystem
      * @param array $windowSize
      * @param array $data
+     * @param CompositeConfigProvider|null $configProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -237,13 +239,11 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
         }
 
         if ($config->getData('add_variables')) {
-            $settings = $this->configProvider->processVariableConfig($config);
-            $config->addData($settings);
+            $config = $this->configProvider->processVariableConfig($config);
         }
 
         if ($config->getData('add_widgets')) {
-            $settings = $this->configProvider->processWidgetConfig($config);
-            $config->addData($settings);
+            $config = $this->configProvider->processWidgetConfig($config);
         }
 
         return $this->configProvider->processWysiswygConfig($config);

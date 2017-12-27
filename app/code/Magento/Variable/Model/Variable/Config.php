@@ -13,7 +13,7 @@ use Magento\Framework\App\ObjectManager;
  * @api
  * @since 100.0.2
  */
-class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
+class Config
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
@@ -65,25 +65,10 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
         $this->_assetRepo = $assetRepo;
     }
 
-
     /**
      * Prepare variable wysiwyg config
      *
      * @param \Magento\Framework\DataObject $config
-     * @return array
-     */
-    public function getConfig($config)
-    {
-        return $this->getWysiwygPluginSettings($config);
-    }
-
-    /**
-     * Prepare variable wysiwyg config
-     *
-     *
-     * @param \Magento\Framework\DataObject $config
-     * @deprecated
-     * @see \Magento\Variable\Model\Variable\Config::getConfig
      * @return array
      */
     public function getWysiwygPluginSettings($config)

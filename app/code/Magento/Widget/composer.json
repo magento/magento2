@@ -13,7 +13,6 @@
         "magento/module-store": "100.3.*",
         "magento/module-theme": "100.3.*",
         "magento/module-variable": "100.3.*",
-        "magento/module-config": "100.3.*",
         "magento/module-ui": "100.3.*"
     },
     "suggest": {

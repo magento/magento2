@@ -8,7 +8,7 @@ namespace Magento\Tinymce3\Model\Config\Wysiwyg;
 /**
  * Class Config adds information about required css files for tinymce3 editor
  */
-class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
+class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
@@ -25,8 +25,7 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
     }
 
     /**
-     * @param \Magento\Framework\DataObject $config
-     * @return \Magento\Framework\DataObject
+     * {@inheritdoc}
      */
     public function getConfig($config)
     {

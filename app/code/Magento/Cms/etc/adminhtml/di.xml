@@ -15,7 +15,7 @@
     <type name="Magento\Cms\Model\Wysiwyg\CompositeConfigProvider">
         <arguments>
             <argument name="variablePluginConfigPovider" xsi:type="array">
-                <item name="default" xsi:type="string">Magento\Variable\Model\Variable\Config</item>
+                <item name="default" xsi:type="string">Magento\Variable\Model\Variable\ConfigProvider</item>
             </argument>
             <argument name="widgetPluginConfigProvider" xsi:type="array">
                 <item name="default" xsi:type="string">Magento\Widget\Model\Widget\Config</item>

@@ -191,18 +191,5 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor</argument>
         </arguments>
     </type>
-    <type name="Magento\Cms\Model\Wysiwyg\CompositeConfigProvider">
-        <arguments>
-            <argument name="variablePluginConfigPovider" xsi:type="array">
-                <item name="default" xsi:type="string">Magento\Variable\Model\Variable\Config</item>
-            </argument>
-            <argument name="widgetPluginConfigProvider" xsi:type="array">
-                <item name="default" xsi:type="string">Magento\Widget\Model\Widget\Config</item>
-            </argument>
-            <argument name="wysiwygConfigPostProcessor" xsi:type="array">
-                <item name="default" xsi:type="string">Magento\Cms\Model\WysiwygDefaultConfig</item>
-            </argument>
-        </arguments>
-    </type>
 </config>
 

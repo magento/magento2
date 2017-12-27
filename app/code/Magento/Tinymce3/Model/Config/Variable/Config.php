@@ -7,9 +7,8 @@ namespace Magento\Tinymce3\Model\Config\Variable;
 
 /**
  * Class Config adds variable plugin information required for tinymce3 editor
- *
  */
-class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
+class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
@@ -37,11 +36,11 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
      * Update variable plugin url
      *
      * @param \Magento\Framework\DataObject $config
-     * @return array
+     * @return \Magento\Framework\DataObject
      */
     public function getConfig($config)
     {
-        $settings = $this->defaultVariableConfig->getConfig($config);
+        $settings = $this->defaultVariableConfig->getWysiwygPluginSettings($config);
         $pluginConfig = isset($settings['plugins']) ? $settings['plugins'] : [];
         $pluginData = [];
         if (!empty($pluginConfig)) {
@@ -50,6 +49,6 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
             $pluginData['src'] = $this->assetRepo->getUrl($editorPluginJs);
         }
         $settings['plugins'] = [$pluginData];
-        return $settings;
+        return $config->addData($settings);
     }
 }

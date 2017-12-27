@@ -3,18 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\Config\Model\Wysiwyg;
+namespace Magento\Framework\Data\Wysiwyg;
 
 /**
- * Interface ConfigInterface
- * @package Magento\Config\Model\Wysiwyg
+ * Interface ConfigProviderInterface
  */
-interface ConfigInterface
+interface ConfigProviderInterface
 {
     /**
      * @param \Magento\Framework\DataObject $config
-     * @return \Magento\Framework\DataObject|array
+     * @return \Magento\Framework\DataObject
      */
     public function getConfig($config);
 }

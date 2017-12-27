@@ -6,8 +6,7 @@
 namespace Magento\Cms\Model\Wysiwyg;
 
 /**
- * Class ConfigProviderFactory
- * @package Magento\Cms\Model\Wysiwyg
+ * Class ConfigProviderFactory to create config provider object by class name
  */
 class ConfigProviderFactory
 {
@@ -31,20 +30,20 @@ class ConfigProviderFactory
      *
      * @param string $instance
      * @param array $arguments
-     * @return object
+     * @return \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
      * @throws \InvalidArgumentException
      */
     public function create($instance, array $arguments = [])
     {
         if (!is_subclass_of(
             $instance,
-            \Magento\Config\Model\Wysiwyg\ConfigInterface::class
+            \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface::class
         )
         ) {
             throw new \InvalidArgumentException(
                 $instance .
                 ' does not implement ' .
-                \Magento\Config\Model\Wysiwyg\ConfigInterface::class
+                \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface::class
             );
         }
 

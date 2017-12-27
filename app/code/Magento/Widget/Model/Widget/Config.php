@@ -8,7 +8,7 @@ namespace Magento\Widget\Model\Widget;
 /**
  * Widgets Insertion Plugin Config for Editor HTML Element
  */
-class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
+class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
@@ -46,13 +46,6 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
     private $registry;
 
     /**
-     * List of postProcessors by adapter type
-     *
-     * @var array
-     */
-    private $postProcessors;
-
-    /**
      * @var \Magento\Ui\Block\Wysiwyg\ActiveEditor
      */
     private $activeEditor;
@@ -72,8 +65,7 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
         \Magento\Widget\Model\WidgetFactory $widgetFactory,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\Framework\Registry $registry,
-        \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor,
-        array $postProcessors = []
+        \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor
     ) {
         $this->_backendUrl = $backendUrl;
         $this->urlDecoder = $urlDecoder;
@@ -81,8 +73,19 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
         $this->_widgetFactory = $widgetFactory;
         $this->urlEncoder = $urlEncoder;
         $this->registry = $registry;
-        $this->postProcessors = $postProcessors;
         $this->activeEditor = $activeEditor;
+    }
+
+    /**
+     * Return config settings for widgets insertion plugin based on editor element config
+     *
+     * @param \Magento\Framework\DataObject $config
+     * @return \Magento\Framework\DataObject
+     */
+    public function getConfig($config)
+    {
+        $settings = $this->getPluginSettings($config);
+        return $config->addData($settings);
     }
 
     /**
@@ -91,7 +94,7 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
      * @param \Magento\Framework\DataObject $config
      * @return array
      */
-    public function getConfig($config)
+    public function getPluginSettings($config)
     {
         $widgetWysiwyg = [
             [
