@@ -140,9 +140,11 @@ class Indexer
                         );
                         $cursor = $this->_connection->query($select);
                         while ($row = $cursor->fetch(\Zend_Db::FETCH_ASSOC)) {
-                            $valueColumnName = $valueColumns[$row['option_id']];
-                            if (isset($describe[$valueColumnName])) {
-                                $updateData[$valueColumnName] = $row['value'];
+                            if( isset($row['option_id']) && isset($valueColumns[$row['option_id']]) ){
+                                $valueColumnName = $valueColumns[$row['option_id']];
+                                if (isset($describe[$valueColumnName])) {
+                                    $updateData[$valueColumnName] = $row['value'];
+                                }
                             }
                         }
                     }
