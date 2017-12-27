@@ -95,7 +95,7 @@ Submit,Submit
 "Please enter valid SKU key.","Please enter valid SKU key."
 "Please enter a valid number.","Please enter a valid number."
 "This is required field","This is required field"
-"Admin is a required field in the each row.","Admin is a required field in the each row."
+"Admin is a required field in each row.","Admin is a required field in each row."
 "Password cannot be the same as email address.","Password cannot be the same as email address."
 "Please fix this field.","Please fix this field."
 "Please enter a valid email address.","Please enter a valid email address."
