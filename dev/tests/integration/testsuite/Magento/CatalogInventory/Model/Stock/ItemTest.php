@@ -63,8 +63,6 @@ class ItemTest extends \PHPUnit\Framework\TestCase
      */
     public function testStockStatusChangedAuto()
     {
-        $this->markTestSkipped('https://github.com/magento-engcom/msi/issues/273');
-
         /** @var \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository */
         $stockItemRepository = $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\CatalogInventory\Model\Stock\StockItemRepository::class);
