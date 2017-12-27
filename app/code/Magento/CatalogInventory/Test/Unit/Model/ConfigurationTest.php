@@ -90,7 +90,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
-            ->with(Configuration::XML_PATH_CAN_SUBTRACT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, 1)
+            ->with(Configuration::XML_PATH_CAN_SUBTRACT, \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, 1)
             ->willReturn(true);
         $this->assertTrue($this->model->canSubtractQty(1));
     }

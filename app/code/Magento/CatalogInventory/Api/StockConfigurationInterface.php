@@ -36,10 +36,10 @@ interface StockConfigurationInterface
     /**
      * Check if is possible subtract value from item qty
      *
-     * @param int $storeId
+     * @param null|int|string $websiteId
      * @return bool
      */
-    public function canSubtractQty($storeId = null);
+    public function canSubtractQty($websiteId = null);
 
     /**
      * @param int $storeId
