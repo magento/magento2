@@ -10,6 +10,7 @@ namespace Magento\Inventory\Model;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface;
 
 /**
  * Doesn't have API interface because this object is need only for internal module using
