@@ -92,7 +92,7 @@ class SourceItems extends Column
 
         $sourceItemsData = [];
         foreach ($sourceItems as $sourceItem) {
-            $source = $this->sourceRepository->get((int)$sourceItem->getSourceId());
+            $source = $this->sourceRepository->get($sourceItem->getSourceCode());
             $qty = (float)$sourceItem->getQuantity();
 
             $sourceItemsData[] = [
