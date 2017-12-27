@@ -45,10 +45,7 @@ class Price
      */
     public function format(Product $product, array $productData)
     {
-       // $included = $product->getPriceInfo()->getAdjustments()['tax']->isIncludedInDisplayPrice();
         $priceInfo = $this->priceInfoFactory->create($product);
-
-        //$priceInfo->getPrices()
         $finalPriceAmount =  $priceInfo->getPrice('final_price')->getAmount();
         $regularPriceAmount =  $priceInfo->getPrice('regular_price')->getAmount();
 
