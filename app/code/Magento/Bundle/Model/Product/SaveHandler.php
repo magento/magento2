@@ -67,7 +67,8 @@ class SaveHandler implements ExtensionInterface
             $this->processRemovedOptions($entity->getSku(), $existingOptionsIds, $optionIds);
             $this->processExistedOptions($entity->getSku(), $existingOptionsIds, $optionIds);
 
-            $this->saveOptions($entity, $options);
+            $newOptionsIds = array_diff($optionIds, $existingOptionsIds);
+            $this->saveOptions($entity, $options, $newOptionsIds);
         } else {
             //save only labels and not selections + product links
             $this->saveOptions($entity, $options);
@@ -97,13 +98,17 @@ class SaveHandler implements ExtensionInterface
      * Perform save for all options entities
      * @param object $entity
      * @param array $options
+     * @param array $newOptionsIds
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
      * @return void
      */
-    private function saveOptions($entity, $options)
+    private function saveOptions($entity, $options, $newOptionsIds = [])
     {
         foreach ($options as $option) {
+            if (in_array($option->getOptionId(), $newOptionsIds)) {
+                $option->setOptionId(null);
+            }
             $this->optionRepository->save($entity, $option);
         }
     }
