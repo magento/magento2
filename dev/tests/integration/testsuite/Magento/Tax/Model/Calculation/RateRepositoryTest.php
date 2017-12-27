@@ -631,7 +631,10 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
             ],
             'like_region_name' => [
                 [
-                    $filterBuilder->setField(Rate::KEY_REGION_NAME)->setValue('%NM%')->setConditionType('like')->create(),
+                    $filterBuilder->setField(Rate::KEY_REGION_NAME)
+                        ->setValue('%NM%')
+                        ->setConditionType('like')
+                        ->create(),
                 ],
                 null,
                 ['US - 42 - 7.5', 'US - 42 - 22'],
