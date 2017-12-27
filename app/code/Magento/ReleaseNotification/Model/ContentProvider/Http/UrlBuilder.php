@@ -3,8 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\ReleaseNotification\Model\ContentProvider\Http;
+
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**

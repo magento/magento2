@@ -17,7 +17,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     private $objectManager;
 
     /**
-     * @var \Magento\ReleaseNotification\Model\ContentProvider\Http\HttpContentProvider | \PHPUnit_Framework_MockObject_MockObject
+     * @var HttpContentProvider | \PHPUnit_Framework_MockObject_MockObject
      */
     private $contentProviderMock;
 
