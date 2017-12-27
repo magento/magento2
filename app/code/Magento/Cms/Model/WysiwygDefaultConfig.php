@@ -1,11 +1,8 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: ilagno
- * Date: 12/21/17
- * Time: 8:14 AM
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 namespace Magento\Cms\Model;
 
 class WysiwygDefaultConfig implements \Magento\Config\Model\Wysiwyg\ConfigInterface

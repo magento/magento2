@@ -65,7 +65,6 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
         $this->_assetRepo = $assetRepo;
     }
 
-
     /**
      * Prepare variable wysiwyg config
      *
