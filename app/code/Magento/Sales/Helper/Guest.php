@@ -217,7 +217,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Load order from cookie
      *
      * @param string $fromCookie
-     * @return \Magento\Sales\Model\Order\Interceptor
+     * @return Order
      * @throws InputException
      * @throws CookieSizeLimitReachedException
      * @throws FailureToSendException
@@ -241,7 +241,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Load order data from post
      *
      * @param array $postData
-     * @return \Magento\Sales\Model\Order\Interceptor
+     * @return Order
      * @throws InputException
      * @throws CookieSizeLimitReachedException
      * @throws FailureToSendException
@@ -296,7 +296,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      * Get order by increment_id and store_id
      *
      * @param string $incrementId
-     * @return array
+     * @return \Magento\Sales\Api\Data\OrderInterface
      * @throws InputException
      */
     private function getOrderRecord($incrementId)
