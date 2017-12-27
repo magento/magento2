@@ -10,20 +10,36 @@ namespace Magento\InventoryApi\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Represents product aggregation among some different physical storages (in technical words, it is an index)
+ * Represents relation between Stock and Source entities. Also, it has own fields that are related to the domain model
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
-interface StockInterface extends ExtensibleDataInterface
+interface StockSourceLinkInterface extends ExtensibleDataInterface
 {
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
+    const LINK_ID = 'link_id';
     const STOCK_ID = 'stock_id';
-    const NAME = 'name';
+    const SOURCE_CODE = 'source_code';
     /**#@-*/
+
+    /**
+     * Get link id
+     *
+     * @return int|null
+     */
+    public function getLinkId();
+
+    /**
+     * Set link id
+     *
+     * @param int|null $linkId
+     * @return void
+     */
+    public function setLinkId($linkId);
 
     /**
      * Get stock id
@@ -41,34 +57,35 @@ interface StockInterface extends ExtensibleDataInterface
     public function setStockId($stockId);
 
     /**
-     * Get stock name
+     * Get source code of the link
      *
      * @return string|null
      */
-    public function getName();
+    public function getSourceCode();
 
     /**
-     * Set stock name
+     * Set source code of the link
      *
-     * @param string|null $name
+     * @param string|null $sourceCode
+     *
      * @return void
      */
-    public function setName($name);
+    public function setSourceCode($sourceCode);
 
     /**
      * Retrieve existing extension attributes object
      *
      * Null for return is specified for proper work SOAP requests parser
      *
-     * @return \Magento\InventoryApi\Api\Data\StockExtensionInterface|null
+     * @return \Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object
      *
-     * @param \Magento\InventoryApi\Api\Data\StockExtensionInterface $extensionAttributes
+     * @param \Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(StockExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(StockSourceLinkExtensionInterface $extensionAttributes);
 }

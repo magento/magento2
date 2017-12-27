@@ -7,29 +7,39 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Model;
 
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 
 /**
  * Doesn't have API interface because this object is need only for internal module using
  *
  * @codeCoverageIgnore
  */
-class StockSourceLink extends AbstractModel
+class StockSourceLink extends AbstractExtensibleModel implements StockSourceLinkInterface
 {
-    /**#@+
-     * Constants for keys of data array. Identical to the name of the getter in snake case
-     */
-    const SOURCE_CODE = 'source_code';
-    const STOCK_ID = 'stock_id';
-    /**#@-*/
-
     /**
      * @inheritdoc
      */
     protected function _construct()
     {
         $this->_init(StockSourceLinkResourceModel::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLinkId()
+    {
+        return $this->getData(self::LINK_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setLinkId($linkId)
+    {
+        $this->setData(self::LINK_ID, $linkId);
     }
 
     /**
@@ -62,5 +72,26 @@ class StockSourceLink extends AbstractModel
     public function setStockId($stockId)
     {
         $this->setData(self::STOCK_ID, $stockId);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes()
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (null === $extensionAttributes) {
+            $extensionAttributes = $this->extensionAttributesFactory->create(StockSourceLinkExtensionInterface::class);
+            $this->setExtensionAttributes($extensionAttributes);
+        }
+        return $extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(StockSourceLinkExtensionInterface $extensionAttributes)
+    {
+        $this->_setExtensionAttributes($extensionAttributes);
     }
 }
