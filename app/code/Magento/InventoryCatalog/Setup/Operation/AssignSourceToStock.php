@@ -54,7 +54,7 @@ class AssignSourceToStock
     public function execute()
     {
         $this->assignSourcesToStock->execute(
-            [$this->defaultSourceProvider->getId()],
+            [$this->defaultSourceProvider->getCode()],
             $this->defaultStockProvider->getId()
         );
     }

@@ -45,11 +45,11 @@ class UnassignSourceFromStockTest extends WebapiAbstract
      */
     public function testUnassignSourceFromStock()
     {
-        $sourceId = 10;
+        $sourceCode = 'eu-1';
         $stockId = 10;
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH_UNASSIGN_SOURCES_FROM_STOCK . '/' . $stockId . '/' . $sourceId,
+                'resourcePath' => self::RESOURCE_PATH_UNASSIGN_SOURCES_FROM_STOCK . '/' . $stockId . '/' . $sourceCode,
                 'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
@@ -59,33 +59,36 @@ class UnassignSourceFromStockTest extends WebapiAbstract
         ];
         (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'stockId' => $stockId]);
+            : $this->_webApiCall($serviceInfo, ['sourceCode' => $sourceCode, 'stockId' => $stockId]);
 
         $assignedSourcesForStock = $this->getAssignedSourcesForStock($stockId);
-        self::assertEquals([20, 30, 40], array_column($assignedSourcesForStock, SourceInterface::SOURCE_ID));
+        self::assertEquals(
+            ['eu-2', 'eu-3', 'eu-disabled'],
+            array_column($assignedSourcesForStock, SourceInterface::SOURCE_CODE)
+        );
     }
 
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock.php
-     * @param string|int $sourceId
+     * @param string|string $sourceCode
      * @param string|int $stockId
      * @param array $expectedErrorData
      * @throws \Exception
      * @dataProvider dataProviderWrongParameters
      */
-    public function testUnassignSourceFromStockWithWrongParameters($sourceId, $stockId, array $expectedErrorData)
+    public function testUnassignSourceFromStockWithWrongParameters($sourceCode, $stockId, array $expectedErrorData)
     {
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $this->markTestSkipped(
-                'Test works only for REST adapter because in SOAP one source_id/stock_id would be converted'
+                'Test works only for REST adapter because in SOAP one source_code/stock_id would be converted'
                 . ' into zero (zero is allowed input for service ner mind it\'s illigible value as'
-                . ' there are no Sources(Stocks) in the system with source_id/stock_id given)'
+                . ' there are no Sources(Stocks) in the system with source_code/stock_id given)'
             );
         }
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH_UNASSIGN_SOURCES_FROM_STOCK . '/' . $stockId . '/' . $sourceId,
+                'resourcePath' => self::RESOURCE_PATH_UNASSIGN_SOURCES_FROM_STOCK . '/' . $stockId . '/' . $sourceCode,
                 'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
         ];
@@ -105,15 +108,8 @@ class UnassignSourceFromStockTest extends WebapiAbstract
     {
         return [
             'not_numeric_stock_id' => [
-                10,
+                'eu-1',
                 'not_numeric',
-                [
-                    'message' => 'Invalid type for value: "not_numeric". Expected Type: "int".',
-                ],
-            ],
-            'not_numeric_source_id' => [
-                'not_numeric',
-                10,
                 [
                     'message' => 'Invalid type for value: "not_numeric". Expected Type: "int".',
                 ],

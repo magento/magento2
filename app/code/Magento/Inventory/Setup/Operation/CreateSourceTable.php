@@ -38,7 +38,6 @@ class CreateSourceTable
         $sourceTable = $this->addAddressFields($sourceTable);
         $sourceTable = $this->addContactInfoFields($sourceTable);
         $sourceTable = $this->addSourceCarrierFields($sourceTable);
-        $sourceTable = $this->addIndex($sourceTable, $setup);
 
         $setup->getConnection()->createTable($sourceTable);
     }
@@ -50,22 +49,12 @@ class CreateSourceTable
     private function addBaseFields(Table $sourceTable): Table
     {
         return $sourceTable->addColumn(
-            SourceInterface::SOURCE_ID,
-            Table::TYPE_INTEGER,
-            null,
-            [
-                Table::OPTION_IDENTITY => true,
-                Table::OPTION_UNSIGNED => true,
-                Table::OPTION_NULLABLE => false,
-                Table::OPTION_PRIMARY => true,
-            ],
-            'Source ID'
-        )->addColumn(
-            SourceInterface::CODE,
+            SourceInterface::SOURCE_CODE,
             Table::TYPE_TEXT,
             255,
             [
                 Table::OPTION_NULLABLE => false,
+                Table::OPTION_PRIMARY => true,
             ],
             'Source Code'
         )->addColumn(
@@ -132,7 +121,7 @@ class CreateSourceTable
      * @param Table $sourceTable
      * @return Table
      */
-    private function addAddressFields(Table $sourceTable)
+    private function addAddressFields(Table $sourceTable): Table
     {
         $sourceTable->addColumn(
             SourceInterface::COUNTRY_ID,
@@ -191,7 +180,7 @@ class CreateSourceTable
      * @param Table $sourceTable
      * @return Table
      */
-    private function addContactInfoFields(Table $sourceTable)
+    private function addContactInfoFields(Table $sourceTable): Table
     {
         $sourceTable->addColumn(
             SourceInterface::CONTACT_NAME,
@@ -233,7 +222,7 @@ class CreateSourceTable
      * @param Table $sourceTable
      * @return Table
      */
-    private function addSourceCarrierFields(Table $sourceTable)
+    private function addSourceCarrierFields(Table $sourceTable): Table
     {
         $sourceTable->addColumn(
             'use_default_carrier_config',
@@ -247,22 +236,5 @@ class CreateSourceTable
             'Use default carrier configuration'
         );
         return $sourceTable;
-    }
-
-    private function addIndex(Table $sourceTable, SchemaSetupInterface $setup)
-    {
-        return $sourceTable->addIndex(
-            $setup->getIdxName(
-                $setup->getTable(SourceResourceModel::TABLE_NAME_SOURCE),
-                [
-                    SourceInterface::CODE
-                ],
-                AdapterInterface::INDEX_TYPE_UNIQUE
-            ),
-            [
-                SourceInterface::CODE
-            ],
-            ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
-        );
     }
 }

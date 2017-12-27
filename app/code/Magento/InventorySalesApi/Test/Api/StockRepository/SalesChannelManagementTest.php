@@ -90,11 +90,11 @@ class SalesChannelManagementTest extends WebapiAbstract
                 [
                     [
                         SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                        SalesChannelInterface::CODE => 'us_website',
+                        SalesChannelInterface::CODE => 'global_website',
                     ],
                     [
                         SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                        SalesChannelInterface::CODE => 'global_website',
+                        SalesChannelInterface::CODE => 'us_website',
                     ],
                 ],
             ],

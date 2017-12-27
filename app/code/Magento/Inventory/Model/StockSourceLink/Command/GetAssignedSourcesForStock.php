@@ -67,10 +67,10 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     public function execute(int $stockId): array
     {
         try {
-            $sourceIds = $this->getAssignedSourceIds($stockId);
+            $sourceCodes = $this->getAssignedSourceCodes($stockId);
 
             $searchCriteria = $this->searchCriteriaBuilder
-                ->addFilter(SourceInterface::SOURCE_ID, $sourceIds, 'in')
+                ->addFilter(SourceInterface::SOURCE_CODE, $sourceCodes, 'in')
                 ->create();
             $searchResult = $this->sourceRepository->getList($searchCriteria);
             return $searchResult->getItems();
@@ -81,19 +81,19 @@ class GetAssignedSourcesForStock implements GetAssignedSourcesForStockInterface
     }
 
     /**
-     * Get all linked SourceIds by given stockId
+     * Get all linked SourceCodes by given stockId
      *
      * @param int $stockId
      * @return array
      */
-    private function getAssignedSourceIds(int $stockId): array
+    private function getAssignedSourceCodes(int $stockId): array
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection
             ->select()
             ->from(
                 $this->resourceConnection->getTableName(StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK),
-                [StockSourceLink::SOURCE_ID]
+                [StockSourceLink::SOURCE_CODE]
             )
             ->where(StockSourceLink::STOCK_ID . ' = ?', $stockId);
         return $connection->fetchCol($select);

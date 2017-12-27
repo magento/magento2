@@ -61,7 +61,7 @@ class SetToZeroLegacyCatalogInventoryAtSourceItemsDeletePlugin
     public function afterExecute(SourceItemsDeleteInterface $subject, $result, array $sourceItems)
     {
         foreach ($sourceItems as $sourceItem) {
-            if ((int)$sourceItem->getSourceId() !== $this->defaultSourceProvider->getId()) {
+            if ($sourceItem->getSourceCode() !== $this->defaultSourceProvider->getCode()) {
                 continue;
             }
             $this->setDataToLegacyStockItem->execute($sourceItem->getSku(), 0, 0);

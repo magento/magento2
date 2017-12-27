@@ -12,5 +12,5 @@ use Magento\TestFramework\Helper\Bootstrap;
 /** @var ResourceConnection $connection */
 $connection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
 $connection->getConnection()->delete($connection->getTableName('inventory_source'), [
-    SourceInterface::SOURCE_ID . ' = ?' => 10,
+    SourceInterface::SOURCE_CODE . ' IN (?)' => ['source-code-1', 'source-code-1-updated']
 ]);

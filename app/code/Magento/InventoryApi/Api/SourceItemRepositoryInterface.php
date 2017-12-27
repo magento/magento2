@@ -25,7 +25,7 @@ use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
  * The method save is absent, due to different semantic (save multiple)
  * @see SourceItemsSaveInterface
  *
- * There is no get method because SourceItem identifies by compound identifier (sku and source_id),
+ * There is no get method because SourceItem identifies by compound identifier (sku and source_code),
  * so need to use getList() method
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser

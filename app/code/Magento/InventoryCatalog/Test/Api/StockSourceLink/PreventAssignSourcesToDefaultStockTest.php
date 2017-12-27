@@ -9,9 +9,12 @@ namespace Magento\InventoryCatalog\Test\Api\StockSourceLink;
 
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
+use Magento\InventoryCatalog\Api\DefaultSourceProviderInterface;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
-class AssignSourcesToStockTest extends WebapiAbstract
+class PreventAssignSourcesToDefaultStockTest extends WebapiAbstract
 {
     /**#@+
      * Service constants
@@ -23,14 +26,14 @@ class AssignSourcesToStockTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/stock.php
-     * @param array $sourceIds
+     * @param array $sourceCodes
      * @param int $stockId
      * @param array $expectedErrorData
      * @throws \Exception
      * @dataProvider dataProviderWrongParameters
      */
     public function testAssignSourcesToStockWithWrongParameters(
-        array $sourceIds,
+        array $sourceCodes,
         int $stockId,
         array $expectedErrorData
     ) {
@@ -46,8 +49,8 @@ class AssignSourcesToStockTest extends WebapiAbstract
         ];
         try {
             (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
-                ? $this->_webApiCall($serviceInfo, ['sourceIds' => $sourceIds])
-                : $this->_webApiCall($serviceInfo, ['sourceIds' => $sourceIds, 'stockId' => $stockId]);
+                ? $this->_webApiCall($serviceInfo, ['sourceCodes' => $sourceCodes])
+                : $this->_webApiCall($serviceInfo, ['sourceCodes' => $sourceCodes, 'stockId' => $stockId]);
             $this->fail('Expected throwing exception');
         } catch (\Exception $e) {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
@@ -72,18 +75,21 @@ class AssignSourcesToStockTest extends WebapiAbstract
      */
     public function dataProviderWrongParameters(): array
     {
+        $defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProviderInterface::class);
+        $defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
+
         return [
             'multiple_sources_assigned_to_default_stock' => [
-                [1, 20],
-                1,
+                [$defaultSourceProvider->getCode(), 'eu-2'],
+                $defaultStockProvider->getId(),
                 [
                     'rest_message' => 'You can only assign Default Source to Default Stock',
                     'soap_message' => 'You can only assign Default Source to Default Stock',
                 ],
             ],
             'not_default_source_assigned_to_default_stock' => [
-                [10],
-                1,
+                ['eu-1'],
+                $defaultStockProvider->getId(),
                 [
                     'rest_message' => 'You can only assign Default Source to Default Stock',
                     'soap_message' => 'You can only assign Default Source to Default Stock',

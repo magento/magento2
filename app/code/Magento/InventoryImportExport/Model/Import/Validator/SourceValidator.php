@@ -29,7 +29,7 @@ class SourceValidator implements ValidatorInterface
     /**
      * @var array
      */
-    private $sourceIds = [];
+    private $sourceCodes = [];
 
     /**
      * @param ValidationResultFactory $validationResultFactory
@@ -41,7 +41,7 @@ class SourceValidator implements ValidatorInterface
     ) {
         $this->validationResultFactory = $validationResultFactory;
         $this->sourceRepository = $sourceRepository;
-        $this->loadSourceIds();
+        $this->loadSourceCodes();
     }
 
     /**
@@ -51,10 +51,10 @@ class SourceValidator implements ValidatorInterface
     {
         $errors = [];
 
-        if (!isset($rowData[Sources::COL_SOURCE])) {
-            $errors[] = __('Missing required column "%column"', ['column' => Sources::COL_SOURCE]);
-        } elseif (!$this->isExistingSource($rowData[Sources::COL_SOURCE])) {
-            $errors[] = __('Source id "%id" does not exists', ['id' => $rowData[Sources::COL_SOURCE]]);
+        if (!isset($rowData[Sources::COL_SOURCE_CODE])) {
+            $errors[] = __('Missing required column "%column"', ['column' => Sources::COL_SOURCE_CODE]);
+        } elseif (!$this->isExistingSource($rowData[Sources::COL_SOURCE_CODE])) {
+            $errors[] = __('Source code "%code" does not exists', ['code' => $rowData[Sources::COL_SOURCE_CODE]]);
         }
 
         return $this->validationResultFactory->create(['errors' => $errors]);
@@ -63,25 +63,25 @@ class SourceValidator implements ValidatorInterface
     /**
      * Returns exits already the source in sources.
      *
-     * @param int $sourceId
+     * @param string $sourceCode
      * @return bool
      */
-    private function isExistingSource($sourceId): bool
+    private function isExistingSource($sourceCode): bool
     {
-        return isset($this->sourceIds[$sourceId]);
+        return isset($this->sourceCodes[$sourceCode]);
     }
 
     /**
-     * Loads all existing source ids
+     * Loads all existing source codes
      *
      * @return void
      */
-    private function loadSourceIds()
+    private function loadSourceCodes()
     {
         $sources = $this->sourceRepository->getList();
         foreach ($sources->getItems() as $source) {
-            $sourceId = $source->getSourceId();
-            $this->sourceIds[$sourceId] = $sourceId;
+            $sourceCode = $source->getSourceCode();
+            $this->sourceCodes[$sourceCode] = $sourceCode;
         }
     }
 }

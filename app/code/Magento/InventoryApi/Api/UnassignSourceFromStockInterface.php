@@ -19,13 +19,13 @@ interface UnassignSourceFromStockInterface
     /**
      * Unassign source from stock
      *
-     * If Source or Stock with given id doesn't exist then do nothing
+     * If Source or Stock with given code doesn't exist then do nothing
      *
-     * @param int $sourceId
+     * @param string $sourceCode
      * @param int $stockId
      * @return void
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function execute(int $sourceId, int $stockId);
+    public function execute(string $sourceCode, int $stockId);
 }

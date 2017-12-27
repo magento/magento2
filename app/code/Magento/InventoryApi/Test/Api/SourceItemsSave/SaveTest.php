@@ -30,13 +30,13 @@ class SaveTest extends WebapiAbstract
     {
         $sourceItems = [
             [
-                SourceItemInterface::SOURCE_ID => 10,
+                SourceItemInterface::SOURCE_CODE => 'eu-1',
                 SourceItemInterface::SKU => 'SKU-1',
                 SourceItemInterface::QUANTITY => 5.5,
                 SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
             ],
             [
-                SourceItemInterface::SOURCE_ID => 20,
+                SourceItemInterface::SOURCE_CODE => 'eu-2',
                 SourceItemInterface::SKU => 'SKU-1',
                 SourceItemInterface::QUANTITY => 3,
                 SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
@@ -65,11 +65,11 @@ class SaveTest extends WebapiAbstract
     {
         $sourceItems = [
             [
-                SourceItemInterface::SOURCE_ID => 10,
+                SourceItemInterface::SOURCE_CODE => 'eu-1',
                 SourceItemInterface::SKU => 'SKU-1',
             ],
             [
-                SourceItemInterface::SOURCE_ID => 20,
+                SourceItemInterface::SOURCE_CODE => 'eu-2',
                 SourceItemInterface::SKU => 'SKU-1',
             ],
         ];

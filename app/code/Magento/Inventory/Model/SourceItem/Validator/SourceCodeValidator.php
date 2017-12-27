@@ -12,9 +12,9 @@ use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 
 /**
- * Check that source id is valid
+ * Check that source code is valid
  */
-class SourceIdValidator implements SourceItemValidatorInterface
+class SourceCodeValidator implements SourceItemValidatorInterface
 {
     /**
      * @var ValidationResultFactory
@@ -34,14 +34,15 @@ class SourceIdValidator implements SourceItemValidatorInterface
      */
     public function validate(SourceItemInterface $source): ValidationResult
     {
-        $errors = [];
-        if (!is_numeric($source->getSourceId())) {
-            $errors[] = __(
-                '"%field" should be numeric.',
-                ['field' => SourceItemInterface::SOURCE_ID]
-            );
-        }
+        $value = (string)$source->getSourceCode();
 
+        if ('' === trim($value)) {
+            $errors[] = __('"%field" can not be empty.', ['field' => SourceItemInterface::SOURCE_CODE]);
+        } elseif (preg_match('/\s/', $value)) {
+            $errors[] = __('"%field" can not contain whitespaces.', ['field' => SourceItemInterface::SOURCE_CODE]);
+        } else {
+            $errors = [];
+        }
         return $this->validationResultFactory->create(['errors' => $errors]);
     }
 }

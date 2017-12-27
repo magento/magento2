@@ -11,15 +11,15 @@ use Magento\TestFramework\Helper\Bootstrap;
 /** @var UnassignSourceFromStockInterface $unassignSourceFromStock */
 $unassignSourceFromStock = Bootstrap::getObjectManager()->get(UnassignSourceFromStockInterface::class);
 // EU stock
-$unassignSourceFromStock->execute(10, 10);
-$unassignSourceFromStock->execute(20, 10);
-$unassignSourceFromStock->execute(30, 10);
-$unassignSourceFromStock->execute(40, 10);
+$unassignSourceFromStock->execute('eu-1', 10);
+$unassignSourceFromStock->execute('eu-2', 10);
+$unassignSourceFromStock->execute('eu-3', 10);
+$unassignSourceFromStock->execute('eu-disabled', 10);
 // US stock
-$unassignSourceFromStock->execute(50, 20);
+$unassignSourceFromStock->execute('us-1', 20);
 // Global Stock
-$unassignSourceFromStock->execute(10, 30);
-$unassignSourceFromStock->execute(20, 30);
-$unassignSourceFromStock->execute(30, 30);
-$unassignSourceFromStock->execute(40, 30);
-$unassignSourceFromStock->execute(50, 30);
+$unassignSourceFromStock->execute('eu-1', 30);
+$unassignSourceFromStock->execute('eu-2', 30);
+$unassignSourceFromStock->execute('eu-3', 30);
+$unassignSourceFromStock->execute('eu-disabled', 30);
+$unassignSourceFromStock->execute('us-1', 30);

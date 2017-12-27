@@ -28,19 +28,19 @@ $defaultSourceProvider = Bootstrap::getObjectManager()->get(DefaultSourceProvide
  */
 $sourcesItemsData = [
     [
-        SourceItemInterface::SOURCE_ID => $defaultSourceProvider->getId(),
+        SourceItemInterface::SOURCE_CODE => $defaultSourceProvider->getCode(),
         SourceItemInterface::SKU => 'SKU-1',
         SourceItemInterface::QUANTITY => 5.5,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
     ],
     [
-        SourceItemInterface::SOURCE_ID => $defaultSourceProvider->getId(),
+        SourceItemInterface::SOURCE_CODE => $defaultSourceProvider->getCode(),
         SourceItemInterface::SKU => 'SKU-2',
         SourceItemInterface::QUANTITY => 5,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
     ],
     [
-        SourceItemInterface::SOURCE_ID => $defaultSourceProvider->getId(),
+        SourceItemInterface::SOURCE_CODE => $defaultSourceProvider->getCode(),
         SourceItemInterface::SKU => 'SKU-3',
         SourceItemInterface::QUANTITY => 6,
         SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,

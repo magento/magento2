@@ -35,16 +35,16 @@ class GetDefaultValues
     }
 
     /**
-     * @param int $sourceId
+     * @param string $sourceCode
      * @param string $sku
      * @return array
      */
-    public function execute(int $sourceId, string $sku) : array
+    public function execute(string $sourceCode, string $sku) : array
     {
         $inventoryNotifyQty = (float)$this->scopeConfig->getValue(self::XML_PATH_NOTIFY_STOCK_QTY);
 
         $defaultConfiguration = [
-            SourceItemConfigurationInterface::SOURCE_ID => $sourceId,
+            SourceItemConfigurationInterface::SOURCE_CODE => $sourceCode,
             SourceItemConfigurationInterface::SKU => $sku,
             SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => $inventoryNotifyQty,
         ];

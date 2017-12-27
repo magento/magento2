@@ -127,8 +127,8 @@ class UpdateSourceItemAtLegacyQtyCounterPlugin
             array_keys($productQuantitiesBySku),
             'in'
         )->addFilter(
-            SourceItemInterface::SOURCE_ID,
-            $this->defaultSourceProvider->getId()
+            SourceItemInterface::SOURCE_CODE,
+            $this->defaultSourceProvider->getCode()
         )->create();
 
         $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();

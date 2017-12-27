@@ -34,7 +34,7 @@ class CountryValidator implements SourceValidatorInterface
      */
     public function validate(SourceInterface $source): ValidationResult
     {
-        $value = $source->getCountryId();
+        $value = (string)$source->getCountryId();
 
         if ('' === trim($value)) {
             $errors[] = __('"%field" can not be empty.', ['field' => SourceInterface::COUNTRY_ID]);

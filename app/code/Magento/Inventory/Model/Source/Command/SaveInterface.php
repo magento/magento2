@@ -27,9 +27,9 @@ interface SaveInterface
      * Save Source data
      *
      * @param SourceInterface $source
-     * @return int
+     * @return void
      * @throws ValidationException
      * @throws CouldNotSaveException
      */
-    public function execute(SourceInterface $source): int;
+    public function execute(SourceInterface $source);
 }

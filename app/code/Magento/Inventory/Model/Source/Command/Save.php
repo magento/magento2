@@ -52,7 +52,7 @@ class Save implements SaveInterface
     /**
      * @inheritdoc
      */
-    public function execute(SourceInterface $source): int
+    public function execute(SourceInterface $source)
     {
         $validationResult = $this->sourceValidator->validate($source);
 
@@ -62,7 +62,7 @@ class Save implements SaveInterface
 
         try {
             $this->sourceResource->save($source);
-            return (int)$source->getSourceId();
+            $source->getSourceCode();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not save Source'), $e);

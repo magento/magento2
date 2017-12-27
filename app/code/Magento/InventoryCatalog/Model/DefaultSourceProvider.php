@@ -17,8 +17,8 @@ class DefaultSourceProvider implements DefaultSourceProviderInterface
     /**
      * @inheritdoc
      */
-    public function getId(): int
+    public function getCode(): string
     {
-        return 1;
+        return 'default';
     }
 }

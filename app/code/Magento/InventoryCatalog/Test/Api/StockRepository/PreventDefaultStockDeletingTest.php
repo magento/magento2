@@ -20,9 +20,6 @@ class PreventDefaultStockDeletingTest extends WebapiAbstract
      */
     private $defaultStockProvider;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         parent::setUp();

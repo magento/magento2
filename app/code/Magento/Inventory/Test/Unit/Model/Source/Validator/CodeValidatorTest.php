@@ -43,14 +43,14 @@ class CodeValidatorTest extends TestCase
         $emptyValidatorResult = $this->createMock(\Magento\Framework\Validation\ValidationResult::class);
         $this->validationResultFactory->expects($this->once())
             ->method('create')
-            ->with(['errors' => [__('"%field" can not be empty.', ['field' => SourceInterface::CODE])]])
+            ->with(['errors' => [__('"%field" can not be empty.', ['field' => SourceInterface::SOURCE_CODE])]])
             ->willReturn($emptyValidatorResult);
         $this->codeValidator = (new ObjectManager($this))->getObject(CodeValidator::class, [
             'validationResultFactory' => $this->validationResultFactory
         ]);
 
         $this->source->expects($this->once())
-            ->method('getCode')
+            ->method('getSourceCode')
             ->willReturn('  ');
         $this->codeValidator->validate($this->source);
     }
@@ -60,13 +60,15 @@ class CodeValidatorTest extends TestCase
         $emptyValidatorResult = $this->createMock(\Magento\Framework\Validation\ValidationResult::class);
         $this->validationResultFactory->expects($this->once())
             ->method('create')
-            ->with(['errors' => [__('"%field" can not contain whitespaces.', ['field' => SourceInterface::CODE])]])
+            ->with([
+                'errors' => [__('"%field" can not contain whitespaces.', ['field' => SourceInterface::SOURCE_CODE])]
+            ])
             ->willReturn($emptyValidatorResult);
         $this->codeValidator = (new ObjectManager($this))->getObject(CodeValidator::class, [
             'validationResultFactory' => $this->validationResultFactory
         ]);
         $this->source->expects($this->once())
-            ->method('getCode')
+            ->method('getSourceCode')
             ->willReturn(' source code ');
         $this->codeValidator->validate($this->source);
     }
@@ -81,7 +83,7 @@ class CodeValidatorTest extends TestCase
             'validationResultFactory' => $this->validationResultFactory
         ]);
         $this->source->expects($this->once())
-            ->method('getCode')
+            ->method('getSourceCode')
             ->willReturn(' source_code ');
 
         $result = $this->codeValidator->validate($this->source);

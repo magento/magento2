@@ -73,9 +73,9 @@ class SourceItemsConfigurationProcessor
         foreach ($sourceItemsData as $sourceItemData) {
             $this->validateSourceItemData($sourceItemData);
 
-            $sourceId = $sourceItemData[SourceItemInterface::SOURCE_ID];
-            if (isset($sourceItemsForDelete[$sourceId])) {
-                $sourceItem = $sourceItemsForDelete[$sourceId];
+            $sourceCode = $sourceItemData[SourceItemInterface::SOURCE_CODE];
+            if (isset($sourceItemsForDelete[$sourceCode])) {
+                $sourceItem = $sourceItemsForDelete[$sourceCode];
             } else {
                 /** @var SourceItemInterface $sourceItem */
                 $sourceItem = $this->sourceItemConfigurationFactory->create();
@@ -89,7 +89,7 @@ class SourceItemsConfigurationProcessor
             );
 
             $sourceItemsForSave[] = $sourceItem;
-            unset($sourceItemsForDelete[$sourceId]);
+            unset($sourceItemsForDelete[$sourceCode]);
         }
         if ($sourceItemsForSave) {
             $this->sourceItemConfigurationSave->execute($sourceItemsForSave);
@@ -112,8 +112,8 @@ class SourceItemsConfigurationProcessor
 
         /** @var \Magento\Inventory\Model\SourceItem $sourceItem */
         foreach ($sourceItemsData as $sourceItem) {
-            $sourceId = $sourceItem[SourceItemInterface::SOURCE_ID];
-            $sourceItemConfig = $this->getSourceItemConfiguration->execute((int)$sourceId, $sku);
+            $sourceCode = $sourceItem[SourceItemInterface::SOURCE_CODE];
+            $sourceItemConfig = $this->getSourceItemConfiguration->execute((string)$sourceCode, $sku);
 
             if (null !== $sourceItemConfig) {
                 $sourceItems[] = $sourceItemConfig;
@@ -123,7 +123,7 @@ class SourceItemsConfigurationProcessor
         $sourceItemMap = [];
         if ($sourceItems) {
             foreach ($sourceItems as $sourceItem) {
-                $sourceItemMap[(int)$sourceItem[SourceItemInterface::SOURCE_ID]] = $sourceItem;
+                $sourceItemMap[(string)$sourceItem[SourceItemInterface::SOURCE_CODE]] = $sourceItem;
             }
         }
         return $sourceItemMap;
@@ -136,7 +136,7 @@ class SourceItemsConfigurationProcessor
      */
     private function validateSourceItemData(array $sourceItemData)
     {
-        if (!isset($sourceItemData[SourceItemInterface::SOURCE_ID])) {
+        if (!isset($sourceItemData[SourceItemInterface::SOURCE_CODE])) {
             throw new InputException(__('Wrong Product to Source relation parameters given.'));
         }
     }
@@ -150,7 +150,7 @@ class SourceItemsConfigurationProcessor
         /** @var SourceItemInterface $sourceItemConfiguration */
         foreach ($sourceItemsConfigurations as $sourceItemConfiguration) {
             $this->sourceItemConfigurationDelete->execute(
-                $sourceItemConfiguration->getSourceId(),
+                $sourceItemConfiguration->getSourceCode(),
                 $sourceItemConfiguration->getSku()
             );
         }

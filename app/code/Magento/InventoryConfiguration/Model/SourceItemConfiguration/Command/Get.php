@@ -70,14 +70,14 @@ class Get implements GetSourceItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $sourceId, string $sku): SourceItemConfigurationInterface
+    public function execute(string $sourceCode, string $sku): SourceItemConfigurationInterface
     {
-        if (empty($sourceId) || empty($sku)) {
+        if (empty($sourceCode) || empty($sku)) {
             throw new InputException(__('Wrong input data'));
         }
 
         try {
-            return $this->getConfiguration($sourceId, $sku);
+            return $this->getConfiguration($sourceCode, $sku);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new LocalizedException(__('Could not load Source Item Configuration.'), $e);
@@ -85,16 +85,16 @@ class Get implements GetSourceItemConfigurationInterface
     }
 
     /**
-     * @param int $sourceId
+     * @param string $sourceCode
      * @param string $sku
      * @return SourceItemConfigurationInterface
      */
-    private function getConfiguration(int $sourceId, string $sku): SourceItemConfigurationInterface
+    private function getConfiguration(string $sourceCode, string $sku): SourceItemConfigurationInterface
     {
-        $sourceItemConfigurationData = $this->getDataResourceModel->execute($sourceId, $sku);
+        $sourceItemConfigurationData = $this->getDataResourceModel->execute($sourceCode, $sku);
 
         if (null === $sourceItemConfigurationData) {
-            $sourceItemConfigurationData = $this->getDefaultValues->execute($sourceId, $sku);
+            $sourceItemConfigurationData = $this->getDefaultValues->execute($sourceCode, $sku);
         }
 
         /** @var SourceItemConfigurationInterface $sourceItem */
