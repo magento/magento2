@@ -5,9 +5,9 @@
  */
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
-use Magento\Wishlist\Controller\Index\Cart;
 use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Wishlist\Controller\Index\Cart;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -172,7 +172,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addSuccess'])
+            ->setMethods(['addSuccessMessage'])
             ->getMockForAbstractClass();
 
         $this->urlMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
@@ -566,8 +566,8 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->willReturn($productName);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
-            ->with('You added '  . $productName . ' to your shopping cart.', null)
+            ->method('addSuccessMessage')
+            ->with('You added ' . $productName . ' to your shopping cart.', null)
             ->willReturnSelf();
 
         $this->cartHelperMock->expects($this->once())
@@ -581,7 +581,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->helperMock->expects($this->once())
             ->method('calculate')
             ->willReturnSelf();
-        
+
         return $refererUrl;
     }
 
@@ -735,7 +735,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new ProductException(__('Test Phrase')));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('This product(s) is out of stock.', null)
             ->willReturnSelf();
 
@@ -901,7 +901,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addNotice')
+            ->method('addNoticeMessage')
             ->with('message', null)
             ->willReturnSelf();
 
@@ -1073,7 +1073,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addNotice')
+            ->method('addNoticeMessage')
             ->with('message', null)
             ->willReturnSelf();
 

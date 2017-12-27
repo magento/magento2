@@ -5,13 +5,13 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use Magento\Eav\Model\Entity\Collection\AbstractCollection;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class AbstractMassStatus
@@ -64,7 +64,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
             $collection = $this->filter->getCollection($this->collectionFactory->create());
             return $this->massAction($collection);
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
             return $resultRedirect->setPath($this->redirectUrl);
@@ -79,7 +79,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      */
     protected function getComponentRefererUrl()
     {
-        return $this->filter->getComponentRefererUrl()?: 'customer/*/index';
+        return $this->filter->getComponentRefererUrl() ?: 'customer/*/index';
     }
 
     /**

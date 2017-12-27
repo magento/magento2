@@ -7,12 +7,12 @@ namespace Magento\Framework\Message\Test\Unit;
 
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Message\CollectionFactory;
+use Magento\Framework\Message\ExceptionMessageLookupFactory;
 use Magento\Framework\Message\Factory;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Message\Session;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Message\ExceptionMessageLookupFactory;
 
 /**
  * \Magento\Framework\Message\Manager test case
@@ -205,16 +205,15 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             ['text' => $alternativeText]
         )->getMock();
 
-        $this->messageFactory->expects(
-            $this->atLeastOnce()
-        )->method(
-            'create'
-        )->with(
-            MessageInterface::TYPE_ERROR,
-            $alternativeText
-        )->will(
-            $this->returnValue($messageError)
-        );
+        $this->messageFactory->expects($this->once())
+            ->method('create')->with(MessageInterface::TYPE_ERROR, null)
+            ->will($this->returnValue($messageError));
+        $messageError->expects($this->once())
+            ->method('setIdentifier')
+            ->willReturnSelf();
+        $messageError->expects($this->once())
+            ->method('setText')->with($alternativeText)
+            ->willReturnSelf();
 
         $messageCollection = $this->getMockBuilder(
             \Magento\Framework\Message\Collection::class
@@ -234,7 +233,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         );
 
         $exception = new \Exception($exceptionMessage);
-        $this->assertEquals($this->model, $this->model->addException($exception, $alternativeText));
+        $this->assertEquals($this->model, $this->model->addExceptionMessage($exception, $alternativeText));
     }
 
     public function testAddExceptionRenderable()
@@ -302,8 +301,14 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $this->eventManager->expects($this->once())
             ->method('dispatch')->with('session_abstract_add_message');
         $this->messageFactory->expects($this->once())
-            ->method('create')->with($type, $message)
+            ->method('create')->with($type, null)
             ->will($this->returnValue($this->messageMock));
+        $this->messageMock->expects($this->once())
+            ->method('setIdentifier')
+            ->willReturnSelf();
+        $this->messageMock->expects($this->once())
+            ->method('setText')->with($message)
+            ->willReturnSelf();
         $this->model->$methodName($message, 'group');
         $this->assertTrue($this->model->hasMessages());
     }
@@ -311,10 +316,10 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     public function addMessageDataProvider()
     {
         return [
-            'error' => [MessageInterface::TYPE_ERROR, 'addError'],
-            'warning' => [MessageInterface::TYPE_WARNING, 'addWarning'],
-            'notice' => [MessageInterface::TYPE_NOTICE, 'addNotice'],
-            'success' => [MessageInterface::TYPE_SUCCESS, 'addSuccess']
+            'error' => [MessageInterface::TYPE_ERROR, 'addErrorMessage'],
+            'warning' => [MessageInterface::TYPE_WARNING, 'addWarningMessage'],
+            'notice' => [MessageInterface::TYPE_NOTICE, 'addNoticeMessage'],
+            'success' => [MessageInterface::TYPE_SUCCESS, 'addSuccessMessage']
         ];
     }
 

@@ -6,8 +6,8 @@
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
-use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 
 class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
 {
@@ -42,16 +42,13 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
                     ['setIntegrationData'],
                     [
                         'getIntegrationData',
-                        [Info::DATA_ID => self::INTEGRATION_ID, Info::DATA_NAME => 'testIntegration']
+                        [Info::DATA_ID => self::INTEGRATION_ID, Info::DATA_NAME => 'testIntegration'],
                     ],
                 ]
             )
         );
-        $this->_escaper->expects($this->once())
-            ->method('escapeHtml')
-            ->willReturnArgument(0);
-        $this->pageTitleMock->expects($this->atLeastOnce())
-            ->method('prepend');
+        $this->_escaper->expects($this->once())->method('escapeHtml')->willReturnArgument(0);
+        $this->pageTitleMock->expects($this->atLeastOnce())->method('prepend');
         $this->_verifyLoadAndRenderLayout();
         $controller = $this->_createIntegrationController('Edit');
         $controller->execute();
@@ -61,7 +58,9 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
     {
         $exceptionMessage = 'This integration no longer exists.';
         // verify the error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with(
+            $this->equalTo($exceptionMessage)
+        );
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
         // put data in session, the magic function getFormData is called so, must match __call method name
         $this->_backendSessionMock->expects(
@@ -80,9 +79,7 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         )->will(
             $this->throwException($invalidIdException)
         );
-        $this->_escaper->expects($this->once())
-            ->method('escapeHtml')
-            ->willReturnArgument(0);
+        $this->_escaper->expects($this->once())->method('escapeHtml')->willReturnArgument(0);
         $this->_verifyLoadAndRenderLayout();
         $integrationContr = $this->_createIntegrationController('Edit');
         $integrationContr->execute();
@@ -92,7 +89,9 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
     {
         $exceptionMessage = 'Integration ID is not specified or is invalid.';
         // verify the error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with(
+            $this->equalTo($exceptionMessage)
+        );
         $this->_verifyLoadAndRenderLayout();
         $integrationContr = $this->_createIntegrationController('Edit');
         $integrationContr->execute();
@@ -102,7 +101,9 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
     {
         $exceptionMessage = 'Integration ID is not specified or is invalid.';
         // verify the error
-        $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with(
+            $this->equalTo($exceptionMessage)
+        );
         $this->_controller = $this->_createIntegrationController('Edit');
         $this->_controller->execute();
     }

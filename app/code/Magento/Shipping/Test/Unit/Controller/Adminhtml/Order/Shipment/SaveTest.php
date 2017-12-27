@@ -7,11 +7,11 @@
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
-use Magento\Sales\Model\ValidatorResultInterface;
-use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface;
 use Magento\Sales\Model\Order\Shipment\Validation\QuantityValidator;
+use Magento\Sales\Model\ValidatorResultInterface;
 
 /**
  * Class SaveTest
@@ -142,7 +142,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         );
         $this->messageManager = $this->createPartialMock(
             \Magento\Framework\Message\Manager::class,
-            ['addSuccess', 'addError']
+            ['addSuccessMessage', 'addErrorMessage']
         );
         $this->session = $this->createPartialMock(
             \Magento\Backend\Model\Session::class,
@@ -236,7 +236,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         if (!$formKeyIsValid || !$isPost) {
             $this->messageManager->expects($this->once())
-                ->method('addError');
+                ->method('addErrorMessage');
 
             $this->resultRedirect->expects($this->once())
                 ->method('setPath')

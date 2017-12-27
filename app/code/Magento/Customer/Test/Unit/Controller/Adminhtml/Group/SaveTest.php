@@ -7,8 +7,8 @@ namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Group;
 
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Controller\Adminhtml\Group\Save;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
 /**
@@ -167,7 +167,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->with($this->group);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You saved the customer group.'));
         $exception = new \Exception('Exception');
         $this->resultRedirect->expects($this->at(0))
@@ -175,7 +175,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->with('customer/group')
             ->willThrowException($exception);
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Exception');
         $this->dataObjectProcessorMock->expects($this->once())
             ->method('buildOutputDataArray')

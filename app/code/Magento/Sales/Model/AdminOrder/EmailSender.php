@@ -5,10 +5,10 @@
  */
 namespace Magento\Sales\Model\AdminOrder;
 
-use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class EmailSender
@@ -55,7 +55,7 @@ class EmailSender
             $this->orderSender->send($order);
         } catch (\Magento\Framework\Exception\MailException $exception) {
             $this->logger->critical($exception);
-            $this->messageManager->addWarning(
+            $this->messageManager->addWarningMessage(
                 __('You did not email your customer. Please check your email settings.')
             );
             return false;

@@ -6,7 +6,6 @@
 
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -141,7 +140,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
         $this->messageManager = $this->getMockBuilder(
             \Magento\Framework\Message\Manager::class
         )->disableOriginalConstructor()->setMethods(
-            ['addSuccess', 'addMessage', 'addException', 'addErrorMessage']
+            ['addSuccessMessage', 'addMessage', 'addExceptionMessage', 'addErrorMessage']
         )->getMock();
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
@@ -442,7 +441,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
         $this->messageManager->expects(
             $this->once()
         )->method(
-            'addException'
+            'addExceptionMessage'
         )->with(
             $this->equalTo($exception),
             $this->equalTo('Something went wrong while resetting customer password.')
@@ -502,7 +501,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
         $this->messageManager->expects(
             $this->once()
         )->method(
-            'addSuccess'
+            'addSuccessMessage'
         )->with(
             $this->equalTo('The customer will receive an email with a link to reset password.')
         );

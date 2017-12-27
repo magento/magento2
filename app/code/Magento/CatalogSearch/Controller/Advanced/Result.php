@@ -6,7 +6,6 @@
  */
 namespace Magento\CatalogSearch\Controller\Advanced;
 
-use Magento\Catalog\Model\Layer\Resolver;
 use Magento\CatalogSearch\Model\Advanced as ModelAdvanced;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\UrlFactory;
@@ -54,7 +53,7 @@ class Result extends \Magento\Framework\App\Action\Action
             $this->_view->loadLayout();
             $this->_view->renderLayout();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $defaultUrl = $this->_urlFactory->create()
                 ->addQueryParams($this->getRequest()->getQueryValue())
                 ->getUrl('*/*/');

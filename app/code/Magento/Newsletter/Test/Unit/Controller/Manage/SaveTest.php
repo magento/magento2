@@ -105,9 +105,9 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('redirect')
             ->with($this->responseMock, 'customer/account/', []);
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
         $this->messageManagerMock->expects($this->never())
-            ->method('addError');
+            ->method('addErrorMessage');
         $this->action->execute();
     }
 
@@ -123,9 +123,9 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('redirect')
             ->with($this->responseMock, 'customer/account/', []);
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Something went wrong while saving your subscription.');
         $this->action->execute();
     }
@@ -154,9 +154,9 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('redirect')
             ->with($this->responseMock, 'customer/account/', []);
         $this->messageManagerMock->expects($this->never())
-            ->method('addSuccess');
+            ->method('addSuccessMessage');
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Something went wrong while saving your subscription.');
         $this->action->execute();
     }

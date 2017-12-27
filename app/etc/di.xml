@@ -1310,6 +1310,7 @@
             <argument name="renderers" xsi:type="array">
                 <item name="escape_renderer" xsi:type="object">Magento\Framework\View\Element\Message\Renderer\EscapeRenderer</item>
                 <item name="block_renderer" xsi:type="object">Magento\Framework\View\Element\Message\Renderer\BlockRenderer</item>
+                <item name="default_renderer" xsi:type="object">Magento\Framework\View\Element\Message\Renderer\DefaultRenderer</item>
             </argument>
         </arguments>
     </type>

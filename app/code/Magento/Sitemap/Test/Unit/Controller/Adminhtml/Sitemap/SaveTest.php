@@ -5,8 +5,8 @@
  */
 namespace Magento\Sitemap\Test\Unit\Controller\Adminhtml\Sitemap;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class SaveTest extends \PHPUnit\Framework\TestCase
 {
@@ -154,7 +154,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap([[$helperClass, $helper], [$sessionClass, $session]]);
 
         $this->messageManagerMock->expects($this->at(0))
-            ->method('addError')
+            ->method('addErrorMessage')
             ->withConsecutive(
                 [$messages[0]],
                 [$messages[1]]

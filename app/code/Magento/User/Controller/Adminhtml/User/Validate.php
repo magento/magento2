@@ -34,7 +34,12 @@ class Validate extends \Magento\User\Controller\Adminhtml\User
 
         if ($errors !== true && !empty($errors)) {
             foreach ($errors as $error) {
-                $this->messageManager->addError($error);
+                $this->messageManager->addComplexErrorMessage(
+                    'addUnescapedMessage',
+                    [
+                        'text' => $error,
+                    ]
+                );
             }
             $response->setError(1);
             $this->_view->getLayout()->initMessages();

@@ -6,8 +6,8 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
 
 class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
 {
@@ -37,18 +37,16 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
             $errors = $importModel->getMessages();
             if (sizeof($errors) > 0) {
                 foreach ($errors as $error) {
-                    $this->messageManager->addWarning($error);
+                    $this->messageManager->addWarningMessage($error);
                 }
-                $this->messageManager->addWarning(
-                    __('Click "Save" to apply the rates we found.')
-                );
+                $this->messageManager->addWarningMessage(__('Click "Save" to apply the rates we found.'));
             } else {
-                $this->messageManager->addSuccess(__('Click "Save" to apply the rates we found.'));
+                $this->messageManager->addSuccessMessage(__('Click "Save" to apply the rates we found.'));
             }
 
             $backendSession->setRates($rates);
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

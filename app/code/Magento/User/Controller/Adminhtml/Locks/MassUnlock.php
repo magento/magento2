@@ -27,10 +27,10 @@ class MassUnlock extends \Magento\User\Controller\Adminhtml\Locks
                 $affectedUsers = $this->_objectManager
                     ->get(\Magento\User\Model\ResourceModel\User::class)
                     ->unlock($userIds);
-                $this->getMessageManager()->addSuccess(__('Unlocked %1 user(s).', $affectedUsers));
+                $this->getMessageManager()->addSuccessMessage(__('Unlocked %1 user(s).', $affectedUsers));
             }
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

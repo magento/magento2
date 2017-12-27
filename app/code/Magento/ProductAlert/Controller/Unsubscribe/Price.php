@@ -5,12 +5,12 @@
  */
 namespace Magento\ProductAlert\Controller\Unsubscribe;
 
-use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
 
 class Price extends UnsubscribeController
 {
@@ -66,13 +66,13 @@ class Price extends UnsubscribeController
                 $model->delete();
             }
 
-            $this->messageManager->addSuccess(__('You deleted the alert subscription.'));
+            $this->messageManager->addSuccessMessage(__('You deleted the alert subscription.'));
         } catch (NoSuchEntityException $noEntityException) {
-            $this->messageManager->addError(__('We can\'t find the product.'));
+            $this->messageManager->addErrorMessage(__('We can\'t find the product.'));
             $resultRedirect->setPath('customer/account/');
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t update the alert subscription right now.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t update the alert subscription right now.'));
         }
         $resultRedirect->setUrl($product->getProductUrl());
         return $resultRedirect;

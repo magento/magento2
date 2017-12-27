@@ -6,9 +6,9 @@
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Product;
 
-use Magento\Reports\Controller\Adminhtml\Report\Product\Viewed;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
+use Magento\Reports\Controller\Adminhtml\Report\Product\Viewed;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -190,7 +190,7 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
 
         $this->messageManagerMock
             ->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($errorText);
 
         $logMock
@@ -217,7 +217,7 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
 
         $this->messageManagerMock
             ->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($errorText);
 
         $this->menuBlockMock
