@@ -37,8 +37,9 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     public function beforeSave($object)
     {
         $attributeName = $this->getAttribute()->getName();
-        $_formated = $object->getData($attributeName . '_is_formated');
-        if (!$_formated && $object->hasData($attributeName)) {
+        $pattern = '/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/';
+        // format only date that was not formatted yet
+        if ($object->hasData($attributeName) && !preg_match($pattern, $object->getData($attributeName))) {
             try {
                 $value = $this->formatDate($object->getData($attributeName));
             } catch (\Exception $e) {
@@ -50,7 +51,6 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
             }
 
             $object->setData($attributeName, $value);
-            $object->setData($attributeName . '_is_formated', true);
         }
 
         return $this;
@@ -60,7 +60,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * Prepare date for save in DB
      *
      * string format used from input fields (all date input fields need apply locale settings)
-     * int value can be declared in code (this meen whot we use valid date)
+     * int value can be declared in code (this means that we use valid date)
      *
      * @param string|int|\DateTime $date
      * @return string
@@ -74,9 +74,9 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
         if (is_scalar($date) && preg_match('/^[0-9]+$/', $date)) {
             $date = (new \DateTime())->setTimestamp($date);
         } elseif (!($date instanceof \DateTime)) {
-            // normalized format expecting Y-m-d[ H:i:s]  - time is optional
             $date = $this->_localeDate->date($date, null, false);
         }
+        // normalized format expecting Y-m-d [H:i:s] - time is optional
         return $date->format('Y-m-d H:i:s');
     }
 }
