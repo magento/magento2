@@ -16,7 +16,7 @@ use Magento\Framework\Api\SearchResultsInterface;
  *
  * @api
  */
-interface StockSourceLinkResultsInterface extends SearchResultsInterface
+interface StockSourceLinkSearchResultsInterface extends SearchResultsInterface
 {
     /**
      * Get StockSourceLink list

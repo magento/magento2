@@ -9,7 +9,7 @@ namespace Magento\InventoryApi\Api;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-use Magento\InventoryApi\Api\Data\StockSourceLinkResultsInterface;
+use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
 
 /**
  * In Magento 2 Repository considered as an implementation of Facade pattern which provides a simplified interface
@@ -44,7 +44,7 @@ interface StockSourceLinkRepositoryInterface
      * SearchCriteria is not required because load all stocks is useful case
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
-     * @return \Magento\InventoryApi\Api\Data\StockSourceLinkResultsInterface
+     * @return \Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria = null): StockSourceLinkResultsInterface;
+    public function getList(SearchCriteriaInterface $searchCriteria = null): StockSourceLinkSearchResultsInterface;
 }

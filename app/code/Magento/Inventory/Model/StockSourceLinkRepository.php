@@ -11,7 +11,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Inventory\Model\StockSourceLink\Command\GetListInterface;
 use Magento\Inventory\Model\StockSourceLink\Command\SaveInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-use Magento\InventoryApi\Api\Data\StockSourceLinkResultsInterface;
+use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
 use Magento\InventoryApi\Api\StockSourceLinkRepositoryInterface;
 
 /**
@@ -52,7 +52,7 @@ class StockSourceLinkRepository implements StockSourceLinkRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria = null): StockSourceLinkResultsInterface
+    public function getList(SearchCriteriaInterface $searchCriteria = null): StockSourceLinkSearchResultsInterface
     {
         return $this->commandGetList->execute($searchCriteria);
     }
