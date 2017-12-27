@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Plugin\Inventory\StockRepository;
+namespace Magento\InventorySales\Plugin\InventoryApi\StockRepository;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\InventoryApi\Api\Data\StockInterface;
