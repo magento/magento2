@@ -92,7 +92,6 @@ class Integer extends Column implements
         return $this->nullable;
     }
 
-
     /**
      * Return default value
      * Note: default value should be int

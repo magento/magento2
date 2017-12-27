@@ -102,7 +102,7 @@ class AdapterMediator
         }
 
         /**
- * @var DbSchemaProcessorInterface $columnProcessor 
+ * @var DbSchemaProcessorInterface $columnProcessor
 */
         foreach ($this->processors[$type] as $columnProcessor) {
             $elementData = $columnProcessor->fromDefinition($elementData);
@@ -132,8 +132,8 @@ class AdapterMediator
 
         foreach ($data as $type => $elements) {
             /**
- * @var ElementInterface $element 
-*/
+            * @var ElementInterface $element
+            */
             foreach ($elements as $element) {
                 $definition[$type][$element->getName()] = $this
                     ->processElementToDefinition($element);
@@ -254,8 +254,8 @@ class AdapterMediator
     {
         $definition = '';
         /**
- * @var DbSchemaProcessorInterface $processor 
-*/
+        * @var DbSchemaProcessorInterface $processor
+        */
         foreach ($this->processors[$element->getElementType()] as $processor) {
             //One column processor can override or modify existing one
             if ($processor->canBeApplied($element)) {

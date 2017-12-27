@@ -212,19 +212,19 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     private function getConstraintType($type)
     {
         switch ($type) {
-        case 'foreign':
-            $elementType = ForeignKey::FOREIGN_KEY_NAME;
-            break;
-        case 'primary':
-            $elementType = Internal::PRIMARY_KEY_NAME;
-            break;
-        case 'unique':
-        case 'index':
-            //In MySQL for unique and for index drop syntax is the same
-            $elementType = Index::INDEX_KEY_NAME;
-            break;
-        default:
-            $elementType = Constraint::TYPE;
+            case 'foreign':
+                $elementType = ForeignKey::FOREIGN_KEY_NAME;
+                break;
+            case 'primary':
+                $elementType = Internal::PRIMARY_KEY_NAME;
+                break;
+            case 'unique':
+            case 'index':
+                //In MySQL for unique and for index drop syntax is the same
+                $elementType = Index::INDEX_KEY_NAME;
+                break;
+            default:
+                $elementType = Constraint::TYPE;
         }
 
         return $elementType;

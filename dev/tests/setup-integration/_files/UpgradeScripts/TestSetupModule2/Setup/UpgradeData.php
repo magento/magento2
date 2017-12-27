@@ -47,9 +47,11 @@ class UpgradeData implements UpgradeDataInterface
                 ]
             );
             $setup->getConnection()->update(
-                $setup->getTable('setup_tests_entity_table'), [
+                $setup->getTable('setup_tests_entity_table'),
+                [
                 'increment_id'=> 1
-                ], 'increment_id = null'
+                ],
+                'increment_id = null'
             );
 
             $setup->getConnection()->insertForce(

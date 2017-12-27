@@ -54,8 +54,8 @@ class UpgradeTest extends \PHPUnit\Framework\TestCase
         $this->shellCommand = $objectManager->create(\Magento\TestFramework\Deploy\CliCommand::class);
         $this->testModuleManager = $objectManager->create(\Magento\TestFramework\Deploy\TestModuleManager::class);
         /**
- * @var \Magento\Framework\Setup\ModuleDataSetupInterface $installer 
-*/
+        * @var \Magento\Framework\Setup\ModuleDataSetupInterface $installer
+        */
         $this->installer = $objectManager->create(
             \Magento\Framework\Setup\ModuleDataSetupInterface::class
         );

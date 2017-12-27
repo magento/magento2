@@ -43,9 +43,6 @@ class InstallTest extends \PHPUnit\Framework\TestCase
         $objectManager = Bootstrap::getObjectManager();
         $this->shellCommand = $objectManager->get(\Magento\TestFramework\Deploy\CliCommand::class);
         $this->testModuleManager = $objectManager->get(\Magento\TestFramework\Deploy\TestModuleManager::class);
-        /**
- * @var \Magento\Framework\Setup\ModuleDataSetupInterface $installer 
-*/
     }
 
     public static function tearDownAfterClass()

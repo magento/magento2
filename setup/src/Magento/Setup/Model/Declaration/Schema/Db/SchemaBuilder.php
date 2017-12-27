@@ -85,12 +85,13 @@ class SchemaBuilder
                 $constrainsData = $this->adapter->getConstraintsList($tableName, $resource);
 
                 /**
- * @var Table $table 
-*/
+                 * @var Table $table
+                 */
                 $table = $this->elementFactory->create(
-                    'table', [
-                    'name' => $tableName,
-                    'resource' => $resource
+                    'table',
+                    [
+                        'name' => $tableName,
+                        'resource' => $resource
                     ]
                 );
 

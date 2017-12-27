@@ -47,24 +47,24 @@ class DeclarativeSchemaBuilderTest extends SetupTestCase
         //Test primary key and renaming
         $referenceTable = $dbSchema->getTableByName('reference_table');
         /**
- * @var Internal $primaryKey 
-*/
+        * @var Internal $primaryKey
+        */
         $primaryKey = $referenceTable->getPrimaryConstraint();
         $columns = $primaryKey->getColumns();
         self::assertEquals(reset($columns)->getName(), 'tinyint_ref');
         //Test column
         $testTable = $dbSchema->getTableByName('test_table');
         /**
- * @var Timestamp $timestampColumn 
-*/
+        * @var Timestamp $timestampColumn
+        */
         $timestampColumn = $testTable->getColumnByName('timestamp');
         self::assertEquals($timestampColumn->getOnUpdate(), 'CURRENT_TIMESTAMP');
         //Test disabled
         self::assertArrayNotHasKey('varbinary_rename', $testTable->getColumns());
         //Test foreign key
         /**
- * @var Reference $foreignKey 
-*/
+        * @var Reference $foreignKey
+        */
         $foreignKey = $testTable->getConstraintByName('some_foreign_key');
         self::assertEquals($foreignKey->getOnDelete(), 'NO ACTION');
         self::assertEquals($foreignKey->getReferenceColumn()->getName(), 'tinyint_ref');

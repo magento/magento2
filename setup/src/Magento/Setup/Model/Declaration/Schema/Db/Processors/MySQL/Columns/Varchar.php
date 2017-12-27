@@ -6,7 +6,6 @@
 namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns;
 
 use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
-use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Varbinary;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
@@ -36,7 +35,6 @@ class Varchar implements DbSchemaProcessorInterface
 
     /**
      * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Varchar   $element
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Varbinary $element
      * @inheritdoc
      */
     public function toDefinition(ElementInterface $element)
@@ -55,8 +53,7 @@ class Varchar implements DbSchemaProcessorInterface
      */
     public function canBeApplied(ElementInterface $element)
     {
-        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Varchar ||
-               $element instanceof Varbinary;
+        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Varchar;
     }
 
     /**

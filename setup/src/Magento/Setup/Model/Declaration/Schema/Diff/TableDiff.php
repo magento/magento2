@@ -100,10 +100,10 @@ class TableDiff
                 //If it is new for generated (generated from db) elements - we need to create it
                 if ($this->diffManager->shouldBeCreated($generatedElements, $element)) {
                     $diff = $this->diffManager->registerCreation($diff, $element);
-                } else if ($this->diffManager->shouldBeModified(
-                        $element,
-                        $generatedElements[$element->getName()]
-                    )
+                } elseif ($this->diffManager->shouldBeModified(
+                    $element,
+                    $generatedElements[$element->getName()]
+                )
                 ) {
                     $diff = $this->diffManager
                         ->registerModification($diff, $element, $generatedElements[$element->getName()]);

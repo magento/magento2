@@ -213,9 +213,7 @@ class SchemaBuilder
                 'name' => $tableData['name'],
                 'resource' => $resource,
             ];
-            /**
- * @var Table $table 
-*/
+            /** @var Table $table */
             $table = $this->elementFactory->create('table', $tableParams);
             $columns = $this->processColumns($tableData, $resource, $table);
             $table->addColumns($columns);
