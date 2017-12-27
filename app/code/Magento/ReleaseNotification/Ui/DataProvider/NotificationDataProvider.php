@@ -22,7 +22,7 @@ class NotificationDataProvider implements DataProviderInterface
     /**
      * @var PoolInterface
      */
-    protected $pool;
+    private $pool;
 
     /**
      * Search result object.
