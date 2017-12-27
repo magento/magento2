@@ -121,7 +121,10 @@ class SourcesTest extends TestCase
     {
         $this->exporter->setParameters([
             Export::FILTER_ELEMENT_GROUP => [
-                'source_code' => 'eu'
+                'source_id' => [
+                    22,
+                    62
+                ]
             ]
         ]);
         $this->exporter->export();

@@ -70,7 +70,10 @@ class Save extends Action
         $resultRedirect = $this->resultRedirectFactory->create();
         $request = $this->getRequest();
         $requestData = $request->getParams();
-        if (!$request->isPost() || empty($requestData['general'])) {
+        if (!$request->isPost()
+            || empty($requestData['general'])
+            || empty($requestData['general'][SourceInterface::SOURCE_CODE])
+        ) {
             $this->messageManager->addErrorMessage(__('Wrong request.'));
             $this->processRedirectAfterFailureSave($resultRedirect);
 
@@ -78,14 +81,14 @@ class Save extends Action
         }
 
         try {
-            $sourceCode = $requestData['general'][SourceInterface::CODE];
+            $sourceCode = $requestData['general'][SourceInterface::SOURCE_CODE];
             $this->processSave($requestData, $sourceCode);
 
             $this->messageManager->addSuccessMessage(__('The Source has been saved.'));
             $this->processRedirectAfterSuccessSave($resultRedirect, $sourceCode);
         } catch (NoSuchEntityException $e) {
             $this->messageManager->addErrorMessage(__('The Source does not exist.'));
-            $this->processRedirectAfterFailureSave($resultRedirect);
+            $this->processRedirectAfterFailureSave($resultRedirect, $sourceCode);
         } catch (ValidationException $e) {
             foreach ($e->getErrors() as $localizedError) {
                 $this->messageManager->addErrorMessage($localizedError->getMessage());
@@ -105,7 +108,6 @@ class Save extends Action
     /**
      * @param array $requestData
      * @param string $sourceCode
-     *
      * @return void
      */
     private function processSave(array $requestData, string $sourceCode)
@@ -116,7 +118,6 @@ class Save extends Action
             /** @var SourceInterface $source */
             $source = $this->sourceFactory->create();
         }
-
         $source = $this->sourceHydrator->hydrate($source, $requestData);
 
         $this->_eventManager->dispatch(
@@ -141,14 +142,13 @@ class Save extends Action
     /**
      * @param Redirect $resultRedirect
      * @param string $sourceCode
-     *
      * @return void
      */
     private function processRedirectAfterSuccessSave(Redirect $resultRedirect, string $sourceCode)
     {
         if ($this->getRequest()->getParam('back')) {
             $resultRedirect->setPath('*/*/edit', [
-                SourceInterface::CODE => $sourceCode,
+                SourceInterface::SOURCE_CODE => $sourceCode,
                 '_current' => true,
             ]);
         } elseif ($this->getRequest()->getParam('redirect_to_new')) {
@@ -162,17 +162,16 @@ class Save extends Action
 
     /**
      * @param Redirect $resultRedirect
-     * @param string $sourceCode
-     *
+     * @param string|null $sourceCode
      * @return void
      */
-    private function processRedirectAfterFailureSave(Redirect $resultRedirect, string $sourceCode)
+    private function processRedirectAfterFailureSave(Redirect $resultRedirect, string $sourceCode = null)
     {
         if (null === $sourceCode) {
             $resultRedirect->setPath('*/*/new');
         } else {
             $resultRedirect->setPath('*/*/edit', [
-                SourceInterface::CODE => $sourceCode,
+                SourceInterface::SOURCE_CODE => $sourceCode,
                 '_current' => true,
             ]);
         }
