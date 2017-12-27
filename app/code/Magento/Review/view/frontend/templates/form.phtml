@@ -41,7 +41,7 @@
                                     class="rating-<?= $block->escapeHtmlAttr($iterator) ?>"
                                     for="<?= /* @noEscape */ $block->getCode($_rating) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>"
                                     title="<?= $block->escapeHtmlAttr(__('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star')) ?>"
-                                    id="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>_label">
+                                    id="<?= /* @noEscape */ $block->getCode($_rating) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>_label">
                                     <span><?= $block->escapeHtml(__('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star')) ?></span>
                                 </label>
                             <?php $iterator++; ?>
