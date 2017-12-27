@@ -108,7 +108,7 @@ class Config implements \Magento\Config\Model\Wysiwyg\ConfigInterface
                 ],
             ],
         ];
-        $configPlugins = $config->getData('plugins');
+        $configPlugins = (array) $config->getData('plugins');
         $variableConfig['plugins'] = array_merge($configPlugins, $variableWysiwyg);
         return $variableConfig;
     }

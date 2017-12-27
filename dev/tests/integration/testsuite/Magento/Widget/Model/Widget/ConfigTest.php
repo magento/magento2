@@ -38,21 +38,23 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $config = new \Magento\Framework\DataObject();
         $settings = $this->_model->getConfig($config);
 
-        $this->assertArrayHasKey('widget_plugin_src', $settings);
-        $this->assertArrayHasKey('widget_placeholders', $settings);
-        $this->assertArrayHasKey('widget_window_url', $settings);
+        $plugin_settings = reset($settings['plugins']);
 
-        $jsFilename = $settings['widget_plugin_src'];
+        $this->assertArrayHasKey('src', $plugin_settings);
+        $this->assertArrayHasKey('placeholders', $plugin_settings['options']);
+        $this->assertArrayHasKey('window_url', $plugin_settings['options']);
+
+        $jsFilename = $plugin_settings['src'];
         $this->assertStringMatchesFormat(
             'http://localhost/pub/static/%s/adminhtml/Magento/backend/en_US/%s/editor_plugin.js',
             $jsFilename
         );
 
-        $this->assertInternalType('array', $settings['widget_placeholders']);
+        $this->assertInternalType('array', $plugin_settings['options']['placeholders']);
 
         $this->assertStringStartsWith(
             'http://localhost/index.php/backend/admin/widget/index/key',
-            $settings['widget_window_url']
+            $plugin_settings['options']['window_url']
         );
     }
 
