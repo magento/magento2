@@ -5,7 +5,7 @@
  */
 namespace Magento\InstantPurchase\Model\QuoteManagement;
 
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote;
@@ -21,14 +21,14 @@ class QuoteFilling
      * Adds products to quote according to request.
      *
      * @param Quote $quote
-     * @param Product $product
+     * @param ProductInterface $product
      * @param array $productRequest
      * @return Quote
      * @throws LocalizedException if product can not be added to quote.
      */
     public function fillQuote(
         Quote $quote,
-        Product $product,
+        ProductInterface $product,
         array $productRequest
     ): Quote {
         $normalizedProductRequest = array_merge(
