@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="sources">
+        <container name="assign_sources_container">
+            <button
+                    name="assign_sources_button"
+                    class="Magento\InventoryCatalog\Ui\Component\AssignSourcesButton"
+                    template="Magento_InventoryCatalog/assign-sources-button.html">
+            </button>
+        </container>
+        <dynamicRows name="assigned_sources">
+            <container name="record" class="Magento\InventoryCatalog\Ui\Component\Record">
+                <field name="actionDelete" template="Magento_InventoryCatalog/action-delete.html" />
+            </container>
+        </dynamicRows>
+    </fieldset>
+</form>
+
