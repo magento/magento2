@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns;
+namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\ColumnDefaultAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
@@ -15,7 +15,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  *
  * @inheritdoc
  */
-class DefaultDefinition implements DbSchemaProcessorInterface
+class DefaultDefinition implements DbDefinitionProcessorInterface
 {
     /**
      * @param ColumnDefaultAwareInterface $element
@@ -42,14 +42,6 @@ class DefaultDefinition implements DbSchemaProcessorInterface
         }
 
         return $default;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function canBeApplied(ElementInterface $element)
-    {
-        return false;
     }
 
     /**

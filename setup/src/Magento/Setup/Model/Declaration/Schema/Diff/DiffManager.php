@@ -105,7 +105,8 @@ class DiffManager
 
             $diff->register(
                 $generatedElement,
-                $operation
+                $operation,
+                $generatedElement
             );
         }
 

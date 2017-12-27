@@ -49,10 +49,10 @@ return [
   KEY `some_foreign_key_without_action` (`integer_main`),
   KEY `speedup_index_renamed` (`tinyint`,`bigint`),
   CONSTRAINT `some_foreign_key` FOREIGN KEY (`tinyint`) REFERENCES `reference_table` (`tinyint_ref`) 
-  ON DELETE SET NULL,
+ON DELETE SET NULL,
   CONSTRAINT `some_foreign_key_new` FOREIGN KEY (`smallint_main`) REFERENCES `reference_table` (`smallint_ref`) 
-  ON DELETE CASCADE,
+ON DELETE CASCADE,
   CONSTRAINT `some_foreign_key_without_action` FOREIGN KEY (`integer_main`) REFERENCES `auto_increment_test` 
-  (`int_auto_increment_with_nullable`) ON DELETE CASCADE
+(`int_auto_increment_with_nullable`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8',
 ];

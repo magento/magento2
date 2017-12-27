@@ -58,9 +58,6 @@ class DeclarativeInstallerTest extends SetupTestCase
         $objectManager = Bootstrap::getObjectManager();
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
         $this->cliCommad = $objectManager->get(CliCommand::class);
-        /** @var AdapterMediator $adapterMediator */
-        $adapterMediator = $objectManager->get(AdapterMediator::class);
-        $adapterMediator->flushCache();
         $this->describeTable = $objectManager->get(DescribeTable::class);
         $this->schemaDiff = $objectManager->get(SchemaDiff::class);
         $this->schemaConfig = $objectManager->get(SchemaConfigInterface::class);
@@ -158,6 +155,22 @@ class DeclarativeInstallerTest extends SetupTestCase
     }
 
     /**
+     * As sometimes we want to ignore spaces and other special characters,
+     * we need to trim data before compare it
+     *
+     * @return array
+     */
+    private function getTrimmedData()
+    {
+        $data = [];
+        foreach ($this->getData() as $key => $createTable) {
+            $data[$key] = preg_replace('/(\s)\n/', '$1', $createTable);
+        }
+
+        return $data;
+    }
+
+    /**
      * @moduleName Magento_TestSetupDeclarationModule1
      * @dataProviderFromFile Magento/TestSetupDeclarationModule1/fixture/declarative_installer/constraint_modification.php
      */
@@ -188,7 +201,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         );
         self::assertNull($diff->get());
         $shardData = $this->describeTable->describeShard(Sharding::DEFAULT_CONNECTION);
-        self::assertEquals($shardData, $this->getData());
+        self::assertEquals($shardData, $this->getTrimmedData());
     }
 
     /**

@@ -4,13 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL;
+namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaWriterInterface;
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Constraints\ForeignKey;
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Constraints\Internal;
+use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Constraints\ForeignKey;
+use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Constraints\Internal;
+use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
 
@@ -212,7 +213,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     private function getConstraintType($type)
     {
         switch ($type) {
-            case 'foreign':
+            case 'reference':
                 $elementType = ForeignKey::FOREIGN_KEY_NAME;
                 break;
             case 'primary':

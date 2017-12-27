@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Db\Processors;
+namespace Magento\Setup\Model\Declaration\Schema\Db;
 
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
@@ -14,16 +14,8 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  * 'type' => 'varchar'
  * 'length' => 255
  */
-interface DbSchemaProcessorInterface
+interface DbDefinitionProcessorInterface
 {
-    /**
-     * Check whether current processor can process element
-     *
-     * @param  ElementInterface $element
-     * @return mixed
-     */
-    public function canBeApplied(ElementInterface $element);
-
     /**
      * Output always will be SQL definition
      *

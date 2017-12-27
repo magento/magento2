@@ -6,8 +6,6 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Operations;
 
-use Magento\Setup\Model\Declaration\Schema\Db\AdapterMediator;
-use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
@@ -22,16 +20,23 @@ class ReCreateTable implements OperationInterface
     const OPERATION_NAME = 'recreate_table';
 
     /**
-     * @var AdapterMediator
+     * @var CreateTable
      */
-    private $adapterMediator;
+    private $createTable;
 
     /**
-     * @param AdapterMediator $adapterMediator
+     * @var DropTable
      */
-    public function __construct(AdapterMediator $adapterMediator)
+    private $dropTable;
+
+    /**
+     * @param CreateTable $createTable
+     * @param DropTable $dropTable
+     */
+    public function __construct(CreateTable $createTable, DropTable $dropTable)
     {
-        $this->adapterMediator = $adapterMediator;
+        $this->createTable = $createTable;
+        $this->dropTable = $dropTable;
     }
 
     /**
@@ -47,11 +52,7 @@ class ReCreateTable implements OperationInterface
      */
     public function doOperation(ElementHistory $elementHistory)
     {
-        /** @var Table $table */
-        $table = $elementHistory->getNew();
-        /** @var Table $oldTable */
-        $oldTable = $elementHistory->getOld();
-        $this->adapterMediator->dropTable($oldTable);
-        $this->adapterMediator->createTable($table);
+        $this->dropTable->doOperation($elementHistory);
+        $this->createTable->doOperation($elementHistory);
     }
 }

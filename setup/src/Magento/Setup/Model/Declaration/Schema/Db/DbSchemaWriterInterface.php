@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Db\Processors;
+namespace Magento\Setup\Model\Declaration\Schema\Db;
 
 /**
  * This class is responsible for read different schema
@@ -16,10 +16,10 @@ interface DbSchemaWriterInterface
      * Create table from SQL fragments, like columns, constraints, foreign keys, indexes, etc
      *
      * @param  array $tableOptions
-     * @param  array $sqlFragments
+     * @param  array $definition
      * @return void
      */
-    public function createTable(array $tableOptions, array $sqlFragments);
+    public function createTable(array $tableOptions, array $definition);
 
     /**
      * Drop table from SQL database

@@ -7,6 +7,10 @@
 namespace Magento\Setup\Model\Declaration\Schema\Operations;
 
 use Magento\Setup\Model\Declaration\Schema\Db\AdapterMediator;
+use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator;
+use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\TableElementInterface;
 use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
@@ -21,16 +25,25 @@ class DropElement implements OperationInterface
     const OPERATION_NAME = 'drop_element';
 
     /**
-     * @var AdapterMediator
+     * @var DbSchemaWriterInterface
      */
-    private $adapterMediator;
+    private $dbSchemaWriter;
 
     /**
-     * @param AdapterMediator $adapterMediator
+     * @var DefinitionAggregator
      */
-    public function __construct(AdapterMediator $adapterMediator)
-    {
-        $this->adapterMediator = $adapterMediator;
+    private $definitionAggregator;
+
+    /**
+     * @param DbSchemaWriterInterface $dbSchemaWriter
+     * @param DefinitionAggregator $definitionAggregator
+     */
+    public function __construct(
+        DbSchemaWriterInterface $dbSchemaWriter,
+        DefinitionAggregator $definitionAggregator
+    ) {
+        $this->dbSchemaWriter = $dbSchemaWriter;
+        $this->definitionAggregator = $definitionAggregator;
     }
 
     /**
@@ -46,6 +59,20 @@ class DropElement implements OperationInterface
      */
     public function doOperation(ElementHistory $elementHistory)
     {
-        $this->adapterMediator->dropElement($elementHistory->getNew());
+        /**
+         * @var TableElementInterface | ElementInterface $element
+         */
+        $element = $elementHistory->getNew();
+        $elementOptions = [
+            'table_name' => $element->getTable()->getName(),
+            'element_name' => $element->getName(),
+            'resource' => $element->getTable()->getResource(),
+            'type' => $element->getType()
+        ];
+
+        $this->dbSchemaWriter->dropElement(
+            $element->getElementType(),
+            $elementOptions
+        );
     }
 }

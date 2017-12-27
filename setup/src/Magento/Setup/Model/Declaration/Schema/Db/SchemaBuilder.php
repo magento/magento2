@@ -6,8 +6,6 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Db;
 
-use Magento\Setup\Model\Declaration\Schema\Casters\CasterAggregator;
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaReaderInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementFactory;
 use Magento\Setup\Model\Declaration\Schema\Dto\Schema;
@@ -28,11 +26,6 @@ use Magento\Setup\Model\Declaration\Schema\Sharding;
 class SchemaBuilder
 {
     /**
-     * @var AdapterMediator
-     */
-    private $adapter;
-
-    /**
      * @var ElementFactory
      */
     private $elementFactory;
@@ -48,20 +41,15 @@ class SchemaBuilder
     private $sharding;
 
     /**
-     * Parser constructor.
-     *
-     * @param AdapterMediator         $adapter
      * @param ElementFactory          $elementFactory
      * @param DbSchemaReaderInterface $dbSchemaReader
      * @param Sharding                $sharding
      */
     public function __construct(
-        AdapterMediator $adapter,
         ElementFactory $elementFactory,
         DbSchemaReaderInterface $dbSchemaReader,
         Sharding $sharding
     ) {
-        $this->adapter = $adapter;
         $this->elementFactory = $elementFactory;
         $this->dbSchemaReader = $dbSchemaReader;
         $this->sharding = $sharding;
@@ -80,9 +68,9 @@ class SchemaBuilder
                 $indexes = [];
                 $constraints = [];
 
-                $columnsData = $this->adapter->getColumnsList($tableName, $resource);
-                $indexesData = $this->adapter->getIndexesList($tableName, $resource);
-                $constrainsData = $this->adapter->getConstraintsList($tableName, $resource);
+                $columnsData = $this->dbSchemaReader->readColumns($tableName, $resource);
+                $indexesData = $this->dbSchemaReader->readIndexes($tableName, $resource);
+                $constrainsData = $this->dbSchemaReader->readConstraints($tableName, $resource);
 
                 /**
                  * @var Table $table
@@ -141,7 +129,7 @@ class SchemaBuilder
     {
         foreach ($tables as $table) {
             $tableName = $table->getName();
-            $referencesData = $this->adapter->getReferencesList($tableName, $table->getResource());
+            $referencesData = $this->dbSchemaReader->readReferences($tableName, $table->getResource());
             $references = [];
 
             foreach ($referencesData as $referenceData) {

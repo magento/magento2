@@ -7,33 +7,33 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/config/schema.xsd">
     <table name="reference_table" resource="sales">
-        <column xsi:type="tinyinteger" name="tinyint_ref" padding="7" nullable="false" identity="true" unsigned="false" />
-        <column xsi:type="tinyinteger" name="tinyint_without_padding" default="0" nullable="false" unsigned="false" />
-        <column xsi:type="biginteger" name="bigint_without_padding" default="0" nullable="false" unsigned="false" />
-        <column xsi:type="smallinteger" name="smallint_without_padding" default="0" nullable="false" unsigned="false" />
-        <column xsi:type="integer" name="integer_without_padding" default="0" nullable="false" unsigned="false" />
-        <column xsi:type="smallinteger" name="smallint_with_big_padding" padding="254" default="0" nullable="false" unsigned="false" />
-        <column xsi:type="smallinteger" name="smallint_without_default" padding="2" nullable="true" unsigned="false" />
-        <column xsi:type="integer" name="int_without_unsigned" padding="2" nullable="true" />
-        <column xsi:type="integer" name="int_unsigned" padding="2" nullable="true" unsigned="true"/>
-        <column xsi:type="biginteger" name="bigint_default_nullable" padding="2" nullable="true" default="1" unsigned="true"/>
-        <column xsi:type="biginteger" name="bigint_not_default_not_nullable" padding="2" nullable="false" unsigned="true"/>
+        <column xsi:type="tinyint" name="tinyint_ref" padding="7" nullable="false" identity="true" unsigned="false" />
+        <column xsi:type="tinyint" name="tinyint_without_padding" default="0" nullable="false" unsigned="false" />
+        <column xsi:type="bigint" name="bigint_without_padding" default="0" nullable="false" unsigned="false" />
+        <column xsi:type="smallint" name="smallint_without_padding" default="0" nullable="false" unsigned="false" />
+        <column xsi:type="int" name="integer_without_padding" default="0" nullable="false" unsigned="false" />
+        <column xsi:type="smallint" name="smallint_with_big_padding" padding="254" default="0" nullable="false" unsigned="false" />
+        <column xsi:type="smallint" name="smallint_without_default" padding="2" nullable="true" unsigned="false" />
+        <column xsi:type="int" name="int_without_unsigned" padding="2" nullable="true" />
+        <column xsi:type="int" name="int_unsigned" padding="2" nullable="true" unsigned="true"/>
+        <column xsi:type="bigint" name="bigint_default_nullable" padding="2" nullable="true" default="1" unsigned="true"/>
+        <column xsi:type="bigint" name="bigint_not_default_not_nullable" padding="2" nullable="false" unsigned="true"/>
         <constraint xsi:type="primary" name="tinyint_primary">
             <column name="tinyint_ref" />
         </constraint>
     </table>
     <table name="auto_increment_test" resource="checkout">
-        <column xsi:type="integer" name="int_auto_increment_with_nullable" identity="true" padding="12" unsigned="true" nullable="true" />
-        <column xsi:type="smallinteger" name="int_disabled_auto_increment" default="0" identity="false" padding="12" unsigned="true" nullable="true" />
+        <column xsi:type="int" name="int_auto_increment_with_nullable" identity="true" padding="12" unsigned="true" nullable="true" />
+        <column xsi:type="smallint" name="int_disabled_auto_increment" default="0" identity="false" padding="12" unsigned="true" nullable="true" />
         <constraint xsi:type="unique" name="unique_null_key">
             <column name="int_auto_increment_with_nullable" />
         </constraint>
     </table>
     <table name="test_table" resource="default">
         <!--Columns-->
-        <column xsi:type="smallinteger" identity="true" name="smallint" padding="3" nullable="true"/>
-        <column xsi:type="tinyinteger" name="tinyint" padding="7" nullable="true" unsigned="false" />
-        <column xsi:type="biginteger" name="bigint" default="0" padding="13" nullable="true" unsigned="false" />
+        <column xsi:type="smallint" identity="true" name="smallint" padding="3" nullable="true"/>
+        <column xsi:type="tinyint" name="tinyint" padding="7" nullable="true" unsigned="false" />
+        <column xsi:type="bigint" name="bigint" default="0" padding="13" nullable="true" unsigned="false" />
         <column xsi:type="float" name="float" default="0" scale="12" />
         <column xsi:type="double" name="double" default="11111111.111111" scale="245"/>
         <column xsi:type="decimal" name="decimal" default="0" scale="15" precission="4"/>

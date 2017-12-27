@@ -7,6 +7,8 @@
 namespace Magento\Setup\Model\Declaration\Schema\Operations;
 
 use Magento\Setup\Model\Declaration\Schema\Db\AdapterMediator;
+use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
@@ -26,16 +28,41 @@ class ModifyElement implements OperationInterface
     const OPERATION_NAME = 'modify_element';
 
     /**
-     * @var AdapterMediator
+     * @var DefinitionAggregator
      */
-    private $adapterMediator;
+    private $definitionAggregator;
 
     /**
-     * @param AdapterMediator $adapterMediator
+     * @var DbSchemaWriterInterface
      */
-    public function __construct(AdapterMediator $adapterMediator)
-    {
-        $this->adapterMediator = $adapterMediator;
+    private $dbSchemaWriter;
+
+    /**
+     * @var AddElement
+     */
+    private $addElement;
+
+    /**
+     * @var DropElement
+     */
+    private $dropElement;
+
+    /**
+     * @param DefinitionAggregator $definitionAggregator
+     * @param DbSchemaWriterInterface $dbSchemaWriter
+     * @param AddElement $addElement
+     * @param DropElement $dropElement
+     */
+    public function __construct(
+        DefinitionAggregator $definitionAggregator,
+        DbSchemaWriterInterface $dbSchemaWriter,
+        AddElement $addElement,
+        DropElement $dropElement
+    ) {
+        $this->definitionAggregator = $definitionAggregator;
+        $this->dbSchemaWriter = $dbSchemaWriter;
+        $this->addElement = $addElement;
+        $this->dropElement = $dropElement;
     }
 
     /**
@@ -44,6 +71,48 @@ class ModifyElement implements OperationInterface
     public function getOperationName()
     {
         return self::OPERATION_NAME;
+    }
+
+    /**
+     * Modify constraint (PRIMARY, UNIQUE, FOREIGN keys) definition for existing table
+     *
+     * @param Constraint $constraint
+     */
+    private function modifyConstraint(Constraint $constraint)
+    {
+        $constraintOptions = [
+            'table_name' => $constraint->getTable()->getName(),
+            'element_name' => $constraint->getName(),
+            'resource' => $constraint->getTable()->getResource(),
+            'type' => $constraint->getType()
+        ];
+        $definition = $this->definitionAggregator->toDefinition($constraint);
+
+        $this->dbSchemaWriter->modifyConstraint(
+            $constraintOptions,
+            $definition
+        );
+    }
+
+
+    /**
+     * Modify column definition for existing table
+     *
+     * @param Column $column
+     */
+    private function modifyColumn(Column $column)
+    {
+        $columnOptions = [
+            'table_name' => $column->getTable()->getName(),
+            'element_name' => $column->getName(),
+            'resource' => $column->getTable()->getResource()
+        ];
+        $definition = $this->definitionAggregator->toDefinition($column);
+
+        $this->dbSchemaWriter->modifyColumn(
+            $columnOptions,
+            $definition
+        );
     }
 
     /**
@@ -57,13 +126,12 @@ class ModifyElement implements OperationInterface
         $element = $elementHistory->getNew();
 
         if ($element instanceof Internal) {
-            $this->adapterMediator->modifyConstraint($element);
+            $this->modifyConstraint($element);
         } else if ($element instanceof Index || $element instanceof Reference) {
-            $this->adapterMediator->dropElement($element);
-            $this->adapterMediator->addElement($element);
-        } else {
-            /** @var Column $element */
-            $this->adapterMediator->modifyColumn($element);
+            $this->dropElement->doOperation($elementHistory);
+            $this->addElement->doOperation($elementHistory);
+        } else if ($element instanceof Column) {
+            $this->modifyColumn($element);
         }
     }
 }

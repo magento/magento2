@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Constraints;
+namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Constraints;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
@@ -16,7 +16,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  *
  * @inheritdoc
  */
-class Internal implements DbSchemaProcessorInterface
+class Internal implements DbDefinitionProcessorInterface
 {
     /**
      * Name of Primary Key
@@ -72,26 +72,14 @@ class Internal implements DbSchemaProcessorInterface
     /**
      * @inheritdoc
      */
-    public function canBeApplied(ElementInterface $element)
-    {
-        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function fromDefinition(array $data)
     {
-        if (isset($data['Key_name'])) {
-            $data = [
+        return [
                 'name' => $data['Key_name'],
                 'column' => [
                     $data['Column_name'] => $data['Column_name']
                 ],
                 'type' => $data['Key_name'] === self::PRIMARY_NAME ? 'primary' : 'unique'
-            ];
-        }
-
-        return $data;
+        ];
     }
 }

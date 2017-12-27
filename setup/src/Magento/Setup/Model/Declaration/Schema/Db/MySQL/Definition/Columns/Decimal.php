@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns;
+namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
@@ -14,7 +14,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  *
  * @inheritdoc
  */
-class Decimal implements DbSchemaProcessorInterface
+class Decimal implements DbDefinitionProcessorInterface
 {
     /**
      * @var Nullable
@@ -44,14 +44,6 @@ class Decimal implements DbSchemaProcessorInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public function canBeApplied(ElementInterface $element)
-    {
-        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Decimal;
-    }
-
-    /**
      * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Decimal $element
      * @inheritdoc
      */
@@ -74,19 +66,15 @@ class Decimal implements DbSchemaProcessorInterface
     public function fromDefinition(array $data)
     {
         $matches = [];
-        if (preg_match('/^(float|decimal|double)\((\d+),(\d+)\)/', $data['type'], $matches)) {
+        if (preg_match('/^(float|decimal|double)\((\d+),(\d+)\)/', $data['definition'], $matches)) {
             /**
              * match[1] - type
              * match[2] - precision
              * match[3] - scale
              */
-            $data['type'] = $matches[1];
-
-            if (isset($matches[2]) && isset($matches[3])) {
-                $data['scale'] = $matches[2];
-                $data['precission'] = $matches[3];
-            }
-
+            $data['scale'] = $matches[2];
+            $data['precission'] = $matches[3];
+            $data = $this->nullable->fromDefinition($data);
             $data = $this->unsigned->fromDefinition($data);
         }
 

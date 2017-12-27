@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Constraints;
+namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Constraints;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
@@ -17,7 +17,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  *
  * @inheritdoc
  */
-class ForeignKey implements DbSchemaProcessorInterface
+class ForeignKey implements DbDefinitionProcessorInterface
 {
     /**
      * Usually used in MySQL requests
@@ -65,41 +65,29 @@ class ForeignKey implements DbSchemaProcessorInterface
     /**
      * @inheritdoc
      */
-    public function canBeApplied(ElementInterface $element)
-    {
-        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function fromDefinition(array $data)
     {
-        if (isset($data['Create Table'])) {
-            $createMySQL = $data['Create Table'];
-            $ddl = [];
-            $regExp  = '#,\s+CONSTRAINT `([^`]*)` FOREIGN KEY ?\(`([^`]*)`\) '
-                . 'REFERENCES (`([^`]*)`\.)?`([^`]*)` \(`([^`]*)`\)'
-                . '( ON DELETE (RESTRICT|CASCADE|SET NULL|NO ACTION))?'
-                . '( ON UPDATE (RESTRICT|CASCADE|SET NULL|NO ACTION))?#';
-            $matches = [];
+        $createMySQL = $data['Create Table'];
+        $ddl = [];
+        $regExp  = '#,\s+CONSTRAINT `([^`]*)` FOREIGN KEY ?\(`([^`]*)`\) '
+            . 'REFERENCES (`([^`]*)`\.)?`([^`]*)` \(`([^`]*)`\)'
+            . '( ON DELETE (RESTRICT|CASCADE|SET NULL|NO ACTION))?'
+            . '( ON UPDATE (RESTRICT|CASCADE|SET NULL|NO ACTION))?#';
+        $matches = [];
 
-            if (preg_match_all($regExp, $createMySQL, $matches, PREG_SET_ORDER)) {
-                foreach ($matches as $match) {
-                    $ddl[$match[1]] = [
-                        'type' => 'foreign',
-                        'name' => $match[1],
-                        'column' => $match[2],
-                        'referenceTable' => $match[5],
-                        'referenceColumn' => $match[6],
-                        'onDelete' => isset($match[7]) ? $match[8] : ''
-                    ];
-                }
+        if (preg_match_all($regExp, $createMySQL, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $match) {
+                $ddl[$match[1]] = [
+                    'type' => Reference::TYPE,
+                    'name' => $match[1],
+                    'column' => $match[2],
+                    'referenceTable' => $match[5],
+                    'referenceColumn' => $match[6],
+                    'onDelete' => isset($match[7]) ? $match[8] : ''
+                ];
             }
-
-            return $ddl;
         }
 
-        return $data;
+        return $ddl;
     }
 }

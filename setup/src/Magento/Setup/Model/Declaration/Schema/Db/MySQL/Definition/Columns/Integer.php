@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns;
+namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
@@ -14,7 +14,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  *
  * @inheritdoc
  */
-class Integer implements DbSchemaProcessorInterface
+class Integer implements DbDefinitionProcessorInterface
 {
     /**
      * @var Unsigned
@@ -22,7 +22,7 @@ class Integer implements DbSchemaProcessorInterface
     private $unsigned;
 
     /**
-     * @var \Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Boolean
+     * @var \Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Boolean
      */
     private $boolean;
 
@@ -63,14 +63,6 @@ class Integer implements DbSchemaProcessorInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public function canBeApplied(ElementInterface $element)
-    {
-        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer;
-    }
-
-    /**
      * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer $element
      * @inheritdoc
      */
@@ -78,7 +70,7 @@ class Integer implements DbSchemaProcessorInterface
     {
         return sprintf(
             '%s(%s) %s %s %s %s',
-            str_replace('integer', 'int', $element->getType()),
+            $element->getType(),
             $element->getPadding(),
             $this->unsigned->toDefinition($element),
             $this->nullable->toDefinition($element),
@@ -93,21 +85,15 @@ class Integer implements DbSchemaProcessorInterface
     public function fromDefinition(array $data)
     {
         $matches = [];
-        if (preg_match('/^(big|medium|small|tiny)?int\((\d+)\)/', $data['type'], $matches)) {
+        if (preg_match('/^(big|small|tiny)?int\((\d+)\)/', $data['definition'], $matches)) {
             /**
-             * match[0] - all
              * match[1] - prefix
              * match[2] - padding, like 5 or 11
              */
-            $data = $this->unsigned->fromDefinition($data);
-            $data['type'] = sprintf("%sinteger", $matches[1]);
             //Use shortcut for mediuminteger
-            $data['type'] = $data['type'] === 'mediuminteger' ? 'integer' : $data['type'];
-
-            if (isset($matches[2])) {
-                $data['padding'] = $matches[2];
-            }
-
+            $data['padding'] = $matches[2];
+            $data = $this->unsigned->fromDefinition($data);
+            $data = $this->nullable->fromDefinition($data);
             $data = $this->identity->fromDefinition($data);
             $data = $this->boolean->fromDefinition($data);
         }

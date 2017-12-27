@@ -17,6 +17,12 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 class Reference extends Constraint implements ElementDiffAwareInterface
 {
     /**
+     * In case if we will need to change this object: add, modify or drop, we will need
+     * to define it by its type
+     */
+    const TYPE = 'reference';
+
+    /**
      * @var Column
      */
     private $column;
@@ -97,6 +103,16 @@ class Reference extends Constraint implements ElementDiffAwareInterface
     public function getOnDelete()
     {
         return $this->onDelete;
+    }
+
+    /**
+     * For foreign key type always will be 'reference'
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return self::TYPE;
     }
 
     /**

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Db\Processors;
+namespace Magento\Setup\Model\Declaration\Schema\Db;
 
 /**
  * This class is responsible for read different schema
@@ -37,7 +37,7 @@ interface DbSchemaReaderInterface
      * @param  string $resource
      * @return array
      */
-    public function readeColumns($tableName, $resource);
+    public function readColumns($tableName, $resource);
 
     /**
      * Read references (foreign keys) from Magento tables

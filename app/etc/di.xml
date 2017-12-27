@@ -174,8 +174,8 @@
     <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
     <preference for="Magento\Framework\Indexer\Config\DependencyInfoProviderInterface" type="Magento\Framework\Indexer\Config\DependencyInfoProvider" />
     <preference for="Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface" type="Magento\Eav\Model\TypeLocator\ComplexType"/>
-    <preference for="Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaReaderInterface" type="Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\DbSchemaReader" />
-    <preference for="Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaWriterInterface" type="Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\DbSchemaWriter" />
+    <preference for="Magento\Setup\Model\Declaration\Schema\Db\DbSchemaReaderInterface" type="Magento\Setup\Model\Declaration\Schema\Db\MySQL\DbSchemaReader" />
+    <preference for="Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface" type="Magento\Setup\Model\Declaration\Schema\Db\MySQL\DbSchemaWriter" />
     <preference for="Magento\Setup\Model\Declaration\Schema\SchemaConfigInterface" type="Magento\Setup\Model\Declaration\Schema\SchemaConfig" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
@@ -1357,10 +1357,10 @@
                 <item name="decimal" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Decimal</item>
                 <item name="float" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Decimal</item>
                 <item name="double" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Decimal</item>
-                <item name="smallinteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
-                <item name="tinyinteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
-                <item name="biginteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
-                <item name="integer" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
+                <item name="smallint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
+                <item name="tinyint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
+                <item name="bigint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
+                <item name="int" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Integer</item>
                 <item name="date" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Date</item>
                 <item name="timestamp" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Timestamp</item>
                 <item name="datetime" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Timestamp</item>
@@ -1368,7 +1368,7 @@
                 <item name="mediumtext" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\MediumText</item>
                 <item name="text" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Text</item>
                 <item name="varchar" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Varchar</item>
-                <item name="varbinary" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Varbinary</item>
+                <item name="varbinary" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Varchar</item>
                 <item name="blob" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\Blob</item>
                 <item name="mediumblob" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\MediumBlob</item>
                 <item name="longblob" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Dto\Factories\LongBlob</item>
@@ -1380,38 +1380,33 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Setup\Model\Declaration\Schema\Db\AdapterMediator">
+    <type name="Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator">
         <arguments>
-            <argument name="processors" xsi:type="array">
-                <item name="column" xsi:type="array">
-                    <item name="basic" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Basic</item>
-                    <item name="boolean" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Boolean</item>
-                    <item name="integer" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Integer</item>
-                    <item name="smallinteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Integer</item>
-                    <item name="tinyinteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Integer</item>
-                    <item name="biginteger" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Integer</item>
-                    <item name="decimal" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Decimal</item>
-                    <item name="float" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Decimal</item>
-                    <item name="double" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Decimal</item>
-                    <item name="text" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Text</item>
-                    <item name="blob" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Blob</item>
-                    <item name="mediumblob" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Blob</item>
-                    <item name="longblob" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Blob</item>
-                    <item name="mediumtext" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Text</item>
-                    <item name="longtext" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Text</item>
-                    <item name="datetime" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Timestamp</item>
-                    <item name="date" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Date</item>
-                    <item name="timestamp" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Timestamp</item>
-                    <item name="varchar" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Varchar</item>
-                    <item name="varbinary" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns\Varchar</item>
-                </item>
-                <item name="index" xsi:type="array">
-                    <item name="indexGeneric" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Index</item>
-                </item>
-                <item name="constraint" xsi:type="array">
-                    <item name="unique" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Constraints\Internal</item>
-                    <item name="foreignKey" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Constraints\ForeignKey</item>
-                </item>
+            <argument name="definitionProcessors" xsi:type="array">
+                <item name="boolean" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Boolean</item>
+                <item name="int" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Integer</item>
+                <item name="smallint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Integer</item>
+                <item name="tinyint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Integer</item>
+                <item name="bigint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Integer</item>
+                <item name="decimal" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Decimal</item>
+                <item name="float" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Decimal</item>
+                <item name="double" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Decimal</item>
+                <item name="text" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Blob</item>
+                <item name="blob" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Blob</item>
+                <item name="mediumblob" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Blob</item>
+                <item name="longblob" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Blob</item>
+                <item name="mediumtext" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Blob</item>
+                <item name="longtext" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Blob</item>
+                <item name="datetime" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Timestamp</item>
+                <item name="date" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Date</item>
+                <item name="timestamp" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Timestamp</item>
+                <item name="varchar" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Varchar</item>
+                <item name="varbinary" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns\Varchar</item>
+                <item name="index" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Index</item>
+                <item name="unique" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Constraints\Internal</item>
+                <item name="primary" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Constraints\Internal</item>
+                <item name="constraint" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Constraints\Internal</item>
+                <item name="reference" xsi:type="object">\Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Constraints\ForeignKey</item>
             </argument>
         </arguments>
     </type>

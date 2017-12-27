@@ -6,7 +6,8 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Operations;
 
-use Magento\Setup\Model\Declaration\Schema\Db\AdapterMediator;
+use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
@@ -22,16 +23,25 @@ class DropTable implements OperationInterface
     const OPERATION_NAME = 'drop_table';
 
     /**
-     * @var AdapterMediator
+     * @var DefinitionAggregator
      */
-    private $adapterMediator;
+    private $definitionAggregator;
 
     /**
-     * @param AdapterMediator $adapterMediator
+     * @var DbSchemaWriterInterface
      */
-    public function __construct(AdapterMediator $adapterMediator)
-    {
-        $this->adapterMediator = $adapterMediator;
+    private $dbSchemaWriter;
+
+    /**
+     * @param DefinitionAggregator $definitionAggregator
+     * @param DbSchemaWriterInterface $dbSchemaWriter
+     */
+    public function __construct(
+        DefinitionAggregator $definitionAggregator,
+        DbSchemaWriterInterface $dbSchemaWriter
+    ) {
+        $this->definitionAggregator = $definitionAggregator;
+        $this->dbSchemaWriter = $dbSchemaWriter;
     }
 
     /**
@@ -47,8 +57,15 @@ class DropTable implements OperationInterface
      */
     public function doOperation(ElementHistory $tableHistory)
     {
-        /** @var Table $table */
-        $table = $tableHistory->getNew();
-        $this->adapterMediator->dropTable($table);
+        /**
+         * @var Table $table
+         */
+        $table = $tableHistory->getOld();
+        $tableOptions = [
+            'name' => $table->getName(),
+            'resource' => $table->getResource()
+        ];
+
+        $this->dbSchemaWriter->dropTable($tableOptions);
     }
 }

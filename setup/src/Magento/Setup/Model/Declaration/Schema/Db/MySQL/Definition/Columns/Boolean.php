@@ -4,9 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns;
+namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Framework\Stdlib\BooleanUtils;
+use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
@@ -15,7 +16,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  *
  * @inheritdoc
  */
-class Boolean implements DbSchemaProcessorInterface
+class Boolean implements DbDefinitionProcessorInterface
 {
     /**
      * Type with what we will persist column
@@ -25,7 +26,7 @@ class Boolean implements DbSchemaProcessorInterface
     /**
      * Type of integer that will be used in MySQL for boolean
      */
-    const INTEGER_TYPE = 'tinyinteger';
+    const INTEGER_TYPE = 'tinyint';
 
     /**
      * Padding for integer described below
@@ -43,21 +44,23 @@ class Boolean implements DbSchemaProcessorInterface
     private $defaultDefinition;
 
     /**
-     * @param Nullable          $nullable
-     * @param DefaultDefinition $defaultDefinition
+     * @var BooleanUtils
      */
-    public function __construct(Nullable $nullable, DefaultDefinition $defaultDefinition)
-    {
-        $this->nullable = $nullable;
-        $this->defaultDefinition = $defaultDefinition;
-    }
+    private $booleanUtils;
 
     /**
-     * @inheritdoc
+     * @param Nullable $nullable
+     * @param DefaultDefinition $defaultDefinition
+     * @param BooleanUtils $booleanUtils
      */
-    public function canBeApplied(ElementInterface $element)
-    {
-        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Boolean;
+    public function __construct(
+        Nullable $nullable,
+        DefaultDefinition $defaultDefinition,
+        BooleanUtils $booleanUtils
+    ) {
+        $this->nullable = $nullable;
+        $this->defaultDefinition = $defaultDefinition;
+        $this->booleanUtils = $booleanUtils;
     }
 
     /**
@@ -82,7 +85,7 @@ class Boolean implements DbSchemaProcessorInterface
     public function fromDefinition(array $data)
     {
         if ($data['type'] === self::INTEGER_TYPE && $data['padding'] === self::INTEGER_PADDING) {
-            $data['type'] = 'boolean';
+            $data['type'] = strtolower(self::TYPE);
             $data['default'] = (bool) $data['default'];
             $data['unsigned'] = false; //For boolean we always do not want to have unsigned
         }

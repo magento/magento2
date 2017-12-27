@@ -8,7 +8,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
     <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/column.xsd"/>
 
-    <xs:complexType name="integer">
+    <xs:complexType name="int">
         <xs:annotation>
             <xs:documentation>
                 Serves needs in integer digits. Default padding is 11.

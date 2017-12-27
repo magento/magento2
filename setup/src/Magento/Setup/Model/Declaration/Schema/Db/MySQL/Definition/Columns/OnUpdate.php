@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns;
+namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
@@ -14,7 +14,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  *
  * @inheritdoc
  */
-class OnUpdate implements DbSchemaProcessorInterface
+class OnUpdate implements DbDefinitionProcessorInterface
 {
     /**
      * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp $element
@@ -22,16 +22,12 @@ class OnUpdate implements DbSchemaProcessorInterface
      */
     public function toDefinition(ElementInterface $element)
     {
-        return $element->getOnUpdate() ?
-            'ON UPDATE CURRENT_TIMESTAMP' : '';
-    }
+        if ($element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp) {
+            return $element->getOnUpdate() ?
+                'ON UPDATE CURRENT_TIMESTAMP' : '';
+        }
 
-    /**
-     * @inheritdoc
-     */
-    public function canBeApplied(ElementInterface $element)
-    {
-        return false;
+        return '';
     }
 
     /**
@@ -41,7 +37,7 @@ class OnUpdate implements DbSchemaProcessorInterface
     {
         $matches = [];
         if (preg_match('/^(?:on update)\s([\_\-\s\w\d]+)/', $data['extra'], $matches)) {
-            $data['on_update'] = $matches[1];
+            $data['on_update'] = true;
         }
 
         return $data;

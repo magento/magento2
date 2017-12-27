@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns;
+namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\ColumnIdentityAwareInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
@@ -15,7 +15,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  *
  * @inheritdoc
  */
-class Identity implements DbSchemaProcessorInterface
+class Identity implements DbDefinitionProcessorInterface
 {
     /**
      * MyMySQL flag, that says that we need to increment field, each time when we add new row
@@ -29,14 +29,6 @@ class Identity implements DbSchemaProcessorInterface
     public function toDefinition(ElementInterface $element)
     {
         return $element->isIdentity() ? strtoupper(self::IDENTITY_FLAG) : '';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function canBeApplied(ElementInterface $element)
-    {
-        return false;
     }
 
     /**

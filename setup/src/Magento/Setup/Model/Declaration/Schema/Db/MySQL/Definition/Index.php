@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL;
+namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
@@ -17,7 +17,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  *
  * @inheritdoc
  */
-class Index implements DbSchemaProcessorInterface
+class Index implements DbDefinitionProcessorInterface
 {
     /**
      * Key name that is used in requests, like DROP INDEX or ADD INDEX

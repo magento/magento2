@@ -6,7 +6,10 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Operations;
 
-use Magento\Setup\Model\Declaration\Schema\Db\AdapterMediator;
+use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator;
+use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\TableElementInterface;
 use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
@@ -21,16 +24,25 @@ class AddElement implements OperationInterface
     const OPERATION_NAME = 'add_element';
 
     /**
-     * @var AdapterMediator
+     * @var DefinitionAggregator
      */
-    private $adapterMediator;
+    private $definitionAggregator;
 
     /**
-     * @param AdapterMediator $adapterMediator
+     * @var DbSchemaWriterInterface
      */
-    public function __construct(AdapterMediator $adapterMediator)
-    {
-        $this->adapterMediator = $adapterMediator;
+    private $dbSchemaWriter;
+
+    /**
+     * @param DefinitionAggregator $definitionAggregator
+     * @param DbSchemaWriterInterface $dbSchemaWriter
+     */
+    public function __construct(
+        DefinitionAggregator $definitionAggregator,
+        DbSchemaWriterInterface $dbSchemaWriter
+    ) {
+        $this->definitionAggregator = $definitionAggregator;
+        $this->dbSchemaWriter = $dbSchemaWriter;
     }
 
     /**
@@ -46,6 +58,21 @@ class AddElement implements OperationInterface
      */
     public function doOperation(ElementHistory $elementHistory)
     {
-        $this->adapterMediator->addElement($elementHistory->getNew());
+        /**
+         * @var TableElementInterface | ElementInterface $element
+         */
+        $element = $elementHistory->getNew();
+        $elementOptions = [
+            'table_name' => $element->getTable()->getName(),
+            'element_name' => $element->getName(),
+            'resource' => $element->getTable()->getResource()
+        ];
+        $definition = $this->definitionAggregator->toDefinition($element);
+
+        $this->dbSchemaWriter->addElement(
+            $elementOptions,
+            $definition,
+            $element->getElementType()
+        );
     }
 }

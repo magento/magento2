@@ -274,6 +274,25 @@ class ResourceConnection
     }
 
     /**
+     * Retrieve db name
+     *
+     * That name can be needed, when we do request in information_schema
+     * to identify db
+     *
+     * @param string $resourceName
+     * @return string
+     */
+    public function getSchemaName($resourceName)
+    {
+        return $this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS .
+            '/' .
+            $resourceName .
+            '/dbname'
+        );
+    }
+
+    /**
      * Get table prefix
      *
      * @return string

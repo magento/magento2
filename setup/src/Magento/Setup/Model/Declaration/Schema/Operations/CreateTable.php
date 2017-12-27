@@ -6,7 +6,12 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Operations;
 
-use Magento\Setup\Model\Declaration\Schema\Db\AdapterMediator;
+use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator;
+use Magento\Setup\Model\Declaration\Schema\Dto\Column;
+use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
+use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
+use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
 use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
@@ -22,16 +27,25 @@ class CreateTable implements OperationInterface
     const OPERATION_NAME = 'create_table';
 
     /**
-     * @var AdapterMediator
+     * @var DbSchemaWriterInterface
      */
-    private $adapterMediator;
+    private $dbSchemaWriter;
 
     /**
-     * @param AdapterMediator $adapterMediator
+     * @var DefinitionAggregator
      */
-    public function __construct(AdapterMediator $adapterMediator)
-    {
-        $this->adapterMediator = $adapterMediator;
+    private $definitionAggregator;
+
+    /**
+     * @param DbSchemaWriterInterface $dbSchemaWriter
+     * @param DefinitionAggregator $definitionAggregator
+     */
+    public function __construct(
+        DbSchemaWriterInterface $dbSchemaWriter,
+        DefinitionAggregator $definitionAggregator
+    ) {
+        $this->dbSchemaWriter = $dbSchemaWriter;
+        $this->definitionAggregator = $definitionAggregator;
     }
 
     /**
@@ -49,6 +63,27 @@ class CreateTable implements OperationInterface
     {
         /** @var Table $table */
         $table = $elementHistory->getNew();
-        $this->adapterMediator->createTable($table);
+
+        $definition = [];
+        $tableOptions = [
+            'resource' => $table->getResource(),
+            'name' => $table->getName()
+        ];
+        $data = [
+            Column::TYPE => $table->getColumns(),
+            Constraint::TYPE => $table->getConstraints(),
+            Index::TYPE => $table->getIndexes()
+        ];
+
+        foreach ($data as $type => $elements) {
+            /**
+             * @var ElementInterface $element
+             */
+            foreach ($elements as $element) {
+                $definition[$type][$element->getName()] = $this->definitionAggregator->toDefinition($element);
+            }
+        }
+
+        $this->dbSchemaWriter->createTable($tableOptions, $definition);
     }
 }

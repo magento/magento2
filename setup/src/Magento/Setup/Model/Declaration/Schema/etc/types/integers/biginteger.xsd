@@ -8,9 +8,9 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
     <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/integers/integer.xsd"/>
 
-    <xs:complexType name="biginteger">
+    <xs:complexType name="bigint">
         <xs:complexContent>
-            <xs:extension base="integer"/>
+            <xs:extension base="int"/>
         </xs:complexContent>
     </xs:complexType>
 </xs:schema>

@@ -20,10 +20,10 @@ class Integer implements FactoryInterface
      * @var array
      */
     private static $defaultPadding = [
-        'integer' => '11',
-        'tinyinteger' => '2',
-        'smallinteger' => '5',
-        'biginteger' => '20'
+        'int' => '11',
+        'tinyint' => '2',
+        'smallint' => '5',
+        'bigint' => '20'
     ];
 
     /**

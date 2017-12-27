@@ -7,15 +7,15 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
     <table name="reference_table" resource="default">
-        <column xsi:type="smallinteger" name="smallint_ref" padding="6" nullable="false" unsigned="false" identity="true" />
+        <column xsi:type="smallint" name="smallint_ref" padding="6" nullable="false" unsigned="false" identity="true" />
         <constraint xsi:type="primary" name="tinyint_primary">
             <column name="smallint_ref" />
         </constraint>
     </table>
     <table name="test_table" resource="default">
         <!--Columns-->
-        <column xsi:type="smallinteger" name="smallint" default="0" padding="6" nullable="true" unsigned="false" />
-        <column xsi:type="biginteger" name="bigint" default="1" padding="20" nullable="true" unsigned="false" />
+        <column xsi:type="smallint" name="smallint" default="0" padding="6" nullable="true" unsigned="false" />
+        <column xsi:type="bigint" name="bigint" default="1" padding="20" nullable="true" unsigned="false" />
         <column xsi:type="float" name="float" default="0" precission="10" scale="0" />
         <column xsi:type="date" name="date" />
         <column xsi:type="timestamp" name="timestamp" default="CURRENT_TIMESTAMP" on_update="true" />

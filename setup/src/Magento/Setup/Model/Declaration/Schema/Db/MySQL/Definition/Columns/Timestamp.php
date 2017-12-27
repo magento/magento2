@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model\Declaration\Schema\Db\Processors\MySQL\Columns;
+namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
-use Magento\Setup\Model\Declaration\Schema\Db\Processors\DbSchemaProcessorInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Date;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
@@ -15,7 +15,7 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
  *
  * @inheritdoc
  */
-class Timestamp implements DbSchemaProcessorInterface
+class Timestamp implements DbDefinitionProcessorInterface
 {
     /**
      * This timestamp can be used, when const value as DEFAULT 0 was passed
@@ -43,14 +43,6 @@ class Timestamp implements DbSchemaProcessorInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public function canBeApplied(ElementInterface $element)
-    {
-        return $element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp;
-    }
-
-    /**
      * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp $element
      * @inheritdoc
      */
@@ -69,15 +61,11 @@ class Timestamp implements DbSchemaProcessorInterface
      */
     public function fromDefinition(array $data)
     {
-        $matches = [];
-        if (preg_match('/^(timestamp|datetime).*/', $data['type'], $matches)) {
-            $data['type'] = $matches[1];
-            if ($data['default'] === self::CONST_DEFAULT_TIMESTAMP) {
-                $data['default'] = 0;
-            }
-            $data = $this->onUpdate->fromDefinition($data);
+        if ($data['default'] === self::CONST_DEFAULT_TIMESTAMP) {
+            $data['default'] = 0;
         }
 
+        $data = $this->onUpdate->fromDefinition($data);
         return $data;
     }
 }
