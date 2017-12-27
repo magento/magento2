@@ -11,7 +11,7 @@ use Magento\InstantPurchase\Model\PaymentMethodChoose\PaymentTokenChooserInterfa
 use Magento\InstantPurchase\Model\ShippingAddressChoose\ShippingAddressChooserInterface;
 use Magento\InstantPurchase\Model\BillingAddressChoose\BillingAddressChooserInterface;
 use Magento\InstantPurchase\Model\ShippingMethodChoose\ShippingMethodChooserInterface;
-use Magento\Store\Model\Store;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Choose instant purchase option programmatically based on configured implementation.
@@ -79,7 +79,7 @@ class InstantPurchaseChooser implements InstantPurchaseInterface
      * @inheritdoc
      */
     public function getOption(
-        Store $store,
+        StoreInterface $store,
         Customer $customer
     ): InstantPurchaseOption {
         if (!$this->isInstantPurchaseButtonEnabled($store)) {
@@ -108,10 +108,10 @@ class InstantPurchaseChooser implements InstantPurchaseInterface
     /**
      * Checks if button available.
      *
-     * @param Store $store
+     * @param StoreInterface $store
      * @return bool
      */
-    private function isInstantPurchaseButtonEnabled(Store $store): bool
+    private function isInstantPurchaseButtonEnabled(StoreInterface $store): bool
     {
         return $this->config->isModuleEnabled($store->getId());
     }

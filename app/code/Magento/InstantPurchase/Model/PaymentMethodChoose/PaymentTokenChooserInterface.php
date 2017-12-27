@@ -6,7 +6,7 @@
 namespace Magento\InstantPurchase\Model\PaymentMethodChoose;
 
 use Magento\Customer\Model\Customer;
-use Magento\Store\Model\Store;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 
 /**
@@ -17,9 +17,9 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 interface PaymentTokenChooserInterface
 {
     /**
-     * @param Store $store
+     * @param StoreInterface $store
      * @param Customer $customer
      * @return PaymentTokenInterface|null
      */
-    public function choose(Store $store, Customer $customer);
+    public function choose(StoreInterface $store, Customer $customer);
 }

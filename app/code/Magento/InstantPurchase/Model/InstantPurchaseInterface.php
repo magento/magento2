@@ -6,6 +6,7 @@
 namespace Magento\InstantPurchase\Model;
 
 use Magento\Customer\Model\Customer;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -18,12 +19,12 @@ interface InstantPurchaseInterface
     /**
      * Detects instant purchase options for a customer in a store.
      *
-     * @param Store $store
+     * @param StoreInterface $store
      * @param Customer $customer
      * @return InstantPurchaseOption
      */
     public function getOption(
-        Store $store,
+        StoreInterface $store,
         Customer $customer
     ): InstantPurchaseOption;
 }
