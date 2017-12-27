@@ -16,6 +16,7 @@ use Magento\Framework\App\ObjectManager;
  * @api
  * @deprecated file will be moved to UI module in future release
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Config extends \Magento\Framework\DataObject implements ConfigInterface
 {
@@ -239,11 +240,11 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
         }
 
         if ($config->getData('add_variables')) {
-            $config = $this->configProvider->processVariableConfig($config);
+            $this->configProvider->processVariableConfig($config);
         }
 
         if ($config->getData('add_widgets')) {
-            $config = $this->configProvider->processWidgetConfig($config);
+            $this->configProvider->processWidgetConfig($config);
         }
 
         return $this->configProvider->processWysiswygConfig($config);

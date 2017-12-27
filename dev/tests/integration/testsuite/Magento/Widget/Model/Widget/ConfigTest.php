@@ -36,7 +36,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
 
         $config = new \Magento\Framework\DataObject();
-        $settings = $this->_model->getConfig($config);
+        $settings = $this->_model->getPluginSettings($config);
 
         $this->assertArrayHasKey('plugins', $settings);
         $this->assertArrayHasKey('widget_placeholders', $settings);

@@ -123,8 +123,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                     'activeEditor' => $this->getMockBuilder(\Magento\Ui\Block\Wysiwyg\ActiveEditor::class)
                         ->disableOriginalConstructor()->getMock(),
                     'configProviderFactory' => $configProviderFactory,
-                    'variablePluginConfigProvider' => [],
-                    'widgetPluginConfigProvider' => [],
+                    'variablePluginConfigProvider' => ['default' => \Magento\Cms\Model\WysiwygDefaultConfig::class],
+                    'widgetPluginConfigProvider' => ['default' => \Magento\Cms\Model\WysiwygDefaultConfig::class],
                     'wysiwygConfigPostProcessor' => ['default' => \Magento\Cms\Model\WysiwygDefaultConfig::class],
 
                 ]
@@ -159,14 +159,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetConfig($data, $isAuthorizationAllowed, $expectedResults)
     {
-        $wysiwygPluginSettings = [
-            'wysiwygPluginSettings' => 'wysiwyg is here',
-        ];
-
-        $pluginSettings = [
-            'pluginSettings' => 'plugins are here',
-        ];
-
         $this->backendUrlMock->expects($this->atLeastOnce())
             ->method('getUrl')
             ->withConsecutive(
@@ -191,18 +183,18 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('isAllowed')
             ->with('Magento_Cms::media_gallery')
             ->willReturn($isAuthorizationAllowed);
-        $this->configProvider->expects($this->any())
-            ->method('processVariableConfig')
-            ->willReturn($wysiwygPluginSettings);
-        $this->configProvider->expects($this->any())
-            ->method('processWidgetConfig')
-            ->willReturn($pluginSettings);
+        if ($data['add_variables']) {
+            $this->configProvider->expects($this->once())
+                ->method('processVariableConfig');
+        }
+        if ($data['add_widgets']) {
+            $this->configProvider->expects($this->once())
+                ->method('processWidgetConfig');
+        }
 
         $config = $this->wysiwygConfig->getConfig($data);
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $config);
         $this->assertEquals($expectedResults[0], $config->getData('someData'));
-        $this->assertEquals($expectedResults[1], $config->getData('wysiwygPluginSettings'));
-        $this->assertEquals($expectedResults[2], $config->getData('pluginSettings'));
         $this->assertEquals('localhost/pub/static/', $config->getData('baseStaticUrl'));
         $this->assertEquals('localhost/pub/static/', $config->getData('baseStaticDefaultUrl'));
     }

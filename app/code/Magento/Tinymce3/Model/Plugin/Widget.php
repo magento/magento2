@@ -7,6 +7,9 @@ namespace Magento\Tinymce3\Model\Plugin;
 
 use Magento\Tinymce3\Model\Config\Source\Wysiwyg\Editor;
 
+/**
+ * Plugin to override widget placeholder images in case if tinymce3 adapter is used
+ */
 class Widget
 {
     /**
@@ -26,14 +29,14 @@ class Widget
 
     /**
      * @param \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Tinymce3\Model\Config\Widget\PlaceholderImagesPool $placeholderImages
      */
     public function __construct(
         \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Tinymce3\Model\Config\Widget\PlaceholderImagesPool $placeholderImages
-    )
-    {
+    ) {
         $this->activeEditor = $activeEditor;
         $this->placeholderImages = $placeholderImages;
         $this->assetRepo = $assetRepo;
@@ -50,8 +53,7 @@ class Widget
         \Magento\Widget\Model\Widget $subject,
         $proceed,
         $type
-    )
-    {
+    ) {
         if ($this->activeEditor->getWysiwygAdapterPath() !== Editor::WYSIWYG_EDITOR_CONFIG_VALUE) {
             return $proceed($type);
         }
@@ -63,5 +65,4 @@ class Widget
         }
         return $defaultImage;
     }
-
 }
