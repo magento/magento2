@@ -8,9 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryApi\Test\Api\StockRepository;
 
 use Magento\Framework\Webapi\Rest\Request;
-use Magento\InventoryApi\Api\Data\StockInterface;
-use Magento\TestFramework\Assert\AssertArrayContains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\Framework\Webapi\Exception;
 
 class DeleteTest extends WebapiAbstract
 {
@@ -27,29 +26,6 @@ class DeleteTest extends WebapiAbstract
     public function testDeleteById()
     {
         $stockIdToDelete = 10;
-        $expectedStocksAfterDeleting = [
-            [
-                StockInterface::STOCK_ID => 1,
-                StockInterface::NAME => 'Default Stock',
-                StockInterface::EXTENSION_ATTRIBUTES_KEY => [
-                    'sales_channels' => []
-                ]
-            ],
-            [
-                StockInterface::STOCK_ID => 20,
-                StockInterface::NAME => 'US-stock',
-                StockInterface::EXTENSION_ATTRIBUTES_KEY => [
-                    'sales_channels' => []
-                ]
-            ],
-            [
-                StockInterface::STOCK_ID => 30,
-                StockInterface::NAME => 'Global-stock',
-                StockInterface::EXTENSION_ATTRIBUTES_KEY => [
-                    'sales_channels' => []
-                ]
-            ],
-        ];
 
         $serviceInfo = [
             'rest' => [
@@ -65,26 +41,43 @@ class DeleteTest extends WebapiAbstract
             ? $this->_webApiCall($serviceInfo)
             : $this->_webApiCall($serviceInfo, ['stockId' => $stockIdToDelete]);
 
-        $actualData = $this->getStocksList();
-        self::assertEquals(3, $actualData['total_count']);
-        AssertArrayContains::assert($expectedStocksAfterDeleting, $actualData['items']);
+        $this->checkIsStockDeleted($stockIdToDelete);
     }
 
     /**
-     * @return array
+     * @param int $deletedStockId
      */
-    private function getStocksList(): array
+    private function checkIsStockDeleted($deletedStockId)
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $deletedStockId,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'GetList',
+                'operation' => self::SERVICE_NAME . 'Get',
             ],
         ];
-        return $this->_webApiCall($serviceInfo);
+
+        $expectedMessage = 'Stock with id "%value" does not exist.';
+        try {
+            (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST)
+                ? $this->_webApiCall($serviceInfo)
+                : $this->_webApiCall($serviceInfo, ['stockId' => $deletedStockId]);
+            $this->fail('Expected throwing exception');
+        } catch (\Exception $e) {
+            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+                $errorData = $this->processRestExceptionResult($e);
+                self::assertEquals($expectedMessage, $errorData['message']);
+                self::assertEquals($deletedStockId, $errorData['parameters']['value']);
+                self::assertEquals(Exception::HTTP_NOT_FOUND, $e->getCode());
+            } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+                $this->assertInstanceOf('SoapFault', $e);
+                $this->checkSoapFault($e, $expectedMessage, 'env:Sender', ['value' => $deletedStockId]);
+            } else {
+                throw $e;
+            }
+        }
     }
 }
