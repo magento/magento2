@@ -107,7 +107,7 @@ class SourceItemsConfigurationProcessor
      */
     private function validateSourceItemData(array $sourceItemData)
     {
-        if (!isset($sourceItemData[SourceItemInterface::SOURCE_ID])) {
+        if (!isset($sourceItemData[SourceItemInterface::SOURCE_CODE])) {
             throw new InputException(__('Wrong Product to Source relation parameters given.'));
         }
     }
@@ -121,7 +121,7 @@ class SourceItemsConfigurationProcessor
         /** @var SourceItemInterface $sourceItemConfiguration */
         foreach ($sourceItemsConfigurations as $sourceItemConfiguration) {
             $this->sourceItemConfigurationDelete->execute(
-                $sourceItemConfiguration->getSourceId(),
+                $sourceItemConfiguration->getSourceCode(),
                 $sourceItemConfiguration->getSku()
             );
         }
