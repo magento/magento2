@@ -459,12 +459,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @param null|int|string $websiteId
+     * @param \Magento\Store\Model\Store $store
      * @return bool
      */
-    public function canReturnToStock($websiteId = null)
+    public function canReturnToStock($store = null)
     {
-        return $this->stockConfiguration->canSubtractQty($websiteId);
+        return $this->stockConfiguration->canSubtractQty($store);
     }
 
     /**

@@ -194,15 +194,15 @@ class Configuration implements StockConfigurationInterface
     /**
      * Check if is possible subtract value from item qty
      *
-     * @param null|string|int $websiteId
+     * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return bool
      */
-    public function canSubtractQty($websiteId = null)
+    public function canSubtractQty($store = null)
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_CAN_SUBTRACT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
-            $websiteId
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
         );
     }
 
