@@ -20,7 +20,7 @@
         <after>
             <amOnPage stepKey="amOnLogoutPage" url="admin/admin/auth/logout/"/>
         </after>
-        <test name="SeeReleaseNotificationUponFirstLoginToAdmin">
+        <test name="AdminConfigurationPermission">
             <annotations>
                 <title value="Advanced Reporting configuration permission"/>
                 <description value="An admin user without Analytics permissions should not be able to see the Advanced Reporting configuration page."/>
