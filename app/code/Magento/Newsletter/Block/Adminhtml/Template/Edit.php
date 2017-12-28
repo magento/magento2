@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Newsletter Template Edit Block
  *
@@ -213,7 +211,7 @@ class Edit extends Widget
     public function getForm()
     {
         return $this->getLayout()->createBlock(
-             \Magento\Newsletter\Block\Adminhtml\Template\Edit\Form::class
+            \Magento\Newsletter\Block\Adminhtml\Template\Edit\Form::class
         )->toHtml();
     }
 

@@ -17,11 +17,6 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     protected $indexController;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $registryMock;
-
-    /**
      * @var \Magento\Backend\App\Action\Context
      */
     protected $context;
@@ -113,7 +108,6 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             \Magento\Email\Controller\Adminhtml\Email\Template\Index::class,
             [
                 'context' => $this->context,
-                'coreRegistry' => $this->registryMock
             ]
         );
     }

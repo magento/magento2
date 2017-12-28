@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
 class SuggestedAttributeListTest extends \PHPUnit\Framework\TestCase
@@ -42,9 +40,13 @@ class SuggestedAttributeListTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->configurableAttributeHandler = $this->createMock(\Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler::class);
+        $this->configurableAttributeHandler = $this->createMock(
+            \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler::class
+        );
         $this->resourceHelperMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Helper::class);
-        $this->collectionMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class);
+        $this->collectionMock = $this->createMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class
+        );
         $this->resourceHelperMock->expects(
             $this->once()
         )->method(
@@ -72,8 +74,10 @@ class SuggestedAttributeListTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValueMap($valueMap)
         );
-        $methods = ['getId', 'getFrontendLabel', 'getAttributeCode', 'getSource'];
-        $this->attributeMock = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, $methods);
+        $this->attributeMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            ['getId', 'getFrontendLabel', 'getAttributeCode', 'getSource']
+        );
         $this->collectionMock->expects(
             $this->once()
         )->method(

@@ -14,5 +14,6 @@
         <element name="AddToCartBtn" type="button" selector="button.action.tocart.primary"/>
         <element name="SuccessMsg" type="button" selector="div.message-success"/>
         <element name="productCount" type="text" selector="#toolbar-amount"/>
+        <element name="CatalogDescription" type="text" selector="//div[@class='category-description']//p"/>
     </section>
 </config>
