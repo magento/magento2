@@ -13,6 +13,8 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
 use Magento\GraphQlCatalog\Model\Type\Handler\PriceAdjustment;
 use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
+use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 
 /**
  * Format a product's price information to conform to GraphQL schema representation
@@ -46,33 +48,15 @@ class Price implements FormatterInterface
     {
         $priceInfo = $this->priceInfoFactory->create($product);
         /** @var \Magento\Catalog\Pricing\Price\FinalPriceInterface $finalPrice */
-        $finalPrice = $priceInfo->getPrice('final_price');
+        $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);
         $minimalPriceAmount =  $finalPrice->getMinimalPrice();
         $maximalPriceAmount =  $finalPrice->getMaximalPrice();
-        $regularPriceAmount =  $priceInfo->getPrice('regular_price')->getAmount();
+        $regularPriceAmount =  $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount();
 
         $productData['price'] = [
-            'minimalPrice' => [
-                'amount' => [
-                    'value' => $minimalPriceAmount->getValue(),
-                    'currency' => $this->getStoreCurrencyCode()
-                ],
-                'adjustments' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $minimalPriceAmount)
-            ],
-            'regularPrice' => [
-                'amount' => [
-                    'value' => $regularPriceAmount->getValue(),
-                    'currency' => $this->getStoreCurrencyCode()
-                ],
-                'adjustments' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $regularPriceAmount)
-            ],
-            'maximalPrice' => [
-                'amount' => [
-                    'value' => $maximalPriceAmount->getValue(),
-                    'currency' => $this->getStoreCurrencyCode()
-                ],
-                'adjustments' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $maximalPriceAmount)
-            ]
+            'minimalPrice' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $minimalPriceAmount),
+            'regularPrice' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $regularPriceAmount),
+            'maximalPrice' => $this->createAdjustmentsArray($priceInfo->getAdjustments(), $maximalPriceAmount)
         ];
 
         return $productData;
@@ -87,6 +71,13 @@ class Price implements FormatterInterface
      */
     private function createAdjustmentsArray(array $adjustments, AmountInterface $amount)
     {
+        $priceArray = [
+                'amount' => [
+                    'value' => $amount->getValue(),
+                    'currency' => $this->getStoreCurrencyCode()
+                ],
+                'adjustments' => []
+            ];
         $priceAdjustmentsArray = [];
         foreach ($adjustments as $adjustmentCode => $adjustment) {
             if ($amount->hasAdjustment($adjustmentCode) && $amount->getAdjustmentAmount($adjustmentCode)) {
@@ -101,7 +92,8 @@ class Price implements FormatterInterface
                 ];
             }
         }
-        return $priceAdjustmentsArray;
+        $priceArray['adjustments'] = $priceAdjustmentsArray;
+        return $priceArray;
     }
 
     /**
