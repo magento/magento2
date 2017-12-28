@@ -96,7 +96,6 @@ class ProductViewTest extends GraphQlAbstract
                     video_url
                 }
             }
-            minimal_price
             msrp
             msrp_display_actual_price_type
             name
@@ -130,7 +129,50 @@ class ProductViewTest extends GraphQlAbstract
                 }
             }
             page_layout
-            price
+            price {
+              minimalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              maximalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              regularPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+            }
             price_type
             price_view
             product_links
@@ -279,7 +321,6 @@ QUERY;
                     video_url
                 }
             }
-            minimal_price
             msrp
             msrp_display_actual_price_type
             name
@@ -313,7 +354,50 @@ QUERY;
                 }
             }
             page_layout
-            price
+            price {
+              minimalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              maximalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              regularPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+            }
             price_type
             price_view
             product_links
@@ -424,7 +508,6 @@ QUERY;
         $categoryIdsAttribute = $product->getCustomAttribute('category_ids');
         $this->assertNotEmpty($categoryIdsAttribute, "Precondition failed: 'category_ids' must not be empty");
         $categoryIdsAttributeValue = $categoryIdsAttribute ? $categoryIdsAttribute->getValue() : [];
-//        $expectedValue = implode(',', $categoryIdsAttributeValue);
         $this->assertEquals($categoryIdsAttributeValue, $actualResponse['category_ids']);
     }
 
@@ -533,7 +616,31 @@ QUERY;
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
             ['response_field' => 'id', 'expected_value' => $product->getId()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
-            ['response_field' => 'price', 'expected_value' => $product->getPrice()],
+            ['response_field' => 'price', 'expected_value' =>
+                [
+                    'minimalPrice' => [
+                        'amount' => [
+                            'value' => $product->getSpecialPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                    'regularPrice' => [
+                        'amount' => [
+                            'value' => $product->getPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                    'maximalPrice' => [
+                        'amount' => [
+                            'value' => $product->getSpecialPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                ]
+            ],
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
             ['response_field' => 'status', 'expected_value' => $product->getStatus()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
@@ -564,7 +671,6 @@ QUERY;
             'msrp',
             'gift_message_available',
             'has_options',
-            'minimal_price',
             'msrp_display_actual_price_type',
             'news_from_date',
             'old_id',

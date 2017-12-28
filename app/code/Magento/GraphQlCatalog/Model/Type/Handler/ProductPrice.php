@@ -4,18 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQlEav\Model\Type\Handler;
+namespace Magento\GraphQlCatalog\Model\Type\Handler;
 
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\TypeFactory;
 use Magento\GraphQl\Model\Type\Handler\Pool;
 
 /**
- * Defines input type for attributes in ['attribute_code' => 'value', 'entity_type' => 'value'] format
+ * Define ProductPrice GraphQL type
  */
-class AttributeInput implements HandlerInterface
+class ProductPrice implements HandlerInterface
 {
-    const ATTRIBUTE_INPUT_TYPE_NAME = 'AttributeInput';
+    const PRODUCT_PRICE_TYPE_NAME = 'ProductPrice';
 
     /**
      * @var Pool
@@ -31,8 +31,10 @@ class AttributeInput implements HandlerInterface
      * @param Pool $typePool
      * @param TypeFactory $typeFactory
      */
-    public function __construct(Pool $typePool, TypeFactory $typeFactory)
-    {
+    public function __construct(
+        Pool $typePool,
+        TypeFactory $typeFactory
+    ) {
         $this->typePool = $typePool;
         $this->typeFactory = $typeFactory;
     }
@@ -42,13 +44,14 @@ class AttributeInput implements HandlerInterface
      */
     public function getType()
     {
-        return $this->typeFactory->createInputObject(
+        return $this->typeFactory->createObject(
             [
-                'name' => self::ATTRIBUTE_INPUT_TYPE_NAME,
+                'name' => self::PRODUCT_PRICE_TYPE_NAME,
                 'fields' => [
-                    'attribute_code' => $this->typePool->getType(Pool::TYPE_STRING),
-                    'entity_type' => $this->typePool->getType(Pool::TYPE_STRING)
-                ],
+                    'minimalPrice' => $this->typePool->getType(Price::PRICE_TYPE_NAME),
+                    'regularPrice' => $this->typePool->getType(Price::PRICE_TYPE_NAME),
+                    'maximalPrice' => $this->typePool->getType(Price::PRICE_TYPE_NAME)
+                ]
             ]
         );
     }
