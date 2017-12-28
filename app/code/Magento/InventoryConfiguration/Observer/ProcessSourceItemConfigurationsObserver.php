@@ -18,7 +18,7 @@ use Magento\Framework\Event\Observer as EventObserver;
  * This needs to be handled in dedicated observer, because there is no pre-defined way of making several API calls for
  * Form submission handling
  */
-class ProcessSourceItemsConfigurationObserver implements ObserverInterface
+class ProcessSourceItemConfigurationsObserver implements ObserverInterface
 {
     /**
      * @var SourceItemsConfigurationProcessor
@@ -26,7 +26,6 @@ class ProcessSourceItemsConfigurationObserver implements ObserverInterface
     private $sourceItemsConfigurationProcessor;
 
     /**
-     * ProcessSourceItemsConfigurationObserver constructor.
      * @param SourceItemsConfigurationProcessor $processSourceItemsConfigurationObserver
      */
     public function __construct(
