@@ -46,8 +46,6 @@ class SaveStockSourceLinks implements StockSourceLinksSaveInterface
      */
     public function execute(array $links): array
     {
-        // todo: implement validation
-
         $savedLinkIdList = [];
 
         try {

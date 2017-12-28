@@ -76,7 +76,6 @@
     </type>
     <!-- StockSourceLink -->
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkInterface" type="Magento\Inventory\Model\StockSourceLink"/>
-    <preference for="Magento\InventoryApi\Api\StockSourceLinkRepositoryInterface" type="Magento\Inventory\Model\StockSourceLinkRepository"/>
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface" type="Magento\Inventory\Model\StockSourceLinkSearchResults"/>
     <preference for="Magento\InventoryApi\Api\GetSourceLinkListInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetSourceLinkList"/>
     <preference for="Magento\InventoryApi\Api\StockSourceLinksSaveInterface" type="Magento\Inventory\Model\StockSourceLink\Command\SaveStockSourceLinks"/>
