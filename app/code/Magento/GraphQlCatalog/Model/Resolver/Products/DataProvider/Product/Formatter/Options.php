@@ -6,25 +6,25 @@
 
 namespace Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter;
 
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Option;
+use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 
 /**
  * Format a product's option information to conform to GraphQL schema representation
  */
-class Options
+class Options implements FormatterInterface
 {
     /**
      * Format product's option data to conform to GraphQL schema
      *
-     * @param array $productData
-     * @return array
+     * {@inheritdoc}
      */
-    public function format(array $productData)
+    public function format(ProductInterface $product, array $productData = [])
     {
-        if (isset($productData['options'])) {
+        if (!empty($product->getOptions())) {
             /** @var Option $option */
-            foreach ($productData['options'] as $key => $option) {
+            foreach ($product->getOptions() as $key => $option) {
                 $productData['options'][$key] = $option->getData();
                 $productData['options'][$key]['product_sku'] = $option->getProductSku();
                 $values = $option->getValues() ?: [];

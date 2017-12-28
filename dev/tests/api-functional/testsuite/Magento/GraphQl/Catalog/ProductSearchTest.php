@@ -9,6 +9,7 @@ namespace Magento\GraphQl\Catalog;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Catalog\Model\Product;
 
 class ProductSearchTest extends GraphQlAbstract
 {
@@ -80,7 +81,6 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('total_count', $response['products']);
-        //$this->assertEquals(3, $response['products']['total_count']);
         $this->assertProductItems($filteredProducts, $response);
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
     }
@@ -147,9 +147,7 @@ QUERY;
     }
 }
 QUERY;
-        /**
-         * @var ProductRepositoryInterface $productRepository
-         */
+        /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product1 = $productRepository->get('simple1');
         $product2 = $productRepository->get('simple2');
@@ -165,9 +163,9 @@ QUERY;
      * pageSize = total_count and current page = 2
      * expected - error is thrown
      * Actual - empty array
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
 
     public function testSearchWithFilterWithPageSizeEqualTotalCount()
@@ -507,9 +505,7 @@ QUERY;
     }
 }
 QUERY;
-        /**
-         * @var ProductRepositoryInterface $productRepository
-         */
+        /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
 
         $visibleProduct1 = $productRepository->get('simple1');
@@ -652,7 +648,8 @@ QUERY;
 
     /**
      * Asserts the different fields of items returned after search query is executed
-     * @param \Magento\Catalog\Model\Product[] $filteredProducts
+     *
+     * @param Product[] $filteredProducts
      * @param array $actualResponse
      */
     private function assertProductItems(array $filteredProducts, array $actualResponse)

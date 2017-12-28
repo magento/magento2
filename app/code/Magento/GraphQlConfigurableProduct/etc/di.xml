@@ -9,9 +9,6 @@
     <type name="Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product">
         <plugin name="add_configurable_data" type="Magento\GraphQlConfigurableProduct\Model\Plugin\Model\Resolver\Products\DataProvider\ProductPlugin"/>
     </type>
-    <type name="Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter">
-        <plugin name="add_configurable_data" type="Magento\GraphQlConfigurableProduct\Model\Plugin\Model\Resolver\Products\DataProvider\Product\FormatterPlugin"/>
-    </type>
     <type name="Magento\GraphQlCatalog\Model\Resolver\Products\Query\Filter">
         <arguments>
             <argument name="postProcessors" xsi:type="array">

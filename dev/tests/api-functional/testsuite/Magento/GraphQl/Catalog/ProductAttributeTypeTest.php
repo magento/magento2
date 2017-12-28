@@ -6,8 +6,6 @@
 
 namespace Magento\GraphQl\Catalog;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class ProductAttributeTypeTest extends GraphQlAbstract

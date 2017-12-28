@@ -6,17 +6,18 @@
 
 namespace Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter;
 
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
 use Magento\GraphQlCatalog\Model\Type\Handler\PriceAdjustment;
+use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 
 /**
  * Format a product's price information to conform to GraphQL schema representation
  */
-class Price
+class Price implements FormatterInterface
 {
     /** @var StoreManagerInterface */
     private $storeManager;
@@ -39,11 +40,9 @@ class Price
     /**
      * Format product's tier price data to conform to GraphQL schema
      *
-     * @param Product $product
-     * @param array $productData
-     * @return array
+     * {@inheritdoc}
      */
-    public function format(Product $product, array $productData)
+    public function format(ProductInterface $product, array $productData = [])
     {
         $priceInfo = $this->priceInfoFactory->create($product);
         /** @var \Magento\Catalog\Pricing\Price\FinalPriceInterface $finalPrice */

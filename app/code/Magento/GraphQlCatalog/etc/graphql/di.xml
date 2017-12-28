@@ -57,4 +57,15 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\FormatterComposite">
+        <arguments>
+            <argument name="formatterInstances" xsi:type="array">
+                <item name="idFixer" xsi:type="object">Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter\IdFixer</item>
+                <item name="mediaGalleryEntries" xsi:type="object">\Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter\MediaGalleryEntries</item>
+                <item name="options" xsi:type="object">\Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter\Options</item>
+                <item name="price" xsi:type="object">\Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter\Price</item>
+                <item name="tierPrices" xsi:type="object">\Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter\TierPrices</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

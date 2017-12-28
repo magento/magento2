@@ -6,21 +6,20 @@
 
 namespace Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter;
 
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 
 /**
  * Format a product's media gallery information to conform to GraphQL schema representation
  */
-class MediaGalleryEntries
+class MediaGalleryEntries implements FormatterInterface
 {
     /**
      * Format product's media gallery entry data to conform to GraphQL schema
      *
-     * @param Product $product
-     * @param array $productData
-     * @return array
+     * {@inheritdoc}
      */
-    public function format(Product $product, array $productData)
+    public function format(ProductInterface $product, array $productData = [])
     {
         $productData['media_gallery_entries'] = $product->getMediaGalleryEntries();
         if (isset($productData['media_gallery_entries'])) {
