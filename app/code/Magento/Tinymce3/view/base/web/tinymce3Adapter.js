@@ -586,8 +586,6 @@ define([
             var result = content;
 
             if (this.config['add_widgets']) {
-                //load here encoder/decoder and than provide encoding logic
-
                 result = this.encodeWidgets(this.decodeWidgets(result));
                 result = this.encodeDirectives(result);
             } else if (this.config['add_directives']) {

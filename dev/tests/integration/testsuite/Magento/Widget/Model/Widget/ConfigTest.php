@@ -39,10 +39,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $settings = $this->_model->getPluginSettings($config);
 
         $this->assertArrayHasKey('plugins', $settings);
-        $this->assertArrayHasKey('widget_placeholders', $settings);
         $plugins = array_shift($settings['plugins']);
         $this->assertArrayHasKey('options', $plugins);
         $this->assertArrayHasKey('window_url', $plugins['options']);
+        $this->assertArrayHasKey('placeholders', $plugins['options']);
 
         $jsFilename = $plugins['src'];
         $this->assertStringMatchesFormat(
@@ -50,7 +50,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $jsFilename
         );
 
-        $this->assertInternalType('array', $settings['widget_placeholders']);
+        $this->assertInternalType('array', $plugins['options']['placeholders']);
 
         $this->assertStringStartsWith(
             'http://localhost/index.php/backend/admin/widget/index/key',

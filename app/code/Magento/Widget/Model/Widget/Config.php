@@ -103,17 +103,15 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
                 'options' => [
                     'window_url' => $this->getWidgetWindowUrl($config),
                     'types' => $this->getAvailableWidgets($config),
-                    'error_image_url' => $this->getErrorImageUrl()
+                    'error_image_url' => $this->getErrorImageUrl(),
+                    'placeholders' => $this->getWidgetPlaceholderImageUrls(),
                 ],
             ]
         ];
 
-        $configPlugins = $config->getData('plugins') ?: [];
+        $configPlugins = (array) $config->getData('plugins') ?: [];
 
-        $widgetConfig = [
-            'plugins' => array_merge($configPlugins, $widgetWysiwyg),
-            'widget_placeholders' => $this->getWidgetPlaceholderImageUrls(),
-        ];
+        $widgetConfig['plugins'] = array_merge($configPlugins, $widgetWysiwyg);
         return $widgetConfig;
     }
 
