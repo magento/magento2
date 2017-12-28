@@ -94,8 +94,10 @@ class SourceItemsConfigurationProcessor
             $sourceItemsConfigs[] = $sourceItemConfigurationData;
         }
 
-        $this->deleteSourceItemsConfiguration($sourceItemsConfigs);
-        $this->sourceItemConfigurationSave->execute($sourceItemsConfigs);
+        if (count($sourceItemsConfigs) > 0) {
+            $this->deleteSourceItemsConfiguration($sourceItemsConfigs);
+            $this->sourceItemConfigurationSave->execute($sourceItemsConfigs);
+        }
     }
 
     /**
