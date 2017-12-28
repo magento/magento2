@@ -42,6 +42,7 @@ class ApplyDataToLegacyStockStatus
      * @param string $sku
      * @param float $quantity
      * @param int $status
+     *
      * @return void
      */
     public function execute(string $sku, float $quantity, int $status)
@@ -52,7 +53,9 @@ class ApplyDataToLegacyStockStatus
         $connection->update(
             $this->resourceConnection->getTableName('cataloginventory_stock_status'),
             [
-                StockStatusInterface::QTY => new \Zend_Db_Expr(sprintf('%s + %s', StockStatusInterface::QTY, $quantity)),
+                StockStatusInterface::QTY => new \Zend_Db_Expr(
+                    sprintf('%s + %s', StockStatusInterface::QTY, $quantity)
+                ),
                 StockStatusInterface::STOCK_STATUS => $status
             ],
             [
