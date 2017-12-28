@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\GraphQl\HttpHeaderProcessor;
+namespace Magento\GraphQl\Controller\HttpHeaderProcessor;
 
 use Magento\Framework\GraphQl\HttpHeaderProcessorInterface;
 use Magento\Framework\Exception\LocalizedException;
