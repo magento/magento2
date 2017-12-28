@@ -3,13 +3,15 @@
 namespace Magento\InstantPurchase\Test\Unit\CustomerData;
 
 use Magento\InstantPurchase\CustomerData\InstantPurchase;
+use Magento\InstantPurchase\Model\Ui\CustomerAddressesFormatter;
+use Magento\InstantPurchase\Model\Ui\PaymentTokenFormatter;
+use Magento\InstantPurchase\Model\Ui\ShippingMethodFormatter;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Customer;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use Magento\InstantPurchase\Model\InstantPurchaseInterface;
 use Magento\InstantPurchase\Model\InstantPurchaseOption;
 
@@ -31,7 +33,7 @@ class InstantPurchaseTest extends TestCase
     private $storeManagerMock;
 
     /**
-     * @var StoreInterface|MockObject
+     * @var Store|MockObject
      */
     private $storeMock;
 
@@ -52,92 +54,73 @@ class InstantPurchaseTest extends TestCase
     
     protected function setUp()
     {
-        $objectManager = new ObjectManager($this);
+        $this->sessionMock = $this->createMock(Session::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(Store::class);
+        $this->customerMock = $this->createMock(Customer::class);
+        $this->instantPurchaseMock = $this->createMock(InstantPurchaseInterface::class);
+        $this->instantPurchaseOptionMock = $this->createMock(InstantPurchaseOption::class);
 
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMock();
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->getMock();
-        $this->customerMock = $this->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->instantPurchaseMock = $this->getMockBuilder(InstantPurchaseInterface::class)
-            ->getMock();
-        $this->instantPurchaseOptionMock = $this->getMockBuilder(InstantPurchaseOption::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sessionMock->method('getCustomer')
+            ->willReturn($this->customerMock);
 
-        $this->instantPurchase = $objectManager->getObject(
-            InstantPurchase::class,
-            [
-                'customerSession' => $this->sessionMock,
-                'storeManager' => $this->storeManagerMock,
-                'instantPurchase' => $this->instantPurchaseMock,
-            ]
+        $this->storeManagerMock->method('getStore')
+            ->willReturn($this->storeMock);
+
+        $this->instantPurchaseMock->method('getOption')
+            ->willReturn($this->instantPurchaseOptionMock);
+
+        $this->instantPurchase = new InstantPurchase(
+            $this->sessionMock,
+            $this->storeManagerMock,
+            $this->instantPurchaseMock,
+            $this->createMock(PaymentTokenFormatter::class),
+            $this->createMock(CustomerAddressesFormatter::class),
+            $this->createMock(ShippingMethodFormatter::class)
         );
     }
 
     public function testGetSectionDataCustomerLoggedOut()
     {
-        $this->sessionMock->expects($this->once())
-            ->method('isLoggedIn')
+        $this->sessionMock->method('isLoggedIn')
             ->willReturn(false);
 
-        $this->assertEquals(['available' => false], $this->instantPurchase->getSectionData());
+        $this->assertArrayHasKey('available', $this->instantPurchase->getSectionData());
     }
 
     public function testGetSectionDataLoggedInAndUnavailable()
     {
-        $this->sessionMock->expects($this->once())
-            ->method('isLoggedIn')
+        $this->sessionMock->method('isLoggedIn')
             ->willReturn(true);
-        
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
-        
-        $this->sessionMock->expects($this->once())
-            ->method('getCustomer')
-            ->willReturn($this->customerMock);
-        
-        $this->instantPurchaseMock->expects($this->once())
-            ->method('getOption')
-            ->with($this->storeMock, $this->customerMock)
-            ->willReturn($this->instantPurchaseOptionMock);
 
-        $this->instantPurchaseOptionMock->expects($this->once())
-            ->method('isAvailable')
+        $this->instantPurchaseOptionMock->method('isAvailable')
             ->willReturn(false);
 
-        $this->assertEquals(['available' => false], $this->instantPurchase->getSectionData());
+        $this->assertArrayHasKey('available', $this->instantPurchase->getSectionData());
     }
 
     public function testGetSectionData()
     {
-        $this->sessionMock->expects($this->once())
-            ->method('isLoggedIn')
+        $this->sessionMock->method('isLoggedIn')
             ->willReturn(true);
 
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
-
-        $this->sessionMock->expects($this->once())
-            ->method('getCustomer')
-            ->willReturn($this->customerMock);
-
-        $this->instantPurchaseMock->expects($this->once())
-            ->method('getOption')
-            ->with($this->storeMock, $this->customerMock)
-            ->willReturn($this->instantPurchaseOptionMock);
-
-        $this->instantPurchaseOptionMock->expects($this->once())
-            ->method('isAvailable')
+        $this->instantPurchaseOptionMock->method('isAvailable')
             ->willReturn(true);
 
-        $this->assertTrue($this->instantPurchase->getSectionData()['available']);
+        $result = $this->instantPurchase->getSectionData();
+        $this->assertArrayHasKey('available', $result);
+        $this->assertArrayHasKey('paymentToken', $result);
+        $this->assertArrayHasKey('publicHash', $result['paymentToken']);
+        $this->assertArrayHasKey('summary', $result['paymentToken']);
+        $this->assertArrayHasKey('shippingAddress', $result);
+        $this->assertArrayHasKey('id', $result['shippingAddress']);
+        $this->assertArrayHasKey('summary', $result['shippingAddress']);
+        $this->assertArrayHasKey('billingAddress', $result);
+        $this->assertArrayHasKey('id', $result['billingAddress']);
+        $this->assertArrayHasKey('summary', $result['billingAddress']);
+        $this->assertArrayHasKey('shippingMethod', $result);
+        $this->assertArrayHasKey('carrier', $result['shippingMethod']);
+        $this->assertArrayHasKey('method', $result['shippingMethod']);
+        $this->assertArrayHasKey('summary', $result['shippingMethod']);
     }
 }
