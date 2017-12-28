@@ -23,7 +23,9 @@ class ContentTypeProcessor implements HttpHeaderProcessorInterface
     public function processHeaderValue($headerValue)
     {
         if (!$headerValue || strpos($headerValue, 'application/json') === false) {
-            throw new LocalizedException(__('Request content type must be application/json'));
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase('Request content type must be application/json')
+            );
         }
     }
 }

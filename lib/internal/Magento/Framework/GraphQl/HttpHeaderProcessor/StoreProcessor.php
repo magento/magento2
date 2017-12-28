@@ -44,7 +44,9 @@ class StoreProcessor implements HttpHeaderProcessorInterface
             if (isset($stores[$storeCode])) {
                 $this->storeManager->setCurrentStore($storeCode);
             } elseif (strtolower($storeCode) !== 'default') {
-                throw new GraphQlInputException(__('Store code %1 does not exist', $storeCode));
+                throw new GraphQlInputException(
+                    new \Magento\Framework\Phrase('Store code %1 does not exist', [$storeCode])
+                );
             }
         }
     }
