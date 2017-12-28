@@ -16,7 +16,7 @@
         <after>
             <amOnPage stepKey="amOnLogoutPage" url="admin/admin/auth/logout/"/>
         </after>
-        <test name="SeeReleaseNotificationUponFirstLoginToAdmin">
+        <test name="AdminConfigurationIndustry">
             <annotations>
                 <title value="Set Magento Advanced reporting industry"/>
                 <description value="An admin user can change the industry setting on the Advanced Reporting configuration page."/>

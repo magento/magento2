@@ -16,7 +16,7 @@
         <after>
             <amOnPage stepKey="amOnLogoutPage" url="admin/admin/auth/logout/"/>
         </after>
-        <test name="SeeReleaseNotificationUponFirstLoginToAdmin">
+        <test name="AdminConfigurationBlankIndustry">
             <annotations>
                 <title value="Try to save empty Magento Advanced Reporting vertical"/>
                 <description value="An admin user cannot save a blank industry setting on the Advanced Reporting configuration page."/>
