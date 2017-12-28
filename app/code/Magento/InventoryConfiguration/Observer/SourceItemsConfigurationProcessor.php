@@ -13,7 +13,6 @@ use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryConfiguration\Model\SourceItemConfigurationFactory;
 use Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\DeleteSourceItemConfigurationInterface;
-use Magento\InventoryConfigurationApi\Api\GetSourceItemConfigurationInterface;
 use Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface;
 
 /**
@@ -22,11 +21,6 @@ use Magento\InventoryConfigurationApi\Api\SourceItemConfigurationsSaveInterface;
 class SourceItemsConfigurationProcessor
 {
     /**
-     * @var GetSourceItemConfigurationInterface
-     */
-    private $getSourceItemConfiguration;
-
-    /**
      * @var SourceItemConfigurationFactory
      */
     private $sourceItemConfigurationFactory;
@@ -34,7 +28,7 @@ class SourceItemsConfigurationProcessor
     /**
      * @var SourceItemConfigurationsSaveInterface
      */
-    private $sourceItemConfigurationSave;
+    private $sourceItemConfigurationsSave;
 
     /**
      * @var DataObjectHelper
@@ -48,23 +42,20 @@ class SourceItemsConfigurationProcessor
 
     /**
      * @param SourceItemConfigurationFactory $sourceItemConfigurationFactory
-     * @param SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave
+     * @param SourceItemConfigurationsSaveInterface $sourceItemConfigurationsSave
      * @param DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete
-     * @param GetSourceItemConfigurationInterface $getSourceItemConfiguration
      * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         SourceItemConfigurationFactory $sourceItemConfigurationFactory,
-        SourceItemConfigurationsSaveInterface $sourceItemConfigurationSave,
+        SourceItemConfigurationsSaveInterface $sourceItemConfigurationsSave,
         DeleteSourceItemConfigurationInterface $sourceItemConfigurationDelete,
-        GetSourceItemConfigurationInterface $getSourceItemConfiguration,
         DataObjectHelper $dataObjectHelper
     ) {
-        $this->sourceItemConfigurationSave = $sourceItemConfigurationSave;
+        $this->sourceItemConfigurationsSave = $sourceItemConfigurationsSave;
         $this->sourceItemConfigurationFactory = $sourceItemConfigurationFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->sourceItemConfigurationDelete = $sourceItemConfigurationDelete;
-        $this->getSourceItemConfiguration = $getSourceItemConfiguration;
     }
 
     /**
@@ -75,10 +66,10 @@ class SourceItemsConfigurationProcessor
      */
     public function process($sku, array $sourceItemsData)
     {
-        $sourceItemsConfigs = [];
+        $sourceItemConfigurations = [];
         foreach ($sourceItemsData as $sourceItemData) {
             $this->validateSourceItemData($sourceItemData);
-            $sourceItemConfigurationData = $this->sourceItemConfigurationFactory->create();
+            $sourceItemConfiguration = $this->sourceItemConfigurationFactory->create();
 
             if ($sourceItemData['notify_stock_qty_use_default'] == 1) {
                 unset($sourceItemData['notify_stock_qty']);
@@ -86,17 +77,17 @@ class SourceItemsConfigurationProcessor
 
             $sourceItemData[SourceItemInterface::SKU] = $sku;
             $this->dataObjectHelper->populateWithArray(
-                $sourceItemConfigurationData,
+                $sourceItemConfiguration,
                 $sourceItemData,
                 SourceItemConfigurationInterface::class
             );
 
-            $sourceItemsConfigs[] = $sourceItemConfigurationData;
+            $sourceItemConfigurations[] = $sourceItemConfiguration;
         }
 
-        if (count($sourceItemsConfigs) > 0) {
-            $this->deleteSourceItemsConfiguration($sourceItemsConfigs);
-            $this->sourceItemConfigurationSave->execute($sourceItemsConfigs);
+        if (count($sourceItemConfigurations) > 0) {
+            $this->deleteSourceItemsConfiguration($sourceItemConfigurations);
+            $this->sourceItemConfigurationsSave->execute($sourceItemConfigurations);
         }
     }
 
