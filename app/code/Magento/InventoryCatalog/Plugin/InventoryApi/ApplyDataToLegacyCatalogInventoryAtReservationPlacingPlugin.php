@@ -13,6 +13,7 @@ use Magento\InventoryApi\Api\AppendReservationsInterface;
 use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use Magento\InventoryCatalog\Model\ResourceModel\ApplyDataToLegacyStockItem;
 use Magento\InventoryCatalog\Model\ResourceModel\ApplyDataToLegacyStockStatus;
+use Magento\InventoryApi\Api\IsProductInStockInterface;
 
 /**
  * Apply inventory data changes  (qty, stock status) to legacy CatalogInventory (cataloginventory_stock_status and
@@ -42,21 +43,29 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingPlugin
     private $applyDataToLegacyStockStatus;
 
     /**
+     * @var IsProductInStockInterface
+     */
+    private $isProductInStock;
+
+    /**
      * @param StockConfigurationInterface $stockConfiguration
      * @param DefaultStockProviderInterface $defaultStockProvider
      * @param ApplyDataToLegacyStockItem $applyDataToLegacyStockItem
      * @param ApplyDataToLegacyStockStatus $applyDataToLegacyStockStatus
+     * @param IsProductInStockInterface $isProductInStock
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
         DefaultStockProviderInterface $defaultStockProvider,
         ApplyDataToLegacyStockItem $applyDataToLegacyStockItem,
-        ApplyDataToLegacyStockStatus $applyDataToLegacyStockStatus
+        ApplyDataToLegacyStockStatus $applyDataToLegacyStockStatus,
+        IsProductInStockInterface $isProductInStock
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->defaultStockProvider = $defaultStockProvider;
         $this->applyDataToLegacyStockItem = $applyDataToLegacyStockItem;
         $this->applyDataToLegacyStockStatus = $applyDataToLegacyStockStatus;
+        $this->isProductInStock = $isProductInStock;
     }
 
     /**
@@ -76,7 +85,8 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingPlugin
                 $this->applyDataToLegacyStockItem->execute($reservation->getSku(), (float)$reservation->getQuantity());
                 $this->applyDataToLegacyStockStatus->execute(
                     $reservation->getSku(),
-                    (float)$reservation->getQuantity()
+                    (float)$reservation->getQuantity(),
+                    (int)$this->isProductInStock->execute($reservation->getSku(), $reservation->getStockId())
                 );
             }
         }
