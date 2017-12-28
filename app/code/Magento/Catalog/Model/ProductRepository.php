@@ -329,7 +329,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         unset($productData['media_gallery']);
         if ($createNew) {
             $product = $this->productFactory->create();
-            if (!isset($productData['product_type'])) {
+            if (isset($productData['price']) && !isset($productData['product_type'])) {
                 $product->setTypeId(Product\Type::TYPE_SIMPLE);
             }
             if ($this->storeManager->hasSingleStore()) {
