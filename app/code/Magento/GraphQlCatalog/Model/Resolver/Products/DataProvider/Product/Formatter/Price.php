@@ -63,7 +63,7 @@ class Price implements FormatterInterface
     }
 
     /**
-     * Fill an adjustment array structure with amounts from an amount type
+     * Fill a price with an adjustment array structure with amounts from an amount type
      *
      * @param AdjustmentInterface[] $adjustments
      * @param AmountInterface $amount
