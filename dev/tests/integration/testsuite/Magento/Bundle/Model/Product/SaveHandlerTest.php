@@ -40,11 +40,12 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $this->productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
     }
 
-    public function testOptionTitlesOnDifferentStores() {
+    public function testOptionTitlesOnDifferentStores()
+    {
         /**
          * @var \Magento\Bundle\Model\Product\OptionList $optionList
          */
-        $optionList = $this->objectManager->create('\Magento\Bundle\Model\Product\OptionList');
+        $optionList = $this->objectManager->create(\Magento\Bundle\Model\Product\OptionList::class);
 
         $secondStoreId = $this->store->load('fixture_second_store')->getId();
         $thirdStoreId = $this->store->load('fixture_third_store')->getId();
