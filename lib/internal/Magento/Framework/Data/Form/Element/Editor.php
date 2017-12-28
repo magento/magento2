@@ -86,7 +86,7 @@ class Editor extends Textarea
      */
     public function getPluginConfigOptions($pluginName, $key = null)
     {
-        $pluginArrIndex = array_search($pluginName, array_column($this->getConfig('plugins'), 'name'));
+        $pluginArrIndex = array_search($pluginName, array_column($this->getConfig('plugins') ?: [], 'name'));
         $pluginOptions = $this->getConfig('plugins')[$pluginArrIndex]['options'];
 
         if ($key !== null) {
