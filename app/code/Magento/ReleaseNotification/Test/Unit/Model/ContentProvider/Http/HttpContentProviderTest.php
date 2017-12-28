@@ -155,7 +155,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->httpContentProvider->getContent());
     }
 
-    public function testGetContentSuccessOnDefault()
+    public function testGetContentSuccessOnEditionDefault()
     {
         $expectedBody = ['test' => 'testValue'];
         $response = json_encode($expectedBody);
@@ -199,6 +199,59 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedBody, $this->httpContentProvider->getContent());
     }
 
+    public function testGetContentSuccessOnVersionDefault()
+    {
+        $expectedBody = ['test' => 'testValue'];
+        $response = json_encode($expectedBody);
+
+        $this->urlBuilderMock->expects($this->any())
+            ->method('getUrl')
+            ->willReturn('contentUrl');
+        $this->productMetadataMock->expects($this->once())
+            ->method('getVersion')
+            ->willReturn('version');
+        $this->productMetadataMock->expects($this->once())
+            ->method('getEdition')
+            ->willReturn('edition');
+        $this->sessionMock->expects($this->once())
+            ->method('getUser')
+            ->willReturn($this->sessionMock);
+        $this->sessionMock->expects($this->once())
+            ->method('getInterfaceLocale')
+            ->willReturn('fr_FR');
+        $this->httpClientMock->expects($this->exactly(3))
+            ->method('get')
+            ->with('contentUrl');
+        $this->httpClientMock->expects($this->at(0))
+            ->method('getBody')
+            ->willReturn('');
+        $this->httpClientMock->expects($this->at(1))
+            ->method('getBody')
+            ->willReturn('');
+        $this->httpClientMock->expects($this->at(2))
+            ->method('getBody')
+            ->willReturn($response);
+        $this->httpClientMock->expects($this->at(0))
+            ->method('getStatus')
+            ->willReturn(400);
+        $this->httpClientMock->expects($this->at(1))
+            ->method('getStatus')
+            ->willReturn(400);
+        $this->httpClientMock->expects($this->at(2))
+            ->method('getStatus')
+            ->willReturn(200);
+        $this->responseResolverMock->expects($this->at(0))
+            ->method('getResult')
+            ->willReturn(false);
+        $this->responseResolverMock->expects($this->at(1))
+            ->method('getResult')
+            ->willReturn(false);
+        $this->responseResolverMock->expects($this->at(2))
+            ->method('getResult')
+            ->willReturn($expectedBody);
+        $this->assertEquals($expectedBody, $this->httpContentProvider->getContent());
+    }
+
     public function testGetEmptyContent()
     {
         $this->urlBuilderMock->expects($this->any())
@@ -216,16 +269,16 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $this->sessionMock->expects($this->once())
             ->method('getInterfaceLocale')
             ->willReturn('fr_FR');
-        $this->httpClientMock->expects($this->exactly(2))
+        $this->httpClientMock->expects($this->exactly(3))
             ->method('get')
             ->with('contentUrl');
-        $this->httpClientMock->expects($this->exactly(2))
+        $this->httpClientMock->expects($this->exactly(3))
             ->method('getBody')
             ->willReturn('');
-        $this->httpClientMock->expects($this->exactly(2))
+        $this->httpClientMock->expects($this->exactly(3))
             ->method('getStatus')
             ->willReturn(400);
-        $this->responseResolverMock->expects($this->exactly(2))
+        $this->responseResolverMock->expects($this->exactly(3))
             ->method('getResult')
             ->willReturn(false);
         $this->loggerMock->expects($this->never())

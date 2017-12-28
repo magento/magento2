@@ -38,9 +38,12 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $baseUrl
      * @param string $expected
+     * @param string $version
+     * @param string $edition
+     * @param string $locale
      * @dataProvider getUrlDataProvider
      */
-    public function testGetUrl($baseUrl, $expected)
+    public function testGetUrl($baseUrl, $version, $edition, $locale, $expected)
     {
         $this->configMock->expects($this->once())
             ->method('getValue')
@@ -50,15 +53,34 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(1);
         $this->assertEquals(
             $expected,
-            $this->urlBuilder->getUrl('version', 'edition', 'locale')
+            $this->urlBuilder->getUrl($version, $edition, $locale)
         );
     }
 
     public function getUrlDataProvider()
     {
         return [
-            ['content/url/example/', 'https://content/url/example/version-edition-locale.json'],
-            ['', '']
+            'all' => [
+                'content/url/example',
+                'version',
+                'edition',
+                'locale',
+                'https://content/url/example/version/edition/locale.json'
+            ],
+            'no-edition' => [
+                'content/url/example',
+                'version',
+                '',
+                'locale',
+                'https://content/url/example/version/locale.json'
+            ],
+            'no-content-url' => [
+                '',
+                'version',
+                'edition',
+                'locale',
+                ''
+            ]
         ];
     }
 }

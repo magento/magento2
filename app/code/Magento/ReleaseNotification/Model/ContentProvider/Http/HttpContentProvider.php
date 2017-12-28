@@ -85,13 +85,14 @@ class HttpContentProvider implements ContentProviderInterface
         $locale = $this->session->getUser()->getInterfaceLocale();
         $version = $this->getTargetVersion();
         $edition = $this->productMetadata->getEdition();
-        $url = $this->urlBuilder->getUrl($version, $edition, $locale);
 
         try {
-            $result = $this->retrieveContent($url);
+            $result = $this->retrieveContent($version, $edition, $locale);
             if (!$result && ($locale !== Locale::DEFAULT_SYSTEM_LOCALE)) {
-                $defaultLocalUrl = $this->urlBuilder->getUrl($version, $edition, Locale::DEFAULT_SYSTEM_LOCALE);
-                $result = $this->retrieveContent($defaultLocalUrl);
+                $result = $this->retrieveContent($version, $edition, Locale::DEFAULT_SYSTEM_LOCALE);
+                if (!$result) {
+                    $result = $this->retrieveContent($version, '', 'default');
+                }
             }
         } catch (\Exception $e) {
             $this->logger->warning(
@@ -148,11 +149,14 @@ class HttpContentProvider implements ContentProviderInterface
     /**
      * Retrieve content from given url
      *
-     * @param $url
+     * @param string $version
+     * @param string $edition
+     * @param string $locale
      * @return bool|string
      */
-    private function retrieveContent($url)
+    private function retrieveContent($version, $edition, $locale)
     {
+        $url = $this->urlBuilder->getUrl($version, $edition, $locale);
         return empty($url)
             ? false
             : $this->responseResolver->getResult($this->getResponse($url), $this->httpClient->getStatus());
