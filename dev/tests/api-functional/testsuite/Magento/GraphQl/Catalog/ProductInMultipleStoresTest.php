@@ -35,7 +35,14 @@ class ProductInMultipleStoresTest extends GraphQlAbstract
             created_at
             id
             name
-            price
+            price {
+                minimalPrice {
+                    amount {
+                        value
+                        currency
+                    }
+                }
+            }
             sku
             status
             type_id

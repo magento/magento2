@@ -228,8 +228,8 @@ QUERY;
         );
         $customerToken = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
-        $this->setToken($customerToken);
-        $response = $this->graphQlQuery($query);
+        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
 
         /**
          * @var ProductRepositoryInterface $productRepository
