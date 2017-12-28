@@ -71,6 +71,9 @@
         <field name="frontend_input" sortOrder="20" formElement="select">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="hints" xsi:type="array">
+                        <item name="texteditor" xsi:type="string" translate="true">Text Editor input type requires WYSIWYG to be enabled in Stores > Configuration > Content Management.</item>
+                    </item>
                     <item name="source" xsi:type="string">product_attribute</item>
                 </item>
             </argument>
@@ -78,6 +81,7 @@
                 <dataType>string</dataType>
                 <label translate="true">Catalog Input Type for Store Owner</label>
                 <dataScope>frontend_input</dataScope>
+                <elementTmpl>Magento_Catalog/form/element/frontend-input-select</elementTmpl>
             </settings>
             <formElements>
                 <select>
