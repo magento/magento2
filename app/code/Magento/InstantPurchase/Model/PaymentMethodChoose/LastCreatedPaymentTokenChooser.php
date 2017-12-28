@@ -12,7 +12,7 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\InstantPurchase\PaymentMethodIntegration\Integration;
 use Magento\InstantPurchase\PaymentMethodIntegration\IntegrationsManager;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 
@@ -73,7 +73,7 @@ class LastCreatedPaymentTokenChooser implements PaymentTokenChooserInterface
     /**
      * @inheritdoc
      */
-    public function choose(StoreInterface $store, Customer $customer)
+    public function choose(Store $store, Customer $customer)
     {
         $searchCriteria = $this->buildSearchCriteria($store->getId(), $customer->getId());
         $searchResult = $this->paymentTokenRepository->getList($searchCriteria);
