@@ -24,7 +24,7 @@
         <?php /* @noEscape */ echo $block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()) ?>
     </span>
     <span class="_hidden"<?php echo $block->getSchema() ? ' itemprop="price"' : '' ?>>
-        <?php /* @escapeNotVerified */ echo $block->getDisplayValue()  ?>
+        <?php /* @noEscape */ echo $block->getDisplayValue()  ?>
     </span>
     <?php if ($block->hasAdjustmentsHtml()): ?>
         <?php echo $block->getAdjustmentsHtml() ?>
