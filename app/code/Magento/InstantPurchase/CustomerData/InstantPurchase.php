@@ -94,7 +94,7 @@ class InstantPurchase implements SectionSourceInterface
         $data = [
             'available' => $instantPurchaseOption->isAvailable()
         ];
-        if (!$data['available']) {
+        if (!$instantPurchaseOption->isAvailable()) {
             return $data;
         }
 
