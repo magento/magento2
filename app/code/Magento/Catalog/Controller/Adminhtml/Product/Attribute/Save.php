@@ -191,6 +191,13 @@ class Save extends Attribute
                 }
             }
 
+            if ($data['frontend_input'] === 'texteditor') {
+                $data['is_wysiwyg_enabled'] = 1;
+                $data['frontend_input'] = 'textarea';
+            } elseif ($data['frontend_input'] === 'textarea') {
+                $data['is_wysiwyg_enabled'] = 0;
+            }
+
             if ($attributeId) {
                 if (!$model->getId()) {
                     $this->messageManager->addErrorMessage(__('This attribute no longer exists.'));
@@ -219,13 +226,6 @@ class Save extends Attribute
             }
 
             $data += ['is_filterable' => 0, 'is_filterable_in_search' => 0];
-
-            if ($data['frontend_input'] === 'texteditor') {
-                $data['is_wysiwyg_enabled'] = 1;
-                $data['frontend_input'] = 'textarea';
-            } elseif ($data['frontend_input'] === 'textarea') {
-                $data['is_wysiwyg_enabled'] = 0;
-            }
 
             if ($model->getIsUserDefined() === null || $model->getIsUserDefined() != 0) {
                 $data['backend_type'] = $model->getBackendTypeByInput($data['frontend_input']);
