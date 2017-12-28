@@ -21,25 +21,9 @@ interface StockSourceLinkInterface extends ExtensibleDataInterface
     /**
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const LINK_ID = 'link_id';
     const STOCK_ID = 'stock_id';
     const SOURCE_CODE = 'source_code';
     /**#@-*/
-
-    /**
-     * Get link id
-     *
-     * @return int|null
-     */
-    public function getLinkId();
-
-    /**
-     * Set link id
-     *
-     * @param int|null $linkId
-     * @return void
-     */
-    public function setLinkId($linkId);
 
     /**
      * Get stock id

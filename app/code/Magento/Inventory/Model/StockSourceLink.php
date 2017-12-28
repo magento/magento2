@@ -30,22 +30,6 @@ class StockSourceLink extends AbstractExtensibleModel implements StockSourceLink
     /**
      * @inheritdoc
      */
-    public function getLinkId()
-    {
-        return $this->getData(self::LINK_ID);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setLinkId($linkId)
-    {
-        $this->setData(self::LINK_ID, $linkId);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getSourceCode()
     {
         return $this->getData(self::SOURCE_CODE);
