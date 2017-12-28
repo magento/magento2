@@ -33,7 +33,7 @@ class StoreProcessor implements HttpHeaderProcessorInterface
     /**
      * Handle the value of the store and set the scope
      *
-     * @inheritDoc
+     * {@inheritDoc}
      * @throws NoSuchEntityException
      */
     public function processHeaderValue($headerValue)

@@ -6,12 +6,12 @@
 namespace Magento\Framework\GraphQl;
 
 /**
- * Use this interface to implement a handler for each entry of a header in an HTTP GraphQL request.
+ * Use this interface to implement a processor for each entry of a header in an HTTP GraphQL request.
  */
 interface HttpHeaderProcessorInterface
 {
     /**
-     * Process a header value individually from a list of headers and handle specific logic.
+     * Perform processing on a list of headers, iteratively.
      *
      * This method should be called even if a header entry is not present on a request
      * to enforce required headers like "application/json"
