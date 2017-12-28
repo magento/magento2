@@ -8,11 +8,11 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Inventory\Model\StockSourceLink\Command\GetListInterface;
-use Magento\Inventory\Model\StockSourceLink\Command\SaveInterface;
-use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
+use Magento\InventoryApi\Api\GetSourceLinkListInterface;
 use Magento\InventoryApi\Api\StockSourceLinkRepositoryInterface;
+use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
+use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 
 /**
  * @inheritdoc
@@ -20,40 +20,56 @@ use Magento\InventoryApi\Api\StockSourceLinkRepositoryInterface;
 class StockSourceLinkRepository implements StockSourceLinkRepositoryInterface
 {
     /**
-     * @var GetListInterface
+     * @var GetSourceLinkListInterface
      */
     private $commandGetList;
 
     /**
-     * @var SaveInterface
+     * @var StockSourceLinksSaveInterface
      */
     private $commandSave;
 
     /**
-     * @param GetListInterface $commandGetList
-     * @param StockSourceLink\Command\SaveInterface $commandSave
+     * @var StockSourceLinksDeleteInterface
+     */
+    private $commandDelete;
+
+    /**
+     * @param GetSourceLinkListInterface $commandGetList
+     * @param StockSourceLinksSaveInterface $commandSave
+     * @param StockSourceLinksDeleteInterface $commandDelete
      */
     public function __construct(
-        GetListInterface $commandGetList,
-        SaveInterface $commandSave
+        GetSourceLinkListInterface $commandGetList,
+        StockSourceLinksSaveInterface $commandSave,
+        StockSourceLinksDeleteInterface $commandDelete
     ) {
         $this->commandGetList = $commandGetList;
         $this->commandSave = $commandSave;
+        $this->commandDelete = $commandDelete;
     }
 
     /**
      * @inheritdoc
      */
-    public function save(StockSourceLinkInterface $stock): int
+    public function save(array $links): array
     {
-        return $this->commandSave->execute($stock);
+        return $this->commandSave->execute($links);
     }
 
     /**
      * @inheritdoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria = null): StockSourceLinkSearchResultsInterface
+    public function getList(SearchCriteriaInterface $searchCriteria): StockSourceLinkSearchResultsInterface
     {
         return $this->commandGetList->execute($searchCriteria);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete(array $links)
+    {
+        $this->commandDelete->execute($links);
     }
 }

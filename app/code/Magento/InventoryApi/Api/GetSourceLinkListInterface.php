@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\StockSourceLink\Command;
+namespace Magento\InventoryApi\Api;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
@@ -20,14 +20,14 @@ use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
  * @see \Magento\InventoryApi\Api\StockSourceLinkRepositoryInterface
  * @api
  */
-interface GetListInterface
+interface GetSourceLinkListInterface
 {
     /**
      * Find StockSourceLink list by given SearchCriteria
      * SearchCriteria is not required because load all stocks is useful case
      *
-     * @param SearchCriteriaInterface|null $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      * @return StockSourceLinkSearchResultsInterface
      */
-    public function execute(SearchCriteriaInterface $searchCriteria = null): StockSourceLinkSearchResultsInterface;
+    public function execute(SearchCriteriaInterface $searchCriteria): StockSourceLinkSearchResultsInterface;
 }

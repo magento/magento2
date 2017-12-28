@@ -15,11 +15,12 @@ use Magento\Inventory\Model\ResourceModel\StockSourceLink\CollectionFactory;
 use Magento\InventoryApi\Api\Data\StockSearchResultsInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterfaceFactory;
+use Magento\InventoryApi\Api\GetSourceLinkListInterface;
 
 /**
  * @inheritdoc
  */
-class GetList implements GetListInterface
+class GetSourceLinkList implements GetSourceLinkListInterface
 {
     /**
      * @var CollectionProcessorInterface
@@ -62,16 +63,12 @@ class GetList implements GetListInterface
     /**
      * @inheritdoc
      */
-    public function execute(SearchCriteriaInterface $searchCriteria = null): StockSourceLinkSearchResultsInterface
+    public function execute(SearchCriteriaInterface $searchCriteria): StockSourceLinkSearchResultsInterface
     {
         /** @var Collection $collection */
         $collection = $this->stockCollectionFactory->create();
 
-        if (null === $searchCriteria) {
-            $searchCriteria = $this->searchCriteriaBuilder->create();
-        } else {
-            $this->collectionProcessor->process($searchCriteria, $collection);
-        }
+        $this->collectionProcessor->process($searchCriteria, $collection);
 
         /** @var StockSearchResultsInterface $searchResult */
         $searchResult = $this->stockSearchResultsFactory->create();

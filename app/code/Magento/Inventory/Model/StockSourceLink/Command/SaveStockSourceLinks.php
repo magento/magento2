@@ -8,14 +8,16 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model\StockSourceLink\Command;
 
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Validation\ValidationException;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
  */
-class Save implements SaveInterface
+class SaveStockSourceLinks implements StockSourceLinksSaveInterface
 {
     /**
      * @var StockSourceLinkResourceModel
@@ -42,13 +44,19 @@ class Save implements SaveInterface
     /**
      * @inheritdoc
      */
-    public function execute(StockSourceLinkInterface $stockSourceLink): int
+    public function execute(array $links): array
     {
         // todo: implement validation
 
+        $savedLinkIdList = [];
+
         try {
-            $this->stockSourceLinkResource->save($stockSourceLink);
-            return (int)$stockSourceLink->getStockId();
+            foreach ($links as $link) {
+                $this->stockSourceLinkResource->save($link);
+                $savedLinkIdList[] = (int)$link->getStockId();
+            }
+
+            return $savedLinkIdList;
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotSaveException(__('Could not save Stock Source Link'), $e);

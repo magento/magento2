@@ -5,14 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Inventory\Model\StockSourceLink\Command;
+namespace Magento\InventoryApi\Api;
 
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Validation\ValidationException;
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 
 /**
- * Save StockSourceLink data command (Service Provider Interface - SPI)
+ * Remove StockSourceLink list command (Service Provider Interface - SPI)
  *
  * Separate command interface to which Repository proxies initial Save call, could be considered as SPI - Interfaces
  * that you should extend and implement to customize current behaviour, but NOT expected to be used (called) in the code
@@ -21,15 +20,14 @@ use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
  * @see \Magento\InventoryApi\Api\StockSourceLinkRepositoryInterface
  * @api
  */
-interface SaveInterface
+interface StockSourceLinksDeleteInterface
 {
     /**
-     * Save StockSourceLink data
+     * Remove StockSourceLink list
      *
-     * @param StockSourceLinkInterface $stockSourceLink
-     * @return int
-     * @throws ValidationException
-     * @throws CouldNotSaveException
+     * @param StockSourceLinkInterface[] $links
+     * @return void
+     * @throws CouldNotDeleteException
      */
-    public function execute(StockSourceLinkInterface $stockSourceLink): int;
+    public function execute(array $links);
 }

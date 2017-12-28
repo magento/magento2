@@ -78,8 +78,9 @@
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkInterface" type="Magento\Inventory\Model\StockSourceLink"/>
     <preference for="Magento\InventoryApi\Api\StockSourceLinkRepositoryInterface" type="Magento\Inventory\Model\StockSourceLinkRepository"/>
     <preference for="Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface" type="Magento\Inventory\Model\StockSourceLinkSearchResults"/>
-    <preference for="Magento\Inventory\Model\StockSourceLink\Command\GetListInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetList"/>
-    <preference for="Magento\Inventory\Model\StockSourceLink\Command\SaveInterface" type="Magento\Inventory\Model\StockSourceLink\Command\Save"/>
+    <preference for="Magento\InventoryApi\Api\GetSourceLinkListInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetSourceLinkList"/>
+    <preference for="Magento\InventoryApi\Api\StockSourceLinksSaveInterface" type="Magento\Inventory\Model\StockSourceLink\Command\SaveStockSourceLinks"/>
+    <preference for="Magento\InventoryApi\Api\StockSourceLinksDeleteInterface" type="Magento\Inventory\Model\StockSourceLink\Command\DeleteStockSourceLinks"/>
     <preference for="Magento\InventoryApi\Api\AssignSourcesToStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\AssignSourcesToStock"/>
     <preference for="Magento\InventoryApi\Api\GetAssignedSourcesForStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\GetAssignedSourcesForStock"/>
     <preference for="Magento\InventoryApi\Api\UnassignSourceFromStockInterface" type="Magento\Inventory\Model\StockSourceLink\Command\UnassignSourceFromStock"/>

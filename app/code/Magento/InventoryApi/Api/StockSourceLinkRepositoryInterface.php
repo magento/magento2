@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryApi\Api;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
 
 /**
@@ -30,21 +29,30 @@ use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
 interface StockSourceLinkRepositoryInterface
 {
     /**
-     * Save StockSourceLink data
+     * Save StockSourceLink list
      *
-     * @param \Magento\InventoryApi\Api\Data\StockSourceLinkInterface $stock
-     * @return int
+     * @param \Magento\InventoryApi\Api\Data\StockSourceLinkInterface[] $links
+     * @return array
      * @throws \Magento\Framework\Validation\ValidationException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(StockSourceLinkInterface $stock): int;
+    public function save(array $links): array;
 
     /**
      * Find StockSourceLink list by given SearchCriteria
      * SearchCriteria is not required because load all stocks is useful case
      *
-     * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria = null): StockSourceLinkSearchResultsInterface;
+    public function getList(SearchCriteriaInterface $searchCriteria): StockSourceLinkSearchResultsInterface;
+
+    /**
+     * Delete StockSourceLink list
+     *
+     * @param \Magento\InventoryApi\Api\Data\StockSourceLinkInterface[] $links
+     * @return void
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     */
+    public function delete(array $links);
 }
