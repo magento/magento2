@@ -5,7 +5,7 @@
  */
 namespace Magento\InstantPurchase\Model;
 
-use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InstantPurchase\Model\QuoteManagement\PaymentConfiguration;
@@ -14,7 +14,7 @@ use Magento\InstantPurchase\Model\QuoteManagement\QuoteCreation;
 use Magento\InstantPurchase\Model\QuoteManagement\QuoteFilling;
 use Magento\InstantPurchase\Model\QuoteManagement\ShippingConfiguration;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use \Throwable;
 
 /**
@@ -82,20 +82,20 @@ class PlaceOrder
     /**
      * Place an order.
      *
-     * @param StoreInterface $store
+     * @param Store $store
      * @param Customer $customer
      * @param InstantPurchaseOption $instantPurchaseOption
-     * @param ProductInterface $product
+     * @param Product $product
      * @param array $productRequest
      * @return int order identifier
      * @throws LocalizedException if order can not be placed.
      * @throws Throwable if unpredictable error occurred.
      */
     public function placeOrder(
-        StoreInterface $store,
+        Store $store,
         Customer $customer,
         InstantPurchaseOption $instantPurchaseOption,
-        ProductInterface $product,
+        Product $product,
         array $productRequest
     ) : int {
         $quote = $this->quoteCreation->createQuote(

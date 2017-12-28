@@ -7,7 +7,7 @@ namespace Magento\InstantPurchase\Model\QuoteManagement;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InstantPurchase\PaymentMethodIntegration\IntegrationsManager;
-use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 
@@ -38,15 +38,15 @@ class PaymentConfiguration
     /**
      * Sets payment method information in quote based on stored payment token.
      *
-     * @param CartInterface $quote
+     * @param Quote $quote
      * @param PaymentTokenInterface $paymentToken
-     * @return CartInterface
+     * @return Quote
      * @throws LocalizedException if payment method can not be configured for a quote.
      */
     public function configurePayment(
-        CartInterface $quote,
+        Quote $quote,
         PaymentTokenInterface $paymentToken
-    ): CartInterface {
+    ): Quote {
         $paymentMethod = $this->getVaultPaymentMethodCode(
             $paymentToken,
             $quote->getStoreId()

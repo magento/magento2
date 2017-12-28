@@ -8,7 +8,7 @@ namespace Magento\InstantPurchase\Model\QuoteManagement;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
 
 /**
  * Purchase products from quote.
@@ -43,11 +43,11 @@ class Purchase
     /**
      * Summarize quote and place order.
      *
-     * @param CartInterface $quote
+     * @param Quote $quote
      * @return int Order id
      * @throws LocalizedException if order can not be placed for a quote.
      */
-    public function purchase(CartInterface $quote): int
+    public function purchase(Quote $quote): int
     {
         $quote->collectTotals();
         $this->quoteRepository->save($quote);

@@ -8,8 +8,8 @@ namespace Magento\InstantPurchase\Model\QuoteManagement;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InstantPurchase\Model\ShippingMethodChoose\DeferredShippingMethodChooserInterface;
 use Magento\InstantPurchase\Model\ShippingMethodChoose\DeferredShippingMethodChooserPool;
-use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 
 /**
@@ -37,15 +37,15 @@ class ShippingConfiguration
     /**
      * Sets shipping information to quote.
      *
-     * @param CartInterface $quote
+     * @param Quote $quote
      * @param ShippingMethodInterface $shippingMethod
-     * @return CartInterface
+     * @return Quote
      * @throws LocalizedException if shipping can not be configured for a quote.
      */
     public function configureShippingMethod(
-        CartInterface $quote,
+        Quote $quote,
         ShippingMethodInterface $shippingMethod
-    ): CartInterface {
+    ): Quote {
         if ($quote->isVirtual()) {
             return $quote;
         }

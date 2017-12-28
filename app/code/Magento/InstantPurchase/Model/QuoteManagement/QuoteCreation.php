@@ -10,7 +10,7 @@ use Magento\Customer\Model\Customer;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteFactory;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Create Quote for instance purchase.
@@ -37,7 +37,7 @@ class QuoteCreation
     /**
      * Creates Quote for instant purchase.
      *
-     * @param StoreInterface $store
+     * @param Store $store
      * @param Customer $customer
      * @param Address $shippingAddress
      * @param Address $billingAddress
@@ -45,7 +45,7 @@ class QuoteCreation
      * @throws LocalizedException if quote can not be created.
      */
     public function createQuote(
-        StoreInterface $store,
+        Store $store,
         Customer $customer,
         Address $shippingAddress,
         Address $billingAddress
