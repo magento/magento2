@@ -2,7 +2,7 @@
 
 namespace Magento\InstantPurchase\Test\Unit\Model;
 
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InstantPurchase\Model\InstantPurchaseOption;
@@ -12,10 +12,12 @@ use Magento\InstantPurchase\Model\QuoteManagement\Purchase;
 use Magento\InstantPurchase\Model\QuoteManagement\QuoteFilling;
 use Magento\InstantPurchase\Model\QuoteManagement\ShippingConfiguration;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
-use Magento\Store\Model\Store;
+use Magento\Store\Api\Data\StoreInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\InstantPurchase\Model\QuoteManagement\QuoteCreation;
 use Magento\Customer\Model\Address;
 
@@ -42,6 +44,11 @@ class PlaceOrderTest extends TestCase
     private $quoteRepositoryMock;
 
     /**
+     * @var CartInterface|MockObject
+     */
+    private $cartMock;
+
+    /**
      * @var Quote|MockObject
      */
     private $quoteMock;
@@ -62,7 +69,7 @@ class PlaceOrderTest extends TestCase
     private $purchaseMock;
 
     /**
-     * @var Store|MockObject
+     * @var StoreInterface|MockObject
      */
     private $storeMock;
 
@@ -77,7 +84,7 @@ class PlaceOrderTest extends TestCase
     private $instantPurchaseOptionMock;
 
     /**
-     * @var Product|MockObject
+     * @var ProductInterface|MockObject
      */
     private $productMock;
 
@@ -88,6 +95,8 @@ class PlaceOrderTest extends TestCase
 
     protected function setUp()
     {
+        $objectManager = new ObjectManager($this);
+
         $this->quoteCreateMock = $this->getMockBuilder(QuoteCreation::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -105,8 +114,7 @@ class PlaceOrderTest extends TestCase
         $this->purchaseMock = $this->getMockBuilder(Purchase::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
+        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->getMock();
         $this->customerMock = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -114,38 +122,43 @@ class PlaceOrderTest extends TestCase
         $this->instantPurchaseOptionMock = $this->getMockBuilder(InstantPurchaseOption::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
+        $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->getMock();
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->cartMock = $this->getMockBuilder(CartInterface::class)
+            ->getMock();
         $this->addressMock = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->placeOrder = $objectManager->getObject(
+            PlaceOrder::class,
+            [
+                'quoteRepository' => $this->quoteRepositoryMock,
+                'quoteCreation' => $this->quoteCreateMock,
+                'quoteFilling' => $this->quoteFillingMock,
+                'shippingConfiguration' => $this->shippingConfigurationMock,
+                'paymentConfiguration' => $this->paymentConfigurationMock,
+                'purchase' => $this->purchaseMock,
+            ]
+        );
     }
 
-    /**
-     * Test for ensuring quote made inactive on error.
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
-    public function testPlaceOrderException()
+    public function testPlaceOrder()
     {
-        $placeOrder = new PlaceOrder(
-            $this->quoteRepositoryMock,
-            $this->quoteCreateMock,
-            $this->quoteFillingMock,
-            $this->shippingConfigurationMock,
-            $this->paymentConfigurationMock,
-            $this->purchaseMock
-        );
+        $orderId = 1;
 
-        $this->instantPurchaseOptionMock->method('getShippingAddress')
+        $this->instantPurchaseOptionMock->expects($this->once())
+            ->method('getShippingAddress')
             ->willReturn($this->addressMock);
-        $this->instantPurchaseOptionMock->method('getBillingAddress')
+        $this->instantPurchaseOptionMock->expects($this->once())
+            ->method('getBillingAddress')
             ->willReturn($this->addressMock);
 
-        $this->quoteCreateMock->method('createQuote')
+        $this->quoteCreateMock->expects($this->once())
+            ->method('createQuote')
             ->with(
                 $this->storeMock,
                 $this->customerMock,
@@ -153,35 +166,104 @@ class PlaceOrderTest extends TestCase
                 $this->addressMock
             )->willReturn($this->quoteMock);
 
-        $this->quoteFillingMock->method('fillQuote')
+        $this->quoteFillingMock->expects($this->once())
+            ->method('fillQuote')
             ->with($this->quoteMock, $this->productMock, [])
             ->willReturn($this->quoteMock);
 
-        $this->quoteMock->method('collectTotals')
+        $this->quoteMock->expects($this->once())
+            ->method('collectTotals')
             ->willReturnSelf();
 
-        $this->quoteRepositoryMock->method('save')
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('save')
             ->with($this->quoteMock);
 
-        $this->quoteMock->method('getId');
+        $this->quoteMock->expects($this->once())
+            ->method('getId');
 
-        $this->quoteRepositoryMock->method('get')
-            ->willReturn($this->quoteMock);
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')
+            ->willReturn($this->cartMock);
 
-        $this->shippingConfigurationMock->method('configureShippingMethod')
-            ->willReturn($this->quoteMock);
-        
-        $this->paymentConfigurationMock->method('configurePayment')
-            ->willReturn($this->quoteMock);
+        $this->purchaseMock->expects($this->once())
+            ->method('purchase')
+            ->willReturn($orderId);
 
-        $this->purchaseMock->method('purchase')
-            ->willThrowException(new LocalizedException(__('Could not place order.')));
+        $this->assertEquals(
+            $orderId,
+            $this->placeOrder->placeOrder(
+                $this->storeMock,
+                $this->customerMock,
+                $this->instantPurchaseOptionMock,
+                $this->productMock,
+                []
+            )
+        );
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testPlaceOrderException()
+    {
+        $this->instantPurchaseOptionMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn($this->addressMock);
+        $this->instantPurchaseOptionMock->expects($this->once())
+            ->method('getBillingAddress')
+            ->willReturn($this->addressMock);
+
+        $this->quoteCreateMock->expects($this->once())
+            ->method('createQuote')
+            ->with(
+                $this->storeMock,
+                $this->customerMock,
+                $this->addressMock,
+                $this->addressMock
+            )->willReturn($this->quoteMock);
+
+        $this->quoteFillingMock->expects($this->once())
+            ->method('fillQuote')
+            ->with($this->quoteMock, $this->productMock, [])
+            ->willReturn($this->quoteMock);
 
         $this->quoteMock->expects($this->once())
+            ->method('collectTotals')
+            ->willReturnSelf();
+
+        $this->quoteRepositoryMock->expects($this->at(0))
+            ->method('save')
+            ->with($this->quoteMock);
+
+        $this->quoteMock->expects($this->once())
+            ->method('getId');
+
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')
+            ->willReturn($this->cartMock);
+
+        $this->shippingConfigurationMock->expects($this->once())
+            ->method('configureShippingMethod')
+            ->willReturn($this->cartMock);
+        
+        $this->paymentConfigurationMock->expects($this->once())
+            ->method('configurePayment')
+            ->willReturn($this->cartMock);
+
+        $this->purchaseMock->expects($this->once())
+            ->method('purchase')
+            ->willThrowException(new LocalizedException(__('Could not place order.')));
+
+        $this->cartMock->expects($this->once())
             ->method('setIsActive')
             ->with(false);
 
-        $placeOrder->placeOrder(
+        $this->quoteRepositoryMock->expects($this->at(2))
+            ->method('save')
+            ->with($this->cartMock);
+
+        $this->placeOrder->placeOrder(
             $this->storeMock,
             $this->customerMock,
             $this->instantPurchaseOptionMock,
