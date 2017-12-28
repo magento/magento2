@@ -19,8 +19,7 @@
         <?php echo($block->getPriceDisplayLabel()) ? 'data-label="' . $block->getPriceDisplayLabel() . $block->getPriceDisplayInclExclTaxes() . '"' : '' ?>
         data-price-amount="<?php /* @escapeNotVerified */ echo $block->getDisplayValue(); ?>"
         data-price-type="<?php /* @escapeNotVerified */ echo $block->getPriceType(); ?>"
-        class="price-wrapper <?php /* @escapeNotVerified */ echo $block->getPriceWrapperCss(); ?>"
-        >
+        class="price-wrapper <?php /* @escapeNotVerified */ echo $block->getPriceWrapperCss(); ?>">
         <?php /* @noEscape */ echo $block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()) ?>
     </span>
     <span class="_hidden"<?php echo $block->getSchema() ? ' itemprop="price"' : '' ?>>
