@@ -32,31 +32,25 @@ class SourceItemsDeleteTest extends WebapiAbstract
     {
         $sourceItemsForDelete = [
             [
-                SourceItemInterface::SOURCE_ID => 10,
+                SourceItemInterface::SOURCE_CODE => 'eu-1',
                 SourceItemInterface::SKU => 'SKU-1',
             ],
             [
-                SourceItemInterface::SOURCE_ID => 20,
+                SourceItemInterface::SOURCE_CODE => 'eu-2',
                 SourceItemInterface::SKU => 'SKU-1',
             ],
         ];
         $expectedSourceItemsAfterDeleting = [
             [
-                SourceItemInterface::SOURCE_ID => 30,
+                SourceItemInterface::SOURCE_CODE => 'eu-3',
                 SourceItemInterface::SKU => 'SKU-1',
                 SourceItemInterface::QUANTITY => 10,
                 SourceItemInterface::STATUS => SourceItemInterface::STATUS_OUT_OF_STOCK,
             ],
             [
-                SourceItemInterface::SOURCE_ID => 40,
+                SourceItemInterface::SOURCE_CODE => 'eu-disabled',
                 SourceItemInterface::SKU => 'SKU-1',
                 SourceItemInterface::QUANTITY => 10,
-                SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
-            ],
-            [
-                SourceItemInterface::SOURCE_ID => 50,
-                SourceItemInterface::SKU => 'SKU-2',
-                SourceItemInterface::QUANTITY => 5,
                 SourceItemInterface::STATUS => SourceItemInterface::STATUS_IN_STOCK,
             ],
         ];
@@ -78,7 +72,7 @@ class SourceItemsDeleteTest extends WebapiAbstract
 
         $actualData = $this->getSourceItems();
 
-        self::assertEquals(3, $actualData['total_count']);
+        self::assertEquals(2, $actualData['total_count']);
         AssertArrayContains::assert($expectedSourceItemsAfterDeleting, $actualData['items']);
     }
 
@@ -88,7 +82,19 @@ class SourceItemsDeleteTest extends WebapiAbstract
     private function getSourceItems(): array
     {
         $requestData = [
-            'searchCriteria' => [SearchCriteria::PAGE_SIZE => 10],
+            'searchCriteria' => [
+                SearchCriteria::FILTER_GROUPS => [
+                    [
+                        'filters' => [
+                            [
+                                'field' => SourceItemInterface::SKU,
+                                'value' => 'SKU-1',
+                                'condition_type' => 'eq',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
         $serviceInfo = [
             'rest' => [

@@ -34,11 +34,7 @@ class DeleteWebsiteToStockLinkTest extends TestCase
         );
     }
 
-    /**
-     * Creates website inside of test so need to enable db isolation to prevent change db state after test execution
-     * @magentoDbIsolation enabled
-     */
-    public function testGetAssignedStocksForWebsite()
+    public function testDeleteWebsiteToStockLink()
     {
         $websiteCode = 'test_1';
 

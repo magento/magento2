@@ -80,7 +80,7 @@ class Sources extends Template implements TabInterface
             $sourceItems = $this->getSourceItemsBySku($orderItem->getSku());
 
             foreach ($sourceItems as $sourceItem) {
-                $sourceName = $this->sourceRepository->get((int)$sourceItem->getSourceId())->getName();
+                $sourceName = $this->sourceRepository->get($sourceItem->getSourceCode())->getName();
                 $sourceItemsData[$sourceName][] = [
                     'sku' => $sourceItem->getSku(),
                     'qty' => $sourceItem->getQuantity(),

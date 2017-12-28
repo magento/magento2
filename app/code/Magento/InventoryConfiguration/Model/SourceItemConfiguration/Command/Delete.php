@@ -42,10 +42,10 @@ class Delete implements DeleteSourceItemConfigurationInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $sourceId, string $sku)
+    public function execute(string $sourceCode, string $sku)
     {
         try {
-            $this->deleteResourceModel->execute($sourceId, $sku);
+            $this->deleteResourceModel->execute($sourceCode, $sku);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new CouldNotDeleteException(__('Could not delete SourceItem Configuration.'), $e);

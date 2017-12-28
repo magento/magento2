@@ -25,12 +25,12 @@ class SourceItemConfigurationsSaveTest extends WebapiAbstract
     {
         $sourceItemConfigurations = [
             [
-                SourceItemConfigurationInterface::SOURCE_ID => 10,
+                SourceItemConfigurationInterface::SOURCE_CODE => 'eu-1',
                 SourceItemConfigurationInterface::SKU => 'SKU-1',
                 SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 2,
             ],
             [
-                SourceItemConfigurationInterface::SOURCE_ID => 20,
+                SourceItemConfigurationInterface::SOURCE_CODE => 'eu-2',
                 SourceItemConfigurationInterface::SKU => 'SKU-1',
                 SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 1,
             ]
@@ -49,23 +49,23 @@ class SourceItemConfigurationsSaveTest extends WebapiAbstract
 
         $this->_webApiCall($serviceInfo, ['sourceItemConfigurations' => $sourceItemConfigurations]);
 
-        $sourceItemConfiguration = $this->getSourceItemConfiguration(10, 'SKU-1');
+        $sourceItemConfiguration = $this->getSourceItemConfiguration('eu-1', 'SKU-1');
         self::assertEquals($sourceItemConfigurations[0], $sourceItemConfiguration);
 
-        $sourceItemConfiguration = $this->getSourceItemConfiguration(20, 'SKU-1');
+        $sourceItemConfiguration = $this->getSourceItemConfiguration('eu-2', 'SKU-1');
         self::assertEquals($sourceItemConfigurations[1], $sourceItemConfiguration);
     }
 
     /**
-     * @param int $sourceId
+     * @param string $sourceCode
      * @param string $sku
      * @return array
      */
-    private function getSourceItemConfiguration(int $sourceId, string $sku)
+    private function getSourceItemConfiguration(string $sourceCode, string $sku)
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceId . '/' . $sku,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sourceCode . '/' . $sku,
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -75,7 +75,7 @@ class SourceItemConfigurationsSaveTest extends WebapiAbstract
         ];
         $sourceItemConfiguration = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)
             ? $this->_webApiCall($serviceInfo)
-            : $this->_webApiCall($serviceInfo, ['sourceId' => $sourceId, 'sku' => $sku]);
+            : $this->_webApiCall($serviceInfo, ['sourceCode' => $sourceCode, 'sku' => $sku]);
 
         self::assertInternalType('array', $sourceItemConfiguration);
         self::assertNotEmpty($sourceItemConfiguration);

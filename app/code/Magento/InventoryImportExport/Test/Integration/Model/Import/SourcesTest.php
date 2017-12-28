@@ -13,6 +13,7 @@ use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
+use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\InventoryImportExport\Model\Import\Sources;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -28,6 +29,11 @@ class SourcesTest extends TestCase
      * @var SourceItemRepositoryInterface
      */
     private $sourceItemRepository;
+
+    /**
+     * @var SourceRepositoryInterface
+     */
+    private $sourceRepository;
 
     /**
      * @var SearchCriteriaBuilder
@@ -50,6 +56,7 @@ class SourcesTest extends TestCase
         ]);
 
         $this->sourceItemRepository = Bootstrap::getObjectManager()->create(SourceItemRepositoryInterface::class);
+        $this->sourceRepository = Bootstrap::getObjectManager()->create(SourceRepositoryInterface::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
     }
 
@@ -58,7 +65,7 @@ class SourcesTest extends TestCase
      */
     public function testValidateRowExpectsInvalidRow()
     {
-        $rowData = $this->buildRowDataArray(880, 'SKU-55', 33, 1);
+        $rowData = $this->buildRowDataArray('us-2', 'SKU-55', 33, 1);
         $result = $this->importer->validateRow($rowData, 2);
         $this->assertNotTrue($result, 'Expect result FALSE as given source ID is not present in database.');
     }
@@ -68,24 +75,18 @@ class SourcesTest extends TestCase
      */
     public function testValidateRowExpectsValidRow()
     {
-        $rowData = $this->buildRowDataArray(20, 'SKU-55', 33, 1);
+        $rowData = $this->buildRowDataArray('eu-2', 'SKU-55', 33, 1);
         $result = $this->importer->validateRow($rowData, 2);
         $this->assertTrue($result, 'Expect result TRUE as given data is valid.');
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testImportDataWithWrongBehavior()
     {
         $this->importer->setParameters([
             'behavior' => 'WrongBehavior'
         ]);
 
-        $bunch = [
-            $this->buildRowDataArray(10, 'SKU-1', 6.88, 1)
-        ];
-        $this->importData($bunch);
+        $this->assertEquals($this->importer->getBehavior(), \Magento\ImportExport\Model\Import::getDefaultBehavior());
     }
 
     /**
@@ -105,10 +106,10 @@ class SourcesTest extends TestCase
         $beforeImportData = $this->getSourceItemList($searchCriteria);
 
         $bunch = [
-            $this->buildRowDataArray(10, 'SKU-1', 6.8800, 1),
-            $this->buildRowDataArray(20, 'SKU-1', 5.0000, 1),
-            $this->buildRowDataArray(50, 'SKU-2', 15, 1),
-            $this->buildRowDataArray(10, 'SKU-2', 33, 1),
+            $this->buildRowDataArray('eu-1', 'SKU-1', 6.8800, 1),
+            $this->buildRowDataArray('eu-2', 'SKU-1', 5.0000, 1),
+            $this->buildRowDataArray('us-1', 'SKU-2', 15, 1),
+            $this->buildRowDataArray('eu-1', 'SKU-2', 33, 1),
         ];
         $this->importData($bunch);
 
@@ -134,8 +135,8 @@ class SourcesTest extends TestCase
         $searchCriteria = $this->searchCriteriaBuilder->create();
 
         $bunch = [
-            $this->buildRowDataArray(10, 'SKU-1', 6.88, 1),
-            $this->buildRowDataArray(20, 'SKU-1', 5, 1),
+            $this->buildRowDataArray('eu-1', 'SKU-1', 6.88, 1),
+            $this->buildRowDataArray('eu-2', 'SKU-1', 5, 1),
         ];
         $this->importData($bunch);
 
@@ -160,16 +161,16 @@ class SourcesTest extends TestCase
         ]);
 
         $bunch = [
-            $this->buildRowDataArray(20, 'SKU-1', 5, 1),
-            $this->buildRowDataArray(50, 'SKU-2', 15, 1),
+            $this->buildRowDataArray('eu-2', 'SKU-1', 5, 1),
+            $this->buildRowDataArray('us-1', 'SKU-2', 15, 1),
         ];
         $this->importData($bunch);
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $afterImportData = $this->getSourceItemList($searchCriteria);
 
-        $this->assertArrayHasKey('20-SKU-1', $afterImportData);
-        $this->assertArrayHasKey('50-SKU-2', $afterImportData);
+        $this->assertArrayHasKey('eu-2-SKU-1', $afterImportData);
+        $this->assertArrayHasKey('us-1-SKU-2', $afterImportData);
     }
 
     /**
@@ -183,7 +184,7 @@ class SourcesTest extends TestCase
     {
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $beforeImportData = $this->getSourceItemList($searchCriteria);
-        $this->assertArrayHasKey('10-SKU-1', $beforeImportData);
+        $this->assertArrayHasKey('eu-1-SKU-1', $beforeImportData);
 
         /** @see \Magento\InventoryImportExport\Model\Import\Command\Replace::execute */
         $this->importer->setParameters([
@@ -191,30 +192,30 @@ class SourcesTest extends TestCase
         ]);
 
         $bunch = [
-            $this->buildRowDataArray(20, 'SKU-1', 20, 1),
-            $this->buildRowDataArray(50, 'SKU-2', 15, 1),
+            $this->buildRowDataArray('eu-2', 'SKU-1', 20, 1),
+            $this->buildRowDataArray('us-1', 'SKU-2', 15, 1),
         ];
         $this->importData($bunch);
         $afterImportData = $this->getSourceItemList($searchCriteria);
 
         // checks whether original source item which has not been imported stays in database
-        $this->assertEquals($beforeImportData['10-SKU-1'], $afterImportData['10-SKU-1']);
+        $this->assertEquals($beforeImportData['eu-1-SKU-1'], $afterImportData['eu-1-SKU-1']);
 
-        $this->assertArrayHasKey('20-SKU-1', $afterImportData);
-        $this->assertArrayHasKey('50-SKU-2', $afterImportData);
+        $this->assertArrayHasKey('eu-2-SKU-1', $afterImportData);
+        $this->assertArrayHasKey('us-1-SKU-2', $afterImportData);
     }
 
     /**
-     * @param int $sourceID
+     * @param string $sourceCode
      * @param string $sku
      * @param int $qty
      * @param int $status
      * @return array
      */
-    private function buildRowDataArray($sourceID, $sku, $qty, $status)
+    private function buildRowDataArray($sourceCode, $sku, $qty, $status)
     {
         return [
-            Sources::COL_SOURCE => $sourceID,
+            Sources::COL_SOURCE_CODE => $sourceCode,
             Sources::COL_SKU => $sku,
             Sources::COL_QTY => $qty,
             Sources::COL_STATUS => $status,
@@ -229,9 +230,9 @@ class SourcesTest extends TestCase
     {
         $comparableArray = [];
         foreach ($sourceItems as $sourceItem) {
-            $key = sprintf('%s-%s', $sourceItem->getSourceId(), $sourceItem->getSku());
+            $key = sprintf('%s-%s', $sourceItem->getSourceCode(), $sourceItem->getSku());
             $comparableArray[$key] = $this->buildRowDataArray(
-                $sourceItem->getSourceId(),
+                $sourceItem->getSourceCode(),
                 $sourceItem->getSku(),
                 $sourceItem->getQuantity(),
                 $sourceItem->getStatus()
@@ -248,9 +249,9 @@ class SourcesTest extends TestCase
     private function updateDataArrayByBunch(array $data, array $bunch)
     {
         foreach ($bunch as $bunchData) {
-            $key = sprintf('%s-%s', $bunchData[Sources::COL_SOURCE], $bunchData[Sources::COL_SKU]);
+            $key = sprintf('%s-%s', $bunchData[Sources::COL_SOURCE_CODE], $bunchData[Sources::COL_SKU]);
             $data[$key] = $this->buildRowDataArray(
-                $bunchData[Sources::COL_SOURCE],
+                $bunchData[Sources::COL_SOURCE_CODE],
                 $bunchData[Sources::COL_SKU],
                 number_format($bunchData[Sources::COL_QTY], 4),
                 $bunchData[Sources::COL_STATUS]

@@ -14,6 +14,6 @@ $connection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
 $connection->getConnection()->delete(
     $connection->getTableName('inventory_source'),
     [
-        SourceInterface::SOURCE_ID . ' IN (?)' => [10, 20, 30, 40, 50],
+        SourceInterface::SOURCE_CODE . ' IN (?)' => ['eu-1', 'eu-2', 'eu-3', 'eu-disabled', 'us-1'],
     ]
 );

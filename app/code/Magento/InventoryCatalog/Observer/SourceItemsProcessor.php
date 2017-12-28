@@ -92,9 +92,9 @@ class SourceItemsProcessor
         foreach ($sourceItemsData as $sourceItemData) {
             $this->validateSourceItemData($sourceItemData);
 
-            $sourceId = $sourceItemData[SourceItemInterface::SOURCE_ID];
-            if (isset($sourceItemsForDelete[$sourceId])) {
-                $sourceItem = $sourceItemsForDelete[$sourceId];
+            $sourceCode = $sourceItemData[SourceItemInterface::SOURCE_CODE];
+            if (isset($sourceItemsForDelete[$sourceCode])) {
+                $sourceItem = $sourceItemsForDelete[$sourceCode];
             } else {
                 /** @var SourceItemInterface $sourceItem */
                 $sourceItem = $this->sourceItemFactory->create();
@@ -104,7 +104,7 @@ class SourceItemsProcessor
             $this->dataObjectHelper->populateWithArray($sourceItem, $sourceItemData, SourceItemInterface::class);
 
             $sourceItemsForSave[] = $sourceItem;
-            unset($sourceItemsForDelete[$sourceId]);
+            unset($sourceItemsForDelete[$sourceCode]);
         }
         if ($sourceItemsForSave) {
             $this->sourceItemsSave->execute($sourceItemsForSave);
@@ -130,7 +130,7 @@ class SourceItemsProcessor
         $sourceItemMap = [];
         if ($sourceItems) {
             foreach ($sourceItems as $sourceItem) {
-                $sourceItemMap[$sourceItem->getSourceId()] = $sourceItem;
+                $sourceItemMap[$sourceItem->getSourceCode()] = $sourceItem;
             }
         }
         return $sourceItemMap;
@@ -143,7 +143,7 @@ class SourceItemsProcessor
      */
     private function validateSourceItemData(array $sourceItemData)
     {
-        if (!isset($sourceItemData[SourceItemInterface::SOURCE_ID])) {
+        if (!isset($sourceItemData[SourceItemInterface::SOURCE_CODE])) {
             throw new InputException(__('Wrong Product to Source relation parameters given.'));
         }
     }

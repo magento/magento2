@@ -30,9 +30,6 @@ class SourceIndexerTest extends TestCase
      */
     private $removeIndexData;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         $this->indexer = Bootstrap::getObjectManager()->get(IndexerInterface::class);
@@ -45,10 +42,7 @@ class SourceIndexerTest extends TestCase
         $this->removeIndexData->execute([10, 20, 30]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function tearDown()
+    protected function tearDown()
     {
         $this->removeIndexData->execute([10, 20, 30]);
     }
@@ -62,7 +56,7 @@ class SourceIndexerTest extends TestCase
      */
     public function testReindexRow()
     {
-        $this->indexer->reindexRow(10);
+        $this->indexer->reindexRow('eu-1');
 
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 10));
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 30));
@@ -77,7 +71,7 @@ class SourceIndexerTest extends TestCase
      */
     public function testReindexList()
     {
-        $this->indexer->reindexList([10, 50]);
+        $this->indexer->reindexList(['eu-1', 'us-1']);
 
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 10));
         self::assertEquals(8.5, $this->getProductQuantityInStock->execute('SKU-1', 30));

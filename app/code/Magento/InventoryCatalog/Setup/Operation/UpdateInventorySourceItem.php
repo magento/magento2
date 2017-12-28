@@ -42,15 +42,12 @@ class UpdateInventorySourceItem
     }
 
     /**
-     * Insert Stock Item to Inventory Source Item by raw MySQL query
-     *
      * @param ModuleDataSetupInterface $setup
-     *
      * @return void
      */
     public function execute(ModuleDataSetupInterface $setup)
     {
-        $defaultSourceId = $this->defaultSourceProvider->getId();
+        $defaultSourceCode = $this->defaultSourceProvider->getCode();
         $sourceItemTable = $setup->getTable(SourceItem::TABLE_NAME_SOURCE_ITEM);
         $legacyStockItemTable = $setup->getTable('cataloginventory_stock_item');
         $productTable = $setup->getTable('catalog_product_entity');
@@ -60,7 +57,7 @@ class UpdateInventorySourceItem
             ->from(
                 $legacyStockItemTable,
                 [
-                    'source_id' => new \Zend_Db_Expr($defaultSourceId),
+                    'source_code' => new \Zend_Db_Expr('\'' .$defaultSourceCode . '\''),
                     'qty',
                     'is_in_stock'
                 ]
@@ -72,7 +69,7 @@ class UpdateInventorySourceItem
             $selectForInsert,
             $sourceItemTable,
             [
-                SourceItemInterface::SOURCE_ID,
+                SourceItemInterface::SOURCE_CODE,
                 SourceItemInterface::QUANTITY,
                 SourceItemInterface::STATUS,
                 SourceItemInterface::SKU,

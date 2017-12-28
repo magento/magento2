@@ -14,7 +14,7 @@
                         <item name="notify_stock_qty" xsi:type="string">notify_stock_qty</item>
                         <item name="notify_stock_qty_use_default" xsi:type="string">notify_stock_qty_use_default_value</item>
                     </item>
-                    <item name="identificationDRProperty" xsi:type="string">source_id</item>
+                    <item name="identificationDRProperty" xsi:type="string">source_code</item>
                 </item>
             </argument>
             <container name="record" component="Magento_Ui/js/dynamic-rows/record">

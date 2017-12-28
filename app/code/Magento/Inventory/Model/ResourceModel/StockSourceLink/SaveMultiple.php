@@ -32,13 +32,13 @@ class SaveMultiple
     }
 
     /**
-     * @param array $sourceIds
+     * @param array $sourceCodes
      * @param int $stockId
      * @return void
      */
-    public function execute(array $sourceIds, int $stockId)
+    public function execute(array $sourceCodes, int $stockId)
     {
-        if (!count($sourceIds)) {
+        if (!count($sourceCodes)) {
             return;
         }
         $connection = $this->resourceConnection->getConnection();
@@ -47,13 +47,13 @@ class SaveMultiple
         );
 
         $columns = [
-            StockSourceLink::SOURCE_ID,
+            StockSourceLink::SOURCE_CODE,
             StockSourceLink::STOCK_ID,
         ];
 
         $data = [];
-        foreach ($sourceIds as $sourceId) {
-            $data[] = [$sourceId, $stockId];
+        foreach ($sourceCodes as $sourceCode) {
+            $data[] = [$sourceCode, $stockId];
         }
         if ($data) {
             $connection->insertArray($tableName, $columns, $data);

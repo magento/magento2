@@ -31,11 +31,11 @@ $dataObjectHelper->populateWithArray(
             'sales_channels' => [
                 [
                     SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                    SalesChannelInterface::CODE => 'test_0',
+                    SalesChannelInterface::CODE => 'eu_website',
                 ],
                 [
                     SalesChannelInterface::TYPE => SalesChannelInterface::TYPE_WEBSITE,
-                    SalesChannelInterface::CODE => 'test_1',
+                    SalesChannelInterface::CODE => 'us_website',
                 ],
             ],
         ],

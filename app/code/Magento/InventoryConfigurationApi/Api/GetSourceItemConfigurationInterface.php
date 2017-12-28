@@ -22,10 +22,10 @@ interface GetSourceItemConfigurationInterface
     /**
      * Get the source item configuration
      *
-     * @param int $sourceId
+     * @param string $sourceCode
      * @param string $sku
      * @return \Magento\InventoryConfigurationApi\Api\Data\SourceItemConfigurationInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(int $sourceId, string $sku): SourceItemConfigurationInterface;
+    public function execute(string $sourceCode, string $sku): SourceItemConfigurationInterface;
 }
