@@ -57,7 +57,7 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
     public function getUrlDataProvider()
     {
         return [
-            ['content/url/example/', 'https://content/url/example/version-edition-locale.json#'],
+            ['content/url/example/', 'https://content/url/example/version-edition-locale.json'],
             ['', '']
         ];
     }
