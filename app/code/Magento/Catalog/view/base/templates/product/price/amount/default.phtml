@@ -20,9 +20,12 @@
         data-price-amount="<?php /* @escapeNotVerified */ echo $block->getDisplayValue(); ?>"
         data-price-type="<?php /* @escapeNotVerified */ echo $block->getPriceType(); ?>"
         class="price-wrapper <?php /* @escapeNotVerified */ echo $block->getPriceWrapperCss(); ?>"
-        <?php echo $block->getSchema() ? ' itemprop="price"' : '' ?>>
+        >
         <?php /* @escapeNotVerified */ echo $block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()) ?>
     </span>
+    <span class="_hidden"<?php echo $block->getSchema() ? ' itemprop="price"' : '' ?>>
+            <?php /* @escapeNotVerified */ echo $block->getDisplayValue()  ?>
+        </span>
     <?php if ($block->hasAdjustmentsHtml()): ?>
         <?php echo $block->getAdjustmentsHtml() ?>
     <?php endif; ?>
