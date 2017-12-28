@@ -9,8 +9,7 @@ define([
     'use strict';
 
     return function (config) {
-        // disabled select only
-        $('select#frontend_input:disabled').each(function () {
+        $('select#frontend_input').each(function () {
             var select = $(this),
                 currentValue = select.find('option:selected').val(),
                 compatibleTypes = config.inputTypes,
@@ -23,6 +22,8 @@ define([
                     .attr({
                         generated: true, for: select.attr('id')
                     }),
+                hint = $('<p>').hide().addClass('note').attr({generated: true}),
+                hints = config.hints,
 
             /**
              * Toggle hint about changes types
@@ -32,6 +33,17 @@ define([
                     warning.hide();
                 } else {
                     warning.show();
+                }
+            },
+
+            /**
+             * Toggle hint
+             */
+            toggleHint = function () {
+                if (typeof hints[select.find('option:selected').val()] !== 'undefined') {
+                    select.after(hint.show().text(hints[select.find('option:selected').val()]));
+                } else {
+                    hint.hide();
                 }
             },
 
@@ -52,15 +64,16 @@ define([
             }
 
             // Check current type (allow only compatible types)
-            if (!~enabledTypes.indexOf(currentValue)) {
-                return;
+            if (~enabledTypes.indexOf(currentValue)) {
+                // Enable select and keep only available options (all other will be removed)
+                select.removeAttr('disabled').find('option').each(removeOption);
+                // Add warning on page and event for show/hide it
+                select.after(warning).on('change', toggleWarning);
             }
-
-            // Enable select and keep only available options (all other will be removed)
-            select.removeAttr('disabled').find('option').each(removeOption);
-
-            // Add warning on page and event for show/hide it
-            select.after(warning).on('change', toggleWarning);
+            //bind hint toggling on change event
+            select.on('change', toggleHint);
+            //show hint for currently selected value
+            toggleHint();
         });
     };
 });

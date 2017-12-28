@@ -36,4 +36,18 @@ class Inputtype implements \Magento\Framework\Option\ArrayInterface
             ['textarea', 'texteditor'],
         ];
     }
+
+    /**
+     * Get hint for input types
+     *
+     * @return array
+     */
+    public function getInputTypeHints()
+    {
+        return [
+            'texteditor' => __(
+                'Text Editor input type requires WYSIWYG to be enabled in Stores > Configuration > Content Management.'
+            ),
+        ];
+    }
 }

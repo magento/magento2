@@ -45,4 +45,14 @@ class Js extends \Magento\Backend\Block\Template
     {
         return $this->inputtype->getVolatileInputTypes();
     }
+
+    /**
+     * Get hints on input types.
+     *
+     * @return array
+     */
+    public function getInputTypeHints()
+    {
+        return $this->inputtype->getInputTypeHints();
+    }
 }
