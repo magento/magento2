@@ -104,22 +104,21 @@ class PlaceOrder extends Action
      */
     public function execute()
     {
-        $params = $this->getRequest()->getParams();
-
-        if (!$this->doesRequestContainAllKnowParams($params)) {
+        $request = $this->getRequest();
+        if (!$this->doesRequestContainAllKnowParams($request)) {
             return $this->createResponse($this->createGenericErrorMessage(), false);
         }
-        if (!$this->formKeyValidator->validate($this->getRequest())) {
+        if (!$this->formKeyValidator->validate($request)) {
             return $this->createResponse($this->createGenericErrorMessage(), false);
         }
 
-        $paymentTokenPublicHash = (string)$params['instant_purchase_payment_token'];
-        $shippingAddressId = (int)$params['instant_purchase_shipping_address'];
-        $billingAddressId = (int)$params['instant_purchase_billing_address'];
-        $carrierCode = (string)isset($params['instant_purchase_carrier']) ? $params['instant_purchase_carrier'] : '';
-        $shippingMethodCode = (string)isset($params['instant_purchase_shipping']) ? $params['instant_purchase_shipping'] : '';
-        $productId = (int)$params['product'];
-        $productRequest = $this->getRequestUnknownParams($params);
+        $paymentTokenPublicHash = (string)$request->getParam('instant_purchase_payment_token');
+        $shippingAddressId = (int)$request->getParam('instant_purchase_shipping_address');
+        $billingAddressId = (int)$request->getParam('instant_purchase_billing_address');
+        $carrierCode = (string)$request->getParam('instant_purchase_carrier');
+        $shippingMethodCode = (string)$request->getParam('instant_purchase_shipping');
+        $productId = (int)$request->getParam('product');
+        $productRequest = $this->getRequestUnknownParams($request);
 
         try {
             $customer = $this->customerSession->getCustomer();
@@ -174,13 +173,13 @@ class PlaceOrder extends Action
     /**
      * Checks if all parameters that should be handled are passed.
      *
-     * @param array $params
+     * @param RequestInterface $request
      * @return bool
      */
-    private function doesRequestContainAllKnowParams(array $params): bool
+    private function doesRequestContainAllKnowParams(RequestInterface $request): bool
     {
         foreach (self::$knownRequestParams as $knownRequestParam) {
-            if (!isset($params[$knownRequestParam])) {
+            if ($request->getParam($knownRequestParam) === null) {
                 return false;
             }
         }
@@ -190,13 +189,14 @@ class PlaceOrder extends Action
     /**
      * Filters out parameters that handled by controller.
      *
-     * @param array $params
+     * @param RequestInterface $request
      * @return array
      */
-    private function getRequestUnknownParams(array $params): array
+    private function getRequestUnknownParams(RequestInterface $request): array
     {
+        $requestParams = $request->getParams();
         $unknownParams = [];
-        foreach ($params as $param => $value) {
+        foreach ($requestParams as $param => $value) {
             if (!isset(self::$knownRequestParams[$param])) {
                 $unknownParams[$param] = $value;
             }
