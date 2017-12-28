@@ -16,7 +16,7 @@
         <after>
             <amOnPage stepKey="amOnLogoutPage" url="admin/admin/auth/logout/"/>
         </after>
-        <test name="SeeReleaseNotificationUponFirstLoginToAdmin">
+        <test name="AdminConfigurationTimeToSendData">
             <annotations>
                 <title value="Time of the day to collect data"/>
                 <description value="An admin user can change the time of the day to collect data setting on the Advanced Reporting configuration page."/>
