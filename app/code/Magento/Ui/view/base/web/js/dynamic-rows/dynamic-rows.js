@@ -224,6 +224,14 @@ define([
             return this;
         },
 
+        /** @inheritdoc */
+        destroy: function () {
+            if (this.dnd()) {
+                this.dnd().destroy();
+            }
+            this._super();
+        },
+
         /**
          * Calls 'initObservable' of parent
          *
