@@ -21,7 +21,7 @@
         data-price-type="<?php /* @escapeNotVerified */ echo $block->getPriceType(); ?>"
         class="price-wrapper <?php /* @escapeNotVerified */ echo $block->getPriceWrapperCss(); ?>"
         >
-        <?php /* @escapeNotVerified */ echo $block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()) ?>
+        <?php /* @noEscape */ echo $block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()) ?>
     </span>
     <span class="_hidden"<?php echo $block->getSchema() ? ' itemprop="price"' : '' ?>>
         <?php /* @escapeNotVerified */ echo $block->getDisplayValue()  ?>
