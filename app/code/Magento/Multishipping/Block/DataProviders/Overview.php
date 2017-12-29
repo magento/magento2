@@ -42,10 +42,33 @@ class Overview implements ArgumentInterface
      */
     public function getAddressError(Address $address): string
     {
+        $addressErrors = $this->getAddressErrors();
+
+        return $addressErrors[$address->getId()] ?? '';
+    }
+
+    /**
+     * Returns all stored errors.
+     *
+     * @return array
+     */
+    public function getAddressErrors(): array
+    {
         if (empty($this->addressErrors)) {
             $this->addressErrors = $this->session->getAddressErrors(true);
         }
 
-        return $this->addressErrors[$address->getId()] ?? '';
+        return $this->addressErrors ?? [];
+    }
+
+    /**
+     * Creates anchor name for address Id.
+     *
+     * @param int $addressId
+     * @return string
+     */
+    public function getAddressAnchorName(int $addressId): string
+    {
+        return 'a' . $addressId;
     }
 }
