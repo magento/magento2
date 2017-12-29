@@ -191,13 +191,6 @@ class Save extends Attribute
                 }
             }
 
-            if ($data['frontend_input'] === 'texteditor') {
-                $data['is_wysiwyg_enabled'] = 1;
-                $data['frontend_input'] = 'textarea';
-            } elseif ($data['frontend_input'] === 'textarea') {
-                $data['is_wysiwyg_enabled'] = 0;
-            }
-
             if ($attributeId) {
                 if (!$model->getId()) {
                     $this->messageManager->addErrorMessage(__('This attribute no longer exists.'));
@@ -212,7 +205,6 @@ class Save extends Attribute
 
                 $data['attribute_code'] = $model->getAttributeCode();
                 $data['is_user_defined'] = $model->getIsUserDefined();
-                $data['frontend_input'] = $model->getFrontendInput();
             } else {
                 /**
                  * @todo add to helper and specify all relations for properties

@@ -81,6 +81,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     protected $_indexerEavProcessor;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation|null
+     */
+    private $inputTypeProcessor;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -100,10 +105,10 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Catalog\Model\Indexer\Product\Eav\Processor $indexerEavProcessor
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper
      * @param LockValidatorInterface $lockValidator
-     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation|null $inputTypeProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -129,12 +134,16 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         LockValidatorInterface $lockValidator,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation $inputTypeProcessor = null
     ) {
         $this->_indexerEavProcessor = $indexerEavProcessor;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
         $this->_productFlatIndexerHelper = $productFlatIndexerHelper;
         $this->attrLockValidator = $lockValidator;
+        $this->inputTypeProcessor = $inputTypeProcessor?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+            \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation::class
+        );
         parent::__construct(
             $context,
             $registry,
@@ -195,11 +204,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
                 $this->setBackendModel(\Magento\Catalog\Model\Product\Attribute\Backend\Price::class);
             }
         }
-        if ($this->getFrontendInput() == 'textarea') {
-            if ($this->getIsWysiwygEnabled()) {
-                $this->setIsHtmlAllowedOnFront(1);
-            }
-        }
+        $this->inputTypeProcessor->convertInputTypeFromPresentation($this);
         if (!$this->getIsSearchable()) {
             $this->setIsVisibleInAdvancedSearch(false);
         }

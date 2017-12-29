@@ -9,6 +9,33 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
+     * @var \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation
+     */
+    private $presentation;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation $presentation
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Cache\FrontendInterface $attributeLabelCache,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation $presentation
+    ) {
+
+        parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
+        $this->presentation = $presentation?:$this->_objectManager->get(
+            \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation::class
+        );
+    }
+    /**
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -43,9 +70,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         if (!empty($data)) {
             $model->addData($data);
         }
-        if ($model->getFrontendInput() === 'textarea' && $model->getIsWysiwygEnabled()) {
-            $model->setFrontendInput('texteditor');
-        }
+        $model->setFrontendInput($this->presentation->getPresentationInputType($model));
         $attributeData = $this->getRequest()->getParam('attribute');
         if (!empty($attributeData) && $id === null) {
             $model->addData($attributeData);
