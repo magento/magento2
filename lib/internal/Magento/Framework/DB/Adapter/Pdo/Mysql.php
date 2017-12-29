@@ -25,6 +25,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Setup\Model\SchemaListener;
 
 // @codingStandardsIgnoreStart
 
@@ -217,12 +218,18 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     private $serializer;
 
     /**
+     * @var SchemaListener
+     */
+    private $schemaListener;
+
+    /**
      * Constructor
      *
      * @param StringUtils $string
      * @param DateTime $dateTime
      * @param LoggerInterface $logger
      * @param SelectFactory $selectFactory
+     * @param SchemaListener $schemaListener
      * @param array $config
      * @param SerializerInterface|null $serializer
      */
@@ -231,6 +238,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         DateTime $dateTime,
         LoggerInterface $logger,
         SelectFactory $selectFactory,
+        SchemaListener $schemaListener,
         array $config = [],
         SerializerInterface $serializer = null
     ) {
@@ -256,6 +264,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         } catch (\Zend_Db_Adapter_Exception $e) {
             throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
+        $this->schemaListener = $schemaListener;
     }
 
     /**
@@ -827,6 +836,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function dropForeignKey($tableName, $fkName, $schemaName = null)
     {
+        $this->schemaListener->dropForeignKey($tableName, $fkName);
         $foreignKeys = $this->getForeignKeys($tableName, $schemaName);
         $fkName = strtoupper($fkName);
         if (substr($fkName, 0, 3) == 'FK_') {
@@ -912,6 +922,17 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
+     * Set schema listener that is used in adapter
+     *
+     * @param SchemaListener $schemaListener
+     * @return void
+     */
+    public function setSchemaListener(SchemaListener $schemaListener)
+    {
+        $this->schemaListener = $schemaListener;
+    }
+
+    /**
      * Adds new column to table.
      *
      * Generally $defintion must be array with column data to keep this call cross-DB compatible.
@@ -927,6 +948,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function addColumn($tableName, $columnName, $definition, $schemaName = null)
     {
+        $this->schemaListener->addColumn($tableName, $columnName, $definition);
         if ($this->tableColumnExists($tableName, $columnName, $schemaName)) {
             return true;
         }
@@ -1046,6 +1068,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $flushData = false,
         $schemaName = null
     ) {
+        $this->schemaListener->changeColumn($tableName,
+            $oldColumnName,
+            $newColumnName,
+            $definition
+        );
         if (!$this->tableColumnExists($tableName, $oldColumnName, $schemaName)) {
             throw new \Zend_Db_Exception(
                 sprintf(
@@ -1091,6 +1118,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function modifyColumn($tableName, $columnName, $definition, $flushData = false, $schemaName = null)
     {
+        $this->schemaListener->modifyColumn(
+            $tableName, $columnName, $definition
+        );
         if (!$this->tableColumnExists($tableName, $columnName, $schemaName)) {
             throw new \Zend_Db_Exception(sprintf('Column "%s" does not exist in table "%s".', $columnName, $tableName));
         }
@@ -2052,6 +2082,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function createTable(Table $table)
     {
+        $this->schemaListener->createTable($table);
         $columns = $table->getColumns();
         foreach ($columns as $columnEntry) {
             if (empty($columnEntry['COMMENT'])) {
@@ -2599,6 +2630,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $indexType = AdapterInterface::INDEX_TYPE_INDEX,
         $schemaName = null
     ) {
+        $this->schemaListener->addIndex(
+            $tableName,
+            $indexName,
+            $fields,
+            $indexType
+        );
         $columns = $this->describeTable($tableName, $schemaName);
         $keyList = $this->getIndexList($tableName, $schemaName);
 
@@ -2747,9 +2784,26 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $query .= ' ON DELETE ' . strtoupper($onDelete);
         }
 
+        $this->schemaListener->addForeignKey(
+            $fkName,
+            $tableName,
+            $columnName,
+            $refTableName,
+            $refColumnName,
+            $onDelete
+        );
+
         $result = $this->rawQuery($query);
         $this->resetDdlCache($tableName);
         return $result;
+    }
+
+    /**
+     * @return SchemaListener
+     */
+    public function getSchemaListener()
+    {
+        return $this->schemaListener;
     }
 
     /**

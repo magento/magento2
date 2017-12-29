@@ -33,6 +33,7 @@ use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
+use Magento\Setup\Model\Declaration\Schema\Config\SchemaLocator;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\Setup;
@@ -225,6 +226,16 @@ class Installer
     private $phpReadinessCheck;
 
     /**
+     * @var SchemaListener
+     */
+    private $schemaListener;
+
+    /**
+     * @var SchemaPersistor
+     */
+    private $schemaPersistor;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -287,6 +298,8 @@ class Installer
         $this->installInfo[self::INFO_MESSAGE] = [];
         $this->deploymentConfig = $deploymentConfig;
         $this->objectManagerProvider = $objectManagerProvider;
+        $this->schemaListener = $objectManagerProvider->get()->get(SchemaListener::class);
+        $this->schemaPersistor = $objectManagerProvider->get()->get(SchemaPersistor::class);
         $this->context = $context;
         $this->setupConfigModel = $setupConfigModel;
         $this->cleanupFiles = $cleanupFiles;
@@ -845,6 +858,8 @@ class Installer
         if (!(($type === 'schema') || ($type === 'data'))) {
             throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
         }
+        $setup->getConnection()
+            ->setSchemaListener($this->schemaListener);
         $resource = new \Magento\Framework\Module\ModuleResource($this->context);
         $verType = $type . '-version';
         $installType = $type . '-install';
@@ -852,6 +867,7 @@ class Installer
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
         foreach ($moduleNames as $moduleName) {
+            $this->schemaListener->setModuleName($moduleName);
             $this->log->log("Module '{$moduleName}':");
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
             $currentVersion = $moduleContextList[$moduleName]->getVersion();
@@ -906,6 +922,8 @@ class Installer
             }
             $this->logProgress();
         }
+
+        $this->schemaPersistor->persist($this->schemaListener);
     }
 
     /**

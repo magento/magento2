@@ -1443,4 +1443,30 @@
             </argument>
         </arguments>
     </type>
+    <type name="\Magento\Setup\Model\SchemaListener">
+        <arguments>
+            <argument name="definitionMappers" xsi:type="array">
+                <item name="integer" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\IntegerDefinition</item>
+                <item name="tinyint" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\IntegerDefinition</item>
+                <item name="smallint" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\IntegerDefinition</item>
+                <item name="mediumint" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\IntegerDefinition</item>
+                <item name="bigint" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\IntegerDefinition</item>
+                <item name="decimal" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\DecimalDefinition</item>
+                <item name="float" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\DecimalDefinition</item>
+                <item name="numeric" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\DecimalDefinition</item>
+                <item name="text" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\TextBlobDefinition</item>
+                <item name="mediumtext" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\TextBlobDefinition</item>
+                <item name="longtext" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\TextBlobDefinition</item>
+                <item name="blob" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\TextBlobDefinition</item>
+                <item name="mediumblob" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\TextBlobDefinition</item>
+                <item name="longblog" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\TextBlobDefinition</item>
+                <item name="varbinary" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\TextBlobDefinition</item>
+                <item name="varchar" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\TextBlobDefinition</item>
+                <item name="timestamp" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\TimestampDefinition</item>
+                <item name="datetime" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\TimestampDefinition</item>
+                <item name="date" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\DateDefinition</item>
+                <item name="boolean" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\BooleanDefinition</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
