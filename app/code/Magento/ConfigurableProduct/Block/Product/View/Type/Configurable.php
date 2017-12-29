@@ -67,7 +67,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * @var Format
      */
-    private $localeFormat;
+    protected $localeFormat;
 
     /**
      * @var Session
@@ -211,9 +211,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $store = $this->getCurrentStore();
         $currentProduct = $this->getProduct();
 
-        $regularPrice = $currentProduct->getPriceInfo()->getPrice('regular_price');
-        $finalPrice = $currentProduct->getPriceInfo()->getPrice('final_price');
-
         $options = $this->helper->getOptions($currentProduct, $this->getAllowProducts());
         $attributesData = $this->configurableAttributeData->getAttributesData($currentProduct, $options);
 
@@ -223,17 +220,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'currencyFormat' => $store->getCurrentCurrency()->getOutputFormat(),
             'optionPrices' => $this->getOptionPrices(),
             'priceFormat' => $this->localeFormat->getPriceFormat(),
-            'prices' => [
-                'oldPrice' => [
-                    'amount' => $this->localeFormat->getNumber($regularPrice->getAmount()->getValue()),
-                ],
-                'basePrice' => [
-                    'amount' => $this->localeFormat->getNumber($finalPrice->getAmount()->getBaseAmount()),
-                ],
-                'finalPrice' => [
-                    'amount' => $this->localeFormat->getNumber($finalPrice->getAmount()->getValue()),
-                ],
-            ],
+            'prices' => $this->getPrices(),
             'productId' => $currentProduct->getId(),
             'chooseText' => __('Choose an Option...'),
             'images' => $this->getOptionImages(),
@@ -247,6 +234,32 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $config = array_merge($config, $this->_getAdditionalConfig());
 
         return $this->jsonEncoder->encode($config);
+    }
+    
+   
+    /**
+     * Get product prices for configurable variations
+     *
+     * @return array
+     * @since 100.2.0
+     */
+    protected function getPrices(){
+        $currentProduct = $this->getProduct();
+
+        $regularPrice = $currentProduct->getPriceInfo()->getPrice('regular_price');
+        $finalPrice = $currentProduct->getPriceInfo()->getPrice('final_price');
+
+        return [
+            'oldPrice' => [
+                'amount' => $this->localeFormat->getNumber($regularPrice->getAmount()->getValue()),
+            ],
+            'basePrice' => [
+                'amount' => $this->localeFormat->getNumber($finalPrice->getAmount()->getBaseAmount()),
+            ],
+            'finalPrice' => [
+                'amount' => $this->localeFormat->getNumber($finalPrice->getAmount()->getValue()),
+            ],
+        ];
     }
 
     /**
