@@ -37,23 +37,43 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     public function beforeSave($object)
     {
         $attributeName = $this->getAttribute()->getName();
-        $pattern = '/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/';
-        // format only date that was not formatted yet
-        if ($object->hasData($attributeName) && !preg_match($pattern, $object->getData($attributeName))) {
-            try {
-                $value = $this->formatDate($object->getData($attributeName));
-            } catch (\Exception $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid date'));
-            }
+        $attributeValue = $object->getData($attributeName);
+        if ($object->hasData($attributeName)) {
+            // format only date that is not formatted yet
+            $dateFormatted = $this->dateIsFormatted($attributeValue);
+            if (!$dateFormatted) {
+                try {
+                    $value = $this->formatDate($attributeValue);
+                } catch (\Exception $e) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Invalid date'));
+                }
 
-            if (is_null($value)) {
-                $value = $object->getData($attributeName);
-            }
+                if (is_null($value)) {
+                    $value = $attributeValue;
+                }
 
-            $object->setData($attributeName, $value);
+                $object->setData($attributeName, $value);
+            }
         }
 
         return $this;
+    }
+
+    /**
+     * Check if date is formatted
+     *
+     * @param string|\DateTime $attributeValue
+     * @return bool
+     */
+    private function dateIsFormatted($attributeValue)
+    {
+        $pattern = '/(\d{4})-(\d{2})-(\d{2})(\s(\d{2}):(\d{2}):(\d{2}))?/';
+        if ($attributeValue instanceof \DateTime) {
+            return false;
+        } elseif (preg_match($pattern, $attributeValue)) {
+            return true;
+        }
+        return false;
     }
 
     /**
