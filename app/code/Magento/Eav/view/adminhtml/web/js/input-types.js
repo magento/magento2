@@ -22,7 +22,12 @@ define([
                     .attr({
                         generated: true, for: select.attr('id')
                     }),
-                hint = $('<p>').hide().addClass('note').attr({generated: true}),
+                hint = $('<p>')
+                    .hide()
+                    .addClass('note')
+                    .attr({
+                        generated: true
+                    }),
                 hints = config.hints,
 
             /**
