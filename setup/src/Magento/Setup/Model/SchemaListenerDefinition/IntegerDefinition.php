@@ -19,7 +19,7 @@ class IntegerDefinition implements DefinitionConverterInterface
     private static $lengthDefaults = [
         'tinyint' => 3,
         'smallint' => 6,
-        'integer' => 11,
+        'int' => 11,
         'bigint' => 20
     ];
 
@@ -28,6 +28,10 @@ class IntegerDefinition implements DefinitionConverterInterface
      */
     public function convertToDefinition(array $definition)
     {
+        if ($definition['type'] === 'integer') {
+            $definition['type'] = 'int';
+        }
+
         return [
             'xsi:type' => $definition['type'],
             'name' => $definition['name'],

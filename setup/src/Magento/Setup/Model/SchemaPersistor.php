@@ -79,6 +79,8 @@ class SchemaPersistor
         if (isset($tableData['columns'])) {
             foreach ($tableData['columns'] as $columnData) {
                 $domColumn = $table->addChild('column');
+                $domColumn->addAttribute('xsi:type', $columnData['xsi:type'], 'xsi');
+                unset($columnData['xsi:type']);
 
                 foreach ($columnData as $attributeKey => $attributeValue) {
                     $domColumn->addAttribute($attributeKey, $attributeValue);
@@ -128,7 +130,7 @@ class SchemaPersistor
                 if ($constraintType === 'foreign') {
                     foreach ($constraints as $constraintData) {
                         $constraintDom = $table->addChild('constraint');
-                        $constraintDom->addAttribute('xsi:type', $constraintType);
+                        $constraintDom->addAttribute('xsi:type', $constraintType, 'xsi');
 
                         foreach ($constraintData as $attributeKey => $attributeValue) {
                             $constraintDom->addAttribute($attributeKey, $attributeValue);
@@ -137,7 +139,7 @@ class SchemaPersistor
                 } else {
                     foreach ($constraints as $name => $constraintData) {
                         $constraintDom = $table->addChild('constraint');
-                        $constraintDom->addAttribute('xsi:type', $constraintType);
+                        $constraintDom->addAttribute('xsi:type', $constraintType, 'xsi');
                         $constraintDom->addAttribute('name', $name);
 
                         foreach ($constraintData['columns'] as $column) {
