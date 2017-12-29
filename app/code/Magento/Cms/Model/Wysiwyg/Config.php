@@ -14,7 +14,6 @@ use Magento\Framework\App\ObjectManager;
  * Wysiwyg Config for Editor HTML Element
  *
  * @api
- * @deprecated file will be moved to UI module in future release
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -90,6 +89,8 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
 
     /**
      * @var array
+     * @deprecated
+     * @see \Magento\Cms\Model\Wysiwyg\Gallery\DefaultConfigProvider
      */
     protected $_windowSize;
 
@@ -194,30 +195,6 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
                 'encode_directives' => true,
                 'width' => '100%',
                 'height' => '500px',
-                'tinymce4' => [
-                    'toolbar' => 'formatselect | bold italic underline | alignleft aligncenter alignright | '
-                        . 'bullist numlist | link image table charmap',
-                    'plugins' => implode(
-                        ' ',
-                        [
-                            'advlist',
-                            'autolink',
-                            'lists',
-                            'link',
-                            'image',
-                            'charmap',
-                            'media',
-                            'noneditable',
-                            'table',
-                            'contextmenu',
-                            'paste',
-                            'code',
-                            'help',
-                            'table'
-                        ]
-                    ),
-                    'content_css' => $this->_assetRepo->getUrl('mage/adminhtml/wysiwyg/tiny_mce/themes/ui.css')
-                ],
                 'plugins' => [],
             ]
         );
@@ -225,14 +202,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
         $config->setData('directives_url_quoted', preg_quote($config->getData('directives_url')));
 
         if ($this->_authorization->isAllowed('Magento_Cms::media_gallery')) {
-            $config->addData(
-                [
-                    'add_images' => true,
-                    'files_browser_window_url' => $this->_backendUrl->getUrl('cms/wysiwyg_images/index'),
-                    'files_browser_window_width' => $this->_windowSize['width'],
-                    'files_browser_window_height' => $this->_windowSize['height'],
-                ]
-            );
+            $this->configProvider->processGalleryConfig($config);
         }
 
         if (is_array($data)) {

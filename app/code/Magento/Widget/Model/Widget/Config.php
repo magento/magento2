@@ -46,11 +46,6 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
     private $registry;
 
     /**
-     * @var \Magento\Ui\Block\Wysiwyg\ActiveEditor
-     */
-    private $activeEditor;
-
-    /**
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
@@ -64,8 +59,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Widget\Model\WidgetFactory $widgetFactory,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\Framework\Registry $registry,
-        \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor
+        \Magento\Framework\Registry $registry
     ) {
         $this->_backendUrl = $backendUrl;
         $this->urlDecoder = $urlDecoder;
@@ -73,7 +67,6 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
         $this->_widgetFactory = $widgetFactory;
         $this->urlEncoder = $urlEncoder;
         $this->registry = $registry;
-        $this->activeEditor = $activeEditor;
     }
 
     /**
@@ -109,7 +102,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
             ]
         ];
 
-        $configPlugins = (array) $config->getData('plugins') ?: [];
+        $configPlugins = (array) $config->getData('plugins');
 
         $widgetConfig['plugins'] = array_merge($configPlugins, $widgetWysiwyg);
         return $widgetConfig;

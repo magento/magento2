@@ -53,10 +53,18 @@ class CompositeConfigProvider
     private $activeEditorPath;
 
     /**
+     * List of gallery config processors by adapter type
+     *
+     * @var array
+     */
+    private $galleryConfigProvider;
+
+    /**
      * @param \Magento\Ui\Block\Wysiwyg\ActiveEditor $activeEditor
-     * @param \Magento\Cms\Model\Wysiwyg\ConfigProviderFactory $configProviderFactory
+     * @param ConfigProviderFactory $configProviderFactory
      * @param array $variablePluginConfigProvider
      * @param array $widgetPluginConfigProvider
+     * @param array $galleryConfigProvider
      * @param array $wysiwygConfigPostProcessor
      */
     public function __construct(
@@ -64,12 +72,14 @@ class CompositeConfigProvider
         \Magento\Cms\Model\Wysiwyg\ConfigProviderFactory $configProviderFactory,
         array $variablePluginConfigProvider,
         array $widgetPluginConfigProvider,
+        array $galleryConfigProvider,
         array $wysiwygConfigPostProcessor
     ) {
         $this->activeEditor = $activeEditor;
         $this->configProviderFactory = $configProviderFactory;
         $this->variablePluginConfigProvider = $variablePluginConfigProvider;
         $this->widgetPluginConfigProvider = $widgetPluginConfigProvider;
+        $this->galleryConfigProvider = $galleryConfigProvider;
         $this->wysiwygConfigPostProcessor = $wysiwygConfigPostProcessor;
     }
 
@@ -93,6 +103,17 @@ class CompositeConfigProvider
     public function processWidgetConfig($config)
     {
         return $this->updateConfig($config, $this->widgetPluginConfigProvider);
+    }
+
+    /**
+     * Add config for gallery
+     *
+     * @param \Magento\Framework\DataObject $config
+     * @return \Magento\Framework\DataObject
+     */
+    public function processGalleryConfig($config)
+    {
+        return $this->updateConfig($config, $this->galleryConfigProvider);
     }
 
     /**

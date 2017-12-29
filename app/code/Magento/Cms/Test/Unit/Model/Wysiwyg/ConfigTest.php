@@ -126,7 +126,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                     'variablePluginConfigProvider' => ['default' => \Magento\Cms\Model\WysiwygDefaultConfig::class],
                     'widgetPluginConfigProvider' => ['default' => \Magento\Cms\Model\WysiwygDefaultConfig::class],
                     'wysiwygConfigPostProcessor' => ['default' => \Magento\Cms\Model\WysiwygDefaultConfig::class],
-
+                    'galleryConfigProvider' => ['default' => \Magento\Cms\Model\WysiwygDefaultConfig::class],
                 ]
             )
             ->setMethods(['processVariableConfig', 'processWidgetConfig'])
