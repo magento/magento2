@@ -116,6 +116,7 @@ class FinalPriceBox extends BasePriceBox
         return '<div class="price-box ' . $this->getData('css_classes') . '" ' .
             'data-role="priceBox" ' .
             'data-product-id="' . $this->getSaleableItem()->getId() . '"' .
+            'data-price-box="product-id-' . $this->getSaleableItem()->getId() . '"' .
             '>' . $html . '</div>';
     }
 
