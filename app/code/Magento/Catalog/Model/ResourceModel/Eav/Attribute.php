@@ -96,6 +96,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Eav\Processor $indexerEavProcessor
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper
@@ -194,7 +195,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
                 $this->setBackendModel(\Magento\Catalog\Model\Product\Attribute\Backend\Price::class);
             }
         }
-        if (!$this->getIsSearchable()) {
+        if ($this->getFrontendInput() == 'textarea') {
+            if ($this->getIsWysiwygEnabled()) {
+                $this->setIsHtmlAllowedOnFront(1);
+ 	 	    }
+ 	 	}
+ 	 	if (!$this->getIsSearchable()) {
             $this->setIsVisibleInAdvancedSearch(false);
         }
         return parent::beforeSave();
