@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\FormatterInterface" type="Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\FormatterComposite" />
     <type name="Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>

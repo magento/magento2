@@ -231,10 +231,7 @@ QUERY;
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
 
-        /**
-         * @var ProductRepositoryInterface $productRepository
-         */
-
+        /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($prductSku, false, null, true);
         $this->assertArrayHasKey('products', $response);
@@ -521,9 +518,7 @@ QUERY;
         $this->assertNotEmpty($actualResponse['tier_prices'], "Precondition failed: 'tier_prices' must not be empty");
         foreach ($actualResponse['tier_prices'] as $tierPriceIndex => $tierPriceArray) {
             foreach ($tierPriceArray as $key => $value) {
-                /**
-                 * @var \Magento\Catalog\Model\Product\TierPrice $tierPrice
-                 */
+                /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
                 $tierPrice = $tierPrices[$tierPriceIndex];
                 $this->assertEquals($value, $tierPrice->getData($key));
             }
@@ -608,9 +603,7 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
-        /**
-         * ['product_object_field_name', 'expected_value']
-         */
+        // ['product_object_field_name', 'expected_value']
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],

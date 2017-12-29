@@ -9,7 +9,7 @@ namespace Magento\GraphQlConfigurableProduct\Model\Resolver\Products\Query;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product;
-use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter;
+use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
 
 /**
@@ -33,7 +33,7 @@ class ConfigurableProductPostProcessor implements \Magento\Framework\GraphQl\Que
     private $productResource;
 
     /**
-     * @var Formatter
+     * @var FormatterInterface
      */
     private $formatter;
 
@@ -41,13 +41,13 @@ class ConfigurableProductPostProcessor implements \Magento\Framework\GraphQl\Que
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Product $productDataProvider
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
-     * @param Formatter $formatter
+     * @param FormatterInterface $formatter
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Product $productDataProvider,
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
-        Formatter $formatter
+        FormatterInterface $formatter
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->productDataProvider = $productDataProvider;
