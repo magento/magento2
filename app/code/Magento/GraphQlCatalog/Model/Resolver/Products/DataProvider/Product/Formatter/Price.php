@@ -71,10 +71,13 @@ class Price implements FormatterInterface
      */
     private function createAdjustmentsArray(array $adjustments, AmountInterface $amount)
     {
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $this->storeManager->getStore();
+
         $priceArray = [
                 'amount' => [
                     'value' => $amount->getValue(),
-                    'currency' => $this->getStoreCurrencyCode()
+                    'currency' => $store->getCurrentCurrencyCode()
                 ],
                 'adjustments' => []
             ];
@@ -85,7 +88,7 @@ class Price implements FormatterInterface
                     'code' => $adjustmentCode,
                     'amount' => [
                         'value' => $amount->getAdjustmentAmount($adjustmentCode),
-                        'currency' => $this->getStoreCurrencyCode(),
+                        'currency' => $store->getCurrentCurrencyCode(),
                     ],
                     'description' => $adjustment->isIncludedInDisplayPrice() ?
                         PriceAdjustment::ADJUSTMENT_INCLUDED : PriceAdjustment::ADJUSTMENT_EXCLUDED
@@ -94,17 +97,5 @@ class Price implements FormatterInterface
         }
         $priceArray['adjustments'] = $priceAdjustmentsArray;
         return $priceArray;
-    }
-
-    /**
-     * Retrieve current store's currency code
-     *
-     * @return string
-     */
-    private function getStoreCurrencyCode()
-    {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $this->storeManager->getStore();
-        return $store->getCurrentCurrencyCode();
     }
 }
