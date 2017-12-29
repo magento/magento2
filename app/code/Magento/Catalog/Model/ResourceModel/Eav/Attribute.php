@@ -198,8 +198,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         if ($this->getFrontendInput() == 'textarea') {
             if ($this->getIsWysiwygEnabled()) {
                 $this->setIsHtmlAllowedOnFront(1);
- 	 	    }
- 	 	}
+            }
+        }
  	 	if (!$this->getIsSearchable()) {
             $this->setIsVisibleInAdvancedSearch(false);
         }
