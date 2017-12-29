@@ -53,6 +53,16 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     private $hasEntity = null;
 
     /**
+     * @var IndexTableStructure
+     */
+    private $finalPriceTable;
+
+    /**
+     * @var PriceModifierInterface[]
+     */
+    private $priceModifiers;
+
+    /**
      * DefaultPrice constructor.
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -61,7 +71,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param string|null $connectionName
-     * @param null|\Magento\Indexer\Model\Indexer\StateFactory $stateFactory
+     * @param IndexTableStructureFactory $indexTableStructureFactory
+     * @param PriceModifierInterface[] $priceModifiers
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -69,11 +80,34 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Module\Manager $moduleManager,
-        $connectionName = null
+        $connectionName = null,
+        IndexTableStructureFactory $indexTableStructureFactory = null,
+        array $priceModifiers = []
     ) {
         $this->_eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
         parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
+
+        if (!$indexTableStructureFactory) {
+            $indexTableStructureFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                IndexTableStructureFactory::class
+            );
+        }
+        $this->finalPriceTable = $indexTableStructureFactory->create([
+            'tableName' => $this->tableStrategy->getTableName('catalog_product_index_price_final'),
+            'entityField' => 'entity_id',
+            'customerGroupField' => 'customer_group_id',
+            'websiteField' => 'website_id',
+            'taxClassField' => 'tax_class_id',
+            'originalPriceField' => 'orig_price',
+            'finalPriceField' => 'price',
+            'minPriceField' => 'min_price',
+            'maxPriceField' => 'max_price',
+            'tierPriceField' => 'tier_price',
+        ]);
+        $this->priceModifiers = (function (PriceModifierInterface ...$priceModifier) {
+            return $priceModifier;
+        })(...array_values($priceModifiers));
     }
 
     /**
@@ -251,8 +285,11 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $this->_prepareDefaultFinalPriceTable();
 
         $select = $this->getSelect($entityIds, $type);
-        $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable(), [], false);
+        $query = $select->insertFromSelect($this->finalPriceTable->getTableName(), [], false);
         $this->getConnection()->query($query);
+
+        $this->applyDiscountPrices($entityIds);
+
         return $this;
     }
 
@@ -359,7 +396,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             'e.' . $metadata->getLinkField(),
             'cs.store_id'
         );
-        $currentDate = $connection->getDatePartSql('cwd.website_date');
+        $currentDate = 'cwd.website_date';
 
         $specialFromDate = $connection->getDatePartSql($specialFrom);
         $specialToDate = $connection->getDatePartSql($specialTo);
@@ -401,6 +438,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                 'store_field' => new \Zend_Db_Expr('cs.store_id'),
             ]
         );
+
         return $select;
     }
 
@@ -447,6 +485,19 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     }
 
     /**
+     * Apply discount prices to temporary final price index table.
+     *
+     * @param int|array $entityIds
+     * @return void
+     */
+    private function applyDiscountPrices($entityIds = null)
+    {
+        foreach ($this->priceModifiers as $priceModifier) {
+            $priceModifier->modifyPrice($this->finalPriceTable, (array) $entityIds);
+        }
+    }
+
+    /**
      * Apply custom option minimal and maximal price to temporary final price index table
      *
      * @return $this
@@ -462,7 +513,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $this->_prepareCustomOptionPriceTable();
 
         $select = $connection->select()->from(
-            ['i' => $this->_getDefaultFinalPriceTable()],
+            ['i' => $this->finalPriceTable->getTableName()],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
             ['cw' => $this->getTable('store_website')],
@@ -529,7 +580,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $connection->query($query);
 
         $select = $connection->select()->from(
-            ['i' => $this->_getDefaultFinalPriceTable()],
+            ['i' => $this->finalPriceTable->getTableName()],
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
             ['cw' => $this->getTable('store_website')],
@@ -598,7 +649,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $query = $select->insertFromSelect($copTable);
         $connection->query($query);
 
-        $table = ['i' => $this->_getDefaultFinalPriceTable()];
+        $table = ['i' => $this->finalPriceTable->getTableName()];
         $select = $connection->select()->join(
             ['io' => $copTable],
             'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
@@ -646,7 +697,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         ];
 
         $connection = $this->getConnection();
-        $table = $this->_getDefaultFinalPriceTable();
+        $table = $this->finalPriceTable->getTableName();
         $select = $connection->select()->from($table, $columns);
 
         if ($entityIds !== null) {
