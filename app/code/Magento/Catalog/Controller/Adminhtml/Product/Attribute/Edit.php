@@ -27,7 +27,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         \Magento\Framework\Cache\FrontendInterface $attributeLabelCache,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation $presentation
+        \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation $presentation = null
     ) {
 
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
