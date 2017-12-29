@@ -66,6 +66,25 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
         $this->unsetData('allow_products');
         return parent::getJsonConfig();
     }
+    
+    /**
+     * Composes configuration for js price format
+     *
+     * @return string
+     */
+    public function getPriceFormatJson(){
+        return $this->jsonEncoder->encode($this->localeFormat->getPriceFormat());
+    }
+
+
+    /**
+     * Composes configuration for js price
+     *
+     * @return string
+     */
+    public function getPricesJson(){
+        return $this->jsonEncoder->encode($this->getPrices());
+    }
 
     /**
      * Do not load images for Configurable product with swatches due to its loaded by request
