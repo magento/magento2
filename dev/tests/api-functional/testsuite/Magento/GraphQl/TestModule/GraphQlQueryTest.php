@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\TestModuleGraphQlQuery;
+namespace Magento\GraphQl\TestModule;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
