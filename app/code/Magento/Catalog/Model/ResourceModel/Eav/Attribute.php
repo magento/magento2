@@ -200,7 +200,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
                 $this->setIsHtmlAllowedOnFront(1);
             }
         }
- 	 	if (!$this->getIsSearchable()) {
+        if (!$this->getIsSearchable()) {
             $this->setIsVisibleInAdvancedSearch(false);
         }
         return parent::beforeSave();
