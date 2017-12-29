@@ -7,10 +7,9 @@
 namespace Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute as AttributeResource;
 
 /**
- * Class Input type preprocessor.
+ * Input type to presentation type converter.
  *
  * @package Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype
  */
@@ -20,7 +19,7 @@ class Presentation
      * Get input type for presentation layer from stored input type.
      *
      * @param Attribute $attribute
-     * @return mixed|string
+     * @return string
      */
     public function getPresentationInputType(Attribute $attribute)
     {
@@ -29,24 +28,5 @@ class Presentation
             return 'texteditor';
         }
         return $inputType;
-    }
-
-    /**
-     * Convert presentation to stored input type.
-     *
-     * @param Attribute $attributeResource
-     *
-     * @return $this
-     */
-    public function convertInputTypeFromPresentation(AttributeResource $attributeResource)
-    {
-        if ($attributeResource->getFrontendInput() == 'texteditor') {
-            $attributeResource->setFrontendInput('textarea');
-            $attributeResource->setIsWysiwygEnabled(true);
-            $attributeResource->setIsHtmlAllowedOnFront(1);
-        } else if ($attributeResource->getFrontendInput() == 'textarea') {
-            $attributeResource->setIsWysiwygEnabled(false);
-        }
-        return $this;
     }
 }
