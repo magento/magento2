@@ -33,6 +33,10 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         $this->getRequest()->setPostValue('email', 'test@test.com');
         $this->dispatch('backend/admin/auth/forgotpassword');
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
+
         $this->assertRedirect(
             $this->equalTo(
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -60,6 +64,10 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $this->getRequest()->setPostValue('email', 'adminUser@example.com');
         $this->dispatch('backend/admin/auth/forgotpassword');
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
+
         $this->assertRedirect(
             $this->equalTo(
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -157,6 +165,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         /** @var \Magento\Backend\Helper\Data $backendHelper */
         $backendHelper = $objectManager->get(\Magento\Backend\Helper\Data::class);
         if ($isPasswordChanged) {
+            $objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
             $this->assertRedirect($this->equalTo($backendHelper->getHomePageUrl()));
         } else {
             $this->assertRedirect(
@@ -204,6 +213,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         );
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
 
         /** @var \Magento\Backend\Helper\Data $backendHelper */
         $backendHelper = $objectManager->get(\Magento\Backend\Helper\Data::class);
