@@ -55,7 +55,7 @@ class SaveHandler implements ExtensionInterface
         $existingBundleProductOptions = $this->optionRepository->getList($entity->getSku());
 
         $existingOptionsIds = !empty($existingBundleProductOptions)
-            ?  $this->getOptionIds($existingBundleProductOptions)
+            ? $this->getOptionIds($existingBundleProductOptions)
             : [];
         $optionIds = !empty($bundleProductOptions)
             ? $this->getOptionIds($bundleProductOptions)
@@ -96,6 +96,7 @@ class SaveHandler implements ExtensionInterface
 
     /**
      * Perform save for all options entities
+     *
      * @param object $entity
      * @param array $options
      * @param array $newOptionsIds
@@ -103,10 +104,10 @@ class SaveHandler implements ExtensionInterface
      * @throws \Magento\Framework\Exception\InputException
      * @return void
      */
-    private function saveOptions($entity, $options, $newOptionsIds = [])
+    private function saveOptions($entity, array $options, array $newOptionsIds = [])
     {
         foreach ($options as $option) {
-            if (in_array($option->getOptionId(), $newOptionsIds)) {
+            if (in_array($option->getOptionId(), $newOptionsIds, true)) {
                 $option->setOptionId(null);
             }
             $this->optionRepository->save($entity, $option);
@@ -115,10 +116,11 @@ class SaveHandler implements ExtensionInterface
 
     /**
      * Get options ids from array of the options entities
+     *
      * @param array $options
      * @return array
      */
-    private function getOptionIds($options)
+    private function getOptionIds(array $options)
     {
         $optionIds = [];
 
@@ -137,6 +139,7 @@ class SaveHandler implements ExtensionInterface
 
     /**
      * Removes old options that no longer exists
+     *
      * @param string $entitySku
      * @param array $existingOptionsIds
      * @param array $optionIds
@@ -145,7 +148,7 @@ class SaveHandler implements ExtensionInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return void
      */
-    private function processRemovedOptions($entitySku, $existingOptionsIds, $optionIds)
+    private function processRemovedOptions($entitySku, array $existingOptionsIds, array $optionIds)
     {
         foreach (array_diff($existingOptionsIds, $optionIds) as $optionId) {
             $option = $this->optionRepository->get($entitySku, $optionId);
@@ -156,6 +159,7 @@ class SaveHandler implements ExtensionInterface
 
     /**
      * Removes option links for existed options
+     *
      * @param string $entitySku
      * @param array $existingOptionsIds
      * @param array $optionIds
@@ -163,7 +167,7 @@ class SaveHandler implements ExtensionInterface
      * @throws \Magento\Framework\Exception\InputException
      * @return void
      */
-    private function processExistedOptions($entitySku, $existingOptionsIds, $optionIds)
+    private function processExistedOptions($entitySku, array $existingOptionsIds, array $optionIds)
     {
         foreach (array_intersect($optionIds, $existingOptionsIds) as $optionId) {
             $option = $this->optionRepository->get($entitySku, $optionId);
