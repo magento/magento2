@@ -256,6 +256,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             'default_value_textarea' => '0',
             'is_required' => '1',
             'frontend_class' => '',
+            'frontend_input' => 'select',
             'is_searchable' => '0',
             'is_visible_in_advanced_search' => '0',
             'is_comparable' => '0',
