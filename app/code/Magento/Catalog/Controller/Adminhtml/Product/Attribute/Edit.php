@@ -9,33 +9,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation
-     */
-    private $presentation;
-
-    /**
-     * Constructor
-     *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation $presentation
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Cache\FrontendInterface $attributeLabelCache,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation $presentation = null
-    ) {
-
-        parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
-        $this->presentation = $presentation?:$this->_objectManager->get(
-            \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation::class
-        );
-    }
-    /**
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -67,10 +40,13 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
         // set entered data if was error when we do save
         $data = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getAttributeData(true);
+        $presentation = $this->_objectManager->get(
+            \Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation::class
+        );
         if (!empty($data)) {
             $model->addData($data);
         }
-        $model->setFrontendInput($this->presentation->getPresentationInputType($model));
+        $model->setFrontendInput($presentation->getPresentationInputType($model));
         $attributeData = $this->getRequest()->getParam('attribute');
         if (!empty($attributeData) && $id === null) {
             $model->addData($attributeData);
