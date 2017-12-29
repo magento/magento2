@@ -77,6 +77,8 @@ interface UrlInterface
      * @param string $routePath
      * @param array $routeParams
      * @return string
+     * @deprecated 101.0.1 getRouteUrl method will become private, and will disappear from the interface, url
+     * creation is centralized through getUrl method
      */
     public function getRouteUrl($routePath = null, $routeParams = null);
 
