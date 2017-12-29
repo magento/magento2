@@ -5,11 +5,11 @@ namespace Magento\InstantPurchase\Test\Unit\Block;
 use Magento\InstantPurchase\Block\Button;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\InstantPurchase\Model\Config;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template\Context;
 
 class ButtonTest extends TestCase
 {
@@ -40,54 +40,34 @@ class ButtonTest extends TestCase
      */
     private $urlMock;
 
+    /**
+     * @var Context|MockObject
+     */
+    private $contextMock;
+
     protected function setUp()
     {
-        $objectManager = new ObjectManager($this);
-        
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock = $this->createMock(Config::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(StoreInterface::class);
+        $this->urlMock = $this->createMock(UrlInterface::class);
+        $this->contextMock = $this->createMock(Context::class);
 
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMock();
+        $this->contextMock->method('getStoreManager')
+            ->willReturn($this->storeManagerMock);
+        $this->contextMock->method('getUrlBuilder')
+            ->willReturn($this->urlMock);
 
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->getMock();
-
-        $this->urlMock = $this->getMockBuilder(UrlInterface::class)
-            ->getMock();
-
-        $this->storeMock->expects($this->once())
-            ->method('getId')
+        $this->storeMock->method('getId')
             ->willReturn(self::STORE_ID);
 
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
+        $this->storeManagerMock->method('getStore')
             ->willReturn($this->storeMock);
 
-        $this->button = $objectManager->getObject(
-            Button::class,
-            [
-                'instantPurchaseConfig' => $this->configMock,
-                '_storeManager' => $this->storeManagerMock,
-                '_urlBuilder' => $this->urlMock,
-            ]
+        $this->button = new Button(
+            $this->contextMock,
+            $this->configMock
         );
-    }
-
-
-    /**
-     * @param bool $status
-     * @dataProvider isEnabledDataProvider
-     */
-    public function testIsEnabled($status)
-    {
-        $this->configMock->expects($this->once())
-            ->method('isModuleEnabled')
-            ->with(self::STORE_ID)
-            ->willReturn($status);
-
-        $this->assertEquals($status, $this->button->isEnabled());
     }
 
     public function testGetJsLayout()
@@ -95,31 +75,16 @@ class ButtonTest extends TestCase
         $buttonText = 'Instant Purchase';
         $url = 'https://magento2.dev/instantpurchase/button/placeOrder';
 
-        $this->configMock->expects($this->once())
-            ->method('getButtonText')
-            ->with(self::STORE_ID)
+        $this->configMock->method('getButtonText')
             ->willReturn($buttonText);
 
-        $this->urlMock->expects($this->once())
-            ->method('getUrl')
-            ->with('instantpurchase/button/placeOrder', ['_secure' => true])
+        $this->urlMock->method('getUrl')
             ->willReturn($url);
 
         $this->assertEquals(
             $this->getExpectedJsLayout($buttonText, $url),
             $this->button->getJsLayout()
         );
-    }
-
-    /**
-     * @return array
-     */
-    public function isEnabledDataProvider()
-    {
-        return [
-            'enabled' => [true],
-            'disabled' => [false],
-        ];
     }
 
     /**
