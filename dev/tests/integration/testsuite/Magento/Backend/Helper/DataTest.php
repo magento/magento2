@@ -108,9 +108,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         /**
          * perform login
          */
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Backend\Model\UrlInterface::class
-        )->turnOffSecretKey();
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
 
         $auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Backend\Model\Auth::class);
         $auth->login(\Magento\TestFramework\Bootstrap::ADMIN_NAME, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
@@ -120,9 +119,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
          * perform logout
          */
         $auth->logout();
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Backend\Model\UrlInterface::class
-        )->turnOnSecretKey();
+        $objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOnSecretKey();
 
         $this->assertFalse($this->_helper->getCurrentUserId());
     }
@@ -141,8 +138,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetHomePageUrl()
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
+
         $this->assertStringEndsWith(
-            'index.php/backend/admin/',
+            'index.php/backend/admin/index/index/',
             $this->_helper->getHomePageUrl(),
             'Incorrect home page URL'
         );

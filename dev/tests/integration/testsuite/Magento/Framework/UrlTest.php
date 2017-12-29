@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework;
 
-use Zend\Stdlib\Parameters;
 use Magento\TestFramework\Helper\Bootstrap;
+use Zend\Stdlib\Parameters;
 
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
@@ -231,6 +231,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     /**
      * Note: isolation flushes the URL memory cache
      * @magentoAppIsolation enabled
+     *
+     * @deprecated 101.0.1 getRouteUrl method will become private, and will disappear from the interface, url
+     * creation is centralized through getUrl method
      */
     public function testGetRouteUrl()
     {

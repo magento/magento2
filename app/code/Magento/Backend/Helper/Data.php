@@ -195,7 +195,7 @@ class Data extends AbstractHelper
      */
     public function getHomePageUrl()
     {
-        return $this->_backendUrl->getRouteUrl('adminhtml');
+        return $this->_backendUrl->getUrl('adminhtml');
     }
 
     /**

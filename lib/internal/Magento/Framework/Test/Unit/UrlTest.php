@@ -515,6 +515,12 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * Retrieve route URL test
+     *
+     * @deprecated 101.0.1 getRouteUrl method will become private, and will disappear from the interface, url
+     * creation is centralized through getUrl method
+     */
     public function testGetRouteUrlWithValidUrl()
     {
         $model = $this->getUrlModel(['routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(false)]);
