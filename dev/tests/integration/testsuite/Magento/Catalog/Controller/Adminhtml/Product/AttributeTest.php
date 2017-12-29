@@ -16,10 +16,13 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testWrongFrontendInput()
     {
-        $postData = $this->_getAttributeData() + [
+        $postData = array_merge(
+            $this->_getAttributeData(),
+            [
                 'attribute_id' => 100500,
                 'frontend_input' => 'some_input',
-            ];
+            ]
+        );
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
