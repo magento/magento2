@@ -72,17 +72,18 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      *
      * @return string
      */
-    public function getPriceFormatJson(){
+    public function getPriceFormatJson()
+    {
         return $this->jsonEncoder->encode($this->localeFormat->getPriceFormat());
     }
-
 
     /**
      * Composes configuration for js price
      *
      * @return string
      */
-    public function getPricesJson(){
+    public function getPricesJson()
+    {
         return $this->jsonEncoder->encode($this->getPrices());
     }
 
