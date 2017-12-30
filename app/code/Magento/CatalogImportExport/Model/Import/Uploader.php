@@ -162,9 +162,9 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
             }
 
             //only use filename (for URI with query parameters)
-            $parsedUrl = parse_url($url);
-            if ($parsedUrl['path']) {
-                $urlPathValues = explode('/', $parsedUrl['path']);
+            $parsedUrlPath = parse_url($url, PHP_URL_PATH);
+            if ($parsedUrlPath) {
+                $urlPathValues = explode('/', $parsedUrlPath);
                 if (!empty($urlPathValues)) {
                     $fileName = end($urlPathValues);
                 }
