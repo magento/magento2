@@ -14,9 +14,6 @@ use Magento\Customer\Model\Metadata\Form;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class Save
- * @package Magento\Customer\Controller\Adminhtml\Index
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Customer\Controller\Adminhtml\Index
