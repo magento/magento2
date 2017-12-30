@@ -127,6 +127,70 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
      */
     protected function _addMessages(array $messages)
     {
-        $this->_messages = array_merge_recursive($this->_messages, $messages);
+        $mergedMessages = array_merge_recursive($this->_messages, $messages);
+
+        $this->_messages = $this->removeDuplicatedMessages($mergedMessages);
+    }
+
+    /**
+     * @param $messages
+     * @return mixed
+     */
+    private function removeDuplicatedMessages($messages)
+    {
+        foreach ($messages as $messageKey => $message) {
+            if ($this->isMessageList($message) && !$this->hasMessageListProperFormat($message)) {
+                $message = $this->removeDuplicatedMessagesFromMessageList($message);
+                if ($this->hasMessageListOnlyOneMessage($message)) {
+                    $messages[$messageKey] = $this->getFirstMessageFromMessageList($message);
+                }
+            }
+        }
+
+        return $messages;
+    }
+
+    /**
+     * @param $messageList
+     * @return bool
+     */
+    private function hasMessageListProperFormat($messageList)
+    {
+        return array_keys($messageList) !== range(0, count($messageList) - 1);
+    }
+
+    /**
+     * @param $message
+     * @return bool
+     */
+    private function isMessageList($message)
+    {
+        return is_array($message);
+    }
+
+    /**
+     * @param $message
+     * @return array
+     */
+    private function removeDuplicatedMessagesFromMessageList($messageList)
+    {
+        return array_unique($messageList, SORT_REGULAR);
+    }
+
+    /**
+     * @param $message
+     * @return bool
+     */
+    private function hasMessageListOnlyOneMessage($message)
+    {
+        return count($message) === 1;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getFirstMessageFromMessageList($messageList)
+    {
+        return current($messageList);
     }
 }

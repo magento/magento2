@@ -361,11 +361,7 @@ class Form
     {
         $validator = $this->_getValidator($data);
         if (!$validator->isValid(false)) {
-            $messages = [];
-            foreach ($validator->getMessages() as $errorMessages) {
-                $messages = array_merge($messages, (array)$errorMessages);
-            }
-            return $messages;
+            return $validator->getMessages();
         }
         return true;
     }

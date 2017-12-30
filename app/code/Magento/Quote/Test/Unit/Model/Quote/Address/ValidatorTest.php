@@ -70,6 +70,20 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($messages, $this->model->getMessages());
     }
 
+    public function testValidateWithTwoConsecutiveInvalidEmails()
+    {
+        $this->itemMock->method('getEmail')->will($this->returnValue('invalid_email_one'));
+        $this->itemMock->method('getCountryId')->will($this->returnValue(null));
+        $this->assertFalse($this->model->isValid($this->itemMock));
+
+        $this->itemMock->method('getEmail')->will($this->returnValue('invalid_email_two'));
+        $this->itemMock->method('getCountryId')->will($this->returnValue(null));
+        $this->assertFalse($this->model->isValid($this->itemMock));
+
+        $messages = ['invalid_email_format' => 'Invalid email format'];
+        $this->assertEquals($messages, $this->model->getMessages());
+    }
+
     public function testValidateWithInvalidCountryId()
     {
         $this->itemMock->expects($this->once())->method('getEmail')->will($this->returnValue(null));
