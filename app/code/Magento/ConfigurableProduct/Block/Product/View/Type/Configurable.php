@@ -236,14 +236,14 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         return $this->jsonEncoder->encode($config);
     }
     
-   
     /**
      * Get product prices for configurable variations
      *
      * @return array
      * @since 100.2.0
      */
-    protected function getPrices(){
+    protected function getPrices()
+    {
         $currentProduct = $this->getProduct();
 
         $regularPrice = $currentProduct->getPriceInfo()->getPrice('regular_price');
