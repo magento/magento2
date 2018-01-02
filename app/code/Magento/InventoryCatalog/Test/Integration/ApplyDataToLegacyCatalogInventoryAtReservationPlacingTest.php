@@ -8,13 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogInventory\Model\Configuration as CatalogInventoryConfiguration;
-use Magento\Framework\App\Config\MutableScopeConfigInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\TestFramework\Helper\Bootstrap as TestFrameworkBootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
@@ -64,11 +59,10 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     * @magentoConfigFixture current_store cataloginventory/options/can_subtract 1
      */
     public function testApplyDataIfCanSubtractOptionIsEnabled()
     {
-        $this->setCanSubtractQtyConfig(1);
-
         $productSku = 'SKU-1';
         $product = $this->productRepository->get($productSku);
         $productId = $product->getId();
@@ -99,11 +93,10 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
     /**
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     * @magentoConfigFixture current_store cataloginventory/options/can_subtract 0
      */
     public function testApplyDataIfCanSubtractOptionIsDisabled()
     {
-        $this->setCanSubtractQtyConfig(0);
-
         $productSku = 'SKU-1';
         $product = $this->productRepository->get($productSku);
         $productId = $product->getId();
@@ -129,25 +122,5 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
 
         $legacyStockItem = current($legacyStockItems);
         self::assertEquals(5.5, $legacyStockItem->getQty());
-    }
-
-    /**
-     * Set canSubtractQty() flag on the website level
-     *
-     * @param bool|int $value
-     *
-     * @return void
-     */
-    private function setCanSubtractQtyConfig($value)
-    {
-        $objectManager = TestFrameworkBootstrap::getObjectManager();
-        /** @var MutableScopeConfigInterface $scopeConfig */
-        $scopeConfig = $objectManager->get(MutableScopeConfigInterface::class);
-
-        $scopeConfig->setValue(
-            CatalogInventoryConfiguration::XML_PATH_CAN_SUBTRACT,
-            $value,
-            ScopeInterface::SCOPE_WEBSITE
-        );
     }
 }
