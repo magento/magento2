@@ -108,7 +108,6 @@ class ProcessorFacade
         return $this->processWithLockTarget($path, $value, $scope, $scopeCode, $lock);
     }
 
-
     /**
      * Processes config:set command with the option to set a target file.
      *
@@ -121,8 +120,14 @@ class ProcessorFacade
      * @return string Processor response message
      * @throws ValidatorException If some validation is wrong
      */
-    public function processWithLockTarget($path, $value, $scope, $scopeCode, $lock, $lockTarget = ConfigFilePool::APP_ENV)
-    {
+    public function processWithLockTarget(
+        $path,
+        $value,
+        $scope,
+        $scopeCode,
+        $lock,
+        $lockTarget = ConfigFilePool::APP_ENV
+    ) {
         try {
             $this->scopeValidator->isValid($scope, $scopeCode);
             $this->pathValidator->validate($path);
