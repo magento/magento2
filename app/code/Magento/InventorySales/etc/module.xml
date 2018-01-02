@@ -9,6 +9,7 @@
     <module name="Magento_InventorySales" setup_version="1.0.0">
         <sequence>
             <module name="Magento_InventoryCatalog"/>
+            <module name="Magento_CatalogInventory"/>
         </sequence>
     </module>
 </config>
