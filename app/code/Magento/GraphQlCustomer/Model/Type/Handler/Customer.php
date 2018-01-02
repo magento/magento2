@@ -108,8 +108,8 @@ class Customer implements HandlerInterface
             $locatedType = $this->typeLocator->getType(
                 $attributeCode,
                 $customerEntityType
-            ) ?: 'string';
-            $locatedType = $locatedType === TypeProcessor::NORMALIZED_ANY_TYPE ? 'string' : $locatedType;
+            ) ?: Pool::TYPE_STRING;
+            $locatedType = $locatedType === TypeProcessor::NORMALIZED_ANY_TYPE ? Pool::TYPE_STRING : $locatedType;
             $result[$attributeCode] = $locatedType;
         }
 
