@@ -458,6 +458,39 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_attribute.php
+     */
+    public function testQueryCustomAttributeField()
+    {
+        $prductSku = 'simple';
+
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "{$prductSku}"}})
+    {
+        items
+        {
+            attribute_code_custom
+        }
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($prductSku, false, null, true);
+        $this->assertArrayHasKey('products', $response);
+        $this->assertArrayHasKey('items', $response['products']);
+        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertArrayHasKey(0, $response['products']['items']);
+        $this->assertCustomAttribute($product, $response['products']['items'][0]);
+    }
+
+    /**
      * @param ProductInterface $product
      * @param array $actualResponse
      */
@@ -506,6 +539,18 @@ QUERY;
         $this->assertNotEmpty($categoryIdsAttribute, "Precondition failed: 'category_ids' must not be empty");
         $categoryIdsAttributeValue = $categoryIdsAttribute ? $categoryIdsAttribute->getValue() : [];
         $this->assertEquals($categoryIdsAttributeValue, $actualResponse['category_ids']);
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param array $actualResponse
+     */
+    private function assertCustomAttribute($product, $actualResponse)
+    {
+        $customAttribute = $product->getCustomAttribute('attribute_code_custom')->getValue();
+        $this->assertNotNull($customAttribute, "Precondition failed: 'manufacturer' must not be null");
+        $this->assertNotEmpty($customAttribute, "Precondition failed: 'manufacturer' must not be empty");
+        $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
     }
 
     /**

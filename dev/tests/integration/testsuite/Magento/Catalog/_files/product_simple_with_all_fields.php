@@ -29,10 +29,12 @@ $eavAttributeValues = [
     'required_options' => 1,
     'special_price' => 3.82,
     'special_from_date' => date('Y-m-d'),
-    'special_to_date' => date('Y-m-d')
+    'special_to_date' => date('Y-m-d'),
+    'manufacturer' => 'Magento Inc.',
 ];
 
 foreach ($eavAttributeValues as $attributeCode => $attributeValue) {
     $product->setCustomAttribute($attributeCode, $attributeValue);
 }
+
 $productRepository->save($product);
