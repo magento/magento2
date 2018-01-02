@@ -10,6 +10,7 @@ namespace Magento\Inventory\Model\ResourceModel\StockSourceLink;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
 use Magento\Inventory\Model\StockSourceLink;
+use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 
 /**
  * Implementation of StockSourceLink save multiple operation for specific db layer
@@ -32,15 +33,17 @@ class SaveMultiple
     }
 
     /**
-     * @param array $sourceCodes
-     * @param int $stockId
+     * Multiple save StockSourceLinks
+     *
+     * @param StockSourceLinkInterface[] $links
      * @return void
      */
-    public function execute(array $sourceCodes, int $stockId)
+    public function execute(array $links)
     {
-        if (!count($sourceCodes)) {
+        if (!count($links)) {
             return;
         }
+
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(
             StockSourceLinkResourceModel::TABLE_NAME_STOCK_SOURCE_LINK
@@ -52,11 +55,15 @@ class SaveMultiple
         ];
 
         $data = [];
-        foreach ($sourceCodes as $sourceCode) {
-            $data[] = [$sourceCode, $stockId];
+
+        foreach ($links as $link) {
+            $data[] = [$link->getSourceCode(), $link->getStockId()];
         }
-        if ($data) {
-            $connection->insertArray($tableName, $columns, $data);
+
+        if (0 == count($data)) {
+            return;
         }
+
+        $connection->insertArray($tableName, $columns, $data);
     }
 }
