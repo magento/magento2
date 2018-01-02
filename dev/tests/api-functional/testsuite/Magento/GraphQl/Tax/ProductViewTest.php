@@ -14,6 +14,9 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Tax\Model\Config;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class ProductViewTest extends GraphQlAbstract
 {
     /**
@@ -43,15 +46,13 @@ class ProductViewTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer_primary_addresses.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_all_fields.php
      * @magentoApiDataFixture Magento/Tax/_files/tax_rule_region_1_al.php
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation disabled
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testQueryAllFieldsSimpleProduct()
     {
-        $prductSku = 'simple';
+        $productSku = 'simple';
 
-        $product = $this->productRepository->get($prductSku, null, null, true);
+        $product = $this->productRepository->get($productSku, null, null, true);
         // set product to taxable goods
         $product->setData('tax_class_id', 2)->save();
 
@@ -71,7 +72,7 @@ class ProductViewTest extends GraphQlAbstract
             Config::CONFIG_XML_PATH_DEFAULT_REGION,
             1,
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            0
+            1
         );
 
         $config->saveConfig(
@@ -87,7 +88,7 @@ class ProductViewTest extends GraphQlAbstract
 
         $query = <<<QUERY
 {
-    products(filter: {sku: {eq: "{$prductSku}"}})
+    products(filter: {sku: {eq: "{$productSku}"}})
     {
         items {
             attribute_set_id
@@ -160,7 +161,7 @@ QUERY;
         $response = $this->graphQlQuery($query, [], '', $headerMap);
 
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->productRepository->get($prductSku, false, null, true);
+        $product = $this->productRepository->get($productSku, false, null, true);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
         $this->assertEquals(1, count($response['products']['items']));

@@ -9,12 +9,12 @@ namespace Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product;
 use Magento\Catalog\Model\Product;
 
 /**
- * Use this as a post processor class after you grabbed the data from a product
+ * Transforms data of a product to its GraphQL type format"
  */
 interface FormatterInterface
 {
     /**
-     * Format/Modify single product data from object to an array
+     * Format single product data to GraphQl type structure
      *
      * @param Product $product
      * @param array $productData

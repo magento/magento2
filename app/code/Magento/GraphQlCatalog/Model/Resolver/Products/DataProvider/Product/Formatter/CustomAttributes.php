@@ -10,12 +10,12 @@ use Magento\Catalog\Model\Product;
 use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 
 /**
- * Grabs the initial data from the product and fixes the id
+ * Populates the custom attributes
  */
 class CustomAttributes implements FormatterInterface
 {
     /**
-     * Fix entity id data
+     * Populate the defined custom attributes
      *
      * {@inheritdoc}
      */

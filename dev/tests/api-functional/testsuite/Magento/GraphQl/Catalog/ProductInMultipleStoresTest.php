@@ -24,11 +24,11 @@ class ProductInMultipleStoresTest extends GraphQlAbstract
      */
     public function testProductFromSpecificAndDefaultStore()
     {
-        $prductSku = 'simple';
+        $productSku = 'simple';
 
         $query = <<<QUERY
 {
-    products(filter: {sku: {eq: "{$prductSku}"}})
+    products(filter: {sku: {eq: "{$productSku}"}})
     {
         items {
             attribute_set_id
@@ -61,7 +61,7 @@ QUERY;
 
         /** @var \Magento\Catalog\Model\Product $product */
         $product = ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product::class);
-        $product->load($product->getIdBySku($prductSku));
+        $product->load($product->getIdBySku($productSku));
 
         //use case for custom store
         $productNameInFixtureStore = 'Product\'s Name in Fixture Store';
