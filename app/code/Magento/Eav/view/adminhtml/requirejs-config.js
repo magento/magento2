@@ -6,7 +6,7 @@
 var config = {
     map: {
         '*': {
-            swatchesProductAttributes: 'Magento_Swatches/js/product-attributes'
+            eavInputTypes: 'Magento_Eav/js/input-types'
         }
     }
 };
