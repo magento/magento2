@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+    <table name="theme" resource="default">
+        <column xsi:type="int" name="theme_id" padding="11" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="parent_id" padding="11" unsigned="false" nullable="true" identity="false"/>
+        <column xsi:type="varchar" name="theme_path" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="theme_title" nullable="false" length="255"/>
+        <column xsi:type="varchar" name="preview_image" nullable="true" length="255"/>
+        <column xsi:type="boolean" name="is_featured" nullable="false" default="0"/>
+        <column xsi:type="varchar" name="area" nullable="false" length="255"/>
+        <column xsi:type="smallint" name="type" padding="6" unsigned="false" nullable="false" identity="false"/>
+        <column xsi:type="text" name="code" nullable="true"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="theme_id"/>
+        </constraint>
+    </table>
+    <table name="theme_file" resource="default">
+        <column xsi:type="int" name="theme_files_id" padding="11" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="theme_id" padding="11" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="varchar" name="file_path" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="file_type" nullable="false" length="32"/>
+        <column xsi:type="longtext" name="content" nullable="false"/>
+        <column xsi:type="smallint" name="sort_order" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0"/>
+        <column xsi:type="boolean" name="is_temporary" nullable="false" default="0"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="theme_files_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="THEME_FILE_THEME_ID_THEME_THEME_ID" table="theme_file" column="theme_id"
+                    referenceTable="theme" referenceColumn="theme_id" onDelete="CASCADE"/>
+    </table>
+    <table name="design_change" resource="default">
+        <column xsi:type="int" name="design_change_id" padding="11" unsigned="false" nullable="false" identity="true"/>
+        <column xsi:type="smallint" name="store_id" padding="6" unsigned="true" nullable="false" identity="false"
+                default="0"/>
+        <column xsi:type="varchar" name="design" nullable="true" length="255"/>
+        <column xsi:type="date" name="date_from"/>
+        <column xsi:type="date" name="date_to"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="design_change_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="DESIGN_CHANGE_STORE_ID_STORE_STORE_ID" table="design_change"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <index name="DESIGN_CHANGE_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+</schema>

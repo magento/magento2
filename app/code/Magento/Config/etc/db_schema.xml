@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+    <table name="core_config_data" resource="default">
+        <column xsi:type="int" name="config_id" padding="11" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="varchar" name="scope" nullable="false" length="8" default="default"/>
+        <column xsi:type="int" name="scope_id" padding="11" unsigned="false" nullable="false" identity="false"
+                default="0"/>
+        <column xsi:type="varchar" name="path" nullable="false" length="255" default="general"/>
+        <column xsi:type="text" name="value" nullable="true"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="config_id"/>
+        </constraint>
+        <constraint xsi:type="unique" name="CORE_CONFIG_DATA_SCOPE_SCOPE_ID_PATH">
+            <column name="scope"/>
+            <column name="scope_id"/>
+            <column name="path"/>
+        </constraint>
+    </table>
+</schema>

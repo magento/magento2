@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+    <table name="sales_sequence_profile" resource="default">
+        <column xsi:type="int" name="profile_id" padding="11" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="meta_id" padding="11" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="varchar" name="prefix" nullable="true" length="32"/>
+        <column xsi:type="varchar" name="suffix" nullable="true" length="32"/>
+        <column xsi:type="int" name="start_value" padding="11" unsigned="true" nullable="false" identity="false"
+                default="1"/>
+        <column xsi:type="int" name="step" padding="11" unsigned="true" nullable="false" identity="false" default="1"/>
+        <column xsi:type="int" name="max_value" padding="11" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="int" name="warning_value" padding="11" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="boolean" name="is_active" nullable="false" default="0"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="profile_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="SALES_SEQUENCE_PROFILE_META_ID_SALES_SEQUENCE_META_META_ID"
+                    table="sales_sequence_profile" column="meta_id" referenceTable="sales_sequence_meta"
+                    referenceColumn="meta_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" name="SALES_SEQUENCE_PROFILE_META_ID_PREFIX_SUFFIX">
+            <column name="meta_id"/>
+            <column name="prefix"/>
+            <column name="suffix"/>
+        </constraint>
+    </table>
+    <table name="sales_sequence_meta" resource="default">
+        <column xsi:type="int" name="meta_id" padding="11" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="varchar" name="entity_type" nullable="false" length="32"/>
+        <column xsi:type="smallint" name="store_id" padding="6" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="varchar" name="sequence_table" nullable="false" length="32"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="meta_id"/>
+        </constraint>
+        <constraint xsi:type="unique" name="SALES_SEQUENCE_META_ENTITY_TYPE_STORE_ID">
+            <column name="entity_type"/>
+            <column name="store_id"/>
+        </constraint>
+    </table>
+</schema>

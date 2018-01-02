@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+    <table name="catalog_eav_attribute" resource="default">
+        <column xsi:type="float" name="search_weight" scale="10" precission="0" unsigned="true" nullable="false"
+                default="1"/>
+    </table>
+</schema>

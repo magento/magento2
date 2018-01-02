@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+    <table name="importexport_importdata" resource="default">
+        <column xsi:type="int" name="id" padding="11" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="varchar" name="entity" nullable="false" length="50"/>
+        <column xsi:type="varchar" name="behavior" nullable="false" length="10" default="append"/>
+        <column xsi:type="longtext" name="data" nullable="true"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="id"/>
+        </constraint>
+    </table>
+    <table name="import_history" resource="default">
+        <column xsi:type="int" name="history_id" padding="11" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="timestamp" name="started_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
+        <column xsi:type="int" name="user_id" padding="11" unsigned="true" nullable="false" identity="false"
+                default="0"/>
+        <column xsi:type="varchar" name="imported_file" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="execution_time" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="summary" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="error_file" nullable="false" length="255"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="history_id"/>
+        </constraint>
+    </table>
+</schema>

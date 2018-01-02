@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+    <table name="wishlist" resource="default">
+        <column xsi:type="int" name="wishlist_id" padding="11" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="customer_id" padding="11" unsigned="true" nullable="false" identity="false"
+                default="0"/>
+        <column xsi:type="smallint" name="shared" padding="6" unsigned="true" nullable="false" identity="false"
+                default="0"/>
+        <column xsi:type="varchar" name="sharing_code" nullable="true" length="32"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="wishlist_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="WISHLIST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID" table="wishlist"
+                    column="customer_id" referenceTable="customer_entity" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="unique" name="WISHLIST_CUSTOMER_ID">
+            <column name="customer_id"/>
+        </constraint>
+        <index name="WISHLIST_SHARED" indexType="btree">
+            <column name="shared"/>
+        </index>
+    </table>
+    <table name="wishlist_item" resource="default">
+        <column xsi:type="int" name="wishlist_item_id" padding="11" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="wishlist_id" padding="11" unsigned="true" nullable="false" identity="false"
+                default="0"/>
+        <column xsi:type="int" name="product_id" padding="11" unsigned="true" nullable="false" identity="false"
+                default="0"/>
+        <column xsi:type="smallint" name="store_id" padding="6" unsigned="true" nullable="true" identity="false"/>
+        <column xsi:type="timestamp" name="added_at" on_update="false" nullable="true"/>
+        <column xsi:type="text" name="description" nullable="true"/>
+        <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="false"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="wishlist_item_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="WISHLIST_ITEM_WISHLIST_ID_WISHLIST_WISHLIST_ID" table="wishlist_item"
+                    column="wishlist_id" referenceTable="wishlist" referenceColumn="wishlist_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="WISHLIST_ITEM_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID"
+                    table="wishlist_item" column="product_id" referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="WISHLIST_ITEM_STORE_ID_STORE_STORE_ID" table="wishlist_item"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
+        <index name="WISHLIST_ITEM_WISHLIST_ID" indexType="btree">
+            <column name="wishlist_id"/>
+        </index>
+        <index name="WISHLIST_ITEM_PRODUCT_ID" indexType="btree">
+            <column name="product_id"/>
+        </index>
+        <index name="WISHLIST_ITEM_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="wishlist_item_option" resource="default">
+        <column xsi:type="int" name="option_id" padding="11" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="wishlist_item_id" padding="11" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="int" name="product_id" padding="11" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="varchar" name="code" nullable="false" length="255"/>
+        <column xsi:type="text" name="value" nullable="true"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="option_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="FK_A014B30B04B72DD0EAB3EECD779728D6" table="wishlist_item_option"
+                    column="wishlist_item_id" referenceTable="wishlist_item" referenceColumn="wishlist_item_id"
+                    onDelete="CASCADE"/>
+    </table>
+</schema>

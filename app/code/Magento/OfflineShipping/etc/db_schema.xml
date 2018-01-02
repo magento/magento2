@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+    <table name="shipping_tablerate" resource="default">
+        <column xsi:type="int" name="pk" padding="11" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="website_id" padding="11" unsigned="false" nullable="false" identity="false"
+                default="0"/>
+        <column xsi:type="varchar" name="dest_country_id" nullable="false" length="4" default="0"/>
+        <column xsi:type="int" name="dest_region_id" padding="11" unsigned="false" nullable="false" identity="false"
+                default="0"/>
+        <column xsi:type="varchar" name="dest_zip" nullable="false" length="10" default="*"/>
+        <column xsi:type="varchar" name="condition_name" nullable="false" length="20"/>
+        <column xsi:type="decimal" name="condition_value" scale="12" precission="4" unsigned="false" nullable="false"
+                default="0.0000"/>
+        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="false"
+                default="0.0000"/>
+        <column xsi:type="decimal" name="cost" scale="12" precission="4" unsigned="false" nullable="false"
+                default="0.0000"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="pk"/>
+        </constraint>
+        <constraint xsi:type="unique" name="UNQ_D60821CDB2AFACEE1566CFC02D0D4CAA">
+            <column name="website_id"/>
+            <column name="dest_country_id"/>
+            <column name="dest_region_id"/>
+            <column name="dest_zip"/>
+            <column name="condition_name"/>
+            <column name="condition_value"/>
+        </constraint>
+    </table>
+    <table name="salesrule" resource="default">
+        <column xsi:type="smallint" name="simple_free_shipping" padding="6" unsigned="true" nullable="false"
+                identity="false" default="0"/>
+    </table>
+    <table name="sales_order_item" resource="default">
+        <column xsi:type="smallint" name="free_shipping" padding="6" unsigned="true" nullable="false" identity="false"
+                default="0"/>
+    </table>
+    <table name="quote_address" resource="default">
+        <column xsi:type="smallint" name="free_shipping" padding="6" unsigned="true" nullable="false" identity="false"
+                default="0"/>
+    </table>
+    <table name="quote_item" resource="default">
+        <column xsi:type="smallint" name="free_shipping" padding="6" unsigned="true" nullable="false" identity="false"
+                default="0"/>
+    </table>
+    <table name="quote_address_item" resource="default">
+        <column xsi:type="int" name="free_shipping" padding="11" unsigned="true" nullable="true" identity="false"/>
+    </table>
+</schema>

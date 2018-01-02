@@ -809,9 +809,9 @@ class Installer
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
-        if (!isset($request[InstallCommand::DECLARATION_MODE_KEY]) || !$request[InstallCommand::DECLARATION_MODE_KEY]) {
+        #if (!isset($request[InstallCommand::DECLARATION_MODE_KEY]) || !$request[InstallCommand::DECLARATION_MODE_KEY]) {
             $this->handleDBSchemaData($setup, 'data');
-        }
+        #}
     }
 
     /**

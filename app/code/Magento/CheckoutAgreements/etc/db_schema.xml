@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+    <table name="checkout_agreement" resource="default">
+        <column xsi:type="int" name="agreement_id" padding="11" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="255"/>
+        <column xsi:type="text" name="content" nullable="true"/>
+        <column xsi:type="varchar" name="content_height" nullable="true" length="25"/>
+        <column xsi:type="text" name="checkbox_text" nullable="true"/>
+        <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0"/>
+        <column xsi:type="smallint" name="is_html" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0"/>
+        <column xsi:type="smallint" name="mode" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="agreement_id"/>
+        </constraint>
+    </table>
+    <table name="checkout_agreement_store" resource="default">
+        <column xsi:type="int" name="agreement_id" padding="11" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="smallint" name="store_id" padding="6" unsigned="true" nullable="false" identity="false"/>
+        <constraint xsi:type="primary" name="PRIMARY">
+            <column name="agreement_id"/>
+            <column name="store_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" name="CHKT_AGRT_STORE_AGRT_ID_CHKT_AGRT_AGRT_ID" table="checkout_agreement_store"
+                    column="agreement_id" referenceTable="checkout_agreement" referenceColumn="agreement_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="CHECKOUT_AGREEMENT_STORE_STORE_ID_STORE_STORE_ID"
+                    table="checkout_agreement_store" column="store_id" referenceTable="store" referenceColumn="store_id"
+                    onDelete="CASCADE"/>
+    </table>
+</schema>
