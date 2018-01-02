@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Model\StockSourceLink\Command;
 
+use Exception;
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
+use Magento\Framework\Exception\InputException;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink\DeleteMultiple;
 use Magento\InventoryApi\Api\StockSourceLinksDeleteInterface;
 use Psr\Log\LoggerInterface;
 
@@ -18,9 +20,9 @@ use Psr\Log\LoggerInterface;
 class StockSourceLinksDelete implements StockSourceLinksDeleteInterface
 {
     /**
-     * @var StockSourceLinkResourceModel
+     * @var DeleteMultiple
      */
-    private $stockSourceLinkResource;
+    private $deleteMultiple;
 
     /**
      * @var LoggerInterface
@@ -28,14 +30,14 @@ class StockSourceLinksDelete implements StockSourceLinksDeleteInterface
     private $logger;
 
     /**
-     * @param StockSourceLinkResourceModel $stockSourceLinkResource
+     * @param DeleteMultiple $deleteMultiple
      * @param LoggerInterface $logger
      */
     public function __construct(
-        StockSourceLinkResourceModel $stockSourceLinkResource,
+        DeleteMultiple $deleteMultiple,
         LoggerInterface $logger
     ) {
-        $this->stockSourceLinkResource = $stockSourceLinkResource;
+        $this->deleteMultiple = $deleteMultiple;
         $this->logger = $logger;
     }
 
@@ -44,13 +46,15 @@ class StockSourceLinksDelete implements StockSourceLinksDeleteInterface
      */
     public function execute(array $links)
     {
+        if (empty($links)) {
+            throw new InputException(__('Input data is empty'));
+        }
+
         try {
-            foreach ($links as $link) {
-                $this->stockSourceLinkResource->delete($link);
-            }
-        } catch (\Exception $e) {
+            $this->deleteMultiple->execute($links);
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotDeleteException(__('Could not delete Stock Source Link'), $e);
+            throw new CouldNotDeleteException(__('Could not delete StockSourceLinks'), $e);
         }
     }
 }
