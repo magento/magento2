@@ -20,7 +20,7 @@ use Magento\InventoryApi\Api\GetSourceLinkListInterface;
 /**
  * @inheritdoc
  */
-class GetSourceLinkList implements GetSourceLinkListInterface
+class GetSourceLinks implements GetSourceLinkListInterface
 {
     /**
      * @var CollectionProcessorInterface
