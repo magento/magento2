@@ -39,33 +39,9 @@ class ProductViewTest extends GraphQlAbstract
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer_primary_addresses.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_all_fields.php
-     * @magentoApiDataFixture Magento/Tax/_files/tax_rule_region_1_al.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testQueryAllFieldsSimpleProduct()
-    {
-        $productSku = 'simple';
-
-        $product = $this->productRepository->get($productSku, null, null, true);
-        // set product to taxable goods
-        $product->setData('tax_class_id', 2)->save();
 
         /** @var \Magento\Config\Model\ResourceModel\Config $config */
         $config = $this->objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
-
-        //display including and excluding
-        $config->saveConfig(
-            Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
-            3,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            0
-        );
 
         //default state tax calculation AL
         $config->saveConfig(
@@ -85,6 +61,47 @@ class ProductViewTest extends GraphQlAbstract
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
         $config = $this->objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
         $config->reinit();
+    }
+
+    public function tearDown()
+    {
+        /** @var \Magento\Config\Model\ResourceModel\Config $config */
+        $config = $this->objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
+
+        //default state tax calculation AL
+        $config->saveConfig(
+            Config::CONFIG_XML_PATH_DEFAULT_REGION,
+            null,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            1
+        );
+
+        $config->saveConfig(
+            Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
+            1,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            1
+        );
+
+        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
+        $config = $this->objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $config->reinit();
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_primary_addresses.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_all_fields.php
+     * @magentoApiDataFixture Magento/Tax/_files/tax_rule_region_1_al.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testQueryAllFieldsSimpleProduct()
+    {
+        $productSku = 'simple';
+
+        $product = $this->productRepository->get($productSku, null, null, true);
+        // set product to taxable goods
+        $product->setData('tax_class_id', 2)->save();
 
         $query = <<<QUERY
 {
