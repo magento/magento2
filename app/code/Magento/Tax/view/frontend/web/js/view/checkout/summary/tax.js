@@ -65,7 +65,7 @@ define([
                 }
             }
 
-            return amount;
+            return parseFloat(amount);
         },
 
         /**
