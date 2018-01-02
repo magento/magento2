@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Model\StockSourceLink\Command;
 
+use Exception;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Validation\ValidationException;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink as StockSourceLinkResourceModel;
-use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink\SaveMultiple;
 use Magento\InventoryApi\Api\StockSourceLinksSaveInterface;
 use Psr\Log\LoggerInterface;
 
@@ -20,9 +20,9 @@ use Psr\Log\LoggerInterface;
 class StockSourceLinksSave implements StockSourceLinksSaveInterface
 {
     /**
-     * @var StockSourceLinkResourceModel
+     * @var SaveMultiple
      */
-    private $stockSourceLinkResource;
+    private $saveMultiple;
 
     /**
      * @var LoggerInterface
@@ -30,14 +30,14 @@ class StockSourceLinksSave implements StockSourceLinksSaveInterface
     private $logger;
 
     /**
-     * @param StockSourceLinkResourceModel $stockSourceLinkResource
+     * @param SaveMultiple $saveMultiple
      * @param LoggerInterface $logger
      */
     public function __construct(
-        StockSourceLinkResourceModel $stockSourceLinkResource,
+        SaveMultiple $saveMultiple,
         LoggerInterface $logger
     ) {
-        $this->stockSourceLinkResource = $stockSourceLinkResource;
+        $this->saveMultiple = $saveMultiple;
         $this->logger = $logger;
     }
 
@@ -46,18 +46,15 @@ class StockSourceLinksSave implements StockSourceLinksSaveInterface
      */
     public function execute(array $links): array
     {
-        $savedLinkIdList = [];
+        if (empty($links)) {
+            throw new InputException(__('Input data is empty'));
+        }
 
         try {
-            foreach ($links as $link) {
-                $this->stockSourceLinkResource->save($link);
-                $savedLinkIdList[] = (int)$link->getStockId();
-            }
-
-            return $savedLinkIdList;
-        } catch (\Exception $e) {
+            $this->saveMultiple->execute($links);
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage());
-            throw new CouldNotSaveException(__('Could not save Stock Source Link'), $e);
+            throw new CouldNotSaveException(__('Could not save StockSourceLinks'), $e);
         }
     }
 }
