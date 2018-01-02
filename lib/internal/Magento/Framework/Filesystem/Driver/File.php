@@ -846,7 +846,7 @@ class File implements DriverInterface
         // check if the path given is already an absolute path containing the
         // basepath. so if the basepath starts at position 0 in the path, we
         // must not concatinate them again because path is already absolute.
-        if (0 === strpos($path, $basePath)) {
+        if (0 === strpos($path, $basePath) || @file_exists($this->getScheme($scheme) . $path)) {
             return $this->getScheme($scheme) . $path;
         }
 
