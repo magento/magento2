@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 /**
  * @inheritdoc
  */
-class DeleteStockSourceLinks implements StockSourceLinksDeleteInterface
+class StockSourceLinksDelete implements StockSourceLinksDeleteInterface
 {
     /**
      * @var StockSourceLinkResourceModel
