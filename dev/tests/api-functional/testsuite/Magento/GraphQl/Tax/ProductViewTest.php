@@ -43,22 +43,17 @@ class ProductViewTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer_primary_addresses.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_all_fields.php
      * @magentoApiDataFixture Magento/Tax/_files/tax_rule_region_1_al.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testQueryAllFieldsSimpleProduct()
     {
         $prductSku = 'simple';
 
-//        $this->storeManager->setCurrentStore(0);
         $product = $this->productRepository->get($prductSku, null, null, true);
         // set product to taxable goods
         $product->setData('tax_class_id', 2)->save();
-
-//        $this->storeManager->setCurrentStore(1);
-//
-//        $product = $this->productRepository->get($prductSku, true, 1, true);
-//        // set product to taxable goods
-//        $product->setData('tax_class_id', 2)->save();
 
         /** @var \Magento\Config\Model\ResourceModel\Config $config */
         $config = $this->objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
