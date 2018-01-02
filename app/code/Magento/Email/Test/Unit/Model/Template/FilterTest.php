@@ -78,7 +78,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     private $backendUrlBuilder;
 
     /**
-     * @var \Magento\Email\Model\Source\Variables|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Variable\Model\Source\Variables|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configVariables;
 
@@ -142,7 +142,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
         $this->emogrifier = $this->objectManager->getObject(\Pelago\Emogrifier::class);
 
-        $this->configVariables = $this->getMockBuilder(\Magento\Email\Model\Source\Variables::class)
+        $this->configVariables = $this->getMockBuilder(\Magento\Variable\Model\Source\Variables::class)
             ->disableOriginalConstructor()
             ->getMock();
 

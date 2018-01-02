@@ -34,7 +34,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Pelago\Emogrifier $emogrifier
-     * @param \Magento\Email\Model\Source\Variables $configVariables
+     * @param \Magento\Variable\Model\Source\Variables $configVariables
      * @param \Magento\Widget\Model\ResourceModel\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -52,7 +52,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $urlModel,
         \Pelago\Emogrifier $emogrifier,
-        \Magento\Email\Model\Source\Variables $configVariables,
+        \Magento\Variable\Model\Source\Variables $configVariables,
         \Magento\Widget\Model\ResourceModel\Widget $widgetResource,
         \Magento\Widget\Model\Widget $widget
     ) {
