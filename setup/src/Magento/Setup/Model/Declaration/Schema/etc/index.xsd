@@ -18,7 +18,7 @@
             <xs:element name="column" type="indexColumnType" maxOccurs="unbounded" />
         </xs:sequence>
 
-        <xs:attribute name="type" type="indexType" />
+        <xs:attribute name="indexType" type="indexType" />
         <xs:attribute name="name" type="xs:string" />
     </xs:complexType>
 

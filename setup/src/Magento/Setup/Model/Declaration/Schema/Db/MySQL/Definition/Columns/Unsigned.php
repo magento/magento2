@@ -24,12 +24,12 @@ class Unsigned implements DbDefinitionProcessorInterface
     const UNSIGNED_FLAG = 'unsigned';
 
     /**
-     * @param ColumnUnsignedAwareInterface $element
+     * @param ColumnUnsignedAwareInterface $column
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $column)
     {
-        return $element->isUnsigned() ? strtoupper(self::UNSIGNED_FLAG) : '';
+        return $column->isUnsigned() ? strtoupper(self::UNSIGNED_FLAG) : '';
     }
 
     /**

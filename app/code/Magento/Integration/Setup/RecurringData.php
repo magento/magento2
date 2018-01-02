@@ -6,17 +6,17 @@
 
 namespace Magento\Integration\Setup;
 
+use Magento\Framework\Setup\InstallDataInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Integration\Model\ConfigBasedIntegrationManager;
 use Magento\Integration\Model\ConsolidatedConfig;
-use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
  * Class Recurring
  *
  */
-class Recurring implements InstallSchemaInterface
+class RecurringData implements InstallDataInterface
 {
     /**
      * @var ConfigBasedIntegrationManager
@@ -45,7 +45,7 @@ class Recurring implements InstallSchemaInterface
     /**
      * {@inheritdoc}
      */
-    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $this->integrationManager->processConfigBasedIntegrations($this->integrationConfig->getIntegrations());
     }

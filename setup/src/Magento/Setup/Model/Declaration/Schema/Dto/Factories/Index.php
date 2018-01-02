@@ -48,8 +48,8 @@ class Index implements FactoryInterface
      */
     public function create(array $data)
     {
-        if (!isset($data['type'])) {
-            $data['type'] = self::DEFAULT_INDEX_TYPE;
+        if (!isset($data['indexType'])) {
+            $data['indexType'] = self::DEFAULT_INDEX_TYPE;
         }
 
         return $this->objectManager->create($this->className, $data);

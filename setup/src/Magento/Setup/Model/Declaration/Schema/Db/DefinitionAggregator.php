@@ -32,9 +32,9 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
     /**
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $column)
     {
-        $type = $element->getType();
+        $type = $column->getType();
         if (!isset($this->definitionProcessors[$type])) {
             throw new \InvalidArgumentException(
                 sprintf("Cannot process object to definition for type %s", $type)
@@ -42,7 +42,7 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
         }
 
         $definitionProcessor = $this->definitionProcessors[$type];
-        return $definitionProcessor->toDefinition($element);
+        return $definitionProcessor->toDefinition($column);
     }
 
     /**

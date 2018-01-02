@@ -7,7 +7,7 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
     <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/constraints/constraint.xsd" />
-    
+    <!--@TODO: why we need to specify table?-->
     <xs:complexType name="foreign">
         <xs:annotation>
             <xs:documentation>

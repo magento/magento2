@@ -23,12 +23,12 @@ class Identity implements DbDefinitionProcessorInterface
     const IDENTITY_FLAG = 'auto_increment';
 
     /**
-     * @param ColumnIdentityAwareInterface $element
+     * @param ColumnIdentityAwareInterface $column
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $column)
     {
-        return $element->isIdentity() ? strtoupper(self::IDENTITY_FLAG) : '';
+        return $column->isIdentity() ? strtoupper(self::IDENTITY_FLAG) : '';
     }
 
     /**

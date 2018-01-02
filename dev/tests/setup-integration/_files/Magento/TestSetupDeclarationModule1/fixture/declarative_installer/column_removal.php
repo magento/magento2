@@ -38,7 +38,7 @@ return [
   `boolean` tinyint(1) DEFAULT \'0\',
   `varbinary_rename` varbinary(255) DEFAULT \'10101\',
   UNIQUE KEY `some_unique_key` (`smallint`,`bigint`),
-  KEY `speedup_index` (`tinyint`,`bigint`),
+  KEY `speedup_index` (`tinyint`,`bigint`) USING BTREE,
   CONSTRAINT `some_foreign_key` FOREIGN KEY (`tinyint`) REFERENCES `reference_table` (`tinyint_ref`) ON DELETE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8',
 ];

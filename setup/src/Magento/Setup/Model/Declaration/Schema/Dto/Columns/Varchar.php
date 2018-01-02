@@ -40,7 +40,7 @@ class Varchar extends Column implements
      * @param Table     $table
      * @param bool      $nullable
      * @param int       $length
-     * @param float|int $default
+     * @param string    $default
      */
     public function __construct(
         string $name,
@@ -48,7 +48,7 @@ class Varchar extends Column implements
         Table $table,
         int $length,
         bool $nullable = true,
-        int $default = null
+        string $default = null
     ) {
         parent::__construct($name, $type, $table);
         $this->nullable = $nullable;

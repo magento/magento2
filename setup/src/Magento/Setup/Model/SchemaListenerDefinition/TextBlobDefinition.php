@@ -67,7 +67,8 @@ class TextBlobDefinition implements DefinitionConverterInterface
         $newDefinition = [
             'xsi:type' => $cType,
             'name' => $definition['name'],
-            'nullable' => $definition['nullable'] ?? true
+            'nullable' => $definition['nullable'] ?? true,
+            'primary' => $definition['primary'] ?? false
         ];
 
         if (in_array($cType, ['varchar', 'varbinary'])) {

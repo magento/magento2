@@ -18,13 +18,13 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 class Nullable implements DbDefinitionProcessorInterface
 {
     /**
-     * @param ColumnNullableAwareInterface $element
+     * @param ColumnNullableAwareInterface $column
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $column)
     {
-        if ($element instanceof ColumnNullableAwareInterface) {
-            return $element->isNullable() ? 'NULL' : 'NOT NULL';
+        if ($column instanceof ColumnNullableAwareInterface) {
+            return $column->isNullable() ? 'NULL' : 'NOT NULL';
         }
 
         return '';

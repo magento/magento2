@@ -40,7 +40,7 @@ return [
   `blob` blob,
   `boolean` tinyint(1) DEFAULT \'0\',
   UNIQUE KEY `some_unique_key` (`smallint`,`bigint`),
-  KEY `speedup_index` (`tinyint`,`bigint`),
+  KEY `speedup_index` (`tinyint`,`bigint`) USING BTREE,
   CONSTRAINT `some_foreign_key` FOREIGN KEY (`tinyint`) REFERENCES `reference_table` (`tinyint_ref`) ON DELETE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8',
 ];

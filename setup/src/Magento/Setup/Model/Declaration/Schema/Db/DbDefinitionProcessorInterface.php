@@ -19,10 +19,10 @@ interface DbDefinitionProcessorInterface
     /**
      * Output always will be SQL definition
      *
-     * @param  ElementInterface $element
+     * @param  ElementInterface $column
      * @return string
      */
-    public function toDefinition(ElementInterface $element);
+    public function toDefinition(ElementInterface $column);
 
     /**
      * Input always will be array of SQL definitions,

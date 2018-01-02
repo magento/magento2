@@ -70,7 +70,9 @@ class SchemaListener
      */
     public function dropForeignKey($tableName, $fkName)
     {
-        $this->tables[$this->moduleName][$tableName]['constraints']['foreign'][$fkName] = ['disabled' => 1];
+//        $this->tables[$this->moduleName][$tableName]['constraints']['foreign'][$fkName] = [
+//            'disabled' => 1,
+//        ];
     }
 
     /**
@@ -84,7 +86,7 @@ class SchemaListener
             $definition = ['type' => $definition];
         }
         $definition = $this->doColumnMapping($definition);
-        $definition['name'] = $columnName;
+        $definition['name'] = strtolower($columnName);
         $definition = $this->definitionMappers[$definition['type']]->convertToDefinition($definition);
         if (isset($definition['default']) && $definition['default'] === false) {
             $definition['default'] = null; //uniform default values
@@ -101,9 +103,9 @@ class SchemaListener
      */
     private function addPrimaryKeyIfExists($tableName, $columnName, $definition)
     {
-        if (isset($definition['primary'])) {
+        if (isset($definition['primary']) && $definition['primary']) {
             if (isset($this->tables[$this->moduleName][$tableName]['constraints']['primary'])) {
-                $this->tables[$this->moduleName][$tableName]['constraints']['primary']['PRIMARY'] = array_replace_recursive(
+                $this->tables[$this->moduleName][$tableName]['constraints']['primary']['PRIMARY'] = array_merge_recursive(
                     $this->tables[$this->moduleName][$tableName]['constraints']['primary']['PRIMARY'],
                     [
                         'columns' => [strtolower($columnName)]
@@ -166,9 +168,10 @@ class SchemaListener
     public function changeColumn($tableName, $oldColumnName, $newColumnName, $definition)
     {
         $this->addColumn($tableName, $newColumnName, $definition);
-        $this->tables[$this->moduleName][$tableName]['columns'][strtolower($oldColumnName)] = [
-            'disabled' => 1
-        ];
+
+        if (isset($this->tables[$this->moduleName][$tableName]['columns'][strtolower($oldColumnName)])) {
+            $this->tables[$this->moduleName][$tableName]['columns'][strtolower($oldColumnName)]['disabled'] = 1;
+        }
         //remove old column if not equal
     }
 
@@ -249,7 +252,7 @@ class SchemaListener
                 $indexType = 'btree';
             }
             $this->tables[$this->moduleName][$tableName]['indexes'][$indexName] =
-                ['columns' => $this->prepareIndexColumns($fields), 'type' => $indexType];
+                ['columns' => $this->prepareIndexColumns($fields), 'indexType' => $indexType];
         } else {
             $this->tables[$this->moduleName][$tableName]['constraints'][$indexType][$indexName] =
                 ['columns' => $this->prepareIndexColumns($fields)];

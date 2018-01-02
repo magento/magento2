@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
@@ -39,41 +40,43 @@ class Boolean implements DbDefinitionProcessorInterface
     private $nullable;
 
     /**
-     * @var DefaultDefinition
-     */
-    private $defaultDefinition;
-
-    /**
      * @var BooleanUtils
      */
     private $booleanUtils;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * @param Nullable $nullable
-     * @param DefaultDefinition $defaultDefinition
      * @param BooleanUtils $booleanUtils
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         Nullable $nullable,
-        DefaultDefinition $defaultDefinition,
-        BooleanUtils $booleanUtils
+        BooleanUtils $booleanUtils,
+        ResourceConnection $resourceConnection
     ) {
         $this->nullable = $nullable;
-        $this->defaultDefinition = $defaultDefinition;
         $this->booleanUtils = $booleanUtils;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Boolean $element
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Boolean $column
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $column)
     {
         return sprintf(
-            '%s %s %s',
+            '%s %s %s %s',
+            $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
             self::TYPE,
-            $this->nullable->toDefinition($element),
-            $this->defaultDefinition->toDefinition($element)
+            $this->nullable->toDefinition($column),
+            $column->getDefault() !== null ?
+                sprintf('DEFAULT %s', $column->getDefault() ? 1 : 0) : ''
         );
     }
 

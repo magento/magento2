@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
@@ -22,25 +23,33 @@ class Blob implements DbDefinitionProcessorInterface
     private $nullable;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * Text constructor.
      *
      * @param Nullable $nullable
+     * @param ResourceConnection $resourceConnection
      */
-    public function __construct(Nullable $nullable)
+    public function __construct(Nullable $nullable, ResourceConnection $resourceConnection)
     {
         $this->nullable = $nullable;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Blob $element
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Blob $column
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $column)
     {
         return sprintf(
-            '%s %s',
-            $element->getType(),
-            $this->nullable->toDefinition($element)
+            '%s %s %s',
+            $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
+            $column->getType(),
+            $this->nullable->toDefinition($column)
         );
     }
 

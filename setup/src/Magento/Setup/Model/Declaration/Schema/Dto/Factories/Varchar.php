@@ -48,10 +48,7 @@ class Varchar implements FactoryInterface
      */
     public function create(array $data)
     {
-        if (!isset($data['length'])) {
-            $data['length'] = self::DEFAULT_TEXT_LENGTH;
-        }
-
+        $data['length'] = isset($data['length']) ? (int) $data['length'] : self::DEFAULT_TEXT_LENGTH;
         return $this->objectManager->create($this->className, $data);
     }
 }

@@ -25,20 +25,12 @@ class Index implements DbDefinitionProcessorInterface
     const INDEX_KEY_NAME = 'INDEX';
 
     /**
-     * @var array
-     */
-    private static $indexTypeMapping = [
-        'FULTEXT' => 'fultext',
-        'BTREE' => 'btree',
-        'HASH' => 'hash'
-    ];
-
-    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
 
     /**
+     * Index constructor.
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(ResourceConnection $resourceConnection)
@@ -47,24 +39,31 @@ class Index implements DbDefinitionProcessorInterface
     }
 
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Index $element
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Index $index
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $index)
     {
-        $adapter = $this->resourceConnection->getConnection(
-            $element->getTable()->getResource()
-        );
-        $columnsList = array_map(
-            function (Column $column) use ($adapter) {
-                return $adapter->quoteIdentifier($column->getName());
-            },
-            $element->getColumns()
-        );
+        $indexType = $index->getIndexType();
+        //There is no matter what connection to use -> so use default one
+        $adapter = $this->resourceConnection->getConnection();
+        $isFullText = $indexType === \Magento\Setup\Model\Declaration\Schema\Dto\Index::FULLTEXT_INDEX;
         //as we used index types, that are similar to MySQL ones, we can just make it upper
+        //[FULLTEXT ]INDEX `name` [USING [BTREE|HASH]] (columns)
         return sprintf(
-            '(%s)',
-            implode(',', $columnsList)
+            '%sINDEX %s%s (%s)',
+            $isFullText ? 'FULLTEXT ' : '',
+            $adapter->quoteIdentifier($index->getName()),
+            !$isFullText ? sprintf(' USING %s', strtoupper($indexType)) : '',
+            implode(
+                ',',
+                array_map(
+                    function($columnName) use($adapter) {
+                        return $adapter->quoteIdentifier($columnName);
+                    },
+                    $index->getColumnNames()
+                )
+            )
         );
     }
 
@@ -82,7 +81,7 @@ class Index implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         return [
-            'indexType' => self::$indexTypeMapping[$data['Index_type']],
+            'indexType' => strtolower($data['Index_type']),
             'name' => $data['Key_name'],
             'column' => [
                 $data['Column_name'] => $data['Column_name']

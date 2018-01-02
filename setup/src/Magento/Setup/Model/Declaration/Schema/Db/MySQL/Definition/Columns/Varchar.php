@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
@@ -21,32 +22,34 @@ class Varchar implements DbDefinitionProcessorInterface
     private $nullable;
 
     /**
-     * @var DefaultDefinition
+     * @var ResourceConnection
      */
-    private $defaultDefinition;
+    private $resourceConnection;
 
     /**
-     * @param Nullable          $nullable
-     * @param DefaultDefinition $defaultDefinition
+     * @param Nullable $nullable
+     * @param ResourceConnection $resourceConnection
      */
-    public function __construct(Nullable $nullable, DefaultDefinition $defaultDefinition)
+    public function __construct(Nullable $nullable, ResourceConnection $resourceConnection)
     {
         $this->nullable = $nullable;
-        $this->defaultDefinition = $defaultDefinition;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Varchar   $element
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Varchar   $column
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $column)
     {
         return sprintf(
-            '%s(%s) %s %s',
-            $element->getType(),
-            $element->getLength(),
-            $this->nullable->toDefinition($element),
-            $this->defaultDefinition->toDefinition($element)
+            '%s %s(%s) %s %s',
+            $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
+            $column->getType(),
+            $column->getLength(),
+            $this->nullable->toDefinition($column),
+            !empty($column->getDefault()) ?
+                sprintf('DEFAULT "%s"', $column->getDefault()) : ''
         );
     }
 

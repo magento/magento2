@@ -51,12 +51,11 @@ interface DbSchemaWriterInterface
      * Please note: that from all structural elements only column can be modified
      *
      * @param $resource
-     * @param $columnName
      * @param $tableName
      * @param  string $columnDefinition
      * @return void
      */
-    public function modifyColumn($resource, $columnName, $tableName, $columnDefinition);
+    public function modifyColumn($resource, $tableName, $columnDefinition);
 
     /**
      * As we can`t just drop and recreate constraint in 2 requests

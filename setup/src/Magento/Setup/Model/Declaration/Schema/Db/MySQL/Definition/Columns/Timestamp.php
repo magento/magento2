@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
-use Magento\Setup\Model\Declaration\Schema\Dto\Columns\Date;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
 /**
@@ -28,31 +28,33 @@ class Timestamp implements DbDefinitionProcessorInterface
     private $onUpdate;
 
     /**
-     * @var DefaultDefinition
+     * @var ResourceConnection
      */
-    private $defaultDefinition;
+    private $resourceConnection;
 
     /**
-     * @param OnUpdate          $onUpdate
-     * @param DefaultDefinition $defaultDefinition
+     * @param OnUpdate $onUpdate
+     * @param ResourceConnection $resourceConnection
      */
-    public function __construct(OnUpdate $onUpdate, DefaultDefinition $defaultDefinition)
+    public function __construct(OnUpdate $onUpdate, ResourceConnection $resourceConnection)
     {
         $this->onUpdate = $onUpdate;
-        $this->defaultDefinition = $defaultDefinition;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp $element
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp $column
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $column)
     {
         return sprintf(
-            '%s %s %s',
-            $element->getType(),
-            $this->defaultDefinition->toDefinition($element),
-            $this->onUpdate->toDefinition($element)
+            '%s %s %s %s',
+            $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
+            $column->getType(),
+            $column->getDefault() === 'NULL' ?
+                '' : sprintf('DEFAULT %s', $column->getDefault()),
+            $this->onUpdate->toDefinition($column)
         );
     }
 

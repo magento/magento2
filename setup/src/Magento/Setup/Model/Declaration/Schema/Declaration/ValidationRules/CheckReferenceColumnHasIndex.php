@@ -55,6 +55,6 @@ class CheckReferenceColumnHasIndex implements ValidationInterface
             }
         }
 
-        return $errors;
+        return [];
     }
 }

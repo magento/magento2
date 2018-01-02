@@ -6,8 +6,6 @@
 
 namespace Magento\Setup\Model\SchemaListenerDefinition;
 
-use Magento\Framework\DB\Ddl\Table;
-
 /**
  * Convert definition for all decimal types: decimal, float, double
  */
@@ -31,11 +29,13 @@ class DecimalDefinition implements DefinitionConverterInterface
         return [
             'xsi:type' => $definition['type'],
             'name' => $definition['name'],
-            'scale' => $definition['scale'] ?? self::DEFAULT_SCALE,
-            'precision' => $definition['precision'] ?? self::DEFAULT_PRECISION,
+            //In previos adapter this 2 fields were switched, so we need to switch again
+            'scale' => $definition['precision'] ?? self::DEFAULT_PRECISION,
+            'precission' => $definition['scale'] ?? self::DEFAULT_SCALE,
             'unsigned' => $definition['unsigned'] ?? false,
             'nullable' => $definition['nullable'] ?? true,
-            'default' => $definition['default'] ?? null
+            'default' => $definition['default'] ?? null,
+            'primary' => $definition['primary'] ?? false
         ];
     }
 }

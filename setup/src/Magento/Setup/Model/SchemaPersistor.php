@@ -68,6 +68,17 @@ class SchemaPersistor
     }
 
     /**
+     * Cast boolean types to string
+     *
+     * @param bool $boolean
+     * @return string
+     */
+    private function castBooleanToString($boolean)
+    {
+        return $boolean ? 'true' : 'false';
+    }
+
+    /**
      * Convert columns from array to XML format
      *
      * @param array $tableData
@@ -77,12 +88,20 @@ class SchemaPersistor
     private function processColumns(array $tableData, \SimpleXMLElement $table)
     {
         if (isset($tableData['columns'])) {
-            foreach ($tableData['columns'] as $columnData) {
+            foreach ($tableData['columns'] as $columnName => $columnData) {
                 $domColumn = $table->addChild('column');
                 $domColumn->addAttribute('xsi:type', $columnData['xsi:type'], 'xsi');
                 unset($columnData['xsi:type']);
 
                 foreach ($columnData as $attributeKey => $attributeValue) {
+                    if ($attributeValue === null) {
+                        continue;
+                    }
+
+                    if (is_bool($attributeValue)) {
+                        $attributeValue = $this->castBooleanToString($attributeValue);
+                    }
+
                     $domColumn->addAttribute($attributeKey, $attributeValue);
                 }
             }
@@ -104,7 +123,7 @@ class SchemaPersistor
             foreach ($tableData['indexes'] as $indexName => $indexData) {
                 $domIndex = $table->addChild('index');
                 $domIndex->addAttribute('name', $indexName);
-                $domIndex->addAttribute('type', $indexData['type']);
+                $domIndex->addAttribute('indexType', $indexData['indexType']);
 
                 foreach ($indexData['columns'] as $column) {
                     $columnXml = $domIndex->addChild('column');
@@ -128,9 +147,10 @@ class SchemaPersistor
         if (isset($tableData['constraints'])) {
             foreach ($tableData['constraints'] as $constraintType => $constraints) {
                 if ($constraintType === 'foreign') {
-                    foreach ($constraints as $constraintData) {
+                    foreach ($constraints as $name => $constraintData) {
                         $constraintDom = $table->addChild('constraint');
                         $constraintDom->addAttribute('xsi:type', $constraintType, 'xsi');
+                        $constraintDom->addAttribute('name', $name);
 
                         foreach ($constraintData as $attributeKey => $attributeValue) {
                             $constraintDom->addAttribute($attributeKey, $attributeValue);

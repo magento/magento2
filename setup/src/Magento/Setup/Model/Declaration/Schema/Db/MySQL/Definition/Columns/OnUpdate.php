@@ -17,13 +17,13 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 class OnUpdate implements DbDefinitionProcessorInterface
 {
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp $element
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp $column
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $column)
     {
-        if ($element instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp) {
-            return $element->getOnUpdate() ?
+        if ($column instanceof \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp) {
+            return $column->getOnUpdate() ?
                 'ON UPDATE CURRENT_TIMESTAMP' : '';
         }
 

@@ -54,7 +54,7 @@
         </constraint>
         <constraint xsi:type="foreign" name="some_foreign_key" column="tinyint" table="test_table" referenceTable="reference_table" referenceColumn="tinyint_ref" onDelete="NO ACTION" />
         <!--Indexes-->
-        <index name="speedup_index" type="btree">
+        <index name="speedup_index" indexType="btree">
             <column name="tinyint" />
             <column name="bigint" />
         </index>

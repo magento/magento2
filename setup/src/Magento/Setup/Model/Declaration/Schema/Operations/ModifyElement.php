@@ -101,7 +101,6 @@ class ModifyElement implements OperationInterface
 
         $this->dbSchemaWriter->modifyColumn(
             $column->getTable()->getResource(),
-            $column->getName(),
             $column->getTable()->getName(),
             $definition
         );

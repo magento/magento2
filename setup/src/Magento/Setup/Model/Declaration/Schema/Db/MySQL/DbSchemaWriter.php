@@ -33,70 +33,17 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     }
 
     /**
-     * Prepare constraint statement by compiling name and definition together
-     *
-     * @param  string $name
-     * @param  string $indexDefinition
-     * @param  string $elementType:    can be COLUMN, CONSTRAINT or INDEX
-     * @return string
-     */
-    private function getAddElementSQL($elementType, $name, $indexDefinition)
-    {
-        return sprintf('ADD %s %s %s', strtoupper($elementType), $name, $indexDefinition);
-    }
-
-    /**
-     * Convert definition from format:
-     *  $name => $definition
-     * To format:
-     *  $name $definition
-     *
-     * @param  array            $columnsDefinition
-     * @param  AdapterInterface $adapter
-     * @return array
-     */
-    private function getColumnsWithNames(array $columnsDefinition, AdapterInterface $adapter)
-    {
-        $definition = [];
-        foreach ($columnsDefinition as $name => $columnDefinition) {
-            $definition[] = sprintf(
-                "%s %s",
-                $adapter->quoteIdentifier($name),
-                $columnDefinition
-            );
-        }
-
-        return $definition;
-    }
-
-    /**
      * @inheritdoc
      * @return \Zend_Db_Statement_Interface
      */
     public function createTable($tableName, $resource, array $definition)
     {
-        $fragmentsSQL = [];
         $adapter = $this->resourceConnection->getConnection($resource);
 
-        foreach ([Constraint::TYPE, \Magento\Setup\Model\Declaration\Schema\Dto\Index::TYPE] as $elementType) {
-            if (isset($definition[$elementType])) { //Some element types can be optional
-                //Process indexes definition
-                foreach ($definition[$elementType] as $name => $elementDefinition) {
-                    $fragmentsSQL[] = sprintf(
-                        '%s %s %s',
-                        strtoupper($elementType),
-                        $adapter->quoteIdentifier($name),
-                        $elementDefinition
-                    );
-                }
-            }
-        }
-
         $sql = sprintf(
-            "CREATE TABLE %s (\n%s,\n%s\n)",
+            "CREATE TABLE %s (\n%s\n)",
             $adapter->quoteIdentifier($tableName),
-            implode(", \n", $this->getColumnsWithNames($definition[Column::TYPE], $adapter)),
-            implode(", \n", $fragmentsSQL)
+            implode(", \n", $definition)
         );
 
         return $adapter->query($sql);
@@ -154,16 +101,14 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      */
     public function addElement($elementName, $resource, $tableName, $elementDefinition, $elementType)
     {
+        $addElementSyntax = $elementType === Column::TYPE ? 'ALTER TABLE %s ADD COLUMN %s' : 'ALTER TABLE %s ADD %s';
+
         $adapter = $this->resourceConnection->getConnection($resource);
 
         $sql = sprintf(
-            'ALTER TABLE %s %s',
+            $addElementSyntax,
             $adapter->quoteIdentifier($tableName),
-            $this->getAddElementSQL(
-                $elementType,
-                $adapter->quoteIdentifier($elementName),
-                $elementDefinition
-            )
+            $elementDefinition
         );
 
         return $adapter->query($sql);
@@ -175,14 +120,13 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      * @inheritdoc
      * @return \Zend_Db_Statement_Interface
      */
-    public function modifyColumn($resource, $columnName, $tableName, $columnDefinition)
+    public function modifyColumn($resource, $tableName, $columnDefinition)
     {
         $adapter = $this->resourceConnection->getConnection($resource);
 
         $sql = sprintf(
-            'ALTER TABLE %s MODIFY COLUMN %s %s',
+            'ALTER TABLE %s MODIFY COLUMN %s',
             $adapter->quoteIdentifier($tableName),
-            $adapter->quoteIdentifier($columnName),
             $columnDefinition
         );
 
@@ -206,12 +150,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
                 $type,
                 $adapter->quoteIdentifier($elementName)
             ),
-            $this->getAddElementSQL(
-                Constraint::TYPE,
-                //We need to avoid `PRIMARY` name in modify constraint syntax
-                $elementName === Internal::PRIMARY_NAME ? '' : $adapter->quoteIdentifier($elementName),
-                $constraintDefinition
-            )
+            sprintf('ADD %s', $constraintDefinition)
         );
 
         return $adapter->query($sql);

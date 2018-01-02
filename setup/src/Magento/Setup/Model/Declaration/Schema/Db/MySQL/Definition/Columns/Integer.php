@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
@@ -37,45 +38,47 @@ class Integer implements DbDefinitionProcessorInterface
     private $identity;
 
     /**
-     * @var DefaultDefinition
+     * @var ResourceConnection
      */
-    private $defaultDefinition;
+    private $resourceConnection;
 
     /**
-     * @param Unsigned          $unsigned
-     * @param bool              $boolean
-     * @param Nullable          $nullable
-     * @param Identity          $identity
-     * @param DefaultDefinition $defaultDefinition
+     * @param Unsigned $unsigned
+     * @param bool $boolean
+     * @param Nullable $nullable
+     * @param Identity $identity
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         Unsigned $unsigned,
         Boolean $boolean,
         Nullable $nullable,
         Identity $identity,
-        DefaultDefinition $defaultDefinition
+        ResourceConnection $resourceConnection
     ) {
         $this->unsigned = $unsigned;
         $this->boolean = $boolean;
         $this->nullable = $nullable;
         $this->identity = $identity;
-        $this->defaultDefinition = $defaultDefinition;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer $element
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Integer $column
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $column)
     {
         return sprintf(
-            '%s(%s) %s %s %s %s',
-            $element->getType(),
-            $element->getPadding(),
-            $this->unsigned->toDefinition($element),
-            $this->nullable->toDefinition($element),
-            $this->defaultDefinition->toDefinition($element),
-            $this->identity->toDefinition($element)
+            '%s %s(%s) %s %s %s %s',
+            $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
+            $column->getType(),
+            $column->getPadding(),
+            $this->unsigned->toDefinition($column),
+            $this->nullable->toDefinition($column),
+            $column->getDefault() !== null ?
+                sprintf('DEFAULT %s', (string) intval($column->getDefault())) : '',
+            $this->identity->toDefinition($column)
         );
     }
 

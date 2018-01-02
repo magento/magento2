@@ -21,6 +21,11 @@ class Index extends GenericElement implements
     const TYPE = 'index';
 
     /**
+     * Fulltext index type
+     */
+    const FULLTEXT_INDEX = "fulltext";
+
+    /**
      * @var Table
      */
     private $table;
@@ -31,20 +36,28 @@ class Index extends GenericElement implements
     private $columns;
 
     /**
+     * @var string
+     */
+    private $indexType;
+
+    /**
      * @param string $name
      * @param string $type
-     * @param Table  $table
-     * @param array  $columns
+     * @param Table $table
+     * @param array $columns
+     * @param string $indexType
      */
     public function __construct(
         string $name,
         string $type,
         Table $table,
-        array $columns
+        array $columns,
+        string $indexType
     ) {
         parent::__construct($name, $type);
         $this->table = $table;
         $this->columns = $columns;
+        $this->indexType = $indexType;
     }
 
     /**
@@ -74,13 +87,24 @@ class Index extends GenericElement implements
     {
         return [
             'type' => $this->getType(),
-            'columns' => array_map(
-                function (Column $column) {
-                    return $column->getName();
-                },
-                $this->getColumns()
-            )
+            'columns' => $this->getColumnNames(),
+            'indexType' => $this->getIndexType()
         ];
+    }
+
+    /**
+     * Retrieve array with column names from column objects collections
+     *
+     * @return array
+     */
+    public function getColumnNames()
+    {
+        return array_map(
+            function (Column $column) {
+                return $column->getName();
+            },
+            $this->getColumns()
+        );
     }
 
     /**
@@ -89,5 +113,13 @@ class Index extends GenericElement implements
     public function getElementType()
     {
         return self::TYPE;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIndexType()
+    {
+        return $this->indexType;
     }
 }

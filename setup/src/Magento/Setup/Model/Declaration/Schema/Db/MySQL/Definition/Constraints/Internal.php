@@ -47,24 +47,26 @@ class Internal implements DbDefinitionProcessorInterface
     }
 
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal $element
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal $constraint
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $constraint)
     {
         $adapter = $this->resourceConnection->getConnection(
-            $element->getTable()->getResource()
+            $constraint->getTable()->getResource()
         );
         $columnsList = array_map(
-            function (Column $column) use ($adapter) {
-                return $adapter->quoteIdentifier($column->getName());
+            function ($columnName) use ($adapter) {
+                return $adapter->quoteIdentifier($columnName);
             },
-            $element->getColumns()
+            $constraint->getColumnNames()
         );
+        $isPrimary = $constraint->getType() === 'primary';
 
         return sprintf(
-            '%s (%s)',
-            $element->getType() === 'primary' ? 'PRIMARY KEY' : 'UNIQUE KEY',
+            'CONSTRAINT %s %s (%s)',
+            $isPrimary ? '' : $adapter->quoteIdentifier($constraint->getName()),
+            $isPrimary ? 'PRIMARY KEY' : 'UNIQUE KEY',
             implode(',', $columnsList)
         );
     }

@@ -75,7 +75,8 @@ class CreateTable implements OperationInterface
              * @var ElementInterface $element
              */
             foreach ($elements as $element) {
-                $definition[$type][$element->getName()] = $this->definitionAggregator->toDefinition($element);
+                //Make definition as flat list
+                $definition[$type . $element->getName()] = $this->definitionAggregator->toDefinition($element);
             }
         }
 

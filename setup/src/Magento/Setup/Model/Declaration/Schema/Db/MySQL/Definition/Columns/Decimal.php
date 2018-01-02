@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
@@ -27,36 +28,38 @@ class Decimal implements DbDefinitionProcessorInterface
     private $unsigned;
 
     /**
-     * @var DefaultDefinition
+     * @var ResourceConnection
      */
-    private $defaultDefinition;
+    private $resourceConnection;
 
     /**
-     * @param Nullable          $nullable
-     * @param Unsigned          $unsigned
-     * @param DefaultDefinition $defaultDefinition
+     * @param Nullable $nullable
+     * @param Unsigned $unsigned
+     * @param ResourceConnection $resourceConnection
      */
-    public function __construct(Nullable $nullable, Unsigned $unsigned, DefaultDefinition $defaultDefinition)
+    public function __construct(Nullable $nullable, Unsigned $unsigned, ResourceConnection $resourceConnection)
     {
         $this->nullable = $nullable;
         $this->unsigned = $unsigned;
-        $this->defaultDefinition = $defaultDefinition;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Decimal $element
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Decimal $column
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $column)
     {
         return sprintf(
-            '%s(%s, %s) %s %s %s',
-            $element->getType(),
-            $element->getScale(),
-            $element->getPrecission(),
-            $this->unsigned->toDefinition($element),
-            $this->nullable->toDefinition($element),
-            $this->defaultDefinition->toDefinition($element)
+            '%s %s(%s, %s) %s %s %s',
+            $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
+            $column->getType(),
+            $column->getScale(),
+            $column->getPrecission(),
+            $this->unsigned->toDefinition($column),
+            $this->nullable->toDefinition($column),
+            $column->getDefault() !== null ?
+                sprintf('DEFAULT %s', $column->getDefault()) : ''
         );
     }
 

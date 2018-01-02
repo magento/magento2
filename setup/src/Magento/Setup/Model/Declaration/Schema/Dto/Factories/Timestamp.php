@@ -76,8 +76,6 @@ class Timestamp implements FactoryInterface
             $data['default'] = self::NULL_TIMESTAMP;
         }
 
-        unset($data['nullable']);
-
         return $this->objectManager->create($this->className, $data);
     }
 }

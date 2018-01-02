@@ -47,7 +47,7 @@ return [
   UNIQUE KEY `some_unique_key` (`smallint`,`float`),
   KEY `some_foreign_key_new` (`smallint_main`),
   KEY `some_foreign_key_without_action` (`integer_main`),
-  KEY `speedup_index_renamed` (`tinyint`,`bigint`),
+  KEY `speedup_index_renamed` (`tinyint`,`bigint`) USING BTREE,
   CONSTRAINT `some_foreign_key` FOREIGN KEY (`tinyint`) REFERENCES `reference_table` (`tinyint_ref`) 
 ON DELETE SET NULL,
   CONSTRAINT `some_foreign_key_new` FOREIGN KEY (`smallint_main`) REFERENCES `reference_table` (`smallint_ref`) 

@@ -29,7 +29,7 @@
         </constraint>
         <constraint xsi:type="foreign" name="some_foreign_key" column="smallint" table="test_table" referenceTable="reference_table" referenceColumn="smallint_ref" onDelete="CASCADE" />
         <!--Indexes-->
-        <index name="speedup_index" type="btree">
+        <index name="speedup_index" indexType="btree">
             <column name="bigint" />
         </index>
     </table>

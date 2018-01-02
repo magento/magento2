@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Columns;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Model\Declaration\Schema\Db\DbDefinitionProcessorInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 
@@ -17,14 +18,28 @@ use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 class Date implements DbDefinitionProcessorInterface
 {
     /**
-     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp $element
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @param ResourceConnection $resourceConnection
+     */
+    public function __construct(ResourceConnection $resourceConnection)
+    {
+        $this->resourceConnection = $resourceConnection;
+    }
+
+    /**
+     * @param \Magento\Setup\Model\Declaration\Schema\Dto\Columns\Timestamp $column
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $column)
     {
         return sprintf(
-            '%s',
-            $element->getType()
+            '%s %s',
+            $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
+            $column->getType()
         );
     }
 

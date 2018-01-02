@@ -38,26 +38,25 @@ class ForeignKey implements DbDefinitionProcessorInterface
     }
 
     /**
-     * @param Reference $element
+     * @param Reference $foreignKey
      * @inheritdoc
      */
-    public function toDefinition(ElementInterface $element)
+    public function toDefinition(ElementInterface $foreignKey)
     {
         $adapter = $this->resourceConnection->getConnection(
-            $element->getTable()->getResource()
+            $foreignKey->getTable()->getResource()
         );
+        //CONSTRAINT `fk_name` FOREIGN KEY (`column`) REFERENCES `table` (`column`) option
         /** @TODO: purge records, if the are not satisfied on delete statement */
         $foreignKeySql = sprintf(
-            "%s (%s) REFERENCES %s (%s)",
+            "CONSTRAINT %s %s (%s) REFERENCES %s (%s) %s",
+            $adapter->quoteIdentifier($foreignKey->getName()),
             self::FOREIGN_KEY_NAME,
-            $adapter->quoteIdentifier($element->getColumn()->getName()),
-            $adapter->quoteIdentifier($element->getReferenceTable()->getName()),
-            $adapter->quoteIdentifier($element->getReferenceColumn()->getName())
+            $adapter->quoteIdentifier($foreignKey->getColumn()->getName()),
+            $adapter->quoteIdentifier($foreignKey->getReferenceTable()->getName()),
+            $adapter->quoteIdentifier($foreignKey->getReferenceColumn()->getName()),
+            $foreignKey->getOnDelete() ? sprintf(" ON DELETE %s", $foreignKey->getOnDelete()) : ''
         );
-
-        if ($element->getOnDelete()) {
-            $foreignKeySql .= sprintf(" ON DELETE %s", $element->getOnDelete());
-        }
 
         return $foreignKeySql;
     }

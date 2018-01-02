@@ -905,7 +905,8 @@ class Installer
             }
             $this->logProgress();
         }
-
+        //Before recurring generate schema
+        $this->schemaPersistor->persist($this->schemaListener);
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
             $handlerType = 'schema-recurring';
@@ -922,8 +923,6 @@ class Installer
             }
             $this->logProgress();
         }
-
-        $this->schemaPersistor->persist($this->schemaListener);
     }
 
     /**
