@@ -30,11 +30,11 @@ class ProductViewTest extends GraphQlAbstract
      */
     public function testQueryAllFieldsSimpleProduct()
     {
-        $prductSku = 'simple';
+        $productSku = 'simple';
 
         $query = <<<QUERY
 {
-    products(filter: {sku: {eq: "{$prductSku}"}})
+    products(filter: {sku: {eq: "{$productSku}"}})
     {
         items {
             attribute_set_id
@@ -233,7 +233,7 @@ QUERY;
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get($prductSku, false, null, true);
+        $product = $productRepository->get($productSku, false, null, true);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
         $this->assertEquals(1, count($response['products']['items']));
@@ -252,11 +252,11 @@ QUERY;
     public function testQueryMediaGalleryEntryFieldsSimpleProduct()
     {
 
-        $prductSku = 'simple';
+        $productSku = 'simple';
 
         $query = <<<QUERY
 {
-    products(filter: {sku: {eq: "{$prductSku}"}})
+    products(filter: {sku: {eq: "{$productSku}"}})
     {
         items{
             attribute_set_id
@@ -449,7 +449,7 @@ QUERY;
          * @var ProductRepositoryInterface $productRepository
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get($prductSku, false, null, true);
+        $product = $productRepository->get($productSku, false, null, true);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
         $this->assertEquals(1, count($response['products']['items']));

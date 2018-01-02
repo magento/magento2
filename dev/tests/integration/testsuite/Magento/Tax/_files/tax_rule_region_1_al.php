@@ -18,11 +18,11 @@ $rate = $objectManager->create(\Magento\Tax\Model\Calculation\Rate::class)->setD
 
 /** @var Magento\Framework\Registry $registry */
 $registry = $objectManager->get(\Magento\Framework\Registry::class);
-$registry->unregister('_fixture/Magento_Tax_Model_Calculation_Rate_NY_CA');
-$registry->register('_fixture/Magento_Tax_Model_Calculation_Rate_NY_CA', $rate);
+$registry->unregister('_fixture/Magento_Tax_Model_Calculation_Rate_AL');
+$registry->register('_fixture/Magento_Tax_Model_Calculation_Rate_NY_AL', $rate);
 
 $ruleData = [
-    'code' => 'Test Rule',
+    'code' => 'AL Test Rule',
     'priority' => '0',
     'position' => '0',
     'customer_tax_class_ids' => [3],
