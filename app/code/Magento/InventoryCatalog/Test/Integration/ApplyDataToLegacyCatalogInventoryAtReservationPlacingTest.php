@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
+use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
 use PHPUnit\Framework\TestCase;
@@ -29,9 +31,19 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
     private $legacyStockItemCriteriaFactory;
 
     /**
+     * @var StockStatusCriteriaInterfaceFactory
+     */
+    private $legacyStockStatusCriteriaFactory;
+
+    /**
      * @var StockItemRepositoryInterface
      */
     private $legacyStockItemRepository;
+
+    /**
+     * @var StockStatusRepositoryInterface
+     */
+    private $legactStockStatusRepository;
 
     /**
      * @var ReservationBuilderInterface
@@ -50,7 +62,12 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
         $this->legacyStockItemCriteriaFactory = Bootstrap::getObjectManager()->get(
             StockItemCriteriaInterfaceFactory::class
         );
+        $this->legacyStockStatusCriteriaFactory = Bootstrap::getObjectManager()->get(
+            StockStatusCriteriaInterfaceFactory::class
+        );
+
         $this->legacyStockItemRepository = Bootstrap::getObjectManager()->get(StockItemRepositoryInterface::class);
+        $this->legactStockStatusRepository = Bootstrap::getObjectManager()->get(StockStatusRepositoryInterface::class);
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
@@ -79,6 +96,17 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
         self::assertTrue($legacyStockItem->getIsInStock());
         self::assertEquals(5.5, $legacyStockItem->getQty());
 
+        $legacyStockStatusCriteria = $this->legacyStockStatusCriteriaFactory->create();
+        $legacyStockStatusCriteria->setProductsFilter($productId);
+        $legacyStockStatusCriteria->setScopeFilter($websiteId);
+        $legacyStockStatusItems = $this->legactStockStatusRepository->getList($legacyStockStatusCriteria)->getItems();
+        self::assertCount(1, $legacyStockStatusItems);
+
+        $legacyStockStatusItem = reset($legacyStockStatusItems);
+        self::assertEquals(1, $legacyStockStatusItem->getStockStatus());
+        self::assertEquals(5.5, $legacyStockStatusItem->getQty());
+
+
         $this->appendReservations->execute([
             $this->reservationBuilder->setStockId(1)->setSku('SKU-1')->setQuantity(-2.5)->build()
         ]);
@@ -88,6 +116,12 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
 
         $legacyStockItem = current($legacyStockItems);
         self::assertEquals(3, $legacyStockItem->getQty());
+
+        $legacyStockStatusItems = $this->legactStockStatusRepository->getList($legacyStockStatusCriteria)->getItems();
+        self::assertCount(1, $legacyStockStatusItems);
+
+        $legacyStockStatusItem = current($legacyStockItems);
+        self::assertEquals(3, $legacyStockStatusItem->getQty());
     }
 
     /**
@@ -113,6 +147,16 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
         self::assertTrue($legacyStockItem->getIsInStock());
         self::assertEquals(5.5, $legacyStockItem->getQty());
 
+        $legacyStockStatusCriteria = $this->legacyStockStatusCriteriaFactory->create();
+        $legacyStockStatusCriteria->setProductsFilter($productId);
+        $legacyStockStatusCriteria->setScopeFilter($websiteId);
+        $legacyStockStatusItems = $this->legactStockStatusRepository->getList($legacyStockStatusCriteria)->getItems();
+        self::assertCount(1, $legacyStockStatusItems);
+
+        $legacyStockStatusItem = reset($legacyStockStatusItems);
+        self::assertEquals(1, $legacyStockStatusItem->getStockStatus());
+        self::assertEquals(5.5, $legacyStockStatusItem->getQty());
+
         $this->appendReservations->execute([
             $this->reservationBuilder->setStockId(1)->setSku('SKU-1')->setQuantity(-2.5)->build()
         ]);
@@ -122,5 +166,13 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
 
         $legacyStockItem = current($legacyStockItems);
         self::assertEquals(5.5, $legacyStockItem->getQty());
+
+        $legacyStockStatusItems = $this->legactStockStatusRepository->getList($legacyStockStatusCriteria)->getItems();
+        self::assertCount(1, $legacyStockStatusItems);
+
+        $legacyStockStatusItem = current($legacyStockItems);
+        self::assertEquals(5.5, $legacyStockStatusItem->getQty());
+
+
     }
 }
