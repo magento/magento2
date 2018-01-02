@@ -327,7 +327,8 @@ class Installer
         if (!empty($request[InstallCommand::INPUT_KEY_CLEANUP_DB])) {
             $script[] = ['Cleaning up database...', 'cleanupDb', []];
         }
-        $script[] = ['Installing database schema:', 'installSchema', [$request]];
+        $script[] = ['Installing database schema:', 'declarativeInstallSchema', [$request]];
+        $script[] = ['Installing database schema:', 'installSchema', []];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
@@ -773,12 +774,26 @@ class Installer
     }
 
     /**
+     * Install Magento if declaration mode was enabled
+     *
+     * @param array $request
+     */
+    public function declarativeInstallSchema(array $request)
+    {
+        if (isset($request[InstallCommand::DECLARATION_MODE_KEY]) && $request[InstallCommand::DECLARATION_MODE_KEY]) {
+            /** @var DeclarationInstaller $declarativeInstaller */
+            $declarativeInstaller = $this->objectManagerProvider->get()->get(DeclarationInstaller::class);
+            $declarativeInstaller->installSchema($request);
+        }
+    }
+
+    /**
      * Installs DB schema
      *
      * @param array $request
      * @return void
      */
-    public function installSchema(array $request)
+    public function installSchema()
     {
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
@@ -786,14 +801,7 @@ class Installer
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
-
-        if (isset($request[InstallCommand::DECLARATION_MODE_KEY]) && $request[InstallCommand::DECLARATION_MODE_KEY]) {
-            /** @var DeclarationInstaller $declarativeInstaller */
-            $declarativeInstaller = $this->objectManagerProvider->get()->get(DeclarationInstaller::class);
-            $declarativeInstaller->installSchema($request);
-        } else {
-            $this->handleDBSchemaData($setup, 'schema');
-        }
+        $this->handleDBSchemaData($setup, 'schema');
     }
 
     /**
@@ -866,18 +874,36 @@ class Installer
         $upgradeType = $type . '-upgrade';
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
-        foreach ($moduleNames as $moduleName) {
-            $this->schemaListener->setModuleName($moduleName);
-            $this->log->log("Module '{$moduleName}':");
-            $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
-            $currentVersion = $moduleContextList[$moduleName]->getVersion();
-            // Schema/Data is installed
-            if ($currentVersion !== '') {
-                $status = version_compare($configVer, $currentVersion);
-                if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
+        if ($type !== 'schema') {
+            foreach ($moduleNames as $moduleName) {
+                $this->schemaListener->setModuleName($moduleName);
+                $this->log->log("Module '{$moduleName}':");
+                $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
+                $currentVersion = $moduleContextList[$moduleName]->getVersion();
+                // Schema/Data is installed
+                if ($currentVersion !== '') {
+                    $status = version_compare($configVer, $currentVersion);
+                    if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
+                        $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
+                        if ($upgrader) {
+                            $this->log->logInline("Upgrading $type.. ");
+                            $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
+                        }
+                        if ($type === 'schema') {
+                            $resource->setDbVersion($moduleName, $configVer);
+                        } elseif ($type === 'data') {
+                            $resource->setDataVersion($moduleName, $configVer);
+                        }
+                    }
+                } elseif ($configVer) {
+                    $installer = $this->getSchemaDataHandler($moduleName, $installType);
+                    if ($installer) {
+                        $this->log->logInline("Installing $type... ");
+                        $installer->install($setup, $moduleContextList[$moduleName]);
+                    }
                     $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
                     if ($upgrader) {
-                        $this->log->logInline("Upgrading $type.. ");
+                        $this->log->logInline("Upgrading $type... ");
                         $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                     }
                     if ($type === 'schema') {
@@ -886,27 +912,12 @@ class Installer
                         $resource->setDataVersion($moduleName, $configVer);
                     }
                 }
-            } elseif ($configVer) {
-                $installer = $this->getSchemaDataHandler($moduleName, $installType);
-                if ($installer) {
-                    $this->log->logInline("Installing $type... ");
-                    $installer->install($setup, $moduleContextList[$moduleName]);
-                }
-                $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
-                if ($upgrader) {
-                    $this->log->logInline("Upgrading $type... ");
-                    $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
-                }
-                if ($type === 'schema') {
-                    $resource->setDbVersion($moduleName, $configVer);
-                } elseif ($type === 'data') {
-                    $resource->setDataVersion($moduleName, $configVer);
-                }
+                $this->logProgress();
             }
-            $this->logProgress();
         }
+
         //Before recurring generate schema
-        $this->schemaPersistor->persist($this->schemaListener);
+        //$this->schemaPersistor->persist($this->schemaListener);
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
             $handlerType = 'schema-recurring';

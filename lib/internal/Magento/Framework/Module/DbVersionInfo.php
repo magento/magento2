@@ -74,10 +74,6 @@ class DbVersionInfo
     {
         $errors = [];
         foreach ($this->moduleList->getNames() as $moduleName) {
-            if (!$this->isSchemaUpToDate($moduleName)) {
-                $errors[] = $this->getSchemaInfo($moduleName);
-            }
-
             if (!$this->isDataUpToDate($moduleName)) {
                 $errors[] = $this->getDataInfo($moduleName);
             }

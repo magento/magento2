@@ -18,24 +18,6 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 class InstallSchema implements InstallSchemaInterface
 {
     /**
-     * @var DefaultCategory
-     */
-    private $defaultCategory;
-
-    /**
-     * @deprecated 100.1.0
-     * @return DefaultCategory
-     */
-    private function getDefaultCategory()
-    {
-        if ($this->defaultCategory === null) {
-            $this->defaultCategory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(DefaultCategory::class);
-        }
-        return $this->defaultCategory;
-    }
-
-    /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
