@@ -205,54 +205,54 @@ QUERY;
                             'value' => 4.106501,
                             'currency' => 'USD'
                         ],
-                        'adjustments' => array (
+                        'adjustments' => [
                             0 =>
-                                array (
+                                [
                                     'amount' =>
-                                        array (
+                                        [
                                             'value' => 0.286501,
                                             'currency' => 'USD',
-                                        ),
-                                    'code' => 'tax',
-                                    'description' => 'Included',
-                                ),
-                        )
+                                        ],
+                                        'code' => 'tax',
+                                        'description' => 'Included',
+                                ],
+                        ]
                     ],
                     'regularPrice' => [
                         'amount' => [
                             'value' => 10.750001,
                             'currency' => 'USD'
                         ],
-                        'adjustments' => array (
+                        'adjustments' => [
                             0 =>
-                                array (
+                                [
                                     'amount' =>
-                                        array (
+                                        [
                                             'value' => 0.750001,
                                             'currency' => 'USD',
-                                        ),
-                                    'code' => 'tax',
-                                    'description' => 'Included',
-                                ),
-                        )
+                                        ],
+                                        'code' => 'tax',
+                                        'description' => 'Included',
+                                ],
+                        ]
                     ],
                     'maximalPrice' => [
                         'amount' => [
                             'value' => 4.106501,
                             'currency' => 'USD'
                         ],
-                        'adjustments' => array (
+                        'adjustments' => [
                             0 =>
-                                array (
+                                [
                                     'amount' =>
-                                        array (
+                                        [
                                             'value' => 0.286501,
                                             'currency' => 'USD',
-                                        ),
-                                    'code' => 'tax',
-                                    'description' => 'Included',
-                                ),
-                        )
+                                        ],
+                                        'code' => 'tax',
+                                        'description' => 'Included',
+                                ],
+                        ]
                     ],
                 ]
             ],

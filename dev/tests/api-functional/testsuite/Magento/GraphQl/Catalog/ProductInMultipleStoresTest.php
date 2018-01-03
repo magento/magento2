@@ -68,7 +68,11 @@ QUERY;
         $product->setName($productNameInFixtureStore)->setStoreId($storeId)->save();
         $headerMap = ['Store' => $storeCodeFromFixture];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
-        $this->assertEquals($productNameInFixtureStore, $response['products']['items'][0]['name'], 'Product name in fixture store is invalid.');
+        $this->assertEquals(
+            $productNameInFixtureStore,
+            $response['products']['items'][0]['name'],
+            'Product name in fixture store is invalid.'
+        );
 
         //use case for default storeCode
         $nameInDefaultStore = 'Simple Product';
