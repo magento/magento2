@@ -60,7 +60,7 @@
     <type name="Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\FormatterComposite">
         <arguments>
             <argument name="formatterInstances" xsi:type="array">
-                <item name="productDataGetter" xsi:type="object">Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter\ProductDataGetter</item>
+                <item name="baseModelData" xsi:type="object">Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter\BaseModelData</item>
                 <item name="customAttributes" xsi:type="object">Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter\CustomAttributes</item>
                 <item name="entityIdToId" xsi:type="object">Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter\EntityIdToId</item>
                 <item name="mediaGalleryEntries" xsi:type="object">\Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter\MediaGalleryEntries</item>
