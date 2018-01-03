@@ -87,7 +87,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         try {
             $this->eavResource->save($attribute);
         } catch (\Exception $e) {
-            throw new StateException(__('Cannot save attribute'));
+            throw new StateException(__($e->getMessage()));
         }
         return $attribute;
     }
