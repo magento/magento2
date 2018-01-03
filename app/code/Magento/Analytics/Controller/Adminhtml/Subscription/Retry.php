@@ -28,7 +28,7 @@ class Retry extends Action
     /**
      * @inheritdoc
      */
-    const ADMIN_RESOURSE = 'Magento_Analytics::analytics_settings';
+    const ADMIN_RESOURCE = 'Magento_Analytics::analytics_settings';
 
     /**
      * @param Context $context

@@ -29,7 +29,7 @@ class SignUp extends Action
     /**
      * @inheritdoc
      */
-    const ADMIN_RESOURSE = 'Magento_Analytics::bi_essentials';
+    const ADMIN_RESOURCE = 'Magento_Analytics::bi_essentials';
 
     /**
      * @param Context $context
