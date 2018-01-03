@@ -83,11 +83,11 @@ class Product implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = self::PRODUCT_TYPE_NAME;
+        $typeName = self::PRODUCT_TYPE_NAME;
         return  $this->typeFactory->createInterface(
             [
-                'name' => $reflector->getShortName(),
-                'fields' => $this->getFields($reflector->getShortName()),
+                'name' => $typeName,
+                'fields' => $this->getFields($typeName),
                 'resolveType' => function ($value) {
                     $typeId = $value['type_id'];
                     if (!in_array($typeId, ['simple', 'configurable'])) {
