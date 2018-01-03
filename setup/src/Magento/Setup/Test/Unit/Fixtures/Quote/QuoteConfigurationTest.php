@@ -67,7 +67,7 @@ class QuoteConfigurationTest extends \PHPUnit_Framework_TestCase
                 ['order_configurable_product_count_from'],
                 ['order_big_configurable_product_count_to'],
                 ['order_big_configurable_product_count_from'],
-                ['order_quotes_enable',]
+                ['order_quotes_enable']
             )->willReturn(1);
         $this->assertSame($expectedResult, $this->fixture->load()->getData());
     }
