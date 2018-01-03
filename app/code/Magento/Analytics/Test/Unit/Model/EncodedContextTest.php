@@ -8,9 +8,6 @@ namespace Magento\Analytics\Test\Unit\Model;
 use Magento\Analytics\Model\EncodedContext;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-/**
- * Class EncodedContextTest
- */
 class EncodedContextTest extends \PHPUnit\Framework\TestCase
 {
     /**

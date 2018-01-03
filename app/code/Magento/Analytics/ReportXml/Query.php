@@ -8,8 +8,6 @@ namespace Magento\Analytics\ReportXml;
 use Magento\Framework\DB\Select;
 
 /**
- * Class Query
- *
  * Query object, contains SQL statement, information about connection, query arguments
  */
 class Query implements \JsonSerializable

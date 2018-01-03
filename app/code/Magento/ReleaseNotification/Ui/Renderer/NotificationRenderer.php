@@ -9,8 +9,6 @@ namespace Magento\ReleaseNotification\Ui\Renderer;
 use Magento\Framework\Escaper;
 
 /**
- * Class NotificationRenderer
- *
  * Builds the HTML for the release notification modals
  */
 class NotificationRenderer

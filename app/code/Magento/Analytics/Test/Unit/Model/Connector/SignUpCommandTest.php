@@ -15,9 +15,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Integration\Model\Oauth\Token as IntegrationToken;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class SignUpCommandTest
- */
 class SignUpCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**

@@ -7,9 +7,6 @@ namespace Magento\Analytics\Test\Unit\Model\Connector\Http;
 
 use Magento\Analytics\Model\Connector\Http\JsonConverter;
 
-/**
- * Class JsonConverterTest
- */
 class JsonConverterTest extends \PHPUnit\Framework\TestCase
 {
     public function testConverterContainsHeader()

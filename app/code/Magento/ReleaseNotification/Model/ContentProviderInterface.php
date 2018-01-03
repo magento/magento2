@@ -7,7 +7,7 @@
 namespace Magento\ReleaseNotification\Model;
 
 /**
- * Class ContentProviderInterface
+ * @api
  *
  * Requests the release notification content data from a defined service
  */
@@ -18,29 +18,11 @@ interface ContentProviderInterface
      *
      * Returns received content or FALSE in case of failure.
      *
+     * @param string $version
+     * @param string $edition
+     * @param string $locale
+     *
      * @return string|false
      */
-    public function getContent();
-
-    /**
-     * Returns the current Magento version used to retrieve the release notification content.
-     * Version information after the dash (-) character is removed (ex. -dev or -rc).
-     *
-     * @return string
-     */
-    public function getTargetVersion();
-
-    /**
-     * Returns the Magento edition
-     *
-     * @return string
-     */
-    public function getEdition();
-
-    /**
-     * Returns the admin user's interface locale
-     *
-     * @return string
-     */
-    public function getLocale();
+    public function getContent($version, $edition, $locale);
 }

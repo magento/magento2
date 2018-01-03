@@ -8,8 +8,6 @@ namespace Magento\ReleaseNotification\Model\ContentProvider\Http;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class UrlBuilder
- *
  * Builder to build Url to retrieve the notification content.
  */
 class UrlBuilder

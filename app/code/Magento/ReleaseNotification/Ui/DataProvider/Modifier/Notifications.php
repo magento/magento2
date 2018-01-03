@@ -12,10 +12,11 @@ use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Ui\Component;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Backend\Model\Auth\Session;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class Notifications
- *
  * Modifies the metadata returning to the Release Notification data provider
  */
 class Notifications implements ModifierInterface
@@ -48,21 +49,45 @@ class Notifications implements ModifierInterface
     private $serializer;
 
     /**
+     * @var ProductMetadataInterface
+     */
+    private $productMetadata;
+
+    /**
+     * @var Session
+     */
+    private $session;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ContentProviderInterface $contentProvider
      * @param NotificationRenderer $render
      * @param CacheInterface $cacheStorage
      * @param SerializerInterface $serializer
+     * @param ProductMetadataInterface $productMetadata
+     * @param Session $session
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ContentProviderInterface $contentProvider,
         NotificationRenderer $render,
         CacheInterface $cacheStorage,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        ProductMetadataInterface $productMetadata,
+        Session $session,
+        LoggerInterface $logger
     ) {
         $this->contentProvider = $contentProvider;
         $this->renderer = $render;
         $this->cacheStorage = $cacheStorage;
         $this->serializer = $serializer;
+        $this->productMetadata = $productMetadata;
+        $this->session = $session;
+        $this->logger = $logger;
     }
 
     /**
@@ -83,10 +108,10 @@ class Notifications implements ModifierInterface
         if ($modalContent) {
             $pages = $modalContent['pages'];
             $pageCount = count($pages);
-            $ctr = 1;
+            $counter = 1;
 
             foreach ($pages as $page) {
-                $meta = $this->buildNotificationMeta($meta, $page, $ctr++ == $pageCount);
+                $meta = $this->buildNotificationMeta($meta, $page, $counter++ == $pageCount);
             }
         } else {
             $meta = $this->hideNotification($meta);
@@ -167,14 +192,55 @@ class Notifications implements ModifierInterface
      */
     private function getNotificationContent()
     {
-        $cacheKey = self::$cachePrefix . $this->contentProvider->getTargetVersion() . "-"
-            . $this->contentProvider->getEdition() . "-" . $this->contentProvider->getLocale();
+        $version = $this->getTargetVersion();
+        $edition = $this->productMetadata->getEdition();
+        $locale = $this->session->getUser()->getInterfaceLocale();
+
+        $cacheKey = self::$cachePrefix . $version . "-" . $edition . "-" . $locale;
         $modalContent = $this->cacheStorage->load($cacheKey);
         if ($modalContent === false) {
-            $modalContent = $this->contentProvider->getContent();
+            $modalContent = $this->contentProvider->getContent($version, $edition, $locale);
             $this->cacheStorage->save($modalContent, $cacheKey);
         }
 
-        return !$modalContent ? $modalContent : $this->serializer->unserialize($modalContent);
+        return !$modalContent ? $modalContent : $this->unserializeContent($modalContent);
+    }
+
+    /**
+     * Unserializes the notification modal content to be used for rendering
+     *
+     * @param string $modalContent
+     * @return array|false
+     */
+    private function unserializeContent($modalContent)
+    {
+        $result = false;
+
+        try {
+            $result = $this->serializer->unserialize($modalContent);
+        } catch (\Exception $e) {
+            $this->logger->warning(
+                sprintf(
+                    'Failed to unserialize the release notification content. The error is: %s',
+                    $e->getMessage()
+                )
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns the current Magento version used to retrieve the release notification content.
+     * Version information after the dash (-) character is removed (ex. -dev or -rc).
+     *
+     * @return string
+     */
+    private function getTargetVersion()
+    {
+        $metadataVersion = $this->productMetadata->getVersion();
+        $version = strstr($metadataVersion, '-', true);
+
+        return !$version ? $metadataVersion : $version;
     }
 }

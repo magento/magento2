@@ -9,9 +9,6 @@ use Magento\Analytics\Model\Connector\Http\JsonConverter;
 use Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 
-/**
- * Class ResponseResolverTest
- */
 class ResponseResolverTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetResultHandleResponseSuccess()

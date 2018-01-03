@@ -12,8 +12,6 @@ use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 use Magento\Framework\App\CacheInterface;
 
 /**
- * Class CanViewNotification
- *
  * Dynamic validator for UI release notification, manage UI component visibility.
  * Return true if the logged in user has not seen the notification.
  */

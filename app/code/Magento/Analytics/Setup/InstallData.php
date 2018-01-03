@@ -19,7 +19,6 @@ class InstallData implements InstallDataInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {

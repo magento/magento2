@@ -18,7 +18,7 @@
 "File is not ready yet.","File is not ready yet."
 "Your Base URL has been changed and your reports are being updated. Advanced Reporting will be available once this change has been processed. Please try again later.","Your Base URL has been changed and your reports are being updated. Advanced Reporting will be available once this change has been processed. Please try again later."
 "Failed to synchronize data to the Magento Business Intelligence service. ","Failed to synchronize data to the Magento Business Intelligence service. "
-"<a href=""%1"">Retry Synchronization</a>","<a href=""%1"">Retry Synchronization</a>"
+"Retry Synchronization","Retry Synchronization"
 TestMessage,TestMessage
 "Error message","Error message"
 "Apps and Games","Apps and Games"

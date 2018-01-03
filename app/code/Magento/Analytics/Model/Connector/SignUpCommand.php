@@ -14,8 +14,6 @@ use Magento\Framework\HTTP\ZendClient;
 use Magento\Store\Model\Store;
 
 /**
- * Class SignUpCommand
- *
  * SignUp merchant for Free Tier project
  */
 class SignUpCommand implements CommandInterface

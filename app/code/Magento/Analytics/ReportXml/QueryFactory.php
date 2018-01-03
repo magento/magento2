@@ -10,8 +10,6 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class QueryFactory
- *
  * Creates Query object according to configuration
  * Factory for @see \Magento\Analytics\ReportXml\Query
  */

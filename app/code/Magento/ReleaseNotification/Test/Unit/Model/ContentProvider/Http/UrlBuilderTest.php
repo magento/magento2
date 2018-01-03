@@ -74,6 +74,13 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
                 'locale',
                 'https://content/url/example/version/locale.json'
             ],
+            'no-locale' => [
+                'content/url/example',
+                'version',
+                'edition',
+                '',
+                'https://content/url/example/version/edition.json'
+            ],
             'no-content-url' => [
                 '',
                 'version',

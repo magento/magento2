@@ -9,9 +9,6 @@ use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Connector\Http\JsonConverter;
 use Magento\Analytics\Model\Connector\ResponseHandler\SignUp;
 
-/**
- * Class SignUpTest
- */
 class SignUpTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandleResult()

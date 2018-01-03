@@ -7,15 +7,11 @@
 namespace Magento\ReleaseNotification\Model\ContentProvider\Http;
 
 use Magento\ReleaseNotification\Model\ContentProviderInterface;
-use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Backend\Model\Auth\Session;
 use Magento\Setup\Module\I18n\Locale;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\HTTP\ClientInterface;
 
 /**
- * Class HttpContentProvider
- *
  * Requests the release notification content data via an HTTP call to a REST API
  */
 class HttpContentProvider implements ContentProviderInterface
@@ -24,21 +20,6 @@ class HttpContentProvider implements ContentProviderInterface
      * @var ClientInterface
      */
     private $httpClient;
-
-    /**
-     * @var ProductMetadataInterface
-     */
-    private $productMetadata;
-
-    /**
-     * @var Session
-     */
-    private $session;
-
-    /**
-     * @var ResponseResolver
-     */
-    private $responseResolver;
 
     /**
      * @var LoggerInterface
@@ -53,24 +34,15 @@ class HttpContentProvider implements ContentProviderInterface
     /**
      * HttpContentProvider constructor.
      * @param ClientInterface $httpClient
-     * @param ProductMetadataInterface $productMetadata
-     * @param Session $session
-     * @param ResponseResolver $responseResolver
      * @param UrlBuilder $urlBuilder
      * @param LoggerInterface $logger
      */
     public function __construct(
         ClientInterface $httpClient,
-        ProductMetadataInterface $productMetadata,
-        Session $session,
-        ResponseResolver $responseResolver,
         UrlBuilder $urlBuilder,
         LoggerInterface $logger
     ) {
         $this->httpClient = $httpClient;
-        $this->productMetadata = $productMetadata;
-        $this->session = $session;
-        $this->responseResolver = $responseResolver;
         $this->urlBuilder = $urlBuilder;
         $this->logger = $logger;
     }
@@ -78,17 +50,13 @@ class HttpContentProvider implements ContentProviderInterface
     /**
      * @inheritdoc
      */
-    public function getContent()
+    public function getContent($version, $edition, $locale)
     {
         $result = false;
 
-        $locale = $this->session->getUser()->getInterfaceLocale();
-        $version = $this->getTargetVersion();
-        $edition = $this->productMetadata->getEdition();
-
         try {
             $result = $this->retrieveContent($version, $edition, $locale);
-            if (!$result && ($locale !== Locale::DEFAULT_SYSTEM_LOCALE)) {
+            if (!$result) {
                 $result = $this->retrieveContent($version, $edition, Locale::DEFAULT_SYSTEM_LOCALE);
                 if (!$result) {
                     $result = $this->retrieveContent($version, '', 'default');
@@ -97,53 +65,13 @@ class HttpContentProvider implements ContentProviderInterface
         } catch (\Exception $e) {
             $this->logger->warning(
                 sprintf(
-                    'Failed to retrieve the release notification content. The respose is: %s',
-                    !empty($response) ? $response : 'Response body is empty.'
+                    'Failed to retrieve the release notification content. The response is: %s',
+                    !empty($result) ? $result : 'Response body is empty.'
                 )
             );
         }
 
         return $result;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getTargetVersion()
-    {
-        $metadataVersion = $this->productMetadata->getVersion();
-        $version = strstr($metadataVersion, '-', true);
-
-        return !$version ? $metadataVersion : $version;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getEdition()
-    {
-        return $this->productMetadata->getEdition();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getLocale()
-    {
-        return $this->session->getUser()->getInterfaceLocale();
-    }
-
-    /**
-     * Returns the response body from the HTTP client
-     *
-     * @param $url
-     *
-     * @return string
-     */
-    private function getResponse($url)
-    {
-        $this->httpClient->get($url);
-        return $this->httpClient->getBody();
     }
 
     /**
@@ -157,8 +85,24 @@ class HttpContentProvider implements ContentProviderInterface
     private function retrieveContent($version, $edition, $locale)
     {
         $url = $this->urlBuilder->getUrl($version, $edition, $locale);
-        return empty($url)
-            ? false
-            : $this->responseResolver->getResult($this->getResponse($url), $this->httpClient->getStatus());
+        return empty($url) ? false : $this->getResponse($url);
+    }
+
+    /**
+     * Returns the response body from the HTTP client
+     *
+     * @param $url
+     * @return string
+     */
+    private function getResponse($url)
+    {
+        $this->httpClient->get($url);
+        $responseBody = $this->httpClient->getBody();
+
+        if ($this->httpClient->getStatus() === 200 && !empty($responseBody)) {
+            return $responseBody;
+        }
+
+        return false;
     }
 }

@@ -13,8 +13,6 @@ use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
- * Class NotificationDataProvider
- *
  * Data Provider for the Release Notifications UI component.
  */
 class NotificationDataProvider implements DataProviderInterface
