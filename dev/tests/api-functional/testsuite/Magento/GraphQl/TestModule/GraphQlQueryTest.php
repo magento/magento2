@@ -23,7 +23,6 @@ class GraphQlQueryTest extends GraphQlAbstract
     {
         item_id
         name
-        integer_list
     }
 }
 QUERY;

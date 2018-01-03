@@ -372,7 +372,6 @@ QUERY;
                 ],
                 $configurableProductLinkArray['price']
             );
-
         }
     }
 
