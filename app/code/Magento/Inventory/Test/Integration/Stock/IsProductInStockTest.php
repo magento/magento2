@@ -63,6 +63,9 @@ class IsProductInStockTest extends TestCase
         $this->removeIndexData->execute([10]);
     }
 
+    /**
+     * We broke transaction during indexation so we need to clean db state manually
+     */
     protected function tearDown()
     {
         $this->removeIndexData->execute([10]);

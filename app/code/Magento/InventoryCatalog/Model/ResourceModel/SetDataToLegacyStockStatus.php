@@ -52,8 +52,8 @@ class SetDataToLegacyStockStatus
         $connection->update(
             $this->resourceConnection->getTableName('cataloginventory_stock_status'),
             [
-                StockStatusInterface::STOCK_STATUS => $status,
                 StockStatusInterface::QTY => $quantity,
+                StockStatusInterface::STOCK_STATUS => $status,
             ],
             [
                 StockStatusInterface::PRODUCT_ID . ' = ?' => $productId,

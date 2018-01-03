@@ -49,9 +49,6 @@ class ReservationPlacingDuringBackItemQtyTest extends TestCase
      */
     private $stockManagement;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
