@@ -164,19 +164,4 @@ class Compiled implements ConfigInterface
     {
         return $this->preferences;
     }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated
-     */
-    private function getSerializer()
-    {
-        if (null === $this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(Serialize::class);
-        }
-        return $this->serializer;
-    }
 }
