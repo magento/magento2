@@ -275,12 +275,30 @@ class DataGrid extends Grid
     {
         $this->search($filter);
         $rowItem = $this->getRow($filter);
+        $this->waitUntilRowIsVisible($rowItem);
         if ($rowItem->isVisible()) {
             $rowItem->find($this->selectItem)->click();
         } else {
             throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
         $this->waitLoader();
+    }
+
+    /**
+     * Wait for row is visible in the grid.
+     *
+     * @param \Magento\Mtf\Client\ElementInterface $rowItem
+     * @return bool
+     */
+    private function waitUntilRowIsVisible($rowItem)
+    {
+        $locator = $rowItem->getLocator()['value'];
+        $strategy = $rowItem->getLocator()['using'];
+        $this->_rootElement->waitUntil(
+            function () use ($locator, $strategy) {
+                return $this->browser->find($locator, $strategy)->isVisible();
+            }
+        );
     }
 
     /**
