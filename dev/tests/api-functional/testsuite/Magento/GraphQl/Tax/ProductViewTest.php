@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Tax\Model\Config;
 
@@ -28,6 +29,12 @@ class ProductViewTest extends GraphQlAbstract
      * @var ProductRepositoryInterface
      */
     private $productRepository;
+
+    /** @var \Magento\Tax\Model\Calculation\Rate[] */
+    private $fixtureTaxRates;
+
+    /** @var \Magento\Tax\Model\Calculation\Rule[] */
+    private $fixtureTaxRules;
 
     /**
      * @var StoreManagerInterface
@@ -57,6 +64,8 @@ class ProductViewTest extends GraphQlAbstract
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             1
         );
+        $this->getFixtureTaxRates();
+        $this->getFixtureTaxRules();
 
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
         $config = $this->objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
@@ -82,6 +91,16 @@ class ProductViewTest extends GraphQlAbstract
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             1
         );
+        $taxRules = $this->getFixtureTaxRules();
+        if (count($taxRules)) {
+            $taxRates = $this->getFixtureTaxRates();
+            foreach ($taxRules as $taxRule) {
+                $taxRule->delete();
+            }
+            foreach ($taxRates as $taxRate) {
+                $taxRate->delete();
+            }
+        }
 
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
         $config = $this->objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
@@ -167,15 +186,7 @@ class ProductViewTest extends GraphQlAbstract
 }
 QUERY;
 
-        // get customer ID token
-        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
-        $customerTokenService = $this->objectManager->create(
-            \Magento\Integration\Api\CustomerTokenServiceInterface::class
-        );
-        $customerToken = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
-
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $response = $this->graphQlQuery($query);
 
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($productSku, false, null, true);
@@ -184,6 +195,49 @@ QUERY;
         $this->assertEquals(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
+    }
+
+    /**
+     * Get tax rates created in Magento\Tax\_files\tax_rule_region_1_al.php
+     *
+     * @return \Magento\Tax\Model\Calculation\Rate[]
+     */
+    private function getFixtureTaxRates()
+    {
+        if ($this->fixtureTaxRates === null) {
+            $this->fixtureTaxRates = [];
+            if ($this->getFixtureTaxRules()) {
+                $taxRateIds = (array)$this->getFixtureTaxRules()[0]->getRates();
+                foreach ($taxRateIds as $taxRateId) {
+                    /** @var \Magento\Tax\Model\Calculation\Rate $taxRate */
+                    $taxRate = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rate::class);
+                    $this->fixtureTaxRates[] = $taxRate->load($taxRateId);
+                }
+            }
+        }
+        return $this->fixtureTaxRates;
+    }
+
+    /**
+     * Get tax rule created in Magento\Tax\_files\tax_rule_region_1_al.php
+     *
+     * @return \Magento\Tax\Model\Calculation\Rule[]
+     */
+    private function getFixtureTaxRules()
+    {
+        if ($this->fixtureTaxRules === null) {
+            $this->fixtureTaxRules = [];
+            $taxRuleCodes = ['AL Test Rule'];
+            foreach ($taxRuleCodes as $taxRuleCode) {
+                /** @var \Magento\Tax\Model\Calculation\Rule $taxRule */
+                $taxRule = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rule::class);
+                $taxRule->load($taxRuleCode, 'code');
+                if ($taxRule->getId()) {
+                    $this->fixtureTaxRules[] = $taxRule;
+                }
+            }
+        }
+        return $this->fixtureTaxRules;
     }
 
     /**
