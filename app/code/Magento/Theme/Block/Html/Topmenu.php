@@ -235,7 +235,13 @@ class Topmenu extends Template implements IdentityInterface
 
             if ($childLevel == 0 && $outermostClass) {
                 $outermostClassCode = ' class="' . $outermostClass . '" ';
-                $child->setClass($outermostClass);
+                $current_class = $child->getClass();
+
+                if (empty($current_class)) {
+                    $child->setClass($outermostClass);
+                } else {
+                    $child->setClass($current_class . ' ' . $outermostClass);
+                }
             }
 
             if (count($colBrakes) && $colBrakes[$counter]['colbrake']) {
