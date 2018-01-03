@@ -54,7 +54,7 @@ class ReservationPlacingDuringBackItemQtyTest extends TestCase
      */
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->get(Indexer::class);
+        $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
         $this->indexer->load(SourceItemIndexer::INDEXER_ID);
 
         $this->getProductQtyInStock = Bootstrap::getObjectManager()->get(GetProductQuantityInStockInterface::class);

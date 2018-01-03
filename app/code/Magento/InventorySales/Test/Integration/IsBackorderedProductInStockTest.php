@@ -58,15 +58,15 @@ class IsBackorderedProductInStockTest extends TestCase
 
     protected function setUp()
     {
-        $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
-        $this->stockItemRepository = Bootstrap::getObjectManager()->create(StockItemRepositoryInterface::class);
-        $this->stockItemCriteriaFactory = Bootstrap::getObjectManager()->create(
+        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+        $this->stockItemRepository = Bootstrap::getObjectManager()->get(StockItemRepositoryInterface::class);
+        $this->stockItemCriteriaFactory = Bootstrap::getObjectManager()->get(
             StockItemCriteriaInterfaceFactory::class
         );
-        $this->sourceItemRepository = Bootstrap::getObjectManager()->create(SourceItemRepositoryInterface::class);
-        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
-        $this->sourceItemsSave = Bootstrap::getObjectManager()->create(SourceItemsSaveInterface::class);
-        $this->isProductInStock = Bootstrap::getObjectManager()->create(IsProductInStockInterface::class);
+        $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+        $this->sourceItemsSave = Bootstrap::getObjectManager()->get(SourceItemsSaveInterface::class);
+        $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
     }
 
     /**

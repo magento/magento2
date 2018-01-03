@@ -59,7 +59,7 @@ class IsProductInStockTest extends TestCase
         $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
         $this->isProductInStock = Bootstrap::getObjectManager()->get(IsProductInStockInterface::class);
 
-        $this->removeIndexData = Bootstrap::getObjectManager()->create(RemoveIndexData::class);
+        $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
         $this->removeIndexData->execute([10]);
     }
 

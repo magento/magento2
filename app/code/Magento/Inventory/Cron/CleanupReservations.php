@@ -9,6 +9,9 @@ namespace Magento\Inventory\Cron;
 
 use Magento\Inventory\Model\CleanupReservationsInterface;
 
+/**
+ * Cron job precessing of reservations cleanup
+ */
 class CleanupReservations
 {
     /**
@@ -16,6 +19,9 @@ class CleanupReservations
      */
     private $cleanupReservations;
 
+    /**
+     * @param CleanupReservationsInterface $cleanupReservations
+     */
     public function __construct(CleanupReservationsInterface $cleanupReservations)
     {
         $this->cleanupReservations = $cleanupReservations;
@@ -26,7 +32,7 @@ class CleanupReservations
      *
      * @return void
      */
-    public function execute(): void
+    public function execute()
     {
         $this->cleanupReservations->execute();
     }

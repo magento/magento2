@@ -56,13 +56,13 @@ class GetProductQuantityInStockTest extends TestCase
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
-        $this->cleanupReservations = Bootstrap::getObjectManager()->create(CleanupReservationsInterface::class);
+        $this->cleanupReservations = Bootstrap::getObjectManager()->get(CleanupReservationsInterface::class);
 
-        $this->getProductQtyInStock = Bootstrap::getObjectManager()->create(
+        $this->getProductQtyInStock = Bootstrap::getObjectManager()->get(
             GetProductQuantityInStockInterface::class
         );
 
-        $this->removeIndexData = Bootstrap::getObjectManager()->create(RemoveIndexData::class);
+        $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
         $this->removeIndexData->execute([10]);
     }
 

@@ -65,7 +65,7 @@ class SetToZeroLegacyStockItemAtSourceItemsDeleteTest extends TestCase
         );
         $this->legacyStockItemRepository = Bootstrap::getObjectManager()->get(StockItemRepositoryInterface::class);
 
-        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
         $this->sourceItemRepository = Bootstrap::getObjectManager()->get(SourceItemRepositoryInterface::class);
 
         $this->sourceItemsDelete = Bootstrap::getObjectManager()->get(SourceItemsDeleteInterface::class);

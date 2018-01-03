@@ -37,7 +37,7 @@ class SourceItemIndexerTest extends TestCase
 
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->get(IndexerInterface::class);
+        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
         $this->indexer->load(SourceItemIndexer::INDEXER_ID);
 
         $this->getProductQuantityInStock = Bootstrap::getObjectManager()
