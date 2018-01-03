@@ -10,7 +10,7 @@ namespace Magento\InventoryCatalog\Test\Integration;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Indexer\Model\Indexer;
 use Magento\Inventory\Indexer\SourceItem\SourceItemIndexer;
-use Magento\Inventory\Model\ReservationCleanupInterface;
+use Magento\Inventory\Model\CleanupReservationsInterface;
 use Magento\Inventory\Test\Integration\Indexer\RemoveIndexData;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
@@ -54,7 +54,7 @@ class ApplyDataToLegacyStockItemAtReservationPlacingTest extends TestCase
     private $appendReservations;
 
     /**
-     * @var ReservationCleanupInterface
+     * @var CleanupReservationsInterface
      */
     private $reservationCleanup;
 
@@ -83,7 +83,7 @@ class ApplyDataToLegacyStockItemAtReservationPlacingTest extends TestCase
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
-        $this->reservationCleanup = Bootstrap::getObjectManager()->create(ReservationCleanupInterface::class);
+        $this->reservationCleanup = Bootstrap::getObjectManager()->create(CleanupReservationsInterface::class);
 
         $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
         $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
