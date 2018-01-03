@@ -219,18 +219,18 @@ class AttributeOptionProviderTest extends \PHPUnit_Framework_TestCase
         $this->attributeResource->expects($this->exactly(7))
             ->method('getTable')
             ->will(
-            $this->returnValueMap(
-                [
-                    ['catalog_product_super_attribute', 'catalog_product_super_attribute value'],
-                    ['catalog_product_entity', 'catalog_product_entity value'],
-                    ['catalog_product_super_link', 'catalog_product_super_link value'],
-                    ['eav_attribute', 'eav_attribute value'],
-                    ['catalog_product_entity', 'catalog_product_entity value'],
-                    ['catalog_product_super_attribute_label', 'catalog_product_super_attribute_label value'],
-                    ['eav_attribute_option', 'eav_attribute_option value']
-                ]
-            )
-        );
+                $this->returnValueMap(
+                    [
+                        ['catalog_product_super_attribute', 'catalog_product_super_attribute value'],
+                        ['catalog_product_entity', 'catalog_product_entity value'],
+                        ['catalog_product_super_link', 'catalog_product_super_link value'],
+                        ['eav_attribute', 'eav_attribute value'],
+                        ['catalog_product_entity', 'catalog_product_entity value'],
+                        ['catalog_product_super_attribute_label', 'catalog_product_super_attribute_label value'],
+                        ['eav_attribute_option', 'eav_attribute_option value']
+                    ]
+                )
+            );
 
         $source = $this->getMockBuilder(AbstractSource::class)
             ->disableOriginalConstructor()
