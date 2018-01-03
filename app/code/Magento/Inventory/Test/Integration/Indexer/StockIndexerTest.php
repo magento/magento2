@@ -32,7 +32,7 @@ class StockIndexerTest extends TestCase
 
     protected function setUp()
     {
-        $this->indexer = Bootstrap::getObjectManager()->get(IndexerInterface::class);
+        $this->indexer = Bootstrap::getObjectManager()->create(IndexerInterface::class);
         $this->indexer->load(StockIndexer::INDEXER_ID);
 
         $this->getProductQuantityInStock = Bootstrap::getObjectManager()

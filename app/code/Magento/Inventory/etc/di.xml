@@ -103,7 +103,7 @@
             <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
         </arguments>
     </type>
-    <type name="\Magento\Inventory\Model\ResourceModel\Reservation\ReservationCleanup">
+    <type name="\Magento\Inventory\Model\ResourceModel\Reservation\CleanupReservations">
         <arguments>
             <argument name="groupConcatMaxLen" xsi:type="number">2000</argument>
         </arguments>
@@ -114,7 +114,7 @@
     <preference for="Magento\InventoryApi\Api\AppendReservationsInterface" type="Magento\Inventory\Model\Reservation\Command\AppendReservations"/>
     <preference for="Magento\InventoryApi\Api\ReservationBuilderInterface" type="Magento\Inventory\Model\Reservation\ReservationBuilder"/>
     <preference for="Magento\InventoryApi\Api\Data\ReservationInterface" type="Magento\Inventory\Model\Reservation"/>
-    <preference for="Magento\Inventory\Model\ReservationCleanupInterface" type="Magento\Inventory\Model\ResourceModel\Reservation\ReservationCleanup"/>
+    <preference for="Magento\Inventory\Model\CleanupReservationsInterface" type="Magento\Inventory\Model\ResourceModel\Reservation\CleanupReservations"/>
     <type name="Magento\InventoryApi\Api\AssignSourcesToStockInterface">
         <plugin name="assignSourcesToStockIndexerInvalidate" type="Magento\Inventory\Model\StockSourceLink\Plugin\AssignSourcesToStock" />
     </type>
