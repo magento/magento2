@@ -70,6 +70,7 @@ class ApplyDataToLegacyStockItemAtReservationPlacingTest extends TestCase
 
     protected function setUp()
     {
+        $this->markTestIncomplete('https://github.com/magento-engcom/msi/issues/368');
         $this->indexer = Bootstrap::getObjectManager()->get(Indexer::class);
         $this->indexer->load(SourceItemIndexer::INDEXER_ID);
         $this->indexer->reindexAll();
