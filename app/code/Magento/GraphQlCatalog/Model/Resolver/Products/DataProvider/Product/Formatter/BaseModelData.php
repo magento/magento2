@@ -12,7 +12,7 @@ use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatte
 /**
  * Grabs the data from the product
  */
-class ProductDataGetter implements FormatterInterface
+class BaseModelData implements FormatterInterface
 {
     /**
      * Get data from product
