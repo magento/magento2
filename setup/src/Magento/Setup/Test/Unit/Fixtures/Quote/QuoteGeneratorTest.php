@@ -214,9 +214,6 @@ class QuoteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('getSku')->willReturnOnConsecutiveCalls('sku1', 'sku2', 'sku3', 'sku3', 'sku4', 'sku4');
         $product->expects($this->atLeastOnce())
             ->method('getName')->willReturnOnConsecutiveCalls('name1', 'name2', 'name3', 'name4');
-        $this->serializer->expects($this->atLeastOnce())
-            ->method('serialize')
-            ->willReturn('a:1:{i:10;i:1;}');
         $this->optionRepository->expects($this->atLeastOnce())
             ->method('getList')
             ->withConsecutive(['sku3'], ['sku4'])
