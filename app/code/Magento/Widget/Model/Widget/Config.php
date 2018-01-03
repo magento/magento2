@@ -8,7 +8,7 @@ namespace Magento\Widget\Model\Widget;
 /**
  * Widgets Insertion Plugin Config for Editor HTML Element
  */
-class Config
+class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 {
     /**
      * @var \Magento\Framework\View\Asset\Repository
@@ -73,25 +73,67 @@ class Config
      * Return config settings for widgets insertion plugin based on editor element config
      *
      * @param \Magento\Framework\DataObject $config
+     * @return \Magento\Framework\DataObject
+     */
+    public function getConfig($config)
+    {
+        $settings = $this->getPluginSettings($config);
+        return $config->addData($settings);
+    }
+
+    /**
+     * Return config settings for widgets insertion plugin based on editor element config
+     *
+     * @param \Magento\Framework\DataObject $config
      * @return array
      */
     public function getPluginSettings($config)
     {
-        $url = $this->_assetRepo->getUrl(
-            'mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js'
-        );
-
-        $errorImageUrl = $this->_assetRepo->getUrl('Magento_Widget::error.png');
-
-        $settings = [
-            'widget_plugin_src' => $url,
-            'widget_placeholders' => $this->_widgetFactory->create()->getPlaceholderImageUrls(),
-            'widget_window_url' => $this->getWidgetWindowUrl($config),
-            'widget_types' => $this->getAvailableWidgets($config),
-            'widget_error_image_url' => $errorImageUrl
+        $widgetWysiwyg = [
+            [
+                'name' => 'magentowidget',
+                'src' => $this->getWysiwygJsPluginSrc(),
+                'options' => [
+                    'window_url' => $this->getWidgetWindowUrl($config),
+                    'types' => $this->getAvailableWidgets($config),
+                    'error_image_url' => $this->getErrorImageUrl(),
+                    'placeholders' => $this->getWidgetPlaceholderImageUrls(),
+                ],
+            ]
         ];
 
-        return $settings;
+        $configPlugins = (array) $config->getData('plugins');
+
+        $widgetConfig['plugins'] = array_merge($configPlugins, $widgetWysiwyg);
+        return $widgetConfig;
+    }
+
+    /**
+     * Return list of available placeholders for widget
+     *
+     * @return array
+     */
+    public function getWidgetPlaceholderImageUrls()
+    {
+        return $this->_widgetFactory->create()->getPlaceholderImageUrls();
+    }
+
+    /**
+     * Return url to error image
+     * @return string
+     */
+    public function getErrorImageUrl()
+    {
+        return $this->_assetRepo->getUrl('Magento_Widget::error.png');
+    }
+
+    /**
+     * Return url to wysiwyg plugin
+     * @return string
+     */
+    public function getWysiwygJsPluginSrc()
+    {
+        return $this->_assetRepo->getUrl('mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js');
     }
 
     /**
@@ -150,7 +192,7 @@ class Config
      * @param \Magento\Framework\DataObject $config Editor element config
      * @return array
      */
-    private function getAvailableWidgets($config)
+    public function getAvailableWidgets($config)
     {
         if (!$config->hasData('widget_types')) {
             $result = [];
