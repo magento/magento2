@@ -15,6 +15,7 @@ class ConfigurableProductViewTest extends GraphQlAbstract
 {
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_with_category_and_weight.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testQueryConfigurableProductLinks()
     {
