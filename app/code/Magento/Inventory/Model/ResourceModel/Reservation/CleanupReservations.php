@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\Inventory\Model\ResourceModel\Reservation;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Inventory\Model\ReservationCleanupInterface;
+use Magento\Inventory\Model\CleanupReservationsInterface;
 use Magento\Inventory\Setup\Operation\CreateReservationTable;
 use Magento\InventoryApi\Api\Data\ReservationInterface;
 
 /**
  * @inheritdoc
  */
-class ReservationCleanup implements ReservationCleanupInterface
+class CleanupReservations implements CleanupReservationsInterface
 {
     /**
      * @var ResourceConnection

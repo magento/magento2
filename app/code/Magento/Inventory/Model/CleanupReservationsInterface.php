@@ -13,7 +13,7 @@ namespace Magento\Inventory\Model;
  *
  * @api
  */
-interface ReservationCleanupInterface
+interface CleanupReservationsInterface
 {
     /**
      * Clean reservation table to prevent overloading.
