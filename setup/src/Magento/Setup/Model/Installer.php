@@ -874,7 +874,7 @@ class Installer
         $upgradeType = $type . '-upgrade';
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
-        if ($type !== 'schema') {
+        #if ($type !== 'schema') {
             foreach ($moduleNames as $moduleName) {
                 $this->schemaListener->setModuleName($moduleName);
                 $this->log->log("Module '{$moduleName}':");
@@ -914,10 +914,10 @@ class Installer
                 }
                 $this->logProgress();
             }
-        }
+        #}
 
         //Before recurring generate schema
-        //$this->schemaPersistor->persist($this->schemaListener);
+        $this->schemaPersistor->persist($this->schemaListener);
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
             $handlerType = 'schema-recurring';

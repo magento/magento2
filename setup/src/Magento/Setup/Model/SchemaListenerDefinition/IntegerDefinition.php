@@ -24,12 +24,31 @@ class IntegerDefinition implements DefinitionConverterInterface
     ];
 
     /**
+     * @var BooleanDefinition
+     */
+    private $booleanDefinition;
+
+    /**
+     * IntegerDefinition constructor.
+     * @param BooleanDefinition $booleanDefinition
+     */
+    public function __construct(BooleanDefinition $booleanDefinition)
+    {
+        $this->booleanDefinition = $booleanDefinition;
+    }
+
+    /**
      * @inheritdoc
      */
     public function convertToDefinition(array $definition)
     {
         if ($definition['type'] === 'integer') {
             $definition['type'] = 'int';
+        }
+
+        if (isset($definition['padding']) && $definition['padding'] == 1) {
+            $definition['type'] = 'boolean';
+            return $this->booleanDefinition->convertToDefinition($definition);
         }
 
         return [
@@ -39,7 +58,7 @@ class IntegerDefinition implements DefinitionConverterInterface
             'unsigned' => $definition['unsigned'] ?? false,
             'nullable' => $definition['nullable'] ?? true,
             'identity' => $definition['identity'] ?? false,
-            'default' => $definition['default'] ?? null,
+            'default' => isset($definition['default']) ? (int) $definition['default'] : null,
             'primary' => $definition['primary'] ?? false
         ];
     }

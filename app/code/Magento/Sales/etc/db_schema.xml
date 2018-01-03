@@ -1374,37 +1374,37 @@
         <column xsi:type="smallint" name="store_id" padding="6" unsigned="true" nullable="true" identity="false"/>
         <column xsi:type="varchar" name="order_status" nullable="false" length="50"/>
         <column xsi:type="int" name="orders_count" padding="11" unsigned="false" nullable="false" identity="false"
-                default="'0'"/>
+                default="0"/>
         <column xsi:type="decimal" name="total_qty_ordered" scale="12" precission="4" unsigned="false" nullable="false"
-                default="'0.0000'"/>
+                default="0.0000"/>
         <column xsi:type="decimal" name="total_qty_invoiced" scale="12" precission="4" unsigned="false" nullable="false"
-                default="'0.0000'"/>
+                default="0.0000"/>
         <column xsi:type="decimal" name="total_income_amount" scale="12" precission="4" unsigned="false"
-                nullable="false" default="'0.0000'"/>
+                nullable="false" default="0.0000"/>
         <column xsi:type="decimal" name="total_revenue_amount" scale="12" precission="4" unsigned="false"
-                nullable="false" default="'0.0000'"/>
+                nullable="false" default="0.0000"/>
         <column xsi:type="decimal" name="total_profit_amount" scale="12" precission="4" unsigned="false"
-                nullable="false" default="'0.0000'"/>
+                nullable="false" default="0.0000"/>
         <column xsi:type="decimal" name="total_invoiced_amount" scale="12" precission="4" unsigned="false"
-                nullable="false" default="'0.0000'"/>
+                nullable="false" default="0.0000"/>
         <column xsi:type="decimal" name="total_canceled_amount" scale="12" precission="4" unsigned="false"
-                nullable="false" default="'0.0000'"/>
+                nullable="false" default="0.0000"/>
         <column xsi:type="decimal" name="total_paid_amount" scale="12" precission="4" unsigned="false" nullable="false"
-                default="'0.0000'"/>
+                default="0.0000"/>
         <column xsi:type="decimal" name="total_refunded_amount" scale="12" precission="4" unsigned="false"
-                nullable="false" default="'0.0000'"/>
+                nullable="false" default="0.0000"/>
         <column xsi:type="decimal" name="total_tax_amount" scale="12" precission="4" unsigned="false" nullable="false"
-                default="'0.0000'"/>
+                default="0.0000"/>
         <column xsi:type="decimal" name="total_tax_amount_actual" scale="12" precission="4" unsigned="false"
-                nullable="false" default="'0.0000'"/>
+                nullable="false" default="0.0000"/>
         <column xsi:type="decimal" name="total_shipping_amount" scale="12" precission="4" unsigned="false"
-                nullable="false" default="'0.0000'"/>
+                nullable="false" default="0.0000"/>
         <column xsi:type="decimal" name="total_shipping_amount_actual" scale="12" precission="4" unsigned="false"
-                nullable="false" default="'0.0000'"/>
+                nullable="false" default="0.0000"/>
         <column xsi:type="decimal" name="total_discount_amount" scale="12" precission="4" unsigned="false"
-                nullable="false" default="'0.0000'"/>
+                nullable="false" default="0.0000"/>
         <column xsi:type="decimal" name="total_discount_amount_actual" scale="12" precission="4" unsigned="false"
-                nullable="false" default="'0.0000'"/>
+                nullable="false" default="0.0000"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="id"/>
         </constraint>

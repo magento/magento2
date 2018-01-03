@@ -34,7 +34,7 @@ class DecimalDefinition implements DefinitionConverterInterface
             'precission' => $definition['scale'] ?? self::DEFAULT_SCALE,
             'unsigned' => $definition['unsigned'] ?? false,
             'nullable' => $definition['nullable'] ?? true,
-            'default' => $definition['default'] ?? null,
+            'default' => isset($definition['default']) ? (int) $definition['default'] : null,
             'primary' => $definition['primary'] ?? false
         ];
     }

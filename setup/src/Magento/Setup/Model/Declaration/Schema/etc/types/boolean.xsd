@@ -11,5 +11,6 @@
     <xs:complexType name="boolean">
         <xs:attributeGroup ref="baseColumn" />
         <xs:attribute name="default" type="xs:boolean" />
+        <xs:attribute name="nullable" type="xs:boolean" />
     </xs:complexType>
 </xs:schema>

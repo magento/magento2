@@ -158,7 +158,7 @@
         <column xsi:type="varchar" name="order_status" nullable="false" length="50"/>
         <column xsi:type="float" name="percent" scale="10" precission="0" unsigned="false" nullable="true"/>
         <column xsi:type="int" name="orders_count" padding="11" unsigned="true" nullable="false" identity="false"
-                default="'0'"/>
+                default="0"/>
         <column xsi:type="float" name="tax_base_amount_sum" scale="10" precission="0" unsigned="false" nullable="true"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="id"/>
