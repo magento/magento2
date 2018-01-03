@@ -49,9 +49,6 @@ class ReservationPlacingDuringRevertProductsSaleTest extends TestCase
      */
     private $stockManagement;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp()
     {
         $this->indexer = Bootstrap::getObjectManager()->get(Indexer::class);

@@ -49,6 +49,9 @@ class SourceItemIndexerTest extends TestCase
         $this->getSourceItemId = Bootstrap::getObjectManager()->get(GetSourceItemId::class);
     }
 
+    /**
+     * We broke transaction during indexation so we need to clean db state manually
+     */
     protected function tearDown()
     {
         $this->removeIndexData->execute([10, 20, 30]);

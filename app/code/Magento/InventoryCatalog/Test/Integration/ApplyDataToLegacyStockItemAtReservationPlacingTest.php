@@ -8,18 +8,26 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Test\Integration;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
-use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
+use Magento\Indexer\Model\Indexer;
+use Magento\Inventory\Indexer\SourceItem\SourceItemIndexer;
+use Magento\Inventory\Model\ReservationCleanupInterface;
+use Magento\Inventory\Test\Integration\Indexer\RemoveIndexData;
 use Magento\InventoryApi\Api\ReservationBuilderInterface;
 use Magento\InventoryApi\Api\AppendReservationsInterface;
+use Magento\InventoryCatalog\Api\DefaultStockProviderInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 
-class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
+class ApplyDataToLegacyStockItemAtReservationPlacingTest extends TestCase
 {
+    /**
+     * @var Indexer
+     */
+    private $indexer;
+
     /**
      * @var ProductRepositoryInterface
      */
@@ -31,19 +39,9 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
     private $legacyStockItemCriteriaFactory;
 
     /**
-     * @var StockStatusCriteriaInterfaceFactory
-     */
-    private $legacyStockStatusCriteriaFactory;
-
-    /**
      * @var StockItemRepositoryInterface
      */
     private $legacyStockItemRepository;
-
-    /**
-     * @var StockStatusRepositoryInterface
-     */
-    private $legactStockStatusRepository;
 
     /**
      * @var ReservationBuilderInterface
@@ -55,22 +53,49 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
      */
     private $appendReservations;
 
+    /**
+     * @var ReservationCleanupInterface
+     */
+    private $reservationCleanup;
+
+    /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    /**
+     * @var RemoveIndexData
+     */
+    private $removeIndexData;
+
     protected function setUp()
     {
+        $this->indexer = Bootstrap::getObjectManager()->get(Indexer::class);
+        $this->indexer->load(SourceItemIndexer::INDEXER_ID);
+        $this->indexer->reindexAll();
+
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
 
         $this->legacyStockItemCriteriaFactory = Bootstrap::getObjectManager()->get(
             StockItemCriteriaInterfaceFactory::class
         );
-        $this->legacyStockStatusCriteriaFactory = Bootstrap::getObjectManager()->get(
-            StockStatusCriteriaInterfaceFactory::class
-        );
-
         $this->legacyStockItemRepository = Bootstrap::getObjectManager()->get(StockItemRepositoryInterface::class);
-        $this->legactStockStatusRepository = Bootstrap::getObjectManager()->get(StockStatusRepositoryInterface::class);
 
         $this->reservationBuilder = Bootstrap::getObjectManager()->get(ReservationBuilderInterface::class);
         $this->appendReservations = Bootstrap::getObjectManager()->get(AppendReservationsInterface::class);
+        $this->reservationCleanup = Bootstrap::getObjectManager()->create(ReservationCleanupInterface::class);
+
+        $this->defaultStockProvider = Bootstrap::getObjectManager()->get(DefaultStockProviderInterface::class);
+        $this->removeIndexData = Bootstrap::getObjectManager()->get(RemoveIndexData::class);
+    }
+
+    /**
+     * We broke transaction during indexation so we need to clean db state manually
+     */
+    protected function tearDown()
+    {
+        $this->removeIndexData->execute([$this->defaultStockProvider->getId()]);
+        $this->reservationCleanup->execute();
     }
 
     /**
@@ -96,32 +121,61 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
         self::assertTrue($legacyStockItem->getIsInStock());
         self::assertEquals(5.5, $legacyStockItem->getQty());
 
-        $legacyStockStatusCriteria = $this->legacyStockStatusCriteriaFactory->create();
-        $legacyStockStatusCriteria->setProductsFilter($productId);
-        $legacyStockStatusCriteria->setScopeFilter($websiteId);
-        $legacyStockStatusItems = $this->legactStockStatusRepository->getList($legacyStockStatusCriteria)->getItems();
-        self::assertCount(1, $legacyStockStatusItems);
-
-        $legacyStockStatusItem = reset($legacyStockStatusItems);
-        self::assertEquals(1, $legacyStockStatusItem->getStockStatus());
-        self::assertEquals(5.5, $legacyStockStatusItem->getQty());
-
-
         $this->appendReservations->execute([
-            $this->reservationBuilder->setStockId(1)->setSku('SKU-1')->setQuantity(-2.5)->build()
+            $this->reservationBuilder->setStockId(1)->setSku($productSku)->setQuantity(-2.5)->build()
         ]);
 
         $legacyStockItems = $this->legacyStockItemRepository->getList($legacyStockItemCriteria)->getItems();
         self::assertCount(1, $legacyStockItems);
 
         $legacyStockItem = current($legacyStockItems);
+        self::assertEquals(1, $legacyStockItem->getIsInStock());
         self::assertEquals(3, $legacyStockItem->getQty());
 
-        $legacyStockStatusItems = $this->legactStockStatusRepository->getList($legacyStockStatusCriteria)->getItems();
-        self::assertCount(1, $legacyStockStatusItems);
+        $this->appendReservations->execute([
+            // unreserved units for cleanup
+            $this->reservationBuilder->setStockId(1)->setSku($productSku)->setQuantity(2.5)->build(),
+        ]);
+    }
 
-        $legacyStockStatusItem = current($legacyStockItems);
-        self::assertEquals(3, $legacyStockStatusItem->getQty());
+    /**
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoDataFixture ../../../../app/code/Magento/InventoryCatalog/Test/_files/source_items_on_default_source.php
+     * @magentoConfigFixture current_store cataloginventory/options/can_subtract 1
+     */
+    public function testApplyDataIfCanSubtractOptionIsEnabledAndProductBecameOutOfStock()
+    {
+        $productSku = 'SKU-1';
+        $product = $this->productRepository->get($productSku);
+        $productId = $product->getId();
+        $websiteId = 0;
+
+        /** @var StockItemCriteriaInterface $legacyStockItemCriteria */
+        $legacyStockItemCriteria = $this->legacyStockItemCriteriaFactory->create();
+        $legacyStockItemCriteria->setProductsFilter($productId);
+        $legacyStockItemCriteria->setScopeFilter($websiteId);
+        $legacyStockItems = $this->legacyStockItemRepository->getList($legacyStockItemCriteria)->getItems();
+        self::assertCount(1, $legacyStockItems);
+
+        $legacyStockItem = reset($legacyStockItems);
+        self::assertTrue($legacyStockItem->getIsInStock());
+        self::assertEquals(5.5, $legacyStockItem->getQty());
+
+        $this->appendReservations->execute([
+            $this->reservationBuilder->setStockId(1)->setSku($productSku)->setQuantity(-5.5)->build()
+        ]);
+
+        $legacyStockItems = $this->legacyStockItemRepository->getList($legacyStockItemCriteria)->getItems();
+        self::assertCount(1, $legacyStockItems);
+
+        $legacyStockItem = current($legacyStockItems);
+        self::assertEquals(0, $legacyStockItem->getIsInStock());
+        self::assertEquals(0, $legacyStockItem->getQty());
+
+        $this->appendReservations->execute([
+            // unreserved units for cleanup
+            $this->reservationBuilder->setStockId(1)->setSku($productSku)->setQuantity(5.5)->build(),
+        ]);
     }
 
     /**
@@ -147,32 +201,20 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingTest extends TestCase
         self::assertTrue($legacyStockItem->getIsInStock());
         self::assertEquals(5.5, $legacyStockItem->getQty());
 
-        $legacyStockStatusCriteria = $this->legacyStockStatusCriteriaFactory->create();
-        $legacyStockStatusCriteria->setProductsFilter($productId);
-        $legacyStockStatusCriteria->setScopeFilter($websiteId);
-        $legacyStockStatusItems = $this->legactStockStatusRepository->getList($legacyStockStatusCriteria)->getItems();
-        self::assertCount(1, $legacyStockStatusItems);
-
-        $legacyStockStatusItem = reset($legacyStockStatusItems);
-        self::assertEquals(1, $legacyStockStatusItem->getStockStatus());
-        self::assertEquals(5.5, $legacyStockStatusItem->getQty());
-
         $this->appendReservations->execute([
-            $this->reservationBuilder->setStockId(1)->setSku('SKU-1')->setQuantity(-2.5)->build()
+            $this->reservationBuilder->setStockId(1)->setSku($productSku)->setQuantity(-2.5)->build()
         ]);
 
         $legacyStockItems = $this->legacyStockItemRepository->getList($legacyStockItemCriteria)->getItems();
         self::assertCount(1, $legacyStockItems);
 
         $legacyStockItem = current($legacyStockItems);
+        self::assertEquals(1, $legacyStockItem->getIsInStock());
         self::assertEquals(5.5, $legacyStockItem->getQty());
 
-        $legacyStockStatusItems = $this->legactStockStatusRepository->getList($legacyStockStatusCriteria)->getItems();
-        self::assertCount(1, $legacyStockStatusItems);
-
-        $legacyStockStatusItem = current($legacyStockItems);
-        self::assertEquals(5.5, $legacyStockStatusItem->getQty());
-
-
+        $this->appendReservations->execute([
+            // unreserved units for cleanup
+            $this->reservationBuilder->setStockId(1)->setSku($productSku)->setQuantity(2.5)->build(),
+        ]);
     }
 }

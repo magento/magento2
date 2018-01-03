@@ -41,9 +41,10 @@ class ApplyDataToLegacyStockItem
     /**
      * @param string $sku
      * @param float $quantity
+     * @param int $status
      * @return void
      */
-    public function execute(string $sku, float $quantity)
+    public function execute(string $sku, float $quantity, int $status)
     {
         $productId = $this->getProductIdsBySkus->execute([$sku])[$sku];
 
@@ -52,6 +53,7 @@ class ApplyDataToLegacyStockItem
             $this->resourceConnection->getTableName('cataloginventory_stock_item'),
             [
                 StockItemInterface::QTY => new \Zend_Db_Expr(sprintf('%s + %s', StockItemInterface::QTY, $quantity)),
+                StockItemInterface::IS_IN_STOCK => $status,
             ],
             [
                 StockItemInterface::PRODUCT_ID . ' = ?' => $productId,

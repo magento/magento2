@@ -82,11 +82,16 @@ class ApplyDataToLegacyCatalogInventoryAtReservationPlacingPlugin
                 if ($this->defaultStockProvider->getId() !== $reservation->getStockId()) {
                     continue;
                 }
-                $this->applyDataToLegacyStockItem->execute($reservation->getSku(), (float)$reservation->getQuantity());
+                $status = (int)$this->isProductInStock->execute($reservation->getSku(), $reservation->getStockId());
+                $this->applyDataToLegacyStockItem->execute(
+                    $reservation->getSku(),
+                    (float)$reservation->getQuantity(),
+                    $status
+                );
                 $this->applyDataToLegacyStockStatus->execute(
                     $reservation->getSku(),
                     (float)$reservation->getQuantity(),
-                    (int)$this->isProductInStock->execute($reservation->getSku(), $reservation->getStockId())
+                    $status
                 );
             }
         }
