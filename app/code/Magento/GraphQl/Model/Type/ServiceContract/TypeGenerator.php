@@ -17,8 +17,6 @@ use Magento\Framework\GraphQl\Type\Definition\TypeInterface;
 
 /**
  * Translate web API service contract layer from array-style schema to GraphQL types
- *
- * @api
  */
 class TypeGenerator
 {
