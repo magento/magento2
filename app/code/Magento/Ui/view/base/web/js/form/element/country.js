@@ -28,7 +28,7 @@ define([
          * @param {String} field
          */
         filter: function (value, field) {
-            var result;
+            var result, defaultCountry;
 
             if (!field) { //validate field, if we are on update
                 field = this.filterBy.field;
@@ -46,6 +46,19 @@ define([
 
             this.setOptions(result);
             this.reset();
+
+			if(!this.value()){
+                _.each(result, function (item) {
+                    var defaultValue = item['is_default'];
+                    if (defaultValue) {
+                        if(defaultValue.includes(value)){
+                            defaultCountry = item.value;
+                            return;
+                        }
+			        }
+			    });
+                this.value(defaultCountry);
+            }
         }
     });
 });

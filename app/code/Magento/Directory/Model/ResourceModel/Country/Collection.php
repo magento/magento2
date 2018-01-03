@@ -66,6 +66,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @since 100.1.0
      */
     protected $countriesWithNotRequiredStates;
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
 
     /**
      * Initialize dependencies.
@@ -80,6 +84,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\App\Helper\AbstractHelper $helperData
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $countriesWithNotRequiredStates
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
@@ -96,6 +101,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\App\Helper\AbstractHelper $helperData,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $countriesWithNotRequiredStates = [],
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
@@ -107,6 +113,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->_countryFactory = $countryFactory;
         $this->_arrayUtils = $arrayUtils;
         $this->helperData = $helperData;
+        $this->storeManager = $storeManager;
         $this->countriesWithNotRequiredStates = $countriesWithNotRequiredStates;
     }
 
@@ -273,6 +280,15 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $sort = [$name => $foregroundCountry] + $sort;
         }
         $isRegionVisible = (bool)$this->helperData->isShowNonRequiredState();
+        $defaultCountry = [];
+        foreach ($this->storeManager->getWebsites() as $website) {
+            $defaultCountryConfig = $this->_scopeConfig->getValue(
+                \Magento\Directory\Helper\Data::XML_PATH_DEFAULT_COUNTRY,
+                ScopeInterface::SCOPE_WEBSITES,
+                $website
+            );
+            $defaultCountry[$defaultCountryConfig][] = $website->getId();
+        }
         $options = [];
         foreach ($sort as $label => $value) {
             $options = $this->addForegroundCountriesToOptionArray($emptyLabel, $options);
@@ -284,6 +300,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             }
             if ($this->helperData->isZipCodeOptional($value)) {
                 $option['is_zipcode_optional'] = true;
+            }
+            if (isset($defaultCountry[$value])) {
+                $option['is_default'] = $defaultCountry[$value];
             }
             $options[] = $option;
         }
