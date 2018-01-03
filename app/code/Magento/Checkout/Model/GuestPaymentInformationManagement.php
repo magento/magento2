@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 
@@ -52,12 +54,18 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     private $logger;
 
     /**
+     * @var ResourceConnection
+     */
+    private $connectionPull;
+
+    /**
      * @param \Magento\Quote\Api\GuestBillingAddressManagementInterface   $billingAddressManagement
      * @param \Magento\Quote\Api\GuestPaymentMethodManagementInterface    $paymentMethodManagement
      * @param \Magento\Quote\Api\GuestCartManagementInterface             $cartManagement
      * @param \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory                     $quoteIdMaskFactory
      * @param CartRepositoryInterface                                     $cartRepository
+     * @param ResourceConnection|null                                     $connectionPull
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -66,7 +74,8 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\GuestCartManagementInterface $cartManagement,
         \Magento\Checkout\Api\PaymentInformationManagementInterface $paymentInformationManagement,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        ResourceConnection $connectionPull = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -74,6 +83,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $this->paymentInformationManagement = $paymentInformationManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->cartRepository = $cartRepository;
+        $this->connectionPull = $connectionPull ?: ObjectManager::getInstance()->get(ResourceConnection::class);
     }
 
     /**
@@ -85,20 +95,33 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
-        $this->savePaymentInformation($cartId, $email, $paymentMethod, $billingAddress);
+        $salesConnection = $this->connectionPull->getConnection('sales');
+        $checkoutConnection = $this->connectionPull->getConnection('checkout');
+        $salesConnection->beginTransaction();
+        $checkoutConnection->beginTransaction();
+
         try {
-            $orderId = $this->cartManagement->placeOrder($cartId);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            throw new CouldNotSaveException(
-                __($e->getMessage()),
-                $e
-            );
+            $this->savePaymentInformation($cartId, $email, $paymentMethod, $billingAddress);
+            try {
+                $orderId = $this->cartManagement->placeOrder($cartId);
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                throw new CouldNotSaveException(
+                    __($e->getMessage()),
+                    $e
+                );
+            } catch (\Exception $e) {
+                $this->getLogger()->critical($e);
+                throw new CouldNotSaveException(
+                    __('An error occurred on the server. Please try to place the order again.'),
+                    $e
+                );
+            }
+            $salesConnection->commit();
+            $checkoutConnection->commit();
         } catch (\Exception $e) {
-            $this->getLogger()->critical($e);
-            throw new CouldNotSaveException(
-                __('An error occurred on the server. Please try to place the order again.'),
-                $e
-            );
+            $salesConnection->rollBack();
+            $checkoutConnection->rollBack();
+            throw $e;
         }
 
         return $orderId;

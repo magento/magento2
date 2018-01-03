@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
@@ -254,7 +254,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Apply attribute filter to facet collection
      *
      * @param string $field
-     * @param null $condition
+     * @param null|string|array $condition
      * @return $this
      */
     public function addFieldToFilter($field, $condition = null)
@@ -265,22 +265,21 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $this->getSearchCriteriaBuilder();
         $this->getFilterBuilder();
-        if (!is_array($condition) || !in_array(key($condition), ['from', 'to'])) {
+        if (is_array($condition)
+            && in_array(key($condition), ['from', 'to'], true)
+        ) {
+            if (!empty($condition['from'])) {
+                $this->addFieldToFilter("{$field}.from", $condition['from']);
+            }
+            if (!empty($condition['to'])) {
+                $this->addFieldToFilter("{$field}.to", $condition['to']);
+            }
+        } else {
             $this->filterBuilder->setField($field);
             $this->filterBuilder->setValue($condition);
             $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
-        } else {
-            if (!empty($condition['from'])) {
-                $this->filterBuilder->setField("{$field}.from");
-                $this->filterBuilder->setValue($condition['from']);
-                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
-            }
-            if (!empty($condition['to'])) {
-                $this->filterBuilder->setField("{$field}.to");
-                $this->filterBuilder->setValue($condition['to']);
-                $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
-            }
         }
+
         return $this;
     }
 
