@@ -83,7 +83,7 @@ class Product implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = new \ReflectionClass($this);
+        $reflector = self::PRODUCT_TYPE_NAME;
         return  $this->typeFactory->createInterface(
             [
                 'name' => $reflector->getShortName(),
