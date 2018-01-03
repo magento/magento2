@@ -13,6 +13,7 @@ namespace Magento\InventoryApi\Api;
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
+ * @deprecated
  */
 interface AssignSourcesToStockInterface
 {
