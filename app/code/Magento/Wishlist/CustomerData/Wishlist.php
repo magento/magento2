@@ -123,6 +123,8 @@ class Wishlist implements SectionSourceInterface
         $product = $wishlistItem->getProduct();
         return [
             'image' => $this->getImageData($product),
+            'product_sku' => $product->getSku(),
+            'product_id' => $product->getId(),
             'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),
             'product_name' => $product->getName(),
             'product_price' => $this->block->getProductPriceHtml(
