@@ -8,7 +8,6 @@ namespace Magento\AdvancedSearch\Model;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Search\Model\QueryInterface;
-use Magento\Search\Model\EngineResolver;
 
 class SuggestedQueries implements SuggestedQueriesInterface
 {
