@@ -87,7 +87,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
     public function testGetContentFailure()
     {
         $version = '2.3.5';
-        $edition = 'Enterprise';
+        $edition = 'Community';
         $locale = 'fr_FR';
         $url = 'https://content.url.example/'. $version . '/' . $edition . '/' . $locale . '.json';
 
@@ -109,7 +109,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
     public function testGetContentSuccessOnLocaleDefault()
     {
         $version = '2.3.1';
-        $edition = 'Enterprise';
+        $edition = 'Community';
         $locale = 'fr_FR';
         $urlLocale = 'https://content.url.example/'. $version . '/' . $edition . '/' . $locale . '.json';
         $urlDefaultLocale = 'https://content.url.example/2.3.0/'. $version . '/' . $edition . '/en_US.json';
