@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Elasticsearch\Block\Adminhtml\System\Config\Elasticsearch5;
+
 /**
  * Elasticsearch 5x test connection block
  * @codeCoverageIgnore
