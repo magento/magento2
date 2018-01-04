@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Elasticsearch\Block\Adminhtml\System\Config;
+namespace Magento\Elasticsearch\Block\Adminhtml\System\Config\Elasticsearch5;
 /**
  * Elasticsearch 5x test connection block
  * @codeCoverageIgnore
  */
-class Elasticsearch5TestConnection extends \Magento\AdvancedSearch\Block\Adminhtml\System\Config\TestConnection
+class TestConnection extends \Magento\AdvancedSearch\Block\Adminhtml\System\Config\TestConnection
 {
     /**
      * {@inheritdoc}

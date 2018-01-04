@@ -59,14 +59,13 @@ class Adapter implements AdapterInterface
         Mapper $mapper,
         ResponseFactory $responseFactory,
         AggregationBuilder $aggregationBuilder,
-        \Magento\Elasticsearch\SearchAdapter\QueryContainerFactory $queryContainerFactory = null
+        \Magento\Elasticsearch\SearchAdapter\QueryContainerFactory $queryContainerFactory
     ) {
         $this->connectionManager = $connectionManager;
         $this->mapper = $mapper;
         $this->responseFactory = $responseFactory;
         $this->aggregationBuilder = $aggregationBuilder;
-        $this->queryContainerFactory = $queryContainerFactory
-            ?: ObjectManager::getInstance()->get(\Magento\Elasticsearch\SearchAdapter\QueryContainerFactory::class);
+        $this->queryContainerFactory = $queryContainerFactory;
     }
 
     /**
