@@ -7,9 +7,7 @@ namespace Magento\Framework\Search\Adapter\Mysql;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\CatalogSearch\Model\ResourceModel\EngineInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
-use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Search\Model\EngineResolver;
 use Magento\TestFramework\Helper\Bootstrap;
