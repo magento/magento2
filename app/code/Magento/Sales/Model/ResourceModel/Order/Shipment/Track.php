@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Shipment;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\ResourceModel\EntityAbstract as SalesResource;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Sales\Model\Spi\ShipmentTrackResourceInterface;
@@ -74,7 +75,7 @@ class Track extends SalesResource implements ShipmentTrackResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -86,9 +87,14 @@ class Track extends SalesResource implements ShipmentTrackResourceInterface
         parent::_beforeSave($object);
         $errors = $this->validator->validate($object);
         if (!empty($errors)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __("Cannot save track:\n%1", implode("\n", $errors))
             );
+        }
+
+        if ($object->getShipment()->getOrder()->getId() != $object->getOrderId()) {
+            $errorMessage = 'Shipment with requested ID %1 doesn\'t correspond with Order with requested ID %2.';
+            throw new LocalizedException(__($errorMessage, $object->getParentId(), $object->getOrderId()));
         }
 
         return $this;
