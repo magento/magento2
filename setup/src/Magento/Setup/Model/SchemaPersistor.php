@@ -193,19 +193,17 @@ class SchemaPersistor
      */
     private function persistModule(\SimpleXMLElement $simpleXmlElementDom, $path)
     {
-        if (strpos($path, 'magento2ee') !== false) {
-            $dom = new \DOMDocument('1.0');
-            $dom->preserveWhiteSpace = false;
-            $dom->formatOutput = true;
-            $dom->loadXML($simpleXmlElementDom->asXML());
-            file_put_contents(
-                $path,
-                str_replace(
-                    ' xmlns:xsi="xsi"', //reokace xmlns, as we do not need it for xsi namespace
-                    '',
-                    $dom->saveXML()
-                )
-            );
-        }
+        $dom = new \DOMDocument('1.0');
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;
+        $dom->loadXML($simpleXmlElementDom->asXML());
+        file_put_contents(
+            $path,
+            str_replace(
+                ' xmlns:xsi="xsi"', //reokace xmlns, as we do not need it for xsi namespace
+                '',
+                $dom->saveXML()
+            )
+        );
     }
 }
