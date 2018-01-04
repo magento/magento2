@@ -7,8 +7,6 @@
 namespace Magento\ReleaseNotification\Model;
 
 /**
- * @api
- *
  * Requests the release notification content data from a defined service
  */
 interface ContentProviderInterface

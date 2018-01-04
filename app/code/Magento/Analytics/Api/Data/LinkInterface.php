@@ -6,8 +6,6 @@
 namespace Magento\Analytics\Api\Data;
 
 /**
- * @api
- *
  * Represents link with collected data and initialized vector for decryption.
  */
 interface LinkInterface
