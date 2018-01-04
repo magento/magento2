@@ -19,10 +19,10 @@
 
         <xs:sequence />
 
-        <xs:attribute name="table" type="xs:string" use="required" />
-        <xs:attribute name="column" type="xs:string" use="required" />
-        <xs:attribute name="referenceColumn" type="xs:string" use="required" />
-        <xs:attribute name="referenceTable" type="xs:string" use="required" />
+        <xs:attribute name="table" type="xs:string" />
+        <xs:attribute name="column" type="xs:string" />
+        <xs:attribute name="referenceColumn" type="xs:string" />
+        <xs:attribute name="referenceTable" type="xs:string" />
         <xs:attribute name="onDelete" type="referenceOptionsType"  />
 
         <xs:attributeGroup ref="baseConstraint" />

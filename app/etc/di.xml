@@ -1467,6 +1467,9 @@
                 <item name="date" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\DateDefinition</item>
                 <item name="boolean" xsi:type="object">Magento\Setup\Model\SchemaListenerDefinition\BooleanDefinition</item>
             </argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="staging" xsi:type="object">Magento\Setup\Model\SchemaListenerHandlers\StagingHandler</item>
+            </argument>
         </arguments>
     </type>
 </config>

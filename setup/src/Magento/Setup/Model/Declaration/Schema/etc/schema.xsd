@@ -8,6 +8,7 @@
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <!--Types-->
+    <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/name.xsd" />
     <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/decimals/decimal.xsd" />
     <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/decimals/float.xsd" />
     <xs:include schemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/types/decimals/double.xsd" />

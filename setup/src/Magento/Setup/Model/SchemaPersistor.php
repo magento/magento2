@@ -123,11 +123,16 @@ class SchemaPersistor
             foreach ($tableData['indexes'] as $indexName => $indexData) {
                 $domIndex = $table->addChild('index');
                 $domIndex->addAttribute('name', $indexName);
-                $domIndex->addAttribute('indexType', $indexData['indexType']);
 
-                foreach ($indexData['columns'] as $column) {
-                    $columnXml = $domIndex->addChild('column');
-                    $columnXml->addAttribute('name', $column);
+                if (isset($indexData['disabled']) && $indexData['disabled']) {
+                    $domIndex->addAttribute('disabled', true);
+                } else {
+                    $domIndex->addAttribute('indexType', $indexData['indexType']);
+
+                    foreach ($indexData['columns'] as $column) {
+                        $columnXml = $domIndex->addChild('column');
+                        $columnXml->addAttribute('name', $column);
+                    }
                 }
             }
         }
@@ -161,6 +166,11 @@ class SchemaPersistor
                         $constraintDom = $table->addChild('constraint');
                         $constraintDom->addAttribute('xsi:type', $constraintType, 'xsi');
                         $constraintDom->addAttribute('name', $name);
+                        $constraintData['columns'] = $constraintData['columns'] ?? [];
+
+                        if (isset($constraintData['disabled'])) {
+                            $constraintDom->addAttribute('disabled', (bool) $constraintData['disabled']);
+                        }
 
                         foreach ($constraintData['columns'] as $column) {
                             $columnXml = $constraintDom->addChild('column');
@@ -183,10 +193,19 @@ class SchemaPersistor
      */
     private function persistModule(\SimpleXMLElement $simpleXmlElementDom, $path)
     {
-        $dom = new \DOMDocument('1.0');
-        $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
-        $dom->loadXML($simpleXmlElementDom->asXML());
-        file_put_contents($path, $dom->saveXML());
+        if (strpos($path, 'magento2ee') !== false) {
+            $dom = new \DOMDocument('1.0');
+            $dom->preserveWhiteSpace = false;
+            $dom->formatOutput = true;
+            $dom->loadXML($simpleXmlElementDom->asXML());
+            file_put_contents(
+                $path,
+                str_replace(
+                    ' xmlns:xsi="xsi"', //reokace xmlns, as we do not need it for xsi namespace
+                    '',
+                    $dom->saveXML()
+                )
+            );
+        }
     }
 }

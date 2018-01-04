@@ -15,11 +15,12 @@
         </xs:annotation>
 
         <xs:sequence>
-            <xs:element name="column" type="indexColumnType" maxOccurs="unbounded" />
+            <xs:element name="column" type="indexColumnType" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
 
         <xs:attribute name="indexType" type="indexType" />
-        <xs:attribute name="name" type="xs:string" />
+        <xs:attribute name="name" type="nameType" />
+        <xs:attribute name="disabled" type="xs:boolean" />
     </xs:complexType>
 
     <xs:complexType name="indexColumnType">

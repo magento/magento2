@@ -46,7 +46,7 @@ class IntegerDefinition implements DefinitionConverterInterface
             $definition['type'] = 'int';
         }
 
-        if (isset($definition['padding']) && $definition['padding'] == 1) {
+        if (isset($definition['length']) && (int) $definition['length'] === 1) {
             $definition['type'] = 'boolean';
             return $this->booleanDefinition->convertToDefinition($definition);
         }
@@ -58,7 +58,7 @@ class IntegerDefinition implements DefinitionConverterInterface
             'unsigned' => $definition['unsigned'] ?? false,
             'nullable' => $definition['nullable'] ?? true,
             'identity' => $definition['identity'] ?? false,
-            'default' => isset($definition['default']) ? (int) $definition['default'] : null,
+            'default' => isset($definition['default']) && $definition['default'] !== false ? (int) $definition['default'] : null,
             'primary' => $definition['primary'] ?? false
         ];
     }

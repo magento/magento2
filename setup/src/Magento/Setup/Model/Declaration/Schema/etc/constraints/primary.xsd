@@ -18,7 +18,7 @@
         </xs:annotation>
 
         <xs:sequence>
-            <xs:element name="column" type="constraintColumnType" maxOccurs="unbounded" />
+            <xs:element name="column" type="constraintColumnType" maxOccurs="unbounded" minOccurs="0" />
         </xs:sequence>
 
         <xs:attributeGroup ref="baseConstraint" />

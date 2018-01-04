@@ -8,6 +8,7 @@ namespace Magento\Setup\Model;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Setup\Model\SchemaListenerDefinition\DefinitionConverterInterface;
+use Magento\Setup\Model\SchemaListenerHandlers\SchemaListenerHandlerInterface;
 
 /**
  * Listen for all changes and record them in order to reuse later
@@ -15,9 +16,25 @@ use Magento\Setup\Model\SchemaListenerDefinition\DefinitionConverterInterface;
 class SchemaListener
 {
     /**
+     * Ignore all ddl queries
+     */
+    const IGNORE_ON = true;
+
+    /**
+     * Disable ignore mode
+     */
+    const IGNORE_OFF = false;
+    /**
      * @var array
      */
     private $tables = [];
+
+    /**
+     * This flag allows us to ignore some DDL operations
+     *
+     * @var bool
+     */
+    private $ignore = self::IGNORE_OFF;
 
     /**
      * @var array
@@ -57,11 +74,18 @@ class SchemaListener
     private $definitionMappers;
 
     /**
-     * @param array $definitionMappers
+     * @var SchemaListenerHandlerInterface[]
      */
-    public function __construct(array $definitionMappers)
+    private $handlers;
+
+    /**
+     * @param array $definitionMappers
+     * @param array $handlers
+     */
+    public function __construct(array $definitionMappers, array $handlers)
     {
         $this->definitionMappers = $definitionMappers;
+        $this->handlers = $handlers;
     }
 
     /**
@@ -70,9 +94,13 @@ class SchemaListener
      */
     public function dropForeignKey($tableName, $fkName)
     {
-//        $this->tables[$this->moduleName][$tableName]['constraints']['foreign'][$fkName] = [
-//            'disabled' => 1,
-//        ];
+        if ($this->ignore) {
+            return;
+        }
+
+        $this->tables[$this->moduleName][$tableName]['constraints']['foreign'][$fkName] = [
+            'disabled' => 1,
+        ];
     }
 
     /**
@@ -99,24 +127,25 @@ class SchemaListener
      * @param string $tableName
      * @param string $columnName
      * @param array $definition
+     * @param string $primaryKeyName
      * @return array
      */
-    private function addPrimaryKeyIfExists($tableName, $columnName, $definition)
+    private function addPrimaryKeyIfExists($tableName, $columnName, $definition, $primaryKeyName)
     {
         if (isset($definition['primary']) && $definition['primary']) {
-            if (isset($this->tables[$this->moduleName][$tableName]['constraints']['primary'])) {
-                $this->tables[$this->moduleName][$tableName]['constraints']['primary']['PRIMARY'] = array_merge_recursive(
-                    $this->tables[$this->moduleName][$tableName]['constraints']['primary']['PRIMARY'],
+            if (isset($this->tables[$this->moduleName][$tableName]['constraints']['primary'][$primaryKeyName])) {
+                $this->tables[$this->moduleName][$tableName]['constraints']['primary'][$primaryKeyName] = array_replace_recursive(
+                    $this->tables[$this->moduleName][$tableName]['constraints']['primary'][$primaryKeyName],
                     [
-                        'columns' => [strtolower($columnName)]
+                        'columns' => [$columnName => strtolower($columnName)]
                     ]
                 );
 
             } else {
-                $this->tables[$this->moduleName][$tableName]['constraints']['primary']['PRIMARY'] = [
+                $this->tables[$this->moduleName][$tableName]['constraints']['primary'][$primaryKeyName] = [
                     'type' => 'primary',
-                    'name' => 'PRIMARY',
-                    'columns' => [strtolower($columnName)]
+                    'name' => $primaryKeyName,
+                    'columns' => [$columnName => strtolower($columnName)]
                 ];
             }
         }
@@ -151,15 +180,22 @@ class SchemaListener
      * @param string $tableName
      * @param string $columnName
      * @param array $definition
+     * @param string $primaryKeyName
      */
-    public function addColumn($tableName, $columnName, $definition)
+    public function addColumn($tableName, $columnName, $definition, $primaryKeyName = 'PRIMARY')
     {
+        if ($this->ignore) {
+            return;
+        }
+
         $definition = $this->castColumnDefinition($definition, $columnName);
-        $definition = $this->addPrimaryKeyIfExists($tableName, $columnName, $definition);
+        $definition = $this->addPrimaryKeyIfExists($tableName, $columnName, $definition, $primaryKeyName);
         $this->tables[$this->moduleName][strtolower($tableName)]['columns'][strtolower($columnName)] = $definition;
     }
 
     /**
+     * Change column is the same as rename
+     *
      * @param string $tableName
      * @param string $oldColumnName
      * @param string $newColumnName
@@ -167,12 +203,24 @@ class SchemaListener
      */
     public function changeColumn($tableName, $oldColumnName, $newColumnName, $definition)
     {
-        $this->addColumn($tableName, $newColumnName, $definition);
-
-        if (isset($this->tables[$this->moduleName][$tableName]['columns'][strtolower($oldColumnName)])) {
-            $this->tables[$this->moduleName][$tableName]['columns'][strtolower($oldColumnName)]['disabled'] = 1;
+        if ($this->ignore) {
+            return;
         }
-        //remove old column if not equal
+
+        foreach ($this->handlers as $handler) {
+            $this->tables = $handler->handle(
+                $this->moduleName,
+                $this->tables,
+                [
+                    'table' => $tableName,
+                    'old_column' => $oldColumnName,
+                    'new_column' => $newColumnName,
+                ],
+                $definition
+            );
+        }
+
+        $this->addColumn($tableName, $newColumnName, $definition, 'STAGING_PRIMARY');
     }
 
     /**
@@ -201,6 +249,10 @@ class SchemaListener
         $refColumnName,
         $onDelete = AdapterInterface::FK_ACTION_CASCADE
     ) {
+        if ($this->ignore) {
+            return;
+        }
+
         $this->tables[$this->moduleName][strtolower($tableName)]['constraints']['foreign'][$fkName] =
             [
                 'table' => strtolower($tableName),
@@ -223,9 +275,9 @@ class SchemaListener
 
         foreach ($indexColumns as $key => $indexColumn) {
             if (is_array($indexColumn)) {
-                $columnNames[] = strtolower($key);
+                $columnNames[strtolower($key)] = strtolower($key);
             } else {
-                $columnNames[] = $indexColumn;
+                $columnNames[$indexColumn] = $indexColumn;
             }
         }
 
@@ -244,6 +296,10 @@ class SchemaListener
         $fields,
         $indexType = AdapterInterface::INDEX_TYPE_INDEX
     ) {
+        if ($this->ignore) {
+            return;
+        }
+
         if (!is_array($fields)) {
             $fields = [$fields];
         }
@@ -310,6 +366,10 @@ class SchemaListener
      */
     public function createTable(Table $table)
     {
+        if ($this->ignore) {
+            return;
+        }
+
         $this->prepareColumns($table->getName(), $table->getColumns());
         $this->prepareConstraintsAndIndexes($table->getForeignKeys(), $table->getIndexes(), $table->getName());
     }
@@ -322,6 +382,16 @@ class SchemaListener
     public function flush()
     {
         $this->tables = [];
+    }
+
+    /**
+     * Turn on/off ignore mode
+     *
+     * @param bool $flag
+     */
+    public function toogleIgnore($flag)
+    {
+        $this->ignore = $flag;
     }
 
     /**

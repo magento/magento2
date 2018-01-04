@@ -328,7 +328,7 @@ class Installer
             $script[] = ['Cleaning up database...', 'cleanupDb', []];
         }
         $script[] = ['Installing database schema:', 'declarativeInstallSchema', [$request]];
-        $script[] = ['Installing database schema:', 'installSchema', []];
+        $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
@@ -344,7 +344,6 @@ class Installer
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
         $script[] = ['Write installation date...', 'writeInstallationDate', []];
-
         $estimatedModules = $this->createModulesConfig($request, true);
         $total = count($script) + 4 * count(array_filter($estimatedModules));
         $this->progress = new Installer\Progress($total, 0);
@@ -356,7 +355,7 @@ class Installer
             call_user_func_array([$this, $method], $params);
             $this->logProgress();
         }
-
+        $this->schemaPersistor->persist($this->schemaListener);
         $this->log->logSuccess('Magento installation complete.');
         $this->log->logSuccess(
             'Magento Admin URI: /'
@@ -793,7 +792,7 @@ class Installer
      * @param array $request
      * @return void
      */
-    public function installSchema()
+    public function installSchema(array $request)
     {
         $this->assertDbConfigExists();
         $this->assertDbAccessible();
@@ -801,7 +800,7 @@ class Installer
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
-        $this->handleDBSchemaData($setup, 'schema');
+        $this->handleDBSchemaData($setup, 'schema', $request);
     }
 
     /**
@@ -818,7 +817,7 @@ class Installer
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
         #if (!isset($request[InstallCommand::DECLARATION_MODE_KEY]) || !$request[InstallCommand::DECLARATION_MODE_KEY]) {
-            $this->handleDBSchemaData($setup, 'data');
+            $this->handleDBSchemaData($setup, 'data', $request);
         #}
     }
 
@@ -855,13 +854,13 @@ class Installer
      *
      * @param SchemaSetupInterface | ModuleDataSetupInterface $setup
      * @param string $type
+     * @param array $request
      * @return void
-     * @throws \Exception
-     *
+     * @throws \Magento\Setup\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function handleDBSchemaData($setup, $type)
+    private function handleDBSchemaData($setup, $type, array $request)
     {
         if (!(($type === 'schema') || ($type === 'data'))) {
             throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
@@ -874,7 +873,9 @@ class Installer
         $upgradeType = $type . '-upgrade';
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
-        #if ($type !== 'schema') {
+        if ($type !== 'schema' ||
+            (!isset($request[InstallCommand::DECLARATION_MODE_KEY]) || !$request[InstallCommand::DECLARATION_MODE_KEY])
+        ) {
             foreach ($moduleNames as $moduleName) {
                 $this->schemaListener->setModuleName($moduleName);
                 $this->log->log("Module '{$moduleName}':");
@@ -914,10 +915,9 @@ class Installer
                 }
                 $this->logProgress();
             }
-        #}
+        }
 
-        //Before recurring generate schema
-        $this->schemaPersistor->persist($this->schemaListener);
+        $this->schemaListener->toogleIgnore(SchemaListener::IGNORE_ON);
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
             $handlerType = 'schema-recurring';
@@ -934,6 +934,7 @@ class Installer
             }
             $this->logProgress();
         }
+        $this->schemaListener->toogleIgnore(SchemaListener::IGNORE_OFF);
     }
 
     /**

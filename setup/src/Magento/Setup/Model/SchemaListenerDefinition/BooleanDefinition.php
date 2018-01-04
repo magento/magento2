@@ -20,7 +20,7 @@ class BooleanDefinition implements DefinitionConverterInterface
             'xsi:type' => $definition['type'],
             'name' => $definition['name'],
             'nullable' => $definition['nullable'] ?? true,
-            'default' => $definition['default'] ?? null
+            'default' => isset($definition['default']) ? (bool) $definition['default'] : null
         ];
     }
 }
