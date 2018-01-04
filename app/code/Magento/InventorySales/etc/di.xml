@@ -14,6 +14,9 @@
     <preference for="Magento\InventorySales\Model\GetAssignedStockIdForWebsiteInterface" type="Magento\InventorySales\Model\ResourceModel\GetAssignedStockIdForWebsite"/>
     <preference for="Magento\InventorySales\Model\DeleteSalesChannelToStockLinkInterface" type="Magento\InventorySales\Model\ResourceModel\DeleteSalesChannelToStockLink"/>
     <preference for="Magento\InventorySalesApi\Api\StockResolverInterface" type="Magento\InventorySales\Model\StockResolver"/>
+    <preference for="Magento\InventorySales\Api\ShippingAlgorithmInterface" type="Magento\InventorySales\Model\DefaultShippingAlgorithm"/>
+    <preference for="Magento\InventorySales\Api\ShippingAlgorithmResultInterface" type="Magento\InventorySales\Model\DefaultShippingAlgorithmResult"/>
+    <preference for="Magento\InventorySales\Api\SourceSelectionInterface" type="Magento\InventorySales\Model\SourceSelection"/>
     <type name="Magento\InventoryApi\Api\StockRepositoryInterface">
         <plugin name="load_sales_channels_on_get_list" type="Magento\InventorySales\Plugin\InventoryApi\StockRepository\LoadSalesChannelsOnGetListPlugin"/>
         <plugin name="load_sales_channels_on_get" type="Magento\InventorySales\Plugin\InventoryApi\StockRepository\LoadSalesChannelsOnGetPlugin"/>

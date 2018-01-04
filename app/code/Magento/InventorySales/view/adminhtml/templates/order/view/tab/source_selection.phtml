@@ -1,0 +1,31 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\InventorySales\Block\Adminhtml\Order\View\Tab\Sources $block */
+?>
+<?php foreach ($block->getSourceItemsData() as $sourceName => $sourceItems): ?>
+    <table class="data-table admin__table-primary edit-order-table">
+        <div class="admin__page-section-item-title">
+            <span class="title"><?= $block->escapeHtml($sourceName) ?></span>
+        </div>
+        <thead>
+            <tr class="headings">
+                <th><span><?= $block->escapeHtml(__('Sku')) ?></span></th>
+                <th><span><?= $block->escapeHtml(__('Available Qty')) ?></span></th>
+                <th><span><?= $block->escapeHtml(__('Qty to Deduct')) ?></span></th>
+            </tr>
+        </thead>
+        <?php foreach ($sourceItems as $sourceItem): ?>
+            <tr>
+                <td><?= $block->escapeHtml($sourceItem['sku']) ?></td>
+                <td><?= $block->escapeHtml($sourceItem['qty']) ?></td>
+                <td><?= $block->escapeHtml($sourceItem['qty_deducted']) ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+<?php endforeach; ?>

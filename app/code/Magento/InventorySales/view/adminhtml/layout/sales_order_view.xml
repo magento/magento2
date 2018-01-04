@@ -9,9 +9,14 @@
     <body>
         <referenceBlock name="sales_order_tabs">
             <block class="Magento\InventorySales\Block\Adminhtml\Order\View\Tab\Sources" name="order_tab_sources" template="Magento_InventorySales::order/view/tab/sources.phtml"/>
+            <block class="Magento\InventorySales\Block\Adminhtml\Order\View\Tab\SourceSelection" name="order_tab_source_selection" template="Magento_InventorySales::order/view/tab/source_selection.phtml"/>
             <action method="addTab">
                 <argument name="name" xsi:type="string">order_sources</argument>
                 <argument name="block" xsi:type="string">order_tab_sources</argument>
+            </action>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">order_source_selection</argument>
+                <argument name="block" xsi:type="string">order_tab_source_selection</argument>
             </action>
         </referenceBlock>
     </body>

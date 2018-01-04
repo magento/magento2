@@ -22,5 +22,5 @@ interface ShippingAlgorithmResultInterface
      *
      * @return array
      */
-    public function getSourceSelection(): array;
+    public function getSourceSelections(): array;
 }
