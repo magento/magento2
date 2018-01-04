@@ -425,7 +425,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @var string[]
      */
-    protected $_imagesArrayKeys = ['image', 'small_image', 'thumbnail', 'swatch_image', '_media_image'];
+    protected $_imagesArrayKeys = [];
 
     /**
      * Permanent entity columns.
@@ -833,7 +833,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         $this->_initAttributeSets()
             ->_initTypeModels()
-            ->_initSkus();
+            ->_initSkus()
+            ->_initImagesArrayKeys();
         $this->validator->init($this);
     }
 
@@ -1073,6 +1074,27 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $this->skuProcessor->setTypeModels($this->_productTypeModels);
         $this->_oldSku = $this->skuProcessor->reloadOldSkus()->getOldSkus();
+        return $this;
+    }
+
+    /**
+     * Initialize image array keys.
+     *
+     * @return $this
+     */
+    protected function _initImagesArrayKeys()
+    {
+        $select = $this->_connection->select()->from(
+            $this->getResource()->getTable('eav_attribute'),
+            ['code' => 'attribute_code']
+        )->where(
+            'frontend_input = :frontend_input'
+        );
+        $bind = [':frontend_input' => 'media_image'];
+
+        $this->_imagesArrayKeys   = $this->_connection->fetchCol($select, $bind);
+        $this->_imagesArrayKeys[] = '_media_image';
+
         return $this;
     }
 
