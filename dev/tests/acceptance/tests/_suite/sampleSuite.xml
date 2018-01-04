@@ -28,7 +28,7 @@
            <module name="Newsletter"/>
         </include>
     </suite>
-    <suite name="MAGETWO-36659">
+    <suite name="MAGETWO36659">
         <include>
            <module name="Cms" />
            <module name="Catalog" />
