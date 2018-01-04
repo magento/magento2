@@ -10,12 +10,14 @@
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="productAttributeWithTwoOptions" type="ProductAttribute">
         <data key="attribute_code" unique="suffix">attribute</data>
-        <data key="frontend_input">select</data>
+        <data key="frontend_input">textarea</data>
         <data key="scope">global</data>
         <data key="is_required">false</data>
         <data key="is_unique">false</data>
         <data key="is_searchable">true</data>
         <data key="is_visible">true</data>
+        <data key="backend_type">text</data>
+        <data key="is_wysiwyg_enabled">true</data>
         <data key="is_visible_in_advanced_search">true</data>
         <data key="is_visible_on_front">true</data>
         <data key="is_filterable">true</data>

@@ -5,7 +5,6 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
     <cest name="VerifyTinyMCEv4IsNativeWYSIWYGOnProductCest">
@@ -43,8 +42,8 @@
             <executeJS function="tinyMCE.get('product_form_description').setContent('Hello World!');" stepKey="executeJSFillContent1"/>
             <executeJS function="tinyMCE.get('product_form_short_description').setContent('Hello World! Short Content');" stepKey="executeJSFillContent2"/>
             <click selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="clickShowHideBtn1" />
-            <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="waitForInsertImage1" />
-            <see selector="{{CmsWYSIWYGSection.InsertImageBtn}}" userInput="Insert Image..." stepKey="seeInsertImage1"/>
+            <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" stepKey="waitForInsertImage1" />
+            <see selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" userInput="Insert Image..." stepKey="seeInsertImage1"/>
             <dontSee selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="insertWidget1" />
             <dontSee selector="{{CmsWYSIWYGSection.InsertVariableBtn}}" stepKey="insertVariable1" />
             <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="clickShowHideBtn2" />
@@ -60,8 +59,8 @@
             <see userInput="Hello World! Short Content" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
         </test>
         <after>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disabledWYSIWYG"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </cest>
 </config>
