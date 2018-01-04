@@ -15,6 +15,7 @@ class ConfigurableProductViewTest extends GraphQlAbstract
 {
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_with_category_and_weight.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testQueryConfigurableProductLinks()
     {
@@ -36,6 +37,50 @@ class ConfigurableProductViewTest extends GraphQlAbstract
             updated_at
             visibility
             weight
+            price {
+              minimalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              maximalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              regularPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+            }
             category_ids                
             ... on ConfigurableProduct {
                 configurable_product_links {
@@ -48,11 +93,55 @@ class ConfigurableProductViewTest extends GraphQlAbstract
                     weight
                     created_at
                     updated_at
+                    price {
+                      minimalPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                      maximalPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                      regularPrice {
+                        amount {
+                          value
+                          currency
+                        }
+                        adjustments {
+                          amount {
+                            value
+                            currency
+                          }
+                          code
+                          description
+                        }
+                      }
+                    }
                     category_links {
                     position
                     category_id
                     }
-                    media_gallery_entries{
+                    media_gallery_entries {
                     disabled
                     file
                     id
@@ -89,6 +178,7 @@ QUERY;
         /**
          * @var ProductRepositoryInterface $productRepository
          */
+
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
 
@@ -106,9 +196,7 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
-        /**
-         * ['product_object_field_name', 'expected_value']
-         */
+        // ['product_object_field_name', 'expected_value']
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
@@ -120,6 +208,32 @@ QUERY;
             ['response_field' => 'updated_at', 'expected_value' => $product->getUpdatedAt()],
             ['response_field' => 'visibility', 'expected_value' => $product->getVisibility()],
             ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
+            [
+                'response_field' => 'price',
+                'expected_value' => [
+                    'minimalPrice' => [
+                        'amount' => [
+                            'value' => $product->getFinalPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                    'regularPrice' => [
+                        'amount' => [
+                            'value' => $product->getFinalPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                    'maximalPrice' => [
+                        'amount' => [
+                            'value' => $product->getFinalPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                ]
+            ],
         ];
 
         $this->assertResponseFields($actualResponse, $assertionMap);
@@ -227,8 +341,37 @@ QUERY;
             unset($configurableProductLinkArray['media_gallery_entries']);
 
             foreach ($configurableProductLinkArray as $key => $value) {
-                $this->assertEquals($value, $childProduct->getData($key));
+                if ($key !== 'price') {
+                    $this->assertEquals($value, $childProduct->getData($key));
+                }
             }
+            //assert prices
+            $this->assertEquals(
+                [
+                    'minimalPrice' => [
+                        'amount' => [
+                            'value' => $childProduct->getFinalPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                    'regularPrice' => [
+                        'amount' => [
+                            'value' => $childProduct->getFinalPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                    'maximalPrice' => [
+                        'amount' => [
+                            'value' => $childProduct->getFinalPrice(),
+                            'currency' => 'USD'
+                        ],
+                        'adjustments' => []
+                    ],
+                ],
+                $configurableProductLinkArray['price']
+            );
         }
     }
 

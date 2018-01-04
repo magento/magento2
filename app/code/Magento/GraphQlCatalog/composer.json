@@ -8,7 +8,9 @@
         "magento/module-eav": "100.3.*",
         "magento/module-catalog": "101.2.*",
         "magento/module-graph-ql": "100.0.*",
+        "magento/module-graph-ql-eav": "100.0.*",
         "magento/module-search": "100.3.*",
+        "magento/module-store": "100.3.*",
         "magento/framework": "100.3.*"
     },
     "license": [
