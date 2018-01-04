@@ -28,15 +28,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->contentProviderMock = $this->getMockBuilder(HttpContentProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contentProviderMock->expects($this->any())
-            ->method('getTargetVersion')
-            ->willReturn('version');
-        $this->contentProviderMock->expects($this->any())
-            ->method('getEdition')
-            ->willReturn('edition');
-        $this->contentProviderMock->expects($this->any())
-            ->method('getLocale')
-            ->willReturn('locale');
         $this->objectManager->addSharedInstance($this->contentProviderMock, HttpContentProvider::class);
     }
 
@@ -56,6 +47,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         CacheCleaner::cleanAll();
         $this->contentProviderMock->expects($this->any())
             ->method('getContent')
+            ->with('2.3.0', 'Community', 'en_US')
             ->willReturn($content);
 
         $this->dispatch('backend/admin/dashboard/index/');
@@ -74,6 +66,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         CacheCleaner::cleanAll();
         $this->contentProviderMock->expects($this->any())
             ->method('getContent')
+            ->with('2.3.0', 'Community', 'en_US')
             ->willReturn('[]');
 
         $this->dispatch('backend/admin/dashboard/index/');
@@ -89,6 +82,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         CacheCleaner::cleanAll();
         $this->contentProviderMock->expects($this->any())
             ->method('getContent')
+            ->with('2.3.0', 'Community', 'en_US')
             ->willReturn(false);
 
         $this->dispatch('backend/admin/dashboard/index/');
