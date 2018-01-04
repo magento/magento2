@@ -583,11 +583,11 @@ abstract class AbstractElement extends AbstractForm
     /**
      * Get input html by sting value.
      *
-     * @param string $value
+     * @param string|null $value
      *
      * @return string
      */
-    private function getHtmlForInputByValue(string $value)
+    private function getHtmlForInputByValue($value)
     {
         return '<input id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" ' . $this->_getUiId()
             . ' value="' . $value . '" ' . $this->serialize($this->getHtmlAttributes()) . '/>';

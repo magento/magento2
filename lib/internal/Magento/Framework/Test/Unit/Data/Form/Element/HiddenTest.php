@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Test\Unit\Data;
+namespace Magento\Framework\Test\Unit\Data\Form\Element;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
