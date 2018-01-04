@@ -5,7 +5,9 @@
  */
 namespace Magento\Customer\Block\Address;
 
+use Magento\Customer\Model\AttributeChecker;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Customer address edit block
@@ -47,6 +49,11 @@ class Edit extends \Magento\Directory\Block\Data
     protected $dataObjectHelper;
 
     /**
+     * @var AttributeChecker
+     */
+    private $attributeChecker;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -61,7 +68,7 @@ class Edit extends \Magento\Directory\Block\Data
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
-     *
+     * @param AttributeChecker $attributeChecker
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -76,13 +83,16 @@ class Edit extends \Magento\Directory\Block\Data
         \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        array $data = []
+        array $data = [],
+        AttributeChecker $attributeChecker = null
     ) {
         $this->_customerSession = $customerSession;
         $this->_addressRepository = $addressRepository;
         $this->addressDataFactory = $addressDataFactory;
         $this->currentCustomer = $currentCustomer;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->attributeChecker = $attributeChecker ?: ObjectManager::getInstance()->get(AttributeChecker::class);
+
         parent::__construct(
             $context,
             $directoryHelper,
@@ -129,9 +139,11 @@ class Edit extends \Magento\Directory\Block\Data
 
         if ($postedData = $this->_customerSession->getAddressFormData(true)) {
             $postedData['region'] = [
-                'region_id' => $postedData['region_id'],
-                'region' => $postedData['region'],
+                'region' => $postedData['region'] ?? null,
             ];
+            if (!empty($postedData['region_id'])) {
+                $postedData['region']['region_id'] = $postedData['region_id'];
+            }
             $this->dataObjectHelper->populateWithArray(
                 $this->_address,
                 $postedData,
@@ -351,5 +363,17 @@ class Edit extends \Magento\Directory\Block\Data
     public function getConfig($path)
     {
         return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * Checks whether it is allowed to show an attribute on the form.
+     *
+     * @param string $attributeCode
+     * @param string $formName
+     * @return bool
+     */
+    public function isAttributeAllowedOnForm($attributeCode, $formName)
+    {
+        return $this->attributeChecker->isAttributeAllowedOnForm($attributeCode, $formName);
     }
 }
