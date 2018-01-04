@@ -66,7 +66,9 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
 
         /** @var Filesystem $filesystem */
         $filesystem = $objectManager->create(Filesystem::class);
-        $this->appDir = $filesystem->getDirectoryRead(DirectoryList::APP);
+        $this->appDir = $this->isComposerBuilt()
+            ? $filesystem->getDirectoryRead(DirectoryList::ROOT)
+            : $filesystem->getDirectoryRead(DirectoryList::APP);
     }
 
     /**
@@ -248,5 +250,21 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             $this->dom->loadXML($content);
         }
         return $this->dom;
+    }
+
+    /**
+     * Check magento modules is in app/code.
+     *
+     * @return bool
+     */
+    private function isComposerBuilt()
+    {
+        $result = false;
+        $rootJson = json_decode(file_get_contents(BP . '/composer.json'), true);
+        if (preg_match('/magento\/project-*/', $rootJson['name']) == 1) {
+            $result  = true;
+        }
+
+        return $result;
     }
 }
