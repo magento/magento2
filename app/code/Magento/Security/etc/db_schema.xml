@@ -9,7 +9,7 @@
                 default="1"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
-        <column xsi:type="varchar" name="ip" nullable="false" length="15" disabled="1"/>
+        <column xsi:type="varchar" name="ip" nullable="false" length="15"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="id"/>
         </constraint>
@@ -27,7 +27,7 @@
         <column xsi:type="smallint" name="request_type" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="varchar" name="account_reference" nullable="true" length="255"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
-        <column xsi:type="varchar" name="ip" nullable="false" length="15" disabled="1"/>
+        <column xsi:type="varchar" name="ip" nullable="false" length="15"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="id"/>
         </constraint>

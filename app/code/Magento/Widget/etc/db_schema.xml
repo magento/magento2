@@ -88,7 +88,7 @@
         <column xsi:type="int" name="theme_id" padding="11" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="int" name="layout_update_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
-        <column xsi:type="boolean" name="is_temporary" nullable="false" default="0"/>
+        <column xsi:type="boolean" name="is_temporary" nullable="false"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="layout_link_id"/>
         </constraint>

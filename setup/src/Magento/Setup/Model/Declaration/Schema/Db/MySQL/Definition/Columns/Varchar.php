@@ -48,7 +48,7 @@ class Varchar implements DbDefinitionProcessorInterface
             $column->getType(),
             $column->getLength(),
             $this->nullable->toDefinition($column),
-            !empty($column->getDefault()) ?
+            $column->getDefault() !== null && $column->getDefault() !== ''  ?
                 sprintf('DEFAULT "%s"', $column->getDefault()) : ''
         );
     }

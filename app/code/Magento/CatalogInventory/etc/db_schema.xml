@@ -20,7 +20,7 @@
                 default="0"/>
         <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="true"/>
         <column xsi:type="decimal" name="min_qty" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+                default="0"/>
         <column xsi:type="smallint" name="use_config_min_qty" padding="6" unsigned="true" nullable="false"
                 identity="false" default="1"/>
         <column xsi:type="smallint" name="is_qty_decimal" padding="6" unsigned="true" nullable="false" identity="false"
@@ -30,17 +30,18 @@
         <column xsi:type="smallint" name="use_config_backorders" padding="6" unsigned="true" nullable="false"
                 identity="false" default="1"/>
         <column xsi:type="decimal" name="min_sale_qty" scale="12" precission="4" unsigned="false" nullable="false"
-                default="1.0000"/>
+                default="1"/>
         <column xsi:type="smallint" name="use_config_min_sale_qty" padding="6" unsigned="true" nullable="false"
                 identity="false" default="1"/>
         <column xsi:type="decimal" name="max_sale_qty" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+                default="0"/>
         <column xsi:type="smallint" name="use_config_max_sale_qty" padding="6" unsigned="true" nullable="false"
                 identity="false" default="1"/>
         <column xsi:type="smallint" name="is_in_stock" padding="6" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="timestamp" name="low_stock_date" on_update="false" nullable="true"/>
-        <column xsi:type="decimal" name="notify_stock_qty" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="notify_stock_qty" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <column xsi:type="smallint" name="use_config_notify_stock_qty" padding="6" unsigned="true" nullable="false"
                 identity="false" default="1"/>
         <column xsi:type="smallint" name="manage_stock" padding="6" unsigned="true" nullable="false" identity="false"
@@ -52,7 +53,7 @@
         <column xsi:type="smallint" name="use_config_qty_increments" padding="6" unsigned="true" nullable="false"
                 identity="false" default="1"/>
         <column xsi:type="decimal" name="qty_increments" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+                default="0"/>
         <column xsi:type="smallint" name="use_config_enable_qty_inc" padding="6" unsigned="true" nullable="false"
                 identity="false" default="1"/>
         <column xsi:type="smallint" name="enable_qty_increments" padding="6" unsigned="true" nullable="false"
@@ -85,8 +86,7 @@
         <column xsi:type="int" name="product_id" padding="11" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="stock_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+        <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
         <column xsi:type="smallint" name="stock_status" padding="6" unsigned="true" nullable="false" identity="false"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="product_id"/>
@@ -107,8 +107,7 @@
         <column xsi:type="int" name="product_id" padding="11" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="stock_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+        <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
         <column xsi:type="smallint" name="stock_status" padding="6" unsigned="true" nullable="false" identity="false"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="product_id"/>
@@ -126,8 +125,7 @@
         <column xsi:type="int" name="product_id" padding="11" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="stock_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+        <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
         <column xsi:type="smallint" name="stock_status" padding="6" unsigned="true" nullable="false" identity="false"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="product_id"/>

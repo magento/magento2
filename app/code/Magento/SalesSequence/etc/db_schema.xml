@@ -11,7 +11,7 @@
         <column xsi:type="int" name="step" padding="11" unsigned="true" nullable="false" identity="false" default="1"/>
         <column xsi:type="int" name="max_value" padding="11" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="int" name="warning_value" padding="11" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="boolean" name="is_active" nullable="false" default="0"/>
+        <column xsi:type="boolean" name="is_active" nullable="false"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="profile_id"/>
         </constraint>

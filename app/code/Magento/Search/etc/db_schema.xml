@@ -52,7 +52,6 @@
                 default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="group_id"/>
-            <column name="group_id"/>
         </constraint>
         <constraint xsi:type="foreign" name="SEARCH_SYNONYMS_STORE_ID_STORE_STORE_ID" table="search_synonyms"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>

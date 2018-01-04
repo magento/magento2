@@ -159,8 +159,6 @@ class UpgradeData implements UpgradeDataInterface
             $this->upgradeVersionTwoZeroTwelve($customerSetup);
         }
 
-        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
-        $indexer->reindexAll();
         $this->eavConfig->clear();
         $setup->endSetup();
     }

@@ -127,7 +127,7 @@
         <column xsi:type="int" name="product_id" padding="11" unsigned="true" nullable="true" identity="false"/>
         <column xsi:type="varchar" name="product_name" nullable="true" length="255"/>
         <column xsi:type="decimal" name="product_price" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+                default="0"/>
         <column xsi:type="int" name="views_num" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="smallint" name="rating_pos" padding="6" unsigned="true" nullable="false" identity="false"
@@ -160,7 +160,7 @@
         <column xsi:type="int" name="product_id" padding="11" unsigned="true" nullable="true" identity="false"/>
         <column xsi:type="varchar" name="product_name" nullable="true" length="255"/>
         <column xsi:type="decimal" name="product_price" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+                default="0"/>
         <column xsi:type="int" name="views_num" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="smallint" name="rating_pos" padding="6" unsigned="true" nullable="false" identity="false"
@@ -193,7 +193,7 @@
         <column xsi:type="int" name="product_id" padding="11" unsigned="true" nullable="true" identity="false"/>
         <column xsi:type="varchar" name="product_name" nullable="true" length="255"/>
         <column xsi:type="decimal" name="product_price" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+                default="0"/>
         <column xsi:type="int" name="views_num" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="smallint" name="rating_pos" padding="6" unsigned="true" nullable="false" identity="false"

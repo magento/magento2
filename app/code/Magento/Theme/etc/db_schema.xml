@@ -7,7 +7,7 @@
         <column xsi:type="varchar" name="theme_path" nullable="true" length="255"/>
         <column xsi:type="varchar" name="theme_title" nullable="false" length="255"/>
         <column xsi:type="varchar" name="preview_image" nullable="true" length="255"/>
-        <column xsi:type="boolean" name="is_featured" nullable="false" default="0"/>
+        <column xsi:type="boolean" name="is_featured" nullable="false"/>
         <column xsi:type="varchar" name="area" nullable="false" length="255"/>
         <column xsi:type="smallint" name="type" padding="6" unsigned="false" nullable="false" identity="false"/>
         <column xsi:type="text" name="code" nullable="true"/>
@@ -23,7 +23,7 @@
         <column xsi:type="longtext" name="content" nullable="false"/>
         <column xsi:type="smallint" name="sort_order" padding="6" unsigned="false" nullable="false" identity="false"
                 default="0"/>
-        <column xsi:type="boolean" name="is_temporary" nullable="false" default="0"/>
+        <column xsi:type="boolean" name="is_temporary" nullable="false"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="theme_files_id"/>
         </constraint>

@@ -46,7 +46,7 @@
                 default="0"/>
         <column xsi:type="varchar" name="action_operator" nullable="true" length="10" default="to_fixed"/>
         <column xsi:type="decimal" name="action_amount" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+                default="0"/>
         <column xsi:type="smallint" name="action_stop" padding="6" unsigned="false" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="int" name="sort_order" padding="11" unsigned="true" nullable="false" identity="false"
@@ -54,7 +54,7 @@
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="varchar" name="sub_simple_action" nullable="true" length="32"/>
         <column xsi:type="decimal" name="sub_discount_amount" scale="12" precission="4" unsigned="false"
-                nullable="false" default="0.0000"/>
+                nullable="false" default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="rule_product_id"/>
         </constraint>
@@ -91,7 +91,7 @@
         <column xsi:type="int" name="product_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="decimal" name="rule_price" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+                default="0"/>
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="date" name="latest_start_date"/>
         <column xsi:type="date" name="earliest_end_date"/>
@@ -126,15 +126,10 @@
             <column name="customer_group_id"/>
             <column name="website_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="CATRULE_GROUP_WS_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID"
-                    table="catalogrule_group_website" column="customer_group_id" referenceTable="customer_group"
-                    referenceColumn="customer_group_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CATALOGRULE_GROUP_WEBSITE_RULE_ID_CATALOGRULE_RULE_ID"
-                    table="catalogrule_group_website" column="rule_id" referenceTable="catalogrule"
-                    referenceColumn="rule_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="CATRULE_GROUP_WS_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID" disabled="1"/>
+        <constraint xsi:type="foreign" name="CATALOGRULE_GROUP_WEBSITE_RULE_ID_CATALOGRULE_RULE_ID" disabled="1"/>
         <constraint xsi:type="foreign" name="CATALOGRULE_GROUP_WEBSITE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
-                    table="catalogrule_group_website" column="website_id" referenceTable="store_website"
-                    referenceColumn="website_id" onDelete="CASCADE"/>
+                    disabled="1"/>
         <index name="CATALOGRULE_GROUP_WEBSITE_CUSTOMER_GROUP_ID" indexType="btree">
             <column name="customer_group_id"/>
         </index>

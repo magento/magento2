@@ -70,11 +70,11 @@
         <column xsi:type="timestamp" name="transaction_completion_date" on_update="false" nullable="true"/>
         <column xsi:type="varchar" name="transaction_debit_or_credit" nullable="false" length="2" default="CR"/>
         <column xsi:type="decimal" name="gross_transaction_amount" scale="20" precission="6" unsigned="false"
-                nullable="false" default="0.000000"/>
+                nullable="false" default="0"/>
         <column xsi:type="varchar" name="gross_transaction_currency" nullable="true" length="3"/>
         <column xsi:type="varchar" name="fee_debit_or_credit" nullable="true" length="2"/>
         <column xsi:type="decimal" name="fee_amount" scale="20" precission="6" unsigned="false" nullable="false"
-                default="0.000000"/>
+                default="0"/>
         <column xsi:type="varchar" name="fee_currency" nullable="true" length="3"/>
         <column xsi:type="varchar" name="custom_field" nullable="true" length="255"/>
         <column xsi:type="varchar" name="consumer_id" nullable="true" length="127"/>
@@ -116,5 +116,14 @@
         <constraint xsi:type="unique" name="PAYPAL_PAYMENT_TRANSACTION_TXN_ID">
             <column name="txn_id"/>
         </constraint>
+    </table>
+    <table name="quote_payment" resource="default">
+        <column xsi:type="varchar" name="paypal_payer_id" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="paypal_payer_status" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="paypal_correlation_id" nullable="true" length="255"/>
+    </table>
+    <table name="sales_order" resource="default">
+        <column xsi:type="int" name="paypal_ipn_customer_notified" padding="11" unsigned="false" nullable="true"
+                identity="false" default="0"/>
     </table>
 </schema>

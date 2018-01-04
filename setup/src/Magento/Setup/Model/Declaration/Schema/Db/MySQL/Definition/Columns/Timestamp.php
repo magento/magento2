@@ -48,12 +48,16 @@ class Timestamp implements DbDefinitionProcessorInterface
      */
     public function toDefinition(ElementInterface $column)
     {
+        $nullable = $column->getDefault() === 'NULL' ? 'NULL' : 'NOT NULL';
+        $default  = $column->getDefault() === 'NULL' ?
+            '' : sprintf('DEFAULT %s', $column->getDefault());
+
         return sprintf(
-            '%s %s %s %s',
+            '%s %s %s %s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
             $column->getType(),
-            $column->getDefault() === 'NULL' ?
-                '' : sprintf('DEFAULT %s', $column->getDefault()),
+            $nullable,
+            $default,
             $this->onUpdate->toDefinition($column)
         );
     }
@@ -64,7 +68,7 @@ class Timestamp implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         if ($data['default'] === self::CONST_DEFAULT_TIMESTAMP) {
-            $data['default'] = 0;
+            $data['default'] = '0';
         }
 
         $data = $this->onUpdate->fromDefinition($data);

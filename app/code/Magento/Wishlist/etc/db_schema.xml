@@ -31,7 +31,7 @@
         <column xsi:type="smallint" name="store_id" padding="6" unsigned="true" nullable="true" identity="false"/>
         <column xsi:type="timestamp" name="added_at" on_update="false" nullable="true"/>
         <column xsi:type="text" name="description" nullable="true"/>
-        <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="false"/>
+        <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="wishlist_item_id"/>
         </constraint>

@@ -16,9 +16,7 @@
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="CAT_PRD_ENTT_ATTR_SET_ID_EAV_ATTR_SET_ATTR_SET_ID"
-                    table="catalog_product_entity" column="attribute_set_id" referenceTable="eav_attribute_set"
-                    referenceColumn="attribute_set_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="CAT_PRD_ENTT_ATTR_SET_ID_EAV_ATTR_SET_ATTR_SET_ID" disabled="1"/>
         <index name="CATALOG_PRODUCT_ENTITY_ATTRIBUTE_SET_ID" indexType="btree">
             <column name="attribute_set_id"/>
         </index>
@@ -67,7 +65,7 @@
                 default="0"/>
         <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
-        <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="value_id"/>
         </constraint>
@@ -296,7 +294,7 @@
                 default="0"/>
         <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
-        <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="value_id"/>
         </constraint>
@@ -448,6 +446,9 @@
         <constraint xsi:type="foreign" name="CAT_CTGR_PRD_PRD_ID_CAT_PRD_ENTT_ENTT_ID" table="catalog_category_product"
                     column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id"
                     onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="CAT_CTGR_PRD_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID"
+                    table="catalog_category_product" column="category_id" referenceTable="catalog_category_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
         <constraint xsi:type="unique" name="CATALOG_CATEGORY_PRODUCT_CATEGORY_ID_PRODUCT_ID">
             <column name="category_id"/>
             <column name="product_id"/>
@@ -600,7 +601,7 @@
                 identity="false"/>
         <column xsi:type="int" name="link_id" padding="11" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="value_id"/>
         </constraint>
@@ -676,10 +677,9 @@
                 default="1"/>
         <column xsi:type="int" name="customer_group_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
-        <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="false"
-                default="1.0000"/>
+        <column xsi:type="decimal" name="qty" scale="12" precission="4" unsigned="false" nullable="false" default="1"/>
         <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+                default="0"/>
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="decimal" name="percentage_value" scale="10" precission="0" unsigned="false" nullable="true"/>
         <constraint xsi:type="primary" name="PRIMARY">
@@ -799,7 +799,7 @@
         <column xsi:type="smallint" name="store_id" padding="6" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+                default="0"/>
         <column xsi:type="varchar" name="price_type" nullable="false" length="7" default="fixed"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="option_price_id"/>
@@ -867,7 +867,7 @@
         <column xsi:type="smallint" name="store_id" padding="6" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+                default="0"/>
         <column xsi:type="varchar" name="price_type" nullable="false" length="7" default="fixed"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="option_type_price_id"/>
@@ -1019,7 +1019,8 @@
         <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="store_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="false"/>
+        <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="false"
+                default="0"/>
         <column xsi:type="int" name="source_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
@@ -1050,25 +1051,24 @@
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="tax_class_id" padding="6" unsigned="true" nullable="true" identity="false"
                 default="0"/>
-        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="final_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
+        <column xsi:type="decimal" name="final_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="entity_id"/>
             <column name="customer_group_id"/>
             <column name="website_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="CAT_PRD_IDX_PRICE_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID"
-                    table="catalog_product_index_price" column="customer_group_id" referenceTable="customer_group"
-                    referenceColumn="customer_group_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CAT_PRD_IDX_PRICE_ENTT_ID_CAT_PRD_ENTT_ENTT_ID"
-                    table="catalog_product_index_price" column="entity_id" referenceTable="catalog_product_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" name="CAT_PRD_IDX_PRICE_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID" disabled="1"/>
+        <constraint xsi:type="foreign" name="CAT_PRD_IDX_PRICE_ENTT_ID_CAT_PRD_ENTT_ENTT_ID" disabled="1"/>
         <constraint xsi:type="foreign" name="CATALOG_PRODUCT_INDEX_PRICE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
-                    table="catalog_product_index_price" column="website_id" referenceTable="store_website"
-                    referenceColumn="website_id" onDelete="CASCADE"/>
+                    disabled="1"/>
         <index name="CATALOG_PRODUCT_INDEX_PRICE_CUSTOMER_GROUP_ID" indexType="btree">
             <column name="customer_group_id"/>
         </index>
@@ -1085,7 +1085,8 @@
         <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="int" name="customer_group_id" padding="11" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="entity_id"/>
             <column name="customer_group_id"/>
@@ -1110,8 +1111,7 @@
     <table name="catalog_product_index_website" resource="default">
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="date" name="website_date"/>
-        <column xsi:type="float" name="rate" scale="10" precission="0" unsigned="false" nullable="true"
-                default="1.0000"/>
+        <column xsi:type="float" name="rate" scale="10" precission="0" unsigned="false" nullable="true" default="1"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="website_id"/>
         </constraint>
@@ -1127,8 +1127,9 @@
         <column xsi:type="int" name="customer_group_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
+        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="parent_id"/>
             <column name="child_id"/>
@@ -1142,8 +1143,9 @@
         <column xsi:type="int" name="customer_group_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
+        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="parent_id"/>
             <column name="child_id"/>
@@ -1156,9 +1158,12 @@
         <column xsi:type="int" name="customer_group_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="entity_id"/>
             <column name="customer_group_id"/>
@@ -1170,9 +1175,12 @@
         <column xsi:type="int" name="customer_group_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="entity_id"/>
             <column name="customer_group_id"/>
@@ -1186,12 +1194,17 @@
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="tax_class_id" padding="6" unsigned="true" nullable="true" identity="false"
                 default="0"/>
-        <column xsi:type="decimal" name="orig_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="base_tier" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="orig_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
+        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="base_tier" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="entity_id"/>
             <column name="customer_group_id"/>
@@ -1205,12 +1218,17 @@
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="tax_class_id" padding="6" unsigned="true" nullable="true" identity="false"
                 default="0"/>
-        <column xsi:type="decimal" name="orig_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="base_tier" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="orig_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
+        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="base_tier" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="entity_id"/>
             <column name="customer_group_id"/>
@@ -1222,9 +1240,12 @@
         <column xsi:type="int" name="customer_group_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="entity_id"/>
             <column name="customer_group_id"/>
@@ -1236,9 +1257,12 @@
         <column xsi:type="int" name="customer_group_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="entity_id"/>
             <column name="customer_group_id"/>
@@ -1252,9 +1276,12 @@
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="int" name="option_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
-        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="entity_id"/>
             <column name="customer_group_id"/>
@@ -1269,9 +1296,12 @@
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="int" name="option_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
-        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="entity_id"/>
             <column name="customer_group_id"/>
@@ -1343,7 +1373,8 @@
         <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="store_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="false"/>
+        <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="false"
+                default="0"/>
         <column xsi:type="int" name="source_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
@@ -1373,7 +1404,8 @@
         <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="store_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="false"/>
+        <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="false"
+                default="0"/>
         <column xsi:type="int" name="source_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
@@ -1405,11 +1437,15 @@
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="tax_class_id" padding="6" unsigned="true" nullable="true" identity="false"
                 default="0"/>
-        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="final_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
+        <column xsi:type="decimal" name="final_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="entity_id"/>
             <column name="customer_group_id"/>
@@ -1432,11 +1468,15 @@
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
         <column xsi:type="smallint" name="tax_class_id" padding="6" unsigned="true" nullable="true" identity="false"
                 default="0"/>
-        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="final_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"/>
-        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"/>
+        <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="true" default="0"/>
+        <column xsi:type="decimal" name="final_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="min_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="max_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
+        <column xsi:type="decimal" name="tier_price" scale="12" precission="4" unsigned="false" nullable="true"
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="entity_id"/>
             <column name="customer_group_id"/>

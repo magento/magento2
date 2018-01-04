@@ -109,7 +109,7 @@
         <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+                default="0"/>
         <constraint xsi:type="primary" name="PRIMARY">
             <column name="value_id"/>
         </constraint>

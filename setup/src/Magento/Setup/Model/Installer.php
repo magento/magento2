@@ -916,7 +916,17 @@ class Installer
                 $this->logProgress();
             }
         }
-
+        $stagingModules = [
+            'Magento_Bundle',
+            'Magento_Catalog',
+            'Magento_CatalogUrlRewrite',
+            'Magento_CatalogInventory',
+            'Magento_ConfigurableProduct',
+            'Magento_ProductAlert',
+            'Magento_Reports',
+            'Magento_Weee',
+            'Magento_Wishlist',
+        ];
         $this->schemaListener->toogleIgnore(SchemaListener::IGNORE_ON);
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
@@ -926,6 +936,10 @@ class Installer
             $handlerType = 'data-recurring';
         }
         foreach ($moduleNames as $moduleName) {
+            if (in_array($moduleName, $stagingModules)) {
+                $this->schemaListener->setModuleName($moduleName);
+                $this->schemaListener->toogleIgnore(SchemaListener::IGNORE_OFF);
+            }
             $this->log->log("Module '{$moduleName}':");
             $modulePostUpdater = $this->getSchemaDataHandler($moduleName, $handlerType);
             if ($modulePostUpdater) {
@@ -933,6 +947,7 @@ class Installer
                 $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
             }
             $this->logProgress();
+            $this->schemaListener->toogleIgnore(SchemaListener::IGNORE_ON);
         }
         $this->schemaListener->toogleIgnore(SchemaListener::IGNORE_OFF);
     }

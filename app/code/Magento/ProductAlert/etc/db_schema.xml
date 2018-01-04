@@ -8,7 +8,7 @@
         <column xsi:type="int" name="product_id" padding="11" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="decimal" name="price" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0.0000"/>
+                default="0"/>
         <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"
                 default="0"/>
         <column xsi:type="timestamp" name="add_date" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>

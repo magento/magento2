@@ -4,27 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Theme\Setup;
+namespace Magento\Customer\Setup;
 
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Theme\Model\Theme\Registration;
-use Magento\Theme\Model\Data\Design\Config;
+use Magento\Customer\Model\Customer;
 
 /**
  * Upgrade registered themes
  */
 class RecurringData implements InstallDataInterface
 {
-    /**
-     * Theme registration
-     *
-     * @var Registration
-     */
-    private $themeRegistration;
-
     /**
      * @var IndexerRegistry
      */
@@ -33,12 +25,10 @@ class RecurringData implements InstallDataInterface
     /**
      * Init
      *
-     * @param Registration $themeRegistration
      * @param IndexerRegistry $indexerRegistry
      */
-    public function __construct(Registration $themeRegistration, IndexerRegistry $indexerRegistry)
+    public function __construct(IndexerRegistry $indexerRegistry)
     {
-        $this->themeRegistration = $themeRegistration;
         $this->indexerRegistry = $indexerRegistry;
     }
 
@@ -47,8 +37,8 @@ class RecurringData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $indexer = $this->indexerRegistry->get(Config::DESIGN_CONFIG_GRID_INDEXER_ID);
+        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexAll();
-        $this->themeRegistration->register();
+
     }
 }
