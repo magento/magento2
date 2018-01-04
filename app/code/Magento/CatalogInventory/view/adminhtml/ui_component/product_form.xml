@@ -105,6 +105,12 @@
                     </imports>
                 </settings>
             </field>
+            <field name="original_inventory_qty" component="Magento_CatalogInventory/js/components/qty-validator-changer" sortOrder="201" formElement="input">
+                <settings>
+                    <visible>false</visible>
+                    <dataScope>stock_data.original_inventory_qty</dataScope>
+                </settings>
+            </field>
             <container name="container_min_qty" component="Magento_Ui/js/form/components/group" sortOrder="300">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
