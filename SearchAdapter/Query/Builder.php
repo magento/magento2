@@ -7,13 +7,13 @@ namespace Magento\Elasticsearch\SearchAdapter\Query;
 
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as ES5Builder;
+use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as Elasticsearch5Builder;
 
 /**
  * @api
  * @since 100.1.0
  */
-class Builder extends ES5Builder
+class Builder extends Elasticsearch5Builder
 {
 
     /**

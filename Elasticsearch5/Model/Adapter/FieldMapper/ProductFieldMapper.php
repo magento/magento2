@@ -106,6 +106,7 @@ class ProductFieldMapper implements FieldMapperInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getAllAttributesTypes($context = [])
     {
@@ -138,7 +139,10 @@ class ProductFieldMapper implements FieldMapperInterface
                 ];
             }
 
-            if ($attribute->usesSource() || $attribute->getFrontendInput() === 'select' || $attribute->getFrontendInput() === 'multiselect') {
+            if ($attribute->usesSource()
+                || $attribute->getFrontendInput() === 'select'
+                || $attribute->getFrontendInput() === 'multiselect'
+            ) {
                 $allAttributes[$attributeCode]['type'] = FieldType::ES_DATA_TYPE_KEYWORD;
 
                 $allAttributes[$attributeCode . '_value'] = [

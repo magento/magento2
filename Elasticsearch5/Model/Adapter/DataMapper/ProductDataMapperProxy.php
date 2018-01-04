@@ -49,6 +49,6 @@ class ProductDataMapperProxy implements DataMapperInterface
      */
     public function map($entityId, array $entityIndexData, $storeId, $context = [])
     {
-        return $this->getDataMapper()->map($entityId,  $entityIndexData, $storeId, $context);
+        return $this->getDataMapper()->map($entityId, $entityIndexData, $storeId, $context);
     }
 }

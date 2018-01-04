@@ -42,7 +42,7 @@
         <arguments>
             <argument name="engines" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Elasticsearch</item>
-                <item name="elasticsearch5" xsi:type="string">Elasticsearch 5x</item>
+                <item name="elasticsearch5" xsi:type="string">Elasticsearch 5.0+</item>
             </argument>
         </arguments>
     </type>
@@ -149,7 +149,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Adapter" type="Magento\Elasticsearch\SearchAdapter\Adapter">
+    <type name="Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Adapter">
         <arguments>
             <argument name="connectionManager" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\SearchAdapter\ConnectionManager</argument>
         </arguments>
@@ -233,6 +233,10 @@
                 <item name="catalog/search/elasticsearch_password" xsi:type="string">1</item>
                 <item name="catalog/search/elasticsearch_server_hostname" xsi:type="string">1</item>
                 <item name="catalog/search/elasticsearch_username" xsi:type="string">1</item>
+
+                <item name="catalog/search/elasticsearch5_password" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_server_hostname" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_username" xsi:type="string">1</item>
             </argument>
             <argument name="environment" xsi:type="array">
                 <item name="catalog/search/elasticsearch_enable_auth" xsi:type="string">1</item>
@@ -242,6 +246,14 @@
                 <item name="catalog/search/elasticsearch_server_port" xsi:type="string">1</item>
                 <item name="catalog/search/elasticsearch_username" xsi:type="string">1</item>
                 <item name="catalog/search/elasticsearch_server_timeout" xsi:type="string">1</item>
+
+                <item name="catalog/search/elasticsearch5_enable_auth" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_index_prefix" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_password" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_server_hostname" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_server_port" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_username" xsi:type="string">1</item>
+                <item name="catalog/search/elasticsearch5_server_timeout" xsi:type="string">1</item>
             </argument>
         </arguments>
     </type>

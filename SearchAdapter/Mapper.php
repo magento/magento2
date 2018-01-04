@@ -13,14 +13,14 @@ use Magento\Framework\Search\Request\Query\Match as MatchQuery;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder as QueryBuilder;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
-use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper as ES5Mapper;
+use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper as Elasticsearch5Mapper;
 
 /**
  * Mapper class
  * @api
  * @since 100.1.0
  */
-class Mapper extends ES5Mapper
+class Mapper extends Elasticsearch5Mapper
 {
     /**
      * @param QueryBuilder $queryBuilder

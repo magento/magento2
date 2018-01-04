@@ -8,6 +8,8 @@ namespace Magento\Elasticsearch\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\AdvancedSearch\Model\Client\ClientResolver;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Elasticsearch config model
@@ -43,14 +45,31 @@ class Config implements ClientOptionsInterface
     protected $scopeConfig;
 
     /**
+     * @var string
+     */
+    private $prefix;
+
+    /**
+     * @var ClientResolver
+     */
+    private $clientResolver;
+
+    /**
      * Constructor
      *
      * @param ScopeConfigInterface $scopeConfig
+     * @param ClientResolver $clientResolver
+     * @param string $prefix
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        ClientResolver $clientResolver = null,
+        $prefix = null
     ) {
         $this->scopeConfig = $scopeConfig;
+        $this->clientResolver = $clientResolver ?:
+            ObjectManager::getInstance()->get(ClientResolver::class);
+        $this->prefix = $prefix ?: $this->clientResolver->getCurrentEngine();
     }
 
     /**
@@ -82,7 +101,7 @@ class Config implements ClientOptionsInterface
      */
     public function getElasticsearchConfigData($field, $storeId = null)
     {
-        return $this->getSearchConfigData('elasticsearch_' . $field, $storeId);
+        return $this->getSearchConfigData($this->prefix . '_' . $field, $storeId);
     }
 
     /**
