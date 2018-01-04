@@ -1,61 +1,31 @@
-[![Build Status](https://travis-ci.org/magento/magento2.svg?branch=develop)](https://travis-ci.org/magento/magento2)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Crowdin](https://d322cqt584bo4o.cloudfront.net/magento-2/localized.png)](https://crowdin.com/project/magento-2)
-<h2>Welcome</h2>
-Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting edge, feature-rich eCommerce solution that gets results.
+## [<svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>](#welcome)<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">欢迎</font></font>
+<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+欢迎来到Magento 2安装！</font><font style="vertical-align: inherit;">我们很高兴您选择安装Magento 2，这是一款功能丰富的尖端电子商务解决方案。
+</font></font>
 
-## Magento system requirements
-[Magento system requirements](http://devdocs.magento.com/magento-system-requirements.html)
+## [<svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>](#magento-system-requirements)<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Magento系统要求</font></font>
 
-## Install Magento
-To install Magento, see either:
+[<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Magento系统要求</font></font>](http://devdocs.magento.com/magento-system-requirements.html)
 
-*	[Magento DevBox](https://magento.com/tech-resources/download), the easiest way to get started with Magento.
-*	[Installation guide](http://devdocs.magento.com/guides/v2.0/install-gde/bk-install-guide.html)
+## [<svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>](#install-magento)<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装Magento</font></font>
 
-<h2>Contributing to the Magento 2 code base</h2>
-Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
+<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">要安装Magento，请参阅：</font></font>
 
-To learn about how to make a contribution, click [here][1].
+*   [<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Magento DevBox</font></font>](https://magento.com/tech-resources/download)<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，开始使用Magento最简单的方法。</font></font>
+*   [<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装指南</font></font>](http://devdocs.magento.com/guides/v2.0/install-gde/bk-install-guide.html)
 
-To learn about issues, click [here][2]. To open an issue, click [here][3].
+*  或在此提问 [<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">交流论坛.</font></font>](http://bbs.mallol.cn)
 
-To suggest documentation improvements, click [here][4].
+## [<svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>](#reporting-security-issues)<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">报告安全问题</font></font>
 
-[1]: <http://devdocs.magento.com/guides/v2.0/contributor-guide/contributing.html>
-[2]: <http://devdocs.magento.com/guides/v2.0/contributor-guide/contributing.html#report>
-[3]: <https://github.com/magento/magento2/issues>
-[4]: <http://devdocs.magento.com>
+<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">要报告Magento软件或网站中的安全漏洞，请发送电子邮件 </font></font>[](mailto:security@magento.com)[<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">security@magento.com</font></font>](mailto:security@magento.com)<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font><font style="vertical-align: inherit;">请不要使用GitHub报告安全问题。</font><font style="vertical-align: inherit;">如果包含敏感信息，</font><font style="vertical-align: inherit;">请务必使用我们的</font></font>[<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">加密密钥</font></font>](https://info2.magento.com/rs/magentoenterprise/images/security_at_magento.asc)<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">加密您的电子邮件</font><font style="vertical-align: inherit;">。</font><font style="vertical-align: inherit;">了解更多关于报告安全问题</font></font>[<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在这里</font></font>](https://magento.com/security/reporting-magento-security-issue)<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font>
 
-<h3>Labels applied by the Magento team</h3>
+<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">通过注册</font></font>[<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安全警报通知，</font></font>](https://magento.com/security/sign-up)<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">及时了解Magento的最新安全新闻和补丁</font><font style="vertical-align: inherit;">。</font></font>
 
-| Label        | Description           | 
-| ------------- |-------------|
-| ![DOC](http://devdocs.magento.com/common/images/github_DOC.png) | Affects Documentation domain. |
-| ![PROD](http://devdocs.magento.com/common/images/github_PROD.png) | Affects the Product team (mostly feature requests or business logic change). |
-| ![TECH](http://devdocs.magento.com/common/images/github_TECH.png) | Affects Architect Group (mostly to make decisions around technology changes). |
-| ![accept](http://devdocs.magento.com/common/images/github_accept.png) | The pull request has been accepted and will be merged into mainline code. |
-| ![reject](http://devdocs.magento.com/common/images/github_reject.png) | The pull request has been rejected and will not be merged into mainline code. Possible reasons can include but are not limited to: issue has already been fixed in another code contribution, or there is an issue with the code contribution. |
-| ![bug report](http://devdocs.magento.com/common/images/github_bug.png) | The Magento Team has confirmed that this issue contains the minimum required information to reproduce. |
-| ![acknowledged](http://devdocs.magento.com/common/images/gitHub_acknowledged.png) | The Magento Team has validated the issue and an internal ticket has been created. |
-| ![in progress](http://devdocs.magento.com/common/images/github_inProgress.png) | The internal ticket is currently in progress, fix is scheduled to be delivered. |
-| ![needs update](http://devdocs.magento.com/common/images/github_needsUpdate.png) | The Magento Team needs additional information from the reporter to properly prioritize and process the issue or pull request. |
+## [<svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg>](#license)<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">License</font></font>
 
-To learn more about issue gate labels click [here](https://github.com/magento/magento2/wiki/Magento-Issue-Gates)
+<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">本发行版中包含的每个Magento源文件都是根据OSL 3.0或Magento企业版（MEE）许可</font></font>
 
-<h2>Reporting security issues</h2>
+[<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">http://opensource.org/licenses/osl-3.0.php</font></font>](http://opensource.org/licenses/osl-3.0.php)<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">   开放软件许可证（OSL 3.0）有关OSL 3.0许可证的全文，请参阅LICENSE.txt或联系</font></font>[<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">license@magentocommerce.com</font></font>](mailto:license@magentocommerce.com)<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">获取副本。</font></font>
 
-To report security vulnerabilities in Magento software or web sites, please e-mail <a href="mailto:security@magento.com">security@magento.com</a>. Please do not report security issues using GitHub. Be sure to encrypt your e-mail with our <a href="https://info2.magento.com/rs/magentoenterprise/images/security_at_magento.asc">encryption key</a> if it includes sensitive information. Learn more about reporting security issues <a href="https://magento.com/security/reporting-magento-security-issue">here</a>.
-
-Stay up-to-date on the latest security news and patches for Magento by signing up for <a href="https://magento.com/security/sign-up">Security Alert Notifications</a>.
-
-<h2>License</h2>
-
-Each Magento source file included in this distribution is licensed under OSL 3.0 or the Magento Enterprise Edition (MEE) license
-
-http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-Please see LICENSE.txt for the full text of the OSL 3.0 license or contact license@magentocommerce.com for a copy.
-
-Subject to Licensee's payment of fees and compliance with the terms and conditions of the MEE License, the MEE License supersedes the OSL 3.0 license for each source file.
-Please see LICENSE_EE.txt for the full text of the MEE License or visit http://magento.com/legal/terms/enterprise.
-
+<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">除被许可方支付费用并符合MEE许可证的条款和条件外，MEE许可证取代每个源文件的OSL 3.0许可证。</font><font style="vertical-align: inherit;">请参阅LICENSE_EE.txt了解MEE许可证的全文或访问</font></font>[<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">http://magento.com/legal/terms/enterprise</font></font>](http://magento.com/legal/terms/enterprise)<font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font>
