@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+  <table name="magento_bulk" resource="default">
+    <column xsi:type="int" name="id" padding="11" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="varbinary" name="uuid" nullable="true" length="39"/>
+    <column xsi:type="int" name="user_id" padding="11" unsigned="true" nullable="true" identity="false"/>
+    <column xsi:type="varchar" name="description" nullable="true" length="255"/>
+    <column xsi:type="int" name="operation_count" padding="11" unsigned="true" nullable="false" identity="false"/>
+    <column xsi:type="timestamp" name="start_time" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID" table="magento_bulk" column="user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="MAGENTO_BULK_UUID">
+      <column name="uuid"/>
+    </constraint>
+  </table>
+  <table name="magento_operation" resource="default">
+    <column xsi:type="int" name="id" padding="11" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="varbinary" name="bulk_uuid" nullable="true" length="39"/>
+    <column xsi:type="varchar" name="topic_name" nullable="true" length="255"/>
+    <column xsi:type="blob" name="serialized_data" nullable="true"/>
+    <column xsi:type="smallint" name="status" padding="6" unsigned="false" nullable="true" identity="false" default="0"/>
+    <column xsi:type="smallint" name="error_code" padding="6" unsigned="false" nullable="true" identity="false"/>
+    <column xsi:type="varchar" name="result_message" nullable="true" length="255"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="MAGENTO_OPERATION_BULK_UUID_MAGENTO_BULK_UUID" table="magento_operation" column="bulk_uuid" referenceTable="magento_bulk" referenceColumn="uuid" onDelete="CASCADE"/>
+    <index name="MAGENTO_OPERATION_BULK_UUID_ERROR_CODE" indexType="btree">
+      <column name="bulk_uuid"/>
+      <column name="error_code"/>
+    </index>
+  </table>
+  <table name="magento_acknowledged_bulk" resource="default">
+    <column xsi:type="int" name="id" padding="11" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="varbinary" name="bulk_uuid" nullable="true" length="39"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="MAGENTO_ACKNOWLEDGED_BULK_BULK_UUID_MAGENTO_BULK_UUID" table="magento_acknowledged_bulk" column="bulk_uuid" referenceTable="magento_bulk" referenceColumn="uuid" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="MAGENTO_ACKNOWLEDGED_BULK_BULK_UUID">
+      <column name="bulk_uuid"/>
+    </constraint>
+  </table>
+</schema>
