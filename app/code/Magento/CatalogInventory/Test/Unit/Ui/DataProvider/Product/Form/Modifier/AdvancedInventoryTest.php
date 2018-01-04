@@ -130,7 +130,7 @@ class AdvancedInventoryTest extends AbstractModifierTest
 
         $this->stockItemMock->expects($this->once())->method('getData')->willReturn(['someData']);
         $this->stockItemMock->expects($this->once())->method('getManageStock')->willReturn($someData);
-        $this->stockItemMock->expects($this->once())->method('getQty')->willReturn($someData);
+        $this->stockItemMock->expects($this->exactly(2))->method('getQty')->willReturn($someData);
         $this->stockItemMock->expects($this->once())->method('getMinQty')->willReturn($someData);
         $this->stockItemMock->expects($this->once())->method('getMinSaleQty')->willReturn($someData);
         $this->stockItemMock->expects($this->once())->method('getMaxSaleQty')->willReturn($someData);
