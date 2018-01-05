@@ -6,9 +6,12 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <cest name="PersistMultipleEntitiesCest">
+    <test name="PersistMultipleEntitiesTest">
+        <annotations>
+            <group value="skip"/>
+        </annotations>
         <before>
             <createData entity="simplesubcategory" stepKey="simplecategory"/>
             <createData entity="simpleproduct" stepKey="simpleproduct1">
@@ -23,13 +26,8 @@
             <deleteData createDataKey="simpleproduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
         </after>
-        <test name="PersistMultipleEntitiesTest">
-            <annotations>
-                <group value="skip"/>
-            </annotations>
-            <amOnPage stepKey="s11" url="/$$simplecategory.name$$.html" />
-            <waitForPageLoad stepKey="s33"/>
-            <see stepKey="s35" selector="{{StorefrontCategoryMainSection.productCount}}" userInput="2"/>
-        </test>
-    </cest>
-</config>
+        <amOnPage stepKey="s11" url="/$$simplecategory.name$$.html" />
+        <waitForPageLoad stepKey="s33"/>
+        <see stepKey="s35" selector="{{StorefrontCategoryMainSection.productCount}}" userInput="2"/>
+    </test>
+</tests>
