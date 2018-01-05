@@ -175,7 +175,7 @@ class Conditions extends Generic implements TabInterface
             ->setRenderer($this->_conditions);
 
         $form->setValues($model->getData());
-        $this->setConditionFormName($model->getConditions(), $formName);
+        $this->setConditionFormName($model, $model->getConditions(), $formName);
         return $form;
     }
 
@@ -184,13 +184,15 @@ class Conditions extends Generic implements TabInterface
      * @param string $formName
      * @return void
      */
-    private function setConditionFormName(\Magento\Rule\Model\Condition\AbstractCondition $conditions, $formName)
+    private function setConditionFormName(\Magento\CatalogRule\Api\Data\RuleInterface $rule, \Magento\Rule\Model\Condition\AbstractCondition $conditions, $formName)
     {
         $conditions->setFormName($formName);
-        $conditions->setJsFormObject($formName);
+        $conditions->setJsFormObject(
+            $rule->getConditionsFieldSetId($formName)
+        );
         if ($conditions->getConditions() && is_array($conditions->getConditions())) {
             foreach ($conditions->getConditions() as $condition) {
-                $this->setConditionFormName($condition, $formName);
+                $this->setConditionFormName($rule, $condition, $formName);
             }
         }
     }
