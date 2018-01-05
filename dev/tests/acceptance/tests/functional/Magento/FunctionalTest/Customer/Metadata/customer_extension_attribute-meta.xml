@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateCustomerExtensionAttribute" dataType="customer_extension_attribute" type="create">
         <field key="is_subscribed">boolean</field>
@@ -16,4 +16,4 @@
         <field key="is_subscribed">boolean</field>
         <field key="extension_attribute">customer_nested_extension_attribute</field>
     </operation>
-</config>
+</operations>

@@ -5,7 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoMainSection">
         <element name="productName" type="text" selector=".base"/>
@@ -19,4 +19,4 @@
         <element name="mediaDescription" type="text" selector=".product.attribute.description>div>p>img"/>
         <element name="mediaShortDescription" type="text" selector=".product.attribute.overview>div>p>img"/>
     </section>
-</config>
+</sections>

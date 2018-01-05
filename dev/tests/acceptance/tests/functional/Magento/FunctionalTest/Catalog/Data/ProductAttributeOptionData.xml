@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="productAttributeOption1" type="ProductAttributeOption">
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
@@ -27,4 +27,4 @@
     <entity name="ProductAttributeOptionGetter" type="ProductAttributeOption">
         <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
     </entity>
-</config>
+</entities>

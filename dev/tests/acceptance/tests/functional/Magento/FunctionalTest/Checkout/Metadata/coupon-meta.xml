@@ -7,7 +7,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateCoupon" dataType="coupon" type="create" auth="adminOauth" url="/rest/V1/coupons" method="POST">
         <contentType>application/json</contentType>
@@ -28,4 +28,4 @@
     <operation name="DeleteCoupon" dataType="coupon" type="delete" auth="adminOauth" url="/rest/V1/coupons/{coupon_id}" method="DELETE">
         <contentType>application/json</contentType>
     </operation>
-</config>
+</operations>
