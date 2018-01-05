@@ -18,7 +18,7 @@
             <env value="phantomjs"/>
         </annotations>
         <before>
-            <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
+            <createData entity="_defaultCmsPage" stepKey="createPreReqCMSPage" />
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
@@ -92,6 +92,7 @@
             <see userInput="Hello Block Page!" stepKey="seeContent"/>
         </test>
         <after>
+            <deleteData createDataKey="createPreReqCMSPage" stepKey="deletePreReqCMSPage" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>

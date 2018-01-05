@@ -30,7 +30,8 @@
                 <testCaseId value="MAGETWO-80505"/>
             </annotations>
             <amOnPage url="{{AdminProductEditPage(simple)}}" stepKey="navigateToProduct"/>
-            <waitForPageLoad stepKey="wait"/>
+            <waitForPageLoad stepKey="waitForPageLoad1"/>
+            <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
             <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
             <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitforTinyMCE4Visible1"/>
             <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4Description" />
@@ -56,7 +57,8 @@
                 <testCaseId value="MAGETWO-80505"/>
             </annotations>
             <amOnPage url="{{AdminProductEditPage(simple)}}" stepKey="navigateToProduct"/>
-            <waitForPageLoad stepKey="wait"/>
+            <waitForPageLoad stepKey="waitForPageLoad2"/>
+            <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
             <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
             <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitforTinyMCE4Visible2"/>
             <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4ShortDescription" />

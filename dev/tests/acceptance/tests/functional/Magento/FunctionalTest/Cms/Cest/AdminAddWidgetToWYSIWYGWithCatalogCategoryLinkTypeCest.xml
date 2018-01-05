@@ -66,6 +66,7 @@
             <see userInput="$$createPreReqCategory.name$$" stepKey="seeCategoryLink"/>
         </test>
         <after>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>

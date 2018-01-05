@@ -11,7 +11,7 @@
         <annotations>
             <features value="TinyMCEv4"/>
             <stories value="TinyMCE v4.6 as a native WYSIWYG editor extension-MAGETWO-72114"/>
-            <group value="WYSIWYG"/>
+            <group value="WYSIWYGProduct"/>
             <env value="chrome"/>
             <env value="firefox"/>
             <env value="phantomjs"/>
@@ -29,11 +29,12 @@
                 <testCaseId value="MAGETWO-81819"/>
             </annotations>
             <amOnPage url="{{AdminProductEditPage.url}}" stepKey="navigateToNewProduct"/>
-            <waitForPageLoad stepKey="wait1"/>
+            <waitForPageLoad stepKey="waitForPageLoad1"/>
             <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
             <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
             <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
             <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+            <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToQty" />
             <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
             <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitForDescription" />
             <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="TinyMCE4Description" />

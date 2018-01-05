@@ -17,7 +17,7 @@
             <env value="firefox"/>
         </annotations>
         <before>
-            <createData entity="_defaultBlock" stepKey="createPreBlock" />
+            <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
@@ -69,6 +69,7 @@
             <see userInput="$$createPreBlock.content$$" stepKey="seeBlockLink"/>
         </test>
         <after>
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>

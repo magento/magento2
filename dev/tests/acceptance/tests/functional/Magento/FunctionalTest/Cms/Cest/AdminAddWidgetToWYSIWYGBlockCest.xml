@@ -16,7 +16,7 @@
             <env value="firefox"/>
         </annotations>
         <before>
-            <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
+            <createData entity="_defaultCmsPage" stepKey="createPreReqCMSPage" />
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
@@ -79,7 +79,7 @@
             <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
         </test>
         <after>
-            <!--<deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage" />-->
+            <deleteData createDataKey="createPreReqCMSPage" stepKey="deletePreReqCMSPage" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>

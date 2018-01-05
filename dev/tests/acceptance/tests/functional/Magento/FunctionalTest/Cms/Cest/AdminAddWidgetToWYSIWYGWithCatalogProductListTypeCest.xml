@@ -79,6 +79,9 @@
             <see userInput="$$createPreReqProduct2.name$$" stepKey="seeProductLink2"/>
         </test>
         <after>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
+            <deleteData createDataKey="createPreReqProduct1" stepKey="deletePreReqProduct1" />
+            <deleteData createDataKey="createPreReqProduct2" stepKey="deletePreReqProduct2" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>

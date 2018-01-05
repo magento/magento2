@@ -17,7 +17,7 @@
             <field key="content">string</field>
         </object>
     </operation>
-    <operation name="DeleteCMS" dataType="cms_page" type="delete" auth="adminOauth" url="/V1/cmsPage/{pageId}" method="DELETE">
+    <operation name="DeleteCMS" dataType="cms_page" type="delete" auth="adminOauth" url="/V1/cmsPage/{id}" method="DELETE">
         <contentType>application/json</contentType>
     </operation>
 </config>

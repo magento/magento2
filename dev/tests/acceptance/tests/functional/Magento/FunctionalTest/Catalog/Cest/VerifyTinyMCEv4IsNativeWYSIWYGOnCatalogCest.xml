@@ -12,10 +12,11 @@
         <annotations>
             <features value="TinyMCEv4"/>
             <stories value="Apply new WYSIWYG on Categories Page-MAGETWO-72137"/>
-            <group value="WYSIWYG"/>
+            <group value="WYSIWYGCatalog"/>
             <env value="chrome"/>
             <env value="firefox"/>
             <env value="phantomjs"/>
+            <env value="safari"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
@@ -30,8 +31,8 @@
                 <testCaseId value="MAGETWO-82551"/>
             </annotations>
             <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToNewCatalog"/>
-            <waitForPageLoad stepKey="wait1"/>
-            <waitForLoadingMaskToDisappear stepKey="wait2" />
+            <waitForPageLoad stepKey="waitForPageLoad1"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoading1" />
             <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
             <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
             <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab"/>
@@ -61,6 +62,7 @@
             <!-- Go to storefront product page, assert product content -->
             <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
             <waitForPageLoad stepKey="waitForPageLoad2"/>
+            <waitForElementVisible selector="{{StorefrontCategoryMainSection.CatalogDescription}}"  stepKey="waitForDesVisible" />
             <see userInput="Hello World!" selector="{{StorefrontCategoryMainSection.CatalogDescription}}" stepKey="assertCatalogDescription"/>
         </test>
         <after>
