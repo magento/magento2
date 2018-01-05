@@ -203,9 +203,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var $objectManager ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /**
-         * @var $repository \Magento\Catalog\Model\ProductRepository
-         */
+        /** @var $repository \Magento\Catalog\Model\ProductRepository */
         $repository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
         $product = $repository->get('simple');
         $this->getRequest()->setMethod('POST');
