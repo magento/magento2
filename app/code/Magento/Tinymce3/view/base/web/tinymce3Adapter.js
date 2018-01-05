@@ -245,6 +245,13 @@ define([
         },
 
         /**
+         * @return {String}
+         */
+        getId: function () {
+            return this.id || (this.activeEditor() ? this.activeEditor().id : null) || tinyMceEditors.values()[0].id;
+        },
+
+        /**
          * @return {Object}
          */
         activeEditor: function () {
@@ -259,6 +266,16 @@ define([
          */
         insertContent: function (content, ui) {
             this.activeEditor().execCommand('mceInsertContent', typeof ui !== 'undefined' ? ui : false, content);
+        },
+
+        /**
+         * Set the status of the toolbar to disabled or enabled (true for enabled, false for disabled)
+         * @param {Boolean} enabled
+         */
+        setToolbarStatus: function (enabled) {
+            _.each(this.activeEditor().controlManager.controls, function (property, index, controls) {
+                controls[property.id].setDisabled(!enabled);
+            });
         },
 
         /**
@@ -558,7 +575,14 @@ define([
             content = editor.getContent();
             content = this.decodeContent(content);
 
-            jQuery('#' + this.id).val(content).trigger('change');
+            this.getTextArea().val(content).trigger('change');
+        },
+
+        /**
+         * @return {Object} jQuery textarea element
+         */
+        getTextArea: function () {
+            return jQuery('#' + this.id);
         },
 
         /**

@@ -7,12 +7,13 @@
  * @api
  */
 define([
+    'wysiwygAdapter',
     'Magento_Ui/js/lib/view/utils/async',
     'underscore',
     'ko',
     './abstract',
-    'Magento_Variable/variables'
-], function ($, _, ko, Abstract) {
+    'Magento_Variable/variables',
+], function (wysiwyg, $, _, ko, Abstract) {
     'use strict';
 
     return Abstract.extend({
@@ -88,20 +89,25 @@ define([
         /**
          * Set disabled property to wysiwyg component
          *
-         * @param {Boolean} status
+         * @param {Boolean} disabled
          */
-        setDisabled: function (status) {
-            this.$wysiwygEditorButton.attr('disabled', status);
-
-            /* eslint-disable no-undef */
-            if (wysiwygAdapter) {
-                _.each(wysiwygAdapter.activeEditor().controlManager.controls, function (property, index, controls) {
-                    controls[property.id].setDisabled(status);
-                });
-
-                wysiwygAdapter.activeEditor().getBody().setAttribute('contenteditable', !status);
+        setDisabled: function (disabled) {
+            if (this.$wysiwygEditorButton) {
+                this.$wysiwygEditorButton.attr('disabled', disabled);
             }
 
+            /* eslint-disable no-undef */
+            if (typeof wysiwyg !== 'undefined') {
+                if (disabled) {
+                    wysiwyg.setToolbarStatus(false);
+                    wysiwyg.getPluginButtons().attr('disabled', 'disabled');
+                    wysiwyg.getTextArea().attr('disabled', 'disabled');
+                } else {
+                    wysiwyg.setToolbarStatus(true);
+                    wysiwyg.getPluginButtons().removeAttr('disabled');
+                    wysiwyg.getTextArea().removeAttr('disabled');
+                }
+            }
             /* eslint-enable  no-undef*/
         }
     });
