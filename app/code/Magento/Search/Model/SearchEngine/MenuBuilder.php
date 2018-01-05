@@ -7,8 +7,8 @@ namespace Magento\Search\Model\SearchEngine;
 
 use Magento\Backend\Model\Menu;
 use Magento\Backend\Model\Menu\Builder;
+use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Framework\Search\SearchEngine\ConfigInterface;
-use Magento\Search\Model\EngineResolver;
 
 /**
  * A plugin for Magento\Backend\Model\Menu\Builder class. Implements "after" for "getResult()".
@@ -29,7 +29,7 @@ class MenuBuilder
     protected $searchFeatureConfig;
 
     /**
-     * @var EngineResolver $engineResolver
+     * @var EngineResolverInterface $engineResolver
      */
     protected $engineResolver;
 
@@ -37,11 +37,11 @@ class MenuBuilder
      * MenuBuilder constructor.
      *
      * @param ConfigInterface $searchFeatureConfig
-     * @param EngineResolver $engineResolver
+     * @param EngineResolverInterface $engineResolver
      */
     public function __construct(
         ConfigInterface $searchFeatureConfig,
-        EngineResolver $engineResolver
+        EngineResolverInterface $engineResolver
     ) {
         $this->searchFeatureConfig = $searchFeatureConfig;
         $this->engineResolver = $engineResolver;

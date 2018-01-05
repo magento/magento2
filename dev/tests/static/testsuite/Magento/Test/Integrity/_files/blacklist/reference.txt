@@ -1,8 +1,6 @@
 PEAR_PackageFile
 Simple_Xml
 PersistentCustomerSegmentation
-SolrClient
-SolrQuery
 RegionUpdater
 Fixture_Module
 TheCompoundNamespace_TheCompoundModule
