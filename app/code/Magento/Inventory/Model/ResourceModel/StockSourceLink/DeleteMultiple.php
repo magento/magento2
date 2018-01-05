@@ -32,7 +32,7 @@ class DeleteMultiple
     }
 
     /**
-     * Multiple delete source items
+     * Multiple delete stock source links
      *
      * @param StockSourceLinkInterface[] $links
      * @return void

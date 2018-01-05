@@ -13,7 +13,7 @@ use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkExtensionInterface;
 
 /**
- * Doesn't have API interface because this object is need only for internal module using
+ * {@inheritdoc}
  *
  * @codeCoverageIgnore
  */

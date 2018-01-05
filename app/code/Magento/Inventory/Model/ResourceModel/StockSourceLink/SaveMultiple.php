@@ -54,16 +54,78 @@ class SaveMultiple
             StockSourceLink::STOCK_ID,
         ];
 
-        $data = [];
+        $columnsSql = $this->buildColumnsSqlPart($columns);
+
+        $valuesSql = $this->buildValuesSqlPart($links);
+        $onDuplicateSql = $this->buildOnDuplicateSqlPart($columns);
+        $bind = $this->getSqlBindData($links);
+
+        $insertSql = sprintf(
+            'INSERT INTO %s (%s) VALUES %s %s',
+            $tableName,
+            $columnsSql,
+            $valuesSql,
+            $onDuplicateSql
+        );
+
+        $connection->query($insertSql, $bind);
+    }
+
+    /**
+     * @param array $columns
+     * @return string
+     */
+    private function buildColumnsSqlPart(array $columns): string
+    {
+        $connection = $this->resourceConnection->getConnection();
+
+        $processedColumns = array_map([$connection, 'quoteIdentifier'], $columns);
+
+        return implode(', ', $processedColumns);
+    }
+
+    /**
+     * @param StockSourceLinkInterface[] $links
+     * @return string
+     */
+    private function buildValuesSqlPart(array $links): string
+    {
+        $sql = rtrim(str_repeat('(?, ?), ', count($links)), ', ');
+
+        return $sql;
+    }
+
+    /**
+     * @param StockSourceLinkInterface[] $links
+     * @return array
+     */
+    private function getSqlBindData(array $links): array
+    {
+        $bind = [];
 
         foreach ($links as $link) {
-            $data[] = [$link->getSourceCode(), $link->getStockId()];
+            $bind = array_merge($bind, [
+                $link->getSourceCode(),
+                $link->getStockId()
+            ]);
         }
 
-        if (0 == count($data)) {
-            return;
+        return $bind;
+    }
+
+    /**
+     * @param array $fields
+     * @return string
+     */
+    private function buildOnDuplicateSqlPart(array $fields): string
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $processedFields = [];
+
+        foreach ($fields as $field) {
+            $processedFields[] = sprintf('%1$s = VALUES(%1$s)', $connection->quoteIdentifier($field));
         }
 
-        $connection->insertArray($tableName, $columns, $data);
+        return 'ON DUPLICATE KEY UPDATE ' . implode(', ', $processedFields);
     }
 }

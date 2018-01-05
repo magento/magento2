@@ -10,17 +10,17 @@ namespace Magento\Inventory\Model\StockSourceLink\Command;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink\Collection;
-use Magento\Inventory\Model\ResourceModel\StockSourceLink\CollectionFactory;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink\Collection as StockSourceLinkCollection;
+use Magento\Inventory\Model\ResourceModel\StockSourceLink\CollectionFactory as StockSourceLinkCollectionFactory;
 use Magento\InventoryApi\Api\Data\StockSearchResultsInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
 use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterfaceFactory;
-use Magento\InventoryApi\Api\GetSourceLinkListInterface;
+use Magento\InventoryApi\Api\GetSourceLinksInterface;
 
 /**
  * @inheritdoc
  */
-class GetSourceLinks implements GetSourceLinkListInterface
+class GetSourceLinks implements GetSourceLinksInterface
 {
     /**
      * @var CollectionProcessorInterface
@@ -28,14 +28,14 @@ class GetSourceLinks implements GetSourceLinkListInterface
     private $collectionProcessor;
 
     /**
-     * @var CollectionFactory
+     * @var StockSourceLinkCollectionFactory
      */
-    private $stockCollectionFactory;
+    private $stockSourceLinkCollectionFactory;
 
     /**
      * @var StockSourceLinkSearchResultsInterfaceFactory
      */
-    private $stockSearchResultsFactory;
+    private $stockSourceLinkSearchResultsFactory;
 
     /**
      * @var SearchCriteriaBuilder
@@ -44,19 +44,19 @@ class GetSourceLinks implements GetSourceLinkListInterface
 
     /**
      * @param CollectionProcessorInterface $collectionProcessor
-     * @param CollectionFactory $stockCollectionFactory
-     * @param StockSourceLinkSearchResultsInterfaceFactory $stockSearchResultsFactory
+     * @param StockSourceLinkCollectionFactory $stockSourceLinkCollectionFactory
+     * @param StockSourceLinkSearchResultsInterfaceFactory $stockSourceLinkSearchResultsFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         CollectionProcessorInterface $collectionProcessor,
-        CollectionFactory $stockCollectionFactory,
-        StockSourceLinkSearchResultsInterfaceFactory $stockSearchResultsFactory,
+        StockSourceLinkCollectionFactory $stockSourceLinkCollectionFactory,
+        StockSourceLinkSearchResultsInterfaceFactory $stockSourceLinkSearchResultsFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->collectionProcessor = $collectionProcessor;
-        $this->stockCollectionFactory = $stockCollectionFactory;
-        $this->stockSearchResultsFactory = $stockSearchResultsFactory;
+        $this->stockSourceLinkCollectionFactory = $stockSourceLinkCollectionFactory;
+        $this->stockSourceLinkSearchResultsFactory = $stockSourceLinkSearchResultsFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
@@ -65,13 +65,14 @@ class GetSourceLinks implements GetSourceLinkListInterface
      */
     public function execute(SearchCriteriaInterface $searchCriteria): StockSourceLinkSearchResultsInterface
     {
-        /** @var Collection $collection */
-        $collection = $this->stockCollectionFactory->create();
+        /** @var StockSourceLinkCollection $collection */
+        $collection = $this->stockSourceLinkCollectionFactory->create();
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
-        /** @var StockSearchResultsInterface $searchResult */
-        $searchResult = $this->stockSearchResultsFactory->create();
+        /** @var StockSourceLinkSearchResultsInterface $searchResult */
+        $searchResult = $this->stockSourceLinkSearchResultsFactory->create();
+
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
         $searchResult->setSearchCriteria($searchCriteria);

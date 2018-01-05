@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryApi\Api;
 
-use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-
 /**
- * Remove StockSourceLink list API
+ * Service method for stock source links delete multiple
+ * Performance efficient API
+ *
+ * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
@@ -20,9 +20,9 @@ interface StockSourceLinksDeleteInterface
     /**
      * Remove StockSourceLink list
      *
-     * @param StockSourceLinkInterface[] $links
+     * @param \Magento\InventoryApi\Api\Data\StockSourceLinkInterface[] $links
      * @return void
-     * @throws CouldNotDeleteException
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function execute(array $links);
 }

@@ -10,7 +10,7 @@ namespace Magento\InventoryApi\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Represents relation between Stock and Source entities. Also, it has own fields that are related to the domain model
+ * Represents relation between Stock and Source entities.
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *

@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryApi\Api;
 
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Validation\ValidationException;
-use Magento\InventoryApi\Api\Data\StockSourceLinkInterface;
-
 /**
- * Save StockSourceLink data API
+ * Service method for stock source links save multiple
+ * Performance efficient API
+ *
+ * Used fully qualified namespaces in annotations for proper work of WebApi request parser
  *
  * @api
  */
@@ -21,10 +20,10 @@ interface StockSourceLinksSaveInterface
     /**
      * Save StockSourceLink data
      *
-     * @param StockSourceLinkInterface[] $links
+     * @param \Magento\InventoryApi\Api\Data\StockSourceLinkInterface[] $links
      * @return array
-     * @throws ValidationException
-     * @throws CouldNotSaveException
+     * @throws \Magento\Framework\Validation\ValidationException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function execute(array $links): array;
 }
