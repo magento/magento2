@@ -6,10 +6,10 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateFrontendLabel" dataType="FrontendLabel" type="create">
         <field key="store_id">integer</field>
         <field key="label">string</field>
     </operation>
-</config>
+</operations>

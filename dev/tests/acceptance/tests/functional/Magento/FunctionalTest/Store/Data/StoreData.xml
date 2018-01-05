@@ -5,7 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="customStore" type="store">
         <!--data key="group_id">customStoreGroup.id</data-->
         <data key="name" unique="suffix">store</data>
@@ -16,4 +16,4 @@
         <data key="store_type">group</data>
         <required-entity type="storeGroup">customStoreGroup</required-entity>
     </entity>
-</config>
+</entities>

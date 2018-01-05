@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
@@ -54,4 +54,4 @@
     <section name="AdminChooseAffectedAttributeSetPopup">
         <element name="confirm" type="button" selector="button[data-index='confirm_button']" timeout="30"/>
     </section>
-</config>
+</sections>

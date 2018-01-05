@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="SamplePaypalConfig" type="paypal_config_state">
         <required-entity type="business_account">SampleBusinessAccount</required-entity>
@@ -58,4 +58,4 @@
     <entity name="DefaultApiSignature" type="api_signature">
         <data key="value"/>
     </entity>
-</config>
+</entities>

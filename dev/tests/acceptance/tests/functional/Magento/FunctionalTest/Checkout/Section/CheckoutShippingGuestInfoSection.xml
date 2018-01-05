@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="CheckoutShippingGuestInfoSection">
         <element name="email" type="input" selector="#customer-email"/>
@@ -18,4 +18,4 @@
         <element name="postcode" type="input" selector="input[name=postcode]"/>
         <element name="telephone" type="input" selector="input[name=telephone]"/>
     </section>
-</config>
+</sections>

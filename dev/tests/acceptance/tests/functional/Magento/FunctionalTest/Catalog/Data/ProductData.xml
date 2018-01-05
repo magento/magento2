@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="_defaultProduct" type="product">
         <data key="sku" unique="suffix">testSku</data>
@@ -46,4 +46,4 @@
         <required-entity type="product_extension_attribute">EavStockItem</required-entity>
         <required-entity type="custom_attribute">CustomAttributeProductAttribute</required-entity>
     </entity>
-</config>
+</entities>
