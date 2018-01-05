@@ -14,8 +14,6 @@ interface ContentProviderInterface
     /**
      * Retrieves the release notification content data.
      *
-     * Returns received content or FALSE in case of failure.
-     *
      * @param string $version
      * @param string $edition
      * @param string $locale

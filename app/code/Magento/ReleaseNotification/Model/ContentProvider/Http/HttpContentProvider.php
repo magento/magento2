@@ -66,7 +66,7 @@ class HttpContentProvider implements ContentProviderInterface
             $this->logger->warning(
                 sprintf(
                     'Failed to retrieve the release notification content. The response is: %s',
-                    !empty($result) ? $result : 'Response body is empty.'
+                    empty($result) ? 'Response body is empty.' : $result
                 )
             );
         }

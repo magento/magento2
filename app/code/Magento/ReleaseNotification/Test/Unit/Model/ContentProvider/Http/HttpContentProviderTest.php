@@ -112,7 +112,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
         $edition = 'Community';
         $locale = 'fr_FR';
         $urlLocale = 'https://content.url.example/'. $version . '/' . $edition . '/' . $locale . '.json';
-        $urlDefaultLocale = 'https://content.url.example/2.3.0/'. $version . '/' . $edition . '/en_US.json';
+        $urlDefaultLocale = 'https://content.url.example/'. $version . '/' . $edition . '/en_US.json';
         $response = '{"return":"default-locale"}';
 
         $this->urlBuilderMock->expects($this->exactly(2))
@@ -147,7 +147,7 @@ class HttpContentProviderTest extends \PHPUnit\Framework\TestCase
     public function testGetContentSuccessOnDefaultOrEmpty($version, $edition, $locale, $response)
     {
         $urlLocale = 'https://content.url.example/'. $version . '/' . $edition . '/' . $locale . '.json';
-        $urlDefaultLocale = 'https://content.url.example/2.3.0/'. $version . '/' . $edition . '/en_US.json';
+        $urlDefaultLocale = 'https://content.url.example/'. $version . '/' . $edition . '/en_US.json';
         $urlDefault = 'https://content.url.example/' . $version . '/default.json';
 
         $this->urlBuilderMock->expects($this->exactly(3))

@@ -8,7 +8,7 @@ namespace Magento\Analytics\Model\ReportXml;
 use Magento\Framework\Module\Manager as ModuleManager;
 
 /**
- * Factory to create a module iterator
+ * Iterator for ReportXml modules
  */
 class ModuleIterator extends \IteratorIterator
 {
