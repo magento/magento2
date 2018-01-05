@@ -6,14 +6,11 @@
 
 namespace Magento\GraphQlEav\Model\Resolver;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\ArgumentInterface;
 use Magento\GraphQl\Model\ResolverInterface;
 use Magento\Framework\Exception\InputException;
 use \Magento\GraphQl\Model\ResolverContextInterface;
+use Magento\GraphQlEav\Model\Resolver\Query\Type;
 
 /**
  * Resolve data for custom attribute metadata requests
@@ -21,25 +18,16 @@ use \Magento\GraphQl\Model\ResolverContextInterface;
 class CustomAttributeMetadata implements ResolverInterface
 {
     /**
-     * @var CustomAttributeTypeLocatorInterface
+     * @var Type
      */
-    private $typeLocator;
+    private $type;
 
     /**
-     * @var TypeProcessor
+     * @param Type $type
      */
-    private $typeProcessor;
-
-    /**
-     * @param CustomAttributeTypeLocatorInterface $typeLocator
-     * @param TypeProcessor $typeProcessor
-     */
-    public function __construct(
-        CustomAttributeTypeLocatorInterface $typeLocator,
-        TypeProcessor $typeProcessor
-    ) {
-        $this->typeLocator = $typeLocator;
-        $this->typeProcessor = $typeProcessor;
+    public function __construct(Type $type)
+    {
+        $this->type = $type;
     }
 
     /**
@@ -55,33 +43,15 @@ class CustomAttributeMetadata implements ResolverInterface
         /** @var ArgumentInterface $attributeInputs */
         $attributeInputs = $args['attributes'];
         foreach ($attributeInputs->getValue() as $attribute) {
-            try {
-                $type = $this->typeLocator->getType($attribute['attribute_code'], $attribute['entity_type']);
-            } catch (LocalizedException $e) {
-                throw new GraphQlInputException(__($e->getMessage()));
-            }
+            $type = $this->type->getType($attribute['attribute_code'], $attribute['entity_type']);
 
-            $isComplexType = strpos($type, '\\') !== false;
-            if ($type === TypeProcessor::ANY_TYPE) {
-                continue;
-            } elseif ($isComplexType) {
-                try {
-                    $type = $this->typeProcessor->translateTypeName($type);
-                } catch (\InvalidArgumentException $exception) {
-                    throw new GraphQlInputException(
-                        __('Type %1 has no internal representation declared.', $type),
-                        null,
-                        0,
-                        false
-                    );
-                }
+            if (!empty($type)) {
+                $attributes['items'][] = [
+                    'attribute_code' => $attribute['attribute_code'],
+                    'entity_type' => $attribute['entity_type'],
+                    'attribute_type' => ucfirst($type)
+                ];
             }
-
-            $attributes['items'][] = [
-                'attribute_code' => $attribute['attribute_code'],
-                'entity_type' => $attribute['entity_type'],
-                'attribute_type' => ucfirst($type)
-            ];
         }
 
         return $attributes;

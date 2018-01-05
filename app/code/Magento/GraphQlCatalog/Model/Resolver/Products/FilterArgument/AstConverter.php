@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Argument\Filter\ClauseFactory;
 use Magento\Framework\GraphQl\Argument\Filter\ConnectiveFactory;
 use Magento\Framework\GraphQl\Argument\Filter\Connective;
 use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
+use Magento\GraphQl\Model\Type\Handler\Pool;
 
 /**
  * Converts the input value for "find" to a @see Connective format
@@ -114,9 +115,9 @@ class AstConverter
     {
         $result = [];
         $attributes = $this->entityAttributeList->getDefaultEntityAttributes(\Magento\Catalog\Model\Product::ENTITY);
-        foreach ($attributes as $attribute) {
-            if ((!$attribute->getIsUserDefined()) && !is_array($attribute)) {
-                $result[$attribute->getAttributeCode()] = 'String';
+        foreach ($attributes as $attributeName => $isType) {
+            if ($isType) {
+                $result[$attributeName] = Pool::TYPE_STRING;
             }
         }
 
@@ -125,7 +126,7 @@ class AstConverter
             if (is_array($attribute)) {
                 unset($staticAttributes[$attributeKey]);
             } else {
-                $staticAttributes[$attributeKey] = 'String';
+                $staticAttributes[$attributeKey] = Pool::TYPE_STRING;
             }
         }
         return $result;
