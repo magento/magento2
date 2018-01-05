@@ -275,46 +275,14 @@ class DataGrid extends Grid
     {
         $this->search($filter);
         $rowItem = $this->getRow($filter);
-        $this->waitUntilRowIsVisible($rowItem);
+        $this->waitLoader();
+        $this->_rootElement->find($rowItem->getLocator()['value'], $rowItem->getLocator()['using'])->hover();
         if ($rowItem->isVisible()) {
-            $this->waitUntilSelectRowIsVisible($rowItem);
             $rowItem->find($this->selectItem)->click();
         } else {
             throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
         $this->waitLoader();
-    }
-
-    /**
-     * Wait for row is visible in the grid.
-     *
-     * @param ElementInterface $rowItem
-     * @return void
-     */
-    private function waitUntilRowIsVisible($rowItem)
-    {
-        $locator = $rowItem->getLocator()['value'];
-        $strategy = $rowItem->getLocator()['using'];
-        $this->_rootElement->waitUntil(
-            function () use ($locator, $strategy) {
-                return $this->_rootElement->find($locator, $strategy)->isVisible();
-            }
-        );
-    }
-
-    /**
-     * Wait for select row is visible.
-     *
-     * @param ElementInterface $rowItem
-     * @return void
-     */
-    private function waitUntilSelectRowIsVisible($rowItem)
-    {
-        $this->_rootElement->waitUntil(
-            function () use ($rowItem) {
-                return $rowItem->find($this->selectItem)->isVisible();
-            }
-        );
     }
 
     /**
