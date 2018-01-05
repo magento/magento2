@@ -66,13 +66,9 @@ class Diff implements DiffInterface
     /**
      * @inheritdoc
      */
-    public function get($operation = null)
+    public function getAll()
     {
-        if ($operation === null) {
-            return $this->changes;
-        }
-
-        return isset($this->changes[$operation]) ? $this->changes[$operation] : [];
+        return $this->changes;
     }
 
     /**
@@ -132,18 +128,17 @@ class Diff implements DiffInterface
     }
 
     /**
+     * @param TableElementInterface $dtoObject
      * @inheritdoc
      */
     public function register(ElementInterface $dtoObject, $operation, ElementInterface $oldDtoObject = null)
     {
-        //Comment until whitelist functionality will be done
-        if (!$this->canBeRegistered($dtoObject)) {
-            // return $this; //ignore any operations for non registered elements changes
-        }
         $historyData = ['new' => $dtoObject, 'old' => $oldDtoObject];
         $history = $this->elementHistoryFactory->create($historyData);
+        $dtoObjectName = $dtoObject instanceof TableElementInterface ?
+            $dtoObject->getTable()->getName() : $dtoObject->getName();
         //dtoObjects can have 4 types: column, constraint, index, table
-        $this->changes[$operation][] = $history;
+        $this->changes[$dtoObjectName][$operation][] = $history;
         return $this;
     }
 

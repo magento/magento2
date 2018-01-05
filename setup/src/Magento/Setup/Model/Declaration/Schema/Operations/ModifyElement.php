@@ -6,13 +6,11 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Operations;
 
-use Magento\Setup\Model\Declaration\Schema\Db\AdapterMediator;
 use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator;
+use Magento\Setup\Model\Declaration\Schema\Db\Statement;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
-use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Internal;
-use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Setup\Model\Declaration\Schema\Dto\Index;
 use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
@@ -38,7 +36,7 @@ class ModifyElement implements OperationInterface
     private $dbSchemaWriter;
 
     /**
-     * @var AddElement
+     * @var AddComplexElement
      */
     private $addElement;
 
@@ -50,13 +48,13 @@ class ModifyElement implements OperationInterface
     /**
      * @param DefinitionAggregator $definitionAggregator
      * @param DbSchemaWriterInterface $dbSchemaWriter
-     * @param AddElement $addElement
+     * @param AddComplexElement $addElement
      * @param DropElement $dropElement
      */
     public function __construct(
         DefinitionAggregator $definitionAggregator,
         DbSchemaWriterInterface $dbSchemaWriter,
-        AddElement $addElement,
+        AddComplexElement $addElement,
         DropElement $dropElement
     ) {
         $this->definitionAggregator = $definitionAggregator;
@@ -74,32 +72,16 @@ class ModifyElement implements OperationInterface
     }
 
     /**
-     * Modify constraint (PRIMARY, UNIQUE, FOREIGN keys) definition for existing table
-     *
-     * @param Constraint $constraint
-     */
-    private function modifyConstraint(Constraint $constraint)
-    {
-        $this->dbSchemaWriter->modifyConstraint(
-            $constraint->getTable()->getResource(),
-            $constraint->getName(),
-            $constraint->getTable()->getName(),
-            $constraint->getType(),
-            $this->definitionAggregator->toDefinition($constraint)
-        );
-    }
-
-
-    /**
      * Modify column definition for existing table
      *
      * @param Column $column
+     * @return Statement
      */
     private function modifyColumn(Column $column)
     {
         $definition = $this->definitionAggregator->toDefinition($column);
 
-        $this->dbSchemaWriter->modifyColumn(
+        return $this->dbSchemaWriter->modifyColumn(
             $column->getTable()->getResource(),
             $column->getTable()->getName(),
             $definition
@@ -116,13 +98,12 @@ class ModifyElement implements OperationInterface
     {
         $element = $elementHistory->getNew();
 
-        if ($element instanceof Internal) {
-            $this->modifyConstraint($element);
-        } else if ($element instanceof Index || $element instanceof Reference) {
-            $this->dropElement->doOperation($elementHistory);
-            $this->addElement->doOperation($elementHistory);
-        } else if ($element instanceof Column) {
-            $this->modifyColumn($element);
+        if ($element instanceof Constraint || $element instanceof Index) {
+            $statement = $this->dropElement->doOperation($elementHistory);
+            return $statement->merge($this->addElement->doOperation($elementHistory));
+        } else {
+            /** @var Column $element */
+            return $this->modifyColumn($element);
         }
     }
 }

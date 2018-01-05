@@ -29,20 +29,22 @@ class Timestamp extends Column implements
     private $onUpdate;
 
     /**
-     * @param string      $name
-     * @param string      $type
-     * @param Table       $table
-     * @param $default
+     * @param string $name
+     * @param string $type
+     * @param Table $table
+     * @param string $default
      * @param string|null $onUpdate
+     * @param string|null $onCreate
      */
     public function __construct(
         string $name,
         string $type,
         Table $table,
         string $default,
-        string $onUpdate = null
+        string $onUpdate = null,
+        string $onCreate = null
     ) {
-        parent::__construct($name, $type, $table);
+        parent::__construct($name, $type, $table, $onCreate);
         $this->default = $default;
         $this->onUpdate = $onUpdate;
     }

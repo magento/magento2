@@ -1423,7 +1423,8 @@
                 <item name="recreate_table" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\ReCreateTable</item>
                 <item name="drop_table" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\DropTable</item>
                 <item name="create_table" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\CreateTable</item>
-                <item name="add_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\AddElement</item>
+                <item name="add_column" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\AddColumn</item>
+                <item name="add_complex_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\AddComplexElement</item>
                 <item name="drop_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\DropElement</item>
                 <item name="modify_element" xsi:type="object">Magento\Setup\Model\Declaration\Schema\Operations\ModifyElement</item>
             </argument>

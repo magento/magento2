@@ -10,6 +10,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\MySQL\Definition\Constraints\Internal;
+use Magento\Setup\Model\Declaration\Schema\Db\Statement;
+use Magento\Setup\Model\Declaration\Schema\Db\StatementFactory;
 use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraint;
 use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
@@ -20,51 +22,67 @@ use Magento\Setup\Model\Declaration\Schema\Dto\Constraints\Reference;
 class DbSchemaWriter implements DbSchemaWriterInterface
 {
     /**
+     * Statement directives with which we will decide what to do with tables
+     *
+     * @var array
+     */
+    private $statementDirectives = [
+        self::ALTER_TYPE => 'ALTER TABLE %s %s',
+        self::CREATE_TYPE => 'CREATE TABLE %s %s',
+        self::DROP_TYPE => 'DROP TABLE %s'
+    ];
+
+    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
 
     /**
-     * @param ResourceConnection $resourceConnection
+     * @var StatementFactory
      */
-    public function __construct(ResourceConnection $resourceConnection)
+    private $statementFactory;
+
+    /**
+     * @param ResourceConnection $resourceConnection
+     * @param StatementFactory $statementFactory
+     */
+    public function __construct(ResourceConnection $resourceConnection, StatementFactory $statementFactory)
     {
         $this->resourceConnection = $resourceConnection;
+        $this->statementFactory = $statementFactory;
     }
 
     /**
      * @inheritdoc
-     * @return \Zend_Db_Statement_Interface
      */
     public function createTable($tableName, $resource, array $definition)
     {
-        $adapter = $this->resourceConnection->getConnection($resource);
-
         $sql = sprintf(
-            "CREATE TABLE %s (\n%s\n)",
-            $adapter->quoteIdentifier($tableName),
+            "(\n%s\n)",
             implode(", \n", $definition)
         );
 
-        return $adapter->query($sql);
+        return $this->statementFactory->create(
+            $tableName,
+            self::CREATE_TYPE,
+            $sql,
+            $resource
+        );
     }
 
     /**
      * Drop table from MySQL database
      *
      * @inheritdoc
-     * @return \Zend_Db_Statement_Interface
      */
     public function dropTable($tableName, $resource)
     {
-        $adapter = $this->resourceConnection->getConnection($resource);
-
-        $sql = sprintf(
-            'DROP TABLE %s',
-            $adapter->quoteIdentifier($tableName)
+        return $this->statementFactory->create(
+            $tableName,
+            self::DROP_TYPE,
+            '',
+            $resource
         );
-
-        return $adapter->query($sql);
     }
 
     /**
@@ -97,82 +115,79 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      * We can add three different elements: column, constraint or index
      *
      * @inheritdoc
-     * @return \Zend_Db_Statement_Interface
      */
     public function addElement($elementName, $resource, $tableName, $elementDefinition, $elementType)
     {
-        $addElementSyntax = $elementType === Column::TYPE ? 'ALTER TABLE %s ADD COLUMN %s' : 'ALTER TABLE %s ADD %s';
-
-        $adapter = $this->resourceConnection->getConnection($resource);
-
+        $addElementSyntax = $elementType === Column::TYPE ? 'ADD COLUMN %s' : 'ADD %s';
         $sql = sprintf(
             $addElementSyntax,
-            $adapter->quoteIdentifier($tableName),
             $elementDefinition
         );
-
-        return $adapter->query($sql);
+        return $this->statementFactory->create(
+            $tableName,
+            self::ALTER_TYPE,
+            $sql,
+            $resource
+        );
     }
 
     /**
      * Modify column and change it definition
      *
      * @inheritdoc
-     * @return \Zend_Db_Statement_Interface
      */
     public function modifyColumn($resource, $tableName, $columnDefinition)
     {
-        $adapter = $this->resourceConnection->getConnection($resource);
-
         $sql = sprintf(
-            'ALTER TABLE %s MODIFY COLUMN %s',
-            $adapter->quoteIdentifier($tableName),
+            'MODIFY COLUMN %s',
             $columnDefinition
         );
-
-        return $adapter->query($sql);
-    }
-
-    /**
-     * Do Drop and Add in one query
-     *
-     * For example ALTER TABLE example DROP FOREIGN KEY `foreign_key`, ADD FOREIGN KEY `foreign_key` ...
-     *
-     * @inheritdoc
-     */
-    public function modifyConstraint($resource, $elementName, $tableName, $type, $constraintDefinition)
-    {
-        $adapter = $this->resourceConnection->getConnection($resource);
-        $sql = sprintf(
-            'ALTER TABLE %s %s, %s',
-            $adapter->quoteIdentifier($tableName),
-            $this->getDropElementSQL(
-                $type,
-                $adapter->quoteIdentifier($elementName)
-            ),
-            sprintf('ADD %s', $constraintDefinition)
+        return $this->statementFactory->create(
+            $tableName,
+            self::ALTER_TYPE,
+            $sql,
+            $resource
         );
-
-        return $adapter->query($sql);
     }
 
     /**
      * @inheritdoc
-     * @return \Zend_Db_Statement_Interface
      */
     public function dropElement($resource, $elementName, $tableName, $type)
     {
         $adapter = $this->resourceConnection->getConnection($resource);
 
         $sql = sprintf(
-            'ALTER TABLE %s %s',
-            $adapter->quoteIdentifier($tableName),
+            '%s',
             $this->getDropElementSQL(
                 $type,
                 $adapter->quoteIdentifier($elementName)
             )
         );
+        return $this->statementFactory->create(
+            $tableName,
+            self::ALTER_TYPE,
+            $sql,
+            $resource
+        );
+    }
 
-        return $adapter->query($sql);
+    /**
+     * @inheritdoc
+     */
+    public function compile(Statement $statement)
+    {
+        $adapter = $this->resourceConnection->getConnection($statement->getResource());
+        $adapter->query(
+            sprintf(
+                $this->statementDirectives[$statement->getType()],
+                $adapter->quoteIdentifier($statement->getTableName()),
+                implode(", ", $statement->getStatements())
+            )
+        );
+        //Do post update, like SQL DML operations or etc...
+        foreach ($statement->getTriggers() as $trigger) {
+            call_user_func($trigger);
+        }
     }
 }

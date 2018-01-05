@@ -35,12 +35,13 @@ class Varchar extends Column implements
     private $length;
 
     /**
-     * @param string    $name
-     * @param string    $type
-     * @param Table     $table
-     * @param bool      $nullable
-     * @param int       $length
-     * @param string    $default
+     * @param string $name
+     * @param string $type
+     * @param Table $table
+     * @param int $length
+     * @param bool $nullable
+     * @param string $default
+     * @param string|null $onCreate
      */
     public function __construct(
         string $name,
@@ -48,9 +49,10 @@ class Varchar extends Column implements
         Table $table,
         int $length,
         bool $nullable = true,
-        string $default = null
+        string $default = null,
+        string $onCreate = null
     ) {
-        parent::__construct($name, $type, $table);
+        parent::__construct($name, $type, $table, $onCreate);
         $this->nullable = $nullable;
         $this->default = $default;
         $this->length = $length;

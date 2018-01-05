@@ -29,20 +29,22 @@ class Boolean extends Column implements
     private $default;
 
     /**
-     * @param string   $name
-     * @param string   $type
-     * @param Table    $table
-     * @param $nullable
-     * @param $default
+     * @param string $name
+     * @param string $type
+     * @param Table $table
+     * @param bool $nullable
+     * @param bool $default
+     * @param string|null $onCreate
      */
     public function __construct(
         string $name,
         string $type,
         Table $table,
         bool $nullable = true,
-        bool $default = false
+        bool $default = false,
+        string $onCreate = null
     ) {
-        parent::__construct($name, $type, $table);
+        parent::__construct($name, $type, $table, $onCreate);
         $this->nullable = $nullable;
         $this->default = $default;
     }

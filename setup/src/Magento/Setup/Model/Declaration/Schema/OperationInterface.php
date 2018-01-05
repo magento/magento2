@@ -6,6 +6,8 @@
 
 namespace Magento\Setup\Model\Declaration\Schema;
 
+use Magento\Setup\Model\Declaration\Schema\Db\Statement;
+
 /**
  * With help of this interface you can go through all element types
  * and apply difference, that is persisted in ChangeRegistry
@@ -25,7 +27,7 @@ interface OperationInterface
      * Apply change of any type
      *
      * @param  ElementHistory $elementHistory
-     * @return void
+     * @return Statement
      */
     public function doOperation(ElementHistory $elementHistory);
 }

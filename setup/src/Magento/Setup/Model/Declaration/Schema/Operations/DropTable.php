@@ -61,6 +61,6 @@ class DropTable implements OperationInterface
          * @var Table $table
          */
         $table = $tableHistory->getOld();
-        $this->dbSchemaWriter->dropTable($table->getName(), $table->getResource());
+        return $this->dbSchemaWriter->dropTable($table->getName(), $table->getResource());
     }
 }

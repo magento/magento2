@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Operations;
 
-use Magento\Setup\Model\Declaration\Schema\Db\AdapterMediator;
 use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
@@ -15,19 +14,16 @@ use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
- * Drop element operation
+ * Add element to table
+ * Under complex element means element that has different dependencies, like foreign key has dependencies
+ * to another table
  */
-class DropElement implements OperationInterface
+class AddComplexElement implements OperationInterface
 {
     /**
      * Operation name
      */
-    const OPERATION_NAME = 'drop_element';
-
-    /**
-     * @var DbSchemaWriterInterface
-     */
-    private $dbSchemaWriter;
+    const OPERATION_NAME = 'add_complex_element';
 
     /**
      * @var DefinitionAggregator
@@ -35,15 +31,20 @@ class DropElement implements OperationInterface
     private $definitionAggregator;
 
     /**
-     * @param DbSchemaWriterInterface $dbSchemaWriter
+     * @var DbSchemaWriterInterface
+     */
+    private $dbSchemaWriter;
+
+    /**
      * @param DefinitionAggregator $definitionAggregator
+     * @param DbSchemaWriterInterface $dbSchemaWriter
      */
     public function __construct(
-        DbSchemaWriterInterface $dbSchemaWriter,
-        DefinitionAggregator $definitionAggregator
+        DefinitionAggregator $definitionAggregator,
+        DbSchemaWriterInterface $dbSchemaWriter
     ) {
-        $this->dbSchemaWriter = $dbSchemaWriter;
         $this->definitionAggregator = $definitionAggregator;
+        $this->dbSchemaWriter = $dbSchemaWriter;
     }
 
     /**
@@ -63,12 +64,15 @@ class DropElement implements OperationInterface
          * @var TableElementInterface | ElementInterface $element
          */
         $element = $elementHistory->getNew();
+        $definition = $this->definitionAggregator->toDefinition($element);
 
-        return $this->dbSchemaWriter->dropElement(
-            $element->getTable()->getResource(),
+        $statement = $this->dbSchemaWriter->addElement(
             $element->getName(),
+            $element->getTable()->getResource(),
             $element->getTable()->getName(),
-            $element->getType()
+            $definition,
+            $element->getElementType()
         );
+        return $statement;
     }
 }

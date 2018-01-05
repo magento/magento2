@@ -6,22 +6,26 @@
 
 namespace Magento\Setup\Model\Declaration\Schema\Operations;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Sql\Expression;
 use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Setup\Model\Declaration\Schema\Db\DefinitionAggregator;
+use Magento\Setup\Model\Declaration\Schema\Db\Statement;
+use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\TableElementInterface;
 use Magento\Setup\Model\Declaration\Schema\ElementHistory;
 use Magento\Setup\Model\Declaration\Schema\OperationInterface;
 
 /**
- * Add element to table
+ * Add column to table
  */
-class AddElement implements OperationInterface
+class AddColumn implements OperationInterface
 {
     /**
      * Operation name
      */
-    const OPERATION_NAME = 'add_element';
+    const OPERATION_NAME = 'add_column';
 
     /**
      * @var DefinitionAggregator
@@ -34,15 +38,23 @@ class AddElement implements OperationInterface
     private $dbSchemaWriter;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * @param DefinitionAggregator $definitionAggregator
      * @param DbSchemaWriterInterface $dbSchemaWriter
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         DefinitionAggregator $definitionAggregator,
-        DbSchemaWriterInterface $dbSchemaWriter
+        DbSchemaWriterInterface $dbSchemaWriter,
+        ResourceConnection $resourceConnection
     ) {
         $this->definitionAggregator = $definitionAggregator;
         $this->dbSchemaWriter = $dbSchemaWriter;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -54,22 +66,52 @@ class AddElement implements OperationInterface
     }
 
     /**
+     * Setup triggers if column have onCreate syntax
+     *
+     * @param Statement $statement
+     * @param Column $column
+     * @return Statement
+     */
+    private function setupTriggersIfExists(Statement $statement, Column $column)
+    {
+        if (preg_match('/migrateDataFrom\(([^\)]+)\)/', $column->getOnCreate(), $matches)) {
+            $callback = function() use ($column, $matches) {
+                $adapter = $this->resourceConnection->getConnection(
+                    $column->getTable()->getResource()
+                );
+                $adapter->update(
+                    $column->getTable()->getName(),
+                    [
+                        $column->getName() => new Expression($matches[1])
+                    ]
+                );
+            };
+
+            $statement->addTrigger($callback);
+        }
+
+        return $statement;
+    }
+
+    /**
      * @inheritdoc
      */
     public function doOperation(ElementHistory $elementHistory)
     {
         /**
-         * @var TableElementInterface | ElementInterface $element
+         * @var Column $element
          */
         $element = $elementHistory->getNew();
         $definition = $this->definitionAggregator->toDefinition($element);
 
-        $this->dbSchemaWriter->addElement(
+        $statement = $this->dbSchemaWriter->addElement(
             $element->getName(),
             $element->getTable()->getResource(),
             $element->getTable()->getName(),
             $definition,
             $element->getElementType()
         );
+        $statement = $this->setupTriggersIfExists($statement, $element);
+        return $statement;
     }
 }

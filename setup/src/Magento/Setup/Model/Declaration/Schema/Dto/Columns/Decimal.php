@@ -48,12 +48,13 @@ class Decimal extends Column implements
     /**
      * @param string $name
      * @param string $type
-     * @param Table  $table
-     * @param int    $precission
-     * @param int    $scale
-     * @param bool   $nullable
-     * @param float  $default
-     * @param bool   $unsigned
+     * @param Table $table
+     * @param int $precission
+     * @param int $scale
+     * @param bool $nullable
+     * @param bool $unsigned
+     * @param float $default
+     * @param string|null $onCreate
      */
     public function __construct(
         string $name,
@@ -63,9 +64,10 @@ class Decimal extends Column implements
         int $scale,
         bool $nullable = true,
         bool $unsigned = false,
-        float $default = null
+        float $default = null,
+        string $onCreate = null
     ) {
-        parent::__construct($name, $type, $table);
+        parent::__construct($name, $type, $table, $onCreate);
         $this->precission = $precission;
         $this->scale = $scale;
         $this->nullable = $nullable;

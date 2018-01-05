@@ -77,7 +77,7 @@ class TableDiff
         ElementInterface $generatedTable,
         Diff $diff
     ) {
-        //Handle changing resource
+        //Handle changing shard
         if ($generatedTable->getResource() !== $declaredTable->getResource()) {
             $diff->register(
                 $declaredTable,

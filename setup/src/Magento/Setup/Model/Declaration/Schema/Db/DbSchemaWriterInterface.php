@@ -13,12 +13,27 @@ namespace Magento\Setup\Model\Declaration\Schema\Db;
 interface DbSchemaWriterInterface
 {
     /**
+     * Type for all alter statements
+     */
+    const ALTER_TYPE = 'alter';
+
+    /**
+     * Type for all create statements
+     */
+    const CREATE_TYPE = 'create';
+
+    /**
+     * Type for all drop statements
+     */
+    const DROP_TYPE = 'drop';
+
+    /**
      * Create table from SQL fragments, like columns, constraints, foreign keys, indexes, etc
      *
      * @param $tableName
      * @param $resource
      * @param  array $definition
-     * @return void
+     * @return Statement
      */
     public function createTable($tableName, $resource, array $definition);
 
@@ -27,7 +42,7 @@ interface DbSchemaWriterInterface
      *
      * @param string $tableName
      * @param string $resource
-     * @return mixed
+     * @return Statement
      */
     public function dropTable($tableName, $resource);
 
@@ -41,7 +56,7 @@ interface DbSchemaWriterInterface
      * @param string $tableName
      * @param string $elementDefinition , for example: like CHAR(200) NOT NULL
      * @param string $elementType
-     * @return mixed
+     * @return Statement
      */
     public function addElement($elementName, $resource, $tableName, $elementDefinition, $elementType);
 
@@ -53,22 +68,9 @@ interface DbSchemaWriterInterface
      * @param $resource
      * @param $tableName
      * @param  string $columnDefinition
-     * @return void
+     * @return Statement
      */
     public function modifyColumn($resource, $tableName, $columnDefinition);
-
-    /**
-     * As we can`t just drop and recreate constraint in 2 requests
-     * we need to do this in one request
-     *
-     * @param string $resource
-     * @param string $elementName
-     * @param string $tableName
-     * @param string $type
-     * @param string $constraintDefinition
-     * @return void
-     */
-    public function modifyConstraint($resource, $elementName, $tableName, $type, $constraintDefinition);
 
     /**
      * Drop any element (constraint, column, index) from index
@@ -77,7 +79,15 @@ interface DbSchemaWriterInterface
      * @param string $elementName
      * @param string $tableName
      * @param string $type
-     * @return \Zend_Db_Statement_Interface
+     * @return Statement
      */
     public function dropElement($resource, $elementName, $tableName, $type);
+
+    /**
+     * Compile statements and make SQL request from them
+     *
+     * @param Statement $statement
+     * @return void
+     */
+    public function compile(Statement $statement);
 }

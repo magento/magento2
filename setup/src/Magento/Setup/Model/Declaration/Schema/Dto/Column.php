@@ -25,17 +25,25 @@ class Column extends GenericElement implements
     private $table;
 
     /**
+     * @var null|string
+     */
+    private $onCreate;
+
+    /**
      * @param string $name
      * @param string $type
-     * @param Table  $table
+     * @param Table $table
+     * @param string|null $onCreate
      */
     public function __construct(
         string $name,
         string $type,
-        Table $table
+        Table $table,
+        string $onCreate = null
     ) {
         parent::__construct($name, $type);
         $this->table = $table;
+        $this->onCreate = $onCreate;
     }
 
     /**
@@ -54,5 +62,13 @@ class Column extends GenericElement implements
     public function getElementType()
     {
         return self::TYPE;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getOnCreate()
+    {
+        return $this->onCreate;
     }
 }

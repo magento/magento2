@@ -26,16 +26,18 @@ class Blob extends Column implements
     /**
      * @param string $name
      * @param string $type
-     * @param Table  $table
-     * @param bool   $nullable
+     * @param Table $table
+     * @param bool $nullable
+     * @param string|null $onCreate
      */
     public function __construct(
         string $name,
         string $type,
         Table $table,
-        bool $nullable = true
+        bool $nullable = true,
+        string $onCreate = null
     ) {
-        parent::__construct($name, $type, $table);
+        parent::__construct($name, $type, $table, $onCreate);
         $this->nullable = $nullable;
     }
 

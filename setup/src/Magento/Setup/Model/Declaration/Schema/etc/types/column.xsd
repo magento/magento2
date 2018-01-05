@@ -11,5 +11,12 @@
     <xs:attributeGroup name="baseColumn">
         <xs:attributeGroup ref="basicOperations" />
         <xs:attribute name="name" type="nameType" use="required" />
+        <xs:attribute name="onCreate" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+                    Example migrateDataFrom(field) or migrateDataFrom(field * 2)
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:attributeGroup>
 </xs:schema>

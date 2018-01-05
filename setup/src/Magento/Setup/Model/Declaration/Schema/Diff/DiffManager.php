@@ -7,9 +7,11 @@
 namespace Magento\Setup\Model\Declaration\Schema\Diff;
 
 use Magento\Setup\Model\Declaration\Schema\Comparator;
+use Magento\Setup\Model\Declaration\Schema\Dto\Column;
 use Magento\Setup\Model\Declaration\Schema\Dto\ElementInterface;
 use Magento\Setup\Model\Declaration\Schema\Dto\Table;
-use Magento\Setup\Model\Declaration\Schema\Operations\AddElement;
+use Magento\Setup\Model\Declaration\Schema\Operations\AddColumn;
+use Magento\Setup\Model\Declaration\Schema\Operations\AddComplexElement;
 use Magento\Setup\Model\Declaration\Schema\Operations\CreateTable;
 use Magento\Setup\Model\Declaration\Schema\Operations\DropElement;
 use Magento\Setup\Model\Declaration\Schema\Operations\DropTable;
@@ -120,7 +122,14 @@ class DiffManager
      */
     public function registerCreation(DiffInterface $diff, ElementInterface $element)
     {
-        $operation = $element instanceof Table ? CreateTable::OPERATION_NAME : AddElement::OPERATION_NAME;
+        if ($element instanceof Table) {
+            $operation = CreateTable::OPERATION_NAME;
+        } elseif ($element instanceof Column) {
+            $operation = AddColumn::OPERATION_NAME;
+        } else {
+            $operation = AddComplexElement::OPERATION_NAME;
+        }
+
         $diff->register(
             $element,
             $operation

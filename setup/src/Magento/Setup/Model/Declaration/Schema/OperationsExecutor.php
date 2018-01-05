@@ -7,6 +7,9 @@
 namespace Magento\Setup\Model\Declaration\Schema;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Setup\Model\Declaration\Schema\Db\DbSchemaWriterInterface;
+use Magento\Setup\Model\Declaration\Schema\Db\Statement;
+use Magento\Setup\Model\Declaration\Schema\Db\StatementFactory;
 use Magento\Setup\Model\Declaration\Schema\Diff\DiffInterface;
 
 /**
@@ -31,18 +34,34 @@ class OperationsExecutor
     private $resourceConnection;
 
     /**
-     * @param array              $operations
-     * @param Sharding           $sharding
+     * @var StatementFactory
+     */
+    private $statementFactory;
+
+    /**
+     * @var DbSchemaWriterInterface
+     */
+    private $dbSchemaWriter;
+
+    /**
+     * @param array $operations
+     * @param Sharding $sharding
      * @param ResourceConnection $resourceConnection
+     * @param StatementFactory $statementFactory
+     * @param DbSchemaWriterInterface $dbSchemaWriter
      */
     public function __construct(
         array $operations,
         Sharding $sharding,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        StatementFactory $statementFactory,
+        DbSchemaWriterInterface $dbSchemaWriter
     ) {
         $this->operations = $operations;
         $this->sharding = $sharding;
         $this->resourceConnection = $resourceConnection;
+        $this->statementFactory = $statementFactory;
+        $this->dbSchemaWriter = $dbSchemaWriter;
     }
 
     /**
@@ -84,12 +103,31 @@ class OperationsExecutor
     public function execute(DiffInterface $diff)
     {
         $this->startSetupForAllConnections();
+        $tableHistories = $diff->getAll();
 
-        foreach ($this->operations as $operation) {
-            $histories = $diff->get($operation->getOperationName());
+        foreach ($tableHistories as $tableName => $tableHistory) {
+            /** @var Statement[] $statements */
+            $statements = [];
 
-            foreach ($histories as $history) {
-                $operation->doOperation($history);
+            foreach ($this->operations as $operation) {
+                if (isset($tableHistory[$operation->getOperationName()])) {
+                    /** @var ElementHistory $elementHistory */
+                    foreach ($tableHistory[$operation->getOperationName()] as $elementHistory) {
+                        $newStatement = $operation->doOperation($elementHistory);
+                        /** @var Statement $oldStatement */
+                        $oldStatement = end($statements);
+
+                        if ($oldStatement && $oldStatement->canDoMerge($newStatement)) {
+                            $oldStatement->merge($newStatement);
+                        } else {
+                            $statements[] = $newStatement;
+                        }
+                    }
+                }
+            }
+            //As some statements can`t be merged with each other, we can describe them only with array
+            foreach ($statements as $statement) {
+                $this->dbSchemaWriter->compile($statement);
             }
         }
 

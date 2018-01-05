@@ -32,10 +32,9 @@ interface DiffInterface
      *   ]
      * ]
      *
-     * @param  string $operation If operation is not specified, changes for all operations will be retrieved
-     * @return ElementHistory[]
+     * @return array
      */
-    public function get($operation = null);
+    public function getAll();
 
     /**
      * Register operation
