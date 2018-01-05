@@ -9,6 +9,7 @@
         "magento/module-eav": "101.0.*",
         "magento/module-reports": "100.2.*",
         "magento/module-sales": "101.0.*",
+        "magento/module-cms": "102.0.*",
         "magento/module-quote": "101.0.*",
         "magento/module-catalog": "102.0.*",
         "magento/module-user": "101.0.*",
