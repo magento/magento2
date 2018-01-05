@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © 2013-2018 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
@@ -40,6 +40,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ['catalog_view_container', ['category_ids' => 100001], 0],
             ['catalog_view_container', ['category_ids' => []], 0],
             ['catalog_view_container', [], 0],
+            ['catalog_view_container', ['visibility' => [2, 4]], 5],
         ];
     }
 }
