@@ -180,7 +180,6 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
                 );
             }
         }
-
     }
 
     /**
