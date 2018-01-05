@@ -238,6 +238,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $rowSelect = $connection->fetchRow($select);
 
-        return is_array($rowSelect);
+        return (is_array($rowSelect) && !empty($rowSelect));
     }
 }
