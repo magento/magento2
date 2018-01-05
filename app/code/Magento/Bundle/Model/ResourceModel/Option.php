@@ -81,7 +81,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         parent::_afterSave($object);
 
-        $condition = [
+        $conditions = [
             'option_id = ?' => $object->getId(),
             'store_id = ? OR store_id = 0' => $object->getStoreId(),
             'parent_product_id = ?' => $object->getParentId()
@@ -89,20 +89,13 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $connection = $this->getConnection();
 
-        $select = $connection->select()->from($this->getTable('catalog_product_bundle_option_value'));
-        foreach ($condition as $k => $v) {
-            $select->where($k, $v);
-        }
-        $select->limit(1);
-
-        $rowSelect = $connection->fetchRow($select);
-        if (is_array($rowSelect)) {
+        if ($this->isOptionPresent($conditions)) {
             $connection->update(
                 $this->getTable('catalog_product_bundle_option_value'),
                 [
                     'title' => $object->getTitle()
                 ],
-                $condition
+                $conditions
             );
         } else {
             $data = new \Magento\Framework\DataObject();
@@ -224,5 +217,27 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->entityManager->save($object);
 
         return $this;
+    }
+
+    /**
+     * Is Bundle option present in the database
+     *
+     * @param array $conditions
+     *
+     * @return bool
+     */
+    private function isOptionPresent($conditions)
+    {
+        $connection = $this->getConnection();
+
+        $select = $connection->select()->from($this->getTable('catalog_product_bundle_option_value'));
+        foreach ($conditions as $condition => $conditionValue) {
+            $select->where($condition, $conditionValue);
+        }
+        $select->limit(1);
+
+        $rowSelect = $connection->fetchRow($select);
+
+        return is_array($rowSelect);
     }
 }
