@@ -40,7 +40,6 @@
             </tr>
         </thead>
         <?php $_items = $_creditmemo->getAllItems(); ?>
-        <?php $_count = count($_items) ?>
         <?php foreach ($_items as $_item): ?>
         <?php if ($_item->getOrderItem()->getParentItem()) {
     continue;
