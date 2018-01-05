@@ -4,27 +4,23 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQlConfigurableProduct\Model\Plugin\Model\Resolver\Products\DataProvider\Product;
+namespace Magento\GraphQlConfigurableProduct\Model\Plugin\Model\Resolver\Products\DataProvider\Product\Formatter;
 
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter;
+use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 
 /**
  * Post formatting plugin to continue formatting data for configurable type products
  */
-class FormatterPlugin
+class ConfigurableOptions implements FormatterInterface
 {
     /**
      * Add configurable links and options to configurable types
      *
-     * @param Formatter $subject
-     * @param array $productData
-     * @param Product $product
-     * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * {@inheritdoc}
      */
-    public function afterFormat(Formatter $subject, array $productData, Product $product)
+    public function format(Product $product, array $productData = [])
     {
         if ($product->getTypeId() === Configurable::TYPE_CODE) {
             $extensionAttributes = $product->getExtensionAttributes();

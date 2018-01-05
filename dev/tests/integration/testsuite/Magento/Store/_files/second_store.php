@@ -10,7 +10,8 @@ $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Ma
 if (!$store->load('fixture_second_store', 'code')->getId()) {
     $websiteId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
         \Magento\Store\Model\StoreManagerInterface::class
-    )->getWebsite()->getId();
+    )->getWebsite()
+        ->getId();
     $groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
         \Magento\Store\Model\StoreManagerInterface::class
     )->getWebsite()->getDefaultGroupId();
