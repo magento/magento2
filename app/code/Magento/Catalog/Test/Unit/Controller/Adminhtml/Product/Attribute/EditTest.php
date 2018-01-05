@@ -87,11 +87,6 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     protected $resultPageFactory;
 
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    protected $objectManager;
-
     protected function setUp()
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMock();
@@ -152,8 +147,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
         $this->context->expects($this->any())->method('getResultPageFactory')->willReturn($this->resultPageFactory);
         $this->context->expects($this->any())->method('getSession')->willReturn($this->session);
 
-        $this->objectManager = new ObjectManager($this);
-        $this->editController = $this->objectManager->getObject(
+        $objectManager = new ObjectManager($this);
+        $this->editController = $objectManager->getObject(
             \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Edit::class,
             [
                 'context' => $this->context,
