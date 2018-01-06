@@ -18,7 +18,7 @@ namespace Magento\InventoryApi\Api;
 interface StockSourceLinksDeleteInterface
 {
     /**
-     * Remove StockSourceLink list
+     * Remove StockSourceLink list list
      *
      * @param \Magento\InventoryApi\Api\Data\StockSourceLinkInterface[] $links
      * @return void

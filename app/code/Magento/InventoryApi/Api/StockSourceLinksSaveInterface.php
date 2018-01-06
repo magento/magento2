@@ -18,7 +18,7 @@ namespace Magento\InventoryApi\Api;
 interface StockSourceLinksSaveInterface
 {
     /**
-     * Save StockSourceLink data
+     * Save StockSourceLink list data
      *
      * @param \Magento\InventoryApi\Api\Data\StockSourceLinkInterface[] $links
      * @return void
