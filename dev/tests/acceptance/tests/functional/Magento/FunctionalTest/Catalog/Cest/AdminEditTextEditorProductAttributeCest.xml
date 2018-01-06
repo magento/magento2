@@ -11,7 +11,7 @@
         <annotations>
             <features value="TinyMCEv4"/>
             <stories value="Input type configuration for custom Product Attributes-MAGETWO-51484"/>
-            <group value="editProductAttribute"/>
+            <group value="catalog"/>
             <env value="chrome"/>
             <env value="firefox"/>
             <env value="phantomjs"/>

@@ -11,7 +11,7 @@
         <annotations>
             <features value="Add Image to WYSIWYG CMS"/>
             <stories value="Default WYSIWYG toolbar configuration with Magento Media Gallery-MAGETWO-42041"/>
-            <group value="addImageCMS"/>
+            <group value="cms"/>
             <env value="chrome"/>
             <env value="firefox"/>
         </annotations>
@@ -73,8 +73,7 @@
             <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
             <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
             <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
-            <waitForLoadingMaskToDisappear stepKey="waitForLoading8" />
-            <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+            <waitForText userInput="You saved the page." stepKey="seeSuccessMessage"/>
             <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
             <waitForPageLoad  stepKey="waitForPageLoad5"/>
             <seeElement selector="{{StorefrontCMSPageSection.mediaDescription}}" stepKey="assertMediaDescription"/>

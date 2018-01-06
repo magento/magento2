@@ -29,15 +29,15 @@
             <!--Create Custom Variable-->
             <actionGroup ref="CreateCustomVariableActionGroup" stepKey="createCustomVariable" />
             <!--Setup Store information-->
-            <waitForPageLoad stepKey="wait" />
-            <amOnPage url="/admin/admin/system_config/" stepKey="goToConfigStoreInformation" />
             <waitForPageLoad stepKey="waitForPageLoad1" />
+            <amOnPage url="/admin/admin/system_config/" stepKey="goToConfigStoreInformation" />
+            <waitForPageLoad stepKey="waitForPageLoad2" />
             <conditionalClick selector="{{StoreConfigSection.StoreInformation}}" dependentSelector="{{StoreConfigSection.CheckIfTabExpand}}" stepKey="checkIfTabOpen" visible="true"/>
             <fillField selector="{{StoreConfigSection.City}}" userInput="{{_defaultVariable.city}}" stepKey="fillCity" />
             <click selector="{{StoreConfigSection.Save}}" stepKey="saveConfig"/>
             <!--Main test-->
             <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
-            <waitForPageLoad stepKey="waitForPageLoad1"/>
+            <waitForPageLoad stepKey="waitForPageLoad3"/>
             <fillField selector="{{BasicFieldNewsletterSection.templateName}}" userInput="{{_defaultNewsletter.name}}" stepKey="fillTemplateName" />
             <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />
             <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
@@ -47,7 +47,7 @@
             <seeElement selector="{{NewsletterWYSIWYGSection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
             <click selector="{{NewsletterWYSIWYGSection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon1" />
             <waitForText userInput="Insert Variable" stepKey="waitForSlideOutOpen"/>
-            <waitForLoadingMaskToDisappear stepKey="waitForPageLoad3"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
             <!--see Insert Variable button disabled-->
             <see selector="{{VariableSection.InsertVariableBtnDisabled}}" userInput="Insert Variable" stepKey="seeInsertWidgetDisabled" />
             <!--see Cancel button enabed-->
@@ -61,31 +61,31 @@
             <click selector="{{VariableSection.Radio('city')}}" stepKey="selectDefaultVariable"/>
             <see selector="{{VariableSection.InsertVariableBtnEnabled}}" userInput="Insert Variable" stepKey="seeInsertVarialeEnabled" />
             <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save1" />
-            <waitForPageLoad stepKey="waitForPageLoad10" />
+            <waitForPageLoad stepKey="waitForPageLoad4" />
             <click selector="{{NewsletterWYSIWYGSection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon2" />
-            <waitForPageLoad stepKey="waitForPageLoad4"/>
+            <waitForPageLoad stepKey="waitForPageLoad5"/>
             <!--see custom variable-->
             <see userInput="{{customVariable.code}}"  stepKey="seeCustomVariable"/>
             <seeElement selector="{{VariableSection.SearchTxtbox}}"  stepKey="searchBox"/>
             <!--press Enter-->
             <pressKey selector="{{VariableSection.SearchTxtbox}}" parameterArray="['Test Variable',\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="pressKeyEnter"/>
-            <waitForPageLoad stepKey="waitForPageLoad5" />
+            <waitForPageLoad stepKey="waitForPageLoad6" />
             <!--see result-->
             <see selector="{{VariableSection.searchResult(customVariable.code)}}" userInput="{{customVariable.code}}" stepKey="seeResult" />
             <!--Insert custom variable-->
             <click selector="{{VariableSection.VariableRadio(customVariable.code)}}" stepKey="selectCustomVariable1"/>
-            <waitForPageLoad stepKey="waitForPageLoad6"/>
+            <waitForPageLoad stepKey="waitForPageLoad7"/>
             <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save2" />
             <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
             <click selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" stepKey="clickShow/HideBtn"/>
             <waitForElementVisible selector="{{NewsletterWYSIWYGSection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
             <seeElement selector="{{NewsletterWYSIWYGSection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
             <click selector="{{BasicFieldNewsletterSection.save}}" stepKey="clickSaveTemplate"/>
-            <waitForPageLoad stepKey="waitForPageLoad9" />
+            <waitForPageLoad stepKey="waitForPageLoad8" />
             <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview1" />
             <switchToWindow userInput="action_window" stepKey="switchToWindow1"/>
             <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe1" />
-            <waitForPageLoad stepKey="waitForPageLoad7"/>
+            <waitForPageLoad stepKey="waitForPageLoad9"/>
             <!--see Default Variable on Storefront-->
             <see userInput="{{_defaultVariable.city}}" stepKey="seeDefaultVariable" />
             <!--see Custom Variable on Storefront-->
@@ -97,7 +97,7 @@
             <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview2" />
             <switchToWindow userInput="action_window" stepKey="switchToWindow2"/>
             <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe2" />
-            <waitForPageLoad stepKey="waitForPageLoad8"/>
+            <waitForPageLoad stepKey="waitForPageLoad10"/>
             <!--see custom variable blank-->
             <dontSee userInput="{{customVariable.html}}" stepKey="dontSeeCustomVariableName" />
             <closeTab stepKey="closeTab"/>

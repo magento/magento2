@@ -22,7 +22,7 @@
                 <description value="You should be able to create a Category in the admin back-end."/>
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-72102"/>
-                <group value="category"/>
+                <group value="category1"/>
             </annotations>
             <loginAsAdmin stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>

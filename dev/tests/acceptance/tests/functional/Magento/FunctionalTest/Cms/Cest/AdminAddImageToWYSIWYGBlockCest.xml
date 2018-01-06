@@ -11,7 +11,7 @@
         <annotations>
             <features value="Add Image to WYSIWYG Block"/>
             <stories value="Default WYSIWYG toolbar configuration with Magento Media Gallery-MAGETWO-42041"/>
-            <group value="addImageBlock"/>
+            <group value="block"/>
             <env value="firefox"/>
             <env value="chrome"/>
         </annotations>
@@ -78,11 +78,13 @@
             <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
             <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
             <waitForPageLoad stepKey="waitForPageLoad6"/>
-            <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="waitForCMSPageGrid" />
-            <scrollTo selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="scrollToCMSPage" />
-            <click selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="clickSelect" />
-            <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="waitForEditLink" />
-            <click selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="clickEdit" />
+            <click selector="{{CmsPagesPageActionsSection.FilterBtn}}" stepKey="clickFiltersBtn" />
+            <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createPreReqCMSPage.identifier$$" stepKey="fillOutURLKey" />
+            <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />
+            <waitForLoadingMaskToDisappear stepKey="waitForLoading9" />
+            <click selector="{{CmsPagesPageActionsSection.select('$$createPreReqCMSPage.identifier$$')}}" stepKey="clickSelect" />
+            <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit('$$createPreReqCMSPage.identifier$$')}}" stepKey="waitForEditLink" />
+            <click selector="{{CmsPagesPageActionsSection.edit('$$createPreReqCMSPage.identifier$$')}}" stepKey="clickEdit" />
             <waitForPageLoad stepKey="waitForPageLoad7" />
             <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
             <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
@@ -102,7 +104,7 @@
             <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
             <waitForPageLoad stepKey="waitForPageLoad10"/>
             <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
-            <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage"/>
+            <amOnPage url="$$createPreReqCMSPage.identifier$$" stepKey="amOnPageTestPage"/>
             <waitForPageLoad stepKey="waitForPageLoad11" />
             <!--see image on Storefront-->
             <seeElement selector="{{StorefrontBlockSection.mediaDescription}}" stepKey="assertMediaDescription"/>

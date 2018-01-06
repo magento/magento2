@@ -11,7 +11,7 @@
         <annotations>
             <features value="Add Image to WYSIWYG on Product Page"/>
             <stories value="Default WYSIWYG toolbar configuration with Magento Media Gallery-MAGETWO-42041"/>
-            <group value="addImageProduct"/>
+            <group value="catalog"/>
             <env value="chrome"/>
             <env value="firefox"/>
         </annotations>

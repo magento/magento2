@@ -11,7 +11,7 @@
         <annotations>
             <features value="Add Variable to WYSIWYG"/>
             <stories value="Add Variable to WYSIWYG MAGETWO-42158"/>
-            <group value="addVariableToCMS"/>
+            <group value="cms"/>
             <env value="chrome"/>
             <env value="firefox"/>
         </annotations>
@@ -84,7 +84,7 @@
             <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
             <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
             <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
-            <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
+            <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage1"/>
             <!--see Default Variable on Storefront-->
             <see userInput="{{_defaultVariable.city}}" stepKey="seeDefaultVariable" />
             <!--see Custom Variable on Storefront-->
@@ -92,7 +92,7 @@
             <!--Delete Custom Variable-->
             <actionGroup ref="DeleteCustomVariableActionGroup" stepKey="deleteCustomVariable" />
             <!--Refresh Storefront-->
-            <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
+            <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage2"/>
             <waitForPageLoad stepKey="waitForPageLoad7" />
             <!--see custom variable blank-->
             <dontSee userInput="{{customVariable.html}}" stepKey="dontSeeCustomVariableName" />

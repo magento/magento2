@@ -11,7 +11,7 @@
         <annotations>
             <features value="Add Widget to WYSIWYG"/>
             <stories value="Widgets in WYSIWYG"/>
-            <group value="categoryLink"/>
+            <group value="cms"/>
             <env value="chrome"/>
             <env value="firefox"/>
         </annotations>
@@ -30,14 +30,14 @@
             </annotations>
             <!--Main test-->
             <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage"/>
-            <waitForPageLoad stepKey="wait1"/>
+            <waitForPageLoad stepKey="waitForPageLoad1"/>
             <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
             <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
             <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
             <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
             <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
             <click selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
-            <waitForPageLoad stepKey="wait2"/>
+            <waitForPageLoad stepKey="waitForPageLoad2"/>
             <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
             <!--see Insert Widget button disabled-->
             <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled" />
@@ -45,11 +45,11 @@
             <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
             <!--Select "Widget Type"-->
             <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Category Link" stepKey="selectCatalogCategoryLink" />
-            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
+            <waitForLoadingMaskToDisappear stepKey="waitForLoading1" />
             <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetEnabled" />
             <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="Category Link Block Template" stepKey="selectTemplate" />
             <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectCategoryBtn" />
-            <waitForLoadingMaskToDisappear stepKey="wait3"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoading2"/>
             <click userInput="$$createPreReqCategory.name$$" stepKey="selectPreCreateCategory" />
             <waitForElementNotVisible selector="{{WidgetSection.SelectCategoryTitle}}" stepKey="waitForSlideoutCloses1" />
             <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
@@ -60,7 +60,7 @@
             <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
             <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
             <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
-            <waitForPageLoad stepKey="wait5" />
+            <waitForPageLoad stepKey="waitForPageLoad3" />
             <see userInput="Hello CMS Page!" stepKey="seeContent"/>
             <!--see widget on Storefront-->
             <see userInput="$$createPreReqCategory.name$$" stepKey="seeCategoryLink"/>

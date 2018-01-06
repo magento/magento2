@@ -12,7 +12,7 @@
         <annotations>
             <features value="TinyMCEv4"/>
             <stories value="Apply new WYSIWYG on CMS Page-MAGETWO-42046"/>
-            <group value="cmsWYSIWYG"/>
+            <group value="cms"/>
             <env value="chrome"/>
             <env value="firefox"/>
             <env value="phantomjs"/>
@@ -61,6 +61,7 @@
             <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
             <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
             <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
             <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
             <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
             <waitForPageLoad stepKey="waitForPageLoad2"/>

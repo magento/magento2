@@ -12,7 +12,7 @@
         <annotations>
             <features value="TinyMCEv4"/>
             <stories value="Apply new WYSIWYG on Categories Page-MAGETWO-72137"/>
-            <group value="WYSIWYGCatalog"/>
+            <group value="catalog"/>
             <env value="chrome"/>
             <env value="firefox"/>
             <env value="phantomjs"/>
