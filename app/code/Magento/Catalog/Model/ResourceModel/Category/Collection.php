@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -111,7 +112,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $storeManager,
             $connection
         );
-        $this->scopeConfig = $scopeConfig ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfig = $scopeConfig ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
