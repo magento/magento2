@@ -44,7 +44,7 @@ class StockSourceLinksSave implements StockSourceLinksSaveInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $links): array
+    public function execute(array $links)
     {
         if (empty($links)) {
             throw new InputException(__('Input data is empty'));

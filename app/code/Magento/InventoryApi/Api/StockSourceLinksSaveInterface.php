@@ -21,9 +21,9 @@ interface StockSourceLinksSaveInterface
      * Save StockSourceLink data
      *
      * @param \Magento\InventoryApi\Api\Data\StockSourceLinkInterface[] $links
-     * @return array
+     * @return void
      * @throws \Magento\Framework\Validation\ValidationException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function execute(array $links): array;
+    public function execute(array $links);
 }
