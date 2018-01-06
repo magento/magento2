@@ -14,8 +14,8 @@ class RegionTest extends \PHPUnit_Framework_TestCase
     public function testRender($regionCollection)
     {
         $countryFactoryMock = $this->getMock(
-            'Magento\Directory\Model\CountryFactory',
-            ['create'],
+            \Magento\Directory\Model\CountryFactory::class,
+            [],
             [],
             '',
             false
