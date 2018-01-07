@@ -13,6 +13,11 @@ class InheritanceBasedFrontendAction extends Action
      */
     private $pageFactory;
 
+    /**
+     * @var bool
+     */
+    private $executeWasCalled = false;
+
     public function __construct(Context $context, PageFactory $pageFactory)
     {
         parent::__construct($context);
@@ -21,6 +26,12 @@ class InheritanceBasedFrontendAction extends Action
 
     public function execute()
     {
+        $this->executeWasCalled = true;
         return $this->pageFactory->create();
+    }
+
+    public function isExecuted(): bool
+    {
+        return $this->executeWasCalled;
     }
 }
