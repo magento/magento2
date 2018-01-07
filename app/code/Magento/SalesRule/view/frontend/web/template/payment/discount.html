@@ -22,23 +22,14 @@
                         <span data-bind="i18n: 'Enter discount code'"></span>
                     </label>
                     <div class="control">
-                        <!-- ko ifnot: isApplied() -->
                         <input class="input-text"
-                               type="text"
-                               id="discount-code"
-                               name="discount_code"
-                               data-validate="{'required-entry':true}"
-                               data-bind="value: couponCode, attr:{placeholder: $t('Enter discount code')} " />
-                        <!-- /ko -->
-                        <!-- ko if: isApplied() -->
-                        <input class="input-text"
+                               data-bind="attr:{disabled:isApplied()}"
                                type="text"
                                id="discount-code-applied"
                                disabled="disabled"
                                name="discount_code"
                                data-validate="{'required-entry':true}"
                                data-bind="value: couponCode, attr:{placeholder: $t('Enter discount code')} " />
-                        <!-- /ko -->
                     </div>
                 </div>
             </div>
