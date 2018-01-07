@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ControllerActionTest extends TestCase
 {
-    public function setupEventManagerSpy(): void
+    public function setupEventManagerSpy()
     {
         /** @var ObjectManager $objectManager */
         $objectManager = ObjectManager::getInstance();
@@ -57,7 +57,7 @@ class ControllerActionTest extends TestCase
         $objectManager->addSharedInstance($eventManagerSpy, Event\Manager\Proxy::class);
     }
 
-    private function assertEventDispatchCount($eventName, $expectedCount): void
+    private function assertEventDispatchCount($eventName, $expectedCount)
     {
         $message = sprintf('Event %s was expected to be dispatched %d time(s).', $eventName, $expectedCount);
         $this->assertCount($expectedCount, $this->getEventManager()->spyOnDispatchedEvent($eventName), $message);
