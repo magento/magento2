@@ -75,8 +75,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
             throw new \Magento\Framework\Webapi\Exception($exceptionMessage);
         }
         $data = $this->_xmlParser->xmlToArray();
-        /** Data will always have exactly one element so it is safe to call reset here. */
-        return reset($data);
+        return $data;
     }
 
     /**

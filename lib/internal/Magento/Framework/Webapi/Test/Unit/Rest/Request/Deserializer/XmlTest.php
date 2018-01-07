@@ -54,7 +54,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
         $validInputXml = '<?xml version="1.0"?><xml><key1>test1</key1><key2>test2</key2></xml>';
         $returnArray = ['xml' => ['key1' => 'test1', 'key2' => 'test2']];
         $this->_xmlParserMock->expects($this->once())->method('xmlToArray')->will($this->returnValue($returnArray));
-        $expectedArray = ['key1' => 'test1', 'key2' => 'test2'];
+        $expectedArray = ['xml' => ['key1' => 'test1', 'key2' => 'test2']];
         /** Initialize SUT. */
         $this->assertEquals(
             $expectedArray,
