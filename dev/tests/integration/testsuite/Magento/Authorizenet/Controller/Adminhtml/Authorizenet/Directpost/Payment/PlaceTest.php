@@ -14,7 +14,7 @@ class PlaceTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 {
     /**
      * Test requestToAuthorizenetData returning
-     * 
+     *
      * @magentoAppArea adminhtml
      */
     public function testExecuteAuthorizenetDataReturning()
