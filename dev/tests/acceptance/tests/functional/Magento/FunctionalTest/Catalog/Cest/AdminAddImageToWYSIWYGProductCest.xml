@@ -60,7 +60,7 @@
             <seeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.imageSelected(ImageUpload.file)}}" stepKey="seeImageSelected1" />
             <see selector="{{ProductDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn1"/>
             <click selector="{{ProductDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected1" />
-            <waitForText userInput="OK" stepKey="waitForConfirm1" />
+            <waitForText userInput="OK" stepKey="waitForConfirm1" time="50"/>
             <click selector="{{ProductDescriptionWYSIWYGToolbarSection.confirmDelete}}" stepKey="confirmDelete1" />
             <waitForElementNotVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.image(ImageUpload.file)}}" stepKey="waitForImageDeleted1" />
             <dontSeeElement selector="{{ProductDescriptionWYSIWYGToolbarSection.image(ImageUpload.file)}}" stepKey="dontSeeImage1" />
@@ -91,7 +91,7 @@
             <waitForElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" stepKey="waitForDeletebtn" />
             <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn2"/>
             <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected2" />
-            <waitForText userInput="OK" stepKey="waitForConfirm3" />
+            <waitForText userInput="OK" stepKey="waitForConfirm3" time="50"/>
             <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.confirmDelete}}" stepKey="confirmDelete2" />
             <attachFile selector="{{ProductShortDescriptionWYSIWYGToolbarSection.BrowseUploadImage}}" userInput="{{ImageUpload1.file}}" stepKey="uploadImage4"/>
             <waitForLoadingMaskToDisappear stepKey="waitForLoading11" />

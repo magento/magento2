@@ -45,6 +45,7 @@
             <waitForElementVisible selector="{{WidgetSection.CMSPage}}" stepKey="waitForPageVisible" />
             <click selector="{{WidgetSection.CMSPage}}" stepKey="selectPreCreateCMS" />
             <waitForElementNotVisible selector="{{WidgetSection.SelectPageTitle}}" stepKey="waitForSlideOutCloses" />
+            <wait time="5" stepKey="waitForSlideoutCloses2" />
             <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
             <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
             <waitForElementNotVisible selector="{{WidgetSection.InsertWidgetTitle}}" stepKey="waitForSlideOutCloses1" />

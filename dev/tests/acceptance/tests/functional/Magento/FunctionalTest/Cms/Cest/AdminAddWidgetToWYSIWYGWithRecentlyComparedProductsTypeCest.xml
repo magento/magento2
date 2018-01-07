@@ -14,7 +14,6 @@
             <stories value="Widgets in WYSIWYG"/>
             <group value="cms"/>
             <env value="chrome"/>
-            <env value="firefox"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
