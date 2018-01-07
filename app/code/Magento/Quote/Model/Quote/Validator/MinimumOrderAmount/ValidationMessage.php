@@ -37,8 +37,8 @@ class ValidationMessage
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Locale\CurrencyInterface $currency = null,
-        \Magento\Framework\Pricing\Helper\Data $priceHelper
+        \Magento\Framework\Locale\CurrencyInterface $currency,
+        \Magento\Framework\Pricing\Helper\Data $priceHelper = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
