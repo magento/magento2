@@ -12,6 +12,11 @@ class InterfaceOnlyFrontendAction implements ActionInterface
      */
     private $pageFactory;
 
+    /**
+     * @var bool
+     */
+    private $executeWasCalled = false;
+
     public function __construct(PageFactory $pageFactory)
     {
         $this->pageFactory = $pageFactory;
@@ -19,6 +24,12 @@ class InterfaceOnlyFrontendAction implements ActionInterface
 
     public function execute()
     {
+        $this->executeWasCalled = true;
         return $this->pageFactory->create();
+    }
+
+    public function isExecuted(): bool
+    {
+        return $this->executeWasCalled;
     }
 }

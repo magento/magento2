@@ -69,7 +69,8 @@ class EventDispatchPlugin
      */
     private function isSetActionNoPostDispatchFlag(ActionInterface $subject): bool
     {
-        return $this->actionFlag->get('', Action::FLAG_NO_POST_DISPATCH);
+        return $this->actionFlag->get('', Action::FLAG_NO_DISPATCH) ||
+               $this->actionFlag->get('', Action::FLAG_NO_POST_DISPATCH);
     }
 
     /**

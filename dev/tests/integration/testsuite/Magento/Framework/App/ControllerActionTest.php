@@ -16,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
  */
 class ControllerActionTest extends TestCase
 {
@@ -68,10 +69,10 @@ class ControllerActionTest extends TestCase
      */
     private function getRequest(): RequestInterface
     {
-        return ObjectManager::getInstance()->get(\Magento\Framework\App\Request\Http::class);
+        return ObjectManager::getInstance()->get(\Magento\TestFramework\Request::class);
     }
 
-    private function fakeBackendAuthentication()
+    private function fakeAuthenticatedBackendRequest()
     {
         $objectManager = ObjectManager::getInstance();
         $objectManager->get(BackendUrl::class)->turnOffSecretKey();
@@ -145,7 +146,7 @@ class ControllerActionTest extends TestCase
      */
     public function testInheritanceBasedAdminhtmlActionDispatchesEvents()
     {
-        $this->fakeBackendAuthentication();
+        $this->fakeAuthenticatedBackendRequest();
         
         $this->setupEventManagerSpy();
 
@@ -173,5 +174,32 @@ class ControllerActionTest extends TestCase
         $action->execute();
 
         $this->assertPreAndPostDispatchEventsAreDispatched();
+    }
+
+    /**
+     * @magentoAppArea frontend
+     * @magentoAppIsolation enabled
+     */
+    public function testSettingTheNoDispatchActionFlagProhibitsExecuteAndPostdispatchEvents()
+    {
+        $this->setupEventManagerSpy();
+
+        /** @var InterfaceOnlyFrontendAction $action */
+        $action = ObjectManager::getInstance()->create(InterfaceOnlyFrontendAction::class);
+        $this->configureRequestForAction('testroute', 'actionpath', 'actionname');
+        
+        /** @var ActionFlag $actionFlag */
+        $actionFlag = ObjectManager::getInstance()->get(ActionFlag::class);
+        $actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
+        
+        $action->execute();
+        
+        $this->assertFalse($action->isExecuted(), 'The controller execute() method was not expected to be called.');
+        $this->assertEventDispatchCount('controller_action_predispatch', 1);
+        $this->assertEventDispatchCount('controller_action_predispatch_testroute', 1);
+        $this->assertEventDispatchCount('controller_action_predispatch_testroute_actionpath_actionname', 1);
+        $this->assertEventDispatchCount('controller_action_postdispatch_testroute_actionpath_actionname', 0);
+        $this->assertEventDispatchCount('controller_action_postdispatch_testroute', 0);
+        $this->assertEventDispatchCount('controller_action_postdispatch', 0);
     }
 }
