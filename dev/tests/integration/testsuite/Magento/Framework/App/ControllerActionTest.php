@@ -14,6 +14,9 @@ use Magento\TestFramework\Bootstrap as TestFramework;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ControllerActionTest extends TestCase
 {
     public function setupEventManagerSpy(): void
