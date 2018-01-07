@@ -85,14 +85,13 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->_eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->_actionFlagMock = $this->createMock(\Magento\Framework\App\ActionFlag::class);
         $this->_redirectMock = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
-        $this->_requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->_responseMock = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
 
         $this->pageConfigMock = $this->createPartialMock(\Magento\Framework\View\Page\Config::class, ['getConfig']);
         $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
         $this->viewMock->expects($this->any())->method('getPage')->will($this->returnValue($this->pageConfigMock));
-        $this->pageConfigMock->expects($this->any())->method('getConfig')->will($this->returnValue(1));
+        $this->pageConfigMock->expects($this->any())->method('getConfig')->willReturn(1);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->action = $this->objectManagerHelper->getObject(
@@ -111,29 +110,12 @@ class ActionTest extends \PHPUnit\Framework\TestCase
 
     public function testDispatchPostDispatch()
     {
-        $this->_requestMock->expects($this->exactly(3))->method('getFullActionName')->will(
-            $this->returnValue(self::FULL_ACTION_NAME)
-        );
-        $this->_requestMock->expects($this->exactly(2))->method('getRouteName')->will(
-            $this->returnValue(self::ROUTE_NAME)
-        );
-        $expectedEventParameters = ['controller_action' => $this->action, 'request' => $this->_requestMock];
-        $this->_eventManagerMock->expects($this->at(0))->method('dispatch')->with(
-            'controller_action_predispatch',
-            $expectedEventParameters
-        );
-        $this->_eventManagerMock->expects($this->at(1))->method('dispatch')->with(
-            'controller_action_predispatch_' . self::ROUTE_NAME,
-            $expectedEventParameters
-        );
-        $this->_eventManagerMock->expects($this->at(2))->method('dispatch')->with(
-            'controller_action_predispatch_' . self::FULL_ACTION_NAME,
-            $expectedEventParameters
-        );
-
-        $this->_requestMock->expects($this->once())->method('isDispatched')->will($this->returnValue(true));
-        $this->_actionFlagMock->expects($this->at(0))->method('get')->with('', Action::FLAG_NO_DISPATCH)->will(
-            $this->returnValue(false)
+        $this->_requestMock->method('getFullActionName')->willReturn(self::FULL_ACTION_NAME);
+        $this->_requestMock->method('getRouteName')->willReturn(self::ROUTE_NAME);
+        $this->_requestMock->method('isDispatched')->willReturn(true);
+        $this->_actionFlagMock->method('get')->willReturnMap(
+            ['', Action::FLAG_NO_DISPATCH, false],
+            ['', Action::FLAG_NO_POST_DISPATCH]
         );
 
         // _forward expectations
@@ -149,23 +131,6 @@ class ActionTest extends \PHPUnit\Framework\TestCase
             $this->_responseMock,
             self::FULL_ACTION_NAME,
             self::$actionParams
-        );
-
-        $this->_actionFlagMock->expects($this->at(1))->method('get')->with('', Action::FLAG_NO_POST_DISPATCH)->will(
-            $this->returnValue(false)
-        );
-
-        $this->_eventManagerMock->expects($this->at(3))->method('dispatch')->with(
-            'controller_action_postdispatch_' . self::FULL_ACTION_NAME,
-            $expectedEventParameters
-        );
-        $this->_eventManagerMock->expects($this->at(4))->method('dispatch')->with(
-            'controller_action_postdispatch_' . self::ROUTE_NAME,
-            $expectedEventParameters
-        );
-        $this->_eventManagerMock->expects($this->at(5))->method('dispatch')->with(
-            'controller_action_postdispatch',
-            $expectedEventParameters
         );
 
         $this->assertEquals($this->_responseMock, $this->action->dispatch($this->_requestMock));
