@@ -67,17 +67,10 @@ class ValidationMessageTest extends \PHPUnit\Framework\TestCase
             ->with('sales/minimum_order/amount', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->willReturn($minimumAmount);
 
-        $this->priceHelperMock->expects(
-            $this->once()
-        )->method(
-            'currency'
-        )->with(
-            $minimumAmount,
-            true,
-            false
-        )->will(
-            $this->returnValue($minimumAmountCurrency)
-        );
+        $this->priceHelperMock->expects($this->once())
+            ->method('currency')
+            ->with($minimumAmount, true, false)
+            ->will($this->returnValue($minimumAmountCurrency));
 
         $this->assertEquals(
             __('Minimum order amount is %1', $minimumAmountCurrency),
