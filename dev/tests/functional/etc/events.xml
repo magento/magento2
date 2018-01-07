@@ -11,6 +11,11 @@
             <tag name="webapi_failed" />
         </observer>
     </preset>
+    <preset name="allure">
+        <observer class="Magento\Mtf\System\Observer\AllureWebapiResponse">
+            <tag name="webapi_failed" />
+        </observer>
+    </preset>
     <preset name="coverage" extends="base">
         <observer class="Magento\Mtf\System\Observer\PageUrl">
             <tag name="click_after"/>

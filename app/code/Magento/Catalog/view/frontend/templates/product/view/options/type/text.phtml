@@ -29,6 +29,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
             if ($_option->getMaxCharacters()) {
                 $_textValidate['maxlength'] = $_option->getMaxCharacters();
             }
+            $_textValidate['validate-no-utf8mb4-characters'] = true;
             ?>
             <input type="text"
                    id="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text"
@@ -47,6 +48,7 @@ $class = ($_option->getIsRequire()) ? ' required' : '';
             if ($_option->getMaxCharacters()) {
                 $_textAreaValidate['maxlength'] = $_option->getMaxCharacters();
             }
+            $_textAreaValidate['validate-no-utf8mb4-characters'] = true;
             ?>
             <textarea id="options_<?= /* @escapeNotVerified */ $_option->getId() ?>_text"
                       class="product-custom-option"

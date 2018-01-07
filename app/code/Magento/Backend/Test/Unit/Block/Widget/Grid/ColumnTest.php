@@ -351,7 +351,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
 
         $this->_block->setFilter('StdClass');
 
-        $grid = new \StdClass();
+        $grid = new \stdClass();
         $this->_block->setGrid($grid);
         $this->assertEquals($grid, $this->_block->getGrid());
     }
