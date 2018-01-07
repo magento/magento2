@@ -38,6 +38,8 @@ class EventDispatchPlugin
     public function beforeExecute(ActionInterface $subject)
     {
         $this->dispatchPreDispatchEvents($subject);
+        
+        return [];
     }
 
     /**
@@ -56,7 +58,7 @@ class EventDispatchPlugin
      */
     public function afterExecute(ActionInterface $subject, $result)
     {
-        if (! $this->isSetActionNoPostDispatchFlag($subject)) {
+        if (! $this->isSetActionNoPostDispatchFlag()) {
             $this->dispatchPostDispatchEvents($subject);
         }
         
@@ -66,8 +68,9 @@ class EventDispatchPlugin
     /**
      * @param ActionInterface $subject
      * @return bool
+     * 
      */
-    private function isSetActionNoPostDispatchFlag(ActionInterface $subject): bool
+    private function isSetActionNoPostDispatchFlag(): bool
     {
         return $this->actionFlag->get('', Action::FLAG_NO_DISPATCH) ||
                $this->actionFlag->get('', Action::FLAG_NO_POST_DISPATCH);
