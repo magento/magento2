@@ -24,6 +24,13 @@ class ActionFlagNoDispatchPlugin
         $this->response = $response;
     }
 
+    /**
+     * @param ActionInterface $subject
+     * @param callable $proceed
+     * @return ResponseInterface
+     * 
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function aroundExecute(ActionInterface $subject, callable $proceed)
     {
         return $this->actionFlag->get('', ActionInterface::FLAG_NO_DISPATCH) ? $this->response : $proceed();
