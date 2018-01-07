@@ -3,6 +3,7 @@
 namespace Magento\Framework\App\Action\Plugin;
 
 use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
@@ -22,11 +23,16 @@ class EventDispatchPlugin
      */
     private $eventManager;
 
-    public function __construct(RequestInterface $request, ManagerInterface $eventManager)
+    /**
+     * @var ActionFlag
+     */
+    private $actionFlag;
+
+    public function __construct(RequestInterface $request, ManagerInterface $eventManager, ActionFlag $actionFlag)
     {
-        \assert($request instanceof Http, sprintf('The request has to be an instance of %s.', Http::class));
         $this->request = $request;
         $this->eventManager = $eventManager;
+        $this->actionFlag = $actionFlag;
     }
 
     public function beforeExecute(ActionInterface $subject)
@@ -63,7 +69,7 @@ class EventDispatchPlugin
      */
     private function isSetActionNoPostDispatchFlag(ActionInterface $subject): bool
     {
-        return $subject instanceof Action && $subject->getActionFlag()->get('', Action::FLAG_NO_POST_DISPATCH);
+        return $this->actionFlag->get('', Action::FLAG_NO_POST_DISPATCH);
     }
 
     /**
