@@ -9,12 +9,13 @@ use Magento\Framework\App\TestStubs\InheritanceBasedFrontendAction;
 use Magento\Framework\App\TestStubs\InterfaceOnlyBackendAction;
 use Magento\Framework\App\TestStubs\InterfaceOnlyFrontendAction;
 use Magento\Framework\Event;
-use Magento\Security\Model\Plugin\Auth as SecurityAuth;
 use Magento\TestFramework\Bootstrap as TestFramework;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Request as TestHttpRequest;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.UnusedLocalVariable)
  */
@@ -65,11 +66,11 @@ class ControllerActionTest extends TestCase
     }
 
     /**
-     * @return \Magento\Framework\App\Request\Http
+     * @return TestHttpRequest
      */
     private function getRequest(): RequestInterface
     {
-        return ObjectManager::getInstance()->get(\Magento\TestFramework\Request::class);
+        return ObjectManager::getInstance()->get(TestHttpRequest::class);
     }
 
     private function fakeAuthenticatedBackendRequest()
@@ -108,7 +109,6 @@ class ControllerActionTest extends TestCase
 
     /**
      * @magentoAppArea frontend
-     * @magentoAppIsolation enabled
      */
     public function testInheritanceBasedFrontendActionDispatchesEvents()
     {
@@ -125,7 +125,6 @@ class ControllerActionTest extends TestCase
 
     /**
      * @magentoAppArea frontend
-     * @magentoAppIsolation enabled
      */
     public function testInterfaceOnlyFrontendActionDispatchesEvents()
     {
@@ -142,7 +141,6 @@ class ControllerActionTest extends TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoAppIsolation enabled
      */
     public function testInheritanceBasedAdminhtmlActionDispatchesEvents()
     {
@@ -161,7 +159,6 @@ class ControllerActionTest extends TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoAppIsolation enabled
      */
     public function testInterfaceOnlyAdminhtmlActionDispatchesEvents()
     {
@@ -178,7 +175,6 @@ class ControllerActionTest extends TestCase
 
     /**
      * @magentoAppArea frontend
-     * @magentoAppIsolation enabled
      */
     public function testSettingTheNoDispatchActionFlagProhibitsExecuteAndPostdispatchEvents()
     {
