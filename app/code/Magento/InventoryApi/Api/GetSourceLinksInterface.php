@@ -14,7 +14,7 @@ use Magento\InventoryApi\Api\Data\StockSourceLinkSearchResultsInterface;
  * Find StockSourceLink list by SearchCriteria API
  *
  * Used fully qualified namespaces in annotations for proper work of WebApi request parser
- * 
+ *
  * @api
  */
 interface GetSourceLinksInterface
