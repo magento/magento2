@@ -12,6 +12,7 @@
             <block class="Magento\Framework\View\Element\Template" name="sidebar.main.account_nav" template="Magento_Theme::html/collapsible.phtml" before="-">
                 <arguments>
                     <argument name="block_css" xsi:type="string">account-nav</argument>
+                    <argument name="block_title" xsi:type="string">Account Sidebar</argument>
                 </arguments>
                 <block class="Magento\Customer\Block\Account\Navigation" name="customer_account_navigation" before="-">
                     <arguments>
