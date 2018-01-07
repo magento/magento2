@@ -54,7 +54,7 @@ define([
             ga('send', 'pageview' + config.pageTrackingData.optPageUrl);
 
             // Process orders data
-            if (config.ordersTrackingData) {
+            if (config.ordersTrackingData.length) {
                 ga('require', 'ec', 'ec.js');
 
                 //Set currency code
