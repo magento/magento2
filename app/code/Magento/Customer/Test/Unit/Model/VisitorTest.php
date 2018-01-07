@@ -39,6 +39,11 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
      */
     protected $session;
 
+    /**
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $request;
+
     protected function setUp()
     {
         $this->registry = $this->createMock(\Magento\Framework\Registry::class);
@@ -46,6 +51,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getSessionId', 'getVisitorData', 'setVisitorData'])
             ->getMock();
+        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -69,6 +75,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
                 'registry' => $this->registry,
                 'session' => $this->session,
                 'resource' => $this->resource,
+                'request' => $this->request,
             ]
         );
 
@@ -101,12 +108,11 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
                 'session' => $this->session,
                 'resource' => $this->resource,
                 'ignores' => ['test_route_name' => true],
+                'request' => $this->request,
             ]
         );
-        $request = new \Magento\Framework\DataObject(['route_name' => 'test_route_name']);
-        $action =  new \Magento\Framework\DataObject(['request' => $request]);
-        $event =  new \Magento\Framework\DataObject(['controller_action' => $action]);
-        $observer = new \Magento\Framework\DataObject(['event' => $event]);
+        $this->request->method('getRouteName')->willReturn('test_route_name');
+        $observer = new \Magento\Framework\DataObject();
         $this->assertTrue($this->visitor->isModuleIgnored($observer));
     }
 

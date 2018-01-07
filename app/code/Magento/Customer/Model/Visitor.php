@@ -200,7 +200,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     public function isModuleIgnored($observer)
     {
         if (is_array($this->ignores) && $observer) {
-            $curModule = $observer->getEvent()->getControllerAction()->getRequest()->getRouteName();
+            $curModule = $this->getRequest()->getRouteName();
             if (isset($this->ignores[$curModule])) {
                 return true;
             }
@@ -314,5 +314,18 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
             )
         );
         return $configValue ?: static::DEFAULT_ONLINE_MINUTES_INTERVAL;
+    }
+
+    /**
+     * @return \Magento\Framework\App\RequestInterface|\Magento\Framework\App\Request\Http
+     */
+    private function getRequest()
+    {
+        if (null === $this->request) {
+            $this->request = \Magento\Framework\App\ObjectManager::getInstance()->create(
+                \Magento\Framework\App\RequestInterface::class
+            );
+        }
+        return $this->request;
     }
 }
