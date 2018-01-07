@@ -68,7 +68,7 @@ class EventDispatchPlugin
     /**
      * @param ActionInterface $subject
      * @return bool
-     * 
+     *
      */
     private function isSetActionNoPostDispatchFlag(): bool
     {
