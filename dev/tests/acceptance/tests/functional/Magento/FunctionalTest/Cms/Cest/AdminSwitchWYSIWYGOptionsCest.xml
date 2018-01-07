@@ -54,7 +54,7 @@
             <!--see widget on Storefront-->
             <see userInput="Hello TinyMCE4!" stepKey="seeContent1"/>
             <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage2"/>
-            <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="expandWYSIWYGOptions2" />
+            <conditionalClick stepKey="expandWYSIWYGOptions2" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
             <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox2" />
             <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue2"/>
             <waitForElementVisible selector="{{ContentManagementSection.Switcher}}" stepKey="waitForSwitcherDropdown2" />

@@ -92,6 +92,7 @@
             <!--Delete Custom Variable-->
             <actionGroup ref="DeleteCustomVariableActionGroup" stepKey="deleteCustomVariable" />
             <!--Refresh Storefront-->
+            <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache" />
             <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage2"/>
             <waitForPageLoad stepKey="waitForPageLoad7" />
             <!--see custom variable blank-->

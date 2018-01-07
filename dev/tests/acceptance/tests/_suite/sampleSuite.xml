@@ -35,7 +35,6 @@
            <module name="Newsletter" />
         </include>
         <exclude>
-            <group name="block"/>
             <cest name="AdminCreateCmsPageCest"/>
             <cest name="AdminCreateCategoryCest"/>
             <cest name="AdminCreateSimpleProductCest"/>

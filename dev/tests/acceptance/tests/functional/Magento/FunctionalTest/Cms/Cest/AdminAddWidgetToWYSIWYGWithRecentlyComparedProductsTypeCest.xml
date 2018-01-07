@@ -80,7 +80,7 @@
             <!--see widget on Storefront-->
             <see userInput="Hello CMS Page!" stepKey="seeContent"/>
             <waitForPageLoad stepKey="waitForPageLoad9" />
-            <waitForText userInput="$$createPreReqProduct.name$$" stepKey="waiForProductVisible" />
+            <waitForText userInput="$$createPreReqProduct.name$$" stepKey="waiForProductVisible" time="30" />
             <see userInput="$$createPreReqProduct.name$$" stepKey="seeProductName" />
         </test>
         <after>
