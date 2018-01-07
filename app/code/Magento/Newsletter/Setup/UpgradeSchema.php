@@ -12,7 +12,7 @@ use Magento\Framework\Setup\UpgradeSchemaInterface;
 /**
  * Upgrade the Newsletter module DB scheme
  */
-class UpgradeSchema implements  UpgradeSchemaInterface
+class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * {@inheritdoc}
