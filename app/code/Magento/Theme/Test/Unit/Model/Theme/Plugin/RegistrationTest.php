@@ -5,6 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Plugin;
 
+use Magento\Framework\App\ActionInterface;
 use Magento\Theme\Model\Theme\Plugin\Registration;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
@@ -17,8 +18,8 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
     /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $logger;
 
-    /** @var \Magento\Backend\App\AbstractAction|\PHPUnit_Framework_MockObject_MockObject */
-    protected $abstractAction;
+    /** @var ActionInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $action;
 
     /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $request;
@@ -39,12 +40,7 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
     {
         $this->themeRegistration = $this->createMock(\Magento\Theme\Model\Theme\Registration::class);
         $this->logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class, [], '', false);
-        $this->abstractAction = $this->getMockForAbstractClass(
-            \Magento\Backend\App\AbstractAction::class,
-            [],
-            '',
-            false
-        );
+        $this->action = $this->createMock(ActionInterface::class);
         $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class, [], '', false);
         $this->appState = $this->createMock(\Magento\Framework\App\State::class);
         $this->themeCollection = $this->createMock(\Magento\Theme\Model\Theme\Collection::class);
@@ -60,10 +56,10 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $hasParentTheme
-     * @dataProvider dataProviderBeforeDispatch
+     * @dataProvider dataProviderBeforeExecute
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function testBeforeDispatch(
+    public function testBeforeExecute(
         $hasParentTheme
     ) {
         $themeId = 1;
@@ -147,13 +143,13 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->willReturnSelf();
 
-        $this->plugin->beforeDispatch($this->abstractAction, $this->request);
+        $this->plugin->beforeExecute($this->action);
     }
 
     /**
      * @return array
      */
-    public function dataProviderBeforeDispatch()
+    public function dataProviderBeforeExecute()
     {
         return [
             [true],
@@ -164,7 +160,7 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
     public function testBeforeDispatchWithProductionMode()
     {
         $this->appState->expects($this->once())->method('getMode')->willReturn('production');
-        $this->plugin->beforeDispatch($this->abstractAction, $this->request);
+        $this->plugin->beforeExecute($this->action, $this->request);
     }
 
     public function testBeforeDispatchWithException()
@@ -173,6 +169,6 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
         $this->themeRegistration->expects($this->once())->method('register')->willThrowException($exception);
         $this->logger->expects($this->once())->method('critical');
 
-        $this->plugin->beforeDispatch($this->abstractAction, $this->request);
+        $this->plugin->beforeExecute($this->action, $this->request);
     }
 }

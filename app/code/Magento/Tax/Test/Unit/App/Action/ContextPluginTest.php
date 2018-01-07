@@ -111,9 +111,9 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
      * @param bool $cache
      * @param bool $taxEnabled
      * @param bool $loggedIn
-     * @dataProvider beforeDispatchDataProvider
+     * @dataProvider beforeExecuteDataProvider
      */
-    public function testBeforeDispatch($cache, $taxEnabled, $loggedIn)
+    public function testBeforeExecute($cache, $taxEnabled, $loggedIn)
     {
         $this->customerSessionMock->expects($this->any())
             ->method('isLoggedIn')
@@ -159,8 +159,7 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
             }
 
             $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
-            $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
-            $result = $this->contextPlugin->beforeDispatch($action, $request);
+            $result = $this->contextPlugin->beforeExecute($action);
             $this->assertNull($result);
         } else {
             $this->assertFalse($loggedIn);
@@ -170,7 +169,7 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function beforeDispatchDataProvider()
+    public function beforeExecuteDataProvider()
     {
         return [
             [false, false, false],
