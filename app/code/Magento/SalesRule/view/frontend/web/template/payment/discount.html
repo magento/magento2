@@ -23,13 +23,11 @@
                     </label>
                     <div class="control">
                         <input class="input-text"
-                               data-bind="attr:{disabled:isApplied()}"
                                type="text"
                                id="discount-code-applied"
-                               disabled="disabled"
                                name="discount_code"
                                data-validate="{'required-entry':true}"
-                               data-bind="value: couponCode, attr:{placeholder: $t('Enter discount code')} " />
+                               data-bind="value: couponCode, attr:{disabled:isApplied() , placeholder: $t('Enter discount code')} " />
                     </div>
                 </div>
             </div>
