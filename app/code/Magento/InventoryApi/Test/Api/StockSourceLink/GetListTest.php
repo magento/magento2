@@ -21,7 +21,7 @@ class GetListTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/stock-source-link';
-    const SERVICE_NAME = 'inventoryApiSourceItemRepositoryV1';
+    const SERVICE_NAME = 'inventoryApiGetSourceLinksV1';
     /**#@-*/
 
     /**
@@ -73,7 +73,7 @@ class GetListTest extends WebapiAbstract
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'GetList',
+                'operation' => self::SERVICE_NAME . 'Execute',
             ],
         ];
         $response = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)

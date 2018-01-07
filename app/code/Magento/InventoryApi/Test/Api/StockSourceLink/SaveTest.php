@@ -19,7 +19,9 @@ class SaveTest extends WebapiAbstract
      * Service constants
      */
     const RESOURCE_PATH = '/V1/inventory/stock-source-link';
-    const SERVICE_NAME = 'inventoryApiStockSourceLinksSaveV1';
+    const SERVICE_NAME_SAVE = 'inventoryApiStockSourceLinksSaveV1';
+    const SERVICE_NAME_DELETE = 'inventoryApiStockSourceLinksDeleteV1';
+    const SERVICE_NAME_GET_LIST = 'inventoryApiGetSourceLinksV1';
     /**#@-*/
 
     /**
@@ -45,8 +47,8 @@ class SaveTest extends WebapiAbstract
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'Execute',
+                'service' => self::SERVICE_NAME_SAVE,
+                'operation' => self::SERVICE_NAME_SAVE . 'Execute',
             ],
         ];
         $this->_webApiCall($serviceInfo, ['links' => $links]);
@@ -77,8 +79,8 @@ class SaveTest extends WebapiAbstract
                 'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME,
-                'operation' => self::SERVICE_NAME . 'Execute',
+                'service' => self::SERVICE_NAME_DELETE,
+                'operation' => self::SERVICE_NAME_DELETE . 'Execute',
             ],
         ];
 
@@ -95,7 +97,10 @@ class SaveTest extends WebapiAbstract
     private function getStockSourceLinks(): array
     {
         $requestData = [
-            'searchCriteria' => [SearchCriteria::PAGE_SIZE => 10],
+            'searchCriteria' => [
+                SearchCriteria::FILTER_GROUPS => [],
+                SearchCriteria::PAGE_SIZE => 10
+            ],
         ];
 
         $serviceInfo = [
@@ -104,8 +109,8 @@ class SaveTest extends WebapiAbstract
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
-                'service' => 'inventoryApiStockSourceLinksV1',
-                'operation' => 'inventoryApiStockSourceLinksV1V1GetList',
+                'service' => self::SERVICE_NAME_GET_LIST,
+                'operation' => self::SERVICE_NAME_GET_LIST . 'Execute',
             ],
         ];
 
