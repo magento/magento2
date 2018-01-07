@@ -66,7 +66,7 @@ class StockSourceLink extends AbstractExtensibleModel implements StockSourceLink
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (null === $extensionAttributes) {
-            $extensionAttributes = $this->extensionAttributesFactory->create(StockSourceLinkExtensionInterface::class);
+            $extensionAttributes = $this->extensionAttributesFactory->create(StockSourceLinkInterface::class);
             $this->setExtensionAttributes($extensionAttributes);
         }
         return $extensionAttributes;
