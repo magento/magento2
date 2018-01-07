@@ -4,7 +4,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Store\App\Action\Plugin;
+
+use Magento\Framework\App\ActionInterface;
 
 class StoreCheck
 {
@@ -23,17 +26,14 @@ class StoreCheck
     }
 
     /**
-     * @param \Magento\Framework\App\Action\AbstractAction $subject
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param ActionInterface $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws \Magento\Framework\Exception\State\InitException
      */
-    public function beforeDispatch(
-        \Magento\Framework\App\Action\AbstractAction $subject,
-        \Magento\Framework\App\RequestInterface $request
-    ) {
-        if (!$this->_storeManager->getStore()->isActive()) {
+    public function beforeExecute(ActionInterface $subject)
+    {
+        if (! $this->_storeManager->getStore()->isActive()) {
             throw new \Magento\Framework\Exception\State\InitException(
                 __('Current store is not active.')
             );
