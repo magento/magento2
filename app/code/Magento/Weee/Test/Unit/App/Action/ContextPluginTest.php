@@ -123,7 +123,7 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testBeforeDispatchBasedOnDefault()
+    public function testBeforeExecuteBasedOnDefault()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -188,10 +188,10 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
         $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
 
-        $this->contextPlugin->beforeDispatch($action, $request);
+        $this->contextPlugin->beforeExecute($action, $request);
     }
 
-    public function testBeforeDispatchBasedOnOrigin()
+    public function testBeforeExecuteBasedOnOrigin()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -217,10 +217,10 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
         $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
 
-        $this->contextPlugin->beforeDispatch($action, $request);
+        $this->contextPlugin->beforeExecute($action, $request);
     }
 
-    public function testBeforeDispatchBasedOnBilling()
+    public function testBeforeExecuteBasedOnBilling()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -289,10 +289,10 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
         $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
 
-        $this->contextPlugin->beforeDispatch($action, $request);
+        $this->contextPlugin->beforeExecute($action, $request);
     }
 
-    public function testBeforeDispatchBasedOnShipping()
+    public function testBeforeExecuterBasedOnShipping()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -361,6 +361,6 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
         $action = $this->objectManager->getObject(\Magento\Framework\App\Test\Unit\Action\Stub\ActionStub::class);
         $request = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getActionName']);
 
-        $this->contextPlugin->beforeDispatch($action, $request);
+        $this->contextPlugin->beforeExecute($action, $request);
     }
 }

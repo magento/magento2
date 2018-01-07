@@ -53,10 +53,7 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * Test aroundDispatch
-     */
-    public function testBeforeDispatch()
+    public function testBeforeExecute()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('getCustomerGroupId')
@@ -74,6 +71,6 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             );
-        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
+        $this->plugin->beforeExecute($this->subjectMock, $this->requestMock);
     }
 }

@@ -75,9 +75,8 @@ class ContextPlugin
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(
-        \Magento\Framework\App\ActionInterface $subject,
-        \Magento\Framework\App\RequestInterface $request
+    public function beforeExecute(
+        \Magento\Framework\App\ActionInterface $subject
     ) {
         if (!$this->customerSession->isLoggedIn() ||
             !$this->moduleManager->isEnabled('Magento_PageCache') ||
