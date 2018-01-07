@@ -857,7 +857,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected function _setFontRegular($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/NotoSerifFont/NotoSerif-Regular.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerif.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -873,7 +873,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected function _setFontBold($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/NotoSerifFont/NotoSerif-Bold.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerifBold.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -889,7 +889,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected function _setFontItalic($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/internal/NotoSerifFont/NotoSerif-Italic.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/GnuFreeFont/FreeSerifItalic.ttf')
         );
         $object->setFont($font, $size);
         return $font;
