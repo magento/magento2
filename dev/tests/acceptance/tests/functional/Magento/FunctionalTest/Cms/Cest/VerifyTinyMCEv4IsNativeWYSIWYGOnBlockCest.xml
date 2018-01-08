@@ -51,7 +51,7 @@
             <seeElement selector="{{BlockWYSIWYGSection.InsertTable}}" stepKey="assertInfo13"/>
             <seeElement selector="{{BlockWYSIWYGSection.SpecialCharacter}}" stepKey="assertInfo14"/>
             <seeElement selector="{{BlockWYSIWYGSection.InsertWidgetIcon}}" stepKey="assertInfo15"/>
-            <!--<seeElement selector="{{BlockWYSIWYGSection.InsertVariableIcon}}" stepKey="assertInfo16"/>-->
+            <seeElement selector="{{BlockWYSIWYGSection.InsertVariableIcon}}" stepKey="assertInfo16"/>
             <executeJS function="tinyMCE.get('cms_block_form_content').setContent('Hello Block Page!');" stepKey="executeJSFillContent"/>
             <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn1" />
             <waitForElementVisible selector="{{BlockWYSIWYGSection.InsertWidgetBtn}}" stepKey="waitForInsertWidget" />
@@ -62,6 +62,7 @@
             <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
             <waitForPageLoad stepKey="waitForPageLoad2"/>
             <waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="waitForCMSPageGrid" />
+            <scrollTo selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="scrollToCMSPage" />
             <click selector="{{CmsPagesPageActionsSection.select('$$createCMSPage.identifier$$')}}" stepKey="clickSelect" />
             <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="waitForEditLink" />
             <click selector="{{CmsPagesPageActionsSection.edit('$$createCMSPage.identifier$$')}}" stepKey="clickEdit" />
@@ -69,30 +70,30 @@
             <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
             <waitForElementVisible selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="waitforShowHideBtn" />
             <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn2"/>
-            <waitForElementVisible selector="{{WidgetSection.InsertWidget}}"  stepKey="waitForInsertInsertWidgetBtn" />
-            <seeElement selector="{{WidgetSection.InsertWidget}}"  stepKey="widgetBtn" />
-            <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget"/>
-            <waitForPageLoad stepKey="wait2"/>
-            <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static" stepKey="selectCMSStaticBlock" />
+            <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}"  stepKey="waitForInsertInsertWidgetBtn" />
+            <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}"  stepKey="widgetBtn" />
+            <click selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="clickInsertWidgetBtn"/>
+            <waitForPageLoad stepKey="waitForPageLoad4"/>
+            <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static Block" stepKey="selectCMSStaticBlock" />
             <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
             <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate" />
             <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
-            <waitForElementVisible selector="{{WidgetSection.BlockPage(_defaultBlock.title)}}" stepKey="waitForBlockTitle" />
-            <click selector="{{WidgetSection.BlockPage(_defaultBlock.title)}}" stepKey="selectPreCreateBlock" />
+            <waitForElementVisible selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="waitForBlockCode" />
+            <click selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="selectPreCreateBlock" />
             <wait time="3" stepKey="wait1" />
-            <click selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="clickInsertWidgetBtn" />
+            <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
             <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
-            <waitForPageLoad stepKey="waitForPageLoad4" />
+            <waitForPageLoad stepKey="waitForPageLoad5" />
             <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
             <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
             <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage"/>
-            <waitForPageLoad stepKey="wait2" />
-            <!--see widget on Storefront-->
+            <waitForPageLoad stepKey="waitForPageLoad6" />
+            <!--see content of Block on Storefront-->
             <see userInput="Hello Block Page!" stepKey="seeContent"/>
         </test>
         <after>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disabledWYSIWYG"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </cest>
 </config>

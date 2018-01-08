@@ -26,6 +26,25 @@
         <element name="v4" type="button" selector="#category_form_description_v4"/>
         <element name="WYSIWYGBtn" type="button" selector=".//button[@class='action-default scalable action-wysiwyg']"/>
     </section>
+    <section name="ProductAttributeWYSIWYGSection">
+        <element name="TextArea" type ="text" selector="//div[@data-index='{{var1}}']//textarea" parameterized="true"/>
+        <element name="showHideBtn" type="button" selector="//button[contains(@id,'{{var1}}')]" parameterized="true"/>
+        <element name="InsertImageBtn" type="button" selector="//div[contains(@id, '{{var1}}')]//span[text()='Insert Image...']" parameterized="true"/>
+        <element name="Style" type="button" selector="//div[contains(@id, '{{var1}}')]//span[text()='Paragraph']" parameterized="true"/>
+        <element name="Bold" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-bold']" parameterized="true"/>
+        <element name="Italic" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-bold']" parameterized="true"/>
+        <element name="Underline" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-underline']" parameterized="true"/>
+        <element name="AlignLeft" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-alignleft']" parameterized="true"/>
+        <element name="AlignCenter" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-aligncenter']" parameterized="true"/>
+        <element name="AlignRight" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-alignright']" parameterized="true"/>
+        <element name="Numlist" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-bullist']" parameterized="true"/>
+        <element name="Bullet" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-numlist']" parameterized="true"/>
+        <element name="InsertLink" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-link']" parameterized="true"/>
+        <element name="InsertImageIcon" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-image']" parameterized="true"/>
+        <element name="InsertTable" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-table']" parameterized="true"/>
+        <element name="SpecialCharacter" type="button" selector="//div[contains(@id, '{{var1}}')]//i[@class='mce-ico mce-i-charmap']" parameterized="true"/>
+        <element name="TinyMCE4" type="text" selector="//div[contains(@id, '{{var1}}')]//div[@class='mce-branding-powered-by']" parameterized="true"/>
+    </section>
     <section name="ProductDescriptionWYSIWYGToolbarSection">
         <element name="TinyMCE4" type ="button" selector="//div[@id='editorproduct_form_description']//div[@class='mce-branding-powered-by']" />
         <element name="showHideBtn" type="button" selector="#toggleproduct_form_description"/>
@@ -43,6 +62,24 @@
         <element name="InsertImageIcon" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-image']" />
         <element name="InsertTable" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-table']" />
         <element name="SpecialCharacter" type="button" selector="//div[@id='editorproduct_form_description']//i[@class='mce-ico mce-i-charmap']" />
+        <element name="Browse" type="button" selector=".mce-i-browse"/>
+        <element name="BrowseUploadImage" type="file" selector=".fileupload" />
+        <element name="image" type="text" selector="//small[text()='{{var1}}']" parameterized="true"/>
+        <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
+        <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open" />
+        <element name="ImageDescription" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-last" />
+        <element name="Height" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-first" />
+        <element name="UploadImage" type="file" selector=".fileupload" />
+        <element name="OkBtn" type="button" selector="//span[text()='Ok']"/>
+        <element name="InsertFile" type="text" selector="#insert_files"/>
+        <element name="CreateFolder" type="button" selector="#new_folder" />
+        <element name="DeleteSelectedBtn" type="text" selector="#delete_files"/>
+        <element name="CancelBtn" type="button" selector="#cancel" />
+        <element name="FolderName" type="button" selector="input[data-role='promptField']" />
+        <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
+        <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
+        <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
+        <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
     </section>
     <section name="ProductShortDescriptionWYSIWYGToolbarSection">
         <element name="TinyMCE4" type ="button" selector="//div[@id='editorproduct_form_short_description']//div[@class='mce-branding-powered-by']" />
@@ -61,6 +98,24 @@
         <element name="InsertImageIcon" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-image']" />
         <element name="InsertTable" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-table']" />
         <element name="SpecialCharacter" type="button" selector="//div[@id='editorproduct_form_short_description']//i[@class='mce-ico mce-i-charmap']"/>
+        <element name="Browse" type="button" selector=".mce-i-browse"/>
+        <element name="BrowseUploadImage" type="file" selector=".fileupload" />
+        <element name="image" type="text" selector="//small[text()='{{var1}}']" parameterized="true"/>
+        <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
+        <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open" />
+        <element name="ImageDescription" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-last" />
+        <element name="Height" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-first" />
+        <element name="UploadImage" type="file" selector=".fileupload" />
+        <element name="OkBtn" type="button" selector="//span[text()='Ok']"/>
+        <element name="InsertFile" type="text" selector="#insert_files"/>
+        <element name="CreateFolder" type="button" selector="#new_folder" />
+        <element name="DeleteSelectedBtn" type="text" selector="#delete_files"/>
+        <element name="CancelBtn" type="button" selector="#cancel" />
+        <element name="FolderName" type="button" selector="input[data-role='promptField']" />
+        <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
+        <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
+        <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
+        <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
     </section>
     <section name="AdminProductFormConfigurationsSection">
         <element name="createConfigurations" type="button" selector="button[data-index='create_configurable_products_button']" timeout="30"/>
