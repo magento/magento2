@@ -141,7 +141,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation enabled
      * @dataProvider runLockDataProvider
      */
-    public function testRunLock($path, $value, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
+    public function testRunLockEnv($path, $value, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
     {
         $this->inputMock->expects($this->any())
             ->method('getArgument')
@@ -152,15 +152,15 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $this->inputMock->expects($this->any())
             ->method('getOption')
             ->willReturnMap([
-                [ConfigSetCommand::OPTION_LOCK, true],
+                [ConfigSetCommand::OPTION_LOCK_ENV, true],
                 [ConfigSetCommand::OPTION_SCOPE, $scope],
                 [ConfigSetCommand::OPTION_SCOPE_CODE, $scopeCode]
             ]);
         $this->outputMock->expects($this->exactly(2))
             ->method('writeln')
             ->withConsecutive(
-                ['<info>Value was saved and locked.</info>'],
-                ['<info>Value was saved and locked.</info>']
+                ['<info>Value was saved in app/etc/env.php and locked.</info>'],
+                ['<info>Value was saved in app/etc/env.php and locked.</info>']
             );
 
         /** @var ConfigSetCommand $command */
@@ -217,7 +217,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             [ConfigSetCommand::OPTION_SCOPE, $scope],
             [ConfigSetCommand::OPTION_SCOPE_CODE, $scopeCode]
         ];
-        $optionsLock = array_merge($options, [[ConfigSetCommand::OPTION_LOCK, true]]);
+        $optionsLock = array_merge($options, [[ConfigSetCommand::OPTION_LOCK_ENV, true]]);
 
         /** @var ConfigPathResolver $resolver */
         $resolver = $this->objectManager->get(ConfigPathResolver::class);
@@ -233,8 +233,8 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertSame(null, $this->arrayManager->get($configPath, $this->loadConfig()));
 
-        $this->runCommand($arguments, $optionsLock, '<info>Value was saved and locked.</info>');
-        $this->runCommand($arguments, $optionsLock, '<info>Value was saved and locked.</info>');
+        $this->runCommand($arguments, $optionsLock, '<info>Value was saved in app/etc/env.php and locked.</info>');
+        $this->runCommand($arguments, $optionsLock, '<info>Value was saved in app/etc/env.php and locked.</info>');
 
         $this->assertSame($value, $this->arrayManager->get($configPath, $this->loadConfig()));
     }
