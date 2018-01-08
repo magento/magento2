@@ -360,6 +360,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     {
         try {
             $customerData = $this->customerRepository->getById($customerId);
+            $customerData->setStoreId($this->_storeManager->getStore()->getId());
             $data = $this->getResource()->loadByCustomerData($customerData);
             $this->addData($data);
             if (!empty($data) && $customerData->getId() && !$this->getCustomerId()) {
@@ -632,6 +633,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             $this->setStatus(self::STATUS_SUBSCRIBED)
                 ->setStatusChanged(true)
                 ->save();
+
+            $this->sendConfirmationSuccessEmail();
             return true;
         }
 

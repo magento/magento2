@@ -45,7 +45,8 @@ define([
                 component: this,
                 selector: 'button'
             }, function (element) {
-                this.$wysiwygEditorButton = $(element);
+                this.$wysiwygEditorButton = this.$wysiwygEditorButton ?
+                    this.$wysiwygEditorButton.add($(element)) : $(element);
             }.bind(this));
 
             return this;
@@ -94,7 +95,7 @@ define([
             this.$wysiwygEditorButton.attr('disabled', status);
 
             /* eslint-disable no-undef */
-            if (tinyMCE) {
+            if (tinyMCE && tinyMCE.activeEditor) {
                 _.each(tinyMCE.activeEditor.controlManager.controls, function (property, index, controls) {
                     controls[property.id].setDisabled(status);
                 });
