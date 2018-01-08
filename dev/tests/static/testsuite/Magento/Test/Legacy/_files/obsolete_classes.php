@@ -707,35 +707,6 @@ return [
         'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
     ],
     ['Magento\CatalogSearch\Model\Layer', 'Magento\Catalog\Model\Layer'],
-    ['Magento\Solr\Block\Catalog\Layer\View', 'Magento\LayeredNavigation\Block\Navigation'],
-    [
-        'Magento\Solr\Block\Catalog\Layer\Filter\Attribute',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    [
-        'Magento\Solr\Block\Catalog\Layer\Filter\Category',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    [
-        'Magento\Solr\Block\Catalog\Layer\Filter\Decimal',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    [
-        'Magento\Solr\Block\Catalog\Layer\Filter\Price',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    [
-        'Magento\Solr\Block\Catalogsearch\Layer\Filter\Attribute',
-        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer',
-    ],
-    ['Magento\Solr\Block\Catalogsearch\Layer', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'],
-    ['Magento\Solr\Model\Catalog\Layer', 'Magento\Catalog\Model\Layer\Category'],
-    ['Magento\Solr\Model\Catalog\Layer\Filter\Attribute', 'Magento\Catalog\Model\Layer\Filter\Attribute'],
-    ['Magento\Solr\Model\Catalog\Layer\Filter\Category', 'Magento\Catalog\Model\Layer\Filter\Category'],
-    ['Magento\Solr\Model\Catalog\Layer\Filter\Decimal', 'Magento\Catalog\Model\Layer\Filter\Decimal'],
-    ['Magento\Solr\Model\Catalog\Layer\Filter\Price', 'Magento\Catalog\Model\Layer\Filter\Price'],
-    ['Magento\Solr\Model\Search\Layer\Filter\Attribute', 'Magento\Catalog\Model\Layer\Filter\Attribute'],
-    ['Magento\Solr\Model\Search\Layer', 'Magento\Catalog\Model\Layer'],
     [
         'Magento\Catalog\Model\Product\Type\Configurable',
         'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
