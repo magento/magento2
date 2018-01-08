@@ -448,21 +448,23 @@ define([
         },
 
         /**
+         * Convert {{directive}} style attributes syntax to absolute URLs
          * @param {Object} content
          * @return {*}
          */
         encodeDirectives: function (content) {
             // collect all HTML tags with attributes that contain directives
-            return content.gsub(/<([a-z0-9\-\_]+.+?)([a-z0-9\-\_]+=".*?\{\{.+?\}\}.*?".*?)>/i, function (match) {
-                var attributesString = match[2];
+            return content.gsub(/<([a-z0-9\-\_]+[^>]+?)([a-z0-9\-\_]+=".*?\{\{.+?\}\}.*?".*?)>/i, function (match) {
+                var attributesString = match[2],
+                    decodedDirectiveString;
 
                 // process tag attributes string
                 attributesString = attributesString.gsub(/([a-z0-9\-\_]+)="(.*?)(\{\{.+?\}\})(.*?)"/i, function (m) {
-                    return m[1] + '="' + m[2] + this.makeDirectiveUrl(Base64.mageEncode(m[3])) + m[4] + '"';
+                    decodedDirectiveString = encodeURIComponent(Base64.mageEncode((m[3].replace(/&quot;/g, '"'))));
+                    return m[1] + '="' + m[2] + this.makeDirectiveUrl(decodedDirectiveString) + m[4] + '"';
                 }.bind(this));
 
                 return '<' + match[1] + attributesString + '>';
-
             }.bind(this));
         },
 
@@ -493,16 +495,17 @@ define([
         },
 
         /**
+         * Convert absolute URLs to {{directive}} style attributes syntax
          * @param {Object} content
          * @return {*}
          */
         decodeDirectives: function (content) {
             // escape special chars in directives url to use it in regular expression
             var url = this.makeDirectiveUrl('%directive%').replace(/([$^.?*!+:=()\[\]{}|\\])/g, '\\$1'),
-                reg = new RegExp(url.replace('%directive%', '([a-zA-Z0-9,_-]+)'));
+                reg = new RegExp(url.replace('%directive%', '([a-zA-Z0-9%,_-]+)'));
 
             return content.gsub(reg, function (match) { //eslint-disable-line no-extra-bind
-                return Base64.mageDecode(match[1]);
+                return Base64.mageDecode(decodeURIComponent(match[1])).replace(/"/g, '&quot;');
             });
         },
 
