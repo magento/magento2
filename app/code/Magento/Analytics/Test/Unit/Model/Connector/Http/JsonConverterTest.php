@@ -65,7 +65,6 @@ class JsonConverterTest extends \PHPUnit\Framework\TestCase
 
     public function testConvertData()
     {
-        $data = ["token" => "secret-token"];
         $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->willReturn('serializedResult');
