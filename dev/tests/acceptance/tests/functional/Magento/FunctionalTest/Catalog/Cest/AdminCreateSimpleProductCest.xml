@@ -62,7 +62,7 @@
         </test>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </cest>
 </config>

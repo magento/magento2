@@ -11,12 +11,23 @@ namespace Magento\Cms\Model\Config\Source\Wysiwyg;
 class Editor implements \Magento\Framework\Option\ArrayInterface
 {
     /**
+     * @var array
+     */
+    private $adapterOptions;
+
+    /**
+     * @param array $adapterOptions
+     */
+    public function __construct(array $adapterOptions = [])
+    {
+        $this->adapterOptions = $adapterOptions;
+    }
+
+    /**
      * @inheritdoc
      */
     public function toOptionArray()
     {
-        return [
-            ['value' => 'mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter', 'label' => __('TinyMCE 4')]
-        ];
+        return $this->adapterOptions;
     }
 }
