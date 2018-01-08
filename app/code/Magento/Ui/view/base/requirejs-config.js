@@ -5,16 +5,12 @@
 
 var config = {
     shim: {
-        'tinymceDeprecated': {
-            'exports': 'tinymce'
-        },
         'tinymce4': {
             'exports': 'tinymce'
         }
     },
     paths: {
         'ui/template': 'Magento_Ui/templates',
-        'tinymceDeprecated': 'Magento_Tinymce3/tiny_mce/tiny_mce_src',
         'tinymce4': 'tiny_mce_4/tinymce.min',
         'wysiwygAdapter': 'mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter'
     },
