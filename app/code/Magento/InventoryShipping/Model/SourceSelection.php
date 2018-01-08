@@ -5,9 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Model;
-
-use Magento\InventorySales\Api\SourceSelectionInterface;
+namespace Magento\InventoryShipping\Model;
 
 class SourceSelection implements SourceSelectionInterface
 {
@@ -22,15 +20,29 @@ class SourceSelection implements SourceSelectionInterface
     private $qty;
 
     /**
+     * @var float
+     */
+    private $qtyAvailable;
+
+    /**
+     * @var string
+     */
+    private $sku;
+
+    /**
      * SourceSelection constructor.
      *
+     * @param string $sku
      * @param string $sourceCode
      * @param float $qty
+     * @param float $qtyAvailable
      */
-    public function __construct(string $sourceCode, float $qty)
+    public function __construct(string $sku, string $sourceCode, float $qty, float $qtyAvailable)
     {
+        $this->sku = $sku;
         $this->sourceCode = $sourceCode;
         $this->qty = $qty;
+        $this->qtyAvailable = $qtyAvailable;
     }
 
     /**
@@ -44,14 +56,6 @@ class SourceSelection implements SourceSelectionInterface
     /**
      * @inheritdoc
      */
-    public function setSourceCode(string $sourceCode)
-    {
-        $this->sourceCode = $sourceCode;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getQty(): float
     {
         return $this->qty;
@@ -60,8 +64,16 @@ class SourceSelection implements SourceSelectionInterface
     /**
      * @inheritdoc
      */
-    public function setQty(float $qty)
+    public function getQtyAvailable(): float
     {
-        $this->qty = $qty;
+        return $this->qtyAvailable;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSku(): string
+    {
+        return $this->sku;
     }
 }

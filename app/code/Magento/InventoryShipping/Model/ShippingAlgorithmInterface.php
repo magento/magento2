@@ -5,13 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Api;
+namespace Magento\InventoryShipping\Model;
 
 use Magento\Sales\Api\Data\OrderInterface;
 
-/**
- * @api
- */
 interface ShippingAlgorithmInterface
 {
     /**
@@ -20,5 +17,5 @@ interface ShippingAlgorithmInterface
      * @param OrderInterface $order
      * @return ShippingAlgorithmResultInterface
      */
-    public function get(OrderInterface $order): ShippingAlgorithmResultInterface;
+    public function execute(OrderInterface $order): ShippingAlgorithmResultInterface;
 }

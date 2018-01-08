@@ -5,9 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Model;
-
-use Magento\InventorySales\Api\ShippingAlgorithmResultInterface;
+namespace Magento\InventoryShipping\Model;
 
 class DefaultShippingAlgorithmResult implements ShippingAlgorithmResultInterface
 {

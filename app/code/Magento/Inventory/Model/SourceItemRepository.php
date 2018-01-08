@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Inventory\Model;
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Inventory\Model\SourceItem\Command\GetListInterface;
+use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 
@@ -23,12 +25,20 @@ class SourceItemRepository implements SourceItemRepositoryInterface
     private $commandGetList;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param GetListInterface $commandGetList
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
-        GetListInterface $commandGetList
+        GetListInterface $commandGetList,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->commandGetList = $commandGetList;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -37,5 +47,17 @@ class SourceItemRepository implements SourceItemRepositoryInterface
     public function getList(SearchCriteriaInterface $searchCriteria): SourceItemSearchResultsInterface
     {
         return $this->commandGetList->execute($searchCriteria);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getBySku(string $sku): SourceItemSearchResultsInterface
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(SourceItemInterface::SKU, $sku)
+            ->create();
+
+        return $this->getList($searchCriteria);
     }
 }

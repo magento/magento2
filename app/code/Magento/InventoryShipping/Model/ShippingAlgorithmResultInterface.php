@@ -5,19 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\InventorySales\Api;
+namespace Magento\InventoryShipping\Model;
 
 /**
  * Responsible for how we will deduct product qty from different Sources
- * @api
  */
 interface ShippingAlgorithmResultInterface
 {
     /**
      * Returns product SKU -> source selection mapping in the following format:
      * [
-     *      'sku-1' => SourceSelectionInterface[],
-     *      'sku-2' => SourceSelectionInterface[],
+     *      'source-code-1' => SourceSelectionInterface[],
+     *      'source-code-2' => SourceSelectionInterface[],
      * ]
      *
      * @return array
