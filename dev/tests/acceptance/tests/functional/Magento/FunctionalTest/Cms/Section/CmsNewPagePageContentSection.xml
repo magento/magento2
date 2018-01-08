@@ -21,7 +21,7 @@
         <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
         <element name="InsertWidgetIcon" type="button" selector="div[aria-label='Insert Widget']"/>
         <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
-        <element name="InsertVariableIcon" type="button" selector="div[aria-label='Insert configuration value Variable or custom Variable']"/>
+        <element name="InsertVariableIcon" type="button" selector="div[aria-label='Insert Variable']"/>
         <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
         <element name="InsertImageIcon" type="button" selector=".mce-i-image"/>
         <element name="Browse" type="button" selector=".mce-i-browse"/>

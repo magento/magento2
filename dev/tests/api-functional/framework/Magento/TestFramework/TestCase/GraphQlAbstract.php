@@ -28,9 +28,29 @@ abstract class GraphQlAbstract extends WebapiAbstract
      * @param string $operationName
      * @return array|int|string|float|bool GraphQL call results
      */
-    public function graphQlQuery(string $query, array $variables = [], string $operationName = '')
+    public function graphQlQuery(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ) {
+        return $this->getGraphQlClient()->postQuery(
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders($headers)
+        );
+    }
+    /**
+     * @return string[]
+     */
+    private function composeHeaders($headers)
     {
-        return $this->getGraphQlClient()->postQuery($query, $variables, $operationName);
+        $headersArray =[];
+        foreach ($headers as $key => $value) {
+            $headersArray[] = sprintf('%s: %s', $key, $value);
+        }
+        return $headersArray;
     }
 
     /**

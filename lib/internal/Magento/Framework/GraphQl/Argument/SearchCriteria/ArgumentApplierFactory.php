@@ -37,10 +37,11 @@ class ArgumentApplierFactory
     public function create(string $argumentName)
     {
         $appliers = [
-            'find' => ArgumentApplier\Find::class,
-            'pageSize' => ArgumentApplier\PageSize::class,
-            'currentPage' => ArgumentApplier\CurrentPage::class,
-            'sort' => ArgumentApplier\Sort::class
+            ArgumentApplier\Filter::ARGUMENT_NAME => ArgumentApplier\Filter::class,
+            ArgumentApplier\PageSize::ARGUMENT_NAME => ArgumentApplier\PageSize::class,
+            ArgumentApplier\CurrentPage::ARGUMENT_NAME => ArgumentApplier\CurrentPage::class,
+            ArgumentApplier\Sort::ARGUMENT_NAME => ArgumentApplier\Sort::class,
+            ArgumentApplier\Search::ARGUMENT_NAME => ArgumentApplier\Search::class
         ];
         if (isset($appliers[$argumentName])) {
             return $this->objectManager->create($appliers[$argumentName]);
