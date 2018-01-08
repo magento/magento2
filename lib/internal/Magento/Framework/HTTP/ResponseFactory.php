@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Analytics\Model\Connector\Http;
+namespace Magento\Framework\HTTP;
 
 /**
  * A factory for an HTTP response.

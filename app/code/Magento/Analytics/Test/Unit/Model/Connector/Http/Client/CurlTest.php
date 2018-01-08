@@ -74,7 +74,7 @@ class CurlTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->curlMock);
 
         $this->responseFactoryMock = $this->getMockBuilder(
-            \Magento\Analytics\Model\Connector\Http\ResponseFactory::class
+            \Magento\Framework\HTTP\ResponseFactory::class
         )
         ->disableOriginalConstructor()
         ->getMock();
