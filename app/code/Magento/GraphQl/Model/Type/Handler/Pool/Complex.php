@@ -27,6 +27,16 @@ class Complex
     private $typeHandlerFactory;
 
     /**
+     * @param HandlerConfig $typeConfig
+     * @param HandlerFactory $typeHandlerFactory
+     */
+    public function __construct(HandlerConfig $typeConfig, HandlerFactory $typeHandlerFactory)
+    {
+        $this->typeConfig = $typeConfig;
+        $this->typeHandlerFactory = $typeHandlerFactory;
+    }
+
+    /**
      * Retrieve type's configuration based off name
      *
      * @param string $typeName

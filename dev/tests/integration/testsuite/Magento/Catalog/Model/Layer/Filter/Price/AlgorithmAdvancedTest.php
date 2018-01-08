@@ -18,7 +18,7 @@ class AlgorithmAdvancedTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
     public function testWithoutLimits()
@@ -90,7 +90,7 @@ class AlgorithmAdvancedTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
     public function testWithLimits()
