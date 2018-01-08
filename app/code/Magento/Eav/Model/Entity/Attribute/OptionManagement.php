@@ -69,7 +69,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
         try {
             $this->resourceModel->save($attribute);
             if ($optionLabel && $attribute->getAttributeCode()) {
-                $option->setValue($attribute->getSource()->getOptionId($optionLabel));
+                $this->setOptionValue($option, $attribute, $optionLabel);
             }
         } catch (\Exception $e) {
             throw new StateException(__('Cannot save attribute %1', $attributeCode));
@@ -150,5 +150,27 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
     private function getOptionId($option)
     {
         return $option->getValue() ?: 'new_option';
+    }
+
+    /**
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
+     * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
+     * @param string $optionLabel
+     * @return void
+     */
+    public function setOptionValue($option, $attribute, $optionLabel)
+    {
+        if ($optionId = $attribute->getSource()->getOptionId($optionLabel)) {
+            $option->setValue($attribute->getSource()->getOptionId($optionId));
+        } else {
+            if (is_array($option->getStoreLabels())) {
+                foreach ($option->getStoreLabels() as $label) {
+                    if ($optionId = $attribute->getSource()->getOptionId($label->getLabel())) {
+                        $option->setValue($attribute->getSource()->getOptionId($optionId));
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
