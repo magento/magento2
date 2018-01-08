@@ -1315,8 +1315,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
             $options = $this->_optionColFactory->create();
             /* @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection $options*/
-            $options->addOrder('sort_order');
-            $options->reset()->addOrder('sort_order')->addTitleToResult(
+            $options->reset()->addOrder('sort_order', 'ASC')->addTitleToResult(
                 $storeId
             )->addPriceToResult(
                 $storeId
