@@ -340,8 +340,11 @@ define([
 
             this.prevOverlayIndex = this.overlay.zIndex();
             this.modal.zIndex(zIndex + this._getVisibleCount());
-            this.overlay.zIndex(zIndex + (this._getVisibleCount() - 1));
-
+            this.overlay.zIndex(zIndex + (this._getVisibleCount() + 1));
+            this.modal.find(this.options.focusableStart).zIndex(zIndex + (this._getVisibleCount() + 2));
+            this.modal.find(this.options.focusableScope).zIndex(zIndex + (this._getVisibleCount() + 2));
+            this.modal.find(this.options.focusableEnd).zIndex(zIndex + (this._getVisibleCount() + 2));
+            
             if (this._getVisibleSlideCount()) {
                 this.modal.css('marginLeft', this.options.modalLeftMargin * this._getVisibleSlideCount());
             }
@@ -424,7 +427,8 @@ define([
                 $(this.options.appendTo).addClass(this.options.parentModalClass);
                 this.overlay = $('<div></div>')
                     .addClass(this.options.overlayClass)
-                    .appendTo(this.modalWrapper);
+                    //.appendTo(this.modalWrapper);
+                    .appendTo(this.modal);
             }
             events = $._data(this.overlay.get(0), 'events');
             events ? this.prevOverlayHandler = events.click[0].handler : false;
