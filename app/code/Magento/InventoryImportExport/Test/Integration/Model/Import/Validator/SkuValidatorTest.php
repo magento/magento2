@@ -40,7 +40,6 @@ class SkuValidatorTest extends TestCase
 
     /**
      * Tests that with an invalid SKU the validation does not pass as expected
-     * 
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      */
@@ -59,7 +58,6 @@ class SkuValidatorTest extends TestCase
 
     /**
      * Tests that with a valid SKU the validation passes correctly as expected
-     *
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      */
@@ -76,8 +74,7 @@ class SkuValidatorTest extends TestCase
     }
 
     /**
-     * Return Data array as if Row in an import
-     *
+     * Return Data array as if Row during an import
      * @param string $sourceCode
      * @param string $sku
      * @param int $qty
