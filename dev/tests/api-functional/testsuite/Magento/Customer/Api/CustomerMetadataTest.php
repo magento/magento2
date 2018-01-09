@@ -63,7 +63,7 @@ class CustomerMetadataTest extends WebapiAbstract
                 Customer::FIRSTNAME,
                 [
                     AttributeMetadata::FRONTEND_INPUT   => 'text',
-                    AttributeMetadata::INPUT_FILTER     => '',
+                    AttributeMetadata::INPUT_FILTER     => 'trim',
                     AttributeMetadata::STORE_LABEL      => 'First Name',
                     AttributeMetadata::MULTILINE_COUNT  => 0,
                     AttributeMetadata::VALIDATION_RULES => [
