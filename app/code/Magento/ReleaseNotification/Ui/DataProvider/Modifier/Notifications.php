@@ -218,7 +218,7 @@ class Notifications implements ModifierInterface
 
         try {
             $result = $this->serializer->unserialize($modalContent);
-        } catch (\Exception $e) {
+        } catch (\InvalidArgumentException $e) {
             $this->logger->warning(
                 sprintf(
                     'Failed to unserialize the release notification content. The error is: %s',
