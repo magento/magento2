@@ -12,7 +12,7 @@ define([
     'underscore',
     'ko',
     './abstract',
-    'Magento_Variable/variables',
+    'Magento_Variable/variables'
 ], function (wysiwyg, $, _, ko, Abstract) {
     'use strict';
 
@@ -92,14 +92,14 @@ define([
          * @param {Boolean} status
          */
         setDisabled: function (status) {
-            if (this.$wysiwygEditorButton != '') {
+            if (this.$wysiwygEditorButton !== '') {
                 this.$wysiwygEditorButton.attr('disabled', status);
             }
 
             /* eslint-disable no-undef */
-            if (typeof wysiwyg != 'undefined' && wysiwyg.activeEditor()) {
+            if (typeof wysiwyg !== 'undefined' && wysiwyg.activeEditor()) {
 
-                if(typeof wysiwyg.activeEditor().controlManager !== 'undefined') {
+                if (typeof wysiwyg.activeEditor().controlManager !== 'undefined') {
                     _.each(wysiwyg.activeEditor().controlManager.controls, function (property, index, controls) {
                         controls[property.id].setDisabled(status);
                     });
