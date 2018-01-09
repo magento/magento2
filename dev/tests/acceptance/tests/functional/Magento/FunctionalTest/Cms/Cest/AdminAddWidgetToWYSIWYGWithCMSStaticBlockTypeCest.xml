@@ -12,17 +12,16 @@
         <annotations>
             <features value="Add Widget to WYSIWYG"/>
             <stories value="Widgets in WYSIWYG"/>
-            <group value="CMSStaticBlock"/>
+            <group value="cms"/>
             <env value="chrome"/>
             <env value="firefox"/>
         </annotations>
         <before>
-            <createData entity="_defaultBlock" stepKey="createPreBlock" />
+            <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
-
         <test name="AddWidgetToWYSIWYGWithTypeOfCMSStaticBlock">
             <annotations>
                 <title value="Create CMS Page With Widget Type:CMS Static Block"/>
@@ -52,9 +51,9 @@
             <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetEnabled" />
             <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate" />
             <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
-            <waitForLoadingMaskToDisappear stepKey="wait3"/>
-            <waitForElementVisible selector="{{WidgetSection.BlockPage($$createPreBlock.identifier$$)}}" stepKey="waitForSlideoutOpens" />
-            <click selector="{{WidgetSection.BlockPage($$createPreBlock.identifier$$)}}" stepKey="selectPreCreateBlock" />
+            <waitForElementVisible selector="{{WidgetSection.BlockPage($$createPreReqBlock.identifier$$)}}" stepKey="waitForSlideoutOpens" />
+            <scrollTo selector="{{WidgetSection.BlockPage($$createPreReqBlock.identifier$$)}}"  stepKey="scrollToBlockIdentifier" />
+            <click selector="{{WidgetSection.BlockPage($$createPreReqBlock.identifier$$)}}" stepKey="selectPreCreateBlock" />
             <waitForElementNotVisible selector="{{WidgetSection.SelectBlockTitle}}" stepKey="waitForSlideoutCloses" />
             <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
             <waitForLoadingMaskToDisappear stepKey="waitingForLoading" />
@@ -67,13 +66,12 @@
             <waitForPageLoad stepKey="wait5" />
             <!--see widget on Storefront-->
             <see userInput="Hello CMS Page!" stepKey="seeContent"/>
-            <see userInput="$$createPreBlock.content$$" stepKey="seeBlockLink"/>
+            <see userInput="$$createPreReqBlock.content$$" stepKey="seeBlockLink"/>
         </test>
-
-
         <after>
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </cest>
 </config>

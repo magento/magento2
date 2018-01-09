@@ -12,7 +12,7 @@
         <annotations>
             <features value="Add Widget to WYSIWYG"/>
             <stories value="Widgets in WYSIWYG"/>
-            <group value="recentlyViewed"/>
+            <group value="cms"/>
             <env value="chrome"/>
             <env value="firefox"/>
         </annotations>
@@ -34,14 +34,14 @@
             </annotations>
             <!--Main test-->
             <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage"/>
-            <waitForPageLoad stepKey="wait1"/>
+            <waitForPageLoad stepKey="waitForPageLoad1"/>
             <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
             <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
             <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
             <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
             <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
             <click selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
-            <waitForPageLoad stepKey="waitForPageLoad" />
+            <waitForPageLoad stepKey="waitForPageLoad2" />
             <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
             <!--see Insert Widget button disabled-->
             <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled" />
@@ -49,7 +49,7 @@
             <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
             <!--Select "Widget Type"-->
             <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Recently Viewed Products" stepKey="selectRecentlyViewedProducts" />
-            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
+            <waitForLoadingMaskToDisappear stepKey="waitForLoading1" />
             <!--see Insert Widget button enabled-->
             <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetEnabled" />
             <fillField selector="{{WidgetSection.PageSize}}" userInput="5" stepKey="fillNoOfProductDisplay" />
@@ -57,25 +57,27 @@
             <selectOption selector="{{WidgetSection.ButtonToShow}}" userInput="Add to Cart" stepKey="selectBtnToShow" />
             <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="Viewed Products Grid Template" stepKey="selectTemplate" />
             <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-            <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
+            <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
             <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
             <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
             <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
             <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
             <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
             <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="amOnProductPage" />
-            <waitForPageLoad stepKey="waitForPage" />
+            <waitForPageLoad stepKey="waitForPageLoad3" />
             <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
-            <waitForPageLoad stepKey="wait5" />
+            <waitForPageLoad stepKey="waitForPageLoad4" />
             <!--see widget on Storefront-->
             <see userInput="Hello CMS Page!" stepKey="seeContent"/>
-            <waitForPageLoad stepKey="wait6" />
+            <waitForPageLoad stepKey="waitForPageLoad5" />
             <waitForText userInput="$$createPreReqProduct.name$$" stepKey="waitForProductVisible" />
             <see userInput="$$createPreReqProduct.name$$" stepKey="seeProductName" />
         </test>
         <after>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
+            <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </cest>
 </config>

@@ -24,17 +24,14 @@ class ProductSearchTest extends GraphQlAbstract
             = <<<QUERY
 {
     products(
-        find:
+        filter:
         {
-          and:
-          {
             price:{gt: "5", lt: "50"}
             or:
             {
               sku:{like:"simple%"}
               name:{like:"Simple%"}              
              }
-           }          
         }
          pageSize:4
          currentPage:1
@@ -82,8 +79,10 @@ QUERY;
     }
 
     /**
-     * Requesting for items that are visible in Catalog, Search or Both matching SKU or NAME
-     * and price < $60 with a special price and weight = 1 sorted by price in DESC
+     * Test a visible product with matching sku or name with special price
+     *
+     * Requesting for items that has a special price and price < $60, that are visible in Catalog, Search or Both which
+     * either has a sku like “simple” or name like “configurable”sorted by price in DESC
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -92,25 +91,19 @@ QUERY;
     {
         $query
             = <<<QUERY
- {
+{
     products(
-        find:
+        filter:
         {
-          and:
+          special_price:{neq:"null"}
+          price:{lt:"60"}
+          or:
           {
-            special_price:{neq:"null"}
-            price:{lt:"60"}
-           or:
-            {
-              sku:{like:"%simple%"}
-              name:{like:"%configurable%"}
-            }
-             or:
-             {
-              visibility:{in:["2", "3","4"]}
-              weight:{eq:"1"}              
-             }
-          }                    
+           sku:{like:"%simple%"}
+           name:{like:"%configurable%"}
+          }
+           visibility:{in:["2", "3","4"]}
+           weight:{eq:"1"} 
         }
         pageSize:6
         currentPage:1
@@ -155,6 +148,136 @@ QUERY;
     }
 
     /**
+     * pageSize = total_count and current page = 2
+     * expected - error is thrown
+     * Actual - empty array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     */
+
+    public function testSearchWithFilterWithPageSizeEqualTotalCount()
+    {
+        $query
+            = <<<QUERY
+{
+    products(
+     search : "simple"
+        filter:
+        {
+          special_price:{neq:"null"}
+          price:{lt:"60"}
+          or:
+          {
+           sku:{like:"%simple%"}
+           name:{like:"%configurable%"}
+          }
+           visibility:{in:["2", "3","4"]}
+           weight:{eq:"1"} 
+        }
+        pageSize:2
+        currentPage:2
+        sort:
+       {
+        price:DESC
+       } 
+    )    
+    {
+        items
+         {
+           sku
+           price
+           name
+           weight
+           status
+           type_id
+           visibility
+           attribute_set_id
+         }    
+        total_count
+        page_info
+        {
+          page_size
+          current_page
+        }
+    }
+}
+QUERY;
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: The value' . ' ' .
+            'specified in the currentPage attribute is greater than the number of pages available (1).');
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * The query returns a total_count of 2 records; setting the pageSize = 1 and currentPage2
+     * Expected result is to get the second product on the list on the second page
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     */
+    public function testSearchWithFilterPageSizeLessThanCurrentPage()
+    {
+        $this->markTestSkipped('This is test is skipped due to MAGETWO-85680');
+        $query
+            = <<<QUERY
+{
+    products(
+     search : "simple"
+        filter:
+        {
+          special_price:{neq:"null"}
+          price:{lt:"60"}
+          or:
+          {
+           sku:{like:"%simple%"}
+           name:{like:"%configurable%"}
+          }
+           visibility:{in:["2", "3","4"]}
+           weight:{eq:"1"} 
+        }
+        pageSize:1
+        currentPage:2
+        sort:
+       {
+        price:DESC
+       } 
+    )    
+    {
+        items
+         {
+           sku
+           price
+           name
+           weight
+           status
+           type_id
+           visibility
+           attribute_set_id
+         }    
+        total_count
+        page_info
+        {
+          page_size
+          current_page
+        }
+    }
+}
+QUERY;
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        // when pagSize =1 and currentPage = 2, it should have simple2 on first page and simple1 on 2nd page
+        // since sorting is done on price in the DESC order
+        $product = $productRepository->get('simple1');
+        $filteredProducts = [$product];
+
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertProductItems($filteredProducts, $response);
+    }
+
+    /**
      * Requesting for items that match a specific SKU or NAME within a certain price range sorted by Price in ASC order
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
@@ -166,17 +289,14 @@ QUERY;
             = <<<QUERY
 {
     products(
-        find:
+        filter:
         {
-          and:
-          {
             price:{gt: "5", lt: "50"}
             or:
             {
               sku:{like:"simple%"}
               name:{like:"simple%"}              
-             }
-           }          
+             }    
         }
          pageSize:4
          currentPage:1
@@ -237,17 +357,14 @@ QUERY;
             = <<<QUERY
 {
     products(
-        find:
+        filter:
         {
-          and:
-          {
             price:{gt: "5", lt: "50"}
             or:
             {
-              sku:{eq:"simple1"}
-              name:{like:"configurable%"}              
-             }
-           }          
+                sku:{eq:"simple1"}
+                name:{like:"configurable%"}
+            }
         }
          pageSize:4
          currentPage:2
@@ -304,21 +421,15 @@ QUERY;
             = <<<QUERY
 {
   products(
-        find:
+        filter:
         {
-          and:
-          {
             price:{gt: "5", lt: "60"}
             or:
             {
               sku:{like:"%simple%"}
-              name:{like:"%Configurable%"}              
-             }
-            or:
-            {
-              weight:{gt:"0"}
-           	}
-          }
+              name:{like:"%Configurable%"}
+              visibility:{in:["2", "3","4"]}
+            }
         }
          sort:
          {
@@ -380,19 +491,16 @@ QUERY;
             = <<<QUERY
 {
 products(
-    find:
+    filter:
     {
-      and:
-      {
         special_price:{lt:"15"}
         price:{lt:"50"}
         visibility:{eq:"2"}
-       or:
+        or:
         {
-          sku:{like:"simple%"}
-          name:{like:"%simple%"}
+            sku:{like:"simple%"}
+            name:{like:"%simple%"}
         }           
-      }                    
     }
     pageSize:2
     currentPage:1
@@ -439,13 +547,9 @@ QUERY;
             = <<<QUERY
 {
     products(
-        find:
+        filter:
         {
-          and:
-          {
             price:{eq:"10"}
-
-           }
         }
          pageSize:2
          currentPage:2

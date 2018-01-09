@@ -177,6 +177,18 @@
             </formElements>
         </field>
         <field name="description" template="ui/form/field" sortOrder="50" formElement="wysiwyg">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="wysiwygConfigData" xsi:type="array">
+                        <item name="height" xsi:type="string">100px</item>
+                        <item name="add_variables" xsi:type="boolean">false</item>
+                        <item name="add_widgets" xsi:type="boolean">false</item>
+                        <item name="add_images" xsi:type="boolean">true</item>
+                        <item name="add_directives" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="source" xsi:type="string">category</item>
+                </item>
+            </argument>
             <settings>
                 <label translate="true">Description</label>
                 <dataScope>description</dataScope>

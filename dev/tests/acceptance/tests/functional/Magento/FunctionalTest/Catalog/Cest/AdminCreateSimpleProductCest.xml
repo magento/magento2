@@ -22,7 +22,7 @@
                 <description value="You should be able to create a Simple Product in the admin back-end."/>
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-23414"/>
-                <group value="product"/>
+                <group value="product1"/>
             </annotations>
             <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
             <fillField userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" selector="{{AdminLoginFormSection.username}}" stepKey="fillUsername"/>
@@ -62,7 +62,7 @@
         </test>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </cest>
 </config>

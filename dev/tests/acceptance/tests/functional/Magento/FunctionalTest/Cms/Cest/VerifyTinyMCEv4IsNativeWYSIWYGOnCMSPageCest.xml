@@ -12,7 +12,7 @@
         <annotations>
             <features value="TinyMCEv4"/>
             <stories value="Apply new WYSIWYG on CMS Page-MAGETWO-42046"/>
-            <group value="cmsWYSIWYG"/>
+            <group value="cms"/>
             <env value="chrome"/>
             <env value="firefox"/>
             <env value="phantomjs"/>
@@ -51,7 +51,7 @@
             <seeElement selector="{{CmsWYSIWYGSection.InsertTable}}" stepKey="assertInfo13"/>
             <seeElement selector="{{CmsWYSIWYGSection.SpecialCharacter}}" stepKey="assertInfo14"/>
             <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="assertInfo15"/>
-            <!--<seeElement selector="{{CmsWYSIWYGSection.InsertVariableIcon}}" stepKey="assertInfo16"/>-->
+            <seeElement selector="{{CmsWYSIWYGSection.InsertVariableIcon}}" stepKey="assertInfo16"/>
             <executeJS function="tinyMCE.get('cms_page_form_content').setContent('Hello World!');" stepKey="executeJSFillContent"/>
             <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn" />
             <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="waitForInsertWidget" />
@@ -61,6 +61,7 @@
             <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
             <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
             <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
             <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
             <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
             <waitForPageLoad stepKey="waitForPageLoad2"/>
@@ -68,8 +69,8 @@
             <see userInput="Hello World!" stepKey="seeContent" />
         </test>
         <after>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disabledWYSIWYG"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </cest>
 </config>

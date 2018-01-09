@@ -12,7 +12,7 @@
         <annotations>
             <features value="Add Widget to WYSIWYG"/>
             <stories value="Widgets in WYSIWYG"/>
-            <group value="CMSPageLink"/>
+            <group value="cms"/>
             <env value="chrome"/>
             <env value="firefox"/>
         </annotations>
@@ -30,14 +30,14 @@
             </annotations>
             <!--Main test-->
             <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage"/>
-            <waitForPageLoad stepKey="wait1"/>
+            <waitForPageLoad stepKey="waitForPageLoad1"/>
             <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
             <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
             <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
             <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
             <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
             <click selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
-            <waitForPageLoad stepKey="wait2"/>
+            <waitForPageLoad stepKey="waitForPageLoad2"/>
             <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
             <!--see Insert Widget button disabled-->
             <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled" />
@@ -45,30 +45,30 @@
             <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
             <!--Select "Widget Type"-->
             <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Page Link" stepKey="selectCMSPageLink" />
-            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
+            <waitForLoadingMaskToDisappear stepKey="waitForLoading1" />
             <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetEnabled" />
             <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Page Link Block Template" stepKey="selectTemplate" />
             <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
-            <!--<waitForLoadingMaskToDisappear stepKey="wait3"/>-->
             <waitForElementVisible selector="{{WidgetSection.CMSPage}}" stepKey="waitForPageVisible" />
+            <scrollTo selector="{{WidgetSection.CMSPage}}" stepKey="scrollToCMSName" />
             <click selector="{{WidgetSection.CMSPage}}" stepKey="selectPreCreateCMS" />
             <waitForElementNotVisible selector="{{WidgetSection.SelectPageTitle}}" stepKey="waitForSlideOutCloses" />
             <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-            <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
+            <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
             <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
             <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
             <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
             <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
             <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
             <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
-            <waitForPageLoad stepKey="wait5" />
+            <waitForPageLoad stepKey="waitForPageLoad3" />
             <see userInput="Hello CMS Page!" stepKey="seeContent"/>
             <!--see widget on Storefront-->
             <see userInput="Home page" stepKey="seeHomepageWidget" />
         </test>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </cest>
 </config>

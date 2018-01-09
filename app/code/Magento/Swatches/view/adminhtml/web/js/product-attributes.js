@@ -206,6 +206,7 @@ define([
                             break;
 
                         case 'textarea':
+                        case 'texteditor':
                             defaultValueTextareaVisibility = true;
                             break;
 

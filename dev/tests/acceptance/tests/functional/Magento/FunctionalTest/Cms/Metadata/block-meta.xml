@@ -16,4 +16,8 @@
             <field key="active">true</field>
         </object>
     </operation>
+
+    <operation name="DeleteBlock" dataType="block" type="delete" auth="adminOauth" url="/V1/cmsBlock/{id}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
 </config>

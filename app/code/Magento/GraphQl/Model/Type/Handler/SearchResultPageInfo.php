@@ -6,19 +6,21 @@
 
 namespace Magento\GraphQl\Model\Type\Handler;
 
-use Magento\GraphQl\Model\Type\Helper\ServiceContract\TypeGenerator;
+use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
-use Magento\Framework\GraphQl\Type\TypeFactory;
+use Magento\Framework\GraphQl\TypeFactory;
 
 /**
  * Define SearchResultPageInfo GraphQL type
  */
 class SearchResultPageInfo implements HandlerInterface
 {
+    const SEARCH_RESULT_PAGE_INFO_TYPE_NAME = 'SearchResultPageInfo';
+
     /**
-     * @var TypeGenerator
+     * @var Pool
      */
-    private $typeGenerator;
+    private $pool;
 
     /**
      * @var TypeFactory
@@ -26,12 +28,12 @@ class SearchResultPageInfo implements HandlerInterface
     private $typeFactory;
 
     /**
-     * @param TypeGenerator $typeGenerator
+     * @param Pool $pool
      * @param TypeFactory $typeFactory
      */
-    public function __construct(TypeGenerator $typeGenerator, TypeFactory $typeFactory)
+    public function __construct(Pool $pool, TypeFactory $typeFactory)
     {
-        $this->typeGenerator = $typeGenerator;
+        $this->pool = $pool;
         $this->typeFactory = $typeFactory;
     }
 
@@ -40,10 +42,9 @@ class SearchResultPageInfo implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = new \ReflectionClass($this);
         return $this->typeFactory->createObject(
             [
-                'name' => $reflector->getShortName(),
+                'name' => self::SEARCH_RESULT_PAGE_INFO_TYPE_NAME,
                 'fields' => $this->getFields()
             ]
         );
@@ -56,15 +57,12 @@ class SearchResultPageInfo implements HandlerInterface
      */
     private function getFields()
     {
-        $reflector = new \ReflectionClass($this);
-        $className = $reflector->getShortName();
+        $intType = $this->pool->getType('Int');
         $result = [
-            'page_size' => 'Int',
-            'current_page' => 'Int'
+            'page_size' => $intType,
+            'current_page' => $intType
         ];
-        $resolvedTypes = $this->typeGenerator->generate($className, $result);
-        $fields = $resolvedTypes->config['fields'];
 
-        return $fields;
+        return $result;
     }
 }
