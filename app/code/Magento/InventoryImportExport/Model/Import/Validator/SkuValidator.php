@@ -61,7 +61,7 @@ class SkuValidator implements ValidatorInterface
      * @param string $sku
      * @return bool
      */
-    private function isValidSku($sku)
+    private function isValidSku(string $sku): bool
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
