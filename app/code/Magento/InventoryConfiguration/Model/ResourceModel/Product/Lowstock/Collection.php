@@ -157,14 +157,15 @@ class Collection extends SourceItemCollection
      */
     public function useNotifyStockQtyFilter()
     {
-
+        $notifyQtyField = CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION .
+            '.' . SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY;
+        $notifyStockExpression = $this->getConnection()->getIfNullSql(
+            $notifyQtyField,
+            (int)$this->stockConfiguration->getNotifyStockQty(0) // TODO: put store_id
+        );
         $this->getSelect()->where(
-            SourceItemInterface::QUANTITY . ' < ' .
-            sprintf(
-                '%s.%s',
-                CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION,
-                SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY
-            )
+            SourceItemInterface::QUANTITY . ' < ?',
+            $notifyStockExpression
         );
         return $this;
     }
