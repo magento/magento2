@@ -18,12 +18,19 @@ class SchemaListener
     /**
      * Ignore all ddl queries
      */
-    const IGNORE_ON = true;
+    const IGNORE_ON = 0;
 
     /**
      * Disable ignore mode
      */
-    const IGNORE_OFF = false;
+    const IGNORE_OFF = 1;
+
+    /**
+     * Staging FK keys installer key
+     * This means, that all changes should be moved from ordinar module to staging module
+     */
+    const STAGING_FK_KEYS = 2;
+
     /**
      * @var array
      */
@@ -82,8 +89,10 @@ class SchemaListener
      * @param array $definitionMappers
      * @param array $handlers
      */
-    public function __construct(array $definitionMappers, array $handlers)
-    {
+    public function __construct(
+        array $definitionMappers,
+        array $handlers
+    ) {
         $this->definitionMappers = $definitionMappers;
         $this->handlers = $handlers;
     }
@@ -94,13 +103,10 @@ class SchemaListener
      */
     public function dropForeignKey($tableName, $fkName)
     {
-        if ($this->ignore) {
-            return;
-        }
-
-        $this->tables[$this->moduleName][$tableName]['constraints']['foreign'][$fkName] = [
-            'disabled' => 1,
+        $dataToLog['constraints']['foreign'][$fkName] = [
+            'disabled' => true,
         ];
+        $this->log($tableName, $dataToLog);
     }
 
     /**
@@ -119,6 +125,7 @@ class SchemaListener
         if (isset($definition['default']) && $definition['default'] === false) {
             $definition['default'] = null; //uniform default values
         }
+        $definition['disabled'] = false;
 
         return $definition;
     }
@@ -133,25 +140,33 @@ class SchemaListener
     private function addPrimaryKeyIfExists($tableName, $columnName, $definition, $primaryKeyName)
     {
         if (isset($definition['primary']) && $definition['primary']) {
-            if (isset($this->tables[$this->moduleName][$tableName]['constraints']['primary'][$primaryKeyName])) {
-                $this->tables[$this->moduleName][$tableName]['constraints']['primary'][$primaryKeyName] = array_replace_recursive(
-                    $this->tables[$this->moduleName][$tableName]['constraints']['primary'][$primaryKeyName],
-                    [
-                        'columns' => [$columnName => strtolower($columnName)]
-                    ]
-                );
+            $dataToLog['constraints']['primary'][$primaryKeyName] = [
+                'type' => 'primary',
+                'name' => $primaryKeyName,
+                'disabled' => false,
+                'columns' => [$columnName => strtolower($columnName)]
+            ];
 
-            } else {
-                $this->tables[$this->moduleName][$tableName]['constraints']['primary'][$primaryKeyName] = [
-                    'type' => 'primary',
-                    'name' => $primaryKeyName,
-                    'columns' => [$columnName => strtolower($columnName)]
-                ];
-            }
+            $this->log($tableName, $dataToLog);
         }
 
         unset($definition['primary']);
         return $definition;
+    }
+
+    /**
+     * @param string $oldTableName
+     * @param string $newTableName
+     * @return void
+     */
+    public function renameTable($oldTableName, $newTableName)
+    {
+        $moduleName = $this->getModuleName();
+
+        if (isset($this->tables[$moduleName][strtolower($oldTableName)])) {
+            $this->tables[$moduleName][strtolower($newTableName)] = $this->tables[$moduleName][strtolower($oldTableName)];
+            unset($this->tables[$moduleName][strtolower($oldTableName)]);
+        }
     }
 
     /**
@@ -181,16 +196,49 @@ class SchemaListener
      * @param string $columnName
      * @param array $definition
      * @param string $primaryKeyName
+     * @param null $onCreate
      */
-    public function addColumn($tableName, $columnName, $definition, $primaryKeyName = 'PRIMARY')
+    public function addColumn($tableName, $columnName, $definition, $primaryKeyName = 'PRIMARY', $onCreate = null)
     {
-        if ($this->ignore) {
-            return;
-        }
-
         $definition = $this->castColumnDefinition($definition, $columnName);
         $definition = $this->addPrimaryKeyIfExists($tableName, $columnName, $definition, $primaryKeyName);
-        $this->tables[$this->moduleName][strtolower($tableName)]['columns'][strtolower($columnName)] = $definition;
+        $definition['onCreate'] = $onCreate;
+        $dataToLog['columns'][strtolower($columnName)] = $definition;
+        $this->log($tableName, $dataToLog);
+    }
+
+    /**
+     * @param string $tableName
+     * @param string $keyName
+     * @param string $indexType
+     */
+    public function dropIndex($tableName, $keyName, $indexType)
+    {
+        if ($indexType === 'index') {
+            $dataToLog['indexes'][$keyName] = [
+                'disabled' => true
+            ];
+        } else {
+            $dataToLog['constraints'][$indexType][$keyName] = [
+                'disabled' => true
+            ];
+        }
+
+        $this->log($tableName, $dataToLog);
+    }
+
+    /**
+     * Do drop column
+     *
+     * @param string $tableName
+     * @param string $columnName
+     */
+    public function dropColumn($tableName, $columnName)
+    {
+        $dataToLog['columns'][strtolower($columnName)] = [
+            'disabled' => true
+        ];
+        $this->log($tableName, $dataToLog);
     }
 
     /**
@@ -203,10 +251,6 @@ class SchemaListener
      */
     public function changeColumn($tableName, $oldColumnName, $newColumnName, $definition)
     {
-        if ($this->ignore) {
-            return;
-        }
-
         foreach ($this->handlers as $handler) {
             $this->tables = $handler->handle(
                 $this->moduleName,
@@ -220,7 +264,14 @@ class SchemaListener
             );
         }
 
-        $this->addColumn($tableName, $newColumnName, $definition, 'STAGING_PRIMARY');
+        $this->dropColumn($tableName, $oldColumnName);
+        $this->addColumn(
+            $tableName,
+            $newColumnName,
+            $definition,
+            'STAGING_PRIMARY',
+            sprintf('migrateDataFrom(%s)', $oldColumnName)
+        );
     }
 
     /**
@@ -231,6 +282,39 @@ class SchemaListener
     public function modifyColumn($tableName, $columnName, $definition)
     {
         $this->addColumn($tableName, $columnName, $definition);
+    }
+
+    /**
+     * Retrieved processed module name
+     *
+     * @return string
+     */
+    private function getModuleName()
+    {
+        return $this->moduleName;
+    }
+
+    /**
+     * Log any change, that was done
+     *
+     * @param string $tableName
+     * @param array $dataToLog
+     * @return void
+     */
+    public function log($tableName, array $dataToLog)
+    {
+        if ($this->ignore & self::IGNORE_OFF === 0) {
+            return;
+        }
+        $moduleName = $this->getModuleName();
+        if (isset($this->tables[$moduleName][strtolower($tableName)])) {
+            $this->tables[$moduleName][strtolower($tableName)] = array_replace_recursive(
+                $this->tables[$moduleName][strtolower($tableName)],
+                $dataToLog
+            );
+        } else {
+            $this->tables[$moduleName][strtolower($tableName)] = $dataToLog;
+        }
     }
 
     /**
@@ -249,18 +333,16 @@ class SchemaListener
         $refColumnName,
         $onDelete = AdapterInterface::FK_ACTION_CASCADE
     ) {
-        if ($this->ignore) {
-            return;
-        }
-
-        $this->tables[$this->moduleName][strtolower($tableName)]['constraints']['foreign'][$fkName] =
+        $dataToLog['constraints']['foreign'][$fkName] =
             [
                 'table' => strtolower($tableName),
                 'column' => strtolower($columnName),
                 'referenceTable' => strtolower($refTableName),
                 'referenceColumn' => strtolower($refColumnName),
-                'onDelete' => $onDelete
+                'onDelete' => $onDelete,
+                'disabled' => false
             ];
+        $this->log($tableName, $dataToLog);
     }
 
     /**
@@ -296,10 +378,6 @@ class SchemaListener
         $fields,
         $indexType = AdapterInterface::INDEX_TYPE_INDEX
     ) {
-        if ($this->ignore) {
-            return;
-        }
-
         if (!is_array($fields)) {
             $fields = [$fields];
         }
@@ -307,12 +385,18 @@ class SchemaListener
             if ($indexType === AdapterInterface::INDEX_TYPE_INDEX) {
                 $indexType = 'btree';
             }
-            $this->tables[$this->moduleName][$tableName]['indexes'][$indexName] =
-                ['columns' => $this->prepareIndexColumns($fields), 'indexType' => $indexType];
+            $dataToLog['indexes'][$indexName] =
+                [
+                    'columns' => $this->prepareIndexColumns($fields),
+                    'indexType' => $indexType,
+                    'disabled' => false
+                ];
         } else {
-            $this->tables[$this->moduleName][$tableName]['constraints'][$indexType][$indexName] =
-                ['columns' => $this->prepareIndexColumns($fields)];
+            $dataToLog['constraints'][$indexType][$indexName] =
+                ['columns' => $this->prepareIndexColumns($fields), 'disabled' => false];
         }
+
+        $this->log($tableName, $dataToLog);
     }
 
     /**
@@ -366,10 +450,6 @@ class SchemaListener
      */
     public function createTable(Table $table)
     {
-        if ($this->ignore) {
-            return;
-        }
-
         $this->prepareColumns($table->getName(), $table->getColumns());
         $this->prepareConstraintsAndIndexes($table->getForeignKeys(), $table->getIndexes(), $table->getName());
     }
@@ -392,6 +472,16 @@ class SchemaListener
     public function toogleIgnore($flag)
     {
         $this->ignore = $flag;
+    }
+
+    /**
+     * Check whether staging fk keys installer is enabled
+     *
+     * @return int
+     */
+    private function isStagingFkKeysEnabled()
+    {
+        return ($this->ignore & self::STAGING_FK_KEYS) === self::STAGING_FK_KEYS;
     }
 
     /**

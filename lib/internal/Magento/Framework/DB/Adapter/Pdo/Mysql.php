@@ -836,7 +836,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function dropForeignKey($tableName, $fkName, $schemaName = null)
     {
-        $this->schemaListener->dropForeignKey($tableName, $fkName);
         $foreignKeys = $this->getForeignKeys($tableName, $schemaName);
         $fkName = strtoupper($fkName);
         if (substr($fkName, 0, 3) == 'FK_') {
@@ -851,6 +850,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 );
                 $this->resetDdlCache($tableName, $schemaName);
                 $this->rawQuery($sql);
+                $this->schemaListener->dropForeignKey($tableName, $fkName);
             }
         }
         return $this;
@@ -993,7 +993,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if (!$this->tableColumnExists($tableName, $columnName, $schemaName)) {
             return true;
         }
-
+        $this->schemaListener->dropColumn($tableName, $columnName);
         $alterDrop = [];
 
         $foreignKeys = $this->getForeignKeys($tableName, $schemaName);
@@ -2597,7 +2597,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if ($this->isTableExists($newTableName, $schemaName)) {
             throw new \Zend_Db_Exception(sprintf('Table "%s" already exists', $newTableName));
         }
-
+        $this->schemaListener->renameTable($oldTableName, $newTableName);
         $oldTable = $this->_getTableName($oldTableName, $schemaName);
         $newTable = $this->_getTableName($newTableName, $schemaName);
 
@@ -2717,22 +2717,28 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function dropIndex($tableName, $keyName, $schemaName = null)
     {
         $indexList = $this->getIndexList($tableName, $schemaName);
+        $indexType = 'index';
         $keyName = strtoupper($keyName);
         if (!isset($indexList[$keyName])) {
             return true;
         }
 
         if ($keyName == 'PRIMARY') {
+            $indexType = 'primary';
             $cond = 'DROP PRIMARY KEY';
         } else {
+            if (strpos($keyName, 'UNQ_') !== false) {
+                $indexType = 'unique';
+            }
             $cond = 'DROP KEY ' . $this->quoteIdentifier($indexList[$keyName]['KEY_NAME']);
         }
+
         $sql = sprintf(
             'ALTER TABLE %s %s',
             $this->quoteIdentifier($this->_getTableName($tableName, $schemaName)),
             $cond
         );
-
+        $this->schemaListener->dropIndex($tableName, $keyName, $indexType);
         $this->resetDdlCache($tableName, $schemaName);
 
         return $this->rawQuery($sql);

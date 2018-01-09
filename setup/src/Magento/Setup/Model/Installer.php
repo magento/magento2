@@ -917,15 +917,15 @@ class Installer
             }
         }
         $stagingModules = [
-            'Magento_Bundle',
-            'Magento_Catalog',
-            'Magento_CatalogUrlRewrite',
-            'Magento_CatalogInventory',
-            'Magento_ConfigurableProduct',
-            'Magento_ProductAlert',
-            'Magento_Reports',
-            'Magento_Weee',
-            'Magento_Wishlist',
+            'Magento_Bundle' => 'Magento_BundleStaging',
+            'Magento_Catalog' => 'Magento_CatalogStaging',
+            'Magento_CatalogUrlRewrite' => 'Magento_CatalogUrlRewriteStaging',
+            'Magento_CatalogInventory' => 'Magento_CatalogInventoryStaging',
+            'Magento_ConfigurableProduct' => 'Magento_ConfigurableProductStaging',
+            'Magento_ProductAlert' => 'Magento_CatalogStaging',
+            'Magento_Reports' => 'Magento_CatalogStaging',
+            'Magento_Weee' => 'Magento_WeeeStaging',
+            'Magento_Wishlist' => 'Magento_CatalogStaging',
         ];
         $this->schemaListener->toogleIgnore(SchemaListener::IGNORE_ON);
         if ($type === 'schema') {
@@ -936,9 +936,9 @@ class Installer
             $handlerType = 'data-recurring';
         }
         foreach ($moduleNames as $moduleName) {
-            if (in_array($moduleName, $stagingModules)) {
-                $this->schemaListener->setModuleName($moduleName);
-                $this->schemaListener->toogleIgnore(SchemaListener::IGNORE_OFF);
+            if (isset($stagingModules[$moduleName])) {
+                $this->schemaListener->setModuleName($stagingModules[$moduleName]);
+                $this->schemaListener->toogleIgnore(SchemaListener::IGNORE_OFF | SchemaListener::STAGING_FK_KEYS);
             }
             $this->log->log("Module '{$moduleName}':");
             $modulePostUpdater = $this->getSchemaDataHandler($moduleName, $handlerType);

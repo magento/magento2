@@ -54,6 +54,7 @@ class SchemaPersistor
             }
 
             foreach ($tablesData as $tableName => $tableData) {
+                $tableData = $this->handleDefinition($tableData);
                 $table = $dom->addChild('table');
                 $table->addAttribute('name', $tableName);
                 /** @TODO: handle different resources for sales and checkout tables */
@@ -65,6 +66,22 @@ class SchemaPersistor
 
             $this->persistModule($dom, $schemaPatch);
         }
+    }
+
+    /**
+     * If disabled attribute is set to false it remove it at all
+     * Also handle other generic attributes
+     *
+     * @param array $definition
+     * @return array
+     */
+    private function handleDefinition(array $definition)
+    {
+        if (isset($definition['disabled']) && !$definition['disabled']) {
+            unset($definition['disabled']);
+        }
+
+        return $definition;
     }
 
     /**
@@ -89,6 +106,7 @@ class SchemaPersistor
     {
         if (isset($tableData['columns'])) {
             foreach ($tableData['columns'] as $columnName => $columnData) {
+                $columnData = $this->handleDefinition($columnData);
                 $domColumn = $table->addChild('column');
                 $domColumn->addAttribute('xsi:type', $columnData['xsi:type'], 'xsi');
                 unset($columnData['xsi:type']);
@@ -121,6 +139,7 @@ class SchemaPersistor
     {
         if (isset($tableData['indexes'])) {
             foreach ($tableData['indexes'] as $indexName => $indexData) {
+                $indexData = $this->handleDefinition($indexData);
                 $domIndex = $table->addChild('index');
                 $domIndex->addAttribute('name', $indexName);
 
@@ -153,6 +172,7 @@ class SchemaPersistor
             foreach ($tableData['constraints'] as $constraintType => $constraints) {
                 if ($constraintType === 'foreign') {
                     foreach ($constraints as $name => $constraintData) {
+                        $constraintData = $this->handleDefinition($constraintData);
                         $constraintDom = $table->addChild('constraint');
                         $constraintDom->addAttribute('xsi:type', $constraintType, 'xsi');
                         $constraintDom->addAttribute('name', $name);
@@ -163,6 +183,7 @@ class SchemaPersistor
                     }
                 } else {
                     foreach ($constraints as $name => $constraintData) {
+                        $constraintData = $this->handleDefinition($constraintData);
                         $constraintDom = $table->addChild('constraint');
                         $constraintDom->addAttribute('xsi:type', $constraintType, 'xsi');
                         $constraintDom->addAttribute('name', $name);
@@ -193,17 +214,19 @@ class SchemaPersistor
      */
     private function persistModule(\SimpleXMLElement $simpleXmlElementDom, $path)
     {
-        $dom = new \DOMDocument('1.0');
-        $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
-        $dom->loadXML($simpleXmlElementDom->asXML());
-        file_put_contents(
-            $path,
-            str_replace(
-                ' xmlns:xsi="xsi"', //reokace xmlns, as we do not need it for xsi namespace
-                '',
-                $dom->saveXML()
-            )
-        );
+        if (strpos($path, 'magento#ee') !== false) {
+            $dom = new \DOMDocument('1.0');
+            $dom->preserveWhiteSpace = false;
+            $dom->formatOutput = true;
+            $dom->loadXML($simpleXmlElementDom->asXML());
+            file_put_contents(
+                $path,
+                str_replace(
+                    ' xmlns:xsi="xsi"', //replace xmlns, as we do not need it for xsi namespace
+                    '',
+                    $dom->saveXML()
+                )
+            );
+        }
     }
 }
