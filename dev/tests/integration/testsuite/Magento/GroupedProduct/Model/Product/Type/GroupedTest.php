@@ -203,7 +203,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         'sku' => 'virtual-product',
-                        'cart_qty' => 5
+                        'cart_qty' => 5,
                     ],
                     [
                         'sku' => 'simple',
