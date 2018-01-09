@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryImportExport\Model\Import\Validator;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryImportExport\Model\Import\Sources;
@@ -18,9 +18,9 @@ use Magento\InventoryImportExport\Model\Import\Sources;
 class SkuValidator implements ValidatorInterface
 {
     /**
-     * @var ProductRepositoryInterface
+     * @var CollectionFactory
      */
-    private $productRepository;
+    protected $collectionFactory;
 
     /**
      * @var ValidationResultFactory
@@ -28,14 +28,14 @@ class SkuValidator implements ValidatorInterface
     private $validationResultFactory;
 
     /**
-     * @param ProductRepositoryInterface $productRepository
+     * @param CollectionFactory $collectionFactory
      * @param ValidationResultFactory $validationResultFactory
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
+        CollectionFactory $collectionFactory,
         ValidationResultFactory $validationResultFactory
     ) {
-        $this->productRepository = $productRepository;
+        $this->collectionFactory = $collectionFactory;
         $this->validationResultFactory = $validationResultFactory;
     }
 
@@ -56,19 +56,17 @@ class SkuValidator implements ValidatorInterface
     }
 
     /**
-     * Attempt to get Product via Repository using SKU catch NoSuchEntityException
-     * If caught product doesn't exist so return false otherwise return true
+     * Attempt to get Product collection filtered using SKU check size and return bool
      *
-     * @param $sku
+     * @param string $sku
      * @return bool
      */
     private function isValidSku($sku)
     {
-        try {
-            $this->productRepository->get($sku);
-        } catch (NoSuchEntityException $e) {
-            return false;
-        }
-        return true;
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
+        $collection = $this->collectionFactory->create();
+        $collection->addAttributeToSelect('sku');
+        $collection->addAttributeToFilter('sku', $sku);
+        return $collection->getSize() > 0;
     }
 }
