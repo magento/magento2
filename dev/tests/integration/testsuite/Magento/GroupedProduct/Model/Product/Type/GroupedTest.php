@@ -197,7 +197,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
                     'qty' => 1,
                     'super_group' => [
                         1 => 4,
-                        21 => 5
+                        21 => 5,
                     ],
                 ],
                 [
@@ -207,9 +207,9 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
                     ],
                     [
                         'sku' => 'simple',
-                        'cart_qty' => 4
+                        'cart_qty' => 4,
                     ],
-                ]
+                ],
             ],
             'Out of stock product are shown #2' => [
                 true,
@@ -223,9 +223,9 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         'sku' => 'virtual-product',
-                        'cart_qty' => 2 // This is a default quantity.
+                        'cart_qty' => 2, // This is a default quantity.
                     ],
-                ]
+                ],
             ],
             'Out of stock product are hidden #1' => [
                 false,
@@ -234,19 +234,19 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
                     'qty' => 1,
                     'super_group' => [
                         1 => 4,
-                        21 => 5
+                        21 => 5,
                     ],
                 ],
                 [
                     [
                         'sku' => 'virtual-product',
-                        'cart_qty' => 5
+                        'cart_qty' => 5,
                     ],
                     [
                         'sku' => 'simple',
-                        'cart_qty' => 4
+                        'cart_qty' => 4,
                     ],
-                ]
+                ],
             ],
             'Out of stock product are hidden #2' => [
                 false,
@@ -260,9 +260,9 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         'sku' => 'virtual-product',
-                        'cart_qty' => 2 // This is a default quantity.
+                        'cart_qty' => 2, // This is a default quantity.
                     ],
-                ]
+                ],
             ],
         ];
     }
