@@ -38,12 +38,11 @@
         </thead>
         <?php $_items = $_invoice->getAllItems(); ?>
         <?php foreach ($_items as $_item): ?>
-        <?php if ($_item->getOrderItem()->getParentItem()) {
-    continue;
-} ?>
-        <tbody>
-            <?= $block->getItemHtml($_item) ?>
-        </tbody>
+            <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
+                <tbody>
+                    <?= $block->getItemHtml($_item) ?>
+                </tbody>
+            <?php endif; ?>
         <?php endforeach; ?>
         <tfoot>
             <?= $block->getInvoiceTotalsHtml($_invoice) ?>
