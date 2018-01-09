@@ -109,4 +109,20 @@ class Adjustments extends \Magento\Backend\Block\Template
         }
         return $label;
     }
+
+    /**
+     * Get update totals url
+     *
+     * @return string
+     */
+    public function getUpdateTotalsUrl()
+    {
+        return $this->getUrl(
+            'sales/*/updateQty',
+            [
+                'order_id' => $this->getSource()->getOrderId(),
+                'invoice_id' => $this->getRequest()->getParam('invoice_id', null)
+            ]
+        );
+    }
 }
