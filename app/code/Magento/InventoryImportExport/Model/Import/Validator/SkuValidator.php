@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\InventoryImportExport\Model\Import\Validator;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryImportExport\Model\Import\Sources;
 
