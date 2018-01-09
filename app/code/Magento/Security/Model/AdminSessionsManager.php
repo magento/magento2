@@ -26,6 +26,8 @@ class AdminSessionsManager
      */
     const LOGOUT_REASON_USER_LOCKED = 10;
 
+    const INTERVAL_BETWEEN_CONSECUTIVE_PROLONGS = 60;
+
     /**
      * @var ConfigInterface
      * @since 100.1.0
@@ -124,11 +126,13 @@ class AdminSessionsManager
      */
     public function processProlong()
     {
-        $this->getCurrentSession()->setData(
-            'updated_at',
-            $this->authSession->getUpdatedAt()
-        );
-        $this->getCurrentSession()->save();
+        if ($this->lastProlongIsOldEnough()) {
+            $this->getCurrentSession()->setData(
+                'updated_at',
+                $this->authSession->getUpdatedAt()
+            );
+            $this->getCurrentSession()->save();
+        }
 
         return $this;
     }
@@ -297,5 +301,24 @@ class AdminSessionsManager
     protected function createAdminSessionInfoCollection()
     {
         return $this->adminSessionInfoCollectionFactory->create();
+    }
+
+    private function lastProlongIsOldEnough()
+    {
+        $lastProlongTimestamp = $this->getCurrentSessionUpdatedAtAsTimestamp();
+        $nowTimestamp = $this->authSession->getUpdatedAt();
+
+        $diff = $nowTimestamp - $lastProlongTimestamp;
+
+        return $diff > self::INTERVAL_BETWEEN_CONSECUTIVE_PROLONGS;
+    }
+
+    private function getCurrentSessionUpdatedAtAsTimestamp()
+    {
+        $updatedAt = $this->getCurrentSession()->getUpdatedAt();
+
+        return is_int($updatedAt)
+            ? $updatedAt
+            : strtotime($updatedAt);
     }
 }
