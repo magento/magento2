@@ -141,6 +141,47 @@ class AbstractMapperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->selectMock, $mapper->map($criteriaMock));
     }
 
+    public function testMapException()
+    {
+        $mapperMethods = [
+            'my-test-value1' => 'mapMyMapperMethodOne'
+        ];
+
+        $criteriaParts = [
+            'my_mapper_method_one' => 'my-test-value1'
+        ];
+        /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit_Framework_MockObject_MockObject $mapper */
+        $mapper = $this->getMockForAbstractClass(
+            \Magento\Framework\DB\AbstractMapper::class,
+            [
+                'logger' => $this->loggerMock,
+                'fetchStrategy' => $this->fetchStrategyMock,
+                'objectFactory' => $this->objectFactoryMock,
+                'mapperFactory' => $this->mapperFactoryMock,
+                'select' => $this->selectMock
+            ],
+            '',
+            true,
+            true,
+            true,
+            $mapperMethods
+        );
+        $criteriaMock = $this->getMockForAbstractClass(
+            \Magento\Framework\Api\CriteriaInterface::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['toArray']
+        );
+        $criteriaMock->expects($this->once())
+            ->method('toArray')
+            ->will($this->returnValue($criteriaParts));
+        $this->expectException(\InvalidArgumentException::class);
+        $mapper->map($criteriaMock);
+    }
+
     /**
      * Run test addExpressionFieldToSelect method
      *
@@ -254,8 +295,8 @@ class AbstractMapperTest extends \PHPUnit\Framework\TestCase
                     'my-test-value2' => 'mapMyMapperMethodTwo',
                 ],
                 'criteriaParts' => [
-                    'my_mapper_method_one' => 'my-test-value1',
-                    'my_mapper_method_two' => 'my-test-value2',
+                    'my_mapper_method_one' => ['my-test-value1'],
+                    'my_mapper_method_two' => ['my-test-value2'],
                 ],
             ]
         ];

@@ -16,7 +16,7 @@
             <group value="skip"/>
         </annotations>
         <before>
-            <createData entity="SamplePerson" mergeKey="beforeData"/>
+            <createData entity="SamplePerson" stepKey="beforeData"/>
         </before>
         <after>
 
@@ -30,23 +30,27 @@
             </annotations>
 
             <!-- Create an entity that depends on another entity -->
-            <createData entity="_defaultCategory" mergeKey="createCategory"/>
-            <createData entity="_defaultProduct" mergeKey="createProduct">
-                <required-entity persistedKey="createCategory"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <required-entity createDataKey="createCategory"/>
             </createData>
 
             <!-- Parameterized url -->
-            <amOnPage url="{{SamplePage('foo', SamplePerson.bar)}}" mergeKey="amOnPage"/>
+            <amOnPage url="{{SamplePage.url('foo', SamplePerson.bar)}}" stepKey="amOnPage"/>
 
             <!-- Parameterized selector -->
-            <grabTextFrom selector="{{SampleSection.twoParamElement(SamplePerson.foo, 'bar')}}" returnVariable="myReturnVar" mergeKey="grabTextFrom"/>
+            <grabTextFrom selector="{{SampleSection.twoParamElement(SamplePerson.foo, 'bar')}}" returnVariable="myReturnVar" stepKey="grabTextFrom"/>
 
             <!-- Element with a timeout -->
-            <click selector="{{SampleSection.timeoutElement}}" mergeKey="click"/>
+            <click selector="{{SampleSection.timeoutElement}}" stepKey="click"/>
 
             <!-- ActionGroup -->
-            <actionGroup ref="SampleActionGroup" mergeKey="actionGroup">
+            <actionGroup ref="SampleActionGroup" stepKey="actionGroup">
                 <argument name="person" value="OverrideDefaultPerson"/>
+            </actionGroup>
+
+            <actionGroup ref="ValidateSlideOutPanelField" stepKey="seeAppearanceMinHeightProperty">
+                <argument name="property" value="AppearanceMinHeightProperty"/>
             </actionGroup>
         </test>
     </cest>

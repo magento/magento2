@@ -84,7 +84,7 @@ class PageForm extends FormTabs
         $this->browser->find($this->header)->hover();
         $tab = $this->getContainerElement($tabName);
         $tabHeader = $tab->find('.//*[contains(@class,"admin__collapsible-title")]', Locator::SELECTOR_XPATH);
-        if ($tabHeader->isVisible() && !strpos($tabHeader->getAttribute('class'), '_show')) {
+        if ($tabHeader->isVisible() && strpos($tabHeader->getAttribute('class'), '_show') === false) {
             $tabHeader->hover();
             $tabHeader->click();
         };

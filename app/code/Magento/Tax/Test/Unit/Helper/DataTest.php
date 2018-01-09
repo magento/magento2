@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Tax\Test\Unit\Helper;
 
 use Magento\Framework\DataObject as MagentoObject;
@@ -171,8 +169,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $appliedTaxesMocks = [];
             foreach ($appliedTaxesData as $appliedTaxData) {
                 $appliedTaxesMock = $this->getMockBuilder(
-                    \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface::class)
-                    ->getMock();
+                    \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface::class
+                )->getMock();
                 $appliedTaxesMock->expects($this->any())
                     ->method('getAmount')
                     ->will($this->returnValue($appliedTaxData['amount']));
@@ -259,7 +257,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('round')
-            ->will($this->returnCallback(
+            ->will(
+                $this->returnCallback(
                     function ($arg) {
                         return round($arg, 2);
                     }
@@ -307,27 +306,27 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'invoice' => [
                     'invoice_items' => [
                         'item1' => new MagentoObject(
-                                [
-                                    'order_item' => new MagentoObject(
-                                            [
-                                                'id' => 1,
-                                                'tax_amount' => 5.00,
-                                            ]
-                                        ),
-                                    'tax_amount' => 2.50,
-                                ]
-                            ),
+                            [
+                                'order_item' => new MagentoObject(
+                                    [
+                                        'id' => 1,
+                                        'tax_amount' => 5.00,
+                                    ]
+                                ),
+                                'tax_amount' => 2.50,
+                            ]
+                        ),
                         'item2' => new MagentoObject(
-                                [
-                                    'order_item' => new MagentoObject(
-                                            [
-                                                'id' => 2,
-                                                'tax_amount' => 0.0,
-                                            ]
-                                        ),
-                                    'tax_amount' => 0.0,
-                                ]
-                            ),
+                            [
+                                'order_item' => new MagentoObject(
+                                    [
+                                        'id' => 2,
+                                        'tax_amount' => 0.0,
+                                    ]
+                                ),
+                                'tax_amount' => 0.0,
+                            ]
+                        ),
                     ],
                 ],
                 'expected_results' => [
@@ -377,18 +376,18 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'invoice' => [
                     'invoice_items' => [
                         'item1' => new MagentoObject(
-                                [
-                                    'order_item' => new MagentoObject(
-                                            [
-                                                'id' => 1,
-                                                'tax_amount' => 5.00,
-                                            ]
-                                        ),
-                                    'tax_amount' => 5.0,
-                                    //half of weee tax is invoiced
-                                    'tax_ratio' => json_encode(['weee' => 0.5]),
-                                ]
-                            ),
+                            [
+                                'order_item' => new MagentoObject(
+                                    [
+                                        'id' => 1,
+                                        'tax_amount' => 5.00,
+                                    ]
+                                ),
+                                'tax_amount' => 5.0,
+                                //half of weee tax is invoiced
+                                'tax_ratio' => json_encode(['weee' => 0.5]),
+                            ]
+                        ),
                     ],
                 ],
                 'expected_results' => [
@@ -481,9 +480,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
      * @param bool $displayPriceIncludingTax
      * @dataProvider dataProviderIsCatalogPriceDisplayAffectedByTax
      */
-    public function testIsCatalogPriceDisplayAffectedByTax($expected, $displayBothPrices, $priceIncludesTax,
-        $isCrossBorderTradeEnabled, $displayPriceIncludingTax)
-    {
+    public function testIsCatalogPriceDisplayAffectedByTax(
+        $expected,
+        $displayBothPrices,
+        $priceIncludesTax,
+        $isCrossBorderTradeEnabled,
+        $displayPriceIncludingTax
+    ) {
         if ($displayBothPrices == true) {
             $this->taxConfigMock->expects($this->at(0))
                 ->method('getPriceDisplayType')

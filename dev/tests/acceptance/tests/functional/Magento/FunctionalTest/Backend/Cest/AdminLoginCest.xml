@@ -12,11 +12,6 @@
         <annotations>
             <features value="Admin Login"/>
             <stories value="Login on the Admin Login page"/>
-            <group value="example"/>
-            <group value="login"/>
-            <env value="chrome"/>
-            <env value="firefox"/>
-            <env value="phantomjs"/>
         </annotations>
         <test name="LoginAsAdmin">
             <annotations>
@@ -24,12 +19,14 @@
                 <description value="You should be able to log into the Magento Admin backend."/>
                 <severity value="CRITICAL"/>
                 <testCaseId value="MAGETWO-71572"/>
+                <group value="example"/>
+                <group value="login"/>
             </annotations>
-            <amOnPage url="{{AdminLoginPage}}" mergeKey="amOnAdminLoginPage"/>
-            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
-            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" mergeKey="fillPassword"/>
-            <click selector="{{AdminLoginFormSection.signIn}}" mergeKey="clickOnSignIn"/>
-            <seeInCurrentUrl url="{{AdminLoginPage}}" mergeKey="seeAdminLoginUrl"/>
+            <amOnPage url="{{AdminLoginPage.url}}" stepKey="amOnAdminLoginPage"/>
+            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="fillUsername"/>
+            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
+            <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickOnSignIn"/>
+            <seeInCurrentUrl url="{{AdminLoginPage.url}}" stepKey="seeAdminLoginUrl"/>
         </test>
     </cest>
 </config>

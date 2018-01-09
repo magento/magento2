@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Model\ResourceModel\Eav;
 
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
@@ -98,11 +96,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Eav\Processor $indexerEavProcessor
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper
      * @param LockValidatorInterface $lockValidator
-     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data

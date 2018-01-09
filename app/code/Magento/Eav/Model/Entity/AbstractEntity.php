@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Model\Entity;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -908,7 +906,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 'value' => trim($value),
             ];
 
-            $entityIdField = $attributeBackend->getEntityIdField();
+            $entityIdField = $object->getResource()->getLinkField();
             $select->from(
                 $attributeBackend->getTable(),
                 $entityIdField
@@ -977,7 +975,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         } else {
             $object->isObjectNew(true);
         }
-
 
         \Magento\Framework\Profiler::stop('EAV:load_entity');
         return $this;
@@ -1245,7 +1242,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $origData = $this->_getOrigObject($newObject)->getOrigData();
             }
 
-            if (is_null($origData)) {
+            if ($origData === null) {
                 $origData = [];
             }
 

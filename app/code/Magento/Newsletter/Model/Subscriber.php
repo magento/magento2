@@ -395,6 +395,10 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     {
         $this->loadByEmail($email);
 
+        if ($this->getId() && $this->getStatus() == self::STATUS_SUBSCRIBED) {
+            return $this->getStatus();
+        }
+
         if (!$this->getId()) {
             $this->setSubscriberConfirmCode($this->randomSequence());
         }
@@ -617,6 +621,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             $this->setStatus(self::STATUS_SUBSCRIBED)
                 ->setStatusChanged(true)
                 ->save();
+
+            $this->sendConfirmationSuccessEmail();
             return true;
         }
 

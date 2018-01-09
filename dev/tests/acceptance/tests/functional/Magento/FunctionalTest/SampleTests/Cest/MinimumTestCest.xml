@@ -12,23 +12,20 @@
         <annotations>
             <features value="Minimum Test"/>
             <stories value="Minimum Test"/>
-            <group value="example"/>
-            <env value="chrome"/>
-            <env value="firefox"/>
-            <env value="phantomjs"/>
         </annotations>
         <after>
-            <seeInCurrentUrl url="/admin/admin/" mergeKey="seeInCurrentUrl"/>
+            <seeInCurrentUrl url="/admin/admin/" stepKey="seeInCurrentUrl"/>
         </after>
         <test name="MinimumFieldsTest">
             <annotations>
                 <title value="Minimum Test"/>
                 <description value="Minimum Test"/>
+                <group value="example"/>
             </annotations>
-            <amOnPage url="{{AdminLoginPage}}" mergeKey="navigateToAdmin"/>
-            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" mergeKey="fillUsername"/>
-            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" mergeKey="fillPassword"/>
-            <click selector="{{AdminLoginFormSection.signIn}}" mergeKey="clickLogin"/>
+            <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
+            <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="fillUsername"/>
+            <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
+            <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
         </test>
     </cest>
 </config>

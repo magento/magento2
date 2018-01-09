@@ -1,7 +1,5 @@
 <?php
 /**
- * Generic test case for Web API functional tests.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,8 +8,11 @@ namespace Magento\TestFramework\TestCase;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Webapi\Model\Soap\Fault;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
+ * Test case for Web API functional tests for REST and SOAP.
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -288,7 +289,9 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
                     sprintf('Declaration of the requested Web API adapter "%s" was not found.', $webApiAdapterCode)
                 );
             }
-            $this->_webApiAdapters[$webApiAdapterCode] = new $this->_webApiAdaptersMap[$webApiAdapterCode]();
+            $this->_webApiAdapters[$webApiAdapterCode] = Bootstrap::getObjectManager()->get(
+                $this->_webApiAdaptersMap[$webApiAdapterCode]
+            );
         }
         return $this->_webApiAdapters[$webApiAdapterCode];
     }
