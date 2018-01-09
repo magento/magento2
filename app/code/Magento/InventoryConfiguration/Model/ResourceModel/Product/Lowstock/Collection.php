@@ -153,15 +153,16 @@ class Collection extends SourceItemCollection
     /**
      * Add Notify Stock Qty Condition to collection
      *
+     * @param null $storeId
      * @return $this
      */
-    public function useNotifyStockQtyFilter()
+    public function useNotifyStockQtyFilter($storeId = null)
     {
         $notifyQtyField = CreateSourceConfigurationTable::TABLE_NAME_SOURCE_ITEM_CONFIGURATION .
             '.' . SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY;
         $notifyStockExpression = $this->getConnection()->getIfNullSql(
             $notifyQtyField,
-            (int)$this->stockConfiguration->getNotifyStockQty(0) // TODO: put store_id
+            (int)$this->stockConfiguration->getNotifyStockQty($storeId)
         );
         $this->getSelect()->where(
             SourceItemInterface::QUANTITY . ' < ?',

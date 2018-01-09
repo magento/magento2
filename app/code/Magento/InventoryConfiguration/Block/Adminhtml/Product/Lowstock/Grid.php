@@ -47,6 +47,22 @@ class Grid extends GridWidget
      */
     protected function _prepareCollection()
     {
+        $website = $this->getRequest()->getParam('website');
+        $group = $this->getRequest()->getParam('group');
+        $store = $this->getRequest()->getParam('store');
+
+        if ($website) {
+            $storeIds = $this->_storeManager->getWebsite($website)->getStoreIds();
+            $storeId = array_pop($storeIds);
+        } elseif ($group) {
+            $storeIds = $this->_storeManager->getGroup($group)->getStoreIds();
+            $storeId = array_pop($storeIds);
+        } elseif ($store) {
+            $storeId = (int)$store;
+        } else {
+            $storeId = null;
+        }
+
         /** @var $collection \Magento\InventoryConfiguration\Model\ResourceModel\Product\Lowstock\Collection  */
         $collection = $this->lowstockCollectionFactory->create();
         $collection->addFieldToSelect(
@@ -55,7 +71,7 @@ class Grid extends GridWidget
         ->joinInventoryConfiguration()
         ->joinCatalogProduct()
         ->filterByIsQtyProductTypes()
-        ->useNotifyStockQtyFilter()
+        ->useNotifyStockQtyFilter($storeId)
         ->setOrder(
             'quantity',
             DataCollection::SORT_ORDER_ASC
