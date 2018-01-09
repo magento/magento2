@@ -22,7 +22,6 @@
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
-
         <test name="AddWidgetToWYSIWYGWithTypeOfCMSStaticBlock">
             <annotations>
                 <title value="Create CMS Page With Widget Type:CMS Static Block"/>
@@ -69,11 +68,9 @@
             <see userInput="Hello CMS Page!" stepKey="seeContent"/>
             <see userInput="$$createPreBlock.content$$" stepKey="seeBlockLink"/>
         </test>
-
-
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </cest>
 </config>
