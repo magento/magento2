@@ -337,14 +337,13 @@ define([
          */
         _setActive: function () {
             var zIndex = this.modal.zIndex();
-
+            var contentIndex = zIndex + (this._getVisibleCount() + 2);
             this.prevOverlayIndex = this.overlay.zIndex();
             this.modal.zIndex(zIndex + this._getVisibleCount());
             this.overlay.zIndex(zIndex + (this._getVisibleCount() + 1));
-            this.modal.find(this.options.focusableStart).zIndex(zIndex + (this._getVisibleCount() + 2));
-            this.modal.find(this.options.focusableScope).zIndex(zIndex + (this._getVisibleCount() + 2));
-            this.modal.find(this.options.focusableEnd).zIndex(zIndex + (this._getVisibleCount() + 2));
-            
+            this.modal.find(this.options.focusableStart).zIndex(contentIndex);
+            this.modal.find(this.options.focusableScope).zIndex(contentIndex);
+            this.modal.find(this.options.focusableEnd).zIndex(contentIndex);
             if (this._getVisibleSlideCount()) {
                 this.modal.css('marginLeft', this.options.modalLeftMargin * this._getVisibleSlideCount());
             }
