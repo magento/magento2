@@ -120,18 +120,18 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         // Load default page handles and page configurations
         if ($params && $params->getBeforeHandles()) {
             foreach ($params->getBeforeHandles() as $handle) {
-                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
                 $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
+                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
             }
         }
-
-        $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
+    
         $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
-
+        $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
+    
         if ($params && $params->getAfterHandles()) {
             foreach ($params->getAfterHandles() as $handle) {
-                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
                 $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
+                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
             }
         }
 
