@@ -276,7 +276,6 @@ class DataGrid extends Grid
         $this->search($filter);
         $rowItem = $this->getRow($filter);
         $this->waitLoader();
-        $this->_rootElement->find($rowItem->getLocator()['value'], $rowItem->getLocator()['using'])->hover();
         if ($rowItem->isVisible()) {
             $rowItem->find($this->selectItem)->click();
         } else {
