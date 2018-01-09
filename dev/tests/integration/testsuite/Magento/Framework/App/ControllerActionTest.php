@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class ControllerActionTest extends TestCase
 {
