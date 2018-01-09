@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\InventoryImportExport\Model\Import\Validator;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Validation\ValidationResultFactory;
 use Magento\InventoryImportExport\Model\Import\Sources;
@@ -64,8 +65,7 @@ class SkuValidator implements ValidatorInterface
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
-        $collection->addAttributeToSelect('sku');
-        $collection->addAttributeToFilter('sku', $sku);
+        $collection->addAttributeToFilter(ProductInterface::SKU, $sku);
         return $collection->getSize() > 0;
     }
 }
