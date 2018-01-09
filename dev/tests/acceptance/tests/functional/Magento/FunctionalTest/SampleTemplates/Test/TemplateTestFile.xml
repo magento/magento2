@@ -6,9 +6,9 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <cest name="">
+    <test name="">
         <annotations>
             <features value=""/>
             <stories value=""/>
@@ -19,15 +19,6 @@
         <after>
 
         </after>
-        <test name="">
-            <annotations>
-                <title value=""/>
-                <description value=""/>
-                <severity value=""/>
-                <testCaseId value=""/>
-                <group value=""/>
-            </annotations>
-            <!-- ADD TEST STEPS HERE -->
-        </test>
-    </cest>
-</config>
+        <!-- ADD TEST STEPS HERE -->
+    </test>
+</tests>
