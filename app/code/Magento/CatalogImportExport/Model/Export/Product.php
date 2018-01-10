@@ -1315,16 +1315,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
             $options = $this->_optionColFactory->create();
             /* @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection $options*/
-            $options->addOrder('sort_order');
-            $options->reset()->addOrder('sort_order')->addTitleToResult(
-                $storeId
-            )->addPriceToResult(
-                $storeId
-            )->addProductToFilter(
-                $productIds
-            )->addValuesToResult(
-                $storeId
-            );
+            $options->reset();
+            $options->addOrder('sort_order', 'ASC');
+            $options->addTitleToResult($storeId);
+            $options->addPriceToResult($storeId);
+            $options->addProductToFilter($productIds);
+            $options->addValuesToResult($storeId);
 
             foreach ($options as $option) {
                 $row = [];
