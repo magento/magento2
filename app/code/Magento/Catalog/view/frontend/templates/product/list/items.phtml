@@ -147,11 +147,15 @@ switch ($type = $block->getType()) {
     break;
 
     case 'other':
+        $exist = null;
     break;
+
+    default:
+        $exist = null;
 }
 ?>
 
-<?php if (isset($exist) && $exist):?>
+<?php if ($exist):?>
 
     <?php if ($type == 'related' || $type == 'upsell'): ?>
         <?php if ($type == 'related'): ?>
