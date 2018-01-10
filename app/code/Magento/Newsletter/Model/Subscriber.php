@@ -614,8 +614,9 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
                         $this->sendConfirmationSuccessEmail();
                         break;
                     case self::STATUS_NOT_ACTIVE:
-                        if ($isConfirmNeed)
+                        if ($isConfirmNeed) {
                             $this->sendConfirmationRequestEmail();
+                        }
                         break;
                 }
             } catch (MailException $e) {
