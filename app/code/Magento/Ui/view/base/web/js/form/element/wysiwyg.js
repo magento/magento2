@@ -12,7 +12,7 @@ define([
     'underscore',
     'ko',
     './abstract',
-    'Magento_Variable/variables',
+    'Magento_Variable/variables'
 ], function (wysiwyg, $, _, ko, Abstract) {
     'use strict';
 
