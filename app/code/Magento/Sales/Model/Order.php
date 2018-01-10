@@ -13,6 +13,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\Order\ShippingMethod;
 use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection as CreditmemoCollection;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
@@ -1199,7 +1200,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Retrieve shipping method
      *
      * @param bool $asObject return carrier code and shipping method data as object
-     * @return string|\Magento\Framework\DataObject
+     * @return string|ShippingMethod
      */
     public function getShippingMethod($asObject = false)
     {
@@ -1207,8 +1208,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         if (!$asObject) {
             return $shippingMethod;
         } else {
-            list($carrierCode, $method) = explode('_', $shippingMethod, 2);
-            return new \Magento\Framework\DataObject(['carrier_code' => $carrierCode, 'method' => $method]);
+            return ShippingMethod::fromFullShippingMethodCode($shippingMethod);
         }
     }
 
