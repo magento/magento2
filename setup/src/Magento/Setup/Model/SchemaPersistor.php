@@ -6,6 +6,7 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Shell;
 
 /**
  * Persist listened schema to db_schema.xml file
@@ -18,11 +19,18 @@ class SchemaPersistor
     private $componentRegistrar;
 
     /**
-     * @param ComponentRegistrar $componentRegistrar
+     * @var Shell
      */
-    public function __construct(ComponentRegistrar $componentRegistrar)
+    private $shell;
+
+    /**
+     * @param ComponentRegistrar $componentRegistrar
+     * @param Shell $shell
+     */
+    public function __construct(ComponentRegistrar $componentRegistrar, Shell $shell)
     {
         $this->componentRegistrar = $componentRegistrar;
+        $this->shell = $shell;
     }
 
     /**
@@ -214,7 +222,7 @@ class SchemaPersistor
      */
     private function persistModule(\SimpleXMLElement $simpleXmlElementDom, $path)
     {
-        if (strpos($path, 'magento#ee') !== false) {
+        if (strpos($path, 'magento2ee') !== false) {
             $dom = new \DOMDocument('1.0');
             $dom->preserveWhiteSpace = false;
             $dom->formatOutput = true;

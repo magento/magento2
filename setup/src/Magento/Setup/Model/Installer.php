@@ -936,10 +936,12 @@ class Installer
             $handlerType = 'data-recurring';
         }
         foreach ($moduleNames as $moduleName) {
-            if (isset($stagingModules[$moduleName])) {
-                $this->schemaListener->setModuleName($stagingModules[$moduleName]);
-                $this->schemaListener->toogleIgnore(SchemaListener::IGNORE_OFF | SchemaListener::STAGING_FK_KEYS);
-            }
+            $schemaListenerModuleName = $stagingModules[$moduleName] ?? $moduleName;
+            $this->schemaListener->setModuleName($schemaListenerModuleName);
+            $this->schemaListener->toogleIgnore(
+                SchemaListener::IGNORE_OFF | SchemaListener::STAGING_FK_KEYS
+            );
+
             $this->log->log("Module '{$moduleName}':");
             $modulePostUpdater = $this->getSchemaDataHandler($moduleName, $handlerType);
             if ($modulePostUpdater) {

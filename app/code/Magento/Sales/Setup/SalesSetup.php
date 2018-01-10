@@ -12,6 +12,7 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Setup\Model\SchemaListener;
 
 /**
  * Sales module setup class
@@ -302,14 +303,14 @@ class SalesSetup extends EavSetup
         return $this->encryptor;
     }
 
-    /**
-     * Get sales connection
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
     public function getConnection()
     {
-        return $this->getSetup()->getConnection(self::$connectionName);
+        $setup = $this->getSetup();
+        /** @var SchemaListener $schemaListener */
+        $schemaListener = $setup->getConnection()->getSchemaListener();
+        $newConnection = $this->getSetup()->getConnection(self::$connectionName);
+        $newConnection->setSchemaListener($schemaListener);
+        return $newConnection;
     }
 
     /**

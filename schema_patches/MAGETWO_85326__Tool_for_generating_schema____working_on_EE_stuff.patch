@@ -1,0 +1,15 @@
+Index: app/code/Magento/CatalogStaging/etc/db_schema.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/code/Magento/CatalogStaging/etc/db_schema.xml	(revision 4a4aa7ae62773eb2ec7e4f6f1bc33a43bcbd3332)
++++ app/code/Magento/CatalogStaging/etc/db_schema.xml	(revision )
+@@ -209,6 +209,7 @@
+   </table>
+   <table name="catalog_category_product" resource="default">
+     <constraint xsi:type="foreign" name="CAT_CTGR_PRD_PRD_ID_CAT_PRD_ENTT_ENTT_ID" disabled="1"/>
++    <constraint xsi:type="foreign" name="CAT_CTGR_PRD_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID" disabled="1"/>
+     <constraint xsi:type="foreign" name="CAT_CTGR_PRD_PRD_ID_SEQUENCE_PRD_SEQUENCE_VAL" table="catalog_category_product" column="product_id" referenceTable="sequence_product" referenceColumn="sequence_value" onDelete="CASCADE"/>
+     <constraint xsi:type="foreign" name="CAT_CTGR_PRD_CTGR_ID_SEQUENCE_CAT_CTGR_SEQUENCE_VAL" table="catalog_category_product" column="category_id" referenceTable="sequence_catalog_category" referenceColumn="sequence_value" onDelete="CASCADE"/>
+   </table>
