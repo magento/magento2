@@ -151,7 +151,7 @@ switch ($type = $block->getType()) {
 }
 ?>
 
-<?php if (isset($exist)):?>
+<?php if (isset($exist) && $exist):?>
 
     <?php if ($type == 'related' || $type == 'upsell'): ?>
         <?php if ($type == 'related'): ?>
