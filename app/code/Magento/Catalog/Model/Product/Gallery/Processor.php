@@ -149,7 +149,7 @@ class Processor
         }
 
         $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
-        $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
+        $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
         $fileName = $dispretionPath . '/' . $fileName;
 
         $fileName = $this->getNotDuplicatedFilename($fileName, $dispretionPath);

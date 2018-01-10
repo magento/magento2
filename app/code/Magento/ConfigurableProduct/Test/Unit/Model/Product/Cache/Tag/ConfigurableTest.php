@@ -32,14 +32,16 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     public function testGetWithScalar()
     {
-        $this->expectException(\InvalidArgumentException::class, 'Provided argument is not an object');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Provided argument is not an object');
         $this->model->getTags('scalar');
     }
 
     public function testGetTagsWithObject()
     {
-        $this->expectException(\InvalidArgumentException::class, 'Provided argument must be a product');
-        $this->model->getTags(new \StdClass());
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Provided argument must be a product');
+        $this->model->getTags(new \stdClass());
     }
 
     public function testGetTagsWithVariation()
