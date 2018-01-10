@@ -1,0 +1,118 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Magento_ReleaseNotification Modal on dashboard
+//  ---------------------------------------------
+
+.release-notification-modal {
+  -webkit-transition: visibility 0s .5s, opacity .5s ease;
+  transition: visibility 0s .5s, opacity .5s ease;
+
+  &._show {
+    visibility: visible;
+    opacity: 1;
+    -webkit-transition: opacity .5s ease;
+    transition: opacity .5s ease;
+  }
+
+  .modal-inner-wrap {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    -webkit-transition: -webkit-transform 0s;
+    transition: transform 0s;
+    height: 50rem;
+    max-width: 75rem;
+    margin-top: 13rem;
+
+    .modal-content, .modal-header {
+      padding-left: 4rem;
+      padding-right: 4rem;
+
+      .action-close {
+        display: none;
+      }
+    }
+  }
+
+  .admin__fieldset {
+    padding: 0;
+  }
+}
+
+.release-notification-title-with-image {
+  padding: 1.5rem 0 2rem 7rem;
+  background-size: 55px 49.08px;
+  background-repeat: no-repeat;
+}
+
+.release-notification-text {
+  line-height: @line-height__l;
+
+  ul {
+    margin: 2rem 0 2rem 0;
+
+    li {
+      font-size: @font-size__xs;
+      margin: 1.5rem 0 1.5rem 2rem;
+
+      span {
+        font-size: @font-size__base;
+        vertical-align: middle;
+        position: relative;
+        left: 1rem;
+      }
+    }
+  }
+}
+
+.release-notification-button-next, .release-notification-button-back {
+  display: inline-block;
+  vertical-align: top;
+  float: right;
+  position: absolute;
+  bottom: 4rem;
+}
+
+.release-notification-button-next {
+  .lib-button-as-link();
+  right: 4rem;
+  font-weight: 400;
+}
+
+.release-notification-button-back {
+  .lib-button-as-link();
+  left: 4rem;
+  font-weight: 400;
+}
+
+.highlight-item {
+  padding: 0 0 2rem 8.5rem;
+  margin-left: 1rem;
+  background-size: 65px 58px;
+  background-repeat: no-repeat;
+
+  h3 {
+    margin: 0;
+
+    span {
+      font-style: @font-style__emphasis;
+      font-size: @font-size__s;
+      font-weight: @font-weight__light;
+    }
+  }
+}
+
+.highlight-item-no-image {
+  padding: 0 0 2rem 0;
+
+  h3 {
+    margin: 0;
+  }
+}
+
+.hide-release-notification {
+  display: none;
+}
