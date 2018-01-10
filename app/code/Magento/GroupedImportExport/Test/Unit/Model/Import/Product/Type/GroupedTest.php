@@ -192,7 +192,7 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'skus' => [
                     'newSku' => [
                         'sku_assoc1' => ['entity_id' => 1],
-                        'productSku' => ['entity_id' => 3, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
+                        'productsku' => ['entity_id' => 3, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
                     ],
                     'oldSku' => ['sku_assoc2' => ['entity_id' => 2]]
                 ],
@@ -205,7 +205,7 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             [
                 'skus' => [
                     'newSku' => [
-                        'productSku' => ['entity_id' => 1, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
+                        'productsku' => ['entity_id' => 1, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
                     ],
                     'oldSku' => []
                 ],
@@ -247,7 +247,7 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     {
         $this->entityModel->expects($this->once())->method('getNewSku')->will($this->returnValue([
             'sku_assoc1' => ['entity_id' => 1],
-            'productSku' => ['entity_id' => 2, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
+            'productsku' => ['entity_id' => 2, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
         ]));
         $this->entityModel->expects($this->once())->method('getOldSku')->will($this->returnValue([
             'sku_assoc2' => ['entity_id' => 3]
