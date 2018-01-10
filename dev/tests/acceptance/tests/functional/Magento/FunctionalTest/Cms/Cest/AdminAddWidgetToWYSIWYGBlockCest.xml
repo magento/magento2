@@ -33,8 +33,8 @@
             <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle"/>
             <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
             <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
-            <waitForElementVisible selector="{{BlockWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE" />
-            <click selector="{{BlockWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon1" />
+            <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+            <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon1" />
             <wait time="10" stepKey="waitForPageLoad2" />
             <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
             <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Page Link" stepKey="selectCMSPageLink" />

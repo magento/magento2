@@ -42,9 +42,9 @@
             <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle1"/>
             <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
             <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
-            <waitForElementVisible selector="{{BlockWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE" />
-            <seeElement selector="{{BlockWYSIWYGSection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
-            <click selector="{{BlockWYSIWYGSection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon1" />
+            <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+            <seeElement selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
+            <click selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon1" />
             <waitForText userInput="Insert Variable" stepKey="waitForSlideOutOpen"/>
             <waitForLoadingMaskToDisappear stepKey="waitForLoading1"/>
             <!--see Insert Variable button disabled-->
@@ -62,7 +62,7 @@
             <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save1" />
             <scrollTo selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" stepKey="scrollToBlockTitle" />
             <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideoutCloses" />
-            <click selector="{{BlockWYSIWYGSection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon2" />
+            <click selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon2" />
             <waitForPageLoad stepKey="waitForPageLoad4"/>
             <!--see custom variable-->
             <see userInput="{{customVariable.code}}"  stepKey="seeCustomVariable"/>
@@ -78,8 +78,8 @@
             <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save2" />
             <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
             <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShow/HideBtn"/>
-            <waitForElementVisible selector="{{BlockWYSIWYGSection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
-            <seeElement selector="{{BlockWYSIWYGSection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
+            <waitForElementVisible selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
+            <seeElement selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
             <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
             <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
             <waitForPageLoad stepKey="waitForPageLoad7"/>

@@ -35,29 +35,15 @@
             <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle"/>
             <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
             <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
-            <waitForElementVisible selector="{{BlockWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE" />
-            <seeElement selector="{{BlockWYSIWYGSection.TinyMCE4}}" stepKey="seeTinyMCE4" />
-            <seeElement selector="{{BlockWYSIWYGSection.Style}}" stepKey="assertInfo2"/>
-            <seeElement selector="{{BlockWYSIWYGSection.Bold}}" stepKey="assertInfo3"/>
-            <seeElement selector="{{BlockWYSIWYGSection.Italic}}" stepKey="assertInfo4"/>
-            <seeElement selector="{{BlockWYSIWYGSection.Underline}}" stepKey="assertInfo5"/>
-            <seeElement selector="{{BlockWYSIWYGSection.AlignLeft}}" stepKey="assertInfo6"/>
-            <seeElement selector="{{BlockWYSIWYGSection.AlignCenter}}" stepKey="assertInfo7"/>
-            <seeElement selector="{{BlockWYSIWYGSection.AlignRight}}" stepKey="assertInfo8"/>
-            <seeElement selector="{{BlockWYSIWYGSection.Numlist}}" stepKey="assertInfo9"/>
-            <seeElement selector="{{BlockWYSIWYGSection.Bullet}}" stepKey="assertInfo10"/>
-            <seeElement selector="{{BlockWYSIWYGSection.InsertLink}}" stepKey="assertInfo11"/>
-            <seeElement selector="{{BlockWYSIWYGSection.InsertImageIcon}}" stepKey="assertInf12"/>
-            <seeElement selector="{{BlockWYSIWYGSection.InsertTable}}" stepKey="assertInfo13"/>
-            <seeElement selector="{{BlockWYSIWYGSection.SpecialCharacter}}" stepKey="assertInfo14"/>
-            <seeElement selector="{{BlockWYSIWYGSection.InsertWidgetIcon}}" stepKey="assertInfo15"/>
-            <seeElement selector="{{BlockWYSIWYGSection.InsertVariableIcon}}" stepKey="assertInfo16"/>
+            <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+            <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE4"/>
+            <actionGroup ref="VerifyMagentoEntityActionGroup" stepKey="verifyMagentoEntities"/>
             <executeJS function="tinyMCE.get('cms_block_form_content').setContent('Hello Block Page!');" stepKey="executeJSFillContent"/>
             <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn1" />
-            <waitForElementVisible selector="{{BlockWYSIWYGSection.InsertWidgetBtn}}" stepKey="waitForInsertWidget" />
-            <see selector="{{BlockWYSIWYGSection.InsertImageBtn}}" userInput="Insert Image..." stepKey="assertInf17"/>
-            <see selector="{{BlockWYSIWYGSection.InsertWidgetBtn}}" userInput="Insert Widget..." stepKey="assertInfo18"/>
-            <see selector="{{BlockWYSIWYGSection.InsertVariableBtn}}" userInput="Insert Variable..." stepKey="assertInfo19"/>
+            <waitForElementVisible selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="waitForInsertWidget" />
+            <see selector="{{TinyMCESection.InsertImageBtn}}" userInput="Insert Image..." stepKey="assertInf17"/>
+            <see selector="{{TinyMCESection.InsertWidgetBtn}}" userInput="Insert Widget..." stepKey="assertInfo18"/>
+            <see selector="{{TinyMCESection.InsertVariableBtn}}" userInput="Insert Variable..." stepKey="assertInfo19"/>
             <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
             <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
             <waitForPageLoad stepKey="waitForPageLoad2"/>
@@ -65,8 +51,6 @@
             <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="$$createPreReqCMSPage.identifier$$" stepKey="fillOutURLKey" />
             <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="clickApplyBtn" />
             <waitForLoadingMaskToDisappear stepKey="waitForLoading3" />
-            <!--<waitForElementVisible selector="{{CmsPagesPageActionsSection.select('$$createPreReqCMSPage.identifier$$')}}" stepKey="waitForCMSPageGrid" />-->
-            <!--<scrollTo selector="{{CmsPagesPageActionsSection.select('$$createPreReqCMSPage.identifier$$')}}" stepKey="scrollToCMSPage" />-->
             <click selector="{{CmsPagesPageActionsSection.select('$$createPreReqCMSPage.identifier$$')}}" stepKey="clickSelect" />
             <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit('$$createPreReqCMSPage.identifier$$')}}" stepKey="waitForEditLink" />
             <click selector="{{CmsPagesPageActionsSection.edit('$$createPreReqCMSPage.identifier$$')}}" stepKey="clickEdit" />

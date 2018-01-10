@@ -11,7 +11,7 @@
         <annotations>
             <features value="TinyMCEv4"/>
             <stories value="Apply new WYSIWYG in Newsletter-MAGETWO-47309"/>
-            <group value="newsletter"/>
+            <group value="newsletter1"/>
             <env value="chrome"/>
             <env value="firefox"/>
             <env value="phantomjs"/>
@@ -35,22 +35,8 @@
             <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
             <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
             <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE" />
-            <seeElement selector="{{NewsletterWYSIWYGSection.TinyMCE4}}" stepKey="seeTinyMCE4" />
-            <seeElement selector="{{NewsletterWYSIWYGSection.Style}}" stepKey="assertInfo2"/>
-            <seeElement selector="{{NewsletterWYSIWYGSection.Bold}}" stepKey="assertInfo3"/>
-            <seeElement selector="{{NewsletterWYSIWYGSection.Italic}}" stepKey="assertInfo4"/>
-            <seeElement selector="{{NewsletterWYSIWYGSection.Underline}}" stepKey="assertInfo5"/>
-            <seeElement selector="{{NewsletterWYSIWYGSection.AlignLeft}}" stepKey="assertInfo6"/>
-            <seeElement selector="{{NewsletterWYSIWYGSection.AlignCenter}}" stepKey="assertInfo7"/>
-            <seeElement selector="{{NewsletterWYSIWYGSection.AlignRight}}" stepKey="assertInfo8"/>
-            <seeElement selector="{{NewsletterWYSIWYGSection.Numlist}}" stepKey="assertInfo9"/>
-            <seeElement selector="{{NewsletterWYSIWYGSection.Bullet}}" stepKey="assertInfo10"/>
-            <seeElement selector="{{NewsletterWYSIWYGSection.InsertLink}}" stepKey="assertInfo11"/>
-            <seeElement selector="{{NewsletterWYSIWYGSection.InsertImageIcon}}" stepKey="assertInf12"/>
-            <seeElement selector="{{NewsletterWYSIWYGSection.InsertTable}}" stepKey="assertInfo13"/>
-            <seeElement selector="{{NewsletterWYSIWYGSection.SpecialCharacter}}" stepKey="assertInfo14"/>
-            <seeElement selector="{{NewsletterWYSIWYGSection.InsertWidgetIcon}}" stepKey="assertInfo15"/>
-            <seeElement selector="{{NewsletterWYSIWYGSection.InsertVariableIcon}}" stepKey="assertInfo16"/>
+            <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE4"/>
+            <actionGroup ref="VerifyMagentoEntityActionGroup" stepKey="verifyMagentoEntities"/>
             <executeJS function="tinyMCE.get('text').setContent('Hello World From Newsletter Template!');" stepKey="executeJSFillContent"/>
             <click selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn2" />
             <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="waitForInsertWidget" />

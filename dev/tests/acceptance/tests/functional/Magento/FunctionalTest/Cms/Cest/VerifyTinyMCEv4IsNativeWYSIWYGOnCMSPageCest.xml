@@ -36,22 +36,8 @@
             <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
             <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{_defaultCmsPage.content_heading}}" stepKey="fillFieldContentHeading"/>
             <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE" />
-            <seeElement selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="seeTinyMCE4" />
-            <seeElement selector="{{CmsWYSIWYGSection.Style}}" stepKey="assertInfo2"/>
-            <seeElement selector="{{CmsWYSIWYGSection.Bold}}" stepKey="assertInfo3"/>
-            <seeElement selector="{{CmsWYSIWYGSection.Italic}}" stepKey="assertInfo4"/>
-            <seeElement selector="{{CmsWYSIWYGSection.Underline}}" stepKey="assertInfo5"/>
-            <seeElement selector="{{CmsWYSIWYGSection.AlignLeft}}" stepKey="assertInfo6"/>
-            <seeElement selector="{{CmsWYSIWYGSection.AlignCenter}}" stepKey="assertInfo7"/>
-            <seeElement selector="{{CmsWYSIWYGSection.AlignRight}}" stepKey="assertInfo8"/>
-            <seeElement selector="{{CmsWYSIWYGSection.Numlist}}" stepKey="assertInfo9"/>
-            <seeElement selector="{{CmsWYSIWYGSection.Bullet}}" stepKey="assertInfo10"/>
-            <seeElement selector="{{CmsWYSIWYGSection.InsertLink}}" stepKey="assertInfo11"/>
-            <seeElement selector="{{CmsWYSIWYGSection.InsertImageIcon}}" stepKey="assertInf12"/>
-            <seeElement selector="{{CmsWYSIWYGSection.InsertTable}}" stepKey="assertInfo13"/>
-            <seeElement selector="{{CmsWYSIWYGSection.SpecialCharacter}}" stepKey="assertInfo14"/>
-            <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="assertInfo15"/>
-            <seeElement selector="{{CmsWYSIWYGSection.InsertVariableIcon}}" stepKey="assertInfo16"/>
+            <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE4"/>
+            <actionGroup ref="VerifyMagentoEntityActionGroup" stepKey="verifyMagentoEntities"/>
             <executeJS function="tinyMCE.get('cms_page_form_content').setContent('Hello World!');" stepKey="executeJSFillContent"/>
             <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn" />
             <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="waitForInsertWidget" />
