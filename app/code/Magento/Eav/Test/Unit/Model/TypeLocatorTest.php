@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Test\Unit\Model;
 
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Eav\Model\TypeLocator;
 use Magento\Eav\Model\TypeLocator\ComplexType as ComplexTypeLocator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -66,7 +65,10 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
         $expected
     ) {
         $this->complexType->expects($this->once())->method('getType')->willReturn($expected);
-        $type = $this->customAttributeTypeLocator->getType($attributeCode, $serviceEntityTypeMapData[$serviceClass]);
+        $type = $this->customAttributeTypeLocator->getType(
+            $attributeCode,
+            $serviceEntityTypeMapData[$serviceClass]
+        );
 
         $this->assertEquals($expected, $type, 'Expected: ' . $expected . 'but got: ' . $type);
     }
@@ -79,16 +81,22 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
     {
         $serviceInterface = \Magento\Catalog\Api\Data\ProductInterface::class;
         $eavEntityType = 'catalog_product';
-        $mediaBackEndModelClass = \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class;
-        $mediaAttributeDataInterface = \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class;
+        $mediaBackEndModelClass = ProductAttributeMediaGalleryEntryInterface::class;
+        $mediaAttributeDataInterface = ProductAttributeMediaGalleryEntryInterface::class;
 
-        $attribute = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, ['getBackendModel']);
+        $attribute = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            ['getBackendModel']
+        );
 
         $attribute->expects($this->any())
             ->method('getBackendModel')
             ->willReturn($mediaBackEndModelClass);
 
-        $attributeNoBackendModel = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, ['getBackendModel', 'getFrontendInput']);
+        $attributeNoBackendModel = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            ['getBackendModel', 'getFrontendInput']
+        );
 
         $attributeNoBackendModel->expects($this->any())
             ->method('getBackendModel')

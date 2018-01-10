@@ -15,9 +15,6 @@ use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Class LinkProviderTest
- */
 class LinkProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**

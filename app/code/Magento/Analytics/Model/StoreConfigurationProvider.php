@@ -13,7 +13,6 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class StoreConfigurationProvider
  * Provides config data report
  */
 class StoreConfigurationProvider

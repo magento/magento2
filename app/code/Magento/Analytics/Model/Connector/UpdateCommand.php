@@ -15,7 +15,6 @@ use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class UpdateCommand
  * Command executes in case change store url
  */
 class UpdateCommand implements CommandInterface

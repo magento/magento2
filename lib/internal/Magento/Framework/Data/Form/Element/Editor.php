@@ -79,6 +79,35 @@ class Editor extends Textarea
     }
 
     /**
+     * Fetch config options from plugin.  If $key is passed, return only that option key's value
+     * @param string $pluginName
+     * @param null $key
+     * @return mixed all options or single option if $key is passed; null if nonexistent
+     */
+    public function getPluginConfigOptions($pluginName, $key = null)
+    {
+        if (!is_array($this->getConfig('plugins'))) {
+            return null;
+        }
+
+        $plugins = $this->getConfig('plugins');
+
+        $pluginArrIndex = array_search($pluginName, array_column($plugins, 'name'));
+
+        if ($pluginArrIndex === false || !isset($plugins[$pluginArrIndex]['options'])) {
+            return null;
+        }
+
+        $pluginOptions = $plugins[$pluginArrIndex]['options'];
+
+        if ($key !== null) {
+            return isset($pluginOptions[$key]) ? $pluginOptions[$key] : null;
+        } else {
+            return $pluginOptions;
+        }
+    }
+
+    /**
      * @return string
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -164,7 +193,7 @@ class Editor extends Textarea
                 ')})(jQuery);' .
                 "\n" .
                 $jsSetupObject .
-                ' = new tinyMceWysiwygSetup("' .
+                ' = new wysiwygSetup("' .
                 $this->getHtmlId() .
                 '", ' .
                 $this->getJsonConfig() .
@@ -197,7 +226,7 @@ class Editor extends Textarea
             return $html;
         } else {
             // Display only buttons to additional features
-            if ($this->getConfig('widget_window_url')) {
+            if ($this->getPluginConfigOptions('magentowidget', 'window_url')) {
                 $html = $this->_getButtonsHtml() . $js . parent::getElementHtml();
                 if ($this->getConfig('add_widgets')) {
                     $html .= '<script type="text/javascript">
@@ -285,8 +314,8 @@ class Editor extends Textarea
                 [
                     'title' => $this->translate('Insert Widget...'),
                     'onclick' => "widgetTools.openDialog('"
-                        . $this->getConfig('widget_window_url')
-                        . "widget_target_id/" . $this->getHtmlId() . "')",
+                        . $this->getPluginConfigOptions('magentowidget', 'window_url')
+                        . "widget_target_id/" . $this->getHtmlId() . "/')",
                     'class' => 'action-add-widget plugin',
                     'style' => $visible ? '' : 'display:none',
                 ]

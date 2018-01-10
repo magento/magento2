@@ -8,9 +8,6 @@ namespace Magento\Analytics\Test\Unit\ReportXml\DB;
 use Magento\Analytics\ReportXml\DB\NameResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-/**
- * Class NameResolverTest
- */
 class NameResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
