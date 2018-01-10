@@ -9,11 +9,14 @@ namespace Magento\InventoryShipping\Model;
 
 use Magento\Sales\Api\Data\OrderInterface;
 
+/**
+ * Returns shipping algorithm result for the order (extension point, SPI)
+ *
+ * @api
+ */
 interface ShippingAlgorithmInterface
 {
     /**
-     * Returns shipping algorithm result for the order
-     *
      * @param OrderInterface $order
      * @return ShippingAlgorithmResultInterface
      */

@@ -7,6 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model;
 
+/**
+ * Represents part of shipping algorithm result
+ *
+ * @api
+ */
 interface SourceSelectionInterface
 {
     /**

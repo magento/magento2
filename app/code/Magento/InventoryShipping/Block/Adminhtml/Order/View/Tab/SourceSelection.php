@@ -31,6 +31,7 @@ class SourceSelection extends Template implements TabInterface
      * @var ShippingAlgorithmInterface
      */
     private $shippingAlgorithm;
+
     /**
      * @var SourceRepositoryInterface
      */

@@ -11,12 +11,14 @@ use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 
 /**
- * This shipping algorithm just iterates over all the sources one by one in no particular order.
+ * {@inheritdoc}
+ *
+ * This shipping algorithm just iterates over all the sources one by one in no particular order
  */
 class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
 {
     /**
-     * @var DefaultShippingAlgorithmResultFactory
+     * @var ShippingAlgorithmResultResultFactory
      */
     private $shippingAlgorithmResultFactory;
 
@@ -33,12 +35,12 @@ class DefaultShippingAlgorithm implements ShippingAlgorithmInterface
     /**
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SourceSelectionInterfaceFactory $sourceSelectionFactory
-     * @param DefaultShippingAlgorithmResultFactory $shippingAlgorithmResultFactory
+     * @param ShippingAlgorithmResultResultFactory $shippingAlgorithmResultFactory
      */
     public function __construct(
         SourceItemRepositoryInterface $sourceItemRepository,
         SourceSelectionInterfaceFactory $sourceSelectionFactory,
-        DefaultShippingAlgorithmResultFactory $shippingAlgorithmResultFactory
+        ShippingAlgorithmResultResultFactory $shippingAlgorithmResultFactory
     ) {
         $this->shippingAlgorithmResultFactory = $shippingAlgorithmResultFactory;
         $this->sourceItemRepository = $sourceItemRepository;

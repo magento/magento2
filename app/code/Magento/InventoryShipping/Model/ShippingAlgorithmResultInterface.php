@@ -9,6 +9,8 @@ namespace Magento\InventoryShipping\Model;
 
 /**
  * Responsible for how we will deduct product qty from different Sources
+ *
+ * @api
  */
 interface ShippingAlgorithmResultInterface
 {
@@ -19,7 +21,7 @@ interface ShippingAlgorithmResultInterface
      *      'source-code-2' => SourceSelectionInterface[],
      * ]
      *
-     * @return array
+     * @return SourceSelectionInterface[]
      */
     public function getSourceSelections(): array;
 }

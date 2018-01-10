@@ -7,16 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model;
 
-class DefaultShippingAlgorithmResult implements ShippingAlgorithmResultInterface
+/**
+ * @inheritdoc
+ */
+class ShippingAlgorithmResult implements ShippingAlgorithmResultInterface
 {
     /**
-     * @var array
+     * @var SourceSelectionInterface[]
      */
     private $sourceSelections;
 
     /**
-     * DefaultShippingAlgorithmResult constructor.
-     * @param array $sourceSelections
+     * @param SourceSelectionInterface[] $sourceSelections
      */
     public function __construct(array $sourceSelections)
     {

@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\InventoryShipping\Model;
 
+/**
+ * @inheritdoc
+ */
 class SourceSelection implements SourceSelectionInterface
 {
     /**
@@ -30,8 +33,6 @@ class SourceSelection implements SourceSelectionInterface
     private $sku;
 
     /**
-     * SourceSelection constructor.
-     *
      * @param string $sku
      * @param string $sourceCode
      * @param float $qty
