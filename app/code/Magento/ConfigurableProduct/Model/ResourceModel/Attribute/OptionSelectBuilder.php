@@ -103,6 +103,12 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
         )->where(
             'attribute.attribute_id = ?',
             $superAttribute->getAttributeId()
+        )->joinInner(
+            ['attribute_opt' => $this->attributeResource->getTable('eav_attribute_option')],
+            'attribute_opt.option_id = entity_value.value',
+            []
+        )->order(
+            'attribute_opt.sort_order ASC'
         );
 
         if (!$superAttribute->getSourceModel()) {
