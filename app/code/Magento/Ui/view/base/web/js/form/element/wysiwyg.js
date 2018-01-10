@@ -92,7 +92,7 @@ define([
          * @param {Boolean} status
          */
         setDisabled: function (status) {
-            if (this.$wysiwygEditorButton !== '') {
+            if (this.$wysiwygEditorButton) {
                 this.$wysiwygEditorButton.attr('disabled', status);
             }
 
