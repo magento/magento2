@@ -84,4 +84,9 @@ class MarkUserNotified extends Action
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         return $resultJson->setData($responseContent);
     }
+
+    protected function _isAllowed()
+    {
+        return parent::_isAllowed();
+    }
 }
