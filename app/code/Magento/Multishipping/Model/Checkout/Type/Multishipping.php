@@ -770,7 +770,8 @@ class Multishipping extends \Magento\Framework\DataObject
             }
 
             $this->_session->setOrderIds($orderIds);
-            $this->_checkoutSession->setLastQuoteId($this->getQuote()->getId());
+            $this->_checkoutSession->setLastQuoteId($this->getQuote()->getId())
+                ->setLastOrderIds($orderIds);
 
             $this->getQuote()->setIsActive(false);
             $this->quoteRepository->save($this->getQuote());

@@ -439,7 +439,12 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     public function clearHelperData()
     {
-        $this->setRedirectUrl(null)->setLastOrderId(null)->setLastRealOrderId(null)->setAdditionalMessages(null);
+        $this->setRedirectUrl(null)
+            ->setLastOrderId(null)
+            ->setLastOrderIds(null)
+            ->setLastRealOrderId(null)
+            ->setAdditionalMessages(null);
+
     }
 
     /**

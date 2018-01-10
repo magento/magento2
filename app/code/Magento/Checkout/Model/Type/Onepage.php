@@ -735,9 +735,11 @@ class Onepage
                 }
             }
 
+
             // add order information to the session
             $this->_checkoutSession
                 ->setLastOrderId($order->getId())
+                ->setLastOrderIds([$order->getId() => $order->getIncrementId()])
                 ->setRedirectUrl($redirectUrl)
                 ->setLastRealOrderId($order->getIncrementId())
                 ->setLastOrderStatus($order->getStatus());
