@@ -1194,6 +1194,65 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->assertArrayNotHasKey('PARAM2', $attributes);
     }
 
+    /**
+     * Test that errors occurred during importing images are logged.
+     *
+     * @param string $fileName
+     * @param bool $throwException
+     * @dataProvider uploadMediaFilesDataProvider
+     */
+    public function testUploadMediaFiles(string $fileName, bool $throwException)
+    {
+        $exception = new \Exception();
+        $expectedFileName = $fileName;
+        if ($throwException) {
+            $expectedFileName = '';
+            $this->_logger->expects($this->once())->method('critical')->with($exception);
+        }
+        $fileUploaderMock = $this
+            ->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Uploader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $fileUploaderMock
+            ->expects($this->once())
+            ->method('move')
+            ->willReturnCallback(
+                function ($name) use ($throwException, $exception) {
+                    if ($throwException) {
+                        throw $exception;
+                    }
+                    return ['file' => $name];
+                }
+            );
+        $this->setPropertyValue(
+            $this->importProduct,
+            '_fileUploader',
+            $fileUploaderMock
+        );
+        $actualFileName = $this->invokeMethod(
+            $this->importProduct,
+            'uploadMediaFiles',
+            [$fileName]
+        );
+        $this->assertEquals(
+            $expectedFileName,
+            $actualFileName
+        );
+    }
+
+    /**
+     * Data provider for testUploadMediaFiles.
+     *
+     * @return array
+     */
+    public function uploadMediaFilesDataProvider()
+    {
+        return [
+            ['test1.jpg', false],
+            ['test2.jpg', true],
+        ];
+    }
+
     public function getImagesFromRowDataProvider()
     {
         return [
