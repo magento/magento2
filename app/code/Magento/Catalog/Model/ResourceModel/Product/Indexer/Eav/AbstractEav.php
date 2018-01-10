@@ -58,6 +58,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             $this->_prepareIndex();
             $this->_prepareRelationIndex();
             $this->_removeNotVisibleEntityFromIndex();
+            $this->checkWebsitesInIndex();
             $this->syncData();
             $this->commit();
         } catch (\Exception $e) {
@@ -82,7 +83,46 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         $this->_prepareIndex($processIds);
         $this->_prepareRelationIndex($processIds);
         $this->_removeNotVisibleEntityFromIndex();
+        $this->checkWebsitesInIndex();
         return $this;
+    }
+
+    /**
+     * Delete values from incorrect website
+     *
+     * @return void
+     */
+    private function checkWebsitesInIndex()
+    {
+        $connection = $this->getConnection();
+        $idxTable = $this->getIdxTable();
+
+        $select = $connection->select()->from($idxTable, null);
+
+        $select->joinInner(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            "cpe.entity_id = {$idxTable}.source_id",
+            []
+        );
+        $select->joinInner(
+            ['s' => $this->getTable('store')],
+            "s.store_id = {$idxTable}.store_id",
+            []
+        );
+        $select->joinInner(
+            ['sw' => $this->getTable('store_website')],
+            "s.website_id = sw.website_id",
+            []
+        );
+        $select->joinLeft(
+            ['cpw' => $this->getTable('catalog_product_website')],
+            "cpe.entity_id = cpw.product_id AND sw.website_id = cpw.website_id",
+            []
+        );
+        $select->where('cpw.product_id IS NULL');
+
+        $query = $select->deleteFromSelect($idxTable);
+        $connection->query($query);
     }
 
     /**
@@ -104,6 +144,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             $this->_prepareIndex(null, $attributeId);
             $this->_prepareRelationIndex();
             $this->_removeNotVisibleEntityFromIndex();
+            $this->checkWebsitesInIndex();
 
             $this->_synchronizeAttributeIndexData($attributeId);
         }
