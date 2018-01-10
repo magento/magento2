@@ -85,7 +85,7 @@ class Visual extends AbstractSwatch
      *
      * @codeCoverageIgnore
      * @param null $swatchStoreValue
-     * @return string
+     * @return array
      */
     protected function reformatSwatchLabels($swatchStoreValue = null)
     {
