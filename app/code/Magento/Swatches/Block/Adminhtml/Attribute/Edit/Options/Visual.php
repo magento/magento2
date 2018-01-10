@@ -92,7 +92,7 @@ class Visual extends AbstractSwatch
         if ($swatchStoreValue === null) {
             return;
         }
-        $newSwatch = '';
+        $newSwatch = [];
         foreach ($swatchStoreValue as $key => $value) {
             if ($value[0] == '#') {
                 $newSwatch[$key] = 'background: '.$value;
