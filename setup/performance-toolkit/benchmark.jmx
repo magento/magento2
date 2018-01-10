@@ -804,164 +804,59 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
       </hashTree>
     </hashTree>
   
-    <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Extract categories" enabled="true">
-  <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/setup/extract_categories.jmx</stringProp>
-</TestFragmentController>
+    <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Extract categories" enabled="true"/>
     <hashTree>
-      <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="SetUp - Extract categories" enabled="true"/>
-      <hashTree>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-          <collectionProp name="HeaderManager.headers">
-            <elementProp name="" elementType="Header">
-              <stringProp name="Header.name">Content-Type</stringProp>
-              <stringProp name="Header.value">application/json</stringProp>
-            </elementProp>
-            <elementProp name="" elementType="Header">
-              <stringProp name="Header.name">Accept</stringProp>
-              <stringProp name="Header.value">*/*</stringProp>
-            </elementProp>
-          </collectionProp>
-        </HeaderManager>
-        <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - Admin Token Retrieval" enabled="true">
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{"username":"${admin_user}","password":"${admin_password}"}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
+      <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - HTTP Request: Open main page (for category extract)" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments"/>
           </elementProp>
           <stringProp name="HTTPSampler.domain"/>
           <stringProp name="HTTPSampler.port"/>
           <stringProp name="HTTPSampler.connect_timeout"/>
           <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
+        <stringProp name="HTTPSampler.protocol"/>
           <stringProp name="HTTPSampler.contentEncoding"/>
-          <stringProp name="HTTPSampler.path">${base_path}rest/V1/integration/admin/token</stringProp>
-          <stringProp name="HTTPSampler.method">POST</stringProp>
+        <stringProp name="HTTPSampler.path">${base_path}</stringProp>
+        <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
           <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
           <boolProp name="HTTPSampler.monitor">false</boolProp>
           <stringProp name="HTTPSampler.embedded_url_re"/>
+        <stringProp name="TestPlan.comments">mpaf/tool/fragments/ce/setup/extract_categories.jmx</stringProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor guiclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.gui.JSONPathExtractorGui" testclass="com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor" testname="jp@gc - JSON Path Extractor" enabled="true">
-            <stringProp name="VAR">admin_token</stringProp>
-            <stringProp name="JSONPATH">$</stringProp>
-            <stringProp name="DEFAULT"/>
-            <stringProp name="VARIABLE"/>
-            <stringProp name="SUBJECT">BODY</stringProp>
-          </com.atlantbh.jmeter.plugins.jsonutils.jsonpathextractor.JSONPathExtractor>
-          <hashTree/>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert token not null" enabled="true">
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert categories on home page" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="484395188">^[a-z0-9-]+$</stringProp>
+            <stringProp name="1711248581">&lt;span&gt;Category ([0-9]+)&lt;/span&gt;</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">1</intProp>
-            <stringProp name="Assertion.scope">variable</stringProp>
-            <stringProp name="Scope.variable">admin_token</stringProp>
+          <intProp name="Assertion.test_type">2</intProp>
           </ResponseAssertion>
           <hashTree/>
-        </hashTree>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-          <collectionProp name="HeaderManager.headers">
-            <elementProp name="" elementType="Header">
-              <stringProp name="Header.name">Authorization</stringProp>
-              <stringProp name="Header.value">Bearer ${admin_token}</stringProp>
-            </elementProp>
-          </collectionProp>
-        </HeaderManager>
-        <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - Get Categories Names and skus" enabled="true">
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="searchCriteria[filterGroups][0][filters][0][field]" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">path</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">searchCriteria[filterGroups][0][filters][0][field]</stringProp>
-              </elementProp>
-              <elementProp name="searchCriteria[filterGroups][0][filters][0][value]" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">1/2/%</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">searchCriteria[filterGroups][0][filters][0][value]</stringProp>
-              </elementProp>
-              <elementProp name="searchCriteria[filterGroups][0][filters][0][conditionType]" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">like</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">searchCriteria[filterGroups][0][filters][0][conditionType]</stringProp>
-              </elementProp>
-              <elementProp name="searchCriteria[filterGroups][1][filters][0][field]" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">level</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">searchCriteria[filterGroups][1][filters][0][field]</stringProp>
-              </elementProp>
-              <elementProp name="searchCriteria[filterGroups][1][filters][0][value]" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">2</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">searchCriteria[filterGroups][1][filters][0][value]</stringProp>
-              </elementProp>
-              <elementProp name="searchCriteria[pageSize]" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">${categories_count}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">searchCriteria[pageSize]</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain"/>
-          <stringProp name="HTTPSampler.port"/>
-          <stringProp name="HTTPSampler.connect_timeout"/>
-          <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
-          <stringProp name="HTTPSampler.contentEncoding"/>
-          <stringProp name="HTTPSampler.path">${base_path}rest/V1/categories/list</stringProp>
-          <stringProp name="HTTPSampler.method">GET</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.use_keepalive">false</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <boolProp name="HTTPSampler.monitor">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"/>
-        </HTTPSamplerProxy>
-        <hashTree>
-          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor: Extract category url key" enabled="true">
+        <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor: Extract first category url key" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">category_url_keys</stringProp>
-            <stringProp name="RegexExtractor.regex">url_key\",\"value\":\"(.*?)\"</stringProp>
-            <stringProp name="RegexExtractor.template">$1$</stringProp>
+          <stringProp name="RegexExtractor.regex">&lt;a href="http://${host}${base_path}(index.php/)?([^'"]+)${url_suffix}"  class="level-top" &gt;</stringProp>
+          <stringProp name="RegexExtractor.template">$2$</stringProp>
             <stringProp name="RegexExtractor.default"/>
             <stringProp name="RegexExtractor.match_number">-1</stringProp>
+          <stringProp name="Scope.variable">simple_product_1_url_key</stringProp>
           </RegexExtractor>
           <hashTree/>
-          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor: Extract category name" enabled="true">
+        <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor: Extract first category name" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">category_names</stringProp>
-            <stringProp name="RegexExtractor.regex">name\":\"(.*?)\"</stringProp>
-            <stringProp name="RegexExtractor.template">$1$</stringProp>
+          <stringProp name="RegexExtractor.regex">&lt;a href="http://${host}${base_path}(index.php/)?category-([0-9]+)${url_suffix}"  class="level-top" &gt;&lt;span&gt;([^'"]+)&lt;/span&gt;</stringProp>
+          <stringProp name="RegexExtractor.template">$3$</stringProp>
             <stringProp name="RegexExtractor.default"/>
             <stringProp name="RegexExtractor.match_number">-1</stringProp>
+          <stringProp name="Scope.variable">simple_product_1_url_key</stringProp>
           </RegexExtractor>
           <hashTree/>
         </hashTree>
-      </hashTree>
       <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach Controller: category url keys loop" enabled="true">
         <stringProp name="ForeachController.inputVal">category_url_keys</stringProp>
         <stringProp name="ForeachController.returnVal">category_url_key</stringProp>
@@ -1021,7 +916,7 @@ if (1 == Integer.parseInt(vars.get("category_name_counter"))) {
 } else {
     categoryNamesList = props.get("category_names_list");
 }
-
+            log.info("category name: " + vars.get("category_name"));
 categoryNamesList.add(vars.get("category_name"));</stringProp>
           <stringProp name="BeanShellSampler.filename"/>
           <stringProp name="BeanShellSampler.parameters"/>
@@ -1036,7 +931,6 @@ props.put("category_name", vars.get("category_name"));</stringProp>
         <stringProp name="BeanShellSampler.parameters"/>
         <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
       </BeanShellSampler>
-      <hashTree/>
     </hashTree>
   
     <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Extract configurable products" enabled="true">
@@ -20940,7 +20834,7 @@ vars.put("related_product_id", props.get("simple_products_list").get(relatedInde
         <collectionProp name="Arguments.arguments">
           <elementProp name="searchCriteria[filterGroups][0][filters][0][value]" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">mycolor</stringProp>
+            <stringProp name="Argument.value">mysize,mycolor</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">searchCriteria[filterGroups][0][filters][0][value]</stringProp>
@@ -20952,19 +20846,12 @@ vars.put("related_product_id", props.get("simple_products_list").get(relatedInde
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
             <stringProp name="Argument.name">searchCriteria[filterGroups][0][filters][0][field]</stringProp>
           </elementProp>
-          <elementProp name="searchCriteria[filterGroups][0][filters][1][value]" elementType="HTTPArgument">
+          <elementProp name="searchCriteria[filterGroups][0][filters][0][condition_type]" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">mysize</stringProp>
+            <stringProp name="Argument.value">in</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
             <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">searchCriteria[filterGroups][0][filters][1][value]</stringProp>
-          </elementProp>
-          <elementProp name="searchCriteria[filterGroups][0][filters][1][field]" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">attribute_code</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">searchCriteria[filterGroups][0][filters][1][field]</stringProp>
+            <stringProp name="Argument.name">searchCriteria[filterGroups][0][filters][0][condition_type]</stringProp>
           </elementProp>
         </collectionProp>
       </elementProp>
@@ -23701,7 +23588,7 @@ function addConfigurableMatrix(attributes) {
         });
     });
 
-    sampler.addArgument("configurable-matrix-serialized", JSON.stringify(products));
+    sampler.addArgument("product[configurable-matrix-serialized]", JSON.stringify(products));
     vars.putObject("configurable_variations_assertion", variationNames);
 }
             </stringProp>
@@ -24331,7 +24218,7 @@ function addConfigurableMatrix(attributes) {
         });
     });
 
-    sampler.addArgument("configurable-matrix-serialized", JSON.stringify(products));
+    sampler.addArgument("product[configurable-matrix-serialized]", JSON.stringify(products));
     vars.putObject("configurable_variations_assertion", variationNames);
 }
             </stringProp>
@@ -30353,7 +30240,7 @@ vars.put("admin_user", adminUser);
           <stringProp name="HTTPSampler.response_timeout"/>
           <stringProp name="HTTPSampler.protocol">${request_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"/>
-          <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/categories/list</stringProp>
+          <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/categories</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
