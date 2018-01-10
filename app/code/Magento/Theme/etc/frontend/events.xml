@@ -9,4 +9,7 @@
     <event name="controller_action_layout_render_before">
         <observer name="theme" instance="Magento\Theme\Observer\ApplyThemeCustomizationObserver" />
     </event>
+    <event name="controller_front_send_response_before">
+        <observer name="message" instance="Magento\Theme\Observer\SetCookieThemeMessage" />
+    </event>
 </config>

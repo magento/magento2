@@ -23,7 +23,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Controller\ResultInterface">
-        <plugin name="result-messages" type="Magento\Theme\Controller\Result\MessagePlugin"/>
-    </type>
 </config>
