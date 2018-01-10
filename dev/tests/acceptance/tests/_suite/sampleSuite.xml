@@ -5,26 +5,39 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Suite/etc/suiteSchema.xsd">
-    <suite name="mySuite">
-        <before>
-            <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <createData entity="_defaultProduct" stepKey="createProduct">
-                <required-entity createDataKey="createCategory"/>
-            </createData>
-        </before>
-        <after>
-            <deleteData stepKey="deleteMyProduct" createDataKey="createProduct"/>
-            <deleteData stepKey="deleteMyCategory" createDataKey="createCategory"/>
-        </after>
+    <suite name="Catalog">
         <include>
-            <group name="example"/>
-            <cest test="PersistMultipleEntitiesTest"  name="PersistMultipleEntitiesCest"/>
-            <module name="SampleTests" file="SampleCest.xml"/>
+            <module name="Catalog" />
         </include>
         <exclude>
-            <group name="testGroup"/>
+            <cest name="AdminCreateCategoryCest"/>
+            <cest name="AdminCreateSimpleProductCest"/>
+        </exclude>
+    </suite>
+    <suite name="Cms">
+        <include>
+            <module name="Cms" />
+        </include>
+        <exclude>
+            <cest name="AdminCreateCmsPageCest"/>
+        </exclude>
+    </suite>
+    <suite name="Newsletter">
+        <include>
+           <module name="Newsletter"/>
+        </include>
+    </suite>
+    <suite name="MAGETWO36659">
+        <include>
+           <module name="Cms" />
+           <module name="Catalog" />
+           <module name="Newsletter" />
+        </include>
+        <exclude>
+            <cest name="AdminCreateCmsPageCest"/>
+            <cest name="AdminCreateCategoryCest"/>
+            <cest name="AdminCreateSimpleProductCest"/>
         </exclude>
     </suite>
 </suites>

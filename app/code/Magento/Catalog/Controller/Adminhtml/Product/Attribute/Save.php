@@ -12,12 +12,14 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation;
 use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator;
 use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory;
 use Magento\Eav\Model\Entity\Attribute\Set;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
@@ -67,19 +69,24 @@ class Save extends Attribute
      * @var LayoutFactory
      */
     private $layoutFactory;
+    /**
+     * @var Presentation
+     */
+    private $presentation;
 
     /**
      * @param Context $context
      * @param FrontendInterface $attributeLabelCache
      * @param Registry $coreRegistry
-     * @param BuildFactory $buildFactory
      * @param PageFactory $resultPageFactory
+     * @param BuildFactory $buildFactory
      * @param AttributeFactory $attributeFactory
      * @param ValidatorFactory $validatorFactory
      * @param CollectionFactory $groupCollectionFactory
      * @param FilterManager $filterManager
      * @param Product $productHelper
      * @param LayoutFactory $layoutFactory
+     * @param Presentation|null $presentation
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -93,7 +100,8 @@ class Save extends Attribute
         CollectionFactory $groupCollectionFactory,
         FilterManager $filterManager,
         Product $productHelper,
-        LayoutFactory $layoutFactory
+        LayoutFactory $layoutFactory,
+        Presentation $presentation = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->buildFactory = $buildFactory;
@@ -103,6 +111,7 @@ class Save extends Attribute
         $this->validatorFactory = $validatorFactory;
         $this->groupCollectionFactory = $groupCollectionFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->presentation = $presentation ?: ObjectManager::getInstance()->get(Presentation::class);
     }
 
     /**
@@ -191,6 +200,8 @@ class Save extends Attribute
                 }
             }
 
+            $data = $this->presentation->convertPresentationDataToInputType($data);
+
             if ($attributeId) {
                 if (!$model->getId()) {
                     $this->messageManager->addErrorMessage(__('This attribute no longer exists.'));
@@ -205,7 +216,6 @@ class Save extends Attribute
 
                 $data['attribute_code'] = $model->getAttributeCode();
                 $data['is_user_defined'] = $model->getIsUserDefined();
-                $data['frontend_input'] = $model->getFrontendInput();
             } else {
                 /**
                  * @todo add to helper and specify all relations for properties

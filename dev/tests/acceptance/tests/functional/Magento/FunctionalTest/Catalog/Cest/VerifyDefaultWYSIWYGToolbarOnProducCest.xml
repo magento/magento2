@@ -75,8 +75,8 @@
             <seeElement selector="{{ProductShortDescriptionWYSIWYGToolbarSection.SpecialCharacter}}" stepKey="assertInfo27"/>
         </test>
         <after>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disabledWYSIWYG"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </cest>
 </config>

@@ -12,5 +12,6 @@
         <element name="addNewPage" type="button" selector="#add" timeout="30"/>
         <element name="select" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//button[text()='Select']" parameterized="true"/>
         <element name="edit" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='Edit']" parameterized="true"/>
+        <element name="preview" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='Preview']" parameterized="true"/>
     </section>
 </config>
