@@ -7,12 +7,13 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <cest name="AdminAddVariableToWYSIWYGCest">
+    <cest name="AdminAddVariableToWYSIWYGCMSCest">
         <annotations>
             <features value="Add Variable to WYSIWYG"/>
             <stories value="Add Variable to WYSIWYG MAGETWO-42158"/>
-            <group value="addVariable"/>
+            <group value="addVariableToCMS"/>
             <env value="chrome"/>
+            <env value="firefox"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
@@ -59,6 +60,7 @@
             <click selector="{{VariableSection.Radio('city')}}" stepKey="selectDefaultVariable"/>
             <see selector="{{VariableSection.InsertVariableBtnEnabled}}" userInput="Insert Variable" stepKey="seeInsertVarialeEnabled" />
             <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save1" />
+            <waitForPageLoad stepKey="waitForPageLoad8" />
             <click selector="{{CmsWYSIWYGSection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon2" />
             <waitForPageLoad stepKey="waitForPageLoad4"/>
             <!--see custom variable-->
@@ -97,7 +99,7 @@
         </test>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </cest>
 </config>

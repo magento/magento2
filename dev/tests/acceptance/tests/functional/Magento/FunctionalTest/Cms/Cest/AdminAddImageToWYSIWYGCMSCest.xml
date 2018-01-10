@@ -13,6 +13,7 @@
             <stories value="Default WYSIWYG toolbar configuration with Magento Media Gallery-MAGETWO-42041"/>
             <group value="addImageCMS"/>
             <env value="chrome"/>
+            <env value="firefox"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
@@ -79,7 +80,7 @@
         </test>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </cest>
 </config>

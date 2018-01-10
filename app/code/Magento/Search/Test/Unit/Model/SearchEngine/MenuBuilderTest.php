@@ -5,10 +5,8 @@
  */
 namespace Magento\Search\Test\Unit\Model\SearchEngine;
 
-use Magento\Backend\Model\Menu;
-use Magento\Backend\Model\Menu\Builder;
+use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Framework\Search\SearchEngine\ConfigInterface;
-use Magento\Search\Model\EngineResolver;
 
 /**
  * Class MenuBuilderTest. A unit test class to test functionality of
@@ -22,14 +20,14 @@ class MenuBuilderTest extends \PHPUnit\Framework\TestCase
     protected $searchFeatureConfig;
 
     /**
-     * @var EngineResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $engineResolver;
 
     protected function setUp()
     {
         $this->searchFeatureConfig = $this->createMock(\Magento\Search\Model\SearchEngine\Config::class);
-        $this->engineResolver = $this->createMock(\Magento\Search\Model\EngineResolver::class);
+        $this->engineResolver = $this->createMock(EngineResolverInterface::class);
     }
 
     public function testAfterGetResult()

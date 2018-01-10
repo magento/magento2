@@ -6,12 +6,16 @@
 
 namespace Magento\GraphQlCatalog\Model\Type\Handler;
 
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Reflection\TypeProcessor;
 use Magento\GraphQl\Model\EntityAttributeList;
 use Magento\Framework\Exception\InputException;
 use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\TypeFactory;
 use Magento\GraphQl\Model\Type\Handler\Pool;
+use Magento\GraphQlEav\Model\Resolver\Query\Type;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
 /**
  * Define product's GraphQL type
@@ -41,21 +45,37 @@ class Product implements HandlerInterface
     private $typeFactory;
 
     /**
+     * @var Type
+     */
+    private $typeLocator;
+
+    /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $productAttributeRepository;
+
+    /**
      * @param Pool $typePool
      * @param TypeGenerator $typeGenerator
      * @param EntityAttributeList $entityAttributeList
      * @param TypeFactory $typeFactory
+     * @param Type $typeLocator
+     * @param ProductAttributeRepositoryInterface $productAttributeRepository
      */
     public function __construct(
         Pool $typePool,
         TypeGenerator $typeGenerator,
         EntityAttributeList $entityAttributeList,
-        TypeFactory $typeFactory
+        TypeFactory $typeFactory,
+        Type $typeLocator,
+        ProductAttributeRepositoryInterface $productAttributeRepository
     ) {
         $this->typePool = $typePool;
         $this->typeGenerator = $typeGenerator;
         $this->entityAttributeList = $entityAttributeList;
         $this->typeFactory = $typeFactory;
+        $this->typeLocator = $typeLocator;
+        $this->productAttributeRepository = $productAttributeRepository;
     }
 
     /**
@@ -63,11 +83,11 @@ class Product implements HandlerInterface
      */
     public function getType()
     {
-        $reflector = new \ReflectionClass($this);
+        $typeName = self::PRODUCT_TYPE_NAME;
         return  $this->typeFactory->createInterface(
             [
-                'name' => $reflector->getShortName(),
-                'fields' => $this->getFields($reflector->getShortName()),
+                'name' => $typeName,
+                'fields' => $this->getFields($typeName),
                 'resolveType' => function ($value) {
                     $typeId = $value['type_id'];
                     if (!in_array($typeId, ['simple', 'configurable'])) {
@@ -95,13 +115,23 @@ class Product implements HandlerInterface
      * @param string $typeName
      * @return array
      * @throws \LogicException Schema failed to generate from service contract type name
+     * @throws GraphQlInputException Entity has invalid type unable to resolve to GraphQL type
      */
     private function getFields(string $typeName)
     {
         $result = [];
-        $attributes = $this->entityAttributeList->getDefaultEntityAttributes(\Magento\Catalog\Model\Product::ENTITY);
-        foreach ($attributes as $attribute) {
-            $result[$attribute->getAttributeCode()] = 'string';
+        $productEntityType = \Magento\Catalog\Model\Product::ENTITY;
+        $attributes = $this->entityAttributeList->getDefaultEntityAttributes(
+            $productEntityType,
+            $this->productAttributeRepository
+        );
+        foreach (array_keys($attributes) as $attributeCode) {
+            $locatedType = $this->typeLocator->getType(
+                $attributeCode,
+                $productEntityType
+            ) ?: 'string';
+            $locatedType = $locatedType === TypeProcessor::NORMALIZED_ANY_TYPE ? 'string' : $locatedType;
+            $result[$attributeCode] = $locatedType;
         }
 
         $staticAttributes = $this->typeGenerator->getTypeData('CatalogDataProductInterface');
@@ -125,12 +155,12 @@ class Product implements HandlerInterface
             [
                 'images' => [
                     0 => [
-                        'value_id' => 'string',
+                        'value_id' => 'int',
                         'file' => 'string',
                         'media_type' => 'string',
                         'entity_id' => 'string',
                         'label' => 'string',
-                        'position' => 'string',
+                        'position' => 'int',
                         'disabled' => 'string',
                         'label_default' => 'string',
                         'position_default' => 'string',
@@ -147,6 +177,9 @@ class Product implements HandlerInterface
                     ]
                 ]
             ];
+
+        $result['price'] = ProductPrice::PRODUCT_PRICE_TYPE_NAME;
+        unset($result['minimal_price']);
 
         $resolvedTypes = $this->typeGenerator->generate($typeName, $result);
         $fields = $resolvedTypes->config['fields'];

@@ -9,10 +9,11 @@ namespace Magento\GraphQlCatalog\Model\Resolver\Products\Query;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\GraphQl\Query\PostFetchProcessorInterface;
 use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product;
 use Magento\GraphQlCatalog\Model\Resolver\Products\SearchResult;
 use Magento\GraphQlCatalog\Model\Resolver\Products\SearchResultFactory;
-use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Formatter;
+use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 
 /**
  * Retrieve filtered product data based off given search criteria in a format that GraphQL can interpret.
@@ -40,7 +41,7 @@ class Filter
     private $searchCriteriaBuilder;
 
     /**
-     * @var Formatter
+     * @var FormatterInterface
      */
     private $formatter;
 
@@ -54,7 +55,7 @@ class Filter
      * @param SearchResultFactory $searchResultFactory
      * @param Product $productDataProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param Formatter $formatter
+     * @param FormatterInterface $formatter
      * @param PostFetchProcessorInterface[] $postProcessors
      */
     public function __construct(
@@ -62,8 +63,8 @@ class Filter
         SearchResultFactory $searchResultFactory,
         Product $productDataProvider,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        Formatter $formatter,
-        array $postProcessors
+        FormatterInterface $formatter,
+        array $postProcessors = []
     ) {
         $this->productRepository = $productRepository;
         $this->searchResultFactory = $searchResultFactory;
