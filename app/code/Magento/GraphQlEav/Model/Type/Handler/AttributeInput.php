@@ -46,8 +46,8 @@ class AttributeInput implements HandlerInterface
             [
                 'name' => self::ATTRIBUTE_INPUT_TYPE_NAME,
                 'fields' => [
-                    'attribute_code' => $this->typePool->getType('String'),
-                    'entity_type' => $this->typePool->getType('String')
+                    'attribute_code' => $this->typePool->getType(Pool::TYPE_STRING),
+                    'entity_type' => $this->typePool->getType(Pool::TYPE_STRING)
                 ],
             ]
         );

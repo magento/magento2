@@ -6,13 +6,12 @@
 
 namespace Magento\GraphQl\Customer;
 
-use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use \Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 
 class CustomerAuthenticationTest extends GraphQlAbstract
 {
@@ -23,7 +22,6 @@ class CustomerAuthenticationTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-
     public function testRegisteredCustomerWithValidCredentials()
     {
         $query
@@ -59,17 +57,16 @@ QUERY;
 
         $userName = 'customer@example.com';
         $password = 'password';
-        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        /** @var CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = ObjectManager::getInstance()
                                ->get(\Magento\Integration\Api\CustomerTokenServiceInterface::class);
         $customerToken = $customerTokenService->createCustomerAccessToken($userName, $password);
-        $this->setToken($customerToken);
-
+        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         /** @var CustomerRepositoryInterface $customerRepository */
         $customerRepository = ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
         $customer = $customerRepository->get('customer@example.com');
 
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
         $this->assertArrayHasKey('customer', $response);
         $this->assertArrayHasKey('addresses', $response['customer']);
         $this->assertTrue(
@@ -85,7 +82,6 @@ QUERY;
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-
     public function testCustomerWithValidCredentialsWithoutToken()
     {
          $query
@@ -115,16 +111,14 @@ QUERY;
     }
 
     /**
-     * Veriy the all the whitelisted fields for a Customer Object
+     * Verify the all the whitelisted fields for a Customer Object
+     *
      * @param CustomerInterface $customer
-     * @param  $actualResponse
+     * @param $actualResponse
      */
-
     public function assertCustomerFields($customer, $actualResponse)
     {
-        /**
-         * ['customer_object_field_name', 'expected_value']
-         */
+        // ['customer_object_field_name', 'expected_value']
         $assertionMap = [
             ['response_field' => 'id', 'expected_value' => $customer->getId()],
             ['response_field' => 'created_at', 'expected_value' => $customer->getCreatedAt()],
@@ -145,10 +139,10 @@ QUERY;
 
     /**
      * Verify the fields for CustomerAddress object
+     *
      * @param CustomerInterface $customer
      * @param array $actualResponse
      */
-
     public function assertCustomerAddressesFields($customer, $actualResponse)
     {
         /** @var AddressInterface $addresses */
