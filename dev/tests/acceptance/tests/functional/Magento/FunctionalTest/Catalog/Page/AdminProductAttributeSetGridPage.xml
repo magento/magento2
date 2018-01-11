@@ -7,7 +7,7 @@
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
-    <page name="AdminProductAttributeSetGridPage" url="admin/catalog/product_set/" module="ProductAttributeSet">
+    <page name="AdminProductAttributeSetGridPage" url="catalog/product_set/" area="admin" module="ProductAttributeSet">
         <section name="AdminProductAttributeSetGridSection"/>
     </page>
 </pages>
