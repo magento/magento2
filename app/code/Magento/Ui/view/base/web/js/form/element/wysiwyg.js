@@ -3,6 +3,8 @@
  * See COPYING.txt for license details.
  */
 
+/* global varienGlobalEvents */
+
 /**
  * @api
  */
@@ -47,6 +49,13 @@ define([
                 selector: 'button'
             }, function (element) {
                 this.$wysiwygEditorButton = $(element);
+            }.bind(this));
+
+            // disable editor completely after initialization is field is disabled
+            varienGlobalEvents.attachEventHandler('wysiwygEditorInitialized', function () {
+                if (this.disabled()) {
+                    this.setDisabled(true);
+                }
             }.bind(this));
 
             return this;
@@ -98,13 +107,11 @@ define([
 
             if (!_.isUndefined(wysiwyg)) {
                 if (disabled) {
-                    wysiwyg.setToolbarStatus(false);
+                    wysiwyg.setEditorStatus(false);
                     wysiwyg.getPluginButtons().attr('disabled', 'disabled');
-                    wysiwyg.getTextArea().attr('disabled', 'disabled');
                 } else {
-                    wysiwyg.setToolbarStatus(true);
+                    wysiwyg.setEditorStatus(true);
                     wysiwyg.getPluginButtons().removeAttr('disabled');
-                    wysiwyg.getTextArea().removeAttr('disabled');
                 }
             }
         }

@@ -132,6 +132,10 @@ define([
 
                     ed.onInit.add(self.onEditorInit.bind(self));
 
+                    ed.onInit.add(function (editor) {
+                        varienGlobalEvents.fireEvent('wysiwygEditorInitialized', editor);
+                    });
+
                     ed.onSubmit.add(function (edi, e) {
                         varienGlobalEvents.fireEvent('tinymceSubmit', e);
                     });
@@ -276,6 +280,22 @@ define([
             _.each(this.activeEditor().controlManager.controls, function (property, index, controls) {
                 controls[property.id].setDisabled(!enabled);
             });
+        },
+
+        /**
+         * Set the status of the editor and toolbar
+         */
+        setEditorStatus: function (enabled) {
+            if (this.activeEditor()) {
+                this.get(this.getId()).getBody().setAttribute('contenteditable', enabled);
+                this.setToolbarStatus(enabled);
+            }
+
+            if (enabled) {
+                this.getTextArea().removeAttr('disabled');
+            } else {
+                this.getTextArea().attr('disabled', 'disabled');
+            }
         },
 
         /**
