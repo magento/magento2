@@ -32,7 +32,7 @@ class CatalogCheckIsUsingStaticUrlsAllowedObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $storeId = $observer->getEvent()->getData('store_id');
+        $storeId = (int)$observer->getEvent()->getData('store_id');
         $result = $observer->getEvent()->getData('result');
         $result->isAllowed = $this->catalogData->setStoreId($storeId)->isUsingStaticUrlsAllowed();
     }
