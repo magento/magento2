@@ -27,10 +27,9 @@
             </createData>
         </before>
         <after>
-            <deleteData stepKey="deleteCategory" createDataKey="category"/>
             <deleteData stepKey="deleteProduct" createDataKey="product"/>
+            <deleteData stepKey="deleteCategory" createDataKey="category"/>
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
         </after>
 
         <amOnPage stepKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>

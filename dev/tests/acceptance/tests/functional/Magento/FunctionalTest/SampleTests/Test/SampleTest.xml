@@ -183,6 +183,8 @@
         <assertElementContainsAttribute selector="#username" attribute="autocomplete" expectedValue="off" stepKey="assertElementContainsAttribute7"/>
         <assertElementContainsAttribute selector=".admin__menu-overlay" attribute="style" expectedValue="display: none;" stepKey="assertElementContainsAttribute8"/>
         <assertElementContainsAttribute selector=".admin__menu-overlay" attribute="border" expectedValue="0" stepKey="assertElementContainsAttribute9"/>
+        <loginAsAdmin stepKey="loginAsAdmin1"/>
+        <loginAsAdmin username="admin" password="123123q" stepKey="loginAsAdmin2"/>
         <closeAdminNotification stepKey="closeAdminNotification1"/>
         <searchAndMultiSelectOption selector="#stuff" parameterArray="['Item 1', 'Item 2']" stepKey="searchAndMultiSelect1"/>
         <searchAndMultiSelectOption selector="#stuff" parameterArray="['Item 1', 'Item 2']" requiredAction="true" stepKey="searchAndMultiSelect2"/>
