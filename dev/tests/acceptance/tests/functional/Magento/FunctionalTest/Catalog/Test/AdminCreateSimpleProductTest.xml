@@ -21,11 +21,12 @@
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
         </before>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+        </after>
 
-        <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
-        <fillField userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" selector="{{AdminLoginFormSection.username}}" stepKey="fillUsername"/>
-        <fillField userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" selector="{{AdminLoginFormSection.password}}" stepKey="fillPassword"/>
-        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
@@ -57,10 +58,5 @@
         <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
         <see userInput="{{_defaultProduct.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
         <see userInput="{{_defaultProduct.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
-
-        <after>
-            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
-        </after>
     </test>
 </tests>

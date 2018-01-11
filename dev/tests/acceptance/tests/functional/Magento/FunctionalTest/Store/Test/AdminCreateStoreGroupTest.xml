@@ -19,10 +19,12 @@
             <createData stepKey="b1" entity="customStoreGroup"/>
             <createData stepKey="b2" entity="customStoreGroup"/>
         </before>
-        <amOnPage stepKey="s1" url="{{AdminLoginPage.url}}"/>
-        <fillField stepKey="s3" selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}"/>
-        <fillField stepKey="s5" selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
-        <click stepKey="s7" selector="{{AdminLoginFormSection.signIn}}"/>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+
         <amOnPage stepKey="s9" url="{{AdminSystemStorePage.url}}"/>
 
         <click stepKey="s11" selector="{{AdminStoresGridSection.resetButton}}"/>

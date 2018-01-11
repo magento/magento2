@@ -18,10 +18,11 @@
             <testCaseId value="MAGETWO-25580"/>
             <group value="cms"/>
         </annotations>
-        <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
-        <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="fillUsername"/>
-        <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillPassword"/>
-        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnPagePagesGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{CmsPagesPageActionsSection.addNewPage}}" stepKey="clickAddNewPage"/>
@@ -38,9 +39,5 @@
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see userInput="{{_defaultCmsPage.content_heading}}" stepKey="seeContentHeading"/>
         <see userInput="{{_defaultCmsPage.content}}" stepKey="seeContent"/>
-
-        <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
-        </after>
     </test>
 </tests>

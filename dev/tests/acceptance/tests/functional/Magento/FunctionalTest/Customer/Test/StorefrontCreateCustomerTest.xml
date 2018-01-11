@@ -19,6 +19,10 @@
             <group value="customer"/>
             <group value="create"/>
         </annotations>
+        <after>
+            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+        </after>
+
         <amOnPage stepKey="amOnStorefrontPage"  url="/"/>
         <click stepKey="clickOnCreateAccountLink" selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}"/>
         <fillField  stepKey="fillFirstName" userInput="{{CustomerEntityOne.firstname}}" selector="{{StorefrontCustomerCreateFormSection.firstnameField}}"/>
