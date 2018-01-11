@@ -58,7 +58,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             $this->_prepareIndex();
             $this->_prepareRelationIndex();
             $this->_removeNotVisibleEntityFromIndex();
-            $this->checkWebsitesInIndex();
+            //$this->checkWebsitesInIndex();
             $this->syncData();
             $this->commit();
         } catch (\Exception $e) {
@@ -83,7 +83,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         $this->_prepareIndex($processIds);
         $this->_prepareRelationIndex($processIds);
         $this->_removeNotVisibleEntityFromIndex();
-        $this->checkWebsitesInIndex();
+       //$this->checkWebsitesInIndex();
         return $this;
     }
 
@@ -144,7 +144,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             $this->_prepareIndex(null, $attributeId);
             $this->_prepareRelationIndex();
             $this->_removeNotVisibleEntityFromIndex();
-            $this->checkWebsitesInIndex();
+            //$this->checkWebsitesInIndex();
 
             $this->_synchronizeAttributeIndexData($attributeId);
         }
