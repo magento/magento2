@@ -83,7 +83,8 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         $this->_prepareIndex($processIds);
         $this->_prepareRelationIndex($processIds);
         $this->_removeNotVisibleEntityFromIndex();
-       //$this->checkWebsitesInIndex();
+        $this->checkWebsitesInIndex();
+
         return $this;
     }
 
