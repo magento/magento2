@@ -138,7 +138,7 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
     {
         $this->select->expects($this->exactly(1))->method('from')->willReturnSelf();
         $this->select->expects($this->exactly(0))->method('columns')->willReturnSelf();
-        $this->select->expects($this->exactly(5))->method('joinInner')->willReturnSelf();
+        $this->select->expects($this->exactly(6))->method('joinInner')->willReturnSelf();
         $this->select->expects($this->exactly(1))->method('joinLeft')->willReturnSelf();
         $this->select->expects($this->exactly(2))->method('where')->willReturnSelf();
 
