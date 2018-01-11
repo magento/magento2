@@ -107,7 +107,6 @@ define([
                     wysiwyg.getTextArea().removeAttr('disabled');
                 }
             }
-            /* eslint-enable  no-undef*/
         }
     });
 });
