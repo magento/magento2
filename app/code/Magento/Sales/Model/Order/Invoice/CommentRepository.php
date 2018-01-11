@@ -17,7 +17,7 @@ use Magento\Sales\Api\InvoiceCommentRepositoryInterface;
 use Magento\Sales\Model\Spi\InvoiceCommentResourceInterface;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
-use \Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class CommentRepository

@@ -17,7 +17,7 @@ use Magento\Sales\Api\Data\CreditmemoCommentSearchResultInterfaceFactory;
 use Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
-use \Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class CommentRepository

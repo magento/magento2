@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order\Creditmemo\Comment;
 use Magento\Sales\Model\Order\Creditmemo\CommentRepository;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
 use Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface;
-use \Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class CommentRepositoryTest

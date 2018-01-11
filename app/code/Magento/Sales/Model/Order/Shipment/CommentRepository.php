@@ -17,7 +17,7 @@ use Magento\Sales\Api\ShipmentCommentRepositoryInterface;
 use Magento\Sales\Model\Spi\ShipmentCommentResourceInterface;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
-use \Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class CommentRepository
