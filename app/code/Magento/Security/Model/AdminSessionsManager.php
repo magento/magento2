@@ -27,14 +27,6 @@ class AdminSessionsManager
     const LOGOUT_REASON_USER_LOCKED = 10;
 
     /**
-     * Max lifetime for session prolong to be valid (sec)
-     *
-     * Means that after session was prolonged
-     * all other prolongs will be ignored within this period
-     */
-    const MAX_INTERVAL_BETWEEN_CONSECUTIVE_PROLONGS = 60;
-
-    /**
      * @var ConfigInterface
      * @since 100.1.0
      */
@@ -73,6 +65,14 @@ class AdminSessionsManager
      * @var RemoteAddress
      */
     private $remoteAddress;
+
+    /**
+     * Max lifetime for session prolong to be valid (sec)
+     *
+     * Means that after session was prolonged
+     * all other prolongs will be ignored within this period
+     */
+    private $maxIntervalBetweenConsecutiveProlongs = 60;
 
     /**
      * @param ConfigInterface $securityConfig
@@ -348,7 +348,7 @@ class AdminSessionsManager
             1,
             min(
                 log((float)$this->securityConfig->getAdminSessionLifetime()),
-                self::MAX_INTERVAL_BETWEEN_CONSECUTIVE_PROLONGS
+                $this->maxIntervalBetweenConsecutiveProlongs
             )
         );
     }
