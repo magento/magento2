@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
     <fixture name="exportData"
              module="Magento_ImportExport"
              type="flat"
@@ -17,4 +17,4 @@
         <field name="file_format" is_required="" />
         <field name="data_export" is_required="" source="Magento\ImportExport\Test\Fixture\ExportData\DataExport"/>
     </fixture>
-</config>
+</entities>

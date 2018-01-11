@@ -5,9 +5,9 @@
   * See COPYING.txt for license details.
   */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd">
     <page name="ProductAttributePage" url="admin/catalog/product_attribute/new/" module="Catalog">
         <section name="AdminCreateProductAttributeSection"/>
     </page>
-</config>
+</pages>

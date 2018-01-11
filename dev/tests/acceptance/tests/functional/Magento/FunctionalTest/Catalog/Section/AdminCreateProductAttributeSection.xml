@@ -6,7 +6,7 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
     <section name="AttributePropertiesSection">
         <element name="DefaultLabel" type="input" selector="#attribute_label"/>
@@ -58,4 +58,4 @@
         <element name="SpecialCharacter" type="button" selector=".mce-i-charmap" />
         <element name="TextArea" type="input" selector="#default_value_textarea" />
     </section>
-</config>
+</sections>
