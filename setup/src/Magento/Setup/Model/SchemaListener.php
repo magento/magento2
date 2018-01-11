@@ -121,7 +121,8 @@ class SchemaListener
         }
         $definition = $this->doColumnMapping($definition);
         $definition['name'] = strtolower($columnName);
-        $definition = $this->definitionMappers[$definition['type']]->convertToDefinition($definition);
+        $definitionType = $definition['type'] === 'int' ? 'integer' : $definition['type'];
+        $definition = $this->definitionMappers[$definitionType]->convertToDefinition($definition);
         if (isset($definition['default']) && $definition['default'] === false) {
             $definition['default'] = null; //uniform default values
         }

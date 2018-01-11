@@ -27,6 +27,13 @@ class Diff implements DiffInterface
     private $changes;
 
     /**
+     * This changes created only for debug reasons
+     *
+     * @var array
+     */
+    public $debugChanges;
+
+    /**
      * @var array
      */
     private $whiteListTables = [];
@@ -139,6 +146,7 @@ class Diff implements DiffInterface
             $dtoObject->getTable()->getName() : $dtoObject->getName();
         //dtoObjects can have 4 types: column, constraint, index, table
         $this->changes[$dtoObjectName][$operation][] = $history;
+        $this->debugChanges[$operation][] = $history;
         return $this;
     }
 

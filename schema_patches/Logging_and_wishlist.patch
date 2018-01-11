@@ -1,0 +1,32 @@
+Index: app/code/Magento/MultipleWishlist/etc/db_schema.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/code/Magento/MultipleWishlist/etc/db_schema.xml	(revision 02cd38c50a54ff230630522550fab2687f2a0c01)
++++ app/code/Magento/MultipleWishlist/etc/db_schema.xml	(revision )
+@@ -4,7 +4,7 @@
+     <column xsi:type="varchar" name="name" nullable="true" length="255"/>
+     <column xsi:type="smallint" name="visibility" padding="6" unsigned="false" nullable="true" identity="false" default="0"/>
+     <constraint xsi:type="foreign" name="WISHLIST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID" table="wishlist" column="customer_id" referenceTable="customer_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+-    <index name="WISHLIST_CUSTOMER_ID" indexType="btree">
++    <index name="MULTIPLE_WISHLIST_CUSTOMER_ID" indexType="btree">
+       <column name="customer_id"/>
+     </index>
+   </table>
+Index: app/code/Magento/Logging/etc/db_schema.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/code/Magento/Logging/etc/db_schema.xml	(revision 02cd38c50a54ff230630522550fab2687f2a0c01)
++++ app/code/Magento/Logging/etc/db_schema.xml	(revision )
+@@ -7,7 +7,7 @@
+     <column xsi:type="varchar" name="event_code" nullable="true" length="100"/>
+     <column xsi:type="timestamp" name="time" on_update="false" nullable="true"/>
+     <column xsi:type="varchar" name="action" nullable="true" length="20"/>
+-    <column xsi:type="text" name="info" nullable="true" length="255"/>
++    <column xsi:type="text" name="info" nullable="true"  />
+     <column xsi:type="varchar" name="status" nullable="true" length="15"/>
+     <column xsi:type="varchar" name="user" nullable="true" length="40"/>
+     <column xsi:type="int" name="user_id" padding="11" unsigned="true" nullable="true" identity="false"/>
