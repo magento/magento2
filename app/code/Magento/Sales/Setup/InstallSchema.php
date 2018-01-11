@@ -27,7 +27,7 @@ class InstallSchema implements InstallSchemaInterface
         /**
          * Create table 'sales_order'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_order')
         )->addColumn(
             'entity_id',
@@ -898,12 +898,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Order'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_order_grid'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_order_grid')
         )->addColumn(
             'entity_id',
@@ -1129,12 +1129,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Order Grid'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_order_address'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_order_address')
         )->addColumn(
             'entity_id',
@@ -1274,12 +1274,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Order Address'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_order_status_history'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_order_status_history')
         )->addColumn(
             'entity_id',
@@ -1345,12 +1345,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Order Status History'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_order_item'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_order_item')
         )->addColumn(
             'item_id',
@@ -1781,12 +1781,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Order Item'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_order_payment'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_order_payment')
         )->addColumn(
             'entity_id',
@@ -2124,12 +2124,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Order Payment'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_shipment'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_shipment')
         )->addColumn(
             'entity_id',
@@ -2283,14 +2283,14 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Shipment'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_shipment_grid'
          *
          * @add order_id, shipping_description
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_shipment_grid')
         )->addColumn(
             'entity_id',
@@ -2495,12 +2495,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Shipment Grid'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_shipment_item'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_shipment_item')
         )->addColumn(
             'entity_id',
@@ -2586,12 +2586,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Shipment Item'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_shipment_track'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_shipment_track')
         )->addColumn(
             'entity_id',
@@ -2677,12 +2677,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Shipment Track'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_shipment_comment'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_shipment_comment')
         )->addColumn(
             'entity_id',
@@ -2735,12 +2735,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Shipment Comment'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_invoice'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_invoice')
         )->addColumn(
             'entity_id',
@@ -3071,12 +3071,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Invoice'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_invoice_grid'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_invoice_grid')
         )->addColumn(
             'entity_id',
@@ -3290,12 +3290,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Invoice Grid'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_invoice_item'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_invoice_item')
         )->addColumn(
             'entity_id',
@@ -3459,12 +3459,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Invoice Item'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_invoice_comment'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_invoice_comment')
         )->addColumn(
             'entity_id',
@@ -3517,12 +3517,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Invoice Comment'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_creditmemo'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_creditmemo')
         )->addColumn(
             'entity_id',
@@ -3877,12 +3877,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Creditmemo'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_creditmemo_grid'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_creditmemo_grid')
         )->addColumn(
             'entity_id',
@@ -4099,12 +4099,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Creditmemo Grid'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_creditmemo_item'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_creditmemo_item')
         )->addColumn(
             'entity_id',
@@ -4268,12 +4268,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Creditmemo Item'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_creditmemo_comment'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_creditmemo_comment')
         )->addColumn(
             'entity_id',
@@ -4326,12 +4326,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Creditmemo Comment'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_invoiced_aggregated'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_invoiced_aggregated')
         )->addColumn(
             'id',
@@ -4407,12 +4407,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Invoiced Aggregated'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_invoiced_aggregated_order'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_invoiced_aggregated_order')
         )->addColumn(
             'id',
@@ -4488,12 +4488,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Invoiced Aggregated Order'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_order_aggregated_created'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_order_aggregated_created')
         )->addColumn(
             'id',
@@ -4635,10 +4635,10 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Order Aggregated Created'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
-        $installer->getConnection()->createTable(
-            $installer->getConnection()->createTableByDdl(
+        $installer->getConnection('sales')->createTable(
+            $installer->getConnection('sales')->createTableByDdl(
                 $installer->getTable('sales_order_aggregated_created'),
                 $installer->getTable('sales_order_aggregated_updated')
             )
@@ -4647,7 +4647,7 @@ class InstallSchema implements InstallSchemaInterface
         /**
          * Create table 'sales_payment_transaction'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_payment_transaction')
         )->addColumn(
             'transaction_id',
@@ -4749,12 +4749,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Payment Transaction'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_refunded_aggregated'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_refunded_aggregated')
         )->addColumn(
             'id',
@@ -4824,12 +4824,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Refunded Aggregated'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_refunded_aggregated_order'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_refunded_aggregated_order')
         )->addColumn(
             'id',
@@ -4899,12 +4899,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Refunded Aggregated Order'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_shipping_aggregated'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_shipping_aggregated')
         )->addColumn(
             'id',
@@ -4974,12 +4974,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Shipping Aggregated'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_shipping_aggregated_order'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_shipping_aggregated_order')
         )->addColumn(
             'id',
@@ -5049,12 +5049,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Shipping Aggregated Order'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_bestsellers_aggregated_daily'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_bestsellers_aggregated_daily')
         )->addColumn(
             'id',
@@ -5127,12 +5127,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Bestsellers Aggregated Daily'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_bestsellers_aggregated_monthly'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_bestsellers_aggregated_monthly')
         )->addColumn(
             'id',
@@ -5205,12 +5205,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Bestsellers Aggregated Monthly'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_bestsellers_aggregated_yearly'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_bestsellers_aggregated_yearly')
         )->addColumn(
             'id',
@@ -5283,12 +5283,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Bestsellers Aggregated Yearly'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_order_tax'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_order_tax')
         )->addColumn(
             'tax_id',
@@ -5362,12 +5362,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Order Tax Table'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_order_tax_item'
          */
-        $table = $setup->getConnection()->newTable(
+        $table = $setup->getConnection('sales')->newTable(
             $setup->getTable('sales_order_tax_item')
         )->addColumn(
             'tax_item_id',
@@ -5461,12 +5461,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Order Tax Item'
         );
-        $setup->getConnection()->createTable($table);
+        $setup->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_order_status'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_order_status')
         )->addColumn(
             'status',
@@ -5483,12 +5483,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Order Status Table'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_order_status_state'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_order_status_state')
         )->addColumn(
             'status',
@@ -5523,12 +5523,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Order Status Table'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         /**
          * Create table 'sales_order_status_label'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('sales')->newTable(
             $installer->getTable('sales_order_status_label')
         )->addColumn(
             'status',
@@ -5566,7 +5566,7 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Order Status Label Table'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('sales')->createTable($table);
 
         $installer->endSetup();
     }

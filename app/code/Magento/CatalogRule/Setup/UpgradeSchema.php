@@ -6,9 +6,9 @@
 
 namespace Magento\CatalogRule\Setup;
 
-use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 /**
  * Upgrade the CatalogRule module DB scheme
@@ -105,11 +105,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function addReplicaTable(SchemaSetupInterface $setup, $existingTable, $replicaTable)
     {
-        $sql = sprintf(
-            'CREATE TABLE IF NOT EXISTS %s LIKE %s',
-            $setup->getTable($replicaTable),
-            $setup->getTable($existingTable)
-        );
-        $setup->getConnection()->query($sql);
+        $table = $setup->getConnection()
+            ->createTableByDdl($existingTable, $replicaTable);
+        $setup->getConnection()
+            ->createTable($table);
     }
 }

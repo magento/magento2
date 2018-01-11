@@ -1,66 +1,61 @@
 <?xml version="1.0"?>
-<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-    <table name="directory_country" resource="default">
-        <column xsi:type="varchar" name="country_id" nullable="false" length="2"/>
-        <column xsi:type="varchar" name="iso2_code" nullable="true" length="2"/>
-        <column xsi:type="varchar" name="iso3_code" nullable="true" length="3"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="country_id"/>
-        </constraint>
-    </table>
-    <table name="directory_country_format" resource="default">
-        <column xsi:type="int" name="country_format_id" padding="11" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="varchar" name="country_id" nullable="true" length="2"/>
-        <column xsi:type="varchar" name="type" nullable="true" length="30"/>
-        <column xsi:type="text" name="format" nullable="false"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="country_format_id"/>
-        </constraint>
-        <constraint xsi:type="unique" name="DIRECTORY_COUNTRY_FORMAT_COUNTRY_ID_TYPE">
-            <column name="country_id"/>
-            <column name="type"/>
-        </constraint>
-    </table>
-    <table name="directory_country_region" resource="default">
-        <column xsi:type="int" name="region_id" padding="11" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="varchar" name="country_id" nullable="false" length="4" default="0"/>
-        <column xsi:type="varchar" name="code" nullable="true" length="32"/>
-        <column xsi:type="varchar" name="default_name" nullable="true" length="255"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="region_id"/>
-        </constraint>
-        <index name="DIRECTORY_COUNTRY_REGION_COUNTRY_ID" indexType="btree">
-            <column name="country_id"/>
-        </index>
-    </table>
-    <table name="directory_country_region_name" resource="default">
-        <column xsi:type="varchar" name="locale" nullable="false" length="8"/>
-        <column xsi:type="int" name="region_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="varchar" name="name" nullable="true" length="255"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="locale"/>
-            <column name="region_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="DIR_COUNTRY_REGION_NAME_REGION_ID_DIR_COUNTRY_REGION_REGION_ID"
-                    table="directory_country_region_name" column="region_id" referenceTable="directory_country_region"
-                    referenceColumn="region_id" onDelete="CASCADE"/>
-        <index name="DIRECTORY_COUNTRY_REGION_NAME_REGION_ID" indexType="btree">
-            <column name="region_id"/>
-        </index>
-    </table>
-    <table name="directory_currency_rate" resource="default">
-        <column xsi:type="varchar" name="currency_from" nullable="false" length="3"/>
-        <column xsi:type="varchar" name="currency_to" nullable="false" length="3"/>
-        <column xsi:type="decimal" name="rate" scale="24" precission="12" unsigned="false" nullable="false"
-                default="0"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="currency_from"/>
-            <column name="currency_to"/>
-        </constraint>
-        <index name="DIRECTORY_CURRENCY_RATE_CURRENCY_TO" indexType="btree">
-            <column name="currency_to"/>
-        </index>
-    </table>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+  <table name="directory_country" resource="default">
+    <column xsi:type="varchar" name="country_id" nullable="false" length="2"/>
+    <column xsi:type="varchar" name="iso2_code" nullable="true" length="2"/>
+    <column xsi:type="varchar" name="iso3_code" nullable="true" length="3"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="country_id"/>
+    </constraint>
+  </table>
+  <table name="directory_country_format" resource="default">
+    <column xsi:type="int" name="country_format_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="varchar" name="country_id" nullable="true" length="2"/>
+    <column xsi:type="varchar" name="type" nullable="true" length="30"/>
+    <column xsi:type="text" name="format" nullable="false"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="country_format_id"/>
+    </constraint>
+    <constraint xsi:type="unique" name="DIRECTORY_COUNTRY_FORMAT_COUNTRY_ID_TYPE">
+      <column name="country_id"/>
+      <column name="type"/>
+    </constraint>
+  </table>
+  <table name="directory_country_region" resource="default">
+    <column xsi:type="int" name="region_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="varchar" name="country_id" nullable="false" length="4" default="0"/>
+    <column xsi:type="varchar" name="code" nullable="true" length="32"/>
+    <column xsi:type="varchar" name="default_name" nullable="true" length="255"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="region_id"/>
+    </constraint>
+    <index name="DIRECTORY_COUNTRY_REGION_COUNTRY_ID" indexType="btree">
+      <column name="country_id"/>
+    </index>
+  </table>
+  <table name="directory_country_region_name" resource="default">
+    <column xsi:type="varchar" name="locale" nullable="false" length="8"/>
+    <column xsi:type="int" name="region_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="varchar" name="name" nullable="true" length="255"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="locale"/>
+      <column name="region_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="DIR_COUNTRY_REGION_NAME_REGION_ID_DIR_COUNTRY_REGION_REGION_ID" table="directory_country_region_name" column="region_id" referenceTable="directory_country_region" referenceColumn="region_id" onDelete="CASCADE"/>
+    <index name="DIRECTORY_COUNTRY_REGION_NAME_REGION_ID" indexType="btree">
+      <column name="region_id"/>
+    </index>
+  </table>
+  <table name="directory_currency_rate" resource="default">
+    <column xsi:type="varchar" name="currency_from" nullable="false" length="3"/>
+    <column xsi:type="varchar" name="currency_to" nullable="false" length="3"/>
+    <column xsi:type="decimal" name="rate" scale="24" precission="12" unsigned="false" nullable="false" default="0"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="currency_from"/>
+      <column name="currency_to"/>
+    </constraint>
+    <index name="DIRECTORY_CURRENCY_RATE_CURRENCY_TO" indexType="btree">
+      <column name="currency_to"/>
+    </index>
+  </table>
 </schema>

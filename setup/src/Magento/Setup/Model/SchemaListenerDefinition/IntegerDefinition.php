@@ -50,12 +50,18 @@ class IntegerDefinition implements DefinitionConverterInterface
             $definition['type'] = 'boolean';
             return $this->booleanDefinition->convertToDefinition($definition);
         }
+        $length = $definition['length'] ?? self::$lengthDefaults[$definition['type']];
+        $unsigned = $definition['unsigned'] ?? false;
+
+        if ((bool) $unsigned && in_array($definition['type'], ['int', 'smallint'])) {
+            $length--;
+        }
 
         return [
             'xsi:type' => $definition['type'],
             'name' => $definition['name'],
-            'padding' => $definition['length'] ?? self::$lengthDefaults[$definition['type']],
-            'unsigned' => $definition['unsigned'] ?? false,
+            'padding' => $length,
+            'unsigned' => $unsigned,
             'nullable' => $definition['nullable'] ?? true,
             'identity' => $definition['identity'] ?? false,
             'default' => isset($definition['default']) && $definition['default'] !== false ? (int) $definition['default'] : null,

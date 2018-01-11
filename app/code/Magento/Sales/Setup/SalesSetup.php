@@ -310,6 +310,7 @@ class SalesSetup extends EavSetup
         $schemaListener = $setup->getConnection()->getSchemaListener();
         $newConnection = $this->getSetup()->getConnection(self::$connectionName);
         $newConnection->setSchemaListener($schemaListener);
+        $schemaListener->setResource('sales');
         return $newConnection;
     }
 

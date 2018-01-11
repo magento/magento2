@@ -94,7 +94,7 @@ class Table extends GenericElement implements
     /**
      * This method lookup only for foreign keys constraints
      *
-     * @return Constraint[]
+     * @return Reference[]
      */
     public function getReferenceConstraints()
     {

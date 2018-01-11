@@ -27,7 +27,7 @@ class InstallSchema implements InstallSchemaInterface
         /**
          * Create table 'quote'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('quote')->newTable(
             $installer->getTable('quote')
         )->addColumn(
             'entity_id',
@@ -338,12 +338,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Quote'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('quote')->createTable($table);
 
         /**
          * Create table 'quote_address'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('quote')->newTable(
             $installer->getTable('quote_address')
         )->addColumn(
             'address_id',
@@ -687,12 +687,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Quote Address'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('quote')->createTable($table);
 
         /**
          * Create table 'quote_item'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('quote')->newTable(
             $installer->getTable('quote_item')
         )->addColumn(
             'item_id',
@@ -979,12 +979,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Quote Item'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('quote')->createTable($table);
 
         /**
          * Create table 'quote_address_item'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('quote')->newTable(
             $installer->getTable('quote_address_item')
         )->addColumn(
             'address_item_id',
@@ -1254,12 +1254,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Quote Address Item'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('quote')->createTable($table);
 
         /**
          * Create table 'quote_item_option'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('quote')->newTable(
             $installer->getTable('quote_item_option')
         )->addColumn(
             'option_id',
@@ -1303,12 +1303,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Quote Item Option'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('quote')->createTable($table);
 
         /**
          * Create table 'quote_payment'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('quote')->newTable(
             $installer->getTable('quote_payment')
         )->addColumn(
             'payment_id',
@@ -1436,12 +1436,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Quote Payment'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('quote')->createTable($table);
 
         /**
          * Create table 'quote_shipping_rate'
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('quote')->newTable(
             $installer->getTable('quote_shipping_rate')
         )->addColumn(
             'rate_id',
@@ -1527,12 +1527,12 @@ class InstallSchema implements InstallSchemaInterface
         )->setComment(
             'Sales Flat Quote Shipping Rate'
         );
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('quote')->createTable($table);
 
         /**
          * Create table to store cartId and obscured UUID based cartId mapping
          */
-        $table = $installer->getConnection()->newTable(
+        $table = $installer->getConnection('quote')->newTable(
             $installer->getTable('quote_id_mask')
         )->addColumn(
             'entity_id',
@@ -1565,7 +1565,7 @@ class InstallSchema implements InstallSchemaInterface
             'Quote ID and masked ID mapping'
         );
 
-        $installer->getConnection()->createTable($table);
+        $installer->getConnection('quote')->createTable($table);
 
         $installer->endSetup();
     }

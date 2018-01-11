@@ -80,7 +80,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     private function hasAttributesExceptName(\DOMElement $element)
     {
-        return $element->hasAttribute('xsi:type') || $element->attributes->length > 2;
+        return $element->hasAttribute('xsi:type') || $element->attributes->length >= 2;
     }
 
     /**

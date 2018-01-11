@@ -1,485 +1,457 @@
 <?xml version="1.0"?>
-<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-    <table name="customer_entity" resource="default">
-        <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="true" identity="false"/>
-        <column xsi:type="varchar" name="email" nullable="true" length="255"/>
-        <column xsi:type="smallint" name="group_id" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="varchar" name="increment_id" nullable="true" length="50"/>
-        <column xsi:type="smallint" name="store_id" padding="6" unsigned="true" nullable="true" identity="false"
-                default="0"/>
-        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
-        <column xsi:type="smallint" name="is_active" padding="6" unsigned="true" nullable="false" identity="false"
-                default="1"/>
-        <column xsi:type="smallint" name="disable_auto_group_change" padding="6" unsigned="true" nullable="false"
-                identity="false" default="0"/>
-        <column xsi:type="varchar" name="created_in" nullable="true" length="255"/>
-        <column xsi:type="varchar" name="prefix" nullable="true" length="40"/>
-        <column xsi:type="varchar" name="firstname" nullable="true" length="255"/>
-        <column xsi:type="varchar" name="middlename" nullable="true" length="255"/>
-        <column xsi:type="varchar" name="lastname" nullable="true" length="255"/>
-        <column xsi:type="varchar" name="suffix" nullable="true" length="40"/>
-        <column xsi:type="date" name="dob"/>
-        <column xsi:type="varchar" name="password_hash" nullable="true" length="128"/>
-        <column xsi:type="varchar" name="rp_token" nullable="true" length="128"/>
-        <column xsi:type="datetime" name="rp_token_created_at" on_update="false" nullable="true" default="NULL"/>
-        <column xsi:type="int" name="default_billing" padding="11" unsigned="true" nullable="true" identity="false"/>
-        <column xsi:type="int" name="default_shipping" padding="11" unsigned="true" nullable="true" identity="false"/>
-        <column xsi:type="varchar" name="taxvat" nullable="true" length="50"/>
-        <column xsi:type="varchar" name="confirmation" nullable="true" length="64"/>
-        <column xsi:type="smallint" name="gender" padding="6" unsigned="true" nullable="true" identity="false"/>
-        <column xsi:type="smallint" name="failures_num" padding="6" unsigned="false" nullable="true" identity="false"
-                default="0"/>
-        <column xsi:type="timestamp" name="first_failure" on_update="false" nullable="true" default="NULL"/>
-        <column xsi:type="timestamp" name="lock_expires" on_update="false" nullable="true" default="NULL"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="entity_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_STORE_ID_STORE_STORE_ID" table="customer_entity"
-                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
-        <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
-                    table="customer_entity" column="website_id" referenceTable="store_website"
-                    referenceColumn="website_id" onDelete="SET NULL"/>
-        <constraint xsi:type="unique" name="CUSTOMER_ENTITY_EMAIL_WEBSITE_ID">
-            <column name="email"/>
-            <column name="website_id"/>
-        </constraint>
-        <index name="CUSTOMER_ENTITY_STORE_ID" indexType="btree">
-            <column name="store_id"/>
-        </index>
-        <index name="CUSTOMER_ENTITY_WEBSITE_ID" indexType="btree">
-            <column name="website_id"/>
-        </index>
-        <index name="CUSTOMER_ENTITY_FIRSTNAME" indexType="btree">
-            <column name="firstname"/>
-        </index>
-        <index name="CUSTOMER_ENTITY_LASTNAME" indexType="btree">
-            <column name="lastname"/>
-        </index>
-    </table>
-    <table name="customer_address_entity" resource="default">
-        <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="varchar" name="increment_id" nullable="true" length="50"/>
-        <column xsi:type="int" name="parent_id" padding="11" unsigned="true" nullable="true" identity="false"/>
-        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
-        <column xsi:type="smallint" name="is_active" padding="6" unsigned="true" nullable="false" identity="false"
-                default="1"/>
-        <column xsi:type="varchar" name="city" nullable="false" length="255"/>
-        <column xsi:type="varchar" name="company" nullable="true" length="255"/>
-        <column xsi:type="varchar" name="country_id" nullable="false" length="255"/>
-        <column xsi:type="varchar" name="fax" nullable="true" length="255"/>
-        <column xsi:type="varchar" name="firstname" nullable="false" length="255"/>
-        <column xsi:type="varchar" name="lastname" nullable="false" length="255"/>
-        <column xsi:type="varchar" name="middlename" nullable="true" length="255"/>
-        <column xsi:type="varchar" name="postcode" nullable="true" length="255"/>
-        <column xsi:type="varchar" name="prefix" nullable="true" length="40"/>
-        <column xsi:type="varchar" name="region" nullable="true" length="255"/>
-        <column xsi:type="int" name="region_id" padding="11" unsigned="true" nullable="true" identity="false"/>
-        <column xsi:type="text" name="street" nullable="false"/>
-        <column xsi:type="varchar" name="suffix" nullable="true" length="40"/>
-        <column xsi:type="varchar" name="telephone" nullable="false" length="255"/>
-        <column xsi:type="varchar" name="vat_id" nullable="true" length="255"/>
-        <column xsi:type="int" name="vat_is_valid" padding="11" unsigned="true" nullable="true" identity="false"/>
-        <column xsi:type="varchar" name="vat_request_date" nullable="true" length="255"/>
-        <column xsi:type="varchar" name="vat_request_id" nullable="true" length="255"/>
-        <column xsi:type="int" name="vat_request_success" padding="11" unsigned="true" nullable="true"
-                identity="false"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="entity_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CUSTOMER_ADDRESS_ENTITY_PARENT_ID_CUSTOMER_ENTITY_ENTITY_ID"
-                    table="customer_address_entity" column="parent_id" referenceTable="customer_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
-        <index name="CUSTOMER_ADDRESS_ENTITY_PARENT_ID" indexType="btree">
-            <column name="parent_id"/>
-        </index>
-    </table>
-    <table name="customer_address_entity_datetime" resource="default">
-        <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-        <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="datetime" name="value" on_update="false" nullable="true" default="NULL"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="value_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_DTIME_ATTR_ID_EAV_ATTR_ATTR_ID"
-                    table="customer_address_entity_datetime" column="attribute_id" referenceTable="eav_attribute"
-                    referenceColumn="attribute_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_DTIME_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID"
-                    table="customer_address_entity_datetime" column="entity_id" referenceTable="customer_address_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="CUSTOMER_ADDRESS_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-        </constraint>
-        <index name="CUSTOMER_ADDRESS_ENTITY_DATETIME_ATTRIBUTE_ID" indexType="btree">
-            <column name="attribute_id"/>
-        </index>
-        <index name="CUSTOMER_ADDRESS_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-            <column name="value"/>
-        </index>
-    </table>
-    <table name="customer_address_entity_decimal" resource="default">
-        <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-        <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="value_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_DEC_ATTR_ID_EAV_ATTR_ATTR_ID"
-                    table="customer_address_entity_decimal" column="attribute_id" referenceTable="eav_attribute"
-                    referenceColumn="attribute_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_DEC_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID"
-                    table="customer_address_entity_decimal" column="entity_id" referenceTable="customer_address_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="CUSTOMER_ADDRESS_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-        </constraint>
-        <index name="CUSTOMER_ADDRESS_ENTITY_DECIMAL_ATTRIBUTE_ID" indexType="btree">
-            <column name="attribute_id"/>
-        </index>
-        <index name="CUSTOMER_ADDRESS_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-            <column name="value"/>
-        </index>
-    </table>
-    <table name="customer_address_entity_int" resource="default">
-        <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-        <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="int" name="value" padding="11" unsigned="false" nullable="false" identity="false"
-                default="0"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="value_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_INT_ATTR_ID_EAV_ATTR_ATTR_ID"
-                    table="customer_address_entity_int" column="attribute_id" referenceTable="eav_attribute"
-                    referenceColumn="attribute_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_INT_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID"
-                    table="customer_address_entity_int" column="entity_id" referenceTable="customer_address_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="CUSTOMER_ADDRESS_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-        </constraint>
-        <index name="CUSTOMER_ADDRESS_ENTITY_INT_ATTRIBUTE_ID" indexType="btree">
-            <column name="attribute_id"/>
-        </index>
-        <index name="CUSTOMER_ADDRESS_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-            <column name="value"/>
-        </index>
-    </table>
-    <table name="customer_address_entity_text" resource="default">
-        <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-        <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="text" name="value" nullable="false"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="value_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_TEXT_ATTR_ID_EAV_ATTR_ATTR_ID"
-                    table="customer_address_entity_text" column="attribute_id" referenceTable="eav_attribute"
-                    referenceColumn="attribute_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_TEXT_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID"
-                    table="customer_address_entity_text" column="entity_id" referenceTable="customer_address_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="CUSTOMER_ADDRESS_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-        </constraint>
-        <index name="CUSTOMER_ADDRESS_ENTITY_TEXT_ATTRIBUTE_ID" indexType="btree">
-            <column name="attribute_id"/>
-        </index>
-    </table>
-    <table name="customer_address_entity_varchar" resource="default">
-        <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-        <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="varchar" name="value" nullable="true" length="255"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="value_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_VCHR_ATTR_ID_EAV_ATTR_ATTR_ID"
-                    table="customer_address_entity_varchar" column="attribute_id" referenceTable="eav_attribute"
-                    referenceColumn="attribute_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_VCHR_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID"
-                    table="customer_address_entity_varchar" column="entity_id" referenceTable="customer_address_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="CUSTOMER_ADDRESS_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-        </constraint>
-        <index name="CUSTOMER_ADDRESS_ENTITY_VARCHAR_ATTRIBUTE_ID" indexType="btree">
-            <column name="attribute_id"/>
-        </index>
-        <index name="CUSTOMER_ADDRESS_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-            <column name="value"/>
-        </index>
-    </table>
-    <table name="customer_entity_datetime" resource="default">
-        <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-        <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="datetime" name="value" on_update="false" nullable="true" default="NULL"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="value_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_DATETIME_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID"
-                    table="customer_entity_datetime" column="attribute_id" referenceTable="eav_attribute"
-                    referenceColumn="attribute_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_DATETIME_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID"
-                    table="customer_entity_datetime" column="entity_id" referenceTable="customer_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="CUSTOMER_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-        </constraint>
-        <index name="CUSTOMER_ENTITY_DATETIME_ATTRIBUTE_ID" indexType="btree">
-            <column name="attribute_id"/>
-        </index>
-        <index name="CUSTOMER_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-            <column name="value"/>
-        </index>
-    </table>
-    <table name="customer_entity_decimal" resource="default">
-        <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-        <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="false"
-                default="0"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="value_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_DECIMAL_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID"
-                    table="customer_entity_decimal" column="attribute_id" referenceTable="eav_attribute"
-                    referenceColumn="attribute_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_DECIMAL_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID"
-                    table="customer_entity_decimal" column="entity_id" referenceTable="customer_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="CUSTOMER_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-        </constraint>
-        <index name="CUSTOMER_ENTITY_DECIMAL_ATTRIBUTE_ID" indexType="btree">
-            <column name="attribute_id"/>
-        </index>
-        <index name="CUSTOMER_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-            <column name="value"/>
-        </index>
-    </table>
-    <table name="customer_entity_int" resource="default">
-        <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-        <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="int" name="value" padding="11" unsigned="false" nullable="false" identity="false"
-                default="0"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="value_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_INT_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID"
-                    table="customer_entity_int" column="attribute_id" referenceTable="eav_attribute"
-                    referenceColumn="attribute_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_INT_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID"
-                    table="customer_entity_int" column="entity_id" referenceTable="customer_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="CUSTOMER_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-        </constraint>
-        <index name="CUSTOMER_ENTITY_INT_ATTRIBUTE_ID" indexType="btree">
-            <column name="attribute_id"/>
-        </index>
-        <index name="CUSTOMER_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-            <column name="value"/>
-        </index>
-    </table>
-    <table name="customer_entity_text" resource="default">
-        <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-        <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="text" name="value" nullable="false"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="value_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_TEXT_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID"
-                    table="customer_entity_text" column="attribute_id" referenceTable="eav_attribute"
-                    referenceColumn="attribute_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_TEXT_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID"
-                    table="customer_entity_text" column="entity_id" referenceTable="customer_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="CUSTOMER_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-        </constraint>
-        <index name="CUSTOMER_ENTITY_TEXT_ATTRIBUTE_ID" indexType="btree">
-            <column name="attribute_id"/>
-        </index>
-    </table>
-    <table name="customer_entity_varchar" resource="default">
-        <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-        <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="varchar" name="value" nullable="true" length="255"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="value_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_VARCHAR_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID"
-                    table="customer_entity_varchar" column="attribute_id" referenceTable="eav_attribute"
-                    referenceColumn="attribute_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_VARCHAR_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID"
-                    table="customer_entity_varchar" column="entity_id" referenceTable="customer_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="CUSTOMER_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-        </constraint>
-        <index name="CUSTOMER_ENTITY_VARCHAR_ATTRIBUTE_ID" indexType="btree">
-            <column name="attribute_id"/>
-        </index>
-        <index name="CUSTOMER_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
-            <column name="entity_id"/>
-            <column name="attribute_id"/>
-            <column name="value"/>
-        </index>
-    </table>
-    <table name="customer_group" resource="default">
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="varchar" name="customer_group_code" nullable="false" length="32"/>
-        <column xsi:type="int" name="tax_class_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="customer_group_id"/>
-        </constraint>
-    </table>
-    <table name="customer_eav_attribute" resource="default">
-        <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="smallint" name="is_visible" padding="6" unsigned="true" nullable="false" identity="false"
-                default="1"/>
-        <column xsi:type="varchar" name="input_filter" nullable="true" length="255"/>
-        <column xsi:type="smallint" name="multiline_count" padding="6" unsigned="true" nullable="false" identity="false"
-                default="1"/>
-        <column xsi:type="text" name="validate_rules" nullable="true"/>
-        <column xsi:type="smallint" name="is_system" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="int" name="sort_order" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="varchar" name="data_model" nullable="true" length="255"/>
-        <column xsi:type="smallint" name="is_used_in_grid" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="smallint" name="is_visible_in_grid" padding="6" unsigned="true" nullable="false"
-                identity="false" default="0"/>
-        <column xsi:type="smallint" name="is_filterable_in_grid" padding="6" unsigned="true" nullable="false"
-                identity="false" default="0"/>
-        <column xsi:type="smallint" name="is_searchable_in_grid" padding="6" unsigned="true" nullable="false"
-                identity="false" default="0"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="attribute_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CUSTOMER_EAV_ATTRIBUTE_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID"
-                    table="customer_eav_attribute" column="attribute_id" referenceTable="eav_attribute"
-                    referenceColumn="attribute_id" onDelete="CASCADE"/>
-    </table>
-    <table name="customer_form_attribute" resource="default">
-        <column xsi:type="varchar" name="form_code" nullable="false" length="32"/>
-        <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="form_code"/>
-            <column name="attribute_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CUSTOMER_FORM_ATTRIBUTE_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID"
-                    table="customer_form_attribute" column="attribute_id" referenceTable="eav_attribute"
-                    referenceColumn="attribute_id" onDelete="CASCADE"/>
-        <index name="CUSTOMER_FORM_ATTRIBUTE_ATTRIBUTE_ID" indexType="btree">
-            <column name="attribute_id"/>
-        </index>
-    </table>
-    <table name="customer_eav_attribute_website" resource="default">
-        <column xsi:type="smallint" name="attribute_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="smallint" name="is_visible" padding="6" unsigned="true" nullable="true" identity="false"/>
-        <column xsi:type="smallint" name="is_required" padding="6" unsigned="true" nullable="true" identity="false"/>
-        <column xsi:type="text" name="default_value" nullable="true"/>
-        <column xsi:type="smallint" name="multiline_count" padding="6" unsigned="true" nullable="true"
-                identity="false"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="attribute_id"/>
-            <column name="website_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="CSTR_EAV_ATTR_WS_ATTR_ID_EAV_ATTR_ATTR_ID"
-                    table="customer_eav_attribute_website" column="attribute_id" referenceTable="eav_attribute"
-                    referenceColumn="attribute_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="CSTR_EAV_ATTR_WS_WS_ID_STORE_WS_WS_ID"
-                    table="customer_eav_attribute_website" column="website_id" referenceTable="store_website"
-                    referenceColumn="website_id" onDelete="CASCADE"/>
-        <index name="CUSTOMER_EAV_ATTRIBUTE_WEBSITE_WEBSITE_ID" indexType="btree">
-            <column name="website_id"/>
-        </index>
-    </table>
-    <table name="customer_visitor" resource="default">
-        <column xsi:type="bigint" name="visitor_id" padding="20" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="int" name="customer_id" padding="11" unsigned="false" nullable="true" identity="false"/>
-        <column xsi:type="varchar" name="session_id" nullable="true" length="64"/>
-        <column xsi:type="timestamp" name="last_visit_at" on_update="false" nullable="false"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="visitor_id"/>
-        </constraint>
-        <index name="CUSTOMER_VISITOR_CUSTOMER_ID" indexType="btree">
-            <column name="customer_id"/>
-        </index>
-        <index name="CUSTOMER_VISITOR_LAST_VISIT_AT" indexType="btree">
-            <column name="last_visit_at"/>
-        </index>
-    </table>
-    <table name="customer_log" resource="default">
-        <column xsi:type="int" name="log_id" padding="11" unsigned="false" nullable="false" identity="true"/>
-        <column xsi:type="int" name="customer_id" padding="11" unsigned="false" nullable="false" identity="false"/>
-        <column xsi:type="timestamp" name="last_login_at" on_update="false" nullable="true" default="NULL"/>
-        <column xsi:type="timestamp" name="last_logout_at" on_update="false" nullable="true" default="NULL"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="log_id"/>
-        </constraint>
-        <constraint xsi:type="unique" name="CUSTOMER_LOG_CUSTOMER_ID">
-            <column name="customer_id"/>
-        </constraint>
-    </table>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+  <table name="customer_entity" resource="default">
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="true" identity="false"/>
+    <column xsi:type="varchar" name="email" nullable="true" length="255"/>
+    <column xsi:type="smallint" name="group_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="varchar" name="increment_id" nullable="true" length="50"/>
+    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false" default="0"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
+    <column xsi:type="smallint" name="is_active" padding="5" unsigned="true" nullable="false" identity="false" default="1"/>
+    <column xsi:type="smallint" name="disable_auto_group_change" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="varchar" name="created_in" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="prefix" nullable="true" length="40"/>
+    <column xsi:type="varchar" name="firstname" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="middlename" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="lastname" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="suffix" nullable="true" length="40"/>
+    <column xsi:type="date" name="dob"/>
+    <column xsi:type="varchar" name="password_hash" nullable="true" length="128"/>
+    <column xsi:type="varchar" name="rp_token" nullable="true" length="128"/>
+    <column xsi:type="datetime" name="rp_token_created_at" on_update="false" nullable="true" default="NULL"/>
+    <column xsi:type="int" name="default_billing" padding="10" unsigned="true" nullable="true" identity="false"/>
+    <column xsi:type="int" name="default_shipping" padding="10" unsigned="true" nullable="true" identity="false"/>
+    <column xsi:type="varchar" name="taxvat" nullable="true" length="50"/>
+    <column xsi:type="varchar" name="confirmation" nullable="true" length="64"/>
+    <column xsi:type="smallint" name="gender" padding="5" unsigned="true" nullable="true" identity="false"/>
+    <column xsi:type="smallint" name="failures_num" padding="6" unsigned="false" nullable="true" identity="false" default="0"/>
+    <column xsi:type="timestamp" name="first_failure" on_update="false" nullable="true" default="NULL"/>
+    <column xsi:type="timestamp" name="lock_expires" on_update="false" nullable="true" default="NULL"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="entity_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_STORE_ID_STORE_STORE_ID" table="customer_entity" column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
+    <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID" table="customer_entity" column="website_id" referenceTable="store_website" referenceColumn="website_id" onDelete="SET NULL"/>
+    <constraint xsi:type="unique" name="CUSTOMER_ENTITY_EMAIL_WEBSITE_ID">
+      <column name="email"/>
+      <column name="website_id"/>
+    </constraint>
+    <index name="CUSTOMER_ENTITY_STORE_ID" indexType="btree">
+      <column name="store_id"/>
+    </index>
+    <index name="CUSTOMER_ENTITY_WEBSITE_ID" indexType="btree">
+      <column name="website_id"/>
+    </index>
+    <index name="CUSTOMER_ENTITY_FIRSTNAME" indexType="btree">
+      <column name="firstname"/>
+    </index>
+    <index name="CUSTOMER_ENTITY_LASTNAME" indexType="btree">
+      <column name="lastname"/>
+    </index>
+  </table>
+  <table name="customer_address_entity" resource="default">
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="varchar" name="increment_id" nullable="true" length="50"/>
+    <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="true" identity="false"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
+    <column xsi:type="smallint" name="is_active" padding="5" unsigned="true" nullable="false" identity="false" default="1"/>
+    <column xsi:type="varchar" name="city" nullable="false" length="255"/>
+    <column xsi:type="varchar" name="company" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="country_id" nullable="false" length="255"/>
+    <column xsi:type="varchar" name="fax" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="firstname" nullable="false" length="255"/>
+    <column xsi:type="varchar" name="lastname" nullable="false" length="255"/>
+    <column xsi:type="varchar" name="middlename" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="postcode" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="prefix" nullable="true" length="40"/>
+    <column xsi:type="varchar" name="region" nullable="true" length="255"/>
+    <column xsi:type="int" name="region_id" padding="10" unsigned="true" nullable="true" identity="false"/>
+    <column xsi:type="text" name="street" nullable="false"/>
+    <column xsi:type="varchar" name="suffix" nullable="true" length="40"/>
+    <column xsi:type="varchar" name="telephone" nullable="false" length="255"/>
+    <column xsi:type="varchar" name="vat_id" nullable="true" length="255"/>
+    <column xsi:type="int" name="vat_is_valid" padding="10" unsigned="true" nullable="true" identity="false"/>
+    <column xsi:type="varchar" name="vat_request_date" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="vat_request_id" nullable="true" length="255"/>
+    <column xsi:type="int" name="vat_request_success" padding="10" unsigned="true" nullable="true" identity="false"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="entity_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CUSTOMER_ADDRESS_ENTITY_PARENT_ID_CUSTOMER_ENTITY_ENTITY_ID" table="customer_address_entity" column="parent_id" referenceTable="customer_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <index name="CUSTOMER_ADDRESS_ENTITY_PARENT_ID" indexType="btree">
+      <column name="parent_id"/>
+    </index>
+  </table>
+  <table name="customer_address_entity_datetime" resource="default">
+    <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
+    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="datetime" name="value" on_update="false" nullable="true" default="NULL"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="value_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_DTIME_ATTR_ID_EAV_ATTR_ATTR_ID" table="customer_address_entity_datetime" column="attribute_id" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_DTIME_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID" table="customer_address_entity_datetime" column="entity_id" referenceTable="customer_address_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="CUSTOMER_ADDRESS_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+    </constraint>
+    <index name="CUSTOMER_ADDRESS_ENTITY_DATETIME_ATTRIBUTE_ID" indexType="btree">
+      <column name="attribute_id"/>
+    </index>
+    <index name="CUSTOMER_ADDRESS_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+      <column name="value"/>
+    </index>
+  </table>
+  <table name="customer_address_entity_decimal" resource="default">
+    <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
+    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="value_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_DEC_ATTR_ID_EAV_ATTR_ATTR_ID" table="customer_address_entity_decimal" column="attribute_id" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_DEC_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID" table="customer_address_entity_decimal" column="entity_id" referenceTable="customer_address_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="CUSTOMER_ADDRESS_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+    </constraint>
+    <index name="CUSTOMER_ADDRESS_ENTITY_DECIMAL_ATTRIBUTE_ID" indexType="btree">
+      <column name="attribute_id"/>
+    </index>
+    <index name="CUSTOMER_ADDRESS_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+      <column name="value"/>
+    </index>
+  </table>
+  <table name="customer_address_entity_int" resource="default">
+    <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
+    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="int" name="value" padding="11" unsigned="false" nullable="false" identity="false" default="0"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="value_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_INT_ATTR_ID_EAV_ATTR_ATTR_ID" table="customer_address_entity_int" column="attribute_id" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_INT_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID" table="customer_address_entity_int" column="entity_id" referenceTable="customer_address_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="CUSTOMER_ADDRESS_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+    </constraint>
+    <index name="CUSTOMER_ADDRESS_ENTITY_INT_ATTRIBUTE_ID" indexType="btree">
+      <column name="attribute_id"/>
+    </index>
+    <index name="CUSTOMER_ADDRESS_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+      <column name="value"/>
+    </index>
+  </table>
+  <table name="customer_address_entity_text" resource="default">
+    <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
+    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="text" name="value" nullable="false"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="value_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_TEXT_ATTR_ID_EAV_ATTR_ATTR_ID" table="customer_address_entity_text" column="attribute_id" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_TEXT_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID" table="customer_address_entity_text" column="entity_id" referenceTable="customer_address_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="CUSTOMER_ADDRESS_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+    </constraint>
+    <index name="CUSTOMER_ADDRESS_ENTITY_TEXT_ATTRIBUTE_ID" indexType="btree">
+      <column name="attribute_id"/>
+    </index>
+  </table>
+  <table name="customer_address_entity_varchar" resource="default">
+    <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
+    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="varchar" name="value" nullable="true" length="255"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="value_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_VCHR_ATTR_ID_EAV_ATTR_ATTR_ID" table="customer_address_entity_varchar" column="attribute_id" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" name="CSTR_ADDR_ENTT_VCHR_ENTT_ID_CSTR_ADDR_ENTT_ENTT_ID" table="customer_address_entity_varchar" column="entity_id" referenceTable="customer_address_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="CUSTOMER_ADDRESS_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+    </constraint>
+    <index name="CUSTOMER_ADDRESS_ENTITY_VARCHAR_ATTRIBUTE_ID" indexType="btree">
+      <column name="attribute_id"/>
+    </index>
+    <index name="CUSTOMER_ADDRESS_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+      <column name="value"/>
+    </index>
+  </table>
+  <table name="customer_entity_datetime" resource="default">
+    <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
+    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="datetime" name="value" on_update="false" nullable="true" default="NULL"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="value_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_DATETIME_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID" table="customer_entity_datetime" column="attribute_id" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_DATETIME_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID" table="customer_entity_datetime" column="entity_id" referenceTable="customer_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="CUSTOMER_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+    </constraint>
+    <index name="CUSTOMER_ENTITY_DATETIME_ATTRIBUTE_ID" indexType="btree">
+      <column name="attribute_id"/>
+    </index>
+    <index name="CUSTOMER_ENTITY_DATETIME_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+      <column name="value"/>
+    </index>
+  </table>
+  <table name="customer_entity_decimal" resource="default">
+    <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
+    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="decimal" name="value" scale="12" precission="4" unsigned="false" nullable="false" default="0"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="value_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_DECIMAL_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID" table="customer_entity_decimal" column="attribute_id" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_DECIMAL_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID" table="customer_entity_decimal" column="entity_id" referenceTable="customer_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="CUSTOMER_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+    </constraint>
+    <index name="CUSTOMER_ENTITY_DECIMAL_ATTRIBUTE_ID" indexType="btree">
+      <column name="attribute_id"/>
+    </index>
+    <index name="CUSTOMER_ENTITY_DECIMAL_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+      <column name="value"/>
+    </index>
+  </table>
+  <table name="customer_entity_int" resource="default">
+    <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
+    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="int" name="value" padding="11" unsigned="false" nullable="false" identity="false" default="0"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="value_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_INT_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID" table="customer_entity_int" column="attribute_id" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_INT_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID" table="customer_entity_int" column="entity_id" referenceTable="customer_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="CUSTOMER_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+    </constraint>
+    <index name="CUSTOMER_ENTITY_INT_ATTRIBUTE_ID" indexType="btree">
+      <column name="attribute_id"/>
+    </index>
+    <index name="CUSTOMER_ENTITY_INT_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+      <column name="value"/>
+    </index>
+  </table>
+  <table name="customer_entity_text" resource="default">
+    <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
+    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="text" name="value" nullable="false"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="value_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_TEXT_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID" table="customer_entity_text" column="attribute_id" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_TEXT_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID" table="customer_entity_text" column="entity_id" referenceTable="customer_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="CUSTOMER_ENTITY_TEXT_ENTITY_ID_ATTRIBUTE_ID">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+    </constraint>
+    <index name="CUSTOMER_ENTITY_TEXT_ATTRIBUTE_ID" indexType="btree">
+      <column name="attribute_id"/>
+    </index>
+  </table>
+  <table name="customer_entity_varchar" resource="default">
+    <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"/>
+    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="varchar" name="value" nullable="true" length="255"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="value_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_VARCHAR_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID" table="customer_entity_varchar" column="attribute_id" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" name="CUSTOMER_ENTITY_VARCHAR_ENTITY_ID_CUSTOMER_ENTITY_ENTITY_ID" table="customer_entity_varchar" column="entity_id" referenceTable="customer_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="CUSTOMER_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+    </constraint>
+    <index name="CUSTOMER_ENTITY_VARCHAR_ATTRIBUTE_ID" indexType="btree">
+      <column name="attribute_id"/>
+    </index>
+    <index name="CUSTOMER_ENTITY_VARCHAR_ENTITY_ID_ATTRIBUTE_ID_VALUE" indexType="btree">
+      <column name="entity_id"/>
+      <column name="attribute_id"/>
+      <column name="value"/>
+    </index>
+  </table>
+  <table name="customer_group" resource="default">
+    <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="varchar" name="customer_group_code" nullable="false" length="32"/>
+    <column xsi:type="int" name="tax_class_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="customer_group_id"/>
+    </constraint>
+  </table>
+  <table name="customer_eav_attribute" resource="default">
+    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"/>
+    <column xsi:type="smallint" name="is_visible" padding="5" unsigned="true" nullable="false" identity="false" default="1"/>
+    <column xsi:type="varchar" name="input_filter" nullable="true" length="255"/>
+    <column xsi:type="smallint" name="multiline_count" padding="5" unsigned="true" nullable="false" identity="false" default="1"/>
+    <column xsi:type="text" name="validate_rules" nullable="true"/>
+    <column xsi:type="smallint" name="is_system" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="int" name="sort_order" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="varchar" name="data_model" nullable="true" length="255"/>
+    <column xsi:type="smallint" name="is_used_in_grid" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="smallint" name="is_visible_in_grid" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="smallint" name="is_filterable_in_grid" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="smallint" name="is_searchable_in_grid" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="attribute_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CUSTOMER_EAV_ATTRIBUTE_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID" table="customer_eav_attribute" column="attribute_id" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>
+  </table>
+  <table name="customer_form_attribute" resource="default">
+    <column xsi:type="varchar" name="form_code" nullable="false" length="32"/>
+    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="form_code"/>
+      <column name="attribute_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CUSTOMER_FORM_ATTRIBUTE_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID" table="customer_form_attribute" column="attribute_id" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>
+    <index name="CUSTOMER_FORM_ATTRIBUTE_ATTRIBUTE_ID" indexType="btree">
+      <column name="attribute_id"/>
+    </index>
+  </table>
+  <table name="customer_eav_attribute_website" resource="default">
+    <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"/>
+    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"/>
+    <column xsi:type="smallint" name="is_visible" padding="5" unsigned="true" nullable="true" identity="false"/>
+    <column xsi:type="smallint" name="is_required" padding="5" unsigned="true" nullable="true" identity="false"/>
+    <column xsi:type="text" name="default_value" nullable="true"/>
+    <column xsi:type="smallint" name="multiline_count" padding="5" unsigned="true" nullable="true" identity="false"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="attribute_id"/>
+      <column name="website_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="CSTR_EAV_ATTR_WS_ATTR_ID_EAV_ATTR_ATTR_ID" table="customer_eav_attribute_website" column="attribute_id" referenceTable="eav_attribute" referenceColumn="attribute_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" name="CSTR_EAV_ATTR_WS_WS_ID_STORE_WS_WS_ID" table="customer_eav_attribute_website" column="website_id" referenceTable="store_website" referenceColumn="website_id" onDelete="CASCADE"/>
+    <index name="CUSTOMER_EAV_ATTRIBUTE_WEBSITE_WEBSITE_ID" indexType="btree">
+      <column name="website_id"/>
+    </index>
+  </table>
+  <table name="customer_visitor" resource="default">
+    <column xsi:type="bigint" name="visitor_id" padding="20" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="int" name="customer_id" padding="11" unsigned="false" nullable="true" identity="false"/>
+    <column xsi:type="varchar" name="session_id" nullable="true" length="64"/>
+    <column xsi:type="timestamp" name="last_visit_at" on_update="false" nullable="false"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="visitor_id"/>
+    </constraint>
+    <index name="CUSTOMER_VISITOR_CUSTOMER_ID" indexType="btree">
+      <column name="customer_id"/>
+    </index>
+    <index name="CUSTOMER_VISITOR_LAST_VISIT_AT" indexType="btree">
+      <column name="last_visit_at"/>
+    </index>
+  </table>
+  <table name="customer_log" resource="default">
+    <column xsi:type="int" name="log_id" padding="11" unsigned="false" nullable="false" identity="true"/>
+    <column xsi:type="int" name="customer_id" padding="11" unsigned="false" nullable="false" identity="false"/>
+    <column xsi:type="timestamp" name="last_login_at" on_update="false" nullable="true" default="NULL"/>
+    <column xsi:type="timestamp" name="last_logout_at" on_update="false" nullable="true" default="NULL"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="log_id"/>
+    </constraint>
+    <constraint xsi:type="unique" name="CUSTOMER_LOG_CUSTOMER_ID">
+      <column name="customer_id"/>
+    </constraint>
+  </table>
+  <table name="customer_grid_flat" resource="default">
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"/>
+    <column xsi:type="text" name="name" nullable="true"/>
+    <column xsi:type="varchar" name="email" nullable="true" length="255"/>
+    <column xsi:type="int" name="group_id" padding="11" unsigned="false" nullable="true" identity="false"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true"/>
+    <column xsi:type="int" name="website_id" padding="11" unsigned="false" nullable="true" identity="false"/>
+    <column xsi:type="varchar" name="confirmation" nullable="true" length="255"/>
+    <column xsi:type="text" name="created_in" nullable="true"/>
+    <column xsi:type="date" name="dob"/>
+    <column xsi:type="int" name="gender" padding="11" unsigned="false" nullable="true" identity="false"/>
+    <column xsi:type="varchar" name="taxvat" nullable="true" length="255"/>
+    <column xsi:type="timestamp" name="lock_expires" on_update="false" nullable="true"/>
+    <column xsi:type="text" name="shipping_full" nullable="true"/>
+    <column xsi:type="text" name="billing_full" nullable="true"/>
+    <column xsi:type="varchar" name="billing_firstname" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="billing_lastname" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="billing_telephone" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="billing_postcode" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="billing_country_id" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="billing_region" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="billing_street" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="billing_city" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="billing_fax" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="billing_vat_id" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="billing_company" nullable="true" length="255"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="entity_id"/>
+    </constraint>
+    <index name="CUSTOMER_GRID_FLAT_GROUP_ID" indexType="btree">
+      <column name="group_id"/>
+    </index>
+    <index name="CUSTOMER_GRID_FLAT_CREATED_AT" indexType="btree">
+      <column name="created_at"/>
+    </index>
+    <index name="CUSTOMER_GRID_FLAT_WEBSITE_ID" indexType="btree">
+      <column name="website_id"/>
+    </index>
+    <index name="CUSTOMER_GRID_FLAT_CONFIRMATION" indexType="btree">
+      <column name="confirmation"/>
+    </index>
+    <index name="CUSTOMER_GRID_FLAT_DOB" indexType="btree">
+      <column name="dob"/>
+    </index>
+    <index name="CUSTOMER_GRID_FLAT_GENDER" indexType="btree">
+      <column name="gender"/>
+    </index>
+    <index name="CUSTOMER_GRID_FLAT_BILLING_COUNTRY_ID" indexType="btree">
+      <column name="billing_country_id"/>
+    </index>
+    <index name="FTI_8746F705702DD5F6D45B8C7CE7FE9F2F" indexType="fulltext">
+      <column name="name"/>
+      <column name="email"/>
+      <column name="created_in"/>
+      <column name="taxvat"/>
+      <column name="shipping_full"/>
+      <column name="billing_full"/>
+      <column name="billing_firstname"/>
+      <column name="billing_lastname"/>
+      <column name="billing_telephone"/>
+      <column name="billing_postcode"/>
+      <column name="billing_region"/>
+      <column name="billing_city"/>
+      <column name="billing_fax"/>
+      <column name="billing_company"/>
+    </index>
+  </table>
 </schema>

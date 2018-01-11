@@ -1,85 +1,71 @@
 <?xml version="1.0"?>
-<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-    <table name="store_website" resource="default">
-        <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="varchar" name="code" nullable="true" length="32"/>
-        <column xsi:type="varchar" name="name" nullable="true" length="64"/>
-        <column xsi:type="smallint" name="sort_order" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="smallint" name="default_group_id" padding="6" unsigned="true" nullable="false"
-                identity="false" default="0"/>
-        <column xsi:type="smallint" name="is_default" padding="6" unsigned="true" nullable="true" identity="false"
-                default="0"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="website_id"/>
-        </constraint>
-        <constraint xsi:type="unique" name="STORE_WEBSITE_CODE">
-            <column name="code"/>
-        </constraint>
-        <index name="STORE_WEBSITE_SORT_ORDER" indexType="btree">
-            <column name="sort_order"/>
-        </index>
-        <index name="STORE_WEBSITE_DEFAULT_GROUP_ID" indexType="btree">
-            <column name="default_group_id"/>
-        </index>
-    </table>
-    <table name="store_group" resource="default">
-        <column xsi:type="smallint" name="group_id" padding="6" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="varchar" name="name" nullable="false" length="255"/>
-        <column xsi:type="int" name="root_category_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="smallint" name="default_store_id" padding="6" unsigned="true" nullable="false"
-                identity="false" default="0"/>
-        <column xsi:type="varchar" name="code" nullable="true" length="32"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="group_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="STORE_GROUP_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID" table="store_group"
-                    column="website_id" referenceTable="store_website" referenceColumn="website_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="STORE_GROUP_CODE">
-            <column name="code"/>
-        </constraint>
-        <index name="STORE_GROUP_WEBSITE_ID" indexType="btree">
-            <column name="website_id"/>
-        </index>
-        <index name="STORE_GROUP_DEFAULT_STORE_ID" indexType="btree">
-            <column name="default_store_id"/>
-        </index>
-    </table>
-    <table name="store" resource="default">
-        <column xsi:type="smallint" name="store_id" padding="6" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="varchar" name="code" nullable="true" length="32"/>
-        <column xsi:type="smallint" name="website_id" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="smallint" name="group_id" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="varchar" name="name" nullable="false" length="255"/>
-        <column xsi:type="smallint" name="sort_order" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="smallint" name="is_active" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="store_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="STORE_GROUP_ID_STORE_GROUP_GROUP_ID" table="store" column="group_id"
-                    referenceTable="store_group" referenceColumn="group_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" name="STORE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID" table="store"
-                    column="website_id" referenceTable="store_website" referenceColumn="website_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" name="STORE_CODE">
-            <column name="code"/>
-        </constraint>
-        <index name="STORE_WEBSITE_ID" indexType="btree">
-            <column name="website_id"/>
-        </index>
-        <index name="STORE_IS_ACTIVE_SORT_ORDER" indexType="btree">
-            <column name="is_active"/>
-            <column name="sort_order"/>
-        </index>
-        <index name="STORE_GROUP_ID" indexType="btree">
-            <column name="group_id"/>
-        </index>
-    </table>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+  <table name="store_website" resource="default">
+    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="varchar" name="code" nullable="true" length="32"/>
+    <column xsi:type="varchar" name="name" nullable="true" length="64"/>
+    <column xsi:type="smallint" name="sort_order" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="smallint" name="default_group_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="smallint" name="is_default" padding="5" unsigned="true" nullable="true" identity="false" default="0"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="website_id"/>
+    </constraint>
+    <constraint xsi:type="unique" name="STORE_WEBSITE_CODE">
+      <column name="code"/>
+    </constraint>
+    <index name="STORE_WEBSITE_SORT_ORDER" indexType="btree">
+      <column name="sort_order"/>
+    </index>
+    <index name="STORE_WEBSITE_DEFAULT_GROUP_ID" indexType="btree">
+      <column name="default_group_id"/>
+    </index>
+  </table>
+  <table name="store_group" resource="default">
+    <column xsi:type="smallint" name="group_id" padding="5" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="varchar" name="name" nullable="false" length="255"/>
+    <column xsi:type="int" name="root_category_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="smallint" name="default_store_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="varchar" name="code" nullable="true" length="32"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="group_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="STORE_GROUP_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID" table="store_group" column="website_id" referenceTable="store_website" referenceColumn="website_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="STORE_GROUP_CODE">
+      <column name="code"/>
+    </constraint>
+    <index name="STORE_GROUP_WEBSITE_ID" indexType="btree">
+      <column name="website_id"/>
+    </index>
+    <index name="STORE_GROUP_DEFAULT_STORE_ID" indexType="btree">
+      <column name="default_store_id"/>
+    </index>
+  </table>
+  <table name="store" resource="default">
+    <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="varchar" name="code" nullable="true" length="32"/>
+    <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="smallint" name="group_id" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="varchar" name="name" nullable="false" length="255"/>
+    <column xsi:type="smallint" name="sort_order" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="smallint" name="is_active" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="store_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="STORE_GROUP_ID_STORE_GROUP_GROUP_ID" table="store" column="group_id" referenceTable="store_group" referenceColumn="group_id" onDelete="CASCADE"/>
+    <constraint xsi:type="foreign" name="STORE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID" table="store" column="website_id" referenceTable="store_website" referenceColumn="website_id" onDelete="CASCADE"/>
+    <constraint xsi:type="unique" name="STORE_CODE">
+      <column name="code"/>
+    </constraint>
+    <index name="STORE_WEBSITE_ID" indexType="btree">
+      <column name="website_id"/>
+    </index>
+    <index name="STORE_IS_ACTIVE_SORT_ORDER" indexType="btree">
+      <column name="is_active"/>
+      <column name="sort_order"/>
+    </index>
+    <index name="STORE_GROUP_ID" indexType="btree">
+      <column name="group_id"/>
+    </index>
+  </table>
 </schema>

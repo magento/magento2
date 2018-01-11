@@ -999,6 +999,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $foreignKeys = $this->getForeignKeys($tableName, $schemaName);
         foreach ($foreignKeys as $fkProp) {
             if ($fkProp['COLUMN_NAME'] == $columnName) {
+                $this->schemaListener->dropForeignKey($tableName, $fkProp['FK_NAME']);
                 $alterDrop[] = 'DROP FOREIGN KEY ' . $this->quoteIdentifier($fkProp['FK_NAME']);
             }
         }
@@ -1009,6 +1010,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $idxColumnKey = array_search($columnName, $idxColumns);
             if ($idxColumnKey !== false) {
                 unset($idxColumns[$idxColumnKey]);
+                if (empty($idxColumns)) {
+                    $this->schemaListener->dropIndex($tableName, $idxData['KEY_NAME'], 'index');
+                }
                 if ($idxColumns && $this->_getIndexByColumns($tableName, $idxColumns, $schemaName)) {
                     $this->dropIndex($tableName, $idxData['KEY_NAME'], $schemaName);
                 }

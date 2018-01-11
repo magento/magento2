@@ -11,7 +11,6 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Framework\App\ResourceConnection\Config;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
@@ -33,10 +32,8 @@ use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
-use Magento\Setup\Model\Declaration\Schema\Config\SchemaLocator;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\DataSetupFactory;
-use Magento\Setup\Module\Setup;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
@@ -878,6 +875,7 @@ class Installer
         ) {
             foreach ($moduleNames as $moduleName) {
                 $this->schemaListener->setModuleName($moduleName);
+                $this->schemaListener->setResource('default');
                 $this->log->log("Module '{$moduleName}':");
                 $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
                 $currentVersion = $moduleContextList[$moduleName]->getVersion();
@@ -927,6 +925,7 @@ class Installer
             'Magento_Weee' => 'Magento_WeeeStaging',
             'Magento_Wishlist' => 'Magento_CatalogStaging',
         ];
+
         $this->schemaListener->toogleIgnore(SchemaListener::IGNORE_ON);
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
@@ -941,6 +940,7 @@ class Installer
             $this->schemaListener->toogleIgnore(
                 SchemaListener::IGNORE_OFF | SchemaListener::STAGING_FK_KEYS
             );
+            $this->schemaListener->setResource('default');
 
             $this->log->log("Module '{$moduleName}':");
             $modulePostUpdater = $this->getSchemaDataHandler($moduleName, $handlerType);

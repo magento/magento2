@@ -8,10 +8,10 @@ namespace Magento\Catalog\Setup;
 
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
-use Magento\Framework\DB\Ddl\Table;
 
 /**
  * Upgrade the Catalog module DB scheme
@@ -698,12 +698,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function addReplicaTable(SchemaSetupInterface $setup, $existingTable, $replicaTable)
     {
-        $sql = sprintf(
-            'CREATE TABLE IF NOT EXISTS %s LIKE %s',
-            $setup->getConnection()->quoteIdentifier($setup->getTable($replicaTable)),
-            $setup->getConnection()->quoteIdentifier($setup->getTable($existingTable))
-        );
-        $setup->getConnection()->query($sql);
+        $table = $setup->getConnection()
+            ->createTableByDdl($existingTable, $replicaTable);
+        $setup->getConnection()
+            ->createTable($table);
     }
 
     /**

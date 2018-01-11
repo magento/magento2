@@ -66,7 +66,7 @@ class SchemaPersistor
                 $table = $dom->addChild('table');
                 $table->addAttribute('name', $tableName);
                 /** @TODO: handle different resources for sales and checkout tables */
-                $table->addAttribute('resource', 'default');
+                $table->addAttribute('resource', $tableData['resource']);
                 $this->processColumns($tableData, $table);
                 $this->processConstraints($tableData, $table);
                 $this->processIndexes($tableData, $table);
@@ -222,7 +222,7 @@ class SchemaPersistor
      */
     private function persistModule(\SimpleXMLElement $simpleXmlElementDom, $path)
     {
-        if (strpos($path, 'magento2ee') !== false) {
+        if (strpos($path, 'magento2ce') !== false) {
             $dom = new \DOMDocument('1.0');
             $dom->preserveWhiteSpace = false;
             $dom->formatOutput = true;

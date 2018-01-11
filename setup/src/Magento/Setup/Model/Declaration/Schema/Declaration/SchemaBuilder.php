@@ -149,7 +149,7 @@ class SchemaBuilder
      * @param  array $structuralElementData
      * @return bool
      */
-    private function isDisabled(array $structuralElementData)
+    private function isDisabled($structuralElementData)
     {
         return isset($structuralElementData['disabled']) &&
             $this->booleanUtils->toBoolean($structuralElementData['disabled']);

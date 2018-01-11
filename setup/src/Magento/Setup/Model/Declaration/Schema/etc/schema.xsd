@@ -61,7 +61,7 @@
     <xs:simpleType name="resourceType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="default" />
-            <xs:enumeration value="checkout" />
+            <xs:enumeration value="quote" />
             <xs:enumeration value="sales" />
         </xs:restriction>
     </xs:simpleType>

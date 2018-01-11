@@ -1,30 +1,29 @@
 <?xml version="1.0"?>
-<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-    <table name="email_template" resource="default">
-        <column xsi:type="int" name="template_id" padding="11" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="varchar" name="template_code" nullable="false" length="150"/>
-        <column xsi:type="text" name="template_text" nullable="false"/>
-        <column xsi:type="text" name="template_styles" nullable="true"/>
-        <column xsi:type="int" name="template_type" padding="11" unsigned="true" nullable="true" identity="false"/>
-        <column xsi:type="varchar" name="template_subject" nullable="false" length="200"/>
-        <column xsi:type="varchar" name="template_sender_name" nullable="true" length="200"/>
-        <column xsi:type="varchar" name="template_sender_email" nullable="true" length="200"/>
-        <column xsi:type="timestamp" name="added_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
-        <column xsi:type="timestamp" name="modified_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
-        <column xsi:type="varchar" name="orig_template_code" nullable="true" length="200"/>
-        <column xsi:type="text" name="orig_template_variables" nullable="true"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="template_id"/>
-        </constraint>
-        <constraint xsi:type="unique" name="EMAIL_TEMPLATE_TEMPLATE_CODE">
-            <column name="template_code"/>
-        </constraint>
-        <index name="EMAIL_TEMPLATE_ADDED_AT" indexType="btree">
-            <column name="added_at"/>
-        </index>
-        <index name="EMAIL_TEMPLATE_MODIFIED_AT" indexType="btree">
-            <column name="modified_at"/>
-        </index>
-    </table>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+  <table name="email_template" resource="default">
+    <column xsi:type="int" name="template_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="varchar" name="template_code" nullable="false" length="150"/>
+    <column xsi:type="text" name="template_text" nullable="false"/>
+    <column xsi:type="text" name="template_styles" nullable="true"/>
+    <column xsi:type="int" name="template_type" padding="10" unsigned="true" nullable="true" identity="false"/>
+    <column xsi:type="varchar" name="template_subject" nullable="false" length="200"/>
+    <column xsi:type="varchar" name="template_sender_name" nullable="true" length="200"/>
+    <column xsi:type="varchar" name="template_sender_email" nullable="true" length="200"/>
+    <column xsi:type="timestamp" name="added_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
+    <column xsi:type="timestamp" name="modified_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
+    <column xsi:type="varchar" name="orig_template_code" nullable="true" length="200"/>
+    <column xsi:type="text" name="orig_template_variables" nullable="true"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="template_id"/>
+    </constraint>
+    <constraint xsi:type="unique" name="EMAIL_TEMPLATE_TEMPLATE_CODE">
+      <column name="template_code"/>
+    </constraint>
+    <index name="EMAIL_TEMPLATE_ADDED_AT" indexType="btree">
+      <column name="added_at"/>
+    </index>
+    <index name="EMAIL_TEMPLATE_MODIFIED_AT" indexType="btree">
+      <column name="modified_at"/>
+    </index>
+  </table>
 </schema>

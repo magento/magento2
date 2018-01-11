@@ -1,24 +1,23 @@
 <?xml version="1.0"?>
-<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-    <table name="cron_schedule" resource="default">
-        <column xsi:type="int" name="schedule_id" padding="11" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="varchar" name="job_code" nullable="false" length="255" default="0"/>
-        <column xsi:type="varchar" name="status" nullable="false" length="7" default="pending"/>
-        <column xsi:type="text" name="messages" nullable="true"/>
-        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
-        <column xsi:type="timestamp" name="scheduled_at" on_update="false" nullable="true"/>
-        <column xsi:type="timestamp" name="executed_at" on_update="false" nullable="true"/>
-        <column xsi:type="timestamp" name="finished_at" on_update="false" nullable="true"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="schedule_id"/>
-        </constraint>
-        <index name="CRON_SCHEDULE_JOB_CODE" indexType="btree">
-            <column name="job_code"/>
-        </index>
-        <index name="CRON_SCHEDULE_SCHEDULED_AT_STATUS" indexType="btree">
-            <column name="scheduled_at"/>
-            <column name="status"/>
-        </index>
-    </table>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+  <table name="cron_schedule" resource="default">
+    <column xsi:type="int" name="schedule_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="varchar" name="job_code" nullable="false" length="255" default="0"/>
+    <column xsi:type="varchar" name="status" nullable="false" length="7" default="pending"/>
+    <column xsi:type="text" name="messages" nullable="true"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
+    <column xsi:type="timestamp" name="scheduled_at" on_update="false" nullable="true"/>
+    <column xsi:type="timestamp" name="executed_at" on_update="false" nullable="true"/>
+    <column xsi:type="timestamp" name="finished_at" on_update="false" nullable="true"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="schedule_id"/>
+    </constraint>
+    <index name="CRON_SCHEDULE_JOB_CODE" indexType="btree">
+      <column name="job_code"/>
+    </index>
+    <index name="CRON_SCHEDULE_SCHEDULED_AT_STATUS" indexType="btree">
+      <column name="scheduled_at"/>
+      <column name="status"/>
+    </index>
+  </table>
 </schema>

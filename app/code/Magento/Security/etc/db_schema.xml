@@ -1,41 +1,38 @@
 <?xml version="1.0"?>
-<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-    <table name="admin_user_session" resource="default">
-        <column xsi:type="int" name="id" padding="11" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="varchar" name="session_id" nullable="false" length="128"/>
-        <column xsi:type="int" name="user_id" padding="11" unsigned="true" nullable="true" identity="false"/>
-        <column xsi:type="smallint" name="status" padding="6" unsigned="true" nullable="false" identity="false"
-                default="1"/>
-        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
-        <column xsi:type="varchar" name="ip" nullable="false" length="15"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="ADMIN_USER_SESSION_USER_ID_ADMIN_USER_USER_ID" table="admin_user_session"
-                    column="user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
-        <index name="ADMIN_USER_SESSION_SESSION_ID" indexType="btree">
-            <column name="session_id"/>
-        </index>
-        <index name="ADMIN_USER_SESSION_USER_ID" indexType="btree">
-            <column name="user_id"/>
-        </index>
-    </table>
-    <table name="password_reset_request_event" resource="default">
-        <column xsi:type="int" name="id" padding="11" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="smallint" name="request_type" padding="6" unsigned="true" nullable="false" identity="false"/>
-        <column xsi:type="varchar" name="account_reference" nullable="true" length="255"/>
-        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
-        <column xsi:type="varchar" name="ip" nullable="false" length="15"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="id"/>
-        </constraint>
-        <index name="PASSWORD_RESET_REQUEST_EVENT_ACCOUNT_REFERENCE" indexType="btree">
-            <column name="account_reference"/>
-        </index>
-        <index name="PASSWORD_RESET_REQUEST_EVENT_CREATED_AT" indexType="btree">
-            <column name="created_at"/>
-        </index>
-    </table>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+  <table name="admin_user_session" resource="default">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="varchar" name="session_id" nullable="false" length="128"/>
+    <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="true" identity="false"/>
+    <column xsi:type="smallint" name="status" padding="5" unsigned="true" nullable="false" identity="false" default="1"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
+    <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
+    <column xsi:type="varchar" name="ip" nullable="false" length="15" onCreate="migrateDataFrom(ip)"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="ADMIN_USER_SESSION_USER_ID_ADMIN_USER_USER_ID" table="admin_user_session" column="user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+    <index name="ADMIN_USER_SESSION_SESSION_ID" indexType="btree">
+      <column name="session_id"/>
+    </index>
+    <index name="ADMIN_USER_SESSION_USER_ID" indexType="btree">
+      <column name="user_id"/>
+    </index>
+  </table>
+  <table name="password_reset_request_event" resource="default">
+    <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="smallint" name="request_type" padding="5" unsigned="true" nullable="false" identity="false"/>
+    <column xsi:type="varchar" name="account_reference" nullable="true" length="255"/>
+    <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"/>
+    <column xsi:type="varchar" name="ip" nullable="false" length="15" onCreate="migrateDataFrom(ip)"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="id"/>
+    </constraint>
+    <index name="PASSWORD_RESET_REQUEST_EVENT_ACCOUNT_REFERENCE" indexType="btree">
+      <column name="account_reference"/>
+    </index>
+    <index name="PASSWORD_RESET_REQUEST_EVENT_CREATED_AT" indexType="btree">
+      <column name="created_at"/>
+    </index>
+  </table>
 </schema>

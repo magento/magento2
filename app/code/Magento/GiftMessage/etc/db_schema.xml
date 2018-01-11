@@ -1,35 +1,32 @@
 <?xml version="1.0"?>
-<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-    <table name="gift_message" resource="default">
-        <column xsi:type="int" name="gift_message_id" padding="11" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="int" name="customer_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="varchar" name="sender" nullable="true" length="255"/>
-        <column xsi:type="varchar" name="recipient" nullable="true" length="255"/>
-        <column xsi:type="text" name="message" nullable="true"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="gift_message_id"/>
-        </constraint>
-    </table>
-    <table name="quote" resource="default">
-        <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"/>
-    </table>
-    <table name="quote_address" resource="default">
-        <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"/>
-    </table>
-    <table name="quote_item" resource="default">
-        <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"/>
-    </table>
-    <table name="quote_address_item" resource="default">
-        <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"/>
-    </table>
-    <table name="sales_order" resource="default">
-        <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"/>
-    </table>
-    <table name="sales_order_item" resource="default">
-        <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"/>
-        <column xsi:type="int" name="gift_message_available" padding="11" unsigned="false" nullable="true"
-                identity="false"/>
-    </table>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+  <table name="gift_message" resource="default">
+    <column xsi:type="int" name="gift_message_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="varchar" name="sender" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="recipient" nullable="true" length="255"/>
+    <column xsi:type="text" name="message" nullable="true"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="gift_message_id"/>
+    </constraint>
+  </table>
+  <table name="quote" resource="quote">
+    <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"/>
+  </table>
+  <table name="quote_address" resource="quote">
+    <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"/>
+  </table>
+  <table name="quote_item" resource="quote">
+    <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"/>
+  </table>
+  <table name="quote_address_item" resource="quote">
+    <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"/>
+  </table>
+  <table name="sales_order" resource="sales">
+    <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"/>
+  </table>
+  <table name="sales_order_item" resource="sales">
+    <column xsi:type="int" name="gift_message_id" padding="11" unsigned="false" nullable="true" identity="false"/>
+    <column xsi:type="int" name="gift_message_available" padding="11" unsigned="false" nullable="true" identity="false"/>
+  </table>
 </schema>

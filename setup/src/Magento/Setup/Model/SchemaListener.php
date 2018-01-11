@@ -37,6 +37,11 @@ class SchemaListener
     private $tables = [];
 
     /**
+     * @var string
+     */
+    private $resource;
+
+    /**
      * This flag allows us to ignore some DDL operations
      *
      * @var bool
@@ -316,6 +321,8 @@ class SchemaListener
         } else {
             $this->tables[$moduleName][strtolower($tableName)] = $dataToLog;
         }
+
+        $this->tables[$moduleName][strtolower($tableName)]['resource'] = $this->resource;
     }
 
     /**
@@ -473,6 +480,14 @@ class SchemaListener
     public function toogleIgnore($flag)
     {
         $this->ignore = $flag;
+    }
+
+    /**
+     * @param string $resource
+     */
+    public function setResource(string $resource)
+    {
+        $this->resource = $resource;
     }
 
     /**

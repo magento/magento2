@@ -7,9 +7,9 @@
  */
 namespace Magento\Framework\Module;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\SetupInterface;
-use Magento\Framework\App\ResourceConnection;
 
 class Setup implements SetupInterface
 {
@@ -63,14 +63,27 @@ class Setup implements SetupInterface
      */
     public function getConnection($connectionName = null)
     {
+        $resource = 'default';
+        if (preg_match('/sales/', $connectionName)) {
+            $resource = 'sales';
+        }
+
+        if (preg_match('/checkout/', $connectionName) || preg_match('/quote/', $connectionName)) {
+            $resource = 'quote';
+        }
+
         if ($connectionName !== null) {
             try {
-                return $this->resourceModel->getConnectionByName($connectionName);
+                $connection = $this->resourceModel->getConnectionByName($connectionName);
+                $connection->getSchemaListener()->setResource($resource);
+                return $connection;
             } catch (\DomainException $exception) {
                 //Fallback to default connection
             }
         }
-        return $this->getDefaultConnection();
+        $connection = $this->getDefaultConnection();
+        $connection->getSchemaListener()->setResource($resource);
+        return $connection;
     }
 
     /**

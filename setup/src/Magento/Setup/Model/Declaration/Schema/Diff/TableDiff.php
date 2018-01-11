@@ -61,8 +61,9 @@ class TableDiff
      */
     private function excludeAutoIndexes(Table $table, array $indexes)
     {
-        foreach ($this->preprocessConstraintsAndIndexes($table->getReferenceConstraints()) as $name => $constraint) {
-            $name = str_replace("fk_", 'index', $name);
+        foreach ($table->getReferenceConstraints() as $constraint) {
+            $indexNameToExclude = $constraint->getColumn()->getName();
+            $name = 'index' . $indexNameToExclude;
             unset($indexes[$name]);
         }
 
@@ -119,6 +120,7 @@ class TableDiff
 
             if ($elementType === self::INDEX_DIFF_TYPE) {
                 $generatedElements = $this->excludeAutoIndexes($generatedTable, $generatedElements);
+                $declaredElements = $this->excludeAutoIndexes($declaredTable, $declaredElements);
             }
 
             foreach ($declaredElements as $elementName => $element) {

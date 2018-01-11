@@ -5,10 +5,9 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection\ConfigInterface as ResourceConfigInterface;
-use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 
 /**
  * Application provides ability to configure multiple connections to persistent storage.
@@ -92,7 +91,16 @@ class ResourceConnection
     public function getConnection($resourceName = self::DEFAULT_CONNECTION)
     {
         $connectionName = $this->config->getConnectionName($resourceName);
-        return $this->getConnectionByName($connectionName);
+        $connection = $this->getConnectionByName($connectionName);
+        if (preg_match('/sales/', $resourceName)) {
+            $connection->getSchemaListener()->setResource('sales');
+        }
+
+        if (preg_match('/checkout/', $resourceName) || preg_match('/quote/', $resourceName)) {
+            $connection->getSchemaListener()->setResource('quote');
+        }
+
+        return $connection;
     }
 
     /**

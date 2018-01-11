@@ -12,14 +12,20 @@ namespace Magento\Setup\Model\SchemaListenerDefinition;
 class DecimalDefinition implements DefinitionConverterInterface
 {
     /**
-     * Default scale for all decimals
+     * Decimal and float has different default values
+     *
+     * @var array
      */
-    const DEFAULT_SCALE = '0';
-
-    /**
-     * Default precision for all decimals
-     */
-    const DEFAULT_PRECISION = '10';
+    private static $shapeByType = [
+        'float' => [
+            'precision' => '10',
+            'scale' => '0'
+        ],
+        'decimal' => [
+            'precision' => '12',
+            'scale' => '4'
+        ]
+    ];
 
     /**
      * @inheritdoc
@@ -30,11 +36,11 @@ class DecimalDefinition implements DefinitionConverterInterface
             'xsi:type' => $definition['type'],
             'name' => $definition['name'],
             //In previos adapter this 2 fields were switched, so we need to switch again
-            'scale' => $definition['precision'] ?? self::DEFAULT_PRECISION,
-            'precission' => $definition['scale'] ?? self::DEFAULT_SCALE,
+            'scale' => $definition['precision'] ?? self::$shapeByType[$definition['type']]['precision'],
+            'precission' => $definition['scale'] ?? self::$shapeByType[$definition['type']]['scale'],
             'unsigned' => $definition['unsigned'] ?? false,
             'nullable' => $definition['nullable'] ?? true,
-            'default' => isset($definition['default']) ? (int) $definition['default'] : null,
+            'default' => isset($definition['default']) && $definition['default'] !== false ? (int) $definition['default'] : null,
             'primary' => $definition['primary'] ?? false
         ];
     }

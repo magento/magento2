@@ -3,21 +3,9 @@
   <table name="catalog_eav_attribute" resource="default">
     <column xsi:type="float" name="search_weight" scale="10" precission="0" unsigned="true" nullable="false" default="1"/>
   </table>
-  <table name="catalogsearch_fulltext_scope1_tmp" resource="default">
-    <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"/>
-    <column xsi:type="int" name="attribute_id" padding="11" unsigned="true" nullable="false" identity="false"/>
-    <column xsi:type="longtext" name="data_index" nullable="true"/>
-    <constraint xsi:type="primary" name="IDX_PRIMARY">
-      <column name="entity_id"/>
-      <column name="attribute_id"/>
-    </constraint>
-    <index name="FTI_FULLTEXT_DATA_INDEX" indexType="fulltext">
-      <column name="data_index"/>
-    </index>
-  </table>
-  <table name="catalogsearch_fulltext_scope1_tmp" resource="default">
-    <column xsi:type="int" name="entity_id" padding="11" unsigned="true" nullable="false" identity="false"/>
-    <column xsi:type="int" name="attribute_id" padding="11" unsigned="true" nullable="false" identity="false"/>
+  <table name="catalogsearch_fulltext_scope1" resource="default">
+    <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"/>
+    <column xsi:type="int" name="attribute_id" padding="10" unsigned="true" nullable="false" identity="false"/>
     <column xsi:type="longtext" name="data_index" nullable="true"/>
     <constraint xsi:type="primary" name="IDX_PRIMARY">
       <column name="entity_id"/>

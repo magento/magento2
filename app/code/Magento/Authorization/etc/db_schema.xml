@@ -1,50 +1,42 @@
 <?xml version="1.0"?>
-<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
-    <table name="authorization_role" resource="default">
-        <column xsi:type="int" name="role_id" padding="11" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="int" name="parent_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="smallint" name="tree_level" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="smallint" name="sort_order" padding="6" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="varchar" name="role_type" nullable="false" length="1" default="0"/>
-        <column xsi:type="int" name="user_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="varchar" name="user_type" nullable="true" length="16"/>
-        <column xsi:type="varchar" name="role_name" nullable="true" length="50"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="role_id"/>
-        </constraint>
-        <index name="AUTHORIZATION_ROLE_PARENT_ID_SORT_ORDER" indexType="btree">
-            <column name="parent_id"/>
-            <column name="sort_order"/>
-        </index>
-        <index name="AUTHORIZATION_ROLE_TREE_LEVEL" indexType="btree">
-            <column name="tree_level"/>
-        </index>
-    </table>
-    <table name="authorization_rule" resource="default">
-        <column xsi:type="int" name="rule_id" padding="11" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="int" name="role_id" padding="11" unsigned="true" nullable="false" identity="false"
-                default="0"/>
-        <column xsi:type="varchar" name="resource_id" nullable="true" length="255"/>
-        <column xsi:type="varchar" name="privileges" nullable="true" length="20"/>
-        <column xsi:type="varchar" name="permission" nullable="true" length="10"/>
-        <constraint xsi:type="primary" name="PRIMARY">
-            <column name="rule_id"/>
-        </constraint>
-        <constraint xsi:type="foreign" name="AUTHORIZATION_RULE_ROLE_ID_AUTHORIZATION_ROLE_ROLE_ID"
-                    table="authorization_rule" column="role_id" referenceTable="authorization_role"
-                    referenceColumn="role_id" onDelete="CASCADE"/>
-        <index name="AUTHORIZATION_RULE_RESOURCE_ID_ROLE_ID" indexType="btree">
-            <column name="resource_id"/>
-            <column name="role_id"/>
-        </index>
-        <index name="AUTHORIZATION_RULE_ROLE_ID_RESOURCE_ID" indexType="btree">
-            <column name="role_id"/>
-            <column name="resource_id"/>
-        </index>
-    </table>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:setup:Model/Declaration/Schema/etc/schema.xsd">
+  <table name="authorization_role" resource="default">
+    <column xsi:type="int" name="role_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="smallint" name="tree_level" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="smallint" name="sort_order" padding="5" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="varchar" name="role_type" nullable="false" length="1" default="0"/>
+    <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="varchar" name="user_type" nullable="true" length="16"/>
+    <column xsi:type="varchar" name="role_name" nullable="true" length="50"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="role_id"/>
+    </constraint>
+    <index name="AUTHORIZATION_ROLE_PARENT_ID_SORT_ORDER" indexType="btree">
+      <column name="parent_id"/>
+      <column name="sort_order"/>
+    </index>
+    <index name="AUTHORIZATION_ROLE_TREE_LEVEL" indexType="btree">
+      <column name="tree_level"/>
+    </index>
+  </table>
+  <table name="authorization_rule" resource="default">
+    <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+    <column xsi:type="int" name="role_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"/>
+    <column xsi:type="varchar" name="resource_id" nullable="true" length="255"/>
+    <column xsi:type="varchar" name="privileges" nullable="true" length="20"/>
+    <column xsi:type="varchar" name="permission" nullable="true" length="10"/>
+    <constraint xsi:type="primary" name="PRIMARY">
+      <column name="rule_id"/>
+    </constraint>
+    <constraint xsi:type="foreign" name="AUTHORIZATION_RULE_ROLE_ID_AUTHORIZATION_ROLE_ROLE_ID" table="authorization_rule" column="role_id" referenceTable="authorization_role" referenceColumn="role_id" onDelete="CASCADE"/>
+    <index name="AUTHORIZATION_RULE_RESOURCE_ID_ROLE_ID" indexType="btree">
+      <column name="resource_id"/>
+      <column name="role_id"/>
+    </index>
+    <index name="AUTHORIZATION_RULE_ROLE_ID_RESOURCE_ID" indexType="btree">
+      <column name="role_id"/>
+      <column name="resource_id"/>
+    </index>
+  </table>
 </schema>
