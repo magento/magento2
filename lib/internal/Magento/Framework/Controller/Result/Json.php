@@ -52,9 +52,13 @@ class Json extends AbstractResult
      * @param boolean $cycleCheck Optional; whether or not to check for object recursion; off by default
      * @param array $options Additional options used during encoding
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setData($data, $cycleCheck = false, $options = [])
     {
+        if ($data instanceof \Magento\Framework\DataObject) {
+            $data = $data->toArray();
+        }
         $this->json = $this->serializer->serialize($data);
         return $this;
     }
