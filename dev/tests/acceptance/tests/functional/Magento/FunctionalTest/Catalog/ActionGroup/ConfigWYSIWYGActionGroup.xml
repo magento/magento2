@@ -6,10 +6,10 @@
   */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
     <actionGroup name="EnabledWYSIWYG">
-        <amOnPage url="admin/admin/system_config/edit/section/cms/" stepKey="navigateToConfigurationPage" />
+        <amOnPage url="admin/admin/system_actionGroups/edit/section/cms/" stepKey="navigateToConfigurationPage" />
         <waitForPageLoad stepKey="wait1"/>
         <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" stepKey="waitForEnableWYSIWYGDropdown1" />
@@ -19,7 +19,7 @@
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
     </actionGroup>
     <actionGroup name="DisabledWYSIWYG">
-        <amOnPage url="admin/admin/system_config/edit/section/cms/" stepKey="navigateToConfigurationPage" />
+        <amOnPage url="admin/admin/system_actionGroups/edit/section/cms/" stepKey="navigateToConfigurationPage" />
         <waitForPageLoad stepKey="wait3"/>
         <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" stepKey="waitForEnableWYSIWYGDropdown2" />
@@ -28,4 +28,4 @@
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions" />
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig" />
     </actionGroup>
-</config>
+</actionGroups>
