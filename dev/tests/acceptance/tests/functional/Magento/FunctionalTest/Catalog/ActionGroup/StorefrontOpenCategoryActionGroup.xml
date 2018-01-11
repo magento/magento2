@@ -8,15 +8,15 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
-    <actionGroup name="StorefrontOpenCategoryActionGroup">
+    <actionGroup name="StorefrontOpenAndCheckCategoryActionGroup">
         <arguments>
             <argument name="category" defaultValue="_defaultCategory"/>
         </arguments>
         <!-- Open Category -->
-        <click selector="//nav//a[span[contains(., '$${{category}}.name$$')]]" mergeKey="clickCategory" />
+        <click selector="//nav//a[span[contains(., '{{category.name}}')]]" stepKey="clickCategory" />
         <!-- Assert Category Page Title equals Category Name -->
-        <seeInTitle userInput="$$category.name$$" mergeKey="assertCategoryNameTitle"/>
+        <seeInTitle userInput="{{category.name}}" stepKey="assertCategoryNameTitle"/>
         <!-- Assert Category Name is on the Categorypage -->
-        <see userInput="$$category.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" mergeKey="assertCategoryName"/>
+        <see userInput="{{category.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
     </actionGroup>
 </config>

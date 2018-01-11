@@ -7,10 +7,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
-    <operation name="CreateSaleRuleCondition" dataType="salesrule_condition" type="create">
+    <operation name="CreateSalesRuleCondition" dataType="SalesRuleCondition" type="create">
         <field key="condition_type" required="true">string</field>
         <array key="conditions" required="true">
-            <value>salesrule_condition</value>
+            <value>SalesRuleCondition</value>
         </array>
         <field key="aggregator_type" required="true">string</field>
         <field key="operator" required="true">string</field>
@@ -19,10 +19,10 @@
         <field key="extension_attributes">empty_extension_attribute</field>
     </operation>
 
-    <operation name="UpdateSaleRuleCondition" dataType="salesrule_condition" type="update">
+    <operation name="UpdateSalesRuleCondition" dataType="SalesRuleCondition" type="update">
         <field key="condition_type">string</field>
         <array key="conditions">
-            <value>salesrule_condition</value>
+            <value>SalesRuleCondition</value>
         </array>
         <field key="aggregator_type">string</field>
         <field key="operator">string</field>

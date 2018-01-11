@@ -18,31 +18,30 @@
             <env value="phantomjs"/>
         </annotations>
         <before>
-            <resetCookie userInput="PHPSESSID" mergeKey="resetCookieForCart"/>
-            <createData entity="_defaultCategory" mergeKey="createCategory"/>
-            <createData entity="_defaultProduct" mergeKey="createSimpleProduct1">
-                <required-entity persistedKey="createCategory"/>
+            <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct1">
+                <required-entity createDataKey="createCategory"/>
             </createData>
-            <createData entity="_defaultProduct" mergeKey="createSimpleProduct2">
-                <required-entity persistedKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct2">
+                <required-entity createDataKey="createCategory"/>
             </createData>
-            <createData entity="_defaultCategory" mergeKey="createCategory1"/>
-            <createData entity="_defaultProduct" mergeKey="createSimpleProduct11">
-                <required-entity persistedKey="createCategory1"/>
+            <createData entity="_defaultCategory" stepKey="createCategory1"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct11">
+                <required-entity createDataKey="createCategory1"/>
             </createData>
-            <createData entity="_defaultSalesRule" mergeKey="createSalesRule"/>
-            <createData entity="_defaultSalesRuleCoupon" mergeKey="createSalesRuleCoupon">
-                <required-entity persistedKey="createSalesRule"/>
+            <createData entity="_defaultApiSalesRule" stepKey="createSalesRule"/>
+            <createData entity="_defaultApiSalesRuleCoupon" stepKey="createSalesRuleCoupon">
+                <required-entity createDataKey="createSalesRule"/>
             </createData>
-
         </before>
         <after>
-            <deleteData createDataKey="createCategory" mergeKey="deleteCategory"/>
-            <deleteData createDataKey="createCategory1" mergeKey="deleteCategory1"/>
-            <deleteData createDataKey="createSimpleProduct1" mergeKey="deleteSimpleProduct1"/>
-            <deleteData createDataKey="createSimpleProduct2" mergeKey="deleteSimpleProduct2"/>
-            <deleteData createDataKey="createSimpleProduct11" mergeKey="deleteSimpleProduct11"/>
-            <deleteData createDataKey="createSalesRule" mergeKey="deleteSalesRule"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createSimpleProduct11" stepKey="deleteSimpleProduct11"/>
+            <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
         </after>
         <test name="End2EndB2CUser">
             <annotations>
@@ -52,155 +51,153 @@
                 <testCaseId value="MAGETWO-75411"/>
             </annotations>
             <!-- Step 1: User browses catalog -->
-            <amOnPage url="{{StorefrontHomePage}}" mergeKey="amOnHomePage"/>
+            <amOnPage url="{{StorefrontHomePage}}" stepKey="amOnHomePage"/>
 
             <!-- Open Category -->
-            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" mergeKey="browseClickCategory" />
-            <seeInTitle userInput="$$createCategory.name$$" mergeKey="browseAssertCategoryNameTitle"/>
-            <see userInput="$$createCategory.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" mergeKey="browseAssertCategoryName"/>
-            <see userInput="2" selector="{{StorefrontCategoryMainSection.productCount}} span" mergeKey="browseAssertCategoryProductCount"/>
-            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" mergeKey="browseAssertCategorySimpleProduct1Name"/>
-            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" mergeKey="browseAssertCategorySimpleProduct1Price"/>
-            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('2')}}" mergeKey="browseAssertCategorySimpleProduct2Name"/>
-            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('2')}}" mergeKey="browseAssertCategorySimpleProduct2Price"/>
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="browseClickCategory" />
+            <seeInTitle userInput="$$createCategory.name$$" stepKey="browseAssertCategoryNameTitle"/>
+            <see userInput="$$createCategory.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="browseAssertCategoryName"/>
+            <see userInput="2" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="browseAssertCategoryProductCount"/>
+            <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="browseAssertCategorySimpleProduct1Name"/>
+            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createSimpleProduct1.name$$)}}" stepKey="browseAssertCategorySimpleProduct1Price"/>
+            <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="browseAssertCategorySimpleProduct2Name"/>
+            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createSimpleProduct1.name$$)}}" stepKey="browseAssertCategorySimpleProduct2Price"/>
 
             <!-- View Simple Product 1 -->
-            <click selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" mergeKey="browseClickCategorySimpleProduct1View" />
-            <seeInTitle userInput="$$createSimpleProduct1.name$$" mergeKey="browseAssertSimpleProduct1NameTitle"/>
-            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="browseAssertSimpleProduct1Name"/>
-            <see userInput="$$createSimpleProduct1.sku$$" selector="{{StorefrontProductInfoMainSection.productSku}}" mergeKey="browseAssertSimpleProduct1Sku"/>
-            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" mergeKey="browseAssertSimpleProduct1Price"/>
-            <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" mergeKey="browseAssertSimpleProduct1Stock"/>
+            <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="browseClickCategorySimpleProduct1View" />
+            <seeInTitle userInput="$$createSimpleProduct1.name$$" stepKey="browseAssertSimpleProduct1NameTitle"/>
+            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="browseAssertSimpleProduct1Name"/>
+            <see userInput="$$createSimpleProduct1.sku$$" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="browseAssertSimpleProduct1Sku"/>
+            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="browseAssertSimpleProduct1Price"/>
+            <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="browseAssertSimpleProduct1Stock"/>
 
             <!-- View Simple Product 2 -->
-            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" mergeKey="browseClickCategory1" />
-            <click selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('2')}}" mergeKey="browseClickCategorySimpleProduct2View" />
-            <seeInTitle userInput="$$createSimpleProduct2.name$$" mergeKey="browseAssertSimpleProduct2NameTitle"/>
-            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="browseAssertSimpleProduct2Name"/>
-            <see userInput="$$createSimpleProduct2.sku$$" selector="{{StorefrontProductInfoMainSection.productSku}}" mergeKey="browseAssertSimpleProduct2Sku"/>
-            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" mergeKey="browseAssertSimpleProduct2Price"/>
-            <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" mergeKey="browseAssertSimpleProduct2Stock"/>
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="browseClickCategory1" />
+            <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="browseClickCategorySimpleProduct2View" />
+            <seeInTitle userInput="$$createSimpleProduct2.name$$" stepKey="browseAssertSimpleProduct2NameTitle"/>
+            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="browseAssertSimpleProduct2Name"/>
+            <see userInput="$$createSimpleProduct2.sku$$" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="browseAssertSimpleProduct2Sku"/>
+            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="browseAssertSimpleProduct2Price"/>
+            <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="browseAssertSimpleProduct2Stock"/>
 
             <!-- Step 2: User searches for product -->
             <!-- Quick Search with Product 1 Name -->
-            <fillField userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontQuickSearchSection.searchPhrase}}" mergeKey="searchFillQuickSearch"/>
-            <click selector="{{StorefrontQuickSearchSection.searchButton}}" mergeKey="searchClickQuickSearchButton" />
-            <seeInTitle userInput="Search results for: '$$createSimpleProduct1.name$$'" mergeKey="searchAssertQuickSearchTitle"/>
-            <see userInput="Search results for: '$$createSimpleProduct1.name$$'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" mergeKey="searchAssertQuickSearchName"/>
-            <see userInput="1" selector="{{StorefrontQuickSearchMainSection.productCount}} span" mergeKey="searchAssertProductCount"/>
-            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" mergeKey="searchAssertSimpleProduct1Name"/>
-            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" mergeKey="searchAssertSimpleProduct1Price"/>
-            <click selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" mergeKey="searchClickSimpleProduct1View"/>
-            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="searchAssertSimpleProduct1PageName"/>
+            <fillField userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="searchFillQuickSearch"/>
+            <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="searchClickQuickSearchButton" />
+            <seeInTitle userInput="Search results for: '$$createSimpleProduct1.name$$'" stepKey="searchAssertQuickSearchTitle"/>
+            <see userInput="Search results for: '$$createSimpleProduct1.name$$'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" stepKey="searchAssertQuickSearchName"/>
+            <see userInput="1" selector="{{StorefrontQuickSearchMainSection.productCount}} span" stepKey="searchAssertProductCount"/>
+            <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="searchAssertSimpleProduct1Name"/>
+            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createSimpleProduct1.name$$   )}}" stepKey="searchAssertSimpleProduct1Price"/>
+            <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="searchClickSimpleProduct1View"/>
+            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="searchAssertSimpleProduct1PageName"/>
 
             <!-- Quick Search with common part of product names -->
-            <fillField userInput="testProductName" selector="{{StorefrontQuickSearchSection.searchPhrase}}" mergeKey="searchFillQuickSearchCommonPart"/>
-            <click selector="{{StorefrontQuickSearchSection.searchButton}}" mergeKey="searchClickQuickSearchButtonCommonPart" />
-            <seeInTitle userInput="Search results for: 'testProductName'" mergeKey="searchAssertQuickSearchTitleCommonPart"/>
-            <see userInput="Search results for: 'testProductName'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" mergeKey="searchAssertQuickSearchNameCommonPart"/>
-            <click selector="{{StorefrontCategoryFilterSection.CategoryFilter}}" mergeKey="searchClickCategoryFilterTitleCommonPart" />
-            <scrollTo selector="{{StorefrontCategoryFilterSection.CategoryByName($$createCategory.name$$)}}" mergeKey="searchScrollToClickCategoryFilterCommonPart"/>
-            <click selector="{{StorefrontCategoryFilterSection.CategoryByName($$createCategory.name$$)}}" mergeKey="searchClickCategoryFilterCommonPart" />
-            <see userInput="2" selector="{{StorefrontCategoryMainSection.productCount}} span" mergeKey="searchAssertCategoryProductCount"/>
-            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" mergeKey="searchAssertCategorySimpleProduct1Name"/>
-            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" mergeKey="searchAssertCategorySimpleProduct1Price"/>
-            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('2')}}" mergeKey="searchAssertCategorySimpleProduct2Name"/>
-            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('2')}}" mergeKey="searchAssertCategorySimpleProduct2Price"/>
-            <click selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('2')}}" mergeKey="searchClickSimpleProduct2View"/>
-            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="searchAssertSimpleProduct2PageName"/>
+            <fillField userInput="testProductName" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="searchFillQuickSearchCommonPart"/>
+            <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="searchClickQuickSearchButtonCommonPart" />
+            <seeInTitle userInput="Search results for: 'testProductName'" stepKey="searchAssertQuickSearchTitleCommonPart"/>
+            <see userInput="Search results for: 'testProductName'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" stepKey="searchAssertQuickSearchNameCommonPart"/>
+            <click selector="{{StorefrontCategoryFilterSection.CategoryFilter}}" stepKey="searchClickCategoryFilterTitleCommonPart" />
+            <scrollTo selector="{{StorefrontCategoryFilterSection.CategoryByName($$createCategory.name$$)}}" stepKey="searchScrollToClickCategoryFilterCommonPart"/>
+            <click selector="{{StorefrontCategoryFilterSection.CategoryByName($$createCategory.name$$)}}" stepKey="searchClickCategoryFilterCommonPart" />
+            <see userInput="2" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="searchAssertCategoryProductCount"/>
+            <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="searchAssertCategorySimpleProduct1Name"/>
+            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createSimpleProduct1.name$$)}}" stepKey="searchAssertCategorySimpleProduct1Price"/>
+            <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="searchAssertCategorySimpleProduct2Name"/>
+            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createSimpleProduct2.name$$)}}" stepKey="searchAssertCategorySimpleProduct2Price"/>
+            <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="searchClickSimpleProduct2View"/>
+            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="searchAssertSimpleProduct2PageName"/>
 
             <!-- Quick Search with non-existent product name -->
-            <fillField userInput="nonexistent$$createSimpleProduct1.name$$nonexistent" selector="{{StorefrontQuickSearchSection.searchPhrase}}" mergeKey="searchFillQuickSearchNonExistent"/>
-            <click selector="{{StorefrontQuickSearchSection.searchButton}}" mergeKey="searchClickQuickSearchButtonNonExistent" />
-            <seeInTitle userInput="Search results for: 'nonexistent$$createSimpleProduct1.name$$nonexistent'" mergeKey="searchAssertQuickSearchTitleNonExistent"/>
-            <seeInTitle userInput="Search results for: 'nonexistent$$createSimpleProduct1.name$$nonexistent'" mergeKey="searchAssertQuickSearchTitleNonExistent"/>
-            <see userInput="Search results for: 'nonexistent$$createSimpleProduct1.name$$nonexistent'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" mergeKey="searchAssertQuickSearchNameNonExistent"/>
-            <see userInput="Your search returned no results." selector="{{StorefrontQuickSearchMainSection.message}}" mergeKey="searchAssertQuickSearchMessageNonExistent"/>
+            <fillField userInput="nonexistent$$createSimpleProduct1.name$$nonexistent" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="searchFillQuickSearchNonExistent"/>
+            <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="searchClickQuickSearchButtonNonExistent" />
+            <seeInTitle userInput="Search results for: 'nonexistent$$createSimpleProduct1.name$$nonexistent'" stepKey="searchAssertQuickSearchTitleNonExistent"/>
+            <see userInput="Search results for: 'nonexistent$$createSimpleProduct1.name$$nonexistent'" selector="{{StorefrontQuickSearchMainSection.SearchTitle}}" stepKey="searchAssertQuickSearchNameNonExistent"/>
+            <see userInput="Your search returned no results." selector="{{StorefrontQuickSearchMainSection.message}}" stepKey="searchAssertQuickSearchMessageNonExistent"/>
 
             <!-- Step 3: User adds products to cart -->
             <!-- Add Simple Product 1 to cart -->
-            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" mergeKey="cartClickCategory" />
-            <click selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" mergeKey="cartClickSimpleProduct1"/>
-            <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" mergeKey="cartClickAddSimpleProduct1ToCart" />
-            <waitForElement selector="{{StorefrontMessageSection.message('You added $$createSimpleProduct1.name$$ to your shopping cart.')}}" time="30" mergeKey="cartMessageSimpleProduct1AddedToCart"/>
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory" />
+            <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="cartClickSimpleProduct1"/>
+            <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="cartClickAddSimpleProduct1ToCart" />
+            <waitForElement selector="{{StorefrontMessageSection.message('You added $$createSimpleProduct1.name$$ to your shopping cart.')}}" time="30" stepKey="cartMessageSimpleProduct1AddedToCart"/>
 
             <!-- Add Simple Product 2 to cart -->
-            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" mergeKey="cartClickCategory1" />
-            <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('2')}}" mergeKey="cartMoveMouseOverSimpleProduct2" />
-            <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByNumber('2')}}" mergeKey="cartClickAddSimpleProduct2ToCart" />
-            <waitForElement selector="{{StorefrontMessageSection.message('You added $$createSimpleProduct2.name$$ to your shopping cart.')}}" time="30" mergeKey="cartMessageSimpleProduct2AddedToCart"/>
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory1" />
+            <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($$createSimpleProduct2.name$$)}}" stepKey="cartMoveMouseOverSimpleProduct2" />
+            <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName($$createSimpleProduct2.name$$)}}" stepKey="cartClickAddSimpleProduct2ToCart" />
+            <waitForElement selector="{{StorefrontMessageSection.message('You added $$createSimpleProduct2.name$$ to your shopping cart.')}}" time="30" stepKey="cartMessageSimpleProduct2AddedToCart"/>
 
             <!-- Check products in minicart -->
-            <waitForElement selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" mergeKey="cartWaitForMinicartSimpleProduct1" />
-            <click selector="{{StorefrontMinicartSection.ShowCart}}" mergeKey="cartClickShowMinicart" />
-            <click selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" mergeKey="cartClickMinicartSimpleProduct1" />
-            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="cartAssertMinicartSimpleProduct1Name"/>
-            <waitForElement selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" mergeKey="cartWaitForMinicartSimpleProduct2" />
-            <click selector="{{StorefrontMinicartSection.ShowCart}}" mergeKey="cartClickShowMinicart1" />
-            <click selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" mergeKey="cartClickMinicartSimpleProduct2" />
-            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="cartAssertMinicartSimpleProduct2Name"/>
+            <waitForElement selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" stepKey="cartWaitForMinicartSimpleProduct1" />
+            <click selector="{{StorefrontMinicartSection.ShowCart}}" stepKey="cartClickShowMinicart" />
+            <click selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" stepKey="cartClickMinicartSimpleProduct1" />
+            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="cartAssertMinicartSimpleProduct1Name"/>
+            <waitForElement selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" stepKey="cartWaitForMinicartSimpleProduct2" />
+            <click selector="{{StorefrontMinicartSection.ShowCart}}" stepKey="cartClickShowMinicart1" />
+            <click selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" stepKey="cartClickMinicartSimpleProduct2" />
+            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="cartAssertMinicartSimpleProduct2Name"/>
 
             <!-- Check products in cart -->
-            <amOnPage url="{{CheckoutCartPage}}" mergeKey="cartOnCheckoutCart"/>
-            <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" mergeKey="cartAssertCartSimpleProduct1Name"/>
-            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{CheckoutCartProductSection.ProductPriceByName($$createSimpleProduct1.name$$)}}" mergeKey="cartAssertCartSimpleProduct1Price"/>
-            <seeInField userInput="1" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct1.name$$)}}" mergeKey="cartAssertCartSimpleProduct1Quantity"/>
-            <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" mergeKey="cartClickCartSimpleProduct1" />
-            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="cartAssertAfterCartSimpleProduct1Name"/>
-            <waitForElement selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" mergeKey="cartWaitForMinicartSimpleProduct21" />
-            <click selector="{{StorefrontMinicartSection.ShowCart}}" mergeKey="cartClickShowMinicart2" />
-            <click selector="{{StorefrontMinicartSection.ViewAndEditCart}}" mergeKey="cartClickViewAndEditCart" />
-            <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" mergeKey="cartAssertCartSimpleProduct2Name"/>
-            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{CheckoutCartProductSection.ProductPriceByName($$createSimpleProduct2.name$$)}}" mergeKey="cartAssertCartSimpleProduct2Price"/>
-            <seeInField userInput="1" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct2.name$$)}}" mergeKey="cartAssertCartSimpleProduct2Quantity"/>
-            <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" mergeKey="cartClickCartSimpleProduct2" />
-            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" mergeKey="cartAssertAfterCartSimpleProduct2Name"/>
+            <amOnPage url="{{CheckoutCartPage}}" stepKey="cartOnCheckoutCart"/>
+            <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" stepKey="cartAssertCartSimpleProduct1Name"/>
+            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{CheckoutCartProductSection.ProductPriceByName($$createSimpleProduct1.name$$)}}" stepKey="cartAssertCartSimpleProduct1Price"/>
+            <seeInField userInput="1" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct1.name$$)}}" stepKey="cartAssertCartSimpleProduct1Quantity"/>
+            <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" stepKey="cartClickCartSimpleProduct1" />
+            <see userInput="$$createSimpleProduct1.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="cartAssertAfterCartSimpleProduct1Name"/>
+            <waitForElement selector="{{StorefrontMinicartSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" stepKey="cartWaitForMinicartSimpleProduct21" />
+            <click selector="{{StorefrontMinicartSection.ShowCart}}" stepKey="cartClickShowMinicart2" />
+            <click selector="{{StorefrontMinicartSection.ViewAndEditCart}}" stepKey="cartClickViewAndEditCart" />
+            <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" stepKey="cartAssertCartSimpleProduct2Name"/>
+            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{CheckoutCartProductSection.ProductPriceByName($$createSimpleProduct2.name$$)}}" stepKey="cartAssertCartSimpleProduct2Price"/>
+            <seeInField userInput="1" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct2.name$$)}}" stepKey="cartAssertCartSimpleProduct2Quantity"/>
+            <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" stepKey="cartClickCartSimpleProduct2" />
+            <see userInput="$$createSimpleProduct2.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="cartAssertAfterCartSimpleProduct2Name"/>
 
             <!-- Step 4: User compares products -->
             <!-- Add Simple Product 1 to comparison -->
-            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" mergeKey="compareClickCategory"/>
-            <click selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" mergeKey="compareClickSimpleProduct1"/>
-            <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" mergeKey="compareScrollToAddSimpleProduct1ToCompare"/>
-            <click selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" mergeKey="compareClickAddSimpleProduct1ToCompare"/>
-            <waitForElement selector="{{StorefrontMessageSection.message('You added product $$createSimpleProduct1.name$$ to the comparison list.')}}" time="30" mergeKey="compareMessageSimpleProduct1AddedToCompare"/>
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategory"/>
+            <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="compareClickSimpleProduct1"/>
+            <scrollTo selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="compareScrollToAddSimpleProduct1ToCompare"/>
+            <click selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="compareClickAddSimpleProduct1ToCompare"/>
+            <waitForElement selector="{{StorefrontMessageSection.message('You added product $$createSimpleProduct1.name$$ to the comparison list.')}}" time="30" stepKey="compareMessageSimpleProduct1AddedToCompare"/>
 
             <!-- Add Simple Product 2 to comparison -->
-            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" mergeKey="compareClickCategory1" />
-            <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('2')}}" mergeKey="compareMoveMouseOverSimpleProduct2" />
-            <click selector="{{StorefrontCategoryProductSection.ProductAddToCompareByNumber('2')}}" mergeKey="compareClickAddSimpleProduct2ToCompare"/>
-            <waitForElement selector="{{StorefrontMessageSection.message('You added product $$createSimpleProduct2.name$$ to the comparison list.')}}" time="30" mergeKey="compareMessageSimpleProduct2AddedToCompare"/>
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategory1" />
+            <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($$createSimpleProduct2.name$$)}}" stepKey="compareMoveMouseOverSimpleProduct2" />
+            <click selector="{{StorefrontCategoryProductSection.ProductAddToCompareByName($$createSimpleProduct2.name$$)}}" stepKey="compareClickAddSimpleProduct2ToCompare"/>
+            <waitForElement selector="{{StorefrontMessageSection.message('You added product $$createSimpleProduct2.name$$ to the comparison list.')}}" time="30" stepKey="compareMessageSimpleProduct2AddedToCompare"/>
 
             <!-- Check products in comparison sidebar -->
-            <waitForElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" mergeKey="compareSimpleProduct1InSidebar"/>
-            <waitForElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" mergeKey="compareSimpleProduct2InSidebar"/>
+            <waitForElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName($$createSimpleProduct1.name$$)}}" stepKey="compareSimpleProduct1InSidebar"/>
+            <waitForElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName($$createSimpleProduct2.name$$)}}" stepKey="compareSimpleProduct2InSidebar"/>
 
             <!-- Check products on comparison page -->
-            <click selector="{{StorefrontComparisonSidebarSection.Compare}}" mergeKey="compareClickCompare"/>
-            <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" mergeKey="compareAssertCompareSimpleProduct1Name"/>
-            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName($$createSimpleProduct1.name$$)}}" mergeKey="compareAssertCompareSimpleProduct1Price"/>
-            <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" mergeKey="compareAssertCompareSimpleProduct2Name"/>
-            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName($$createSimpleProduct2.name$$)}}" mergeKey="compareAssertCompareSimpleProduct2Price"/>
+            <click selector="{{StorefrontComparisonSidebarSection.Compare}}" stepKey="compareClickCompare"/>
+            <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($$createSimpleProduct1.name$$)}}" stepKey="compareAssertCompareSimpleProduct1Name"/>
+            <see userInput="$$$createSimpleProduct1.price$$.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName($$createSimpleProduct1.name$$)}}" stepKey="compareAssertCompareSimpleProduct1Price"/>
+            <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($$createSimpleProduct2.name$$)}}" stepKey="compareAssertCompareSimpleProduct2Name"/>
+            <see userInput="$$$createSimpleProduct2.price$$.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName($$createSimpleProduct2.name$$)}}" stepKey="compareAssertCompareSimpleProduct2Price"/>
 
             <!-- Clear comparison sidebar -->
-            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" mergeKey="compareClickCategoryBeforeClear"/>
-            <waitForElementVisible selector="{{StorefrontComparisonSidebarSection.ClearAll}}" time="30" mergeKey="compareWaitForClearAll"/>
-            <click selector="{{StorefrontComparisonSidebarSection.ClearAll}}" mergeKey="compareClickClearAll"/>
-            <waitForPageLoad mergeKey="compareWaitForPageClearOk"/>
-            <waitForElement selector="{{ModalConfirmationSection.OkButton}}" time="30" mergeKey="compareWaitForClearOk"/>
-            <scrollTo selector="{{ModalConfirmationSection.OkButton}}" mergeKey="compareClickClearOk"/>
-            <click selector="{{ModalConfirmationSection.OkButton}}" mergeKey="compareClickClearOk"/>
-            <waitForElement selector="{{StorefrontMessageSection.message('You cleared the comparison list.')}}" time="30" mergeKey="compareMessageCleared"/>
-            <waitForElement selector="{{StorefrontComparisonSidebarSection.NoItemsMessage}}" time="30" mergeKey="compareNoItems"/>
+            <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategoryBeforeClear"/>
+            <waitForElementVisible selector="{{StorefrontComparisonSidebarSection.ClearAll}}" time="30" stepKey="compareWaitForClearAll"/>
+            <click selector="{{StorefrontComparisonSidebarSection.ClearAll}}" stepKey="compareClickClearAll"/>
+            <waitForElementVisible selector="{{ModalConfirmationSection.OkButton}}" time="30" stepKey="compareWaitForClearOk"/>
+            <scrollTo selector="{{ModalConfirmationSection.OkButton}}" stepKey="compareClickClearOk"/>
+            <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="compareClickClearOk"/>
+            <waitForElement selector="{{StorefrontMessageSection.message('You cleared the comparison list.')}}" time="30" stepKey="compareMessageCleared"/>
+            <waitForElement selector="{{StorefrontComparisonSidebarSection.NoItemsMessage}}" time="30" stepKey="compareNoItems"/>
 
             <!-- Step 5: User uses coupon codes -->
-            <amOnPage url="{{CheckoutCartPage}}" mergeKey="couponOnCartPage"/>
-            <click selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" mergeKey="couponClickCouponHeader" />
-            <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" mergeKey="couponWaitForCouponField" />
-            <fillField userInput="$$createSalesRuleCoupon.code$$" selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" mergeKey="couponFillCouponField"/>
-            <click selector="{{StorefrontSalesRuleCartCouponSection.applyButton}}" mergeKey="couponClickApplyButton"/>
-            <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.discountTotal}}" mergeKey="couponWaitForDiscountTotal" />
-            <!--<see userInput="$$createSalesRule.store_labels[0]['store_label']$$" selector="{{StorefrontSalesRuleCartCouponSection.discountLabel}}" mergeKey="couponAssertDiscountLabel" />-->
-            <see userInput="-$24.60" selector="{{StorefrontSalesRuleCartCouponSection.discountTotal}}" mergeKey="couponAssertDiscountTotal" />
+            <amOnPage url="{{CheckoutCartPage}}" stepKey="couponOnCartPage"/>
+            <click selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" stepKey="couponClickCouponHeader" />
+            <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="couponWaitForCouponField" />
+            <fillField userInput="$$createSalesRuleCoupon.code$$" selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="couponFillCouponField"/>
+            <click selector="{{StorefrontSalesRuleCartCouponSection.applyButton}}" stepKey="couponClickApplyButton"/>
+            <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.discountTotal}}" stepKey="couponWaitForDiscountTotal" />
+            <!--<see userInput="$$createSalesRule.store_labels[0]['store_label']$$" selector="{{StorefrontSalesRuleCartCouponSection.discountLabel}}" stepKey="couponAssertDiscountLabel" />-->
+            <see userInput="-$24.60" selector="{{StorefrontSalesRuleCartCouponSection.discountTotal}}" stepKey="couponAssertDiscountTotal" />
 
 
 
