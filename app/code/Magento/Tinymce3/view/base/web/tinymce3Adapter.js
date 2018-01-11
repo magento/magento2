@@ -287,7 +287,7 @@ define([
          */
         setEditorStatus: function (enabled) {
             if (this.activeEditor()) {
-                this.get(this.getId()).getBody().setAttribute('contenteditable', enabled);
+                this.activeEditor().getBody().setAttribute('contenteditable', enabled);
                 this.setToolbarStatus(enabled);
             }
 
