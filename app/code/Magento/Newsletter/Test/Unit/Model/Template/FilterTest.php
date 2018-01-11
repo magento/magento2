@@ -49,7 +49,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $layoutFactory = $this->createPartialMock(\Magento\Framework\View\LayoutFactory::class, ['create']);
         $this->appState = $this->createMock(\Magento\Framework\App\State::class);
         $emogrifier = $this->createMock(\Pelago\Emogrifier::class);
-        $configVariables = $this->createMock(\Magento\Email\Model\Source\Variables::class);
+        $configVariables = $this->createMock(\Magento\Variable\Model\Source\Variables::class);
         $widgetResource = $this->createMock(\Magento\Widget\Model\ResourceModel\Widget::class);
         $widget = $this->createMock(\Magento\Widget\Model\Widget::class);
 

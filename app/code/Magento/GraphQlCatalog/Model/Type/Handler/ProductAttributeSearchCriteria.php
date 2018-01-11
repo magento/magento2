@@ -6,8 +6,8 @@
 
 namespace Magento\GraphQlCatalog\Model\Type\Handler;
 
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\GraphQl\Model\EntityAttributeList;
-use Magento\GraphQl\Model\Type\ServiceContract\TypeGenerator;
 use Magento\GraphQl\Model\Type\HandlerInterface;
 use Magento\Framework\GraphQl\TypeFactory;
 use Magento\GraphQl\Model\Type\Handler\Pool;
@@ -21,7 +21,7 @@ class ProductAttributeSearchCriteria implements HandlerInterface
     const PRODUCT_ATTRIBUTE_SEARCH_CRITERIA_TYPE_NAME = 'ProductAttributeSearchCriteria';
 
     /**
-     * @var TypeGenerator
+     * @var Pool
      */
     private $pool;
 
@@ -36,18 +36,26 @@ class ProductAttributeSearchCriteria implements HandlerInterface
     private $typeFactory;
 
     /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $productAttributeRepository;
+
+    /**
      * @param Pool $pool
      * @param EntityAttributeList $entityAttributeList
      * @param TypeFactory $typeFactory
+     * @param ProductAttributeRepositoryInterface $productAttributeRepository
      */
     public function __construct(
         Pool $pool,
         EntityAttributeList $entityAttributeList,
-        TypeFactory $typeFactory
+        TypeFactory $typeFactory,
+        ProductAttributeRepositoryInterface $productAttributeRepository
     ) {
         $this->pool = $pool;
         $this->entityAttributeList = $entityAttributeList;
         $this->typeFactory = $typeFactory;
+        $this->productAttributeRepository = $productAttributeRepository;
     }
 
     /**
@@ -72,10 +80,13 @@ class ProductAttributeSearchCriteria implements HandlerInterface
     private function getFields()
     {
         $productAttributeSearchCriteriaClassName = self::PRODUCT_ATTRIBUTE_SEARCH_CRITERIA_TYPE_NAME;
-        $attributes = $this->entityAttributeList->getDefaultEntityAttributes(\Magento\Catalog\Model\Product::ENTITY);
+        $attributes = $this->entityAttributeList->getDefaultEntityAttributes(
+            \Magento\Catalog\Model\Product::ENTITY,
+            $this->productAttributeRepository
+        );
         $schema = [];
-        foreach ($attributes as $attribute) {
-            $schema[$attribute->getAttributeCode()] = $this->pool->getType(
+        foreach (array_keys($attributes) as $attributeCode) {
+            $schema[$attributeCode] = $this->pool->getType(
                 SearchCriteriaExpression::SEARCH_CRITERIA_EXPRESSION_TYPE_NAME
             );
         }

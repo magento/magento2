@@ -8,20 +8,19 @@ namespace Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\Fo
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\TierPrice;
+use Magento\GraphQlCatalog\Model\Resolver\Products\DataProvider\Product\FormatterInterface;
 
 /**
  * Format a product's tier price information to conform to GraphQL schema representation
  */
-class TierPrices
+class TierPrices implements FormatterInterface
 {
     /**
      * Format product's tier price data to conform to GraphQL schema
      *
-     * @param Product $product
-     * @param array $productData
-     * @return array
+     * {@inheritdoc}
      */
-    public function format(Product $product, array $productData)
+    public function format(Product $product, array $productData = [])
     {
         $tierPrices = $product->getTierPrices();
         if ($tierPrices) {

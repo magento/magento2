@@ -94,12 +94,12 @@ define([
             this.$wysiwygEditorButton.attr('disabled', status);
 
             /* eslint-disable no-undef */
-            if (tinyMCE) {
-                _.each(tinyMCE.activeEditor.controlManager.controls, function (property, index, controls) {
+            if (wysiwygAdapter) {
+                _.each(wysiwygAdapter.activeEditor().controlManager.controls, function (property, index, controls) {
                     controls[property.id].setDisabled(status);
                 });
 
-                tinyMCE.activeEditor.getBody().setAttribute('contenteditable', !status);
+                wysiwygAdapter.activeEditor().getBody().setAttribute('contenteditable', !status);
             }
 
             /* eslint-enable  no-undef*/
