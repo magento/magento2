@@ -65,6 +65,15 @@ class Collection extends SourceItemCollection
         );
     }
 
+    protected function _initSelect()
+    {
+        $this->addFilterToMap('inventory_source_code', 'main_table.source_code');
+        $this->addFilterToMap('source_item_sku', 'main_table.sku');
+        $this->addFilterToMap('product_name', 'catalog_product_entity_varchar.value');
+
+        return parent::_initSelect();
+    }
+
     public function joinCatalogProduct()
     {
         $nameAttribute = $this->attributeRepositoryInterface->get('catalog_product', 'name');
