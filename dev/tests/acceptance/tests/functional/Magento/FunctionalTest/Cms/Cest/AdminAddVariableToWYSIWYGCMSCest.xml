@@ -41,10 +41,10 @@
             <waitForPageLoad stepKey="waitForPageLoad2"/>
             <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
             <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
-            <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+            <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
             <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
-            <seeElement selector="{{CmsWYSIWYGSection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
-            <click selector="{{CmsWYSIWYGSection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon1" />
+            <seeElement selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
+            <click selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon1" />
             <waitForLoadingMaskToDisappear stepKey="waitForPageLoad3"/>
             <waitForText userInput="Insert Variable" stepKey="waitForSlideOutOpen"/>
             <!--see Insert Variable button disabled-->
@@ -61,7 +61,7 @@
             <see selector="{{VariableSection.InsertVariableBtnEnabled}}" userInput="Insert Variable" stepKey="seeInsertVarialeEnabled" />
             <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save1" />
             <waitForPageLoad stepKey="waitForPageLoad8" />
-            <click selector="{{CmsWYSIWYGSection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon2" />
+            <click selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon2" />
             <waitForPageLoad stepKey="waitForPageLoad4"/>
             <!--see custom variable-->
             <see userInput="{{customVariable.code}}"  stepKey="seeCustomVariable"/>

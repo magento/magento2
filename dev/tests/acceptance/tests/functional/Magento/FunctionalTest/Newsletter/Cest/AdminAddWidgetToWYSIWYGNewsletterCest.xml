@@ -33,7 +33,7 @@
             <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />
             <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
             <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
-            <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+            <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
             <click selector="{{NewsletterWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
             <wait time="10" stepKey="waitForPageLoad2" />
             <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />

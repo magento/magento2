@@ -33,10 +33,10 @@
             <waitForPageLoad stepKey="waitForPageLoad1"/>
             <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
             <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
-            <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+            <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
             <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
-            <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
-            <click selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
+            <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
+            <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
             <waitForPageLoad stepKey="waitForPageLoad2"/>
             <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
             <!--see Insert Widget button disabled-->

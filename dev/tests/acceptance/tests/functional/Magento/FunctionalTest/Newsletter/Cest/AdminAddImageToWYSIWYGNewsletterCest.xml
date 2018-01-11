@@ -34,45 +34,45 @@
             <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
             <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
             <waitForElementVisible selector="{{NewsletterWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
-            <click selector="{{CmsWYSIWYGSection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
+            <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
             <waitForPageLoad stepKey="waitForPageLoad2" />
-            <click selector="{{CmsWYSIWYGSection.Browse}}" stepKey="clickBrowse" />
-            <waitForElement selector="{{CmsWYSIWYGSection.CancelBtn}}" stepKey="waitForCancelBtn" />
+            <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse" />
+            <waitForElement selector="{{MediaGallerySection.CancelBtn}}" stepKey="waitForCancelBtn" />
             <waitForPageLoad stepKey="waitForPageLoad3" />
             <waitForLoadingMaskToDisappear stepKey="waitForLoading1" />
             <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
-            <waitForElement selector="{{CmsWYSIWYGSection.StorageRootArrow}}" stepKey="waitForStorageFoot" />
-            <see selector="{{CmsWYSIWYGSection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn" />
-            <see selector="{{CmsWYSIWYGSection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn" />
-            <see selector="{{CmsWYSIWYGSection.InsertFile}}" userInput="Add Selected" stepKey="seeAddSelectedBtn" />
-            <click selector="{{CmsWYSIWYGSection.CreateFolder}}" stepKey="createFolder"/>
-            <waitForElementVisible selector="{{CmsWYSIWYGSection.FolderName}}" stepKey="waitForPopUp" />
-            <fillField selector="{{CmsWYSIWYGSection.FolderName}}" userInput="{{ImageFolder.name}}" stepKey="fillFolderName" />
-            <click selector="{{CmsWYSIWYGSection.AcceptFolderName}}" stepKey="acceptFolderName" />
+            <waitForElement selector="{{MediaGallerySection.StorageRootArrow}}" stepKey="waitForStorageFoot" />
+            <see selector="{{MediaGallerySection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn" />
+            <see selector="{{MediaGallerySection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn" />
+            <see selector="{{MediaGallerySection.InsertFile}}" userInput="Add Selected" stepKey="seeAddSelectedBtn" />
+            <click selector="{{MediaGallerySection.CreateFolder}}" stepKey="createFolder"/>
+            <waitForElementVisible selector="{{MediaGallerySection.FolderName}}" stepKey="waitForPopUp" />
+            <fillField selector="{{MediaGallerySection.FolderName}}" userInput="{{ImageFolder.name}}" stepKey="fillFolderName" />
+            <click selector="{{MediaGallerySection.AcceptFolderName}}" stepKey="acceptFolderName" />
             <waitForLoadingMaskToDisappear stepKey="waitForLoading3" />
-            <conditionalClick selector="{{CmsWYSIWYGSection.StorageRootArrow}}" dependentSelector="{{CmsWYSIWYGSection.checkIfArrowExpand}}" stepKey="clickArrowIfCloses" visible="true"/>
+            <conditionalClick selector="{{MediaGallerySection.StorageRootArrow}}" dependentSelector="{{MediaGallerySection.checkIfArrowExpand}}" stepKey="clickArrowIfCloses" visible="true"/>
             <waitForText userInput="{{ImageFolder.name}}" stepKey="waitForNewFolder" />
             <click userInput="{{ImageFolder.name}}" stepKey="clickOnCreatedFolder" />
             <waitForLoadingMaskToDisappear stepKey="waitForLoading4" />
-            <attachFile selector="{{CmsWYSIWYGSection.BrowseUploadImage}}" userInput="{{ImageUpload.file}}" stepKey="uploadImage1"/>
+            <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{ImageUpload.file}}" stepKey="uploadImage1"/>
             <waitForLoadingMaskToDisappear stepKey="waitForLoading5" />
-            <waitForElementVisible  selector="{{CmsWYSIWYGSection.image(ImageUpload.file)}}" stepKey="waitForUploadImage1" />
-            <seeElement selector="{{CmsWYSIWYGSection.imageSelected(ImageUpload.file)}}" stepKey="seeImageSelected" />
-            <see selector="{{CmsWYSIWYGSection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn"/>
-            <click selector="{{CmsWYSIWYGSection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected" />
+            <waitForElementVisible  selector="{{MediaGallerySection.image(ImageUpload.file)}}" stepKey="waitForUploadImage1" />
+            <seeElement selector="{{MediaGallerySection.imageSelected(ImageUpload.file)}}" stepKey="seeImageSelected" />
+            <see selector="{{MediaGallerySection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn"/>
+            <click selector="{{MediaGallerySection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected" />
             <waitForText userInput="OK" stepKey="waitForConfirm" />
-            <click selector="{{CmsWYSIWYGSection.confirmDelete}}" stepKey="confirmDelete" />
-            <waitForElementNotVisible selector="{{CmsWYSIWYGSection.image(ImageUpload.file)}}" stepKey="waitForImageDeleted" />
-            <dontSeeElement selector="{{CmsWYSIWYGSection.image(ImageUpload.file)}}" stepKey="dontSeeImage" />
-            <attachFile selector="{{CmsWYSIWYGSection.BrowseUploadImage}}" userInput="{{ImageUpload.file}}" stepKey="uploadImage2"/>
+            <click selector="{{MediaGallerySection.confirmDelete}}" stepKey="confirmDelete" />
+            <waitForElementNotVisible selector="{{MediaGallerySection.image(ImageUpload.file)}}" stepKey="waitForImageDeleted" />
+            <dontSeeElement selector="{{MediaGallerySection.image(ImageUpload.file)}}" stepKey="dontSeeImage" />
+            <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{ImageUpload.file}}" stepKey="uploadImage2"/>
             <waitForLoadingMaskToDisappear stepKey="waitForLoading6" />
-            <waitForElementVisible selector="{{CmsWYSIWYGSection.image(ImageUpload.file)}}" stepKey="waitForUploadImage2" />
-            <click selector="{{CmsWYSIWYGSection.InsertFile}}" stepKey="clickInsertBtn" />
+            <waitForElementVisible selector="{{MediaGallerySection.image(ImageUpload.file)}}" stepKey="waitForUploadImage2" />
+            <click selector="{{MediaGallerySection.InsertFile}}" stepKey="clickInsertBtn" />
             <waitForLoadingMaskToDisappear stepKey="waitForLoading7" />
-            <waitForElementVisible selector="{{CmsWYSIWYGSection.OkBtn}}" stepKey="waitForOkBtn" />
-            <fillField selector="{{CmsWYSIWYGSection.ImageDescription}}" userInput="{{ImageUpload.content}}" stepKey="fillImageDescription" />
-            <fillField selector="{{CmsWYSIWYGSection.Height}}" userInput="{{ImageUpload.height}}" stepKey="fillImageHeight" />
-            <click selector="{{CmsWYSIWYGSection.OkBtn}}" stepKey="clickOkBtn" />
+            <waitForElementVisible selector="{{MediaGallerySection.OkBtn}}" stepKey="waitForOkBtn" />
+            <fillField selector="{{MediaGallerySection.ImageDescription}}" userInput="{{ImageUpload.content}}" stepKey="fillImageDescription" />
+            <fillField selector="{{MediaGallerySection.Height}}" userInput="{{ImageUpload.height}}" stepKey="fillImageHeight" />
+            <click selector="{{MediaGallerySection.OkBtn}}" stepKey="clickOkBtn" />
             <waitForPageLoad stepKey="waitForPageLoad4"/>
             <!--Go to Storefront-->
             <click selector="{{BasicFieldNewsletterSection.save}}" stepKey="clickSaveTemplate"/>

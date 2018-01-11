@@ -87,9 +87,9 @@
             <click selector="{{CmsPagesPageActionsSection.edit('$$createPreReqCMSPage.identifier$$')}}" stepKey="clickEdit" />
             <waitForPageLoad stepKey="waitForPageLoad7" />
             <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
-            <waitForElementVisible selector="{{CmsWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
-            <seeElement selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
-            <click selector="{{CmsWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
+            <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+            <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
+            <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
             <waitForPageLoad stepKey="waitForPageLoad8" />
             <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static Block" stepKey="selectCMSStaticBlock" />
             <waitForLoadingMaskToDisappear stepKey="waitForLoading7" />
