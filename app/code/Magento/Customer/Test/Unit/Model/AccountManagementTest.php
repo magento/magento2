@@ -983,6 +983,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
             ->with(['customer' => $this->customerSecure, 'store' => $this->store])
             ->willReturnSelf();
         $this->transportBuilder->expects($this->once())
+            ->method('setScopeId')
+            ->willReturnSelf();
+        $this->transportBuilder->expects($this->once())
             ->method('setFrom')
             ->with($sender)
             ->willReturnSelf();

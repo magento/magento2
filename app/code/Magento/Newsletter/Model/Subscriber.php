@@ -677,6 +677,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             ]
         )->setTemplateVars(
             ['subscriber' => $this, 'store' => $this->_storeManager->getStore()]
+        )->setScopeId(
+            $this->_storeManager->getStore()->getId()
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_CONFIRM_EMAIL_IDENTITY,
@@ -730,6 +732,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             ]
         )->setTemplateVars(
             ['subscriber' => $this]
+        )->setScopeId(
+            $this->_storeManager->getStore()->getId()
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_SUCCESS_EMAIL_IDENTITY,
@@ -782,6 +786,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             ]
         )->setTemplateVars(
             ['subscriber' => $this]
+        )->setScopeId(
+            $this->_storeManager->getStore()->getId()
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY,

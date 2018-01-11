@@ -162,6 +162,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             'setTemplateIdentifier',
             'setTemplateOptions',
             'setTemplateVars',
+            'setScopeId',
             'setFrom',
             'addTo',
         ];

@@ -210,6 +210,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $this->returnSelf()
         );
 
+        $this->_transportBuilder->expects($this->once())->method('setScopeId')->will($this->returnSelf());
         $this->_transportBuilder->expects($this->once())->method('addBcc')->will($this->returnSelf());
         $this->_transportBuilder->expects(
             $this->once()
