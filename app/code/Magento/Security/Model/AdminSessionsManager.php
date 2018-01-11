@@ -26,7 +26,13 @@ class AdminSessionsManager
      */
     const LOGOUT_REASON_USER_LOCKED = 10;
 
-    const INTERVAL_BETWEEN_CONSECUTIVE_PROLONGS = 60;
+    /**
+     * Max lifetime for session prolong to be valid (sec)
+     *
+     * Means that after session was prolonged
+     * all other prolongs will be ignored within this period
+     */
+    const MAX_INTERVAL_BETWEEN_CONSECUTIVE_PROLONGS = 60;
 
     /**
      * @var ConfigInterface
@@ -129,7 +135,10 @@ class AdminSessionsManager
         if ($this->lastProlongIsOldEnough()) {
             $this->getCurrentSession()->setData(
                 'updated_at',
-                $this->authSession->getUpdatedAt()
+                date(
+                    \Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT,
+                    $this->authSession->getUpdatedAt()
+                )
             );
             $this->getCurrentSession()->save();
         }
@@ -303,22 +312,44 @@ class AdminSessionsManager
         return $this->adminSessionInfoCollectionFactory->create();
     }
 
+    /**
+     * Calculates diff between now and last session updated_at
+     * and decides whether new prolong must be triggered or not
+     *
+     * This is done to limit amount of session prolongs and updates to database
+     * within some period of time - X
+     * X - is calculated in getIntervalBetweenConsecutiveProlongs()
+     *
+     * @see getIntervalBetweenConsecutiveProlongs()
+     * @return bool
+     */
     private function lastProlongIsOldEnough()
     {
-        $lastProlongTimestamp = $this->getCurrentSessionUpdatedAtAsTimestamp();
+        $lastProlongTimestamp = strtotime($this->getCurrentSession()->getUpdatedAt());
         $nowTimestamp = $this->authSession->getUpdatedAt();
 
         $diff = $nowTimestamp - $lastProlongTimestamp;
 
-        return $diff > self::INTERVAL_BETWEEN_CONSECUTIVE_PROLONGS;
+        return (float) $diff > $this->getIntervalBetweenConsecutiveProlongs();
     }
 
-    private function getCurrentSessionUpdatedAtAsTimestamp()
+    /**
+     * Calculates lifetime for session prolong to be valid
+     *
+     * Calculation is based on admin session lifetime
+     * Calculated result is in seconds and is in the interval
+     * between 1 (including) and MAX_INTERVAL_BETWEEN_CONSECUTIVE_PROLONGS (including)
+     *
+     * @return float
+     */
+    private function getIntervalBetweenConsecutiveProlongs()
     {
-        $updatedAt = $this->getCurrentSession()->getUpdatedAt();
-
-        return is_int($updatedAt)
-            ? $updatedAt
-            : strtotime($updatedAt);
+        return (float) max(
+            1,
+            min(
+                log((float)$this->securityConfig->getAdminSessionLifetime()),
+                self::MAX_INTERVAL_BETWEEN_CONSECUTIVE_PROLONGS
+            )
+        );
     }
 }
