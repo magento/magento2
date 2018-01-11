@@ -96,8 +96,7 @@ define([
                 this.$wysiwygEditorButton.attr('disabled', disabled);
             }
 
-            /* eslint-disable no-undef */
-            if (typeof wysiwyg !== 'undefined') {
+            if (!_.isUndefined(wysiwyg)) {
                 if (disabled) {
                     wysiwyg.setToolbarStatus(false);
                     wysiwyg.getPluginButtons().attr('disabled', 'disabled');
