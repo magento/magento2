@@ -77,7 +77,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
         try {
             $this->_imageHandler = new \Imagick($this->_fileName);
         } catch (\ImagickException $e) {
-            throw new \Exception('Unsupported image format.', $e->getCode(), $e);
+            throw new \Exception(sprintf('Unsupported image format. File: %s', $this->_fileName), $e->getCode(), $e);
         }
 
         $this->backgroundColor();
