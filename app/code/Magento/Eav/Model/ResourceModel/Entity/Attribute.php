@@ -180,7 +180,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
          * @todo need use default source model of entity type !!!
          */
         if (!$object->getId()) {
-            if ($object->getFrontendInput() == 'select') {
+            if ($object->getFrontendInput() == 'select' && !$object->hasSourceModel()) {
                 $object->setSourceModel(\Magento\Eav\Model\Entity\Attribute\Source\Table::class);
             }
         }

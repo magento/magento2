@@ -279,14 +279,20 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     private function processAttributeData(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
-        $attribute->setBackendType(
-            $attribute->getBackendTypeByInput($attribute->getFrontendInput())
-        );
-        $attribute->setSourceModel(
-            $this->productHelper->getAttributeSourceModelByInputType($attribute->getFrontendInput())
-        );
-        $attribute->setBackendModel(
-            $this->productHelper->getAttributeBackendModelByInputType($attribute->getFrontendInput())
-        );
+        if (!$attribute->getBackendType()) {
+            $attribute->setBackendType(
+                $attribute->getBackendTypeByInput($attribute->getFrontendInput())
+            );
+        }
+        if (!$attribute->getSourceModel()) {
+            $attribute->setSourceModel(
+                $this->productHelper->getAttributeSourceModelByInputType($attribute->getFrontendInput())
+            );
+        }
+        if (!$attribute->getBackendModel()) {
+            $attribute->setBackendModel(
+                $this->productHelper->getAttributeBackendModelByInputType($attribute->getFrontendInput())
+            );
+        }
     }
 }
