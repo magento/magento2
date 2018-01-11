@@ -9,4 +9,5 @@
     <preference for="Magento\InventoryShipping\Model\ShippingAlgorithmInterface" type="Magento\InventoryShipping\Model\DefaultShippingAlgorithm"/>
     <preference for="Magento\InventoryShipping\Model\ShippingAlgorithmResultInterface" type="Magento\InventoryShipping\Model\ShippingAlgorithmResult"/>
     <preference for="Magento\InventoryShipping\Model\SourceSelectionInterface" type="Magento\InventoryShipping\Model\SourceSelection"/>
+    <preference for="Magento\InventoryShipping\Model\SourceItemSelectionInterface" type="Magento\InventoryShipping\Model\SourceItemSelection"/>
 </config>

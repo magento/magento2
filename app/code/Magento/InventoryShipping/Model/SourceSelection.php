@@ -18,32 +18,18 @@ class SourceSelection implements SourceSelectionInterface
     private $sourceCode;
 
     /**
-     * @var float
+     * @var SourceItemSelectionInterface[]
      */
-    private $qty;
+    private $sourceItemSelections;
 
     /**
-     * @var float
-     */
-    private $qtyAvailable;
-
-    /**
-     * @var string
-     */
-    private $sku;
-
-    /**
-     * @param string $sku
      * @param string $sourceCode
-     * @param float $qty
-     * @param float $qtyAvailable
+     * @param SourceItemSelectionInterface[] $sourceItemSelections
      */
-    public function __construct(string $sku, string $sourceCode, float $qty, float $qtyAvailable)
+    public function __construct(string $sourceCode, array $sourceItemSelections)
     {
-        $this->sku = $sku;
         $this->sourceCode = $sourceCode;
-        $this->qty = $qty;
-        $this->qtyAvailable = $qtyAvailable;
+        $this->sourceItemSelections = $sourceItemSelections;
     }
 
     /**
@@ -57,24 +43,8 @@ class SourceSelection implements SourceSelectionInterface
     /**
      * @inheritdoc
      */
-    public function getQty(): float
+    public function getSourceItemSelections(): array
     {
-        return $this->qty;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getQtyAvailable(): float
-    {
-        return $this->qtyAvailable;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getSku(): string
-    {
-        return $this->sku;
+        return $this->sourceItemSelections;
     }
 }

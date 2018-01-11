@@ -8,19 +8,12 @@ declare(strict_types=1);
 namespace Magento\InventoryShipping\Model;
 
 /**
- * Represents part of shipping algorithm result
+ * Represents shipping algorithm results for the specific source
  *
  * @api
  */
 interface SourceSelectionInterface
 {
-    /**
-     * Get item SKU
-     *
-     * @return string
-     */
-    public function getSku(): string;
-
     /**
      * Get source code
      *
@@ -29,16 +22,7 @@ interface SourceSelectionInterface
     public function getSourceCode(): string;
 
     /**
-     * Get quantity which will be deducted for this source
-     *
-     * @return float
+     * @return SourceItemSelectionInterface[]
      */
-    public function getQty(): float;
-
-    /**
-     * Get available quantity for this source
-     *
-     * @return float
-     */
-    public function getQtyAvailable(): float;
+    public function getSourceItemSelections(): array;
 }

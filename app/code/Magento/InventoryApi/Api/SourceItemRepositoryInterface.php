@@ -44,12 +44,4 @@ interface SourceItemRepositoryInterface
      * @return \Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria): SourceItemSearchResultsInterface;
-
-    /**
-     * Find SourceItems by SKU
-     *
-     * @param string $sku
-     * @return \Magento\InventoryApi\Api\Data\SourceItemSearchResultsInterface
-     */
-    public function getBySku(string $sku): SourceItemSearchResultsInterface;
 }

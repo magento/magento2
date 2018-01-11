@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\InventoryCatalog\Ui\DataProvider\Component\Listing\Column;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\InventoryApi\Api\Data\SourceItemInterface;
+use Magento\Inventory\Model\SourceItemFinderInterface;
 use Magento\InventoryApi\Api\SourceItemRepositoryInterface;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
@@ -36,11 +36,17 @@ class SourceItems extends Column
     private $sourceRepository;
 
     /**
+     * @var SourceItemFinderInterface
+     */
+    private $sourceItemFinder;
+
+    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param SourceItemRepositoryInterface $sourceItemRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SourceRepositoryInterface $sourceRepository
+     * @param SourceItemFinderInterface $sourceItemFinder
      * @param array $components
      * @param array $data
      */
@@ -50,6 +56,7 @@ class SourceItems extends Column
         SourceItemRepositoryInterface $sourceItemRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SourceRepositoryInterface $sourceRepository,
+        SourceItemFinderInterface $sourceItemFinder,
         array $components = [],
         array $data = []
     ) {
@@ -57,6 +64,7 @@ class SourceItems extends Column
         $this->sourceItemRepository = $sourceItemRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->sourceRepository = $sourceRepository;
+        $this->sourceItemFinder = $sourceItemFinder;
     }
 
     /**
@@ -85,10 +93,7 @@ class SourceItems extends Column
      */
     private function getSourceItemsData(string $sku): array
     {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(SourceItemInterface::SKU, $sku)
-            ->create();
-        $sourceItems = $this->sourceItemRepository->getList($searchCriteria)->getItems();
+        $sourceItems = $this->sourceItemFinder->findBySku($sku)->getItems();
 
         $sourceItemsData = [];
         foreach ($sourceItems as $sourceItem) {

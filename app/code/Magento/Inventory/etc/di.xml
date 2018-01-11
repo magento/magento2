@@ -12,6 +12,7 @@
     <preference for="Magento\InventoryApi\Api\Data\SourceCarrierLinkInterface" type="Magento\Inventory\Model\SourceCarrierLink"/>
     <preference for="Magento\InventoryApi\Api\Data\SourceSearchResultsInterface" type="Magento\Inventory\Model\SourceSearchResults"/>
     <preference for="Magento\Inventory\Model\SourceCarrierLinkManagementInterface" type="Magento\Inventory\Model\SourceCarrierLinkManagement"/>
+    <preference for="Magento\Inventory\Model\SourceItemFinderInterface" type="Magento\Inventory\Model\SourceItemFinder"/>
     <preference for="Magento\Inventory\Model\Source\Command\GetInterface" type="Magento\Inventory\Model\Source\Command\Get"/>
     <preference for="Magento\Inventory\Model\Source\Command\GetListInterface" type="Magento\Inventory\Model\Source\Command\GetList"/>
     <preference for="Magento\Inventory\Model\Source\Command\SaveInterface" type="Magento\Inventory\Model\Source\Command\Save"/>

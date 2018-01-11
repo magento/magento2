@@ -59,8 +59,10 @@ class SourceSelection extends Template implements TabInterface
 
     /**
      * Get source selections for order
+     *
+     * @return SourceSelectionInterface[]
      */
-    public function getSourceSelections()
+    public function getSourceSelections(): array
     {
         $order = $this->registry->registry('current_order');
         return $this->shippingAlgorithm->execute($order)->getSourceSelections();
