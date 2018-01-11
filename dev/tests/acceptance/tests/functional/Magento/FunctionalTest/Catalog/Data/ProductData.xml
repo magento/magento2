@@ -18,8 +18,8 @@
         <data key="urlKey" unique="suffix">testurlkey</data>
         <data key="status">1</data>
         <data key="quantity">100</data>
-        <required-entity type="product_extension_attribute">EavStockItem</required-entity>
-        <required-entity type="custom_attribute_array">CustomAttributeCategoryIds</required-entity>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
     <entity name="SimpleProduct" type="product">
         <data key="sku" unique="suffix">SimpleProduct</data>
@@ -29,8 +29,8 @@
         <data key="price">123.00</data>
         <data key="visibility">4</data>
         <data key="status">1</data>
-        <required-entity type="product_extension_attribute">EavStockItem</required-entity>
-        <required-entity type="custom_attribute_array">CustomAttributeCategoryIds</required-entity>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
     <entity name="NewSimpleProduct" type="product">
         <data key="price">321.00</data>
@@ -43,8 +43,8 @@
         <data key="price">1.23</data>
         <data key="visibility">4</data>
         <data key="status">1</data>
-        <required-entity type="product_extension_attribute">EavStockItem</required-entity>
-        <required-entity type="custom_attribute">CustomAttributeProductAttribute</required-entity>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
     <entity name="ImageUpload" type="uploadImage">
         <data key="title" unique="suffix">Image1</data>

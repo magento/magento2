@@ -29,6 +29,6 @@
         <data key="is_visible_in_grid">true</data>
         <data key="is_filterable_in_grid">true</data>
         <data key="used_for_sort_by">true</data>
-        <required-entity type="FrontendLabel">ProductAttributeFrontendLabel</required-entity>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
 </entities>

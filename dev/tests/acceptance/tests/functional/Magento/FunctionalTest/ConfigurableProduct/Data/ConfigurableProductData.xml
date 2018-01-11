@@ -18,8 +18,8 @@
         <data key="urlKey" unique="suffix">configurableurlkey</data>
         <data key="status">1</data>
         <data key="quantity">100</data>
-        <required-entity type="product_extension_attribute">EavStockItem</required-entity>
-        <required-entity type="custom_attribute_array">CustomAttributeCategoryIds</required-entity>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
     <entity name="ConfigurableProductAddChild" type="ConfigurableProductAddChild">
         <var key="sku" entityKey="sku" entityType="product" />

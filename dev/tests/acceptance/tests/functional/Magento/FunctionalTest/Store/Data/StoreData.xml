@@ -14,6 +14,6 @@
         <data key="store_id">null</data>
         <data key="store_action">add</data>
         <data key="store_type">group</data>
-        <required-entity type="storeGroup">customStoreGroup</required-entity>
+        <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
     </entity>
 </entities>

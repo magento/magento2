@@ -11,7 +11,7 @@
     <entity name="ConfigurableProductTwoOptions" type="ConfigurableProductOption">
         <var key="attribute_id" entityKey="attribute_id" entityType="ProductAttribute" />
         <data key="label">option</data>
-        <required-entity type="ValueIndex">ValueIndex1</required-entity>
-        <required-entity type="ValueIndex">ValueIndex2</required-entity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex2</requiredEntity>
     </entity>
 </entities>
