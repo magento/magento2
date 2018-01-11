@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Cms\Model\Wysiwyg\Config"/>
+    <type name="Magento\Widget\Model\Widget">
+        <plugin name="change_widget_placeholder" type="Magento\Tinymce3\Model\Plugin\Widget" />
+    </type>
+    <type name="Magento\Cms\Model\Wysiwyg\CompositeConfigProvider">
+        <arguments>
+            <argument name="wysiwygConfigPostProcessor" xsi:type="array">
+                <item name="Magento_Tinymce3/tinymce3Adapter" xsi:type="string">Magento\Tinymce3\Model\Config\Wysiwyg\Config</item>
+            </argument>
+            <argument name="variablePluginConfigProvider" xsi:type="array">
+                <item name="Magento_Tinymce3/tinymce3Adapter" xsi:type="string">Magento\Tinymce3\Model\Config\Variable\Config</item>
+            </argument>
+            <argument name="widgetPluginConfigProvider" xsi:type="array">
+                <item name="Magento_Tinymce3/tinymce3Adapter" xsi:type="string">Magento\Tinymce3\Model\Config\Widget\Config</item>
+            </argument>
+            <argument name="galleryConfigProvider" xsi:type="array">
+                <item name="Magento_Tinymce3/tinymce3Adapter" xsi:type="string">Magento\Cms\Model\WysiwygDefaultConfig</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Tinymce3\Model\Config\Widget\PlaceholderImagesPool">
+        <arguments>
+            <argument name="widgetPlaceholders" xsi:type="array">
+                <item name="Magento\Catalog\Block\Product\Widget\NewWidget" xsi:type="string">Magento_Tinymce3::images/catalog/product_widget_new.png</item>
+                <item name="Magento\Catalog\Block\Product\Widget\Link" xsi:type="string">Magento_Tinymce3::images/catalog/product_widget_link.png</item>
+                <item name="Magento\Catalog\Block\Category\Widget\Link" xsi:type="string">Magento_Tinymce3::images/catalog/category_widget_link.png</item>
+                <item name="Magento\Catalog\Block\Widget\RecentlyCompared" xsi:type="string">Magento_Tinymce3::images/catalog/product_widget_compared.png</item>
+                <item name="Magento\Catalog\Block\Widget\RecentlyViewed" xsi:type="string">Magento_Tinymce3::images/catalog/product_widget_viewed.png</item>
+                <item name="Magento\Cms\Block\Widget\Page\Link" xsi:type="string">Magento_Tinymce3::images/cms/widget_page_link.png</item>
+                <item name="Magento\Cms\Block\Widget\Block" xsi:type="string">Magento_Tinymce3::images/cms/widget_block.png</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Cms\Model\Config\Source\Wysiwyg\Editor">
+        <arguments>
+            <argument name="adapterOptions" xsi:type="array">
+                <item name="tinymce3" xsi:type="array">
+                    <item name="value" xsi:type="const">Magento\Tinymce3\Model\Config\Source\Wysiwyg\Editor::WYSIWYG_EDITOR_CONFIG_VALUE</item>
+                    <item name="label" xsi:type="string" translatable="true">TinyMCE 3 (deprecated)</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>
