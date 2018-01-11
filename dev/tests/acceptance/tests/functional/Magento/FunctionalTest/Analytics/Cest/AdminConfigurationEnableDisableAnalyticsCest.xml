@@ -11,7 +11,7 @@
     <cest name="AdminConfigurationEnableDisableAdvancedReportingCest">
         <annotations>
             <features value="Analytics"/>
-            <stories value="Advance Reporting"/>
+            <stories value="Enable/disable Advanced Reporting"/>
         </annotations>
         <after>
             <amOnPage stepKey="amOnLogoutPage" url="admin/admin/auth/logout/"/>
